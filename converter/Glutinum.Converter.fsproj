@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <Version>0.1.0-alpha-001</Version>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <Authors>Maxime Mangel</Authors>
+        <Description>
+            Fable bindings for npm https://github.com/chalk/chalk package
+        </Description>
+    </PropertyGroup>
+    <ItemGroup>
+        <Compile Include="TypeScript.fs" />
+        <Compile Include="Fsharp.fs" />
+        <Compile Include="Program.fs" />
+    </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="Fable.Core" Version="3.2.5" />
+      <PackageReference Include="Fable.Node" Version="1.2.0" />
+      <PackageReference Include="Glutinum.Chalk" Version="0.1.0-alpha-001" />
+    </ItemGroup>
+    <!-- This package doesn't contain actual code
+        so we don't need to add the sources -->
+    <!-- <ItemGroup>
+    <Content Include="*.fsproj; *.fs" PackagePath="fable" />
+    </ItemGroup> -->
+</Project>

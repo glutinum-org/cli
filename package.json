@@ -1,0 +1,25 @@
+{
+  "name": "glutinum.converter",
+  "version": "0.0.0",
+  "description": "Glutinum.Converter",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/glutinum-org/Glutinum.Converter.git"
+  },
+  "author": "Maxime Mangel",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/glutinum-org/Glutinum.Converter/issues"
+  },
+  "homepage": "https://github.com/glutinum-org/Glutinum.Converter#readme",
+  "devDependencies": {
+    "esm": "^3.2.25",
+    "fast-glob": "^3.2.5",
+    "mocha": "^8.3.2",
+    "typescript": "^4.2.3"
+  }
+}
