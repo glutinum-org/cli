@@ -42,7 +42,7 @@ type [<AllowNullLiteral>] IExports =
     abstract doesNotMatch: value: string * regExp: RegExp * ?message: U2<string, Error> -> unit
     abstract strict: obj
 
-type [<AllowNullLiteral;AbstractClass>] AssertionError =
+type [<AllowNullLiteral;AbstractClass; Erase>] AssertionError =
     inherit Error
     abstract name: string with get, set
     abstract message: string with get, set

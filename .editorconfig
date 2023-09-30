@@ -5,3 +5,12 @@ end_of_line = lf
 insert_final_newline = true
 indent_style = space
 indent_size = 4
+trim_trailing_whitespace = true
+
+[*.{fs,fsx}]
+max_line_length = 80
+fsharp_alternative_long_member_definitions = true
+fsharp_multi_line_lambda_closing_newline = true
+fsharp_bar_before_discriminated_union_declaration = true
+fsharp_multiline_bracket_style = stroustrup
+fsharp_keep_max_number_of_blank_lines = 2
