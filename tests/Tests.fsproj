@@ -11,7 +11,7 @@
         <Compile Include="Node.Assert.fs" />
         <Compile Include="Fable.Core.JsInterop.fs" />
         <Compile Include="Globals.fs" />
-        <Compile Include="Enums.fs" />
+        <Compile Include="Specs.fs" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="../converter/Glutinum.Converter.fsproj" />

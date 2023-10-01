@@ -18,22 +18,23 @@
   },
   "homepage": "https://github.com/glutinum-org/Glutinum.Converter#readme",
   "devDependencies": {
+    "@types/jest": "^29.5.5",
+    "ava": "^5.3.1",
     "fast-glob": "^3.3.0",
     "mocha": "^10.2.0",
     "typescript": "^5.1.6"
   },
   "dependencies": {
-    "ava": "^5.3.1",
     "chalk": "^5.3.0"
   },
-    "ava": {
-        "files": [
-            "tests/**/*",
-            "!tests/fable_modules/**/*"
-        ],
-        "ignoredByWatcher": [
-            "tests/**/*.fsproj",
-            "tests/**/*.fs"
-        ]
-    }
+  "ava": {
+    "files": [
+      "tests/**/*",
+      "!tests/fable_modules/**/*"
+    ],
+    "ignoredByWatcher": [
+      "tests/**/*.fsproj",
+      "tests/**/*.fs"
+    ]
+  }
 }
