@@ -4,9 +4,9 @@ specifiers:
   '@types/jest': ^29.5.5
   ava: ^5.3.1
   chalk: ^5.3.0
-  fast-glob: ^3.3.0
+  fast-glob: ^3.3.1
   mocha: ^10.2.0
-  typescript: ^5.1.6
+  typescript: ^5.2.2
 
 dependencies:
   chalk: 5.3.0
@@ -14,9 +14,9 @@ dependencies:
 devDependencies:
   '@types/jest': 29.5.5
   ava: 5.3.1
-  fast-glob: 3.3.0
+  fast-glob: 3.3.1
   mocha: 10.2.0
-  typescript: 5.1.6
+  typescript: 5.2.2
 
 packages:
 
@@ -606,8 +606,8 @@ packages:
     resolution: {integrity: sha512-VxPP4NqbUjj6MaAOafWeUn2cXWLcCtljklUtZf0Ind4XQ+QPtmA0b18zZy0jIQx+ExRVCR/ZQpBmik5lXshNsw==}
     dev: true
 
-  /fast-glob/3.3.0:
-    resolution: {integrity: sha512-ChDuvbOypPuNjO8yIDf36x7BlZX1smcUMTTcyoIjycexOxd6DFsKsg21qVBzEmr3G7fUKIRy2/psii+CIUt7FA==}
+  /fast-glob/3.3.1:
+    resolution: {integrity: sha512-kNFPyjhh5cKjrUltxs+wFx+ZkbRaxxmZ+X0ZU31SOsxCEtP9VPgtq2teZw1DebupL5GmDaNQ6yKMMVcM41iqDg==}
     engines: {node: '>=8.6.0'}
     dependencies:
       '@nodelib/fs.stat': 2.0.5
@@ -699,7 +699,7 @@ packages:
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     dependencies:
       dir-glob: 3.0.1
-      fast-glob: 3.3.0
+      fast-glob: 3.3.1
       ignore: 5.2.4
       merge2: 1.4.1
       slash: 4.0.0
@@ -1365,8 +1365,8 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /typescript/5.1.6:
-    resolution: {integrity: sha512-zaWCozRZ6DLEWAWFrVDz1H6FVXzUSfTy5FUMWsQlU8Ym5JP9eO4xkTIROFCQvhQf61z6O/G6ugw3SgAnvvm+HA==}
+  /typescript/5.2.2:
+    resolution: {integrity: sha512-mI4WrpHsbCIcwT9cF4FZvr80QUeKvsUsUvKDoR+X/7XHQH98xYD8YHZg7ANtz2GtZt/CBq2QJ0thkGJMHfqc1w==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

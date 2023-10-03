@@ -1,3 +1,7 @@
+(***)
+#r "nuget: Fable.Core"
+(***)
+
 open Fable.Core
 open System
 

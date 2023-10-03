@@ -7,6 +7,7 @@ open Glutinum.Ava
 open Glutinum.Converter.Program
 open Node.Api
 open Fable.Core.JsInterop
+open System
 
 type Node.Fs.IExports with
 
@@ -27,11 +28,22 @@ module Fs =
             )
         )
 
+let private removeHeader (textContent : string) =
+    textContent.Replace("\r\n", "\n").Split('\n')
+    |> Array.skip 4
+    |> String.concat "\n"
+
 let macroTestSpec (t: ExecutionContext<obj>) (specPath: string) =
     promise {
         let filepath = $"{__SOURCE_DIRECTORY__}/specs/{specPath}.d.ts"
         let res = transform filepath
-        let! expected = Fs.readFile ($"{__SOURCE_DIRECTORY__}/specs/{specPath}.fs")
+        let! expectedContent =
+            $"{__SOURCE_DIRECTORY__}/specs/{specPath}.fsx"
+            |> Fs.readFile
+        let expected = removeHeader expectedContent
+
+        printfn "'%A'" expectedContent
+        printfn "'%A'" expected
 
         t.deepEqual.Invoke(res, expected) |> ignore
     }

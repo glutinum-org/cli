@@ -15,7 +15,7 @@ type Printer () =
 
     member __.Unindent with get () =
         // Safety measure so we don't have negative indentation space
-        indentationLevel <- System.Math.Max(indentationLevel + 1, 0)
+        indentationLevel <- System.Math.Max(indentationLevel - 1, 0)
 
     member __.Write(text : string) =
         buffer.Append(String.replicate indentationLevel indentationText + text)
@@ -69,9 +69,6 @@ let printOutFile (printer : Printer) (outFile : FSharpOutFile) =
         printer.NewLine
     )
 
-    if outFile.Opens.Length > 0 then
-        printer.NewLine
-
 module Naming =
     let (|Digit|_|) (digit: string) =
         if String.IsNullOrWhiteSpace digit then None
@@ -118,8 +115,6 @@ let private printEnum (printer : Printer) (enumInfo : FSharpEnum) =
         | FSharpLiteral.Int value ->
             printer.Write($"""| {enumCaseName} = %i{value}""")
         | FSharpLiteral.String value ->
-            printfn $"enumCaseName: {enumCaseName} - value: {value}"
-            printfn "%A" (nameEqualsDefaultFableValue enumCaseName value)
             if nameEqualsDefaultFableValue enumCaseName value then
                 printer.Write($"""| {enumCaseName}""")
             else
@@ -144,6 +139,8 @@ Errored enum: {enumInfo.Name}
 let rec print (printer : Printer) (fsharpTypes : FSharpType list) =
     match fsharpTypes with
     | fsharpType::tail ->
+        printer.NewLine
+
         match fsharpType with
         | FSharpType.Union unionInfo ->
             printer.Write("[<RequireQualifiedAccess>]")
@@ -184,6 +181,8 @@ let rec print (printer : Printer) (fsharpTypes : FSharpType list) =
 
         | _ ->
             Log.warn $"{fsharpType} not implemented yet"
+
+        print printer tail
 
     | [] ->
         Log.success "Done"
