@@ -122,296 +122,129 @@ type UnionTypeNodeType =
     | MixedLiteralTypeReference
     | Unsupported
 
-let private getUnionTypeNodeType
-    (checker: Ts.TypeChecker)
-    (nodes: Ts.TypeNode list)
-    =
-    let rec inferType
-        (state:
-            {|
-                IsInitialized: bool
-                HasStringLiteral: bool
-                HasNumericLiteral: bool
-            |})
-        (nodes: Ts.TypeNode list)
-        =
-
-        match nodes with
-        | [] ->
-            match state.HasStringLiteral, state.HasNumericLiteral with
-            | true, false -> StringLiteralOnly
-            | false, true -> NumericLiteralOnly
-            | true, true
-            | false, false -> Unsupported
-
-        | node :: rest ->
-            let ts = ts
-            let isStringLiteral = ts.isStringLiteral node
-            let isNumericLiteral = ts.isNumericLiteral node
-            let isLiteralTypeNode = ts.isLiteralTypeNode node
-
-            if not state.IsInitialized then
-                if ts.isLiteralTypeNode node then
-                    let literalTypeNode = node :?> Ts.LiteralTypeNode
-                    let literalExpression = unbox<Ts.LiteralExpression> literalTypeNode.literal
-
-                    match literalExpression.kind with
-                    | Ts.SyntaxKind.StringLiteral ->
-                        inferType
-                            {|
-                                state with
-                                    IsInitialized = true
-                                    HasStringLiteral = true
-                            |}
-                            rest
-                    | Ts.SyntaxKind.NumericLiteral ->
-                        inferType
-                            {|
-                                state with
-                                    IsInitialized = true
-                                    HasNumericLiteral = true
-                            |}
-                            rest
-                    | _ -> Unsupported
-                elif ts.isTypeReferenceNode node then
-                    let typeReferenceNode = node :?> Ts.TypeReferenceNode
-                    // TODO: Remove unboxing
-
-                    let symbolOpt =
-                        checker.getSymbolAtLocation (
-                            !!typeReferenceNode.typeName
-                        )
-
-                    match symbolOpt with
-                    | Some symbol ->
-                        let mutable hasStringLiteral = false
-                        let mutable hasNumericLiteral = false
-
-                        symbol.declarations
-                        |> List.ofSeq
-                        |> List.iter (fun declaration ->
-                            if not hasStringLiteral then
-                                if
-                                    declaration?``type``?types?(0)?kind = Ts.SyntaxKind.StringLiteral
-                                then
-                                    hasStringLiteral <- true
-
-                            if not hasNumericLiteral then
-                                if
-                                    declaration?``type``?types?(0)?kind = Ts.SyntaxKind.NumericLiteral
-                                then
-                                    hasNumericLiteral <- true
-                        )
-
-                        match hasStringLiteral, hasNumericLiteral with
-                        | true, false -> StringLiteralTypeReferenceOnly
-                        | false, true -> NumericLiteralTypeReferenceOnly
-                        | true, true -> MixedLiteralTypeReference
-                        | false, false -> Unsupported
-                    | None -> Unsupported
-                else
-                    Unsupported
-            else if ts.isLiteralTypeNode node then
-                let literalTypeNode = node :?> Ts.LiteralTypeNode
-                let literalExpression = unbox<Ts.LiteralExpression> literalTypeNode.literal
-
-                match literalExpression.kind with
-                | Ts.SyntaxKind.StringLiteral ->
-                    if state.HasStringLiteral then
-                        inferType
-                            {|
-                                state with
-                                    HasStringLiteral = true
-                            |}
-                            rest
-                    else
-                        Unsupported
-                | Ts.SyntaxKind.NumericLiteral ->
-                    if state.HasNumericLiteral then
-                        inferType
-                            {|
-                                state with
-                                    HasNumericLiteral = true
-                            |}
-                            rest
-                    else
-                        Unsupported
-                | _ -> Unsupported
-            else
-                Unsupported
-
-    inferType
-        {|
-            IsInitialized = false
-            HasStringLiteral = false
-            HasNumericLiteral = false
-        |}
-        nodes
-
-let private readUnionType
+let rec private readUnionTypeCases
     (checker: Ts.TypeChecker)
     (name: string)
     (unionTypeNode: Ts.UnionTypeNode)
-    : FSharpEnum =
+    : FSharpEnumCase list =
     // If all the types are literal, generate a Fable enum
     // If the types are TypeReference, of the same literal type, inline the case in a Fable enum
     // If the type are TypeReference, of different literal types, generate an erased Fable union type
     // If otherwise, not supported?
 
-    let inferedUnionTypeNodeType =
-        unionTypeNode.types |> List.ofSeq |> getUnionTypeNodeType checker
+    // TODO: Support ParenthesizedType
+    // Recursively accessing the inner type and removing the parenthesis should be enough
 
-    match inferedUnionTypeNodeType with
-    | StringLiteralOnly ->
-        let cases =
-            unionTypeNode.types
-            |> List.ofSeq
-            |> List.map (fun node ->
+    // TODO: Can this be done in a single pass?
+    // I tried different implementation but most of them where to complex
+    // for the benefit of a single pass
+
+    let stringLiteralCases =
+        unionTypeNode.types
+        |> Seq.toList
+        |> List.filter (fun node ->
+            if ts.isLiteralTypeNode node then
                 let literalTypeNode = node :?> Ts.LiteralTypeNode
+                let literalExpression = unbox<Ts.LiteralExpression> literalTypeNode.literal
 
-                let literalExpression =
-                    unbox<Ts.LiteralExpression> literalTypeNode.literal
+                ts.isStringLiteral literalExpression
+            else
+                false
+        )
+        |> List.map (fun node ->
+            let literalTypeNode = node :?> Ts.LiteralTypeNode
+            let literalExpression = unbox<Ts.LiteralExpression> literalTypeNode.literal
 
-                {
-                    Name = literalTypeNode.getText ()
-                    Value =
-                        tryReadLiteral literalExpression
-                        |> Option.defaultWith (fun () ->
-                            failwith "Expected a StringLiteral"
-                        )
-                }
-                : FSharpEnumCase
-            )
+            {
+                Name = literalTypeNode.getText ()
+                Value =
+                    tryReadLiteral literalExpression
+                    |> Option.defaultWith (fun () ->
+                        failwith "Expected a NumericLiteral"
+                    )
+            }
+            : FSharpEnumCase
+        )
 
-
-        { Name = name; Cases = cases }
-
-    | NumericLiteralOnly ->
-        let cases =
-            unionTypeNode.types
-            |> List.ofSeq
-            |> List.map (fun node ->
+    let numericLiteralCases =
+        unionTypeNode.types
+        |> Seq.toList
+        |> List.filter (fun node ->
+            if ts.isLiteralTypeNode node then
                 let literalTypeNode = node :?> Ts.LiteralTypeNode
+                let literalExpression = unbox<Ts.LiteralExpression> literalTypeNode.literal
 
-                let literalExpression =
-                    unbox<Ts.LiteralExpression> literalTypeNode.literal
+                ts.isNumericLiteral literalExpression
+            else
+                false
+        )
+        |> List.map (fun node ->
+            let literalTypeNode = node :?> Ts.LiteralTypeNode
+            let literalExpression = unbox<Ts.LiteralExpression> literalTypeNode.literal
 
-                {
-                    Name = literalTypeNode.getText ()
-                    Value =
-                        tryReadLiteral literalExpression
-                        |> Option.defaultWith (fun () ->
-                            failwith "Expected a NumericLiteral"
-                        )
-                }
-                : FSharpEnumCase
-            )
+            {
+                Name = literalTypeNode.getText ()
+                Value =
+                    tryReadLiteral literalExpression
+                    |> Option.defaultWith (fun () ->
+                        failwith "Expected a NumericLiteral"
+                    )
+            }
+            : FSharpEnumCase
+        )
 
-        { Name = name; Cases = cases }
+    let typeReferencesCases =
+        unionTypeNode.types
+        |> Seq.toList
+        |> List.filter ts.isTypeReferenceNode
+        |> List.choose (fun node ->
+            let typeReferenceNode = node :?> Ts.TypeReferenceNode
 
-    | StringLiteralTypeReferenceOnly ->
-        let typeReferenceNode = unionTypeNode :?> Ts.TypeReferenceNode
-        // TODO: Remove unboxing
+            // TODO: Remove unboxing
+            let symbolOpt = checker.getSymbolAtLocation !!typeReferenceNode.typeName
 
-        let symbolOpt =
-            checker.getSymbolAtLocation (
-                !!typeReferenceNode.typeName
-            )
+            match symbolOpt with
+            | None ->
+                printfn "Symbol not found"
+                None
 
+            | Some symbol ->
+                symbol.declarations
+                |> Seq.toList
+                |> List.collect (fun declaration ->
+                    // We use the readUnionType to handle nested unions
+                    let enum = readUnionType checker "fake" declaration?``type``
 
-        match symbolOpt with
-        | Some symbol ->
-            symbol.declarations
-            |> List.ofSeq
-            |> List.map (fun declaration ->
-                let typ = declaration?``type``?types
-                let i = 0
-                failwith ""
-            )
+                    enum.Cases
+                )
+                |> Some
+                // None
+        )
+        |> List.concat
 
-            failwith "ddw"
+    // This is an incorrect way of handling the result
+    // but it works for now, it will be re-visisted in the future
+    // when adding more tests
+    match stringLiteralCases.IsEmpty, numericLiteralCases.IsEmpty with
+    | false, true ->
+        stringLiteralCases
+    | true, false ->
+        numericLiteralCases
+    | false, false
+    | true, true ->
+        typeReferencesCases
 
-        | None ->
-            failwith "readUnionType: Was not able to get the symbol at location when handling StringLiteralTypeReferenceOnly"
+and private readUnionType
+    (checker: Ts.TypeChecker)
+    (name : string)
+    (unionTypeNode: Ts.UnionTypeNode) : FSharpEnum =
 
-    | NumericLiteralTypeReferenceOnly
-    | MixedLiteralTypeReference
-    | Unsupported -> { Name = name; Cases = [] }
+    let cases = readUnionTypeCases checker "name" unionTypeNode
 
-
-// let cases =
-//     unionTypeNode.types
-//     |> List.ofSeq
-//     |> List.map (fun node ->
-//         if ts.isLiteralTypeNode node then
-//             node
-//         else
-//             match node.kind with
-//             | Ts.SyntaxKind.TypeReference ->
-//                 let typeReferenceNode = node :?> Ts.TypeReferenceNode
-//                 let isNode = ts.isTypeNode node
-
-//                 let typ = checker.getTypeAtLocation typeReferenceNode
-
-//                 // if typ.isStringLiteral() then
-//                 //     let value = typ?value |> unbox<string>
-//                 //     {
-//                 //         Name = value
-//                 //         Value = FSharpLiteral.String value |> Some
-//                 //     } : FSharpEnumCase
-//                 // else if typ.isNumberLiteral() then
-//                 //     let value = typ?value |> unbox<float>
-//                 //     // First, try to parse as an integer
-//                 //     match System.Int32.TryParse text with
-//                 //     | (true, i) -> FSharpLiteral.Int i |> Some
-//                 //     | _ ->
-//                 //         // If it fails, try to parse as a float
-//                 //         match System.Double.TryParse text with
-//                 //         | (true, f) -> FSharpLiteral.Float f |> Some
-//                 //         | _ -> None
-//                 //     {
-//                 //         Name = value.ToString()
-//                 //         Value = FSharpLiteral.Float value |> Some
-//                 //     } : FSharpEnumCase
-//                 // else
-//                 //     let y = checker.getSymbolAtLocation typeReferenceNode
-//                 failwith "xxx"
-//             | _ ->
-//                 failwith "readUnionType: Unsupported kind was expecting a literal type or a type reference"
-//     )
-//     |> List.filter ts.isLiteralTypeNode
-//     |> List.map (fun node ->
-//         let literalTypeNode = node :?> Ts.LiteralTypeNode
-//         let literalExpression = unbox<Ts.LiteralExpression> literalTypeNode.literal
-
-//         match literalExpression.kind with
-//         | Ts.SyntaxKind.StringLiteral ->
-//             let x = tryReadLiteral literalExpression
-//             {
-//                 Name = literalTypeNode.getText ()
-//                 Value =
-//                     tryReadLiteral literalExpression
-//                     |> Option.defaultWith (fun () ->
-//                         failwith "Expected a StringLiteral"
-//                     )
-//             } : FSharpEnumCase
-//         | Ts.SyntaxKind.NumericLiteral ->
-//             {
-//                 Name = literalTypeNode.getText ()
-//                 Value =
-//                     tryReadLiteral literalExpression
-//                     |> Option.defaultWith (fun () ->
-//                         failwith "Expected a NumericLiteral"
-//                     )
-//             } : FSharpEnumCase
-//         | _ ->
-//             failwith "Expected a StringLiteral or NumericLiteral"
-//     )
-
-// {
-//     Name = name
-//     Cases = cases
-// }
+    {
+        Name = name
+        Cases = cases
+    } : FSharpEnum
 
 let private readTypeAliasDeclaration
     (checker: Ts.TypeChecker)
@@ -420,9 +253,11 @@ let private readTypeAliasDeclaration
     match declaration.``type``.kind with
     | Ts.SyntaxKind.UnionType ->
         let unionTypeNode = declaration.``type`` :?> Ts.UnionTypeNode
-        let name = declaration.name.getText ()
+        // Should it be moved inside of readUnionType?
+        let unionName = declaration.name.getText ()
 
-        readUnionType checker name unionTypeNode
+        readUnionType checker unionName unionTypeNode
+
     | _ -> failwith "ReadTypeAliasDeclaration: Unsupported kind"
 
 let private convert
@@ -491,5 +326,6 @@ let transform (filePath: string) =
 
 let res = transform "./tests/specs/enums/literalStringEnumWithInheritance.d.ts"
 // let res = transform "./tests/specs/enums/literalNumericEnum.d.ts"
+// let res = transform "./tests/specs/enums/literalStringEnum.d.ts"
 
 printfn "'%A'" res
