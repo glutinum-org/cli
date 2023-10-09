@@ -179,8 +179,9 @@ let rec print (printer : Printer) (fsharpTypes : FSharpType list) =
         | FSharpType.Enum enumInfo ->
             printEnum printer enumInfo
 
-        | _ ->
-            Log.warn $"{fsharpType} not implemented yet"
+        | FSharpType.Unsupported syntaxKind ->
+            printer.Write($"obj // Unsupported syntax kind: %A{syntaxKind}")
+            printer.NewLine
 
         print printer tail
 

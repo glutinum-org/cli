@@ -42,9 +42,6 @@ let macroTestSpec (t: ExecutionContext<obj>) (specPath: string) =
             |> Fs.readFile
         let expected = removeHeader expectedContent
 
-        printfn "'%A'" expectedContent
-        printfn "'%A'" expected
-
         t.deepEqual.Invoke(res, expected) |> ignore
     }
 

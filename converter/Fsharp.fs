@@ -1,5 +1,7 @@
 module Glutinum.Converter.FSharpAST
 
+open TypeScript
+
 [<RequireQualifiedAccess>]
 type FSharpLiteral =
     | String of string
@@ -138,6 +140,7 @@ type FSharpType =
     | Enum of FSharpEnum
     | Union of FSharpUnion
     | Module of FSharpModule
+    | Unsupported of Ts.SyntaxKind
     | Discard
 
 type FSharpOutFile =

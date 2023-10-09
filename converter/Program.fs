@@ -139,8 +139,36 @@ let rec private readUnionTypeCases
     // I tried different implementation but most of them where to complex
     // for the benefit of a single pass
 
-    let stringLiteralCases =
+    let rec removeParenthesizedType (node: Ts.Node) =
+        if ts.isParenthesizedTypeNode node then
+            let parenthesizedTypeNode = node :?> Ts.ParenthesizedTypeNode
+
+            removeParenthesizedType parenthesizedTypeNode.``type``
+        else
+            node
+
+    let types =
         unionTypeNode.types
+        |> Seq.toList
+        // Remove the ParenthesizedType
+        |> List.map removeParenthesizedType
+
+    // let y =
+    //     unionTypeNode.types
+    //     |> Seq.toList
+    //     // Remove the ParenthesizedType
+    //     |> List.map removeParenthesizedType
+
+    // let x =
+    //     y
+    //     |> List.filter ts.isTypeReferenceNode
+
+
+    let ts = ts
+    let i = ()
+
+    let stringLiteralCases =
+        types
         |> Seq.toList
         |> List.filter (fun node ->
             if ts.isLiteralTypeNode node then
@@ -167,7 +195,7 @@ let rec private readUnionTypeCases
         )
 
     let numericLiteralCases =
-        unionTypeNode.types
+        types
         |> Seq.toList
         |> List.filter (fun node ->
             if ts.isLiteralTypeNode node then
@@ -194,7 +222,7 @@ let rec private readUnionTypeCases
         )
 
     let typeReferencesCases =
-        unionTypeNode.types
+        types
         |> Seq.toList
         |> List.filter ts.isTypeReferenceNode
         |> List.choose (fun node ->
@@ -205,7 +233,7 @@ let rec private readUnionTypeCases
 
             match symbolOpt with
             | None ->
-                printfn "Symbol not found"
+                failwith "readUnionTypeCases: Unsupported type reference"
                 None
 
             | Some symbol ->
@@ -246,7 +274,7 @@ and private readUnionType
         Cases = cases
     } : FSharpEnum
 
-let private readTypeAliasDeclaration
+and private readTypeAliasDeclaration
     (checker: Ts.TypeChecker)
     (declaration: Ts.TypeAliasDeclaration)
     =
@@ -260,31 +288,32 @@ let private readTypeAliasDeclaration
 
     | _ -> failwith "ReadTypeAliasDeclaration: Unsupported kind"
 
+and private readNode
+    (checker: Ts.TypeChecker)
+    (typeNode: Ts.Node) =
+    match typeNode.kind with
+    | Ts.SyntaxKind.EnumDeclaration ->
+        let declaration = (typeNode :?> Ts.EnumDeclaration)
+
+        let enum = readEnum checker declaration
+
+        FSharpType.Enum enum
+
+    | Ts.SyntaxKind.TypeAliasDeclaration ->
+        let declaration = (typeNode :?> Ts.TypeAliasDeclaration)
+
+        FSharpType.Enum(readTypeAliasDeclaration checker declaration)
+
+    | unsupported ->
+        FSharpType.Unsupported unsupported
+
 let private convert
     (checker: Ts.TypeChecker)
     (sourceFile: option<Ts.SourceFile>)
     =
     sourceFile.Value.statements
     |> List.ofSeq
-    |> List.collect (fun statement ->
-        match statement.kind with
-        | Ts.SyntaxKind.EnumDeclaration ->
-            let declaration = (statement :?> Ts.EnumDeclaration)
-
-            let enum = readEnum checker declaration
-
-            [ FSharpType.Enum enum ]
-
-        | Ts.SyntaxKind.TypeAliasDeclaration ->
-            let declaration = (statement :?> Ts.TypeAliasDeclaration)
-
-            [ FSharpType.Enum(readTypeAliasDeclaration checker declaration) ]
-
-        | _ ->
-            printfn "Unsupported Statement kind: %A" statement.kind
-            []
-
-    )
+    |> List.map (readNode checker)
 
 
 let transform (filePath: string) =
@@ -324,7 +353,8 @@ let transform (filePath: string) =
 
 // log(printer.ToString())
 
-let res = transform "./tests/specs/enums/literalStringEnumWithInheritance.d.ts"
+// let res = transform "./tests/specs/enums/literalStringEnumWithInheritance.d.ts"
+let res = transform "./tests/specs/enums/literalStringEnumWithInheritanceAndParenthesized.d.ts"
 // let res = transform "./tests/specs/enums/literalNumericEnum.d.ts"
 // let res = transform "./tests/specs/enums/literalStringEnum.d.ts"
 
