@@ -215,6 +215,55 @@ and private readTypeAliasDeclaration
 
     | _ -> failwith "ReadTypeAliasDeclaration: Unsupported kind"
 
+and readInterfaceDeclaration
+    (checker : Ts.TypeChecker)
+    (declaration: Ts.InterfaceDeclaration) : FSharpInterface =
+
+    let i = ()
+
+    let tryReadNamedDeclaration
+        (checker : Ts.TypeChecker)
+        (declaration: Ts.NamedDeclaration) =
+        match declaration.kind with
+        | Ts.SyntaxKind.PropertySignature ->
+            let propertySignature = declaration :?> Ts.PropertySignature
+            let name =
+                unbox<Ts.Node> propertySignature.name
+
+
+            let typeInfo =
+                propertySignature.``type``
+                |> Option.map (fun typ ->
+                    match typ.kind with
+                    | Ts.SyntaxKind.NumberKeyword -> "float"
+                    | _ -> failwith "tryReadNamedDeclaration: Unsupported type"
+                )
+                |> Option.defaultWith (fun () ->
+                    failwith "tryReadNamedDeclaration: Missing type on propertySignaure"
+                )
+
+            {
+                Name = name.getText()
+                Type = typeInfo
+                IsOptional = false
+                IsStatic = false
+                Accessor = FSharpAccessor.ReadOnly
+                Accessibility = FSharpAccessiblity.Protected
+            } : FSharpMember
+
+        | _ -> failwith "tryReadNamedDeclaration: Unsupported kind"
+
+
+    let members =
+        declaration.members
+        |> Seq.toList
+        |> List.map (tryReadNamedDeclaration checker)
+
+    {
+        Name = declaration.name.getText ()
+        Members = members
+    }
+
 and private readNode (checker: Ts.TypeChecker) (typeNode: Ts.Node) =
     match typeNode.kind with
     | Ts.SyntaxKind.EnumDeclaration ->
@@ -228,6 +277,12 @@ and private readNode (checker: Ts.TypeChecker) (typeNode: Ts.Node) =
         let declaration = typeNode :?> Ts.TypeAliasDeclaration
 
         FSharpType.Enum(readTypeAliasDeclaration checker declaration)
+
+    | Ts.SyntaxKind.InterfaceDeclaration ->
+        let declaration = typeNode :?> Ts.InterfaceDeclaration
+
+        readInterfaceDeclaration checker declaration
+        |> FSharpType.Interface
 
     | unsupported -> FSharpType.Unsupported unsupported
 
@@ -278,7 +333,7 @@ let transform (filePath: string) =
 // let res = transform "./tests/specs/enums/literalStringEnumWithInheritance.d.ts"
 let res =
     transform
-        "./tests/specs/enums/literalNumericEnumWithInheritanceAndParenthesized.d.ts"
+        "./tests/specs/interfaces/readonlyProperty.d.ts"
 // let res = transform "./tests/specs/enums/literalNumericEnum.d.ts"
 // let res = transform "./tests/specs/enums/literalStringEnum.d.ts"
 

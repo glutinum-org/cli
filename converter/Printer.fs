@@ -5,39 +5,33 @@ open Glutinum.Chalk
 open Glutinum.Converter.FSharpAST
 open Fable.Core
 
-type Printer () =
+type Printer() =
     let buffer = new Text.StringBuilder()
     let mutable indentationLevel = 0
     let indentationText = "    " // 4 spaces
 
-    member __.Indent with get () =
-        indentationLevel <- indentationLevel + 1
+    member __.Indent = indentationLevel <- indentationLevel + 1
 
-    member __.Unindent with get () =
+    member __.Unindent =
         // Safety measure so we don't have negative indentation space
         indentationLevel <- System.Math.Max(indentationLevel - 1, 0)
 
-    member __.Write(text : string) =
+    member __.Write(text: string) =
         buffer.Append(String.replicate indentationLevel indentationText + text)
         |> ignore
 
-    member __.NewLine with get () =
-        buffer.AppendLine()
-        |> ignore
+    member __.NewLine = buffer.AppendLine() |> ignore
 
-    override  __.ToString() =
-        buffer.ToString()
+    override __.ToString() = buffer.ToString()
 
-let private removeSingleQuote (text : string) =
-    text.Trim(''')
+let private removeSingleQuote (text: string) = text.Trim(''')
 
-let private removeDoubleQuote (text : string) =
-    text.Trim('"')
+let private removeDoubleQuote (text: string) = text.Trim('"')
 
-let private capitalizeFirstLetter (text : string) =
+let private capitalizeFirstLetter (text: string) =
     (string text.[0]).ToUpper() + text.[1..]
 
-let private lowercaseFirstLetter (text : string) =
+let private lowercaseFirstLetter (text: string) =
     (string text.[0]).ToLower() + text.[1..]
 
 /// <summary>
@@ -49,19 +43,17 @@ let private lowercaseFirstLetter (text : string) =
 /// <c>true</c> if provided value is the same as the default Fable computed value computed from the name.
 /// <c>false</c> otherwise
 /// </returns>
-let private nameEqualsDefaultFableValue (name: string) (value: string): bool =
-    let defaultFableValue =
-        lowercaseFirstLetter name
+let private nameEqualsDefaultFableValue (name: string) (value: string) : bool =
+    let defaultFableValue = lowercaseFirstLetter name
 
     defaultFableValue.Equals value
 
-let printOutFile (printer : Printer) (outFile : FSharpOutFile) =
+let printOutFile (printer: Printer) (outFile: FSharpOutFile) =
     match outFile.Name with
     | Some name ->
         printer.Write($"module {name} =")
         printer.NewLine
-    | None ->
-        ()
+    | None -> ()
 
     outFile.Opens
     |> List.iter (fun o ->
@@ -72,24 +64,44 @@ let printOutFile (printer : Printer) (outFile : FSharpOutFile) =
 module Naming =
     let (|Digit|_|) (digit: string) =
         if String.IsNullOrWhiteSpace digit then None
-        elif Char.IsDigit (digit, 0) then Some digit
+        elif Char.IsDigit(digit, 0) then Some digit
         else None
 
-let private sanitizeEnumCaseName (name : string) =
+let private sanitizeEnumCaseName (name: string) =
     let name =
-        name
-        |> removeSingleQuote
-        |> removeDoubleQuote
-        |> capitalizeFirstLetter
+        name |> removeSingleQuote |> removeDoubleQuote |> capitalizeFirstLetter
 
     match name with
     | Naming.Digit _ ->
         // F# enums cannot start with a digit, so we escape it with backticks
         $"``{name}``"
-    | _ ->
-        name
+    | _ -> name
 
-let private printEnum (printer : Printer) (enumInfo : FSharpEnum) =
+let private printInterface (printer: Printer) (enumInfo: FSharpInterface) =
+    printer.Write("[<AllowNullLiteral>]")
+    printer.NewLine
+
+    printer.Write($"type {enumInfo.Name} =")
+    printer.NewLine
+
+    printer.Indent
+
+    enumInfo.Members
+    |> List.iter (fun m ->
+        let accessor =
+            match m.Accessor with
+            | FSharpAccessor.ReadOnly -> "with get"
+            | FSharpAccessor.WriteOnly -> "with set"
+            | FSharpAccessor.ReadWrite -> "with get, set"
+
+        printer.Write($"abstract {m.Name}: {m.Type} {accessor}")
+
+        printer.NewLine
+    )
+
+    printer.Unindent
+
+let private printEnum (printer: Printer) (enumInfo: FSharpEnum) =
     printer.Write("[<RequireQualifiedAccess>]")
     printer.NewLine
 
@@ -98,8 +110,7 @@ let private printEnum (printer : Printer) (enumInfo : FSharpEnum) =
         printer.Write("[<StringEnum>]")
         printer.NewLine
     | FSharpEnumType.Numeric
-    | FSharpEnumType.Unknown ->
-        ()
+    | FSharpEnumType.Unknown -> ()
 
     printer.Write($"type {enumInfo.Name} =")
     printer.NewLine
@@ -107,9 +118,7 @@ let private printEnum (printer : Printer) (enumInfo : FSharpEnum) =
 
     enumInfo.Cases
     |> List.iter (fun enumCaseInfo ->
-        let enumCaseName =
-            enumCaseInfo.Name
-            |> sanitizeEnumCaseName
+        let enumCaseName = enumCaseInfo.Name |> sanitizeEnumCaseName
 
         match enumCaseInfo.Value with
         | FSharpLiteral.Int value ->
@@ -118,15 +127,19 @@ let private printEnum (printer : Printer) (enumInfo : FSharpEnum) =
             if nameEqualsDefaultFableValue enumCaseName value then
                 printer.Write($"""| {enumCaseName}""")
             else
-                printer.Write($"""| [<CompiledName("{value}")>] {enumCaseName}""")
+                printer.Write(
+                    $"""| [<CompiledName("{value}")>] {enumCaseName}"""
+                )
 
         | FSharpLiteral.Bool _ ->
-            failwith $"""Boolean values are not supported inside of F# enums.
+            failwith
+                $"""Boolean values are not supported inside of F# enums.
 
 Errored enum: {enumInfo.Name}
 """
         | FSharpLiteral.Float value ->
-            failwith $"""Float values are not supported inside of F# enums.
+            failwith
+                $"""Float values are not supported inside of F# enums.
 
 Errored enum: {enumInfo.Name}
 """
@@ -136,9 +149,9 @@ Errored enum: {enumInfo.Name}
 
     printer.Unindent
 
-let rec print (printer : Printer) (fsharpTypes : FSharpType list) =
+let rec print (printer: Printer) (fsharpTypes: FSharpType list) =
     match fsharpTypes with
-    | fsharpType::tail ->
+    | fsharpType :: tail ->
         printer.NewLine
 
         match fsharpType with
@@ -155,29 +168,29 @@ let rec print (printer : Printer) (fsharpTypes : FSharpType list) =
 
             unionInfo.Cases
             |> List.iter (fun enumCaseInfo ->
-                    match enumCaseInfo.Value with
-                    | FSharpUnionCaseType.Named value ->
-                        let caseValue =
-                            value
-                            |> removeSingleQuote
-                            |> removeDoubleQuote
+                match enumCaseInfo.Value with
+                | FSharpUnionCaseType.Named value ->
+                    let caseValue =
+                        value |> removeSingleQuote |> removeDoubleQuote
 
-                        printer.Write($"""| [<CompiledName("{caseValue}")>] {enumCaseInfo.Name}""")
-                    | FSharpUnionCaseType.Literal value ->
-                        let caseValue =
-                            value
-                            |> removeSingleQuote
-                            |> capitalizeFirstLetter
+                    printer.Write(
+                        $"""| [<CompiledName("{caseValue}")>] {enumCaseInfo.Name}"""
+                    )
+                | FSharpUnionCaseType.Literal value ->
+                    let caseValue =
+                        value |> removeSingleQuote |> capitalizeFirstLetter
 
-                        printer.Write($"""| {caseValue}""")
+                    printer.Write($"""| {caseValue}""")
 
-                    printer.NewLine
+                printer.NewLine
             )
 
             printer.Unindent
 
-        | FSharpType.Enum enumInfo ->
-            printEnum printer enumInfo
+        | FSharpType.Enum enumInfo -> printEnum printer enumInfo
+
+        | FSharpType.Interface interfaceInfo ->
+            printInterface printer interfaceInfo
 
         | FSharpType.Unsupported syntaxKind ->
             printer.Write($"obj // Unsupported syntax kind: %A{syntaxKind}")
@@ -185,5 +198,4 @@ let rec print (printer : Printer) (fsharpTypes : FSharpType list) =
 
         print printer tail
 
-    | [] ->
-        Log.success "Done"
+    | [] -> Log.success "Done"

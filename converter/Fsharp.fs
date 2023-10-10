@@ -136,10 +136,39 @@ type FSharpModule =
     }
 
 [<RequireQualifiedAccess>]
+type FSharpAccessor =
+    | ReadOnly
+    | WriteOnly
+    | ReadWrite
+
+[<RequireQualifiedAccess>]
+type FSharpAccessiblity =
+    | Public
+    | Private
+    | Protected
+
+type FSharpMember =
+    {
+        Name : string
+        Type : string
+        IsOptional : bool
+        IsStatic : bool
+        Accessor : FSharpAccessor
+        Accessibility : FSharpAccessiblity
+    }
+
+type FSharpInterface =
+    {
+        Name : string
+        Members : FSharpMember list
+    }
+
+[<RequireQualifiedAccess>]
 type FSharpType =
     | Enum of FSharpEnum
     | Union of FSharpUnion
     | Module of FSharpModule
+    | Interface of FSharpInterface
     | Unsupported of Ts.SyntaxKind
     | Discard
 
