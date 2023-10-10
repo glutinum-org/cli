@@ -6,19 +6,19 @@ open Fable.Core
 open System
 
 [<RequireQualifiedAccess>]
-type NumberD =
+type NumberA =
     | ``1`` = 1
 
 [<RequireQualifiedAccess>]
-type NumberE =
+type NumberB =
     | ``2`` = 2
 
 [<RequireQualifiedAccess>]
-type NumberF =
+type NumberC =
     | ``3`` = 3
 
 [<RequireQualifiedAccess>]
-type NumberG =
+type NumberD =
     | ``1`` = 1
     | ``2`` = 2
     | ``3`` = 3

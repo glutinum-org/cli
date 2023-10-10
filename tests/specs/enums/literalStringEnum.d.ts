@@ -1,3 +1,3 @@
-declare type ForegroundColor =
+export type ForegroundColor =
 	| 'black'
 	| 'red'

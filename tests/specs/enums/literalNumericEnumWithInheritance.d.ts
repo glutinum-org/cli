@@ -1,7 +1,7 @@
-declare type NumberA =
+export type NumberA =
 	| 1
 
-declare type NumberB =
+export type NumberB =
 	| 2
 
-declare type NumberC = NumberA | NumberB;
+export type NumberC = NumberA | NumberB;

@@ -1,10 +1,10 @@
-declare type ColorC =
+export type ColorA =
 	| 'black'
 
-declare type ColorD =
+export type ColorB =
 	| 'bgBlack'
 
-declare type ColorE =
+export type ColorC =
 	| 'red'
 
-declare type ColorF = ColorC | (ColorD | ColorE);
+export type Color = ColorA | (ColorB | ColorC);

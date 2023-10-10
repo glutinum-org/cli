@@ -1,7 +1,7 @@
-declare type ColorA =
+export type ColorA =
 	| 'black'
 
-declare type ColorB =
+export type ColorB =
 	| 'bgBlack'
 
-declare type Color = ColorA | ColorB;
+export type Color = ColorA | ColorB;

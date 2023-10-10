@@ -7,22 +7,22 @@ open System
 
 [<RequireQualifiedAccess>]
 [<StringEnum>]
-type ColorC =
+type ColorA =
     | Black
 
 [<RequireQualifiedAccess>]
 [<StringEnum>]
-type ColorD =
+type ColorB =
     | BgBlack
 
 [<RequireQualifiedAccess>]
 [<StringEnum>]
-type ColorE =
+type ColorC =
     | Red
 
 [<RequireQualifiedAccess>]
 [<StringEnum>]
-type ColorF =
+type Color =
     | Black
     | BgBlack
     | Red

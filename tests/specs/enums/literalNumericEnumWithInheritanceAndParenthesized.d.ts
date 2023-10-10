@@ -1,10 +1,10 @@
-declare type NumberD =
+export type NumberA =
 	| 1
 
-declare type NumberE =
+export type NumberB =
 	| 2
 
-declare type NumberF =
+export type NumberC =
 	| 3
 
-declare type NumberG = NumberD | (NumberE | NumberF);
+export type NumberD = NumberA | (NumberB | NumberC);
