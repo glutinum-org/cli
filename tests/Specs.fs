@@ -30,7 +30,14 @@ module Fs =
 
 let private removeHeader (textContent : string) =
     textContent.Replace("\r\n", "\n").Split('\n')
-    |> Array.skip 4
+    // Skip start of header
+    |> Array.skip 1
+    // Skip until first line with (***)
+    |> Array.skipWhile (fun x -> x.StartsWith("(***)") |> not)
+    // Skip end of header (***)
+    |> Array.skip 1
+    // Skip until we find a non-empty line
+    |> Array.skipWhile String.IsNullOrEmpty
     |> String.concat "\n"
 
 let macroTestSpec (t: ExecutionContext<obj>) (specPath: string) =

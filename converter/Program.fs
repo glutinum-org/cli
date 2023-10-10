@@ -114,30 +114,14 @@ let private readEnum
         Cases = readEnumResults.Cases
     }
 
-type UnionTypeNodeType =
-    | StringLiteralOnly
-    | NumericLiteralOnly
-    | StringLiteralTypeReferenceOnly
-    | NumericLiteralTypeReferenceOnly
-    | MixedLiteralTypeReference
-    | Unsupported
-
 let rec private readUnionTypeCases
     (checker: Ts.TypeChecker)
-    (name: string)
     (unionTypeNode: Ts.UnionTypeNode)
     : FSharpEnumCase list =
     // If all the types are literal, generate a Fable enum
     // If the types are TypeReference, of the same literal type, inline the case in a Fable enum
     // If the type are TypeReference, of different literal types, generate an erased Fable union type
     // If otherwise, not supported?
-
-    // TODO: Support ParenthesizedType
-    // Recursively accessing the inner type and removing the parenthesis should be enough
-
-    // TODO: Can this be done in a single pass?
-    // I tried different implementation but most of them where to complex
-    // for the benefit of a single pass
 
     let rec removeParenthesizedType (node: Ts.Node) =
         if ts.isParenthesizedTypeNode node then
@@ -147,89 +131,40 @@ let rec private readUnionTypeCases
         else
             node
 
-    let types =
-        unionTypeNode.types
-        |> Seq.toList
-        // Remove the ParenthesizedType
-        |> List.map removeParenthesizedType
+    unionTypeNode.types
+    |> Seq.toList
+    // Remove the ParenthesizedType
+    |> List.map removeParenthesizedType
+    |> List.choose (fun node ->
+        if ts.isLiteralTypeNode node then
+            let literalTypeNode = node :?> Ts.LiteralTypeNode
 
-    // let y =
-    //     unionTypeNode.types
-    //     |> Seq.toList
-    //     // Remove the ParenthesizedType
-    //     |> List.map removeParenthesizedType
+            let literalExpression =
+                unbox<Ts.LiteralExpression> literalTypeNode.literal
 
-    // let x =
-    //     y
-    //     |> List.filter ts.isTypeReferenceNode
-
-
-    let ts = ts
-    let i = ()
-
-    let stringLiteralCases =
-        types
-        |> Seq.toList
-        |> List.filter (fun node ->
-            if ts.isLiteralTypeNode node then
-                let literalTypeNode = node :?> Ts.LiteralTypeNode
-                let literalExpression = unbox<Ts.LiteralExpression> literalTypeNode.literal
-
+            if
                 ts.isStringLiteral literalExpression
+                || ts.isNumericLiteral literalExpression
+            then
+                ({
+                    Name = literalTypeNode.getText ()
+                    Value =
+                        tryReadLiteral literalExpression
+                        |> Option.defaultWith (fun () ->
+                            failwith "Expected a NumericLiteral"
+                        )
+                }
+                : FSharpEnumCase)
+                |> fun case -> [ case ]
+                |> Some
             else
-                false
-        )
-        |> List.map (fun node ->
-            let literalTypeNode = node :?> Ts.LiteralTypeNode
-            let literalExpression = unbox<Ts.LiteralExpression> literalTypeNode.literal
-
-            {
-                Name = literalTypeNode.getText ()
-                Value =
-                    tryReadLiteral literalExpression
-                    |> Option.defaultWith (fun () ->
-                        failwith "Expected a NumericLiteral"
-                    )
-            }
-            : FSharpEnumCase
-        )
-
-    let numericLiteralCases =
-        types
-        |> Seq.toList
-        |> List.filter (fun node ->
-            if ts.isLiteralTypeNode node then
-                let literalTypeNode = node :?> Ts.LiteralTypeNode
-                let literalExpression = unbox<Ts.LiteralExpression> literalTypeNode.literal
-
-                ts.isNumericLiteral literalExpression
-            else
-                false
-        )
-        |> List.map (fun node ->
-            let literalTypeNode = node :?> Ts.LiteralTypeNode
-            let literalExpression = unbox<Ts.LiteralExpression> literalTypeNode.literal
-
-            {
-                Name = literalTypeNode.getText ()
-                Value =
-                    tryReadLiteral literalExpression
-                    |> Option.defaultWith (fun () ->
-                        failwith "Expected a NumericLiteral"
-                    )
-            }
-            : FSharpEnumCase
-        )
-
-    let typeReferencesCases =
-        types
-        |> Seq.toList
-        |> List.filter ts.isTypeReferenceNode
-        |> List.choose (fun node ->
+                None
+        else if ts.isTypeReferenceNode node then
             let typeReferenceNode = node :?> Ts.TypeReferenceNode
 
             // TODO: Remove unboxing
-            let symbolOpt = checker.getSymbolAtLocation !!typeReferenceNode.typeName
+            let symbolOpt =
+                checker.getSymbolAtLocation !!typeReferenceNode.typeName
 
             match symbolOpt with
             | None ->
@@ -241,38 +176,30 @@ let rec private readUnionTypeCases
                 |> Seq.toList
                 |> List.collect (fun declaration ->
                     // We use the readUnionType to handle nested unions
-                    let enum = readUnionType checker "fake" declaration?``type``
+                    let enum =
+                        readUnionType checker "fake" declaration?``type``
 
                     enum.Cases
                 )
                 |> Some
-                // None
-        )
-        |> List.concat
-
-    // This is an incorrect way of handling the result
-    // but it works for now, it will be re-visisted in the future
-    // when adding more tests
-    match stringLiteralCases.IsEmpty, numericLiteralCases.IsEmpty with
-    | false, true ->
-        stringLiteralCases
-    | true, false ->
-        numericLiteralCases
-    | false, false
-    | true, true ->
-        typeReferencesCases
+        else if node.kind = Ts.SyntaxKind.UnionType then
+            let unionTypeNode = node :?> Ts.UnionTypeNode
+            // Unwrap union
+            readUnionTypeCases checker unionTypeNode |> Some
+        else
+            None
+    )
+    |> List.concat
 
 and private readUnionType
     (checker: Ts.TypeChecker)
-    (name : string)
-    (unionTypeNode: Ts.UnionTypeNode) : FSharpEnum =
+    (name: string)
+    (unionTypeNode: Ts.UnionTypeNode)
+    : FSharpEnum =
 
-    let cases = readUnionTypeCases checker "name" unionTypeNode
+    let cases = readUnionTypeCases checker unionTypeNode
 
-    {
-        Name = name
-        Cases = cases
-    } : FSharpEnum
+    { Name = name; Cases = cases } : FSharpEnum
 
 and private readTypeAliasDeclaration
     (checker: Ts.TypeChecker)
@@ -288,32 +215,27 @@ and private readTypeAliasDeclaration
 
     | _ -> failwith "ReadTypeAliasDeclaration: Unsupported kind"
 
-and private readNode
-    (checker: Ts.TypeChecker)
-    (typeNode: Ts.Node) =
+and private readNode (checker: Ts.TypeChecker) (typeNode: Ts.Node) =
     match typeNode.kind with
     | Ts.SyntaxKind.EnumDeclaration ->
-        let declaration = (typeNode :?> Ts.EnumDeclaration)
+        let declaration = typeNode :?> Ts.EnumDeclaration
 
         let enum = readEnum checker declaration
 
         FSharpType.Enum enum
 
     | Ts.SyntaxKind.TypeAliasDeclaration ->
-        let declaration = (typeNode :?> Ts.TypeAliasDeclaration)
+        let declaration = typeNode :?> Ts.TypeAliasDeclaration
 
         FSharpType.Enum(readTypeAliasDeclaration checker declaration)
 
-    | unsupported ->
-        FSharpType.Unsupported unsupported
+    | unsupported -> FSharpType.Unsupported unsupported
 
 let private convert
     (checker: Ts.TypeChecker)
     (sourceFile: option<Ts.SourceFile>)
     =
-    sourceFile.Value.statements
-    |> List.ofSeq
-    |> List.map (readNode checker)
+    sourceFile.Value.statements |> List.ofSeq |> List.map (readNode checker)
 
 
 let transform (filePath: string) =
@@ -354,7 +276,9 @@ let transform (filePath: string) =
 // log(printer.ToString())
 
 // let res = transform "./tests/specs/enums/literalStringEnumWithInheritance.d.ts"
-let res = transform "./tests/specs/enums/literalStringEnumWithInheritanceAndParenthesized.d.ts"
+let res =
+    transform
+        "./tests/specs/enums/literalNumericEnumWithInheritanceAndParenthesized.d.ts"
 // let res = transform "./tests/specs/enums/literalNumericEnum.d.ts"
 // let res = transform "./tests/specs/enums/literalStringEnum.d.ts"
 
