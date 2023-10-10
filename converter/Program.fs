@@ -230,6 +230,18 @@ and readInterfaceDeclaration
             let name =
                 unbox<Ts.Node> propertySignature.name
 
+            let accessor =
+                match propertySignature.modifiers with
+                | Some modifiers ->
+                    modifiers
+                    |> Seq.exists (fun modifier ->
+                        let i = ()
+                        modifier?kind = Ts.SyntaxKind.ReadonlyKeyword
+                    )
+                    |> function
+                    | true -> FSharpAccessor.ReadOnly
+                    | false -> FSharpAccessor.ReadWrite
+                | None -> FSharpAccessor.ReadWrite
 
             let typeInfo =
                 propertySignature.``type``
@@ -247,7 +259,7 @@ and readInterfaceDeclaration
                 Type = typeInfo
                 IsOptional = false
                 IsStatic = false
-                Accessor = FSharpAccessor.ReadOnly
+                Accessor = accessor
                 Accessibility = FSharpAccessiblity.Protected
             } : FSharpMember
 
