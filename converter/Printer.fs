@@ -89,30 +89,46 @@ let private sanitizeEnumCaseName (name: string) =
         $"``{name}``"
     | _ -> name
 
-let private printInterface (printer: Printer) (enumInfo: FSharpInterface) =
-    printer.Write("[<AllowNullLiteral>]")
-    printer.NewLine
+let printAttribute (printer : Printer) (fsharpAttribute : FSharpAttribute) =
+    match fsharpAttribute with
+    | FSharpAttribute.Text text ->
+        printer.Write(text)
+    | FSharpAttribute.EmitSelfInvoke ->
+        printer.Write("[<Emit(\"$0($1...)\")>]")
+    | FSharpAttribute.Import (name, module_) ->
+        printer.Write($"[<Import(\"{name}\", \"{module_}\")>]")
+    | FSharpAttribute.Erase ->
+        printer.Write("[<Erase>]")
+    | FSharpAttribute.AllowNullLiteral ->
+        printer.Write("[<AllowNullLiteral>]")
 
-    printer.Write($"type {enumInfo.Name} =")
+let printAttributes (printer : Printer) (fsharpAttributes : FSharpAttribute list) =
+    fsharpAttributes
+    |> List.iter (printAttribute printer)
+
+let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
+    if interfaceInfo.Attributes.Length > 0 then
+        printAttributes printer interfaceInfo.Attributes
+        printer.NewLine
+
+    printer.Write($"type {interfaceInfo.Name} =")
     printer.NewLine
 
     printer.Indent
 
-    enumInfo.Members
+    interfaceInfo.Members
     |> List.iter (fun m ->
 
-        m.Attributes
-        |> List.iter (
-            function
-            | FSharpAttribute.Text text ->
-                printer.Write(text)
-                printer.NewLine
-            | FSharpAttribute.EmitSelfInvoke ->
-                printer.Write("[<Emit(\"$0($1...)\")>]")
-                printer.NewLine
-        )
+        if m.Attributes.Length > 0 then
+            printAttributes printer m.Attributes
+            printer.NewLine
 
-        printer.Write($"abstract {m.Name}: ")
+        if m.IsStatic then
+            printer.Write("static ")
+        else
+            printer.Write("abstract ")
+
+        printer.WriteInline($"member {m.Name}: ")
 
         m.Parameters
         |> List.iteri (fun index p ->
@@ -126,6 +142,9 @@ let private printInterface (printer: Printer) (enumInfo: FSharpInterface) =
             printer.WriteInline(" -> ")
 
         printer.WriteInline(m.Type)
+
+        if m.IsStatic then
+            printer.WriteInline(" = nativeOnly")
 
         m.Accessor
         |> Option.map (

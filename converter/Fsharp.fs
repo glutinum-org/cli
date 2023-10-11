@@ -154,6 +154,9 @@ type FSharpAttribute =
     /// Generates <c>[&lt;Emit("$0($1...)")&gt;]</c> attribute.
     /// </summary>
     | EmitSelfInvoke
+    | Import of string * string
+    | Erase
+    | AllowNullLiteral
 
 type FSharpParameter =
     {
@@ -176,6 +179,7 @@ type FSharpMember =
 
 type FSharpInterface =
     {
+        Attributes : FSharpAttribute list
         Name : string
         Members : FSharpMember list
     }

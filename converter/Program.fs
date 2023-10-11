@@ -209,7 +209,7 @@ and private readUnionType
 
     let cases = readUnionTypeCases checker unionTypeNode
 
-    { Name = name; Cases = cases } : FSharpEnum
+    { Name = name; Cases = cases }: FSharpEnum
 
 and private readTypeAliasDeclaration
     (checker: Ts.TypeChecker)
@@ -223,44 +223,47 @@ and private readTypeAliasDeclaration
 
         readUnionType checker unionName unionTypeNode
 
-    | _ -> failwith $"ReadTypeAliasDeclaration: Unsupported kind {declaration.``type``.kind}"
+    | _ ->
+        failwith
+            $"ReadTypeAliasDeclaration: Unsupported kind {declaration.``type``.kind}"
 
 and readInterfaceDeclaration
-    (checker : Ts.TypeChecker)
-    (declaration: Ts.InterfaceDeclaration) : FSharpInterface =
+    (checker: Ts.TypeChecker)
+    (declaration: Ts.InterfaceDeclaration)
+    : FSharpInterface =
 
     let tryReadNamedDeclaration
-        (checker : Ts.TypeChecker)
-        (declaration: Ts.NamedDeclaration) =
+        (checker: Ts.TypeChecker)
+        (declaration: Ts.NamedDeclaration)
+        =
         match declaration.kind with
         | Ts.SyntaxKind.PropertySignature ->
             let propertySignature = declaration :?> Ts.PropertySignature
-            let name =
-                unbox<Ts.Node> propertySignature.name
+            let name = unbox<Ts.Node> propertySignature.name
 
             let accessor =
                 match propertySignature.modifiers with
                 | Some modifiers ->
                     modifiers
                     |> Seq.exists (fun modifier ->
-                        let i = ()
                         modifier?kind = Ts.SyntaxKind.ReadonlyKeyword
                     )
                     |> function
-                    | true -> FSharpAccessor.ReadOnly
-                    | false -> FSharpAccessor.ReadWrite
+                        | true -> FSharpAccessor.ReadOnly
+                        | false -> FSharpAccessor.ReadWrite
                 | None -> FSharpAccessor.ReadWrite
 
             {
                 Attributes = []
-                Name = name.getText()
+                Name = name.getText ()
                 Parameters = []
                 Type = readTypeNode propertySignature.``type``
                 IsOptional = false
                 IsStatic = false
                 Accessor = Some accessor
                 Accessibility = FSharpAccessiblity.Protected
-            } : FSharpMember
+            }
+            : FSharpMember
 
         | Ts.SyntaxKind.CallSignature ->
             let callSignature = declaration :?> Ts.CallSignatureDeclaration
@@ -271,11 +274,10 @@ and readInterfaceDeclaration
                 callSignature.parameters
                 |> Seq.toList
                 |> List.map (fun parameter ->
-                    let name =
-                        unbox<Ts.Identifier> parameter.name
+                    let name = unbox<Ts.Identifier> parameter.name
 
                     {
-                        Name = name.getText()
+                        Name = name.getText ()
                         IsOptional = false
                         Type = readTypeNode parameter.``type``
                     }
@@ -290,7 +292,8 @@ and readInterfaceDeclaration
                 IsStatic = false
                 Accessor = None
                 Accessibility = FSharpAccessiblity.Protected
-            } : FSharpMember
+            }
+            : FSharpMember
 
         | _ -> failwith "tryReadNamedDeclaration: Unsupported kind"
 
@@ -301,9 +304,56 @@ and readInterfaceDeclaration
         |> List.map (tryReadNamedDeclaration checker)
 
     {
+        Attributes = [ FSharpAttribute.AllowNullLiteral ]
         Name = declaration.name.getText ()
         Members = members
     }
+
+and readVariableStatement
+    (checker: Ts.TypeChecker)
+    (statement: Ts.VariableStatement)
+    =
+
+    let i = ()
+
+    let isExported =
+        statement.modifiers
+        |> Option.map (fun modifiers ->
+            modifiers
+            |> Seq.exists (fun modifier ->
+                modifier?kind = Ts.SyntaxKind.ExportKeyword
+            )
+        )
+        |> Option.defaultValue false
+
+    if isExported then
+        statement.declarationList.declarations
+        |> Seq.toList
+        |> List.map (fun declaration ->
+            let i = 0
+
+            let name =
+                match declaration.name?kind with
+                | Ts.SyntaxKind.Identifier ->
+                    let id: Ts.Identifier = !!declaration.name
+                    id.getText ()
+                | _ -> failwith "readVariableStatement: Unsupported kind"
+
+            {
+                Attributes = [
+                    FSharpAttribute.Import (name, "module")
+                ]
+                Name = name
+                Parameters = []
+                Type = readTypeNode declaration.``type``
+                IsOptional = false
+                IsStatic = true
+                Accessor = None
+                Accessibility = FSharpAccessiblity.Public
+            }
+        )
+    else
+        []
 
 and private readNode (checker: Ts.TypeChecker) (typeNode: Ts.Node) =
     match typeNode.kind with
@@ -322,7 +372,17 @@ and private readNode (checker: Ts.TypeChecker) (typeNode: Ts.Node) =
     | Ts.SyntaxKind.InterfaceDeclaration ->
         let declaration = typeNode :?> Ts.InterfaceDeclaration
 
-        readInterfaceDeclaration checker declaration
+        readInterfaceDeclaration checker declaration |> FSharpType.Interface
+
+    | Ts.SyntaxKind.VariableStatement ->
+        {
+            Attributes = [ FSharpAttribute.Erase ]
+            Name = "Exports"
+            Members =
+                readVariableStatement
+                    checker
+                    (typeNode :?> Ts.VariableStatement)
+        }
         |> FSharpType.Interface
 
     | unsupported -> FSharpType.Unsupported unsupported
@@ -372,8 +432,7 @@ let transform (filePath: string) =
 // log(printer.ToString())
 
 // let res = transform "./tests/specs/enums/literalStringEnumWithInheritance.d.ts"
-let res =
-    transform "./tests/specs/interfaces/callSignature.d.ts"
+let res = transform "./tests/specs/exports/variable.d.ts"
 // let res = transform "./tests/specs/enums/literalNumericEnum.d.ts"
 // let res = transform "./tests/specs/enums/literalStringEnum.d.ts"
 

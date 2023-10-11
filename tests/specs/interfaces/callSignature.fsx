@@ -8,4 +8,4 @@ open System
 [<AllowNullLiteral>]
 type MyObject =
     [<Emit("$0($1...)")>]
-    abstract Invoke: name: string -> unit
+    abstract member Invoke: name: string -> unit

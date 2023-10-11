@@ -7,4 +7,4 @@ open System
 
 [<AllowNullLiteral>]
 type Options =
-    abstract level: float with get, set
+    abstract member level: float with get, set
