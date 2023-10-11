@@ -114,6 +114,16 @@ let private readEnum
         Cases = readEnumResults.Cases
     }
 
+let private readTypeNode (typeNode: option<Ts.TypeNode>) =
+    match typeNode with
+    | Some typeNode ->
+        match typeNode.kind with
+        | Ts.SyntaxKind.NumberKeyword -> "float"
+        | Ts.SyntaxKind.StringKeyword -> "string"
+        | Ts.SyntaxKind.VoidKeyword -> "unit"
+        | _ -> failwith $"readTypeNode: Unsupported kind {typeNode.kind}"
+    | None -> "unit"
+
 let rec private readUnionTypeCases
     (checker: Ts.TypeChecker)
     (unionTypeNode: Ts.UnionTypeNode)
@@ -213,13 +223,11 @@ and private readTypeAliasDeclaration
 
         readUnionType checker unionName unionTypeNode
 
-    | _ -> failwith "ReadTypeAliasDeclaration: Unsupported kind"
+    | _ -> failwith $"ReadTypeAliasDeclaration: Unsupported kind {declaration.``type``.kind}"
 
 and readInterfaceDeclaration
     (checker : Ts.TypeChecker)
     (declaration: Ts.InterfaceDeclaration) : FSharpInterface =
-
-    let i = ()
 
     let tryReadNamedDeclaration
         (checker : Ts.TypeChecker)
@@ -243,23 +251,44 @@ and readInterfaceDeclaration
                     | false -> FSharpAccessor.ReadWrite
                 | None -> FSharpAccessor.ReadWrite
 
-            let typeInfo =
-                propertySignature.``type``
-                |> Option.map (fun typ ->
-                    match typ.kind with
-                    | Ts.SyntaxKind.NumberKeyword -> "float"
-                    | _ -> failwith "tryReadNamedDeclaration: Unsupported type"
-                )
-                |> Option.defaultWith (fun () ->
-                    failwith "tryReadNamedDeclaration: Missing type on propertySignaure"
+            {
+                Attributes = []
+                Name = name.getText()
+                Parameters = []
+                Type = readTypeNode propertySignature.``type``
+                IsOptional = false
+                IsStatic = false
+                Accessor = Some accessor
+                Accessibility = FSharpAccessiblity.Protected
+            } : FSharpMember
+
+        | Ts.SyntaxKind.CallSignature ->
+            let callSignature = declaration :?> Ts.CallSignatureDeclaration
+
+            // let readParameters (parameters : Ts.ParameterDeclaration list) =
+
+            let parameters =
+                callSignature.parameters
+                |> Seq.toList
+                |> List.map (fun parameter ->
+                    let name =
+                        unbox<Ts.Identifier> parameter.name
+
+                    {
+                        Name = name.getText()
+                        IsOptional = false
+                        Type = readTypeNode parameter.``type``
+                    }
                 )
 
             {
-                Name = name.getText()
-                Type = typeInfo
+                Attributes = [ FSharpAttribute.EmitSelfInvoke ]
+                Name = "Invoke"
+                Parameters = parameters
+                Type = readTypeNode callSignature.``type``
                 IsOptional = false
                 IsStatic = false
-                Accessor = accessor
+                Accessor = None
                 Accessibility = FSharpAccessiblity.Protected
             } : FSharpMember
 
@@ -344,8 +373,7 @@ let transform (filePath: string) =
 
 // let res = transform "./tests/specs/enums/literalStringEnumWithInheritance.d.ts"
 let res =
-    transform
-        "./tests/specs/interfaces/readonlyProperty.d.ts"
+    transform "./tests/specs/interfaces/callSignature.d.ts"
 // let res = transform "./tests/specs/enums/literalNumericEnum.d.ts"
 // let res = transform "./tests/specs/enums/literalStringEnum.d.ts"
 

@@ -16,9 +16,21 @@ type Printer() =
         // Safety measure so we don't have negative indentation space
         indentationLevel <- System.Math.Max(indentationLevel - 1, 0)
 
+    /// <summary>Write the provided text prefixed with indentation</summary>
+    /// <param name="text"></param>
+    /// <returns></returns>
     member __.Write(text: string) =
         buffer.Append(String.replicate indentationLevel indentationText + text)
         |> ignore
+
+    /// <summary>
+    /// Write the provided text directly in the buffer
+    ///
+    /// Useful when you don't want to prefix the text with indentation
+    /// </summary>
+    /// <param name="text"></param>
+    /// <returns></returns>
+    member __.WriteInline(text: string) = buffer.Append(text) |> ignore
 
     member __.NewLine = buffer.AppendLine() |> ignore
 
@@ -88,13 +100,41 @@ let private printInterface (printer: Printer) (enumInfo: FSharpInterface) =
 
     enumInfo.Members
     |> List.iter (fun m ->
-        let accessor =
-            match m.Accessor with
-            | FSharpAccessor.ReadOnly -> "with get"
-            | FSharpAccessor.WriteOnly -> "with set"
-            | FSharpAccessor.ReadWrite -> "with get, set"
 
-        printer.Write($"abstract {m.Name}: {m.Type} {accessor}")
+        m.Attributes
+        |> List.iter (
+            function
+            | FSharpAttribute.Text text ->
+                printer.Write(text)
+                printer.NewLine
+            | FSharpAttribute.EmitSelfInvoke ->
+                printer.Write("[<Emit(\"$0($1...)\")>]")
+                printer.NewLine
+        )
+
+        printer.Write($"abstract {m.Name}: ")
+
+        m.Parameters
+        |> List.iteri (fun index p ->
+            if index <> 0 then
+                printer.WriteInline(" -> ")
+
+            printer.WriteInline($"{p.Name}: {p.Type}")
+        )
+
+        if m.Parameters.Length > 0 then
+            printer.WriteInline(" -> ")
+
+        printer.WriteInline(m.Type)
+
+        m.Accessor
+        |> Option.map (
+            function
+            | FSharpAccessor.ReadOnly -> " with get"
+            | FSharpAccessor.WriteOnly -> " with set"
+            | FSharpAccessor.ReadWrite -> " with get, set"
+        )
+        |> Option.iter printer.WriteInline
 
         printer.NewLine
     )
@@ -195,6 +235,20 @@ let rec print (printer: Printer) (fsharpTypes: FSharpType list) =
         | FSharpType.Unsupported syntaxKind ->
             printer.Write($"obj // Unsupported syntax kind: %A{syntaxKind}")
             printer.NewLine
+
+        | FSharpType.Module moduleInfo ->
+            printer.Write($"module {moduleInfo.Name} =")
+            printer.NewLine
+
+            printer.Indent
+
+        // TODO: Make print return the tail
+        // Allowing module to eat they content and be able to unindent?
+        // print printer tail
+
+        // printer.Unindent
+
+        | FSharpType.Discard -> ()
 
         print printer tail
 

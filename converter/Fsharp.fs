@@ -147,13 +147,30 @@ type FSharpAccessiblity =
     | Private
     | Protected
 
+[<RequireQualifiedAccess>]
+type FSharpAttribute =
+    | Text of string
+    /// <summary>
+    /// Generates <c>[&lt;Emit("$0($1...)")&gt;]</c> attribute.
+    /// </summary>
+    | EmitSelfInvoke
+
+type FSharpParameter =
+    {
+        Name: string
+        IsOptional: bool
+        Type: string
+    }
+
 type FSharpMember =
     {
+        Attributes : FSharpAttribute list
         Name : string
+        Parameters : FSharpParameter list
         Type : string
         IsOptional : bool
         IsStatic : bool
-        Accessor : FSharpAccessor
+        Accessor : FSharpAccessor option
         Accessibility : FSharpAccessiblity
     }
 
