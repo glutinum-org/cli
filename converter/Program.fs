@@ -212,17 +212,70 @@ and private readUnionType
 
     { Name = name; Cases = cases }: FSharpEnum
 
+and readTypeOperator
+    (checker: Ts.TypeChecker)
+    (name: string)
+    (node: Ts.TypeOperatorNode)
+    : FSharpType =
+
+    match node.operator with
+    | Ts.SyntaxKind.KeyOfKeyword ->
+        if ts.isTypeReferenceNode node.``type`` then
+            let typeReferenceNode = node.``type`` :?> Ts.TypeReferenceNode
+
+            // TODO: Remove unboxing
+            let symbolOpt =
+                checker.getSymbolAtLocation !!typeReferenceNode.typeName
+
+            match symbolOpt with
+            | None -> failwith "readTypeOperator: Missing symbol"
+
+            | Some symbol ->
+                let interfaceDeclaration =
+                    symbol.declarations[0] :?> Ts.InterfaceDeclaration
+
+                let fsharpInterface =
+                    readInterfaceDeclaration checker interfaceDeclaration
+
+                // Transform the F# interface into a F# enum
+                let cases =
+                    fsharpInterface.Members
+                    |> List.map (fun memb ->
+                        {
+                            Name = memb.Name
+                            Value = FSharpUnionCaseType.Named memb.Name
+                        }
+                        : FSharpUnionCase
+                    )
+
+                {
+                    Name = name
+                    Cases = cases
+                }
+                |> FSharpType.Union
+
+        else
+            failwith "readTypeOperator: Unsupported type reference"
+
+    | _ -> failwith $"readTypeOperator: Unsupported operator {node.operator}"
+
 and private readTypeAliasDeclaration
     (checker: Ts.TypeChecker)
     (declaration: Ts.TypeAliasDeclaration)
     =
+
     match declaration.``type``.kind with
     | Ts.SyntaxKind.UnionType ->
         let unionTypeNode = declaration.``type`` :?> Ts.UnionTypeNode
         // Should it be moved inside of readUnionType?
         let unionName = declaration.name.getText ()
 
-        readUnionType checker unionName unionTypeNode
+        readUnionType checker unionName unionTypeNode |> FSharpType.Enum
+
+    | Ts.SyntaxKind.TypeOperator ->
+        let typeOperatorNode = declaration.``type`` :?> Ts.TypeOperatorNode
+        let aliasName = declaration.name.getText ()
+        readTypeOperator checker aliasName typeOperatorNode
 
     | _ ->
         failwith
@@ -341,9 +394,7 @@ and readVariableStatement
                 | _ -> failwith "readVariableStatement: Unsupported kind"
 
             {
-                Attributes = [
-                    FSharpAttribute.Import (name, "module")
-                ]
+                Attributes = [ FSharpAttribute.Import(name, "module") ]
                 Name = name
                 Parameters = []
                 Type = readTypeNode declaration.``type``
@@ -368,7 +419,7 @@ and private readNode (checker: Ts.TypeChecker) (typeNode: Ts.Node) =
     | Ts.SyntaxKind.TypeAliasDeclaration ->
         let declaration = typeNode :?> Ts.TypeAliasDeclaration
 
-        FSharpType.Enum(readTypeAliasDeclaration checker declaration)
+        readTypeAliasDeclaration checker declaration
 
     | Ts.SyntaxKind.InterfaceDeclaration ->
         let declaration = typeNode :?> Ts.InterfaceDeclaration
@@ -433,7 +484,7 @@ let transform (filePath: string) =
 // log(printer.ToString())
 
 // let res = transform "./tests/specs/enums/literalStringEnumWithInheritance.d.ts"
-let res = transform "./tests/specs/exports/variable.d.ts"
+let res = transform "./tests/specs/keyof/simpleObject.d.ts"
 // let res = transform "./tests/specs/enums/literalNumericEnum.d.ts"
 // let res = transform "./tests/specs/enums/literalStringEnum.d.ts"
 
