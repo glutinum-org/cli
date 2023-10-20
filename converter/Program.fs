@@ -89,7 +89,8 @@ let private readEnumCases
         NextCaseIndex =
             match caseValue with
             // Use the current case index as a reference for the next case
-            // In TypeScript, you can have the following enum: enum E { A, B = 4, C }
+            // In TypeScript, you can have the following enum:
+            // enum E { A, B = 4, C }
             // Meaning that C is 5
             | FSharpLiteral.Int i -> i + 1
             // TODO: Mixed enums is not supported in F#, should we fail, ignore
