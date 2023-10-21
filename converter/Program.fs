@@ -1,4 +1,4 @@
-module Glutinum.Converter.Program
+module rec Glutinum.Converter.Program
 
 open Fable.Core
 open System
@@ -115,15 +115,24 @@ let private readEnum
         Cases = readEnumResults.Cases
     }
 
-let private readTypeNode (typeNode: option<Ts.TypeNode>) =
+let private createSimpleType (name: string) : FSharpType =
+    { Name = name; Declarations = [] } |> FSharpType.Mapped
+
+let private readTypeNode
+    (checker: Ts.TypeChecker)
+    (typeNode: option<Ts.TypeNode>)
+    : FSharpType =
     match typeNode with
     | Some typeNode ->
         match typeNode.kind with
-        | Ts.SyntaxKind.NumberKeyword -> "float"
-        | Ts.SyntaxKind.StringKeyword -> "string"
-        | Ts.SyntaxKind.VoidKeyword -> "unit"
+        | Ts.SyntaxKind.NumberKeyword -> createSimpleType "float"
+        | Ts.SyntaxKind.StringKeyword -> createSimpleType "string"
+        | Ts.SyntaxKind.VoidKeyword -> createSimpleType "unit"
+        | Ts.SyntaxKind.UnionType ->
+            readUnionType checker "fake" (typeNode :?> Ts.UnionTypeNode)
+            |> FSharpType.Enum
         | _ -> failwith $"readTypeNode: Unsupported kind {typeNode.kind}"
-    | None -> "unit"
+    | None -> createSimpleType "unit"
 
 let rec private readUnionTypeCases
     (checker: Ts.TypeChecker)
@@ -193,16 +202,21 @@ let rec private readUnionTypeCases
                     enum.Cases
                 )
                 |> Some
-        else if node.kind = Ts.SyntaxKind.UnionType then
-            let unionTypeNode = node :?> Ts.UnionTypeNode
-            // Unwrap union
-            readUnionTypeCases checker unionTypeNode |> Some
         else
-            None
+            match node.kind with
+            | Ts.SyntaxKind.UnionType ->
+                let unionTypeNode = node :?> Ts.UnionTypeNode
+                // Unwrap union
+                readUnionTypeCases checker unionTypeNode |> Some
+            | _ ->
+                let typ = readTypeNode checker (Some (node :?> Ts.TypeNode))
+                printfn $"readUnionTypeCases: Unsupported type {typ}"
+                // Capture simple types like string, number, real type, etc.
+                None
     )
     |> List.concat
 
-and private readUnionType
+let private readUnionType
     (checker: Ts.TypeChecker)
     (name: string)
     (unionTypeNode: Ts.UnionTypeNode)
@@ -212,7 +226,7 @@ and private readUnionType
 
     { Name = name; Cases = cases }: FSharpEnum
 
-and readTypeOperator
+let readTypeOperator
     (checker: Ts.TypeChecker)
     (name: string)
     (node: Ts.TypeOperatorNode)
@@ -248,18 +262,14 @@ and readTypeOperator
                         : FSharpUnionCase
                     )
 
-                {
-                    Name = name
-                    Cases = cases
-                }
-                |> FSharpType.Union
+                { Name = name; Cases = cases } |> FSharpType.Union
 
         else
             failwith "readTypeOperator: Unsupported type reference"
 
     | _ -> failwith $"readTypeOperator: Unsupported operator {node.operator}"
 
-and private readTypeAliasDeclaration
+let private readTypeAliasDeclaration
     (checker: Ts.TypeChecker)
     (declaration: Ts.TypeAliasDeclaration)
     =
@@ -277,11 +287,13 @@ and private readTypeAliasDeclaration
         let aliasName = declaration.name.getText ()
         readTypeOperator checker aliasName typeOperatorNode
 
+    | Ts.SyntaxKind.IndexedAccessType -> FSharpType.Discard
+
     | _ ->
         failwith
             $"ReadTypeAliasDeclaration: Unsupported kind {declaration.``type``.kind}"
 
-and readInterfaceDeclaration
+let readInterfaceDeclaration
     (checker: Ts.TypeChecker)
     (declaration: Ts.InterfaceDeclaration)
     : FSharpInterface =
@@ -311,7 +323,7 @@ and readInterfaceDeclaration
                 Attributes = []
                 Name = name.getText ()
                 Parameters = []
-                Type = readTypeNode propertySignature.``type``
+                Type = readTypeNode checker propertySignature.``type``
                 IsOptional = false
                 IsStatic = false
                 Accessor = Some accessor
@@ -333,7 +345,7 @@ and readInterfaceDeclaration
                     {
                         Name = name.getText ()
                         IsOptional = false
-                        Type = readTypeNode parameter.``type``
+                        Type = readTypeNode checker parameter.``type``
                     }
                 )
 
@@ -341,7 +353,7 @@ and readInterfaceDeclaration
                 Attributes = [ FSharpAttribute.EmitSelfInvoke ]
                 Name = "Invoke"
                 Parameters = parameters
-                Type = readTypeNode callSignature.``type``
+                Type = readTypeNode checker callSignature.``type``
                 IsOptional = false
                 IsStatic = false
                 Accessor = None
@@ -363,7 +375,7 @@ and readInterfaceDeclaration
         Members = members
     }
 
-and readVariableStatement
+let readVariableStatement
     (checker: Ts.TypeChecker)
     (statement: Ts.VariableStatement)
     =
@@ -397,7 +409,7 @@ and readVariableStatement
                 Attributes = [ FSharpAttribute.Import(name, "module") ]
                 Name = name
                 Parameters = []
-                Type = readTypeNode declaration.``type``
+                Type = readTypeNode checker declaration.``type``
                 IsOptional = false
                 IsStatic = true
                 Accessor = None
@@ -407,7 +419,7 @@ and readVariableStatement
     else
         []
 
-and private readNode (checker: Ts.TypeChecker) (typeNode: Ts.Node) =
+let private readNode (checker: Ts.TypeChecker) (typeNode: Ts.Node) =
     match typeNode.kind with
     | Ts.SyntaxKind.EnumDeclaration ->
         let declaration = typeNode :?> Ts.EnumDeclaration
@@ -484,7 +496,7 @@ let transform (filePath: string) =
 // log(printer.ToString())
 
 // let res = transform "./tests/specs/enums/literalStringEnumWithInheritance.d.ts"
-let res = transform "./tests/specs/keyof/simpleObject.d.ts"
+let res = transform "tests/specs/mappedType/indexedAccessType.d.ts"
 // let res = transform "./tests/specs/enums/literalNumericEnum.d.ts"
 // let res = transform "./tests/specs/enums/literalStringEnum.d.ts"
 

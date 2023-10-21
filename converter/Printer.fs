@@ -106,6 +106,18 @@ let printAttributes (printer : Printer) (fsharpAttributes : FSharpAttribute list
     fsharpAttributes
     |> List.iter (printAttribute printer)
 
+let private printType (fsharpType : FSharpType) =
+    printfn "printType: %A" fsharpType
+    match fsharpType with
+    | FSharpType.Mapped info ->
+        info.Name
+    | FSharpType.Union info ->
+        info.Name
+    | FSharpType.Enum info ->
+        info.Name
+    | _ ->
+        "obj"
+
 let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
     if interfaceInfo.Attributes.Length > 0 then
         printAttributes printer interfaceInfo.Attributes
@@ -135,13 +147,13 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
             if index <> 0 then
                 printer.WriteInline(" -> ")
 
-            printer.WriteInline($"{p.Name}: {p.Type}")
+            printer.WriteInline($"{p.Name}: {printType p.Type}")
         )
 
         if m.Parameters.Length > 0 then
             printer.WriteInline(" -> ")
 
-        printer.WriteInline(m.Type)
+        printer.WriteInline(printType m.Type)
 
         if m.IsStatic then
             printer.WriteInline(" = nativeOnly")
@@ -267,6 +279,7 @@ let rec print (printer: Printer) (fsharpTypes: FSharpType list) =
 
         // printer.Unindent
 
+        | FSharpType.Mapped _
         | FSharpType.Discard -> ()
 
         print printer tail

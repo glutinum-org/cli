@@ -1,4 +1,4 @@
-module Glutinum.Converter.FSharpAST
+module rec Glutinum.Converter.FSharpAST
 
 open TypeScript
 
@@ -162,7 +162,7 @@ type FSharpParameter =
     {
         Name: string
         IsOptional: bool
-        Type: string
+        Type: FSharpType
     }
 
 type FSharpMember =
@@ -170,7 +170,7 @@ type FSharpMember =
         Attributes : FSharpAttribute list
         Name : string
         Parameters : FSharpParameter list
-        Type : string
+        Type : FSharpType
         IsOptional : bool
         IsStatic : bool
         Accessor : FSharpAccessor option
@@ -184,6 +184,12 @@ type FSharpInterface =
         Members : FSharpMember list
     }
 
+type FSharpMapped =
+    {
+        Name : string
+        Declarations : FSharpType list
+    }
+
 [<RequireQualifiedAccess>]
 type FSharpType =
     | Enum of FSharpEnum
@@ -191,6 +197,7 @@ type FSharpType =
     | Module of FSharpModule
     | Interface of FSharpInterface
     | Unsupported of Ts.SyntaxKind
+    | Mapped of FSharpMapped
     | Discard
 
 type FSharpOutFile =

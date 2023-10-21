@@ -12,7 +12,7 @@
     <ItemGroup>
         <Compile Include="Log.fs" />
         <Compile Include="TypeScript.fs" />
-        <Compile Include="Fsharp.fs" />
+        <Compile Include="FsharpAST.fs" />
         <Compile Include="Printer.fs" />
         <Compile Include="Program.fs" />
     </ItemGroup>
