@@ -84,8 +84,8 @@ type FSharpUnionCaseType =
 
 type FSharpUnionCase =
     {
+        Attributes : FSharpAttribute list
         Name : string
-        Value : FSharpUnionCaseType
     }
 
 [<RequireQualifiedAccess>]
@@ -96,6 +96,7 @@ type FSharpUnionType =
 
 type FSharpUnion =
     {
+        Attributes : FSharpAttribute list
         Name : string
         Cases : FSharpUnionCase list
     }
@@ -157,6 +158,9 @@ type FSharpAttribute =
     | Import of string * string
     | Erase
     | AllowNullLiteral
+    | StringEnum
+    | CompiledName of string
+    | RequireQualifiedAccess
 
 type FSharpParameter =
     {
@@ -191,6 +195,15 @@ type FSharpMapped =
     }
 
 [<RequireQualifiedAccess>]
+type FSharpPrimitive =
+    | String
+    | Int
+    | Float
+    | Bool
+    | Unit
+    | Number
+
+[<RequireQualifiedAccess>]
 type FSharpType =
     | Enum of FSharpEnum
     | Union of FSharpUnion
@@ -198,6 +211,7 @@ type FSharpType =
     | Interface of FSharpInterface
     | Unsupported of Ts.SyntaxKind
     | Mapped of FSharpMapped
+    | Primitive of FSharpPrimitive
     | Discard
 
 type FSharpOutFile =

@@ -43,7 +43,7 @@ let private removeHeader (textContent : string) =
 let macroTestSpec (t: ExecutionContext<obj>) (specPath: string) =
     promise {
         let filepath = $"{__SOURCE_DIRECTORY__}/specs/{specPath}.d.ts"
-        let res = transform filepath
+        let res = main filepath
         let! expectedContent =
             $"{__SOURCE_DIRECTORY__}/specs/{specPath}.fsx"
             |> Fs.readFile

@@ -13,5 +13,5 @@ type Point =
 [<RequireQualifiedAccess>]
 [<StringEnum>]
 type P =
-    | [<CompiledName("x")>] x
-    | [<CompiledName("y")>] y
+    | x
+    | y
