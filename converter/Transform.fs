@@ -27,6 +27,7 @@ let rec private transformType (glueType: GlueType) : FSharpType =
         | GluePrimitive.Bool -> FSharpType.Primitive FSharpPrimitive.Bool
         | GluePrimitive.Unit -> FSharpType.Primitive FSharpPrimitive.Unit
         | GluePrimitive.Number -> FSharpType.Primitive FSharpPrimitive.Number
+        | GluePrimitive.Any -> FSharpType.Primitive FSharpPrimitive.Null
     | GlueType.Union cases ->
         {
             Attributes = []
@@ -376,18 +377,21 @@ let private transformTypeAliasDeclaration
                 match glueType with
                 | GlueType.Interface interfaceInfo ->
                     interfaceInfo.Members
-                    |> List.map (fun m ->
-
-                        let cases =
-                            match m with
-                            | GlueMember.Method { Type = typ }
-                            | GlueMember.Property { Type = typ }
-                            | GlueMember.CallSignature { Type = typ } ->
-                                typ
-
-                        transformType cases
+                    // Flatten all the types
+                    |> List.collect (fun m ->
+                        match m with
+                        | GlueMember.Method { Type = typ }
+                        | GlueMember.Property { Type = typ }
+                        | GlueMember.CallSignature { Type = typ } ->
+                            match typ with
+                            | GlueType.Union cases -> cases
+                            | _ -> [ typ ]
                     )
-                    |> List.head
+                    // Remove duplicates
+                    |> List.distinct
+                    // Wrap inside of an union, so it can be transformed as U2, U3, etc.
+                    |> GlueType.Union
+                    |> transformType
 
                 | _ -> FSharpType.Discard
             | _ -> FSharpType.Discard

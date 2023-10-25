@@ -69,7 +69,7 @@ type GluePrimitive =
     | Bool
     | Unit
     | Number
-
+    | Any
 
 [<RequireQualifiedAccess>]
 type GlueLiteral =
@@ -132,6 +132,7 @@ type GlueType =
             | GluePrimitive.Bool -> "bool"
             | GluePrimitive.Unit -> "unit"
             | GluePrimitive.Number -> "float"
+            | GluePrimitive.Any -> "obj"
         | Enum info -> info.Name
         | TypeAliasDeclaration info -> info.Name
         | Union _ -> "obj"

@@ -135,6 +135,7 @@ let private printType (fsharpType: FSharpType) =
         | FSharpPrimitive.Bool -> "bool"
         | FSharpPrimitive.Unit -> "unit"
         | FSharpPrimitive.Number -> "float"
+        | FSharpPrimitive.Null -> "obj"
     | _ -> "obj"
 
 let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =

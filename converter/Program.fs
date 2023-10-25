@@ -53,9 +53,4 @@ let main (filePath: string) =
 
 // log(printer.ToString())
 
-// let res = transform "./tests/specs/enums/literalStringEnumWithInheritance.d.ts"
-let res = main "tests/specs/mappedType/indexedAccessType.d.ts"
-// let res = transform "./tests/specs/enums/literalNumericEnum.d.ts"
-// let res = transform "./tests/specs/enums/literalStringEnum.d.ts"
-
-// printfn "'%A'" res
+let res = main "tests/specs/indexedAccessType/interfaceWithSeveralMethods.d.ts"

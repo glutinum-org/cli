@@ -202,6 +202,7 @@ type FSharpPrimitive =
     | Bool
     | Unit
     | Number
+    | Null
 
 type FSharpTypeAlias =
     {
@@ -213,6 +214,18 @@ type FSharpTypeAlias =
 type FSharpType =
     | Enum of FSharpEnum
     | Union of FSharpUnion
+    // Create ErasedUnion type to make a difference between standard F# union
+    // and Fable U2, U3, etc. types.
+    // It is also possible that a third type of union exist which are
+    // specialized ErasedUnion types.
+    // To avoid using U2, U3, etc. types, but insteand things like:
+    // [<Erased>]
+    // type ConfigType =
+    //     | String of string
+    //     | Numeric of float
+    // Allowing for a more natural syntax, as you know what each cases expects
+    // compared to U2, U3, etc. for which you have to look at the type definition.
+    // | ErasedUnion of FSharpUnion
     | Module of FSharpModule
     | Interface of FSharpInterface
     | Unsupported of Ts.SyntaxKind

@@ -125,6 +125,8 @@ let private readTypeNode
         | Ts.SyntaxKind.NumberKeyword -> GlueType.Primitive GluePrimitive.Number
         | Ts.SyntaxKind.StringKeyword -> GlueType.Primitive GluePrimitive.String
         | Ts.SyntaxKind.VoidKeyword -> GlueType.Primitive GluePrimitive.Unit
+        | Ts.SyntaxKind.BooleanKeyword -> GlueType.Primitive GluePrimitive.Bool
+        | Ts.SyntaxKind.AnyKeyword -> GlueType.Primitive GluePrimitive.Any
         | Ts.SyntaxKind.UnionType ->
             readUnionType checker (typeNode :?> Ts.UnionTypeNode)
 
