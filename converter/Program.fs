@@ -32,11 +32,11 @@ let main (filePath: string) =
 
     let glueAst = Read.readSourceFile checker sourceFile
 
-    // printfn "glueAst: %A" glueAst
+    printfn "glueAst: %A" glueAst
 
     let res = Transform.transform glueAst
 
-    // printfn "fsharpAst: %A" res
+    printfn "fsharpAst: %A" res
 
     let outFile = {
         Name = None
@@ -54,7 +54,7 @@ let main (filePath: string) =
 // log(printer.ToString())
 
 // let res = transform "./tests/specs/enums/literalStringEnumWithInheritance.d.ts"
-let res = main "./tests/specs/keyof/simpleObject.d.ts"
+let res = main "tests/specs/mappedType/indexedAccessType.d.ts"
 // let res = transform "./tests/specs/enums/literalNumericEnum.d.ts"
 // let res = transform "./tests/specs/enums/literalStringEnum.d.ts"
 

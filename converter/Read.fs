@@ -125,10 +125,9 @@ let private readTypeNode
         | Ts.SyntaxKind.NumberKeyword -> GlueType.Primitive GluePrimitive.Number
         | Ts.SyntaxKind.StringKeyword -> GlueType.Primitive GluePrimitive.String
         | Ts.SyntaxKind.VoidKeyword -> GlueType.Primitive GluePrimitive.Unit
-        | Ts.SyntaxKind.UnionType -> GlueType.Primitive GluePrimitive.Unit
+        | Ts.SyntaxKind.UnionType ->
+            readUnionType checker (typeNode :?> Ts.UnionTypeNode)
 
-        //     readUnionType checker "fake" (typeNode :?> Ts.UnionTypeNode)
-        //     |> FSharpType.Enum
         | _ -> failwith $"readTypeNode: Unsupported kind {typeNode.kind}"
     | None -> GlueType.Primitive GluePrimitive.Unit
 
@@ -203,10 +202,10 @@ let rec private readUnionTypeCases
                 // Unwrap union
                 readUnionTypeCases checker unionTypeNode |> Some
             | _ ->
-                let typ = readTypeNode checker (Some (node :?> Ts.TypeNode))
-                printfn $"readUnionTypeCases: Unsupported type {typ}"
                 // Capture simple types like string, number, real type, etc.
-                None
+                readTypeNode checker (Some (node :?> Ts.TypeNode))
+                |> List.singleton
+                |> Some
     )
     |> List.concat
 
@@ -248,6 +247,25 @@ let readTypeOperator
 
     | _ -> failwith $"readTypeOperator: Unsupported operator {node.operator}"
 
+let private readIndexedAccessType
+    (checker : Ts.TypeChecker)
+    (declaration : Ts.IndexedAccessType) =
+
+    let nodeType = declaration.indexType :?> Ts.TypeNode
+
+    let typ =
+        match nodeType.kind with
+        | Ts.SyntaxKind.TypeOperator ->
+            let typeOperatorNode = declaration.indexType :?> Ts.TypeOperatorNode
+            readTypeOperator checker typeOperatorNode
+
+        | _ ->
+            // readTypeNode checker declaration.symbol
+            // |>
+            GlueType.Discard
+
+    GlueType.IndexedAccessType typ
+
 let private readTypeAliasDeclaration
     (checker: Ts.TypeChecker)
     (declaration: Ts.TypeAliasDeclaration)
@@ -266,7 +284,8 @@ let private readTypeAliasDeclaration
             readTypeOperator checker typeOperatorNode
 
         | Ts.SyntaxKind.IndexedAccessType ->
-            GlueType.Discard
+            let declaration = declaration.``type`` :?> Ts.IndexedAccessType
+            readIndexedAccessType checker declaration
 
         | _ ->
             failwith

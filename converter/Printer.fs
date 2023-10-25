@@ -118,7 +118,14 @@ let printAttributes
 let private printType (fsharpType: FSharpType) =
     match fsharpType with
     | FSharpType.Mapped info -> info.Name
-    | FSharpType.Union info -> info.Name
+    | FSharpType.Union info ->
+        let cases =
+            info.Cases
+            |> List.map (fun c -> c.Name)
+            |> String.concat ", "
+
+        $"{info.Name}<{cases}>"
+
     | FSharpType.Enum info -> info.Name
     | FSharpType.Primitive info ->
         match info with
@@ -252,6 +259,14 @@ let rec print (printer: Printer) (fsharpTypes: FSharpType list) =
         // print printer tail
 
         // printer.Unindent
+
+        | FSharpType.Alias aliasInfo ->
+            printer.Write($"type {aliasInfo.Name} =")
+            printer.NewLine
+            printer.Indent
+            printer.Write(printType aliasInfo.Type)
+            printer.NewLine
+            printer.Unindent
 
         | FSharpType.Mapped _
         | FSharpType.Primitive _

@@ -118,3 +118,24 @@ type GlueType =
     | Union of GlueType list
     | Literal of GlueLiteral
     | KeyOf of GlueType
+    | IndexedAccessType of GlueType
+
+    member this.Name with get () =
+        match this with
+        | Interface info -> info.Name
+        | Variable info -> info.Name
+        | Primitive info ->
+            match info with
+            | GluePrimitive.String -> "string"
+            | GluePrimitive.Int -> "int"
+            | GluePrimitive.Float -> "float"
+            | GluePrimitive.Bool -> "bool"
+            | GluePrimitive.Unit -> "unit"
+            | GluePrimitive.Number -> "float"
+        | Enum info -> info.Name
+        | TypeAliasDeclaration info -> info.Name
+        | Union _ -> "obj"
+        | Literal info -> info.ToText()
+        | KeyOf _ -> "string"
+        | Discard -> "obj"
+        | IndexedAccessType _ -> "obj"

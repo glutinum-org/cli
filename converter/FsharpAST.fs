@@ -203,6 +203,12 @@ type FSharpPrimitive =
     | Unit
     | Number
 
+type FSharpTypeAlias =
+    {
+        Name : string
+        Type : FSharpType
+    }
+
 [<RequireQualifiedAccess>]
 type FSharpType =
     | Enum of FSharpEnum
@@ -212,6 +218,7 @@ type FSharpType =
     | Unsupported of Ts.SyntaxKind
     | Mapped of FSharpMapped
     | Primitive of FSharpPrimitive
+    | Alias of FSharpTypeAlias
     | Discard
 
 type FSharpOutFile =

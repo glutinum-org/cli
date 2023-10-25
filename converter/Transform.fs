@@ -17,7 +17,7 @@ let private transformLiteral (glueLiteral: GlueLiteral) : FSharpLiteral =
     | GlueLiteral.Float value -> FSharpLiteral.Float value
     | GlueLiteral.Bool value -> FSharpLiteral.Bool value
 
-let private transformType (glueType: GlueType) : FSharpType =
+let rec private transformType (glueType: GlueType) : FSharpType =
     match glueType with
     | GlueType.Primitive primitiveInfo ->
         match primitiveInfo with
@@ -27,7 +27,29 @@ let private transformType (glueType: GlueType) : FSharpType =
         | GluePrimitive.Bool -> FSharpType.Primitive FSharpPrimitive.Bool
         | GluePrimitive.Unit -> FSharpType.Primitive FSharpPrimitive.Unit
         | GluePrimitive.Number -> FSharpType.Primitive FSharpPrimitive.Number
-    | _ -> failwithf "transformType: Unexpected type: %A" glueType
+    | GlueType.Union cases ->
+        {
+            Attributes = []
+            Name = $"U{cases.Length}"
+            Cases =
+                cases
+                |> List.map (fun caseType ->
+                    {
+                        Attributes = []
+                        Name = caseType.Name
+                    }
+                )
+        }
+        |> FSharpType.Union
+
+    | GlueType.IndexedAccessType _
+    | GlueType.Literal _
+    | GlueType.Interface _
+    | GlueType.Enum _
+    | GlueType.TypeAliasDeclaration _
+    | GlueType.Variable _
+    | GlueType.KeyOf _
+    | GlueType.Discard -> FSharpType.Discard
 
 /// <summary></summary>
 /// <param name="exports"></param>
@@ -163,8 +185,6 @@ let private transformEnum (glueEnum: GlueEnum) : FSharpType =
                 | GlueLiteral.String value -> value
                 | _ -> failwith "Should not happen"
 
-            // let create
-
             let caseName =
                 glueMember.Name
                 |> String.removeSingleQuote
@@ -203,19 +223,49 @@ Errored enum: {glueEnum.Name}
 module TypeAliasDeclaration =
 
     let transformKeyOf (aliasName: string) (glueType: GlueType) : FSharpType =
-        match glueType with
-        | GlueType.Interface interfaceInfo ->
-            {
-                Attributes = [ FSharpAttribute.AllowNullLiteral ]
-                Name = aliasName
-                Members = []
-            }
-            |> FSharpType.Interface
+        let cases =
+            match glueType with
+            | GlueType.Interface interfaceInfo ->
+                interfaceInfo.Members
+                |> List.choose (fun m ->
+                    match m with
+                    | GlueMember.Method { Name = caseName }
+                    | GlueMember.Property { Name = caseName } ->
+                        let caseValue =
+                            caseName
+                            |> String.removeSingleQuote
+                            |> String.removeDoubleQuote
 
-        | _ ->
-            failwithf
-                "TypeAliasDeclaration.transformKeyOf: Unexpected type: %A"
-                glueType
+                        let differentName =
+                            Naming.nameNotEqualsDefaultFableValue caseName caseValue
+
+                        {
+                            Attributes =
+                                [
+                                    if differentName then
+                                        FSharpAttribute.CompiledName(caseName)
+                                ]
+                            Name = caseValue
+                        }
+                        : FSharpUnionCase
+                        |> Some
+                    // Doesn't make sense to have a case for call signature
+                    | GlueMember.CallSignature _ -> None
+                )
+            | _ ->
+                []
+
+        ({
+            Attributes =
+                [
+                    FSharpAttribute.RequireQualifiedAccess
+                    FSharpAttribute.StringEnum
+                ]
+            Name = aliasName
+            Cases = cases
+        }
+        : FSharpUnion)
+        |> FSharpType.Union
 
 let private transformTypeAliasDeclaration
     (glueTypeAliasDeclaration: GlueTypeAliasDeclaration)
@@ -317,49 +367,37 @@ let private transformTypeAliasDeclaration
             FSharpType.Discard
 
     | GlueType.KeyOf glueType :: [] ->
-        let cases =
+        TypeAliasDeclaration.transformKeyOf glueTypeAliasDeclaration.Name glueType
+
+    | GlueType.IndexedAccessType glueType :: [] ->
+        let typ =
             match glueType with
-            | GlueType.Interface interfaceInfo ->
-                interfaceInfo.Members
-                |> List.choose (fun m ->
-                    match m with
-                    | GlueMember.Method { Name = caseName }
-                    | GlueMember.Property { Name = caseName } ->
-                        let caseValue =
-                            caseName
-                            |> String.removeSingleQuote
-                            |> String.removeDoubleQuote
+            | GlueType.KeyOf glueType ->
+                match glueType with
+                | GlueType.Interface interfaceInfo ->
+                    interfaceInfo.Members
+                    |> List.map (fun m ->
 
-                        let differentName =
-                            Naming.nameNotEqualsDefaultFableValue caseName caseValue
+                        let cases =
+                            match m with
+                            | GlueMember.Method { Type = typ }
+                            | GlueMember.Property { Type = typ }
+                            | GlueMember.CallSignature { Type = typ } ->
+                                typ
 
-                        {
-                            Attributes =
-                                [
-                                    if differentName then
-                                        FSharpAttribute.CompiledName(caseName)
-                                ]
-                            Name = caseValue
-                        }
-                        : FSharpUnionCase
-                        |> Some
-                    // Doesn't make sense to have a case for call signature
-                    | GlueMember.CallSignature _ -> None
-                )
-            | _ ->
-                []
+                        transformType cases
+                    )
+                    |> List.head
+
+                | _ -> FSharpType.Discard
+            | _ -> FSharpType.Discard
 
         ({
-            Attributes =
-                [
-                    FSharpAttribute.RequireQualifiedAccess
-                    FSharpAttribute.StringEnum
-                ]
             Name = glueTypeAliasDeclaration.Name
-            Cases = cases
+            Type = typ
         }
-        : FSharpUnion)
-        |> FSharpType.Union
+        : FSharpTypeAlias)
+        |> FSharpType.Alias
 
     | _ -> FSharpType.Discard
 
@@ -375,6 +413,7 @@ let rec private transformToFsharp (glueTypes: GlueType list) : FSharpType list =
         | GlueType.TypeAliasDeclaration typeAliasInfo ->
             transformTypeAliasDeclaration typeAliasInfo
 
+        | GlueType.IndexedAccessType _
         | GlueType.Union _
         | GlueType.Literal _
         | GlueType.Variable _
