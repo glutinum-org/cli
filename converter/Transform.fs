@@ -69,10 +69,10 @@ let private transformExports (exports: GlueType list) : FSharpType =
                     Type = transformType info.Type
                     IsOptional = false
                     IsStatic = true
-                    IsFunction = false
                     Accessor = None
                     Accessibility = FSharpAccessiblity.Public
                 }
+                |> FSharpMember.Property
 
             | GlueType.FunctionDeclaration info ->
                 {
@@ -83,10 +83,10 @@ let private transformExports (exports: GlueType list) : FSharpType =
                     Type = transformType info.Type
                     IsOptional = false
                     IsStatic = true
-                    IsFunction = true
                     Accessor = None
                     Accessibility = FSharpAccessiblity.Public
                 }
+                |> FSharpMember.Method
 
             | glueType ->
                 failwithf "Could not generate exportMembers for: %A" glueType
@@ -126,11 +126,10 @@ let private transformInterface (info: GlueInterface) : FSharpInterface =
                     Type = transformType methodInfo.Type
                     IsOptional = methodInfo.IsOptional
                     IsStatic = methodInfo.IsStatic
-                    IsFunction = false
                     Accessor = None
                     Accessibility = FSharpAccessiblity.Public
                 }
-
+                |> FSharpMember.Method
 
             | GlueMember.CallSignature callSignatureInfo ->
                 {
@@ -142,10 +141,10 @@ let private transformInterface (info: GlueInterface) : FSharpInterface =
                     Type = transformType callSignatureInfo.Type
                     IsOptional = false
                     IsStatic = false
-                    IsFunction = false
                     Accessor = None
                     Accessibility = FSharpAccessiblity.Public
                 }
+                |> FSharpMember.Method
 
             | GlueMember.Property propertyInfo ->
                 {
@@ -155,10 +154,10 @@ let private transformInterface (info: GlueInterface) : FSharpInterface =
                     Type = transformType propertyInfo.Type
                     IsOptional = false
                     IsStatic = propertyInfo.IsStatic
-                    IsFunction = false
                     Accessor = transformAccessor propertyInfo.Accessor |> Some
                     Accessibility = FSharpAccessiblity.Public
                 }
+                |> FSharpMember.Property
         )
 
     {

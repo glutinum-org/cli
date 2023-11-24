@@ -147,47 +147,81 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
     printer.Indent
 
     interfaceInfo.Members
-    |> List.iter (fun m ->
+    |> List.iter (function
+        | FSharpMember.Method methodInfo ->
+            printAttributes printer methodInfo.Attributes
 
-        printAttributes printer m.Attributes
+            if methodInfo.IsStatic then
+                printer.Write("static ")
+            else
+                printer.Write("abstract ")
 
-        if m.IsStatic then
-            printer.Write("static ")
-        else
-            printer.Write("abstract ")
+            printer.WriteInline($"member {methodInfo.Name}")
 
-        printer.WriteInline($"member {m.Name}: ")
+            if methodInfo.IsStatic then
+                printer.WriteInline(" ")
+                // Special case for functions with no parameters
+                if methodInfo.Parameters.Length = 0 then
+                    printer.WriteInline("()")
+                else
+                    methodInfo.Parameters
+                    |> List.iteri (fun index p ->
+                        if index <> 0 then
+                            printer.WriteInline(", ")
 
-        // Special case for functions with no parameters
-        if m.Parameters.Length = 0 && m.IsFunction then
-            printer.WriteInline("unit -> ")
-        else
-            m.Parameters
-            |> List.iteri (fun index p ->
-                if index <> 0 then
-                    printer.WriteInline(" -> ")
+                        if p.IsOptional then
+                            printer.WriteInline("?")
 
-                printer.WriteInline($"{p.Name}: {printType p.Type}")
-            )
+                        printer.WriteInline($"{p.Name}: {printType p.Type}")
+                    )
+            else
+                printer.WriteInline(": " )
+                methodInfo.Parameters
+                |> List.iteri (fun index p ->
+                    if index <> 0 then
+                        printer.WriteInline(" -> ")
 
-            if m.Parameters.Length > 0 then
+                    printer.WriteInline($"{p.Name}: {printType p.Type}")
+                )
+
+            if methodInfo.IsStatic then
+                printer.WriteInline(" : ")
+            else
                 printer.WriteInline(" -> ")
 
-        printer.WriteInline(printType m.Type)
+            printer.WriteInline(printType methodInfo.Type)
 
-        if m.IsStatic then
-            printer.WriteInline(" = nativeOnly")
+            if methodInfo.IsStatic then
+                printer.WriteInline(" = nativeOnly")
 
-        m.Accessor
-        |> Option.map (
-            function
-            | FSharpAccessor.ReadOnly -> " with get"
-            | FSharpAccessor.WriteOnly -> " with set"
-            | FSharpAccessor.ReadWrite -> " with get, set"
-        )
-        |> Option.iter printer.WriteInline
+            printer.NewLine
 
-        printer.NewLine
+        | FSharpMember.Property propertyInfo ->
+
+            printAttributes printer propertyInfo.Attributes
+
+            if propertyInfo.IsStatic then
+                printer.Write("static ")
+            else
+                printer.Write("abstract ")
+
+            printer.WriteInline($"member {propertyInfo.Name}")
+
+            printer.WriteInline($": {printType propertyInfo.Type}")
+
+            if propertyInfo.IsStatic then
+                printer.WriteInline(" = nativeOnly")
+
+            propertyInfo.Accessor
+            |> Option.map (
+                function
+                | FSharpAccessor.ReadOnly -> " with get"
+                | FSharpAccessor.WriteOnly -> " with set"
+                | FSharpAccessor.ReadWrite -> " with get, set"
+            )
+            |> Option.iter printer.WriteInline
+
+            printer.NewLine
     )
 
     printer.Unindent
