@@ -107,6 +107,14 @@ type GlueTypeAliasDeclaration =
         Types : GlueType list
     }
 
+type GlueFunctionDeclaration =
+    {
+        IsDeclared : bool
+        Name : string
+        Type : GlueType
+        Parameters : GlueParameter list
+    }
+
 [<RequireQualifiedAccess>]
 type GlueType =
     | Discard
@@ -115,6 +123,7 @@ type GlueType =
     | Primitive of GluePrimitive
     | Enum of GlueEnum
     | TypeAliasDeclaration of GlueTypeAliasDeclaration
+    | FunctionDeclaration of GlueFunctionDeclaration
     | Union of GlueType list
     | Literal of GlueLiteral
     | KeyOf of GlueType
@@ -140,3 +149,4 @@ type GlueType =
         | KeyOf _ -> "string"
         | Discard -> "obj"
         | IndexedAccessType _ -> "obj"
+        | FunctionDeclaration info -> info.Name

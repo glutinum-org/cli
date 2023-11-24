@@ -50,7 +50,8 @@ let rec private transformType (glueType: GlueType) : FSharpType =
     | GlueType.TypeAliasDeclaration _
     | GlueType.Variable _
     | GlueType.KeyOf _
-    | GlueType.Discard -> FSharpType.Discard
+    | GlueType.Discard
+    | GlueType.FunctionDeclaration _ -> FSharpType.Discard
 
 /// <summary></summary>
 /// <param name="exports"></param>
@@ -68,6 +69,21 @@ let private transformExports (exports: GlueType list) : FSharpType =
                     Type = transformType info.Type
                     IsOptional = false
                     IsStatic = true
+                    IsFunction = false
+                    Accessor = None
+                    Accessibility = FSharpAccessiblity.Public
+                }
+
+            | GlueType.FunctionDeclaration info ->
+                {
+                    Attributes = [ FSharpAttribute.Import(info.Name, "module") ]
+                    Name = info.Name
+                    Parameters =
+                        info.Parameters |> List.map transformParameter
+                    Type = transformType info.Type
+                    IsOptional = false
+                    IsStatic = true
+                    IsFunction = true
                     Accessor = None
                     Accessibility = FSharpAccessiblity.Public
                 }
@@ -110,6 +126,7 @@ let private transformInterface (info: GlueInterface) : FSharpInterface =
                     Type = transformType methodInfo.Type
                     IsOptional = methodInfo.IsOptional
                     IsStatic = methodInfo.IsStatic
+                    IsFunction = false
                     Accessor = None
                     Accessibility = FSharpAccessiblity.Public
                 }
@@ -125,6 +142,7 @@ let private transformInterface (info: GlueInterface) : FSharpInterface =
                     Type = transformType callSignatureInfo.Type
                     IsOptional = false
                     IsStatic = false
+                    IsFunction = false
                     Accessor = None
                     Accessibility = FSharpAccessiblity.Public
                 }
@@ -137,6 +155,7 @@ let private transformInterface (info: GlueInterface) : FSharpInterface =
                     Type = transformType propertyInfo.Type
                     IsOptional = false
                     IsStatic = propertyInfo.IsStatic
+                    IsFunction = false
                     Accessor = transformAccessor propertyInfo.Accessor |> Some
                     Accessibility = FSharpAccessiblity.Public
                 }
@@ -417,6 +436,7 @@ let rec private transformToFsharp (glueTypes: GlueType list) : FSharpType list =
         | GlueType.TypeAliasDeclaration typeAliasInfo ->
             transformTypeAliasDeclaration typeAliasInfo
 
+        | GlueType.FunctionDeclaration _
         | GlueType.IndexedAccessType _
         | GlueType.Union _
         | GlueType.Literal _
@@ -432,7 +452,8 @@ let transform (glueAst: GlueType list) : FSharpType list =
         glueAst
         |> List.partition (fun glueType ->
             match glueType with
-            | GlueType.Variable _ -> true
+            | GlueType.Variable _
+            | GlueType.FunctionDeclaration _ -> true
             | _ -> false
         )
 

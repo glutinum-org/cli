@@ -158,16 +158,20 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
 
         printer.WriteInline($"member {m.Name}: ")
 
-        m.Parameters
-        |> List.iteri (fun index p ->
-            if index <> 0 then
+        // Special case for functions with no parameters
+        if m.Parameters.Length = 0 && m.IsFunction then
+            printer.WriteInline("unit -> ")
+        else
+            m.Parameters
+            |> List.iteri (fun index p ->
+                if index <> 0 then
+                    printer.WriteInline(" -> ")
+
+                printer.WriteInline($"{p.Name}: {printType p.Type}")
+            )
+
+            if m.Parameters.Length > 0 then
                 printer.WriteInline(" -> ")
-
-            printer.WriteInline($"{p.Name}: {printType p.Type}")
-        )
-
-        if m.Parameters.Length > 0 then
-            printer.WriteInline(" -> ")
 
         printer.WriteInline(printType m.Type)
 

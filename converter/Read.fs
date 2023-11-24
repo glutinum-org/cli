@@ -406,6 +406,32 @@ let private tryReadVariableStatement
     else
         None
 
+let private readFunctionDeclaration
+    (checker: Ts.TypeChecker)
+    (declaration: Ts.FunctionDeclaration)
+    : GlueFunctionDeclaration =
+
+    let isDeclared =
+        match declaration.modifiers with
+        | Some modifiers ->
+            modifiers
+            |> Seq.exists (fun modifier ->
+                modifier?kind = Ts.SyntaxKind.DeclareKeyword
+            )
+        | None -> false
+
+    let name =
+        match declaration.name with
+        | Some name -> name.getText ()
+        | None -> failwith "readFunctionDeclaration: Missing name"
+
+    {
+        IsDeclared = isDeclared
+        Name = name
+        Type = readTypeNode checker declaration.``type``
+        Parameters = readParameters checker declaration.parameters
+    }
+
 let private readNode (checker: Ts.TypeChecker) (typeNode: Ts.Node) : GlueType =
     match typeNode.kind with
     | Ts.SyntaxKind.EnumDeclaration ->
@@ -431,6 +457,12 @@ let private readNode (checker: Ts.TypeChecker) (typeNode: Ts.Node) : GlueType =
         with
         | Some variable -> GlueType.Variable variable
         | None -> GlueType.Discard
+
+    | Ts.SyntaxKind.FunctionDeclaration ->
+        let declaration = typeNode :?> Ts.FunctionDeclaration
+
+        readFunctionDeclaration checker declaration
+        |> GlueType.FunctionDeclaration
 
     | unsupported -> GlueType.Discard
 

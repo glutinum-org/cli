@@ -177,6 +177,11 @@ type FSharpMember =
         Type : FSharpType
         IsOptional : bool
         IsStatic : bool
+        // Is there a better way to detect members created from functions?
+        // This Isfunction is mostly here to handle functions withouth parameters
+        // as we need to identify them to generates `unit -> returnType`
+        // otherwise we would generate `returnType` which is just a property and not a function.
+        IsFunction : bool
         Accessor : FSharpAccessor option
         Accessibility : FSharpAccessiblity
     }

@@ -53,4 +53,4 @@ let main (filePath: string) =
 
 // log(printer.ToString())
 
-let res = main "tests/specs/indexedAccessType/interfaceWithSeveralMethods.d.ts"
+// let res = main "tests/specs/functions/topLevelDeclaredBasicFunction.d.ts"
