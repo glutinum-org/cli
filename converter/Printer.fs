@@ -51,9 +51,12 @@ let printOutFile (printer: Printer) (outFile: FSharpOutFile) =
 
 module Naming =
     let (|Digit|_|) (digit: string) =
-        if String.IsNullOrWhiteSpace digit then None
-        elif Char.IsDigit(digit, 0) then Some digit
-        else None
+        if String.IsNullOrWhiteSpace digit then
+            None
+        elif Char.IsDigit(digit, 0) then
+            Some digit
+        else
+            None
 
 let private sanitizeEnumCaseName (name: string) =
     let name =
@@ -120,9 +123,7 @@ let private printType (fsharpType: FSharpType) =
     | FSharpType.Mapped info -> info.Name
     | FSharpType.Union info ->
         let cases =
-            info.Cases
-            |> List.map (fun c -> c.Name)
-            |> String.concat ", "
+            info.Cases |> List.map (fun c -> c.Name) |> String.concat ", "
 
         $"{info.Name}<{cases}>"
 
@@ -147,7 +148,8 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
     printer.Indent
 
     interfaceInfo.Members
-    |> List.iter (function
+    |> List.iter (
+        function
         // TODO: Rewrite the code below to share more code
         // Right now there are a lots of duplication and special rules
         // Can these rules be represented in the AST to simplify the code?
@@ -167,6 +169,7 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
                 if methodInfo.Parameters.Length = 0 then
                     printer.WriteInline("()")
                 else
+                    printer.WriteInline("(")
                     methodInfo.Parameters
                     |> List.iteri (fun index p ->
                         if index <> 0 then
@@ -177,8 +180,10 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
 
                         printer.WriteInline($"{p.Name}: {printType p.Type}")
                     )
+                    printer.WriteInline(")")
             else
-                printer.WriteInline(": " )
+                printer.WriteInline(": ")
+
                 methodInfo.Parameters
                 |> List.iteri (fun index p ->
                     if index <> 0 then
@@ -247,8 +252,7 @@ let private printEnum (printer: Printer) (enumInfo: FSharpEnum) =
 
         | FSharpLiteral.Bool _
         | FSharpLiteral.String _
-        | FSharpLiteral.Float _ ->
-            ()
+        | FSharpLiteral.Float _ -> ()
 
         printer.NewLine
     )

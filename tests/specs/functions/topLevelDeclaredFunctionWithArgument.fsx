@@ -8,4 +8,4 @@ open System
 [<Erase>]
 type Exports =
     [<Import("hello", "module")>]
-    static member hello () : unit = nativeOnly
+    static member hello (name: string) : unit = nativeOnly

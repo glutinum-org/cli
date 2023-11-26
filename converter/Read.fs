@@ -310,7 +310,7 @@ let private readParameters
 
         {
             Name = name.getText ()
-            IsOptional = false
+            IsOptional = parameter.questionToken.IsSome
             Type = readTypeNode checker parameter.``type``
         }
     )
