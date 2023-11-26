@@ -1,0 +1,28 @@
+name: build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Setup Node.js environment
+      uses: actions/setup-node@4
+
+    - name: Fable Tests - JavaScript
+      run: |
+        npm i
+        dotnet tool restore
+        dotnet fable tests --run npx ava tests
