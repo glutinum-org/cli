@@ -21,8 +21,12 @@ jobs:
     - name: Setup Node.js environment
       uses: actions/setup-node@v4
 
+    - uses: pnpm/action-setup@v2
+      with:
+        version: 8
+
     - name: Fable Tests - JavaScript
       run: |
-        npm i
+        pnpm install
         dotnet tool restore
         dotnet fable tests --run npx ava tests
