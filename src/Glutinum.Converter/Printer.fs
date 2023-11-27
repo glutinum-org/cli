@@ -148,11 +148,8 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
     printer.Indent
 
     interfaceInfo.Members
-    |> List.iteri (fun index m ->
-        if index <> 0 then
-            printer.NewLine
-
-        match m with
+    |> List.iter (
+        function
         // TODO: Rewrite the code below to share more code
         // Right now there are a lots of duplication and special rules
         // Can these rules be represented in the AST to simplify the code?
