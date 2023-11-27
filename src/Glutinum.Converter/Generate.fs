@@ -1,4 +1,4 @@
-module rec Glutinum.Converter.Program
+module rec Glutinum.Converter.Generate
 
 open Fable.Core
 open System
@@ -10,7 +10,8 @@ open Node.Api
 open Fable.Core.JS
 open Glutinum.Converter
 
-let main (filePath: string) =
+let generateBindingFile (filePath : string) =
+
     if fs.existsSync (U2.Case1 filePath) |> not then
         failwith $"File does not exist: {filePath}"
 

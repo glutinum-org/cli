@@ -4,7 +4,7 @@ open Fable.Core
 open Mocha
 open Glutinum.FastGlob
 open Glutinum.Ava
-open Glutinum.Converter.Program
+open Glutinum.Converter.Generate
 open Node.Api
 open Fable.Core.JsInterop
 open System
@@ -43,7 +43,7 @@ let private removeHeader (textContent : string) =
 let macroTestSpec (t: ExecutionContext<obj>) (specPath: string) =
     promise {
         let filepath = $"{__SOURCE_DIRECTORY__}/specs/{specPath}.d.ts"
-        let res = main filepath
+        let res = generateBindingFile filepath
         let! expectedContent =
             $"{__SOURCE_DIRECTORY__}/specs/{specPath}.fsx"
             |> Fs.readFile

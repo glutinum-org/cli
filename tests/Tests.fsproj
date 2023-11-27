@@ -14,7 +14,7 @@
         <Compile Include="Specs.fs" />
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="../converter/Glutinum.Converter.fsproj" />
+        <ProjectReference Include="../src/Glutinum.Converter/Glutinum.Converter.fsproj" />
     </ItemGroup>
     <ItemGroup>
       <PackageReference Include="Fable.Core" Version="4.0.0" />

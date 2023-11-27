@@ -1,13 +1,12 @@
 Glutinum.Converter
 
-Commands:
+| Tasks | Command |
+|---|---|
+| Test  | `dotnet fable tests --sourceMaps --run npx ava tests`  |
+| Watch test  |   `dotnet fable tests --watch --sourceMaps --run npx ava tests --watch` |
+| Watch specific test | `dotnet fable tests --watch --sourceMaps --run npx ava tests --watch --match="**XXX**"` |
 
-Compile the test files: `dotnet fable tests --watch --sourceMaps`
+You can also use attach a JavaScript debugger while debugging a specific test by compile the CLI tool:
 
-Run the tests: `npx ava tests --watch`
-
-If you want to focus on specific tests, you can use the `--match` option of AVA.
-
-Example:
-
-This command `npx ava tests --watch --match="**mappedType**"` will match all tests containing the string `mappedType` in their name.
+- Terminal: `dotnet fable src/Glutinum.Converter.CLI --watch --sourceMaps`
+- JavaScript debug terminal (VSCode): `node src/Glutinum.Converter.CLI/Program.fs.js ./tests/specs/enums/literalNumericEnum.d.ts`

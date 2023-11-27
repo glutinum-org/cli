@@ -10,22 +10,15 @@
         </Description>
     </PropertyGroup>
     <ItemGroup>
-        <Compile Include="Utils/String.fs" />
-        <Compile Include="Utils/Naming.fs" />
-        <Compile Include="Utils/Keywords.fs" />
-        <Compile Include="Log.fs" />
-        <Compile Include="TypeScript.fs" />
-        <Compile Include="GlueAST.fs" />
-        <Compile Include="FsharpAST.fs" />
-        <Compile Include="Read.fs" />
-        <Compile Include="Transform.fs" />
-        <Compile Include="Printer.fs" />
         <Compile Include="Program.fs" />
     </ItemGroup>
     <ItemGroup>
       <PackageReference Include="Fable.Core" Version="4.0.0" />
       <PackageReference Include="Fable.Node" Version="1.2.0" />
       <PackageReference Include="Glutinum.Chalk" Version="0.1.0-alpha-001" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\Glutinum.Converter\Glutinum.Converter.fsproj" />
     </ItemGroup>
     <!-- This package doesn't contain actual code
         so we don't need to add the sources -->
