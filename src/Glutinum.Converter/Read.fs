@@ -432,6 +432,44 @@ let private readFunctionDeclaration
         Parameters = readParameters checker declaration.parameters
     }
 
+let private readModuleDeclaration
+    (checker: Ts.TypeChecker)
+    (declaration: Ts.ModuleDeclaration)
+    : GlueTypeModuleDeclaration =
+
+    let name = unbox<Ts.Identifier> declaration.name
+    let children = declaration.getChildren()
+
+    let isNamespace =
+        children
+        |> Seq.exists (fun node ->
+            node.kind = Ts.SyntaxKind.NamespaceKeyword
+        )
+
+    let types =
+        children
+        |> Seq.choose(fun child ->
+            match child.kind with
+            | Ts.SyntaxKind.ModuleBlock ->
+                let moduleBlock = child :?> Ts.ModuleBlock
+
+                moduleBlock.statements
+                |> List.ofSeq
+                |> List.map (readNode checker)
+                |> Some
+
+            | Ts.SyntaxKind.NamespaceKeyword
+            | _ -> None
+        )
+        |> Seq.concat
+        |> Seq.toList
+
+    {
+        Name = name.getText ()
+        IsNamespace = isNamespace
+        Types = types
+    }
+
 let private readNode (checker: Ts.TypeChecker) (typeNode: Ts.Node) : GlueType =
     match typeNode.kind with
     | Ts.SyntaxKind.EnumDeclaration ->
@@ -464,7 +502,15 @@ let private readNode (checker: Ts.TypeChecker) (typeNode: Ts.Node) : GlueType =
         readFunctionDeclaration checker declaration
         |> GlueType.FunctionDeclaration
 
-    | unsupported -> GlueType.Discard
+    | Ts.SyntaxKind.ModuleDeclaration ->
+        let declaration = typeNode :?> Ts.ModuleDeclaration
+
+        readModuleDeclaration checker declaration
+        |> GlueType.ModuleDeclaration
+
+    | unsupported ->
+        printfn $"readNode: Unsupported kind {unsupported}"
+        GlueType.Discard
 
 let readSourceFile
     (checker: Ts.TypeChecker)

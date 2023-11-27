@@ -423,6 +423,13 @@ let private transformTypeAliasDeclaration
 
     | _ -> FSharpType.Discard
 
+let private transformModuleDeclaration (moduleDeclaration : GlueTypeModuleDeclaration) : FSharpType =
+    ({
+        Name = moduleDeclaration.Name
+        Types = transformToFsharp moduleDeclaration.Types
+    } : FSharpModule)
+    |> FSharpType.Module
+
 let rec private transformToFsharp (glueTypes: GlueType list) : FSharpType list =
     glueTypes
     |> List.map (
@@ -434,6 +441,9 @@ let rec private transformToFsharp (glueTypes: GlueType list) : FSharpType list =
 
         | GlueType.TypeAliasDeclaration typeAliasInfo ->
             transformTypeAliasDeclaration typeAliasInfo
+
+        | GlueType.ModuleDeclaration moduleInfo ->
+            transformModuleDeclaration moduleInfo
 
         | GlueType.FunctionDeclaration _
         | GlueType.IndexedAccessType _

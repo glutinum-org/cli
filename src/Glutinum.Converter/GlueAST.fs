@@ -115,6 +115,13 @@ type GlueFunctionDeclaration =
         Parameters : GlueParameter list
     }
 
+type GlueTypeModuleDeclaration =
+    {
+        Name : string
+        IsNamespace : bool
+        Types : GlueType list
+    }
+
 [<RequireQualifiedAccess>]
 type GlueType =
     | Discard
@@ -128,6 +135,7 @@ type GlueType =
     | Literal of GlueLiteral
     | KeyOf of GlueType
     | IndexedAccessType of GlueType
+    | ModuleDeclaration of GlueTypeModuleDeclaration
 
     member this.Name with get () =
         match this with
@@ -150,3 +158,4 @@ type GlueType =
         | Discard -> "obj"
         | IndexedAccessType _ -> "obj"
         | FunctionDeclaration info -> info.Name
+        | ModuleDeclaration info -> info.Name

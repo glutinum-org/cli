@@ -134,6 +134,7 @@ type FSharpUnion =
 type FSharpModule =
     {
         Name : string
+        Types : FSharpType list
     }
 
 [<RequireQualifiedAccess>]
