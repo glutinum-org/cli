@@ -10,7 +10,7 @@ open Node.Api
 open Fable.Core.JS
 open Glutinum.Converter
 
-let generateBindingFile (filePath : string) =
+let generateBindingFile (filePath: string) =
 
     if fs.existsSync (U2.Case1 filePath) |> not then
         failwith $"File does not exist: {filePath}"
@@ -39,10 +39,15 @@ let generateBindingFile (filePath : string) =
 
     printfn "fsharpAst: %A" res
 
-    let outFile = {
-        Name = None
-        Opens = [ "Fable.Core"; "System" ]
-    }
+    let outFile =
+        {
+            Name = "Glutinum"
+            Opens =
+                [
+                    "Fable.Core"
+                    "System"
+                ]
+        }
 
     Printer.printOutFile printer outFile
 

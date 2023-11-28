@@ -1,3 +1,5 @@
+module rec Glutinum
+
 (***)
 #r "nuget: Fable.Core"
 (***)

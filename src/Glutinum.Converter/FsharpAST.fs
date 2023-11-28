@@ -134,6 +134,7 @@ type FSharpUnion =
 type FSharpModule =
     {
         Name : string
+        IsRecursive : bool
         Types : FSharpType list
     }
 
@@ -162,6 +163,7 @@ type FSharpAttribute =
     | StringEnum
     | CompiledName of string
     | RequireQualifiedAccess
+    | EmitConstructor
 
 type FSharpParameter =
     {
@@ -216,6 +218,12 @@ type FSharpTypeAlias =
         Type : FSharpType
     }
 
+// type FSharpClass =
+//     {
+//         Name : string
+//         Members : FSharpMember list
+//     }
+
 [<RequireQualifiedAccess>]
 type FSharpType =
     | Enum of FSharpEnum
@@ -238,10 +246,11 @@ type FSharpType =
     | Mapped of FSharpMapped
     | Primitive of FSharpPrimitive
     | Alias of FSharpTypeAlias
+    // | Class of FSharpClass
     | Discard
 
 type FSharpOutFile =
     {
-        Name : string option
+        Name : string
         Opens : string list
     }

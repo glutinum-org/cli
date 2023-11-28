@@ -467,7 +467,19 @@ let private readModuleDeclaration
     {
         Name = name.getText ()
         IsNamespace = isNamespace
+        IsRecursive = false
         Types = types
+    }
+
+let private readClassDeclaration
+    (checker: Ts.TypeChecker)
+    (declaration: Ts.ClassDeclaration)
+    : GlueTypeClassDeclaration =
+
+    let name = unbox<Ts.Identifier> declaration.name
+
+    {
+        Name = name.getText ()
     }
 
 let private readNode (checker: Ts.TypeChecker) (typeNode: Ts.Node) : GlueType =
@@ -507,6 +519,12 @@ let private readNode (checker: Ts.TypeChecker) (typeNode: Ts.Node) : GlueType =
 
         readModuleDeclaration checker declaration
         |> GlueType.ModuleDeclaration
+
+    | Ts.SyntaxKind.ClassDeclaration ->
+        let declaration = typeNode :?> Ts.ClassDeclaration
+
+        readClassDeclaration checker declaration
+        |> GlueType.ClassDeclaration
 
     | unsupported ->
         printfn $"readNode: Unsupported kind {unsupported}"

@@ -37,11 +37,9 @@ type Printer() =
     override __.ToString() = buffer.ToString()
 
 let printOutFile (printer: Printer) (outFile: FSharpOutFile) =
-    match outFile.Name with
-    | Some name ->
-        printer.Write($"module {name} =")
-        printer.NewLine
-    | None -> ()
+    printer.Write($"module rec {outFile.Name}")
+    printer.NewLine
+    printer.NewLine
 
     outFile.Opens
     |> List.iter (fun o ->
@@ -82,6 +80,7 @@ let attributeToText (fsharpAttribute: FSharpAttribute) =
     | FSharpAttribute.StringEnum -> "[<StringEnum>]"
     | FSharpAttribute.CompiledName name -> $"[<CompiledName(\"{name}\")>]"
     | FSharpAttribute.RequireQualifiedAccess -> "[<RequireQualifiedAccess>]"
+    | FSharpAttribute.EmitConstructor -> "[<EmitConstructor>]"
 
 let private printInlineAttribute
     (printer: Printer)
@@ -107,6 +106,24 @@ let private printInlineAttributes
 
         printer.WriteInline(attributesText)
         printer.WriteInline(" ")
+
+let private printCompactAttributesAndNewLine
+    (printer: Printer)
+    (fsharpAttributes: FSharpAttribute list)
+    =
+    if fsharpAttributes.Length > 0 then
+        let attributesText =
+            fsharpAttributes
+            |> List.map attributeToText
+            // Merge attributes:
+            // [<CompiledName("UP")>][<CompiledValue(1)>]
+            // becomes
+            // [<CompiledName("UP"); CompiledValue(1)>]
+            |> String.concat ""
+            |> String.replace ">][<" "; "
+
+        printer.Write(attributesText)
+        printer.NewLine
 
 let printAttributes
     (printer: Printer)
@@ -154,7 +171,7 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
         // Right now there are a lots of duplication and special rules
         // Can these rules be represented in the AST to simplify the code?
         | FSharpMember.Method methodInfo ->
-            printAttributes printer methodInfo.Attributes
+            printCompactAttributesAndNewLine printer methodInfo.Attributes
 
             if methodInfo.IsStatic then
                 printer.Write("static ")
@@ -232,6 +249,10 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
             printer.NewLine
     )
 
+    if interfaceInfo.Members.Length = 0 then
+        printer.Write("interface end")
+        printer.NewLine
+
     printer.Unindent
 
 let private printEnum (printer: Printer) (enumInfo: FSharpEnum) =
@@ -295,7 +316,10 @@ let rec print (printer: Printer) (fsharpTypes: FSharpType list) =
             printer.NewLine
 
         | FSharpType.Module moduleInfo ->
-            printer.Write($"module {moduleInfo.Name} =")
+            printer.Write($"module ")
+            if moduleInfo.IsRecursive then
+                printer.Write($"rec ")
+            printer.Write($"{moduleInfo.Name} =")
             printer.NewLine
 
             printer.Indent

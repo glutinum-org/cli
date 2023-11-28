@@ -29,8 +29,15 @@ module Fs =
         )
 
 let private removeHeader (textContent : string) =
-    textContent.Replace("\r\n", "\n").Split('\n')
+    let lines =
+        textContent.Replace("\r\n", "\n").Split('\n')
+
+    let moduleStatement =
+        Array.head lines
+
+    lines
     // Skip start of header
+    |> Array.skipWhile (fun x -> x.StartsWith("(***)") |> not)
     |> Array.skip 1
     // Skip until first line with (***)
     |> Array.skipWhile (fun x -> x.StartsWith("(***)") |> not)
@@ -39,7 +46,8 @@ let private removeHeader (textContent : string) =
     // Skip until we find a non-empty line
     |> Array.skipWhile String.IsNullOrEmpty
     |> String.concat "\n"
-
+    // Add the top level module statement
+    |> fun x -> moduleStatement + "\n\n" + x
 let macroTestSpec (t: ExecutionContext<obj>) (specPath: string) =
     promise {
         let filepath = $"{__SOURCE_DIRECTORY__}/specs/{specPath}.d.ts"

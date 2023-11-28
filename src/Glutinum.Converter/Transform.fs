@@ -78,9 +78,30 @@ let private transformExports (exports: GlueType list) : FSharpType =
                 {
                     Attributes = [ FSharpAttribute.Import(info.Name, "module") ]
                     Name = info.Name
-                    Parameters =
-                        info.Parameters |> List.map transformParameter
+                    Parameters = info.Parameters |> List.map transformParameter
                     Type = transformType info.Type
+                    IsOptional = false
+                    IsStatic = true
+                    Accessor = None
+                    Accessibility = FSharpAccessiblity.Public
+                }
+                |> FSharpMember.Method
+
+            | GlueType.ClassDeclaration info ->
+                {
+                    Attributes =
+                        [
+                            FSharpAttribute.Import(info.Name, "module")
+                            FSharpAttribute.EmitConstructor
+                        ]
+                    Name = info.Name
+                    Parameters = []
+                    Type =
+                        ({
+                            Name = info.Name
+                            Declarations = []
+                        })
+                        |> FSharpType.Mapped
                     IsOptional = false
                     IsStatic = true
                     Accessor = None
@@ -256,7 +277,9 @@ module TypeAliasDeclaration =
                             |> String.removeDoubleQuote
 
                         let differentName =
-                            Naming.nameNotEqualsDefaultFableValue caseName caseValue
+                            Naming.nameNotEqualsDefaultFableValue
+                                caseName
+                                caseValue
 
                         {
                             Attributes =
@@ -271,8 +294,7 @@ module TypeAliasDeclaration =
                     // Doesn't make sense to have a case for call signature
                     | GlueMember.CallSignature _ -> None
                 )
-            | _ ->
-                []
+            | _ -> []
 
         ({
             Attributes =
@@ -386,7 +408,9 @@ let private transformTypeAliasDeclaration
             FSharpType.Discard
 
     | GlueType.KeyOf glueType :: [] ->
-        TypeAliasDeclaration.transformKeyOf glueTypeAliasDeclaration.Name glueType
+        TypeAliasDeclaration.transformKeyOf
+            glueTypeAliasDeclaration.Name
+            glueType
 
     | GlueType.IndexedAccessType glueType :: [] ->
         let typ =
@@ -423,12 +447,29 @@ let private transformTypeAliasDeclaration
 
     | _ -> FSharpType.Discard
 
-let private transformModuleDeclaration (moduleDeclaration : GlueTypeModuleDeclaration) : FSharpType =
+let private transformModuleDeclaration
+    (moduleDeclaration: GlueTypeModuleDeclaration)
+    : FSharpType
+    =
     ({
         Name = moduleDeclaration.Name
+        IsRecursive = moduleDeclaration.IsRecursive
         Types = transformToFsharp moduleDeclaration.Types
-    } : FSharpModule)
+    }
+    : FSharpModule)
     |> FSharpType.Module
+
+let private transformClassDeclaration
+    (classDeclaration: GlueTypeClassDeclaration)
+    : FSharpType
+    =
+    ({
+        Attributes = []
+        Name = classDeclaration.Name
+        Members = []
+    }
+    : FSharpInterface)
+    |> FSharpType.Interface
 
 let rec private transformToFsharp (glueTypes: GlueType list) : FSharpType list =
     glueTypes
@@ -445,6 +486,9 @@ let rec private transformToFsharp (glueTypes: GlueType list) : FSharpType list =
         | GlueType.ModuleDeclaration moduleInfo ->
             transformModuleDeclaration moduleInfo
 
+        | GlueType.ClassDeclaration classInfo ->
+            transformClassDeclaration classInfo
+
         | GlueType.FunctionDeclaration _
         | GlueType.IndexedAccessType _
         | GlueType.Union _
@@ -452,8 +496,7 @@ let rec private transformToFsharp (glueTypes: GlueType list) : FSharpType list =
         | GlueType.Variable _
         | GlueType.Primitive _
         | GlueType.KeyOf _
-        | GlueType.Discard ->
-            FSharpType.Discard
+        | GlueType.Discard -> FSharpType.Discard
     )
 
 let transform (glueAst: GlueType list) : FSharpType list =
@@ -465,6 +508,16 @@ let transform (glueAst: GlueType list) : FSharpType list =
             | GlueType.FunctionDeclaration _ -> true
             | _ -> false
         )
+
+    let classes =
+        rest
+        |> List.filter (fun glueType ->
+            match glueType with
+            | GlueType.ClassDeclaration _ -> true
+            | _ -> false
+        )
+
+    let exports = exports @ classes
 
     [
         if not (List.isEmpty exports) then

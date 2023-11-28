@@ -119,7 +119,13 @@ type GlueTypeModuleDeclaration =
     {
         Name : string
         IsNamespace : bool
+        IsRecursive : bool
         Types : GlueType list
+    }
+
+type GlueTypeClassDeclaration =
+    {
+        Name : string
     }
 
 [<RequireQualifiedAccess>]
@@ -136,6 +142,7 @@ type GlueType =
     | KeyOf of GlueType
     | IndexedAccessType of GlueType
     | ModuleDeclaration of GlueTypeModuleDeclaration
+    | ClassDeclaration of GlueTypeClassDeclaration
 
     member this.Name with get () =
         match this with
