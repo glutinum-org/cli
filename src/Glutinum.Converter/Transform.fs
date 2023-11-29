@@ -56,10 +56,14 @@ let rec private transformType (glueType: GlueType) : FSharpType =
 /// <summary></summary>
 /// <param name="exports"></param>
 /// <returns></returns>
-let private transformExports (exports: GlueType list) : FSharpType =
+let private transformExports
+    (isTopLevel: bool)
+    (exports: GlueType list)
+    : FSharpType
+    =
     let members =
         exports
-        |> List.map (
+        |> List.collect (
             function
             | GlueType.Variable info ->
                 {
@@ -73,6 +77,7 @@ let private transformExports (exports: GlueType list) : FSharpType =
                     Accessibility = FSharpAccessiblity.Public
                 }
                 |> FSharpMember.Property
+                |> List.singleton
 
             | GlueType.FunctionDeclaration info ->
                 {
@@ -86,28 +91,66 @@ let private transformExports (exports: GlueType list) : FSharpType =
                     Accessibility = FSharpAccessiblity.Public
                 }
                 |> FSharpMember.Method
+                |> List.singleton
 
             | GlueType.ClassDeclaration info ->
-                {
-                    Attributes =
-                        [
-                            FSharpAttribute.Import(info.Name, "module")
-                            FSharpAttribute.EmitConstructor
-                        ]
-                    Name = info.Name
-                    Parameters = []
-                    Type =
-                        ({
-                            Name = info.Name
-                            Declarations = []
-                        })
-                        |> FSharpType.Mapped
-                    IsOptional = false
-                    IsStatic = true
-                    Accessor = None
-                    Accessibility = FSharpAccessiblity.Public
-                }
-                |> FSharpMember.Method
+                // TODO: Handle constructor parameters
+                // TODO: Handle constructor overloads
+
+                info.Constructors
+                |> List.map (fun (GlueConstructor parameters) ->
+                    {
+                        Attributes =
+                            [
+                                if isTopLevel then
+                                    FSharpAttribute.Import(info.Name, "module")
+                                    FSharpAttribute.EmitConstructor
+                                else
+                                    FSharpAttribute.EmitMacroConstructor info.Name
+                            ]
+                        Name = info.Name
+                        Parameters = parameters |> List.map transformParameter
+                        Type =
+                            ({
+                                Name = info.Name
+                                Declarations = []
+                            })
+                            |> FSharpType.Mapped
+                        IsOptional = false
+                        IsStatic = true
+                        Accessor = None
+                        Accessibility = FSharpAccessiblity.Public
+                    }
+                    |> FSharpMember.Method
+                )
+
+            | GlueType.ModuleDeclaration moduleDeclaration ->
+                moduleDeclaration.Types
+                |> List.choose(fun typ ->
+                    match typ with
+                    | GlueType.ClassDeclaration info ->
+                        {
+                            Attributes =
+                                [
+                                    FSharpAttribute.ImportAll "module"
+                                ]
+                            Name = moduleDeclaration.Name
+                            Parameters = []
+                            Type =
+                                ({
+                                    Name = $"{moduleDeclaration.Name}.Exports"
+                                    Declarations = []
+                                })
+                                |> FSharpType.Mapped
+                            IsOptional = false
+                            IsStatic = true
+                            Accessor = FSharpAccessor.ReadOnly |> Some
+                            Accessibility = FSharpAccessiblity.Public
+                        }
+                        |> FSharpMember.Property
+                        |> Some
+                    | _ -> None
+                )
 
             | glueType ->
                 failwithf "Could not generate exportMembers for: %A" glueType
@@ -454,7 +497,7 @@ let private transformModuleDeclaration
     ({
         Name = moduleDeclaration.Name
         IsRecursive = moduleDeclaration.IsRecursive
-        Types = transformToFsharp moduleDeclaration.Types
+        Types = transform false moduleDeclaration.Types
     }
     : FSharpModule)
     |> FSharpType.Module
@@ -499,7 +542,7 @@ let rec private transformToFsharp (glueTypes: GlueType list) : FSharpType list =
         | GlueType.Discard -> FSharpType.Discard
     )
 
-let transform (glueAst: GlueType list) : FSharpType list =
+let transform (isTopLevel: bool) (glueAst: GlueType list) : FSharpType list =
     let exports, rest =
         glueAst
         |> List.partition (fun glueType ->
@@ -514,14 +557,29 @@ let transform (glueAst: GlueType list) : FSharpType list =
         |> List.filter (fun glueType ->
             match glueType with
             | GlueType.ClassDeclaration _ -> true
+            | GlueType.ModuleDeclaration info ->
+                info.Types
+                |> List.exists (fun glueType ->
+                    match glueType with
+                    | GlueType.ClassDeclaration _ -> true
+                    | _ -> false
+                )
             | _ -> false
         )
+
+    // let oneLevelDeeperClasses =
+    //     rest
+    //     |> List.choose (fun glueType ->
+    //         match glueType with
+    //         | GlueType.ModuleDeclaration _ -> true
+    //         | _ -> false
+    //     )
 
     let exports = exports @ classes
 
     [
         if not (List.isEmpty exports) then
-            transformExports exports
+            transformExports isTopLevel exports
 
         yield! transformToFsharp rest
     ]

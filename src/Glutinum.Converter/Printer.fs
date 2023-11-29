@@ -81,6 +81,9 @@ let attributeToText (fsharpAttribute: FSharpAttribute) =
     | FSharpAttribute.CompiledName name -> $"[<CompiledName(\"{name}\")>]"
     | FSharpAttribute.RequireQualifiedAccess -> "[<RequireQualifiedAccess>]"
     | FSharpAttribute.EmitConstructor -> "[<EmitConstructor>]"
+    | FSharpAttribute.EmitMacroConstructor className ->
+        $"[<Emit(\"new $0.{className}($1...)\")>]"
+    | FSharpAttribute.ImportAll module_ -> $"[<ImportAll(\"{module_}\")>]"
 
 let private printInlineAttribute
     (printer: Printer)
@@ -187,6 +190,7 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
                     printer.WriteInline("()")
                 else
                     printer.WriteInline("(")
+
                     methodInfo.Parameters
                     |> List.iteri (fun index p ->
                         if index <> 0 then
@@ -197,6 +201,7 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
 
                         printer.WriteInline($"{p.Name}: {printType p.Type}")
                     )
+
                     printer.WriteInline(")")
             else
                 printer.WriteInline(": ")
@@ -230,21 +235,34 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
             else
                 printer.Write("abstract ")
 
-            printer.WriteInline($"member {propertyInfo.Name}")
-
-            printer.WriteInline($": {printType propertyInfo.Type}")
+            printer.WriteInline($"member {propertyInfo.Name} ")
 
             if propertyInfo.IsStatic then
+
+                propertyInfo.Accessor
+                |> Option.map (
+                    function
+                    | FSharpAccessor.ReadOnly -> "with get ()"
+                    | FSharpAccessor.WriteOnly -> failwithf "with set"
+                    | FSharpAccessor.ReadWrite -> failwithf "with get, set"
+                )
+                |> Option.iter printer.WriteInline
+
+                printer.WriteInline($" : {printType propertyInfo.Type}")
+
                 printer.WriteInline(" = nativeOnly")
 
-            propertyInfo.Accessor
-            |> Option.map (
-                function
-                | FSharpAccessor.ReadOnly -> " with get"
-                | FSharpAccessor.WriteOnly -> " with set"
-                | FSharpAccessor.ReadWrite -> " with get, set"
-            )
-            |> Option.iter printer.WriteInline
+            else
+                printer.WriteInline($": {printType propertyInfo.Type}")
+
+                propertyInfo.Accessor
+                |> Option.map (
+                    function
+                    | FSharpAccessor.ReadOnly -> " with get"
+                    | FSharpAccessor.WriteOnly -> " with set"
+                    | FSharpAccessor.ReadWrite -> " with get, set"
+                )
+                |> Option.iter printer.WriteInline
 
             printer.NewLine
     )
@@ -317,8 +335,10 @@ let rec print (printer: Printer) (fsharpTypes: FSharpType list) =
 
         | FSharpType.Module moduleInfo ->
             printer.Write($"module ")
+
             if moduleInfo.IsRecursive then
                 printer.Write($"rec ")
+
             printer.Write($"{moduleInfo.Name} =")
             printer.NewLine
 

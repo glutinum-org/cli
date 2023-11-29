@@ -123,9 +123,13 @@ type GlueTypeModuleDeclaration =
         Types : GlueType list
     }
 
+type GlueConstructor =
+    GlueConstructor of GlueParameter list
+
 type GlueTypeClassDeclaration =
     {
         Name : string
+        Constructors : GlueConstructor list
     }
 
 [<RequireQualifiedAccess>]

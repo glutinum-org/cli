@@ -35,7 +35,7 @@ let generateBindingFile (filePath: string) =
 
     printfn "glueAst: %A" glueAst
 
-    let res = Transform.transform glueAst
+    let res = Transform.transform true glueAst
 
     printfn "fsharpAst: %A" res
 

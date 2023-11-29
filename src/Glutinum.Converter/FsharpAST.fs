@@ -158,12 +158,14 @@ type FSharpAttribute =
     /// </summary>
     | EmitSelfInvoke
     | Import of string * string
+    | ImportAll of string
     | Erase
     | AllowNullLiteral
     | StringEnum
     | CompiledName of string
     | RequireQualifiedAccess
     | EmitConstructor
+    | EmitMacroConstructor of className : string
 
 type FSharpParameter =
     {

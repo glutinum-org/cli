@@ -478,8 +478,24 @@ let private readClassDeclaration
 
     let name = unbox<Ts.Identifier> declaration.name
 
+    let constructors =
+        declaration.members
+        |> Seq.toList
+        |> List.choose (fun m ->
+            match m.kind with
+            | Ts.SyntaxKind.Constructor ->
+                let constructor = m :?> Ts.ConstructorDeclaration
+
+                readParameters checker constructor.parameters
+                |> GlueConstructor
+                |> Some
+
+            | _ -> None
+        )
+
     {
         Name = name.getText ()
+        Constructors = constructors
     }
 
 let private readNode (checker: Ts.TypeChecker) (typeNode: Ts.Node) : GlueType =
@@ -525,6 +541,16 @@ let private readNode (checker: Ts.TypeChecker) (typeNode: Ts.Node) : GlueType =
 
         readClassDeclaration checker declaration
         |> GlueType.ClassDeclaration
+
+    | Ts.SyntaxKind.ExportAssignment ->
+        let exportAssignment = typeNode :?> Ts.ExportAssignment
+
+        let i = 0
+
+        // let symbolOpt =
+        //     checker.get
+
+        GlueType.Discard
 
     | unsupported ->
         printfn $"readNode: Unsupported kind {unsupported}"
