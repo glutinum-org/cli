@@ -70,6 +70,8 @@ type GluePrimitive =
     | Unit
     | Number
     | Any
+    | Null
+    | Undefined
 
 [<RequireQualifiedAccess>]
 type GlueLiteral =
@@ -168,6 +170,8 @@ type GlueType =
             | GluePrimitive.Unit -> "unit"
             | GluePrimitive.Number -> "float"
             | GluePrimitive.Any -> "obj"
+            | GluePrimitive.Null -> "obj option"
+            | GluePrimitive.Undefined -> "obj"
         | Enum info -> info.Name
         | TypeAliasDeclaration info -> info.Name
         | Union _ -> "obj"
@@ -177,3 +181,5 @@ type GlueType =
         | IndexedAccessType _ -> "obj"
         | FunctionDeclaration info -> info.Name
         | ModuleDeclaration info -> info.Name
+        | ClassDeclaration info -> info.Name
+        | TypeReference info -> info.Name

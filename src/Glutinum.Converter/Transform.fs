@@ -28,20 +28,44 @@ let rec private transformType (glueType: GlueType) : FSharpType =
         | GluePrimitive.Unit -> FSharpType.Primitive FSharpPrimitive.Unit
         | GluePrimitive.Number -> FSharpType.Primitive FSharpPrimitive.Number
         | GluePrimitive.Any -> FSharpType.Primitive FSharpPrimitive.Null
+        | GluePrimitive.Null -> FSharpType.Primitive FSharpPrimitive.Null
+        | GluePrimitive.Undefined -> FSharpType.Primitive FSharpPrimitive.Null
     | GlueType.Union cases ->
-        {
-            Attributes = []
-            Name = $"U{cases.Length}"
-            Cases =
-                cases
-                |> List.map (fun caseType ->
-                    {
-                        Attributes = []
-                        Name = caseType.Name
-                    }
-                )
-        }
-        |> FSharpType.Union
+        let optionalTypes, others =
+            cases
+            |> List.partition (fun glueType ->
+                match glueType with
+                | GlueType.Primitive primitiveInfo ->
+                    match primitiveInfo with
+                    | GluePrimitive.Null
+                    | GluePrimitive.Undefined -> true
+                    | _ -> false
+                | _ -> false
+            )
+
+        let isOptional = not optionalTypes.IsEmpty
+
+        printfn "isOptional: %A" isOptional
+        printfn "others: %A" others
+        printfn "cases: %A" cases
+
+        if isOptional && others.Length = 1 then
+            FSharpType.Option(transformType others.Head)
+        else
+            {
+                Attributes = []
+                Name = $"U{others.Length}"
+                Cases =
+                    others
+                    |> List.map (fun caseType ->
+                        {
+                            Attributes = []
+                            Name = caseType.Name
+                        }
+                    )
+                IsOptional = isOptional
+            }
+            |> FSharpType.Union
 
     | GlueType.TypeReference typeReference ->
         ({
@@ -51,6 +75,8 @@ let rec private transformType (glueType: GlueType) : FSharpType =
         : FSharpTypeReference)
         |> FSharpType.TypeReference
 
+    | GlueType.ClassDeclaration _
+    | GlueType.ModuleDeclaration _
     | GlueType.IndexedAccessType _
     | GlueType.Literal _
     | GlueType.Interface _
@@ -303,6 +329,7 @@ let private transformEnum (glueEnum: GlueEnum) : FSharpType =
                 ]
             Name = glueEnum.Name
             Cases = stringValues |> List.map transformMembers
+            IsOptional = false
         }
         |> FSharpType.Union
     | _ ->
@@ -356,6 +383,7 @@ module TypeAliasDeclaration =
                 ]
             Name = aliasName
             Cases = cases
+            IsOptional = false
         }
         : FSharpUnion)
         |> FSharpType.Union
@@ -427,6 +455,7 @@ let private transformTypeAliasDeclaration
                     ]
                 Name = glueTypeAliasDeclaration.Name
                 Cases = cases
+                IsOptional = false
             }
             : FSharpUnion)
             |> FSharpType.Union

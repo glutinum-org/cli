@@ -99,6 +99,7 @@ type FSharpUnion =
         Attributes : FSharpAttribute list
         Name : string
         Cases : FSharpUnionCase list
+        IsOptional : bool
     }
 
     // member this.Type =
@@ -236,6 +237,7 @@ type FSharpTypeReference =
 type FSharpType =
     | Enum of FSharpEnum
     | Union of FSharpUnion
+    | Option of FSharpType
     // Create ErasedUnion type to make a difference between standard F# union
     // and Fable U2, U3, etc. types.
     // It is also possible that a third type of union exist which are

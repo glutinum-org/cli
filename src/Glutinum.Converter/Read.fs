@@ -127,6 +127,8 @@ let private readTypeNode
         | Ts.SyntaxKind.VoidKeyword -> GlueType.Primitive GluePrimitive.Unit
         | Ts.SyntaxKind.BooleanKeyword -> GlueType.Primitive GluePrimitive.Bool
         | Ts.SyntaxKind.AnyKeyword -> GlueType.Primitive GluePrimitive.Any
+        | Ts.SyntaxKind.NullKeyword -> GlueType.Primitive GluePrimitive.Null
+        | Ts.SyntaxKind.UndefinedKeyword -> GlueType.Primitive GluePrimitive.Undefined
         | Ts.SyntaxKind.UnionType ->
             readUnionType checker (typeNode :?> Ts.UnionTypeNode)
 
@@ -163,9 +165,11 @@ let rec private readUnionTypeCases
     // If otherwise, not supported?
 
     let rec removeParenthesizedType (node: Ts.Node) =
+        let ts = ts
         if ts.isParenthesizedTypeNode node then
             let parenthesizedTypeNode = node :?> Ts.ParenthesizedTypeNode
 
+            let i = 0
             removeParenthesizedType parenthesizedTypeNode.``type``
         else
             node
@@ -193,20 +197,46 @@ let rec private readUnionTypeCases
                 |> fun case -> [ case ]
                 |> Some
             else
-                None
+                match literalExpression.kind with
+                | Ts.SyntaxKind.NullKeyword
+                | Ts.SyntaxKind.UndefinedKeyword ->
+                    GlueType.Primitive GluePrimitive.Null
+                    |> List.singleton
+                    |> Some
+                | _ ->
+                    None
         else if ts.isTypeReferenceNode node then
             let typeReferenceNode = node :?> Ts.TypeReferenceNode
 
-            // TODO: Remove unboxing
+            // let typeReferenceNode = typeNode :?> Ts.TypeReferenceNode
+
             let symbolOpt =
                 checker.getSymbolAtLocation !!typeReferenceNode.typeName
 
-            match symbolOpt with
-            | None ->
-                failwith "readUnionTypeCases: Unsupported type reference"
-                None
+            let symbol =
+                Option.defaultWith (fun () ->
+                    failwith "readUnionTypeCases: Unsupported type reference, missing symbol"
+                ) symbolOpt
 
-            | Some symbol ->
+            // TODO: How to differentiate TypeReference to Enum/Union vs others
+            // Check below is really hacky / not robust
+            if isNull symbol.declarations || symbol.declarations.Count = 0 then
+                None // Should it be obj ?
+            else if symbol.declarations.Count > 1 then
+                let fullName =
+                    checker.getFullyQualifiedName symbol
+
+                (
+                    {
+                        Name = typeReferenceNode.getText()
+                        FullName = fullName
+                    }
+                )
+                |> GlueType.TypeReference
+                |> List.singleton
+                |> Some
+
+            else
                 symbol.declarations
                 |> Seq.toList
                 |> List.collect (fun declaration ->

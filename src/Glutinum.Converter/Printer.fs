@@ -138,14 +138,20 @@ let printAttributes
         printer.NewLine
     )
 
-let private printType (fsharpType: FSharpType) =
+let rec private printType (fsharpType: FSharpType) =
     match fsharpType with
     | FSharpType.Mapped info -> info.Name
     | FSharpType.Union info ->
         let cases =
             info.Cases |> List.map (fun c -> c.Name) |> String.concat ", "
 
-        $"{info.Name}<{cases}>"
+        let option =
+            if info.IsOptional then
+                " option"
+            else
+                ""
+
+        $"{info.Name}<{cases}>{option}"
 
     | FSharpType.Enum info -> info.Name
     | FSharpType.Primitive info ->
@@ -159,6 +165,8 @@ let private printType (fsharpType: FSharpType) =
         | FSharpPrimitive.Null -> "obj"
     | FSharpType.TypeReference typeReference ->
         typeReference.FullName
+    | FSharpType.Option optionType ->
+        printType optionType + " option"
     | FSharpType.Module _
     | FSharpType.Interface _
     | FSharpType.Unsupported _
@@ -368,6 +376,7 @@ let rec print (printer: Printer) (fsharpTypes: FSharpType list) =
         | FSharpType.Mapped _
         | FSharpType.Primitive _
         | FSharpType.TypeReference _
+        | FSharpType.Option _
         | FSharpType.Discard -> ()
 
         print printer tail
