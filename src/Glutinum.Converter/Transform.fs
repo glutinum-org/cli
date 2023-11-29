@@ -43,6 +43,14 @@ let rec private transformType (glueType: GlueType) : FSharpType =
         }
         |> FSharpType.Union
 
+    | GlueType.TypeReference typeReference ->
+        ({
+            Name = typeReference.Name
+            FullName = typeReference.FullName
+        }
+        : FSharpTypeReference)
+        |> FSharpType.TypeReference
+
     | GlueType.IndexedAccessType _
     | GlueType.Literal _
     | GlueType.Interface _
@@ -94,7 +102,6 @@ let private transformExports
                 |> List.singleton
 
             | GlueType.ClassDeclaration info ->
-                // TODO: Handle constructor parameters
                 // TODO: Handle constructor overloads
 
                 info.Constructors
@@ -106,7 +113,8 @@ let private transformExports
                                     FSharpAttribute.Import(info.Name, "module")
                                     FSharpAttribute.EmitConstructor
                                 else
-                                    FSharpAttribute.EmitMacroConstructor info.Name
+                                    FSharpAttribute.EmitMacroConstructor
+                                        info.Name
                             ]
                         Name = info.Name
                         Parameters = parameters |> List.map transformParameter
@@ -126,15 +134,16 @@ let private transformExports
 
             | GlueType.ModuleDeclaration moduleDeclaration ->
                 moduleDeclaration.Types
-                |> List.choose(fun typ ->
+                |> List.choose (fun typ ->
                     match typ with
                     | GlueType.ClassDeclaration info ->
                         {
-                            Attributes =
-                                [
-                                    FSharpAttribute.ImportAll "module"
-                                ]
-                            Name = moduleDeclaration.Name
+                            Attributes = [ FSharpAttribute.ImportAll "module" ]
+                            // "_" suffix is added to avoid name collision if
+                            // there are some functions with the same name as
+                            // the name of the module
+                            // TODO: Only add the "_" suffix if there is a name collision
+                            Name = moduleDeclaration.Name + "_"
                             Parameters = []
                             Type =
                                 ({
@@ -532,6 +541,7 @@ let rec private transformToFsharp (glueTypes: GlueType list) : FSharpType list =
         | GlueType.ClassDeclaration classInfo ->
             transformClassDeclaration classInfo
 
+        | GlueType.TypeReference _
         | GlueType.FunctionDeclaration _
         | GlueType.IndexedAccessType _
         | GlueType.Union _

@@ -226,6 +226,12 @@ type FSharpTypeAlias =
 //         Members : FSharpMember list
 //     }
 
+type FSharpTypeReference =
+    {
+        Name : string
+        FullName : string
+    }
+
 [<RequireQualifiedAccess>]
 type FSharpType =
     | Enum of FSharpEnum
@@ -250,6 +256,7 @@ type FSharpType =
     | Alias of FSharpTypeAlias
     // | Class of FSharpClass
     | Discard
+    | TypeReference of FSharpTypeReference
 
 type FSharpOutFile =
     {

@@ -10,7 +10,7 @@ open System
 [<Erase>]
 type Exports =
     [<ImportAll("module")>]
-    static member lib with get () : lib.Exports = nativeOnly
+    static member lib_ with get () : lib.Exports = nativeOnly
 
 
 module lib =

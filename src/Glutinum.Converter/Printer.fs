@@ -157,7 +157,13 @@ let private printType (fsharpType: FSharpType) =
         | FSharpPrimitive.Unit -> "unit"
         | FSharpPrimitive.Number -> "float"
         | FSharpPrimitive.Null -> "obj"
-    | _ -> "obj"
+    | FSharpType.TypeReference typeReference ->
+        typeReference.FullName
+    | FSharpType.Module _
+    | FSharpType.Interface _
+    | FSharpType.Unsupported _
+    | FSharpType.Alias _
+    | FSharpType.Discard -> "obj"
 
 let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
     printAttributes printer interfaceInfo.Attributes
@@ -361,6 +367,7 @@ let rec print (printer: Printer) (fsharpTypes: FSharpType list) =
 
         | FSharpType.Mapped _
         | FSharpType.Primitive _
+        | FSharpType.TypeReference _
         | FSharpType.Discard -> ()
 
         print printer tail

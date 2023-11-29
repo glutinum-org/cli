@@ -132,6 +132,12 @@ type GlueTypeClassDeclaration =
         Constructors : GlueConstructor list
     }
 
+type GlueTypeTypeReference =
+    {
+        Name : string
+        FullName : string
+    }
+
 [<RequireQualifiedAccess>]
 type GlueType =
     | Discard
@@ -147,6 +153,7 @@ type GlueType =
     | IndexedAccessType of GlueType
     | ModuleDeclaration of GlueTypeModuleDeclaration
     | ClassDeclaration of GlueTypeClassDeclaration
+    | TypeReference of GlueTypeTypeReference
 
     member this.Name with get () =
         match this with

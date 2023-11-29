@@ -130,6 +130,26 @@ let private readTypeNode
         | Ts.SyntaxKind.UnionType ->
             readUnionType checker (typeNode :?> Ts.UnionTypeNode)
 
+        | Ts.SyntaxKind.TypeReference ->
+            let typeReferenceNode = typeNode :?> Ts.TypeReferenceNode
+
+            let symbolOpt =
+                checker.getSymbolAtLocation !!typeReferenceNode.typeName
+
+            let fullName =
+                match symbolOpt with
+                | None -> failwith "readTypeNode: Missing symbol"
+                | Some symbol ->
+                    checker.getFullyQualifiedName symbol
+
+            (
+                {
+                    Name = typeReferenceNode.getText()
+                    FullName = fullName
+                }
+            )
+            |> GlueType.TypeReference
+
         | _ -> failwith $"readTypeNode: Unsupported kind {typeNode.kind}"
     | None -> GlueType.Primitive GluePrimitive.Unit
 
@@ -542,15 +562,15 @@ let private readNode (checker: Ts.TypeChecker) (typeNode: Ts.Node) : GlueType =
         readClassDeclaration checker declaration
         |> GlueType.ClassDeclaration
 
-    | Ts.SyntaxKind.ExportAssignment ->
-        let exportAssignment = typeNode :?> Ts.ExportAssignment
+    // | Ts.SyntaxKind.ExportAssignment ->
+    //     let exportAssignment = typeNode :?> Ts.ExportAssignment
 
-        let i = 0
+    //     let i = 0
 
-        // let symbolOpt =
-        //     checker.get
+    //     // let symbolOpt =
+    //     //     checker.get
 
-        GlueType.Discard
+    //     GlueType.Discard
 
     | unsupported ->
         printfn $"readNode: Unsupported kind {unsupported}"
