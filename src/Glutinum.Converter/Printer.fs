@@ -235,20 +235,20 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
             else
                 printer.Write("abstract ")
 
-            printer.WriteInline($"member {propertyInfo.Name} ")
+            printer.WriteInline($"member {propertyInfo.Name}")
 
             if propertyInfo.IsStatic then
 
                 propertyInfo.Accessor
                 |> Option.map (
                     function
-                    | FSharpAccessor.ReadOnly -> "with get ()"
-                    | FSharpAccessor.WriteOnly -> failwithf "with set"
-                    | FSharpAccessor.ReadWrite -> failwithf "with get, set"
+                    | FSharpAccessor.ReadOnly -> " with get () "
+                    | FSharpAccessor.WriteOnly -> failwithf " with set "
+                    | FSharpAccessor.ReadWrite -> failwithf " with get, set "
                 )
                 |> Option.iter printer.WriteInline
 
-                printer.WriteInline($" : {printType propertyInfo.Type}")
+                printer.WriteInline($": {printType propertyInfo.Type}")
 
                 printer.WriteInline(" = nativeOnly")
 
