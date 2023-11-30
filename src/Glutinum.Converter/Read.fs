@@ -165,7 +165,6 @@ let rec private readUnionTypeCases
     // If otherwise, not supported?
 
     let rec removeParenthesizedType (node: Ts.Node) =
-        let ts = ts
         if ts.isParenthesizedTypeNode node then
             let parenthesizedTypeNode = node :?> Ts.ParenthesizedTypeNode
 

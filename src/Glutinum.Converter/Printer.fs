@@ -164,7 +164,7 @@ let rec private printType (fsharpType: FSharpType) =
         | FSharpPrimitive.Number -> "float"
         | FSharpPrimitive.Null -> "obj"
     | FSharpType.TypeReference typeReference ->
-        typeReference.FullName
+        typeReference.Name
     | FSharpType.Option optionType ->
         printType optionType + " option"
     | FSharpType.Module _

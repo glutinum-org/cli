@@ -87,7 +87,9 @@ let rec private transformType (glueType: GlueType) : FSharpType =
     | GlueType.Variable _
     | GlueType.KeyOf _
     | GlueType.Discard
-    | GlueType.FunctionDeclaration _ -> FSharpType.Discard
+    | GlueType.FunctionDeclaration _ ->
+        printfn "Could not transform type: %A" glueType
+        FSharpType.Discard
 
 /// <summary></summary>
 /// <param name="exports"></param>
@@ -395,7 +397,6 @@ let private transformTypeAliasDeclaration
     : FSharpType
     =
 
-
     // TODO: Make the transformation more robust
     match glueTypeAliasDeclaration.Types with
     | GlueType.Union cases :: [] ->
@@ -488,8 +489,12 @@ let private transformTypeAliasDeclaration
         // Either by using U2, U3, etc. or by creating custom
         // Erased enum cases for improving the user experience
         else
-            // TODO
-            FSharpType.Discard
+            ({
+                Name = glueTypeAliasDeclaration.Name
+                Type = transformType (GlueType.Union cases)
+            }
+            : FSharpTypeAlias)
+            |> FSharpType.Alias
 
     | GlueType.KeyOf glueType :: [] ->
         TypeAliasDeclaration.transformKeyOf
@@ -533,6 +538,14 @@ let private transformTypeAliasDeclaration
         ({
             Name = glueTypeAliasDeclaration.Name
             Type = transformPrimitive primitiveInfo |> FSharpType.Primitive
+        }
+        : FSharpTypeAlias)
+        |> FSharpType.Alias
+
+    | GlueType.TypeReference typeReference :: [] ->
+        ({
+            Name = glueTypeAliasDeclaration.Name
+            Type = transformType (GlueType.TypeReference typeReference)
         }
         : FSharpTypeAlias)
         |> FSharpType.Alias

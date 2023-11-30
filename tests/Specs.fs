@@ -67,7 +67,11 @@ let test: obj = jsNative
 // The .d.ts files needs to have a matching .fs file with the expected output
 fs.readdirSync ($"{__SOURCE_DIRECTORY__}/specs", {| recursive = true |})
 |> Array.filter (fun x -> x.EndsWith(".d.ts"))
+// Remove disabled tests
+|> Array.filter (fun x -> x.Contains("/disabled.") |> not)
+// Remove extension
 |> Array.map (fun x -> x.Replace(".d.ts", ""))
+// Generate a test for each file
 |> Array.map (fun specPath ->
     test $ ($"{specPath}", macroTestSpec, $"{specPath}")
 )
