@@ -17,19 +17,25 @@ let private transformLiteral (glueLiteral: GlueLiteral) : FSharpLiteral =
     | GlueLiteral.Float value -> FSharpLiteral.Float value
     | GlueLiteral.Bool value -> FSharpLiteral.Bool value
 
+let private transformPrimitive
+    (gluePrimitive: GluePrimitive)
+    : FSharpPrimitive
+    =
+    match gluePrimitive with
+    | GluePrimitive.String -> FSharpPrimitive.String
+    | GluePrimitive.Int -> FSharpPrimitive.Int
+    | GluePrimitive.Float -> FSharpPrimitive.Float
+    | GluePrimitive.Bool -> FSharpPrimitive.Bool
+    | GluePrimitive.Unit -> FSharpPrimitive.Unit
+    | GluePrimitive.Number -> FSharpPrimitive.Number
+    | GluePrimitive.Any -> FSharpPrimitive.Null
+    | GluePrimitive.Null -> FSharpPrimitive.Null
+    | GluePrimitive.Undefined -> FSharpPrimitive.Null
+
 let rec private transformType (glueType: GlueType) : FSharpType =
     match glueType with
     | GlueType.Primitive primitiveInfo ->
-        match primitiveInfo with
-        | GluePrimitive.String -> FSharpType.Primitive FSharpPrimitive.String
-        | GluePrimitive.Int -> FSharpType.Primitive FSharpPrimitive.Int
-        | GluePrimitive.Float -> FSharpType.Primitive FSharpPrimitive.Float
-        | GluePrimitive.Bool -> FSharpType.Primitive FSharpPrimitive.Bool
-        | GluePrimitive.Unit -> FSharpType.Primitive FSharpPrimitive.Unit
-        | GluePrimitive.Number -> FSharpType.Primitive FSharpPrimitive.Number
-        | GluePrimitive.Any -> FSharpType.Primitive FSharpPrimitive.Null
-        | GluePrimitive.Null -> FSharpType.Primitive FSharpPrimitive.Null
-        | GluePrimitive.Undefined -> FSharpType.Primitive FSharpPrimitive.Null
+        transformPrimitive primitiveInfo |> FSharpType.Primitive
     | GlueType.Union cases ->
         let optionalTypes, others =
             cases
@@ -44,10 +50,6 @@ let rec private transformType (glueType: GlueType) : FSharpType =
             )
 
         let isOptional = not optionalTypes.IsEmpty
-
-        printfn "isOptional: %A" isOptional
-        printfn "others: %A" others
-        printfn "cases: %A" cases
 
         if isOptional && others.Length = 1 then
             FSharpType.Option(transformType others.Head)
@@ -393,6 +395,7 @@ let private transformTypeAliasDeclaration
     : FSharpType
     =
 
+
     // TODO: Make the transformation more robust
     match glueTypeAliasDeclaration.Types with
     | GlueType.Union cases :: [] ->
@@ -522,6 +525,14 @@ let private transformTypeAliasDeclaration
         ({
             Name = glueTypeAliasDeclaration.Name
             Type = typ
+        }
+        : FSharpTypeAlias)
+        |> FSharpType.Alias
+
+    | GlueType.Primitive primitiveInfo :: [] ->
+        ({
+            Name = glueTypeAliasDeclaration.Name
+            Type = transformPrimitive primitiveInfo |> FSharpType.Primitive
         }
         : FSharpTypeAlias)
         |> FSharpType.Alias

@@ -1,0 +1,1 @@
+type MyBoolean = boolean;

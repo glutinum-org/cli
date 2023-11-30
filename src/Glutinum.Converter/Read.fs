@@ -340,8 +340,7 @@ let private readTypeAliasDeclaration
             readIndexedAccessType checker declaration
 
         | _ ->
-            failwith
-                $"ReadTypeAliasDeclaration: Unsupported kind {declaration.``type``.kind}"
+            readTypeNode checker (Some declaration.``type``)
 
     {
         Name = declaration.name.getText ()
