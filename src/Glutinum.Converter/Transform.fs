@@ -77,6 +77,9 @@ let rec private transformType (glueType: GlueType) : FSharpType =
         : FSharpTypeReference)
         |> FSharpType.TypeReference
 
+    | GlueType.Array glueType ->
+        transformType glueType |> FSharpType.ResizeArray
+
     | GlueType.ClassDeclaration _
     | GlueType.ModuleDeclaration _
     | GlueType.IndexedAccessType _
@@ -550,6 +553,14 @@ let private transformTypeAliasDeclaration
         : FSharpTypeAlias)
         |> FSharpType.Alias
 
+    | GlueType.Array glueType :: [] ->
+        ({
+            Name = glueTypeAliasDeclaration.Name
+            Type = transformType (GlueType.Array glueType)
+        }
+        : FSharpTypeAlias)
+        |> FSharpType.Alias
+
     | _ -> FSharpType.Discard
 
 let private transformModuleDeclaration
@@ -594,6 +605,7 @@ let rec private transformToFsharp (glueTypes: GlueType list) : FSharpType list =
         | GlueType.ClassDeclaration classInfo ->
             transformClassDeclaration classInfo
 
+        | GlueType.Array _
         | GlueType.TypeReference _
         | GlueType.FunctionDeclaration _
         | GlueType.IndexedAccessType _

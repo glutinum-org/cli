@@ -3,7 +3,7 @@ module Glutinum.Converter.Program
 open Glutinum.Converter.Generate
 
 [<EntryPoint>]
-let main (argv : string array) =
+let main (argv: string array) =
     let filePath = argv.[0]
     printfn "Generating binding file for %s" filePath
     let res = generateBindingFile filePath

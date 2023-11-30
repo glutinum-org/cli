@@ -28,12 +28,10 @@ module Fs =
             )
         )
 
-let private removeHeader (textContent : string) =
-    let lines =
-        textContent.Replace("\r\n", "\n").Split('\n')
+let private removeHeader (textContent: string) =
+    let lines = textContent.Replace("\r\n", "\n").Split('\n')
 
-    let moduleStatement =
-        Array.head lines
+    let moduleStatement = Array.head lines
 
     lines
     // Skip start of header
@@ -48,13 +46,15 @@ let private removeHeader (textContent : string) =
     |> String.concat "\n"
     // Add the top level module statement
     |> fun x -> moduleStatement + "\n\n" + x
+
 let macroTestSpec (t: ExecutionContext<obj>) (specPath: string) =
     promise {
         let filepath = $"{__SOURCE_DIRECTORY__}/specs/{specPath}.d.ts"
         let res = generateBindingFile filepath
+
         let! expectedContent =
-            $"{__SOURCE_DIRECTORY__}/specs/{specPath}.fsx"
-            |> Fs.readFile
+            $"{__SOURCE_DIRECTORY__}/specs/{specPath}.fsx" |> Fs.readFile
+
         let expected = removeHeader expectedContent
 
         t.deepEqual.Invoke(res, expected) |> ignore

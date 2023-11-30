@@ -5,11 +5,13 @@ open System
 open Fable.Core
 open Fable.Core.JS
 
-let [<Import("default","fast-glob")>] fastGlob: FastGlob.IExports = jsNative
+[<Import("default", "fast-glob")>]
+let fastGlob: FastGlob.IExports = jsNative
 
 type Pattern = string
 
-type [<AllowNullLiteral>] Options =
+[<AllowNullLiteral>]
+type Options =
     /// <summary>Return the absolute path for entries.</summary>
     /// <default>false</default>
     abstract absolute: bool option with get, set
@@ -95,8 +97,13 @@ type [<AllowNullLiteral>] Options =
     /// <default>true</default>
     abstract unique: bool option with get, set
 
-type [<AllowNullLiteral>] IExports =
+[<AllowNullLiteral>]
+type IExports =
     [<Emit("$0($1...)")>]
-    abstract Invoke: source: Pattern * ?options: Options -> Promise<ResizeArray<string>>
+    abstract Invoke:
+        source: Pattern * ?options: Options -> Promise<ResizeArray<string>>
+
     [<Emit("$0($1...)")>]
-    abstract Invoke: source: ResizeArray<Pattern> * ?options: Options -> Promise<ResizeArray<string>>
+    abstract Invoke:
+        source: ResizeArray<Pattern> * ?options: Options ->
+            Promise<ResizeArray<string>>

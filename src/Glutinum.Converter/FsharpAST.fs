@@ -11,14 +11,10 @@ type FSharpLiteral =
 
     member this.ToText() =
         match this with
-        | String value ->
-            value
-        | Int value ->
-            string value
-        | Float value ->
-            string value
-        | Bool value ->
-            string value
+        | String value -> value
+        | Int value -> string value
+        | Float value -> string value
+        | Bool value -> string value
 
 // [<RequireQualifiedAccess>]
 // type FSharpEnumCaseValue =
@@ -27,8 +23,8 @@ type FSharpLiteral =
 
 type FSharpEnumCase =
     {
-        Name : string
-        Value : FSharpLiteral
+        Name: string
+        Value: FSharpLiteral
     }
 
 [<RequireQualifiedAccess>]
@@ -39,8 +35,8 @@ type FSharpEnumType =
 
 type FSharpEnum =
     {
-        Name : string
-        Cases : FSharpEnumCase list
+        Name: string
+        Cases: FSharpEnumCase list
     }
 
     member this.Type =
@@ -48,12 +44,10 @@ type FSharpEnum =
             this.Cases
             |> List.forall (fun c ->
                 match c.Value with
-                | FSharpLiteral.String _ ->
-                    true
+                | FSharpLiteral.String _ -> true
                 | FSharpLiteral.Float _
                 | FSharpLiteral.Int _
-                | FSharpLiteral.Bool _ ->
-                    false
+                | FSharpLiteral.Bool _ -> false
             )
 
         let isNumeric =
@@ -61,11 +55,9 @@ type FSharpEnum =
             |> List.forall (fun c ->
                 match c.Value with
                 | FSharpLiteral.String _
-                | FSharpLiteral.Bool _ ->
-                    false
+                | FSharpLiteral.Bool _ -> false
                 | FSharpLiteral.Float _
-                | FSharpLiteral.Int _ ->
-                    true
+                | FSharpLiteral.Int _ -> true
             )
 
         if isNumeric then
@@ -79,13 +71,13 @@ type FSharpEnum =
 type FSharpUnionCaseType =
     | Named of string
     | Literal of string
-    // | Float of float
-    // | Int of int
+// | Float of float
+// | Int of int
 
 type FSharpUnionCase =
     {
-        Attributes : FSharpAttribute list
-        Name : string
+        Attributes: FSharpAttribute list
+        Name: string
     }
 
 [<RequireQualifiedAccess>]
@@ -96,47 +88,47 @@ type FSharpUnionType =
 
 type FSharpUnion =
     {
-        Attributes : FSharpAttribute list
-        Name : string
-        Cases : FSharpUnionCase list
-        IsOptional : bool
+        Attributes: FSharpAttribute list
+        Name: string
+        Cases: FSharpUnionCase list
+        IsOptional: bool
     }
 
-    // member this.Type =
-    //     let isString =
-    //         this.Cases
-    //         |> List.forall (fun c ->
-    //             match c.Value with
-    //             | FSharpUnionCaseType.Literal _ ->
-    //                 true
-    //             | FSharpUnionCaseType.Float _
-    //             | FSharpUnionCaseType.Int _ ->
-    //                 false
-    //         )
+// member this.Type =
+//     let isString =
+//         this.Cases
+//         |> List.forall (fun c ->
+//             match c.Value with
+//             | FSharpUnionCaseType.Literal _ ->
+//                 true
+//             | FSharpUnionCaseType.Float _
+//             | FSharpUnionCaseType.Int _ ->
+//                 false
+//         )
 
-    //     let isNumeric =
-    //         this.Cases
-    //         |> List.forall (fun c ->
-    //             match c.Value with
-    //             | FSharpUnionCaseType.String _ ->
-    //                 false
-    //             | FSharpUnionCaseType.Float _
-    //             | FSharpUnionCaseType.Int _ ->
-    //                 true
-    //         )
+//     let isNumeric =
+//         this.Cases
+//         |> List.forall (fun c ->
+//             match c.Value with
+//             | FSharpUnionCaseType.String _ ->
+//                 false
+//             | FSharpUnionCaseType.Float _
+//             | FSharpUnionCaseType.Int _ ->
+//                 true
+//         )
 
-    //     if isNumeric then
-    //         FSharpUnionType.Numeric
-    //     elif isString then
-    //         FSharpUnionType.String
-    //     else
-    //         FSharpUnionType.Unknown
+//     if isNumeric then
+//         FSharpUnionType.Numeric
+//     elif isString then
+//         FSharpUnionType.String
+//     else
+//         FSharpUnionType.Unknown
 
 type FSharpModule =
     {
-        Name : string
-        IsRecursive : bool
-        Types : FSharpType list
+        Name: string
+        IsRecursive: bool
+        Types: FSharpType list
     }
 
 [<RequireQualifiedAccess>]
@@ -166,7 +158,7 @@ type FSharpAttribute =
     | CompiledName of string
     | RequireQualifiedAccess
     | EmitConstructor
-    | EmitMacroConstructor of className : string
+    | EmitMacroConstructor of className: string
 
 type FSharpParameter =
     {
@@ -177,14 +169,14 @@ type FSharpParameter =
 
 type FSharpMemberInfo =
     {
-        Attributes : FSharpAttribute list
-        Name : string
-        Parameters : FSharpParameter list
-        Type : FSharpType
-        IsOptional : bool
-        IsStatic : bool
-        Accessor : FSharpAccessor option
-        Accessibility : FSharpAccessiblity
+        Attributes: FSharpAttribute list
+        Name: string
+        Parameters: FSharpParameter list
+        Type: FSharpType
+        IsOptional: bool
+        IsStatic: bool
+        Accessor: FSharpAccessor option
+        Accessibility: FSharpAccessiblity
     }
 
 [<RequireQualifiedAccess>]
@@ -194,15 +186,15 @@ type FSharpMember =
 
 type FSharpInterface =
     {
-        Attributes : FSharpAttribute list
-        Name : string
-        Members : FSharpMember list
+        Attributes: FSharpAttribute list
+        Name: string
+        Members: FSharpMember list
     }
 
 type FSharpMapped =
     {
-        Name : string
-        Declarations : FSharpType list
+        Name: string
+        Declarations: FSharpType list
     }
 
 [<RequireQualifiedAccess>]
@@ -217,8 +209,8 @@ type FSharpPrimitive =
 
 type FSharpTypeAlias =
     {
-        Name : string
-        Type : FSharpType
+        Name: string
+        Type: FSharpType
     }
 
 // type FSharpClass =
@@ -229,8 +221,8 @@ type FSharpTypeAlias =
 
 type FSharpTypeReference =
     {
-        Name : string
-        FullName : string
+        Name: string
+        FullName: string
     }
 
 [<RequireQualifiedAccess>]
@@ -259,9 +251,10 @@ type FSharpType =
     // | Class of FSharpClass
     | Discard
     | TypeReference of FSharpTypeReference
+    | ResizeArray of FSharpType
 
 type FSharpOutFile =
     {
-        Name : string
-        Opens : string list
+        Name: string
+        Opens: string list
     }

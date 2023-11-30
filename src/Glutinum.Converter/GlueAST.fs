@@ -59,7 +59,11 @@ type GlueInterface =
         Members: GlueMember list
     }
 
-type GlueVariable = { Name: string; Type: GlueType }
+type GlueVariable =
+    {
+        Name: string
+        Type: GlueType
+    }
 
 [<RequireQualifiedAccess>]
 type GluePrimitive =
@@ -82,62 +86,57 @@ type GlueLiteral =
 
     member this.ToText() =
         match this with
-        | String value ->
-            value
-        | Int value ->
-            string value
-        | Float value ->
-            string value
-        | Bool value ->
-            string value
+        | String value -> value
+        | Int value -> string value
+        | Float value -> string value
+        | Bool value -> string value
 
 type GlueEnumMember =
     {
-        Name : string
-        Value : GlueLiteral
+        Name: string
+        Value: GlueLiteral
     }
 
 type GlueEnum =
     {
-        Name : string
-        Members : GlueEnumMember list
+        Name: string
+        Members: GlueEnumMember list
     }
 
 type GlueTypeAliasDeclaration =
     {
-        Name : string
-        Types : GlueType list
+        Name: string
+        Types: GlueType list
     }
 
 type GlueFunctionDeclaration =
     {
-        IsDeclared : bool
-        Name : string
-        Type : GlueType
-        Parameters : GlueParameter list
+        IsDeclared: bool
+        Name: string
+        Type: GlueType
+        Parameters: GlueParameter list
     }
 
 type GlueTypeModuleDeclaration =
     {
-        Name : string
-        IsNamespace : bool
-        IsRecursive : bool
-        Types : GlueType list
+        Name: string
+        IsNamespace: bool
+        IsRecursive: bool
+        Types: GlueType list
     }
 
-type GlueConstructor =
-    GlueConstructor of GlueParameter list
+type GlueConstructor = | GlueConstructor of GlueParameter list
 
 type GlueTypeClassDeclaration =
     {
-        Name : string
-        Constructors : GlueConstructor list
+        Name: string
+        Constructors: GlueConstructor list
     }
 
 type GlueTypeTypeReference =
     {
-        Name : string
-        FullName : string
+        Name: string
+        FullName: string
     }
 
 [<RequireQualifiedAccess>]
@@ -156,8 +155,9 @@ type GlueType =
     | ModuleDeclaration of GlueTypeModuleDeclaration
     | ClassDeclaration of GlueTypeClassDeclaration
     | TypeReference of GlueTypeTypeReference
+    | Array of GlueType
 
-    member this.Name with get () =
+    member this.Name =
         match this with
         | Interface info -> info.Name
         | Variable info -> info.Name
@@ -183,3 +183,4 @@ type GlueType =
         | ModuleDeclaration info -> info.Name
         | ClassDeclaration info -> info.Name
         | TypeReference info -> info.Name
+        | Array info -> $"ResizeArray<{info.Name}>"

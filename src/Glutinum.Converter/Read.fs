@@ -102,8 +102,13 @@ let private readEnumMembers
 let private readEnum
     (checker: Ts.TypeChecker)
     (enumDeclaration: Ts.EnumDeclaration)
-    : GlueEnum =
-    let initialState = {| NextCaseIndex = 0; Members = [] |}
+    : GlueEnum
+    =
+    let initialState =
+        {|
+            NextCaseIndex = 0
+            Members = []
+        |}
 
     let readEnumResults =
         enumDeclaration.members
@@ -118,7 +123,8 @@ let private readEnum
 let private readTypeNode
     (checker: Ts.TypeChecker)
     (typeNode: option<Ts.TypeNode>)
-    : GlueType =
+    : GlueType
+    =
     match typeNode with
     | Some typeNode ->
         match typeNode.kind with
@@ -128,7 +134,8 @@ let private readTypeNode
         | Ts.SyntaxKind.BooleanKeyword -> GlueType.Primitive GluePrimitive.Bool
         | Ts.SyntaxKind.AnyKeyword -> GlueType.Primitive GluePrimitive.Any
         | Ts.SyntaxKind.NullKeyword -> GlueType.Primitive GluePrimitive.Null
-        | Ts.SyntaxKind.UndefinedKeyword -> GlueType.Primitive GluePrimitive.Undefined
+        | Ts.SyntaxKind.UndefinedKeyword ->
+            GlueType.Primitive GluePrimitive.Undefined
         | Ts.SyntaxKind.UnionType ->
             readUnionType checker (typeNode :?> Ts.UnionTypeNode)
 
@@ -141,16 +148,21 @@ let private readTypeNode
             let fullName =
                 match symbolOpt with
                 | None -> failwith "readTypeNode: Missing symbol"
-                | Some symbol ->
-                    checker.getFullyQualifiedName symbol
+                | Some symbol -> checker.getFullyQualifiedName symbol
 
-            (
-                {
-                    Name = typeReferenceNode.getText()
-                    FullName = fullName
-                }
-            )
+            ({
+                Name = typeReferenceNode.getText ()
+                FullName = fullName
+            })
             |> GlueType.TypeReference
+
+        | Ts.SyntaxKind.ArrayType ->
+            let arrayTypeNode = typeNode :?> Ts.ArrayTypeNode
+
+            let elementType =
+                readTypeNode checker (Some arrayTypeNode.elementType)
+
+            GlueType.Array elementType
 
         | _ -> failwith $"readTypeNode: Unsupported kind {typeNode.kind}"
     | None -> GlueType.Primitive GluePrimitive.Unit
@@ -158,7 +170,8 @@ let private readTypeNode
 let rec private readUnionTypeCases
     (checker: Ts.TypeChecker)
     (unionTypeNode: Ts.UnionTypeNode)
-    : GlueType list =
+    : GlueType list
+    =
     // If all the types are literal, generate a Fable enum
     // If the types are TypeReference, of the same literal type, inline the case in a Fable enum
     // If the type are TypeReference, of different literal types, generate an erased Fable union type
@@ -202,8 +215,7 @@ let rec private readUnionTypeCases
                     GlueType.Primitive GluePrimitive.Null
                     |> List.singleton
                     |> Some
-                | _ ->
-                    None
+                | _ -> None
         else if ts.isTypeReferenceNode node then
             let typeReferenceNode = node :?> Ts.TypeReferenceNode
 
@@ -213,24 +225,24 @@ let rec private readUnionTypeCases
                 checker.getSymbolAtLocation !!typeReferenceNode.typeName
 
             let symbol =
-                Option.defaultWith (fun () ->
-                    failwith "readUnionTypeCases: Unsupported type reference, missing symbol"
-                ) symbolOpt
+                Option.defaultWith
+                    (fun () ->
+                        failwith
+                            "readUnionTypeCases: Unsupported type reference, missing symbol"
+                    )
+                    symbolOpt
 
             // TODO: How to differentiate TypeReference to Enum/Union vs others
             // Check below is really hacky / not robust
             if isNull symbol.declarations || symbol.declarations.Count = 0 then
                 None // Should it be obj ?
             else if symbol.declarations.Count > 1 then
-                let fullName =
-                    checker.getFullyQualifiedName symbol
+                let fullName = checker.getFullyQualifiedName symbol
 
-                (
-                    {
-                        Name = typeReferenceNode.getText()
-                        FullName = fullName
-                    }
-                )
+                ({
+                    Name = typeReferenceNode.getText ()
+                    FullName = fullName
+                })
                 |> GlueType.TypeReference
                 |> List.singleton
                 |> Some
@@ -240,8 +252,7 @@ let rec private readUnionTypeCases
                 |> Seq.toList
                 |> List.collect (fun declaration ->
                     // We use the readUnionType to handle nested unions
-                    let enum =
-                        readUnionType checker declaration?``type``
+                    let enum = readUnionType checker declaration?``type``
 
                     [ enum ]
                 )
@@ -254,7 +265,7 @@ let rec private readUnionTypeCases
                 readUnionTypeCases checker unionTypeNode |> Some
             | _ ->
                 // Capture simple types like string, number, real type, etc.
-                readTypeNode checker (Some (node :?> Ts.TypeNode))
+                readTypeNode checker (Some(node :?> Ts.TypeNode))
                 |> List.singleton
                 |> Some
     )
@@ -263,15 +274,16 @@ let rec private readUnionTypeCases
 let private readUnionType
     (checker: Ts.TypeChecker)
     (unionTypeNode: Ts.UnionTypeNode)
-    : GlueType =
+    : GlueType
+    =
 
-    readUnionTypeCases checker unionTypeNode
-    |> GlueType.Union
+    readUnionTypeCases checker unionTypeNode |> GlueType.Union
 
 let readTypeOperator
     (checker: Ts.TypeChecker)
     (node: Ts.TypeOperatorNode)
-    : GlueType =
+    : GlueType
+    =
 
     match node.operator with
     | Ts.SyntaxKind.KeyOfKeyword ->
@@ -299,8 +311,9 @@ let readTypeOperator
     | _ -> failwith $"readTypeOperator: Unsupported operator {node.operator}"
 
 let private readIndexedAccessType
-    (checker : Ts.TypeChecker)
-    (declaration : Ts.IndexedAccessType) =
+    (checker: Ts.TypeChecker)
+    (declaration: Ts.IndexedAccessType)
+    =
 
     let nodeType = declaration.indexType :?> Ts.TypeNode
 
@@ -338,8 +351,7 @@ let private readTypeAliasDeclaration
             let declaration = declaration.``type`` :?> Ts.IndexedAccessType
             readIndexedAccessType checker declaration
 
-        | _ ->
-            readTypeNode checker (Some declaration.``type``)
+        | _ -> readTypeNode checker (Some declaration.``type``)
 
     {
         Name = declaration.name.getText ()
@@ -366,7 +378,8 @@ let private readParameters
 let private readInterfaceDeclaration
     (checker: Ts.TypeChecker)
     (declaration: Ts.InterfaceDeclaration)
-    : GlueInterface =
+    : GlueInterface
+    =
 
     let tryReadNamedDeclaration
         (checker: Ts.TypeChecker)
@@ -422,7 +435,8 @@ let private readInterfaceDeclaration
 let private tryReadVariableStatement
     (checker: Ts.TypeChecker)
     (statement: Ts.VariableStatement)
-    : GlueVariable option =
+    : GlueVariable option
+    =
 
     let isExported =
         statement.modifiers
@@ -457,7 +471,8 @@ let private tryReadVariableStatement
 let private readFunctionDeclaration
     (checker: Ts.TypeChecker)
     (declaration: Ts.FunctionDeclaration)
-    : GlueFunctionDeclaration =
+    : GlueFunctionDeclaration
+    =
 
     let isDeclared =
         match declaration.modifiers with
@@ -483,20 +498,19 @@ let private readFunctionDeclaration
 let private readModuleDeclaration
     (checker: Ts.TypeChecker)
     (declaration: Ts.ModuleDeclaration)
-    : GlueTypeModuleDeclaration =
+    : GlueTypeModuleDeclaration
+    =
 
     let name = unbox<Ts.Identifier> declaration.name
-    let children = declaration.getChildren()
+    let children = declaration.getChildren ()
 
     let isNamespace =
         children
-        |> Seq.exists (fun node ->
-            node.kind = Ts.SyntaxKind.NamespaceKeyword
-        )
+        |> Seq.exists (fun node -> node.kind = Ts.SyntaxKind.NamespaceKeyword)
 
     let types =
         children
-        |> Seq.choose(fun child ->
+        |> Seq.choose (fun child ->
             match child.kind with
             | Ts.SyntaxKind.ModuleBlock ->
                 let moduleBlock = child :?> Ts.ModuleBlock
@@ -522,7 +536,8 @@ let private readModuleDeclaration
 let private readClassDeclaration
     (checker: Ts.TypeChecker)
     (declaration: Ts.ClassDeclaration)
-    : GlueTypeClassDeclaration =
+    : GlueTypeClassDeclaration
+    =
 
     let name = unbox<Ts.Identifier> declaration.name
 
@@ -581,14 +596,12 @@ let private readNode (checker: Ts.TypeChecker) (typeNode: Ts.Node) : GlueType =
     | Ts.SyntaxKind.ModuleDeclaration ->
         let declaration = typeNode :?> Ts.ModuleDeclaration
 
-        readModuleDeclaration checker declaration
-        |> GlueType.ModuleDeclaration
+        readModuleDeclaration checker declaration |> GlueType.ModuleDeclaration
 
     | Ts.SyntaxKind.ClassDeclaration ->
         let declaration = typeNode :?> Ts.ClassDeclaration
 
-        readClassDeclaration checker declaration
-        |> GlueType.ClassDeclaration
+        readClassDeclaration checker declaration |> GlueType.ClassDeclaration
 
     // | Ts.SyntaxKind.ExportAssignment ->
     //     let exportAssignment = typeNode :?> Ts.ExportAssignment
