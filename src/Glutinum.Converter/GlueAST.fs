@@ -106,7 +106,7 @@ type GlueEnum =
 type GlueTypeAliasDeclaration =
     {
         Name: string
-        Types: GlueType list
+        Type: GlueType
     }
 
 type GlueFunctionDeclaration =

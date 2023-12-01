@@ -401,8 +401,11 @@ let private transformTypeAliasDeclaration
     =
 
     // TODO: Make the transformation more robust
-    match glueTypeAliasDeclaration.Types with
-    | GlueType.Union cases :: [] ->
+    match glueTypeAliasDeclaration.Type with
+    | GlueType.Union cases ->
+        printfn "%A" cases
+
+        // let
         // Unions can have nested unions, so we need to flatten them
         // TODO: Is there cases where we don't want to flatten?
         // U2<U2<int, string>, bool>
@@ -410,22 +413,39 @@ let private transformTypeAliasDeclaration
             cases
             |> List.collect (
                 function
+                // We are inside an union, and have access to the literal types
+                | GlueType.Literal _ as literal -> [ literal ]
                 | GlueType.Union cases -> flattenCases cases
-                | glueType -> [ glueType ]
+                | GlueType.TypeAliasDeclaration aliasCases ->
+                    match aliasCases.Type with
+                    | GlueType.Union cases -> flattenCases cases
+                    | _ -> failwith "Should not happen"
+                // Can't find cases so we return an empty list to discard the type
+                // Should we do something if we fall in this state?
+                // I think the code below will be able to recover by generating
+                // an erased enum, but I don't know if there cases where we could
+                // be bitting ourselves in the foot
+                | _ -> []
             )
 
-        let cases = flattenCases cases
+        let flattenedCases = flattenCases cases
 
         let isStringOnly =
-            cases
-            |> List.forall (
-                function
-                | GlueType.Literal(GlueLiteral.String _) -> true
-                | _ -> false
-            )
+            // If the list is empty, it means that there was no candidates
+            // for string literals
+            not flattenedCases.IsEmpty
+            && flattenedCases
+               |> List.forall (
+                   function
+                   | GlueType.Literal(GlueLiteral.String _) -> true
+                   | _ -> false
+               )
 
         let isNumericOnly =
-            cases
+            // If the list is empty, it means that there was no candidates
+            // for numeric literals
+            not flattenedCases.IsEmpty
+            && flattenedCases
             |> List.forall (
                 function
                 | GlueType.Literal(GlueLiteral.Int _) -> true
@@ -436,7 +456,7 @@ let private transformTypeAliasDeclaration
         // we can transform it into a StringEnum
         if isStringOnly then
             let cases =
-                cases
+                flattenedCases
                 |> List.map (fun value ->
                     match value with
                     | GlueType.Literal(GlueLiteral.String value) ->
@@ -470,7 +490,7 @@ let private transformTypeAliasDeclaration
         // we can transform it into a standard F# enum
         else if isNumericOnly then
             let cases =
-                cases
+                flattenedCases
                 |> List.map (fun value ->
                     match value with
                     | GlueType.Literal(GlueLiteral.Int value) ->
@@ -499,12 +519,12 @@ let private transformTypeAliasDeclaration
             : FSharpTypeAlias)
             |> FSharpType.Alias
 
-    | GlueType.KeyOf glueType :: [] ->
+    | GlueType.KeyOf glueType ->
         TypeAliasDeclaration.transformKeyOf
             glueTypeAliasDeclaration.Name
             glueType
 
-    | GlueType.IndexedAccessType glueType :: [] ->
+    | GlueType.IndexedAccessType glueType ->
         let typ =
             match glueType with
             | GlueType.KeyOf glueType ->
@@ -537,7 +557,7 @@ let private transformTypeAliasDeclaration
         : FSharpTypeAlias)
         |> FSharpType.Alias
 
-    | GlueType.Primitive primitiveInfo :: [] ->
+    | GlueType.Primitive primitiveInfo ->
         ({
             Name = glueTypeAliasDeclaration.Name
             Type = transformPrimitive primitiveInfo |> FSharpType.Primitive
@@ -545,7 +565,7 @@ let private transformTypeAliasDeclaration
         : FSharpTypeAlias)
         |> FSharpType.Alias
 
-    | GlueType.TypeReference typeReference :: [] ->
+    | GlueType.TypeReference typeReference ->
         ({
             Name = glueTypeAliasDeclaration.Name
             Type = transformType (GlueType.TypeReference typeReference)
@@ -553,7 +573,7 @@ let private transformTypeAliasDeclaration
         : FSharpTypeAlias)
         |> FSharpType.Alias
 
-    | GlueType.Array glueType :: [] ->
+    | GlueType.Array glueType ->
         ({
             Name = glueTypeAliasDeclaration.Name
             Type = transformType (GlueType.Array glueType)

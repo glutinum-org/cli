@@ -246,17 +246,21 @@ let rec private readUnionTypeCases
                 |> GlueType.TypeReference
                 |> List.singleton
                 |> Some
-
             else
-                symbol.declarations
-                |> Seq.toList
-                |> List.collect (fun declaration ->
-                    // We use the readUnionType to handle nested unions
-                    let enum = readUnionType checker declaration?``type``
+                let declaration = symbol.declarations.[0]
 
-                    [ enum ]
-                )
-                |> Some
+                readNode checker declaration |> List.singleton |> Some
+
+        // else
+        //     symbol.declarations
+        //     |> Seq.toList
+        //     |> List.collect (fun declaration ->
+        //         // We use the readUnionType to handle nested unions
+        //         let enum = readUnionType checker declaration?``type``
+
+        //         [ enum ]
+        //     )
+        //     |> Some
         else
             match node.kind with
             | Ts.SyntaxKind.UnionType ->
@@ -336,7 +340,7 @@ let private readTypeAliasDeclaration
     : GlueType
     =
 
-    let types =
+    let typ =
         match declaration.``type``.kind with
         | Ts.SyntaxKind.UnionType ->
             let unionTypeNode = declaration.``type`` :?> Ts.UnionTypeNode
@@ -355,7 +359,7 @@ let private readTypeAliasDeclaration
 
     {
         Name = declaration.name.getText ()
-        Types = [ types ]
+        Type = typ
     }
     |> GlueType.TypeAliasDeclaration
 
@@ -452,7 +456,6 @@ let private tryReadVariableStatement
         let declaration =
             statement.declarationList.declarations |> Seq.toList |> List.head
 
-
         let name =
             match declaration.name?kind with
             | Ts.SyntaxKind.Identifier ->
@@ -460,10 +463,11 @@ let private tryReadVariableStatement
                 id.getText ()
             | _ -> failwith "readVariableStatement: Unsupported kind"
 
-        {
+        ({
             Name = name
             Type = readTypeNode checker declaration.``type``
         }
+        : GlueVariable)
         |> Some
     else
         None
