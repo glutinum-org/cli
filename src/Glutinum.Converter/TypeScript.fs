@@ -1,6 +1,8 @@
-// ts2fable 0.8.0
-// TS: 4.2.3
+// ts2fable 0.9.0
 module rec TypeScript
+
+#nowarn "3390" // disable warnings for invalid XML comments
+#nowarn "0044" // disable warnings for `Obsolete` usage
 
 open System
 open Fable.Core
@@ -8,226 +10,90 @@ open Fable.Core.JS
 
 type Array<'T> = System.Collections.Generic.IList<'T>
 type ReadonlyArray<'T> = System.Collections.Generic.IReadOnlyList<'T>
-type ReadonlySet<'T> = Set<'T>
+type ReadonlyMap<'K, 'V> = Map<'K, 'V>
 type Symbol = obj
 
-[<ImportDefault("typescript")>]
-let ts: Ts.IExports = jsNative
-
-[<AllowNullLiteral>]
-type IExports =
-    abstract setTimeout:
-        handler: (ResizeArray<obj option> -> unit) * timeout: float ->
-            obj option
-
-    abstract clearTimeout: handle: obj option -> unit
-
-#nowarn "3390"
-
-#if DEBUG
-#nowarn "44"
-#endif
+let [<ImportDefault("typescript")>] ts: Ts.IExports = jsNative
 
 module Ts =
-    [<Import("ScriptSnapshot", "module/ts")>]
-    let scriptSnapshot: ScriptSnapshot.IExports = jsNative
+    let [<Import("ScriptSnapshot","module/ts")>] scriptSnapshot: ScriptSnapshot.IExports = jsNative
 
-    [<AllowNullLiteral>]
-    type IExports =
+    type NoisTypeNodede =
+        class end
+
+    type [<AllowNullLiteral>] IExports =
         abstract versionMajorMinor: obj
+        /// The version of the TypeScript compiler release
         abstract version: string
         abstract OperationCanceledException: OperationCanceledExceptionStatic
-        abstract getNodeMajorVersion: unit -> float option
-        abstract sys: System
+        abstract sys: System with get, set
         abstract tokenToString: t: SyntaxKind -> string option
-
-        abstract getPositionOfLineAndCharacter:
-            sourceFile: SourceFileLike * line: float * character: float -> float
-
-        abstract getLineAndCharacterOfPosition:
-            sourceFile: SourceFileLike * position: float -> LineAndCharacter
-
+        abstract getPositionOfLineAndCharacter: sourceFile: SourceFileLike * line: float * character: float -> float
+        abstract getLineAndCharacterOfPosition: sourceFile: SourceFileLike * position: float -> LineAndCharacter
         abstract isWhiteSpaceLike: ch: float -> bool
         /// Does not include line breaks. For that, see isWhiteSpaceLike.
         abstract isWhiteSpaceSingleLine: ch: float -> bool
         abstract isLineBreak: ch: float -> bool
         abstract couldStartTrivia: text: string * pos: float -> bool
-
-        abstract forEachLeadingCommentRange:
-            text: string *
-            pos: float *
-            cb: (float -> float -> CommentKind -> bool -> 'U) ->
-                'U option
-
-        abstract forEachLeadingCommentRange:
-            text: string *
-            pos: float *
-            cb: (float -> float -> CommentKind -> bool -> 'T -> 'U) *
-            state: 'T ->
-                'U option
-
-        abstract forEachTrailingCommentRange:
-            text: string *
-            pos: float *
-            cb: (float -> float -> CommentKind -> bool -> 'U) ->
-                'U option
-
-        abstract forEachTrailingCommentRange:
-            text: string *
-            pos: float *
-            cb: (float -> float -> CommentKind -> bool -> 'T -> 'U) *
-            state: 'T ->
-                'U option
-
-        abstract reduceEachLeadingCommentRange:
-            text: string *
-            pos: float *
-            cb: (float -> float -> CommentKind -> bool -> 'T -> 'U -> 'U) *
-            state: 'T *
-            initial: 'U ->
-                'U option
-
-        abstract reduceEachTrailingCommentRange:
-            text: string *
-            pos: float *
-            cb: (float -> float -> CommentKind -> bool -> 'T -> 'U -> 'U) *
-            state: 'T *
-            initial: 'U ->
-                'U option
-
-        abstract getLeadingCommentRanges:
-            text: string * pos: float -> ResizeArray<CommentRange> option
-
-        abstract getTrailingCommentRanges:
-            text: string * pos: float -> ResizeArray<CommentRange> option
-
+        abstract forEachLeadingCommentRange: text: string * pos: float * cb: (float -> float -> CommentKind -> bool -> 'U) -> 'U option
+        abstract forEachLeadingCommentRange: text: string * pos: float * cb: (float -> float -> CommentKind -> bool -> 'T -> 'U) * state: 'T -> 'U option
+        abstract forEachTrailingCommentRange: text: string * pos: float * cb: (float -> float -> CommentKind -> bool -> 'U) -> 'U option
+        abstract forEachTrailingCommentRange: text: string * pos: float * cb: (float -> float -> CommentKind -> bool -> 'T -> 'U) * state: 'T -> 'U option
+        abstract reduceEachLeadingCommentRange: text: string * pos: float * cb: (float -> float -> CommentKind -> bool -> 'T -> 'U) * state: 'T * initial: 'U -> 'U option
+        abstract reduceEachTrailingCommentRange: text: string * pos: float * cb: (float -> float -> CommentKind -> bool -> 'T -> 'U) * state: 'T * initial: 'U -> 'U option
+        abstract getLeadingCommentRanges: text: string * pos: float -> ResizeArray<CommentRange> option
+        abstract getTrailingCommentRanges: text: string * pos: float -> ResizeArray<CommentRange> option
         /// Optionally, get the shebang
         abstract getShebang: text: string -> string option
-
-        abstract isIdentifierStart:
-            ch: float * languageVersion: ScriptTarget option -> bool
-
-        abstract isIdentifierPart:
-            ch: float *
-            languageVersion: ScriptTarget option *
-            ?identifierVariant: LanguageVariant ->
-                bool
-
-        abstract createScanner:
-            languageVersion: ScriptTarget *
-            skipTrivia: bool *
-            ?languageVariant: LanguageVariant *
-            ?textInitial: string *
-            ?onError: ErrorCallback *
-            ?start: float *
-            ?length: float ->
-                Scanner
-
+        abstract isIdentifierStart: ch: float * languageVersion: ScriptTarget option -> bool
+        abstract isIdentifierPart: ch: float * languageVersion: ScriptTarget option * ?identifierVariant: LanguageVariant -> bool
+        abstract createScanner: languageVersion: ScriptTarget * skipTrivia: bool * ?languageVariant: LanguageVariant * ?textInitial: string * ?onError: ErrorCallback * ?start: float * ?length: float -> Scanner
         abstract isExternalModuleNameRelative: moduleName: string -> bool
-
-        abstract sortAndDeduplicateDiagnostics:
-            diagnostics: ResizeArray<'T> -> SortedReadonlyArray<'T>
-                when 'T :> Diagnostic
-
+        abstract sortAndDeduplicateDiagnostics: diagnostics: ResizeArray<'T> -> SortedReadonlyArray<'T> when 'T :> Diagnostic
         abstract getDefaultLibFileName: options: CompilerOptions -> string
         abstract textSpanEnd: span: TextSpan -> float
         abstract textSpanIsEmpty: span: TextSpan -> bool
-
-        abstract textSpanContainsPosition:
-            span: TextSpan * position: float -> bool
-
-        abstract textSpanContainsTextSpan:
-            span: TextSpan * other: TextSpan -> bool
-
+        abstract textSpanContainsPosition: span: TextSpan * position: float -> bool
+        abstract textSpanContainsTextSpan: span: TextSpan * other: TextSpan -> bool
         abstract textSpanOverlapsWith: span: TextSpan * other: TextSpan -> bool
-
-        abstract textSpanOverlap:
-            span1: TextSpan * span2: TextSpan -> TextSpan option
-
-        abstract textSpanIntersectsWithTextSpan:
-            span: TextSpan * other: TextSpan -> bool
-
-        abstract textSpanIntersectsWith:
-            span: TextSpan * start: float * length: float -> bool
-
-        abstract decodedTextSpanIntersectsWith:
-            start1: float * length1: float * start2: float * length2: float ->
-                bool
-
-        abstract textSpanIntersectsWithPosition:
-            span: TextSpan * position: float -> bool
-
-        abstract textSpanIntersection:
-            span1: TextSpan * span2: TextSpan -> TextSpan option
-
+        abstract textSpanOverlap: span1: TextSpan * span2: TextSpan -> TextSpan option
+        abstract textSpanIntersectsWithTextSpan: span: TextSpan * other: TextSpan -> bool
+        abstract textSpanIntersectsWith: span: TextSpan * start: float * length: float -> bool
+        abstract decodedTextSpanIntersectsWith: start1: float * length1: float * start2: float * length2: float -> bool
+        abstract textSpanIntersectsWithPosition: span: TextSpan * position: float -> bool
+        abstract textSpanIntersection: span1: TextSpan * span2: TextSpan -> TextSpan option
         abstract createTextSpan: start: float * length: float -> TextSpan
-
-        abstract createTextSpanFromBounds:
-            start: float * ``end``: float -> TextSpan
-
+        abstract createTextSpanFromBounds: start: float * ``end``: float -> TextSpan
         abstract textChangeRangeNewSpan: range: TextChangeRange -> TextSpan
         abstract textChangeRangeIsUnchanged: range: TextChangeRange -> bool
-
-        abstract createTextChangeRange:
-            span: TextSpan * newLength: float -> TextChangeRange
-
-        abstract unchangedTextChangeRange: TextChangeRange
-
+        abstract createTextChangeRange: span: TextSpan * newLength: float -> TextChangeRange
         /// Called to merge all the changes that occurred across several versions of a script snapshot
         /// into a single change.  i.e. if a user keeps making successive edits to a script we will
         /// have a text change from V1 to V2, V2 to V3, ..., Vn.
         ///
         /// This function will then merge those changes into a single change range valid between V1 and
         /// Vn.
-        abstract collapseTextChangeRangesAcrossMultipleVersions:
-            changes: ResizeArray<TextChangeRange> -> TextChangeRange
-
+        abstract collapseTextChangeRangesAcrossMultipleVersions: changes: ResizeArray<TextChangeRange> -> TextChangeRange
         abstract getTypeParameterOwner: d: Declaration -> Declaration option
-
-        abstract isParameterPropertyDeclaration:
-            node: Node * parent: Node -> bool
-
+        abstract isParameterPropertyDeclaration: node: Node * parent: Node -> bool
         abstract isEmptyBindingPattern: node: BindingName -> bool
-        abstract isEmptyBindingElement: node: BindingElement -> bool
-
-        abstract walkUpBindingElementsAndPatterns:
-            binding: BindingElement ->
-                U2<VariableDeclaration, ParameterDeclaration>
-
+        abstract isEmptyBindingElement: node: U2<BindingElement, ArrayBindingElement> -> bool
+        abstract walkUpBindingElementsAndPatterns: binding: BindingElement -> U2<VariableDeclaration, ParameterDeclaration>
         abstract getCombinedModifierFlags: node: Declaration -> ModifierFlags
         abstract getCombinedNodeFlags: node: Node -> NodeFlags
-
         /// Checks to see if the locale is in the appropriate format,
         /// and if it is, attempts to set the appropriate language.
-        abstract validateLocaleAndSetLanguage:
-            locale: string *
-            sys: ValidateLocaleAndSetLanguageSys *
-            ?errors: Push<Diagnostic> ->
-                unit
-
+        abstract validateLocaleAndSetLanguage: locale: string * sys: {| getExecutingFilePath: unit -> string; resolvePath: string -> string; fileExists: string -> bool; readFile: string -> string option |} * ?errors: ResizeArray<Diagnostic> -> unit
         abstract getOriginalNode: node: Node -> Node
-
-        abstract getOriginalNode:
-            node: Node * nodeTest: (Node -> bool) -> 'T when 'T :> Node
-
+        abstract getOriginalNode: node: Node * nodeTest: (Node -> bool) -> 'T when 'T :> Node
         abstract getOriginalNode: node: Node option -> Node option
-
-        abstract getOriginalNode:
-            node: Node option * nodeTest: (Node option -> bool) -> 'T option
-                when 'T :> Node
-
+        abstract getOriginalNode: node: Node option * nodeTest: (Node -> bool) -> 'T option when 'T :> Node
         /// Iterates through the parent chain of a node and performs the callback on each parent until the callback
         /// returns a truthy value, then returns that value.
         /// If no such value is found, it applies the callback until the parent pointer is undefined or the callback returns "quit"
         /// At that point findAncestor returns undefined.
-        abstract findAncestor:
-            node: Node option * callback: (Node -> bool) -> 'T option
-                when 'T :> Node
-
-        abstract findAncestor:
-            node: Node option * callback: (Node -> U2<bool, string>) ->
-                Node option
-
+        abstract findAncestor: node: Node option * callback: (Node -> bool) -> 'T option when 'T :> Node
+        abstract findAncestor: node: Node option * callback: (Node -> U2<bool, string>) -> Node option
         /// <summary>Gets a value indicating whether a node originated in the parse tree.</summary>
         /// <param name="node">The node to test.</param>
         abstract isParseTreeNode: node: Node -> bool
@@ -235,34 +101,26 @@ module Ts =
         /// <param name="node">The original node.</param>
         /// <returns>The original parse tree node if found; otherwise, undefined.</returns>
         abstract getParseTreeNode: node: Node option -> Node option
-
         /// <summary>Gets the original parse tree node for a node.</summary>
         /// <param name="node">The original node.</param>
         /// <param name="nodeTest">A callback used to ensure the correct type of parse tree node is returned.</param>
         /// <returns>The original parse tree node if found; otherwise, undefined.</returns>
-        abstract getParseTreeNode:
-            node: 'T option * ?nodeTest: (Node -> bool) -> 'T option
-                when 'T :> Node
-
+        abstract getParseTreeNode: node: 'T option * ?nodeTest: (Node -> bool) -> 'T option when 'T :> Node
         /// Add an extra underscore to identifiers that start with two underscores to avoid issues with magic names like '__proto__'
         abstract escapeLeadingUnderscores: identifier: string -> __String
         /// <summary>Remove extra underscore from escaped identifier text content.</summary>
         /// <param name="identifier">The escaped identifier text.</param>
         /// <returns>The unescaped identifier text.</returns>
         abstract unescapeLeadingUnderscores: identifier: __String -> string
-
-        abstract idText:
-            identifierOrPrivateName: U2<Identifier, PrivateIdentifier> -> string
-
+        abstract idText: identifierOrPrivateName: U2<Identifier, PrivateIdentifier> -> string
+        /// If the text of an Identifier matches a keyword (including contextual and TypeScript-specific keywords), returns the
+        /// SyntaxKind for the matching keyword.
+        abstract identifierToKeywordKind: node: Identifier -> KeywordSyntaxKind option
         abstract symbolName: symbol: Symbol -> string
-
-        abstract getNameOfJSDocTypedef:
-            declaration: JSDocTypedefTag ->
-                U2<Identifier, PrivateIdentifier> option
-
-        abstract getNameOfDeclaration:
-            declaration: U2<Declaration, Expression> -> DeclarationName option
-
+        abstract getNameOfJSDocTypedef: declaration: JSDocTypedefTag -> U2<Identifier, PrivateIdentifier> option
+        abstract getNameOfDeclaration: declaration: U2<Declaration, Expression> option -> DeclarationName option
+        abstract getDecorators: node: HasDecorators -> ResizeArray<Decorator> option
+        abstract getModifiers: node: HasModifiers -> ResizeArray<Modifier> option
         /// <summary>Gets the JSDoc parameter tags for the node if present.</summary>
         /// <remarks>
         /// Returns any JSDoc param tag whose name matches the provided
@@ -274,9 +132,7 @@ module Ts =
         ///
         /// For binding patterns, parameter tags are matched by position.
         /// </remarks>
-        abstract getJSDocParameterTags:
-            param: ParameterDeclaration -> ResizeArray<JSDocParameterTag>
-
+        abstract getJSDocParameterTags: param: ParameterDeclaration -> ResizeArray<JSDocParameterTag>
         /// <summary>Gets the JSDoc type parameter tags for the node if present.</summary>
         /// <remarks>
         /// Returns any JSDoc template tag whose names match the provided
@@ -286,24 +142,17 @@ module Ts =
         /// node are returned first, so in the previous example, the template
         /// tag on the containing function expression would be first.
         /// </remarks>
-        abstract getJSDocTypeParameterTags:
-            param: TypeParameterDeclaration -> ResizeArray<JSDocTemplateTag>
-
+        abstract getJSDocTypeParameterTags: param: TypeParameterDeclaration -> ResizeArray<JSDocTemplateTag>
         /// <summary>Return true if the node has JSDoc parameter tags.</summary>
         /// <remarks>
         /// Includes parameter tags that are not directly on the node,
         /// for example on a variable declaration whose initializer is a function expression.
         /// </remarks>
-        abstract hasJSDocParameterTags:
-            node: U2<FunctionLikeDeclaration, SignatureDeclaration> -> bool
-
+        abstract hasJSDocParameterTags: node: U2<FunctionLikeDeclaration, SignatureDeclaration> -> bool
         /// Gets the JSDoc augments tag for the node if present
         abstract getJSDocAugmentsTag: node: Node -> JSDocAugmentsTag option
-
         /// Gets the JSDoc implements tags for the node if present
-        abstract getJSDocImplementsTags:
-            node: Node -> ResizeArray<JSDocImplementsTag>
-
+        abstract getJSDocImplementsTags: node: Node -> ResizeArray<JSDocImplementsTag>
         /// Gets the JSDoc class tag for the node if present
         abstract getJSDocClassTag: node: Node -> JSDocClassTag option
         /// Gets the JSDoc public tag for the node if present
@@ -314,6 +163,7 @@ module Ts =
         abstract getJSDocProtectedTag: node: Node -> JSDocProtectedTag option
         /// Gets the JSDoc protected tag for the node if present
         abstract getJSDocReadonlyTag: node: Node -> JSDocReadonlyTag option
+        abstract getJSDocOverrideTagNoCache: node: Node -> JSDocOverrideTag option
         /// Gets the JSDoc deprecated tag for the node if present
         abstract getJSDocDeprecatedTag: node: Node -> JSDocDeprecatedTag option
         /// Gets the JSDoc enum tag for the node if present
@@ -324,6 +174,7 @@ module Ts =
         abstract getJSDocReturnTag: node: Node -> JSDocReturnTag option
         /// Gets the JSDoc template tag for the node if present
         abstract getJSDocTemplateTag: node: Node -> JSDocTemplateTag option
+        abstract getJSDocSatisfiesTag: node: Node -> JSDocSatisfiesTag option
         /// Gets the JSDoc type tag for the node if present and valid
         abstract getJSDocTypeTag: node: Node -> JSDocTypeTag option
         /// <summary>Gets the type node for the node if provided via JSDoc.</summary>
@@ -345,28 +196,24 @@ module Ts =
         abstract getJSDocReturnType: node: Node -> TypeNode option
         /// Get all JSDoc tags related to a node, including those on parent nodes.
         abstract getJSDocTags: node: Node -> ResizeArray<JSDocTag>
-
         /// Gets all JSDoc tags that match a specified predicate
-        abstract getAllJSDocTags:
-            node: Node * predicate: (JSDocTag -> bool) -> ResizeArray<'T>
-                when 'T :> JSDocTag
-
+        abstract getAllJSDocTags: node: Node * predicate: (JSDocTag -> bool) -> ResizeArray<'T> when 'T :> JSDocTag
         /// Gets all JSDoc tags of a specified kind
-        abstract getAllJSDocTagsOfKind:
-            node: Node * kind: SyntaxKind -> ResizeArray<JSDocTag>
-
+        abstract getAllJSDocTagsOfKind: node: Node * kind: SyntaxKind -> ResizeArray<JSDocTag>
+        /// Gets the text of a jsdoc comment, flattening links to their text.
+        abstract getTextOfJSDocComment: ?comment: U2<string, ResizeArray<JSDocComment>> -> string option
         /// <summary>
         /// Gets the effective type parameters. If the node was parsed in a
         /// JavaScript file, gets the type parameters from the <c>@template</c> tag from JSDoc.
+        ///
+        /// This does *not* return type parameters from a jsdoc reference to a generic type, eg
+        ///
+        /// type Id = &lt;T&gt;(x: T) =&gt; T
+        /// /**
         /// </summary>
-        abstract getEffectiveTypeParameterDeclarations:
-            node: DeclarationWithTypeParameters ->
-                ResizeArray<TypeParameterDeclaration>
-
-        abstract getEffectiveConstraintOfTypeParameter:
-            node: TypeParameterDeclaration -> TypeNode option
-
-        abstract isIdentifierOrPrivateIdentifier: node: Node -> bool
+        abstract getEffectiveTypeParameterDeclarations: node: DeclarationWithTypeParameters -> ResizeArray<TypeParameterDeclaration>
+        abstract getEffectiveConstraintOfTypeParameter: node: TypeParameterDeclaration -> TypeNode option
+        abstract isMemberName: node: Node -> bool
         abstract isPropertyAccessChain: node: Node -> bool
         abstract isElementAccessChain: node: Node -> bool
         abstract isCallChain: node: Node -> bool
@@ -378,9 +225,15 @@ module Ts =
         abstract isNonNullChain: node: Node -> bool
         abstract isBreakOrContinueStatement: node: Node -> bool
         abstract isNamedExportBindings: node: Node -> bool
+        [<Obsolete("")>]
         abstract isUnparsedTextLike: node: Node -> bool
+        [<Obsolete("")>]
         abstract isUnparsedNode: node: Node -> bool
         abstract isJSDocPropertyLikeTag: node: Node -> bool
+        /// True if kind is of some token syntax kind.
+        /// For example, this is true for an IfKeyword but not for an IfStatement.
+        /// Literals are considered tokens, except TemplateLiteral, but does include TemplateHead/Middle/Tail.
+        abstract isTokenKind: kind: SyntaxKind -> bool
         /// True if node is of some token syntax kind.
         /// For example, this is true for an IfKeyword but not for an IfStatement.
         /// Literals are considered tokens, except TemplateLiteral, but does include TemplateHead/Middle/Tail.
@@ -389,18 +242,23 @@ module Ts =
         abstract isTemplateLiteralToken: node: Node -> bool
         abstract isTemplateMiddleOrTemplateTail: node: Node -> bool
         abstract isImportOrExportSpecifier: node: Node -> bool
+        abstract isTypeOnlyImportDeclaration: node: Node -> bool
+        abstract isTypeOnlyExportDeclaration: node: Node -> bool
         abstract isTypeOnlyImportOrExportDeclaration: node: Node -> bool
+        abstract isAssertionKey: node: Node -> bool
         abstract isStringTextContainingNode: node: Node -> bool
         abstract isModifier: node: Node -> bool
         abstract isEntityName: node: Node -> bool
         abstract isPropertyName: node: Node -> bool
         abstract isBindingName: node: Node -> bool
-        abstract isFunctionLike: node: Node -> bool
+        abstract isFunctionLike: node: Node option -> bool
         abstract isClassElement: node: Node -> bool
         abstract isClassLike: node: Node -> bool
         abstract isAccessor: node: Node -> bool
+        abstract isAutoAccessorPropertyDeclaration: node: Node -> bool
+        abstract isModifierLike: node: Node -> bool
         abstract isTypeElement: node: Node -> bool
-        abstract isClassOrTypeElement: node: Node -> bool
+        abstract isClassOrTypeElement: node: NoisTypeNodede -> bool
         abstract isObjectLiteralElementLike: node: Node -> bool
         /// <summary>
         /// Node test that determines whether a node is a valid type node.
@@ -409,18 +267,28 @@ module Ts =
         /// </summary>
         abstract isTypeNode: node: Node -> bool
         abstract isFunctionOrConstructorTypeNode: node: Node -> bool
+        abstract isArrayBindingElement: node: Node -> bool
         abstract isPropertyAccessOrQualifiedName: node: Node -> bool
         abstract isCallLikeExpression: node: Node -> bool
         abstract isCallOrNewExpression: node: Node -> bool
         abstract isTemplateLiteral: node: Node -> bool
+        abstract isLeftHandSideExpression: node: Node -> bool
+        abstract isLiteralTypeLiteral: node: Node -> bool
+        /// Determines whether a node is an expression based only on its kind.
+        abstract isExpression: node: Node -> bool
         abstract isAssertionExpression: node: Node -> bool
-
-        abstract isIterationStatement:
-            node: Node * lookInLabeledStatements: obj -> bool
-
-        abstract isIterationStatement:
-            node: Node * lookInLabeledStatements: bool -> bool
-
+        [<Emit("$0.isIterationStatement($1,false)")>] abstract isIterationStatement_false: node: Node -> bool
+        abstract isIterationStatement: node: Node * lookInLabeledStatements: bool -> bool
+        abstract isConciseBody: node: Node -> bool
+        abstract isForInitializer: node: Node -> bool
+        abstract isModuleBody: node: Node -> bool
+        abstract isNamedImportBindings: node: Node -> bool
+        abstract isStatement: node: Node -> bool
+        abstract isModuleReference: node: Node -> bool
+        abstract isJsxTagNameExpression: node: Node -> bool
+        abstract isJsxChild: node: Node -> bool
+        abstract isJsxAttributeLike: node: Node -> bool
+        abstract isStringLiteralOrJsxExpression: node: Node -> bool
         abstract isJsxOpeningLikeElement: node: Node -> bool
         abstract isCaseOrDefaultClause: node: Node -> bool
         /// True if node is of a kind that may contain comment text.
@@ -430,141 +298,90 @@ module Ts =
         /// True if has initializer node attached to it.
         abstract hasOnlyExpressionInitializer: node: Node -> bool
         abstract isObjectLiteralElement: node: Node -> bool
-        abstract isStringLiteralLike: node: Node -> bool
-        abstract factory: NodeFactory
+        abstract isStringLiteralLike: node: U2<Node, FileReference> -> bool
+        abstract isJSDocLinkLike: node: Node -> bool
+        abstract hasRestParameter: s: U2<SignatureDeclaration, JSDocSignature> -> bool
+        abstract isRestParameter: node: U2<ParameterDeclaration, JSDocParameterTag> -> bool
+        abstract unchangedTextChangeRange: TextChangeRange with get, set
+        /// <summary>
+        /// This function checks multiple locations for JSDoc comments that apply to a host node.
+        /// At each location, the whole comment may apply to the node, or only a specific tag in
+        /// the comment. In the first case, location adds the entire <see cref="JSDoc" /> object. In the
+        /// second case, it adds the applicable <see cref="JSDocTag" />.
+        ///
+        /// For example, a JSDoc comment before a parameter adds the entire <see cref="JSDoc" />. But a
+        /// <c>@param</c> tag on the parent function only adds the <see cref="JSDocTag" /> for the <c>@param</c>.
+        ///
+        /// <code lang="ts">
+        /// /** JSDoc will be returned for `a` *\/
+        /// const a = 0
+        /// /**
+        ///  * Entire JSDoc will be returned for `b`
+        ///  *
+        /// </code>
+        /// </summary>
+        /// <param name="c">
+        /// JSDocTag will be returned for <c>c</c>
+        /// *\/
+        /// function b(/** JSDoc will be returned for <c>c</c> *\/ c) {}
+        /// <code>
+        /// </code>
+        /// </param>
+        abstract getJSDocCommentsAndTags: hostNode: Node -> ResizeArray<U2<JSDoc, JSDocTag>>
+        [<Obsolete("")>]
         abstract createUnparsedSourceFile: text: string -> UnparsedSource
-
-        abstract createUnparsedSourceFile:
-            inputFile: InputFiles *
-            ``type``: CreateUnparsedSourceFileType *
-            ?stripInternal: bool ->
-                UnparsedSource
-
-        abstract createUnparsedSourceFile:
-            text: string * mapPath: string option * map: string option ->
-                UnparsedSource
-
-        abstract createInputFiles:
-            javascriptText: string * declarationText: string -> InputFiles
-
-        abstract createInputFiles:
-            readFileText: (string -> string option) *
-            javascriptPath: string *
-            javascriptMapPath: string option *
-            declarationPath: string *
-            declarationMapPath: string option *
-            buildInfoPath: string option ->
-                InputFiles
-
-        abstract createInputFiles:
-            javascriptText: string *
-            declarationText: string *
-            javascriptMapPath: string option *
-            javascriptMapText: string option *
-            declarationMapPath: string option *
-            declarationMapText: string option ->
-                InputFiles
-
+        [<Obsolete("")>]
+        abstract createUnparsedSourceFile: inputFile: InputFiles * ``type``: IExportsCreateUnparsedSourceFile * ?stripInternal: bool -> UnparsedSource
+        [<Obsolete("")>]
+        abstract createUnparsedSourceFile: text: string * mapPath: string option * map: string option -> UnparsedSource
+        [<Obsolete("")>]
+        abstract createInputFiles: javascriptText: string * declarationText: string -> InputFiles
+        [<Obsolete("")>]
+        abstract createInputFiles: javascriptText: string * declarationText: string * javascriptMapPath: string option * javascriptMapText: string option * declarationMapPath: string option * declarationMapText: string option -> InputFiles
+        [<Obsolete("")>]
+        abstract createInputFiles: readFileText: (string -> string option) * javascriptPath: string * javascriptMapPath: string option * declarationPath: string * declarationMapPath: string option * buildInfoPath: string option -> InputFiles
         /// Create an external source map source file reference
-        abstract createSourceMapSource:
-            fileName: string * text: string * ?skipTrivia: (float -> float) ->
-                SourceMapSource
-
-        abstract setOriginalNode:
-            node: 'T * original: Node option -> 'T when 'T :> Node
-
+        abstract createSourceMapSource: fileName: string * text: string * ?skipTrivia: (float -> float) -> SourceMapSource
+        abstract setOriginalNode: node: 'T * original: Node option -> 'T when 'T :> Node
+        abstract factory: NodeFactory
         /// <summary>Clears any <c>EmitNode</c> entries from parse-tree nodes.</summary>
         /// <param name="sourceFile">A source file.</param>
         abstract disposeEmitNodes: sourceFile: SourceFile option -> unit
-
         /// Sets flags that control emit behavior of a node.
-        abstract setEmitFlags:
-            node: 'T * emitFlags: EmitFlags -> 'T when 'T :> Node
-
+        abstract setEmitFlags: node: 'T * emitFlags: EmitFlags -> 'T when 'T :> Node
         /// Gets a custom text range to use when emitting source maps.
         abstract getSourceMapRange: node: Node -> SourceMapRange
-
         /// Sets a custom text range to use when emitting source maps.
-        abstract setSourceMapRange:
-            node: 'T * range: SourceMapRange option -> 'T when 'T :> Node
-
+        abstract setSourceMapRange: node: 'T * range: SourceMapRange option -> 'T when 'T :> Node
         /// Gets the TextRange to use for source maps for a token of a node.
-        abstract getTokenSourceMapRange:
-            node: Node * token: SyntaxKind -> SourceMapRange option
-
+        abstract getTokenSourceMapRange: node: Node * token: SyntaxKind -> SourceMapRange option
         /// Sets the TextRange to use for source maps for a token of a node.
-        abstract setTokenSourceMapRange:
-            node: 'T * token: SyntaxKind * range: SourceMapRange option -> 'T
-                when 'T :> Node
-
+        abstract setTokenSourceMapRange: node: 'T * token: SyntaxKind * range: SourceMapRange option -> 'T when 'T :> Node
         /// Gets a custom text range to use when emitting comments.
         abstract getCommentRange: node: Node -> TextRange
-
         /// Sets a custom text range to use when emitting comments.
-        abstract setCommentRange:
-            node: 'T * range: TextRange -> 'T when 'T :> Node
-
-        abstract getSyntheticLeadingComments:
-            node: Node -> ResizeArray<SynthesizedComment> option
-
-        abstract setSyntheticLeadingComments:
-            node: 'T * comments: ResizeArray<SynthesizedComment> option -> 'T
-                when 'T :> Node
-
-        abstract addSyntheticLeadingComment:
-            node: 'T *
-            kind: SyntaxKind *
-            text: string *
-            ?hasTrailingNewLine: bool ->
-                'T
-                when 'T :> Node
-
-        abstract getSyntheticTrailingComments:
-            node: Node -> ResizeArray<SynthesizedComment> option
-
-        abstract setSyntheticTrailingComments:
-            node: 'T * comments: ResizeArray<SynthesizedComment> option -> 'T
-                when 'T :> Node
-
-        abstract addSyntheticTrailingComment:
-            node: 'T *
-            kind: SyntaxKind *
-            text: string *
-            ?hasTrailingNewLine: bool ->
-                'T
-                when 'T :> Node
-
-        abstract moveSyntheticComments:
-            node: 'T * original: Node -> 'T when 'T :> Node
-
+        abstract setCommentRange: node: 'T * range: TextRange -> 'T when 'T :> Node
+        abstract getSyntheticLeadingComments: node: Node -> ResizeArray<SynthesizedComment> option
+        abstract setSyntheticLeadingComments: node: 'T * comments: ResizeArray<SynthesizedComment> option -> 'T when 'T :> Node
+        abstract addSyntheticLeadingComment: node: 'T * kind: SyntaxKind * text: string * ?hasTrailingNewLine: bool -> 'T when 'T :> Node
+        abstract getSyntheticTrailingComments: node: Node -> ResizeArray<SynthesizedComment> option
+        abstract setSyntheticTrailingComments: node: 'T * comments: ResizeArray<SynthesizedComment> option -> 'T when 'T :> Node
+        abstract addSyntheticTrailingComment: node: 'T * kind: SyntaxKind * text: string * ?hasTrailingNewLine: bool -> 'T when 'T :> Node
+        abstract moveSyntheticComments: node: 'T * original: Node -> 'T when 'T :> Node
         /// Gets the constant value to emit for an expression representing an enum.
-        abstract getConstantValue:
-            node: AccessExpression -> U2<string, float> option
-
+        abstract getConstantValue: node: AccessExpression -> U2<string, float> option
         /// Sets the constant value to emit for an expression.
-        abstract setConstantValue:
-            node: AccessExpression * value: U2<string, float> ->
-                AccessExpression
-
+        abstract setConstantValue: node: AccessExpression * value: U2<string, float> -> AccessExpression
         /// Adds an EmitHelper to a node.
-        abstract addEmitHelper:
-            node: 'T * helper: EmitHelper -> 'T when 'T :> Node
-
+        abstract addEmitHelper: node: 'T * helper: EmitHelper -> 'T when 'T :> Node
         /// Add EmitHelpers to a node.
-        abstract addEmitHelpers:
-            node: 'T * helpers: ResizeArray<EmitHelper> option -> 'T
-                when 'T :> Node
-
+        abstract addEmitHelpers: node: 'T * helpers: ResizeArray<EmitHelper> option -> 'T when 'T :> Node
         /// Removes an EmitHelper from a node.
         abstract removeEmitHelper: node: Node * helper: EmitHelper -> bool
         /// Gets the EmitHelpers of a node.
         abstract getEmitHelpers: node: Node -> ResizeArray<EmitHelper> option
-
         /// Moves matching emit helpers from a source node to a target node.
-        abstract moveEmitHelpers:
-            source: Node * target: Node * predicate: (EmitHelper -> bool) ->
-                unit
-
+        abstract moveEmitHelpers: source: Node * target: Node * predicate: (EmitHelper -> bool) -> unit
         abstract isNumericLiteral: node: Node -> bool
         abstract isBigIntLiteral: node: Node -> bool
         abstract isStringLiteral: node: Node -> bool
@@ -574,10 +391,21 @@ module Ts =
         abstract isTemplateHead: node: Node -> bool
         abstract isTemplateMiddle: node: Node -> bool
         abstract isTemplateTail: node: Node -> bool
+        abstract isDotDotDotToken: node: Node -> bool
+        abstract isPlusToken: node: Node -> bool
+        abstract isMinusToken: node: Node -> bool
+        abstract isAsteriskToken: node: Node -> bool
+        abstract isExclamationToken: node: Node -> bool
+        abstract isQuestionToken: node: Node -> bool
+        abstract isColonToken: node: Node -> bool
+        abstract isQuestionDotToken: node: Node -> bool
+        abstract isEqualsGreaterThanToken: node: Node -> bool
         abstract isIdentifier: node: Node -> bool
+        abstract isPrivateIdentifier: node: Node -> bool
+        abstract isAssertsKeyword: node: Node -> bool
+        abstract isAwaitKeyword: node: Node -> bool
         abstract isQualifiedName: node: Node -> bool
         abstract isComputedPropertyName: node: Node -> bool
-        abstract isPrivateIdentifier: node: Node -> bool
         abstract isTypeParameterDeclaration: node: Node -> bool
         abstract isParameter: node: Node -> bool
         abstract isDecorator: node: Node -> bool
@@ -585,6 +413,7 @@ module Ts =
         abstract isPropertyDeclaration: node: Node -> bool
         abstract isMethodSignature: node: Node -> bool
         abstract isMethodDeclaration: node: Node -> bool
+        abstract isClassStaticBlockDeclaration: node: Node -> bool
         abstract isConstructorDeclaration: node: Node -> bool
         abstract isGetAccessorDeclaration: node: Node -> bool
         abstract isSetAccessorDeclaration: node: Node -> bool
@@ -644,6 +473,7 @@ module Ts =
         abstract isOmittedExpression: node: Node -> bool
         abstract isExpressionWithTypeArguments: node: Node -> bool
         abstract isAsExpression: node: Node -> bool
+        abstract isSatisfiesExpression: node: Node -> bool
         abstract isNonNullExpression: node: Node -> bool
         abstract isMetaProperty: node: Node -> bool
         abstract isSyntheticExpression: node: Node -> bool
@@ -684,6 +514,9 @@ module Ts =
         abstract isImportEqualsDeclaration: node: Node -> bool
         abstract isImportDeclaration: node: Node -> bool
         abstract isImportClause: node: Node -> bool
+        abstract isImportTypeAssertionContainer: node: Node -> bool
+        abstract isAssertClause: node: Node -> bool
+        abstract isAssertEntry: node: Node -> bool
         abstract isNamespaceImport: node: Node -> bool
         abstract isNamespaceExport: node: Node -> bool
         abstract isNamedImports: node: Node -> bool
@@ -706,6 +539,7 @@ module Ts =
         abstract isJsxAttributes: node: Node -> bool
         abstract isJsxSpreadAttribute: node: Node -> bool
         abstract isJsxExpression: node: Node -> bool
+        abstract isJsxNamespacedName: node: Node -> bool
         abstract isCaseClause: node: Node -> bool
         abstract isDefaultClause: node: Node -> bool
         abstract isHeritageClause: node: Node -> bool
@@ -714,12 +548,18 @@ module Ts =
         abstract isShorthandPropertyAssignment: node: Node -> bool
         abstract isSpreadAssignment: node: Node -> bool
         abstract isEnumMember: node: Node -> bool
+        [<Obsolete("")>]
         abstract isUnparsedPrepend: node: Node -> bool
         abstract isSourceFile: node: Node -> bool
         abstract isBundle: node: Node -> bool
+        [<Obsolete("")>]
         abstract isUnparsedSource: node: Node -> bool
         abstract isJSDocTypeExpression: node: Node -> bool
         abstract isJSDocNameReference: node: Node -> bool
+        abstract isJSDocMemberName: node: Node -> bool
+        abstract isJSDocLink: node: Node -> bool
+        abstract isJSDocLinkCode: node: Node -> bool
+        abstract isJSDocLinkPlain: node: Node -> bool
         abstract isJSDocAllType: node: Node -> bool
         abstract isJSDocUnknownType: node: Node -> bool
         abstract isJSDocNullableType: node: Node -> bool
@@ -739,6 +579,8 @@ module Ts =
         abstract isJSDocPrivateTag: node: Node -> bool
         abstract isJSDocProtectedTag: node: Node -> bool
         abstract isJSDocReadonlyTag: node: Node -> bool
+        abstract isJSDocOverrideTag: node: Node -> bool
+        abstract isJSDocOverloadTag: node: Node -> bool
         abstract isJSDocDeprecatedTag: node: Node -> bool
         abstract isJSDocSeeTag: node: Node -> bool
         abstract isJSDocEnumTag: node: Node -> bool
@@ -751,10 +593,17 @@ module Ts =
         abstract isJSDocUnknownTag: node: Node -> bool
         abstract isJSDocPropertyTag: node: Node -> bool
         abstract isJSDocImplementsTag: node: Node -> bool
-
-        abstract setTextRange:
-            range: 'T * location: TextRange option -> 'T when 'T :> TextRange
-
+        abstract isJSDocSatisfiesTag: node: Node -> bool
+        abstract isJSDocThrowsTag: node: Node -> bool
+        abstract isQuestionOrExclamationToken: node: Node -> bool
+        abstract isIdentifierOrThisTypeNode: node: Node -> bool
+        abstract isReadonlyKeywordOrPlusOrMinusToken: node: Node -> bool
+        abstract isQuestionOrPlusOrMinusToken: node: Node -> bool
+        abstract isModuleName: node: Node -> bool
+        abstract isBinaryOperatorToken: node: Node -> bool
+        abstract setTextRange: range: 'T * location: TextRange option -> 'T when 'T :> TextRange
+        abstract canHaveModifiers: node: Node -> bool
+        abstract canHaveDecorators: node: Node -> bool
         /// <summary>
         /// Invokes a callback for each child of the given node. The 'cbNode' callback is invoked for all child nodes
         /// stored in properties. If a 'cbNodes' callback is specified, it is invoked for embedded arrays; otherwise,
@@ -768,76 +617,30 @@ module Ts =
         /// <c>forEachChild</c> must visit the children of a node in the order
         /// that they appear in the source code. The language service depends on this property to locate nodes by position.
         /// </remarks>
-        abstract forEachChild:
-            node: Node *
-            cbNode: (Node -> 'T option) *
-            ?cbNodes: (ResizeArray<Node> -> 'T option) ->
-                'T option
-
-        abstract createSourceFile:
-            fileName: string *
-            sourceText: string *
-            languageVersion: ScriptTarget *
-            ?setParentNodes: bool *
-            ?scriptKind: ScriptKind ->
-                SourceFile
-
-        abstract parseIsolatedEntityName:
-            text: string * languageVersion: ScriptTarget -> EntityName option
-
+        abstract forEachChild: node: Node * cbNode: (Node -> 'T option) * ?cbNodes: (ResizeArray<Node> -> 'T option) -> 'T option
+        abstract createSourceFile: fileName: string * sourceText: string * languageVersionOrOptions: U2<ScriptTarget, CreateSourceFileOptions> * ?setParentNodes: bool * ?scriptKind: ScriptKind -> SourceFile
+        abstract parseIsolatedEntityName: text: string * languageVersion: ScriptTarget -> EntityName option
         /// <summary>Parse json text into SyntaxTree and return node and parse errors if any</summary>
         /// <param name="fileName" />
         /// <param name="sourceText" />
-        abstract parseJsonText:
-            fileName: string * sourceText: string -> JsonSourceFile
-
+        abstract parseJsonText: fileName: string * sourceText: string -> JsonSourceFile
         abstract isExternalModule: file: SourceFile -> bool
-
-        abstract updateSourceFile:
-            sourceFile: SourceFile *
-            newText: string *
-            textChangeRange: TextChangeRange *
-            ?aggressiveChecks: bool ->
-                SourceFile
-
-        abstract parseCommandLine:
-            commandLine: ResizeArray<string> *
-            ?readFile: (string -> string option) ->
-                ParsedCommandLine
-
+        abstract updateSourceFile: sourceFile: SourceFile * newText: string * textChangeRange: TextChangeRange * ?aggressiveChecks: bool -> SourceFile
+        abstract parseCommandLine: commandLine: ResizeArray<string> * ?readFile: (string -> string option) -> ParsedCommandLine
         /// Reads the config file, reports errors if any and exits if the config file cannot be found
-        abstract getParsedCommandLineOfConfigFile:
-            configFileName: string *
-            optionsToExtend: CompilerOptions *
-            host: ParseConfigFileHost *
-            ?extendedConfigCache: Map<ExtendedConfigCacheEntry> *
-            ?watchOptionsToExtend: WatchOptions *
-            ?extraFileExtensions: ResizeArray<FileExtensionInfo> ->
-                ParsedCommandLine option
-
+        abstract getParsedCommandLineOfConfigFile: configFileName: string * optionsToExtend: CompilerOptions option * host: ParseConfigFileHost * ?extendedConfigCache: Map<string, ExtendedConfigCacheEntry> * ?watchOptionsToExtend: WatchOptions * ?extraFileExtensions: ResizeArray<FileExtensionInfo> -> ParsedCommandLine option
         /// <summary>Read tsconfig.json file</summary>
         /// <param name="fileName">The path to the config file</param>
-        abstract readConfigFile:
-            fileName: string * readFile: (string -> string option) ->
-                ReadConfigFileReturn
-
+        abstract readConfigFile: fileName: string * readFile: (string -> string option) -> {| config: obj option; error: Diagnostic option |}
         /// <summary>Parse the text of the tsconfig.json file</summary>
         /// <param name="fileName">The path to the config file</param>
         /// <param name="jsonText">The text of the config file</param>
-        abstract parseConfigFileTextToJson:
-            fileName: string * jsonText: string ->
-                ParseConfigFileTextToJsonReturn
-
+        abstract parseConfigFileTextToJson: fileName: string * jsonText: string -> {| config: obj option; error: Diagnostic option |}
         /// <summary>Read tsconfig.json file</summary>
         /// <param name="fileName">The path to the config file</param>
-        abstract readJsonConfigFile:
-            fileName: string * readFile: (string -> string option) ->
-                TsConfigSourceFile
-
+        abstract readJsonConfigFile: fileName: string * readFile: (string -> string option) -> TsConfigSourceFile
         /// Convert the json syntax tree into the json value
-        abstract convertToObject:
-            sourceFile: JsonSourceFile * errors: Push<Diagnostic> -> obj option
-
+        abstract convertToObject: sourceFile: JsonSourceFile * errors: ResizeArray<Diagnostic> -> obj option
         /// <summary>Parse the contents of a config file (tsconfig.json).</summary>
         /// <param name="json">The contents of the config file to parse</param>
         /// <param name="host">Instance of ParseConfigHost used to enumerate files in folder.</param>
@@ -845,18 +648,7 @@ module Ts =
         /// A root directory to resolve relative path entries in the config
         /// file to. e.g. outDir
         /// </param>
-        abstract parseJsonConfigFileContent:
-            json: obj option *
-            host: ParseConfigHost *
-            basePath: string *
-            ?existingOptions: CompilerOptions *
-            ?configFileName: string *
-            ?resolutionStack: ResizeArray<Path> *
-            ?extraFileExtensions: ResizeArray<FileExtensionInfo> *
-            ?extendedConfigCache: Map<ExtendedConfigCacheEntry> *
-            ?existingWatchOptions: WatchOptions ->
-                ParsedCommandLine
-
+        abstract parseJsonConfigFileContent: json: obj option * host: ParseConfigHost * basePath: string * ?existingOptions: CompilerOptions * ?configFileName: string * ?resolutionStack: ResizeArray<Path> * ?extraFileExtensions: ResizeArray<FileExtensionInfo> * ?extendedConfigCache: Map<string, ExtendedConfigCacheEntry> * ?existingWatchOptions: WatchOptions -> ParsedCommandLine
         /// <summary>Parse the contents of a config file (tsconfig.json).</summary>
         /// <param name="jsonNode">The contents of the config file to parse</param>
         /// <param name="host">Instance of ParseConfigHost used to enumerate files in folder.</param>
@@ -864,271 +656,163 @@ module Ts =
         /// A root directory to resolve relative path entries in the config
         /// file to. e.g. outDir
         /// </param>
-        abstract parseJsonSourceFileConfigFileContent:
-            sourceFile: TsConfigSourceFile *
-            host: ParseConfigHost *
-            basePath: string *
-            ?existingOptions: CompilerOptions *
-            ?configFileName: string *
-            ?resolutionStack: ResizeArray<Path> *
-            ?extraFileExtensions: ResizeArray<FileExtensionInfo> *
-            ?extendedConfigCache: Map<ExtendedConfigCacheEntry> *
-            ?existingWatchOptions: WatchOptions ->
-                ParsedCommandLine
-
-        abstract convertCompilerOptionsFromJson:
-            jsonOptions: obj option * basePath: string * ?configFileName: string ->
-                ConvertCompilerOptionsFromJsonReturn
-
-        abstract convertTypeAcquisitionFromJson:
-            jsonOptions: obj option * basePath: string * ?configFileName: string ->
-                ConvertTypeAcquisitionFromJsonReturn
-
-        abstract getEffectiveTypeRoots:
-            options: CompilerOptions * host: GetEffectiveTypeRootsHost ->
-                ResizeArray<string> option
-
+        abstract parseJsonSourceFileConfigFileContent: sourceFile: TsConfigSourceFile * host: ParseConfigHost * basePath: string * ?existingOptions: CompilerOptions * ?configFileName: string * ?resolutionStack: ResizeArray<Path> * ?extraFileExtensions: ResizeArray<FileExtensionInfo> * ?extendedConfigCache: Map<string, ExtendedConfigCacheEntry> * ?existingWatchOptions: WatchOptions -> ParsedCommandLine
+        abstract convertCompilerOptionsFromJson: jsonOptions: obj option * basePath: string * ?configFileName: string -> {| options: CompilerOptions; errors: ResizeArray<Diagnostic> |}
+        abstract convertTypeAcquisitionFromJson: jsonOptions: obj option * basePath: string * ?configFileName: string -> {| options: TypeAcquisition; errors: ResizeArray<Diagnostic> |}
+        abstract getEffectiveTypeRoots: options: CompilerOptions * host: GetEffectiveTypeRootsHost -> ResizeArray<string> option
         /// <param name="containingFile">
         /// file that contains type reference directive, can be undefined if containing file is unknown.
         /// This is possible in case if resolution is performed for directives specified via 'types' parameter. In this case initial path for secondary lookups
         /// is assumed to be the same as root directory of the project.
         /// </param>
-        abstract resolveTypeReferenceDirective:
-            typeReferenceDirectiveName: string *
-            containingFile: string option *
-            options: CompilerOptions *
-            host: ModuleResolutionHost *
-            ?redirectedReference: ResolvedProjectReference ->
-                ResolvedTypeReferenceDirectiveWithFailedLookupLocations
-
+        abstract resolveTypeReferenceDirective: typeReferenceDirectiveName: string * containingFile: string option * options: CompilerOptions * host: ModuleResolutionHost * ?redirectedReference: ResolvedProjectReference * ?cache: TypeReferenceDirectiveResolutionCache * ?resolutionMode: ResolutionMode -> ResolvedTypeReferenceDirectiveWithFailedLookupLocations
         /// Given a set of options, returns the set of type directive names
-        ///    that should be included for this program automatically.
+        ///   that should be included for this program automatically.
         /// This list could either come from the config file,
-        ///    or from enumerating the types root + initial secondary types lookup location.
+        ///   or from enumerating the types root + initial secondary types lookup location.
         /// More type directives might appear in the program later as a result of loading actual source files;
-        ///    this list is only the set of defaults that are implicitly included.
-        abstract getAutomaticTypeDirectiveNames:
-            options: CompilerOptions * host: ModuleResolutionHost ->
-                ResizeArray<string>
-
-        abstract createModuleResolutionCache:
-            currentDirectory: string *
-            getCanonicalFileName: (string -> string) *
-            ?options: CompilerOptions ->
-                ModuleResolutionCache
-
-        abstract resolveModuleNameFromCache:
-            moduleName: string *
-            containingFile: string *
-            cache: ModuleResolutionCache ->
-                ResolvedModuleWithFailedLookupLocations option
-
-        abstract resolveModuleName:
-            moduleName: string *
-            containingFile: string *
-            compilerOptions: CompilerOptions *
-            host: ModuleResolutionHost *
-            ?cache: ModuleResolutionCache *
-            ?redirectedReference: ResolvedProjectReference ->
-                ResolvedModuleWithFailedLookupLocations
-
-        abstract nodeModuleNameResolver:
-            moduleName: string *
-            containingFile: string *
-            compilerOptions: CompilerOptions *
-            host: ModuleResolutionHost *
-            ?cache: ModuleResolutionCache *
-            ?redirectedReference: ResolvedProjectReference ->
-                ResolvedModuleWithFailedLookupLocations
-
-        abstract classicNameResolver:
-            moduleName: string *
-            containingFile: string *
-            compilerOptions: CompilerOptions *
-            host: ModuleResolutionHost *
-            ?cache: NonRelativeModuleNameResolutionCache *
-            ?redirectedReference: ResolvedProjectReference ->
-                ResolvedModuleWithFailedLookupLocations
-
-        /// <summary>Visits a Node using the supplied visitor, possibly returning a new Node in its place.</summary>
+        ///   this list is only the set of defaults that are implicitly included.
+        abstract getAutomaticTypeDirectiveNames: options: CompilerOptions * host: ModuleResolutionHost -> ResizeArray<string>
+        abstract createModuleResolutionCache: currentDirectory: string * getCanonicalFileName: (string -> string) * ?options: CompilerOptions * ?packageJsonInfoCache: PackageJsonInfoCache -> ModuleResolutionCache
+        abstract createTypeReferenceDirectiveResolutionCache: currentDirectory: string * getCanonicalFileName: (string -> string) * ?options: CompilerOptions * ?packageJsonInfoCache: PackageJsonInfoCache -> TypeReferenceDirectiveResolutionCache
+        abstract resolveModuleNameFromCache: moduleName: string * containingFile: string * cache: ModuleResolutionCache * ?mode: ResolutionMode -> ResolvedModuleWithFailedLookupLocations option
+        abstract resolveModuleName: moduleName: string * containingFile: string * compilerOptions: CompilerOptions * host: ModuleResolutionHost * ?cache: ModuleResolutionCache * ?redirectedReference: ResolvedProjectReference * ?resolutionMode: ResolutionMode -> ResolvedModuleWithFailedLookupLocations
+        abstract bundlerModuleNameResolver: moduleName: string * containingFile: string * compilerOptions: CompilerOptions * host: ModuleResolutionHost * ?cache: ModuleResolutionCache * ?redirectedReference: ResolvedProjectReference -> ResolvedModuleWithFailedLookupLocations
+        abstract nodeModuleNameResolver: moduleName: string * containingFile: string * compilerOptions: CompilerOptions * host: ModuleResolutionHost * ?cache: ModuleResolutionCache * ?redirectedReference: ResolvedProjectReference -> ResolvedModuleWithFailedLookupLocations
+        abstract classicNameResolver: moduleName: string * containingFile: string * compilerOptions: CompilerOptions * host: ModuleResolutionHost * ?cache: NonRelativeModuleNameResolutionCache * ?redirectedReference: ResolvedProjectReference -> ResolvedModuleWithFailedLookupLocations
+        /// <summary>
+        /// Visits a Node using the supplied visitor, possibly returning a new Node in its place.
+        ///
+        /// - If the input node is undefined, then the output is undefined.
+        /// - If the visitor returns undefined, then the output is undefined.
+        /// - If the output node is not undefined, then it will satisfy the test function.
+        /// - In order to obtain a return type that is more specific than <c>Node</c>, a test
+        ///   function _must_ be provided, and that function must be a type predicate.
+        /// </summary>
         /// <param name="node">The Node to visit.</param>
         /// <param name="visitor">The callback used to visit the Node.</param>
         /// <param name="test">A callback to execute to verify the Node is valid.</param>
         /// <param name="lift">An optional callback to execute to lift a NodeArray into a valid Node.</param>
-        abstract visitNode:
-            node: 'T *
-            visitor: Visitor option *
-            ?test: (Node -> bool) *
-            ?lift: (ResizeArray<Node> -> 'T) ->
-                'T
-                when 'T :> Node
-
-        /// <summary>Visits a Node using the supplied visitor, possibly returning a new Node in its place.</summary>
+        abstract visitNode: node: 'TIn * visitor: Visitor<'TIn, 'TVisited> * test: (Node -> bool) * ?lift: (ResizeArray<Node> -> Node) -> U2<'TOut, obj> when 'TOut :> Node
+        /// <summary>
+        /// Visits a Node using the supplied visitor, possibly returning a new Node in its place.
+        ///
+        /// - If the input node is undefined, then the output is undefined.
+        /// - If the visitor returns undefined, then the output is undefined.
+        /// - If the output node is not undefined, then it will satisfy the test function.
+        /// - In order to obtain a return type that is more specific than <c>Node</c>, a test
+        ///   function _must_ be provided, and that function must be a type predicate.
+        /// </summary>
         /// <param name="node">The Node to visit.</param>
         /// <param name="visitor">The callback used to visit the Node.</param>
         /// <param name="test">A callback to execute to verify the Node is valid.</param>
         /// <param name="lift">An optional callback to execute to lift a NodeArray into a valid Node.</param>
-        abstract visitNode:
-            node: 'T option *
-            visitor: Visitor option *
-            ?test: (Node -> bool) *
-            ?lift: (ResizeArray<Node> -> 'T) ->
-                'T option
-                when 'T :> Node
-
-        /// <summary>Visits a NodeArray using the supplied visitor, possibly returning a new NodeArray in its place.</summary>
+        abstract visitNode: node: 'TIn * visitor: Visitor<'TIn, 'TVisited> * ?test: (Node -> bool) * ?lift: (ResizeArray<Node> -> Node) -> U2<Node, obj>
+        /// <summary>
+        /// Visits a NodeArray using the supplied visitor, possibly returning a new NodeArray in its place.
+        ///
+        /// - If the input node array is undefined, the output is undefined.
+        /// - If the visitor can return undefined, the node it visits in the array will be reused.
+        /// - If the output node array is not undefined, then its contents will satisfy the test.
+        /// - In order to obtain a return type that is more specific than <c>NodeArray&lt;Node&gt;</c>, a test
+        ///   function _must_ be provided, and that function must be a type predicate.
+        /// </summary>
         /// <param name="nodes">The NodeArray to visit.</param>
         /// <param name="visitor">The callback used to visit a Node.</param>
         /// <param name="test">A node test to execute for each node.</param>
         /// <param name="start">An optional value indicating the starting offset at which to start visiting.</param>
         /// <param name="count">An optional value indicating the maximum number of nodes to visit.</param>
-        abstract visitNodes:
-            nodes: ResizeArray<'T> *
-            visitor: Visitor option *
-            ?test: (Node -> bool) *
-            ?start: float *
-            ?count: float ->
-                ResizeArray<'T>
-                when 'T :> Node
-
-        /// <summary>Visits a NodeArray using the supplied visitor, possibly returning a new NodeArray in its place.</summary>
+        abstract visitNodes: nodes: 'TInArray * visitor: Visitor<'TIn, Node option> * test: (Node -> bool) * ?start: float * ?count: float -> U2<ResizeArray<'TOut>, obj> when 'TIn :> Node and 'TOut :> Node
+        /// <summary>
+        /// Visits a NodeArray using the supplied visitor, possibly returning a new NodeArray in its place.
+        ///
+        /// - If the input node array is undefined, the output is undefined.
+        /// - If the visitor can return undefined, the node it visits in the array will be reused.
+        /// - If the output node array is not undefined, then its contents will satisfy the test.
+        /// - In order to obtain a return type that is more specific than <c>NodeArray&lt;Node&gt;</c>, a test
+        ///   function _must_ be provided, and that function must be a type predicate.
+        /// </summary>
         /// <param name="nodes">The NodeArray to visit.</param>
         /// <param name="visitor">The callback used to visit a Node.</param>
         /// <param name="test">A node test to execute for each node.</param>
         /// <param name="start">An optional value indicating the starting offset at which to start visiting.</param>
         /// <param name="count">An optional value indicating the maximum number of nodes to visit.</param>
-        abstract visitNodes:
-            nodes: ResizeArray<'T> option *
-            visitor: Visitor option *
-            ?test: (Node -> bool) *
-            ?start: float *
-            ?count: float ->
-                ResizeArray<'T> option
-                when 'T :> Node
-
+        abstract visitNodes: nodes: 'TInArray * visitor: Visitor<'TIn, Node option> * ?test: (Node -> bool) * ?start: float * ?count: float -> U2<ResizeArray<Node>, obj> when 'TIn :> Node
         /// Starts a new lexical environment and visits a statement list, ending the lexical environment
         /// and merging hoisted declarations upon completion.
-        abstract visitLexicalEnvironment:
-            statements: ResizeArray<Statement> *
-            visitor: Visitor *
-            context: TransformationContext *
-            ?start: float *
-            ?ensureUseStrict: bool *
-            ?nodesVisitor: NodesVisitor ->
-                ResizeArray<Statement>
-
+        abstract visitLexicalEnvironment: statements: ResizeArray<Statement> * visitor: Visitor * context: TransformationContext * ?start: float * ?ensureUseStrict: bool * ?nodesVisitor: NodesVisitor -> ResizeArray<Statement>
         /// Starts a new lexical environment and visits a parameter list, suspending the lexical
         /// environment upon completion.
-        abstract visitParameterList:
-            nodes: ResizeArray<ParameterDeclaration> *
-            visitor: Visitor *
-            context: TransformationContext *
-            ?nodesVisitor: NodesVisitor ->
-                ResizeArray<ParameterDeclaration>
-
-        abstract visitParameterList:
-            nodes: ResizeArray<ParameterDeclaration> option *
-            visitor: Visitor *
-            context: TransformationContext *
-            ?nodesVisitor: NodesVisitor ->
-                ResizeArray<ParameterDeclaration> option
-
+        abstract visitParameterList: nodes: ResizeArray<ParameterDeclaration> * visitor: Visitor * context: TransformationContext * ?nodesVisitor: NodesVisitor -> ResizeArray<ParameterDeclaration>
+        abstract visitParameterList: nodes: ResizeArray<ParameterDeclaration> option * visitor: Visitor * context: TransformationContext * ?nodesVisitor: NodesVisitor -> ResizeArray<ParameterDeclaration> option
         /// Resumes a suspended lexical environment and visits a function body, ending the lexical
         /// environment and merging hoisted declarations upon completion.
-        abstract visitFunctionBody:
-            node: FunctionBody *
-            visitor: Visitor *
-            context: TransformationContext ->
-                FunctionBody
-
+        abstract visitFunctionBody: node: FunctionBody * visitor: Visitor * context: TransformationContext -> FunctionBody
         /// Resumes a suspended lexical environment and visits a function body, ending the lexical
         /// environment and merging hoisted declarations upon completion.
-        abstract visitFunctionBody:
-            node: FunctionBody option *
-            visitor: Visitor *
-            context: TransformationContext ->
-                FunctionBody option
-
+        abstract visitFunctionBody: node: FunctionBody option * visitor: Visitor * context: TransformationContext -> FunctionBody option
         /// Resumes a suspended lexical environment and visits a concise body, ending the lexical
         /// environment and merging hoisted declarations upon completion.
-        abstract visitFunctionBody:
-            node: ConciseBody *
-            visitor: Visitor *
-            context: TransformationContext ->
-                ConciseBody
-
+        abstract visitFunctionBody: node: ConciseBody * visitor: Visitor * context: TransformationContext -> ConciseBody
+        /// Visits an iteration body, adding any block-scoped variables required by the transformation.
+        abstract visitIterationBody: body: Statement * visitor: Visitor * context: TransformationContext -> Statement
+        /// <summary>Visits the elements of a <see cref="CommaListExpression" />.</summary>
+        /// <param name="visitor">The visitor to use when visiting expressions whose result will not be discarded at runtime.</param>
+        /// <param name="discardVisitor">The visitor to use when visiting expressions whose result will be discarded at runtime. Defaults to <see cref="visitor" />.</param>
+        abstract visitCommaListElements: elements: ResizeArray<Expression> * visitor: Visitor * ?discardVisitor: Visitor -> ResizeArray<Expression>
         /// <summary>Visits each child of a Node using the supplied visitor, possibly returning a new Node of the same kind in its place.</summary>
         /// <param name="node">The Node whose children will be visited.</param>
         /// <param name="visitor">The callback used to visit each child.</param>
         /// <param name="context">A lexical environment context for the visitor.</param>
-        abstract visitEachChild:
-            node: 'T * visitor: Visitor * context: TransformationContext -> 'T
-                when 'T :> Node
-
+        abstract visitEachChild: node: 'T * visitor: Visitor * context: TransformationContext -> 'T when 'T :> Node
         /// <summary>Visits each child of a Node using the supplied visitor, possibly returning a new Node of the same kind in its place.</summary>
         /// <param name="node">The Node whose children will be visited.</param>
         /// <param name="visitor">The callback used to visit each child.</param>
         /// <param name="context">A lexical environment context for the visitor.</param>
-        abstract visitEachChild:
-            node: 'T option *
-            visitor: Visitor *
-            context: TransformationContext *
-            ?nodesVisitor: obj *
-            ?tokenVisitor: Visitor ->
-                'T option
-                when 'T :> Node
-
-        abstract getTsBuildInfoEmitOutputFilePath:
-            options: CompilerOptions -> string option
-
-        abstract getOutputFileNames:
-            commandLine: ParsedCommandLine *
-            inputFileName: string *
-            ignoreCase: bool ->
-                ResizeArray<string>
-
-        abstract createPrinter:
-            ?printerOptions: PrinterOptions * ?handlers: PrintHandlers ->
-                Printer
-
-        abstract findConfigFile:
-            searchPath: string *
-            fileExists: (string -> bool) *
-            ?configName: string ->
-                string option
-
-        abstract resolveTripleslashReference:
-            moduleName: string * containingFile: string -> string
-
-        abstract createCompilerHost:
-            options: CompilerOptions * ?setParentNodes: bool -> CompilerHost
-
-        abstract getPreEmitDiagnostics:
-            program: Program *
-            ?sourceFile: SourceFile *
-            ?cancellationToken: CancellationToken ->
-                ResizeArray<Diagnostic>
-
-        abstract formatDiagnostics:
-            diagnostics: ResizeArray<Diagnostic> * host: FormatDiagnosticsHost ->
-                string
-
-        abstract formatDiagnostic:
-            diagnostic: Diagnostic * host: FormatDiagnosticsHost -> string
-
-        abstract formatDiagnosticsWithColorAndContext:
-            diagnostics: ResizeArray<Diagnostic> * host: FormatDiagnosticsHost ->
-                string
-
-        abstract flattenDiagnosticMessageText:
-            diag: U2<string, DiagnosticMessageChain> option *
-            newLine: string *
-            ?indent: float ->
-                string
-
-        abstract getConfigFileParsingDiagnostics:
-            configFileParseResult: ParsedCommandLine -> ResizeArray<Diagnostic>
-
+        abstract visitEachChild: node: 'T option * visitor: Visitor * context: TransformationContext * ?nodesVisitor: obj * ?tokenVisitor: Visitor -> 'T option when 'T :> Node
+        abstract getTsBuildInfoEmitOutputFilePath: options: CompilerOptions -> string option
+        abstract getOutputFileNames: commandLine: ParsedCommandLine * inputFileName: string * ignoreCase: bool -> ResizeArray<string>
+        abstract createPrinter: ?printerOptions: PrinterOptions * ?handlers: PrintHandlers -> Printer
+        abstract findConfigFile: searchPath: string * fileExists: (string -> bool) * ?configName: string -> string option
+        abstract resolveTripleslashReference: moduleName: string * containingFile: string -> string
+        abstract createCompilerHost: options: CompilerOptions * ?setParentNodes: bool -> CompilerHost
+        abstract getPreEmitDiagnostics: program: Program * ?sourceFile: SourceFile * ?cancellationToken: CancellationToken -> ResizeArray<Diagnostic>
+        abstract formatDiagnostics: diagnostics: ResizeArray<Diagnostic> * host: FormatDiagnosticsHost -> string
+        abstract formatDiagnostic: diagnostic: Diagnostic * host: FormatDiagnosticsHost -> string
+        abstract formatDiagnosticsWithColorAndContext: diagnostics: ResizeArray<Diagnostic> * host: FormatDiagnosticsHost -> string
+        abstract flattenDiagnosticMessageText: diag: U2<string, DiagnosticMessageChain> option * newLine: string * ?indent: float -> string
+        /// Calculates the resulting resolution mode for some reference in some file - this is generally the explicitly
+        /// provided resolution mode in the reference, unless one is not present, in which case it is the mode of the containing file.
+        abstract getModeForFileReference: ref: U2<FileReference, string> * containingFileMode: ResolutionMode -> ResolutionMode
+        /// <summary>
+        /// Calculates the final resolution mode for an import at some index within a file's imports list. This is generally the explicitly
+        /// defined mode of the import if provided, or, if not, the mode of the containing file (with some exceptions: import=require is always commonjs, dynamic import is always esm).
+        /// If you have an actual import node, prefer using getModeForUsageLocation on the reference string node.
+        /// </summary>
+        /// <param name="file">File to fetch the resolution mode within</param>
+        /// <param name="index">Index into the file's complete resolution list to get the resolution of - this is a concatenation of the file's imports and module augmentations</param>
+        abstract getModeForResolutionAtIndex: file: SourceFile * index: float -> ResolutionMode
+        /// <summary>
+        /// Calculates the final resolution mode for a given module reference node. This is generally the explicitly provided resolution mode, if
+        /// one exists, or the mode of the containing source file. (Excepting import=require, which is always commonjs, and dynamic import, which is always esm).
+        /// Notably, this function always returns <c>undefined</c> if the containing file has an <c>undefined</c> <c>impliedNodeFormat</c> - this field is only set when
+        /// <c>moduleResolution</c> is <c>node16</c>+.
+        /// </summary>
+        /// <param name="file">The file the import or import-like reference is contained within</param>
+        /// <param name="usage">The module reference string</param>
+        /// <returns>The final resolution mode of the import</returns>
+        abstract getModeForUsageLocation: file: {| impliedNodeFormat: ResolutionMode option |} * usage: StringLiteralLike -> ModuleKind option
+        abstract getConfigFileParsingDiagnostics: configFileParseResult: ParsedCommandLine -> ResizeArray<Diagnostic>
+        /// <summary>
+        /// A function for determining if a given file is esm or cjs format, assuming modern node module resolution rules, as configured by the
+        /// <c>options</c> parameter.
+        /// </summary>
+        /// <param name="fileName">The normalized absolute path to check the format of (it need not exist on disk)</param>
+        /// <param name="packageJsonInfoCache">A cache for package file lookups - it's best to have a cache when this function is called often</param>
+        /// <param name="host">The ModuleResolutionHost which can perform the filesystem lookups for package json data</param>
+        /// <param name="options">The compiler options to perform the analysis under - relevant options are <c>moduleResolution</c> and <c>traceResolution</c></param>
+        /// <returns><c>undefined</c> if the path has no relevant implied format, <c>ModuleKind.ESNext</c> for esm format, and <c>ModuleKind.CommonJS</c> for cjs format</returns>
+        abstract getImpliedNodeFormatForFile: fileName: Path * packageJsonInfoCache: PackageJsonInfoCache option * host: ModuleResolutionHost * options: CompilerOptions -> ResolutionMode
         /// <summary>
         /// Create a new 'Program' instance. A Program is an immutable collection of 'SourceFile's and a 'CompilerOptions'
         /// that represent a compilation unit.
@@ -1138,9 +822,7 @@ module Ts =
         /// </summary>
         /// <param name="createProgramOptions">The options for creating a program.</param>
         /// <returns>A 'Program' object.</returns>
-        abstract createProgram:
-            createProgramOptions: CreateProgramOptions -> Program
-
+        abstract createProgram: createProgramOptions: CreateProgramOptions -> Program
         /// <summary>
         /// Create a new 'Program' instance. A Program is an immutable collection of 'SourceFile's and a 'CompilerOptions'
         /// that represent a compilation unit.
@@ -1154,1843 +836,90 @@ module Ts =
         /// <param name="oldProgram">Reuses an old program structure.</param>
         /// <param name="configFileParsingDiagnostics">error during config file parsing</param>
         /// <returns>A 'Program' object.</returns>
-        abstract createProgram:
-            rootNames: ResizeArray<string> *
-            options: CompilerOptions *
-            ?host: CompilerHost *
-            ?oldProgram: Program *
-            ?configFileParsingDiagnostics: ResizeArray<Diagnostic> ->
-                Program
-
+        abstract createProgram: rootNames: ResizeArray<string> * options: CompilerOptions * ?host: CompilerHost * ?oldProgram: Program * ?configFileParsingDiagnostics: ResizeArray<Diagnostic> -> Program
         /// Returns the target config filename of a project reference.
         /// Note: The file might not exist.
-        abstract resolveProjectReferencePath:
-            ref: ProjectReference -> ResolvedConfigFileName
-
-        [<Obsolete("")>]
-        abstract resolveProjectReferencePath:
-            host: ResolveProjectReferencePathHost * ref: ProjectReference ->
-                ResolvedConfigFileName
-
+        abstract resolveProjectReferencePath: ref: ProjectReference -> ResolvedConfigFileName
         /// Create the builder to manage semantic diagnostics and cache them
-        abstract createSemanticDiagnosticsBuilderProgram:
-            newProgram: Program *
-            host: BuilderProgramHost *
-            ?oldProgram: SemanticDiagnosticsBuilderProgram *
-            ?configFileParsingDiagnostics: ResizeArray<Diagnostic> ->
-                SemanticDiagnosticsBuilderProgram
-
-        abstract createSemanticDiagnosticsBuilderProgram:
-            rootNames: ResizeArray<string> option *
-            options: CompilerOptions option *
-            ?host: CompilerHost *
-            ?oldProgram: SemanticDiagnosticsBuilderProgram *
-            ?configFileParsingDiagnostics: ResizeArray<Diagnostic> *
-            ?projectReferences: ResizeArray<ProjectReference> ->
-                SemanticDiagnosticsBuilderProgram
-
+        abstract createSemanticDiagnosticsBuilderProgram: newProgram: Program * host: BuilderProgramHost * ?oldProgram: SemanticDiagnosticsBuilderProgram * ?configFileParsingDiagnostics: ResizeArray<Diagnostic> -> SemanticDiagnosticsBuilderProgram
+        abstract createSemanticDiagnosticsBuilderProgram: rootNames: ResizeArray<string> option * options: CompilerOptions option * ?host: CompilerHost * ?oldProgram: SemanticDiagnosticsBuilderProgram * ?configFileParsingDiagnostics: ResizeArray<Diagnostic> * ?projectReferences: ResizeArray<ProjectReference> -> SemanticDiagnosticsBuilderProgram
         /// Create the builder that can handle the changes in program and iterate through changed files
         /// to emit the those files and manage semantic diagnostics cache as well
-        abstract createEmitAndSemanticDiagnosticsBuilderProgram:
-            newProgram: Program *
-            host: BuilderProgramHost *
-            ?oldProgram: EmitAndSemanticDiagnosticsBuilderProgram *
-            ?configFileParsingDiagnostics: ResizeArray<Diagnostic> ->
-                EmitAndSemanticDiagnosticsBuilderProgram
-
-        abstract createEmitAndSemanticDiagnosticsBuilderProgram:
-            rootNames: ResizeArray<string> option *
-            options: CompilerOptions option *
-            ?host: CompilerHost *
-            ?oldProgram: EmitAndSemanticDiagnosticsBuilderProgram *
-            ?configFileParsingDiagnostics: ResizeArray<Diagnostic> *
-            ?projectReferences: ResizeArray<ProjectReference> ->
-                EmitAndSemanticDiagnosticsBuilderProgram
-
+        abstract createEmitAndSemanticDiagnosticsBuilderProgram: newProgram: Program * host: BuilderProgramHost * ?oldProgram: EmitAndSemanticDiagnosticsBuilderProgram * ?configFileParsingDiagnostics: ResizeArray<Diagnostic> -> EmitAndSemanticDiagnosticsBuilderProgram
+        abstract createEmitAndSemanticDiagnosticsBuilderProgram: rootNames: ResizeArray<string> option * options: CompilerOptions option * ?host: CompilerHost * ?oldProgram: EmitAndSemanticDiagnosticsBuilderProgram * ?configFileParsingDiagnostics: ResizeArray<Diagnostic> * ?projectReferences: ResizeArray<ProjectReference> -> EmitAndSemanticDiagnosticsBuilderProgram
         /// Creates a builder thats just abstraction over program and can be used with watch
-        abstract createAbstractBuilder:
-            newProgram: Program *
-            host: BuilderProgramHost *
-            ?oldProgram: BuilderProgram *
-            ?configFileParsingDiagnostics: ResizeArray<Diagnostic> ->
-                BuilderProgram
-
-        abstract createAbstractBuilder:
-            rootNames: ResizeArray<string> option *
-            options: CompilerOptions option *
-            ?host: CompilerHost *
-            ?oldProgram: BuilderProgram *
-            ?configFileParsingDiagnostics: ResizeArray<Diagnostic> *
-            ?projectReferences: ResizeArray<ProjectReference> ->
-                BuilderProgram
-
-        abstract readBuilderProgram:
-            compilerOptions: CompilerOptions * host: ReadBuildProgramHost ->
-                EmitAndSemanticDiagnosticsBuilderProgram option
-
-        abstract createIncrementalCompilerHost:
-            options: CompilerOptions * ?system: System -> CompilerHost
-
-        abstract createIncrementalProgram:
-            p0: IncrementalProgramOptions<'T> -> 'T when 'T :> BuilderProgram
-
+        abstract createAbstractBuilder: newProgram: Program * host: BuilderProgramHost * ?oldProgram: BuilderProgram * ?configFileParsingDiagnostics: ResizeArray<Diagnostic> -> BuilderProgram
+        abstract createAbstractBuilder: rootNames: ResizeArray<string> option * options: CompilerOptions option * ?host: CompilerHost * ?oldProgram: BuilderProgram * ?configFileParsingDiagnostics: ResizeArray<Diagnostic> * ?projectReferences: ResizeArray<ProjectReference> -> BuilderProgram
+        abstract readBuilderProgram: compilerOptions: CompilerOptions * host: ReadBuildProgramHost -> EmitAndSemanticDiagnosticsBuilderProgram option
+        abstract createIncrementalCompilerHost: options: CompilerOptions * ?system: System -> CompilerHost
+        abstract createIncrementalProgram: p0: IncrementalProgramOptions<'T> -> 'T when 'T :> BuilderProgram
         /// Create the watch compiler host for either configFile or fileNames and its options
-        abstract createWatchCompilerHost:
-            configFileName: string *
-            optionsToExtend: CompilerOptions option *
-            system: System *
-            ?createProgram: CreateProgram<'T> *
-            ?reportDiagnostic: DiagnosticReporter *
-            ?reportWatchStatus: WatchStatusReporter *
-            ?watchOptionsToExtend: WatchOptions *
-            ?extraFileExtensions: ResizeArray<FileExtensionInfo> ->
-                WatchCompilerHostOfConfigFile<'T>
-                when 'T :> BuilderProgram
-
-        abstract createWatchCompilerHost:
-            rootFiles: ResizeArray<string> *
-            options: CompilerOptions *
-            system: System *
-            ?createProgram: CreateProgram<'T> *
-            ?reportDiagnostic: DiagnosticReporter *
-            ?reportWatchStatus: WatchStatusReporter *
-            ?projectReferences: ResizeArray<ProjectReference> *
-            ?watchOptions: WatchOptions ->
-                WatchCompilerHostOfFilesAndCompilerOptions<'T>
-                when 'T :> BuilderProgram
-
+        abstract createWatchCompilerHost: configFileName: string * optionsToExtend: CompilerOptions option * system: System * ?createProgram: CreateProgram<'T> * ?reportDiagnostic: DiagnosticReporter * ?reportWatchStatus: WatchStatusReporter * ?watchOptionsToExtend: WatchOptions * ?extraFileExtensions: ResizeArray<FileExtensionInfo> -> WatchCompilerHostOfConfigFile<'T> when 'T :> BuilderProgram
+        abstract createWatchCompilerHost: rootFiles: ResizeArray<string> * options: CompilerOptions * system: System * ?createProgram: CreateProgram<'T> * ?reportDiagnostic: DiagnosticReporter * ?reportWatchStatus: WatchStatusReporter * ?projectReferences: ResizeArray<ProjectReference> * ?watchOptions: WatchOptions -> WatchCompilerHostOfFilesAndCompilerOptions<'T> when 'T :> BuilderProgram
         /// Creates the watch from the host for root files and compiler options
-        abstract createWatchProgram:
-            host: WatchCompilerHostOfFilesAndCompilerOptions<'T> ->
-                WatchOfFilesAndCompilerOptions<'T>
-                when 'T :> BuilderProgram
-
+        abstract createWatchProgram: host: WatchCompilerHostOfFilesAndCompilerOptions<'T> -> WatchOfFilesAndCompilerOptions<'T> when 'T :> BuilderProgram
         /// Creates the watch from the host for config file
-        abstract createWatchProgram:
-            host: WatchCompilerHostOfConfigFile<'T> -> WatchOfConfigFile<'T>
-                when 'T :> BuilderProgram
-
+        abstract createWatchProgram: host: WatchCompilerHostOfConfigFile<'T> -> WatchOfConfigFile<'T> when 'T :> BuilderProgram
         /// Create a function that reports watch status by writing to the system and handles the formating of the diagnostic
-        abstract createBuilderStatusReporter:
-            system: System * ?pretty: bool -> DiagnosticReporter
-
-        abstract createSolutionBuilderHost:
-            ?system: System *
-            ?createProgram: CreateProgram<'T> *
-            ?reportDiagnostic: DiagnosticReporter *
-            ?reportSolutionBuilderStatus: DiagnosticReporter *
-            ?reportErrorSummary: ReportEmitErrorSummary ->
-                SolutionBuilderHost<'T>
-                when 'T :> BuilderProgram
-
-        abstract createSolutionBuilderWithWatchHost:
-            ?system: System *
-            ?createProgram: CreateProgram<'T> *
-            ?reportDiagnostic: DiagnosticReporter *
-            ?reportSolutionBuilderStatus: DiagnosticReporter *
-            ?reportWatchStatus: WatchStatusReporter ->
-                SolutionBuilderWithWatchHost<'T>
-                when 'T :> BuilderProgram
-
-        abstract createSolutionBuilder:
-            host: SolutionBuilderHost<'T> *
-            rootNames: ResizeArray<string> *
-            defaultOptions: BuildOptions ->
-                SolutionBuilder<'T>
-                when 'T :> BuilderProgram
-
-        abstract createSolutionBuilderWithWatch:
-            host: SolutionBuilderWithWatchHost<'T> *
-            rootNames: ResizeArray<string> *
-            defaultOptions: BuildOptions *
-            ?baseWatchOptions: WatchOptions ->
-                SolutionBuilder<'T>
-                when 'T :> BuilderProgram
-
-        abstract getDefaultFormatCodeSettings:
-            ?newLineCharacter: string -> FormatCodeSettings
-
+        abstract createBuilderStatusReporter: system: System * ?pretty: bool -> DiagnosticReporter
+        abstract createSolutionBuilderHost: ?system: System * ?createProgram: CreateProgram<'T> * ?reportDiagnostic: DiagnosticReporter * ?reportSolutionBuilderStatus: DiagnosticReporter * ?reportErrorSummary: ReportEmitErrorSummary -> SolutionBuilderHost<'T> when 'T :> BuilderProgram
+        abstract createSolutionBuilderWithWatchHost: ?system: System * ?createProgram: CreateProgram<'T> * ?reportDiagnostic: DiagnosticReporter * ?reportSolutionBuilderStatus: DiagnosticReporter * ?reportWatchStatus: WatchStatusReporter -> SolutionBuilderWithWatchHost<'T> when 'T :> BuilderProgram
+        abstract createSolutionBuilder: host: SolutionBuilderHost<'T> * rootNames: ResizeArray<string> * defaultOptions: BuildOptions -> SolutionBuilder<'T> when 'T :> BuilderProgram
+        abstract createSolutionBuilderWithWatch: host: SolutionBuilderWithWatchHost<'T> * rootNames: ResizeArray<string> * defaultOptions: BuildOptions * ?baseWatchOptions: WatchOptions -> SolutionBuilder<'T> when 'T :> BuilderProgram
+        abstract getDefaultFormatCodeSettings: ?newLineCharacter: string -> FormatCodeSettings
         /// The classifier is used for syntactic highlighting in editors via the TSServer
         abstract createClassifier: unit -> Classifier
-
-        abstract createDocumentRegistry:
-            ?useCaseSensitiveFileNames: bool * ?currentDirectory: string ->
-                DocumentRegistry
-
-        abstract preProcessFile:
-            sourceText: string *
-            ?readImportFiles: bool *
-            ?detectJavaScriptImports: bool ->
-                PreProcessedFileInfo
-
-        abstract transpileModule:
-            input: string * transpileOptions: TranspileOptions ->
-                TranspileOutput
-
-        abstract transpile:
-            input: string *
-            ?compilerOptions: CompilerOptions *
-            ?fileName: string *
-            ?diagnostics: ResizeArray<Diagnostic> *
-            ?moduleName: string ->
-                string
-
-        abstract servicesVersion: obj
-
-        abstract toEditorSettings:
-            options: U2<EditorOptions, EditorSettings> -> EditorSettings
-
-        abstract displayPartsToString:
-            displayParts: ResizeArray<SymbolDisplayPart> option -> string
-
+        abstract createDocumentRegistry: ?useCaseSensitiveFileNames: bool * ?currentDirectory: string -> DocumentRegistry
+        abstract preProcessFile: sourceText: string * ?readImportFiles: bool * ?detectJavaScriptImports: bool -> PreProcessedFileInfo
+        abstract transpileModule: input: string * transpileOptions: TranspileOptions -> TranspileOutput
+        abstract transpile: input: string * ?compilerOptions: CompilerOptions * ?fileName: string * ?diagnostics: ResizeArray<Diagnostic> * ?moduleName: string -> string
+        abstract toEditorSettings: options: U2<EditorOptions, EditorSettings> -> EditorSettings
+        abstract displayPartsToString: displayParts: ResizeArray<SymbolDisplayPart> option -> string
         abstract getDefaultCompilerOptions: unit -> CompilerOptions
         abstract getSupportedCodeFixes: unit -> ResizeArray<string>
-
-        abstract createLanguageServiceSourceFile:
-            fileName: string *
-            scriptSnapshot: IScriptSnapshot *
-            scriptTarget: ScriptTarget *
-            version: string *
-            setNodeParents: bool *
-            ?scriptKind: ScriptKind ->
-                SourceFile
-
-        abstract updateLanguageServiceSourceFile:
-            sourceFile: SourceFile *
-            scriptSnapshot: IScriptSnapshot *
-            version: string *
-            textChangeRange: TextChangeRange option *
-            ?aggressiveChecks: bool ->
-                SourceFile
-
-        abstract createLanguageService:
-            host: LanguageServiceHost *
-            ?documentRegistry: DocumentRegistry *
-            ?syntaxOnlyOrLanguageServiceMode: U2<bool, LanguageServiceMode> ->
-                LanguageService
-
+        abstract createLanguageServiceSourceFile: fileName: string * scriptSnapshot: IScriptSnapshot * scriptTargetOrOptions: U2<ScriptTarget, CreateSourceFileOptions> * version: string * setNodeParents: bool * ?scriptKind: ScriptKind -> SourceFile
+        abstract updateLanguageServiceSourceFile: sourceFile: SourceFile * scriptSnapshot: IScriptSnapshot * version: string * textChangeRange: TextChangeRange option * ?aggressiveChecks: bool -> SourceFile
+        abstract createLanguageService: host: LanguageServiceHost * ?documentRegistry: DocumentRegistry * ?syntaxOnlyOrLanguageServiceMode: U2<bool, LanguageServiceMode> -> LanguageService
         /// Get the path of the default library files (lib.d.ts) as distributed with the typescript
         /// node package.
         /// The functionality is not supported if the ts module is consumed outside of a node module.
         abstract getDefaultLibFilePath: options: CompilerOptions -> string
-
+        /// The version of the language service API
+        abstract servicesVersion: obj
         /// <summary>Transform one or more nodes using the supplied transformers.</summary>
         /// <param name="source">A single <c>Node</c> or an array of <c>Node</c> objects.</param>
         /// <param name="transformers">An array of <c>TransformerFactory</c> callbacks used to process the transformation.</param>
         /// <param name="compilerOptions">Optional compiler options.</param>
-        abstract transform:
-            source: U2<'T, ResizeArray<'T>> *
-            transformers: ResizeArray<TransformerFactory<'T>> *
-            ?compilerOptions: CompilerOptions ->
-                TransformationResult<'T>
-                when 'T :> Node
-
-        abstract createNodeArray<'T> :
-            ResizeArray<'T> -> bool -> ResizeArray<'T>
-
-        abstract createNumericLiteral:
-            (U2<string, float> -> TokenFlags -> NumericLiteral)
-
-        abstract createBigIntLiteral:
-            (U2<string, PseudoBigInt> -> BigIntLiteral)
-
-        abstract createStringLiteral: IExportsCreateStringLiteral
-
-        abstract createStringLiteralFromNode:
-            (PropertyNameLiteral -> bool -> StringLiteral)
-
-        abstract createRegularExpressionLiteral:
-            (string -> RegularExpressionLiteral)
-
-        abstract createLoopVariable: (unit -> Identifier)
-
-        abstract createUniqueName:
-            (string -> GeneratedIdentifierFlags -> Identifier)
-
-        abstract createPrivateIdentifier: (string -> PrivateIdentifier)
-        abstract createSuper: (unit -> SuperExpression)
-        abstract createThis: (unit -> ThisExpression)
-        abstract createNull: (unit -> NullLiteral)
-        abstract createTrue: (unit -> TrueLiteral)
-        abstract createFalse: (unit -> FalseLiteral)
-        abstract createModifier<'T> : 'T -> ModifierToken<'T>
-
-        abstract createModifiersFromModifierFlags:
-            (ModifierFlags -> ResizeArray<Modifier>)
-
-        abstract createQualifiedName:
-            (EntityName -> U2<string, Identifier> -> QualifiedName)
-
-        abstract updateQualifiedName:
-            (QualifiedName -> EntityName -> Identifier -> QualifiedName)
-
-        abstract createComputedPropertyName:
-            (Expression -> ComputedPropertyName)
-
-        abstract updateComputedPropertyName:
-            (ComputedPropertyName -> Expression -> ComputedPropertyName)
-
-        abstract createTypeParameterDeclaration:
-            (U2<string, Identifier>
-                -> TypeNode
-                -> TypeNode
-                -> TypeParameterDeclaration)
-
-        abstract updateTypeParameterDeclaration:
-            (TypeParameterDeclaration
-                -> Identifier
-                -> TypeNode option
-                -> TypeNode option
-                -> TypeParameterDeclaration)
-
-        abstract createParameter:
-            (ResizeArray<Decorator> option
-                -> ResizeArray<Modifier> option
-                -> DotDotDotToken option
-                -> U2<string, BindingName>
-                -> QuestionToken
-                -> TypeNode
-                -> Expression
-                -> ParameterDeclaration)
-
-        abstract updateParameter:
-            (ParameterDeclaration
-                -> ResizeArray<Decorator> option
-                -> ResizeArray<Modifier> option
-                -> DotDotDotToken option
-                -> U2<string, BindingName>
-                -> QuestionToken option
-                -> TypeNode option
-                -> Expression option
-                -> ParameterDeclaration)
-
-        abstract createDecorator: (Expression -> Decorator)
-        abstract updateDecorator: (Decorator -> Expression -> Decorator)
-
-        abstract createProperty:
-            (ResizeArray<Decorator> option
-                -> ResizeArray<Modifier> option
-                -> U2<string, PropertyName>
-                -> U2<QuestionToken, ExclamationToken> option
-                -> TypeNode option
-                -> Expression option
-                -> PropertyDeclaration)
-
-        abstract updateProperty:
-            (PropertyDeclaration
-                -> ResizeArray<Decorator> option
-                -> ResizeArray<Modifier> option
-                -> U2<string, PropertyName>
-                -> U2<QuestionToken, ExclamationToken> option
-                -> TypeNode option
-                -> Expression option
-                -> PropertyDeclaration)
-
-        abstract createMethod:
-            (ResizeArray<Decorator> option
-                -> ResizeArray<Modifier> option
-                -> AsteriskToken option
-                -> U2<string, PropertyName>
-                -> QuestionToken option
-                -> ResizeArray<TypeParameterDeclaration> option
-                -> ResizeArray<ParameterDeclaration>
-                -> TypeNode option
-                -> Block option
-                -> MethodDeclaration)
-
-        abstract updateMethod:
-            (MethodDeclaration
-                -> ResizeArray<Decorator> option
-                -> ResizeArray<Modifier> option
-                -> AsteriskToken option
-                -> PropertyName
-                -> QuestionToken option
-                -> ResizeArray<TypeParameterDeclaration> option
-                -> ResizeArray<ParameterDeclaration>
-                -> TypeNode option
-                -> Block option
-                -> MethodDeclaration)
-
-        abstract createConstructor:
-            (ResizeArray<Decorator> option
-                -> ResizeArray<Modifier> option
-                -> ResizeArray<ParameterDeclaration>
-                -> Block option
-                -> ConstructorDeclaration)
-
-        abstract updateConstructor:
-            (ConstructorDeclaration
-                -> ResizeArray<Decorator> option
-                -> ResizeArray<Modifier> option
-                -> ResizeArray<ParameterDeclaration>
-                -> Block option
-                -> ConstructorDeclaration)
-
-        abstract createGetAccessor:
-            (ResizeArray<Decorator> option
-                -> ResizeArray<Modifier> option
-                -> U2<string, PropertyName>
-                -> ResizeArray<ParameterDeclaration>
-                -> TypeNode option
-                -> Block option
-                -> GetAccessorDeclaration)
-
-        abstract updateGetAccessor:
-            (GetAccessorDeclaration
-                -> ResizeArray<Decorator> option
-                -> ResizeArray<Modifier> option
-                -> PropertyName
-                -> ResizeArray<ParameterDeclaration>
-                -> TypeNode option
-                -> Block option
-                -> GetAccessorDeclaration)
-
-        abstract createSetAccessor:
-            (ResizeArray<Decorator> option
-                -> ResizeArray<Modifier> option
-                -> U2<string, PropertyName>
-                -> ResizeArray<ParameterDeclaration>
-                -> Block option
-                -> SetAccessorDeclaration)
-
-        abstract updateSetAccessor:
-            (SetAccessorDeclaration
-                -> ResizeArray<Decorator> option
-                -> ResizeArray<Modifier> option
-                -> PropertyName
-                -> ResizeArray<ParameterDeclaration>
-                -> Block option
-                -> SetAccessorDeclaration)
-
-        abstract createCallSignature:
-            (ResizeArray<TypeParameterDeclaration> option
-                -> ResizeArray<ParameterDeclaration>
-                -> TypeNode option
-                -> CallSignatureDeclaration)
-
-        abstract updateCallSignature:
-            (CallSignatureDeclaration
-                -> ResizeArray<TypeParameterDeclaration> option
-                -> ResizeArray<ParameterDeclaration>
-                -> TypeNode option
-                -> CallSignatureDeclaration)
-
-        abstract createConstructSignature:
-            (ResizeArray<TypeParameterDeclaration> option
-                -> ResizeArray<ParameterDeclaration>
-                -> TypeNode option
-                -> ConstructSignatureDeclaration)
-
-        abstract updateConstructSignature:
-            (ConstructSignatureDeclaration
-                -> ResizeArray<TypeParameterDeclaration> option
-                -> ResizeArray<ParameterDeclaration>
-                -> TypeNode option
-                -> ConstructSignatureDeclaration)
-
-        abstract updateIndexSignature:
-            (IndexSignatureDeclaration
-                -> ResizeArray<Decorator> option
-                -> ResizeArray<Modifier> option
-                -> ResizeArray<ParameterDeclaration>
-                -> TypeNode
-                -> IndexSignatureDeclaration)
-
-        abstract createKeywordTypeNode<'TKind> :
-            'TKind -> KeywordTypeNode<'TKind>
-
-        abstract createTypePredicateNodeWithModifier:
-            (AssertsKeyword option
-                -> U3<string, Identifier, ThisTypeNode>
-                -> TypeNode option
-                -> TypePredicateNode)
-
-        abstract updateTypePredicateNodeWithModifier:
-            (TypePredicateNode
-                -> AssertsKeyword option
-                -> U2<Identifier, ThisTypeNode>
-                -> TypeNode option
-                -> TypePredicateNode)
-
-        abstract createTypeReferenceNode:
-            (U2<string, EntityName>
-                -> ResizeArray<TypeNode>
-                -> TypeReferenceNode)
-
-        abstract updateTypeReferenceNode:
-            (TypeReferenceNode
-                -> EntityName
-                -> ResizeArray<TypeNode> option
-                -> TypeReferenceNode)
-
-        abstract createFunctionTypeNode:
-            (ResizeArray<TypeParameterDeclaration> option
-                -> ResizeArray<ParameterDeclaration>
-                -> TypeNode
-                -> FunctionTypeNode)
-
-        abstract updateFunctionTypeNode:
-            (FunctionTypeNode
-                -> ResizeArray<TypeParameterDeclaration> option
-                -> ResizeArray<ParameterDeclaration>
-                -> TypeNode
-                -> FunctionTypeNode)
-
-        abstract createConstructorTypeNode:
-            (ResizeArray<TypeParameterDeclaration> option
-                -> ResizeArray<ParameterDeclaration>
-                -> TypeNode
-                -> ConstructorTypeNode)
-
-        abstract updateConstructorTypeNode:
-            (ConstructorTypeNode
-                -> ResizeArray<TypeParameterDeclaration> option
-                -> ResizeArray<ParameterDeclaration>
-                -> TypeNode
-                -> ConstructorTypeNode)
-
-        abstract createTypeQueryNode: (EntityName -> TypeQueryNode)
-
-        abstract updateTypeQueryNode:
-            (TypeQueryNode -> EntityName -> TypeQueryNode)
-
-        abstract createTypeLiteralNode:
-            (ResizeArray<TypeElement> option -> TypeLiteralNode)
-
-        abstract updateTypeLiteralNode:
-            (TypeLiteralNode -> ResizeArray<TypeElement> -> TypeLiteralNode)
-
-        abstract createArrayTypeNode: (TypeNode -> ArrayTypeNode)
-
-        abstract updateArrayTypeNode:
-            (ArrayTypeNode -> TypeNode -> ArrayTypeNode)
-
-        abstract createTupleTypeNode:
-            (ResizeArray<U2<TypeNode, NamedTupleMember>> -> TupleTypeNode)
-
-        abstract updateTupleTypeNode:
-            (TupleTypeNode
-                -> ResizeArray<U2<TypeNode, NamedTupleMember>>
-                -> TupleTypeNode)
-
-        abstract createOptionalTypeNode: (TypeNode -> OptionalTypeNode)
-
-        abstract updateOptionalTypeNode:
-            (OptionalTypeNode -> TypeNode -> OptionalTypeNode)
-
-        abstract createRestTypeNode: (TypeNode -> RestTypeNode)
-        abstract updateRestTypeNode: (RestTypeNode -> TypeNode -> RestTypeNode)
-        abstract createUnionTypeNode: (ResizeArray<TypeNode> -> UnionTypeNode)
-
-        abstract updateUnionTypeNode:
-            (UnionTypeNode -> ResizeArray<TypeNode> -> UnionTypeNode)
-
-        abstract createIntersectionTypeNode:
-            (ResizeArray<TypeNode> -> IntersectionTypeNode)
-
-        abstract updateIntersectionTypeNode:
-            (IntersectionTypeNode
-                -> ResizeArray<TypeNode>
-                -> IntersectionTypeNode)
-
-        abstract createConditionalTypeNode:
-            (TypeNode -> TypeNode -> TypeNode -> TypeNode -> ConditionalTypeNode)
-
-        abstract updateConditionalTypeNode:
-            (ConditionalTypeNode
-                -> TypeNode
-                -> TypeNode
-                -> TypeNode
-                -> TypeNode
-                -> ConditionalTypeNode)
-
-        abstract createInferTypeNode:
-            (TypeParameterDeclaration -> InferTypeNode)
-
-        abstract updateInferTypeNode:
-            (InferTypeNode -> TypeParameterDeclaration -> InferTypeNode)
-
-        abstract createImportTypeNode:
-            (TypeNode
-                -> EntityName
-                -> ResizeArray<TypeNode>
-                -> bool
-                -> ImportTypeNode)
-
-        abstract updateImportTypeNode:
-            (ImportTypeNode
-                -> TypeNode
-                -> EntityName option
-                -> ResizeArray<TypeNode> option
-                -> bool
-                -> ImportTypeNode)
-
-        abstract createParenthesizedType: (TypeNode -> ParenthesizedTypeNode)
-
-        abstract updateParenthesizedType:
-            (ParenthesizedTypeNode -> TypeNode -> ParenthesizedTypeNode)
-
-        abstract createThisTypeNode: (unit -> ThisTypeNode)
-
-        abstract updateTypeOperatorNode:
-            (TypeOperatorNode -> TypeNode -> TypeOperatorNode)
-
-        abstract createIndexedAccessTypeNode:
-            (TypeNode -> TypeNode -> IndexedAccessTypeNode)
-
-        abstract updateIndexedAccessTypeNode:
-            (IndexedAccessTypeNode
-                -> TypeNode
-                -> TypeNode
-                -> IndexedAccessTypeNode)
-
-        abstract createMappedTypeNode:
-            (U3<ReadonlyKeyword, PlusToken, MinusToken> option
-                -> TypeParameterDeclaration
-                -> TypeNode option
-                -> U3<QuestionToken, PlusToken, MinusToken> option
-                -> TypeNode option
-                -> MappedTypeNode)
-
-        abstract updateMappedTypeNode:
-            (MappedTypeNode
-                -> U3<ReadonlyKeyword, PlusToken, MinusToken> option
-                -> TypeParameterDeclaration
-                -> TypeNode option
-                -> U3<QuestionToken, PlusToken, MinusToken> option
-                -> TypeNode option
-                -> MappedTypeNode)
-
-        abstract createLiteralTypeNode:
-            (U4<LiteralExpression, BooleanLiteral, PrefixUnaryExpression, NullLiteral>
-                -> LiteralTypeNode)
-
-        abstract updateLiteralTypeNode:
-            (LiteralTypeNode
-                -> U4<LiteralExpression, BooleanLiteral, PrefixUnaryExpression, NullLiteral>
-                -> LiteralTypeNode)
-
-        abstract createObjectBindingPattern:
-            (ResizeArray<BindingElement> -> ObjectBindingPattern)
-
-        abstract updateObjectBindingPattern:
-            (ObjectBindingPattern
-                -> ResizeArray<BindingElement>
-                -> ObjectBindingPattern)
-
-        abstract createArrayBindingPattern:
-            (ResizeArray<ArrayBindingElement> -> ArrayBindingPattern)
-
-        abstract updateArrayBindingPattern:
-            (ArrayBindingPattern
-                -> ResizeArray<ArrayBindingElement>
-                -> ArrayBindingPattern)
-
-        abstract createBindingElement:
-            (DotDotDotToken option
-                -> U2<string, PropertyName> option
-                -> U2<string, BindingName>
-                -> Expression
-                -> BindingElement)
-
-        abstract updateBindingElement:
-            (BindingElement
-                -> DotDotDotToken option
-                -> PropertyName option
-                -> BindingName
-                -> Expression option
-                -> BindingElement)
-
-        abstract createArrayLiteral:
-            (ResizeArray<Expression> -> bool -> ArrayLiteralExpression)
-
-        abstract updateArrayLiteral:
-            (ArrayLiteralExpression
-                -> ResizeArray<Expression>
-                -> ArrayLiteralExpression)
-
-        abstract createObjectLiteral:
-            (ResizeArray<ObjectLiteralElementLike>
-                -> bool
-                -> ObjectLiteralExpression)
-
-        abstract updateObjectLiteral:
-            (ObjectLiteralExpression
-                -> ResizeArray<ObjectLiteralElementLike>
-                -> ObjectLiteralExpression)
-
-        abstract createPropertyAccess:
-            (Expression
-                -> U3<string, Identifier, PrivateIdentifier>
-                -> PropertyAccessExpression)
-
-        abstract updatePropertyAccess:
-            (PropertyAccessExpression
-                -> Expression
-                -> U2<Identifier, PrivateIdentifier>
-                -> PropertyAccessExpression)
-
-        abstract createPropertyAccessChain:
-            (Expression
-                -> QuestionDotToken option
-                -> U3<string, Identifier, PrivateIdentifier>
-                -> PropertyAccessChain)
-
-        abstract updatePropertyAccessChain:
-            (PropertyAccessChain
-                -> Expression
-                -> QuestionDotToken option
-                -> U2<Identifier, PrivateIdentifier>
-                -> PropertyAccessChain)
-
-        abstract createElementAccess:
-            (Expression -> U2<float, Expression> -> ElementAccessExpression)
-
-        abstract updateElementAccess:
-            (ElementAccessExpression
-                -> Expression
-                -> Expression
-                -> ElementAccessExpression)
-
-        abstract createElementAccessChain:
-            (Expression
-                -> QuestionDotToken option
-                -> U2<float, Expression>
-                -> ElementAccessChain)
-
-        abstract updateElementAccessChain:
-            (ElementAccessChain
-                -> Expression
-                -> QuestionDotToken option
-                -> Expression
-                -> ElementAccessChain)
-
-        abstract createCall:
-            (Expression
-                -> ResizeArray<TypeNode> option
-                -> ResizeArray<Expression> option
-                -> CallExpression)
-
-        abstract updateCall:
-            (CallExpression
-                -> Expression
-                -> ResizeArray<TypeNode> option
-                -> ResizeArray<Expression>
-                -> CallExpression)
-
-        abstract createCallChain:
-            (Expression
-                -> QuestionDotToken option
-                -> ResizeArray<TypeNode> option
-                -> ResizeArray<Expression> option
-                -> CallChain)
-
-        abstract updateCallChain:
-            (CallChain
-                -> Expression
-                -> QuestionDotToken option
-                -> ResizeArray<TypeNode> option
-                -> ResizeArray<Expression>
-                -> CallChain)
-
-        abstract createNew:
-            (Expression
-                -> ResizeArray<TypeNode> option
-                -> ResizeArray<Expression> option
-                -> NewExpression)
-
-        abstract updateNew:
-            (NewExpression
-                -> Expression
-                -> ResizeArray<TypeNode> option
-                -> ResizeArray<Expression> option
-                -> NewExpression)
-
-        abstract createTypeAssertion: (TypeNode -> Expression -> TypeAssertion)
-
-        abstract updateTypeAssertion:
-            (TypeAssertion -> TypeNode -> Expression -> TypeAssertion)
-
-        abstract createParen: (Expression -> ParenthesizedExpression)
-
-        abstract updateParen:
-            (ParenthesizedExpression -> Expression -> ParenthesizedExpression)
-
-        abstract createFunctionExpression:
-            (ResizeArray<Modifier> option
-                -> AsteriskToken option
-                -> U2<string, Identifier> option
-                -> ResizeArray<TypeParameterDeclaration> option
-                -> ResizeArray<ParameterDeclaration> option
-                -> TypeNode option
-                -> Block
-                -> FunctionExpression)
-
-        abstract updateFunctionExpression:
-            (FunctionExpression
-                -> ResizeArray<Modifier> option
-                -> AsteriskToken option
-                -> Identifier option
-                -> ResizeArray<TypeParameterDeclaration> option
-                -> ResizeArray<ParameterDeclaration>
-                -> TypeNode option
-                -> Block
-                -> FunctionExpression)
-
-        abstract createDelete: (Expression -> DeleteExpression)
-
-        abstract updateDelete:
-            (DeleteExpression -> Expression -> DeleteExpression)
-
-        abstract createTypeOf: (Expression -> TypeOfExpression)
-
-        abstract updateTypeOf:
-            (TypeOfExpression -> Expression -> TypeOfExpression)
-
-        abstract createVoid: (Expression -> VoidExpression)
-        abstract updateVoid: (VoidExpression -> Expression -> VoidExpression)
-        abstract createAwait: (Expression -> AwaitExpression)
-        abstract updateAwait: (AwaitExpression -> Expression -> AwaitExpression)
-
-        abstract createPrefix:
-            (PrefixUnaryOperator -> Expression -> PrefixUnaryExpression)
-
-        abstract updatePrefix:
-            (PrefixUnaryExpression -> Expression -> PrefixUnaryExpression)
-
-        abstract createPostfix:
-            (Expression -> PostfixUnaryOperator -> PostfixUnaryExpression)
-
-        abstract updatePostfix:
-            (PostfixUnaryExpression -> Expression -> PostfixUnaryExpression)
-
-        abstract createBinary:
-            (Expression
-                -> U2<BinaryOperator, BinaryOperatorToken>
-                -> Expression
-                -> BinaryExpression)
-
-        abstract updateConditional:
-            (ConditionalExpression
-                -> Expression
-                -> QuestionToken
-                -> Expression
-                -> ColonToken
-                -> Expression
-                -> ConditionalExpression)
-
-        abstract createTemplateExpression:
-            (TemplateHead -> ResizeArray<TemplateSpan> -> TemplateExpression)
-
-        abstract updateTemplateExpression:
-            (TemplateExpression
-                -> TemplateHead
-                -> ResizeArray<TemplateSpan>
-                -> TemplateExpression)
-
-        abstract createTemplateHead: IExportsCreateTemplateHead
-        abstract createTemplateMiddle: IExportsCreateTemplateMiddle
-        abstract createTemplateTail: IExportsCreateTemplateTail
-
-        abstract createNoSubstitutionTemplateLiteral:
-            IExportsCreateNoSubstitutionTemplateLiteral
-
-        abstract updateYield:
-            (YieldExpression
-                -> AsteriskToken option
-                -> Expression option
-                -> YieldExpression)
-
-        abstract createSpread: (Expression -> SpreadElement)
-        abstract updateSpread: (SpreadElement -> Expression -> SpreadElement)
-        abstract createOmittedExpression: (unit -> OmittedExpression)
-        abstract createAsExpression: (Expression -> TypeNode -> AsExpression)
-
-        abstract updateAsExpression:
-            (AsExpression -> Expression -> TypeNode -> AsExpression)
-
-        abstract createNonNullExpression: (Expression -> NonNullExpression)
-
-        abstract updateNonNullExpression:
-            (NonNullExpression -> Expression -> NonNullExpression)
-
-        abstract createNonNullChain: (Expression -> NonNullChain)
-
-        abstract updateNonNullChain:
-            (NonNullChain -> Expression -> NonNullChain)
-
-        abstract createMetaProperty: (SyntaxKind -> Identifier -> MetaProperty)
-
-        abstract updateMetaProperty:
-            (MetaProperty -> Identifier -> MetaProperty)
-
-        abstract createTemplateSpan:
-            (Expression -> U2<TemplateMiddle, TemplateTail> -> TemplateSpan)
-
-        abstract updateTemplateSpan:
-            (TemplateSpan
-                -> Expression
-                -> U2<TemplateMiddle, TemplateTail>
-                -> TemplateSpan)
-
-        abstract createSemicolonClassElement: (unit -> SemicolonClassElement)
-        abstract createBlock: (ResizeArray<Statement> -> bool -> Block)
-        abstract updateBlock: (Block -> ResizeArray<Statement> -> Block)
-
-        abstract createVariableStatement:
-            (ResizeArray<Modifier> option
-                -> U2<VariableDeclarationList, ResizeArray<VariableDeclaration>>
-                -> VariableStatement)
-
-        abstract updateVariableStatement:
-            (VariableStatement
-                -> ResizeArray<Modifier> option
-                -> VariableDeclarationList
-                -> VariableStatement)
-
-        abstract createEmptyStatement: (unit -> EmptyStatement)
-        abstract createExpressionStatement: (Expression -> ExpressionStatement)
-
-        abstract updateExpressionStatement:
-            (ExpressionStatement -> Expression -> ExpressionStatement)
-
-        abstract createStatement: (Expression -> ExpressionStatement)
-
-        abstract updateStatement:
-            (ExpressionStatement -> Expression -> ExpressionStatement)
-
-        abstract createIf: (Expression -> Statement -> Statement -> IfStatement)
-
-        abstract updateIf:
-            (IfStatement
-                -> Expression
-                -> Statement
-                -> Statement option
-                -> IfStatement)
-
-        abstract createDo: (Statement -> Expression -> DoStatement)
-
-        abstract updateDo:
-            (DoStatement -> Statement -> Expression -> DoStatement)
-
-        abstract createWhile: (Expression -> Statement -> WhileStatement)
-
-        abstract updateWhile:
-            (WhileStatement -> Expression -> Statement -> WhileStatement)
-
-        abstract createFor:
-            (ForInitializer option
-                -> Expression option
-                -> Expression option
-                -> Statement
-                -> ForStatement)
-
-        abstract updateFor:
-            (ForStatement
-                -> ForInitializer option
-                -> Expression option
-                -> Expression option
-                -> Statement
-                -> ForStatement)
-
-        abstract createForIn:
-            (ForInitializer -> Expression -> Statement -> ForInStatement)
-
-        abstract updateForIn:
-            (ForInStatement
-                -> ForInitializer
-                -> Expression
-                -> Statement
-                -> ForInStatement)
-
-        abstract createForOf:
-            (AwaitKeyword option
-                -> ForInitializer
-                -> Expression
-                -> Statement
-                -> ForOfStatement)
-
-        abstract updateForOf:
-            (ForOfStatement
-                -> AwaitKeyword option
-                -> ForInitializer
-                -> Expression
-                -> Statement
-                -> ForOfStatement)
-
-        abstract createContinue: (U2<string, Identifier> -> ContinueStatement)
-
-        abstract updateContinue:
-            (ContinueStatement -> Identifier option -> ContinueStatement)
-
-        abstract createBreak: (U2<string, Identifier> -> BreakStatement)
-
-        abstract updateBreak:
-            (BreakStatement -> Identifier option -> BreakStatement)
-
-        abstract createReturn: (Expression -> ReturnStatement)
-
-        abstract updateReturn:
-            (ReturnStatement -> Expression option -> ReturnStatement)
-
-        abstract createWith: (Expression -> Statement -> WithStatement)
-
-        abstract updateWith:
-            (WithStatement -> Expression -> Statement -> WithStatement)
-
-        abstract createSwitch: (Expression -> CaseBlock -> SwitchStatement)
-
-        abstract updateSwitch:
-            (SwitchStatement -> Expression -> CaseBlock -> SwitchStatement)
-
-        abstract createLabel:
-            (U2<string, Identifier> -> Statement -> LabeledStatement)
-
-        abstract updateLabel:
-            (LabeledStatement -> Identifier -> Statement -> LabeledStatement)
-
-        abstract createThrow: (Expression -> ThrowStatement)
-        abstract updateThrow: (ThrowStatement -> Expression -> ThrowStatement)
-
-        abstract createTry:
-            (Block -> CatchClause option -> Block option -> TryStatement)
-
-        abstract updateTry:
-            (TryStatement
-                -> Block
-                -> CatchClause option
-                -> Block option
-                -> TryStatement)
-
-        abstract createDebuggerStatement: (unit -> DebuggerStatement)
-
-        abstract createVariableDeclarationList:
-            (ResizeArray<VariableDeclaration>
-                -> NodeFlags
-                -> VariableDeclarationList)
-
-        abstract updateVariableDeclarationList:
-            (VariableDeclarationList
-                -> ResizeArray<VariableDeclaration>
-                -> VariableDeclarationList)
-
-        abstract createFunctionDeclaration:
-            (ResizeArray<Decorator> option
-                -> ResizeArray<Modifier> option
-                -> AsteriskToken option
-                -> U2<string, Identifier> option
-                -> ResizeArray<TypeParameterDeclaration> option
-                -> ResizeArray<ParameterDeclaration>
-                -> TypeNode option
-                -> Block option
-                -> FunctionDeclaration)
-
-        abstract updateFunctionDeclaration:
-            (FunctionDeclaration
-                -> ResizeArray<Decorator> option
-                -> ResizeArray<Modifier> option
-                -> AsteriskToken option
-                -> Identifier option
-                -> ResizeArray<TypeParameterDeclaration> option
-                -> ResizeArray<ParameterDeclaration>
-                -> TypeNode option
-                -> Block option
-                -> FunctionDeclaration)
-
-        abstract createClassDeclaration:
-            (ResizeArray<Decorator> option
-                -> ResizeArray<Modifier> option
-                -> U2<string, Identifier> option
-                -> ResizeArray<TypeParameterDeclaration> option
-                -> ResizeArray<HeritageClause> option
-                -> ResizeArray<ClassElement>
-                -> ClassDeclaration)
-
-        abstract updateClassDeclaration:
-            (ClassDeclaration
-                -> ResizeArray<Decorator> option
-                -> ResizeArray<Modifier> option
-                -> Identifier option
-                -> ResizeArray<TypeParameterDeclaration> option
-                -> ResizeArray<HeritageClause> option
-                -> ResizeArray<ClassElement>
-                -> ClassDeclaration)
-
-        abstract createInterfaceDeclaration:
-            (ResizeArray<Decorator> option
-                -> ResizeArray<Modifier> option
-                -> U2<string, Identifier>
-                -> ResizeArray<TypeParameterDeclaration> option
-                -> ResizeArray<HeritageClause> option
-                -> ResizeArray<TypeElement>
-                -> InterfaceDeclaration)
-
-        abstract updateInterfaceDeclaration:
-            (InterfaceDeclaration
-                -> ResizeArray<Decorator> option
-                -> ResizeArray<Modifier> option
-                -> Identifier
-                -> ResizeArray<TypeParameterDeclaration> option
-                -> ResizeArray<HeritageClause> option
-                -> ResizeArray<TypeElement>
-                -> InterfaceDeclaration)
-
-        abstract createTypeAliasDeclaration:
-            (ResizeArray<Decorator> option
-                -> ResizeArray<Modifier> option
-                -> U2<string, Identifier>
-                -> ResizeArray<TypeParameterDeclaration> option
-                -> TypeNode
-                -> TypeAliasDeclaration)
-
-        abstract updateTypeAliasDeclaration:
-            (TypeAliasDeclaration
-                -> ResizeArray<Decorator> option
-                -> ResizeArray<Modifier> option
-                -> Identifier
-                -> ResizeArray<TypeParameterDeclaration> option
-                -> TypeNode
-                -> TypeAliasDeclaration)
-
-        abstract createEnumDeclaration:
-            (ResizeArray<Decorator> option
-                -> ResizeArray<Modifier> option
-                -> U2<string, Identifier>
-                -> ResizeArray<EnumMember>
-                -> EnumDeclaration)
-
-        abstract updateEnumDeclaration:
-            (EnumDeclaration
-                -> ResizeArray<Decorator> option
-                -> ResizeArray<Modifier> option
-                -> Identifier
-                -> ResizeArray<EnumMember>
-                -> EnumDeclaration)
-
-        abstract createModuleDeclaration:
-            (ResizeArray<Decorator> option
-                -> ResizeArray<Modifier> option
-                -> ModuleName
-                -> ModuleBody option
-                -> NodeFlags
-                -> ModuleDeclaration)
-
-        abstract updateModuleDeclaration:
-            (ModuleDeclaration
-                -> ResizeArray<Decorator> option
-                -> ResizeArray<Modifier> option
-                -> ModuleName
-                -> ModuleBody option
-                -> ModuleDeclaration)
-
-        abstract createModuleBlock: (ResizeArray<Statement> -> ModuleBlock)
-
-        abstract updateModuleBlock:
-            (ModuleBlock -> ResizeArray<Statement> -> ModuleBlock)
-
-        abstract createCaseBlock:
-            (ResizeArray<CaseOrDefaultClause> -> CaseBlock)
-
-        abstract updateCaseBlock:
-            (CaseBlock -> ResizeArray<CaseOrDefaultClause> -> CaseBlock)
-
-        abstract createNamespaceExportDeclaration:
-            (U2<string, Identifier> -> NamespaceExportDeclaration)
-
-        abstract updateNamespaceExportDeclaration:
-            (NamespaceExportDeclaration
-                -> Identifier
-                -> NamespaceExportDeclaration)
-
-        abstract createImportEqualsDeclaration:
-            (ResizeArray<Decorator> option
-                -> ResizeArray<Modifier> option
-                -> bool
-                -> U2<string, Identifier>
-                -> ModuleReference
-                -> ImportEqualsDeclaration)
-
-        abstract updateImportEqualsDeclaration:
-            (ImportEqualsDeclaration
-                -> ResizeArray<Decorator> option
-                -> ResizeArray<Modifier> option
-                -> bool
-                -> Identifier
-                -> ModuleReference
-                -> ImportEqualsDeclaration)
-
-        abstract createImportDeclaration:
-            (ResizeArray<Decorator> option
-                -> ResizeArray<Modifier> option
-                -> ImportClause option
-                -> Expression
-                -> ImportDeclaration)
-
-        abstract updateImportDeclaration:
-            (ImportDeclaration
-                -> ResizeArray<Decorator> option
-                -> ResizeArray<Modifier> option
-                -> ImportClause option
-                -> Expression
-                -> ImportDeclaration)
-
-        abstract createNamespaceImport: (Identifier -> NamespaceImport)
-
-        abstract updateNamespaceImport:
-            (NamespaceImport -> Identifier -> NamespaceImport)
-
-        abstract createNamedImports:
-            (ResizeArray<ImportSpecifier> -> NamedImports)
-
-        abstract updateNamedImports:
-            (NamedImports -> ResizeArray<ImportSpecifier> -> NamedImports)
-
-        abstract createImportSpecifier:
-            (Identifier option -> Identifier -> ImportSpecifier)
-
-        abstract updateImportSpecifier:
-            (ImportSpecifier
-                -> Identifier option
-                -> Identifier
-                -> ImportSpecifier)
-
-        abstract createExportAssignment:
-            (ResizeArray<Decorator> option
-                -> ResizeArray<Modifier> option
-                -> bool option
-                -> Expression
-                -> ExportAssignment)
-
-        abstract updateExportAssignment:
-            (ExportAssignment
-                -> ResizeArray<Decorator> option
-                -> ResizeArray<Modifier> option
-                -> Expression
-                -> ExportAssignment)
-
-        abstract createNamedExports:
-            (ResizeArray<ExportSpecifier> -> NamedExports)
-
-        abstract updateNamedExports:
-            (NamedExports -> ResizeArray<ExportSpecifier> -> NamedExports)
-
-        abstract createExportSpecifier:
-            (U2<string, Identifier> option
-                -> U2<string, Identifier>
-                -> ExportSpecifier)
-
-        abstract updateExportSpecifier:
-            (ExportSpecifier
-                -> Identifier option
-                -> Identifier
-                -> ExportSpecifier)
-
-        abstract createExternalModuleReference:
-            (Expression -> ExternalModuleReference)
-
-        abstract updateExternalModuleReference:
-            (ExternalModuleReference -> Expression -> ExternalModuleReference)
-
-        abstract createJSDocTypeExpression: (TypeNode -> JSDocTypeExpression)
-
-        abstract createJSDocTypeTag:
-            (Identifier option -> JSDocTypeExpression -> string -> JSDocTypeTag)
-
-        abstract createJSDocReturnTag:
-            (Identifier option
-                -> JSDocTypeExpression
-                -> string
-                -> JSDocReturnTag)
-
-        abstract createJSDocThisTag:
-            (Identifier option -> JSDocTypeExpression -> string -> JSDocThisTag)
-
-        abstract createJSDocComment: (string -> ResizeArray<JSDocTag> -> JSDoc)
-
-        abstract createJSDocParameterTag:
-            (Identifier option
-                -> EntityName
-                -> bool
-                -> JSDocTypeExpression
-                -> bool
-                -> string
-                -> JSDocParameterTag)
-
-        abstract createJSDocClassTag:
-            (Identifier option -> string -> JSDocClassTag)
-
-        abstract createJSDocAugmentsTag:
-            (Identifier option -> obj -> string -> JSDocAugmentsTag)
-
-        abstract createJSDocEnumTag:
-            (Identifier option -> JSDocTypeExpression -> string -> JSDocEnumTag)
-
-        abstract createJSDocTemplateTag:
-            (Identifier option
-                -> JSDocTypeExpression option
-                -> ResizeArray<TypeParameterDeclaration>
-                -> string
-                -> JSDocTemplateTag)
-
-        abstract createJSDocTypedefTag:
-            (Identifier option
-                -> U2<JSDocTypeLiteral, JSDocTypeExpression>
-                -> U2<Identifier, JSDocNamespaceDeclaration>
-                -> string
-                -> JSDocTypedefTag)
-
-        abstract createJSDocCallbackTag:
-            (Identifier option
-                -> JSDocSignature
-                -> U2<Identifier, JSDocNamespaceDeclaration>
-                -> string
-                -> JSDocCallbackTag)
-
-        abstract createJSDocSignature:
-            (ResizeArray<JSDocTemplateTag> option
-                -> ResizeArray<JSDocParameterTag>
-                -> JSDocReturnTag
-                -> JSDocSignature)
-
-        abstract createJSDocPropertyTag:
-            (Identifier option
-                -> EntityName
-                -> bool
-                -> JSDocTypeExpression
-                -> bool
-                -> string
-                -> JSDocPropertyTag)
-
-        abstract createJSDocTypeLiteral:
-            (ResizeArray<JSDocPropertyLikeTag> -> bool -> JSDocTypeLiteral)
-
-        abstract createJSDocImplementsTag:
-            (Identifier option -> obj -> string -> JSDocImplementsTag)
-
-        abstract createJSDocAuthorTag:
-            (Identifier option -> string -> JSDocAuthorTag)
-
-        abstract createJSDocPublicTag:
-            (Identifier option -> string -> JSDocPublicTag)
-
-        abstract createJSDocPrivateTag:
-            (Identifier option -> string -> JSDocPrivateTag)
-
-        abstract createJSDocProtectedTag:
-            (Identifier option -> string -> JSDocProtectedTag)
-
-        abstract createJSDocReadonlyTag:
-            (Identifier option -> string -> JSDocReadonlyTag)
-
-        abstract createJSDocTag: (Identifier -> string -> JSDocUnknownTag)
-
-        abstract createJsxElement:
-            (JsxOpeningElement
-                -> ResizeArray<JsxChild>
-                -> JsxClosingElement
-                -> JsxElement)
-
-        abstract updateJsxElement:
-            (JsxElement
-                -> JsxOpeningElement
-                -> ResizeArray<JsxChild>
-                -> JsxClosingElement
-                -> JsxElement)
-
-        abstract createJsxSelfClosingElement:
-            (JsxTagNameExpression
-                -> ResizeArray<TypeNode> option
-                -> JsxAttributes
-                -> JsxSelfClosingElement)
-
-        abstract updateJsxSelfClosingElement:
-            (JsxSelfClosingElement
-                -> JsxTagNameExpression
-                -> ResizeArray<TypeNode> option
-                -> JsxAttributes
-                -> JsxSelfClosingElement)
-
-        abstract createJsxOpeningElement:
-            (JsxTagNameExpression
-                -> ResizeArray<TypeNode> option
-                -> JsxAttributes
-                -> JsxOpeningElement)
-
-        abstract updateJsxOpeningElement:
-            (JsxOpeningElement
-                -> JsxTagNameExpression
-                -> ResizeArray<TypeNode> option
-                -> JsxAttributes
-                -> JsxOpeningElement)
-
-        abstract createJsxClosingElement:
-            (JsxTagNameExpression -> JsxClosingElement)
-
-        abstract updateJsxClosingElement:
-            (JsxClosingElement -> JsxTagNameExpression -> JsxClosingElement)
-
-        abstract createJsxFragment:
-            (JsxOpeningFragment
-                -> ResizeArray<JsxChild>
-                -> JsxClosingFragment
-                -> JsxFragment)
-
-        abstract createJsxText: (string -> bool -> JsxText)
-        abstract updateJsxText: (JsxText -> string -> bool -> JsxText)
-        abstract createJsxOpeningFragment: (unit -> JsxOpeningFragment)
-        abstract createJsxJsxClosingFragment: (unit -> JsxClosingFragment)
-
-        abstract updateJsxFragment:
-            (JsxFragment
-                -> JsxOpeningFragment
-                -> ResizeArray<JsxChild>
-                -> JsxClosingFragment
-                -> JsxFragment)
-
-        abstract createJsxAttribute:
-            (Identifier
-                -> U2<StringLiteral, JsxExpression> option
-                -> JsxAttribute)
-
-        abstract updateJsxAttribute:
-            (JsxAttribute
-                -> Identifier
-                -> U2<StringLiteral, JsxExpression> option
-                -> JsxAttribute)
-
-        abstract createJsxAttributes:
-            (ResizeArray<JsxAttributeLike> -> JsxAttributes)
-
-        abstract updateJsxAttributes:
-            (JsxAttributes -> ResizeArray<JsxAttributeLike> -> JsxAttributes)
-
-        abstract createJsxSpreadAttribute: (Expression -> JsxSpreadAttribute)
-
-        abstract updateJsxSpreadAttribute:
-            (JsxSpreadAttribute -> Expression -> JsxSpreadAttribute)
-
-        abstract createJsxExpression:
-            (DotDotDotToken option -> Expression option -> JsxExpression)
-
-        abstract updateJsxExpression:
-            (JsxExpression -> Expression option -> JsxExpression)
-
-        abstract createCaseClause:
-            (Expression -> ResizeArray<Statement> -> CaseClause)
-
-        abstract updateCaseClause:
-            (CaseClause -> Expression -> ResizeArray<Statement> -> CaseClause)
-
-        abstract createDefaultClause: (ResizeArray<Statement> -> DefaultClause)
-
-        abstract updateDefaultClause:
-            (DefaultClause -> ResizeArray<Statement> -> DefaultClause)
-
-        abstract createHeritageClause:
-            (SyntaxKind
-                -> ResizeArray<ExpressionWithTypeArguments>
-                -> HeritageClause)
-
-        abstract updateHeritageClause:
-            (HeritageClause
-                -> ResizeArray<ExpressionWithTypeArguments>
-                -> HeritageClause)
-
-        abstract createCatchClause:
-            (U2<string, VariableDeclaration> option -> Block -> CatchClause)
-
-        abstract updateCatchClause:
-            (CatchClause -> VariableDeclaration option -> Block -> CatchClause)
-
-        abstract createPropertyAssignment:
-            (U2<string, PropertyName> -> Expression -> PropertyAssignment)
-
-        abstract updatePropertyAssignment:
-            (PropertyAssignment
-                -> PropertyName
-                -> Expression
-                -> PropertyAssignment)
-
-        abstract createShorthandPropertyAssignment:
-            (U2<string, Identifier> -> Expression -> ShorthandPropertyAssignment)
-
-        abstract updateShorthandPropertyAssignment:
-            (ShorthandPropertyAssignment
-                -> Identifier
-                -> Expression option
-                -> ShorthandPropertyAssignment)
-
-        abstract createSpreadAssignment: (Expression -> SpreadAssignment)
-
-        abstract updateSpreadAssignment:
-            (SpreadAssignment -> Expression -> SpreadAssignment)
-
-        abstract createEnumMember:
-            (U2<string, PropertyName> -> Expression -> EnumMember)
-
-        abstract updateEnumMember:
-            (EnumMember -> PropertyName -> Expression option -> EnumMember)
-
-        abstract updateSourceFileNode:
-            (SourceFile
-                -> ResizeArray<Statement>
-                -> bool
-                -> ResizeArray<FileReference>
-                -> ResizeArray<FileReference>
-                -> bool
-                -> ResizeArray<FileReference>
-                -> SourceFile)
-
-        abstract createNotEmittedStatement: (Node -> NotEmittedStatement)
-
-        abstract createPartiallyEmittedExpression:
-            (Expression -> Node -> PartiallyEmittedExpression)
-
-        abstract updatePartiallyEmittedExpression:
-            (PartiallyEmittedExpression
-                -> Expression
-                -> PartiallyEmittedExpression)
-
-        abstract createCommaList:
-            (ResizeArray<Expression> -> CommaListExpression)
-
-        abstract updateCommaList:
-            (CommaListExpression
-                -> ResizeArray<Expression>
-                -> CommaListExpression)
-
-        abstract createBundle:
-            (ResizeArray<SourceFile>
-                -> ResizeArray<U2<UnparsedSource, InputFiles>>
-                -> Bundle)
-
-        abstract updateBundle:
-            (Bundle
-                -> ResizeArray<SourceFile>
-                -> ResizeArray<U2<UnparsedSource, InputFiles>>
-                -> Bundle)
-
-        abstract createImmediatelyInvokedFunctionExpression:
-            IExportsCreateImmediatelyInvokedFunctionExpression
-
-        abstract createImmediatelyInvokedArrowFunction:
-            IExportsCreateImmediatelyInvokedFunctionExpression
-
-        abstract createVoidZero: (unit -> VoidExpression)
-        abstract createExportDefault: (Expression -> ExportAssignment)
-        abstract createExternalModuleExport: (Identifier -> ExportDeclaration)
-        abstract createNamespaceExport: (Identifier -> NamespaceExport)
-
-        abstract updateNamespaceExport:
-            (NamespaceExport -> Identifier -> NamespaceExport)
-
-        abstract createToken<'TKind> : 'TKind -> Token<'TKind>
-        abstract createIdentifier: (string -> Identifier)
-        abstract createTempVariable: ((Identifier -> unit) option -> Identifier)
-        abstract getGeneratedNameForNode: (Node option -> Identifier)
-        abstract createOptimisticUniqueName: (string -> Identifier)
-        abstract createFileLevelUniqueName: (string -> Identifier)
-
-        abstract createIndexSignature:
-            (ResizeArray<Decorator> option
-                -> ResizeArray<Modifier> option
-                -> ResizeArray<ParameterDeclaration>
-                -> TypeNode
-                -> IndexSignatureDeclaration)
-
-        abstract createTypePredicateNode:
-            (U3<Identifier, ThisTypeNode, string>
-                -> TypeNode
-                -> TypePredicateNode)
-
-        abstract updateTypePredicateNode:
-            (TypePredicateNode
-                -> U2<Identifier, ThisTypeNode>
-                -> TypeNode
-                -> TypePredicateNode)
-
-        abstract createLiteral: IExportsCreateLiteral
-
-        abstract createMethodSignature:
-            (ResizeArray<TypeParameterDeclaration> option
-                -> ResizeArray<ParameterDeclaration>
-                -> TypeNode option
-                -> U2<string, PropertyName>
-                -> QuestionToken option
-                -> MethodSignature)
-
-        abstract updateMethodSignature:
-            (MethodSignature
-                -> ResizeArray<TypeParameterDeclaration> option
-                -> ResizeArray<ParameterDeclaration>
-                -> TypeNode option
-                -> PropertyName
-                -> QuestionToken option
-                -> MethodSignature)
-
-        abstract createTypeOperatorNode: IExportsCreateTypeOperatorNode
-        abstract createTaggedTemplate: IExportsCreateTaggedTemplate
-        abstract updateTaggedTemplate: IExportsUpdateTaggedTemplate
-
-        abstract updateBinary:
-            (BinaryExpression
-                -> Expression
-                -> Expression
-                -> U2<BinaryOperator, BinaryOperatorToken>
-                -> BinaryExpression)
-
-        abstract createConditional: IExportsCreateConditional
-        abstract createYield: IExportsCreateYield
-
-        abstract createClassExpression:
-            (ResizeArray<Modifier> option
-                -> U2<string, Identifier> option
-                -> ResizeArray<TypeParameterDeclaration> option
-                -> ResizeArray<HeritageClause> option
-                -> ResizeArray<ClassElement>
-                -> ClassExpression)
-
-        abstract updateClassExpression:
-            (ClassExpression
-                -> ResizeArray<Modifier> option
-                -> Identifier option
-                -> ResizeArray<TypeParameterDeclaration> option
-                -> ResizeArray<HeritageClause> option
-                -> ResizeArray<ClassElement>
-                -> ClassExpression)
-
-        abstract createPropertySignature:
-            (ResizeArray<Modifier> option
-                -> U2<PropertyName, string>
-                -> QuestionToken option
-                -> TypeNode option
-                -> Expression
-                -> PropertySignature)
-
-        abstract updatePropertySignature:
-            (PropertySignature
-                -> ResizeArray<Modifier> option
-                -> PropertyName
-                -> QuestionToken option
-                -> TypeNode option
-                -> Expression option
-                -> PropertySignature)
-
-        abstract createExpressionWithTypeArguments:
-            (ResizeArray<TypeNode> option
-                -> Expression
-                -> ExpressionWithTypeArguments)
-
-        abstract updateExpressionWithTypeArguments:
-            (ExpressionWithTypeArguments
-                -> ResizeArray<TypeNode> option
-                -> Expression
-                -> ExpressionWithTypeArguments)
-
-        abstract createArrowFunction: IExportsCreateArrowFunction
-        abstract updateArrowFunction: IExportsUpdateArrowFunction
-        abstract createVariableDeclaration: IExportsCreateVariableDeclaration
-        abstract updateVariableDeclaration: IExportsUpdateVariableDeclaration
-
-        abstract createImportClause:
-            (Identifier option
-                -> NamedImportBindings option
-                -> obj
-                -> ImportClause)
-
-        abstract updateImportClause:
-            (ImportClause
-                -> Identifier option
-                -> NamedImportBindings option
-                -> bool
-                -> ImportClause)
-
-        abstract createExportDeclaration:
-            (ResizeArray<Decorator> option
-                -> ResizeArray<Modifier> option
-                -> NamedExportBindings option
-                -> Expression
-                -> obj
-                -> ExportDeclaration)
-
-        abstract updateExportDeclaration:
-            (ExportDeclaration
-                -> ResizeArray<Decorator> option
-                -> ResizeArray<Modifier> option
-                -> NamedExportBindings option
-                -> Expression option
-                -> bool
-                -> ExportDeclaration)
-
-        abstract createJSDocParamTag:
-            (EntityName
-                -> bool
-                -> JSDocTypeExpression
-                -> string
-                -> JSDocParameterTag)
-
-        abstract createComma: (Expression -> Expression -> Expression)
-        abstract createLessThan: (Expression -> Expression -> Expression)
-
-        abstract createAssignment:
-            (Expression -> Expression -> BinaryExpression)
-
-        abstract createStrictEquality:
-            (Expression -> Expression -> BinaryExpression)
-
-        abstract createStrictInequality:
-            (Expression -> Expression -> BinaryExpression)
-
-        abstract createAdd: (Expression -> Expression -> BinaryExpression)
-        abstract createSubtract: (Expression -> Expression -> BinaryExpression)
-
-        abstract createLogicalAnd:
-            (Expression -> Expression -> BinaryExpression)
-
-        abstract createLogicalOr: (Expression -> Expression -> BinaryExpression)
-        abstract createPostfixIncrement: (Expression -> PostfixUnaryExpression)
-        abstract createLogicalNot: (Expression -> PrefixUnaryExpression)
-        abstract createNode: (SyntaxKind -> obj -> obj -> Node)
-        abstract getMutableClone<'T> : 'T -> 'T
-        abstract isTypeAssertion: (Node -> bool)
-
-    [<AllowNullLiteral>]
-    type ValidateLocaleAndSetLanguageSys =
-        abstract getExecutingFilePath: unit -> string
-        abstract resolvePath: path: string -> string
-        abstract fileExists: fileName: string -> bool
-        abstract readFile: fileName: string -> string option
-
-    [<StringEnum>]
-    [<RequireQualifiedAccess>]
-    type CreateUnparsedSourceFileType =
-        | Js
-        | Dts
-
-    [<AllowNullLiteral>]
-    type ReadConfigFileReturn =
-        abstract config: obj option with get, set
-        abstract error: Diagnostic option with get, set
-
-    [<AllowNullLiteral>]
-    type ParseConfigFileTextToJsonReturn =
-        abstract config: obj option with get, set
-        abstract error: Diagnostic option with get, set
-
-    [<AllowNullLiteral>]
-    type ConvertCompilerOptionsFromJsonReturn =
-        abstract options: CompilerOptions with get, set
-        abstract errors: ResizeArray<Diagnostic> with get, set
-
-    [<AllowNullLiteral>]
-    type ConvertTypeAcquisitionFromJsonReturn =
-        abstract options: TypeAcquisition with get, set
-        abstract errors: ResizeArray<Diagnostic> with get, set
+        abstract transform: source: U2<'T, ResizeArray<'T>> * transformers: ResizeArray<TransformerFactory<'T>> * ?compilerOptions: CompilerOptions -> TransformationResult<'T> when 'T :> Node
 
     /// <summary>
     /// Type of objects whose values are all of the same type.
     /// The <c>in</c> and <c>for-in</c> operators can *not* be safely used,
     /// since <c>Object.prototype</c> may be modified by outside code.
     /// </summary>
-    [<AllowNullLiteral>]
-    type MapLike<'T> =
-        [<EmitIndexer>]
-        abstract Item: index: string -> 'T with get, set
+    type [<AllowNullLiteral>] MapLike<'T> =
+        [<EmitIndexer>] abstract Item: index: string -> 'T with get, set
 
-    [<AllowNullLiteral>]
-    type SortedReadonlyArray<'T> =
+    type [<AllowNullLiteral>] SortedReadonlyArray<'T> =
         inherit ReadonlyArray<'T>
         abstract `` __sortedArrayBrand``: obj option with get, set
 
-    [<AllowNullLiteral>]
-    type SortedArray<'T> =
+    type [<AllowNullLiteral>] SortedArray<'T> =
         inherit Array<'T>
         abstract `` __sortedArrayBrand``: obj option with get, set
 
-    /// Common read methods for ES6 Map/Set.
-    [<AllowNullLiteral>]
-    type ReadonlyCollection<'K> =
-        abstract size: float
-        abstract has: key: 'K -> bool
-        abstract keys: unit -> Iterator<'K>
+    type [<AllowNullLiteral>] Path =
+        interface end
 
-    /// Common write methods for ES6 Map/Set.
-    [<AllowNullLiteral>]
-    type Collection<'K> =
-        inherit ReadonlyCollection<'K>
-        abstract delete: key: 'K -> bool
-        abstract clear: unit -> unit
-
-    /// ES6 Map interface, only read methods included.
-    [<AllowNullLiteral>]
-    type ReadonlyESMap<'K, 'V> =
-        inherit ReadonlyCollection<'K>
-        abstract get: key: 'K -> 'V option
-        abstract values: unit -> Iterator<'V>
-        abstract entries: unit -> Iterator<'K * 'V>
-        abstract forEach: action: ('V -> 'K -> unit) -> unit
-
-    /// ES6 Map interface, only read methods included.
-    [<AllowNullLiteral>]
-    type ReadonlyMap<'T> =
-        inherit ReadonlyESMap<string, 'T>
-
-    /// ES6 Map interface.
-    [<AllowNullLiteral>]
-    type ESMap<'K, 'V> =
-        inherit ReadonlyESMap<'K, 'V>
-        inherit Collection<'K>
-        abstract set: key: 'K * value: 'V -> ESMap<'K, 'V>
-
-    /// ES6 Map interface.
-    [<AllowNullLiteral>]
-    type Map<'T> =
-        inherit ESMap<string, 'T>
-
-    /// ES6 Set interface, only read methods included.
-    [<AllowNullLiteral>]
-    type ReadonlySet<'T> =
-        inherit ReadonlyCollection<'T>
-        abstract has: value: 'T -> bool
-        abstract values: unit -> Iterator<'T>
-        abstract entries: unit -> Iterator<'T * 'T>
-        abstract forEach: action: ('T -> 'T -> unit) -> unit
-
-    /// ES6 Set interface.
-    [<AllowNullLiteral>]
-    type Set<'T> =
-        inherit ReadonlySet<'T>
-        inherit Collection<'T>
-        abstract add: value: 'T -> Set<'T>
-        abstract delete: value: 'T -> bool
-
-    /// ES6 Iterator type.
-    [<AllowNullLiteral>]
-    type Iterator<'T> =
-        abstract next: unit -> U2<IteratorNext<'T>, IteratorNext2>
-
-    /// Array that is only intended to be pushed to, never read.
-    [<AllowNullLiteral>]
-    type Push<'T> =
-        abstract push: [<ParamArray>] values: 'T[] -> unit
-
-    [<AllowNullLiteral>]
-    type Path =
-        interface
-        end
-
-    [<AllowNullLiteral>]
-    type TextRange =
+    type [<AllowNullLiteral>] TextRange =
         abstract pos: float with get, set
         abstract ``end``: float with get, set
 
-    [<AllowNullLiteral>]
-    type ReadonlyTextRange =
+    type [<AllowNullLiteral>] ReadonlyTextRange =
         abstract pos: float
         abstract ``end``: float
 
-    [<RequireQualifiedAccess>]
-    type SyntaxKind =
+    type [<RequireQualifiedAccess>] SyntaxKind =
         | Unknown = 0
         | EndOfFileToken = 1
         | SingleLineCommentTrivia = 2
@@ -3397,60 +1326,131 @@ module Ts =
         | FirstJSDocTagNode = 334
         | LastJSDocTagNode = 357
 
-    type TriviaSyntaxKind = SyntaxKind
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia | SyntaxKind.NewLineTrivia | SyntaxKind.WhitespaceTrivia | SyntaxKind.ShebangTrivia | SyntaxKind.ConflictMarkerTrivia
+    /// </code>
+    /// </remarks>
+    type TriviaSyntaxKind =
+        SyntaxKind
 
-    type LiteralSyntaxKind = SyntaxKind
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// SyntaxKind.NumericLiteral | SyntaxKind.BigIntLiteral | SyntaxKind.StringLiteral | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.RegularExpressionLiteral | SyntaxKind.NoSubstitutionTemplateLiteral
+    /// </code>
+    /// </remarks>
+    type LiteralSyntaxKind =
+        SyntaxKind
 
-    type PseudoLiteralSyntaxKind = SyntaxKind
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// SyntaxKind.TemplateHead | SyntaxKind.TemplateMiddle | SyntaxKind.TemplateTail
+    /// </code>
+    /// </remarks>
+    type PseudoLiteralSyntaxKind =
+        SyntaxKind
 
-    type PunctuationSyntaxKind = SyntaxKind
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// SyntaxKind.OpenBraceToken | SyntaxKind.CloseBraceToken | SyntaxKind.OpenParenToken | SyntaxKind.CloseParenToken | SyntaxKind.OpenBracketToken | SyntaxKind.CloseBracketToken | SyntaxKind.DotToken | SyntaxKind.DotDotDotToken | SyntaxKind.SemicolonToken | SyntaxKind.CommaToken | SyntaxKind.QuestionDotToken | SyntaxKind.LessThanToken | SyntaxKind.LessThanSlashToken | SyntaxKind.GreaterThanToken | SyntaxKind.LessThanEqualsToken | SyntaxKind.GreaterThanEqualsToken | SyntaxKind.EqualsEqualsToken | SyntaxKind.ExclamationEqualsToken | SyntaxKind.EqualsEqualsEqualsToken | SyntaxKind.ExclamationEqualsEqualsToken | SyntaxKind.EqualsGreaterThanToken | SyntaxKind.PlusToken | SyntaxKind.MinusToken | SyntaxKind.AsteriskToken | SyntaxKind.AsteriskAsteriskToken | SyntaxKind.SlashToken | SyntaxKind.PercentToken | SyntaxKind.PlusPlusToken | SyntaxKind.MinusMinusToken | SyntaxKind.LessThanLessThanToken | SyntaxKind.GreaterThanGreaterThanToken | SyntaxKind.GreaterThanGreaterThanGreaterThanToken | SyntaxKind.AmpersandToken | SyntaxKind.BarToken | SyntaxKind.CaretToken | SyntaxKind.ExclamationToken | SyntaxKind.TildeToken | SyntaxKind.AmpersandAmpersandToken | SyntaxKind.AmpersandAmpersandEqualsToken | SyntaxKind.BarBarToken | SyntaxKind.BarBarEqualsToken | SyntaxKind.QuestionQuestionToken | SyntaxKind.QuestionQuestionEqualsToken | SyntaxKind.QuestionToken | SyntaxKind.ColonToken | SyntaxKind.AtToken | SyntaxKind.BacktickToken | SyntaxKind.HashToken | SyntaxKind.EqualsToken | SyntaxKind.PlusEqualsToken | SyntaxKind.MinusEqualsToken | SyntaxKind.AsteriskEqualsToken | SyntaxKind.AsteriskAsteriskEqualsToken | SyntaxKind.SlashEqualsToken | SyntaxKind.PercentEqualsToken | SyntaxKind.LessThanLessThanEqualsToken | SyntaxKind.GreaterThanGreaterThanEqualsToken | SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken | SyntaxKind.AmpersandEqualsToken | SyntaxKind.BarEqualsToken | SyntaxKind.CaretEqualsToken
+    /// </code>
+    /// </remarks>
+    type PunctuationSyntaxKind =
+        SyntaxKind
 
-    type KeywordSyntaxKind = SyntaxKind
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// SyntaxKind.AbstractKeyword | SyntaxKind.AccessorKeyword | SyntaxKind.AnyKeyword | SyntaxKind.AsKeyword | SyntaxKind.AssertsKeyword | SyntaxKind.AssertKeyword | SyntaxKind.AsyncKeyword | SyntaxKind.AwaitKeyword | SyntaxKind.BigIntKeyword | SyntaxKind.BooleanKeyword | SyntaxKind.BreakKeyword | SyntaxKind.CaseKeyword | SyntaxKind.CatchKeyword | SyntaxKind.ClassKeyword | SyntaxKind.ConstKeyword | SyntaxKind.ConstructorKeyword | SyntaxKind.ContinueKeyword | SyntaxKind.DebuggerKeyword | SyntaxKind.DeclareKeyword | SyntaxKind.DefaultKeyword | SyntaxKind.DeleteKeyword | SyntaxKind.DoKeyword | SyntaxKind.ElseKeyword | SyntaxKind.EnumKeyword | SyntaxKind.ExportKeyword | SyntaxKind.ExtendsKeyword | SyntaxKind.FalseKeyword | SyntaxKind.FinallyKeyword | SyntaxKind.ForKeyword | SyntaxKind.FromKeyword | SyntaxKind.FunctionKeyword | SyntaxKind.GetKeyword | SyntaxKind.GlobalKeyword | SyntaxKind.IfKeyword | SyntaxKind.ImplementsKeyword | SyntaxKind.ImportKeyword | SyntaxKind.InferKeyword | SyntaxKind.InKeyword | SyntaxKind.InstanceOfKeyword | SyntaxKind.InterfaceKeyword | SyntaxKind.IntrinsicKeyword | SyntaxKind.IsKeyword | SyntaxKind.KeyOfKeyword | SyntaxKind.LetKeyword | SyntaxKind.ModuleKeyword | SyntaxKind.NamespaceKeyword | SyntaxKind.NeverKeyword | SyntaxKind.NewKeyword | SyntaxKind.NullKeyword | SyntaxKind.NumberKeyword | SyntaxKind.ObjectKeyword | SyntaxKind.OfKeyword | SyntaxKind.PackageKeyword | SyntaxKind.PrivateKeyword | SyntaxKind.ProtectedKeyword | SyntaxKind.PublicKeyword | SyntaxKind.ReadonlyKeyword | SyntaxKind.OutKeyword | SyntaxKind.OverrideKeyword | SyntaxKind.RequireKeyword | SyntaxKind.ReturnKeyword | SyntaxKind.SatisfiesKeyword | SyntaxKind.SetKeyword | SyntaxKind.StaticKeyword | SyntaxKind.StringKeyword | SyntaxKind.SuperKeyword | SyntaxKind.SwitchKeyword | SyntaxKind.SymbolKeyword | SyntaxKind.ThisKeyword | SyntaxKind.ThrowKeyword | SyntaxKind.TrueKeyword | SyntaxKind.TryKeyword | SyntaxKind.TypeKeyword | SyntaxKind.TypeOfKeyword | SyntaxKind.UndefinedKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.UnknownKeyword | SyntaxKind.UsingKeyword | SyntaxKind.VarKeyword | SyntaxKind.VoidKeyword | SyntaxKind.WhileKeyword | SyntaxKind.WithKeyword | SyntaxKind.YieldKeyword
+    /// </code>
+    /// </remarks>
+    type KeywordSyntaxKind =
+        SyntaxKind
 
-    type ModifierSyntaxKind = SyntaxKind
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// SyntaxKind.AbstractKeyword | SyntaxKind.AccessorKeyword | SyntaxKind.AsyncKeyword | SyntaxKind.ConstKeyword | SyntaxKind.DeclareKeyword | SyntaxKind.DefaultKeyword | SyntaxKind.ExportKeyword | SyntaxKind.InKeyword | SyntaxKind.PrivateKeyword | SyntaxKind.ProtectedKeyword | SyntaxKind.PublicKeyword | SyntaxKind.ReadonlyKeyword | SyntaxKind.OutKeyword | SyntaxKind.OverrideKeyword | SyntaxKind.StaticKeyword
+    /// </code>
+    /// </remarks>
+    type ModifierSyntaxKind =
+        SyntaxKind
 
-    type KeywordTypeSyntaxKind = SyntaxKind
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// SyntaxKind.AnyKeyword | SyntaxKind.BigIntKeyword | SyntaxKind.BooleanKeyword | SyntaxKind.IntrinsicKeyword | SyntaxKind.NeverKeyword | SyntaxKind.NumberKeyword | SyntaxKind.ObjectKeyword | SyntaxKind.StringKeyword | SyntaxKind.SymbolKeyword | SyntaxKind.UndefinedKeyword | SyntaxKind.UnknownKeyword | SyntaxKind.VoidKeyword
+    /// </code>
+    /// </remarks>
+    type KeywordTypeSyntaxKind =
+        SyntaxKind
 
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// SyntaxKind.Unknown | SyntaxKind.EndOfFileToken | TriviaSyntaxKind | LiteralSyntaxKind | PseudoLiteralSyntaxKind | PunctuationSyntaxKind | SyntaxKind.Identifier | KeywordSyntaxKind
+    /// </code>
+    /// </remarks>
     type TokenSyntaxKind =
-        U6<SyntaxKind, TriviaSyntaxKind, LiteralSyntaxKind, PseudoLiteralSyntaxKind, PunctuationSyntaxKind, KeywordSyntaxKind>
+        SyntaxKind
 
-    type JsxTokenSyntaxKind = SyntaxKind
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// SyntaxKind.LessThanSlashToken | SyntaxKind.EndOfFileToken | SyntaxKind.ConflictMarkerTrivia | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.OpenBraceToken | SyntaxKind.LessThanToken
+    /// </code>
+    /// </remarks>
+    type JsxTokenSyntaxKind =
+        SyntaxKind
 
-    type JSDocSyntaxKind = U2<SyntaxKind, KeywordSyntaxKind>
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// SyntaxKind.EndOfFileToken | SyntaxKind.WhitespaceTrivia | SyntaxKind.AtToken | SyntaxKind.NewLineTrivia | SyntaxKind.AsteriskToken | SyntaxKind.OpenBraceToken | SyntaxKind.CloseBraceToken | SyntaxKind.LessThanToken | SyntaxKind.GreaterThanToken | SyntaxKind.OpenBracketToken | SyntaxKind.CloseBracketToken | SyntaxKind.EqualsToken | SyntaxKind.CommaToken | SyntaxKind.DotToken | SyntaxKind.Identifier | SyntaxKind.BacktickToken | SyntaxKind.HashToken | SyntaxKind.Unknown | KeywordSyntaxKind
+    /// </code>
+    /// </remarks>
+    type JSDocSyntaxKind =
+        SyntaxKind
 
-    [<RequireQualifiedAccess>]
-    type NodeFlags =
+    type [<RequireQualifiedAccess>] NodeFlags =
         | None = 0
         | Let = 1
         | Const = 2
-        | NestedNamespace = 4
-        | Synthesized = 8
-        | Namespace = 16
-        | OptionalChain = 32
-        | ExportContext = 64
-        | ContainsThis = 128
-        | HasImplicitReturn = 256
-        | HasExplicitReturn = 512
-        | GlobalAugmentation = 1024
-        | HasAsyncFunctions = 2048
-        | DisallowInContext = 4096
-        | YieldContext = 8192
-        | DecoratorContext = 16384
-        | AwaitContext = 32768
-        | ThisNodeHasError = 65536
-        | JavaScriptFile = 131072
-        | ThisNodeOrAnySubNodesHasError = 262144
-        | HasAggregatedChildData = 524288
-        | JSDoc = 4194304
-        | JsonFile = 33554432
-        | BlockScoped = 3
-        | ReachabilityCheckFlags = 768
-        | ReachabilityAndEmitFlags = 2816
-        | ContextFlags = 25358336
-        | TypeExcludesFlags = 40960
+        | Using = 4
+        | AwaitUsing = 6
+        | NestedNamespace = 8
+        | Synthesized = 16
+        | Namespace = 32
+        | OptionalChain = 64
+        | ExportContext = 128
+        | ContainsThis = 256
+        | HasImplicitReturn = 512
+        | HasExplicitReturn = 1024
+        | GlobalAugmentation = 2048
+        | HasAsyncFunctions = 4096
+        | DisallowInContext = 8192
+        | YieldContext = 16384
+        | DecoratorContext = 32768
+        | AwaitContext = 65536
+        | DisallowConditionalTypesContext = 131072
+        | ThisNodeHasError = 262144
+        | JavaScriptFile = 524288
+        | ThisNodeOrAnySubNodesHasError = 1048576
+        | HasAggregatedChildData = 2097152
+        | JSDoc = 16777216
+        | JsonFile = 134217728
+        | BlockScoped = 7
+        | Constant = 6
+        | ReachabilityCheckFlags = 1536
+        | ReachabilityAndEmitFlags = 5632
+        | ContextFlags = 101441536
+        | TypeExcludesFlags = 81920
 
-    [<RequireQualifiedAccess>]
-    type ModifierFlags =
+    type [<RequireQualifiedAccess>] ModifierFlags =
         | None = 0
         | Export = 1
         | Ambient = 2
@@ -3459,22 +1459,27 @@ module Ts =
         | Protected = 16
         | Static = 32
         | Readonly = 64
-        | Abstract = 128
-        | Async = 256
-        | Default = 512
+        | Accessor = 128
+        | Abstract = 256
+        | Async = 512
+        | Default = 1024
         | Const = 2048
         | HasComputedJSDocModifiers = 4096
         | Deprecated = 8192
+        | Override = 16384
+        | In = 32768
+        | Out = 65536
+        | Decorator = 131072
         | HasComputedFlags = 536870912
         | AccessibilityModifier = 28
-        | ParameterPropertyModifier = 92
+        | ParameterPropertyModifier = 16476
         | NonPublicAccessibilityModifier = 24
-        | TypeScriptModifier = 2270
-        | ExportDefault = 513
-        | All = 11263
+        | TypeScriptModifier = 117086
+        | ExportDefault = 1025
+        | All = 258047
+        | Modifier = 126975
 
-    [<RequireQualifiedAccess>]
-    type JsxFlags =
+    type [<RequireQualifiedAccess>] JsxFlags =
         | None = 0
         /// An element from a named property of the JSX.IntrinsicElements interface
         | IntrinsicNamedElement = 1
@@ -3482,22 +1487,16 @@ module Ts =
         | IntrinsicIndexedElement = 2
         | IntrinsicElement = 3
 
-    [<AllowNullLiteral>]
-    type Node =
+    type [<AllowNullLiteral>] Node =
         inherit ReadonlyTextRange
         abstract kind: SyntaxKind
         abstract flags: NodeFlags
-        abstract decorators: ResizeArray<Decorator> option
-        abstract modifiers: ModifiersArray option
         abstract parent: Node
         abstract getSourceFile: unit -> SourceFile
         abstract getChildCount: ?sourceFile: SourceFile -> float
         abstract getChildAt: index: float * ?sourceFile: SourceFile -> Node
         abstract getChildren: ?sourceFile: SourceFile -> ResizeArray<Node>
-
-        abstract getStart:
-            ?sourceFile: SourceFile * ?includeJsDocComment: bool -> float
-
+        abstract getStart: ?sourceFile: SourceFile * ?includeJsDocComment: bool -> float
         abstract getFullStart: unit -> float
         abstract getEnd: unit -> float
         abstract getWidth: ?sourceFile: SourceFileLike -> float
@@ -3507,20 +1506,25 @@ module Ts =
         abstract getText: ?sourceFile: SourceFile -> string
         abstract getFirstToken: ?sourceFile: SourceFile -> Node option
         abstract getLastToken: ?sourceFile: SourceFile -> Node option
+        abstract forEachChild: cbNode: (Node -> 'T option) * ?cbNodeArray: (ResizeArray<Node> -> 'T option) -> 'T option
 
-        abstract forEachChild:
-            cbNode: (Node -> 'T option) *
-            ?cbNodeArray: (ResizeArray<Node> -> 'T option) ->
-                'T option
+    type [<AllowNullLiteral>] JSDocContainer =
+        inherit Node
+        abstract _jsdocContainerBrand: obj option with get, set
 
-    [<AllowNullLiteral>]
-    type JSDocContainer =
-        interface
-        end
+    type [<AllowNullLiteral>] LocalsContainer =
+        inherit Node
+        abstract _localsContainerBrand: obj option with get, set
 
-    type HasJSDoc = obj
+    type [<AllowNullLiteral>] FlowContainer =
+        inherit Node
+        abstract _flowContainerBrand: obj option with get, set
 
-    type HasType = obj
+    type HasJSDoc =
+        obj
+
+    type HasType =
+        obj
 
     type HasTypeArguments =
         U5<CallExpression, NewExpression, TaggedTemplateExpression, JsxOpeningElement, JsxSelfClosingElement>
@@ -3529,227 +1533,494 @@ module Ts =
         U5<HasExpressionInitializer, ForStatement, ForInStatement, ForOfStatement, JsxAttribute>
 
     type HasExpressionInitializer =
-        U7<VariableDeclaration, ParameterDeclaration, BindingElement, PropertySignature, PropertyDeclaration, PropertyAssignment, EnumMember>
+        U6<VariableDeclaration, ParameterDeclaration, BindingElement, PropertyDeclaration, PropertyAssignment, EnumMember>
 
-    [<AllowNullLiteral>]
-    type NodeArray<'T when 'T :> Node> =
+    type HasDecorators =
+        U7<ParameterDeclaration, PropertyDeclaration, MethodDeclaration, GetAccessorDeclaration, SetAccessorDeclaration, ClassExpression, ClassDeclaration>
+
+    type HasModifiers =
+        obj
+
+    type [<AllowNullLiteral>] NodeArray<'T when 'T :> Node> =
         inherit ReadonlyArray<'T>
         inherit ReadonlyTextRange
-        abstract hasTrailingComma: bool option with get, set
+        abstract hasTrailingComma: bool
 
-    // type [<AllowNullLiteral>] Token<'TKind when 'TKind :> SyntaxKind> =
-    [<AllowNullLiteral>]
-    type Token<'TKind> =
+    type [<AllowNullLiteral>] Token<'TKind> =
         inherit Node
-        // abstract kind: 'TKind
-        abstract kind: SyntaxKind
+        abstract kind: 'TKind
 
+    type [<AllowNullLiteral>] EndOfFileToken =
+        interface end
 
-    [<AllowNullLiteral>]
-    type EndOfFileToken =
-        interface
-        end
-
-    [<AllowNullLiteral>]
-    type PunctuationToken<'TKind> =
-        inherit Token<PunctuationSyntaxKind>
-
-    type DotToken = PunctuationToken<SyntaxKind>
-
-    type DotDotDotToken = PunctuationToken<SyntaxKind>
-
-    type QuestionToken = PunctuationToken<SyntaxKind>
-
-    type ExclamationToken = PunctuationToken<SyntaxKind>
-
-    type ColonToken = PunctuationToken<SyntaxKind>
-
-    type EqualsToken = PunctuationToken<SyntaxKind>
-
-    type AsteriskToken = PunctuationToken<SyntaxKind>
-
-    type EqualsGreaterThanToken = PunctuationToken<SyntaxKind>
-
-    type PlusToken = PunctuationToken<SyntaxKind>
-
-    type MinusToken = PunctuationToken<SyntaxKind>
-
-    type QuestionDotToken = PunctuationToken<SyntaxKind>
-
-    [<AllowNullLiteral>]
-    type KeywordToken<'TKind> =
+    type [<AllowNullLiteral>] PunctuationToken<'TKind> =
         inherit Token<'TKind>
 
-    type AssertsKeyword = KeywordToken<SyntaxKind>
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// PunctuationToken&lt;SyntaxKind.DotToken&gt;
+    /// </code>
+    /// </remarks>
+    type DotToken =
+        PunctuationToken<SyntaxKind>
 
-    type AwaitKeyword = KeywordToken<SyntaxKind>
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// PunctuationToken&lt;SyntaxKind.DotDotDotToken&gt;
+    /// </code>
+    /// </remarks>
+    type DotDotDotToken =
+        PunctuationToken<SyntaxKind>
 
-    [<Obsolete("Use `AwaitKeyword` instead.")>]
-    type AwaitKeywordToken = AwaitKeyword
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// PunctuationToken&lt;SyntaxKind.QuestionToken&gt;
+    /// </code>
+    /// </remarks>
+    type QuestionToken =
+        PunctuationToken<SyntaxKind>
 
-    [<Obsolete("Use `AssertsKeyword` instead.")>]
-    type AssertsToken = AssertsKeyword
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// PunctuationToken&lt;SyntaxKind.ExclamationToken&gt;
+    /// </code>
+    /// </remarks>
+    type ExclamationToken =
+        PunctuationToken<SyntaxKind>
 
-    [<AllowNullLiteral>]
-    type ModifierToken<'TKind> =
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// PunctuationToken&lt;SyntaxKind.ColonToken&gt;
+    /// </code>
+    /// </remarks>
+    type ColonToken =
+        PunctuationToken<SyntaxKind>
+
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// PunctuationToken&lt;SyntaxKind.EqualsToken&gt;
+    /// </code>
+    /// </remarks>
+    type EqualsToken =
+        PunctuationToken<SyntaxKind>
+
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// PunctuationToken&lt;SyntaxKind.AmpersandAmpersandEqualsToken&gt;
+    /// </code>
+    /// </remarks>
+    type AmpersandAmpersandEqualsToken =
+        PunctuationToken<SyntaxKind>
+
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// PunctuationToken&lt;SyntaxKind.BarBarEqualsToken&gt;
+    /// </code>
+    /// </remarks>
+    type BarBarEqualsToken =
+        PunctuationToken<SyntaxKind>
+
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// PunctuationToken&lt;SyntaxKind.QuestionQuestionEqualsToken&gt;
+    /// </code>
+    /// </remarks>
+    type QuestionQuestionEqualsToken =
+        PunctuationToken<SyntaxKind>
+
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// PunctuationToken&lt;SyntaxKind.AsteriskToken&gt;
+    /// </code>
+    /// </remarks>
+    type AsteriskToken =
+        PunctuationToken<SyntaxKind>
+
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// PunctuationToken&lt;SyntaxKind.EqualsGreaterThanToken&gt;
+    /// </code>
+    /// </remarks>
+    type EqualsGreaterThanToken =
+        PunctuationToken<SyntaxKind>
+
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// PunctuationToken&lt;SyntaxKind.PlusToken&gt;
+    /// </code>
+    /// </remarks>
+    type PlusToken =
+        PunctuationToken<SyntaxKind>
+
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// PunctuationToken&lt;SyntaxKind.MinusToken&gt;
+    /// </code>
+    /// </remarks>
+    type MinusToken =
+        PunctuationToken<SyntaxKind>
+
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// PunctuationToken&lt;SyntaxKind.QuestionDotToken&gt;
+    /// </code>
+    /// </remarks>
+    type QuestionDotToken =
+        PunctuationToken<SyntaxKind>
+
+    type [<AllowNullLiteral>] KeywordToken<'TKind> =
+        inherit Token<'TKind>
+
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// KeywordToken&lt;SyntaxKind.AssertsKeyword&gt;
+    /// </code>
+    /// </remarks>
+    type AssertsKeyword =
+        KeywordToken<SyntaxKind>
+
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// KeywordToken&lt;SyntaxKind.AssertKeyword&gt;
+    /// </code>
+    /// </remarks>
+    type AssertKeyword =
+        KeywordToken<SyntaxKind>
+
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// KeywordToken&lt;SyntaxKind.AwaitKeyword&gt;
+    /// </code>
+    /// </remarks>
+    type AwaitKeyword =
+        KeywordToken<SyntaxKind>
+
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// KeywordToken&lt;SyntaxKind.CaseKeyword&gt;
+    /// </code>
+    /// </remarks>
+    type CaseKeyword =
+        KeywordToken<SyntaxKind>
+
+    type [<AllowNullLiteral>] ModifierToken<'TKind> =
         inherit KeywordToken<'TKind>
 
-    type AbstractKeyword = ModifierToken<SyntaxKind>
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// ModifierToken&lt;SyntaxKind.AbstractKeyword&gt;
+    /// </code>
+    /// </remarks>
+    type AbstractKeyword =
+        ModifierToken<SyntaxKind>
 
-    type AsyncKeyword = ModifierToken<SyntaxKind>
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// ModifierToken&lt;SyntaxKind.AccessorKeyword&gt;
+    /// </code>
+    /// </remarks>
+    type AccessorKeyword =
+        ModifierToken<SyntaxKind>
 
-    type ConstKeyword = ModifierToken<SyntaxKind>
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// ModifierToken&lt;SyntaxKind.AsyncKeyword&gt;
+    /// </code>
+    /// </remarks>
+    type AsyncKeyword =
+        ModifierToken<SyntaxKind>
 
-    type DeclareKeyword = ModifierToken<SyntaxKind>
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// ModifierToken&lt;SyntaxKind.ConstKeyword&gt;
+    /// </code>
+    /// </remarks>
+    type ConstKeyword =
+        ModifierToken<SyntaxKind>
 
-    type DefaultKeyword = ModifierToken<SyntaxKind>
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// ModifierToken&lt;SyntaxKind.DeclareKeyword&gt;
+    /// </code>
+    /// </remarks>
+    type DeclareKeyword =
+        ModifierToken<SyntaxKind>
 
-    type ExportKeyword = ModifierToken<SyntaxKind>
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// ModifierToken&lt;SyntaxKind.DefaultKeyword&gt;
+    /// </code>
+    /// </remarks>
+    type DefaultKeyword =
+        ModifierToken<SyntaxKind>
 
-    type PrivateKeyword = ModifierToken<SyntaxKind>
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// ModifierToken&lt;SyntaxKind.ExportKeyword&gt;
+    /// </code>
+    /// </remarks>
+    type ExportKeyword =
+        ModifierToken<SyntaxKind>
 
-    type ProtectedKeyword = ModifierToken<SyntaxKind>
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// ModifierToken&lt;SyntaxKind.InKeyword&gt;
+    /// </code>
+    /// </remarks>
+    type InKeyword =
+        ModifierToken<SyntaxKind>
 
-    type PublicKeyword = ModifierToken<SyntaxKind>
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// ModifierToken&lt;SyntaxKind.PrivateKeyword&gt;
+    /// </code>
+    /// </remarks>
+    type PrivateKeyword =
+        ModifierToken<SyntaxKind>
 
-    type ReadonlyKeyword = ModifierToken<SyntaxKind>
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// ModifierToken&lt;SyntaxKind.ProtectedKeyword&gt;
+    /// </code>
+    /// </remarks>
+    type ProtectedKeyword =
+        ModifierToken<SyntaxKind>
 
-    type StaticKeyword = ModifierToken<SyntaxKind>
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// ModifierToken&lt;SyntaxKind.PublicKeyword&gt;
+    /// </code>
+    /// </remarks>
+    type PublicKeyword =
+        ModifierToken<SyntaxKind>
 
-    [<Obsolete("Use `ReadonlyKeyword` instead.")>]
-    type ReadonlyToken = ReadonlyKeyword
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// ModifierToken&lt;SyntaxKind.ReadonlyKeyword&gt;
+    /// </code>
+    /// </remarks>
+    type ReadonlyKeyword =
+        ModifierToken<SyntaxKind>
 
-    type Modifier = obj
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// ModifierToken&lt;SyntaxKind.OutKeyword&gt;
+    /// </code>
+    /// </remarks>
+    type OutKeyword =
+        ModifierToken<SyntaxKind>
 
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// ModifierToken&lt;SyntaxKind.OverrideKeyword&gt;
+    /// </code>
+    /// </remarks>
+    type OverrideKeyword =
+        ModifierToken<SyntaxKind>
+
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// ModifierToken&lt;SyntaxKind.StaticKeyword&gt;
+    /// </code>
+    /// </remarks>
+    type StaticKeyword =
+        ModifierToken<SyntaxKind>
+
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// AbstractKeyword | AccessorKeyword | AsyncKeyword | ConstKeyword | DeclareKeyword | DefaultKeyword | ExportKeyword | InKeyword | PrivateKeyword | ProtectedKeyword | PublicKeyword | OutKeyword | OverrideKeyword | ReadonlyKeyword | StaticKeyword
+    /// </code>
+    /// </remarks>
+    type Modifier =
+        ModifierToken<SyntaxKind>
+
+    type ModifierLike =
+        U2<Modifier, Decorator>
+
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// PublicKeyword | PrivateKeyword | ProtectedKeyword
+    /// </code>
+    /// </remarks>
     type AccessibilityModifier =
-        U3<PublicKeyword, PrivateKeyword, ProtectedKeyword>
+        ModifierToken<SyntaxKind>
 
-    type ParameterPropertyModifier = U2<AccessibilityModifier, ReadonlyKeyword>
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// AccessibilityModifier | ReadonlyKeyword
+    /// </code>
+    /// </remarks>
+    type ParameterPropertyModifier =
+        ModifierToken<SyntaxKind>
 
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// AccessibilityModifier | ReadonlyKeyword | StaticKeyword | AccessorKeyword
+    /// </code>
+    /// </remarks>
     type ClassMemberModifier =
-        U3<AccessibilityModifier, ReadonlyKeyword, StaticKeyword>
+        ModifierToken<SyntaxKind>
 
-    type ModifiersArray = ResizeArray<Modifier>
+    type ModifiersArray =
+        ResizeArray<Modifier>
 
-    [<RequireQualifiedAccess>]
-    type GeneratedIdentifierFlags =
+    type [<RequireQualifiedAccess>] GeneratedIdentifierFlags =
         | None = 0
         | ReservedInNestedScopes = 8
         | Optimistic = 16
         | FileLevel = 32
         | AllowNameSubstitution = 64
 
-    [<AllowNullLiteral>]
-    type Identifier =
+    type [<AllowNullLiteral>] Identifier =
         inherit PrimaryExpression
         inherit Declaration
+        inherit JSDocContainer
+        inherit FlowContainer
         abstract kind: SyntaxKind
         /// <summary>
         /// Prefer to use <c>id.unescapedText</c>. (Note: This is available only in services, not internally to the TypeScript compiler.)
         /// Text of identifier, but if the identifier begins with two underscores, this will begin with three.
         /// </summary>
         abstract escapedText: __String
-        abstract originalKeywordKind: SyntaxKind option
-        abstract isInJSDocNamespace: bool option with get, set
         abstract text: string
+        [<Obsolete("Use `idKeyword(identifier)` instead.")>]
+        abstract originalKeywordKind: SyntaxKind option
+        [<Obsolete("Use `.parent` or the surrounding context to determine this instead.")>]
+        abstract isInJSDocNamespace: bool option
 
-    [<AllowNullLiteral>]
-    type TransientIdentifier =
+    type [<AllowNullLiteral>] TransientIdentifier =
         inherit Identifier
         abstract resolvedSymbol: Symbol with get, set
 
-    [<AllowNullLiteral>]
-    type QualifiedName =
+    type [<AllowNullLiteral>] QualifiedName =
         inherit Node
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract left: EntityName
         abstract right: Identifier
 
-    type EntityName = U2<Identifier, QualifiedName>
+    type EntityName =
+        U2<Identifier, QualifiedName>
 
     type PropertyName =
         U5<Identifier, StringLiteral, NumericLiteral, ComputedPropertyName, PrivateIdentifier>
 
-    type DeclarationName =
-        U8<Identifier, PrivateIdentifier, StringLiteralLike, NumericLiteral, ComputedPropertyName, ElementAccessExpression, BindingPattern, EntityNameExpression>
+    type MemberName =
+        U2<Identifier, PrivateIdentifier>
 
-    [<AllowNullLiteral>]
-    type Declaration =
+    type DeclarationName =
+        U6<PropertyName, JsxAttributeName, StringLiteralLike, ElementAccessExpression, BindingPattern, EntityNameExpression>
+
+    type [<AllowNullLiteral>] Declaration =
         inherit Node
         abstract _declarationBrand: obj option with get, set
 
-    [<AllowNullLiteral>]
-    type NamedDeclaration =
+    type [<AllowNullLiteral>] NamedDeclaration =
         inherit Declaration
         abstract name: DeclarationName option
 
-    [<AllowNullLiteral>]
-    type DeclarationStatement =
+    type [<AllowNullLiteral>] DeclarationStatement =
         inherit NamedDeclaration
         inherit Statement
         abstract name: U3<Identifier, StringLiteral, NumericLiteral> option
 
-    [<AllowNullLiteral>]
-    type ComputedPropertyName =
+    type [<AllowNullLiteral>] ComputedPropertyName =
         inherit Node
         abstract kind: SyntaxKind
         abstract parent: Declaration
         abstract expression: Expression
 
-    [<AllowNullLiteral>]
-    type PrivateIdentifier =
-        inherit Node
+    type [<AllowNullLiteral>] PrivateIdentifier =
+        inherit PrimaryExpression
         abstract kind: SyntaxKind
         abstract escapedText: __String
         abstract text: string
 
-    [<AllowNullLiteral>]
-    type Decorator =
+    type [<AllowNullLiteral>] Decorator =
         inherit Node
         abstract kind: SyntaxKind
         abstract parent: NamedDeclaration
         abstract expression: LeftHandSideExpression
 
-    [<AllowNullLiteral>]
-    type TypeParameterDeclaration =
+    type [<AllowNullLiteral>] TypeParameterDeclaration =
         inherit NamedDeclaration
+        inherit JSDocContainer
         abstract kind: SyntaxKind
         abstract parent: U2<DeclarationWithTypeParameterChildren, InferTypeNode>
+        abstract modifiers: ResizeArray<Modifier> option
         abstract name: Identifier
         /// <summary>Note: Consider calling <c>getEffectiveConstraintOfTypeParameter</c></summary>
         abstract ``constraint``: TypeNode option
         abstract ``default``: TypeNode option
         abstract expression: Expression option with get, set
 
-    [<AllowNullLiteral>]
-    type SignatureDeclarationBase =
+    type [<AllowNullLiteral>] SignatureDeclarationBase =
         inherit NamedDeclaration
         inherit JSDocContainer
-        abstract kind: SignatureDeclaration
+        abstract kind: obj
         abstract name: PropertyName option
         abstract typeParameters: ResizeArray<TypeParameterDeclaration> option
         abstract parameters: ResizeArray<ParameterDeclaration>
         abstract ``type``: TypeNode option
 
-    type SignatureDeclaration = obj
+    type SignatureDeclaration =
+        obj
 
-    [<AllowNullLiteral>]
-    type CallSignatureDeclaration =
+    type [<AllowNullLiteral>] CallSignatureDeclaration =
         inherit SignatureDeclarationBase
         inherit TypeElement
+        inherit LocalsContainer
         abstract kind: SyntaxKind
 
-    [<AllowNullLiteral>]
-    type ConstructSignatureDeclaration =
+    type [<AllowNullLiteral>] ConstructSignatureDeclaration =
         inherit SignatureDeclarationBase
         inherit TypeElement
+        inherit LocalsContainer
         abstract kind: SyntaxKind
 
-    type BindingName = U2<Identifier, BindingPattern>
+    type BindingName =
+        U2<Identifier, BindingPattern>
 
-    [<AllowNullLiteral>]
-    type VariableDeclaration =
+    type [<AllowNullLiteral>] VariableDeclaration =
         inherit NamedDeclaration
+        inherit JSDocContainer
         abstract kind: SyntaxKind
         abstract parent: U2<VariableDeclarationList, CatchClause>
         abstract name: BindingName
@@ -3757,31 +2028,27 @@ module Ts =
         abstract ``type``: TypeNode option
         abstract initializer: Expression option
 
-    [<AllowNullLiteral>]
-    type VariableDeclarationList =
+    type [<AllowNullLiteral>] VariableDeclarationList =
         inherit Node
         abstract kind: SyntaxKind
-
-        abstract parent:
-            U4<VariableStatement, ForStatement, ForOfStatement, ForInStatement>
-
+        abstract parent: U4<VariableStatement, ForStatement, ForOfStatement, ForInStatement>
         abstract declarations: ResizeArray<VariableDeclaration>
 
-    [<AllowNullLiteral>]
-    type ParameterDeclaration =
+    type [<AllowNullLiteral>] ParameterDeclaration =
         inherit NamedDeclaration
         inherit JSDocContainer
         abstract kind: SyntaxKind
         abstract parent: SignatureDeclaration
+        abstract modifiers: ResizeArray<ModifierLike> option
         abstract dotDotDotToken: DotDotDotToken option
         abstract name: BindingName
         abstract questionToken: QuestionToken option
         abstract ``type``: TypeNode option
         abstract initializer: Expression option
 
-    [<AllowNullLiteral>]
-    type BindingElement =
+    type [<AllowNullLiteral>] BindingElement =
         inherit NamedDeclaration
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract parent: BindingPattern
         abstract propertyName: PropertyName option
@@ -3789,30 +2056,33 @@ module Ts =
         abstract name: BindingName
         abstract initializer: Expression option
 
-    [<AllowNullLiteral>]
-    type PropertySignature =
+    type [<AllowNullLiteral>] PropertySignature =
         inherit TypeElement
         inherit JSDocContainer
         abstract kind: SyntaxKind
+        abstract parent: U2<TypeLiteralNode, InterfaceDeclaration>
+        abstract modifiers: ResizeArray<Modifier> option
         abstract name: PropertyName
         abstract questionToken: QuestionToken option
         abstract ``type``: TypeNode option
-        abstract initializer: Expression option with get, set
 
-    [<AllowNullLiteral>]
-    type PropertyDeclaration =
+    type [<AllowNullLiteral>] PropertyDeclaration =
         inherit ClassElement
         inherit JSDocContainer
         abstract kind: SyntaxKind
         abstract parent: ClassLikeDeclaration
+        abstract modifiers: ResizeArray<ModifierLike> option
         abstract name: PropertyName
         abstract questionToken: QuestionToken option
         abstract exclamationToken: ExclamationToken option
         abstract ``type``: TypeNode option
         abstract initializer: Expression option
 
-    [<AllowNullLiteral>]
-    type ObjectLiteralElement =
+    type [<AllowNullLiteral>] AutoAccessorPropertyDeclaration =
+        inherit PropertyDeclaration
+        abstract _autoAccessorBrand: obj option with get, set
+
+    type [<AllowNullLiteral>] ObjectLiteralElement =
         inherit NamedDeclaration
         abstract _objectLiteralBrand: obj option with get, set
         abstract name: PropertyName option
@@ -3821,67 +2091,50 @@ module Ts =
     type ObjectLiteralElementLike =
         U5<PropertyAssignment, ShorthandPropertyAssignment, SpreadAssignment, MethodDeclaration, AccessorDeclaration>
 
-    [<AllowNullLiteral>]
-    type PropertyAssignment =
+    type [<AllowNullLiteral>] PropertyAssignment =
         inherit ObjectLiteralElement
         inherit JSDocContainer
         abstract kind: SyntaxKind
         abstract parent: ObjectLiteralExpression
         abstract name: PropertyName
-        abstract questionToken: QuestionToken option
-        abstract exclamationToken: ExclamationToken option
         abstract initializer: Expression
 
-    [<AllowNullLiteral>]
-    type ShorthandPropertyAssignment =
+    type [<AllowNullLiteral>] ShorthandPropertyAssignment =
         inherit ObjectLiteralElement
         inherit JSDocContainer
         abstract kind: SyntaxKind
         abstract parent: ObjectLiteralExpression
         abstract name: Identifier
-        abstract questionToken: QuestionToken option
-        abstract exclamationToken: ExclamationToken option
         abstract equalsToken: EqualsToken option
         abstract objectAssignmentInitializer: Expression option
 
-    [<AllowNullLiteral>]
-    type SpreadAssignment =
+    type [<AllowNullLiteral>] SpreadAssignment =
         inherit ObjectLiteralElement
         inherit JSDocContainer
         abstract kind: SyntaxKind
         abstract parent: ObjectLiteralExpression
         abstract expression: Expression
 
-    type VariableLikeDeclaration = obj
+    type VariableLikeDeclaration =
+        obj
 
-    [<AllowNullLiteral>]
-    type PropertyLikeDeclaration =
-        inherit NamedDeclaration
-        abstract name: PropertyName
-
-    [<AllowNullLiteral>]
-    type ObjectBindingPattern =
+    type [<AllowNullLiteral>] ObjectBindingPattern =
         inherit Node
         abstract kind: SyntaxKind
-
-        abstract parent:
-            U3<VariableDeclaration, ParameterDeclaration, BindingElement>
-
+        abstract parent: U3<VariableDeclaration, ParameterDeclaration, BindingElement>
         abstract elements: ResizeArray<BindingElement>
 
-    [<AllowNullLiteral>]
-    type ArrayBindingPattern =
+    type [<AllowNullLiteral>] ArrayBindingPattern =
         inherit Node
         abstract kind: SyntaxKind
-
-        abstract parent:
-            U3<VariableDeclaration, ParameterDeclaration, BindingElement>
-
+        abstract parent: U3<VariableDeclaration, ParameterDeclaration, BindingElement>
         abstract elements: ResizeArray<ArrayBindingElement>
 
-    type BindingPattern = U2<ObjectBindingPattern, ArrayBindingPattern>
+    type BindingPattern =
+        U2<ObjectBindingPattern, ArrayBindingPattern>
 
-    type ArrayBindingElement = U2<BindingElement, OmittedExpression>
+    type ArrayBindingElement =
+        U2<BindingElement, OmittedExpression>
 
     /// Several node kinds share function-like features such as a signature,
     /// a name, and a body. These nodes should extend FunctionLikeDeclarationBase.
@@ -3889,8 +2142,7 @@ module Ts =
     /// - FunctionDeclaration
     /// - MethodDeclaration
     /// - AccessorDeclaration
-    [<AllowNullLiteral>]
-    type FunctionLikeDeclarationBase =
+    type [<AllowNullLiteral>] FunctionLikeDeclarationBase =
         inherit SignatureDeclarationBase
         abstract _functionLikeDeclarationBrand: obj option with get, set
         abstract asteriskToken: AsteriskToken option
@@ -3902,502 +2154,639 @@ module Ts =
         U7<FunctionDeclaration, MethodDeclaration, GetAccessorDeclaration, SetAccessorDeclaration, ConstructorDeclaration, FunctionExpression, ArrowFunction>
 
     [<Obsolete("Use SignatureDeclaration")>]
-    type FunctionLike = SignatureDeclaration
+    type FunctionLike =
+        SignatureDeclaration
 
-    [<AllowNullLiteral>]
-    type FunctionDeclaration =
+    type [<AllowNullLiteral>] FunctionDeclaration =
         inherit FunctionLikeDeclarationBase
         inherit DeclarationStatement
+        inherit LocalsContainer
         abstract kind: SyntaxKind
+        abstract modifiers: ResizeArray<ModifierLike> option
         abstract name: Identifier option
         abstract body: FunctionBody option
 
-    [<AllowNullLiteral>]
-    type MethodSignature =
+    type [<AllowNullLiteral>] MethodSignature =
         inherit SignatureDeclarationBase
         inherit TypeElement
+        inherit LocalsContainer
         abstract kind: SyntaxKind
-        abstract parent: ObjectTypeDeclaration
+        abstract parent: U2<TypeLiteralNode, InterfaceDeclaration>
+        abstract modifiers: ResizeArray<Modifier> option
         abstract name: PropertyName
 
-    [<AllowNullLiteral>]
-    type MethodDeclaration =
+    type [<AllowNullLiteral>] MethodDeclaration =
         inherit FunctionLikeDeclarationBase
         inherit ClassElement
         inherit ObjectLiteralElement
         inherit JSDocContainer
+        inherit LocalsContainer
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract parent: U2<ClassLikeDeclaration, ObjectLiteralExpression>
+        abstract modifiers: ResizeArray<ModifierLike> option
         abstract name: PropertyName
         abstract body: FunctionBody option
 
-    [<AllowNullLiteral>]
-    type ConstructorDeclaration =
+    type [<AllowNullLiteral>] ConstructorDeclaration =
         inherit FunctionLikeDeclarationBase
         inherit ClassElement
         inherit JSDocContainer
+        inherit LocalsContainer
         abstract kind: SyntaxKind
         abstract parent: ClassLikeDeclaration
+        abstract modifiers: ResizeArray<ModifierLike> option
         abstract body: FunctionBody option
 
     /// For when we encounter a semicolon in a class declaration. ES6 allows these as class elements.
-    [<AllowNullLiteral>]
-    type SemicolonClassElement =
+    type [<AllowNullLiteral>] SemicolonClassElement =
         inherit ClassElement
+        inherit JSDocContainer
         abstract kind: SyntaxKind
         abstract parent: ClassLikeDeclaration
 
-    [<AllowNullLiteral>]
-    type GetAccessorDeclaration =
+    type [<AllowNullLiteral>] GetAccessorDeclaration =
         inherit FunctionLikeDeclarationBase
         inherit ClassElement
+        inherit TypeElement
         inherit ObjectLiteralElement
         inherit JSDocContainer
+        inherit LocalsContainer
+        inherit FlowContainer
         abstract kind: SyntaxKind
-        abstract parent: U2<ClassLikeDeclaration, ObjectLiteralExpression>
+        abstract parent: U4<ClassLikeDeclaration, ObjectLiteralExpression, TypeLiteralNode, InterfaceDeclaration>
+        abstract modifiers: ResizeArray<ModifierLike> option
         abstract name: PropertyName
         abstract body: FunctionBody option
 
-    [<AllowNullLiteral>]
-    type SetAccessorDeclaration =
+    type [<AllowNullLiteral>] SetAccessorDeclaration =
         inherit FunctionLikeDeclarationBase
         inherit ClassElement
+        inherit TypeElement
         inherit ObjectLiteralElement
         inherit JSDocContainer
+        inherit LocalsContainer
+        inherit FlowContainer
         abstract kind: SyntaxKind
-        abstract parent: U2<ClassLikeDeclaration, ObjectLiteralExpression>
+        abstract parent: U4<ClassLikeDeclaration, ObjectLiteralExpression, TypeLiteralNode, InterfaceDeclaration>
+        abstract modifiers: ResizeArray<ModifierLike> option
         abstract name: PropertyName
         abstract body: FunctionBody option
 
     type AccessorDeclaration =
         U2<GetAccessorDeclaration, SetAccessorDeclaration>
 
-    [<AllowNullLiteral>]
-    type IndexSignatureDeclaration =
+    type [<AllowNullLiteral>] IndexSignatureDeclaration =
         inherit SignatureDeclarationBase
         inherit ClassElement
         inherit TypeElement
+        inherit LocalsContainer
         abstract kind: SyntaxKind
         abstract parent: ObjectTypeDeclaration
+        abstract modifiers: ResizeArray<ModifierLike> option
         abstract ``type``: TypeNode
 
-    [<AllowNullLiteral>]
-    type TypeNode =
+    type [<AllowNullLiteral>] ClassStaticBlockDeclaration =
+        inherit ClassElement
+        inherit JSDocContainer
+        inherit LocalsContainer
+        abstract kind: SyntaxKind
+        abstract parent: U2<ClassDeclaration, ClassExpression>
+        abstract body: Block
+
+    type [<AllowNullLiteral>] TypeNode =
         inherit Node
         abstract _typeNodeBrand: obj option with get, set
 
-    type KeywordTypeNode = KeywordTypeNode<KeywordTypeSyntaxKind>
+    type KeywordTypeNode =
+        KeywordTypeNode<KeywordTypeSyntaxKind>
 
-    [<AllowNullLiteral>]
-    type KeywordTypeNode<'TKind> =
+    type [<AllowNullLiteral>] KeywordTypeNode<'TKind> =
         inherit KeywordToken<'TKind>
         inherit TypeNode
         abstract kind: 'TKind
 
-    [<AllowNullLiteral>]
-    type ImportTypeNode =
+    type [<AllowNullLiteral>] ImportTypeAssertionContainer =
+        inherit Node
+        abstract kind: SyntaxKind
+        abstract parent: ImportTypeNode
+        abstract assertClause: AssertClause
+        abstract multiLine: bool option
+
+    type [<AllowNullLiteral>] ImportTypeNode =
         inherit NodeWithTypeArguments
         abstract kind: SyntaxKind
         abstract isTypeOf: bool
         abstract argument: TypeNode
+        abstract assertions: ImportTypeAssertionContainer option
         abstract qualifier: EntityName option
 
-    [<AllowNullLiteral>]
-    type ThisTypeNode =
+    type [<AllowNullLiteral>] ThisTypeNode =
         inherit TypeNode
         abstract kind: SyntaxKind
 
     type FunctionOrConstructorTypeNode =
         U2<FunctionTypeNode, ConstructorTypeNode>
 
-    [<AllowNullLiteral>]
-    type FunctionOrConstructorTypeNodeBase =
+    type [<AllowNullLiteral>] FunctionOrConstructorTypeNodeBase =
         inherit TypeNode
         inherit SignatureDeclarationBase
         abstract kind: SyntaxKind
         abstract ``type``: TypeNode
 
-    [<AllowNullLiteral>]
-    type FunctionTypeNode =
+    type [<AllowNullLiteral>] FunctionTypeNode =
         inherit FunctionOrConstructorTypeNodeBase
+        inherit LocalsContainer
         abstract kind: SyntaxKind
 
-    [<AllowNullLiteral>]
-    type ConstructorTypeNode =
+    type [<AllowNullLiteral>] ConstructorTypeNode =
         inherit FunctionOrConstructorTypeNodeBase
+        inherit LocalsContainer
         abstract kind: SyntaxKind
+        abstract modifiers: ResizeArray<Modifier> option
 
-    [<AllowNullLiteral>]
-    type NodeWithTypeArguments =
+    type [<AllowNullLiteral>] NodeWithTypeArguments =
         inherit TypeNode
         abstract typeArguments: ResizeArray<TypeNode> option
 
-    type TypeReferenceType = U2<TypeReferenceNode, ExpressionWithTypeArguments>
+    type TypeReferenceType =
+        U2<TypeReferenceNode, ExpressionWithTypeArguments>
 
-    [<AllowNullLiteral>]
-    type TypeReferenceNode =
+    type [<AllowNullLiteral>] TypeReferenceNode =
         inherit NodeWithTypeArguments
         abstract kind: SyntaxKind
         abstract typeName: EntityName
 
-    [<AllowNullLiteral>]
-    type TypePredicateNode =
+    type [<AllowNullLiteral>] TypePredicateNode =
         inherit TypeNode
         abstract kind: SyntaxKind
         abstract parent: U2<SignatureDeclaration, JSDocTypeExpression>
-        abstract assertsModifier: AssertsToken option
+        abstract assertsModifier: AssertsKeyword option
         abstract parameterName: U2<Identifier, ThisTypeNode>
         abstract ``type``: TypeNode option
 
-    [<AllowNullLiteral>]
-    type TypeQueryNode =
-        inherit TypeNode
+    type [<AllowNullLiteral>] TypeQueryNode =
+        inherit NodeWithTypeArguments
         abstract kind: SyntaxKind
         abstract exprName: EntityName
 
-    [<AllowNullLiteral>]
-    type TypeLiteralNode =
+    type [<AllowNullLiteral>] TypeLiteralNode =
         inherit TypeNode
         inherit Declaration
         abstract kind: SyntaxKind
         abstract members: ResizeArray<TypeElement>
 
-    [<AllowNullLiteral>]
-    type ArrayTypeNode =
+    type [<AllowNullLiteral>] ArrayTypeNode =
         inherit TypeNode
         abstract kind: SyntaxKind
         abstract elementType: TypeNode
 
-    [<AllowNullLiteral>]
-    type TupleTypeNode =
+    type [<AllowNullLiteral>] TupleTypeNode =
         inherit TypeNode
         abstract kind: SyntaxKind
         abstract elements: ResizeArray<U2<TypeNode, NamedTupleMember>>
 
-    [<AllowNullLiteral>]
-    type NamedTupleMember =
+    type [<AllowNullLiteral>] NamedTupleMember =
         inherit TypeNode
-        inherit JSDocContainer
         inherit Declaration
+        inherit JSDocContainer
         abstract kind: SyntaxKind
         abstract dotDotDotToken: Token<SyntaxKind> option
         abstract name: Identifier
         abstract questionToken: Token<SyntaxKind> option
         abstract ``type``: TypeNode
 
-    [<AllowNullLiteral>]
-    type OptionalTypeNode =
+    type [<AllowNullLiteral>] OptionalTypeNode =
         inherit TypeNode
         abstract kind: SyntaxKind
         abstract ``type``: TypeNode
 
-    [<AllowNullLiteral>]
-    type RestTypeNode =
+    type [<AllowNullLiteral>] RestTypeNode =
         inherit TypeNode
         abstract kind: SyntaxKind
         abstract ``type``: TypeNode
 
-    type UnionOrIntersectionTypeNode = U2<UnionTypeNode, IntersectionTypeNode>
+    type UnionOrIntersectionTypeNode =
+        U2<UnionTypeNode, IntersectionTypeNode>
 
-    [<AllowNullLiteral>]
-    type UnionTypeNode =
+    type [<AllowNullLiteral>] UnionTypeNode =
         inherit TypeNode
         abstract kind: SyntaxKind
         abstract types: ResizeArray<TypeNode>
 
-    [<AllowNullLiteral>]
-    type IntersectionTypeNode =
+    type [<AllowNullLiteral>] IntersectionTypeNode =
         inherit TypeNode
         abstract kind: SyntaxKind
         abstract types: ResizeArray<TypeNode>
 
-    [<AllowNullLiteral>]
-    type ConditionalTypeNode =
+    type [<AllowNullLiteral>] ConditionalTypeNode =
         inherit TypeNode
+        inherit LocalsContainer
         abstract kind: SyntaxKind
         abstract checkType: TypeNode
         abstract extendsType: TypeNode
         abstract trueType: TypeNode
         abstract falseType: TypeNode
 
-    [<AllowNullLiteral>]
-    type InferTypeNode =
+    type [<AllowNullLiteral>] InferTypeNode =
         inherit TypeNode
         abstract kind: SyntaxKind
         abstract typeParameter: TypeParameterDeclaration
 
-    [<AllowNullLiteral>]
-    type ParenthesizedTypeNode =
+    type [<AllowNullLiteral>] ParenthesizedTypeNode =
         inherit TypeNode
         abstract kind: SyntaxKind
         abstract ``type``: TypeNode
 
-    [<AllowNullLiteral>]
-    type TypeOperatorNode =
+    type [<AllowNullLiteral>] TypeOperatorNode =
         inherit TypeNode
         abstract kind: SyntaxKind
         abstract operator: SyntaxKind
         abstract ``type``: TypeNode
 
-    [<AllowNullLiteral>]
-    type IndexedAccessTypeNode =
+    type [<AllowNullLiteral>] IndexedAccessTypeNode =
         inherit TypeNode
         abstract kind: SyntaxKind
         abstract objectType: TypeNode
         abstract indexType: TypeNode
 
-    [<AllowNullLiteral>]
-    type MappedTypeNode =
+    type [<AllowNullLiteral>] MappedTypeNode =
         inherit TypeNode
         inherit Declaration
+        inherit LocalsContainer
         abstract kind: SyntaxKind
-        abstract readonlyToken: U3<ReadonlyToken, PlusToken, MinusToken> option
+        abstract readonlyToken: U3<ReadonlyKeyword, PlusToken, MinusToken> option
         abstract typeParameter: TypeParameterDeclaration
         abstract nameType: TypeNode option
         abstract questionToken: U3<QuestionToken, PlusToken, MinusToken> option
         abstract ``type``: TypeNode option
+        /// Used only to produce grammar errors
+        abstract members: ResizeArray<TypeElement> option
 
-    [<AllowNullLiteral>]
-    type LiteralTypeNode =
+    type [<AllowNullLiteral>] LiteralTypeNode =
         inherit TypeNode
         abstract kind: SyntaxKind
+        abstract literal: U4<NullLiteral, BooleanLiteral, LiteralExpression, PrefixUnaryExpression>
 
-        abstract literal:
-            U4<NullLiteral, BooleanLiteral, LiteralExpression, PrefixUnaryExpression>
-
-    [<AllowNullLiteral>]
-    type StringLiteral =
+    type [<AllowNullLiteral>] StringLiteral =
         inherit LiteralExpression
         inherit Declaration
         abstract kind: SyntaxKind
 
-    type StringLiteralLike = U2<StringLiteral, NoSubstitutionTemplateLiteral>
+    type StringLiteralLike =
+        U2<StringLiteral, NoSubstitutionTemplateLiteral>
 
-    type PropertyNameLiteral = U3<Identifier, StringLiteralLike, NumericLiteral>
+    type PropertyNameLiteral =
+        U4<Identifier, StringLiteralLike, NumericLiteral, JsxNamespacedName>
 
-    [<AllowNullLiteral>]
-    type TemplateLiteralTypeNode =
+    type [<AllowNullLiteral>] TemplateLiteralTypeNode =
         inherit TypeNode
         abstract kind: SyntaxKind with get, set
         abstract head: TemplateHead
         abstract templateSpans: ResizeArray<TemplateLiteralTypeSpan>
 
-    [<AllowNullLiteral>]
-    type TemplateLiteralTypeSpan =
+    type [<AllowNullLiteral>] TemplateLiteralTypeSpan =
         inherit TypeNode
         abstract kind: SyntaxKind
         abstract parent: TemplateLiteralTypeNode
         abstract ``type``: TypeNode
         abstract literal: U2<TemplateMiddle, TemplateTail>
 
-    [<AllowNullLiteral>]
-    type Expression =
+    type [<AllowNullLiteral>] Expression =
         inherit Node
         abstract _expressionBrand: obj option with get, set
 
-    [<AllowNullLiteral>]
-    type OmittedExpression =
+    type [<AllowNullLiteral>] OmittedExpression =
         inherit Expression
         abstract kind: SyntaxKind
 
-    [<AllowNullLiteral>]
-    type PartiallyEmittedExpression =
+    type [<AllowNullLiteral>] PartiallyEmittedExpression =
         inherit LeftHandSideExpression
         abstract kind: SyntaxKind
         abstract expression: Expression
 
-    [<AllowNullLiteral>]
-    type UnaryExpression =
+    type [<AllowNullLiteral>] UnaryExpression =
         inherit Expression
         abstract _unaryExpressionBrand: obj option with get, set
 
     /// Deprecated, please use UpdateExpression
-    type IncrementExpression = UpdateExpression
+    type IncrementExpression =
+        UpdateExpression
 
-    [<AllowNullLiteral>]
-    type UpdateExpression =
+    type [<AllowNullLiteral>] UpdateExpression =
         inherit UnaryExpression
         abstract _updateExpressionBrand: obj option with get, set
 
-    type PrefixUnaryOperator = SyntaxKind
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// SyntaxKind.PlusPlusToken | SyntaxKind.MinusMinusToken | SyntaxKind.PlusToken | SyntaxKind.MinusToken | SyntaxKind.TildeToken | SyntaxKind.ExclamationToken
+    /// </code>
+    /// </remarks>
+    type PrefixUnaryOperator =
+        SyntaxKind
 
-    [<AllowNullLiteral>]
-    type PrefixUnaryExpression =
+    type [<AllowNullLiteral>] PrefixUnaryExpression =
         inherit UpdateExpression
         abstract kind: SyntaxKind
         abstract operator: PrefixUnaryOperator
         abstract operand: UnaryExpression
 
-    type PostfixUnaryOperator = SyntaxKind
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// SyntaxKind.PlusPlusToken | SyntaxKind.MinusMinusToken
+    /// </code>
+    /// </remarks>
+    type PostfixUnaryOperator =
+        SyntaxKind
 
-    [<AllowNullLiteral>]
-    type PostfixUnaryExpression =
+    type [<AllowNullLiteral>] PostfixUnaryExpression =
         inherit UpdateExpression
         abstract kind: SyntaxKind
         abstract operand: LeftHandSideExpression
         abstract operator: PostfixUnaryOperator
 
-    [<AllowNullLiteral>]
-    type LeftHandSideExpression =
+    type [<AllowNullLiteral>] LeftHandSideExpression =
         inherit UpdateExpression
         abstract _leftHandSideExpressionBrand: obj option with get, set
 
-    [<AllowNullLiteral>]
-    type MemberExpression =
+    type [<AllowNullLiteral>] MemberExpression =
         inherit LeftHandSideExpression
         abstract _memberExpressionBrand: obj option with get, set
 
-    [<AllowNullLiteral>]
-    type PrimaryExpression =
+    type [<AllowNullLiteral>] PrimaryExpression =
         inherit MemberExpression
         abstract _primaryExpressionBrand: obj option with get, set
 
-    [<AllowNullLiteral>]
-    type NullLiteral =
+    type [<AllowNullLiteral>] NullLiteral =
         inherit PrimaryExpression
         abstract kind: SyntaxKind
 
-    [<AllowNullLiteral>]
-    type TrueLiteral =
+    type [<AllowNullLiteral>] TrueLiteral =
         inherit PrimaryExpression
         abstract kind: SyntaxKind
 
-    [<AllowNullLiteral>]
-    type FalseLiteral =
+    type [<AllowNullLiteral>] FalseLiteral =
         inherit PrimaryExpression
         abstract kind: SyntaxKind
 
-    type BooleanLiteral = U2<TrueLiteral, FalseLiteral>
+    type BooleanLiteral =
+        U2<TrueLiteral, FalseLiteral>
 
-    [<AllowNullLiteral>]
-    type ThisExpression =
+    type [<AllowNullLiteral>] ThisExpression =
+        inherit PrimaryExpression
+        inherit FlowContainer
+        abstract kind: SyntaxKind
+
+    type [<AllowNullLiteral>] SuperExpression =
+        inherit PrimaryExpression
+        inherit FlowContainer
+        abstract kind: SyntaxKind
+
+    type [<AllowNullLiteral>] ImportExpression =
         inherit PrimaryExpression
         abstract kind: SyntaxKind
 
-    [<AllowNullLiteral>]
-    type SuperExpression =
-        inherit PrimaryExpression
-        abstract kind: SyntaxKind
-
-    [<AllowNullLiteral>]
-    type ImportExpression =
-        inherit PrimaryExpression
-        abstract kind: SyntaxKind
-
-    [<AllowNullLiteral>]
-    type DeleteExpression =
+    type [<AllowNullLiteral>] DeleteExpression =
         inherit UnaryExpression
         abstract kind: SyntaxKind
         abstract expression: UnaryExpression
 
-    [<AllowNullLiteral>]
-    type TypeOfExpression =
+    type [<AllowNullLiteral>] TypeOfExpression =
         inherit UnaryExpression
         abstract kind: SyntaxKind
         abstract expression: UnaryExpression
 
-    [<AllowNullLiteral>]
-    type VoidExpression =
+    type [<AllowNullLiteral>] VoidExpression =
         inherit UnaryExpression
         abstract kind: SyntaxKind
         abstract expression: UnaryExpression
 
-    [<AllowNullLiteral>]
-    type AwaitExpression =
+    type [<AllowNullLiteral>] AwaitExpression =
         inherit UnaryExpression
         abstract kind: SyntaxKind
         abstract expression: UnaryExpression
 
-    [<AllowNullLiteral>]
-    type YieldExpression =
+    type [<AllowNullLiteral>] YieldExpression =
         inherit Expression
         abstract kind: SyntaxKind
         abstract asteriskToken: AsteriskToken option
         abstract expression: Expression option
 
-    [<AllowNullLiteral>]
-    type SyntheticExpression =
+    type [<AllowNullLiteral>] SyntheticExpression =
         inherit Expression
         abstract kind: SyntaxKind
         abstract isSpread: bool
         abstract ``type``: Type
+        abstract tupleNameSource: U2<ParameterDeclaration, NamedTupleMember> option
 
-        abstract tupleNameSource:
-            U2<ParameterDeclaration, NamedTupleMember> option
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// SyntaxKind.AsteriskAsteriskToken
+    /// </code>
+    /// </remarks>
+    type ExponentiationOperator =
+        SyntaxKind
 
-    type ExponentiationOperator = SyntaxKind
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// SyntaxKind.AsteriskToken | SyntaxKind.SlashToken | SyntaxKind.PercentToken
+    /// </code>
+    /// </remarks>
+    type MultiplicativeOperator =
+        SyntaxKind
 
-    type MultiplicativeOperator = SyntaxKind
-
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// ExponentiationOperator | MultiplicativeOperator
+    /// </code>
+    /// </remarks>
     type MultiplicativeOperatorOrHigher =
-        U2<ExponentiationOperator, MultiplicativeOperator>
+        SyntaxKind
 
-    type AdditiveOperator = SyntaxKind
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// SyntaxKind.PlusToken | SyntaxKind.MinusToken
+    /// </code>
+    /// </remarks>
+    type AdditiveOperator =
+        SyntaxKind
 
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// MultiplicativeOperatorOrHigher | AdditiveOperator
+    /// </code>
+    /// </remarks>
     type AdditiveOperatorOrHigher =
-        U2<MultiplicativeOperatorOrHigher, AdditiveOperator>
+        SyntaxKind
 
-    type ShiftOperator = SyntaxKind
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// SyntaxKind.LessThanLessThanToken | SyntaxKind.GreaterThanGreaterThanToken | SyntaxKind.GreaterThanGreaterThanGreaterThanToken
+    /// </code>
+    /// </remarks>
+    type ShiftOperator =
+        SyntaxKind
 
-    type ShiftOperatorOrHigher = U2<AdditiveOperatorOrHigher, ShiftOperator>
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// AdditiveOperatorOrHigher | ShiftOperator
+    /// </code>
+    /// </remarks>
+    type ShiftOperatorOrHigher =
+        SyntaxKind
 
-    type RelationalOperator = SyntaxKind
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// SyntaxKind.LessThanToken | SyntaxKind.LessThanEqualsToken | SyntaxKind.GreaterThanToken | SyntaxKind.GreaterThanEqualsToken | SyntaxKind.InstanceOfKeyword | SyntaxKind.InKeyword
+    /// </code>
+    /// </remarks>
+    type RelationalOperator =
+        SyntaxKind
 
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// ShiftOperatorOrHigher | RelationalOperator
+    /// </code>
+    /// </remarks>
     type RelationalOperatorOrHigher =
-        U2<ShiftOperatorOrHigher, RelationalOperator>
+        SyntaxKind
 
-    type EqualityOperator = SyntaxKind
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// SyntaxKind.EqualsEqualsToken | SyntaxKind.EqualsEqualsEqualsToken | SyntaxKind.ExclamationEqualsEqualsToken | SyntaxKind.ExclamationEqualsToken
+    /// </code>
+    /// </remarks>
+    type EqualityOperator =
+        SyntaxKind
 
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// RelationalOperatorOrHigher | EqualityOperator
+    /// </code>
+    /// </remarks>
     type EqualityOperatorOrHigher =
-        U2<RelationalOperatorOrHigher, EqualityOperator>
+        SyntaxKind
 
-    type BitwiseOperator = SyntaxKind
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// SyntaxKind.AmpersandToken | SyntaxKind.BarToken | SyntaxKind.CaretToken
+    /// </code>
+    /// </remarks>
+    type BitwiseOperator =
+        SyntaxKind
 
-    type BitwiseOperatorOrHigher = U2<EqualityOperatorOrHigher, BitwiseOperator>
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// EqualityOperatorOrHigher | BitwiseOperator
+    /// </code>
+    /// </remarks>
+    type BitwiseOperatorOrHigher =
+        SyntaxKind
 
-    type LogicalOperator = SyntaxKind
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// SyntaxKind.AmpersandAmpersandToken | SyntaxKind.BarBarToken
+    /// </code>
+    /// </remarks>
+    type LogicalOperator =
+        SyntaxKind
 
-    type LogicalOperatorOrHigher = U2<BitwiseOperatorOrHigher, LogicalOperator>
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// BitwiseOperatorOrHigher | LogicalOperator
+    /// </code>
+    /// </remarks>
+    type LogicalOperatorOrHigher =
+        SyntaxKind
 
-    type CompoundAssignmentOperator = SyntaxKind
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// SyntaxKind.PlusEqualsToken | SyntaxKind.MinusEqualsToken | SyntaxKind.AsteriskAsteriskEqualsToken | SyntaxKind.AsteriskEqualsToken | SyntaxKind.SlashEqualsToken | SyntaxKind.PercentEqualsToken | SyntaxKind.AmpersandEqualsToken | SyntaxKind.BarEqualsToken | SyntaxKind.CaretEqualsToken | SyntaxKind.LessThanLessThanEqualsToken | SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken | SyntaxKind.GreaterThanGreaterThanEqualsToken | SyntaxKind.BarBarEqualsToken | SyntaxKind.AmpersandAmpersandEqualsToken | SyntaxKind.QuestionQuestionEqualsToken
+    /// </code>
+    /// </remarks>
+    type CompoundAssignmentOperator =
+        SyntaxKind
 
-    type AssignmentOperator = U2<SyntaxKind, CompoundAssignmentOperator>
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// SyntaxKind.EqualsToken | CompoundAssignmentOperator
+    /// </code>
+    /// </remarks>
+    type AssignmentOperator =
+        SyntaxKind
 
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// SyntaxKind.QuestionQuestionToken | LogicalOperatorOrHigher | AssignmentOperator
+    /// </code>
+    /// </remarks>
     type AssignmentOperatorOrHigher =
-        U3<SyntaxKind, LogicalOperatorOrHigher, AssignmentOperator>
+        SyntaxKind
 
-    type BinaryOperator = U2<AssignmentOperatorOrHigher, SyntaxKind>
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// AssignmentOperatorOrHigher | SyntaxKind.CommaToken
+    /// </code>
+    /// </remarks>
+    type BinaryOperator =
+        SyntaxKind
 
-    type LogicalOrCoalescingAssignmentOperator = SyntaxKind
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// SyntaxKind.AmpersandAmpersandEqualsToken | SyntaxKind.BarBarEqualsToken | SyntaxKind.QuestionQuestionEqualsToken
+    /// </code>
+    /// </remarks>
+    type LogicalOrCoalescingAssignmentOperator =
+        SyntaxKind
 
-    type BinaryOperatorToken = Token<BinaryOperator>
+    type BinaryOperatorToken =
+        Token<BinaryOperator>
 
-    [<AllowNullLiteral>]
-    type BinaryExpression =
+    type [<AllowNullLiteral>] BinaryExpression =
         inherit Expression
         inherit Declaration
+        inherit JSDocContainer
         abstract kind: SyntaxKind
         abstract left: Expression
         abstract operatorToken: BinaryOperatorToken
         abstract right: Expression
 
-    type AssignmentOperatorToken = Token<AssignmentOperator>
+    type AssignmentOperatorToken =
+        Token<AssignmentOperator>
 
-    [<AllowNullLiteral>]
-    type AssignmentExpression<'TOperator
-        when 'TOperator :> AssignmentOperatorToken> =
+    type [<AllowNullLiteral>] AssignmentExpression<'TOperator when 'TOperator :> AssignmentOperatorToken> =
         inherit BinaryExpression
         abstract left: LeftHandSideExpression
         abstract operatorToken: 'TOperator
 
-    [<AllowNullLiteral>]
-    type ObjectDestructuringAssignment =
-        inherit AssignmentExpression<AssignmentOperatorToken>
+    type [<AllowNullLiteral>] ObjectDestructuringAssignment =
+        inherit AssignmentExpression<EqualsToken>
         abstract left: ObjectLiteralExpression
 
-    [<AllowNullLiteral>]
-    type ArrayDestructuringAssignment =
-        inherit AssignmentExpression<AssignmentOperatorToken>
+    type [<AllowNullLiteral>] ArrayDestructuringAssignment =
+        inherit AssignmentExpression<EqualsToken>
         abstract left: ArrayLiteralExpression
 
     type DestructuringAssignment =
@@ -4409,7 +2798,8 @@ module Ts =
     type ObjectBindingOrAssignmentElement =
         U4<BindingElement, PropertyAssignment, ShorthandPropertyAssignment, SpreadAssignment>
 
-    type ArrayBindingOrAssignmentElement = obj
+    type ArrayBindingOrAssignmentElement =
+        obj
 
     type BindingOrAssignmentElementRestIndicator =
         U3<DotDotDotToken, SpreadElement, SpreadAssignment>
@@ -4423,13 +2813,13 @@ module Ts =
     type ArrayBindingOrAssignmentPattern =
         U2<ArrayBindingPattern, ArrayLiteralExpression>
 
-    type AssignmentPattern = U2<ObjectLiteralExpression, ArrayLiteralExpression>
+    type AssignmentPattern =
+        U2<ObjectLiteralExpression, ArrayLiteralExpression>
 
     type BindingOrAssignmentPattern =
         U2<ObjectBindingOrAssignmentPattern, ArrayBindingOrAssignmentPattern>
 
-    [<AllowNullLiteral>]
-    type ConditionalExpression =
+    type [<AllowNullLiteral>] ConditionalExpression =
         inherit Expression
         abstract kind: SyntaxKind
         abstract condition: Expression
@@ -4438,61 +2828,61 @@ module Ts =
         abstract colonToken: ColonToken
         abstract whenFalse: Expression
 
-    type FunctionBody = Block
+    type FunctionBody =
+        Block
 
-    type ConciseBody = U2<FunctionBody, Expression>
+    type ConciseBody =
+        U2<FunctionBody, Expression>
 
-    [<AllowNullLiteral>]
-    type FunctionExpression =
+    type [<AllowNullLiteral>] FunctionExpression =
         inherit PrimaryExpression
         inherit FunctionLikeDeclarationBase
         inherit JSDocContainer
+        inherit LocalsContainer
+        inherit FlowContainer
         abstract kind: SyntaxKind
+        abstract modifiers: ResizeArray<Modifier> option
         abstract name: Identifier option
         abstract body: FunctionBody
 
-    [<AllowNullLiteral>]
-    type ArrowFunction =
+    type [<AllowNullLiteral>] ArrowFunction =
         inherit Expression
         inherit FunctionLikeDeclarationBase
         inherit JSDocContainer
+        inherit LocalsContainer
+        inherit FlowContainer
         abstract kind: SyntaxKind
+        abstract modifiers: ResizeArray<Modifier> option
         abstract equalsGreaterThanToken: EqualsGreaterThanToken
         abstract body: ConciseBody
         abstract name: obj
 
-    [<AllowNullLiteral>]
-    type LiteralLikeNode =
+    type [<AllowNullLiteral>] LiteralLikeNode =
         inherit Node
         abstract text: string with get, set
         abstract isUnterminated: bool option with get, set
         abstract hasExtendedUnicodeEscape: bool option with get, set
 
-    [<AllowNullLiteral>]
-    type TemplateLiteralLikeNode =
+    type [<AllowNullLiteral>] TemplateLiteralLikeNode =
         inherit LiteralLikeNode
         abstract rawText: string option with get, set
 
-    [<AllowNullLiteral>]
-    type LiteralExpression =
+    type [<AllowNullLiteral>] LiteralExpression =
         inherit LiteralLikeNode
         inherit PrimaryExpression
         abstract _literalExpressionBrand: obj option with get, set
 
-    [<AllowNullLiteral>]
-    type RegularExpressionLiteral =
+    type [<AllowNullLiteral>] RegularExpressionLiteral =
         inherit LiteralExpression
         abstract kind: SyntaxKind
 
-    [<AllowNullLiteral>]
-    type NoSubstitutionTemplateLiteral =
+    type [<AllowNullLiteral>] NoSubstitutionTemplateLiteral =
         inherit LiteralExpression
         inherit TemplateLiteralLikeNode
         inherit Declaration
         abstract kind: SyntaxKind
 
-    [<RequireQualifiedAccess>]
-    type TokenFlags =
+    type [<RequireQualifiedAccess>] TokenFlags =
         | None = 0
         | Scientific = 16
         | Octal = 32
@@ -4500,157 +2890,143 @@ module Ts =
         | BinarySpecifier = 128
         | OctalSpecifier = 256
 
-    [<AllowNullLiteral>]
-    type NumericLiteral =
+    type [<AllowNullLiteral>] NumericLiteral =
         inherit LiteralExpression
         inherit Declaration
         abstract kind: SyntaxKind
 
-    [<AllowNullLiteral>]
-    type BigIntLiteral =
+    type [<AllowNullLiteral>] BigIntLiteral =
         inherit LiteralExpression
         abstract kind: SyntaxKind
 
     type LiteralToken =
         U6<NumericLiteral, BigIntLiteral, StringLiteral, JsxText, RegularExpressionLiteral, NoSubstitutionTemplateLiteral>
 
-    [<AllowNullLiteral>]
-    type TemplateHead =
+    type [<AllowNullLiteral>] TemplateHead =
         inherit TemplateLiteralLikeNode
         abstract kind: SyntaxKind
         abstract parent: U2<TemplateExpression, TemplateLiteralTypeNode>
 
-    [<AllowNullLiteral>]
-    type TemplateMiddle =
+    type [<AllowNullLiteral>] TemplateMiddle =
         inherit TemplateLiteralLikeNode
         abstract kind: SyntaxKind
         abstract parent: U2<TemplateSpan, TemplateLiteralTypeSpan>
 
-    [<AllowNullLiteral>]
-    type TemplateTail =
+    type [<AllowNullLiteral>] TemplateTail =
         inherit TemplateLiteralLikeNode
         abstract kind: SyntaxKind
         abstract parent: U2<TemplateSpan, TemplateLiteralTypeSpan>
 
-    type PseudoLiteralToken = U3<TemplateHead, TemplateMiddle, TemplateTail>
+    type PseudoLiteralToken =
+        U3<TemplateHead, TemplateMiddle, TemplateTail>
 
     type TemplateLiteralToken =
         U2<NoSubstitutionTemplateLiteral, PseudoLiteralToken>
 
-    [<AllowNullLiteral>]
-    type TemplateExpression =
+    type [<AllowNullLiteral>] TemplateExpression =
         inherit PrimaryExpression
         abstract kind: SyntaxKind
         abstract head: TemplateHead
         abstract templateSpans: ResizeArray<TemplateSpan>
 
-    type TemplateLiteral = U2<TemplateExpression, NoSubstitutionTemplateLiteral>
+    type TemplateLiteral =
+        U2<TemplateExpression, NoSubstitutionTemplateLiteral>
 
-    [<AllowNullLiteral>]
-    type TemplateSpan =
+    type [<AllowNullLiteral>] TemplateSpan =
         inherit Node
         abstract kind: SyntaxKind
         abstract parent: TemplateExpression
         abstract expression: Expression
         abstract literal: U2<TemplateMiddle, TemplateTail>
 
-    [<AllowNullLiteral>]
-    type ParenthesizedExpression =
+    type [<AllowNullLiteral>] ParenthesizedExpression =
         inherit PrimaryExpression
         inherit JSDocContainer
         abstract kind: SyntaxKind
         abstract expression: Expression
 
-    [<AllowNullLiteral>]
-    type ArrayLiteralExpression =
+    type [<AllowNullLiteral>] ArrayLiteralExpression =
         inherit PrimaryExpression
         abstract kind: SyntaxKind
         abstract elements: ResizeArray<Expression>
 
-    [<AllowNullLiteral>]
-    type SpreadElement =
+    type [<AllowNullLiteral>] SpreadElement =
         inherit Expression
         abstract kind: SyntaxKind
-
-        abstract parent:
-            U3<ArrayLiteralExpression, CallExpression, NewExpression>
-
+        abstract parent: U3<ArrayLiteralExpression, CallExpression, NewExpression>
         abstract expression: Expression
 
     /// This interface is a base interface for ObjectLiteralExpression and JSXAttributes to extend from. JSXAttributes is similar to
     /// ObjectLiteralExpression in that it contains array of properties; however, JSXAttributes' properties can only be
     /// JSXAttribute or JSXSpreadAttribute. ObjectLiteralExpression, on the other hand, can only have properties of type
     /// ObjectLiteralElement (e.g. PropertyAssignment, ShorthandPropertyAssignment etc.)
-    [<AllowNullLiteral>]
-    type ObjectLiteralExpressionBase<'T when 'T :> ObjectLiteralElement> =
+    type [<AllowNullLiteral>] ObjectLiteralExpressionBase<'T when 'T :> ObjectLiteralElement> =
         inherit PrimaryExpression
         inherit Declaration
         abstract properties: ResizeArray<'T>
 
-    [<AllowNullLiteral>]
-    type ObjectLiteralExpression =
-        inherit ObjectLiteralExpressionBase<ObjectLiteralElement>
+    type [<AllowNullLiteral>] ObjectLiteralExpression =
+        // inherit ObjectLiteralExpressionBase<ObjectLiteralElementLike>
+        inherit JSDocContainer
         abstract kind: SyntaxKind
 
     type EntityNameExpression =
         U2<Identifier, PropertyAccessEntityNameExpression>
 
-    type EntityNameOrEntityNameExpression = U2<EntityName, EntityNameExpression>
+    type EntityNameOrEntityNameExpression =
+        U2<EntityName, EntityNameExpression>
 
     type AccessExpression =
         U2<PropertyAccessExpression, ElementAccessExpression>
 
-    [<AllowNullLiteral>]
-    type PropertyAccessExpression =
+    type [<AllowNullLiteral>] PropertyAccessExpression =
         inherit MemberExpression
         inherit NamedDeclaration
+        inherit JSDocContainer
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract expression: LeftHandSideExpression
         abstract questionDotToken: QuestionDotToken option
-        abstract name: U2<Identifier, PrivateIdentifier>
+        abstract name: MemberName
 
-    [<AllowNullLiteral>]
-    type PropertyAccessChain =
+    type [<AllowNullLiteral>] PropertyAccessChain =
         inherit PropertyAccessExpression
         abstract _optionalChainBrand: obj option with get, set
-        abstract name: U2<Identifier, PrivateIdentifier>
+        abstract name: MemberName
 
-    [<AllowNullLiteral>]
-    type SuperPropertyAccessExpression =
+    type [<AllowNullLiteral>] SuperPropertyAccessExpression =
         inherit PropertyAccessExpression
         abstract expression: SuperExpression
 
     /// Brand for a PropertyAccessExpression which, like a QualifiedName, consists of a sequence of identifiers separated by dots.
-    [<AllowNullLiteral>]
-    type PropertyAccessEntityNameExpression =
+    type [<AllowNullLiteral>] PropertyAccessEntityNameExpression =
         inherit PropertyAccessExpression
         abstract _propertyAccessExpressionLikeQualifiedNameBrand: obj option with get, set
         abstract expression: EntityNameExpression
         abstract name: Identifier
 
-    [<AllowNullLiteral>]
-    type ElementAccessExpression =
+    type [<AllowNullLiteral>] ElementAccessExpression =
         inherit MemberExpression
+        inherit Declaration
+        inherit JSDocContainer
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract expression: LeftHandSideExpression
         abstract questionDotToken: QuestionDotToken option
         abstract argumentExpression: Expression
 
-    [<AllowNullLiteral>]
-    type ElementAccessChain =
+    type [<AllowNullLiteral>] ElementAccessChain =
         inherit ElementAccessExpression
         abstract _optionalChainBrand: obj option with get, set
 
-    [<AllowNullLiteral>]
-    type SuperElementAccessExpression =
+    type [<AllowNullLiteral>] SuperElementAccessExpression =
         inherit ElementAccessExpression
         abstract expression: SuperExpression
 
     type SuperProperty =
         U2<SuperPropertyAccessExpression, SuperElementAccessExpression>
 
-    [<AllowNullLiteral>]
-    type CallExpression =
+    type [<AllowNullLiteral>] CallExpression =
         inherit LeftHandSideExpression
         inherit Declaration
         abstract kind: SyntaxKind
@@ -4659,36 +3035,28 @@ module Ts =
         abstract typeArguments: ResizeArray<TypeNode> option
         abstract arguments: ResizeArray<Expression>
 
-    [<AllowNullLiteral>]
-    type CallChain =
+    type [<AllowNullLiteral>] CallChain =
         inherit CallExpression
         abstract _optionalChainBrand: obj option with get, set
 
     type OptionalChain =
         U4<PropertyAccessChain, ElementAccessChain, CallChain, NonNullChain>
 
-    [<AllowNullLiteral>]
-    type SuperCall =
+    type [<AllowNullLiteral>] SuperCall =
         inherit CallExpression
         abstract expression: SuperExpression
 
-    [<AllowNullLiteral>]
-    type ImportCall =
+    type [<AllowNullLiteral>] ImportCall =
         inherit CallExpression
         abstract expression: ImportExpression
 
-    [<AllowNullLiteral>]
-    type ExpressionWithTypeArguments =
+    type [<AllowNullLiteral>] ExpressionWithTypeArguments =
+        inherit MemberExpression
         inherit NodeWithTypeArguments
         abstract kind: SyntaxKind
-
-        abstract parent:
-            U3<HeritageClause, JSDocAugmentsTag, JSDocImplementsTag>
-
         abstract expression: LeftHandSideExpression
 
-    [<AllowNullLiteral>]
-    type NewExpression =
+    type [<AllowNullLiteral>] NewExpression =
         inherit PrimaryExpression
         inherit Declaration
         abstract kind: SyntaxKind
@@ -4696,8 +3064,7 @@ module Ts =
         abstract typeArguments: ResizeArray<TypeNode> option
         abstract arguments: ResizeArray<Expression> option
 
-    [<AllowNullLiteral>]
-    type TaggedTemplateExpression =
+    type [<AllowNullLiteral>] TaggedTemplateExpression =
         inherit MemberExpression
         abstract kind: SyntaxKind
         abstract tag: LeftHandSideExpression
@@ -4707,68 +3074,80 @@ module Ts =
     type CallLikeExpression =
         U5<CallExpression, NewExpression, TaggedTemplateExpression, Decorator, JsxOpeningLikeElement>
 
-    [<AllowNullLiteral>]
-    type AsExpression =
+    type [<AllowNullLiteral>] AsExpression =
         inherit Expression
         abstract kind: SyntaxKind
         abstract expression: Expression
         abstract ``type``: TypeNode
 
-    [<AllowNullLiteral>]
-    type TypeAssertion =
+    type [<AllowNullLiteral>] TypeAssertion =
         inherit UnaryExpression
         abstract kind: SyntaxKind
         abstract ``type``: TypeNode
         abstract expression: UnaryExpression
 
-    type AssertionExpression = U2<TypeAssertion, AsExpression>
+    type [<AllowNullLiteral>] SatisfiesExpression =
+        inherit Expression
+        abstract kind: SyntaxKind
+        abstract expression: Expression
+        abstract ``type``: TypeNode
 
-    [<AllowNullLiteral>]
-    type NonNullExpression =
+    type AssertionExpression =
+        U2<TypeAssertion, AsExpression>
+
+    type [<AllowNullLiteral>] NonNullExpression =
         inherit LeftHandSideExpression
         abstract kind: SyntaxKind
         abstract expression: Expression
 
-    [<AllowNullLiteral>]
-    type NonNullChain =
+    type [<AllowNullLiteral>] NonNullChain =
         inherit NonNullExpression
         abstract _optionalChainBrand: obj option with get, set
 
-    [<AllowNullLiteral>]
-    type MetaProperty =
+    type [<AllowNullLiteral>] MetaProperty =
         inherit PrimaryExpression
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract keywordToken: SyntaxKind
         abstract name: Identifier
 
-    [<AllowNullLiteral>]
-    type JsxElement =
+    type [<AllowNullLiteral>] JsxElement =
         inherit PrimaryExpression
         abstract kind: SyntaxKind
         abstract openingElement: JsxOpeningElement
         abstract children: ResizeArray<JsxChild>
         abstract closingElement: JsxClosingElement
 
-    type JsxOpeningLikeElement = U2<JsxSelfClosingElement, JsxOpeningElement>
+    type JsxOpeningLikeElement =
+        U2<JsxSelfClosingElement, JsxOpeningElement>
 
-    type JsxAttributeLike = U2<JsxAttribute, JsxSpreadAttribute>
+    type JsxAttributeLike =
+        U2<JsxAttribute, JsxSpreadAttribute>
+
+    type JsxAttributeName =
+        U2<Identifier, JsxNamespacedName>
 
     type JsxTagNameExpression =
-        U3<Identifier, ThisExpression, JsxTagNamePropertyAccess>
+        U4<Identifier, ThisExpression, JsxTagNamePropertyAccess, JsxNamespacedName>
 
-    [<AllowNullLiteral>]
-    type JsxTagNamePropertyAccess =
+    type [<AllowNullLiteral>] JsxTagNamePropertyAccess =
         inherit PropertyAccessExpression
-        abstract expression: JsxTagNameExpression
+        abstract expression: U3<Identifier, ThisExpression, JsxTagNamePropertyAccess>
 
-    [<AllowNullLiteral>]
-    type JsxAttributes =
-        inherit ObjectLiteralExpressionBase<JsxAttribute>
+    type [<AllowNullLiteral>] JsxAttributes =
+        inherit PrimaryExpression
+        inherit Declaration
+        abstract properties: ResizeArray<JsxAttributeLike>
         abstract kind: SyntaxKind
         abstract parent: JsxOpeningLikeElement
 
-    [<AllowNullLiteral>]
-    type JsxOpeningElement =
+    type [<AllowNullLiteral>] JsxNamespacedName =
+        inherit Node
+        abstract kind: SyntaxKind
+        abstract name: Identifier
+        abstract ``namespace``: Identifier
+
+    type [<AllowNullLiteral>] JsxOpeningElement =
         inherit Expression
         abstract kind: SyntaxKind
         abstract parent: JsxElement
@@ -4776,265 +3155,260 @@ module Ts =
         abstract typeArguments: ResizeArray<TypeNode> option
         abstract attributes: JsxAttributes
 
-    [<AllowNullLiteral>]
-    type JsxSelfClosingElement =
+    type [<AllowNullLiteral>] JsxSelfClosingElement =
         inherit PrimaryExpression
         abstract kind: SyntaxKind
         abstract tagName: JsxTagNameExpression
         abstract typeArguments: ResizeArray<TypeNode> option
         abstract attributes: JsxAttributes
 
-    [<AllowNullLiteral>]
-    type JsxFragment =
+    type [<AllowNullLiteral>] JsxFragment =
         inherit PrimaryExpression
         abstract kind: SyntaxKind
         abstract openingFragment: JsxOpeningFragment
         abstract children: ResizeArray<JsxChild>
         abstract closingFragment: JsxClosingFragment
 
-    [<AllowNullLiteral>]
-    type JsxOpeningFragment =
+    type [<AllowNullLiteral>] JsxOpeningFragment =
         inherit Expression
         abstract kind: SyntaxKind
         abstract parent: JsxFragment
 
-    [<AllowNullLiteral>]
-    type JsxClosingFragment =
+    type [<AllowNullLiteral>] JsxClosingFragment =
         inherit Expression
         abstract kind: SyntaxKind
         abstract parent: JsxFragment
 
-    [<AllowNullLiteral>]
-    type JsxAttribute =
-        inherit ObjectLiteralElement
+    type [<AllowNullLiteral>] JsxAttribute =
+        inherit Declaration
         abstract kind: SyntaxKind
         abstract parent: JsxAttributes
-        abstract name: Identifier
-        abstract initializer: U2<StringLiteral, JsxExpression> option
+        abstract name: JsxAttributeName
+        abstract initializer: JsxAttributeValue option
 
-    [<AllowNullLiteral>]
-    type JsxSpreadAttribute =
+    type JsxAttributeValue =
+        U5<StringLiteral, JsxExpression, JsxElement, JsxSelfClosingElement, JsxFragment>
+
+    type [<AllowNullLiteral>] JsxSpreadAttribute =
         inherit ObjectLiteralElement
         abstract kind: SyntaxKind
         abstract parent: JsxAttributes
         abstract expression: Expression
 
-    [<AllowNullLiteral>]
-    type JsxClosingElement =
+    type [<AllowNullLiteral>] JsxClosingElement =
         inherit Node
         abstract kind: SyntaxKind
         abstract parent: JsxElement
         abstract tagName: JsxTagNameExpression
 
-    [<AllowNullLiteral>]
-    type JsxExpression =
+    type [<AllowNullLiteral>] JsxExpression =
         inherit Expression
         abstract kind: SyntaxKind
-        abstract parent: U2<JsxElement, JsxAttributeLike>
+        abstract parent: U3<JsxElement, JsxFragment, JsxAttributeLike>
         abstract dotDotDotToken: Token<SyntaxKind> option
         abstract expression: Expression option
 
-    [<AllowNullLiteral>]
-    type JsxText =
+    type [<AllowNullLiteral>] JsxText =
         inherit LiteralLikeNode
         abstract kind: SyntaxKind
-        abstract parent: JsxElement
+        abstract parent: U2<JsxElement, JsxFragment>
         abstract containsOnlyTriviaWhiteSpaces: bool
 
     type JsxChild =
         U5<JsxText, JsxExpression, JsxElement, JsxSelfClosingElement, JsxFragment>
 
-    [<AllowNullLiteral>]
-    type Statement =
+    type [<AllowNullLiteral>] Statement =
         inherit Node
+        inherit JSDocContainer
         abstract _statementBrand: obj option with get, set
 
-    [<AllowNullLiteral>]
-    type NotEmittedStatement =
+    type [<AllowNullLiteral>] NotEmittedStatement =
         inherit Statement
         abstract kind: SyntaxKind
 
     /// A list of comma-separated expressions. This node is only created by transformations.
-    [<AllowNullLiteral>]
-    type CommaListExpression =
+    type [<AllowNullLiteral>] CommaListExpression =
         inherit Expression
         abstract kind: SyntaxKind
         abstract elements: ResizeArray<Expression>
 
-    [<AllowNullLiteral>]
-    type EmptyStatement =
+    type [<AllowNullLiteral>] EmptyStatement =
         inherit Statement
         abstract kind: SyntaxKind
 
-    [<AllowNullLiteral>]
-    type DebuggerStatement =
+    type [<AllowNullLiteral>] DebuggerStatement =
         inherit Statement
+        inherit FlowContainer
         abstract kind: SyntaxKind
 
-    [<AllowNullLiteral>]
-    type MissingDeclaration =
+    type [<AllowNullLiteral>] MissingDeclaration =
         inherit DeclarationStatement
+        inherit PrimaryExpression
         abstract kind: SyntaxKind
         abstract name: Identifier option
 
-    type BlockLike = U4<SourceFile, Block, ModuleBlock, CaseOrDefaultClause>
+    type BlockLike =
+        U4<SourceFile, Block, ModuleBlock, CaseOrDefaultClause>
 
-    [<AllowNullLiteral>]
-    type Block =
+    type [<AllowNullLiteral>] Block =
         inherit Statement
+        inherit LocalsContainer
         abstract kind: SyntaxKind
         abstract statements: ResizeArray<Statement>
 
-    [<AllowNullLiteral>]
-    type VariableStatement =
+    type [<AllowNullLiteral>] VariableStatement =
         inherit Statement
-        inherit JSDocContainer
+        inherit FlowContainer
         abstract kind: SyntaxKind
+        abstract modifiers: ResizeArray<ModifierLike> option
         abstract declarationList: VariableDeclarationList
 
-    [<AllowNullLiteral>]
-    type ExpressionStatement =
+    type [<AllowNullLiteral>] ExpressionStatement =
         inherit Statement
-        inherit JSDocContainer
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract expression: Expression
 
-    [<AllowNullLiteral>]
-    type IfStatement =
+    type [<AllowNullLiteral>] IfStatement =
         inherit Statement
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract expression: Expression
         abstract thenStatement: Statement
         abstract elseStatement: Statement option
 
-    [<AllowNullLiteral>]
-    type IterationStatement =
+    type [<AllowNullLiteral>] IterationStatement =
         inherit Statement
         abstract statement: Statement
 
-    [<AllowNullLiteral>]
-    type DoStatement =
+    type [<AllowNullLiteral>] DoStatement =
         inherit IterationStatement
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract expression: Expression
 
-    [<AllowNullLiteral>]
-    type WhileStatement =
+    type [<AllowNullLiteral>] WhileStatement =
         inherit IterationStatement
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract expression: Expression
 
-    type ForInitializer = U2<VariableDeclarationList, Expression>
+    type ForInitializer =
+        U2<VariableDeclarationList, Expression>
 
-    [<AllowNullLiteral>]
-    type ForStatement =
+    type [<AllowNullLiteral>] ForStatement =
         inherit IterationStatement
+        inherit LocalsContainer
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract initializer: ForInitializer option
         abstract condition: Expression option
         abstract incrementor: Expression option
 
-    type ForInOrOfStatement = U2<ForInStatement, ForOfStatement>
+    type ForInOrOfStatement =
+        U2<ForInStatement, ForOfStatement>
 
-    [<AllowNullLiteral>]
-    type ForInStatement =
+    type [<AllowNullLiteral>] ForInStatement =
         inherit IterationStatement
+        inherit LocalsContainer
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract initializer: ForInitializer
         abstract expression: Expression
 
-    [<AllowNullLiteral>]
-    type ForOfStatement =
+    type [<AllowNullLiteral>] ForOfStatement =
         inherit IterationStatement
+        inherit LocalsContainer
+        inherit FlowContainer
         abstract kind: SyntaxKind
-        abstract awaitModifier: AwaitKeywordToken option
+        abstract awaitModifier: AwaitKeyword option
         abstract initializer: ForInitializer
         abstract expression: Expression
 
-    [<AllowNullLiteral>]
-    type BreakStatement =
+    type [<AllowNullLiteral>] BreakStatement =
         inherit Statement
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract label: Identifier option
 
-    [<AllowNullLiteral>]
-    type ContinueStatement =
+    type [<AllowNullLiteral>] ContinueStatement =
         inherit Statement
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract label: Identifier option
 
-    type BreakOrContinueStatement = U2<BreakStatement, ContinueStatement>
+    type BreakOrContinueStatement =
+        U2<BreakStatement, ContinueStatement>
 
-    [<AllowNullLiteral>]
-    type ReturnStatement =
+    type [<AllowNullLiteral>] ReturnStatement =
         inherit Statement
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract expression: Expression option
 
-    [<AllowNullLiteral>]
-    type WithStatement =
+    type [<AllowNullLiteral>] WithStatement =
         inherit Statement
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract expression: Expression
         abstract statement: Statement
 
-    [<AllowNullLiteral>]
-    type SwitchStatement =
+    type [<AllowNullLiteral>] SwitchStatement =
         inherit Statement
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract expression: Expression
         abstract caseBlock: CaseBlock
         abstract possiblyExhaustive: bool option with get, set
 
-    [<AllowNullLiteral>]
-    type CaseBlock =
+    type [<AllowNullLiteral>] CaseBlock =
         inherit Node
+        inherit LocalsContainer
         abstract kind: SyntaxKind
         abstract parent: SwitchStatement
         abstract clauses: ResizeArray<CaseOrDefaultClause>
 
-    [<AllowNullLiteral>]
-    type CaseClause =
+    type [<AllowNullLiteral>] CaseClause =
         inherit Node
+        inherit JSDocContainer
         abstract kind: SyntaxKind
         abstract parent: CaseBlock
         abstract expression: Expression
         abstract statements: ResizeArray<Statement>
 
-    [<AllowNullLiteral>]
-    type DefaultClause =
+    type [<AllowNullLiteral>] DefaultClause =
         inherit Node
         abstract kind: SyntaxKind
         abstract parent: CaseBlock
         abstract statements: ResizeArray<Statement>
 
-    type CaseOrDefaultClause = U2<CaseClause, DefaultClause>
+    type CaseOrDefaultClause =
+        U2<CaseClause, DefaultClause>
 
-    [<AllowNullLiteral>]
-    type LabeledStatement =
+    type [<AllowNullLiteral>] LabeledStatement =
         inherit Statement
-        inherit JSDocContainer
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract label: Identifier
         abstract statement: Statement
 
-    [<AllowNullLiteral>]
-    type ThrowStatement =
+    type [<AllowNullLiteral>] ThrowStatement =
         inherit Statement
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract expression: Expression
 
-    [<AllowNullLiteral>]
-    type TryStatement =
+    type [<AllowNullLiteral>] TryStatement =
         inherit Statement
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract tryBlock: Block
         abstract catchClause: CatchClause option
         abstract finallyBlock: Block option
 
-    [<AllowNullLiteral>]
-    type CatchClause =
+    type [<AllowNullLiteral>] CatchClause =
         inherit Node
+        inherit LocalsContainer
         abstract kind: SyntaxKind
         abstract parent: TryStatement
         abstract variableDeclaration: VariableDeclaration option
@@ -5049,8 +3423,7 @@ module Ts =
     type DeclarationWithTypeParameterChildren =
         U5<SignatureDeclaration, ClassLikeDeclaration, InterfaceDeclaration, TypeAliasDeclaration, JSDocTemplateTag>
 
-    [<AllowNullLiteral>]
-    type ClassLikeDeclarationBase =
+    type [<AllowNullLiteral>] ClassLikeDeclarationBase =
         inherit NamedDeclaration
         inherit JSDocContainer
         abstract kind: SyntaxKind
@@ -5059,64 +3432,62 @@ module Ts =
         abstract heritageClauses: ResizeArray<HeritageClause> option
         abstract members: ResizeArray<ClassElement>
 
-    [<AllowNullLiteral>]
-    type ClassDeclaration =
+    type [<AllowNullLiteral>] ClassDeclaration =
         inherit ClassLikeDeclarationBase
         inherit DeclarationStatement
         abstract kind: SyntaxKind
+        abstract modifiers: ResizeArray<ModifierLike> option
         /// <summary>May be undefined in <c>export default class { ... }</c>.</summary>
         abstract name: Identifier option
 
-    [<AllowNullLiteral>]
-    type ClassExpression =
+    type [<AllowNullLiteral>] ClassExpression =
         inherit ClassLikeDeclarationBase
         inherit PrimaryExpression
         abstract kind: SyntaxKind
+        abstract modifiers: ResizeArray<ModifierLike> option
 
-    type ClassLikeDeclaration = U2<ClassDeclaration, ClassExpression>
+    type ClassLikeDeclaration =
+        U2<ClassDeclaration, ClassExpression>
 
-    [<AllowNullLiteral>]
-    type ClassElement =
+    type [<AllowNullLiteral>] ClassElement =
         inherit NamedDeclaration
         abstract _classElementBrand: obj option with get, set
         abstract name: PropertyName option
 
-    [<AllowNullLiteral>]
-    type TypeElement =
+    type [<AllowNullLiteral>] TypeElement =
         inherit NamedDeclaration
         abstract _typeElementBrand: obj option with get, set
         abstract name: PropertyName option
         abstract questionToken: QuestionToken option
 
-    [<AllowNullLiteral>]
-    type InterfaceDeclaration =
+    type [<AllowNullLiteral>] InterfaceDeclaration =
         inherit DeclarationStatement
         inherit JSDocContainer
         abstract kind: SyntaxKind
+        abstract modifiers: ResizeArray<ModifierLike> option
         abstract name: Identifier
         abstract typeParameters: ResizeArray<TypeParameterDeclaration> option
         abstract heritageClauses: ResizeArray<HeritageClause> option
         abstract members: ResizeArray<TypeElement>
 
-    [<AllowNullLiteral>]
-    type HeritageClause =
+    type [<AllowNullLiteral>] HeritageClause =
         inherit Node
         abstract kind: SyntaxKind
         abstract parent: U2<InterfaceDeclaration, ClassLikeDeclaration>
         abstract token: SyntaxKind
         abstract types: ResizeArray<ExpressionWithTypeArguments>
 
-    [<AllowNullLiteral>]
-    type TypeAliasDeclaration =
+    type [<AllowNullLiteral>] TypeAliasDeclaration =
         inherit DeclarationStatement
         inherit JSDocContainer
+        inherit LocalsContainer
         abstract kind: SyntaxKind
+        abstract modifiers: ResizeArray<ModifierLike> option
         abstract name: Identifier
         abstract typeParameters: ResizeArray<TypeParameterDeclaration> option
         abstract ``type``: TypeNode
 
-    [<AllowNullLiteral>]
-    type EnumMember =
+    type [<AllowNullLiteral>] EnumMember =
         inherit NamedDeclaration
         inherit JSDocContainer
         abstract kind: SyntaxKind
@@ -5124,89 +3495,92 @@ module Ts =
         abstract name: PropertyName
         abstract initializer: Expression option
 
-    [<AllowNullLiteral>]
-    type EnumDeclaration =
+    type [<AllowNullLiteral>] EnumDeclaration =
         inherit DeclarationStatement
         inherit JSDocContainer
         abstract kind: SyntaxKind
+        abstract modifiers: ResizeArray<ModifierLike> option
         abstract name: Identifier
         abstract members: ResizeArray<EnumMember>
 
-    type ModuleName = U2<Identifier, StringLiteral>
+    type ModuleName =
+        U2<Identifier, StringLiteral>
 
-    type ModuleBody = U2<NamespaceBody, JSDocNamespaceBody>
+    type ModuleBody =
+        U2<NamespaceBody, JSDocNamespaceBody>
 
-    [<AllowNullLiteral>]
-    type ModuleDeclaration =
+    type [<AllowNullLiteral>] ModuleDeclaration =
         inherit DeclarationStatement
         inherit JSDocContainer
+        inherit LocalsContainer
         abstract kind: SyntaxKind
         abstract parent: U2<ModuleBody, SourceFile>
+        abstract modifiers: ResizeArray<ModifierLike> option
         abstract name: ModuleName
         abstract body: U2<ModuleBody, JSDocNamespaceDeclaration> option
 
-    type NamespaceBody = U2<ModuleBlock, NamespaceDeclaration>
+    type NamespaceBody =
+        U2<ModuleBlock, NamespaceDeclaration>
 
-    [<AllowNullLiteral>]
-    type NamespaceDeclaration =
+    type [<AllowNullLiteral>] NamespaceDeclaration =
         inherit ModuleDeclaration
         abstract name: Identifier
         abstract body: NamespaceBody
 
-    type JSDocNamespaceBody = U2<Identifier, JSDocNamespaceDeclaration>
+    type JSDocNamespaceBody =
+        U2<Identifier, JSDocNamespaceDeclaration>
 
-    [<AllowNullLiteral>]
-    type JSDocNamespaceDeclaration =
+    type [<AllowNullLiteral>] JSDocNamespaceDeclaration =
         inherit ModuleDeclaration
         abstract name: Identifier
         abstract body: JSDocNamespaceBody option
 
-    [<AllowNullLiteral>]
-    type ModuleBlock =
+    type [<AllowNullLiteral>] ModuleBlock =
         inherit Node
         inherit Statement
         abstract kind: SyntaxKind
         abstract parent: ModuleDeclaration
         abstract statements: ResizeArray<Statement>
 
-    type ModuleReference = U2<EntityName, ExternalModuleReference>
+    type ModuleReference =
+        U2<EntityName, ExternalModuleReference>
 
     /// One of:
     /// - import x = require("mod");
     /// - import x = M.x;
-    [<AllowNullLiteral>]
-    type ImportEqualsDeclaration =
+    type [<AllowNullLiteral>] ImportEqualsDeclaration =
         inherit DeclarationStatement
         inherit JSDocContainer
         abstract kind: SyntaxKind
         abstract parent: U2<SourceFile, ModuleBlock>
+        abstract modifiers: ResizeArray<ModifierLike> option
         abstract name: Identifier
         abstract isTypeOnly: bool
         abstract moduleReference: ModuleReference
 
-    [<AllowNullLiteral>]
-    type ExternalModuleReference =
+    type [<AllowNullLiteral>] ExternalModuleReference =
         inherit Node
         abstract kind: SyntaxKind
         abstract parent: ImportEqualsDeclaration
         abstract expression: Expression
 
-    [<AllowNullLiteral>]
-    type ImportDeclaration =
+    type [<AllowNullLiteral>] ImportDeclaration =
         inherit Statement
-        inherit JSDocContainer
         abstract kind: SyntaxKind
         abstract parent: U2<SourceFile, ModuleBlock>
+        abstract modifiers: ResizeArray<ModifierLike> option
         abstract importClause: ImportClause option
         /// If this is not a StringLiteral it will be a grammar error.
         abstract moduleSpecifier: Expression
+        abstract assertClause: AssertClause option
 
-    type NamedImportBindings = U2<NamespaceImport, NamedImports>
+    type NamedImportBindings =
+        U2<NamespaceImport, NamedImports>
 
-    type NamedExportBindings = U2<NamespaceExport, NamedExports>
+    type NamedExportBindings =
+        U2<NamespaceExport, NamedExports>
 
-    [<AllowNullLiteral>]
-    type ImportClause =
+    type [<AllowNullLiteral>] ImportClause =
         inherit NamedDeclaration
         abstract kind: SyntaxKind
         abstract parent: ImportDeclaration
@@ -5214,174 +3588,202 @@ module Ts =
         abstract name: Identifier option
         abstract namedBindings: NamedImportBindings option
 
-    [<AllowNullLiteral>]
-    type NamespaceImport =
+    type AssertionKey =
+        U2<Identifier, StringLiteral>
+
+    type [<AllowNullLiteral>] AssertEntry =
+        inherit Node
+        abstract kind: SyntaxKind
+        abstract parent: AssertClause
+        abstract name: AssertionKey
+        abstract value: Expression
+
+    type [<AllowNullLiteral>] AssertClause =
+        inherit Node
+        abstract kind: SyntaxKind
+        abstract parent: U2<ImportDeclaration, ExportDeclaration>
+        abstract elements: ResizeArray<AssertEntry>
+        abstract multiLine: bool option
+
+    type [<AllowNullLiteral>] NamespaceImport =
         inherit NamedDeclaration
         abstract kind: SyntaxKind
         abstract parent: ImportClause
         abstract name: Identifier
 
-    [<AllowNullLiteral>]
-    type NamespaceExport =
+    type [<AllowNullLiteral>] NamespaceExport =
         inherit NamedDeclaration
         abstract kind: SyntaxKind
         abstract parent: ExportDeclaration
         abstract name: Identifier
 
-    [<AllowNullLiteral>]
-    type NamespaceExportDeclaration =
+    type [<AllowNullLiteral>] NamespaceExportDeclaration =
         inherit DeclarationStatement
         inherit JSDocContainer
         abstract kind: SyntaxKind
         abstract name: Identifier
 
-    [<AllowNullLiteral>]
-    type ExportDeclaration =
+    type [<AllowNullLiteral>] ExportDeclaration =
         inherit DeclarationStatement
         inherit JSDocContainer
         abstract kind: SyntaxKind
         abstract parent: U2<SourceFile, ModuleBlock>
+        abstract modifiers: ResizeArray<ModifierLike> option
         abstract isTypeOnly: bool
         /// <summary>Will not be assigned in the case of <c>export * from "foo";</c></summary>
         abstract exportClause: NamedExportBindings option
         /// If this is not a StringLiteral it will be a grammar error.
         abstract moduleSpecifier: Expression option
+        abstract assertClause: AssertClause option
 
-    [<AllowNullLiteral>]
-    type NamedImports =
+    type [<AllowNullLiteral>] NamedImports =
         inherit Node
         abstract kind: SyntaxKind
         abstract parent: ImportClause
         abstract elements: ResizeArray<ImportSpecifier>
 
-    [<AllowNullLiteral>]
-    type NamedExports =
+    type [<AllowNullLiteral>] NamedExports =
         inherit Node
         abstract kind: SyntaxKind
         abstract parent: ExportDeclaration
         abstract elements: ResizeArray<ExportSpecifier>
 
-    type NamedImportsOrExports = U2<NamedImports, NamedExports>
+    type NamedImportsOrExports =
+        U2<NamedImports, NamedExports>
 
-    [<AllowNullLiteral>]
-    type ImportSpecifier =
+    type [<AllowNullLiteral>] ImportSpecifier =
         inherit NamedDeclaration
         abstract kind: SyntaxKind
         abstract parent: NamedImports
         abstract propertyName: Identifier option
         abstract name: Identifier
+        abstract isTypeOnly: bool
 
-    [<AllowNullLiteral>]
-    type ExportSpecifier =
+    type [<AllowNullLiteral>] ExportSpecifier =
         inherit NamedDeclaration
+        inherit JSDocContainer
         abstract kind: SyntaxKind
         abstract parent: NamedExports
+        abstract isTypeOnly: bool
         abstract propertyName: Identifier option
         abstract name: Identifier
 
-    type ImportOrExportSpecifier = U2<ImportSpecifier, ExportSpecifier>
+    type ImportOrExportSpecifier =
+        U2<ImportSpecifier, ExportSpecifier>
 
     type TypeOnlyCompatibleAliasDeclaration =
-        U4<ImportClause, ImportEqualsDeclaration, NamespaceImport, ImportOrExportSpecifier>
+        U6<ImportClause, ImportEqualsDeclaration, NamespaceImport, ImportOrExportSpecifier, ExportDeclaration, NamespaceExport>
+
+    type TypeOnlyImportDeclaration =
+        obj
+
+    type TypeOnlyExportDeclaration =
+        obj
+
+    type TypeOnlyAliasDeclaration =
+        U2<TypeOnlyImportDeclaration, TypeOnlyExportDeclaration>
 
     /// <summary>
     /// This is either an <c>export =</c> or an <c>export default</c> declaration.
     /// Unless <c>isExportEquals</c> is set, this node was parsed as an <c>export default</c>.
     /// </summary>
-    [<AllowNullLiteral>]
-    type ExportAssignment =
+    type [<AllowNullLiteral>] ExportAssignment =
         inherit DeclarationStatement
         inherit JSDocContainer
         abstract kind: SyntaxKind
         abstract parent: SourceFile
+        abstract modifiers: ResizeArray<ModifierLike> option
         abstract isExportEquals: bool option
         abstract expression: Expression
 
-    [<AllowNullLiteral>]
-    type FileReference =
+    type [<AllowNullLiteral>] FileReference =
         inherit TextRange
         abstract fileName: string with get, set
+        abstract resolutionMode: ResolutionMode option with get, set
 
-    [<AllowNullLiteral>]
-    type CheckJsDirective =
+    type [<AllowNullLiteral>] CheckJsDirective =
         inherit TextRange
         abstract enabled: bool with get, set
 
-    type CommentKind = SyntaxKind
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia
+    /// </code>
+    /// </remarks>
+    type CommentKind =
+        SyntaxKind
 
-    [<AllowNullLiteral>]
-    type CommentRange =
+    type [<AllowNullLiteral>] CommentRange =
         inherit TextRange
         abstract hasTrailingNewLine: bool option with get, set
         abstract kind: CommentKind with get, set
 
-    [<AllowNullLiteral>]
-    type SynthesizedComment =
+    type [<AllowNullLiteral>] SynthesizedComment =
         inherit CommentRange
         abstract text: string with get, set
-        abstract pos: obj with get, set
-        abstract ``end``: obj with get, set
+        abstract pos: int with get, set
+        abstract ``end``: int with get, set
         abstract hasLeadingNewline: bool option with get, set
 
-    [<AllowNullLiteral>]
-    type JSDocTypeExpression =
+    type [<AllowNullLiteral>] JSDocTypeExpression =
         inherit TypeNode
         abstract kind: SyntaxKind
         abstract ``type``: TypeNode
 
-    [<AllowNullLiteral>]
-    type JSDocNameReference =
+    type [<AllowNullLiteral>] JSDocNameReference =
         inherit Node
         abstract kind: SyntaxKind
-        abstract name: EntityName
+        abstract name: U2<EntityName, JSDocMemberName>
 
-    [<AllowNullLiteral>]
-    type JSDocType =
+    /// Class#method reference in JSDoc
+    type [<AllowNullLiteral>] JSDocMemberName =
+        inherit Node
+        abstract kind: SyntaxKind
+        abstract left: U2<EntityName, JSDocMemberName>
+        abstract right: Identifier
+
+    type [<AllowNullLiteral>] JSDocType =
         inherit TypeNode
         abstract _jsDocTypeBrand: obj option with get, set
 
-    [<AllowNullLiteral>]
-    type JSDocAllType =
+    type [<AllowNullLiteral>] JSDocAllType =
         inherit JSDocType
         abstract kind: SyntaxKind
 
-    [<AllowNullLiteral>]
-    type JSDocUnknownType =
+    type [<AllowNullLiteral>] JSDocUnknownType =
         inherit JSDocType
         abstract kind: SyntaxKind
 
-    [<AllowNullLiteral>]
-    type JSDocNonNullableType =
+    type [<AllowNullLiteral>] JSDocNonNullableType =
+        inherit JSDocType
+        abstract kind: SyntaxKind
+        abstract ``type``: TypeNode
+        abstract postfix: bool
+
+    type [<AllowNullLiteral>] JSDocNullableType =
+        inherit JSDocType
+        abstract kind: SyntaxKind
+        abstract ``type``: TypeNode
+        abstract postfix: bool
+
+    type [<AllowNullLiteral>] JSDocOptionalType =
         inherit JSDocType
         abstract kind: SyntaxKind
         abstract ``type``: TypeNode
 
-    [<AllowNullLiteral>]
-    type JSDocNullableType =
-        inherit JSDocType
-        abstract kind: SyntaxKind
-        abstract ``type``: TypeNode
-
-    [<AllowNullLiteral>]
-    type JSDocOptionalType =
-        inherit JSDocType
-        abstract kind: SyntaxKind
-        abstract ``type``: TypeNode
-
-    [<AllowNullLiteral>]
-    type JSDocFunctionType =
+    type [<AllowNullLiteral>] JSDocFunctionType =
         inherit JSDocType
         inherit SignatureDeclarationBase
+        inherit LocalsContainer
         abstract kind: SyntaxKind
 
-    [<AllowNullLiteral>]
-    type JSDocVariadicType =
+    type [<AllowNullLiteral>] JSDocVariadicType =
         inherit JSDocType
         abstract kind: SyntaxKind
         abstract ``type``: TypeNode
 
-    [<AllowNullLiteral>]
-    type JSDocNamepathType =
+    type [<AllowNullLiteral>] JSDocNamepathType =
         inherit JSDocType
         abstract kind: SyntaxKind
         abstract ``type``: TypeNode
@@ -5389,23 +3791,46 @@ module Ts =
     type JSDocTypeReferencingNode =
         U4<JSDocVariadicType, JSDocOptionalType, JSDocNullableType, JSDocNonNullableType>
 
-    [<AllowNullLiteral>]
-    type JSDoc =
+    type [<AllowNullLiteral>] JSDoc =
         inherit Node
         abstract kind: SyntaxKind
         abstract parent: HasJSDoc
         abstract tags: ResizeArray<JSDocTag> option
-        abstract comment: string option
+        abstract comment: U2<string, ResizeArray<JSDocComment>> option
 
-    [<AllowNullLiteral>]
-    type JSDocTag =
+    type [<AllowNullLiteral>] JSDocTag =
         inherit Node
         abstract parent: U2<JSDoc, JSDocTypeLiteral>
         abstract tagName: Identifier
-        abstract comment: string option
+        abstract comment: U2<string, ResizeArray<JSDocComment>> option
 
-    [<AllowNullLiteral>]
-    type JSDocUnknownTag =
+    type [<AllowNullLiteral>] JSDocLink =
+        inherit Node
+        abstract kind: SyntaxKind
+        abstract name: U2<EntityName, JSDocMemberName> option
+        abstract text: string with get, set
+
+    type [<AllowNullLiteral>] JSDocLinkCode =
+        inherit Node
+        abstract kind: SyntaxKind
+        abstract name: U2<EntityName, JSDocMemberName> option
+        abstract text: string with get, set
+
+    type [<AllowNullLiteral>] JSDocLinkPlain =
+        inherit Node
+        abstract kind: SyntaxKind
+        abstract name: U2<EntityName, JSDocMemberName> option
+        abstract text: string with get, set
+
+    type JSDocComment =
+        U4<JSDocText, JSDocLink, JSDocLinkCode, JSDocLinkPlain>
+
+    type [<AllowNullLiteral>] JSDocText =
+        inherit Node
+        abstract kind: SyntaxKind
+        abstract text: string with get, set
+
+    type [<AllowNullLiteral>] JSDocUnknownTag =
         inherit JSDocTag
         abstract kind: SyntaxKind
 
@@ -5413,125 +3838,124 @@ module Ts =
     /// Note that <c>@extends</c> is a synonym of <c>@augments</c>.
     /// Both tags are represented by this interface.
     /// </summary>
-    [<AllowNullLiteral>]
-    type JSDocAugmentsTag =
+    type [<AllowNullLiteral>] JSDocAugmentsTag =
         inherit JSDocTag
         abstract kind: SyntaxKind
         abstract ``class``: obj
 
-    [<AllowNullLiteral>]
-    type JSDocImplementsTag =
+    type [<AllowNullLiteral>] JSDocImplementsTag =
         inherit JSDocTag
         abstract kind: SyntaxKind
         abstract ``class``: obj
 
-    [<AllowNullLiteral>]
-    type JSDocAuthorTag =
+    type [<AllowNullLiteral>] JSDocAuthorTag =
         inherit JSDocTag
         abstract kind: SyntaxKind
 
-    [<AllowNullLiteral>]
-    type JSDocDeprecatedTag =
+    type [<AllowNullLiteral>] JSDocDeprecatedTag =
         inherit JSDocTag
         abstract kind: SyntaxKind with get, set
 
-    [<AllowNullLiteral>]
-    type JSDocClassTag =
+    type [<AllowNullLiteral>] JSDocClassTag =
         inherit JSDocTag
         abstract kind: SyntaxKind
 
-    [<AllowNullLiteral>]
-    type JSDocPublicTag =
+    type [<AllowNullLiteral>] JSDocPublicTag =
         inherit JSDocTag
         abstract kind: SyntaxKind
 
-    [<AllowNullLiteral>]
-    type JSDocPrivateTag =
+    type [<AllowNullLiteral>] JSDocPrivateTag =
         inherit JSDocTag
         abstract kind: SyntaxKind
 
-    [<AllowNullLiteral>]
-    type JSDocProtectedTag =
+    type [<AllowNullLiteral>] JSDocProtectedTag =
         inherit JSDocTag
         abstract kind: SyntaxKind
 
-    [<AllowNullLiteral>]
-    type JSDocReadonlyTag =
+    type [<AllowNullLiteral>] JSDocReadonlyTag =
         inherit JSDocTag
         abstract kind: SyntaxKind
 
-    [<AllowNullLiteral>]
-    type JSDocEnumTag =
+    type [<AllowNullLiteral>] JSDocOverrideTag =
+        inherit JSDocTag
+        abstract kind: SyntaxKind
+
+    type [<AllowNullLiteral>] JSDocEnumTag =
         inherit JSDocTag
         inherit Declaration
+        inherit LocalsContainer
         abstract kind: SyntaxKind
         abstract parent: JSDoc
         abstract typeExpression: JSDocTypeExpression
 
-    [<AllowNullLiteral>]
-    type JSDocThisTag =
+    type [<AllowNullLiteral>] JSDocThisTag =
         inherit JSDocTag
         abstract kind: SyntaxKind
         abstract typeExpression: JSDocTypeExpression
 
-    [<AllowNullLiteral>]
-    type JSDocTemplateTag =
+    type [<AllowNullLiteral>] JSDocTemplateTag =
         inherit JSDocTag
         abstract kind: SyntaxKind
         abstract ``constraint``: JSDocTypeExpression option
         abstract typeParameters: ResizeArray<TypeParameterDeclaration>
 
-    [<AllowNullLiteral>]
-    type JSDocSeeTag =
+    type [<AllowNullLiteral>] JSDocSeeTag =
         inherit JSDocTag
         abstract kind: SyntaxKind
         abstract name: JSDocNameReference option
 
-    [<AllowNullLiteral>]
-    type JSDocReturnTag =
+    type [<AllowNullLiteral>] JSDocReturnTag =
         inherit JSDocTag
         abstract kind: SyntaxKind
         abstract typeExpression: JSDocTypeExpression option
 
-    [<AllowNullLiteral>]
-    type JSDocTypeTag =
+    type [<AllowNullLiteral>] JSDocTypeTag =
         inherit JSDocTag
         abstract kind: SyntaxKind
         abstract typeExpression: JSDocTypeExpression
 
-    [<AllowNullLiteral>]
-    type JSDocTypedefTag =
+    type [<AllowNullLiteral>] JSDocTypedefTag =
         inherit JSDocTag
         inherit NamedDeclaration
+        inherit LocalsContainer
         abstract kind: SyntaxKind
         abstract parent: JSDoc
         abstract fullName: U2<JSDocNamespaceDeclaration, Identifier> option
         abstract name: Identifier option
+        abstract typeExpression: U2<JSDocTypeExpression, JSDocTypeLiteral> option
 
-        abstract typeExpression:
-            U2<JSDocTypeExpression, JSDocTypeLiteral> option
-
-    [<AllowNullLiteral>]
-    type JSDocCallbackTag =
+    type [<AllowNullLiteral>] JSDocCallbackTag =
         inherit JSDocTag
         inherit NamedDeclaration
+        inherit LocalsContainer
         abstract kind: SyntaxKind
         abstract parent: JSDoc
         abstract fullName: U2<JSDocNamespaceDeclaration, Identifier> option
         abstract name: Identifier option
         abstract typeExpression: JSDocSignature
 
-    [<AllowNullLiteral>]
-    type JSDocSignature =
+    type [<AllowNullLiteral>] JSDocOverloadTag =
+        inherit JSDocTag
+        abstract kind: SyntaxKind
+        abstract parent: JSDoc
+        abstract typeExpression: JSDocSignature
+
+    type [<AllowNullLiteral>] JSDocThrowsTag =
+        inherit JSDocTag
+        abstract kind: SyntaxKind
+        abstract typeExpression: JSDocTypeExpression option
+
+    type [<AllowNullLiteral>] JSDocSignature =
         inherit JSDocType
         inherit Declaration
+        inherit JSDocContainer
+        inherit LocalsContainer
         abstract kind: SyntaxKind
         abstract typeParameters: ResizeArray<JSDocTemplateTag> option
         abstract parameters: ResizeArray<JSDocParameterTag>
         abstract ``type``: JSDocReturnTag option
 
-    [<AllowNullLiteral>]
-    type JSDocPropertyLikeTag =
+    type [<AllowNullLiteral>] JSDocPropertyLikeTag =
         inherit JSDocTag
         inherit Declaration
         abstract parent: JSDoc
@@ -5541,26 +3965,28 @@ module Ts =
         abstract isNameFirst: bool
         abstract isBracketed: bool
 
-    [<AllowNullLiteral>]
-    type JSDocPropertyTag =
+    type [<AllowNullLiteral>] JSDocPropertyTag =
         inherit JSDocPropertyLikeTag
         abstract kind: SyntaxKind
 
-    [<AllowNullLiteral>]
-    type JSDocParameterTag =
+    type [<AllowNullLiteral>] JSDocParameterTag =
         inherit JSDocPropertyLikeTag
         abstract kind: SyntaxKind
 
-    [<AllowNullLiteral>]
-    type JSDocTypeLiteral =
+    type [<AllowNullLiteral>] JSDocTypeLiteral =
         inherit JSDocType
+        inherit Declaration
         abstract kind: SyntaxKind
         abstract jsDocPropertyTags: ResizeArray<JSDocPropertyLikeTag> option
         /// If true, then this type literal represents an *array* of its type.
         abstract isArrayType: bool
 
-    [<RequireQualifiedAccess>]
-    type FlowFlags =
+    type [<AllowNullLiteral>] JSDocSatisfiesTag =
+        inherit JSDocTag
+        abstract kind: SyntaxKind
+        abstract typeExpression: JSDocTypeExpression
+
+    type [<RequireQualifiedAccess>] FlowFlags =
         | Unreachable = 1
         | Start = 2
         | BranchLabel = 4
@@ -5578,79 +4004,81 @@ module Ts =
         | Condition = 96
 
     type FlowNode =
-        U8<FlowStart, FlowLabel, FlowAssignment, FlowCall, FlowCondition, FlowSwitchClause, FlowArrayMutation, FlowReduceLabel>
+        U8<FlowStart, FlowLabel, FlowAssignment, FlowCondition, FlowSwitchClause, FlowArrayMutation, FlowCall, FlowReduceLabel>
 
-    [<AllowNullLiteral>]
-    type FlowNodeBase =
+    type [<AllowNullLiteral>] FlowNodeBase =
         abstract flags: FlowFlags with get, set
         abstract id: float option with get, set
 
-    [<AllowNullLiteral>]
-    type FlowStart =
+    type [<AllowNullLiteral>] FlowStart =
         inherit FlowNodeBase
+        abstract node: U5<FunctionExpression, ArrowFunction, MethodDeclaration, GetAccessorDeclaration, SetAccessorDeclaration> option with get, set
 
-        abstract node:
-            U3<FunctionExpression, ArrowFunction, MethodDeclaration> option with get, set
-
-    [<AllowNullLiteral>]
-    type FlowLabel =
+    type [<AllowNullLiteral>] FlowLabel =
         inherit FlowNodeBase
         abstract antecedents: ResizeArray<FlowNode> option with get, set
 
-    [<AllowNullLiteral>]
-    type FlowAssignment =
+    type [<AllowNullLiteral>] FlowAssignment =
         inherit FlowNodeBase
         abstract node: U3<Expression, VariableDeclaration, BindingElement> with get, set
         abstract antecedent: FlowNode with get, set
 
-    [<AllowNullLiteral>]
-    type FlowCall =
+    type [<AllowNullLiteral>] FlowCall =
         inherit FlowNodeBase
         abstract node: CallExpression with get, set
         abstract antecedent: FlowNode with get, set
 
-    [<AllowNullLiteral>]
-    type FlowCondition =
+    type [<AllowNullLiteral>] FlowCondition =
         inherit FlowNodeBase
         abstract node: Expression with get, set
         abstract antecedent: FlowNode with get, set
 
-    [<AllowNullLiteral>]
-    type FlowSwitchClause =
+    type [<AllowNullLiteral>] FlowSwitchClause =
         inherit FlowNodeBase
         abstract switchStatement: SwitchStatement with get, set
         abstract clauseStart: float with get, set
         abstract clauseEnd: float with get, set
         abstract antecedent: FlowNode with get, set
 
-    [<AllowNullLiteral>]
-    type FlowArrayMutation =
+    type [<AllowNullLiteral>] FlowArrayMutation =
         inherit FlowNodeBase
         abstract node: U2<CallExpression, BinaryExpression> with get, set
         abstract antecedent: FlowNode with get, set
 
-    [<AllowNullLiteral>]
-    type FlowReduceLabel =
+    type [<AllowNullLiteral>] FlowReduceLabel =
         inherit FlowNodeBase
         abstract target: FlowLabel with get, set
         abstract antecedents: ResizeArray<FlowNode> with get, set
         abstract antecedent: FlowNode with get, set
 
-    type FlowType = U2<Type, IncompleteType>
+    type FlowType =
+        U2<Type, IncompleteType>
 
-    [<AllowNullLiteral>]
-    type IncompleteType =
-        abstract flags: TypeFlags with get, set
+    type [<AllowNullLiteral>] IncompleteType =
+        abstract flags: U2<TypeFlags, float> with get, set
         abstract ``type``: Type with get, set
 
-    [<AllowNullLiteral>]
-    type AmdDependency =
+    type [<AllowNullLiteral>] AmdDependency =
         abstract path: string with get, set
         abstract name: string option with get, set
 
-    [<AllowNullLiteral>]
-    type SourceFile =
+    /// Subset of properties from SourceFile that are used in multiple utility functions
+    type [<AllowNullLiteral>] SourceFileLike =
+        abstract text: string
+        abstract getLineAndCharacterOfPosition: pos: float -> LineAndCharacter
+
+    /// <remarks>
+    /// Original in TypeScript:
+    /// <code lang="typescript">
+    /// ModuleKind.ESNext | ModuleKind.CommonJS | undefined
+    /// </code>
+    /// </remarks>
+    type ResolutionMode =
+        ModuleKind
+
+    type [<AllowNullLiteral>] SourceFile =
         inherit Declaration
+        inherit LocalsContainer
         abstract kind: SyntaxKind
         abstract statements: ResizeArray<Statement>
         abstract endOfFileToken: Token<SyntaxKind>
@@ -5665,31 +4093,45 @@ module Ts =
         abstract isDeclarationFile: bool with get, set
         /// lib.d.ts should have a reference comment like
         ///
-        ///   /// <reference no-default-lib="true"/>
+        ///  /// <reference no-default-lib="true"/>
         ///
         /// If any other file has this comment, it signals not to include lib.d.ts
         /// because this containing file is intended to act as a default library.
         abstract hasNoDefaultLib: bool with get, set
         abstract languageVersion: ScriptTarget with get, set
+        /// <summary>
+        /// When <c>module</c> is <c>Node16</c> or <c>NodeNext</c>, this field controls whether the
+        /// source file in question is an ESNext-output-format file, or a CommonJS-output-format
+        /// module. This is derived by the module resolver as it looks up the file, since
+        /// it is derived from either the file extension of the module, or the containing
+        /// <c>package.json</c> context, and affects both checking and emit.
+        ///
+        /// It is _public_ so that (pre)transformers can set this field,
+        /// since it switches the builtin <c>node</c> module transform. Generally speaking, if unset,
+        /// the field is treated as though it is <c>ModuleKind.CommonJS</c>.
+        ///
+        /// Note that this field is only set by the module resolution process when
+        /// <c>moduleResolution</c> is <c>Node16</c> or <c>NodeNext</c>, which is implied by the <c>module</c> setting
+        /// of <c>Node16</c> or <c>NodeNext</c>, respectively, but may be overriden (eg, by a <c>moduleResolution</c>
+        /// of <c>node</c>). If so, this field will be unset and source files will be considered to be
+        /// CommonJS-output-format by the node module transformer and type checker, regardless of extension or context.
+        /// </summary>
+        abstract impliedNodeFormat: ResolutionMode option with get, set
         abstract getLineAndCharacterOfPosition: pos: float -> LineAndCharacter
         abstract getLineEndOfPosition: pos: float -> float
         abstract getLineStarts: unit -> ResizeArray<float>
+        abstract getPositionOfLineAndCharacter: line: float * character: float -> float
+        abstract update: newText: string * textChangeRange: TextChangeRange -> SourceFile
 
-        abstract getPositionOfLineAndCharacter:
-            line: float * character: float -> float
-
-        abstract update:
-            newText: string * textChangeRange: TextChangeRange -> SourceFile
-
-    [<AllowNullLiteral>]
-    type Bundle =
+    type [<AllowNullLiteral>] Bundle =
         inherit Node
         abstract kind: SyntaxKind
+        [<Obsolete("")>]
         abstract prepends: ResizeArray<U2<InputFiles, UnparsedSource>>
         abstract sourceFiles: ResizeArray<SourceFile>
 
-    [<AllowNullLiteral>]
-    type InputFiles =
+    [<Obsolete("")>]
+    type [<AllowNullLiteral>] InputFiles =
         inherit Node
         abstract kind: SyntaxKind
         abstract javascriptPath: string option with get, set
@@ -5701,8 +4143,8 @@ module Ts =
         abstract declarationMapPath: string option with get, set
         abstract declarationMapText: string option with get, set
 
-    [<AllowNullLiteral>]
-    type UnparsedSource =
+    [<Obsolete("")>]
+    type [<AllowNullLiteral>] UnparsedSource =
         inherit Node
         abstract kind: SyntaxKind
         abstract fileName: string with get, set
@@ -5710,68 +4152,65 @@ module Ts =
         abstract prologues: ResizeArray<UnparsedPrologue>
         abstract helpers: ResizeArray<UnscopedEmitHelper> option with get, set
         abstract referencedFiles: ResizeArray<FileReference> with get, set
-        abstract typeReferenceDirectives: ResizeArray<string> option with get, set
+        abstract typeReferenceDirectives: ResizeArray<FileReference> option with get, set
         abstract libReferenceDirectives: ResizeArray<FileReference> with get, set
         abstract hasNoDefaultLib: bool option with get, set
         abstract sourceMapPath: string option with get, set
         abstract sourceMapText: string option with get, set
-
-        abstract syntheticReferences:
-            ResizeArray<UnparsedSyntheticReference> option
-
+        abstract syntheticReferences: ResizeArray<UnparsedSyntheticReference> option
         abstract texts: ResizeArray<UnparsedSourceText>
 
-    type UnparsedSourceText = U2<UnparsedPrepend, UnparsedTextLike>
+    [<Obsolete("")>]
+    type UnparsedSourceText =
+        U2<UnparsedPrepend, UnparsedTextLike>
 
+    [<Obsolete("")>]
     type UnparsedNode =
         U3<UnparsedPrologue, UnparsedSourceText, UnparsedSyntheticReference>
 
-    [<AllowNullLiteral>]
-    type UnparsedSection =
+    [<Obsolete("")>]
+    type [<AllowNullLiteral>] UnparsedSection =
         inherit Node
         abstract kind: SyntaxKind
         abstract parent: UnparsedSource
         abstract data: string option
 
-    [<AllowNullLiteral>]
-    type UnparsedPrologue =
+    [<Obsolete("")>]
+    type [<AllowNullLiteral>] UnparsedPrologue =
         inherit UnparsedSection
         abstract kind: SyntaxKind
         abstract parent: UnparsedSource
         abstract data: string
 
-    [<AllowNullLiteral>]
-    type UnparsedPrepend =
+    [<Obsolete("")>]
+    type [<AllowNullLiteral>] UnparsedPrepend =
         inherit UnparsedSection
         abstract kind: SyntaxKind
         abstract parent: UnparsedSource
         abstract data: string
         abstract texts: ResizeArray<UnparsedTextLike>
 
-    [<AllowNullLiteral>]
-    type UnparsedTextLike =
+    [<Obsolete("")>]
+    type [<AllowNullLiteral>] UnparsedTextLike =
         inherit UnparsedSection
         abstract kind: SyntaxKind
         abstract parent: UnparsedSource
 
-    [<AllowNullLiteral>]
-    type UnparsedSyntheticReference =
+    [<Obsolete("")>]
+    type [<AllowNullLiteral>] UnparsedSyntheticReference =
         inherit UnparsedSection
         abstract kind: SyntaxKind
         abstract parent: UnparsedSource
 
-    [<AllowNullLiteral>]
-    type JsonSourceFile =
+    type [<AllowNullLiteral>] JsonSourceFile =
         inherit SourceFile
         abstract statements: ResizeArray<JsonObjectExpressionStatement>
 
-    [<AllowNullLiteral>]
-    type TsConfigSourceFile =
+    type [<AllowNullLiteral>] TsConfigSourceFile =
         inherit JsonSourceFile
         abstract extendedSourceFiles: ResizeArray<string> option with get, set
 
-    [<AllowNullLiteral>]
-    type JsonMinusNumericLiteral =
+    type [<AllowNullLiteral>] JsonMinusNumericLiteral =
         inherit PrefixUnaryExpression
         abstract kind: SyntaxKind
         abstract operator: SyntaxKind
@@ -5780,30 +4219,20 @@ module Ts =
     type JsonObjectExpression =
         U7<ObjectLiteralExpression, ArrayLiteralExpression, JsonMinusNumericLiteral, NumericLiteral, StringLiteral, BooleanLiteral, NullLiteral>
 
-    [<AllowNullLiteral>]
-    type JsonObjectExpressionStatement =
+    type [<AllowNullLiteral>] JsonObjectExpressionStatement =
         inherit ExpressionStatement
         abstract expression: JsonObjectExpression
 
-    [<AllowNullLiteral>]
-    type ScriptReferenceHost =
+    type [<AllowNullLiteral>] ScriptReferenceHost =
         abstract getCompilerOptions: unit -> CompilerOptions
         abstract getSourceFile: fileName: string -> SourceFile option
         abstract getSourceFileByPath: path: Path -> SourceFile option
         abstract getCurrentDirectory: unit -> string
 
-    [<AllowNullLiteral>]
-    type ParseConfigHost =
+    type [<AllowNullLiteral>] ParseConfigHost =
+        inherit ModuleResolutionHost
         abstract useCaseSensitiveFileNames: bool with get, set
-
-        abstract readDirectory:
-            rootDir: string *
-            extensions: ResizeArray<string> *
-            excludes: ResizeArray<string> option *
-            includes: ResizeArray<string> *
-            ?depth: float ->
-                ResizeArray<string>
-
+        abstract readDirectory: rootDir: string * extensions: ResizeArray<string> * excludes: ResizeArray<string> option * includes: ResizeArray<string> * ?depth: float -> ResizeArray<string>
         /// <summary>Gets a value indicating whether the specified path exists and is a file.</summary>
         /// <param name="path">The path to test.</param>
         abstract fileExists: path: string -> bool
@@ -5813,47 +4242,33 @@ module Ts =
     /// Branded string for keeping track of when we've turned an ambiguous path
     /// specified like "./blah" to an absolute path to an actual
     /// tsconfig file, e.g. "/root/blah/tsconfig.json"
-    [<AllowNullLiteral>]
-    type ResolvedConfigFileName =
-        interface
-        end
+    type [<AllowNullLiteral>] ResolvedConfigFileName =
+        interface end
 
-    [<AllowNullLiteral>]
-    type WriteFileCallback =
-        [<Emit "$0($1...)">]
-        abstract Invoke:
-            fileName: string *
-            data: string *
-            writeByteOrderMark: bool *
-            ?onError: (string -> unit) *
-            ?sourceFiles: ResizeArray<SourceFile> ->
-                unit
+    type [<AllowNullLiteral>] WriteFileCallbackData =
+        interface end
 
-    [<AllowNullLiteral>]
-    type OperationCanceledException =
-        interface
-        end
+    type [<AllowNullLiteral>] WriteFileCallback =
+        [<Emit("$0($1...)")>] abstract Invoke: fileName: string * text: string * writeByteOrderMark: bool * ?onError: (string -> unit) * ?sourceFiles: ResizeArray<SourceFile> * ?data: WriteFileCallbackData -> unit
 
-    [<AllowNullLiteral>]
-    type OperationCanceledExceptionStatic =
-        [<EmitConstructor>]
-        abstract Create: unit -> OperationCanceledException
+    type [<AllowNullLiteral>] OperationCanceledException =
+        interface end
 
-    [<AllowNullLiteral>]
-    type CancellationToken =
+    type [<AllowNullLiteral>] OperationCanceledExceptionStatic =
+        [<EmitConstructor>] abstract Create: unit -> OperationCanceledException
+
+    type [<AllowNullLiteral>] CancellationToken =
         abstract isCancellationRequested: unit -> bool
         /// <exception cref="">OperationCanceledException if isCancellationRequested is true</exception>
         abstract throwIfCancellationRequested: unit -> unit
 
-    [<AllowNullLiteral>]
-    type Program =
+    type [<AllowNullLiteral>] Program =
         inherit ScriptReferenceHost
         abstract getCurrentDirectory: unit -> string
         /// Get a list of root file names that were passed to a 'createProgram'
         abstract getRootFileNames: unit -> ResizeArray<string>
         /// Get a list of files in the program
         abstract getSourceFiles: unit -> ResizeArray<SourceFile>
-
         /// Emits the JavaScript and declaration files.  If targetSourceFile is not specified, then
         /// the JavaScript and declaration files will be produced for all the files in this program.
         /// If targetSourceFile is specified, then only the JavaScript and declaration for that
@@ -5862,98 +4277,49 @@ module Ts =
         /// If writeFile is not specified then the writeFile callback from the compiler host will be
         /// used for writing the JavaScript and declaration files.  Otherwise, the writeFile parameter
         /// will be invoked when writing the JavaScript and declaration files.
-        abstract emit:
-            ?targetSourceFile: SourceFile *
-            ?writeFile: WriteFileCallback *
-            ?cancellationToken: CancellationToken *
-            ?emitOnlyDtsFiles: bool *
-            ?customTransformers: CustomTransformers ->
-                EmitResult
-
-        abstract getOptionsDiagnostics:
-            ?cancellationToken: CancellationToken -> ResizeArray<Diagnostic>
-
-        abstract getGlobalDiagnostics:
-            ?cancellationToken: CancellationToken -> ResizeArray<Diagnostic>
-
-        abstract getSyntacticDiagnostics:
-            ?sourceFile: SourceFile * ?cancellationToken: CancellationToken ->
-                ResizeArray<DiagnosticWithLocation>
-
+        abstract emit: ?targetSourceFile: SourceFile * ?writeFile: WriteFileCallback * ?cancellationToken: CancellationToken * ?emitOnlyDtsFiles: bool * ?customTransformers: CustomTransformers -> EmitResult
+        abstract getOptionsDiagnostics: ?cancellationToken: CancellationToken -> ResizeArray<Diagnostic>
+        abstract getGlobalDiagnostics: ?cancellationToken: CancellationToken -> ResizeArray<Diagnostic>
+        abstract getSyntacticDiagnostics: ?sourceFile: SourceFile * ?cancellationToken: CancellationToken -> ResizeArray<DiagnosticWithLocation>
         /// The first time this is called, it will return global diagnostics (no location).
-        abstract getSemanticDiagnostics:
-            ?sourceFile: SourceFile * ?cancellationToken: CancellationToken ->
-                ResizeArray<Diagnostic>
-
-        abstract getDeclarationDiagnostics:
-            ?sourceFile: SourceFile * ?cancellationToken: CancellationToken ->
-                ResizeArray<DiagnosticWithLocation>
-
-        abstract getConfigFileParsingDiagnostics:
-            unit -> ResizeArray<Diagnostic>
-
+        abstract getSemanticDiagnostics: ?sourceFile: SourceFile * ?cancellationToken: CancellationToken -> ResizeArray<Diagnostic>
+        abstract getDeclarationDiagnostics: ?sourceFile: SourceFile * ?cancellationToken: CancellationToken -> ResizeArray<DiagnosticWithLocation>
+        abstract getConfigFileParsingDiagnostics: unit -> ResizeArray<Diagnostic>
         /// Gets a type checker that can be used to semantically analyze source files in the program.
         abstract getTypeChecker: unit -> TypeChecker
-        abstract getTypeCatalog: unit -> ResizeArray<Type>
         abstract getNodeCount: unit -> float
         abstract getIdentifierCount: unit -> float
         abstract getSymbolCount: unit -> float
         abstract getTypeCount: unit -> float
         abstract getInstantiationCount: unit -> float
-
-        abstract getRelationCacheSizes:
-            unit -> ProgramGetRelationCacheSizesReturn
-
+        abstract getRelationCacheSizes: unit -> {| assignable: float; identity: float; subtype: float; strictSubtype: float |}
         abstract isSourceFileFromExternalLibrary: file: SourceFile -> bool
         abstract isSourceFileDefaultLibrary: file: SourceFile -> bool
+        abstract getProjectReferences: unit -> ResizeArray<ProjectReference> option
+        abstract getResolvedProjectReferences: unit -> ResizeArray<ResolvedProjectReference option> option
 
-        abstract getProjectReferences:
-            unit -> ResizeArray<ProjectReference> option
-
-        abstract getResolvedProjectReferences:
-            unit -> ResizeArray<ResolvedProjectReference option> option
-
-    [<AllowNullLiteral>]
-    type ProgramGetRelationCacheSizesReturn =
-        abstract assignable: float with get, set
-        abstract identity: float with get, set
-        abstract subtype: float with get, set
-        abstract strictSubtype: float with get, set
-
-    [<AllowNullLiteral>]
-    type ResolvedProjectReference =
+    type [<AllowNullLiteral>] ResolvedProjectReference =
         abstract commandLine: ParsedCommandLine with get, set
         abstract sourceFile: SourceFile with get, set
         abstract references: ResizeArray<ResolvedProjectReference option> option with get, set
 
-    [<AllowNullLiteral>]
-    type CustomTransformerFactory =
-        [<Emit "$0($1...)">]
-        abstract Invoke: context: TransformationContext -> CustomTransformer
+    type [<AllowNullLiteral>] CustomTransformerFactory =
+        [<Emit("$0($1...)")>] abstract Invoke: context: TransformationContext -> CustomTransformer
 
-    [<AllowNullLiteral>]
-    type CustomTransformer =
+    type [<AllowNullLiteral>] CustomTransformer =
         abstract transformSourceFile: node: SourceFile -> SourceFile
         abstract transformBundle: node: Bundle -> Bundle
 
-    [<AllowNullLiteral>]
-    type CustomTransformers =
+    type [<AllowNullLiteral>] CustomTransformers =
         /// Custom transformers to evaluate before built-in .js transformations.
-        abstract before:
-            ResizeArray<U2<TransformerFactory<SourceFile>, CustomTransformerFactory>> option with get, set
-
+        abstract before: ResizeArray<U2<TransformerFactory<SourceFile>, CustomTransformerFactory>> option with get, set
         /// Custom transformers to evaluate after built-in .js transformations.
-        abstract after:
-            ResizeArray<U2<TransformerFactory<SourceFile>, CustomTransformerFactory>> option with get, set
-
+        abstract after: ResizeArray<U2<TransformerFactory<SourceFile>, CustomTransformerFactory>> option with get, set
         /// Custom transformers to evaluate after built-in .d.ts transformations.
         // abstract afterDeclarations: ResizeArray<U2<TransformerFactory<U2<Bundle, SourceFile>>, CustomTransformerFactory>> option with get, set
-        abstract afterDeclarations:
-            ResizeArray<U2<TransformerFactory<Bundle>, CustomTransformerFactory>> option with get, set
-    // abstract afterDeclarations: ResizeArray<U2<TransformerFactory<SourceFile>, CustomTransformerFactory>> option with get, set
+        abstract afterDeclarations: ResizeArray<obj> option with get, set
 
-    [<AllowNullLiteral>]
-    type SourceMapSpan =
+    type [<AllowNullLiteral>] SourceMapSpan =
         /// Line number in the .js file.
         abstract emittedLine: float with get, set
         /// Column number in the .js file.
@@ -5968,44 +4334,31 @@ module Ts =
         abstract sourceIndex: float with get, set
 
     /// Return code used by getEmitOutput function to indicate status of the function
-    [<RequireQualifiedAccess>]
-    type ExitStatus =
+    type [<RequireQualifiedAccess>] ExitStatus =
         | Success = 0
         | DiagnosticsPresent_OutputsSkipped = 1
         | DiagnosticsPresent_OutputsGenerated = 2
         | InvalidProject_OutputsSkipped = 3
         | ProjectReferenceCycle_OutputsSkipped = 4
-        /// <deprecated>Use ProjectReferenceCycle_OutputsSkipped instead.</deprecated>
-        | ProjectReferenceCycle_OutputsSkupped = 4
 
-    [<AllowNullLiteral>]
-    type EmitResult =
+    type [<AllowNullLiteral>] EmitResult =
         abstract emitSkipped: bool with get, set
         /// Contains declaration emit diagnostics
         abstract diagnostics: ResizeArray<Diagnostic> with get, set
         abstract emittedFiles: ResizeArray<string> option with get, set
 
-    [<AllowNullLiteral>]
-    type TypeChecker =
+    type [<AllowNullLiteral>] TypeChecker =
         abstract getTypeOfSymbolAtLocation: symbol: Symbol * node: Node -> Type
+        abstract getTypeOfSymbol: symbol: Symbol -> Type
         abstract getDeclaredTypeOfSymbol: symbol: Symbol -> Type
         abstract getPropertiesOfType: ``type``: Type -> ResizeArray<Symbol>
-
-        abstract getPropertyOfType:
-            ``type``: Type * propertyName: string -> Symbol option
-
-        abstract getPrivateIdentifierPropertyOfType:
-            leftType: Type * name: string * location: Node -> Symbol option
-
-        abstract getIndexInfoOfType:
-            ``type``: Type * kind: IndexKind -> IndexInfo option
-
-        abstract getSignaturesOfType:
-            ``type``: Type * kind: SignatureKind -> ResizeArray<Signature>
-
-        abstract getIndexTypeOfType:
-            ``type``: Type * kind: IndexKind -> Type option
-
+        abstract getPropertyOfType: ``type``: Type * propertyName: string -> Symbol option
+        abstract getPrivateIdentifierPropertyOfType: leftType: Type * name: string * location: Node -> Symbol option
+        abstract getIndexInfoOfType: ``type``: Type * kind: IndexKind -> IndexInfo option
+        abstract getIndexInfosOfType: ``type``: Type -> ResizeArray<IndexInfo>
+        abstract getIndexInfosOfIndexSymbol: (Symbol -> ResizeArray<IndexInfo>) with get, set
+        abstract getSignaturesOfType: ``type``: Type * kind: SignatureKind -> ResizeArray<Signature>
+        abstract getIndexTypeOfType: ``type``: Type * kind: IndexKind -> Type option
         abstract getBaseTypes: ``type``: InterfaceType -> ResizeArray<BaseType>
         abstract getBaseTypeOfLiteralType: ``type``: Type -> Type
         abstract getWidenedType: ``type``: Type -> Type
@@ -6013,195 +4366,128 @@ module Ts =
         abstract getNullableType: ``type``: Type * flags: TypeFlags -> Type
         abstract getNonNullableType: ``type``: Type -> Type
         abstract getTypeArguments: ``type``: TypeReference -> ResizeArray<Type>
-
         /// Note that the resulting nodes cannot be checked.
-        abstract typeToTypeNode:
-            ``type``: Type *
-            enclosingDeclaration: Node option *
-            flags: NodeBuilderFlags option ->
-                TypeNode option
-
+        abstract typeToTypeNode: ``type``: Type * enclosingDeclaration: Node option * flags: NodeBuilderFlags option -> TypeNode option
         /// Note that the resulting nodes cannot be checked.
-        abstract signatureToSignatureDeclaration:
-            signature: Signature *
-            kind: SyntaxKind *
-            enclosingDeclaration: Node option *
-            flags: NodeBuilderFlags option ->
-                obj option
-
+        abstract signatureToSignatureDeclaration: signature: Signature * kind: SyntaxKind * enclosingDeclaration: Node option * flags: NodeBuilderFlags option -> obj option
         /// Note that the resulting nodes cannot be checked.
-        abstract indexInfoToIndexSignatureDeclaration:
-            indexInfo: IndexInfo *
-            kind: IndexKind *
-            enclosingDeclaration: Node option *
-            flags: NodeBuilderFlags option ->
-                IndexSignatureDeclaration option
-
+        abstract indexInfoToIndexSignatureDeclaration: indexInfo: IndexInfo * enclosingDeclaration: Node option * flags: NodeBuilderFlags option -> IndexSignatureDeclaration option
         /// Note that the resulting nodes cannot be checked.
-        abstract symbolToEntityName:
-            symbol: Symbol *
-            meaning: SymbolFlags *
-            enclosingDeclaration: Node option *
-            flags: NodeBuilderFlags option ->
-                EntityName option
-
+        abstract symbolToEntityName: symbol: Symbol * meaning: SymbolFlags * enclosingDeclaration: Node option * flags: NodeBuilderFlags option -> EntityName option
         /// Note that the resulting nodes cannot be checked.
-        abstract symbolToExpression:
-            symbol: Symbol *
-            meaning: SymbolFlags *
-            enclosingDeclaration: Node option *
-            flags: NodeBuilderFlags option ->
-                Expression option
-
+        abstract symbolToExpression: symbol: Symbol * meaning: SymbolFlags * enclosingDeclaration: Node option * flags: NodeBuilderFlags option -> Expression option
         /// Note that the resulting nodes cannot be checked.
-        abstract symbolToTypeParameterDeclarations:
-            symbol: Symbol *
-            enclosingDeclaration: Node option *
-            flags: NodeBuilderFlags option ->
-                ResizeArray<TypeParameterDeclaration> option
-
+        abstract symbolToTypeParameterDeclarations: symbol: Symbol * enclosingDeclaration: Node option * flags: NodeBuilderFlags option -> ResizeArray<TypeParameterDeclaration> option
         /// Note that the resulting nodes cannot be checked.
-        abstract symbolToParameterDeclaration:
-            symbol: Symbol *
-            enclosingDeclaration: Node option *
-            flags: NodeBuilderFlags option ->
-                ParameterDeclaration option
-
+        abstract symbolToParameterDeclaration: symbol: Symbol * enclosingDeclaration: Node option * flags: NodeBuilderFlags option -> ParameterDeclaration option
         /// Note that the resulting nodes cannot be checked.
-        abstract typeParameterToDeclaration:
-            parameter: TypeParameter *
-            enclosingDeclaration: Node option *
-            flags: NodeBuilderFlags option ->
-                TypeParameterDeclaration option
-
-        abstract getSymbolsInScope:
-            location: Node * meaning: SymbolFlags -> ResizeArray<Symbol>
-
+        abstract typeParameterToDeclaration: parameter: TypeParameter * enclosingDeclaration: Node option * flags: NodeBuilderFlags option -> TypeParameterDeclaration option
+        abstract getSymbolsInScope: location: Node * meaning: SymbolFlags -> ResizeArray<Symbol>
         abstract getSymbolAtLocation: node: Node -> Symbol option
-
-        abstract getSymbolsOfParameterPropertyDeclaration:
-            parameter: ParameterDeclaration * parameterName: string ->
-                ResizeArray<Symbol>
-
+        abstract getSymbolsOfParameterPropertyDeclaration: parameter: ParameterDeclaration * parameterName: string -> ResizeArray<Symbol>
         /// The function returns the value (local variable) symbol of an identifier in the short-hand property assignment.
         /// This is necessary as an identifier in short-hand property assignment can contains two meaning: property name and property value.
-        abstract getShorthandAssignmentValueSymbol:
-            location: Node -> Symbol option
-
-        abstract getExportSpecifierLocalTargetSymbol:
-            location: U2<ExportSpecifier, Identifier> -> Symbol option
-
+        abstract getShorthandAssignmentValueSymbol: location: Node option -> Symbol option
+        abstract getExportSpecifierLocalTargetSymbol: location: U2<ExportSpecifier, Identifier> -> Symbol option
         /// <summary>
         /// If a symbol is a local symbol with an associated exported symbol, returns the exported symbol.
         /// Otherwise returns its input.
         /// For example, at <c>export type T = number;</c>:
-        ///      - <c>getSymbolAtLocation</c> at the location <c>T</c> will return the exported symbol for <c>T</c>.
-        ///      - But the result of <c>getSymbolsInScope</c> will contain the *local* symbol for <c>T</c>, not the exported symbol.
-        ///      - Calling <c>getExportSymbolOfSymbol</c> on that local symbol will return the exported symbol.
+        ///     - <c>getSymbolAtLocation</c> at the location <c>T</c> will return the exported symbol for <c>T</c>.
+        ///     - But the result of <c>getSymbolsInScope</c> will contain the *local* symbol for <c>T</c>, not the exported symbol.
+        ///     - Calling <c>getExportSymbolOfSymbol</c> on that local symbol will return the exported symbol.
         /// </summary>
         abstract getExportSymbolOfSymbol: symbol: Symbol -> Symbol
-
-        abstract getPropertySymbolOfDestructuringAssignment:
-            location: Identifier -> Symbol option
-
+        abstract getPropertySymbolOfDestructuringAssignment: location: Identifier -> Symbol option
         abstract getTypeOfAssignmentPattern: pattern: AssignmentPattern -> Type
         abstract getTypeAtLocation: node: Node -> Type
         abstract getTypeFromTypeNode: node: TypeNode -> Type
-
-        abstract signatureToString:
-            signature: Signature *
-            ?enclosingDeclaration: Node *
-            ?flags: TypeFormatFlags *
-            ?kind: SignatureKind ->
-                string
-
-        abstract typeToString:
-            ``type``: Type *
-            ?enclosingDeclaration: Node *
-            ?flags: TypeFormatFlags ->
-                string
-
-        abstract symbolToString:
-            symbol: Symbol *
-            ?enclosingDeclaration: Node *
-            ?meaning: SymbolFlags *
-            ?flags: SymbolFormatFlags ->
-                string
-
-        abstract typePredicateToString:
-            predicate: TypePredicate *
-            ?enclosingDeclaration: Node *
-            ?flags: TypeFormatFlags ->
-                string
-
+        abstract signatureToString: signature: Signature * ?enclosingDeclaration: Node * ?flags: TypeFormatFlags * ?kind: SignatureKind -> string
+        abstract typeToString: ``type``: Type * ?enclosingDeclaration: Node * ?flags: TypeFormatFlags -> string
+        abstract symbolToString: symbol: Symbol * ?enclosingDeclaration: Node * ?meaning: SymbolFlags * ?flags: SymbolFormatFlags -> string
+        abstract typePredicateToString: predicate: TypePredicate * ?enclosingDeclaration: Node * ?flags: TypeFormatFlags -> string
         abstract getFullyQualifiedName: symbol: Symbol -> string
-
-        abstract getAugmentedPropertiesOfType:
-            ``type``: Type -> ResizeArray<Symbol>
-
+        abstract getAugmentedPropertiesOfType: ``type``: Type -> ResizeArray<Symbol>
         abstract getRootSymbols: symbol: Symbol -> ResizeArray<Symbol>
-
-        abstract getSymbolOfExpando:
-            node: Node * allowDeclaration: bool -> Symbol option
-
+        abstract getSymbolOfExpando: node: Node * allowDeclaration: bool -> Symbol option
         abstract getContextualType: node: Expression -> Type option
-
         /// <summary>
         /// returns unknownSignature in the case of an error.
         /// returns undefined if the node is not valid.
         /// </summary>
         /// <param name="argumentCount">Apparent number of arguments, passed in case of a possibly incomplete call. This should come from an ArgumentListInfo. See <c>signatureHelp.ts</c>.</param>
-        abstract getResolvedSignature:
-            node: CallLikeExpression *
-            ?candidatesOutArray: ResizeArray<Signature> *
-            ?argumentCount: float ->
-                Signature option
-
-        abstract getSignatureFromDeclaration:
-            declaration: SignatureDeclaration -> Signature option
-
-        abstract isImplementationOfOverload:
-            node: SignatureDeclaration -> bool option
-
+        abstract getResolvedSignature: node: CallLikeExpression * ?candidatesOutArray: ResizeArray<Signature> * ?argumentCount: float -> Signature option
+        abstract getSignatureFromDeclaration: declaration: SignatureDeclaration -> Signature option
+        abstract isImplementationOfOverload: node: SignatureDeclaration -> bool option
         abstract isUndefinedSymbol: symbol: Symbol -> bool
         abstract isArgumentsSymbol: symbol: Symbol -> bool
         abstract isUnknownSymbol: symbol: Symbol -> bool
-
-        abstract getConstantValue:
-            node:
-                U3<EnumMember, PropertyAccessExpression, ElementAccessExpression> ->
-                U2<string, float> option
-
-        abstract isValidPropertyAccess:
-            node: U3<PropertyAccessExpression, QualifiedName, ImportTypeNode> *
-            propertyName: string ->
-                bool
-
+        abstract getConstantValue: node: U3<EnumMember, PropertyAccessExpression, ElementAccessExpression> -> U2<string, float> option
+        abstract isValidPropertyAccess: node: U3<PropertyAccessExpression, QualifiedName, ImportTypeNode> * propertyName: string -> bool
         /// Follow all aliases to get the original symbol.
         abstract getAliasedSymbol: symbol: Symbol -> Symbol
+        /// Follow a *single* alias to get the immediately aliased symbol.
+        abstract getImmediateAliasedSymbol: symbol: Symbol -> Symbol option
         abstract getExportsOfModule: moduleSymbol: Symbol -> ResizeArray<Symbol>
-
-        abstract getJsxIntrinsicTagNamesAt:
-            location: Node -> ResizeArray<Symbol>
-
+        abstract getJsxIntrinsicTagNamesAt: location: Node -> ResizeArray<Symbol>
         abstract isOptionalParameter: node: ParameterDeclaration -> bool
         abstract getAmbientModules: unit -> ResizeArray<Symbol>
-
-        abstract tryGetMemberInModuleExports:
-            memberName: string * moduleSymbol: Symbol -> Symbol option
-
+        abstract tryGetMemberInModuleExports: memberName: string * moduleSymbol: Symbol -> Symbol option
         abstract getApparentType: ``type``: Type -> Type
         abstract getBaseConstraintOfType: ``type``: Type -> Type option
         abstract getDefaultFromTypeParameter: ``type``: Type -> Type option
-
+        /// <summary>
+        /// Gets the intrinsic <c>any</c> type. There are multiple types that act as <c>any</c> used internally in the compiler,
+        /// so the type returned by this function should not be used in equality checks to determine if another type
+        /// is <c>any</c>. Instead, use <c>type.flags &amp; TypeFlags.Any</c>.
+        /// </summary>
+        abstract getAnyType: unit -> Type
+        abstract getStringType: unit -> Type
+        abstract getStringLiteralType: value: string -> StringLiteralType
+        abstract getNumberType: unit -> Type
+        abstract getNumberLiteralType: value: float -> NumberLiteralType
+        abstract getBigIntType: unit -> Type
+        abstract getBooleanType: unit -> Type
+        abstract getFalseType: unit -> Type
+        abstract getTrueType: unit -> Type
+        abstract getVoidType: unit -> Type
+        /// <summary>
+        /// Gets the intrinsic <c>undefined</c> type. There are multiple types that act as <c>undefined</c> used internally in the compiler
+        /// depending on compiler options, so the type returned by this function should not be used in equality checks to determine
+        /// if another type is <c>undefined</c>. Instead, use <c>type.flags &amp; TypeFlags.Undefined</c>.
+        /// </summary>
+        abstract getUndefinedType: unit -> Type
+        /// <summary>
+        /// Gets the intrinsic <c>null</c> type. There are multiple types that act as <c>null</c> used internally in the compiler,
+        /// so the type returned by this function should not be used in equality checks to determine if another type
+        /// is <c>null</c>. Instead, use <c>type.flags &amp; TypeFlags.Null</c>.
+        /// </summary>
+        abstract getNullType: unit -> Type
+        abstract getESSymbolType: unit -> Type
+        /// <summary>
+        /// Gets the intrinsic <c>never</c> type. There are multiple types that act as <c>never</c> used internally in the compiler,
+        /// so the type returned by this function should not be used in equality checks to determine if another type
+        /// is <c>never</c>. Instead, use <c>type.flags &amp; TypeFlags.Never</c>.
+        /// </summary>
+        abstract getNeverType: unit -> Type
+        /// <summary>
+        /// True if this type is the <c>Array</c> or <c>ReadonlyArray</c> type from lib.d.ts.
+        /// This function will _not_ return true if passed a type which
+        /// extends <c>Array</c> (for example, the TypeScript AST's <c>NodeArray</c> type).
+        /// </summary>
+        abstract isArrayType: ``type``: Type -> bool
+        /// True if this type is a tuple type. This function will _not_ return true if
+        /// passed a type which extends from a tuple.
+        abstract isTupleType: ``type``: Type -> bool
+        /// <summary>True if this type is assignable to <c>ReadonlyArray&lt;any&gt;</c>.</summary>
+        abstract isArrayLikeType: ``type``: Type -> bool
+        abstract getTypePredicateOfSignature: signature: Signature -> TypePredicate option
         /// Depending on the operation performed, it may be appropriate to throw away the checker
         /// if the cancellation token is triggered. Typically, if it is used for error checking
         /// and the operation is cancelled, then it should be discarded, otherwise it is safe to keep.
-        abstract runWithCancellationToken:
-            token: CancellationToken * cb: (TypeChecker -> 'T) -> 'T
+        abstract runWithCancellationToken: token: CancellationToken * cb: (TypeChecker -> 'T) -> 'T
 
-    [<RequireQualifiedAccess>]
-    type NodeBuilderFlags =
+    type [<RequireQualifiedAccess>] NodeBuilderFlags =
         | None = 0
         | NoTruncation = 1
         | WriteArrayAsGenericType = 2
@@ -6220,9 +4506,9 @@ module Ts =
         | UseAliasDefinedOutsideCurrentScope = 16384
         | UseSingleQuotesForStringLiteralType = 268435456
         | NoTypeReduction = 536870912
-        | NoUndefinedOptionalParameterType = 1073741824
+        | OmitThisParameter = 33554432
         | AllowThisInObjectLiteral = 32768
-        | AllowQualifedNameInPlaceOfIdentifier = 65536
+        | AllowQualifiedNameInPlaceOfIdentifier = 65536
         | AllowAnonymousIdentifier = 131072
         | AllowEmptyUnionOrIntersection = 262144
         | AllowEmptyTuple = 524288
@@ -6233,10 +4519,8 @@ module Ts =
         | InObjectTypeLiteral = 4194304
         | InTypeAlias = 8388608
         | InInitialEntityName = 16777216
-        | InReverseMappedType = 33554432
 
-    [<RequireQualifiedAccess>]
-    type TypeFormatFlags =
+    type [<RequireQualifiedAccess>] TypeFormatFlags =
         | None = 0
         | NoTruncation = 1
         | WriteArrayAsGenericType = 2
@@ -6251,6 +4535,7 @@ module Ts =
         | UseAliasDefinedOutsideCurrentScope = 16384
         | UseSingleQuotesForStringLiteralType = 268435456
         | NoTypeReduction = 536870912
+        | OmitThisParameter = 33554432
         | AllowUniqueESSymbolType = 1048576
         | AddUndefined = 131072
         | WriteArrowStyleSignature = 262144
@@ -6258,56 +4543,47 @@ module Ts =
         | InElementType = 2097152
         | InFirstTypeArgument = 4194304
         | InTypeAlias = 8388608
-        /// <deprecated />
-        | WriteOwnNameForAnyLike = 0
-        | NodeBuilderFlagsMask = 814775659
+        | NodeBuilderFlagsMask = 848330091
 
-    [<RequireQualifiedAccess>]
-    type SymbolFormatFlags =
+    type [<RequireQualifiedAccess>] SymbolFormatFlags =
         | None = 0
         | WriteTypeParametersOrArguments = 1
         | UseOnlyExternalAliasing = 2
         | AllowAnyNodeKind = 4
         | UseAliasDefinedOutsideCurrentScope = 8
 
-    [<RequireQualifiedAccess>]
-    type TypePredicateKind =
+    type [<RequireQualifiedAccess>] TypePredicateKind =
         | This = 0
         | Identifier = 1
         | AssertsThis = 2
         | AssertsIdentifier = 3
 
-    [<AllowNullLiteral>]
-    type TypePredicateBase =
+    type [<AllowNullLiteral>] TypePredicateBase =
         abstract kind: TypePredicateKind with get, set
         abstract ``type``: Type option with get, set
 
-    [<AllowNullLiteral>]
-    type ThisTypePredicate =
+    type [<AllowNullLiteral>] ThisTypePredicate =
         inherit TypePredicateBase
         abstract kind: TypePredicateKind with get, set
         abstract parameterName: obj with get, set
         abstract parameterIndex: obj with get, set
         abstract ``type``: Type with get, set
 
-    [<AllowNullLiteral>]
-    type IdentifierTypePredicate =
+    type [<AllowNullLiteral>] IdentifierTypePredicate =
         inherit TypePredicateBase
         abstract kind: TypePredicateKind with get, set
         abstract parameterName: string with get, set
         abstract parameterIndex: float with get, set
         abstract ``type``: Type with get, set
 
-    [<AllowNullLiteral>]
-    type AssertsThisTypePredicate =
+    type [<AllowNullLiteral>] AssertsThisTypePredicate =
         inherit TypePredicateBase
         abstract kind: TypePredicateKind with get, set
         abstract parameterName: obj with get, set
         abstract parameterIndex: obj with get, set
         abstract ``type``: Type option with get, set
 
-    [<AllowNullLiteral>]
-    type AssertsIdentifierTypePredicate =
+    type [<AllowNullLiteral>] AssertsIdentifierTypePredicate =
         inherit TypePredicateBase
         abstract kind: TypePredicateKind with get, set
         abstract parameterName: string with get, set
@@ -6317,8 +4593,7 @@ module Ts =
     type TypePredicate =
         U4<ThisTypePredicate, IdentifierTypePredicate, AssertsThisTypePredicate, AssertsIdentifierTypePredicate>
 
-    [<RequireQualifiedAccess>]
-    type SymbolFlags =
+    type [<RequireQualifiedAccess>] SymbolFlags =
         | None = 0
         | FunctionScopedVariable = 1
         | BlockScopedVariable = 2
@@ -6370,6 +4645,7 @@ module Ts =
         | MethodExcludes = 103359
         | GetAccessorExcludes = 46015
         | SetAccessorExcludes = 78783
+        | AccessorExcludes = 13247
         | TypeParameterExcludes = 526824
         | TypeAliasExcludes = 788968
         | AliasExcludes = 2097152
@@ -6379,12 +4655,11 @@ module Ts =
         | PropertyOrAccessor = 98308
         | ClassMember = 106500
 
-    [<AllowNullLiteral>]
-    type Symbol =
+    type [<AllowNullLiteral>] Symbol =
         abstract flags: SymbolFlags with get, set
         abstract escapedName: __String with get, set
-        abstract declarations: ResizeArray<Declaration> with get, set
-        abstract valueDeclaration: Declaration with get, set
+        abstract declarations: ResizeArray<Declaration> option with get, set
+        abstract valueDeclaration: Declaration option with get, set
         abstract members: SymbolTable option with get, set
         abstract exports: SymbolTable option with get, set
         abstract globalExports: SymbolTable option with get, set
@@ -6393,30 +4668,25 @@ module Ts =
         abstract getEscapedName: unit -> __String
         abstract getName: unit -> string
         abstract getDeclarations: unit -> ResizeArray<Declaration> option
+        abstract getDocumentationComment: typeChecker: TypeChecker option -> ResizeArray<SymbolDisplayPart>
+        abstract getJsDocTags: ?checker: TypeChecker -> ResizeArray<JSDocTagInfo>
 
-        abstract getDocumentationComment:
-            typeChecker: TypeChecker option -> ResizeArray<SymbolDisplayPart>
-
-        abstract getJsDocTags: unit -> ResizeArray<JSDocTagInfo>
-
-    [<StringEnum>]
-    [<RequireQualifiedAccess>]
-    type InternalSymbolName =
-        | [<CompiledName "__call">] Call
-        | [<CompiledName "__constructor">] Constructor
-        | [<CompiledName "__new">] New
-        | [<CompiledName "__index">] Index
-        | [<CompiledName "__export">] ExportStar
-        | [<CompiledName "__global">] Global
-        | [<CompiledName "__missing">] Missing
-        | [<CompiledName "__type">] Type
-        | [<CompiledName "__object">] Object
-        | [<CompiledName "__jsxAttributes">] JSXAttributes
-        | [<CompiledName "__class">] Class
-        | [<CompiledName "__function">] Function
-        | [<CompiledName "__computed">] Computed
-        | [<CompiledName "__resolving__">] Resolving
-        | [<CompiledName "export=">] ExportEquals
+    type [<StringEnum>] [<RequireQualifiedAccess>] InternalSymbolName =
+        | [<CompiledName("__call")>] Call
+        | [<CompiledName("__constructor")>] Constructor
+        | [<CompiledName("__new")>] New
+        | [<CompiledName("__index")>] Index
+        | [<CompiledName("__export")>] ExportStar
+        | [<CompiledName("__global")>] Global
+        | [<CompiledName("__missing")>] Missing
+        | [<CompiledName("__type")>] Type
+        | [<CompiledName("__object")>] Object
+        | [<CompiledName("__jsxAttributes")>] JSXAttributes
+        | [<CompiledName("__class")>] Class
+        | [<CompiledName("__function")>] Function
+        | [<CompiledName("__computed")>] Computed
+        | [<CompiledName("__resolving__")>] Resolving
+        | [<CompiledName("export=")>] ExportEquals
         | Default
         | This
 
@@ -6426,24 +4696,22 @@ module Ts =
     /// with an intersection of void and an object. This makes it wholly incompatible
     /// with a normal string (which is good, it cannot be misused on assignment or on usage),
     /// while still being comparable with a normal string via === (also good) and castable from a string.
-    type __String = U2<obj, InternalSymbolName>
+    type __String =
+        U2<obj, InternalSymbolName>
 
-    /// <summary>ReadonlyMap where keys are <c>__String</c>s.</summary>
-    [<AllowNullLiteral>]
+    [<Obsolete("Use ReadonlyMap<__String, T> instead.")>]
     type ReadonlyUnderscoreEscapedMap<'T> =
-        inherit ReadonlyESMap<__String, 'T>
+        ReadonlyMap<__String, 'T>
 
-    /// <summary>Map where keys are <c>__String</c>s.</summary>
-    [<AllowNullLiteral>]
+    [<Obsolete("Use Map<__String, T> instead.")>]
     type UnderscoreEscapedMap<'T> =
-        inherit ESMap<__String, 'T>
-        inherit ReadonlyUnderscoreEscapedMap<'T>
+        Map<__String, 'T>
 
     /// SymbolTable based on ES6 Map interface.
-    type SymbolTable = UnderscoreEscapedMap<Symbol>
+    type SymbolTable =
+        Map<__String, Symbol>
 
-    [<RequireQualifiedAccess>]
-    type TypeFlags =
+    type [<RequireQualifiedAccess>] TypeFlags =
         | Any = 1
         | Unknown = 2
         | String = 4
@@ -6474,7 +4742,8 @@ module Ts =
         | TemplateLiteral = 134217728
         | StringMapping = 268435456
         | Literal = 2944
-        | Unit = 109440
+        | Unit = 109472
+        | Freshable = 2976
         | StringOrNumberLiteral = 384
         | PossiblyFalsy = 117724
         | StringLike = 402653316
@@ -6496,8 +4765,7 @@ module Ts =
     type DestructuringPattern =
         U3<BindingPattern, ObjectLiteralExpression, ArrayLiteralExpression>
 
-    [<AllowNullLiteral>]
-    type Type =
+    type [<AllowNullLiteral>] Type =
         abstract flags: TypeFlags with get, set
         abstract symbol: Symbol with get, set
         abstract pattern: DestructuringPattern option with get, set
@@ -6525,41 +4793,39 @@ module Ts =
         abstract isTypeParameter: unit -> bool
         abstract isClassOrInterface: unit -> bool
         abstract isClass: unit -> bool
+        abstract isIndexType: unit -> bool
 
-    [<AllowNullLiteral>]
-    type LiteralType =
+    type [<AllowNullLiteral>] FreshableType =
         inherit Type
-        abstract value: U3<string, float, PseudoBigInt> with get, set
-        abstract freshType: LiteralType with get, set
-        abstract regularType: LiteralType with get, set
+        abstract freshType: FreshableType with get, set
+        abstract regularType: FreshableType with get, set
 
-    [<AllowNullLiteral>]
-    type UniqueESSymbolType =
+    type [<AllowNullLiteral>] LiteralType =
+        inherit FreshableType
+        abstract value: U3<string, float, PseudoBigInt> with get, set
+
+    type [<AllowNullLiteral>] UniqueESSymbolType =
         inherit Type
         abstract symbol: Symbol with get, set
         abstract escapedName: __String with get, set
 
-    [<AllowNullLiteral>]
-    type StringLiteralType =
+    type [<AllowNullLiteral>] StringLiteralType =
         inherit LiteralType
         abstract value: string with get, set
 
-    [<AllowNullLiteral>]
-    type NumberLiteralType =
+    type [<AllowNullLiteral>] NumberLiteralType =
         inherit LiteralType
         abstract value: float with get, set
 
-    [<AllowNullLiteral>]
-    type BigIntLiteralType =
+    type [<AllowNullLiteral>] BigIntLiteralType =
         inherit LiteralType
         abstract value: PseudoBigInt with get, set
 
-    [<AllowNullLiteral>]
-    type EnumType =
-        inherit Type
+    type [<AllowNullLiteral>] EnumType =
+        inherit FreshableType
 
-    [<RequireQualifiedAccess>]
-    type ObjectFlags =
+    type [<RequireQualifiedAccess>] ObjectFlags =
+        | None = 0
         | Class = 1
         | Interface = 2
         | Reference = 4
@@ -6570,40 +4836,37 @@ module Ts =
         | ObjectLiteral = 128
         | EvolvingArray = 256
         | ObjectLiteralPatternWithComputedProperties = 512
-        | ContainsSpread = 1024
-        | ReverseMapped = 2048
-        | JsxAttributes = 4096
-        | MarkerType = 8192
-        | JSLiteral = 16384
-        | FreshLiteral = 32768
-        | ArrayLiteral = 65536
-        | ObjectRestType = 131072
+        | ReverseMapped = 1024
+        | JsxAttributes = 2048
+        | JSLiteral = 4096
+        | FreshLiteral = 8192
+        | ArrayLiteral = 16384
         | ClassOrInterface = 3
+        | ContainsSpread = 2097152
+        | ObjectRestType = 4194304
+        | InstantiationExpressionType = 8388608
 
-    [<AllowNullLiteral>]
-    type ObjectType =
+    type [<AllowNullLiteral>] ObjectType =
         inherit Type
         abstract objectFlags: ObjectFlags with get, set
 
     /// Class and interface types (ObjectFlags.Class and ObjectFlags.Interface).
-    [<AllowNullLiteral>]
-    type InterfaceType =
+    type [<AllowNullLiteral>] InterfaceType =
         inherit ObjectType
         abstract typeParameters: ResizeArray<TypeParameter> option with get, set
         abstract outerTypeParameters: ResizeArray<TypeParameter> option with get, set
         abstract localTypeParameters: ResizeArray<TypeParameter> option with get, set
         abstract thisType: TypeParameter option with get, set
 
-    type BaseType = U3<ObjectType, IntersectionType, TypeVariable>
+    type BaseType =
+        U3<ObjectType, IntersectionType, TypeVariable>
 
-    [<AllowNullLiteral>]
-    type InterfaceTypeWithDeclaredMembers =
+    type [<AllowNullLiteral>] InterfaceTypeWithDeclaredMembers =
         inherit InterfaceType
         abstract declaredProperties: ResizeArray<Symbol> with get, set
         abstract declaredCallSignatures: ResizeArray<Signature> with get, set
         abstract declaredConstructSignatures: ResizeArray<Signature> with get, set
-        abstract declaredStringIndexInfo: IndexInfo option with get, set
-        abstract declaredNumberIndexInfo: IndexInfo option with get, set
+        abstract declaredIndexInfos: ResizeArray<IndexInfo> with get, set
 
     /// Type references (ObjectFlags.Reference). When a class or interface has type parameters or
     /// a "this" type, references to the class or interface are made using type references. The
@@ -6613,27 +4876,20 @@ module Ts =
     /// the type reference itself is substituted for "this". The typeArguments property is undefined
     /// if the class or interface has no type parameters and the reference isn't specifying an
     /// explicit "this" argument.
-    [<AllowNullLiteral>]
-    type TypeReference =
+    type [<AllowNullLiteral>] TypeReference =
         inherit ObjectType
         abstract target: GenericType with get, set
-
-        abstract node:
-            U3<TypeReferenceNode, ArrayTypeNode, TupleTypeNode> option with get, set
-
+        abstract node: U3<TypeReferenceNode, ArrayTypeNode, TupleTypeNode> option with get, set
         abstract typeArguments: ResizeArray<Type> option with get, set
 
-    [<AllowNullLiteral>]
-    type DeferredTypeReference =
+    type [<AllowNullLiteral>] DeferredTypeReference =
         inherit TypeReference
 
-    [<AllowNullLiteral>]
-    type GenericType =
+    type [<AllowNullLiteral>] GenericType =
         inherit InterfaceType
         inherit TypeReference
 
-    [<RequireQualifiedAccess>]
-    type ElementFlags =
+    type [<RequireQualifiedAccess>] ElementFlags =
         | Required = 1
         | Optional = 2
         | Rest = 4
@@ -6643,55 +4899,48 @@ module Ts =
         | NonRequired = 14
         | NonRest = 11
 
-    [<AllowNullLiteral>]
-    type TupleType =
+    type [<AllowNullLiteral>] TupleType =
         inherit GenericType
         abstract elementFlags: ResizeArray<ElementFlags> with get, set
+        /// Number of required or variadic elements
         abstract minLength: float with get, set
+        /// Number of initial required or optional elements
         abstract fixedLength: float with get, set
+        /// True if tuple has any rest or variadic elements
         abstract hasRestElement: bool with get, set
         abstract combinedFlags: ElementFlags with get, set
         abstract readonly: bool with get, set
+        abstract labeledElementDeclarations: ResizeArray<U2<NamedTupleMember, ParameterDeclaration> option> option with get, set
 
-        abstract labeledElementDeclarations:
-            ResizeArray<U2<NamedTupleMember, ParameterDeclaration>> option with get, set
-
-    [<AllowNullLiteral>]
-    type TupleTypeReference =
+    type [<AllowNullLiteral>] TupleTypeReference =
         inherit TypeReference
         abstract target: TupleType with get, set
 
-    [<AllowNullLiteral>]
-    type UnionOrIntersectionType =
+    type [<AllowNullLiteral>] UnionOrIntersectionType =
         inherit Type
         abstract types: ResizeArray<Type> with get, set
 
-    [<AllowNullLiteral>]
-    type UnionType =
+    type [<AllowNullLiteral>] UnionType =
         inherit UnionOrIntersectionType
 
-    [<AllowNullLiteral>]
-    type IntersectionType =
+    type [<AllowNullLiteral>] IntersectionType =
         inherit UnionOrIntersectionType
 
-    type StructuredType = U3<ObjectType, UnionType, IntersectionType>
+    type StructuredType =
+        U3<ObjectType, UnionType, IntersectionType>
 
-    [<AllowNullLiteral>]
-    type EvolvingArrayType =
+    type [<AllowNullLiteral>] EvolvingArrayType =
         inherit ObjectType
         abstract elementType: Type with get, set
         abstract finalArrayType: Type option with get, set
 
-    [<AllowNullLiteral>]
-    type InstantiableType =
+    type [<AllowNullLiteral>] InstantiableType =
         inherit Type
 
-    [<AllowNullLiteral>]
-    type TypeParameter =
+    type [<AllowNullLiteral>] TypeParameter =
         inherit InstantiableType
 
-    [<AllowNullLiteral>]
-    type IndexedAccessType =
+    type [<AllowNullLiteral>] IndexedAccessType =
         inherit InstantiableType
         abstract objectType: Type with get, set
         abstract indexType: Type with get, set
@@ -6699,110 +4948,97 @@ module Ts =
         abstract simplifiedForReading: Type option with get, set
         abstract simplifiedForWriting: Type option with get, set
 
-    type TypeVariable = U2<TypeParameter, IndexedAccessType>
+    type TypeVariable =
+        U2<TypeParameter, IndexedAccessType>
 
-    [<AllowNullLiteral>]
-    type IndexType =
+    type [<AllowNullLiteral>] IndexType =
         inherit InstantiableType
         abstract ``type``: U2<InstantiableType, UnionOrIntersectionType> with get, set
 
-    [<AllowNullLiteral>]
-    type ConditionalRoot =
+    type [<AllowNullLiteral>] ConditionalRoot =
         abstract node: ConditionalTypeNode with get, set
         abstract checkType: Type with get, set
         abstract extendsType: Type with get, set
         abstract isDistributive: bool with get, set
         abstract inferTypeParameters: ResizeArray<TypeParameter> option with get, set
         abstract outerTypeParameters: ResizeArray<TypeParameter> option with get, set
-        abstract instantiations: Map<Type> option with get, set
+        abstract instantiations: Map<string, Type> option with get, set
         abstract aliasSymbol: Symbol option with get, set
         abstract aliasTypeArguments: ResizeArray<Type> option with get, set
 
-    [<AllowNullLiteral>]
-    type ConditionalType =
+    type [<AllowNullLiteral>] ConditionalType =
         inherit InstantiableType
         abstract root: ConditionalRoot with get, set
         abstract checkType: Type with get, set
         abstract extendsType: Type with get, set
-        abstract resolvedTrueType: Type with get, set
-        abstract resolvedFalseType: Type with get, set
+        abstract resolvedTrueType: Type option with get, set
+        abstract resolvedFalseType: Type option with get, set
 
-    [<AllowNullLiteral>]
-    type TemplateLiteralType =
+    type [<AllowNullLiteral>] TemplateLiteralType =
         inherit InstantiableType
         abstract texts: ResizeArray<string> with get, set
         abstract types: ResizeArray<Type> with get, set
 
-    [<AllowNullLiteral>]
-    type StringMappingType =
+    type [<AllowNullLiteral>] StringMappingType =
         inherit InstantiableType
         abstract symbol: Symbol with get, set
         abstract ``type``: Type with get, set
 
-    [<AllowNullLiteral>]
-    type SubstitutionType =
+    type [<AllowNullLiteral>] SubstitutionType =
         inherit InstantiableType
+        abstract objectFlags: ObjectFlags with get, set
         abstract baseType: Type with get, set
-        abstract substitute: Type with get, set
+        abstract ``constraint``: Type with get, set
 
-    [<RequireQualifiedAccess>]
-    type SignatureKind =
+    type [<RequireQualifiedAccess>] SignatureKind =
         | Call = 0
         | Construct = 1
 
-    [<AllowNullLiteral>]
-    type Signature =
+    type [<AllowNullLiteral>] Signature =
         abstract declaration: U2<SignatureDeclaration, JSDocSignature> option with get, set
         abstract typeParameters: ResizeArray<TypeParameter> option with get, set
         abstract parameters: ResizeArray<Symbol> with get, set
         abstract getDeclaration: unit -> SignatureDeclaration
         abstract getTypeParameters: unit -> ResizeArray<TypeParameter> option
         abstract getParameters: unit -> ResizeArray<Symbol>
+        abstract getTypeParameterAtPosition: pos: float -> Type
         abstract getReturnType: unit -> Type
-
-        abstract getDocumentationComment:
-            typeChecker: TypeChecker option -> ResizeArray<SymbolDisplayPart>
-
+        abstract getDocumentationComment: typeChecker: TypeChecker option -> ResizeArray<SymbolDisplayPart>
         abstract getJsDocTags: unit -> ResizeArray<JSDocTagInfo>
 
-    [<RequireQualifiedAccess>]
-    type IndexKind =
+    type [<RequireQualifiedAccess>] IndexKind =
         | String = 0
         | Number = 1
 
-    [<AllowNullLiteral>]
-    type IndexInfo =
+    type [<AllowNullLiteral>] IndexInfo =
+        abstract keyType: Type with get, set
         abstract ``type``: Type with get, set
         abstract isReadonly: bool with get, set
         abstract declaration: IndexSignatureDeclaration option with get, set
 
-    [<RequireQualifiedAccess>]
-    type InferencePriority =
+    type [<RequireQualifiedAccess>] InferencePriority =
+        | None = 0
         | NakedTypeVariable = 1
         | SpeculativeTuple = 2
-        | HomomorphicMappedType = 4
-        | PartialHomomorphicMappedType = 8
-        | MappedTypeConstraint = 16
-        | ContravariantConditional = 32
-        | ReturnType = 64
-        | LiteralKeyof = 128
-        | NoConstraints = 256
-        | AlwaysStrict = 512
-        | MaxValue = 1024
-        | PriorityImpliesCombination = 208
+        | SubstituteSource = 4
+        | HomomorphicMappedType = 8
+        | PartialHomomorphicMappedType = 16
+        | MappedTypeConstraint = 32
+        | ContravariantConditional = 64
+        | ReturnType = 128
+        | LiteralKeyof = 256
+        | NoConstraints = 512
+        | AlwaysStrict = 1024
+        | MaxValue = 2048
+        | PriorityImpliesCombination = 416
         | Circularity = -1
 
-    [<Obsolete("Use FileExtensionInfo instead.")>]
-    type JsFileExtensionInfo = FileExtensionInfo
-
-    [<AllowNullLiteral>]
-    type FileExtensionInfo =
+    type [<AllowNullLiteral>] FileExtensionInfo =
         abstract extension: string with get, set
         abstract isMixedContent: bool with get, set
         abstract scriptKind: ScriptKind option with get, set
 
-    [<AllowNullLiteral>]
-    type DiagnosticMessage =
+    type [<AllowNullLiteral>] DiagnosticMessage =
         abstract key: string with get, set
         abstract category: DiagnosticCategory with get, set
         abstract code: float with get, set
@@ -6814,26 +5050,21 @@ module Ts =
     /// It is built from the bottom up, leaving the head to be the "main" diagnostic.
     /// While it seems that DiagnosticMessageChain is structurally similar to DiagnosticMessage,
     /// the difference is that messages are all preformatted in DMC.
-    [<AllowNullLiteral>]
-    type DiagnosticMessageChain =
+    type [<AllowNullLiteral>] DiagnosticMessageChain =
         abstract messageText: string with get, set
         abstract category: DiagnosticCategory with get, set
         abstract code: float with get, set
         abstract next: ResizeArray<DiagnosticMessageChain> option with get, set
 
-    [<AllowNullLiteral>]
-    type Diagnostic =
+    type [<AllowNullLiteral>] Diagnostic =
         inherit DiagnosticRelatedInformation
         /// <summary>May store more in future. For now, this will simply be <c>true</c> to indicate when a diagnostic is an unused-identifier diagnostic.</summary>
         abstract reportsUnnecessary: DiagnosticMessageReportsUnnecessary option with get, set
         abstract reportsDeprecated: DiagnosticMessageReportsUnnecessary option with get, set
         abstract source: string option with get, set
+        abstract relatedInformation: ResizeArray<DiagnosticRelatedInformation> option with get, set
 
-        abstract relatedInformation:
-            ResizeArray<DiagnosticRelatedInformation> option with get, set
-
-    [<AllowNullLiteral>]
-    type DiagnosticRelatedInformation =
+    type [<AllowNullLiteral>] DiagnosticRelatedInformation =
         abstract category: DiagnosticCategory with get, set
         abstract code: float with get, set
         abstract file: SourceFile option with get, set
@@ -6841,31 +5072,42 @@ module Ts =
         abstract length: float option with get, set
         abstract messageText: U2<string, DiagnosticMessageChain> with get, set
 
-    [<AllowNullLiteral>]
-    type DiagnosticWithLocation =
+    type [<AllowNullLiteral>] DiagnosticWithLocation =
         inherit Diagnostic
         abstract file: SourceFile with get, set
         abstract start: float with get, set
         abstract length: float with get, set
 
-    [<RequireQualifiedAccess>]
-    type DiagnosticCategory =
+    type [<RequireQualifiedAccess>] DiagnosticCategory =
         | Warning = 0
         | Error = 1
         | Suggestion = 2
         | Message = 3
 
-    [<RequireQualifiedAccess>]
-    type ModuleResolutionKind =
+    type [<RequireQualifiedAccess>] ModuleResolutionKind =
         | Classic = 1
+        /// <deprecated>
+        /// <c>NodeJs</c> was renamed to <c>Node10</c> to better reflect the version of Node that it targets.
+        /// Use the new name or consider switching to a modern module resolution target.
+        /// </deprecated>
         | NodeJs = 2
+        | Node10 = 2
+        | Node16 = 3
+        | NodeNext = 99
+        | Bundler = 100
 
-    [<AllowNullLiteral>]
-    type PluginImport =
+    type [<RequireQualifiedAccess>] ModuleDetectionKind =
+        /// Files with imports, exports and/or import.meta are considered modules
+        | Legacy = 1
+        /// Legacy, but also files with jsx under react-jsx or react-jsxdev and esm mode files under moduleResolution: node16+
+        | Auto = 2
+        /// Consider all non-declaration files modules, regardless of present syntax
+        | Force = 3
+
+    type [<AllowNullLiteral>] PluginImport =
         abstract name: string with get, set
 
-    [<AllowNullLiteral>]
-    type ProjectReference =
+    type [<AllowNullLiteral>] ProjectReference =
         /// A normalized path on disk
         abstract path: string with get, set
         /// The path as the user originally wrote it
@@ -6875,32 +5117,33 @@ module Ts =
         /// True if it is intended that this reference form a circularity
         abstract circular: bool option with get, set
 
-    [<RequireQualifiedAccess>]
-    type WatchFileKind =
+    type [<RequireQualifiedAccess>] WatchFileKind =
         | FixedPollingInterval = 0
         | PriorityPollingInterval = 1
         | DynamicPriorityPolling = 2
-        | UseFsEvents = 3
-        | UseFsEventsOnParentDirectory = 4
+        | FixedChunkSizePolling = 3
+        | UseFsEvents = 4
+        | UseFsEventsOnParentDirectory = 5
 
-    [<RequireQualifiedAccess>]
-    type WatchDirectoryKind =
+    type [<RequireQualifiedAccess>] WatchDirectoryKind =
         | UseFsEvents = 0
         | FixedPollingInterval = 1
         | DynamicPriorityPolling = 2
+        | FixedChunkSizePolling = 3
 
-    [<RequireQualifiedAccess>]
-    type PollingWatchKind =
+    type [<RequireQualifiedAccess>] PollingWatchKind =
         | FixedInterval = 0
         | PriorityInterval = 1
         | DynamicPriority = 2
+        | FixedChunkSize = 3
 
     type CompilerOptionsValue =
         U8<string, float, bool, ResizeArray<U2<string, float>>, ResizeArray<string>, MapLike<ResizeArray<string>>, ResizeArray<PluginImport>, ResizeArray<ProjectReference>> option
 
-    [<AllowNullLiteral>]
-    type CompilerOptions =
+    type [<AllowNullLiteral>] CompilerOptions =
+        abstract allowImportingTsExtensions: bool option with get, set
         abstract allowJs: bool option with get, set
+        abstract allowArbitraryExtensions: bool option with get, set
         abstract allowSyntheticDefaultImports: bool option with get, set
         abstract allowUmdGlobalAccess: bool option with get, set
         abstract allowUnreachableCode: bool option with get, set
@@ -6909,6 +5152,7 @@ module Ts =
         abstract baseUrl: string option with get, set
         abstract charset: string option with get, set
         abstract checkJs: bool option with get, set
+        abstract customConditions: ResizeArray<string> option with get, set
         abstract declaration: bool option with get, set
         abstract declarationMap: bool option with get, set
         abstract emitDeclarationOnly: bool option with get, set
@@ -6920,8 +5164,10 @@ module Ts =
         abstract downlevelIteration: bool option with get, set
         abstract emitBOM: bool option with get, set
         abstract emitDecoratorMetadata: bool option with get, set
+        abstract exactOptionalPropertyTypes: bool option with get, set
         abstract experimentalDecorators: bool option with get, set
         abstract forceConsistentCasingInFileNames: bool option with get, set
+        abstract ignoreDeprecations: string option with get, set
         abstract importHelpers: bool option with get, set
         abstract importsNotUsedAsValues: ImportsNotUsedAsValues option with get, set
         abstract inlineSourceMap: bool option with get, set
@@ -6935,6 +5181,8 @@ module Ts =
         abstract maxNodeModuleJsDepth: float option with get, set
         abstract ``module``: ModuleKind option with get, set
         abstract moduleResolution: ModuleResolutionKind option with get, set
+        abstract moduleSuffixes: ResizeArray<string> option with get, set
+        abstract moduleDetection: ModuleDetectionKind option with get, set
         abstract newLine: NewLineKind option with get, set
         abstract noEmit: bool option with get, set
         abstract noEmitHelpers: bool option with get, set
@@ -6958,7 +5206,9 @@ module Ts =
         abstract outFile: string option with get, set
         abstract paths: MapLike<ResizeArray<string>> option with get, set
         abstract preserveConstEnums: bool option with get, set
+        abstract noImplicitOverride: bool option with get, set
         abstract preserveSymlinks: bool option with get, set
+        abstract preserveValueImports: bool option with get, set
         abstract project: string option with get, set
         abstract reactNamespace: string option with get, set
         abstract jsxFactory: string option with get, set
@@ -6968,6 +5218,8 @@ module Ts =
         abstract incremental: bool option with get, set
         abstract tsBuildInfoFile: string option with get, set
         abstract removeComments: bool option with get, set
+        abstract resolvePackageJsonExports: bool option with get, set
+        abstract resolvePackageJsonImports: bool option with get, set
         abstract rootDir: string option with get, set
         abstract rootDirs: ResizeArray<string> option with get, set
         abstract skipLibCheck: bool option with get, set
@@ -6984,46 +5236,33 @@ module Ts =
         abstract suppressImplicitAnyIndexErrors: bool option with get, set
         abstract target: ScriptTarget option with get, set
         abstract traceResolution: bool option with get, set
+        abstract useUnknownInCatchVariables: bool option with get, set
         abstract resolveJsonModule: bool option with get, set
         abstract types: ResizeArray<string> option with get, set
         /// Paths used to compute primary types search locations
         abstract typeRoots: ResizeArray<string> option with get, set
+        abstract verbatimModuleSyntax: bool option with get, set
         abstract esModuleInterop: bool option with get, set
         abstract useDefineForClassFields: bool option with get, set
+        [<EmitIndexer>] abstract Item: option: string -> U2<CompilerOptionsValue, TsConfigSourceFile> option with get, set
 
-        [<EmitIndexer>]
-        abstract Item:
-            option: string ->
-                U2<CompilerOptionsValue, TsConfigSourceFile> option with get, set
-
-    [<AllowNullLiteral>]
-    type WatchOptions =
+    type [<AllowNullLiteral>] WatchOptions =
         abstract watchFile: WatchFileKind option with get, set
         abstract watchDirectory: WatchDirectoryKind option with get, set
         abstract fallbackPolling: PollingWatchKind option with get, set
         abstract synchronousWatchDirectory: bool option with get, set
         abstract excludeDirectories: ResizeArray<string> option with get, set
         abstract excludeFiles: ResizeArray<string> option with get, set
+        [<EmitIndexer>] abstract Item: option: string -> CompilerOptionsValue option with get, set
 
-        [<EmitIndexer>]
-        abstract Item: option: string -> CompilerOptionsValue option with get, set
-
-    [<AllowNullLiteral>]
-    type TypeAcquisition =
-        [<Obsolete("typingOptions.enableAutoDiscovery
-Use typeAcquisition.enable instead.")>]
-        abstract enableAutoDiscovery: bool option with get, set
-
+    type [<AllowNullLiteral>] TypeAcquisition =
         abstract enable: bool option with get, set
         abstract ``include``: ResizeArray<string> option with get, set
         abstract exclude: ResizeArray<string> option with get, set
         abstract disableFilenameBasedTypeAcquisition: bool option with get, set
+        [<EmitIndexer>] abstract Item: option: string -> CompilerOptionsValue option with get, set
 
-        [<EmitIndexer>]
-        abstract Item: option: string -> CompilerOptionsValue option with get, set
-
-    [<RequireQualifiedAccess>]
-    type ModuleKind =
+    type [<RequireQualifiedAccess>] ModuleKind =
         | None = 0
         | CommonJS = 1
         | AMD = 2
@@ -7031,10 +5270,12 @@ Use typeAcquisition.enable instead.")>]
         | System = 4
         | ES2015 = 5
         | ES2020 = 6
+        | ES2022 = 7
         | ESNext = 99
+        | Node16 = 100
+        | NodeNext = 199
 
-    [<RequireQualifiedAccess>]
-    type JsxEmit =
+    type [<RequireQualifiedAccess>] JsxEmit =
         | None = 0
         | Preserve = 1
         | React = 2
@@ -7042,25 +5283,21 @@ Use typeAcquisition.enable instead.")>]
         | ReactJSX = 4
         | ReactJSXDev = 5
 
-    [<RequireQualifiedAccess>]
-    type ImportsNotUsedAsValues =
+    type [<RequireQualifiedAccess>] ImportsNotUsedAsValues =
         | Remove = 0
         | Preserve = 1
         | Error = 2
 
-    [<RequireQualifiedAccess>]
-    type NewLineKind =
+    type [<RequireQualifiedAccess>] NewLineKind =
         | CarriageReturnLineFeed = 0
         | LineFeed = 1
 
-    [<AllowNullLiteral>]
-    type LineAndCharacter =
+    type [<AllowNullLiteral>] LineAndCharacter =
         /// 0-based.
         abstract line: float with get, set
         abstract character: float with get, set
 
-    [<RequireQualifiedAccess>]
-    type ScriptKind =
+    type [<RequireQualifiedAccess>] ScriptKind =
         | Unknown = 0
         | JS = 1
         | JSX = 2
@@ -7072,8 +5309,7 @@ Use typeAcquisition.enable instead.")>]
         /// Deferred extensions are going to be included in all project contexts.
         | Deferred = 7
 
-    [<RequireQualifiedAccess>]
-    type ScriptTarget =
+    type [<RequireQualifiedAccess>] ScriptTarget =
         | ES3 = 0
         | ES5 = 1
         | ES2015 = 2
@@ -7082,18 +5318,18 @@ Use typeAcquisition.enable instead.")>]
         | ES2018 = 5
         | ES2019 = 6
         | ES2020 = 7
+        | ES2021 = 8
+        | ES2022 = 9
         | ESNext = 99
         | JSON = 100
         | Latest = 99
 
-    [<RequireQualifiedAccess>]
-    type LanguageVariant =
+    type [<RequireQualifiedAccess>] LanguageVariant =
         | Standard = 0
         | JSX = 1
 
     /// Either a parsed command line or a parsed tsconfig.json
-    [<AllowNullLiteral>]
-    type ParsedCommandLine =
+    type [<AllowNullLiteral>] ParsedCommandLine =
         abstract options: CompilerOptions with get, set
         abstract typeAcquisition: TypeAcquisition option with get, set
         abstract fileNames: ResizeArray<string> with get, set
@@ -7104,13 +5340,11 @@ Use typeAcquisition.enable instead.")>]
         abstract wildcardDirectories: MapLike<WatchDirectoryFlags> option with get, set
         abstract compileOnSave: bool option with get, set
 
-    [<RequireQualifiedAccess>]
-    type WatchDirectoryFlags =
+    type [<RequireQualifiedAccess>] WatchDirectoryFlags =
         | None = 0
         | Recursive = 1
 
-    [<AllowNullLiteral>]
-    type CreateProgramOptions =
+    type [<AllowNullLiteral>] CreateProgramOptions =
         abstract rootNames: ResizeArray<string> with get, set
         abstract options: CompilerOptions with get, set
         abstract projectReferences: ResizeArray<ProjectReference> option with get, set
@@ -7118,8 +5352,7 @@ Use typeAcquisition.enable instead.")>]
         abstract oldProgram: Program option with get, set
         abstract configFileParsingDiagnostics: ResizeArray<Diagnostic> option with get, set
 
-    [<AllowNullLiteral>]
-    type ModuleResolutionHost =
+    type [<AllowNullLiteral>] ModuleResolutionHost =
         abstract fileExists: fileName: string -> bool
         abstract readFile: fileName: string -> string option
         abstract trace: s: string -> unit
@@ -7129,6 +5362,13 @@ Use typeAcquisition.enable instead.")>]
         abstract realpath: path: string -> string
         abstract getCurrentDirectory: unit -> string
         abstract getDirectories: path: string -> ResizeArray<string>
+        abstract useCaseSensitiveFileNames: U2<bool, (unit -> bool)> option with get, set
+
+    /// Used by services to specify the minimum host area required to set up source files under any compilation settings
+    type [<AllowNullLiteral>] MinimalResolutionCacheHost =
+        inherit ModuleResolutionHost
+        abstract getCompilationSettings: unit -> CompilerOptions
+        abstract getCompilerHost: unit -> CompilerHost option
 
     /// <summary>
     /// Represents the result of module resolution.
@@ -7137,32 +5377,32 @@ Use typeAcquisition.enable instead.")>]
     ///
     /// Prefer to return a <c>ResolvedModuleFull</c> so that the file type does not have to be inferred.
     /// </summary>
-    [<AllowNullLiteral>]
-    type ResolvedModule =
+    type [<AllowNullLiteral>] ResolvedModule =
         /// Path of the file the module was resolved to.
         abstract resolvedFileName: string with get, set
         /// <summary>True if <c>resolvedFileName</c> comes from <c>node_modules</c>.</summary>
         abstract isExternalLibraryImport: bool option with get, set
+        /// True if the original module reference used a .ts extension to refer directly to a .ts file,
+        /// which should produce an error during checking if emit is enabled.
+        abstract resolvedUsingTsExtension: bool option with get, set
 
     /// <summary>
     /// ResolvedModule with an explicitly provided <c>extension</c> property.
     /// Prefer this over <c>ResolvedModule</c>.
     /// If changing this, remember to change <c>moduleResolutionIsEqualTo</c>.
     /// </summary>
-    [<AllowNullLiteral>]
-    type ResolvedModuleFull =
+    type [<AllowNullLiteral>] ResolvedModuleFull =
         inherit ResolvedModule
         /// Extension of resolvedFileName. This must match what's at the end of resolvedFileName.
         /// This is optional for backwards-compatibility, but will be added if not provided.
-        abstract extension: Extension with get, set
+        abstract extension: string with get, set
         abstract packageId: PackageId option with get, set
 
     /// <summary>
     /// Unique identifier with a package name and version.
     /// If changing this, remember to change <c>packageIdIsEqual</c>.
     /// </summary>
-    [<AllowNullLiteral>]
-    type PackageId =
+    type [<AllowNullLiteral>] PackageId =
         /// <summary>
         /// Name of the package.
         /// Should not include <c>@types</c>.
@@ -7175,55 +5415,38 @@ Use typeAcquisition.enable instead.")>]
         /// Version of the package, e.g. "1.2.3"
         abstract version: string with get, set
 
-    [<StringEnum>]
-    [<RequireQualifiedAccess>]
-    type Extension =
-        | [<CompiledName ".ts">] Ts
-        | [<CompiledName ".tsx">] Tsx
-        | [<CompiledName ".d.ts">] Dts
-        | [<CompiledName ".js">] Js
-        | [<CompiledName ".jsx">] Jsx
-        | [<CompiledName ".json">] Json
-        | [<CompiledName ".tsbuildinfo">] TsBuildInfo
+    type [<StringEnum>] [<RequireQualifiedAccess>] Extension =
+        | [<CompiledName(".ts")>] Ts
+        | [<CompiledName(".tsx")>] Tsx
+        | [<CompiledName(".d.ts")>] Dts
+        | [<CompiledName(".js")>] Js
+        | [<CompiledName(".jsx")>] Jsx
+        | [<CompiledName(".json")>] Json
+        | [<CompiledName(".tsbuildinfo")>] TsBuildInfo
+        | [<CompiledName(".mjs")>] Mjs
+        | [<CompiledName(".mts")>] Mts
+        | [<CompiledName(".d.mts")>] Dmts
+        | [<CompiledName(".cjs")>] Cjs
+        | [<CompiledName(".cts")>] Cts
+        | [<CompiledName(".d.cts")>] Dcts
 
-    [<AllowNullLiteral>]
-    type ResolvedModuleWithFailedLookupLocations =
+    type [<AllowNullLiteral>] ResolvedModuleWithFailedLookupLocations =
         abstract resolvedModule: ResolvedModuleFull option
 
-    [<AllowNullLiteral>]
-    type ResolvedTypeReferenceDirective =
+    type [<AllowNullLiteral>] ResolvedTypeReferenceDirective =
         abstract primary: bool with get, set
         abstract resolvedFileName: string option with get, set
         abstract packageId: PackageId option with get, set
         /// <summary>True if <c>resolvedFileName</c> comes from <c>node_modules</c>.</summary>
         abstract isExternalLibraryImport: bool option with get, set
 
-    [<AllowNullLiteral>]
-    type ResolvedTypeReferenceDirectiveWithFailedLookupLocations =
-        abstract resolvedTypeReferenceDirective:
-            ResolvedTypeReferenceDirective option
+    type [<AllowNullLiteral>] ResolvedTypeReferenceDirectiveWithFailedLookupLocations =
+        abstract resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective option
 
-        abstract failedLookupLocations: ResizeArray<string>
-
-    [<AllowNullLiteral>]
-    type CompilerHost =
+    type [<AllowNullLiteral>] CompilerHost =
         inherit ModuleResolutionHost
-
-        abstract getSourceFile:
-            fileName: string *
-            languageVersion: ScriptTarget *
-            ?onError: (string -> unit) *
-            ?shouldCreateNewSourceFile: bool ->
-                SourceFile option
-
-        abstract getSourceFileByPath:
-            fileName: string *
-            path: Path *
-            languageVersion: ScriptTarget *
-            ?onError: (string -> unit) *
-            ?shouldCreateNewSourceFile: bool ->
-                SourceFile option
-
+        abstract getSourceFile: fileName: string * languageVersionOrOptions: U2<ScriptTarget, CreateSourceFileOptions> * ?onError: (string -> unit) * ?shouldCreateNewSourceFile: bool -> SourceFile option
+        abstract getSourceFileByPath: fileName: string * path: Path * languageVersionOrOptions: U2<ScriptTarget, CreateSourceFileOptions> * ?onError: (string -> unit) * ?shouldCreateNewSourceFile: bool -> SourceFile option
         abstract getCancellationToken: unit -> CancellationToken
         abstract getDefaultLibFileName: options: CompilerOptions -> string
         abstract getDefaultLibLocation: unit -> string
@@ -7232,102 +5455,87 @@ Use typeAcquisition.enable instead.")>]
         abstract getCanonicalFileName: fileName: string -> string
         abstract useCaseSensitiveFileNames: unit -> bool
         abstract getNewLine: unit -> string
+        abstract readDirectory: rootDir: string * extensions: ResizeArray<string> * excludes: ResizeArray<string> option * includes: ResizeArray<string> * ?depth: float -> ResizeArray<string>
+        [<Obsolete("supply resolveModuleNameLiterals instead for resolution that can handle newer resolution modes like nodenext")>]
+        abstract resolveModuleNames: moduleNames: ResizeArray<string> * containingFile: string * reusedNames: ResizeArray<string> option * redirectedReference: ResolvedProjectReference option * options: CompilerOptions * ?containingSourceFile: SourceFile -> ResizeArray<ResolvedModule option>
+        /// <summary>Returns the module resolution cache used by a provided <c>resolveModuleNames</c> implementation so that any non-name module resolution operations (eg, package.json lookup) can reuse it</summary>
+        abstract getModuleResolutionCache: unit -> ModuleResolutionCache option
+        [<Obsolete("supply resolveTypeReferenceDirectiveReferences instead for resolution that can handle newer resolution modes like nodenext
 
-        abstract readDirectory:
-            rootDir: string *
-            extensions: ResizeArray<string> *
-            excludes: ResizeArray<string> option *
-            includes: ResizeArray<string> *
-            ?depth: float ->
-                ResizeArray<string>
-
-        abstract resolveModuleNames:
-            moduleNames: ResizeArray<string> *
-            containingFile: string *
-            reusedNames: ResizeArray<string> option *
-            redirectedReference: ResolvedProjectReference option *
-            options: CompilerOptions ->
-                ResizeArray<ResolvedModule option>
-
-        /// This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files
-        abstract resolveTypeReferenceDirectives:
-            typeReferenceDirectiveNames: ResizeArray<string> *
-            containingFile: string *
-            redirectedReference: ResolvedProjectReference option *
-            options: CompilerOptions ->
-                ResizeArray<ResolvedTypeReferenceDirective option>
-
+This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files")>]
+        abstract resolveTypeReferenceDirectives: typeReferenceDirectiveNames: U2<ResizeArray<string>, ResizeArray<FileReference>> * containingFile: string * redirectedReference: ResolvedProjectReference option * options: CompilerOptions * ?containingFileMode: ResolutionMode -> ResizeArray<ResolvedTypeReferenceDirective option>
+        abstract resolveModuleNameLiterals: moduleLiterals: ResizeArray<StringLiteralLike> * containingFile: string * redirectedReference: ResolvedProjectReference option * options: CompilerOptions * containingSourceFile: SourceFile * reusedNames: ResizeArray<StringLiteralLike> option -> ResizeArray<ResolvedModuleWithFailedLookupLocations>
+        abstract resolveTypeReferenceDirectiveReferences: typeDirectiveReferences: ResizeArray<'T> * containingFile: string * redirectedReference: ResolvedProjectReference option * options: CompilerOptions * containingSourceFile: SourceFile option * reusedNames: ResizeArray<'T> option -> ResizeArray<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>
         abstract getEnvironmentVariable: name: string -> string option
+        /// If provided along with custom resolveModuleNames or resolveTypeReferenceDirectives, used to determine if unchanged file path needs to re-resolve modules/type reference directives
+        abstract hasInvalidatedResolutions: filePath: Path -> bool
         abstract createHash: data: string -> string
+        abstract getParsedCommandLine: fileName: string -> ParsedCommandLine option
 
-        abstract getParsedCommandLine:
-            fileName: string -> ParsedCommandLine option
-
-    [<AllowNullLiteral>]
-    type SourceMapRange =
+    type [<AllowNullLiteral>] SourceMapRange =
         inherit TextRange
         abstract source: SourceMapSource option with get, set
 
-    [<AllowNullLiteral>]
-    type SourceMapSource =
+    type [<AllowNullLiteral>] SourceMapSource =
         abstract fileName: string with get, set
         abstract text: string with get, set
         abstract skipTrivia: (float -> float) option with get, set
         abstract getLineAndCharacterOfPosition: pos: float -> LineAndCharacter
 
-    [<RequireQualifiedAccess>]
-    type EmitFlags =
+    type [<RequireQualifiedAccess>] EmitFlags =
         | None = 0
         | SingleLine = 1
-        | AdviseOnEmitNode = 2
-        | NoSubstitution = 4
-        | CapturesThis = 8
-        | NoLeadingSourceMap = 16
-        | NoTrailingSourceMap = 32
-        | NoSourceMap = 48
-        | NoNestedSourceMaps = 64
-        | NoTokenLeadingSourceMaps = 128
-        | NoTokenTrailingSourceMaps = 256
-        | NoTokenSourceMaps = 384
-        | NoLeadingComments = 512
-        | NoTrailingComments = 1024
-        | NoComments = 1536
-        | NoNestedComments = 2048
-        | HelperName = 4096
-        | ExportName = 8192
-        | LocalName = 16384
-        | InternalName = 32768
-        | Indented = 65536
-        | NoIndentation = 131072
-        | AsyncFunctionBody = 262144
-        | ReuseTempVariableScope = 524288
-        | CustomPrologue = 1048576
-        | NoHoisting = 2097152
-        | HasEndOfDeclarationMarker = 4194304
+        | MultiLine = 2
+        | AdviseOnEmitNode = 4
+        | NoSubstitution = 8
+        | CapturesThis = 16
+        | NoLeadingSourceMap = 32
+        | NoTrailingSourceMap = 64
+        | NoSourceMap = 96
+        | NoNestedSourceMaps = 128
+        | NoTokenLeadingSourceMaps = 256
+        | NoTokenTrailingSourceMaps = 512
+        | NoTokenSourceMaps = 768
+        | NoLeadingComments = 1024
+        | NoTrailingComments = 2048
+        | NoComments = 3072
+        | NoNestedComments = 4096
+        | HelperName = 8192
+        | ExportName = 16384
+        | LocalName = 32768
+        | InternalName = 65536
+        | Indented = 131072
+        | NoIndentation = 262144
+        | AsyncFunctionBody = 524288
+        | ReuseTempVariableScope = 1048576
+        | CustomPrologue = 2097152
+        | NoHoisting = 4194304
         | Iterator = 8388608
         | NoAsciiEscaping = 16777216
 
-    [<AllowNullLiteral>]
-    type EmitHelper =
+    type [<AllowNullLiteral>] EmitHelperBase =
         abstract name: string
         abstract scoped: bool
         abstract text: U2<string, (EmitHelperUniqueNameCallback -> string)>
         abstract priority: float option
         abstract dependencies: ResizeArray<EmitHelper> option
 
-    [<AllowNullLiteral>]
-    type UnscopedEmitHelper =
-        inherit EmitHelper
-        abstract scoped: obj
+    type [<AllowNullLiteral>] ScopedEmitHelper =
+        inherit EmitHelperBase
+        abstract scoped: bool
+
+    type [<AllowNullLiteral>] UnscopedEmitHelper =
+        inherit EmitHelperBase
+        abstract scoped: bool
         abstract text: string
 
-    [<AllowNullLiteral>]
-    type EmitHelperUniqueNameCallback =
-        [<Emit "$0($1...)">]
-        abstract Invoke: name: string -> string
+    type EmitHelper =
+        U2<ScopedEmitHelper, UnscopedEmitHelper>
 
-    [<RequireQualifiedAccess>]
-    type EmitHint =
+    type [<AllowNullLiteral>] EmitHelperUniqueNameCallback =
+        [<Emit("$0($1...)")>] abstract Invoke: name: string -> string
+
+    type [<RequireQualifiedAccess>] EmitHint =
         | SourceFile = 0
         | Expression = 1
         | IdentifierName = 2
@@ -7336,2076 +5544,493 @@ Use typeAcquisition.enable instead.")>]
         | EmbeddedStatement = 5
         | JsxAttributeValue = 6
 
-    [<RequireQualifiedAccess>]
-    type OuterExpressionKinds =
+    type [<RequireQualifiedAccess>] OuterExpressionKinds =
         | Parentheses = 1
         | TypeAssertions = 2
         | NonNullAssertions = 4
         | PartiallyEmittedExpressions = 8
         | Assertions = 6
         | All = 15
+        | ExcludeJSDocTypeAssertion = 16
 
-    [<StringEnum>]
-    [<RequireQualifiedAccess>]
-    type TypeOfTag =
-        | Undefined
-        | Number
-        | Bigint
-        | Boolean
-        | String
-        | Symbol
-        | Object
-        | Function
+    type [<AllowNullLiteral>] ImmediatelyInvokedFunctionExpression =
+        interface end
 
-    [<AllowNullLiteral>]
-    type NodeFactory =
-        abstract createNodeArray:
-            ?elements: ResizeArray<'T> * ?hasTrailingComma: bool ->
-                ResizeArray<'T>
-                when 'T :> Node
+    type [<AllowNullLiteral>] ImmediatelyInvokedArrowFunction =
+        interface end
 
-        abstract createNumericLiteral:
-            value: U2<string, float> * ?numericLiteralFlags: TokenFlags ->
-                NumericLiteral
-
-        abstract createBigIntLiteral:
-            value: U2<string, PseudoBigInt> -> BigIntLiteral
-
-        abstract createStringLiteral:
-            text: string * ?isSingleQuote: bool -> StringLiteral
-
-        abstract createStringLiteralFromNode:
-            sourceNode: PropertyNameLiteral * ?isSingleQuote: bool ->
-                StringLiteral
-
-        abstract createRegularExpressionLiteral:
-            text: string -> RegularExpressionLiteral
-
+    type [<AllowNullLiteral>] NodeFactory =
+        abstract createNodeArray: ?elements: ResizeArray<'T> * ?hasTrailingComma: bool -> ResizeArray<'T> when 'T :> Node
+        abstract createNumericLiteral: value: U2<string, float> * ?numericLiteralFlags: TokenFlags -> NumericLiteral
+        abstract createBigIntLiteral: value: U2<string, PseudoBigInt> -> BigIntLiteral
+        abstract createStringLiteral: text: string * ?isSingleQuote: bool -> StringLiteral
+        abstract createStringLiteralFromNode: sourceNode: U2<PropertyNameLiteral, PrivateIdentifier> * ?isSingleQuote: bool -> StringLiteral
+        abstract createRegularExpressionLiteral: text: string -> RegularExpressionLiteral
         abstract createIdentifier: text: string -> Identifier
-
-        /// Create a unique temporary variable.
-        abstract createTempVariable:
-            recordTempVariable: (Identifier -> unit) option -> Identifier
-
-        /// Create a unique temporary variable for use in a loop.
-        abstract createLoopVariable: unit -> Identifier
-
+        /// <summary>Create a unique temporary variable.</summary>
+        /// <param name="recordTempVariable">
+        /// An optional callback used to record the temporary variable name. This
+        /// should usually be a reference to <c>hoistVariableDeclaration</c> from a <c>TransformationContext</c>, but
+        /// can be <c>undefined</c> if you plan to record the temporary variable manually.
+        /// </param>
+        /// <param name="reservedInNestedScopes">
+        /// When <c>true</c>, reserves the temporary variable name in all nested scopes
+        /// during emit so that the variable can be referenced in a nested function body. This is an alternative to
+        /// setting <c>EmitFlags.ReuseTempVariableScope</c> on the nested function itself.
+        /// </param>
+        abstract createTempVariable: recordTempVariable: (Identifier -> unit) option * ?reservedInNestedScopes: bool -> Identifier
+        /// <summary>Create a unique temporary variable for use in a loop.</summary>
+        /// <param name="reservedInNestedScopes">
+        /// When <c>true</c>, reserves the temporary variable name in all nested scopes
+        /// during emit so that the variable can be referenced in a nested function body. This is an alternative to
+        /// setting <c>EmitFlags.ReuseTempVariableScope</c> on the nested function itself.
+        /// </param>
+        abstract createLoopVariable: ?reservedInNestedScopes: bool -> Identifier
         /// Create a unique name based on the supplied text.
-        abstract createUniqueName:
-            text: string * ?flags: GeneratedIdentifierFlags -> Identifier
-
+        abstract createUniqueName: text: string * ?flags: GeneratedIdentifierFlags -> Identifier
         /// Create a unique name generated for a node.
-        abstract getGeneratedNameForNode: node: Node option -> Identifier
+        abstract getGeneratedNameForNode: node: Node option * ?flags: GeneratedIdentifierFlags -> Identifier
         abstract createPrivateIdentifier: text: string -> PrivateIdentifier
+        abstract createUniquePrivateName: ?text: string -> PrivateIdentifier
+        abstract getGeneratedPrivateNameForNode: node: Node -> PrivateIdentifier
         abstract createToken: token: SyntaxKind -> SuperExpression
-        // abstract createToken: token: 'TKind -> PunctuationToken<'TKind> // when 'TKind :> PunctuationSyntaxKind
-        // abstract createToken: token: 'TKind -> KeywordTypeNode<'TKind> // when 'TKind :> KeywordTypeSyntaxKind
-        // abstract createToken: token: 'TKind -> ModifierToken<'TKind> // when 'TKind :> ModifierSyntaxKind
-        // abstract createToken: token: 'TKind -> KeywordToken<'TKind> // when 'TKind :> KeywordSyntaxKind
-        // abstract createToken: token: 'TKind -> Token<'TKind>
+        abstract createToken: token: 'TKind -> PunctuationToken<'TKind>
         abstract createSuper: unit -> SuperExpression
         abstract createThis: unit -> ThisExpression
         abstract createNull: unit -> NullLiteral
         abstract createTrue: unit -> TrueLiteral
         abstract createFalse: unit -> FalseLiteral
-
-        abstract createModifier:
-            kind: ModifierSyntaxKind -> ModifierToken<ModifierSyntaxKind> //when 'T :> ModifierSyntaxKind
-
-        abstract createModifiersFromModifierFlags:
-            flags: ModifierFlags -> ResizeArray<Modifier>
-
-        abstract createQualifiedName:
-            left: EntityName * right: U2<string, Identifier> -> QualifiedName
-
-        abstract updateQualifiedName:
-            node: QualifiedName * left: EntityName * right: Identifier ->
-                QualifiedName
-
-        abstract createComputedPropertyName:
-            expression: Expression -> ComputedPropertyName
-
-        abstract updateComputedPropertyName:
-            node: ComputedPropertyName * expression: Expression ->
-                ComputedPropertyName
-
-        abstract createTypeParameterDeclaration:
-            name: U2<string, Identifier> *
-            ?``constraint``: TypeNode *
-            ?defaultType: TypeNode ->
-                TypeParameterDeclaration
-
-        abstract updateTypeParameterDeclaration:
-            node: TypeParameterDeclaration *
-            name: Identifier *
-            ``constraint``: TypeNode option *
-            defaultType: TypeNode option ->
-                TypeParameterDeclaration
-
-        abstract createParameterDeclaration:
-            decorators: ResizeArray<Decorator> option *
-            modifiers: ResizeArray<Modifier> option *
-            dotDotDotToken: DotDotDotToken option *
-            name: U2<string, BindingName> *
-            ?questionToken: QuestionToken *
-            ?``type``: TypeNode *
-            ?initializer: Expression ->
-                ParameterDeclaration
-
-        abstract updateParameterDeclaration:
-            node: ParameterDeclaration *
-            decorators: ResizeArray<Decorator> option *
-            modifiers: ResizeArray<Modifier> option *
-            dotDotDotToken: DotDotDotToken option *
-            name: U2<string, BindingName> *
-            questionToken: QuestionToken option *
-            ``type``: TypeNode option *
-            initializer: Expression option ->
-                ParameterDeclaration
-
+        abstract createModifier: kind: 'T -> ModifierToken<'T>
+        abstract createModifiersFromModifierFlags: flags: ModifierFlags -> ResizeArray<Modifier> option
+        abstract createQualifiedName: left: EntityName * right: U2<string, Identifier> -> QualifiedName
+        abstract updateQualifiedName: node: QualifiedName * left: EntityName * right: Identifier -> QualifiedName
+        abstract createComputedPropertyName: expression: Expression -> ComputedPropertyName
+        abstract updateComputedPropertyName: node: ComputedPropertyName * expression: Expression -> ComputedPropertyName
+        abstract createTypeParameterDeclaration: modifiers: ResizeArray<Modifier> option * name: U2<string, Identifier> * ?``constraint``: TypeNode * ?defaultType: TypeNode -> TypeParameterDeclaration
+        abstract updateTypeParameterDeclaration: node: TypeParameterDeclaration * modifiers: ResizeArray<Modifier> option * name: Identifier * ``constraint``: TypeNode option * defaultType: TypeNode option -> TypeParameterDeclaration
+        abstract createParameterDeclaration: modifiers: ResizeArray<ModifierLike> option * dotDotDotToken: DotDotDotToken option * name: U2<string, BindingName> * ?questionToken: QuestionToken * ?``type``: TypeNode * ?initializer: Expression -> ParameterDeclaration
+        abstract updateParameterDeclaration: node: ParameterDeclaration * modifiers: ResizeArray<ModifierLike> option * dotDotDotToken: DotDotDotToken option * name: U2<string, BindingName> * questionToken: QuestionToken option * ``type``: TypeNode option * initializer: Expression option -> ParameterDeclaration
         abstract createDecorator: expression: Expression -> Decorator
-
-        abstract updateDecorator:
-            node: Decorator * expression: Expression -> Decorator
-
-        abstract createPropertySignature:
-            modifiers: ResizeArray<Modifier> option *
-            name: U2<PropertyName, string> *
-            questionToken: QuestionToken option *
-            ``type``: TypeNode option ->
-                PropertySignature
-
-        abstract updatePropertySignature:
-            node: PropertySignature *
-            modifiers: ResizeArray<Modifier> option *
-            name: PropertyName *
-            questionToken: QuestionToken option *
-            ``type``: TypeNode option ->
-                PropertySignature
-
-        abstract createPropertyDeclaration:
-            decorators: ResizeArray<Decorator> option *
-            modifiers: ResizeArray<Modifier> option *
-            name: U2<string, PropertyName> *
-            questionOrExclamationToken:
-                U2<QuestionToken, ExclamationToken> option *
-            ``type``: TypeNode option *
-            initializer: Expression option ->
-                PropertyDeclaration
-
-        abstract updatePropertyDeclaration:
-            node: PropertyDeclaration *
-            decorators: ResizeArray<Decorator> option *
-            modifiers: ResizeArray<Modifier> option *
-            name: U2<string, PropertyName> *
-            questionOrExclamationToken:
-                U2<QuestionToken, ExclamationToken> option *
-            ``type``: TypeNode option *
-            initializer: Expression option ->
-                PropertyDeclaration
-
-        abstract createMethodSignature:
-            modifiers: ResizeArray<Modifier> option *
-            name: U2<string, PropertyName> *
-            questionToken: QuestionToken option *
-            typeParameters: ResizeArray<TypeParameterDeclaration> option *
-            parameters: ResizeArray<ParameterDeclaration> *
-            ``type``: TypeNode option ->
-                MethodSignature
-
-        abstract updateMethodSignature:
-            node: MethodSignature *
-            modifiers: ResizeArray<Modifier> option *
-            name: PropertyName *
-            questionToken: QuestionToken option *
-            typeParameters: ResizeArray<TypeParameterDeclaration> option *
-            parameters: ResizeArray<ParameterDeclaration> *
-            ``type``: TypeNode option ->
-                MethodSignature
-
-        abstract createMethodDeclaration:
-            decorators: ResizeArray<Decorator> option *
-            modifiers: ResizeArray<Modifier> option *
-            asteriskToken: AsteriskToken option *
-            name: U2<string, PropertyName> *
-            questionToken: QuestionToken option *
-            typeParameters: ResizeArray<TypeParameterDeclaration> option *
-            parameters: ResizeArray<ParameterDeclaration> *
-            ``type``: TypeNode option *
-            body: Block option ->
-                MethodDeclaration
-
-        abstract updateMethodDeclaration:
-            node: MethodDeclaration *
-            decorators: ResizeArray<Decorator> option *
-            modifiers: ResizeArray<Modifier> option *
-            asteriskToken: AsteriskToken option *
-            name: PropertyName *
-            questionToken: QuestionToken option *
-            typeParameters: ResizeArray<TypeParameterDeclaration> option *
-            parameters: ResizeArray<ParameterDeclaration> *
-            ``type``: TypeNode option *
-            body: Block option ->
-                MethodDeclaration
-
-        abstract createConstructorDeclaration:
-            decorators: ResizeArray<Decorator> option *
-            modifiers: ResizeArray<Modifier> option *
-            parameters: ResizeArray<ParameterDeclaration> *
-            body: Block option ->
-                ConstructorDeclaration
-
-        abstract updateConstructorDeclaration:
-            node: ConstructorDeclaration *
-            decorators: ResizeArray<Decorator> option *
-            modifiers: ResizeArray<Modifier> option *
-            parameters: ResizeArray<ParameterDeclaration> *
-            body: Block option ->
-                ConstructorDeclaration
-
-        abstract createGetAccessorDeclaration:
-            decorators: ResizeArray<Decorator> option *
-            modifiers: ResizeArray<Modifier> option *
-            name: U2<string, PropertyName> *
-            parameters: ResizeArray<ParameterDeclaration> *
-            ``type``: TypeNode option *
-            body: Block option ->
-                GetAccessorDeclaration
-
-        abstract updateGetAccessorDeclaration:
-            node: GetAccessorDeclaration *
-            decorators: ResizeArray<Decorator> option *
-            modifiers: ResizeArray<Modifier> option *
-            name: PropertyName *
-            parameters: ResizeArray<ParameterDeclaration> *
-            ``type``: TypeNode option *
-            body: Block option ->
-                GetAccessorDeclaration
-
-        abstract createSetAccessorDeclaration:
-            decorators: ResizeArray<Decorator> option *
-            modifiers: ResizeArray<Modifier> option *
-            name: U2<string, PropertyName> *
-            parameters: ResizeArray<ParameterDeclaration> *
-            body: Block option ->
-                SetAccessorDeclaration
-
-        abstract updateSetAccessorDeclaration:
-            node: SetAccessorDeclaration *
-            decorators: ResizeArray<Decorator> option *
-            modifiers: ResizeArray<Modifier> option *
-            name: PropertyName *
-            parameters: ResizeArray<ParameterDeclaration> *
-            body: Block option ->
-                SetAccessorDeclaration
-
-        abstract createCallSignature:
-            typeParameters: ResizeArray<TypeParameterDeclaration> option *
-            parameters: ResizeArray<ParameterDeclaration> *
-            ``type``: TypeNode option ->
-                CallSignatureDeclaration
-
-        abstract updateCallSignature:
-            node: CallSignatureDeclaration *
-            typeParameters: ResizeArray<TypeParameterDeclaration> option *
-            parameters: ResizeArray<ParameterDeclaration> *
-            ``type``: TypeNode option ->
-                CallSignatureDeclaration
-
-        abstract createConstructSignature:
-            typeParameters: ResizeArray<TypeParameterDeclaration> option *
-            parameters: ResizeArray<ParameterDeclaration> *
-            ``type``: TypeNode option ->
-                ConstructSignatureDeclaration
-
-        abstract updateConstructSignature:
-            node: ConstructSignatureDeclaration *
-            typeParameters: ResizeArray<TypeParameterDeclaration> option *
-            parameters: ResizeArray<ParameterDeclaration> *
-            ``type``: TypeNode option ->
-                ConstructSignatureDeclaration
-
-        abstract createIndexSignature:
-            decorators: ResizeArray<Decorator> option *
-            modifiers: ResizeArray<Modifier> option *
-            parameters: ResizeArray<ParameterDeclaration> *
-            ``type``: TypeNode ->
-                IndexSignatureDeclaration
-
-        abstract updateIndexSignature:
-            node: IndexSignatureDeclaration *
-            decorators: ResizeArray<Decorator> option *
-            modifiers: ResizeArray<Modifier> option *
-            parameters: ResizeArray<ParameterDeclaration> *
-            ``type``: TypeNode ->
-                IndexSignatureDeclaration
-
-        abstract createTemplateLiteralTypeSpan:
-            ``type``: TypeNode * literal: U2<TemplateMiddle, TemplateTail> ->
-                TemplateLiteralTypeSpan
-
-        abstract updateTemplateLiteralTypeSpan:
-            node: TemplateLiteralTypeSpan *
-            ``type``: TypeNode *
-            literal: U2<TemplateMiddle, TemplateTail> ->
-                TemplateLiteralTypeSpan
-
-        abstract createKeywordTypeNode:
-            kind: KeywordTypeSyntaxKind ->
-                KeywordTypeNode<KeywordTypeSyntaxKind> // when 'TKind :> KeywordTypeSyntaxKind
-
-        abstract createTypePredicateNode:
-            assertsModifier: AssertsKeyword option *
-            parameterName: U3<Identifier, ThisTypeNode, string> *
-            ``type``: TypeNode option ->
-                TypePredicateNode
-
-        abstract updateTypePredicateNode:
-            node: TypePredicateNode *
-            assertsModifier: AssertsKeyword option *
-            parameterName: U2<Identifier, ThisTypeNode> *
-            ``type``: TypeNode option ->
-                TypePredicateNode
-
-        abstract createTypeReferenceNode:
-            typeName: U2<string, EntityName> *
-            ?typeArguments: ResizeArray<TypeNode> ->
-                TypeReferenceNode
-
-        abstract updateTypeReferenceNode:
-            node: TypeReferenceNode *
-            typeName: EntityName *
-            typeArguments: ResizeArray<TypeNode> option ->
-                TypeReferenceNode
-
-        abstract createFunctionTypeNode:
-            typeParameters: ResizeArray<TypeParameterDeclaration> option *
-            parameters: ResizeArray<ParameterDeclaration> *
-            ``type``: TypeNode ->
-                FunctionTypeNode
-
-        abstract updateFunctionTypeNode:
-            node: FunctionTypeNode *
-            typeParameters: ResizeArray<TypeParameterDeclaration> option *
-            parameters: ResizeArray<ParameterDeclaration> *
-            ``type``: TypeNode ->
-                FunctionTypeNode
-
-        abstract createConstructorTypeNode:
-            modifiers: ResizeArray<Modifier> option *
-            typeParameters: ResizeArray<TypeParameterDeclaration> option *
-            parameters: ResizeArray<ParameterDeclaration> *
-            ``type``: TypeNode ->
-                ConstructorTypeNode
-
-        [<Obsolete("")>]
-        abstract createConstructorTypeNode:
-            typeParameters: ResizeArray<TypeParameterDeclaration> option *
-            parameters: ResizeArray<ParameterDeclaration> *
-            ``type``: TypeNode ->
-                ConstructorTypeNode
-
-        abstract updateConstructorTypeNode:
-            node: ConstructorTypeNode *
-            modifiers: ResizeArray<Modifier> option *
-            typeParameters: ResizeArray<TypeParameterDeclaration> option *
-            parameters: ResizeArray<ParameterDeclaration> *
-            ``type``: TypeNode ->
-                ConstructorTypeNode
-
-        [<Obsolete("")>]
-        abstract updateConstructorTypeNode:
-            node: ConstructorTypeNode *
-            typeParameters: ResizeArray<TypeParameterDeclaration> option *
-            parameters: ResizeArray<ParameterDeclaration> *
-            ``type``: TypeNode ->
-                ConstructorTypeNode
-
-        abstract createTypeQueryNode: exprName: EntityName -> TypeQueryNode
-
-        abstract updateTypeQueryNode:
-            node: TypeQueryNode * exprName: EntityName -> TypeQueryNode
-
-        abstract createTypeLiteralNode:
-            members: ResizeArray<TypeElement> option -> TypeLiteralNode
-
-        abstract updateTypeLiteralNode:
-            node: TypeLiteralNode * members: ResizeArray<TypeElement> ->
-                TypeLiteralNode
-
+        abstract updateDecorator: node: Decorator * expression: Expression -> Decorator
+        abstract createPropertySignature: modifiers: ResizeArray<Modifier> option * name: U2<PropertyName, string> * questionToken: QuestionToken option * ``type``: TypeNode option -> PropertySignature
+        abstract updatePropertySignature: node: PropertySignature * modifiers: ResizeArray<Modifier> option * name: PropertyName * questionToken: QuestionToken option * ``type``: TypeNode option -> PropertySignature
+        abstract createPropertyDeclaration: modifiers: ResizeArray<ModifierLike> option * name: U2<string, PropertyName> * questionOrExclamationToken: U2<QuestionToken, ExclamationToken> option * ``type``: TypeNode option * initializer: Expression option -> PropertyDeclaration
+        abstract updatePropertyDeclaration: node: PropertyDeclaration * modifiers: ResizeArray<ModifierLike> option * name: U2<string, PropertyName> * questionOrExclamationToken: U2<QuestionToken, ExclamationToken> option * ``type``: TypeNode option * initializer: Expression option -> PropertyDeclaration
+        abstract createMethodSignature: modifiers: ResizeArray<Modifier> option * name: U2<string, PropertyName> * questionToken: QuestionToken option * typeParameters: ResizeArray<TypeParameterDeclaration> option * parameters: ResizeArray<ParameterDeclaration> * ``type``: TypeNode option -> MethodSignature
+        abstract updateMethodSignature: node: MethodSignature * modifiers: ResizeArray<Modifier> option * name: PropertyName * questionToken: QuestionToken option * typeParameters: ResizeArray<TypeParameterDeclaration> option * parameters: ResizeArray<ParameterDeclaration> * ``type``: TypeNode option -> MethodSignature
+        abstract createMethodDeclaration: modifiers: ResizeArray<ModifierLike> option * asteriskToken: AsteriskToken option * name: U2<string, PropertyName> * questionToken: QuestionToken option * typeParameters: ResizeArray<TypeParameterDeclaration> option * parameters: ResizeArray<ParameterDeclaration> * ``type``: TypeNode option * body: Block option -> MethodDeclaration
+        abstract updateMethodDeclaration: node: MethodDeclaration * modifiers: ResizeArray<ModifierLike> option * asteriskToken: AsteriskToken option * name: PropertyName * questionToken: QuestionToken option * typeParameters: ResizeArray<TypeParameterDeclaration> option * parameters: ResizeArray<ParameterDeclaration> * ``type``: TypeNode option * body: Block option -> MethodDeclaration
+        abstract createConstructorDeclaration: modifiers: ResizeArray<ModifierLike> option * parameters: ResizeArray<ParameterDeclaration> * body: Block option -> ConstructorDeclaration
+        abstract updateConstructorDeclaration: node: ConstructorDeclaration * modifiers: ResizeArray<ModifierLike> option * parameters: ResizeArray<ParameterDeclaration> * body: Block option -> ConstructorDeclaration
+        abstract createGetAccessorDeclaration: modifiers: ResizeArray<ModifierLike> option * name: U2<string, PropertyName> * parameters: ResizeArray<ParameterDeclaration> * ``type``: TypeNode option * body: Block option -> GetAccessorDeclaration
+        abstract updateGetAccessorDeclaration: node: GetAccessorDeclaration * modifiers: ResizeArray<ModifierLike> option * name: PropertyName * parameters: ResizeArray<ParameterDeclaration> * ``type``: TypeNode option * body: Block option -> GetAccessorDeclaration
+        abstract createSetAccessorDeclaration: modifiers: ResizeArray<ModifierLike> option * name: U2<string, PropertyName> * parameters: ResizeArray<ParameterDeclaration> * body: Block option -> SetAccessorDeclaration
+        abstract updateSetAccessorDeclaration: node: SetAccessorDeclaration * modifiers: ResizeArray<ModifierLike> option * name: PropertyName * parameters: ResizeArray<ParameterDeclaration> * body: Block option -> SetAccessorDeclaration
+        abstract createCallSignature: typeParameters: ResizeArray<TypeParameterDeclaration> option * parameters: ResizeArray<ParameterDeclaration> * ``type``: TypeNode option -> CallSignatureDeclaration
+        abstract updateCallSignature: node: CallSignatureDeclaration * typeParameters: ResizeArray<TypeParameterDeclaration> option * parameters: ResizeArray<ParameterDeclaration> * ``type``: TypeNode option -> CallSignatureDeclaration
+        abstract createConstructSignature: typeParameters: ResizeArray<TypeParameterDeclaration> option * parameters: ResizeArray<ParameterDeclaration> * ``type``: TypeNode option -> ConstructSignatureDeclaration
+        abstract updateConstructSignature: node: ConstructSignatureDeclaration * typeParameters: ResizeArray<TypeParameterDeclaration> option * parameters: ResizeArray<ParameterDeclaration> * ``type``: TypeNode option -> ConstructSignatureDeclaration
+        abstract createIndexSignature: modifiers: ResizeArray<ModifierLike> option * parameters: ResizeArray<ParameterDeclaration> * ``type``: TypeNode -> IndexSignatureDeclaration
+        abstract updateIndexSignature: node: IndexSignatureDeclaration * modifiers: ResizeArray<ModifierLike> option * parameters: ResizeArray<ParameterDeclaration> * ``type``: TypeNode -> IndexSignatureDeclaration
+        abstract createTemplateLiteralTypeSpan: ``type``: TypeNode * literal: U2<TemplateMiddle, TemplateTail> -> TemplateLiteralTypeSpan
+        abstract updateTemplateLiteralTypeSpan: node: TemplateLiteralTypeSpan * ``type``: TypeNode * literal: U2<TemplateMiddle, TemplateTail> -> TemplateLiteralTypeSpan
+        abstract createClassStaticBlockDeclaration: body: Block -> ClassStaticBlockDeclaration
+        abstract updateClassStaticBlockDeclaration: node: ClassStaticBlockDeclaration * body: Block -> ClassStaticBlockDeclaration
+        abstract createKeywordTypeNode: kind: 'TKind -> KeywordTypeNode<'TKind>
+        abstract createTypePredicateNode: assertsModifier: AssertsKeyword option * parameterName: U3<Identifier, ThisTypeNode, string> * ``type``: TypeNode option -> TypePredicateNode
+        abstract updateTypePredicateNode: node: TypePredicateNode * assertsModifier: AssertsKeyword option * parameterName: U2<Identifier, ThisTypeNode> * ``type``: TypeNode option -> TypePredicateNode
+        abstract createTypeReferenceNode: typeName: U2<string, EntityName> * ?typeArguments: ResizeArray<TypeNode> -> TypeReferenceNode
+        abstract updateTypeReferenceNode: node: TypeReferenceNode * typeName: EntityName * typeArguments: ResizeArray<TypeNode> option -> TypeReferenceNode
+        abstract createFunctionTypeNode: typeParameters: ResizeArray<TypeParameterDeclaration> option * parameters: ResizeArray<ParameterDeclaration> * ``type``: TypeNode -> FunctionTypeNode
+        abstract updateFunctionTypeNode: node: FunctionTypeNode * typeParameters: ResizeArray<TypeParameterDeclaration> option * parameters: ResizeArray<ParameterDeclaration> * ``type``: TypeNode -> FunctionTypeNode
+        abstract createConstructorTypeNode: modifiers: ResizeArray<Modifier> option * typeParameters: ResizeArray<TypeParameterDeclaration> option * parameters: ResizeArray<ParameterDeclaration> * ``type``: TypeNode -> ConstructorTypeNode
+        abstract updateConstructorTypeNode: node: ConstructorTypeNode * modifiers: ResizeArray<Modifier> option * typeParameters: ResizeArray<TypeParameterDeclaration> option * parameters: ResizeArray<ParameterDeclaration> * ``type``: TypeNode -> ConstructorTypeNode
+        abstract createTypeQueryNode: exprName: EntityName * ?typeArguments: ResizeArray<TypeNode> -> TypeQueryNode
+        abstract updateTypeQueryNode: node: TypeQueryNode * exprName: EntityName * ?typeArguments: ResizeArray<TypeNode> -> TypeQueryNode
+        abstract createTypeLiteralNode: members: ResizeArray<TypeElement> option -> TypeLiteralNode
+        abstract updateTypeLiteralNode: node: TypeLiteralNode * members: ResizeArray<TypeElement> -> TypeLiteralNode
         abstract createArrayTypeNode: elementType: TypeNode -> ArrayTypeNode
-
-        abstract updateArrayTypeNode:
-            node: ArrayTypeNode * elementType: TypeNode -> ArrayTypeNode
-
-        abstract createTupleTypeNode:
-            elements: ResizeArray<U2<TypeNode, NamedTupleMember>> ->
-                TupleTypeNode
-
-        abstract updateTupleTypeNode:
-            node: TupleTypeNode *
-            elements: ResizeArray<U2<TypeNode, NamedTupleMember>> ->
-                TupleTypeNode
-
-        abstract createNamedTupleMember:
-            dotDotDotToken: DotDotDotToken option *
-            name: Identifier *
-            questionToken: QuestionToken option *
-            ``type``: TypeNode ->
-                NamedTupleMember
-
-        abstract updateNamedTupleMember:
-            node: NamedTupleMember *
-            dotDotDotToken: DotDotDotToken option *
-            name: Identifier *
-            questionToken: QuestionToken option *
-            ``type``: TypeNode ->
-                NamedTupleMember
-
+        abstract updateArrayTypeNode: node: ArrayTypeNode * elementType: TypeNode -> ArrayTypeNode
+        abstract createTupleTypeNode: elements: ResizeArray<U2<TypeNode, NamedTupleMember>> -> TupleTypeNode
+        abstract updateTupleTypeNode: node: TupleTypeNode * elements: ResizeArray<U2<TypeNode, NamedTupleMember>> -> TupleTypeNode
+        abstract createNamedTupleMember: dotDotDotToken: DotDotDotToken option * name: Identifier * questionToken: QuestionToken option * ``type``: TypeNode -> NamedTupleMember
+        abstract updateNamedTupleMember: node: NamedTupleMember * dotDotDotToken: DotDotDotToken option * name: Identifier * questionToken: QuestionToken option * ``type``: TypeNode -> NamedTupleMember
         abstract createOptionalTypeNode: ``type``: TypeNode -> OptionalTypeNode
-
-        abstract updateOptionalTypeNode:
-            node: OptionalTypeNode * ``type``: TypeNode -> OptionalTypeNode
-
+        abstract updateOptionalTypeNode: node: OptionalTypeNode * ``type``: TypeNode -> OptionalTypeNode
         abstract createRestTypeNode: ``type``: TypeNode -> RestTypeNode
-
-        abstract updateRestTypeNode:
-            node: RestTypeNode * ``type``: TypeNode -> RestTypeNode
-
-        abstract createUnionTypeNode:
-            types: ResizeArray<TypeNode> -> UnionTypeNode
-
-        abstract updateUnionTypeNode:
-            node: UnionTypeNode * types: ResizeArray<TypeNode> -> UnionTypeNode
-
-        abstract createIntersectionTypeNode:
-            types: ResizeArray<TypeNode> -> IntersectionTypeNode
-
-        abstract updateIntersectionTypeNode:
-            node: IntersectionTypeNode * types: ResizeArray<TypeNode> ->
-                IntersectionTypeNode
-
-        abstract createConditionalTypeNode:
-            checkType: TypeNode *
-            extendsType: TypeNode *
-            trueType: TypeNode *
-            falseType: TypeNode ->
-                ConditionalTypeNode
-
-        abstract updateConditionalTypeNode:
-            node: ConditionalTypeNode *
-            checkType: TypeNode *
-            extendsType: TypeNode *
-            trueType: TypeNode *
-            falseType: TypeNode ->
-                ConditionalTypeNode
-
-        abstract createInferTypeNode:
-            typeParameter: TypeParameterDeclaration -> InferTypeNode
-
-        abstract updateInferTypeNode:
-            node: InferTypeNode * typeParameter: TypeParameterDeclaration ->
-                InferTypeNode
-
-        abstract createImportTypeNode:
-            argument: TypeNode *
-            ?qualifier: EntityName *
-            ?typeArguments: ResizeArray<TypeNode> *
-            ?isTypeOf: bool ->
-                ImportTypeNode
-
-        abstract updateImportTypeNode:
-            node: ImportTypeNode *
-            argument: TypeNode *
-            qualifier: EntityName option *
-            typeArguments: ResizeArray<TypeNode> option *
-            ?isTypeOf: bool ->
-                ImportTypeNode
-
-        abstract createParenthesizedType:
-            ``type``: TypeNode -> ParenthesizedTypeNode
-
-        abstract updateParenthesizedType:
-            node: ParenthesizedTypeNode * ``type``: TypeNode ->
-                ParenthesizedTypeNode
-
+        abstract updateRestTypeNode: node: RestTypeNode * ``type``: TypeNode -> RestTypeNode
+        abstract createUnionTypeNode: types: ResizeArray<TypeNode> -> UnionTypeNode
+        abstract updateUnionTypeNode: node: UnionTypeNode * types: ResizeArray<TypeNode> -> UnionTypeNode
+        abstract createIntersectionTypeNode: types: ResizeArray<TypeNode> -> IntersectionTypeNode
+        abstract updateIntersectionTypeNode: node: IntersectionTypeNode * types: ResizeArray<TypeNode> -> IntersectionTypeNode
+        abstract createConditionalTypeNode: checkType: TypeNode * extendsType: TypeNode * trueType: TypeNode * falseType: TypeNode -> ConditionalTypeNode
+        abstract updateConditionalTypeNode: node: ConditionalTypeNode * checkType: TypeNode * extendsType: TypeNode * trueType: TypeNode * falseType: TypeNode -> ConditionalTypeNode
+        abstract createInferTypeNode: typeParameter: TypeParameterDeclaration -> InferTypeNode
+        abstract updateInferTypeNode: node: InferTypeNode * typeParameter: TypeParameterDeclaration -> InferTypeNode
+        abstract createImportTypeNode: argument: TypeNode * ?assertions: ImportTypeAssertionContainer * ?qualifier: EntityName * ?typeArguments: ResizeArray<TypeNode> * ?isTypeOf: bool -> ImportTypeNode
+        abstract updateImportTypeNode: node: ImportTypeNode * argument: TypeNode * assertions: ImportTypeAssertionContainer option * qualifier: EntityName option * typeArguments: ResizeArray<TypeNode> option * ?isTypeOf: bool -> ImportTypeNode
+        abstract createParenthesizedType: ``type``: TypeNode -> ParenthesizedTypeNode
+        abstract updateParenthesizedType: node: ParenthesizedTypeNode * ``type``: TypeNode -> ParenthesizedTypeNode
         abstract createThisTypeNode: unit -> ThisTypeNode
-
-        abstract createTypeOperatorNode:
-            operator: SyntaxKind * ``type``: TypeNode -> TypeOperatorNode
-
-        abstract updateTypeOperatorNode:
-            node: TypeOperatorNode * ``type``: TypeNode -> TypeOperatorNode
-
-        abstract createIndexedAccessTypeNode:
-            objectType: TypeNode * indexType: TypeNode -> IndexedAccessTypeNode
-
-        abstract updateIndexedAccessTypeNode:
-            node: IndexedAccessTypeNode *
-            objectType: TypeNode *
-            indexType: TypeNode ->
-                IndexedAccessTypeNode
-
-        abstract createMappedTypeNode:
-            readonlyToken: U3<ReadonlyKeyword, PlusToken, MinusToken> option *
-            typeParameter: TypeParameterDeclaration *
-            nameType: TypeNode option *
-            questionToken: U3<QuestionToken, PlusToken, MinusToken> option *
-            ``type``: TypeNode option ->
-                MappedTypeNode
-
-        abstract updateMappedTypeNode:
-            node: MappedTypeNode *
-            readonlyToken: U3<ReadonlyKeyword, PlusToken, MinusToken> option *
-            typeParameter: TypeParameterDeclaration *
-            nameType: TypeNode option *
-            questionToken: U3<QuestionToken, PlusToken, MinusToken> option *
-            ``type``: TypeNode option ->
-                MappedTypeNode
-
-        abstract createLiteralTypeNode:
-            literal: LiteralTypeNode -> LiteralTypeNode
-
-        abstract updateLiteralTypeNode:
-            node: LiteralTypeNode * literal: LiteralTypeNode -> LiteralTypeNode
-
-        abstract createTemplateLiteralType:
-            head: TemplateHead *
-            templateSpans: ResizeArray<TemplateLiteralTypeSpan> ->
-                TemplateLiteralTypeNode
-
-        abstract updateTemplateLiteralType:
-            node: TemplateLiteralTypeNode *
-            head: TemplateHead *
-            templateSpans: ResizeArray<TemplateLiteralTypeSpan> ->
-                TemplateLiteralTypeNode
-
-        abstract createObjectBindingPattern:
-            elements: ResizeArray<BindingElement> -> ObjectBindingPattern
-
-        abstract updateObjectBindingPattern:
-            node: ObjectBindingPattern * elements: ResizeArray<BindingElement> ->
-                ObjectBindingPattern
-
-        abstract createArrayBindingPattern:
-            elements: ResizeArray<ArrayBindingElement> -> ArrayBindingPattern
-
-        abstract updateArrayBindingPattern:
-            node: ArrayBindingPattern *
-            elements: ResizeArray<ArrayBindingElement> ->
-                ArrayBindingPattern
-
-        abstract createBindingElement:
-            dotDotDotToken: DotDotDotToken option *
-            propertyName: U2<string, PropertyName> option *
-            name: U2<string, BindingName> *
-            ?initializer: Expression ->
-                BindingElement
-
-        abstract updateBindingElement:
-            node: BindingElement *
-            dotDotDotToken: DotDotDotToken option *
-            propertyName: PropertyName option *
-            name: BindingName *
-            initializer: Expression option ->
-                BindingElement
-
-        abstract createArrayLiteralExpression:
-            ?elements: ResizeArray<Expression> * ?multiLine: bool ->
-                ArrayLiteralExpression
-
-        abstract updateArrayLiteralExpression:
-            node: ArrayLiteralExpression * elements: ResizeArray<Expression> ->
-                ArrayLiteralExpression
-
-        abstract createObjectLiteralExpression:
-            ?properties: ResizeArray<ObjectLiteralElementLike> *
-            ?multiLine: bool ->
-                ObjectLiteralExpression
-
-        abstract updateObjectLiteralExpression:
-            node: ObjectLiteralExpression *
-            properties: ResizeArray<ObjectLiteralElementLike> ->
-                ObjectLiteralExpression
-
-        abstract createPropertyAccessExpression:
-            expression: Expression *
-            name: U3<string, Identifier, PrivateIdentifier> ->
-                PropertyAccessExpression
-
-        abstract updatePropertyAccessExpression:
-            node: PropertyAccessExpression *
-            expression: Expression *
-            name: U2<Identifier, PrivateIdentifier> ->
-                PropertyAccessExpression
-
-        abstract createPropertyAccessChain:
-            expression: Expression *
-            questionDotToken: QuestionDotToken option *
-            name: U3<string, Identifier, PrivateIdentifier> ->
-                PropertyAccessChain
-
-        abstract updatePropertyAccessChain:
-            node: PropertyAccessChain *
-            expression: Expression *
-            questionDotToken: QuestionDotToken option *
-            name: U2<Identifier, PrivateIdentifier> ->
-                PropertyAccessChain
-
-        abstract createElementAccessExpression:
-            expression: Expression * index: U2<float, Expression> ->
-                ElementAccessExpression
-
-        abstract updateElementAccessExpression:
-            node: ElementAccessExpression *
-            expression: Expression *
-            argumentExpression: Expression ->
-                ElementAccessExpression
-
-        abstract createElementAccessChain:
-            expression: Expression *
-            questionDotToken: QuestionDotToken option *
-            index: U2<float, Expression> ->
-                ElementAccessChain
-
-        abstract updateElementAccessChain:
-            node: ElementAccessChain *
-            expression: Expression *
-            questionDotToken: QuestionDotToken option *
-            argumentExpression: Expression ->
-                ElementAccessChain
-
-        abstract createCallExpression:
-            expression: Expression *
-            typeArguments: ResizeArray<TypeNode> option *
-            argumentsArray: ResizeArray<Expression> option ->
-                CallExpression
-
-        abstract updateCallExpression:
-            node: CallExpression *
-            expression: Expression *
-            typeArguments: ResizeArray<TypeNode> option *
-            argumentsArray: ResizeArray<Expression> ->
-                CallExpression
-
-        abstract createCallChain:
-            expression: Expression *
-            questionDotToken: QuestionDotToken option *
-            typeArguments: ResizeArray<TypeNode> option *
-            argumentsArray: ResizeArray<Expression> option ->
-                CallChain
-
-        abstract updateCallChain:
-            node: CallChain *
-            expression: Expression *
-            questionDotToken: QuestionDotToken option *
-            typeArguments: ResizeArray<TypeNode> option *
-            argumentsArray: ResizeArray<Expression> ->
-                CallChain
-
-        abstract createNewExpression:
-            expression: Expression *
-            typeArguments: ResizeArray<TypeNode> option *
-            argumentsArray: ResizeArray<Expression> option ->
-                NewExpression
-
-        abstract updateNewExpression:
-            node: NewExpression *
-            expression: Expression *
-            typeArguments: ResizeArray<TypeNode> option *
-            argumentsArray: ResizeArray<Expression> option ->
-                NewExpression
-
-        abstract createTaggedTemplateExpression:
-            tag: Expression *
-            typeArguments: ResizeArray<TypeNode> option *
-            template: TemplateLiteral ->
-                TaggedTemplateExpression
-
-        abstract updateTaggedTemplateExpression:
-            node: TaggedTemplateExpression *
-            tag: Expression *
-            typeArguments: ResizeArray<TypeNode> option *
-            template: TemplateLiteral ->
-                TaggedTemplateExpression
-
-        abstract createTypeAssertion:
-            ``type``: TypeNode * expression: Expression -> TypeAssertion
-
-        abstract updateTypeAssertion:
-            node: TypeAssertion * ``type``: TypeNode * expression: Expression ->
-                TypeAssertion
-
-        abstract createParenthesizedExpression:
-            expression: Expression -> ParenthesizedExpression
-
-        abstract updateParenthesizedExpression:
-            node: ParenthesizedExpression * expression: Expression ->
-                ParenthesizedExpression
-
-        abstract createFunctionExpression:
-            modifiers: ResizeArray<Modifier> option *
-            asteriskToken: AsteriskToken option *
-            name: U2<string, Identifier> option *
-            typeParameters: ResizeArray<TypeParameterDeclaration> option *
-            parameters: ResizeArray<ParameterDeclaration> option *
-            ``type``: TypeNode option *
-            body: Block ->
-                FunctionExpression
-
-        abstract updateFunctionExpression:
-            node: FunctionExpression *
-            modifiers: ResizeArray<Modifier> option *
-            asteriskToken: AsteriskToken option *
-            name: Identifier option *
-            typeParameters: ResizeArray<TypeParameterDeclaration> option *
-            parameters: ResizeArray<ParameterDeclaration> *
-            ``type``: TypeNode option *
-            body: Block ->
-                FunctionExpression
-
-        abstract createArrowFunction:
-            modifiers: ResizeArray<Modifier> option *
-            typeParameters: ResizeArray<TypeParameterDeclaration> option *
-            parameters: ResizeArray<ParameterDeclaration> *
-            ``type``: TypeNode option *
-            equalsGreaterThanToken: EqualsGreaterThanToken option *
-            body: ConciseBody ->
-                ArrowFunction
-
-        abstract updateArrowFunction:
-            node: ArrowFunction *
-            modifiers: ResizeArray<Modifier> option *
-            typeParameters: ResizeArray<TypeParameterDeclaration> option *
-            parameters: ResizeArray<ParameterDeclaration> *
-            ``type``: TypeNode option *
-            equalsGreaterThanToken: EqualsGreaterThanToken *
-            body: ConciseBody ->
-                ArrowFunction
-
-        abstract createDeleteExpression:
-            expression: Expression -> DeleteExpression
-
-        abstract updateDeleteExpression:
-            node: DeleteExpression * expression: Expression -> DeleteExpression
-
-        abstract createTypeOfExpression:
-            expression: Expression -> TypeOfExpression
-
-        abstract updateTypeOfExpression:
-            node: TypeOfExpression * expression: Expression -> TypeOfExpression
-
+        abstract createTypeOperatorNode: operator: SyntaxKind * ``type``: TypeNode -> TypeOperatorNode
+        abstract updateTypeOperatorNode: node: TypeOperatorNode * ``type``: TypeNode -> TypeOperatorNode
+        abstract createIndexedAccessTypeNode: objectType: TypeNode * indexType: TypeNode -> IndexedAccessTypeNode
+        abstract updateIndexedAccessTypeNode: node: IndexedAccessTypeNode * objectType: TypeNode * indexType: TypeNode -> IndexedAccessTypeNode
+        abstract createMappedTypeNode: readonlyToken: U3<ReadonlyKeyword, PlusToken, MinusToken> option * typeParameter: TypeParameterDeclaration * nameType: TypeNode option * questionToken: U3<QuestionToken, PlusToken, MinusToken> option * ``type``: TypeNode option * members: ResizeArray<TypeElement> option -> MappedTypeNode
+        abstract updateMappedTypeNode: node: MappedTypeNode * readonlyToken: U3<ReadonlyKeyword, PlusToken, MinusToken> option * typeParameter: TypeParameterDeclaration * nameType: TypeNode option * questionToken: U3<QuestionToken, PlusToken, MinusToken> option * ``type``: TypeNode option * members: ResizeArray<TypeElement> option -> MappedTypeNode
+        abstract createLiteralTypeNode: literal: obj -> LiteralTypeNode
+        abstract updateLiteralTypeNode: node: LiteralTypeNode * literal: obj -> LiteralTypeNode
+        abstract createTemplateLiteralType: head: TemplateHead * templateSpans: ResizeArray<TemplateLiteralTypeSpan> -> TemplateLiteralTypeNode
+        abstract updateTemplateLiteralType: node: TemplateLiteralTypeNode * head: TemplateHead * templateSpans: ResizeArray<TemplateLiteralTypeSpan> -> TemplateLiteralTypeNode
+        abstract createObjectBindingPattern: elements: ResizeArray<BindingElement> -> ObjectBindingPattern
+        abstract updateObjectBindingPattern: node: ObjectBindingPattern * elements: ResizeArray<BindingElement> -> ObjectBindingPattern
+        abstract createArrayBindingPattern: elements: ResizeArray<ArrayBindingElement> -> ArrayBindingPattern
+        abstract updateArrayBindingPattern: node: ArrayBindingPattern * elements: ResizeArray<ArrayBindingElement> -> ArrayBindingPattern
+        abstract createBindingElement: dotDotDotToken: DotDotDotToken option * propertyName: U2<string, PropertyName> option * name: U2<string, BindingName> * ?initializer: Expression -> BindingElement
+        abstract updateBindingElement: node: BindingElement * dotDotDotToken: DotDotDotToken option * propertyName: PropertyName option * name: BindingName * initializer: Expression option -> BindingElement
+        abstract createArrayLiteralExpression: ?elements: ResizeArray<Expression> * ?multiLine: bool -> ArrayLiteralExpression
+        abstract updateArrayLiteralExpression: node: ArrayLiteralExpression * elements: ResizeArray<Expression> -> ArrayLiteralExpression
+        abstract createObjectLiteralExpression: ?properties: ResizeArray<ObjectLiteralElementLike> * ?multiLine: bool -> ObjectLiteralExpression
+        abstract updateObjectLiteralExpression: node: ObjectLiteralExpression * properties: ResizeArray<ObjectLiteralElementLike> -> ObjectLiteralExpression
+        abstract createPropertyAccessExpression: expression: Expression * name: U2<string, MemberName> -> PropertyAccessExpression
+        abstract updatePropertyAccessExpression: node: PropertyAccessExpression * expression: Expression * name: MemberName -> PropertyAccessExpression
+        abstract createPropertyAccessChain: expression: Expression * questionDotToken: QuestionDotToken option * name: U2<string, MemberName> -> PropertyAccessChain
+        abstract updatePropertyAccessChain: node: PropertyAccessChain * expression: Expression * questionDotToken: QuestionDotToken option * name: MemberName -> PropertyAccessChain
+        abstract createElementAccessExpression: expression: Expression * index: U2<float, Expression> -> ElementAccessExpression
+        abstract updateElementAccessExpression: node: ElementAccessExpression * expression: Expression * argumentExpression: Expression -> ElementAccessExpression
+        abstract createElementAccessChain: expression: Expression * questionDotToken: QuestionDotToken option * index: U2<float, Expression> -> ElementAccessChain
+        abstract updateElementAccessChain: node: ElementAccessChain * expression: Expression * questionDotToken: QuestionDotToken option * argumentExpression: Expression -> ElementAccessChain
+        abstract createCallExpression: expression: Expression * typeArguments: ResizeArray<TypeNode> option * argumentsArray: ResizeArray<Expression> option -> CallExpression
+        abstract updateCallExpression: node: CallExpression * expression: Expression * typeArguments: ResizeArray<TypeNode> option * argumentsArray: ResizeArray<Expression> -> CallExpression
+        abstract createCallChain: expression: Expression * questionDotToken: QuestionDotToken option * typeArguments: ResizeArray<TypeNode> option * argumentsArray: ResizeArray<Expression> option -> CallChain
+        abstract updateCallChain: node: CallChain * expression: Expression * questionDotToken: QuestionDotToken option * typeArguments: ResizeArray<TypeNode> option * argumentsArray: ResizeArray<Expression> -> CallChain
+        abstract createNewExpression: expression: Expression * typeArguments: ResizeArray<TypeNode> option * argumentsArray: ResizeArray<Expression> option -> NewExpression
+        abstract updateNewExpression: node: NewExpression * expression: Expression * typeArguments: ResizeArray<TypeNode> option * argumentsArray: ResizeArray<Expression> option -> NewExpression
+        abstract createTaggedTemplateExpression: tag: Expression * typeArguments: ResizeArray<TypeNode> option * template: TemplateLiteral -> TaggedTemplateExpression
+        abstract updateTaggedTemplateExpression: node: TaggedTemplateExpression * tag: Expression * typeArguments: ResizeArray<TypeNode> option * template: TemplateLiteral -> TaggedTemplateExpression
+        abstract createTypeAssertion: ``type``: TypeNode * expression: Expression -> TypeAssertion
+        abstract updateTypeAssertion: node: TypeAssertion * ``type``: TypeNode * expression: Expression -> TypeAssertion
+        abstract createParenthesizedExpression: expression: Expression -> ParenthesizedExpression
+        abstract updateParenthesizedExpression: node: ParenthesizedExpression * expression: Expression -> ParenthesizedExpression
+        abstract createFunctionExpression: modifiers: ResizeArray<Modifier> option * asteriskToken: AsteriskToken option * name: U2<string, Identifier> option * typeParameters: ResizeArray<TypeParameterDeclaration> option * parameters: ResizeArray<ParameterDeclaration> option * ``type``: TypeNode option * body: Block -> FunctionExpression
+        abstract updateFunctionExpression: node: FunctionExpression * modifiers: ResizeArray<Modifier> option * asteriskToken: AsteriskToken option * name: Identifier option * typeParameters: ResizeArray<TypeParameterDeclaration> option * parameters: ResizeArray<ParameterDeclaration> * ``type``: TypeNode option * body: Block -> FunctionExpression
+        abstract createArrowFunction: modifiers: ResizeArray<Modifier> option * typeParameters: ResizeArray<TypeParameterDeclaration> option * parameters: ResizeArray<ParameterDeclaration> * ``type``: TypeNode option * equalsGreaterThanToken: EqualsGreaterThanToken option * body: ConciseBody -> ArrowFunction
+        abstract updateArrowFunction: node: ArrowFunction * modifiers: ResizeArray<Modifier> option * typeParameters: ResizeArray<TypeParameterDeclaration> option * parameters: ResizeArray<ParameterDeclaration> * ``type``: TypeNode option * equalsGreaterThanToken: EqualsGreaterThanToken * body: ConciseBody -> ArrowFunction
+        abstract createDeleteExpression: expression: Expression -> DeleteExpression
+        abstract updateDeleteExpression: node: DeleteExpression * expression: Expression -> DeleteExpression
+        abstract createTypeOfExpression: expression: Expression -> TypeOfExpression
+        abstract updateTypeOfExpression: node: TypeOfExpression * expression: Expression -> TypeOfExpression
         abstract createVoidExpression: expression: Expression -> VoidExpression
-
-        abstract updateVoidExpression:
-            node: VoidExpression * expression: Expression -> VoidExpression
-
-        abstract createAwaitExpression:
-            expression: Expression -> AwaitExpression
-
-        abstract updateAwaitExpression:
-            node: AwaitExpression * expression: Expression -> AwaitExpression
-
-        abstract createPrefixUnaryExpression:
-            operator: PrefixUnaryOperator * operand: Expression ->
-                PrefixUnaryExpression
-
-        abstract updatePrefixUnaryExpression:
-            node: PrefixUnaryExpression * operand: Expression ->
-                PrefixUnaryExpression
-
-        abstract createPostfixUnaryExpression:
-            operand: Expression * operator: PostfixUnaryOperator ->
-                PostfixUnaryExpression
-
-        abstract updatePostfixUnaryExpression:
-            node: PostfixUnaryExpression * operand: Expression ->
-                PostfixUnaryExpression
-
-        abstract createBinaryExpression:
-            left: Expression *
-            operator: U2<BinaryOperator, BinaryOperatorToken> *
-            right: Expression ->
-                BinaryExpression
-
-        abstract updateBinaryExpression:
-            node: BinaryExpression *
-            left: Expression *
-            operator: U2<BinaryOperator, BinaryOperatorToken> *
-            right: Expression ->
-                BinaryExpression
-
-        abstract createConditionalExpression:
-            condition: Expression *
-            questionToken: QuestionToken option *
-            whenTrue: Expression *
-            colonToken: ColonToken option *
-            whenFalse: Expression ->
-                ConditionalExpression
-
-        abstract updateConditionalExpression:
-            node: ConditionalExpression *
-            condition: Expression *
-            questionToken: QuestionToken *
-            whenTrue: Expression *
-            colonToken: ColonToken *
-            whenFalse: Expression ->
-                ConditionalExpression
-
-        abstract createTemplateExpression:
-            head: TemplateHead * templateSpans: ResizeArray<TemplateSpan> ->
-                TemplateExpression
-
-        abstract updateTemplateExpression:
-            node: TemplateExpression *
-            head: TemplateHead *
-            templateSpans: ResizeArray<TemplateSpan> ->
-                TemplateExpression
-
-        abstract createTemplateHead:
-            text: string * ?rawText: string * ?templateFlags: TokenFlags ->
-                TemplateHead
-
-        abstract createTemplateHead:
-            text: string option * rawText: string * ?templateFlags: TokenFlags ->
-                TemplateHead
-
-        abstract createTemplateMiddle:
-            text: string * ?rawText: string * ?templateFlags: TokenFlags ->
-                TemplateMiddle
-
-        abstract createTemplateMiddle:
-            text: string option * rawText: string * ?templateFlags: TokenFlags ->
-                TemplateMiddle
-
-        abstract createTemplateTail:
-            text: string * ?rawText: string * ?templateFlags: TokenFlags ->
-                TemplateTail
-
-        abstract createTemplateTail:
-            text: string option * rawText: string * ?templateFlags: TokenFlags ->
-                TemplateTail
-
-        abstract createNoSubstitutionTemplateLiteral:
-            text: string * ?rawText: string -> NoSubstitutionTemplateLiteral
-
-        abstract createNoSubstitutionTemplateLiteral:
-            text: string option * rawText: string ->
-                NoSubstitutionTemplateLiteral
-
-        abstract createYieldExpression:
-            asteriskToken: AsteriskToken * expression: Expression ->
-                YieldExpression
-
-        abstract createYieldExpression:
-            asteriskToken: obj * expression: Expression option ->
-                YieldExpression
-
-        abstract updateYieldExpression:
-            node: YieldExpression *
-            asteriskToken: AsteriskToken option *
-            expression: Expression option ->
-                YieldExpression
-
+        abstract updateVoidExpression: node: VoidExpression * expression: Expression -> VoidExpression
+        abstract createAwaitExpression: expression: Expression -> AwaitExpression
+        abstract updateAwaitExpression: node: AwaitExpression * expression: Expression -> AwaitExpression
+        abstract createPrefixUnaryExpression: operator: PrefixUnaryOperator * operand: Expression -> PrefixUnaryExpression
+        abstract updatePrefixUnaryExpression: node: PrefixUnaryExpression * operand: Expression -> PrefixUnaryExpression
+        abstract createPostfixUnaryExpression: operand: Expression * operator: PostfixUnaryOperator -> PostfixUnaryExpression
+        abstract updatePostfixUnaryExpression: node: PostfixUnaryExpression * operand: Expression -> PostfixUnaryExpression
+        abstract createBinaryExpression: left: Expression * operator: U2<BinaryOperator, BinaryOperatorToken> * right: Expression -> BinaryExpression
+        abstract updateBinaryExpression: node: BinaryExpression * left: Expression * operator: U2<BinaryOperator, BinaryOperatorToken> * right: Expression -> BinaryExpression
+        abstract createConditionalExpression: condition: Expression * questionToken: QuestionToken option * whenTrue: Expression * colonToken: ColonToken option * whenFalse: Expression -> ConditionalExpression
+        abstract updateConditionalExpression: node: ConditionalExpression * condition: Expression * questionToken: QuestionToken * whenTrue: Expression * colonToken: ColonToken * whenFalse: Expression -> ConditionalExpression
+        abstract createTemplateExpression: head: TemplateHead * templateSpans: ResizeArray<TemplateSpan> -> TemplateExpression
+        abstract updateTemplateExpression: node: TemplateExpression * head: TemplateHead * templateSpans: ResizeArray<TemplateSpan> -> TemplateExpression
+        abstract createTemplateHead: text: string * ?rawText: string * ?templateFlags: TokenFlags -> TemplateHead
+        abstract createTemplateHead: text: string option * rawText: string * ?templateFlags: TokenFlags -> TemplateHead
+        abstract createTemplateMiddle: text: string * ?rawText: string * ?templateFlags: TokenFlags -> TemplateMiddle
+        abstract createTemplateMiddle: text: string option * rawText: string * ?templateFlags: TokenFlags -> TemplateMiddle
+        abstract createTemplateTail: text: string * ?rawText: string * ?templateFlags: TokenFlags -> TemplateTail
+        abstract createTemplateTail: text: string option * rawText: string * ?templateFlags: TokenFlags -> TemplateTail
+        abstract createNoSubstitutionTemplateLiteral: text: string * ?rawText: string -> NoSubstitutionTemplateLiteral
+        abstract createNoSubstitutionTemplateLiteral: text: string option * rawText: string -> NoSubstitutionTemplateLiteral
+        abstract createYieldExpression: asteriskToken: AsteriskToken * expression: Expression -> YieldExpression
+        abstract createYieldExpression: asteriskToken: obj * expression: Expression option -> YieldExpression
+        abstract updateYieldExpression: node: YieldExpression * asteriskToken: AsteriskToken option * expression: Expression option -> YieldExpression
         abstract createSpreadElement: expression: Expression -> SpreadElement
-
-        abstract updateSpreadElement:
-            node: SpreadElement * expression: Expression -> SpreadElement
-
-        abstract createClassExpression:
-            decorators: ResizeArray<Decorator> option *
-            modifiers: ResizeArray<Modifier> option *
-            name: U2<string, Identifier> option *
-            typeParameters: ResizeArray<TypeParameterDeclaration> option *
-            heritageClauses: ResizeArray<HeritageClause> option *
-            members: ResizeArray<ClassElement> ->
-                ClassExpression
-
-        abstract updateClassExpression:
-            node: ClassExpression *
-            decorators: ResizeArray<Decorator> option *
-            modifiers: ResizeArray<Modifier> option *
-            name: Identifier option *
-            typeParameters: ResizeArray<TypeParameterDeclaration> option *
-            heritageClauses: ResizeArray<HeritageClause> option *
-            members: ResizeArray<ClassElement> ->
-                ClassExpression
-
+        abstract updateSpreadElement: node: SpreadElement * expression: Expression -> SpreadElement
+        abstract createClassExpression: modifiers: ResizeArray<ModifierLike> option * name: U2<string, Identifier> option * typeParameters: ResizeArray<TypeParameterDeclaration> option * heritageClauses: ResizeArray<HeritageClause> option * members: ResizeArray<ClassElement> -> ClassExpression
+        abstract updateClassExpression: node: ClassExpression * modifiers: ResizeArray<ModifierLike> option * name: Identifier option * typeParameters: ResizeArray<TypeParameterDeclaration> option * heritageClauses: ResizeArray<HeritageClause> option * members: ResizeArray<ClassElement> -> ClassExpression
         abstract createOmittedExpression: unit -> OmittedExpression
-
-        abstract createExpressionWithTypeArguments:
-            expression: Expression * typeArguments: ResizeArray<TypeNode> option ->
-                ExpressionWithTypeArguments
-
-        abstract updateExpressionWithTypeArguments:
-            node: ExpressionWithTypeArguments *
-            expression: Expression *
-            typeArguments: ResizeArray<TypeNode> option ->
-                ExpressionWithTypeArguments
-
-        abstract createAsExpression:
-            expression: Expression * ``type``: TypeNode -> AsExpression
-
-        abstract updateAsExpression:
-            node: AsExpression * expression: Expression * ``type``: TypeNode ->
-                AsExpression
-
-        abstract createNonNullExpression:
-            expression: Expression -> NonNullExpression
-
-        abstract updateNonNullExpression:
-            node: NonNullExpression * expression: Expression ->
-                NonNullExpression
-
+        abstract createExpressionWithTypeArguments: expression: Expression * typeArguments: ResizeArray<TypeNode> option -> ExpressionWithTypeArguments
+        abstract updateExpressionWithTypeArguments: node: ExpressionWithTypeArguments * expression: Expression * typeArguments: ResizeArray<TypeNode> option -> ExpressionWithTypeArguments
+        abstract createAsExpression: expression: Expression * ``type``: TypeNode -> AsExpression
+        abstract updateAsExpression: node: AsExpression * expression: Expression * ``type``: TypeNode -> AsExpression
+        abstract createNonNullExpression: expression: Expression -> NonNullExpression
+        abstract updateNonNullExpression: node: NonNullExpression * expression: Expression -> NonNullExpression
         abstract createNonNullChain: expression: Expression -> NonNullChain
-
-        abstract updateNonNullChain:
-            node: NonNullChain * expression: Expression -> NonNullChain
-
-        abstract createMetaProperty:
-            keywordToken: MetaProperty * name: Identifier -> MetaProperty
-
-        abstract updateMetaProperty:
-            node: MetaProperty * name: Identifier -> MetaProperty
-
-        abstract createTemplateSpan:
-            expression: Expression * literal: U2<TemplateMiddle, TemplateTail> ->
-                TemplateSpan
-
-        abstract updateTemplateSpan:
-            node: TemplateSpan *
-            expression: Expression *
-            literal: U2<TemplateMiddle, TemplateTail> ->
-                TemplateSpan
-
+        abstract updateNonNullChain: node: NonNullChain * expression: Expression -> NonNullChain
+        abstract createMetaProperty: keywordToken: obj * name: Identifier -> MetaProperty
+        abstract updateMetaProperty: node: MetaProperty * name: Identifier -> MetaProperty
+        abstract createSatisfiesExpression: expression: Expression * ``type``: TypeNode -> SatisfiesExpression
+        abstract updateSatisfiesExpression: node: SatisfiesExpression * expression: Expression * ``type``: TypeNode -> SatisfiesExpression
+        abstract createTemplateSpan: expression: Expression * literal: U2<TemplateMiddle, TemplateTail> -> TemplateSpan
+        abstract updateTemplateSpan: node: TemplateSpan * expression: Expression * literal: U2<TemplateMiddle, TemplateTail> -> TemplateSpan
         abstract createSemicolonClassElement: unit -> SemicolonClassElement
-
-        abstract createBlock:
-            statements: ResizeArray<Statement> * ?multiLine: bool -> Block
-
-        abstract updateBlock:
-            node: Block * statements: ResizeArray<Statement> -> Block
-
-        abstract createVariableStatement:
-            modifiers: ResizeArray<Modifier> option *
-            declarationList:
-                U2<VariableDeclarationList, ResizeArray<VariableDeclaration>> ->
-                VariableStatement
-
-        abstract updateVariableStatement:
-            node: VariableStatement *
-            modifiers: ResizeArray<Modifier> option *
-            declarationList: VariableDeclarationList ->
-                VariableStatement
-
+        abstract createBlock: statements: ResizeArray<Statement> * ?multiLine: bool -> Block
+        abstract updateBlock: node: Block * statements: ResizeArray<Statement> -> Block
+        abstract createVariableStatement: modifiers: ResizeArray<ModifierLike> option * declarationList: U2<VariableDeclarationList, ResizeArray<VariableDeclaration>> -> VariableStatement
+        abstract updateVariableStatement: node: VariableStatement * modifiers: ResizeArray<ModifierLike> option * declarationList: VariableDeclarationList -> VariableStatement
         abstract createEmptyStatement: unit -> EmptyStatement
-
-        abstract createExpressionStatement:
-            expression: Expression -> ExpressionStatement
-
-        abstract updateExpressionStatement:
-            node: ExpressionStatement * expression: Expression ->
-                ExpressionStatement
-
-        abstract createIfStatement:
-            expression: Expression *
-            thenStatement: Statement *
-            ?elseStatement: Statement ->
-                IfStatement
-
-        abstract updateIfStatement:
-            node: IfStatement *
-            expression: Expression *
-            thenStatement: Statement *
-            elseStatement: Statement option ->
-                IfStatement
-
-        abstract createDoStatement:
-            statement: Statement * expression: Expression -> DoStatement
-
-        abstract updateDoStatement:
-            node: DoStatement * statement: Statement * expression: Expression ->
-                DoStatement
-
-        abstract createWhileStatement:
-            expression: Expression * statement: Statement -> WhileStatement
-
-        abstract updateWhileStatement:
-            node: WhileStatement * expression: Expression * statement: Statement ->
-                WhileStatement
-
-        abstract createForStatement:
-            initializer: ForInitializer option *
-            condition: Expression option *
-            incrementor: Expression option *
-            statement: Statement ->
-                ForStatement
-
-        abstract updateForStatement:
-            node: ForStatement *
-            initializer: ForInitializer option *
-            condition: Expression option *
-            incrementor: Expression option *
-            statement: Statement ->
-                ForStatement
-
-        abstract createForInStatement:
-            initializer: ForInitializer *
-            expression: Expression *
-            statement: Statement ->
-                ForInStatement
-
-        abstract updateForInStatement:
-            node: ForInStatement *
-            initializer: ForInitializer *
-            expression: Expression *
-            statement: Statement ->
-                ForInStatement
-
-        abstract createForOfStatement:
-            awaitModifier: AwaitKeyword option *
-            initializer: ForInitializer *
-            expression: Expression *
-            statement: Statement ->
-                ForOfStatement
-
-        abstract updateForOfStatement:
-            node: ForOfStatement *
-            awaitModifier: AwaitKeyword option *
-            initializer: ForInitializer *
-            expression: Expression *
-            statement: Statement ->
-                ForOfStatement
-
-        abstract createContinueStatement:
-            ?label: U2<string, Identifier> -> ContinueStatement
-
-        abstract updateContinueStatement:
-            node: ContinueStatement * label: Identifier option ->
-                ContinueStatement
-
-        abstract createBreakStatement:
-            ?label: U2<string, Identifier> -> BreakStatement
-
-        abstract updateBreakStatement:
-            node: BreakStatement * label: Identifier option -> BreakStatement
-
-        abstract createReturnStatement:
-            ?expression: Expression -> ReturnStatement
-
-        abstract updateReturnStatement:
-            node: ReturnStatement * expression: Expression option ->
-                ReturnStatement
-
-        abstract createWithStatement:
-            expression: Expression * statement: Statement -> WithStatement
-
-        abstract updateWithStatement:
-            node: WithStatement * expression: Expression * statement: Statement ->
-                WithStatement
-
-        abstract createSwitchStatement:
-            expression: Expression * caseBlock: CaseBlock -> SwitchStatement
-
-        abstract updateSwitchStatement:
-            node: SwitchStatement *
-            expression: Expression *
-            caseBlock: CaseBlock ->
-                SwitchStatement
-
-        abstract createLabeledStatement:
-            label: U2<string, Identifier> * statement: Statement ->
-                LabeledStatement
-
-        abstract updateLabeledStatement:
-            node: LabeledStatement * label: Identifier * statement: Statement ->
-                LabeledStatement
-
+        abstract createExpressionStatement: expression: Expression -> ExpressionStatement
+        abstract updateExpressionStatement: node: ExpressionStatement * expression: Expression -> ExpressionStatement
+        abstract createIfStatement: expression: Expression * thenStatement: Statement * ?elseStatement: Statement -> IfStatement
+        abstract updateIfStatement: node: IfStatement * expression: Expression * thenStatement: Statement * elseStatement: Statement option -> IfStatement
+        abstract createDoStatement: statement: Statement * expression: Expression -> DoStatement
+        abstract updateDoStatement: node: DoStatement * statement: Statement * expression: Expression -> DoStatement
+        abstract createWhileStatement: expression: Expression * statement: Statement -> WhileStatement
+        abstract updateWhileStatement: node: WhileStatement * expression: Expression * statement: Statement -> WhileStatement
+        abstract createForStatement: initializer: ForInitializer option * condition: Expression option * incrementor: Expression option * statement: Statement -> ForStatement
+        abstract updateForStatement: node: ForStatement * initializer: ForInitializer option * condition: Expression option * incrementor: Expression option * statement: Statement -> ForStatement
+        abstract createForInStatement: initializer: ForInitializer * expression: Expression * statement: Statement -> ForInStatement
+        abstract updateForInStatement: node: ForInStatement * initializer: ForInitializer * expression: Expression * statement: Statement -> ForInStatement
+        abstract createForOfStatement: awaitModifier: AwaitKeyword option * initializer: ForInitializer * expression: Expression * statement: Statement -> ForOfStatement
+        abstract updateForOfStatement: node: ForOfStatement * awaitModifier: AwaitKeyword option * initializer: ForInitializer * expression: Expression * statement: Statement -> ForOfStatement
+        abstract createContinueStatement: ?label: U2<string, Identifier> -> ContinueStatement
+        abstract updateContinueStatement: node: ContinueStatement * label: Identifier option -> ContinueStatement
+        abstract createBreakStatement: ?label: U2<string, Identifier> -> BreakStatement
+        abstract updateBreakStatement: node: BreakStatement * label: Identifier option -> BreakStatement
+        abstract createReturnStatement: ?expression: Expression -> ReturnStatement
+        abstract updateReturnStatement: node: ReturnStatement * expression: Expression option -> ReturnStatement
+        abstract createWithStatement: expression: Expression * statement: Statement -> WithStatement
+        abstract updateWithStatement: node: WithStatement * expression: Expression * statement: Statement -> WithStatement
+        abstract createSwitchStatement: expression: Expression * caseBlock: CaseBlock -> SwitchStatement
+        abstract updateSwitchStatement: node: SwitchStatement * expression: Expression * caseBlock: CaseBlock -> SwitchStatement
+        abstract createLabeledStatement: label: U2<string, Identifier> * statement: Statement -> LabeledStatement
+        abstract updateLabeledStatement: node: LabeledStatement * label: Identifier * statement: Statement -> LabeledStatement
         abstract createThrowStatement: expression: Expression -> ThrowStatement
-
-        abstract updateThrowStatement:
-            node: ThrowStatement * expression: Expression -> ThrowStatement
-
-        abstract createTryStatement:
-            tryBlock: Block *
-            catchClause: CatchClause option *
-            finallyBlock: Block option ->
-                TryStatement
-
-        abstract updateTryStatement:
-            node: TryStatement *
-            tryBlock: Block *
-            catchClause: CatchClause option *
-            finallyBlock: Block option ->
-                TryStatement
-
+        abstract updateThrowStatement: node: ThrowStatement * expression: Expression -> ThrowStatement
+        abstract createTryStatement: tryBlock: Block * catchClause: CatchClause option * finallyBlock: Block option -> TryStatement
+        abstract updateTryStatement: node: TryStatement * tryBlock: Block * catchClause: CatchClause option * finallyBlock: Block option -> TryStatement
         abstract createDebuggerStatement: unit -> DebuggerStatement
-
-        abstract createVariableDeclaration:
-            name: U2<string, BindingName> *
-            ?exclamationToken: ExclamationToken *
-            ?``type``: TypeNode *
-            ?initializer: Expression ->
-                VariableDeclaration
-
-        abstract updateVariableDeclaration:
-            node: VariableDeclaration *
-            name: BindingName *
-            exclamationToken: ExclamationToken option *
-            ``type``: TypeNode option *
-            initializer: Expression option ->
-                VariableDeclaration
-
-        abstract createVariableDeclarationList:
-            declarations: ResizeArray<VariableDeclaration> * ?flags: NodeFlags ->
-                VariableDeclarationList
-
-        abstract updateVariableDeclarationList:
-            node: VariableDeclarationList *
-            declarations: ResizeArray<VariableDeclaration> ->
-                VariableDeclarationList
-
-        abstract createFunctionDeclaration:
-            decorators: ResizeArray<Decorator> option *
-            modifiers: ResizeArray<Modifier> option *
-            asteriskToken: AsteriskToken option *
-            name: U2<string, Identifier> option *
-            typeParameters: ResizeArray<TypeParameterDeclaration> option *
-            parameters: ResizeArray<ParameterDeclaration> *
-            ``type``: TypeNode option *
-            body: Block option ->
-                FunctionDeclaration
-
-        abstract updateFunctionDeclaration:
-            node: FunctionDeclaration *
-            decorators: ResizeArray<Decorator> option *
-            modifiers: ResizeArray<Modifier> option *
-            asteriskToken: AsteriskToken option *
-            name: Identifier option *
-            typeParameters: ResizeArray<TypeParameterDeclaration> option *
-            parameters: ResizeArray<ParameterDeclaration> *
-            ``type``: TypeNode option *
-            body: Block option ->
-                FunctionDeclaration
-
-        abstract createClassDeclaration:
-            decorators: ResizeArray<Decorator> option *
-            modifiers: ResizeArray<Modifier> option *
-            name: U2<string, Identifier> option *
-            typeParameters: ResizeArray<TypeParameterDeclaration> option *
-            heritageClauses: ResizeArray<HeritageClause> option *
-            members: ResizeArray<ClassElement> ->
-                ClassDeclaration
-
-        abstract updateClassDeclaration:
-            node: ClassDeclaration *
-            decorators: ResizeArray<Decorator> option *
-            modifiers: ResizeArray<Modifier> option *
-            name: Identifier option *
-            typeParameters: ResizeArray<TypeParameterDeclaration> option *
-            heritageClauses: ResizeArray<HeritageClause> option *
-            members: ResizeArray<ClassElement> ->
-                ClassDeclaration
-
-        abstract createInterfaceDeclaration:
-            decorators: ResizeArray<Decorator> option *
-            modifiers: ResizeArray<Modifier> option *
-            name: U2<string, Identifier> *
-            typeParameters: ResizeArray<TypeParameterDeclaration> option *
-            heritageClauses: ResizeArray<HeritageClause> option *
-            members: ResizeArray<TypeElement> ->
-                InterfaceDeclaration
-
-        abstract updateInterfaceDeclaration:
-            node: InterfaceDeclaration *
-            decorators: ResizeArray<Decorator> option *
-            modifiers: ResizeArray<Modifier> option *
-            name: Identifier *
-            typeParameters: ResizeArray<TypeParameterDeclaration> option *
-            heritageClauses: ResizeArray<HeritageClause> option *
-            members: ResizeArray<TypeElement> ->
-                InterfaceDeclaration
-
-        abstract createTypeAliasDeclaration:
-            decorators: ResizeArray<Decorator> option *
-            modifiers: ResizeArray<Modifier> option *
-            name: U2<string, Identifier> *
-            typeParameters: ResizeArray<TypeParameterDeclaration> option *
-            ``type``: TypeNode ->
-                TypeAliasDeclaration
-
-        abstract updateTypeAliasDeclaration:
-            node: TypeAliasDeclaration *
-            decorators: ResizeArray<Decorator> option *
-            modifiers: ResizeArray<Modifier> option *
-            name: Identifier *
-            typeParameters: ResizeArray<TypeParameterDeclaration> option *
-            ``type``: TypeNode ->
-                TypeAliasDeclaration
-
-        abstract createEnumDeclaration:
-            decorators: ResizeArray<Decorator> option *
-            modifiers: ResizeArray<Modifier> option *
-            name: U2<string, Identifier> *
-            members: ResizeArray<EnumMember> ->
-                EnumDeclaration
-
-        abstract updateEnumDeclaration:
-            node: EnumDeclaration *
-            decorators: ResizeArray<Decorator> option *
-            modifiers: ResizeArray<Modifier> option *
-            name: Identifier *
-            members: ResizeArray<EnumMember> ->
-                EnumDeclaration
-
-        abstract createModuleDeclaration:
-            decorators: ResizeArray<Decorator> option *
-            modifiers: ResizeArray<Modifier> option *
-            name: ModuleName *
-            body: ModuleBody option *
-            ?flags: NodeFlags ->
-                ModuleDeclaration
-
-        abstract updateModuleDeclaration:
-            node: ModuleDeclaration *
-            decorators: ResizeArray<Decorator> option *
-            modifiers: ResizeArray<Modifier> option *
-            name: ModuleName *
-            body: ModuleBody option ->
-                ModuleDeclaration
-
-        abstract createModuleBlock:
-            statements: ResizeArray<Statement> -> ModuleBlock
-
-        abstract updateModuleBlock:
-            node: ModuleBlock * statements: ResizeArray<Statement> ->
-                ModuleBlock
-
-        abstract createCaseBlock:
-            clauses: ResizeArray<CaseOrDefaultClause> -> CaseBlock
-
-        abstract updateCaseBlock:
-            node: CaseBlock * clauses: ResizeArray<CaseOrDefaultClause> ->
-                CaseBlock
-
-        abstract createNamespaceExportDeclaration:
-            name: U2<string, Identifier> -> NamespaceExportDeclaration
-
-        abstract updateNamespaceExportDeclaration:
-            node: NamespaceExportDeclaration * name: Identifier ->
-                NamespaceExportDeclaration
-
-        abstract createImportEqualsDeclaration:
-            decorators: ResizeArray<Decorator> option *
-            modifiers: ResizeArray<Modifier> option *
-            isTypeOnly: bool *
-            name: U2<string, Identifier> *
-            moduleReference: ModuleReference ->
-                ImportEqualsDeclaration
-
-        abstract updateImportEqualsDeclaration:
-            node: ImportEqualsDeclaration *
-            decorators: ResizeArray<Decorator> option *
-            modifiers: ResizeArray<Modifier> option *
-            isTypeOnly: bool *
-            name: Identifier *
-            moduleReference: ModuleReference ->
-                ImportEqualsDeclaration
-
-        abstract createImportDeclaration:
-            decorators: ResizeArray<Decorator> option *
-            modifiers: ResizeArray<Modifier> option *
-            importClause: ImportClause option *
-            moduleSpecifier: Expression ->
-                ImportDeclaration
-
-        abstract updateImportDeclaration:
-            node: ImportDeclaration *
-            decorators: ResizeArray<Decorator> option *
-            modifiers: ResizeArray<Modifier> option *
-            importClause: ImportClause option *
-            moduleSpecifier: Expression ->
-                ImportDeclaration
-
-        abstract createImportClause:
-            isTypeOnly: bool *
-            name: Identifier option *
-            namedBindings: NamedImportBindings option ->
-                ImportClause
-
-        abstract updateImportClause:
-            node: ImportClause *
-            isTypeOnly: bool *
-            name: Identifier option *
-            namedBindings: NamedImportBindings option ->
-                ImportClause
-
+        abstract createVariableDeclaration: name: U2<string, BindingName> * ?exclamationToken: ExclamationToken * ?``type``: TypeNode * ?initializer: Expression -> VariableDeclaration
+        abstract updateVariableDeclaration: node: VariableDeclaration * name: BindingName * exclamationToken: ExclamationToken option * ``type``: TypeNode option * initializer: Expression option -> VariableDeclaration
+        abstract createVariableDeclarationList: declarations: ResizeArray<VariableDeclaration> * ?flags: NodeFlags -> VariableDeclarationList
+        abstract updateVariableDeclarationList: node: VariableDeclarationList * declarations: ResizeArray<VariableDeclaration> -> VariableDeclarationList
+        abstract createFunctionDeclaration: modifiers: ResizeArray<ModifierLike> option * asteriskToken: AsteriskToken option * name: U2<string, Identifier> option * typeParameters: ResizeArray<TypeParameterDeclaration> option * parameters: ResizeArray<ParameterDeclaration> * ``type``: TypeNode option * body: Block option -> FunctionDeclaration
+        abstract updateFunctionDeclaration: node: FunctionDeclaration * modifiers: ResizeArray<ModifierLike> option * asteriskToken: AsteriskToken option * name: Identifier option * typeParameters: ResizeArray<TypeParameterDeclaration> option * parameters: ResizeArray<ParameterDeclaration> * ``type``: TypeNode option * body: Block option -> FunctionDeclaration
+        abstract createClassDeclaration: modifiers: ResizeArray<ModifierLike> option * name: U2<string, Identifier> option * typeParameters: ResizeArray<TypeParameterDeclaration> option * heritageClauses: ResizeArray<HeritageClause> option * members: ResizeArray<ClassElement> -> ClassDeclaration
+        abstract updateClassDeclaration: node: ClassDeclaration * modifiers: ResizeArray<ModifierLike> option * name: Identifier option * typeParameters: ResizeArray<TypeParameterDeclaration> option * heritageClauses: ResizeArray<HeritageClause> option * members: ResizeArray<ClassElement> -> ClassDeclaration
+        abstract createInterfaceDeclaration: modifiers: ResizeArray<ModifierLike> option * name: U2<string, Identifier> * typeParameters: ResizeArray<TypeParameterDeclaration> option * heritageClauses: ResizeArray<HeritageClause> option * members: ResizeArray<TypeElement> -> InterfaceDeclaration
+        abstract updateInterfaceDeclaration: node: InterfaceDeclaration * modifiers: ResizeArray<ModifierLike> option * name: Identifier * typeParameters: ResizeArray<TypeParameterDeclaration> option * heritageClauses: ResizeArray<HeritageClause> option * members: ResizeArray<TypeElement> -> InterfaceDeclaration
+        abstract createTypeAliasDeclaration: modifiers: ResizeArray<ModifierLike> option * name: U2<string, Identifier> * typeParameters: ResizeArray<TypeParameterDeclaration> option * ``type``: TypeNode -> TypeAliasDeclaration
+        abstract updateTypeAliasDeclaration: node: TypeAliasDeclaration * modifiers: ResizeArray<ModifierLike> option * name: Identifier * typeParameters: ResizeArray<TypeParameterDeclaration> option * ``type``: TypeNode -> TypeAliasDeclaration
+        abstract createEnumDeclaration: modifiers: ResizeArray<ModifierLike> option * name: U2<string, Identifier> * members: ResizeArray<EnumMember> -> EnumDeclaration
+        abstract updateEnumDeclaration: node: EnumDeclaration * modifiers: ResizeArray<ModifierLike> option * name: Identifier * members: ResizeArray<EnumMember> -> EnumDeclaration
+        abstract createModuleDeclaration: modifiers: ResizeArray<ModifierLike> option * name: ModuleName * body: ModuleBody option * ?flags: NodeFlags -> ModuleDeclaration
+        abstract updateModuleDeclaration: node: ModuleDeclaration * modifiers: ResizeArray<ModifierLike> option * name: ModuleName * body: ModuleBody option -> ModuleDeclaration
+        abstract createModuleBlock: statements: ResizeArray<Statement> -> ModuleBlock
+        abstract updateModuleBlock: node: ModuleBlock * statements: ResizeArray<Statement> -> ModuleBlock
+        abstract createCaseBlock: clauses: ResizeArray<CaseOrDefaultClause> -> CaseBlock
+        abstract updateCaseBlock: node: CaseBlock * clauses: ResizeArray<CaseOrDefaultClause> -> CaseBlock
+        abstract createNamespaceExportDeclaration: name: U2<string, Identifier> -> NamespaceExportDeclaration
+        abstract updateNamespaceExportDeclaration: node: NamespaceExportDeclaration * name: Identifier -> NamespaceExportDeclaration
+        abstract createImportEqualsDeclaration: modifiers: ResizeArray<ModifierLike> option * isTypeOnly: bool * name: U2<string, Identifier> * moduleReference: ModuleReference -> ImportEqualsDeclaration
+        abstract updateImportEqualsDeclaration: node: ImportEqualsDeclaration * modifiers: ResizeArray<ModifierLike> option * isTypeOnly: bool * name: Identifier * moduleReference: ModuleReference -> ImportEqualsDeclaration
+        abstract createImportDeclaration: modifiers: ResizeArray<ModifierLike> option * importClause: ImportClause option * moduleSpecifier: Expression * ?assertClause: AssertClause -> ImportDeclaration
+        abstract updateImportDeclaration: node: ImportDeclaration * modifiers: ResizeArray<ModifierLike> option * importClause: ImportClause option * moduleSpecifier: Expression * assertClause: AssertClause option -> ImportDeclaration
+        abstract createImportClause: isTypeOnly: bool * name: Identifier option * namedBindings: NamedImportBindings option -> ImportClause
+        abstract updateImportClause: node: ImportClause * isTypeOnly: bool * name: Identifier option * namedBindings: NamedImportBindings option -> ImportClause
+        abstract createAssertClause: elements: ResizeArray<AssertEntry> * ?multiLine: bool -> AssertClause
+        abstract updateAssertClause: node: AssertClause * elements: ResizeArray<AssertEntry> * ?multiLine: bool -> AssertClause
+        abstract createAssertEntry: name: AssertionKey * value: Expression -> AssertEntry
+        abstract updateAssertEntry: node: AssertEntry * name: AssertionKey * value: Expression -> AssertEntry
+        abstract createImportTypeAssertionContainer: clause: AssertClause * ?multiLine: bool -> ImportTypeAssertionContainer
+        abstract updateImportTypeAssertionContainer: node: ImportTypeAssertionContainer * clause: AssertClause * ?multiLine: bool -> ImportTypeAssertionContainer
         abstract createNamespaceImport: name: Identifier -> NamespaceImport
-
-        abstract updateNamespaceImport:
-            node: NamespaceImport * name: Identifier -> NamespaceImport
-
+        abstract updateNamespaceImport: node: NamespaceImport * name: Identifier -> NamespaceImport
         abstract createNamespaceExport: name: Identifier -> NamespaceExport
-
-        abstract updateNamespaceExport:
-            node: NamespaceExport * name: Identifier -> NamespaceExport
-
-        abstract createNamedImports:
-            elements: ResizeArray<ImportSpecifier> -> NamedImports
-
-        abstract updateNamedImports:
-            node: NamedImports * elements: ResizeArray<ImportSpecifier> ->
-                NamedImports
-
-        abstract createImportSpecifier:
-            propertyName: Identifier option * name: Identifier ->
-                ImportSpecifier
-
-        abstract updateImportSpecifier:
-            node: ImportSpecifier *
-            propertyName: Identifier option *
-            name: Identifier ->
-                ImportSpecifier
-
-        abstract createExportAssignment:
-            decorators: ResizeArray<Decorator> option *
-            modifiers: ResizeArray<Modifier> option *
-            isExportEquals: bool option *
-            expression: Expression ->
-                ExportAssignment
-
-        abstract updateExportAssignment:
-            node: ExportAssignment *
-            decorators: ResizeArray<Decorator> option *
-            modifiers: ResizeArray<Modifier> option *
-            expression: Expression ->
-                ExportAssignment
-
-        abstract createExportDeclaration:
-            decorators: ResizeArray<Decorator> option *
-            modifiers: ResizeArray<Modifier> option *
-            isTypeOnly: bool *
-            exportClause: NamedExportBindings option *
-            ?moduleSpecifier: Expression ->
-                ExportDeclaration
-
-        abstract updateExportDeclaration:
-            node: ExportDeclaration *
-            decorators: ResizeArray<Decorator> option *
-            modifiers: ResizeArray<Modifier> option *
-            isTypeOnly: bool *
-            exportClause: NamedExportBindings option *
-            moduleSpecifier: Expression option ->
-                ExportDeclaration
-
-        abstract createNamedExports:
-            elements: ResizeArray<ExportSpecifier> -> NamedExports
-
-        abstract updateNamedExports:
-            node: NamedExports * elements: ResizeArray<ExportSpecifier> ->
-                NamedExports
-
-        abstract createExportSpecifier:
-            propertyName: U2<string, Identifier> option *
-            name: U2<string, Identifier> ->
-                ExportSpecifier
-
-        abstract updateExportSpecifier:
-            node: ExportSpecifier *
-            propertyName: Identifier option *
-            name: Identifier ->
-                ExportSpecifier
-
-        abstract createExternalModuleReference:
-            expression: Expression -> ExternalModuleReference
-
-        abstract updateExternalModuleReference:
-            node: ExternalModuleReference * expression: Expression ->
-                ExternalModuleReference
-
+        abstract updateNamespaceExport: node: NamespaceExport * name: Identifier -> NamespaceExport
+        abstract createNamedImports: elements: ResizeArray<ImportSpecifier> -> NamedImports
+        abstract updateNamedImports: node: NamedImports * elements: ResizeArray<ImportSpecifier> -> NamedImports
+        abstract createImportSpecifier: isTypeOnly: bool * propertyName: Identifier option * name: Identifier -> ImportSpecifier
+        abstract updateImportSpecifier: node: ImportSpecifier * isTypeOnly: bool * propertyName: Identifier option * name: Identifier -> ImportSpecifier
+        abstract createExportAssignment: modifiers: ResizeArray<ModifierLike> option * isExportEquals: bool option * expression: Expression -> ExportAssignment
+        abstract updateExportAssignment: node: ExportAssignment * modifiers: ResizeArray<ModifierLike> option * expression: Expression -> ExportAssignment
+        abstract createExportDeclaration: modifiers: ResizeArray<ModifierLike> option * isTypeOnly: bool * exportClause: NamedExportBindings option * ?moduleSpecifier: Expression * ?assertClause: AssertClause -> ExportDeclaration
+        abstract updateExportDeclaration: node: ExportDeclaration * modifiers: ResizeArray<ModifierLike> option * isTypeOnly: bool * exportClause: NamedExportBindings option * moduleSpecifier: Expression option * assertClause: AssertClause option -> ExportDeclaration
+        abstract createNamedExports: elements: ResizeArray<ExportSpecifier> -> NamedExports
+        abstract updateNamedExports: node: NamedExports * elements: ResizeArray<ExportSpecifier> -> NamedExports
+        abstract createExportSpecifier: isTypeOnly: bool * propertyName: U2<string, Identifier> option * name: U2<string, Identifier> -> ExportSpecifier
+        abstract updateExportSpecifier: node: ExportSpecifier * isTypeOnly: bool * propertyName: Identifier option * name: Identifier -> ExportSpecifier
+        abstract createExternalModuleReference: expression: Expression -> ExternalModuleReference
+        abstract updateExternalModuleReference: node: ExternalModuleReference * expression: Expression -> ExternalModuleReference
         abstract createJSDocAllType: unit -> JSDocAllType
         abstract createJSDocUnknownType: unit -> JSDocUnknownType
-
-        abstract createJSDocNonNullableType:
-            ``type``: TypeNode -> JSDocNonNullableType
-
-        abstract updateJSDocNonNullableType:
-            node: JSDocNonNullableType * ``type``: TypeNode ->
-                JSDocNonNullableType
-
-        abstract createJSDocNullableType:
-            ``type``: TypeNode -> JSDocNullableType
-
-        abstract updateJSDocNullableType:
-            node: JSDocNullableType * ``type``: TypeNode -> JSDocNullableType
-
-        abstract createJSDocOptionalType:
-            ``type``: TypeNode -> JSDocOptionalType
-
-        abstract updateJSDocOptionalType:
-            node: JSDocOptionalType * ``type``: TypeNode -> JSDocOptionalType
-
-        abstract createJSDocFunctionType:
-            parameters: ResizeArray<ParameterDeclaration> *
-            ``type``: TypeNode option ->
-                JSDocFunctionType
-
-        abstract updateJSDocFunctionType:
-            node: JSDocFunctionType *
-            parameters: ResizeArray<ParameterDeclaration> *
-            ``type``: TypeNode option ->
-                JSDocFunctionType
-
-        abstract createJSDocVariadicType:
-            ``type``: TypeNode -> JSDocVariadicType
-
-        abstract updateJSDocVariadicType:
-            node: JSDocVariadicType * ``type``: TypeNode -> JSDocVariadicType
-
-        abstract createJSDocNamepathType:
-            ``type``: TypeNode -> JSDocNamepathType
-
-        abstract updateJSDocNamepathType:
-            node: JSDocNamepathType * ``type``: TypeNode -> JSDocNamepathType
-
-        abstract createJSDocTypeExpression:
-            ``type``: TypeNode -> JSDocTypeExpression
-
-        abstract updateJSDocTypeExpression:
-            node: JSDocTypeExpression * ``type``: TypeNode ->
-                JSDocTypeExpression
-
-        abstract createJSDocNameReference:
-            name: EntityName -> JSDocNameReference
-
-        abstract updateJSDocNameReference:
-            node: JSDocNameReference * name: EntityName -> JSDocNameReference
-
-        abstract createJSDocTypeLiteral:
-            ?jsDocPropertyTags: ResizeArray<JSDocPropertyLikeTag> *
-            ?isArrayType: bool ->
-                JSDocTypeLiteral
-
-        abstract updateJSDocTypeLiteral:
-            node: JSDocTypeLiteral *
-            jsDocPropertyTags: ResizeArray<JSDocPropertyLikeTag> option *
-            isArrayType: bool option ->
-                JSDocTypeLiteral
-
-        abstract createJSDocSignature:
-            typeParameters: ResizeArray<JSDocTemplateTag> option *
-            parameters: ResizeArray<JSDocParameterTag> *
-            ?``type``: JSDocReturnTag ->
-                JSDocSignature
-
-        abstract updateJSDocSignature:
-            node: JSDocSignature *
-            typeParameters: ResizeArray<JSDocTemplateTag> option *
-            parameters: ResizeArray<JSDocParameterTag> *
-            ``type``: JSDocReturnTag option ->
-                JSDocSignature
-
-        abstract createJSDocTemplateTag:
-            tagName: Identifier option *
-            ``constraint``: JSDocTypeExpression option *
-            typeParameters: ResizeArray<TypeParameterDeclaration> *
-            ?comment: string ->
-                JSDocTemplateTag
-
-        abstract updateJSDocTemplateTag:
-            node: JSDocTemplateTag *
-            tagName: Identifier option *
-            ``constraint``: JSDocTypeExpression option *
-            typeParameters: ResizeArray<TypeParameterDeclaration> *
-            comment: string option ->
-                JSDocTemplateTag
-
-        abstract createJSDocTypedefTag:
-            tagName: Identifier option *
-            ?typeExpression: U2<JSDocTypeExpression, JSDocTypeLiteral> *
-            ?fullName: U2<Identifier, JSDocNamespaceDeclaration> *
-            ?comment: string ->
-                JSDocTypedefTag
-
-        abstract updateJSDocTypedefTag:
-            node: JSDocTypedefTag *
-            tagName: Identifier option *
-            typeExpression: U2<JSDocTypeExpression, JSDocTypeLiteral> option *
-            fullName: U2<Identifier, JSDocNamespaceDeclaration> option *
-            comment: string option ->
-                JSDocTypedefTag
-
-        abstract createJSDocParameterTag:
-            tagName: Identifier option *
-            name: EntityName *
-            isBracketed: bool *
-            ?typeExpression: JSDocTypeExpression *
-            ?isNameFirst: bool *
-            ?comment: string ->
-                JSDocParameterTag
-
-        abstract updateJSDocParameterTag:
-            node: JSDocParameterTag *
-            tagName: Identifier option *
-            name: EntityName *
-            isBracketed: bool *
-            typeExpression: JSDocTypeExpression option *
-            isNameFirst: bool *
-            comment: string option ->
-                JSDocParameterTag
-
-        abstract createJSDocPropertyTag:
-            tagName: Identifier option *
-            name: EntityName *
-            isBracketed: bool *
-            ?typeExpression: JSDocTypeExpression *
-            ?isNameFirst: bool *
-            ?comment: string ->
-                JSDocPropertyTag
-
-        abstract updateJSDocPropertyTag:
-            node: JSDocPropertyTag *
-            tagName: Identifier option *
-            name: EntityName *
-            isBracketed: bool *
-            typeExpression: JSDocTypeExpression option *
-            isNameFirst: bool *
-            comment: string option ->
-                JSDocPropertyTag
-
-        abstract createJSDocTypeTag:
-            tagName: Identifier option *
-            typeExpression: JSDocTypeExpression *
-            ?comment: string ->
-                JSDocTypeTag
-
-        abstract updateJSDocTypeTag:
-            node: JSDocTypeTag *
-            tagName: Identifier option *
-            typeExpression: JSDocTypeExpression *
-            comment: string option ->
-                JSDocTypeTag
-
-        abstract createJSDocSeeTag:
-            tagName: Identifier option *
-            nameExpression: JSDocNameReference option *
-            ?comment: string ->
-                JSDocSeeTag
-
-        abstract updateJSDocSeeTag:
-            node: JSDocSeeTag *
-            tagName: Identifier option *
-            nameExpression: JSDocNameReference option *
-            ?comment: string ->
-                JSDocSeeTag
-
-        abstract createJSDocReturnTag:
-            tagName: Identifier option *
-            ?typeExpression: JSDocTypeExpression *
-            ?comment: string ->
-                JSDocReturnTag
-
-        abstract updateJSDocReturnTag:
-            node: JSDocReturnTag *
-            tagName: Identifier option *
-            typeExpression: JSDocTypeExpression option *
-            comment: string option ->
-                JSDocReturnTag
-
-        abstract createJSDocThisTag:
-            tagName: Identifier option *
-            typeExpression: JSDocTypeExpression *
-            ?comment: string ->
-                JSDocThisTag
-
-        abstract updateJSDocThisTag:
-            node: JSDocThisTag *
-            tagName: Identifier option *
-            typeExpression: JSDocTypeExpression option *
-            comment: string option ->
-                JSDocThisTag
-
-        abstract createJSDocEnumTag:
-            tagName: Identifier option *
-            typeExpression: JSDocTypeExpression *
-            ?comment: string ->
-                JSDocEnumTag
-
-        abstract updateJSDocEnumTag:
-            node: JSDocEnumTag *
-            tagName: Identifier option *
-            typeExpression: JSDocTypeExpression *
-            comment: string option ->
-                JSDocEnumTag
-
-        abstract createJSDocCallbackTag:
-            tagName: Identifier option *
-            typeExpression: JSDocSignature *
-            ?fullName: U2<Identifier, JSDocNamespaceDeclaration> *
-            ?comment: string ->
-                JSDocCallbackTag
-
-        abstract updateJSDocCallbackTag:
-            node: JSDocCallbackTag *
-            tagName: Identifier option *
-            typeExpression: JSDocSignature *
-            fullName: U2<Identifier, JSDocNamespaceDeclaration> option *
-            comment: string option ->
-                JSDocCallbackTag
-
-        abstract createJSDocAugmentsTag:
-            tagName: Identifier option *
-            className: JSDocAugmentsTag *
-            ?comment: string ->
-                JSDocAugmentsTag
-
-        abstract updateJSDocAugmentsTag:
-            node: JSDocAugmentsTag *
-            tagName: Identifier option *
-            className: JSDocAugmentsTag *
-            comment: string option ->
-                JSDocAugmentsTag
-
-        abstract createJSDocImplementsTag:
-            tagName: Identifier option *
-            className: JSDocImplementsTag *
-            ?comment: string ->
-                JSDocImplementsTag
-
-        abstract updateJSDocImplementsTag:
-            node: JSDocImplementsTag *
-            tagName: Identifier option *
-            className: JSDocImplementsTag *
-            comment: string option ->
-                JSDocImplementsTag
-
-        abstract createJSDocAuthorTag:
-            tagName: Identifier option * ?comment: string -> JSDocAuthorTag
-
-        abstract updateJSDocAuthorTag:
-            node: JSDocAuthorTag *
-            tagName: Identifier option *
-            comment: string option ->
-                JSDocAuthorTag
-
-        abstract createJSDocClassTag:
-            tagName: Identifier option * ?comment: string -> JSDocClassTag
-
-        abstract updateJSDocClassTag:
-            node: JSDocClassTag *
-            tagName: Identifier option *
-            comment: string option ->
-                JSDocClassTag
-
-        abstract createJSDocPublicTag:
-            tagName: Identifier option * ?comment: string -> JSDocPublicTag
-
-        abstract updateJSDocPublicTag:
-            node: JSDocPublicTag *
-            tagName: Identifier option *
-            comment: string option ->
-                JSDocPublicTag
-
-        abstract createJSDocPrivateTag:
-            tagName: Identifier option * ?comment: string -> JSDocPrivateTag
-
-        abstract updateJSDocPrivateTag:
-            node: JSDocPrivateTag *
-            tagName: Identifier option *
-            comment: string option ->
-                JSDocPrivateTag
-
-        abstract createJSDocProtectedTag:
-            tagName: Identifier option * ?comment: string -> JSDocProtectedTag
-
-        abstract updateJSDocProtectedTag:
-            node: JSDocProtectedTag *
-            tagName: Identifier option *
-            comment: string option ->
-                JSDocProtectedTag
-
-        abstract createJSDocReadonlyTag:
-            tagName: Identifier option * ?comment: string -> JSDocReadonlyTag
-
-        abstract updateJSDocReadonlyTag:
-            node: JSDocReadonlyTag *
-            tagName: Identifier option *
-            comment: string option ->
-                JSDocReadonlyTag
-
-        abstract createJSDocUnknownTag:
-            tagName: Identifier * ?comment: string -> JSDocUnknownTag
-
-        abstract updateJSDocUnknownTag:
-            node: JSDocUnknownTag * tagName: Identifier * comment: string option ->
-                JSDocUnknownTag
-
-        abstract createJSDocDeprecatedTag:
-            tagName: Identifier * ?comment: string -> JSDocDeprecatedTag
-
-        abstract updateJSDocDeprecatedTag:
-            node: JSDocDeprecatedTag * tagName: Identifier * ?comment: string ->
-                JSDocDeprecatedTag
-
-        abstract createJSDocComment:
-            ?comment: string * ?tags: ResizeArray<JSDocTag> -> JSDoc
-
-        abstract updateJSDocComment:
-            node: JSDoc *
-            comment: string option *
-            tags: ResizeArray<JSDocTag> option ->
-                JSDoc
-
-        abstract createJsxElement:
-            openingElement: JsxOpeningElement *
-            children: ResizeArray<JsxChild> *
-            closingElement: JsxClosingElement ->
-                JsxElement
-
-        abstract updateJsxElement:
-            node: JsxElement *
-            openingElement: JsxOpeningElement *
-            children: ResizeArray<JsxChild> *
-            closingElement: JsxClosingElement ->
-                JsxElement
-
-        abstract createJsxSelfClosingElement:
-            tagName: JsxTagNameExpression *
-            typeArguments: ResizeArray<TypeNode> option *
-            attributes: JsxAttributes ->
-                JsxSelfClosingElement
-
-        abstract updateJsxSelfClosingElement:
-            node: JsxSelfClosingElement *
-            tagName: JsxTagNameExpression *
-            typeArguments: ResizeArray<TypeNode> option *
-            attributes: JsxAttributes ->
-                JsxSelfClosingElement
-
-        abstract createJsxOpeningElement:
-            tagName: JsxTagNameExpression *
-            typeArguments: ResizeArray<TypeNode> option *
-            attributes: JsxAttributes ->
-                JsxOpeningElement
-
-        abstract updateJsxOpeningElement:
-            node: JsxOpeningElement *
-            tagName: JsxTagNameExpression *
-            typeArguments: ResizeArray<TypeNode> option *
-            attributes: JsxAttributes ->
-                JsxOpeningElement
-
-        abstract createJsxClosingElement:
-            tagName: JsxTagNameExpression -> JsxClosingElement
-
-        abstract updateJsxClosingElement:
-            node: JsxClosingElement * tagName: JsxTagNameExpression ->
-                JsxClosingElement
-
-        abstract createJsxFragment:
-            openingFragment: JsxOpeningFragment *
-            children: ResizeArray<JsxChild> *
-            closingFragment: JsxClosingFragment ->
-                JsxFragment
-
-        abstract createJsxText:
-            text: string * ?containsOnlyTriviaWhiteSpaces: bool -> JsxText
-
-        abstract updateJsxText:
-            node: JsxText * text: string * ?containsOnlyTriviaWhiteSpaces: bool ->
-                JsxText
-
+        abstract createJSDocNonNullableType: ``type``: TypeNode * ?postfix: bool -> JSDocNonNullableType
+        abstract updateJSDocNonNullableType: node: JSDocNonNullableType * ``type``: TypeNode -> JSDocNonNullableType
+        abstract createJSDocNullableType: ``type``: TypeNode * ?postfix: bool -> JSDocNullableType
+        abstract updateJSDocNullableType: node: JSDocNullableType * ``type``: TypeNode -> JSDocNullableType
+        abstract createJSDocOptionalType: ``type``: TypeNode -> JSDocOptionalType
+        abstract updateJSDocOptionalType: node: JSDocOptionalType * ``type``: TypeNode -> JSDocOptionalType
+        abstract createJSDocFunctionType: parameters: ResizeArray<ParameterDeclaration> * ``type``: TypeNode option -> JSDocFunctionType
+        abstract updateJSDocFunctionType: node: JSDocFunctionType * parameters: ResizeArray<ParameterDeclaration> * ``type``: TypeNode option -> JSDocFunctionType
+        abstract createJSDocVariadicType: ``type``: TypeNode -> JSDocVariadicType
+        abstract updateJSDocVariadicType: node: JSDocVariadicType * ``type``: TypeNode -> JSDocVariadicType
+        abstract createJSDocNamepathType: ``type``: TypeNode -> JSDocNamepathType
+        abstract updateJSDocNamepathType: node: JSDocNamepathType * ``type``: TypeNode -> JSDocNamepathType
+        abstract createJSDocTypeExpression: ``type``: TypeNode -> JSDocTypeExpression
+        abstract updateJSDocTypeExpression: node: JSDocTypeExpression * ``type``: TypeNode -> JSDocTypeExpression
+        abstract createJSDocNameReference: name: U2<EntityName, JSDocMemberName> -> JSDocNameReference
+        abstract updateJSDocNameReference: node: JSDocNameReference * name: U2<EntityName, JSDocMemberName> -> JSDocNameReference
+        abstract createJSDocMemberName: left: U2<EntityName, JSDocMemberName> * right: Identifier -> JSDocMemberName
+        abstract updateJSDocMemberName: node: JSDocMemberName * left: U2<EntityName, JSDocMemberName> * right: Identifier -> JSDocMemberName
+        abstract createJSDocLink: name: U2<EntityName, JSDocMemberName> option * text: string -> JSDocLink
+        abstract updateJSDocLink: node: JSDocLink * name: U2<EntityName, JSDocMemberName> option * text: string -> JSDocLink
+        abstract createJSDocLinkCode: name: U2<EntityName, JSDocMemberName> option * text: string -> JSDocLinkCode
+        abstract updateJSDocLinkCode: node: JSDocLinkCode * name: U2<EntityName, JSDocMemberName> option * text: string -> JSDocLinkCode
+        abstract createJSDocLinkPlain: name: U2<EntityName, JSDocMemberName> option * text: string -> JSDocLinkPlain
+        abstract updateJSDocLinkPlain: node: JSDocLinkPlain * name: U2<EntityName, JSDocMemberName> option * text: string -> JSDocLinkPlain
+        abstract createJSDocTypeLiteral: ?jsDocPropertyTags: ResizeArray<JSDocPropertyLikeTag> * ?isArrayType: bool -> JSDocTypeLiteral
+        abstract updateJSDocTypeLiteral: node: JSDocTypeLiteral * jsDocPropertyTags: ResizeArray<JSDocPropertyLikeTag> option * isArrayType: bool option -> JSDocTypeLiteral
+        abstract createJSDocSignature: typeParameters: ResizeArray<JSDocTemplateTag> option * parameters: ResizeArray<JSDocParameterTag> * ?``type``: JSDocReturnTag -> JSDocSignature
+        abstract updateJSDocSignature: node: JSDocSignature * typeParameters: ResizeArray<JSDocTemplateTag> option * parameters: ResizeArray<JSDocParameterTag> * ``type``: JSDocReturnTag option -> JSDocSignature
+        abstract createJSDocTemplateTag: tagName: Identifier option * ``constraint``: JSDocTypeExpression option * typeParameters: ResizeArray<TypeParameterDeclaration> * ?comment: U2<string, ResizeArray<JSDocComment>> -> JSDocTemplateTag
+        abstract updateJSDocTemplateTag: node: JSDocTemplateTag * tagName: Identifier option * ``constraint``: JSDocTypeExpression option * typeParameters: ResizeArray<TypeParameterDeclaration> * comment: U2<string, ResizeArray<JSDocComment>> option -> JSDocTemplateTag
+        abstract createJSDocTypedefTag: tagName: Identifier option * ?typeExpression: U2<JSDocTypeExpression, JSDocTypeLiteral> * ?fullName: U2<Identifier, JSDocNamespaceDeclaration> * ?comment: U2<string, ResizeArray<JSDocComment>> -> JSDocTypedefTag
+        abstract updateJSDocTypedefTag: node: JSDocTypedefTag * tagName: Identifier option * typeExpression: U2<JSDocTypeExpression, JSDocTypeLiteral> option * fullName: U2<Identifier, JSDocNamespaceDeclaration> option * comment: U2<string, ResizeArray<JSDocComment>> option -> JSDocTypedefTag
+        abstract createJSDocParameterTag: tagName: Identifier option * name: EntityName * isBracketed: bool * ?typeExpression: JSDocTypeExpression * ?isNameFirst: bool * ?comment: U2<string, ResizeArray<JSDocComment>> -> JSDocParameterTag
+        abstract updateJSDocParameterTag: node: JSDocParameterTag * tagName: Identifier option * name: EntityName * isBracketed: bool * typeExpression: JSDocTypeExpression option * isNameFirst: bool * comment: U2<string, ResizeArray<JSDocComment>> option -> JSDocParameterTag
+        abstract createJSDocPropertyTag: tagName: Identifier option * name: EntityName * isBracketed: bool * ?typeExpression: JSDocTypeExpression * ?isNameFirst: bool * ?comment: U2<string, ResizeArray<JSDocComment>> -> JSDocPropertyTag
+        abstract updateJSDocPropertyTag: node: JSDocPropertyTag * tagName: Identifier option * name: EntityName * isBracketed: bool * typeExpression: JSDocTypeExpression option * isNameFirst: bool * comment: U2<string, ResizeArray<JSDocComment>> option -> JSDocPropertyTag
+        abstract createJSDocTypeTag: tagName: Identifier option * typeExpression: JSDocTypeExpression * ?comment: U2<string, ResizeArray<JSDocComment>> -> JSDocTypeTag
+        abstract updateJSDocTypeTag: node: JSDocTypeTag * tagName: Identifier option * typeExpression: JSDocTypeExpression * comment: U2<string, ResizeArray<JSDocComment>> option -> JSDocTypeTag
+        abstract createJSDocSeeTag: tagName: Identifier option * nameExpression: JSDocNameReference option * ?comment: U2<string, ResizeArray<JSDocComment>> -> JSDocSeeTag
+        abstract updateJSDocSeeTag: node: JSDocSeeTag * tagName: Identifier option * nameExpression: JSDocNameReference option * ?comment: U2<string, ResizeArray<JSDocComment>> -> JSDocSeeTag
+        abstract createJSDocReturnTag: tagName: Identifier option * ?typeExpression: JSDocTypeExpression * ?comment: U2<string, ResizeArray<JSDocComment>> -> JSDocReturnTag
+        abstract updateJSDocReturnTag: node: JSDocReturnTag * tagName: Identifier option * typeExpression: JSDocTypeExpression option * comment: U2<string, ResizeArray<JSDocComment>> option -> JSDocReturnTag
+        abstract createJSDocThisTag: tagName: Identifier option * typeExpression: JSDocTypeExpression * ?comment: U2<string, ResizeArray<JSDocComment>> -> JSDocThisTag
+        abstract updateJSDocThisTag: node: JSDocThisTag * tagName: Identifier option * typeExpression: JSDocTypeExpression option * comment: U2<string, ResizeArray<JSDocComment>> option -> JSDocThisTag
+        abstract createJSDocEnumTag: tagName: Identifier option * typeExpression: JSDocTypeExpression * ?comment: U2<string, ResizeArray<JSDocComment>> -> JSDocEnumTag
+        abstract updateJSDocEnumTag: node: JSDocEnumTag * tagName: Identifier option * typeExpression: JSDocTypeExpression * comment: U2<string, ResizeArray<JSDocComment>> option -> JSDocEnumTag
+        abstract createJSDocCallbackTag: tagName: Identifier option * typeExpression: JSDocSignature * ?fullName: U2<Identifier, JSDocNamespaceDeclaration> * ?comment: U2<string, ResizeArray<JSDocComment>> -> JSDocCallbackTag
+        abstract updateJSDocCallbackTag: node: JSDocCallbackTag * tagName: Identifier option * typeExpression: JSDocSignature * fullName: U2<Identifier, JSDocNamespaceDeclaration> option * comment: U2<string, ResizeArray<JSDocComment>> option -> JSDocCallbackTag
+        abstract createJSDocOverloadTag: tagName: Identifier option * typeExpression: JSDocSignature * ?comment: U2<string, ResizeArray<JSDocComment>> -> JSDocOverloadTag
+        abstract updateJSDocOverloadTag: node: JSDocOverloadTag * tagName: Identifier option * typeExpression: JSDocSignature * comment: U2<string, ResizeArray<JSDocComment>> option -> JSDocOverloadTag
+        abstract createJSDocAugmentsTag: tagName: Identifier option * className: obj * ?comment: U2<string, ResizeArray<JSDocComment>> -> JSDocAugmentsTag
+        abstract updateJSDocAugmentsTag: node: JSDocAugmentsTag * tagName: Identifier option * className: obj * comment: U2<string, ResizeArray<JSDocComment>> option -> JSDocAugmentsTag
+        abstract createJSDocImplementsTag: tagName: Identifier option * className: obj * ?comment: U2<string, ResizeArray<JSDocComment>> -> JSDocImplementsTag
+        abstract updateJSDocImplementsTag: node: JSDocImplementsTag * tagName: Identifier option * className: obj * comment: U2<string, ResizeArray<JSDocComment>> option -> JSDocImplementsTag
+        abstract createJSDocAuthorTag: tagName: Identifier option * ?comment: U2<string, ResizeArray<JSDocComment>> -> JSDocAuthorTag
+        abstract updateJSDocAuthorTag: node: JSDocAuthorTag * tagName: Identifier option * comment: U2<string, ResizeArray<JSDocComment>> option -> JSDocAuthorTag
+        abstract createJSDocClassTag: tagName: Identifier option * ?comment: U2<string, ResizeArray<JSDocComment>> -> JSDocClassTag
+        abstract updateJSDocClassTag: node: JSDocClassTag * tagName: Identifier option * comment: U2<string, ResizeArray<JSDocComment>> option -> JSDocClassTag
+        abstract createJSDocPublicTag: tagName: Identifier option * ?comment: U2<string, ResizeArray<JSDocComment>> -> JSDocPublicTag
+        abstract updateJSDocPublicTag: node: JSDocPublicTag * tagName: Identifier option * comment: U2<string, ResizeArray<JSDocComment>> option -> JSDocPublicTag
+        abstract createJSDocPrivateTag: tagName: Identifier option * ?comment: U2<string, ResizeArray<JSDocComment>> -> JSDocPrivateTag
+        abstract updateJSDocPrivateTag: node: JSDocPrivateTag * tagName: Identifier option * comment: U2<string, ResizeArray<JSDocComment>> option -> JSDocPrivateTag
+        abstract createJSDocProtectedTag: tagName: Identifier option * ?comment: U2<string, ResizeArray<JSDocComment>> -> JSDocProtectedTag
+        abstract updateJSDocProtectedTag: node: JSDocProtectedTag * tagName: Identifier option * comment: U2<string, ResizeArray<JSDocComment>> option -> JSDocProtectedTag
+        abstract createJSDocReadonlyTag: tagName: Identifier option * ?comment: U2<string, ResizeArray<JSDocComment>> -> JSDocReadonlyTag
+        abstract updateJSDocReadonlyTag: node: JSDocReadonlyTag * tagName: Identifier option * comment: U2<string, ResizeArray<JSDocComment>> option -> JSDocReadonlyTag
+        abstract createJSDocUnknownTag: tagName: Identifier * ?comment: U2<string, ResizeArray<JSDocComment>> -> JSDocUnknownTag
+        abstract updateJSDocUnknownTag: node: JSDocUnknownTag * tagName: Identifier * comment: U2<string, ResizeArray<JSDocComment>> option -> JSDocUnknownTag
+        abstract createJSDocDeprecatedTag: tagName: Identifier option * ?comment: U2<string, ResizeArray<JSDocComment>> -> JSDocDeprecatedTag
+        abstract updateJSDocDeprecatedTag: node: JSDocDeprecatedTag * tagName: Identifier option * ?comment: U2<string, ResizeArray<JSDocComment>> -> JSDocDeprecatedTag
+        abstract createJSDocOverrideTag: tagName: Identifier option * ?comment: U2<string, ResizeArray<JSDocComment>> -> JSDocOverrideTag
+        abstract updateJSDocOverrideTag: node: JSDocOverrideTag * tagName: Identifier option * ?comment: U2<string, ResizeArray<JSDocComment>> -> JSDocOverrideTag
+        abstract createJSDocThrowsTag: tagName: Identifier * typeExpression: JSDocTypeExpression option * ?comment: U2<string, ResizeArray<JSDocComment>> -> JSDocThrowsTag
+        abstract updateJSDocThrowsTag: node: JSDocThrowsTag * tagName: Identifier option * typeExpression: JSDocTypeExpression option * ?comment: U2<string, ResizeArray<JSDocComment>> -> JSDocThrowsTag
+        abstract createJSDocSatisfiesTag: tagName: Identifier option * typeExpression: JSDocTypeExpression * ?comment: U2<string, ResizeArray<JSDocComment>> -> JSDocSatisfiesTag
+        abstract updateJSDocSatisfiesTag: node: JSDocSatisfiesTag * tagName: Identifier option * typeExpression: JSDocTypeExpression * comment: U2<string, ResizeArray<JSDocComment>> option -> JSDocSatisfiesTag
+        abstract createJSDocText: text: string -> JSDocText
+        abstract updateJSDocText: node: JSDocText * text: string -> JSDocText
+        abstract createJSDocComment: ?comment: U2<string, ResizeArray<JSDocComment>> * ?tags: ResizeArray<JSDocTag> -> JSDoc
+        abstract updateJSDocComment: node: JSDoc * comment: U2<string, ResizeArray<JSDocComment>> option * tags: ResizeArray<JSDocTag> option -> JSDoc
+        abstract createJsxElement: openingElement: JsxOpeningElement * children: ResizeArray<JsxChild> * closingElement: JsxClosingElement -> JsxElement
+        abstract updateJsxElement: node: JsxElement * openingElement: JsxOpeningElement * children: ResizeArray<JsxChild> * closingElement: JsxClosingElement -> JsxElement
+        abstract createJsxSelfClosingElement: tagName: JsxTagNameExpression * typeArguments: ResizeArray<TypeNode> option * attributes: JsxAttributes -> JsxSelfClosingElement
+        abstract updateJsxSelfClosingElement: node: JsxSelfClosingElement * tagName: JsxTagNameExpression * typeArguments: ResizeArray<TypeNode> option * attributes: JsxAttributes -> JsxSelfClosingElement
+        abstract createJsxOpeningElement: tagName: JsxTagNameExpression * typeArguments: ResizeArray<TypeNode> option * attributes: JsxAttributes -> JsxOpeningElement
+        abstract updateJsxOpeningElement: node: JsxOpeningElement * tagName: JsxTagNameExpression * typeArguments: ResizeArray<TypeNode> option * attributes: JsxAttributes -> JsxOpeningElement
+        abstract createJsxClosingElement: tagName: JsxTagNameExpression -> JsxClosingElement
+        abstract updateJsxClosingElement: node: JsxClosingElement * tagName: JsxTagNameExpression -> JsxClosingElement
+        abstract createJsxFragment: openingFragment: JsxOpeningFragment * children: ResizeArray<JsxChild> * closingFragment: JsxClosingFragment -> JsxFragment
+        abstract createJsxText: text: string * ?containsOnlyTriviaWhiteSpaces: bool -> JsxText
+        abstract updateJsxText: node: JsxText * text: string * ?containsOnlyTriviaWhiteSpaces: bool -> JsxText
         abstract createJsxOpeningFragment: unit -> JsxOpeningFragment
         abstract createJsxJsxClosingFragment: unit -> JsxClosingFragment
-
-        abstract updateJsxFragment:
-            node: JsxFragment *
-            openingFragment: JsxOpeningFragment *
-            children: ResizeArray<JsxChild> *
-            closingFragment: JsxClosingFragment ->
-                JsxFragment
-
-        abstract createJsxAttribute:
-            name: Identifier *
-            initializer: U2<StringLiteral, JsxExpression> option ->
-                JsxAttribute
-
-        abstract updateJsxAttribute:
-            node: JsxAttribute *
-            name: Identifier *
-            initializer: U2<StringLiteral, JsxExpression> option ->
-                JsxAttribute
-
-        abstract createJsxAttributes:
-            properties: ResizeArray<JsxAttributeLike> -> JsxAttributes
-
-        abstract updateJsxAttributes:
-            node: JsxAttributes * properties: ResizeArray<JsxAttributeLike> ->
-                JsxAttributes
-
-        abstract createJsxSpreadAttribute:
-            expression: Expression -> JsxSpreadAttribute
-
-        abstract updateJsxSpreadAttribute:
-            node: JsxSpreadAttribute * expression: Expression ->
-                JsxSpreadAttribute
-
-        abstract createJsxExpression:
-            dotDotDotToken: DotDotDotToken option *
-            expression: Expression option ->
-                JsxExpression
-
-        abstract updateJsxExpression:
-            node: JsxExpression * expression: Expression option -> JsxExpression
-
-        abstract createCaseClause:
-            expression: Expression * statements: ResizeArray<Statement> ->
-                CaseClause
-
-        abstract updateCaseClause:
-            node: CaseClause *
-            expression: Expression *
-            statements: ResizeArray<Statement> ->
-                CaseClause
-
-        abstract createDefaultClause:
-            statements: ResizeArray<Statement> -> DefaultClause
-
-        abstract updateDefaultClause:
-            node: DefaultClause * statements: ResizeArray<Statement> ->
-                DefaultClause
-
-        abstract createHeritageClause:
-            token: HeritageClause *
-            types: ResizeArray<ExpressionWithTypeArguments> ->
-                HeritageClause
-
-        abstract updateHeritageClause:
-            node: HeritageClause *
-            types: ResizeArray<ExpressionWithTypeArguments> ->
-                HeritageClause
-
-        abstract createCatchClause:
-            variableDeclaration: U2<string, VariableDeclaration> option *
-            block: Block ->
-                CatchClause
-
-        abstract updateCatchClause:
-            node: CatchClause *
-            variableDeclaration: VariableDeclaration option *
-            block: Block ->
-                CatchClause
-
-        abstract createPropertyAssignment:
-            name: U2<string, PropertyName> * initializer: Expression ->
-                PropertyAssignment
-
-        abstract updatePropertyAssignment:
-            node: PropertyAssignment *
-            name: PropertyName *
-            initializer: Expression ->
-                PropertyAssignment
-
-        abstract createShorthandPropertyAssignment:
-            name: U2<string, Identifier> *
-            ?objectAssignmentInitializer: Expression ->
-                ShorthandPropertyAssignment
-
-        abstract updateShorthandPropertyAssignment:
-            node: ShorthandPropertyAssignment *
-            name: Identifier *
-            objectAssignmentInitializer: Expression option ->
-                ShorthandPropertyAssignment
-
-        abstract createSpreadAssignment:
-            expression: Expression -> SpreadAssignment
-
-        abstract updateSpreadAssignment:
-            node: SpreadAssignment * expression: Expression -> SpreadAssignment
-
-        abstract createEnumMember:
-            name: U2<string, PropertyName> * ?initializer: Expression ->
-                EnumMember
-
-        abstract updateEnumMember:
-            node: EnumMember *
-            name: PropertyName *
-            initializer: Expression option ->
-                EnumMember
-
-        abstract createSourceFile:
-            statements: ResizeArray<Statement> *
-            endOfFileToken: EndOfFileToken *
-            flags: NodeFlags ->
-                SourceFile
-
-        abstract updateSourceFile:
-            node: SourceFile *
-            statements: ResizeArray<Statement> *
-            ?isDeclarationFile: bool *
-            ?referencedFiles: ResizeArray<FileReference> *
-            ?typeReferences: ResizeArray<FileReference> *
-            ?hasNoDefaultLib: bool *
-            ?libReferences: ResizeArray<FileReference> ->
-                SourceFile
-
-        abstract createNotEmittedStatement:
-            original: Node -> NotEmittedStatement
-
-        abstract createPartiallyEmittedExpression:
-            expression: Expression * ?original: Node ->
-                PartiallyEmittedExpression
-
-        abstract updatePartiallyEmittedExpression:
-            node: PartiallyEmittedExpression * expression: Expression ->
-                PartiallyEmittedExpression
-
-        abstract createCommaListExpression:
-            elements: ResizeArray<Expression> -> CommaListExpression
-
-        abstract updateCommaListExpression:
-            node: CommaListExpression * elements: ResizeArray<Expression> ->
-                CommaListExpression
-
-        abstract createBundle:
-            sourceFiles: ResizeArray<SourceFile> *
-            ?prepends: ResizeArray<U2<UnparsedSource, InputFiles>> ->
-                Bundle
-
-        abstract updateBundle:
-            node: Bundle *
-            sourceFiles: ResizeArray<SourceFile> *
-            ?prepends: ResizeArray<U2<UnparsedSource, InputFiles>> ->
-                Bundle
-
-        abstract createComma:
-            left: Expression * right: Expression -> BinaryExpression
-
-        abstract createAssignment:
-            left: U2<ObjectLiteralExpression, ArrayLiteralExpression> *
-            right: Expression ->
-                DestructuringAssignment
-
-        abstract createAssignment:
-            left: Expression * right: Expression ->
-                AssignmentExpression<AssignmentOperatorToken>
-
-        abstract createLogicalOr:
-            left: Expression * right: Expression -> BinaryExpression
-
-        abstract createLogicalAnd:
-            left: Expression * right: Expression -> BinaryExpression
-
-        abstract createBitwiseOr:
-            left: Expression * right: Expression -> BinaryExpression
-
-        abstract createBitwiseXor:
-            left: Expression * right: Expression -> BinaryExpression
-
-        abstract createBitwiseAnd:
-            left: Expression * right: Expression -> BinaryExpression
-
-        abstract createStrictEquality:
-            left: Expression * right: Expression -> BinaryExpression
-
-        abstract createStrictInequality:
-            left: Expression * right: Expression -> BinaryExpression
-
-        abstract createEquality:
-            left: Expression * right: Expression -> BinaryExpression
-
-        abstract createInequality:
-            left: Expression * right: Expression -> BinaryExpression
-
-        abstract createLessThan:
-            left: Expression * right: Expression -> BinaryExpression
-
-        abstract createLessThanEquals:
-            left: Expression * right: Expression -> BinaryExpression
-
-        abstract createGreaterThan:
-            left: Expression * right: Expression -> BinaryExpression
-
-        abstract createGreaterThanEquals:
-            left: Expression * right: Expression -> BinaryExpression
-
-        abstract createLeftShift:
-            left: Expression * right: Expression -> BinaryExpression
-
-        abstract createRightShift:
-            left: Expression * right: Expression -> BinaryExpression
-
-        abstract createUnsignedRightShift:
-            left: Expression * right: Expression -> BinaryExpression
-
-        abstract createAdd:
-            left: Expression * right: Expression -> BinaryExpression
-
-        abstract createSubtract:
-            left: Expression * right: Expression -> BinaryExpression
-
-        abstract createMultiply:
-            left: Expression * right: Expression -> BinaryExpression
-
-        abstract createDivide:
-            left: Expression * right: Expression -> BinaryExpression
-
-        abstract createModulo:
-            left: Expression * right: Expression -> BinaryExpression
-
-        abstract createExponent:
-            left: Expression * right: Expression -> BinaryExpression
-
+        abstract updateJsxFragment: node: JsxFragment * openingFragment: JsxOpeningFragment * children: ResizeArray<JsxChild> * closingFragment: JsxClosingFragment -> JsxFragment
+        abstract createJsxAttribute: name: JsxAttributeName * initializer: JsxAttributeValue option -> JsxAttribute
+        abstract updateJsxAttribute: node: JsxAttribute * name: JsxAttributeName * initializer: JsxAttributeValue option -> JsxAttribute
+        abstract createJsxAttributes: properties: ResizeArray<JsxAttributeLike> -> JsxAttributes
+        abstract updateJsxAttributes: node: JsxAttributes * properties: ResizeArray<JsxAttributeLike> -> JsxAttributes
+        abstract createJsxSpreadAttribute: expression: Expression -> JsxSpreadAttribute
+        abstract updateJsxSpreadAttribute: node: JsxSpreadAttribute * expression: Expression -> JsxSpreadAttribute
+        abstract createJsxExpression: dotDotDotToken: DotDotDotToken option * expression: Expression option -> JsxExpression
+        abstract updateJsxExpression: node: JsxExpression * expression: Expression option -> JsxExpression
+        abstract createJsxNamespacedName: ``namespace``: Identifier * name: Identifier -> JsxNamespacedName
+        abstract updateJsxNamespacedName: node: JsxNamespacedName * ``namespace``: Identifier * name: Identifier -> JsxNamespacedName
+        abstract createCaseClause: expression: Expression * statements: ResizeArray<Statement> -> CaseClause
+        abstract updateCaseClause: node: CaseClause * expression: Expression * statements: ResizeArray<Statement> -> CaseClause
+        abstract createDefaultClause: statements: ResizeArray<Statement> -> DefaultClause
+        abstract updateDefaultClause: node: DefaultClause * statements: ResizeArray<Statement> -> DefaultClause
+        abstract createHeritageClause: token: obj * types: ResizeArray<ExpressionWithTypeArguments> -> HeritageClause
+        abstract updateHeritageClause: node: HeritageClause * types: ResizeArray<ExpressionWithTypeArguments> -> HeritageClause
+        abstract createCatchClause: variableDeclaration: U3<string, BindingName, VariableDeclaration> option * block: Block -> CatchClause
+        abstract updateCatchClause: node: CatchClause * variableDeclaration: VariableDeclaration option * block: Block -> CatchClause
+        abstract createPropertyAssignment: name: U2<string, PropertyName> * initializer: Expression -> PropertyAssignment
+        abstract updatePropertyAssignment: node: PropertyAssignment * name: PropertyName * initializer: Expression -> PropertyAssignment
+        abstract createShorthandPropertyAssignment: name: U2<string, Identifier> * ?objectAssignmentInitializer: Expression -> ShorthandPropertyAssignment
+        abstract updateShorthandPropertyAssignment: node: ShorthandPropertyAssignment * name: Identifier * objectAssignmentInitializer: Expression option -> ShorthandPropertyAssignment
+        abstract createSpreadAssignment: expression: Expression -> SpreadAssignment
+        abstract updateSpreadAssignment: node: SpreadAssignment * expression: Expression -> SpreadAssignment
+        abstract createEnumMember: name: U2<string, PropertyName> * ?initializer: Expression -> EnumMember
+        abstract updateEnumMember: node: EnumMember * name: PropertyName * initializer: Expression option -> EnumMember
+        abstract createSourceFile: statements: ResizeArray<Statement> * endOfFileToken: EndOfFileToken * flags: NodeFlags -> SourceFile
+        abstract updateSourceFile: node: SourceFile * statements: ResizeArray<Statement> * ?isDeclarationFile: bool * ?referencedFiles: ResizeArray<FileReference> * ?typeReferences: ResizeArray<FileReference> * ?hasNoDefaultLib: bool * ?libReferences: ResizeArray<FileReference> -> SourceFile
+        abstract createNotEmittedStatement: original: Node -> NotEmittedStatement
+        abstract createPartiallyEmittedExpression: expression: Expression * ?original: Node -> PartiallyEmittedExpression
+        abstract updatePartiallyEmittedExpression: node: PartiallyEmittedExpression * expression: Expression -> PartiallyEmittedExpression
+        abstract createCommaListExpression: elements: ResizeArray<Expression> -> CommaListExpression
+        abstract updateCommaListExpression: node: CommaListExpression * elements: ResizeArray<Expression> -> CommaListExpression
+        abstract createBundle: sourceFiles: ResizeArray<SourceFile> -> Bundle
+        [<Obsolete("")>]
+        abstract createBundle: sourceFiles: ResizeArray<SourceFile> * ?prepends: ResizeArray<U2<UnparsedSource, InputFiles>> -> Bundle
+        abstract updateBundle: node: Bundle * sourceFiles: ResizeArray<SourceFile> -> Bundle
+        [<Obsolete("")>]
+        abstract updateBundle: node: Bundle * sourceFiles: ResizeArray<SourceFile> * ?prepends: ResizeArray<U2<UnparsedSource, InputFiles>> -> Bundle
+        abstract createComma: left: Expression * right: Expression -> BinaryExpression
+        abstract createAssignment: left: U2<ObjectLiteralExpression, ArrayLiteralExpression> * right: Expression -> DestructuringAssignment
+        abstract createAssignment: left: Expression * right: Expression -> AssignmentExpression<EqualsToken>
+        abstract createLogicalOr: left: Expression * right: Expression -> BinaryExpression
+        abstract createLogicalAnd: left: Expression * right: Expression -> BinaryExpression
+        abstract createBitwiseOr: left: Expression * right: Expression -> BinaryExpression
+        abstract createBitwiseXor: left: Expression * right: Expression -> BinaryExpression
+        abstract createBitwiseAnd: left: Expression * right: Expression -> BinaryExpression
+        abstract createStrictEquality: left: Expression * right: Expression -> BinaryExpression
+        abstract createStrictInequality: left: Expression * right: Expression -> BinaryExpression
+        abstract createEquality: left: Expression * right: Expression -> BinaryExpression
+        abstract createInequality: left: Expression * right: Expression -> BinaryExpression
+        abstract createLessThan: left: Expression * right: Expression -> BinaryExpression
+        abstract createLessThanEquals: left: Expression * right: Expression -> BinaryExpression
+        abstract createGreaterThan: left: Expression * right: Expression -> BinaryExpression
+        abstract createGreaterThanEquals: left: Expression * right: Expression -> BinaryExpression
+        abstract createLeftShift: left: Expression * right: Expression -> BinaryExpression
+        abstract createRightShift: left: Expression * right: Expression -> BinaryExpression
+        abstract createUnsignedRightShift: left: Expression * right: Expression -> BinaryExpression
+        abstract createAdd: left: Expression * right: Expression -> BinaryExpression
+        abstract createSubtract: left: Expression * right: Expression -> BinaryExpression
+        abstract createMultiply: left: Expression * right: Expression -> BinaryExpression
+        abstract createDivide: left: Expression * right: Expression -> BinaryExpression
+        abstract createModulo: left: Expression * right: Expression -> BinaryExpression
+        abstract createExponent: left: Expression * right: Expression -> BinaryExpression
         abstract createPrefixPlus: operand: Expression -> PrefixUnaryExpression
         abstract createPrefixMinus: operand: Expression -> PrefixUnaryExpression
-
-        abstract createPrefixIncrement:
-            operand: Expression -> PrefixUnaryExpression
-
-        abstract createPrefixDecrement:
-            operand: Expression -> PrefixUnaryExpression
-
+        abstract createPrefixIncrement: operand: Expression -> PrefixUnaryExpression
+        abstract createPrefixDecrement: operand: Expression -> PrefixUnaryExpression
         abstract createBitwiseNot: operand: Expression -> PrefixUnaryExpression
         abstract createLogicalNot: operand: Expression -> PrefixUnaryExpression
-
-        abstract createPostfixIncrement:
-            operand: Expression -> PostfixUnaryExpression
-
-        abstract createPostfixDecrement:
-            operand: Expression -> PostfixUnaryExpression
-
-        abstract createImmediatelyInvokedFunctionExpression:
-            statements: ResizeArray<Statement> -> CallExpression
-
-        abstract createImmediatelyInvokedFunctionExpression:
-            statements: ResizeArray<Statement> *
-            param: ParameterDeclaration *
-            paramValue: Expression ->
-                CallExpression
-
-        abstract createImmediatelyInvokedArrowFunction:
-            statements: ResizeArray<Statement> -> CallExpression
-
-        abstract createImmediatelyInvokedArrowFunction:
-            statements: ResizeArray<Statement> *
-            param: ParameterDeclaration *
-            paramValue: Expression ->
-                CallExpression
-
+        abstract createPostfixIncrement: operand: Expression -> PostfixUnaryExpression
+        abstract createPostfixDecrement: operand: Expression -> PostfixUnaryExpression
+        abstract createImmediatelyInvokedFunctionExpression: statements: ResizeArray<Statement> -> CallExpression
+        abstract createImmediatelyInvokedFunctionExpression: statements: ResizeArray<Statement> * param: ParameterDeclaration * paramValue: Expression -> CallExpression
+        abstract createImmediatelyInvokedArrowFunction: statements: ResizeArray<Statement> -> ImmediatelyInvokedArrowFunction
+        abstract createImmediatelyInvokedArrowFunction: statements: ResizeArray<Statement> * param: ParameterDeclaration * paramValue: Expression -> ImmediatelyInvokedArrowFunction
         abstract createVoidZero: unit -> VoidExpression
         abstract createExportDefault: expression: Expression -> ExportAssignment
+        abstract createExternalModuleExport: exportName: Identifier -> ExportDeclaration
+        abstract restoreOuterExpressions: outerExpression: Expression option * innerExpression: Expression * ?kinds: OuterExpressionKinds -> Expression
 
-        abstract createExternalModuleExport:
-            exportName: Identifier -> ExportDeclaration
-
-        abstract restoreOuterExpressions:
-            outerExpression: Expression option *
-            innerExpression: Expression *
-            ?kinds: OuterExpressionKinds ->
-                Expression
-
-    [<AllowNullLiteral>]
-    type CoreTransformationContext =
+    type [<AllowNullLiteral>] CoreTransformationContext =
         abstract factory: NodeFactory
         /// Gets the compiler options supplied to the transformer.
         abstract getCompilerOptions: unit -> CompilerOptions
@@ -9422,8 +6047,7 @@ Use typeAcquisition.enable instead.")>]
         /// Hoists a variable declaration to the containing scope.
         abstract hoistVariableDeclaration: node: Identifier -> unit
 
-    [<AllowNullLiteral>]
-    type TransformationContext =
+    type [<AllowNullLiteral>] TransformationContext =
         inherit CoreTransformationContext
         /// Records a request for a non-scoped emit helper in the current context.
         abstract requestEmitHelper: helper: EmitHelper -> unit
@@ -9447,7 +6071,6 @@ Use typeAcquisition.enable instead.")>]
         /// Determines whether before/after emit notifications should be raised in the pretty
         /// printer when it emits a node.
         abstract isEmitNotificationEnabled: node: Node -> bool
-
         /// <summary>
         /// Hook used to allow transformers to capture state before or after
         /// the printer emits a node.
@@ -9455,11 +6078,9 @@ Use typeAcquisition.enable instead.")>]
         /// NOTE: Transformation hooks should only be modified during <c>Transformer</c> initialization,
         /// before returning the <c>NodeTransformer</c> callback.
         /// </summary>
-        abstract onEmitNode:
-            (EmitHint -> Node -> (EmitHint -> Node -> unit) -> unit) with get, set
+        abstract onEmitNode: (EmitHint -> Node -> (EmitHint -> Node -> unit) -> unit) with get, set
 
-    [<AllowNullLiteral>]
-    type TransformationResult<'T when 'T :> Node> =
+    type [<AllowNullLiteral>] TransformationResult<'T when 'T :> Node> =
         /// Gets the transformed source files.
         abstract transformed: ResizeArray<'T> with get, set
         /// Gets diagnostics for the transformation.
@@ -9468,17 +6089,11 @@ Use typeAcquisition.enable instead.")>]
         /// <param name="hint">A hint as to the intended usage of the node.</param>
         /// <param name="node">The node to substitute.</param>
         abstract substituteNode: hint: EmitHint * node: Node -> Node
-
         /// <summary>Emits a node with possible notification.</summary>
         /// <param name="hint">A hint as to the intended usage of the node.</param>
         /// <param name="node">The node to emit.</param>
         /// <param name="emitCallback">A callback used to emit the node.</param>
-        abstract emitNodeWithNotification:
-            hint: EmitHint *
-            node: Node *
-            emitCallback: (EmitHint -> Node -> unit) ->
-                unit
-
+        abstract emitNodeWithNotification: hint: EmitHint * node: Node * emitCallback: (EmitHint -> Node -> unit) -> unit
         /// <summary>Indicates if a given node needs an emit notification</summary>
         /// <param name="node">The node to emit.</param>
         abstract isEmitNotificationEnabled: node: Node -> bool
@@ -9489,71 +6104,68 @@ Use typeAcquisition.enable instead.")>]
     /// A function that is used to initialize and return a <c>Transformer</c> callback, which in turn
     /// will be used to transform one or more nodes.
     /// </summary>
-    [<AllowNullLiteral>]
-    type TransformerFactory<'T when 'T :> Node> =
+    type [<AllowNullLiteral>] TransformerFactory<'T when 'T :> Node> =
         /// <summary>
         /// A function that is used to initialize and return a <c>Transformer</c> callback, which in turn
         /// will be used to transform one or more nodes.
         /// </summary>
-        [<Emit "$0($1...)">]
-        abstract Invoke: context: TransformationContext -> Transformer<'T>
+        [<Emit("$0($1...)")>] abstract Invoke: context: TransformationContext -> Transformer<'T>
 
     /// A function that transforms a node.
-    [<AllowNullLiteral>]
-    type Transformer<'T when 'T :> Node> =
+    type [<AllowNullLiteral>] Transformer<'T when 'T :> Node> =
         /// A function that transforms a node.
-        [<Emit "$0($1...)">]
-        abstract Invoke: node: 'T -> 'T
+        [<Emit("$0($1...)")>] abstract Invoke: node: 'T -> 'T
 
     /// A function that accepts and possibly transforms a node.
-    [<AllowNullLiteral>]
     type Visitor =
+        Visitor<Node, Node option>
+
+    /// A function that accepts and possibly transforms a node.
+    type Visitor<'TIn when 'TIn :> Node> =
+        Visitor<'TIn, 'TIn option>
+
+    /// A function that accepts and possibly transforms a node.
+    type [<AllowNullLiteral>] Visitor<'TIn, 'TOut when 'TIn :> Node> =
         /// A function that accepts and possibly transforms a node.
-        [<Emit "$0($1...)">]
-        abstract Invoke: node: Node -> VisitResult<Node>
+        [<Emit("$0($1...)")>] abstract Invoke: node: 'TIn -> VisitResult<'TOut>
 
-    [<AllowNullLiteral>]
-    type NodeVisitor =
-        [<Emit "$0($1...)">]
-        abstract Invoke:
-            nodes: 'T *
-            visitor: Visitor option *
-            ?test: (Node -> bool) *
-            ?lift: (ResizeArray<Node> -> 'T) ->
-                'T
+    /// <summary>
+    /// A function that walks a node using the given visitor, lifting node arrays into single nodes,
+    /// returning an node which satisfies the test.
+    ///
+    /// - If the input node is undefined, then the output is undefined.
+    /// - If the visitor returns undefined, then the output is undefined.
+    /// - If the output node is not undefined, then it will satisfy the test function.
+    /// - In order to obtain a return type that is more specific than <c>Node</c>, a test
+    ///   function _must_ be provided, and that function must be a type predicate.
+    ///
+    /// For the canonical implementation of this type,
+    /// </summary>
+    /// <seealso cref="visitNode">.</seealso>
+    type [<AllowNullLiteral>] NodeVisitor =
+        [<Emit("$0($1...)")>] abstract Invoke: node: 'TIn * visitor: Visitor<'TIn, 'TVisited> * test: (Node -> bool) * ?lift: (ResizeArray<Node> -> Node) -> U2<'TOut, obj> when 'TOut :> Node
+        [<Emit("$0($1...)")>] abstract Invoke: node: 'TIn * visitor: Visitor<'TIn, 'TVisited> * ?test: (Node -> bool) * ?lift: (ResizeArray<Node> -> Node) -> U2<Node, obj>
 
-        [<Emit "$0($1...)">]
-        abstract Invoke:
-            nodes: 'T option *
-            visitor: Visitor option *
-            ?test: (Node -> bool) *
-            ?lift: (ResizeArray<Node> -> 'T) ->
-                'T option
+    /// <summary>
+    /// A function that walks a node array using the given visitor, returning an array whose contents satisfy the test.
+    ///
+    /// - If the input node array is undefined, the output is undefined.
+    /// - If the visitor can return undefined, the node it visits in the array will be reused.
+    /// - If the output node array is not undefined, then its contents will satisfy the test.
+    /// - In order to obtain a return type that is more specific than <c>NodeArray&lt;Node&gt;</c>, a test
+    ///   function _must_ be provided, and that function must be a type predicate.
+    ///
+    /// For the canonical implementation of this type,
+    /// </summary>
+    /// <seealso cref="visitNodes">.</seealso>
+    type [<AllowNullLiteral>] NodesVisitor =
+        [<Emit("$0($1...)")>] abstract Invoke: nodes: 'TInArray * visitor: Visitor<'TIn, Node option> * test: (Node -> bool) * ?start: float * ?count: float -> U2<ResizeArray<'TOut>, obj> when 'TIn :> Node and 'TOut :> Node
+        [<Emit("$0($1...)")>] abstract Invoke: nodes: 'TInArray * visitor: Visitor<'TIn, Node option> * ?test: (Node -> bool) * ?start: float * ?count: float -> U2<ResizeArray<Node>, obj> when 'TIn :> Node
 
-    [<AllowNullLiteral>]
-    type NodesVisitor =
-        [<Emit "$0($1...)">]
-        abstract Invoke:
-            nodes: ResizeArray<'T> *
-            visitor: Visitor option *
-            ?test: (Node -> bool) *
-            ?start: float *
-            ?count: float ->
-                ResizeArray<'T>
+    type VisitResult<'T> =
+        U2<'T, ResizeArray<Node>>
 
-        [<Emit "$0($1...)">]
-        abstract Invoke:
-            nodes: ResizeArray<'T> option *
-            visitor: Visitor option *
-            ?test: (Node -> bool) *
-            ?start: float *
-            ?count: float ->
-                ResizeArray<'T> option
-
-    type VisitResult<'T when 'T :> Node> = U2<'T, ResizeArray<'T>> option
-
-    [<AllowNullLiteral>]
-    type Printer =
+    type [<AllowNullLiteral>] Printer =
         /// <summary>Print a node and its subtree as-is, without any emit transformations.</summary>
         /// <param name="hint">
         /// A value indicating the purpose of a node. This is primarily used to
@@ -9571,26 +6183,18 @@ Use typeAcquisition.enable instead.")>]
         /// the identifiers of the source file are used when generating unique names to avoid
         /// collisions.
         /// </param>
-        abstract printNode:
-            hint: EmitHint * node: Node * sourceFile: SourceFile -> string
-
+        abstract printNode: hint: EmitHint * node: Node * sourceFile: SourceFile -> string
         /// Prints a list of nodes using the given format flags
-        abstract printList:
-            format: ListFormat * list: ResizeArray<'T> * sourceFile: SourceFile ->
-                string
-                when 'T :> Node
-
+        abstract printList: format: ListFormat * list: ResizeArray<'T> * sourceFile: SourceFile -> string when 'T :> Node
         /// Prints a source file as-is, without any emit transformations.
         abstract printFile: sourceFile: SourceFile -> string
         /// Prints a bundle of source files as-is, without any emit transformations.
         abstract printBundle: bundle: Bundle -> string
 
-    [<AllowNullLiteral>]
-    type PrintHandlers =
+    type [<AllowNullLiteral>] PrintHandlers =
         /// A hook used by the Printer when generating unique names to avoid collisions with
         /// globally defined names that exist outside of the current source file.
         abstract hasGlobalName: name: string -> bool
-
         /// <summary>
         /// A hook used by the Printer to provide notifications prior to emitting a node. A
         /// compatible implementation **must** invoke <c>emitCallback</c> with the provided <c>hint</c> and
@@ -9600,7 +6204,7 @@ Use typeAcquisition.enable instead.")>]
         /// <param name="node">The node to emit.</param>
         /// <param name="emitCallback">A callback that, when invoked, will emit the node.</param>
         /// <example>
-        /// <code language="ts">
+        /// <code lang="ts">
         /// var printer = createPrinter(printerOptions, {
         ///   onEmitNode(hint, node, emitCallback) {
         ///     // set up or track state prior to emitting the node...
@@ -9610,15 +6214,10 @@ Use typeAcquisition.enable instead.")>]
         /// });
         /// </code>
         /// </example>
-        abstract onEmitNode:
-            hint: EmitHint *
-            node: Node option *
-            emitCallback: (EmitHint -> Node option -> unit) ->
-                unit
-
+        abstract onEmitNode: hint: EmitHint * node: Node * emitCallback: (EmitHint -> Node -> unit) -> unit
         /// <summary>A hook used to check if an emit notification is required for a node.</summary>
         /// <param name="node">The node to emit.</param>
-        abstract isEmitNotificationEnabled: node: Node option -> bool
+        abstract isEmitNotificationEnabled: node: Node -> bool
         /// <summary>
         /// A hook used by the Printer to perform just-in-time substitution of a node. This is
         /// primarily used by node transformations that need to substitute one node for another,
@@ -9627,7 +6226,7 @@ Use typeAcquisition.enable instead.")>]
         /// <param name="hint">A hint indicating the intended purpose of the node.</param>
         /// <param name="node">The node to emit.</param>
         /// <example>
-        /// <code language="ts">
+        /// <code lang="ts">
         /// var printer = createPrinter(printerOptions, {
         ///   substituteNode(hint, node) {
         ///     // perform substitution if necessary...
@@ -9638,36 +6237,29 @@ Use typeAcquisition.enable instead.")>]
         /// </example>
         abstract substituteNode: hint: EmitHint * node: Node -> Node
 
-    [<AllowNullLiteral>]
-    type PrinterOptions =
+    type [<AllowNullLiteral>] PrinterOptions =
         abstract removeComments: bool option with get, set
         abstract newLine: NewLineKind option with get, set
         abstract omitTrailingSemicolon: bool option with get, set
         abstract noEmitHelpers: bool option with get, set
 
-    [<AllowNullLiteral>]
-    type GetEffectiveTypeRootsHost =
-        abstract directoryExists: directoryName: string -> bool
+    type [<AllowNullLiteral>] GetEffectiveTypeRootsHost =
         abstract getCurrentDirectory: unit -> string
 
-    [<AllowNullLiteral>]
-    type TextSpan =
+    type [<AllowNullLiteral>] TextSpan =
         abstract start: float with get, set
         abstract length: float with get, set
 
-    [<AllowNullLiteral>]
-    type TextChangeRange =
+    type [<AllowNullLiteral>] TextChangeRange =
         abstract span: TextSpan with get, set
         abstract newLength: float with get, set
 
-    [<AllowNullLiteral>]
-    type SyntaxList =
+    type [<AllowNullLiteral>] SyntaxList =
         inherit Node
         abstract kind: SyntaxKind with get, set
         abstract _children: ResizeArray<Node> with get, set
 
-    [<RequireQualifiedAccess>]
-    type ListFormat =
+    type [<RequireQualifiedAccess>] ListFormat =
         | None = 0
         | SingleLine = 0
         | MultiLine = 1
@@ -9697,7 +6289,7 @@ Use typeAcquisition.enable instead.")>]
         | NoSpaceIfEmpty = 524288
         | SingleElement = 1048576
         | SpaceAfterList = 2097152
-        | Modifiers = 262656
+        | Modifiers = 2359808
         | HeritageClauses = 512
         | SingleLineTypeLiteralMembers = 768
         | MultiLineTypeLiteralMembers = 32897
@@ -9708,6 +6300,7 @@ Use typeAcquisition.enable instead.")>]
         | ObjectBindingPatternElements = 525136
         | ArrayBindingPatternElements = 524880
         | ObjectLiteralExpressionProperties = 526226
+        | ImportClauseEntries = 526226
         | ArrayLiteralExpressionElements = 8914
         | CommaListElements = 528
         | CallExpressionArguments = 2576
@@ -9736,79 +6329,84 @@ Use typeAcquisition.enable instead.")>]
         | IndexSignatureParameters = 8848
         | JSDocComment = 33
 
-    [<AllowNullLiteral>]
-    type UserPreferences =
+    type [<AllowNullLiteral>] UserPreferences =
         abstract disableSuggestions: bool option
         abstract quotePreference: UserPreferencesQuotePreference option
         abstract includeCompletionsForModuleExports: bool option
+        abstract includeCompletionsForImportStatements: bool option
+        abstract includeCompletionsWithSnippetText: bool option
         abstract includeAutomaticOptionalChainCompletions: bool option
         abstract includeCompletionsWithInsertText: bool option
-
-        abstract importModuleSpecifierPreference:
-            UserPreferencesImportModuleSpecifierPreference option
-
+        abstract includeCompletionsWithClassMemberSnippets: bool option
+        abstract includeCompletionsWithObjectLiteralMethodSnippets: bool option
+        abstract useLabelDetailsInCompletionEntries: bool option
+        abstract allowIncompleteCompletions: bool option
+        abstract importModuleSpecifierPreference: UserPreferencesImportModuleSpecifierPreference option
         /// <summary>Determines whether we import <c>foo/index.ts</c> as "foo", "foo/index", or "foo/index.js"</summary>
-        abstract importModuleSpecifierEnding:
-            UserPreferencesImportModuleSpecifierEnding option
-
+        abstract importModuleSpecifierEnding: UserPreferencesImportModuleSpecifierEnding option
         abstract allowTextChangesInNewFiles: bool option
         abstract providePrefixAndSuffixTextForRename: bool option
-
-        abstract includePackageJsonAutoImports:
-            UserPreferencesIncludePackageJsonAutoImports option
-
+        abstract includePackageJsonAutoImports: UserPreferencesIncludePackageJsonAutoImports option
         abstract provideRefactorNotApplicableReason: bool option
+        abstract jsxAttributeCompletionStyle: UserPreferencesJsxAttributeCompletionStyle option
+        abstract includeInlayParameterNameHints: UserPreferencesIncludeInlayParameterNameHints option
+        abstract includeInlayParameterNameHintsWhenArgumentMatchesName: bool option
+        abstract includeInlayFunctionParameterTypeHints: bool option
+        abstract includeInlayVariableTypeHints: bool option
+        abstract includeInlayVariableTypeHintsWhenTypeMatchesName: bool option
+        abstract includeInlayPropertyDeclarationTypeHints: bool option
+        abstract includeInlayFunctionLikeReturnTypeHints: bool option
+        abstract includeInlayEnumMemberValueHints: bool option
+        abstract interactiveInlayHints: bool option
+        abstract allowRenameOfImportPath: bool option
+        abstract autoImportFileExcludePatterns: ResizeArray<string> option
+        abstract organizeImportsIgnoreCase: U2<bool, string> option
+        abstract organizeImportsCollation: UserPreferencesOrganizeImportsCollation option
+        abstract organizeImportsLocale: string option
+        abstract organizeImportsNumericCollation: bool option
+        abstract organizeImportsAccentCollation: bool option
+        abstract organizeImportsCaseFirst: UserPreferencesOrganizeImportsCaseFirst option
 
     /// Represents a bigint literal value without requiring bigint support
-    [<AllowNullLiteral>]
-    type PseudoBigInt =
+    type [<AllowNullLiteral>] PseudoBigInt =
         abstract negative: bool with get, set
         abstract base10Value: string with get, set
 
-    [<RequireQualifiedAccess>]
-    type FileWatcherEventKind =
+    type [<RequireQualifiedAccess>] FileWatcherEventKind =
         | Created = 0
         | Changed = 1
         | Deleted = 2
 
-    [<AllowNullLiteral>]
-    type FileWatcherCallback =
-        [<Emit "$0($1...)">]
-        abstract Invoke:
-            fileName: string * eventKind: FileWatcherEventKind -> unit
+    type [<AllowNullLiteral>] FileWatcherCallback =
+        [<Emit("$0($1...)")>] abstract Invoke: fileName: string * eventKind: FileWatcherEventKind * ?modifiedTime: DateTime -> unit
 
-    [<AllowNullLiteral>]
-    type DirectoryWatcherCallback =
-        [<Emit "$0($1...)">]
-        abstract Invoke: fileName: string -> unit
+    type [<AllowNullLiteral>] DirectoryWatcherCallback =
+        [<Emit("$0($1...)")>] abstract Invoke: fileName: string -> unit
 
-    [<AllowNullLiteral>]
-    type System =
+    type [<StringEnum>] [<RequireQualifiedAccess>] BufferEncoding =
+        | Ascii
+        | Utf8
+        | [<CompiledName("utf-8")>] ``utf-8``
+        | Utf16le
+        | Ucs2
+        | [<CompiledName("ucs-2")>] ``ucs-2``
+        | Base64
+        | Latin1
+        | Binary
+        | Hex
+
+    type [<AllowNullLiteral>] System =
         abstract args: ResizeArray<string> with get, set
         abstract newLine: string with get, set
         abstract useCaseSensitiveFileNames: bool with get, set
         abstract write: s: string -> unit
         abstract writeOutputIsTTY: unit -> bool
+        abstract getWidthOfTerminal: unit -> float
         abstract readFile: path: string * ?encoding: string -> string option
         abstract getFileSize: path: string -> float
-
-        abstract writeFile:
-            path: string * data: string * ?writeByteOrderMark: bool -> unit
-
-        abstract watchFile:
-            path: string *
-            callback: FileWatcherCallback *
-            ?pollingInterval: float *
-            ?options: WatchOptions ->
-                FileWatcher
-
-        abstract watchDirectory:
-            path: string *
-            callback: DirectoryWatcherCallback *
-            ?recursive: bool *
-            ?options: WatchOptions ->
-                FileWatcher
-
+        abstract writeFile: path: string * data: string * ?writeByteOrderMark: bool -> unit
+        abstract watchFile: path: string * callback: FileWatcherCallback * ?pollingInterval: float * ?options: WatchOptions -> FileWatcher
+        abstract watchDirectory: path: string * callback: DirectoryWatcherCallback * ?recursive: bool * ?options: WatchOptions -> FileWatcher
         abstract resolvePath: path: string -> string
         abstract fileExists: path: string -> bool
         abstract directoryExists: path: string -> bool
@@ -9816,15 +6414,7 @@ Use typeAcquisition.enable instead.")>]
         abstract getExecutingFilePath: unit -> string
         abstract getCurrentDirectory: unit -> string
         abstract getDirectories: path: string -> ResizeArray<string>
-
-        abstract readDirectory:
-            path: string *
-            ?extensions: ResizeArray<string> *
-            ?exclude: ResizeArray<string> *
-            ?``include``: ResizeArray<string> *
-            ?depth: float ->
-                ResizeArray<string>
-
+        abstract readDirectory: path: string * ?extensions: ResizeArray<string> * ?exclude: ResizeArray<string> * ?``include``: ResizeArray<string> * ?depth: float -> ResizeArray<string>
         abstract getModifiedTime: path: string -> DateTime option
         abstract setModifiedTime: path: string * time: DateTime -> unit
         abstract deleteFile: path: string -> unit
@@ -9835,32 +6425,28 @@ Use typeAcquisition.enable instead.")>]
         abstract getMemoryUsage: unit -> float
         abstract exit: ?exitCode: float -> unit
         abstract realpath: path: string -> string
-
-        abstract setTimeout:
-            callback: (ResizeArray<obj option> -> unit) *
-            ms: float *
-            [<ParamArray>] args: obj option[] ->
-                obj option
-
+        abstract setTimeout: callback: (ResizeArray<obj option> -> unit) * ms: float * [<ParamArray>] args: obj option[] -> obj option
         abstract clearTimeout: timeoutId: obj option -> unit
         abstract clearScreen: unit -> unit
         abstract base64decode: input: string -> string
         abstract base64encode: input: string -> string
 
-    [<AllowNullLiteral>]
-    type FileWatcher =
+    type [<AllowNullLiteral>] FileWatcher =
         abstract close: unit -> unit
 
-    [<AllowNullLiteral>]
-    type ErrorCallback =
-        [<Emit "$0($1...)">]
-        abstract Invoke: message: DiagnosticMessage * length: float -> unit
+    type [<AllowNullLiteral>] ErrorCallback =
+        [<Emit("$0($1...)")>] abstract Invoke: message: DiagnosticMessage * length: float * ?arg0: obj -> unit
 
-    [<AllowNullLiteral>]
-    type Scanner =
+    type [<AllowNullLiteral>] Scanner =
+        [<Obsolete("use {@link getTokenFullStart }")>]
         abstract getStartPos: unit -> float
         abstract getToken: unit -> SyntaxKind
+        abstract getTokenFullStart: unit -> float
+        abstract getTokenStart: unit -> float
+        abstract getTokenEnd: unit -> float
+        [<Obsolete("use {@link getTokenEnd }")>]
         abstract getTextPos: unit -> float
+        [<Obsolete("use {@link getTokenStart }")>]
         abstract getTokenPos: unit -> float
         abstract getTokenText: unit -> string
         abstract getTokenValue: unit -> string
@@ -9874,127 +6460,148 @@ Use typeAcquisition.enable instead.")>]
         abstract reScanSlashToken: unit -> SyntaxKind
         abstract reScanAsteriskEqualsToken: unit -> SyntaxKind
         abstract reScanTemplateToken: isTaggedTemplate: bool -> SyntaxKind
+        [<Obsolete("use {@link reScanTemplateToken }(false)")>]
         abstract reScanTemplateHeadOrNoSubstitutionTemplate: unit -> SyntaxKind
         abstract scanJsxIdentifier: unit -> SyntaxKind
         abstract scanJsxAttributeValue: unit -> SyntaxKind
         abstract reScanJsxAttributeValue: unit -> SyntaxKind
-        abstract reScanJsxToken: unit -> JsxTokenSyntaxKind
+        abstract reScanJsxToken: ?allowMultilineJsxText: bool -> JsxTokenSyntaxKind
         abstract reScanLessThanToken: unit -> SyntaxKind
+        abstract reScanHashToken: unit -> SyntaxKind
         abstract reScanQuestionToken: unit -> SyntaxKind
         abstract reScanInvalidIdentifier: unit -> SyntaxKind
         abstract scanJsxToken: unit -> JsxTokenSyntaxKind
         abstract scanJsDocToken: unit -> JSDocSyntaxKind
         abstract scan: unit -> SyntaxKind
         abstract getText: unit -> string
-
-        abstract setText:
-            text: string option * ?start: float * ?length: float -> unit
-
+        abstract setText: text: string option * ?start: float * ?length: float -> unit
         abstract setOnError: onError: ErrorCallback option -> unit
         abstract setScriptTarget: scriptTarget: ScriptTarget -> unit
         abstract setLanguageVariant: variant: LanguageVariant -> unit
+        [<Obsolete("use {@link resetTokenState }")>]
         abstract setTextPos: textPos: float -> unit
+        abstract resetTokenState: pos: float -> unit
         abstract lookAhead: callback: (unit -> 'T) -> 'T
-
-        abstract scanRange:
-            start: float * length: float * callback: (unit -> 'T) -> 'T
-
+        abstract scanRange: start: float * length: float * callback: (unit -> 'T) -> 'T
         abstract tryScan: callback: (unit -> 'T) -> 'T
 
-    [<AllowNullLiteral>]
-    type ParameterPropertyDeclaration =
-        interface
-        end
+    type [<AllowNullLiteral>] ParameterPropertyDeclaration =
+        interface end
 
-    [<AllowNullLiteral>]
-    type DiagnosticReporter =
-        [<Emit "$0($1...)">]
-        abstract Invoke: diagnostic: Diagnostic -> unit
+    type [<AllowNullLiteral>] CreateSourceFileOptions =
+        abstract languageVersion: ScriptTarget with get, set
+        /// <summary>
+        /// Controls the format the file is detected as - this can be derived from only the path
+        /// and files on disk, but needs to be done with a module resolution cache in scope to be performant.
+        /// This is usually <c>undefined</c> for compilations that do not have <c>moduleResolution</c> values of <c>node16</c> or <c>nodenext</c>.
+        /// </summary>
+        abstract impliedNodeFormat: ResolutionMode option with get, set
+        /// <summary>
+        /// Controls how module-y-ness is set for the given file. Usually the result of calling
+        /// <c>getSetExternalModuleIndicator</c> on a valid <c>CompilerOptions</c> object. If not present, the default
+        /// check specified by <c>isFileProbablyExternalModule</c> will be used to set the field.
+        /// </summary>
+        abstract setExternalModuleIndicator: (SourceFile -> unit) option with get, set
+
+    type [<AllowNullLiteral>] DiagnosticReporter =
+        [<Emit("$0($1...)")>] abstract Invoke: diagnostic: Diagnostic -> unit
 
     /// Reports config file diagnostics
-    [<AllowNullLiteral>]
-    type ConfigFileDiagnosticsReporter =
+    type [<AllowNullLiteral>] ConfigFileDiagnosticsReporter =
         /// Reports unrecoverable error when parsing config file
         abstract onUnRecoverableConfigFileDiagnostic: DiagnosticReporter with get, set
 
     /// Interface extending ParseConfigHost to support ParseConfigFile that reads config file and reports errors
-    [<AllowNullLiteral>]
-    type ParseConfigFileHost =
+    type [<AllowNullLiteral>] ParseConfigFileHost =
         inherit ParseConfigHost
         inherit ConfigFileDiagnosticsReporter
         abstract getCurrentDirectory: unit -> string
 
-    [<AllowNullLiteral>]
-    type ParsedTsconfig =
+    type [<AllowNullLiteral>] ParsedTsconfig =
         abstract raw: obj option with get, set
         abstract options: CompilerOptions option with get, set
         abstract watchOptions: WatchOptions option with get, set
         abstract typeAcquisition: TypeAcquisition option with get, set
         /// Note that the case of the config path has not yet been normalized, as no files have been imported into the project yet
-        abstract extendedConfigPath: string option with get, set
+        abstract extendedConfigPath: U2<string, ResizeArray<string>> option with get, set
 
-    [<AllowNullLiteral>]
-    type ExtendedConfigCacheEntry =
+    type [<AllowNullLiteral>] ExtendedConfigCacheEntry =
         abstract extendedResult: TsConfigSourceFile with get, set
         abstract extendedConfig: ParsedTsconfig option with get, set
 
-    /// Cached module resolutions per containing directory.
-    /// This assumes that any module id will have the same resolution for sibling files located in the same folder.
-    [<AllowNullLiteral>]
-    type ModuleResolutionCache =
-        inherit NonRelativeModuleNameResolutionCache
+    type [<AllowNullLiteral>] TypeReferenceDirectiveResolutionCache =
+        inherit PerDirectoryResolutionCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>
+        inherit NonRelativeNameResolutionCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>
+        inherit PackageJsonInfoCache
 
-        abstract getOrCreateCacheForDirectory:
-            directoryName: string *
-            ?redirectedReference: ResolvedProjectReference ->
-                Map<ResolvedModuleWithFailedLookupLocations>
+    type [<AllowNullLiteral>] ModeAwareCache<'T> =
+        abstract get: key: string * mode: ResolutionMode -> 'T option
+        abstract set: key: string * mode: ResolutionMode * value: 'T -> ModeAwareCache<'T>
+        abstract delete: key: string * mode: ResolutionMode -> ModeAwareCache<'T>
+        abstract has: key: string * mode: ResolutionMode -> bool
+        abstract forEach: cb: ('T -> string -> ResolutionMode -> unit) -> unit
+        abstract size: unit -> float
+
+    /// Cached resolutions per containing directory.
+    /// This assumes that any module id will have the same resolution for sibling files located in the same folder.
+    type [<AllowNullLiteral>] PerDirectoryResolutionCache<'T> =
+        abstract getFromDirectoryCache: name: string * mode: ResolutionMode * directoryName: string * redirectedReference: ResolvedProjectReference option -> 'T option
+        abstract getOrCreateCacheForDirectory: directoryName: string * ?redirectedReference: ResolvedProjectReference -> ModeAwareCache<'T>
+        abstract clear: unit -> unit
+        /// Updates with the current compilerOptions the cache will operate with.
+        /// This updates the redirects map as well if needed so module resolutions are cached if they can across the projects
+        abstract update: options: CompilerOptions -> unit
+
+    type [<AllowNullLiteral>] NonRelativeNameResolutionCache<'T> =
+        abstract getFromNonRelativeNameCache: nonRelativeName: string * mode: ResolutionMode * directoryName: string * redirectedReference: ResolvedProjectReference option -> 'T option
+        abstract getOrCreateCacheForNonRelativeName: nonRelativeName: string * mode: ResolutionMode * ?redirectedReference: ResolvedProjectReference -> PerNonRelativeNameCache<'T>
+        abstract clear: unit -> unit
+        /// Updates with the current compilerOptions the cache will operate with.
+        /// This updates the redirects map as well if needed so module resolutions are cached if they can across the projects
+        abstract update: options: CompilerOptions -> unit
+
+    type [<AllowNullLiteral>] PerNonRelativeNameCache<'T> =
+        abstract get: directory: string -> 'T option
+        abstract set: directory: string * result: 'T -> unit
+
+    type [<AllowNullLiteral>] ModuleResolutionCache =
+        inherit PerDirectoryResolutionCache<ResolvedModuleWithFailedLookupLocations>
+        inherit NonRelativeModuleNameResolutionCache
+        inherit PackageJsonInfoCache
+        abstract getPackageJsonInfoCache: unit -> PackageJsonInfoCache
 
     /// Stored map from non-relative module name to a table: directory -> result of module lookup in this directory
     /// We support only non-relative module names because resolution of relative module names is usually more deterministic and thus less expensive.
-    [<AllowNullLiteral>]
-    type NonRelativeModuleNameResolutionCache =
-        abstract getOrCreateCacheForModuleName:
-            nonRelativeModuleName: string *
-            ?redirectedReference: ResolvedProjectReference ->
-                PerModuleNameCache
+    type [<AllowNullLiteral>] NonRelativeModuleNameResolutionCache =
+        inherit NonRelativeNameResolutionCache<ResolvedModuleWithFailedLookupLocations>
+        inherit PackageJsonInfoCache
+        [<Obsolete("Use getOrCreateCacheForNonRelativeName")>]
+        abstract getOrCreateCacheForModuleName: nonRelativeModuleName: string * mode: ResolutionMode * ?redirectedReference: ResolvedProjectReference -> PerModuleNameCache
 
-    [<AllowNullLiteral>]
+    type [<AllowNullLiteral>] PackageJsonInfoCache =
+        abstract clear: unit -> unit
+
     type PerModuleNameCache =
-        abstract get:
-            directory: string -> ResolvedModuleWithFailedLookupLocations option
+        PerNonRelativeNameCache<ResolvedModuleWithFailedLookupLocations>
 
-        abstract set:
-            directory: string * result: ResolvedModuleWithFailedLookupLocations ->
-                unit
-
-    [<AllowNullLiteral>]
-    type FormatDiagnosticsHost =
+    type [<AllowNullLiteral>] FormatDiagnosticsHost =
         abstract getCurrentDirectory: unit -> string
         abstract getCanonicalFileName: fileName: string -> string
         abstract getNewLine: unit -> string
 
-    [<Obsolete("")>]
-    [<AllowNullLiteral>]
-    type ResolveProjectReferencePathHost =
-        abstract fileExists: fileName: string -> bool
-
-    [<AllowNullLiteral>]
-    type EmitOutput =
+    type [<AllowNullLiteral>] EmitOutput =
         abstract outputFiles: ResizeArray<OutputFile> with get, set
         abstract emitSkipped: bool with get, set
 
-    [<AllowNullLiteral>]
-    type OutputFile =
+    type [<AllowNullLiteral>] OutputFile =
         abstract name: string with get, set
         abstract writeByteOrderMark: bool with get, set
         abstract text: string with get, set
 
-    type AffectedFileResult<'T> = U2<'T, U2<SourceFile, Program>> option
+    type AffectedFileResult<'T> =
+        {| result: 'T; affected: U2<SourceFile, Program> |} option
 
-    [<AllowNullLiteral>]
-    type BuilderProgramHost =
-        /// return true if file names are treated with case sensitivity
-        abstract useCaseSensitiveFileNames: unit -> bool
+    type [<AllowNullLiteral>] BuilderProgramHost =
         /// If provided this would be used this hash instead of actual file shape text for detecting changes
         abstract createHash: (string -> string) option with get, set
         /// When emit or emitNextAffectedFile are called without writeFile,
@@ -10002,8 +6609,7 @@ Use typeAcquisition.enable instead.")>]
         abstract writeFile: WriteFileCallback option with get, set
 
     /// Builder to manage the program state changes
-    [<AllowNullLiteral>]
-    type BuilderProgram =
+    type [<AllowNullLiteral>] BuilderProgram =
         /// Returns current program
         abstract getProgram: unit -> Program
         /// Get compiler options of the program
@@ -10012,43 +6618,25 @@ Use typeAcquisition.enable instead.")>]
         abstract getSourceFile: fileName: string -> SourceFile option
         /// Get a list of files in the program
         abstract getSourceFiles: unit -> ResizeArray<SourceFile>
-
         /// Get the diagnostics for compiler options
-        abstract getOptionsDiagnostics:
-            ?cancellationToken: CancellationToken -> ResizeArray<Diagnostic>
-
+        abstract getOptionsDiagnostics: ?cancellationToken: CancellationToken -> ResizeArray<Diagnostic>
         /// Get the diagnostics that dont belong to any file
-        abstract getGlobalDiagnostics:
-            ?cancellationToken: CancellationToken -> ResizeArray<Diagnostic>
-
+        abstract getGlobalDiagnostics: ?cancellationToken: CancellationToken -> ResizeArray<Diagnostic>
         /// Get the diagnostics from config file parsing
-        abstract getConfigFileParsingDiagnostics:
-            unit -> ResizeArray<Diagnostic>
-
+        abstract getConfigFileParsingDiagnostics: unit -> ResizeArray<Diagnostic>
         /// Get the syntax diagnostics, for all source files if source file is not supplied
-        abstract getSyntacticDiagnostics:
-            ?sourceFile: SourceFile * ?cancellationToken: CancellationToken ->
-                ResizeArray<Diagnostic>
-
+        abstract getSyntacticDiagnostics: ?sourceFile: SourceFile * ?cancellationToken: CancellationToken -> ResizeArray<Diagnostic>
         /// Get the declaration diagnostics, for all source files if source file is not supplied
-        abstract getDeclarationDiagnostics:
-            ?sourceFile: SourceFile * ?cancellationToken: CancellationToken ->
-                ResizeArray<DiagnosticWithLocation>
-
+        abstract getDeclarationDiagnostics: ?sourceFile: SourceFile * ?cancellationToken: CancellationToken -> ResizeArray<DiagnosticWithLocation>
         /// Get all the dependencies of the file
-        abstract getAllDependencies:
-            sourceFile: SourceFile -> ResizeArray<string>
-
+        abstract getAllDependencies: sourceFile: SourceFile -> ResizeArray<string>
         /// Gets the semantic diagnostics from the program corresponding to this state of file (if provided) or whole program
         /// The semantic diagnostics are cached and managed here
         /// Note that it is assumed that when asked about semantic diagnostics through this API,
         /// the file has been taken out of affected files so it is safe to use cache or get from program and cache the diagnostics
         /// In case of SemanticDiagnosticsBuilderProgram if the source file is not provided,
         /// it will iterate through all the affected files, to ensure that cache stays valid and yet provide a way to get all semantic diagnostics
-        abstract getSemanticDiagnostics:
-            ?sourceFile: SourceFile * ?cancellationToken: CancellationToken ->
-                ResizeArray<Diagnostic>
-
+        abstract getSemanticDiagnostics: ?sourceFile: SourceFile * ?cancellationToken: CancellationToken -> ResizeArray<Diagnostic>
         /// Emits the JavaScript and declaration files.
         /// When targetSource file is specified, emits the files corresponding to that source file,
         /// otherwise for the whole program.
@@ -10058,53 +6646,32 @@ Use typeAcquisition.enable instead.")>]
         ///
         /// The first of writeFile if provided, writeFile of BuilderProgramHost if provided, writeFile of compiler host
         /// in that order would be used to write the files
-        abstract emit:
-            ?targetSourceFile: SourceFile *
-            ?writeFile: WriteFileCallback *
-            ?cancellationToken: CancellationToken *
-            ?emitOnlyDtsFiles: bool *
-            ?customTransformers: CustomTransformers ->
-                EmitResult
-
+        abstract emit: ?targetSourceFile: SourceFile * ?writeFile: WriteFileCallback * ?cancellationToken: CancellationToken * ?emitOnlyDtsFiles: bool * ?customTransformers: CustomTransformers -> EmitResult
         /// Get the current directory of the program
         abstract getCurrentDirectory: unit -> string
 
     /// The builder that caches the semantic diagnostics for the program and handles the changed files and affected files
-    [<AllowNullLiteral>]
-    type SemanticDiagnosticsBuilderProgram =
+    type [<AllowNullLiteral>] SemanticDiagnosticsBuilderProgram =
         inherit BuilderProgram
-
         /// Gets the semantic diagnostics from the program for the next affected file and caches it
         /// Returns undefined if the iteration is complete
-        abstract getSemanticDiagnosticsOfNextAffectedFile:
-            ?cancellationToken: CancellationToken *
-            ?ignoreSourceFile: (SourceFile -> bool) ->
-                AffectedFileResult<ResizeArray<Diagnostic>>
+        abstract getSemanticDiagnosticsOfNextAffectedFile: ?cancellationToken: CancellationToken * ?ignoreSourceFile: (SourceFile -> bool) -> AffectedFileResult<ResizeArray<Diagnostic>>
 
     /// The builder that can handle the changes in program and iterate through changed file to emit the files
     /// The semantic diagnostics are cached per file and managed by clearing for the changed/affected files
-    [<AllowNullLiteral>]
-    type EmitAndSemanticDiagnosticsBuilderProgram =
+    type [<AllowNullLiteral>] EmitAndSemanticDiagnosticsBuilderProgram =
         inherit SemanticDiagnosticsBuilderProgram
-
         /// Emits the next affected file's emit result (EmitResult and sourceFiles emitted) or returns undefined if iteration is complete
         /// The first of writeFile if provided, writeFile of BuilderProgramHost if provided, writeFile of compiler host
         /// in that order would be used to write the files
-        abstract emitNextAffectedFile:
-            ?writeFile: WriteFileCallback *
-            ?cancellationToken: CancellationToken *
-            ?emitOnlyDtsFiles: bool *
-            ?customTransformers: CustomTransformers ->
-                AffectedFileResult<EmitResult>
+        abstract emitNextAffectedFile: ?writeFile: WriteFileCallback * ?cancellationToken: CancellationToken * ?emitOnlyDtsFiles: bool * ?customTransformers: CustomTransformers -> AffectedFileResult<EmitResult>
 
-    [<AllowNullLiteral>]
-    type ReadBuildProgramHost =
+    type [<AllowNullLiteral>] ReadBuildProgramHost =
         abstract useCaseSensitiveFileNames: unit -> bool
         abstract getCurrentDirectory: unit -> string
         abstract readFile: fileName: string -> string option
 
-    [<AllowNullLiteral>]
-    type IncrementalProgramOptions<'T when 'T :> BuilderProgram> =
+    type [<AllowNullLiteral>] IncrementalProgramOptions<'T when 'T :> BuilderProgram> =
         abstract rootNames: ResizeArray<string> with get, set
         abstract options: CompilerOptions with get, set
         abstract configFileParsingDiagnostics: ResizeArray<Diagnostic> option with get, set
@@ -10112,69 +6679,28 @@ Use typeAcquisition.enable instead.")>]
         abstract host: CompilerHost option with get, set
         abstract createProgram: CreateProgram<'T> option with get, set
 
-    [<AllowNullLiteral>]
-    type WatchStatusReporter =
-        [<Emit "$0($1...)">]
-        abstract Invoke:
-            diagnostic: Diagnostic *
-            newLine: string *
-            options: CompilerOptions *
-            ?errorCount: float ->
-                unit
+    type [<AllowNullLiteral>] WatchStatusReporter =
+        [<Emit("$0($1...)")>] abstract Invoke: diagnostic: Diagnostic * newLine: string * options: CompilerOptions * ?errorCount: float -> unit
 
     /// Create the program with rootNames and options, if they are undefined, oldProgram and new configFile diagnostics create new program
-    [<AllowNullLiteral>]
-    type CreateProgram<'T when 'T :> BuilderProgram> =
+    type [<AllowNullLiteral>] CreateProgram<'T when 'T :> BuilderProgram> =
         /// Create the program with rootNames and options, if they are undefined, oldProgram and new configFile diagnostics create new program
-        [<Emit "$0($1...)">]
-        abstract Invoke:
-            rootNames: ResizeArray<string> option *
-            options: CompilerOptions option *
-            ?host: CompilerHost *
-            ?oldProgram: 'T *
-            ?configFileParsingDiagnostics: ResizeArray<Diagnostic> *
-            ?projectReferences: ResizeArray<ProjectReference> ->
-                'T
+        [<Emit("$0($1...)")>] abstract Invoke: rootNames: ResizeArray<string> option * options: CompilerOptions option * ?host: CompilerHost * ?oldProgram: 'T * ?configFileParsingDiagnostics: ResizeArray<Diagnostic> * ?projectReferences: ResizeArray<ProjectReference> -> 'T
 
     /// Host that has watch functionality used in --watch mode
-    [<AllowNullLiteral>]
-    type WatchHost =
+    type [<AllowNullLiteral>] WatchHost =
         /// If provided, called with Diagnostic message that informs about change in watch status
-        abstract onWatchStatusChange:
-            diagnostic: Diagnostic *
-            newLine: string *
-            options: CompilerOptions *
-            ?errorCount: float ->
-                unit
-
+        abstract onWatchStatusChange: diagnostic: Diagnostic * newLine: string * options: CompilerOptions * ?errorCount: float -> unit
         /// Used to watch changes in source files, missing files needed to update the program or config file
-        abstract watchFile:
-            path: string *
-            callback: FileWatcherCallback *
-            ?pollingInterval: float *
-            ?options: CompilerOptions ->
-                FileWatcher
-
+        abstract watchFile: path: string * callback: FileWatcherCallback * ?pollingInterval: float * ?options: WatchOptions -> FileWatcher
         /// Used to watch resolved module's failed lookup locations, config file specs, type roots where auto type reference directives are added
-        abstract watchDirectory:
-            path: string *
-            callback: DirectoryWatcherCallback *
-            ?recursive: bool *
-            ?options: CompilerOptions ->
-                FileWatcher
-
+        abstract watchDirectory: path: string * callback: DirectoryWatcherCallback * ?recursive: bool * ?options: WatchOptions -> FileWatcher
         /// If provided, will be used to set delayed compilation, so that multiple changes in short span are compiled together
-        abstract setTimeout:
-            callback: (ResizeArray<obj option> -> unit) *
-            ms: float *
-            [<ParamArray>] args: obj option[] ->
-                obj option
-
+        abstract setTimeout: callback: (ResizeArray<obj option> -> unit) * ms: float * [<ParamArray>] args: obj option[] -> obj option
         /// If provided, will be used to reset existing delayed compilation
         abstract clearTimeout: timeoutId: obj option -> unit
 
-    [<AllowNullLiteral>]
-    type ProgramHost<'T when 'T :> BuilderProgram> =
+    type [<AllowNullLiteral>] ProgramHost<'T when 'T :> BuilderProgram> =
         /// Used to create the program when need for program creation or recreation detected
         abstract createProgram: CreateProgram<'T> with get, set
         abstract useCaseSensitiveFileNames: unit -> bool
@@ -10193,53 +6719,41 @@ Use typeAcquisition.enable instead.")>]
         abstract directoryExists: path: string -> bool
         /// If provided, used in resolutions as well as handling directory structure
         abstract getDirectories: path: string -> ResizeArray<string>
-
         /// If provided, used to cache and handle directory structure modifications
-        abstract readDirectory:
-            path: string *
-            ?extensions: ResizeArray<string> *
-            ?exclude: ResizeArray<string> *
-            ?``include``: ResizeArray<string> *
-            ?depth: float ->
-                ResizeArray<string>
-
+        abstract readDirectory: path: string * ?extensions: ResizeArray<string> * ?exclude: ResizeArray<string> * ?``include``: ResizeArray<string> * ?depth: float -> ResizeArray<string>
         /// Symbol links resolution
         abstract realpath: path: string -> string
         /// If provided would be used to write log about compilation
         abstract trace: s: string -> unit
         /// If provided is used to get the environment variable
         abstract getEnvironmentVariable: name: string -> string option
+        [<Obsolete("supply resolveModuleNameLiterals instead for resolution that can handle newer resolution modes like nodenext
 
-        /// If provided, used to resolve the module names, otherwise typescript's default module resolution
-        abstract resolveModuleNames:
-            moduleNames: ResizeArray<string> *
-            containingFile: string *
-            reusedNames: ResizeArray<string> option *
-            redirectedReference: ResolvedProjectReference option *
-            options: CompilerOptions ->
-                ResizeArray<ResolvedModule option>
+If provided, used to resolve the module names, otherwise typescript's default module resolution")>]
+        abstract resolveModuleNames: moduleNames: ResizeArray<string> * containingFile: string * reusedNames: ResizeArray<string> option * redirectedReference: ResolvedProjectReference option * options: CompilerOptions * ?containingSourceFile: SourceFile -> ResizeArray<ResolvedModule option>
+        [<Obsolete("supply resolveTypeReferenceDirectiveReferences instead for resolution that can handle newer resolution modes like nodenext
 
-        /// If provided, used to resolve type reference directives, otherwise typescript's default resolution
-        abstract resolveTypeReferenceDirectives:
-            typeReferenceDirectiveNames: ResizeArray<string> *
-            containingFile: string *
-            redirectedReference: ResolvedProjectReference option *
-            options: CompilerOptions ->
-                ResizeArray<ResolvedTypeReferenceDirective option>
+If provided, used to resolve type reference directives, otherwise typescript's default resolution")>]
+        abstract resolveTypeReferenceDirectives: typeReferenceDirectiveNames: U2<ResizeArray<string>, ResizeArray<FileReference>> * containingFile: string * redirectedReference: ResolvedProjectReference option * options: CompilerOptions * ?containingFileMode: ResolutionMode -> ResizeArray<ResolvedTypeReferenceDirective option>
+        abstract resolveModuleNameLiterals: moduleLiterals: ResizeArray<StringLiteralLike> * containingFile: string * redirectedReference: ResolvedProjectReference option * options: CompilerOptions * containingSourceFile: SourceFile * reusedNames: ResizeArray<StringLiteralLike> option -> ResizeArray<ResolvedModuleWithFailedLookupLocations>
+        abstract resolveTypeReferenceDirectiveReferences: typeDirectiveReferences: ResizeArray<'T> * containingFile: string * redirectedReference: ResolvedProjectReference option * options: CompilerOptions * containingSourceFile: SourceFile option * reusedNames: ResizeArray<'T> option -> ResizeArray<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>
+        /// If provided along with custom resolveModuleNames or resolveTypeReferenceDirectives, used to determine if unchanged file path needs to re-resolve modules/type reference directives
+        abstract hasInvalidatedResolutions: filePath: Path -> bool
+        /// <summary>Returns the module resolution cache used by a provided <c>resolveModuleNames</c> implementation so that any non-name module resolution operations (eg, package.json lookup) can reuse it</summary>
+        abstract getModuleResolutionCache: unit -> ModuleResolutionCache option
 
-    [<AllowNullLiteral>]
-    type WatchCompilerHost<'T when 'T :> BuilderProgram> =
+    type [<AllowNullLiteral>] WatchCompilerHost<'T when 'T :> BuilderProgram> =
         inherit ProgramHost<'T>
         inherit WatchHost
         /// Instead of using output d.ts file from project reference, use its source file
         abstract useSourceOfProjectReferenceRedirect: unit -> bool
+        /// If provided, use this method to get parsed command lines for referenced projects
+        abstract getParsedCommandLine: fileName: string -> ParsedCommandLine option
         /// If provided, callback to invoke after every new program creation
         abstract afterProgramCreate: program: 'T -> unit
 
     /// Host to create watch with root files and options
-    [<AllowNullLiteral>]
-    type WatchCompilerHostOfFilesAndCompilerOptions<'T when 'T :> BuilderProgram>
-        =
+    type [<AllowNullLiteral>] WatchCompilerHostOfFilesAndCompilerOptions<'T when 'T :> BuilderProgram> =
         inherit WatchCompilerHost<'T>
         /// root files to use to generate program
         abstract rootFiles: ResizeArray<string> with get, set
@@ -10250,8 +6764,7 @@ Use typeAcquisition.enable instead.")>]
         abstract projectReferences: ResizeArray<ProjectReference> option with get, set
 
     /// Host to create watch with config file
-    [<AllowNullLiteral>]
-    type WatchCompilerHostOfConfigFile<'T when 'T :> BuilderProgram> =
+    type [<AllowNullLiteral>] WatchCompilerHostOfConfigFile<'T when 'T :> BuilderProgram> =
         inherit WatchCompilerHost<'T>
         inherit ConfigFileDiagnosticsReporter
         /// Name of the config file to compile
@@ -10260,283 +6773,229 @@ Use typeAcquisition.enable instead.")>]
         abstract optionsToExtend: CompilerOptions option with get, set
         abstract watchOptionsToExtend: WatchOptions option with get, set
         abstract extraFileExtensions: ResizeArray<FileExtensionInfo> option with get, set
-
         /// Used to generate source file names from the config file and its include, exclude, files rules
         /// and also to cache the directory stucture
-        abstract readDirectory:
-            path: string *
-            ?extensions: ResizeArray<string> *
-            ?exclude: ResizeArray<string> *
-            ?``include``: ResizeArray<string> *
-            ?depth: float ->
-                ResizeArray<string>
+        abstract readDirectory: path: string * ?extensions: ResizeArray<string> * ?exclude: ResizeArray<string> * ?``include``: ResizeArray<string> * ?depth: float -> ResizeArray<string>
 
-    [<AllowNullLiteral>]
-    type Watch<'T> =
+    type [<AllowNullLiteral>] Watch<'T> =
         /// Synchronize with host and get updated program
         abstract getProgram: unit -> 'T
         /// Closes the watch
         abstract close: unit -> unit
 
     /// Creates the watch what generates program using the config file
-    [<AllowNullLiteral>]
-    type WatchOfConfigFile<'T> =
+    type [<AllowNullLiteral>] WatchOfConfigFile<'T> =
         inherit Watch<'T>
 
     /// Creates the watch that generates program using the root files and compiler options
-    [<AllowNullLiteral>]
-    type WatchOfFilesAndCompilerOptions<'T> =
+    type [<AllowNullLiteral>] WatchOfFilesAndCompilerOptions<'T> =
         inherit Watch<'T>
         /// Updates the root files in the program, only if this is not config file compilation
         abstract updateRootFileNames: fileNames: ResizeArray<string> -> unit
 
-    [<AllowNullLiteral>]
-    type BuildOptions =
+    type [<AllowNullLiteral>] BuildOptions =
         abstract dry: bool option with get, set
         abstract force: bool option with get, set
         abstract verbose: bool option with get, set
         abstract incremental: bool option with get, set
         abstract assumeChangesOnlyAffectDirectDependencies: bool option with get, set
+        abstract declaration: bool option with get, set
+        abstract declarationMap: bool option with get, set
+        abstract emitDeclarationOnly: bool option with get, set
+        abstract sourceMap: bool option with get, set
+        abstract inlineSourceMap: bool option with get, set
         abstract traceResolution: bool option with get, set
+        [<EmitIndexer>] abstract Item: option: string -> CompilerOptionsValue option with get, set
 
-        [<EmitIndexer>]
-        abstract Item: option: string -> CompilerOptionsValue option with get, set
+    type [<AllowNullLiteral>] ReportEmitErrorSummary =
+        [<Emit("$0($1...)")>] abstract Invoke: errorCount: float * filesInError: ResizeArray<ReportFileInError option> -> unit
 
-    [<AllowNullLiteral>]
-    type ReportEmitErrorSummary =
-        [<Emit "$0($1...)">]
-        abstract Invoke: errorCount: float -> unit
+    type [<AllowNullLiteral>] ReportFileInError =
+        abstract fileName: string with get, set
+        abstract line: float with get, set
 
-    [<AllowNullLiteral>]
-    type SolutionBuilderHostBase<'T when 'T :> BuilderProgram> =
+    type [<AllowNullLiteral>] SolutionBuilderHostBase<'T when 'T :> BuilderProgram> =
         inherit ProgramHost<'T>
         abstract createDirectory: path: string -> unit
-
         /// Should provide create directory and writeFile if done of invalidatedProjects is not invoked with
         /// writeFileCallback
-        abstract writeFile:
-            path: string * data: string * ?writeByteOrderMark: bool -> unit
-
+        abstract writeFile: path: string * data: string * ?writeByteOrderMark: bool -> unit
+        abstract getCustomTransformers: (string -> CustomTransformers option) option with get, set
         abstract getModifiedTime: fileName: string -> DateTime option
         abstract setModifiedTime: fileName: string * date: DateTime -> unit
         abstract deleteFile: fileName: string -> unit
-
-        abstract getParsedCommandLine:
-            fileName: string -> ParsedCommandLine option
-
+        abstract getParsedCommandLine: fileName: string -> ParsedCommandLine option
         abstract reportDiagnostic: DiagnosticReporter with get, set
         abstract reportSolutionBuilderStatus: DiagnosticReporter with get, set
         abstract afterProgramEmitAndDiagnostics: program: 'T -> unit
 
-    [<AllowNullLiteral>]
-    type SolutionBuilderHost<'T when 'T :> BuilderProgram> =
+    type [<AllowNullLiteral>] SolutionBuilderHost<'T when 'T :> BuilderProgram> =
         inherit SolutionBuilderHostBase<'T>
         abstract reportErrorSummary: ReportEmitErrorSummary option with get, set
 
-    [<AllowNullLiteral>]
-    type SolutionBuilderWithWatchHost<'T when 'T :> BuilderProgram> =
+    type [<AllowNullLiteral>] SolutionBuilderWithWatchHost<'T when 'T :> BuilderProgram> =
         inherit SolutionBuilderHostBase<'T>
         inherit WatchHost
 
-    [<AllowNullLiteral>]
-    type SolutionBuilder<'T when 'T :> BuilderProgram> =
-        abstract build:
-            ?project: string * ?cancellationToken: CancellationToken ->
-                ExitStatus
-
+    type [<AllowNullLiteral>] SolutionBuilder<'T when 'T :> BuilderProgram> =
+        abstract build: ?project: string * ?cancellationToken: CancellationToken * ?writeFile: WriteFileCallback * ?getCustomTransformers: (string -> CustomTransformers) -> ExitStatus
         abstract clean: ?project: string -> ExitStatus
-
-        abstract buildReferences:
-            project: string * ?cancellationToken: CancellationToken ->
-                ExitStatus
-
+        abstract buildReferences: project: string * ?cancellationToken: CancellationToken * ?writeFile: WriteFileCallback * ?getCustomTransformers: (string -> CustomTransformers) -> ExitStatus
         abstract cleanReferences: ?project: string -> ExitStatus
+        abstract getNextInvalidatedProject: ?cancellationToken: CancellationToken -> InvalidatedProject<'T> option
 
-        abstract getNextInvalidatedProject:
-            ?cancellationToken: CancellationToken ->
-                InvalidatedProject<'T> option
-
-    [<RequireQualifiedAccess>]
-    type InvalidatedProjectKind =
+    type [<RequireQualifiedAccess>] InvalidatedProjectKind =
         | Build = 0
+        /// <deprecated />
         | UpdateBundle = 1
         | UpdateOutputFileStamps = 2
 
-    [<AllowNullLiteral>]
-    type InvalidatedProjectBase =
+    type [<AllowNullLiteral>] InvalidatedProjectBase =
         abstract kind: InvalidatedProjectKind
         abstract project: ResolvedConfigFileName
-
         /// To dispose this project and ensure that all the necessary actions are taken and state is updated accordingly
-        abstract ``done``:
-            ?cancellationToken: CancellationToken *
-            ?writeFile: WriteFileCallback *
-            ?customTransformers: CustomTransformers ->
-                ExitStatus
-
+        abstract ``done``: ?cancellationToken: CancellationToken * ?writeFile: WriteFileCallback * ?customTransformers: CustomTransformers -> ExitStatus
         abstract getCompilerOptions: unit -> CompilerOptions
         abstract getCurrentDirectory: unit -> string
 
-    [<AllowNullLiteral>]
-    type UpdateOutputFileStampsProject =
+    type [<AllowNullLiteral>] UpdateOutputFileStampsProject =
         inherit InvalidatedProjectBase
         abstract kind: InvalidatedProjectKind
         abstract updateOutputFileStatmps: unit -> unit
 
-    [<AllowNullLiteral>]
-    type BuildInvalidedProject<'T when 'T :> BuilderProgram> =
+    type [<AllowNullLiteral>] BuildInvalidedProject<'T when 'T :> BuilderProgram> =
         inherit InvalidatedProjectBase
         abstract kind: InvalidatedProjectKind
         abstract getBuilderProgram: unit -> 'T option
         abstract getProgram: unit -> Program option
         abstract getSourceFile: fileName: string -> SourceFile option
         abstract getSourceFiles: unit -> ResizeArray<SourceFile>
+        abstract getOptionsDiagnostics: ?cancellationToken: CancellationToken -> ResizeArray<Diagnostic>
+        abstract getGlobalDiagnostics: ?cancellationToken: CancellationToken -> ResizeArray<Diagnostic>
+        abstract getConfigFileParsingDiagnostics: unit -> ResizeArray<Diagnostic>
+        abstract getSyntacticDiagnostics: ?sourceFile: SourceFile * ?cancellationToken: CancellationToken -> ResizeArray<Diagnostic>
+        abstract getAllDependencies: sourceFile: SourceFile -> ResizeArray<string>
+        abstract getSemanticDiagnostics: ?sourceFile: SourceFile * ?cancellationToken: CancellationToken -> ResizeArray<Diagnostic>
+        abstract getSemanticDiagnosticsOfNextAffectedFile: ?cancellationToken: CancellationToken * ?ignoreSourceFile: (SourceFile -> bool) -> AffectedFileResult<ResizeArray<Diagnostic>>
+        abstract emit: ?targetSourceFile: SourceFile * ?writeFile: WriteFileCallback * ?cancellationToken: CancellationToken * ?emitOnlyDtsFiles: bool * ?customTransformers: CustomTransformers -> EmitResult option
 
-        abstract getOptionsDiagnostics:
-            ?cancellationToken: CancellationToken -> ResizeArray<Diagnostic>
-
-        abstract getGlobalDiagnostics:
-            ?cancellationToken: CancellationToken -> ResizeArray<Diagnostic>
-
-        abstract getConfigFileParsingDiagnostics:
-            unit -> ResizeArray<Diagnostic>
-
-        abstract getSyntacticDiagnostics:
-            ?sourceFile: SourceFile * ?cancellationToken: CancellationToken ->
-                ResizeArray<Diagnostic>
-
-        abstract getAllDependencies:
-            sourceFile: SourceFile -> ResizeArray<string>
-
-        abstract getSemanticDiagnostics:
-            ?sourceFile: SourceFile * ?cancellationToken: CancellationToken ->
-                ResizeArray<Diagnostic>
-
-        abstract getSemanticDiagnosticsOfNextAffectedFile:
-            ?cancellationToken: CancellationToken *
-            ?ignoreSourceFile: (SourceFile -> bool) ->
-                AffectedFileResult<ResizeArray<Diagnostic>>
-
-        abstract emit:
-            ?targetSourceFile: SourceFile *
-            ?writeFile: WriteFileCallback *
-            ?cancellationToken: CancellationToken *
-            ?emitOnlyDtsFiles: bool *
-            ?customTransformers: CustomTransformers ->
-                EmitResult option
-
-    [<AllowNullLiteral>]
-    type UpdateBundleProject<'T when 'T :> BuilderProgram> =
+    [<Obsolete("")>]
+    type [<AllowNullLiteral>] UpdateBundleProject<'T when 'T :> BuilderProgram> =
         inherit InvalidatedProjectBase
         abstract kind: InvalidatedProjectKind
-
-        abstract emit:
-            ?writeFile: WriteFileCallback *
-            ?customTransformers: CustomTransformers ->
-                U2<EmitResult, BuildInvalidedProject<'T>> option
+        abstract emit: ?writeFile: WriteFileCallback * ?customTransformers: CustomTransformers -> U2<EmitResult, BuildInvalidedProject<'T>> option
 
     type InvalidatedProject<'T when 'T :> BuilderProgram> =
         U3<UpdateOutputFileStampsProject, BuildInvalidedProject<'T>, UpdateBundleProject<'T>>
 
+    module JsTyping =
+
+        type [<AllowNullLiteral>] TypingResolutionHost =
+            abstract directoryExists: path: string -> bool
+            abstract fileExists: fileName: string -> bool
+            abstract readFile: path: string * ?encoding: string -> string option
+            abstract readDirectory: rootDir: string * extensions: ResizeArray<string> * excludes: ResizeArray<string> option * includes: ResizeArray<string> option * ?depth: float -> ResizeArray<string>
+
     module Server =
 
-        type ActionSet = string
+        type ActionSet =
+            string
 
-        type ActionInvalidate = string
+        type ActionInvalidate =
+            string
 
-        type ActionPackageInstalled = string
+        type ActionPackageInstalled =
+            string
 
-        type EventTypesRegistry = string
+        type EventTypesRegistry =
+            string
 
-        type EventBeginInstallTypes = string
+        type EventBeginInstallTypes =
+            string
 
-        type EventEndInstallTypes = string
+        type EventEndInstallTypes =
+            string
 
-        type EventInitializationFailed = string
+        type EventInitializationFailed =
+            string
 
-        [<AllowNullLiteral>]
-        type TypingInstallerResponse =
-            abstract kind:
-                U7<ActionSet, ActionInvalidate, EventTypesRegistry, ActionPackageInstalled, EventBeginInstallTypes, EventEndInstallTypes, EventInitializationFailed>
+        type ActionWatchTypingLocations =
+            string
 
-        [<AllowNullLiteral>]
-        type TypingInstallerRequestWithProjectName =
+        type [<AllowNullLiteral>] TypingInstallerResponse =
+            abstract kind: U8<ActionSet, ActionInvalidate, EventTypesRegistry, ActionPackageInstalled, EventBeginInstallTypes, EventEndInstallTypes, EventInitializationFailed, ActionWatchTypingLocations>
+
+        type [<AllowNullLiteral>] TypingInstallerRequestWithProjectName =
             abstract projectName: string
 
-        [<AllowNullLiteral>]
-        type DiscoverTypings =
+        type [<AllowNullLiteral>] DiscoverTypings =
             inherit TypingInstallerRequestWithProjectName
             abstract fileNames: ResizeArray<string>
             abstract projectRootPath: Path
             abstract compilerOptions: CompilerOptions
-            abstract watchOptions: WatchOptions option
             abstract typeAcquisition: TypeAcquisition
             abstract unresolvedImports: SortedReadonlyArray<string>
             abstract cachePath: string option
             abstract kind: string
 
-        [<AllowNullLiteral>]
-        type CloseProject =
+        type [<AllowNullLiteral>] CloseProject =
             inherit TypingInstallerRequestWithProjectName
             abstract kind: string
 
-        [<AllowNullLiteral>]
-        type TypesRegistryRequest =
+        type [<AllowNullLiteral>] TypesRegistryRequest =
             abstract kind: string
 
-        [<AllowNullLiteral>]
-        type InstallPackageRequest =
+        type [<AllowNullLiteral>] InstallPackageRequest =
             inherit TypingInstallerRequestWithProjectName
             abstract kind: string
             abstract fileName: Path
             abstract packageName: string
             abstract projectRootPath: Path
 
-        [<AllowNullLiteral>]
-        type PackageInstalledResponse =
+        type [<AllowNullLiteral>] PackageInstalledResponse =
             inherit ProjectResponse
             abstract kind: ActionPackageInstalled
             abstract success: bool
             abstract message: string
 
-        [<AllowNullLiteral>]
-        type InitializationFailedResponse =
+        type [<AllowNullLiteral>] InitializationFailedResponse =
             inherit TypingInstallerResponse
             abstract kind: EventInitializationFailed
             abstract message: string
             abstract stack: string option
 
-        [<AllowNullLiteral>]
-        type ProjectResponse =
+        type [<AllowNullLiteral>] ProjectResponse =
             inherit TypingInstallerResponse
             abstract projectName: string
 
-        [<AllowNullLiteral>]
-        type InvalidateCachedTypings =
+        type [<AllowNullLiteral>] InvalidateCachedTypings =
             inherit ProjectResponse
             abstract kind: ActionInvalidate
 
-        [<AllowNullLiteral>]
-        type InstallTypes =
+        type [<AllowNullLiteral>] InstallTypes =
             inherit ProjectResponse
             abstract kind: U2<EventBeginInstallTypes, EventEndInstallTypes>
             abstract eventId: float
             abstract typingsInstallerVersion: string
             abstract packagesToInstall: ResizeArray<string>
 
-        [<AllowNullLiteral>]
-        type BeginInstallTypes =
+        type [<AllowNullLiteral>] BeginInstallTypes =
             inherit InstallTypes
             abstract kind: EventBeginInstallTypes
 
-        [<AllowNullLiteral>]
-        type EndInstallTypes =
+        type [<AllowNullLiteral>] EndInstallTypes =
             inherit InstallTypes
             abstract kind: EventEndInstallTypes
             abstract installSuccess: bool
 
-        [<AllowNullLiteral>]
-        type SetTypings =
+        type [<AllowNullLiteral>] InstallTypingHost =
+            inherit JsTyping.TypingResolutionHost
+            abstract useCaseSensitiveFileNames: bool with get, set
+            abstract writeFile: path: string * content: string -> unit
+            abstract createDirectory: path: string -> unit
+            abstract getCurrentDirectory: unit -> string
+
+        type [<AllowNullLiteral>] SetTypings =
             inherit ProjectResponse
             abstract typeAcquisition: TypeAcquisition
             abstract compilerOptions: CompilerOptions
@@ -10544,39 +7003,35 @@ Use typeAcquisition.enable instead.")>]
             abstract unresolvedImports: SortedReadonlyArray<string>
             abstract kind: ActionSet
 
-    [<AllowNullLiteral>]
-    type SourceFileLike =
-        abstract getLineAndCharacterOfPosition: pos: float -> LineAndCharacter
+        type [<AllowNullLiteral>] WatchTypingLocations =
+            inherit ProjectResponse
+            /// if files is undefined, retain same set of watchers
+            abstract files: ResizeArray<string> option
+            abstract kind: ActionWatchTypingLocations
 
     /// Represents an immutable snapshot of a script at a specified time.Once acquired, the
     /// snapshot is observably immutable. i.e. the same calls with the same parameters will return
     /// the same values.
-    [<AllowNullLiteral>]
-    type IScriptSnapshot =
+    type [<AllowNullLiteral>] IScriptSnapshot =
         /// Gets a portion of the script snapshot specified by [start, end).
         abstract getText: start: float * ``end``: float -> string
         /// Gets the length of this script snapshot.
         abstract getLength: unit -> float
-
         /// Gets the TextChangeRange that describe how the text changed between this text and
         /// an older version.  This information is used by the incremental parser to determine
         /// what sections of the script need to be re-parsed.  'undefined' can be returned if the
         /// change range cannot be determined.  However, in that case, incremental parsing will
         /// not happen and the entire document will be re - parsed.
-        abstract getChangeRange:
-            oldSnapshot: IScriptSnapshot -> TextChangeRange option
-
+        abstract getChangeRange: oldSnapshot: IScriptSnapshot -> TextChangeRange option
         /// Releases all resources held by this script snapshot
         abstract dispose: unit -> unit
 
     module ScriptSnapshot =
 
-        [<AllowNullLiteral>]
-        type IExports =
+        type [<AllowNullLiteral>] IExports =
             abstract fromString: text: string -> IScriptSnapshot
 
-    [<AllowNullLiteral>]
-    type PreProcessedFileInfo =
+    type [<AllowNullLiteral>] PreProcessedFileInfo =
         abstract referencedFiles: ResizeArray<FileReference> with get, set
         abstract typeReferenceDirectives: ResizeArray<FileReference> with get, set
         abstract libReferenceDirectives: ResizeArray<FileReference> with get, set
@@ -10584,29 +7039,30 @@ Use typeAcquisition.enable instead.")>]
         abstract ambientExternalModules: ResizeArray<string> option with get, set
         abstract isLibFile: bool with get, set
 
-    [<AllowNullLiteral>]
-    type HostCancellationToken =
+    type [<AllowNullLiteral>] HostCancellationToken =
         abstract isCancellationRequested: unit -> bool
 
-    [<AllowNullLiteral>]
-    type InstallPackageOptions =
+    type [<AllowNullLiteral>] InstallPackageOptions =
         abstract fileName: Path with get, set
         abstract packageName: string with get, set
 
-    [<AllowNullLiteral>]
-    type PerformanceEvent =
+    type [<AllowNullLiteral>] PerformanceEvent =
         abstract kind: PerformanceEventKind with get, set
         abstract durationMs: float with get, set
 
-    [<RequireQualifiedAccess>]
-    type LanguageServiceMode =
+    type [<RequireQualifiedAccess>] LanguageServiceMode =
         | Semantic = 0
         | PartialSemantic = 1
         | Syntactic = 2
 
-    [<AllowNullLiteral>]
-    type LanguageServiceHost =
+    type [<AllowNullLiteral>] IncompleteCompletionsCache =
+        abstract get: unit -> CompletionInfo option
+        abstract set: response: CompletionInfo -> unit
+        abstract clear: unit -> unit
+
+    type [<AllowNullLiteral>] LanguageServiceHost =
         inherit GetEffectiveTypeRootsHost
+        inherit MinimalResolutionCacheHost
         abstract getCompilationSettings: unit -> CompilerOptions
         abstract getNewLine: unit -> string
         abstract getProjectVersion: unit -> string
@@ -10614,10 +7070,7 @@ Use typeAcquisition.enable instead.")>]
         abstract getScriptKind: fileName: string -> ScriptKind
         abstract getScriptVersion: fileName: string -> string
         abstract getScriptSnapshot: fileName: string -> IScriptSnapshot option
-
-        abstract getProjectReferences:
-            unit -> ResizeArray<ProjectReference> option
-
+        abstract getProjectReferences: unit -> ResizeArray<ProjectReference> option
         abstract getLocalizedDiagnosticMessages: unit -> obj option
         abstract getCancellationToken: unit -> HostCancellationToken
         abstract getCurrentDirectory: unit -> string
@@ -10626,66 +7079,37 @@ Use typeAcquisition.enable instead.")>]
         abstract trace: s: string -> unit
         abstract error: s: string -> unit
         abstract useCaseSensitiveFileNames: unit -> bool
-
-        abstract readDirectory:
-            path: string *
-            ?extensions: ResizeArray<string> *
-            ?exclude: ResizeArray<string> *
-            ?``include``: ResizeArray<string> *
-            ?depth: float ->
-                ResizeArray<string>
-
-        abstract readFile: path: string * ?encoding: string -> string option
+        abstract readDirectory: path: string * ?extensions: ResizeArray<string> * ?exclude: ResizeArray<string> * ?``include``: ResizeArray<string> * ?depth: float -> ResizeArray<string>
+        /// Resolve a symbolic link.
         abstract realpath: path: string -> string
+        abstract readFile: path: string * ?encoding: string -> string option
         abstract fileExists: path: string -> bool
         abstract getTypeRootsVersion: unit -> float
-
-        abstract resolveModuleNames:
-            moduleNames: ResizeArray<string> *
-            containingFile: string *
-            reusedNames: ResizeArray<string> option *
-            redirectedReference: ResolvedProjectReference option *
-            options: CompilerOptions ->
-                ResizeArray<ResolvedModule option>
-
-        abstract getResolvedModuleWithFailedLookupLocationsFromCache:
-            modulename: string * containingFile: string ->
-                ResolvedModuleWithFailedLookupLocations option
-
-        abstract resolveTypeReferenceDirectives:
-            typeDirectiveNames: ResizeArray<string> *
-            containingFile: string *
-            redirectedReference: ResolvedProjectReference option *
-            options: CompilerOptions ->
-                ResizeArray<ResolvedTypeReferenceDirective option>
-
+        [<Obsolete("supply resolveModuleNameLiterals instead for resolution that can handle newer resolution modes like nodenext")>]
+        abstract resolveModuleNames: moduleNames: ResizeArray<string> * containingFile: string * reusedNames: ResizeArray<string> option * redirectedReference: ResolvedProjectReference option * options: CompilerOptions * ?containingSourceFile: SourceFile -> ResizeArray<ResolvedModule option>
+        abstract getResolvedModuleWithFailedLookupLocationsFromCache: modulename: string * containingFile: string * ?resolutionMode: ResolutionMode -> ResolvedModuleWithFailedLookupLocations option
+        [<Obsolete("supply resolveTypeReferenceDirectiveReferences instead for resolution that can handle newer resolution modes like nodenext")>]
+        abstract resolveTypeReferenceDirectives: typeDirectiveNames: U2<ResizeArray<string>, ResizeArray<FileReference>> * containingFile: string * redirectedReference: ResolvedProjectReference option * options: CompilerOptions * ?containingFileMode: ResolutionMode -> ResizeArray<ResolvedTypeReferenceDirective option>
+        abstract resolveModuleNameLiterals: moduleLiterals: ResizeArray<StringLiteralLike> * containingFile: string * redirectedReference: ResolvedProjectReference option * options: CompilerOptions * containingSourceFile: SourceFile * reusedNames: ResizeArray<StringLiteralLike> option -> ResizeArray<ResolvedModuleWithFailedLookupLocations>
+        abstract resolveTypeReferenceDirectiveReferences: typeDirectiveReferences: ResizeArray<'T> * containingFile: string * redirectedReference: ResolvedProjectReference option * options: CompilerOptions * containingSourceFile: SourceFile option * reusedNames: ResizeArray<'T> option -> ResizeArray<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>
         abstract getDirectories: directoryName: string -> ResizeArray<string>
         /// Gets a set of custom transformers to use during emit.
         abstract getCustomTransformers: unit -> CustomTransformers option
         abstract isKnownTypesPackageName: name: string -> bool
-
-        abstract installPackage:
-            options: InstallPackageOptions ->
-                Promise<ApplyCodeActionCommandResult>
-
+        abstract installPackage: options: InstallPackageOptions -> Promise<ApplyCodeActionCommandResult>
         abstract writeFile: fileName: string * content: string -> unit
+        abstract getParsedCommandLine: fileName: string -> ParsedCommandLine option
 
-    [<AllowNullLiteral>]
-    type WithMetadata<'T> =
-        interface
-        end
+    type [<AllowNullLiteral>] WithMetadata<'T> =
+        interface end
 
-    [<StringEnum>]
-    [<RequireQualifiedAccess>]
-    type SemanticClassificationFormat =
+    type [<StringEnum>] [<RequireQualifiedAccess>] SemanticClassificationFormat =
         | Original
-        | [<CompiledName "2020">] TwentyTwenty
+        | [<CompiledName("2020")>] TwentyTwenty
 
-    [<AllowNullLiteral>]
-    type LanguageService =
+    type [<AllowNullLiteral>] LanguageService =
         /// This is used as a part of restarting the language service.
         abstract cleanupSemanticCache: unit -> unit
-
         /// <summary>
         /// Gets errors indicating invalid syntax in a file.
         ///
@@ -10702,9 +7126,7 @@ Use typeAcquisition.enable instead.")>]
         /// that require the type system, which will be present in <c>getSemanticDiagnostics</c>.
         /// </summary>
         /// <param name="fileName">A path to the file you want syntactic diagnostics for</param>
-        abstract getSyntacticDiagnostics:
-            fileName: string -> ResizeArray<DiagnosticWithLocation>
-
+        abstract getSyntacticDiagnostics: fileName: string -> ResizeArray<DiagnosticWithLocation>
         /// <summary>
         /// Gets warnings or errors indicating type system issues in a given file.
         /// Requesting semantic diagnostics may start up the type system and
@@ -10719,45 +7141,24 @@ Use typeAcquisition.enable instead.")>]
         /// correct sentence structure. However, it is semantically invalid, because it is not true.
         /// </summary>
         /// <param name="fileName">A path to the file you want semantic diagnostics for</param>
-        abstract getSemanticDiagnostics:
-            fileName: string -> ResizeArray<Diagnostic>
-
+        abstract getSemanticDiagnostics: fileName: string -> ResizeArray<Diagnostic>
         /// <summary>
         /// Gets suggestion diagnostics for a specific file. These diagnostics tend to
         /// proactively suggest refactors, as opposed to diagnostics that indicate
         /// potentially incorrect runtime behavior.
         /// </summary>
         /// <param name="fileName">A path to the file you want semantic diagnostics for</param>
-        abstract getSuggestionDiagnostics:
-            fileName: string -> ResizeArray<DiagnosticWithLocation>
-
+        abstract getSuggestionDiagnostics: fileName: string -> ResizeArray<DiagnosticWithLocation>
         /// Gets global diagnostics related to the program configuration and compiler options.
         abstract getCompilerOptionsDiagnostics: unit -> ResizeArray<Diagnostic>
-
         [<Obsolete("Use getEncodedSyntacticClassifications instead.")>]
-        abstract getSyntacticClassifications:
-            fileName: string * span: TextSpan -> ResizeArray<ClassifiedSpan>
-
-        abstract getSyntacticClassifications:
-            fileName: string *
-            span: TextSpan *
-            format: SemanticClassificationFormat ->
-                U2<ResizeArray<ClassifiedSpan>, ResizeArray<ClassifiedSpan2020>>
-
+        abstract getSyntacticClassifications: fileName: string * span: TextSpan -> ResizeArray<ClassifiedSpan>
+        abstract getSyntacticClassifications: fileName: string * span: TextSpan * format: SemanticClassificationFormat -> U2<ResizeArray<ClassifiedSpan>, ResizeArray<ClassifiedSpan2020>>
         [<Obsolete("Use getEncodedSemanticClassifications instead.")>]
-        abstract getSemanticClassifications:
-            fileName: string * span: TextSpan -> ResizeArray<ClassifiedSpan>
-
-        abstract getSemanticClassifications:
-            fileName: string *
-            span: TextSpan *
-            format: SemanticClassificationFormat ->
-                U2<ResizeArray<ClassifiedSpan>, ResizeArray<ClassifiedSpan2020>>
-
+        abstract getSemanticClassifications: fileName: string * span: TextSpan -> ResizeArray<ClassifiedSpan>
+        abstract getSemanticClassifications: fileName: string * span: TextSpan * format: SemanticClassificationFormat -> U2<ResizeArray<ClassifiedSpan>, ResizeArray<ClassifiedSpan2020>>
         /// Encoded as triples of [start, length, ClassificationType].
-        abstract getEncodedSyntacticClassifications:
-            fileName: string * span: TextSpan -> Classifications
-
+        abstract getEncodedSyntacticClassifications: fileName: string * span: TextSpan -> Classifications
         /// <summary>
         /// Gets semantic highlights information for a particular file. Has two formats, an older
         /// version used by VS and a format used by VS Code.
@@ -10766,12 +7167,7 @@ Use typeAcquisition.enable instead.")>]
         /// <param name="position">A text span to return results within</param>
         /// <param name="format">Which format to use, defaults to "original"</param>
         /// <returns>a number array encoded as triples of [start, length, ClassificationType, ...].</returns>
-        abstract getEncodedSemanticClassifications:
-            fileName: string *
-            span: TextSpan *
-            ?format: SemanticClassificationFormat ->
-                Classifications
-
+        abstract getEncodedSemanticClassifications: fileName: string * span: TextSpan * ?format: SemanticClassificationFormat -> Classifications
         /// <summary>Gets completion entries at a particular position in a file.</summary>
         /// <param name="fileName">The path to the file</param>
         /// <param name="position">A zero-based index of the character where you want the entries</param>
@@ -10779,341 +7175,169 @@ Use typeAcquisition.enable instead.")>]
         /// An object describing how the request was triggered and what kinds
         /// of code actions can be returned with the completions.
         /// </param>
-        abstract getCompletionsAtPosition:
-            fileName: string *
-            position: float *
-            options: GetCompletionsAtPositionOptions option ->
-                WithMetadata<CompletionInfo> option
-
+        /// <param name="formattingSettings">settings needed for calling formatting functions.</param>
+        abstract getCompletionsAtPosition: fileName: string * position: float * options: GetCompletionsAtPositionOptions option * ?formattingSettings: FormatCodeSettings -> WithMetadata<CompletionInfo> option
         /// <summary>Gets the extended details for a completion entry retrieved from <c>getCompletionsAtPosition</c>.</summary>
         /// <param name="fileName">The path to the file</param>
         /// <param name="position">A zero based index of the character where you want the entries</param>
-        /// <param name="entryName">The name from an existing completion which came from <c>getCompletionsAtPosition</c></param>
+        /// <param name="entryName">The <c>name</c> from an existing completion which came from <c>getCompletionsAtPosition</c></param>
         /// <param name="formatOptions">How should code samples in the completions be formatted, can be undefined for backwards compatibility</param>
-        /// <param name="source">Source code for the current file, can be undefined for backwards compatibility</param>
+        /// <param name="source"><c>source</c> property from the completion entry</param>
         /// <param name="preferences">User settings, can be undefined for backwards compatibility</param>
-        abstract getCompletionEntryDetails:
-            fileName: string *
-            position: float *
-            entryName: string *
-            formatOptions: U2<FormatCodeOptions, FormatCodeSettings> option *
-            source: string option *
-            preferences: UserPreferences option ->
-                CompletionEntryDetails option
-
-        abstract getCompletionEntrySymbol:
-            fileName: string *
-            position: float *
-            name: string *
-            source: string option ->
-                Symbol option
-
+        /// <param name="data"><c>data</c> property from the completion entry</param>
+        abstract getCompletionEntryDetails: fileName: string * position: float * entryName: string * formatOptions: U2<FormatCodeOptions, FormatCodeSettings> option * source: string option * preferences: UserPreferences option * data: CompletionEntryData option -> CompletionEntryDetails option
+        abstract getCompletionEntrySymbol: fileName: string * position: float * name: string * source: string option -> Symbol option
         /// <summary>
         /// Gets semantic information about the identifier at a particular position in a
         /// file. Quick info is what you typically see when you hover in an editor.
         /// </summary>
         /// <param name="fileName">The path to the file</param>
         /// <param name="position">A zero-based index of the character where you want the quick info</param>
-        abstract getQuickInfoAtPosition:
-            fileName: string * position: float -> QuickInfo option
-
-        abstract getNameOrDottedNameSpan:
-            fileName: string * startPos: float * endPos: float ->
-                TextSpan option
-
-        abstract getBreakpointStatementAtPosition:
-            fileName: string * position: float -> TextSpan option
-
-        abstract getSignatureHelpItems:
-            fileName: string *
-            position: float *
-            options: SignatureHelpItemsOptions option ->
-                SignatureHelpItems option
-
-        abstract getRenameInfo:
-            fileName: string * position: float * ?options: RenameInfoOptions ->
-                RenameInfo
-
-        abstract findRenameLocations:
-            fileName: string *
-            position: float *
-            findInStrings: bool *
-            findInComments: bool *
-            ?providePrefixAndSuffixTextForRename: bool ->
-                ResizeArray<RenameLocation> option
-
-        abstract getSmartSelectionRange:
-            fileName: string * position: float -> SelectionRange
-
-        abstract getDefinitionAtPosition:
-            fileName: string * position: float ->
-                ResizeArray<DefinitionInfo> option
-
-        abstract getDefinitionAndBoundSpan:
-            fileName: string * position: float ->
-                DefinitionInfoAndBoundSpan option
-
-        abstract getTypeDefinitionAtPosition:
-            fileName: string * position: float ->
-                ResizeArray<DefinitionInfo> option
-
-        abstract getImplementationAtPosition:
-            fileName: string * position: float ->
-                ResizeArray<ImplementationLocation> option
-
-        abstract getReferencesAtPosition:
-            fileName: string * position: float ->
-                ResizeArray<ReferenceEntry> option
-
-        abstract findReferences:
-            fileName: string * position: float ->
-                ResizeArray<ReferencedSymbol> option
-
-        abstract getDocumentHighlights:
-            fileName: string *
-            position: float *
-            filesToSearch: ResizeArray<string> ->
-                ResizeArray<DocumentHighlights> option
-
-        abstract getFileReferences:
-            fileName: string -> ResizeArray<ReferenceEntry>
-
-        [<Obsolete("")>]
-        abstract getOccurrencesAtPosition:
-            fileName: string * position: float ->
-                ResizeArray<ReferenceEntry> option
-
-        abstract getNavigateToItems:
-            searchValue: string *
-            ?maxResultCount: float *
-            ?fileName: string *
-            ?excludeDtsFiles: bool ->
-                ResizeArray<NavigateToItem>
-
-        abstract getNavigationBarItems:
-            fileName: string -> ResizeArray<NavigationBarItem>
-
+        abstract getQuickInfoAtPosition: fileName: string * position: float -> QuickInfo option
+        abstract getNameOrDottedNameSpan: fileName: string * startPos: float * endPos: float -> TextSpan option
+        abstract getBreakpointStatementAtPosition: fileName: string * position: float -> TextSpan option
+        abstract getSignatureHelpItems: fileName: string * position: float * options: SignatureHelpItemsOptions option -> SignatureHelpItems option
+        abstract getRenameInfo: fileName: string * position: float * preferences: UserPreferences -> RenameInfo
+        [<Obsolete("Use the signature with `UserPreferences` instead.")>]
+        abstract getRenameInfo: fileName: string * position: float * ?options: RenameInfoOptions -> RenameInfo
+        abstract findRenameLocations: fileName: string * position: float * findInStrings: bool * findInComments: bool * preferences: UserPreferences -> ResizeArray<RenameLocation> option
+        [<Obsolete("Pass `providePrefixAndSuffixTextForRename` as part of a `UserPreferences` parameter.")>]
+        abstract findRenameLocations: fileName: string * position: float * findInStrings: bool * findInComments: bool * ?providePrefixAndSuffixTextForRename: bool -> ResizeArray<RenameLocation> option
+        abstract getSmartSelectionRange: fileName: string * position: float -> SelectionRange
+        abstract getDefinitionAtPosition: fileName: string * position: float -> ResizeArray<DefinitionInfo> option
+        abstract getDefinitionAndBoundSpan: fileName: string * position: float -> DefinitionInfoAndBoundSpan option
+        abstract getTypeDefinitionAtPosition: fileName: string * position: float -> ResizeArray<DefinitionInfo> option
+        abstract getImplementationAtPosition: fileName: string * position: float -> ResizeArray<ImplementationLocation> option
+        abstract getReferencesAtPosition: fileName: string * position: float -> ResizeArray<ReferenceEntry> option
+        abstract findReferences: fileName: string * position: float -> ResizeArray<ReferencedSymbol> option
+        abstract getDocumentHighlights: fileName: string * position: float * filesToSearch: ResizeArray<string> -> ResizeArray<DocumentHighlights> option
+        abstract getFileReferences: fileName: string -> ResizeArray<ReferenceEntry>
+        abstract getNavigateToItems: searchValue: string * ?maxResultCount: float * ?fileName: string * ?excludeDtsFiles: bool -> ResizeArray<NavigateToItem>
+        abstract getNavigationBarItems: fileName: string -> ResizeArray<NavigationBarItem>
         abstract getNavigationTree: fileName: string -> NavigationTree
-
-        abstract prepareCallHierarchy:
-            fileName: string * position: float ->
-                U2<CallHierarchyItem, ResizeArray<CallHierarchyItem>> option
-
-        abstract provideCallHierarchyIncomingCalls:
-            fileName: string * position: float ->
-                ResizeArray<CallHierarchyIncomingCall>
-
-        abstract provideCallHierarchyOutgoingCalls:
-            fileName: string * position: float ->
-                ResizeArray<CallHierarchyOutgoingCall>
-
-        abstract getOutliningSpans:
-            fileName: string -> ResizeArray<OutliningSpan>
-
-        abstract getTodoComments:
-            fileName: string * descriptors: ResizeArray<TodoCommentDescriptor> ->
-                ResizeArray<TodoComment>
-
-        abstract getBraceMatchingAtPosition:
-            fileName: string * position: float -> ResizeArray<TextSpan>
-
-        abstract getIndentationAtPosition:
-            fileName: string *
-            position: float *
-            options: U2<EditorOptions, EditorSettings> ->
-                float
-
-        abstract getFormattingEditsForRange:
-            fileName: string *
-            start: float *
-            ``end``: float *
-            options: U2<FormatCodeOptions, FormatCodeSettings> ->
-                ResizeArray<TextChange>
-
-        abstract getFormattingEditsForDocument:
-            fileName: string *
-            options: U2<FormatCodeOptions, FormatCodeSettings> ->
-                ResizeArray<TextChange>
-
-        abstract getFormattingEditsAfterKeystroke:
-            fileName: string *
-            position: float *
-            key: string *
-            options: U2<FormatCodeOptions, FormatCodeSettings> ->
-                ResizeArray<TextChange>
-
-        abstract getDocCommentTemplateAtPosition:
-            fileName: string *
-            position: float *
-            ?options: DocCommentTemplateOptions ->
-                TextInsertion option
-
-        abstract isValidBraceCompletionAtPosition:
-            fileName: string * position: float * openingBrace: float -> bool
-
+        abstract prepareCallHierarchy: fileName: string * position: float -> U2<CallHierarchyItem, ResizeArray<CallHierarchyItem>> option
+        abstract provideCallHierarchyIncomingCalls: fileName: string * position: float -> ResizeArray<CallHierarchyIncomingCall>
+        abstract provideCallHierarchyOutgoingCalls: fileName: string * position: float -> ResizeArray<CallHierarchyOutgoingCall>
+        abstract provideInlayHints: fileName: string * span: TextSpan * preferences: UserPreferences option -> ResizeArray<InlayHint>
+        abstract getOutliningSpans: fileName: string -> ResizeArray<OutliningSpan>
+        abstract getTodoComments: fileName: string * descriptors: ResizeArray<TodoCommentDescriptor> -> ResizeArray<TodoComment>
+        abstract getBraceMatchingAtPosition: fileName: string * position: float -> ResizeArray<TextSpan>
+        abstract getIndentationAtPosition: fileName: string * position: float * options: U2<EditorOptions, EditorSettings> -> float
+        abstract getFormattingEditsForRange: fileName: string * start: float * ``end``: float * options: U2<FormatCodeOptions, FormatCodeSettings> -> ResizeArray<TextChange>
+        abstract getFormattingEditsForDocument: fileName: string * options: U2<FormatCodeOptions, FormatCodeSettings> -> ResizeArray<TextChange>
+        abstract getFormattingEditsAfterKeystroke: fileName: string * position: float * key: string * options: U2<FormatCodeOptions, FormatCodeSettings> -> ResizeArray<TextChange>
+        abstract getDocCommentTemplateAtPosition: fileName: string * position: float * ?options: DocCommentTemplateOptions * ?formatOptions: FormatCodeSettings -> TextInsertion option
+        abstract isValidBraceCompletionAtPosition: fileName: string * position: float * openingBrace: float -> bool
         /// <summary>
-        /// This will return a defined result if the position is after the <c>></c> of the opening tag, or somewhere in the text, of a JSXElement with no closing tag.
-        /// Editors should call this after <c>></c> is typed.
+        /// This will return a defined result if the position is after the <c>&gt;</c> of the opening tag, or somewhere in the text, of a JSXElement with no closing tag.
+        /// Editors should call this after <c>&gt;</c> is typed.
         /// </summary>
-        abstract getJsxClosingTagAtPosition:
-            fileName: string * position: float -> JsxClosingTagInfo option
-
-        abstract getSpanOfEnclosingComment:
-            fileName: string * position: float * onlyMultiLine: bool ->
-                TextSpan option
-
-        abstract toLineColumnOffset:
-            fileName: string * position: float -> LineAndCharacter
-
-        abstract getCodeFixesAtPosition:
-            fileName: string *
-            start: float *
-            ``end``: float *
-            errorCodes: ResizeArray<float> *
-            formatOptions: FormatCodeSettings *
-            preferences: UserPreferences ->
-                ResizeArray<CodeFixAction>
-
-        abstract getCombinedCodeFix:
-            scope: CombinedCodeFixScope *
-            fixId: LanguageServiceGetCombinedCodeFixFixId *
-            formatOptions: FormatCodeSettings *
-            preferences: UserPreferences ->
-                CombinedCodeActions
-
-        abstract applyCodeActionCommand:
-            action: CodeActionCommand * ?formatSettings: FormatCodeSettings ->
-                Promise<ApplyCodeActionCommandResult>
-
-        abstract applyCodeActionCommand:
-            action: ResizeArray<CodeActionCommand> *
-            ?formatSettings: FormatCodeSettings ->
-                Promise<ResizeArray<ApplyCodeActionCommandResult>>
-
-        abstract applyCodeActionCommand:
-            action: U2<CodeActionCommand, ResizeArray<CodeActionCommand>> *
-            ?formatSettings: FormatCodeSettings ->
-                Promise<U2<ApplyCodeActionCommandResult, ResizeArray<ApplyCodeActionCommandResult>>>
-
+        abstract getJsxClosingTagAtPosition: fileName: string * position: float -> JsxClosingTagInfo option
+        abstract getLinkedEditingRangeAtPosition: fileName: string * position: float -> LinkedEditingInfo option
+        abstract getSpanOfEnclosingComment: fileName: string * position: float * onlyMultiLine: bool -> TextSpan option
+        abstract toLineColumnOffset: fileName: string * position: float -> LineAndCharacter
+        abstract getCodeFixesAtPosition: fileName: string * start: float * ``end``: float * errorCodes: ResizeArray<float> * formatOptions: FormatCodeSettings * preferences: UserPreferences -> ResizeArray<CodeFixAction>
+        abstract getCombinedCodeFix: scope: CombinedCodeFixScope * fixId: LanguageServiceGetCombinedCodeFixFixId * formatOptions: FormatCodeSettings * preferences: UserPreferences -> CombinedCodeActions
+        abstract applyCodeActionCommand: action: CodeActionCommand * ?formatSettings: FormatCodeSettings -> Promise<ApplyCodeActionCommandResult>
+        abstract applyCodeActionCommand: action: ResizeArray<CodeActionCommand> * ?formatSettings: FormatCodeSettings -> Promise<ResizeArray<ApplyCodeActionCommandResult>>
+        abstract applyCodeActionCommand: action: U2<CodeActionCommand, ResizeArray<CodeActionCommand>> * ?formatSettings: FormatCodeSettings -> Promise<U2<ApplyCodeActionCommandResult, ResizeArray<ApplyCodeActionCommandResult>>>
         [<Obsolete("`fileName` will be ignored")>]
-        abstract applyCodeActionCommand:
-            fileName: string * action: CodeActionCommand ->
-                Promise<ApplyCodeActionCommandResult>
-
+        abstract applyCodeActionCommand: fileName: string * action: CodeActionCommand -> Promise<ApplyCodeActionCommandResult>
         [<Obsolete("`fileName` will be ignored")>]
-        abstract applyCodeActionCommand:
-            fileName: string * action: ResizeArray<CodeActionCommand> ->
-                Promise<ResizeArray<ApplyCodeActionCommandResult>>
-
+        abstract applyCodeActionCommand: fileName: string * action: ResizeArray<CodeActionCommand> -> Promise<ResizeArray<ApplyCodeActionCommandResult>>
         [<Obsolete("`fileName` will be ignored")>]
-        abstract applyCodeActionCommand:
-            fileName: string *
-            action: U2<CodeActionCommand, ResizeArray<CodeActionCommand>> ->
-                Promise<U2<ApplyCodeActionCommandResult, ResizeArray<ApplyCodeActionCommandResult>>>
-
-        abstract getApplicableRefactors:
-            fileName: string *
-            positionOrRange: U2<float, TextRange> *
-            preferences: UserPreferences option *
-            ?triggerReason: RefactorTriggerReason *
-            ?kind: string ->
-                ResizeArray<ApplicableRefactorInfo>
-
-        abstract getEditsForRefactor:
-            fileName: string *
-            formatOptions: FormatCodeSettings *
-            positionOrRange: U2<float, TextRange> *
-            refactorName: string *
-            actionName: string *
-            preferences: UserPreferences option ->
-                RefactorEditInfo option
-
-        abstract organizeImports:
-            scope: OrganizeImportsScope *
-            formatOptions: FormatCodeSettings *
-            preferences: UserPreferences option ->
-                ResizeArray<FileTextChanges>
-
-        abstract getEditsForFileRename:
-            oldFilePath: string *
-            newFilePath: string *
-            formatOptions: FormatCodeSettings *
-            preferences: UserPreferences option ->
-                ResizeArray<FileTextChanges>
-
-        abstract getEmitOutput:
-            fileName: string * ?emitOnlyDtsFiles: bool * ?forceDtsEmit: bool ->
-                EmitOutput
-
+        abstract applyCodeActionCommand: fileName: string * action: U2<CodeActionCommand, ResizeArray<CodeActionCommand>> -> Promise<U2<ApplyCodeActionCommandResult, ResizeArray<ApplyCodeActionCommandResult>>>
+        /// <param name="includeInteractiveActions">
+        /// Include refactor actions that require additional arguments to be
+        /// passed when calling <c>getEditsForRefactor</c>. When true, clients should inspect the <c>isInteractive</c>
+        /// property of each returned <c>RefactorActionInfo</c> and ensure they are able to collect the appropriate
+        /// arguments for any interactive action before offering it.
+        /// </param>
+        abstract getApplicableRefactors: fileName: string * positionOrRange: U2<float, TextRange> * preferences: UserPreferences option * ?triggerReason: RefactorTriggerReason * ?kind: string * ?includeInteractiveActions: bool -> ResizeArray<ApplicableRefactorInfo>
+        abstract getEditsForRefactor: fileName: string * formatOptions: FormatCodeSettings * positionOrRange: U2<float, TextRange> * refactorName: string * actionName: string * preferences: UserPreferences option * ?interactiveRefactorArguments: InteractiveRefactorArguments -> RefactorEditInfo option
+        abstract getMoveToRefactoringFileSuggestions: fileName: string * positionOrRange: U2<float, TextRange> * preferences: UserPreferences option * ?triggerReason: RefactorTriggerReason * ?kind: string -> {| newFileName: string; files: ResizeArray<string> |}
+        abstract organizeImports: args: OrganizeImportsArgs * formatOptions: FormatCodeSettings * preferences: UserPreferences option -> ResizeArray<FileTextChanges>
+        abstract getEditsForFileRename: oldFilePath: string * newFilePath: string * formatOptions: FormatCodeSettings * preferences: UserPreferences option -> ResizeArray<FileTextChanges>
+        abstract getEmitOutput: fileName: string * ?emitOnlyDtsFiles: bool * ?forceDtsEmit: bool -> EmitOutput
         abstract getProgram: unit -> Program option
-
-        abstract toggleLineComment:
-            fileName: string * textRange: TextRange -> ResizeArray<TextChange>
-
-        abstract toggleMultilineComment:
-            fileName: string * textRange: TextRange -> ResizeArray<TextChange>
-
-        abstract commentSelection:
-            fileName: string * textRange: TextRange -> ResizeArray<TextChange>
-
-        abstract uncommentSelection:
-            fileName: string * textRange: TextRange -> ResizeArray<TextChange>
-
+        abstract toggleLineComment: fileName: string * textRange: TextRange -> ResizeArray<TextChange>
+        abstract toggleMultilineComment: fileName: string * textRange: TextRange -> ResizeArray<TextChange>
+        abstract commentSelection: fileName: string * textRange: TextRange -> ResizeArray<TextChange>
+        abstract uncommentSelection: fileName: string * textRange: TextRange -> ResizeArray<TextChange>
+        abstract getSupportedCodeFixes: ?fileName: string -> ResizeArray<string>
         abstract dispose: unit -> unit
 
-    [<AllowNullLiteral>]
-    type LanguageServiceGetCombinedCodeFixFixId =
-        interface
-        end
+    type [<AllowNullLiteral>] LanguageServiceGetCombinedCodeFixFixId =
+        interface end
 
-    [<AllowNullLiteral>]
-    type JsxClosingTagInfo =
+    type [<AllowNullLiteral>] JsxClosingTagInfo =
         abstract newText: string
 
-    [<AllowNullLiteral>]
-    type CombinedCodeFixScope =
+    type [<AllowNullLiteral>] LinkedEditingInfo =
+        abstract ranges: ResizeArray<TextSpan>
+        abstract wordPattern: string option with get, set
+
+    type [<AllowNullLiteral>] CombinedCodeFixScope =
         abstract ``type``: string with get, set
         abstract fileName: string with get, set
 
-    type OrganizeImportsScope = CombinedCodeFixScope
+    type [<StringEnum>] [<RequireQualifiedAccess>] OrganizeImportsMode =
+        | [<CompiledName("All")>] All
+        | [<CompiledName("SortAndCombine")>] SortAndCombine
+        | [<CompiledName("RemoveUnused")>] RemoveUnused
 
-    [<StringEnum>]
-    [<RequireQualifiedAccess>]
-    type CompletionsTriggerCharacter =
-        | [<CompiledName ".">] ``Dot``
-        | [<CompiledName "\"">] ``Quote``
-        | [<CompiledName "'">] ``SingleQuote``
-        | [<CompiledName "`">] ``BackTick``
-        | [<CompiledName "/">] ``Slach``
-        | [<CompiledName "@">] ``At``
-        | [<CompiledName "<">] ``LesserThan``
-        | [<CompiledName "#">] ``HashTag``
+    type [<AllowNullLiteral>] OrganizeImportsArgs =
+        inherit CombinedCodeFixScope
+        [<Obsolete("Use `mode` instead")>]
+        abstract skipDestructiveCodeActions: bool option with get, set
+        abstract mode: OrganizeImportsMode option with get, set
 
-    [<AllowNullLiteral>]
-    type GetCompletionsAtPositionOptions =
+    type [<StringEnum>] [<RequireQualifiedAccess>] CompletionsTriggerCharacter =
+        | [<CompiledName(".")>] DOT
+        | [<CompiledName("\"")>] QUOTATION
+        | [<CompiledName("'")>] ``'``
+        | [<CompiledName("`")>] BACKTICK
+        | [<CompiledName("/")>] SLASH
+        | [<CompiledName("@")>] AT
+        | [<CompiledName("<")>] ``<``
+        | [<CompiledName("#")>] ``#``
+        | [<CompiledName(" ")>] Empty
+
+    type [<RequireQualifiedAccess>] CompletionTriggerKind =
+        /// Completion was triggered by typing an identifier, manual invocation (e.g Ctrl+Space) or via API.
+        | Invoked = 1
+        /// Completion was triggered by a trigger character.
+        | TriggerCharacter = 2
+        /// Completion was re-triggered as the current completion list is incomplete.
+        | TriggerForIncompleteCompletions = 3
+
+    type [<AllowNullLiteral>] GetCompletionsAtPositionOptions =
         inherit UserPreferences
         /// If the editor is asking for completions because a certain character was typed
         /// (as opposed to when the user explicitly requested them) this should be set.
         abstract triggerCharacter: CompletionsTriggerCharacter option with get, set
-
+        abstract triggerKind: CompletionTriggerKind option with get, set
+        /// <summary>
+        /// Include a <c>symbol</c> property on each completion entry object.
+        /// Symbols reference cyclic data structures and sometimes an entire TypeChecker instance,
+        /// so use caution when serializing or retaining completion entries retrieved with this option.
+        /// </summary>
+        /// <default>false</default>
+        abstract includeSymbol: bool option with get, set
         [<Obsolete("Use includeCompletionsForModuleExports")>]
         abstract includeExternalModuleExports: bool option with get, set
-
         [<Obsolete("Use includeCompletionsWithInsertText")>]
         abstract includeInsertTextCompletions: bool option with get, set
 
-    [<StringEnum>]
-    [<RequireQualifiedAccess>]
-    type SignatureHelpTriggerCharacter =
-        | [<CompiledName ",">] ``Comma``
-        | [<CompiledName "(">] ``LeftParens``
-        | [<CompiledName "<">] ``LesserThan``
+    type [<StringEnum>] [<RequireQualifiedAccess>] SignatureHelpTriggerCharacter =
+        | [<CompiledName(",")>] ``,``
+        | [<CompiledName("(")>] ``(``
+        | [<CompiledName("<")>] ``<``
 
     type SignatureHelpRetriggerCharacter =
         U2<SignatureHelpTriggerCharacter, string>
 
-    [<AllowNullLiteral>]
-    type SignatureHelpItemsOptions =
+    type [<AllowNullLiteral>] SignatureHelpItemsOptions =
         abstract triggerReason: SignatureHelpTriggerReason option with get, set
 
     type SignatureHelpTriggerReason =
@@ -11121,15 +7345,13 @@ Use typeAcquisition.enable instead.")>]
 
     /// Signals that the user manually requested signature help.
     /// The language service will unconditionally attempt to provide a result.
-    [<AllowNullLiteral>]
-    type SignatureHelpInvokedReason =
+    type [<AllowNullLiteral>] SignatureHelpInvokedReason =
         abstract kind: string with get, set
         abstract triggerCharacter: obj option with get, set
 
     /// Signals that the signature help request came from a user typing a character.
     /// Depending on the character and the syntactic context, the request may or may not be served a result.
-    [<AllowNullLiteral>]
-    type SignatureHelpCharacterTypedReason =
+    type [<AllowNullLiteral>] SignatureHelpCharacterTypedReason =
         abstract kind: string with get, set
         /// Character that was responsible for triggering signature help.
         abstract triggerCharacter: SignatureHelpTriggerCharacter with get, set
@@ -11140,28 +7362,23 @@ Use typeAcquisition.enable instead.")>]
     /// The language service will unconditionally attempt to provide a result.
     /// <c>triggerCharacter</c> can be <c>undefined</c> for a retrigger caused by a cursor move.
     /// </summary>
-    [<AllowNullLiteral>]
-    type SignatureHelpRetriggeredReason =
+    type [<AllowNullLiteral>] SignatureHelpRetriggeredReason =
         abstract kind: string with get, set
         /// Character that was responsible for triggering signature help.
         abstract triggerCharacter: SignatureHelpRetriggerCharacter option with get, set
 
-    [<AllowNullLiteral>]
-    type ApplyCodeActionCommandResult =
+    type [<AllowNullLiteral>] ApplyCodeActionCommandResult =
         abstract successMessage: string with get, set
 
-    [<AllowNullLiteral>]
-    type Classifications =
+    type [<AllowNullLiteral>] Classifications =
         abstract spans: ResizeArray<float> with get, set
         abstract endOfLineState: EndOfLineState with get, set
 
-    [<AllowNullLiteral>]
-    type ClassifiedSpan =
+    type [<AllowNullLiteral>] ClassifiedSpan =
         abstract textSpan: TextSpan with get, set
         abstract classificationType: ClassificationTypeNames with get, set
 
-    [<AllowNullLiteral>]
-    type ClassifiedSpan2020 =
+    type [<AllowNullLiteral>] ClassifiedSpan2020 =
         abstract textSpan: TextSpan with get, set
         abstract classificationType: float with get, set
 
@@ -11171,8 +7388,7 @@ Use typeAcquisition.enable instead.")>]
     /// The navbar is returned as a list of top-level items, each of which has a list of child items.
     /// Child items always have an empty array for their <c>childItems</c>.
     /// </summary>
-    [<AllowNullLiteral>]
-    type NavigationBarItem =
+    type [<AllowNullLiteral>] NavigationBarItem =
         abstract text: string with get, set
         abstract kind: ScriptElementKind with get, set
         abstract kindModifiers: string with get, set
@@ -11184,8 +7400,7 @@ Use typeAcquisition.enable instead.")>]
 
     /// Node in a tree of nested declarations in a file.
     /// The top node is always a script or module node.
-    [<AllowNullLiteral>]
-    type NavigationTree =
+    type [<AllowNullLiteral>] NavigationTree =
         /// Name of the declaration, or a short description, e.g. "<class>".
         abstract text: string with get, set
         abstract kind: ScriptElementKind with get, set
@@ -11198,8 +7413,7 @@ Use typeAcquisition.enable instead.")>]
         /// Present if non-empty
         abstract childItems: ResizeArray<NavigationTree> option with get, set
 
-    [<AllowNullLiteral>]
-    type CallHierarchyItem =
+    type [<AllowNullLiteral>] CallHierarchyItem =
         abstract name: string with get, set
         abstract kind: ScriptElementKind with get, set
         abstract kindModifiers: string option with get, set
@@ -11208,40 +7422,52 @@ Use typeAcquisition.enable instead.")>]
         abstract selectionSpan: TextSpan with get, set
         abstract containerName: string option with get, set
 
-    [<AllowNullLiteral>]
-    type CallHierarchyIncomingCall =
+    type [<AllowNullLiteral>] CallHierarchyIncomingCall =
         abstract from: CallHierarchyItem with get, set
         abstract fromSpans: ResizeArray<TextSpan> with get, set
 
-    [<AllowNullLiteral>]
-    type CallHierarchyOutgoingCall =
+    type [<AllowNullLiteral>] CallHierarchyOutgoingCall =
         abstract ``to``: CallHierarchyItem with get, set
         abstract fromSpans: ResizeArray<TextSpan> with get, set
 
-    [<AllowNullLiteral>]
-    type TodoCommentDescriptor =
+    type [<StringEnum>] [<RequireQualifiedAccess>] InlayHintKind =
+        | [<CompiledName("Type")>] Type
+        | [<CompiledName("Parameter")>] Parameter
+        | [<CompiledName("Enum")>] Enum
+
+    type [<AllowNullLiteral>] InlayHint =
+        /// This property will be the empty string when displayParts is set.
+        abstract text: string with get, set
+        abstract position: float with get, set
+        abstract kind: InlayHintKind with get, set
+        abstract whitespaceBefore: bool option with get, set
+        abstract whitespaceAfter: bool option with get, set
+        abstract displayParts: ResizeArray<InlayHintDisplayPart> option with get, set
+
+    type [<AllowNullLiteral>] InlayHintDisplayPart =
+        abstract text: string with get, set
+        abstract span: TextSpan option with get, set
+        abstract file: string option with get, set
+
+    type [<AllowNullLiteral>] TodoCommentDescriptor =
         abstract text: string with get, set
         abstract priority: float with get, set
 
-    [<AllowNullLiteral>]
-    type TodoComment =
+    type [<AllowNullLiteral>] TodoComment =
         abstract descriptor: TodoCommentDescriptor with get, set
         abstract message: string with get, set
         abstract position: float with get, set
 
-    [<AllowNullLiteral>]
-    type TextChange =
+    type [<AllowNullLiteral>] TextChange =
         abstract span: TextSpan with get, set
         abstract newText: string with get, set
 
-    [<AllowNullLiteral>]
-    type FileTextChanges =
+    type [<AllowNullLiteral>] FileTextChanges =
         abstract fileName: string with get, set
         abstract textChanges: ResizeArray<TextChange> with get, set
         abstract isNewFile: bool option with get, set
 
-    [<AllowNullLiteral>]
-    type CodeAction =
+    type [<AllowNullLiteral>] CodeAction =
         /// Description of the code action to display in the UI of the editor
         abstract description: string with get, set
         /// Text changes to apply to each file as part of the code action
@@ -11252,8 +7478,7 @@ Use typeAcquisition.enable instead.")>]
         /// </summary>
         abstract commands: ResizeArray<CodeActionCommand> option with get, set
 
-    [<AllowNullLiteral>]
-    type CodeFixAction =
+    type [<AllowNullLiteral>] CodeFixAction =
         inherit CodeAction
         /// Short name to identify the fix, for use by telemetry.
         abstract fixName: string with get, set
@@ -11262,21 +7487,18 @@ Use typeAcquisition.enable instead.")>]
         abstract fixId: DiagnosticMessageReportsUnnecessary option with get, set
         abstract fixAllDescription: string option with get, set
 
-    [<AllowNullLiteral>]
-    type CombinedCodeActions =
+    type [<AllowNullLiteral>] CombinedCodeActions =
         abstract changes: ResizeArray<FileTextChanges> with get, set
         abstract commands: ResizeArray<CodeActionCommand> option with get, set
 
-    type CodeActionCommand = InstallPackageAction
+    type CodeActionCommand =
+        InstallPackageAction
 
-    [<AllowNullLiteral>]
-    type InstallPackageAction =
-        interface
-        end
+    type [<AllowNullLiteral>] InstallPackageAction =
+        interface end
 
     /// A set of one or more available refactoring actions, grouped under a parent refactoring.
-    [<AllowNullLiteral>]
-    type ApplicableRefactorInfo =
+    type [<AllowNullLiteral>] ApplicableRefactorInfo =
         /// The programmatic name of the refactoring
         abstract name: string with get, set
         /// A description of this refactoring category to show to the user.
@@ -11292,8 +7514,7 @@ Use typeAcquisition.enable instead.")>]
 
     /// Represents a single refactoring action - for example, the "Extract Method..." refactor might
     /// offer several actions, each corresponding to a surround class or closure to extract into.
-    [<AllowNullLiteral>]
-    type RefactorActionInfo =
+    type [<AllowNullLiteral>] RefactorActionInfo =
         /// The programmatic name of the refactoring action
         abstract name: string with get, set
         /// A description of this refactoring action to show to the user.
@@ -11305,30 +7526,31 @@ Use typeAcquisition.enable instead.")>]
         abstract notApplicableReason: string option with get, set
         /// The hierarchical dotted name of the refactor action.
         abstract kind: string option with get, set
+        /// <summary>
+        /// Indicates that the action requires additional arguments to be passed
+        /// when calling <c>getEditsForRefactor</c>.
+        /// </summary>
+        abstract isInteractive: bool option with get, set
 
     /// A set of edits to make in response to a refactor action, plus an optional
     /// location where renaming should be invoked from
-    [<AllowNullLiteral>]
-    type RefactorEditInfo =
+    type [<AllowNullLiteral>] RefactorEditInfo =
         abstract edits: ResizeArray<FileTextChanges> with get, set
         abstract renameFilename: string option with get, set
         abstract renameLocation: float option with get, set
         abstract commands: ResizeArray<CodeActionCommand> option with get, set
+        abstract notApplicableReason: string option with get, set
 
-    [<StringEnum>]
-    [<RequireQualifiedAccess>]
-    type RefactorTriggerReason =
+    type [<StringEnum>] [<RequireQualifiedAccess>] RefactorTriggerReason =
         | Implicit
         | Invoked
 
-    [<AllowNullLiteral>]
-    type TextInsertion =
+    type [<AllowNullLiteral>] TextInsertion =
         abstract newText: string with get, set
         /// The position in newText the caret should point to after the insertion.
         abstract caretOffset: float with get, set
 
-    [<AllowNullLiteral>]
-    type DocumentSpan =
+    type [<AllowNullLiteral>] DocumentSpan =
         abstract textSpan: TextSpan with get, set
         abstract fileName: string with get, set
         /// If the span represents a location that was remapped (e.g. via a .d.ts.map file),
@@ -11340,43 +7562,35 @@ Use typeAcquisition.enable instead.")>]
         abstract contextSpan: TextSpan option with get, set
         abstract originalContextSpan: TextSpan option with get, set
 
-    [<AllowNullLiteral>]
-    type RenameLocation =
+    type [<AllowNullLiteral>] RenameLocation =
         inherit DocumentSpan
         abstract prefixText: string option
         abstract suffixText: string option
 
-    [<AllowNullLiteral>]
-    type ReferenceEntry =
+    type [<AllowNullLiteral>] ReferenceEntry =
         inherit DocumentSpan
         abstract isWriteAccess: bool with get, set
-        abstract isDefinition: bool with get, set
-        abstract isInString: obj option with get, set
+        abstract isInString: bool option with get, set
 
-    [<AllowNullLiteral>]
-    type ImplementationLocation =
+    type [<AllowNullLiteral>] ImplementationLocation =
         inherit DocumentSpan
         abstract kind: ScriptElementKind with get, set
         abstract displayParts: ResizeArray<SymbolDisplayPart> with get, set
 
-    [<StringEnum>]
-    [<RequireQualifiedAccess>]
-    type HighlightSpanKind =
+    type [<StringEnum>] [<RequireQualifiedAccess>] HighlightSpanKind =
         | None
         | Definition
         | Reference
         | WrittenReference
 
-    [<AllowNullLiteral>]
-    type HighlightSpan =
+    type [<AllowNullLiteral>] HighlightSpan =
         abstract fileName: string option with get, set
-        abstract isInString: obj option with get, set
+        abstract isInString: bool option with get, set
         abstract textSpan: TextSpan with get, set
         abstract contextSpan: TextSpan option with get, set
         abstract kind: HighlightSpanKind with get, set
 
-    [<AllowNullLiteral>]
-    type NavigateToItem =
+    type [<AllowNullLiteral>] NavigateToItem =
         abstract name: string with get, set
         abstract kind: ScriptElementKind with get, set
         abstract kindModifiers: string with get, set
@@ -11387,21 +7601,18 @@ Use typeAcquisition.enable instead.")>]
         abstract containerName: string with get, set
         abstract containerKind: ScriptElementKind with get, set
 
-    [<RequireQualifiedAccess>]
-    type IndentStyle =
+    type [<RequireQualifiedAccess>] IndentStyle =
         | None = 0
         | Block = 1
         | Smart = 2
 
-    [<StringEnum>]
-    [<RequireQualifiedAccess>]
-    type SemicolonPreference =
+    type [<StringEnum>] [<RequireQualifiedAccess>] SemicolonPreference =
         | Ignore
         | Insert
         | Remove
 
-    [<AllowNullLiteral>]
-    type EditorOptions =
+    [<Obsolete("- consider using EditorSettings instead")>]
+    type [<AllowNullLiteral>] EditorOptions =
         abstract BaseIndentSize: float option with get, set
         abstract IndentSize: float with get, set
         abstract TabSize: float with get, set
@@ -11409,8 +7620,7 @@ Use typeAcquisition.enable instead.")>]
         abstract ConvertTabsToSpaces: bool with get, set
         abstract IndentStyle: IndentStyle with get, set
 
-    [<AllowNullLiteral>]
-    type EditorSettings =
+    type [<AllowNullLiteral>] EditorSettings =
         abstract baseIndentSize: float option with get, set
         abstract indentSize: float option with get, set
         abstract tabSize: float option with get, set
@@ -11419,8 +7629,8 @@ Use typeAcquisition.enable instead.")>]
         abstract indentStyle: IndentStyle option with get, set
         abstract trimTrailingWhitespace: bool option with get, set
 
-    [<AllowNullLiteral>]
-    type FormatCodeOptions =
+    [<Obsolete("- consider using FormatCodeSettings instead")>]
+    type [<AllowNullLiteral>] FormatCodeOptions =
         inherit EditorOptions
         abstract InsertSpaceAfterCommaDelimiter: bool with get, set
         abstract InsertSpaceAfterSemicolonInForStatements: bool with get, set
@@ -11428,56 +7638,31 @@ Use typeAcquisition.enable instead.")>]
         abstract InsertSpaceAfterConstructor: bool option with get, set
         abstract InsertSpaceAfterKeywordsInControlFlowStatements: bool with get, set
         abstract InsertSpaceAfterFunctionKeywordForAnonymousFunctions: bool with get, set
-
-        abstract InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis:
-            bool with get, set
-
+        abstract InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: bool with get, set
         abstract InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: bool with get, set
-
-        abstract InsertSpaceAfterOpeningAndBeforeClosingNonemptyBraces:
-            bool option with get, set
-
-        abstract InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces:
-            bool with get, set
-
-        abstract InsertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces:
-            bool option with get, set
-
+        abstract InsertSpaceAfterOpeningAndBeforeClosingNonemptyBraces: bool option with get, set
+        abstract InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: bool with get, set
+        abstract InsertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces: bool option with get, set
         abstract InsertSpaceAfterTypeAssertion: bool option with get, set
         abstract InsertSpaceBeforeFunctionParenthesis: bool option with get, set
         abstract PlaceOpenBraceOnNewLineForFunctions: bool with get, set
         abstract PlaceOpenBraceOnNewLineForControlBlocks: bool with get, set
         abstract insertSpaceBeforeTypeAnnotation: bool option with get, set
 
-    [<AllowNullLiteral>]
-    type FormatCodeSettings =
+    type [<AllowNullLiteral>] FormatCodeSettings =
         inherit EditorSettings
         abstract insertSpaceAfterCommaDelimiter: bool option
         abstract insertSpaceAfterSemicolonInForStatements: bool option
         abstract insertSpaceBeforeAndAfterBinaryOperators: bool option
         abstract insertSpaceAfterConstructor: bool option
         abstract insertSpaceAfterKeywordsInControlFlowStatements: bool option
-
-        abstract insertSpaceAfterFunctionKeywordForAnonymousFunctions:
-            bool option
-
-        abstract insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis:
-            bool option
-
-        abstract insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets:
-            bool option
-
-        abstract insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces:
-            bool option
-
+        abstract insertSpaceAfterFunctionKeywordForAnonymousFunctions: bool option
+        abstract insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: bool option
+        abstract insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: bool option
+        abstract insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces: bool option
         abstract insertSpaceAfterOpeningAndBeforeClosingEmptyBraces: bool option
-
-        abstract insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces:
-            bool option
-
-        abstract insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces:
-            bool option
-
+        abstract insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: bool option
+        abstract insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces: bool option
         abstract insertSpaceAfterTypeAssertion: bool option
         abstract insertSpaceBeforeFunctionParenthesis: bool option
         abstract placeOpenBraceOnNewLineForFunctions: bool option
@@ -11485,32 +7670,33 @@ Use typeAcquisition.enable instead.")>]
         abstract insertSpaceBeforeTypeAnnotation: bool option
         abstract indentMultiLineObjectLiteralBeginningOnBlankLine: bool option
         abstract semicolons: SemicolonPreference option
+        abstract indentSwitchCase: bool option
 
-    [<AllowNullLiteral>]
-    type DefinitionInfo =
+    type [<AllowNullLiteral>] DefinitionInfo =
         inherit DocumentSpan
         abstract kind: ScriptElementKind with get, set
         abstract name: string with get, set
         abstract containerKind: ScriptElementKind with get, set
         abstract containerName: string with get, set
+        abstract unverified: bool option with get, set
 
-    [<AllowNullLiteral>]
-    type DefinitionInfoAndBoundSpan =
+    type [<AllowNullLiteral>] DefinitionInfoAndBoundSpan =
         abstract definitions: ResizeArray<DefinitionInfo> option with get, set
         abstract textSpan: TextSpan with get, set
 
-    [<AllowNullLiteral>]
-    type ReferencedSymbolDefinitionInfo =
+    type [<AllowNullLiteral>] ReferencedSymbolDefinitionInfo =
         inherit DefinitionInfo
         abstract displayParts: ResizeArray<SymbolDisplayPart> with get, set
 
-    [<AllowNullLiteral>]
-    type ReferencedSymbol =
+    type [<AllowNullLiteral>] ReferencedSymbol =
         abstract definition: ReferencedSymbolDefinitionInfo with get, set
-        abstract references: ResizeArray<ReferenceEntry> with get, set
+        abstract references: ResizeArray<ReferencedSymbolEntry> with get, set
 
-    [<RequireQualifiedAccess>]
-    type SymbolDisplayPartKind =
+    type [<AllowNullLiteral>] ReferencedSymbolEntry =
+        inherit ReferenceEntry
+        abstract isDefinition: bool option with get, set
+
+    type [<RequireQualifiedAccess>] SymbolDisplayPartKind =
         | AliasName = 0
         | ClassName = 1
         | EnumName = 2
@@ -11533,19 +7719,23 @@ Use typeAcquisition.enable instead.")>]
         | EnumMemberName = 19
         | FunctionName = 20
         | RegularExpressionLiteral = 21
+        | Link = 22
+        | LinkName = 23
+        | LinkText = 24
 
-    [<AllowNullLiteral>]
-    type SymbolDisplayPart =
+    type [<AllowNullLiteral>] SymbolDisplayPart =
         abstract text: string with get, set
         abstract kind: string with get, set
 
-    [<AllowNullLiteral>]
-    type JSDocTagInfo =
-        abstract name: string with get, set
-        abstract text: string option with get, set
+    type [<AllowNullLiteral>] JSDocLinkDisplayPart =
+        inherit SymbolDisplayPart
+        abstract target: DocumentSpan with get, set
 
-    [<AllowNullLiteral>]
-    type QuickInfo =
+    type [<AllowNullLiteral>] JSDocTagInfo =
+        abstract name: string with get, set
+        abstract text: ResizeArray<SymbolDisplayPart> option with get, set
+
+    type [<AllowNullLiteral>] QuickInfo =
         abstract kind: ScriptElementKind with get, set
         abstract kindModifiers: string with get, set
         abstract textSpan: TextSpan with get, set
@@ -11553,11 +7743,11 @@ Use typeAcquisition.enable instead.")>]
         abstract documentation: ResizeArray<SymbolDisplayPart> option with get, set
         abstract tags: ResizeArray<JSDocTagInfo> option with get, set
 
-    type RenameInfo = U2<RenameInfoSuccess, RenameInfoFailure>
+    type RenameInfo =
+        U2<RenameInfoSuccess, RenameInfoFailure>
 
-    [<AllowNullLiteral>]
-    type RenameInfoSuccess =
-        abstract canRename: obj with get, set
+    type [<AllowNullLiteral>] RenameInfoSuccess =
+        abstract canRename: bool with get, set
         /// <summary>
         /// File or directory to rename.
         /// If set, <c>getEditsForFileRename</c> should be called instead of <c>findRenameLocations</c>.
@@ -11569,29 +7759,28 @@ Use typeAcquisition.enable instead.")>]
         abstract kindModifiers: string with get, set
         abstract triggerSpan: TextSpan with get, set
 
-    [<AllowNullLiteral>]
-    type RenameInfoFailure =
-        abstract canRename: obj with get, set
+    type [<AllowNullLiteral>] RenameInfoFailure =
+        abstract canRename: bool with get, set
         abstract localizedErrorMessage: string with get, set
 
-    [<AllowNullLiteral>]
-    type RenameInfoOptions =
+    [<Obsolete("Use `UserPreferences` instead.")>]
+    type [<AllowNullLiteral>] RenameInfoOptions =
         abstract allowRenameOfImportPath: bool option
 
-    [<AllowNullLiteral>]
-    type DocCommentTemplateOptions =
+    type [<AllowNullLiteral>] DocCommentTemplateOptions =
         abstract generateReturnInDocTemplate: bool option
 
-    [<AllowNullLiteral>]
-    type SignatureHelpParameter =
+    type [<AllowNullLiteral>] InteractiveRefactorArguments =
+        abstract targetFile: string with get, set
+
+    type [<AllowNullLiteral>] SignatureHelpParameter =
         abstract name: string with get, set
         abstract documentation: ResizeArray<SymbolDisplayPart> with get, set
         abstract displayParts: ResizeArray<SymbolDisplayPart> with get, set
         abstract isOptional: bool with get, set
         abstract isRest: bool option with get, set
 
-    [<AllowNullLiteral>]
-    type SelectionRange =
+    type [<AllowNullLiteral>] SelectionRange =
         abstract textSpan: TextSpan with get, set
         abstract parent: SelectionRange option with get, set
 
@@ -11600,8 +7789,7 @@ Use typeAcquisition.enable instead.")>]
     /// signature help item in the context of any documents that have been updated.  i.e. after
     /// an edit has happened, while signature help is still active, the host can ask important
     /// questions like 'what parameter is the user currently contained within?'.
-    [<AllowNullLiteral>]
-    type SignatureHelpItem =
+    type [<AllowNullLiteral>] SignatureHelpItem =
         abstract isVariadic: bool with get, set
         abstract prefixDisplayParts: ResizeArray<SymbolDisplayPart> with get, set
         abstract suffixDisplayParts: ResizeArray<SymbolDisplayPart> with get, set
@@ -11611,48 +7799,105 @@ Use typeAcquisition.enable instead.")>]
         abstract tags: ResizeArray<JSDocTagInfo> with get, set
 
     /// Represents a set of signature help items, and the preferred item that should be selected.
-    [<AllowNullLiteral>]
-    type SignatureHelpItems =
+    type [<AllowNullLiteral>] SignatureHelpItems =
         abstract items: ResizeArray<SignatureHelpItem> with get, set
         abstract applicableSpan: TextSpan with get, set
         abstract selectedItemIndex: float with get, set
         abstract argumentIndex: float with get, set
         abstract argumentCount: float with get, set
 
-    [<AllowNullLiteral>]
-    type CompletionInfo =
+    type [<RequireQualifiedAccess>] CompletionInfoFlags =
+        | None = 0
+        | MayIncludeAutoImports = 1
+        | IsImportStatementCompletion = 2
+        | IsContinuation = 4
+        | ResolvedModuleSpecifiers = 8
+        | ResolvedModuleSpecifiersBeyondLimit = 16
+        | MayIncludeMethodSnippets = 32
+
+    type [<AllowNullLiteral>] CompletionInfo =
+        /// For performance telemetry.
+        abstract flags: CompletionInfoFlags option with get, set
         /// <summary>Not true for all global completions. This will be true if the enclosing scope matches a few syntax kinds. See <c>isSnippetScope</c>.</summary>
         abstract isGlobalCompletion: bool with get, set
         abstract isMemberCompletion: bool with get, set
         /// <summary>
-        /// In the absence of `CompletionEntry["replacementSpan"], the editor may choose whether to use
+        /// In the absence of <c>CompletionEntry["replacementSpan"]</c>, the editor may choose whether to use
         /// this span or its default one. If <c>CompletionEntry["replacementSpan"]</c> is defined, that span
         /// must be used to commit that completion entry.
         /// </summary>
         abstract optionalReplacementSpan: TextSpan option with get, set
         /// true when the current location also allows for a new identifier
         abstract isNewIdentifierLocation: bool with get, set
+        /// Indicates to client to continue requesting completions on subsequent keystrokes.
+        abstract isIncomplete: bool option with get, set
         abstract entries: ResizeArray<CompletionEntry> with get, set
 
-    [<AllowNullLiteral>]
-    type CompletionEntry =
+    type [<AllowNullLiteral>] CompletionEntryDataAutoImport =
+        /// The name of the property or export in the module's symbol table. Differs from the completion name
+        /// in the case of InternalSymbolName.ExportEquals and InternalSymbolName.Default.
+        abstract exportName: string with get, set
+        abstract exportMapKey: string option with get, set
+        abstract moduleSpecifier: string option with get, set
+        /// The file name declaring the export's module symbol, if it was an external module
+        abstract fileName: string option with get, set
+        /// The module name (with quotes stripped) of the export's module symbol, if it was an ambient module
+        abstract ambientModuleName: string option with get, set
+        /// True if the export was found in the package.json AutoImportProvider
+        abstract isPackageJsonImport: bool option with get, set
+
+    type [<AllowNullLiteral>] CompletionEntryDataUnresolved =
+        inherit CompletionEntryDataAutoImport
+        abstract exportMapKey: string with get, set
+
+    type [<AllowNullLiteral>] CompletionEntryDataResolved =
+        inherit CompletionEntryDataAutoImport
+        abstract moduleSpecifier: string with get, set
+
+    type CompletionEntryData =
+        U2<CompletionEntryDataUnresolved, CompletionEntryDataResolved>
+
+    type [<AllowNullLiteral>] CompletionEntry =
         abstract name: string with get, set
         abstract kind: ScriptElementKind with get, set
         abstract kindModifiers: string option with get, set
         abstract sortText: string with get, set
         abstract insertText: string option with get, set
+        abstract filterText: string option with get, set
+        abstract isSnippet: bool option with get, set
         /// An optional span that indicates the text to be replaced by this completion item.
         /// If present, this span should be used instead of the default one.
         /// It will be set if the required span differs from the one generated by the default replacement behavior.
         abstract replacementSpan: TextSpan option with get, set
-        abstract hasAction: obj option with get, set
+        abstract hasAction: bool option with get, set
         abstract source: string option with get, set
-        abstract isRecommended: obj option with get, set
-        abstract isFromUncheckedFile: obj option with get, set
-        abstract isPackageJsonImport: obj option with get, set
+        abstract sourceDisplay: ResizeArray<SymbolDisplayPart> option with get, set
+        abstract labelDetails: CompletionEntryLabelDetails option with get, set
+        abstract isRecommended: bool option with get, set
+        abstract isFromUncheckedFile: bool option with get, set
+        abstract isPackageJsonImport: bool option with get, set
+        abstract isImportStatementCompletion: bool option with get, set
+        /// <summary>
+        /// For API purposes.
+        /// Included for non-string completions only when <c>includeSymbol: true</c> option is passed to <c>getCompletionsAtPosition</c>.
+        /// </summary>
+        /// <example>Get declaration of completion: <c>symbol.valueDeclaration</c></example>
+        abstract symbol: Symbol option with get, set
+        /// <summary>
+        /// A property to be sent back to TS Server in the CompletionDetailsRequest, along with <c>name</c>,
+        /// that allows TS Server to look up the symbol represented by the completion item, disambiguating
+        /// items with the same name. Currently only defined for auto-import completions, but the type is
+        /// <c>unknown</c> in the protocol, so it can be changed as needed to support other kinds of completions.
+        /// The presence of this property should generally not be used to assume that this completion entry
+        /// is an auto-import.
+        /// </summary>
+        abstract data: CompletionEntryData option with get, set
 
-    [<AllowNullLiteral>]
-    type CompletionEntryDetails =
+    type [<AllowNullLiteral>] CompletionEntryLabelDetails =
+        abstract detail: string option with get, set
+        abstract description: string option with get, set
+
+    type [<AllowNullLiteral>] CompletionEntryDetails =
         abstract name: string with get, set
         abstract kind: ScriptElementKind with get, set
         abstract kindModifiers: string with get, set
@@ -11660,10 +7905,11 @@ Use typeAcquisition.enable instead.")>]
         abstract documentation: ResizeArray<SymbolDisplayPart> option with get, set
         abstract tags: ResizeArray<JSDocTagInfo> option with get, set
         abstract codeActions: ResizeArray<CodeAction> option with get, set
+        [<Obsolete("Use `sourceDisplay` instead.")>]
         abstract source: ResizeArray<SymbolDisplayPart> option with get, set
+        abstract sourceDisplay: ResizeArray<SymbolDisplayPart> option with get, set
 
-    [<AllowNullLiteral>]
-    type OutliningSpan =
+    type [<AllowNullLiteral>] OutliningSpan =
         /// The span of the document to actually collapse.
         abstract textSpan: TextSpan with get, set
         /// The span of the document to display when the user hovers over the collapsed span.
@@ -11676,9 +7922,7 @@ Use typeAcquisition.enable instead.")>]
         /// Classification of the contents of the span
         abstract kind: OutliningSpanKind with get, set
 
-    [<StringEnum>]
-    [<RequireQualifiedAccess>]
-    type OutliningSpanKind =
+    type [<StringEnum>] [<RequireQualifiedAccess>] OutliningSpanKind =
         /// Single or multi-line comments
         | Comment
         /// Sections marked by '// #region' and '// #endregion' comments
@@ -11688,14 +7932,12 @@ Use typeAcquisition.enable instead.")>]
         /// Contiguous blocks of import declarations
         | Imports
 
-    [<RequireQualifiedAccess>]
-    type OutputFileType =
+    type [<RequireQualifiedAccess>] OutputFileType =
         | JavaScript = 0
         | SourceMap = 1
         | Declaration = 2
 
-    [<RequireQualifiedAccess>]
-    type EndOfLineState =
+    type [<RequireQualifiedAccess>] EndOfLineState =
         | None = 0
         | InMultiLineCommentTrivia = 1
         | InSingleQuoteStringLiteral = 2
@@ -11704,8 +7946,7 @@ Use typeAcquisition.enable instead.")>]
         | InTemplateMiddleOrTail = 5
         | InTemplateSubstitutionPosition = 6
 
-    [<RequireQualifiedAccess>]
-    type TokenClass =
+    type [<RequireQualifiedAccess>] TokenClass =
         | Punctuation = 0
         | Keyword = 1
         | Operator = 2
@@ -11717,18 +7958,15 @@ Use typeAcquisition.enable instead.")>]
         | StringLiteral = 8
         | RegExpLiteral = 9
 
-    [<AllowNullLiteral>]
-    type ClassificationResult =
+    type [<AllowNullLiteral>] ClassificationResult =
         abstract finalLexState: EndOfLineState with get, set
         abstract entries: ResizeArray<ClassificationInfo> with get, set
 
-    [<AllowNullLiteral>]
-    type ClassificationInfo =
+    type [<AllowNullLiteral>] ClassificationInfo =
         abstract length: float with get, set
         abstract classification: TokenClass with get, set
 
-    [<AllowNullLiteral>]
-    type Classifier =
+    type [<AllowNullLiteral>] Classifier =
         /// <summary>
         /// Gives lexical classifications of tokens on a line without any syntactic context.
         /// For instance, a token consisting of the text 'string' can be either an identifier
@@ -11750,131 +7988,135 @@ Use typeAcquisition.enable instead.")>]
         /// subsume the classification.
         /// </param>
         [<Obsolete("Use getLexicalClassifications instead.")>]
-        abstract getClassificationsForLine:
-            text: string *
-            lexState: EndOfLineState *
-            syntacticClassifierAbsent: bool ->
-                ClassificationResult
+        abstract getClassificationsForLine: text: string * lexState: EndOfLineState * syntacticClassifierAbsent: bool -> ClassificationResult
+        abstract getEncodedLexicalClassifications: text: string * endOfLineState: EndOfLineState * syntacticClassifierAbsent: bool -> Classifications
 
-        abstract getEncodedLexicalClassifications:
-            text: string *
-            endOfLineState: EndOfLineState *
-            syntacticClassifierAbsent: bool ->
-                Classifications
-
-    [<StringEnum>]
-    [<RequireQualifiedAccess>]
-    type ScriptElementKind =
-        | [<CompiledName "">] Unknown
+    type [<StringEnum>] [<RequireQualifiedAccess>] ScriptElementKind =
+        | [<CompiledName("")>] Unknown
         | Warning
         /// predefined type (void) or keyword (class)
         | Keyword
         /// top level script node
-        | [<CompiledName "script">] ScriptElement
+        | [<CompiledName("script")>] ScriptElement
         /// module foo {}
-        | [<CompiledName "module">] ModuleElement
+        | [<CompiledName("module")>] ModuleElement
         /// class X {}
-        | [<CompiledName "class">] ClassElement
+        | [<CompiledName("class")>] ClassElement
         /// var x = class X {}
-        | [<CompiledName "local class">] LocalClassElement
+        | [<CompiledName("local class")>] LocalClassElement
         /// interface Y {}
-        | [<CompiledName "interface">] InterfaceElement
+        | [<CompiledName("interface")>] InterfaceElement
         /// type T = ...
-        | [<CompiledName "type">] TypeElement
+        | [<CompiledName("type")>] TypeElement
         /// enum E
-        | [<CompiledName "enum">] EnumElement
-        | [<CompiledName "enum member">] EnumMemberElement
+        | [<CompiledName("enum")>] EnumElement
+        | [<CompiledName("enum member")>] EnumMemberElement
         /// Inside module and script only
         /// const v = ..
-        | [<CompiledName "var">] VariableElement
+        | [<CompiledName("var")>] VariableElement
         /// Inside function
-        | [<CompiledName "local var">] LocalVariableElement
+        | [<CompiledName("local var")>] LocalVariableElement
+        /// using foo = ...
+        | [<CompiledName("using")>] VariableUsingElement
+        /// await using foo = ...
+        | [<CompiledName("await using")>] VariableAwaitUsingElement
         /// Inside module and script only
         /// function f() { }
-        | [<CompiledName "function">] FunctionElement
+        | [<CompiledName("function")>] FunctionElement
         /// Inside function
-        | [<CompiledName "local function">] LocalFunctionElement
+        | [<CompiledName("local function")>] LocalFunctionElement
         /// class X { [public|private]* foo() {} }
-        | [<CompiledName "method">] MemberFunctionElement
+        | [<CompiledName("method")>] MemberFunctionElement
         /// class X { [public|private]* [get|set] foo:number; }
-        | [<CompiledName "getter">] MemberGetAccessorElement
-        | [<CompiledName "setter">] MemberSetAccessorElement
+        | [<CompiledName("getter")>] MemberGetAccessorElement
+        | [<CompiledName("setter")>] MemberSetAccessorElement
         /// class X { [public|private]* foo:number; }
         /// interface Y { foo:number; }
-        | [<CompiledName "property">] MemberVariableElement
+        | [<CompiledName("property")>] MemberVariableElement
+        /// class X { [public|private]* accessor foo: number; }
+        | [<CompiledName("accessor")>] MemberAccessorVariableElement
         /// class X { constructor() { } }
-        | [<CompiledName "constructor">] ConstructorImplementationElement
+        /// class X { static { } }
+        | [<CompiledName("constructor")>] ConstructorImplementationElement
         /// interface Y { ():number; }
-        | [<CompiledName "call">] CallSignatureElement
+        | [<CompiledName("call")>] CallSignatureElement
         /// interface Y { []:number; }
-        | [<CompiledName "index">] IndexSignatureElement
+        | [<CompiledName("index")>] IndexSignatureElement
         /// interface Y { new():Y; }
-        | [<CompiledName "construct">] ConstructSignatureElement
+        | [<CompiledName("construct")>] ConstructSignatureElement
         /// function foo(*Y*: string)
-        | [<CompiledName "parameter">] ParameterElement
-        | [<CompiledName "type parameter">] TypeParameterElement
-        | [<CompiledName "primitive type">] PrimitiveType
+        | [<CompiledName("parameter")>] ParameterElement
+        | [<CompiledName("type parameter")>] TypeParameterElement
+        | [<CompiledName("primitive type")>] PrimitiveType
         | Label
         | Alias
-        | [<CompiledName "const">] ConstElement
-        | [<CompiledName "let">] LetElement
+        | [<CompiledName("const")>] ConstElement
+        | [<CompiledName("let")>] LetElement
         | Directory
-        | [<CompiledName "external module name">] ExternalModuleName
-        /// <JsxTagName attribute1 attribute2={0} />
-        | [<CompiledName "JSX attribute">] JsxAttribute
+        | [<CompiledName("external module name")>] ExternalModuleName
+        /// <summary>&lt;JsxTagName attribute1 attribute2={0} /&gt;</summary>
+        /// <deprecated />
+        | [<CompiledName("JSX attribute")>] JsxAttribute
         /// String literal
         | String
+        /// <summary>Jsdoc</summary>
+        | Link
+        /// <summary>Jsdoc</summary>
+        | [<CompiledName("link name")>] LinkName
+        /// <summary>Jsdoc</summary>
+        | [<CompiledName("link text")>] LinkText
 
-    [<StringEnum>]
-    [<RequireQualifiedAccess>]
-    type ScriptElementKindModifier =
-        | [<CompiledName "">] None
-        | [<CompiledName "public">] PublicMemberModifier
-        | [<CompiledName "private">] PrivateMemberModifier
-        | [<CompiledName "protected">] ProtectedMemberModifier
-        | [<CompiledName "export">] ExportedModifier
-        | [<CompiledName "declare">] AmbientModifier
-        | [<CompiledName "static">] StaticModifier
-        | [<CompiledName "abstract">] AbstractModifier
-        | [<CompiledName "optional">] OptionalModifier
-        | [<CompiledName "deprecated">] DeprecatedModifier
-        | [<CompiledName ".d.ts">] DtsModifier
-        | [<CompiledName ".ts">] TsModifier
-        | [<CompiledName ".tsx">] TsxModifier
-        | [<CompiledName ".js">] JsModifier
-        | [<CompiledName ".jsx">] JsxModifier
-        | [<CompiledName ".json">] JsonModifier
+    type [<StringEnum>] [<RequireQualifiedAccess>] ScriptElementKindModifier =
+        | [<CompiledName("")>] None
+        | [<CompiledName("public")>] PublicMemberModifier
+        | [<CompiledName("private")>] PrivateMemberModifier
+        | [<CompiledName("protected")>] ProtectedMemberModifier
+        | [<CompiledName("export")>] ExportedModifier
+        | [<CompiledName("declare")>] AmbientModifier
+        | [<CompiledName("static")>] StaticModifier
+        | [<CompiledName("abstract")>] AbstractModifier
+        | [<CompiledName("optional")>] OptionalModifier
+        | [<CompiledName("deprecated")>] DeprecatedModifier
+        | [<CompiledName(".d.ts")>] DtsModifier
+        | [<CompiledName(".ts")>] TsModifier
+        | [<CompiledName(".tsx")>] TsxModifier
+        | [<CompiledName(".js")>] JsModifier
+        | [<CompiledName(".jsx")>] JsxModifier
+        | [<CompiledName(".json")>] JsonModifier
+        | [<CompiledName(".d.mts")>] DmtsModifier
+        | [<CompiledName(".mts")>] MtsModifier
+        | [<CompiledName(".mjs")>] MjsModifier
+        | [<CompiledName(".d.cts")>] DctsModifier
+        | [<CompiledName(".cts")>] CtsModifier
+        | [<CompiledName(".cjs")>] CjsModifier
 
-    [<StringEnum>]
-    [<RequireQualifiedAccess>]
-    type ClassificationTypeNames =
+    type [<StringEnum>] [<RequireQualifiedAccess>] ClassificationTypeNames =
         | Comment
         | Identifier
         | Keyword
-        | [<CompiledName "number">] NumericLiteral
-        | [<CompiledName "bigint">] BigintLiteral
+        | [<CompiledName("number")>] NumericLiteral
+        | [<CompiledName("bigint")>] BigintLiteral
         | Operator
-        | [<CompiledName "string">] StringLiteral
-        | [<CompiledName "whitespace">] WhiteSpace
+        | [<CompiledName("string")>] StringLiteral
+        | [<CompiledName("whitespace")>] WhiteSpace
         | Text
         | Punctuation
-        | [<CompiledName "class name">] ClassName
-        | [<CompiledName "enum name">] EnumName
-        | [<CompiledName "interface name">] InterfaceName
-        | [<CompiledName "module name">] ModuleName
-        | [<CompiledName "type parameter name">] TypeParameterName
-        | [<CompiledName "type alias name">] TypeAliasName
-        | [<CompiledName "parameter name">] ParameterName
-        | [<CompiledName "doc comment tag name">] DocCommentTagName
-        | [<CompiledName "jsx open tag name">] JsxOpenTagName
-        | [<CompiledName "jsx close tag name">] JsxCloseTagName
-        | [<CompiledName "jsx self closing tag name">] JsxSelfClosingTagName
-        | [<CompiledName "jsx attribute">] JsxAttribute
-        | [<CompiledName "jsx text">] JsxText
-        | [<CompiledName "jsx attribute string literal value">] JsxAttributeStringLiteralValue
+        | [<CompiledName("class name")>] ClassName
+        | [<CompiledName("enum name")>] EnumName
+        | [<CompiledName("interface name")>] InterfaceName
+        | [<CompiledName("module name")>] ModuleName
+        | [<CompiledName("type parameter name")>] TypeParameterName
+        | [<CompiledName("type alias name")>] TypeAliasName
+        | [<CompiledName("parameter name")>] ParameterName
+        | [<CompiledName("doc comment tag name")>] DocCommentTagName
+        | [<CompiledName("jsx open tag name")>] JsxOpenTagName
+        | [<CompiledName("jsx close tag name")>] JsxCloseTagName
+        | [<CompiledName("jsx self closing tag name")>] JsxSelfClosingTagName
+        | [<CompiledName("jsx attribute")>] JsxAttribute
+        | [<CompiledName("jsx text")>] JsxText
+        | [<CompiledName("jsx attribute string literal value")>] JsxAttributeStringLiteralValue
 
-    [<RequireQualifiedAccess>]
-    type ClassificationType =
+    type [<RequireQualifiedAccess>] ClassificationType =
         | Comment = 1
         | Identifier = 2
         | Keyword = 3
@@ -11901,8 +8143,15 @@ Use typeAcquisition.enable instead.")>]
         | JsxAttributeStringLiteralValue = 24
         | BigintLiteral = 25
 
-    [<AllowNullLiteral>]
-    type DocumentHighlights =
+    type [<AllowNullLiteral>] InlayHintsContext =
+        abstract file: SourceFile with get, set
+        abstract program: Program with get, set
+        abstract cancellationToken: CancellationToken with get, set
+        abstract host: LanguageServiceHost with get, set
+        abstract span: TextSpan with get, set
+        abstract preferences: UserPreferences with get, set
+
+    type [<AllowNullLiteral>] DocumentHighlights =
         abstract fileName: string with get, set
         abstract highlightSpans: ResizeArray<HighlightSpan> with get, set
 
@@ -11919,18 +8168,20 @@ Use typeAcquisition.enable instead.")>]
     ///
     /// To create a default DocumentRegistry, use createDocumentRegistry to create one, and pass it
     /// to all subsequent createLanguageService calls.
-    [<AllowNullLiteral>]
-    type DocumentRegistry =
+    type [<AllowNullLiteral>] DocumentRegistry =
         /// <summary>
         /// Request a stored SourceFile with a given fileName and compilationSettings.
         /// The first call to acquire will call createLanguageServiceSourceFile to generate
         /// the SourceFile if was not found in the registry.
         /// </summary>
         /// <param name="fileName">The name of the file requested</param>
-        /// <param name="compilationSettings">
+        /// <param name="compilationSettingsOrHost">
         /// Some compilation settings like target affects the
         /// shape of a the resulting SourceFile. This allows the DocumentRegistry to store
-        /// multiple copies of the same file for different compilation settings.
+        /// multiple copies of the same file for different compilation settings. A minimal
+        /// resolution cache is needed to fully define a source file's shape when
+        /// the compilation settings include <c>module: node16</c>+, so providing a cache host
+        /// object should be preferred. A common host is a language service <c>ConfiguredProject</c>.
         /// </param>
         /// <param name="scriptSnapshot">
         /// Text of the file. Only used if the file was not found
@@ -11940,58 +8191,27 @@ Use typeAcquisition.enable instead.")>]
         /// Current version of the file. Only used if the file was not found
         /// in the registry and a new one was created.
         /// </param>
-        abstract acquireDocument:
-            fileName: string *
-            compilationSettings: CompilerOptions *
-            scriptSnapshot: IScriptSnapshot *
-            version: string *
-            ?scriptKind: ScriptKind ->
-                SourceFile
-
-        abstract acquireDocumentWithKey:
-            fileName: string *
-            path: Path *
-            compilationSettings: CompilerOptions *
-            key: DocumentRegistryBucketKey *
-            scriptSnapshot: IScriptSnapshot *
-            version: string *
-            ?scriptKind: ScriptKind ->
-                SourceFile
-
+        abstract acquireDocument: fileName: string * compilationSettingsOrHost: U2<CompilerOptions, MinimalResolutionCacheHost> * scriptSnapshot: IScriptSnapshot * version: string * ?scriptKind: ScriptKind * ?sourceFileOptions: U2<CreateSourceFileOptions, ScriptTarget> -> SourceFile
+        abstract acquireDocumentWithKey: fileName: string * path: Path * compilationSettingsOrHost: U2<CompilerOptions, MinimalResolutionCacheHost> * key: DocumentRegistryBucketKey * scriptSnapshot: IScriptSnapshot * version: string * ?scriptKind: ScriptKind * ?sourceFileOptions: U2<CreateSourceFileOptions, ScriptTarget> -> SourceFile
         /// <summary>
         /// Request an updated version of an already existing SourceFile with a given fileName
         /// and compilationSettings. The update will in-turn call updateLanguageServiceSourceFile
         /// to get an updated SourceFile.
         /// </summary>
         /// <param name="fileName">The name of the file requested</param>
-        /// <param name="compilationSettings">
+        /// <param name="compilationSettingsOrHost">
         /// Some compilation settings like target affects the
         /// shape of a the resulting SourceFile. This allows the DocumentRegistry to store
-        /// multiple copies of the same file for different compilation settings.
+        /// multiple copies of the same file for different compilation settings. A minimal
+        /// resolution cache is needed to fully define a source file's shape when
+        /// the compilation settings include <c>module: node16</c>+, so providing a cache host
+        /// object should be preferred. A common host is a language service <c>ConfiguredProject</c>.
         /// </param>
         /// <param name="scriptSnapshot">Text of the file.</param>
         /// <param name="version">Current version of the file.</param>
-        abstract updateDocument:
-            fileName: string *
-            compilationSettings: CompilerOptions *
-            scriptSnapshot: IScriptSnapshot *
-            version: string *
-            ?scriptKind: ScriptKind ->
-                SourceFile
-
-        abstract updateDocumentWithKey:
-            fileName: string *
-            path: Path *
-            compilationSettings: CompilerOptions *
-            key: DocumentRegistryBucketKey *
-            scriptSnapshot: IScriptSnapshot *
-            version: string *
-            ?scriptKind: ScriptKind ->
-                SourceFile
-
-        abstract getKeyForCompilationSettings:
-            settings: CompilerOptions -> DocumentRegistryBucketKey
-
+        abstract updateDocument: fileName: string * compilationSettingsOrHost: U2<CompilerOptions, MinimalResolutionCacheHost> * scriptSnapshot: IScriptSnapshot * version: string * ?scriptKind: ScriptKind * ?sourceFileOptions: U2<CreateSourceFileOptions, ScriptTarget> -> SourceFile
+        abstract updateDocumentWithKey: fileName: string * path: Path * compilationSettingsOrHost: U2<CompilerOptions, MinimalResolutionCacheHost> * key: DocumentRegistryBucketKey * scriptSnapshot: IScriptSnapshot * version: string * ?scriptKind: ScriptKind * ?sourceFileOptions: U2<CreateSourceFileOptions, ScriptTarget> -> SourceFile
+        abstract getKeyForCompilationSettings: settings: CompilerOptions -> DocumentRegistryBucketKey
         /// <summary>
         /// Informs the DocumentRegistry that a file is not needed any longer.
         ///
@@ -12000,21 +8220,29 @@ Use typeAcquisition.enable instead.")>]
         /// </summary>
         /// <param name="fileName">The name of the file to be released</param>
         /// <param name="compilationSettings">The compilation settings used to acquire the file</param>
-        abstract releaseDocument:
-            fileName: string * compilationSettings: CompilerOptions -> unit
-
-        abstract releaseDocumentWithKey:
-            path: Path * key: DocumentRegistryBucketKey -> unit
-
+        /// <param name="scriptKind">The script kind of the file to be released</param>
+        [<Obsolete("pass scriptKind and impliedNodeFormat for correctness")>]
+        abstract releaseDocument: fileName: string * compilationSettings: CompilerOptions * ?scriptKind: ScriptKind -> unit
+        /// <summary>
+        /// Informs the DocumentRegistry that a file is not needed any longer.
+        ///
+        /// Note: It is not allowed to call release on a SourceFile that was not acquired from
+        /// this registry originally.
+        /// </summary>
+        /// <param name="fileName">The name of the file to be released</param>
+        /// <param name="compilationSettings">The compilation settings used to acquire the file</param>
+        /// <param name="scriptKind">The script kind of the file to be released</param>
+        /// <param name="impliedNodeFormat">The implied source file format of the file to be released</param>
+        abstract releaseDocument: fileName: string * compilationSettings: CompilerOptions * scriptKind: ScriptKind * impliedNodeFormat: ResolutionMode -> unit
+        [<Obsolete("pass scriptKind for and impliedNodeFormat correctness")>]
+        abstract releaseDocumentWithKey: path: Path * key: DocumentRegistryBucketKey * ?scriptKind: ScriptKind -> unit
+        abstract releaseDocumentWithKey: path: Path * key: DocumentRegistryBucketKey * scriptKind: ScriptKind * impliedNodeFormat: ResolutionMode -> unit
         abstract reportStats: unit -> string
 
-    [<AllowNullLiteral>]
-    type DocumentRegistryBucketKey =
-        interface
-        end
+    type [<AllowNullLiteral>] DocumentRegistryBucketKey =
+        interface end
 
-    [<AllowNullLiteral>]
-    type TranspileOptions =
+    type [<AllowNullLiteral>] TranspileOptions =
         abstract compilerOptions: CompilerOptions option with get, set
         abstract fileName: string option with get, set
         abstract reportDiagnostics: bool option with get, set
@@ -12022,301 +8250,63 @@ Use typeAcquisition.enable instead.")>]
         abstract renamedDependencies: MapLike<string> option with get, set
         abstract transformers: CustomTransformers option with get, set
 
-    [<AllowNullLiteral>]
-    type TranspileOutput =
+    type [<AllowNullLiteral>] TranspileOutput =
         abstract outputText: string with get, set
         abstract diagnostics: ResizeArray<Diagnostic> option with get, set
         abstract sourceMapText: string option with get, set
 
-    [<AllowNullLiteral>]
-    type IExportsCreateStringLiteral =
-        [<Emit "$0($1...)">]
-        abstract Invoke: text: string * ?isSingleQuote: bool -> StringLiteral
+    type [<StringEnum>] [<RequireQualifiedAccess>] IExportsCreateUnparsedSourceFile =
+        | Js
+        | Dts
 
-        [<Emit "$0($1...)">]
-        abstract Invoke:
-            text: string *
-            ?isSingleQuote: bool *
-            ?hasExtendedUnicodeEscape: bool ->
-                StringLiteral
+    type [<AllowNullLiteral>] DiagnosticMessageReportsUnnecessary =
+        interface end
 
-    [<AllowNullLiteral>]
-    type IExportsCreateTemplateHead =
-        [<Emit "$0($1...)">]
-        abstract Invoke:
-            text: string * ?rawText: string * ?templateFlags: TokenFlags ->
-                TemplateHead
-
-        [<Emit "$0($1...)">]
-        abstract Invoke:
-            text: string option * rawText: string * ?templateFlags: TokenFlags ->
-                TemplateHead
-
-    [<AllowNullLiteral>]
-    type IExportsCreateTemplateMiddle =
-        [<Emit "$0($1...)">]
-        abstract Invoke:
-            text: string * ?rawText: string * ?templateFlags: TokenFlags ->
-                TemplateMiddle
-
-        [<Emit "$0($1...)">]
-        abstract Invoke:
-            text: string option * rawText: string * ?templateFlags: TokenFlags ->
-                TemplateMiddle
-
-    [<AllowNullLiteral>]
-    type IExportsCreateTemplateTail =
-        [<Emit "$0($1...)">]
-        abstract Invoke:
-            text: string * ?rawText: string * ?templateFlags: TokenFlags ->
-                TemplateTail
-
-        [<Emit "$0($1...)">]
-        abstract Invoke:
-            text: string option * rawText: string * ?templateFlags: TokenFlags ->
-                TemplateTail
-
-    [<AllowNullLiteral>]
-    type IExportsCreateNoSubstitutionTemplateLiteral =
-        [<Emit "$0($1...)">]
-        abstract Invoke:
-            text: string * ?rawText: string -> NoSubstitutionTemplateLiteral
-
-        [<Emit "$0($1...)">]
-        abstract Invoke:
-            text: string option * rawText: string ->
-                NoSubstitutionTemplateLiteral
-
-    [<AllowNullLiteral>]
-    type IExportsCreateImmediatelyInvokedFunctionExpression =
-        [<Emit "$0($1...)">]
-        abstract Invoke: statements: ResizeArray<Statement> -> CallExpression
-
-        [<Emit "$0($1...)">]
-        abstract Invoke:
-            statements: ResizeArray<Statement> *
-            param: ParameterDeclaration *
-            paramValue: Expression ->
-                CallExpression
-
-    [<AllowNullLiteral>]
-    type IExportsCreateLiteral =
-        [<Emit "$0($1...)">]
-        abstract Invoke:
-            value:
-                U5<string, StringLiteral, NoSubstitutionTemplateLiteral, NumericLiteral, Identifier> ->
-                StringLiteral
-
-        [<Emit "$0($1...)">]
-        abstract Invoke: value: U2<float, PseudoBigInt> -> NumericLiteral
-
-        [<Emit "$0($1...)">]
-        abstract Invoke: value: bool -> BooleanLiteral
-
-        [<Emit "$0($1...)">]
-        abstract Invoke:
-            value: U4<string, float, PseudoBigInt, bool> -> PrimaryExpression
-
-    [<AllowNullLiteral>]
-    type IExportsCreateTypeOperatorNode =
-        [<Emit "$0($1...)">]
-        abstract Invoke: ``type``: TypeNode -> TypeOperatorNode
-
-        [<Emit "$0($1...)">]
-        abstract Invoke:
-            operator: SyntaxKind * ``type``: TypeNode -> TypeOperatorNode
-
-    [<AllowNullLiteral>]
-    type IExportsCreateTaggedTemplate =
-        [<Emit "$0($1...)">]
-        abstract Invoke:
-            tag: Expression * template: TemplateLiteral ->
-                TaggedTemplateExpression
-
-        [<Emit "$0($1...)">]
-        abstract Invoke:
-            tag: Expression *
-            typeArguments: ResizeArray<TypeNode> option *
-            template: TemplateLiteral ->
-                TaggedTemplateExpression
-
-    [<AllowNullLiteral>]
-    type IExportsUpdateTaggedTemplate =
-        [<Emit "$0($1...)">]
-        abstract Invoke:
-            node: TaggedTemplateExpression *
-            tag: Expression *
-            template: TemplateLiteral ->
-                TaggedTemplateExpression
-
-        [<Emit "$0($1...)">]
-        abstract Invoke:
-            node: TaggedTemplateExpression *
-            tag: Expression *
-            typeArguments: ResizeArray<TypeNode> option *
-            template: TemplateLiteral ->
-                TaggedTemplateExpression
-
-    [<AllowNullLiteral>]
-    type IExportsCreateConditional =
-        [<Emit "$0($1...)">]
-        abstract Invoke:
-            condition: Expression * whenTrue: Expression * whenFalse: Expression ->
-                ConditionalExpression
-
-        [<Emit "$0($1...)">]
-        abstract Invoke:
-            condition: Expression *
-            questionToken: QuestionToken *
-            whenTrue: Expression *
-            colonToken: ColonToken *
-            whenFalse: Expression ->
-                ConditionalExpression
-
-    [<AllowNullLiteral>]
-    type IExportsCreateYield =
-        [<Emit "$0($1...)">]
-        abstract Invoke: ?expression: Expression -> YieldExpression
-
-        [<Emit "$0($1...)">]
-        abstract Invoke:
-            asteriskToken: AsteriskToken option * expression: Expression ->
-                YieldExpression
-
-    [<AllowNullLiteral>]
-    type IExportsCreateArrowFunction =
-        [<Emit "$0($1...)">]
-        abstract Invoke:
-            modifiers: ResizeArray<Modifier> option *
-            typeParameters: ResizeArray<TypeParameterDeclaration> option *
-            parameters: ResizeArray<ParameterDeclaration> *
-            ``type``: TypeNode option *
-            equalsGreaterThanToken: EqualsGreaterThanToken option *
-            body: ConciseBody ->
-                ArrowFunction
-
-        [<Emit "$0($1...)">]
-        abstract Invoke:
-            modifiers: ResizeArray<Modifier> option *
-            typeParameters: ResizeArray<TypeParameterDeclaration> option *
-            parameters: ResizeArray<ParameterDeclaration> *
-            ``type``: TypeNode option *
-            body: ConciseBody ->
-                ArrowFunction
-
-    [<AllowNullLiteral>]
-    type IExportsUpdateArrowFunction =
-        [<Emit "$0($1...)">]
-        abstract Invoke:
-            node: ArrowFunction *
-            modifiers: ResizeArray<Modifier> option *
-            typeParameters: ResizeArray<TypeParameterDeclaration> option *
-            parameters: ResizeArray<ParameterDeclaration> *
-            ``type``: TypeNode option *
-            equalsGreaterThanToken: EqualsGreaterThanToken *
-            body: ConciseBody ->
-                ArrowFunction
-
-        [<Emit "$0($1...)">]
-        abstract Invoke:
-            node: ArrowFunction *
-            modifiers: ResizeArray<Modifier> option *
-            typeParameters: ResizeArray<TypeParameterDeclaration> option *
-            parameters: ResizeArray<ParameterDeclaration> *
-            ``type``: TypeNode option *
-            body: ConciseBody ->
-                ArrowFunction
-
-    [<AllowNullLiteral>]
-    type IExportsCreateVariableDeclaration =
-        [<Emit "$0($1...)">]
-        abstract Invoke:
-            name: U2<string, BindingName> *
-            ?``type``: TypeNode *
-            ?initializer: Expression ->
-                VariableDeclaration
-
-        [<Emit "$0($1...)">]
-        abstract Invoke:
-            name: U2<string, BindingName> *
-            exclamationToken: ExclamationToken option *
-            ``type``: TypeNode option *
-            initializer: Expression option ->
-                VariableDeclaration
-
-    [<AllowNullLiteral>]
-    type IExportsUpdateVariableDeclaration =
-        [<Emit "$0($1...)">]
-        abstract Invoke:
-            node: VariableDeclaration *
-            name: BindingName *
-            ``type``: TypeNode option *
-            initializer: Expression option ->
-                VariableDeclaration
-
-        [<Emit "$0($1...)">]
-        abstract Invoke:
-            node: VariableDeclaration *
-            name: BindingName *
-            exclamationToken: ExclamationToken option *
-            ``type``: TypeNode option *
-            initializer: Expression option ->
-                VariableDeclaration
-
-    [<AllowNullLiteral>]
-    type IteratorNext<'T> =
-        abstract value: 'T with get, set
-        abstract ``done``: obj option with get, set
-
-    [<AllowNullLiteral>]
-    type IteratorNext2 =
-        abstract value: unit with get //, set
-        abstract ``done``: obj with get, set
-
-    [<AllowNullLiteral>]
-    type DiagnosticMessageReportsUnnecessary =
-        interface
-        end
-
-    [<StringEnum>]
-    [<RequireQualifiedAccess>]
-    type UserPreferencesQuotePreference =
+    type [<StringEnum>] [<RequireQualifiedAccess>] UserPreferencesQuotePreference =
         | Auto
         | Double
         | Single
 
-    [<StringEnum>]
-    [<RequireQualifiedAccess>]
-    type UserPreferencesImportModuleSpecifierPreference =
+    type [<StringEnum>] [<RequireQualifiedAccess>] UserPreferencesImportModuleSpecifierPreference =
         | Shortest
-        | [<CompiledName "project-relative">] ProjectRelative
+        | [<CompiledName("project-relative")>] ProjectRelative
         | Relative
-        | [<CompiledName "non-relative">] NonRelative
+        | [<CompiledName("non-relative")>] NonRelative
 
-    [<StringEnum>]
-    [<RequireQualifiedAccess>]
-    type UserPreferencesImportModuleSpecifierEnding =
+    type [<StringEnum>] [<RequireQualifiedAccess>] UserPreferencesImportModuleSpecifierEnding =
         | Auto
         | Minimal
         | Index
         | Js
 
-    [<StringEnum>]
-    [<RequireQualifiedAccess>]
-    type UserPreferencesIncludePackageJsonAutoImports =
+    type [<StringEnum>] [<RequireQualifiedAccess>] UserPreferencesIncludePackageJsonAutoImports =
         | Auto
         | On
         | Off
 
-    [<StringEnum>]
-    [<RequireQualifiedAccess>]
-    type PerformanceEventKind =
-        | [<CompiledName "UpdateGraph">] UpdateGraph
-        | [<CompiledName "CreatePackageJsonAutoImportProvider">] CreatePackageJsonAutoImportProvider
+    type [<StringEnum>] [<RequireQualifiedAccess>] UserPreferencesJsxAttributeCompletionStyle =
+        | Auto
+        | Braces
+        | None
 
-    [<StringEnum>]
-    [<RequireQualifiedAccess>]
-    type NavigateToItemMatchKind =
+    type [<StringEnum>] [<RequireQualifiedAccess>] UserPreferencesIncludeInlayParameterNameHints =
+        | None
+        | Literals
+        | All
+
+    type [<StringEnum>] [<RequireQualifiedAccess>] UserPreferencesOrganizeImportsCollation =
+        | Ordinal
+        | Unicode
+
+    type [<StringEnum>] [<RequireQualifiedAccess>] UserPreferencesOrganizeImportsCaseFirst =
+        | Upper
+        | Lower
+
+    type [<StringEnum>] [<RequireQualifiedAccess>] PerformanceEventKind =
+        | [<CompiledName("UpdateGraph")>] UpdateGraph
+        | [<CompiledName("CreatePackageJsonAutoImportProvider")>] CreatePackageJsonAutoImportProvider
+
+    type [<StringEnum>] [<RequireQualifiedAccess>] NavigateToItemMatchKind =
         | Exact
         | Prefix
         | Substring

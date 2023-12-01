@@ -18,6 +18,24 @@ type JS.NumberConstructor with
 let private isNumericString (text: string) =
     jsTypeof text = "string" && unbox text |> Constructors.Number.isNaN |> not
 
+module TypeFlags =
+
+    let hasFlag (flags: Ts.TypeFlags) (flag: Ts.TypeFlags) =
+        int flags &&& int flag <> 0
+
+let private tryReadNumericLiteral (text: string) =
+    if isNumericString text then
+        // First, try to parse as an integer
+        match System.Int32.TryParse text with
+        | (true, i) -> GlueLiteral.Int i |> Some
+        | _ ->
+            // If it fails, try to parse as a float
+            match System.Double.TryParse text with
+            | (true, f) -> GlueLiteral.Float f |> Some
+            | _ -> None
+    else
+        None
+
 let private tryReadLiteral (expression: Ts.Node) =
     match expression.kind with
     | Ts.SyntaxKind.StringLiteral ->
@@ -30,17 +48,7 @@ let private tryReadLiteral (expression: Ts.Node) =
     | _ ->
         let text = expression.getText ()
 
-        if isNumericString text then
-            // First, try to parse as an integer
-            match System.Int32.TryParse text with
-            | (true, i) -> GlueLiteral.Int i |> Some
-            | _ ->
-                // If it fails, try to parse as a float
-                match System.Double.TryParse text with
-                | (true, f) -> GlueLiteral.Float f |> Some
-                | _ -> None
-        else
-            None
+        tryReadNumericLiteral text
 
 
 let private readEnumMembers
@@ -150,11 +158,53 @@ let private readTypeNode
                 | None -> failwith "readTypeNode: Missing symbol"
                 | Some symbol -> checker.getFullyQualifiedName symbol
 
-            ({
-                Name = typeReferenceNode.getText ()
-                FullName = fullName
-            })
-            |> GlueType.TypeReference
+            // Could this detect false positive, if the library defined
+            // its own Exclude type?
+            if fullName = "Exclude" then
+                let i = 0
+                let typ =
+                    checker.getTypeFromTypeNode typeReferenceNode :?> Ts.UnionOrIntersectionType
+
+                let cases =
+                    typ.types
+                    |> Seq.toList
+                    |> List.choose (fun typ ->
+                        if TypeFlags.hasFlag typ.flags Ts.TypeFlags.StringLiteral then
+                            let literalType =
+                                typ :?> Ts.LiteralType
+
+                            let value = unbox<string> literalType.value
+
+                            GlueLiteral.String value
+                            |> GlueType.Literal
+                            |> Some
+                        else if TypeFlags.hasFlag typ.flags Ts.TypeFlags.NumberLiteral then
+                            let literalType =
+                                typ :?> Ts.LiteralType
+
+                            let value =
+                                if Constructors.Number.isSafeInteger literalType.value then
+                                    GlueLiteral.Int(unbox<int> literalType.value)
+                                else
+                                    GlueLiteral.Float(unbox<float> literalType.value)
+
+                            value
+                            |> GlueType.Literal
+                            |> Some
+                        else
+                            None
+                    )
+
+                cases
+                |> GlueTypeUnion
+                |> GlueType.Union
+
+            else
+                ({
+                    Name = typeReferenceNode.getText ()
+                    FullName = fullName
+                })
+                |> GlueType.TypeReference
 
         | Ts.SyntaxKind.ArrayType ->
             let arrayTypeNode = typeNode :?> Ts.ArrayTypeNode
@@ -170,7 +220,7 @@ let private readTypeNode
 let rec private readUnionTypeCases
     (checker: Ts.TypeChecker)
     (unionTypeNode: Ts.UnionTypeNode)
-    : GlueType list
+    : GlueTypeUnion
     =
     // If all the types are literal, generate a Fable enum
     // If the types are TypeReference, of the same literal type, inline the case in a Fable enum
@@ -234,22 +284,27 @@ let rec private readUnionTypeCases
 
             // TODO: How to differentiate TypeReference to Enum/Union vs others
             // Check below is really hacky / not robust
-            if isNull symbol.declarations || symbol.declarations.Count = 0 then
-                None // Should it be obj ?
-            else if symbol.declarations.Count > 1 then
-                let fullName = checker.getFullyQualifiedName symbol
+            match symbol.declarations with
+            | Some declarations ->
+                if declarations.Count = 0 then
+                    None // Should it be obj ?
+                else if declarations.Count > 1 then
+                    let fullName = checker.getFullyQualifiedName symbol
 
-                ({
-                    Name = typeReferenceNode.getText ()
-                    FullName = fullName
-                })
-                |> GlueType.TypeReference
-                |> List.singleton
-                |> Some
-            else
-                let declaration = symbol.declarations.[0]
+                    ({
+                        Name = typeReferenceNode.getText ()
+                        FullName = fullName
+                    })
+                    |> GlueType.TypeReference
+                    |> List.singleton
+                    |> Some
+                else
+                    let declaration = declarations.[0]
 
-                readNode checker declaration |> List.singleton |> Some
+                    readNode checker declaration |> List.singleton |> Some
+
+            | None ->
+                failwith "readUnionTypeCases: Unsupported type reference"
 
         // else
         //     symbol.declarations
@@ -266,7 +321,9 @@ let rec private readUnionTypeCases
             | Ts.SyntaxKind.UnionType ->
                 let unionTypeNode = node :?> Ts.UnionTypeNode
                 // Unwrap union
-                readUnionTypeCases checker unionTypeNode |> Some
+                let (GlueTypeUnion cases) = readUnionTypeCases checker unionTypeNode
+
+                Some cases
             | _ ->
                 // Capture simple types like string, number, real type, etc.
                 readTypeNode checker (Some(node :?> Ts.TypeNode))
@@ -274,6 +331,7 @@ let rec private readUnionTypeCases
                 |> Some
     )
     |> List.concat
+    |> GlueTypeUnion
 
 let private readUnionType
     (checker: Ts.TypeChecker)
@@ -302,12 +360,16 @@ let readTypeOperator
             | None -> failwith "readTypeOperator: Missing symbol"
 
             | Some symbol ->
-                let interfaceDeclaration =
-                    symbol.declarations[0] :?> Ts.InterfaceDeclaration
+                match symbol.declarations with
+                | Some declarations ->
+                    let interfaceDeclaration =
+                        declarations[0] :?> Ts.InterfaceDeclaration
 
-                readInterfaceDeclaration checker interfaceDeclaration
-                |> GlueType.Interface
-                |> GlueType.KeyOf
+                    readInterfaceDeclaration checker interfaceDeclaration
+                    |> GlueType.Interface
+                    |> GlueType.KeyOf
+
+                | None -> failwith "readTypeOperator: Missing declaration"
 
         else
             failwith "readTypeOperator: Unsupported type reference"

@@ -29,3 +29,14 @@ type NumberE =
     | ``1`` = 1
     | ``2`` = 2
     | ``3`` = 3
+
+[<RequireQualifiedAccess>]
+type NumberF =
+    | ``4`` = 4
+
+[<RequireQualifiedAccess>]
+type NumberG =
+    | ``1`` = 1
+    | ``2`` = 2
+    | ``3`` = 3
+    | ``4`` = 4

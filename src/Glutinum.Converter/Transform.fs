@@ -36,7 +36,7 @@ let rec private transformType (glueType: GlueType) : FSharpType =
     match glueType with
     | GlueType.Primitive primitiveInfo ->
         transformPrimitive primitiveInfo |> FSharpType.Primitive
-    | GlueType.Union cases ->
+    | GlueType.Union (GlueTypeUnion cases) ->
         let optionalTypes, others =
             cases
             |> List.partition (fun glueType ->
@@ -402,10 +402,8 @@ let private transformTypeAliasDeclaration
 
     // TODO: Make the transformation more robust
     match glueTypeAliasDeclaration.Type with
-    | GlueType.Union cases ->
-        printfn "%A" cases
+    | GlueType.Union (GlueTypeUnion cases)  as unionType ->
 
-        // let
         // Unions can have nested unions, so we need to flatten them
         // TODO: Is there cases where we don't want to flatten?
         // U2<U2<int, string>, bool>
@@ -415,10 +413,10 @@ let private transformTypeAliasDeclaration
                 function
                 // We are inside an union, and have access to the literal types
                 | GlueType.Literal _ as literal -> [ literal ]
-                | GlueType.Union cases -> flattenCases cases
+                | GlueType.Union (GlueTypeUnion cases) -> flattenCases cases
                 | GlueType.TypeAliasDeclaration aliasCases ->
                     match aliasCases.Type with
-                    | GlueType.Union cases -> flattenCases cases
+                    | GlueType.Union (GlueTypeUnion cases) -> flattenCases cases
                     | _ -> failwith "Should not happen"
                 // Can't find cases so we return an empty list to discard the type
                 // Should we do something if we fall in this state?
@@ -514,7 +512,7 @@ let private transformTypeAliasDeclaration
         else
             ({
                 Name = glueTypeAliasDeclaration.Name
-                Type = transformType (GlueType.Union cases)
+                Type = transformType unionType
             }
             : FSharpTypeAlias)
             |> FSharpType.Alias
@@ -538,12 +536,13 @@ let private transformTypeAliasDeclaration
                         | GlueMember.Property { Type = typ }
                         | GlueMember.CallSignature { Type = typ } ->
                             match typ with
-                            | GlueType.Union cases -> cases
+                            | GlueType.Union (GlueTypeUnion cases) -> cases
                             | _ -> [ typ ]
                     )
                     // Remove duplicates
                     |> List.distinct
                     // Wrap inside of an union, so it can be transformed as U2, U3, etc.
+                    |> GlueTypeUnion
                     |> GlueType.Union
                     |> transformType
 
@@ -625,6 +624,7 @@ let rec private transformToFsharp (glueTypes: GlueType list) : FSharpType list =
         | GlueType.ClassDeclaration classInfo ->
             transformClassDeclaration classInfo
 
+        | GlueType.Exclude _
         | GlueType.Array _
         | GlueType.TypeReference _
         | GlueType.FunctionDeclaration _

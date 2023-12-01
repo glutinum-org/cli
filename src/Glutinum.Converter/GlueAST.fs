@@ -139,6 +139,20 @@ type GlueTypeTypeReference =
         FullName: string
     }
 
+type GlueTypeUnion =
+    GlueTypeUnion of GlueType list
+
+[<RequireQualifiedAccess>]
+type ExcludedMember =
+    | Literal of GlueLiteral
+    // | Function
+
+type GlueTypeExclude =
+    {
+        UnionType : GlueTypeUnion
+        ExcludedMembers: ExcludedMember list
+    }
+
 [<RequireQualifiedAccess>]
 type GlueType =
     | Discard
@@ -148,7 +162,7 @@ type GlueType =
     | Enum of GlueEnum
     | TypeAliasDeclaration of GlueTypeAliasDeclaration
     | FunctionDeclaration of GlueFunctionDeclaration
-    | Union of GlueType list
+    | Union of GlueTypeUnion
     | Literal of GlueLiteral
     | KeyOf of GlueType
     | IndexedAccessType of GlueType
@@ -156,6 +170,7 @@ type GlueType =
     | ClassDeclaration of GlueTypeClassDeclaration
     | TypeReference of GlueTypeTypeReference
     | Array of GlueType
+    | Exclude of GlueTypeExclude
 
     member this.Name =
         match this with
@@ -174,13 +189,14 @@ type GlueType =
             | GluePrimitive.Undefined -> "obj"
         | Enum info -> info.Name
         | TypeAliasDeclaration info -> info.Name
-        | Union _ -> "obj"
         | Literal info -> info.ToText()
         | KeyOf _ -> "string"
-        | Discard -> "obj"
-        | IndexedAccessType _ -> "obj"
         | FunctionDeclaration info -> info.Name
         | ModuleDeclaration info -> info.Name
         | ClassDeclaration info -> info.Name
         | TypeReference info -> info.Name
         | Array info -> $"ResizeArray<{info.Name}>"
+        | IndexedAccessType _
+        | Union _
+        | Discard
+        | Exclude _ -> "obj"

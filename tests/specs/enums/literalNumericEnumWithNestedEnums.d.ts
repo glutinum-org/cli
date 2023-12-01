@@ -10,3 +10,8 @@ export type NumberD =
     | 3
 
 export type NumberE = NumberC | NumberD;
+
+export type NumberF =
+    | 4
+
+export type NumberG = NumberE | NumberF;
