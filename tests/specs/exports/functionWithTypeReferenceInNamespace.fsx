@@ -21,5 +21,6 @@ module dayjs =
         [<Emit("new $0.Dayjs($1...)")>]
         static member Dayjs () : Dayjs = nativeOnly
 
+    [<AllowNullLiteral>]
     type Dayjs =
         interface end

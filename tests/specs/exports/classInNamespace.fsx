@@ -20,5 +20,6 @@ module lib =
         [<Emit("new $0.Logger($1...)")>]
         static member Logger () : Logger = nativeOnly
 
+    [<AllowNullLiteral>]
     type Logger =
         interface end

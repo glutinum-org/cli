@@ -14,5 +14,6 @@ type Exports =
     [<Import("Logger", "module"); EmitConstructor>]
     static member Logger (prefix: string) : Logger = nativeOnly
 
+[<AllowNullLiteral>]
 type Logger =
     interface end
