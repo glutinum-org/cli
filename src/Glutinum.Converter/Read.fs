@@ -208,6 +208,53 @@ let private readTypeNode
 
                 cases |> GlueTypeUnion |> GlueType.Union
 
+            else if fullName = "Partial" then
+                let typ = checker.getTypeFromTypeNode typeReferenceNode
+
+                // Try find the original type
+                // For now, I am navigating inside of the symbol information
+                // to find a reference to the interface declaration via one of
+                // the members of the type
+                // Is there a better way of doing it?
+                match typ.aliasTypeArguments with
+                | None -> GlueType.Discard
+                | Some aliasTypeArguments ->
+                    if aliasTypeArguments.Count <> 1 then
+                        GlueType.Discard
+                    else
+                        let symbol = aliasTypeArguments.[0].symbol
+
+                        if symbol.members.IsNone then
+                            GlueType.Discard
+                        else
+
+                            // Take any of the members
+                            let (_, refMember) =
+                                symbol.members.Value.entries()
+                                |> Seq.head
+
+                            let originalType =
+                                refMember.declarations.Value[0].parent
+
+                            match originalType.kind with
+                            | Ts.SyntaxKind.InterfaceDeclaration ->
+                                let interfaceDeclaration =
+                                    originalType :?> Ts.InterfaceDeclaration
+
+                                let members =
+                                    interfaceDeclaration.members
+                                    |> Seq.toList
+                                    |> List.map (tryReadNamedDeclaration checker)
+
+                                ({
+                                    Name = interfaceDeclaration.name.getText ()
+                                    Members = members
+                                }
+                                : GlueInterface)
+                                |> GlueType.Partial
+
+                            | _ -> GlueType.Discard
+
             else
                 ({
                     Name = typeReferenceNode.getText ()
@@ -498,7 +545,8 @@ let private tryReadNamedDeclaration
             Parameters = readParameters checker methodDeclaration.parameters
             Type = readTypeNode checker methodDeclaration.``type``
             IsOptional = methodDeclaration.questionToken.IsSome
-            IsStatic = methodDeclaration.modifiers
+            IsStatic =
+                methodDeclaration.modifiers
                 |> Option.map (fun modifiers ->
                     modifiers
                     |> Seq.exists (fun modifier ->
@@ -594,7 +642,7 @@ let private readFunctionDeclaration
 let private readModuleDeclaration
     (checker: Ts.TypeChecker)
     (declaration: Ts.ModuleDeclaration)
-    : GlueTypeModuleDeclaration
+    : GlueModuleDeclaration
     =
 
     let name = unbox<Ts.Identifier> declaration.name
@@ -632,14 +680,12 @@ let private readModuleDeclaration
 let private readClassDeclaration
     (checker: Ts.TypeChecker)
     (declaration: Ts.ClassDeclaration)
-    : GlueTypeClassDeclaration
+    : GlueClassDeclaration
     =
 
     let name = unbox<Ts.Identifier> declaration.name
 
-    let members =
-        declaration.members
-        |> Seq.toList
+    let members = declaration.members |> Seq.toList
 
     let constructors, members =
         members
@@ -664,9 +710,7 @@ let private readClassDeclaration
         )
 
     let members =
-        members
-        |> Seq.toList
-        |> List.map (tryReadNamedDeclaration checker)
+        members |> Seq.toList |> List.map (tryReadNamedDeclaration checker)
 
     {
         Name = name.getText ()

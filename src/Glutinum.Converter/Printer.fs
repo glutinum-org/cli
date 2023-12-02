@@ -228,7 +228,13 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
                         if index <> 0 then
                             printer.WriteInline(" -> ")
 
-                        printer.WriteInline($"{p.Name}: {printType p.Type}")
+                        let option =
+                            if p.IsOptional then
+                                " option"
+                            else
+                                ""
+
+                        printer.WriteInline($"{p.Name}: {printType p.Type}{option}")
                     )
 
             if methodInfo.IsStatic then
@@ -271,6 +277,9 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
 
             else
                 printer.WriteInline($": {printType propertyInfo.Type}")
+
+                if propertyInfo.IsOptional then
+                    printer.WriteInline(" option")
 
                 propertyInfo.Accessor
                 |> Option.map (

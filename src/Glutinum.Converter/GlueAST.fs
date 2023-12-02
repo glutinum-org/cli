@@ -117,7 +117,7 @@ type GlueFunctionDeclaration =
         Parameters: GlueParameter list
     }
 
-type GlueTypeModuleDeclaration =
+type GlueModuleDeclaration =
     {
         Name: string
         IsNamespace: bool
@@ -127,14 +127,14 @@ type GlueTypeModuleDeclaration =
 
 type GlueConstructor = | GlueConstructor of GlueParameter list
 
-type GlueTypeClassDeclaration =
+type GlueClassDeclaration =
     {
         Name: string
         Constructors: GlueConstructor list
         Members: GlueMember list
     }
 
-type GlueTypeTypeReference =
+type GlueTypeReference =
     {
         Name: string
         FullName: string
@@ -147,12 +147,6 @@ type GlueTypeUnion =
 type ExcludedMember =
     | Literal of GlueLiteral
     // | Function
-
-type GlueTypeExclude =
-    {
-        UnionType : GlueTypeUnion
-        ExcludedMembers: ExcludedMember list
-    }
 
 [<RequireQualifiedAccess>]
 type GlueType =
@@ -167,11 +161,11 @@ type GlueType =
     | Literal of GlueLiteral
     | KeyOf of GlueType
     | IndexedAccessType of GlueType
-    | ModuleDeclaration of GlueTypeModuleDeclaration
-    | ClassDeclaration of GlueTypeClassDeclaration
-    | TypeReference of GlueTypeTypeReference
+    | ModuleDeclaration of GlueModuleDeclaration
+    | ClassDeclaration of GlueClassDeclaration
+    | TypeReference of GlueTypeReference
+    | Partial of GlueInterface
     | Array of GlueType
-    | Exclude of GlueTypeExclude
 
     member this.Name =
         match this with
@@ -199,5 +193,5 @@ type GlueType =
         | Array info -> $"ResizeArray<{info.Name}>"
         | IndexedAccessType _
         | Union _
-        | Discard
-        | Exclude _ -> "obj"
+        | Partial _
+        | Discard -> "obj"

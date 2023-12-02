@@ -579,10 +579,34 @@ let private transformTypeAliasDeclaration
         : FSharpTypeAlias)
         |> FSharpType.Alias
 
+    | GlueType.Partial interfaceInfo ->
+        let originalInterface = transformInterface interfaceInfo
+
+        // Adapt the original interface to make it partial
+        let partialInterface =
+            { originalInterface with
+                // Use the alias name instead of the original interface name
+                Name = glueTypeAliasDeclaration.Name
+                // Transform all the members to optional
+                Members =
+                    originalInterface.Members
+                    |> List.map (fun m ->
+                        match m with
+                        | FSharpMember.Method method ->
+                            { method with IsOptional = true }
+                            |> FSharpMember.Method
+                        | FSharpMember.Property property ->
+                            { property with IsOptional = true }
+                            |> FSharpMember.Property
+                    )
+            }
+
+        FSharpType.Interface partialInterface
+
     | _ -> FSharpType.Discard
 
 let private transformModuleDeclaration
-    (moduleDeclaration: GlueTypeModuleDeclaration)
+    (moduleDeclaration: GlueModuleDeclaration)
     : FSharpType
     =
     ({
@@ -594,7 +618,7 @@ let private transformModuleDeclaration
     |> FSharpType.Module
 
 let private transformClassDeclaration
-    (classDeclaration: GlueTypeClassDeclaration)
+    (classDeclaration: GlueClassDeclaration)
     : FSharpType
     =
     ({
@@ -623,7 +647,7 @@ let rec private transformToFsharp (glueTypes: GlueType list) : FSharpType list =
         | GlueType.ClassDeclaration classInfo ->
             transformClassDeclaration classInfo
 
-        | GlueType.Exclude _
+        | GlueType.Partial _
         | GlueType.Array _
         | GlueType.TypeReference _
         | GlueType.FunctionDeclaration _
