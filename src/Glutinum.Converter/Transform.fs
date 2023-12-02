@@ -36,7 +36,7 @@ let rec private transformType (glueType: GlueType) : FSharpType =
     match glueType with
     | GlueType.Primitive primitiveInfo ->
         transformPrimitive primitiveInfo |> FSharpType.Primitive
-    | GlueType.Union (GlueTypeUnion cases) ->
+    | GlueType.Union(GlueTypeUnion cases) ->
         let optionalTypes, others =
             cases
             |> List.partition (fun glueType ->
@@ -218,58 +218,57 @@ let private transformAccessor (accessor: GlueAccessor) : FSharpAccessor =
     | GlueAccessor.WriteOnly -> FSharpAccessor.WriteOnly
     | GlueAccessor.ReadWrite -> FSharpAccessor.ReadWrite
 
+let private transformMembers (members: GlueMember list) : FSharpMember list =
+    members
+    |> List.map (
+        function
+        | GlueMember.Method methodInfo ->
+            {
+                Attributes = []
+                Name = methodInfo.Name
+                Parameters =
+                    methodInfo.Parameters |> List.map transformParameter
+                Type = transformType methodInfo.Type
+                IsOptional = methodInfo.IsOptional
+                IsStatic = methodInfo.IsStatic
+                Accessor = None
+                Accessibility = FSharpAccessiblity.Public
+            }
+            |> FSharpMember.Method
+
+        | GlueMember.CallSignature callSignatureInfo ->
+            {
+                Attributes = [ FSharpAttribute.EmitSelfInvoke ]
+                Name = "Invoke"
+                Parameters =
+                    callSignatureInfo.Parameters |> List.map transformParameter
+                Type = transformType callSignatureInfo.Type
+                IsOptional = false
+                IsStatic = false
+                Accessor = None
+                Accessibility = FSharpAccessiblity.Public
+            }
+            |> FSharpMember.Method
+
+        | GlueMember.Property propertyInfo ->
+            {
+                Attributes = []
+                Name = propertyInfo.Name
+                Parameters = []
+                Type = transformType propertyInfo.Type
+                IsOptional = false
+                IsStatic = propertyInfo.IsStatic
+                Accessor = transformAccessor propertyInfo.Accessor |> Some
+                Accessibility = FSharpAccessiblity.Public
+            }
+            |> FSharpMember.Property
+    )
+
 let private transformInterface (info: GlueInterface) : FSharpInterface =
-    let members =
-        info.Members
-        |> List.map (
-            function
-            | GlueMember.Method methodInfo ->
-                {
-                    Attributes = []
-                    Name = methodInfo.Name
-                    Parameters =
-                        methodInfo.Parameters |> List.map transformParameter
-                    Type = transformType methodInfo.Type
-                    IsOptional = methodInfo.IsOptional
-                    IsStatic = methodInfo.IsStatic
-                    Accessor = None
-                    Accessibility = FSharpAccessiblity.Public
-                }
-                |> FSharpMember.Method
-
-            | GlueMember.CallSignature callSignatureInfo ->
-                {
-                    Attributes = [ FSharpAttribute.EmitSelfInvoke ]
-                    Name = "Invoke"
-                    Parameters =
-                        callSignatureInfo.Parameters
-                        |> List.map transformParameter
-                    Type = transformType callSignatureInfo.Type
-                    IsOptional = false
-                    IsStatic = false
-                    Accessor = None
-                    Accessibility = FSharpAccessiblity.Public
-                }
-                |> FSharpMember.Method
-
-            | GlueMember.Property propertyInfo ->
-                {
-                    Attributes = []
-                    Name = propertyInfo.Name
-                    Parameters = []
-                    Type = transformType propertyInfo.Type
-                    IsOptional = false
-                    IsStatic = propertyInfo.IsStatic
-                    Accessor = transformAccessor propertyInfo.Accessor |> Some
-                    Accessibility = FSharpAccessiblity.Public
-                }
-                |> FSharpMember.Property
-        )
-
     {
         Attributes = [ FSharpAttribute.AllowNullLiteral ]
         Name = info.Name
-        Members = members
+        Members = transformMembers info.Members
     }
 
 let private transformEnum (glueEnum: GlueEnum) : FSharpType =
@@ -402,7 +401,7 @@ let private transformTypeAliasDeclaration
 
     // TODO: Make the transformation more robust
     match glueTypeAliasDeclaration.Type with
-    | GlueType.Union (GlueTypeUnion cases)  as unionType ->
+    | GlueType.Union(GlueTypeUnion cases) as unionType ->
 
         // Unions can have nested unions, so we need to flatten them
         // TODO: Is there cases where we don't want to flatten?
@@ -413,10 +412,10 @@ let private transformTypeAliasDeclaration
                 function
                 // We are inside an union, and have access to the literal types
                 | GlueType.Literal _ as literal -> [ literal ]
-                | GlueType.Union (GlueTypeUnion cases) -> flattenCases cases
+                | GlueType.Union(GlueTypeUnion cases) -> flattenCases cases
                 | GlueType.TypeAliasDeclaration aliasCases ->
                     match aliasCases.Type with
-                    | GlueType.Union (GlueTypeUnion cases) -> flattenCases cases
+                    | GlueType.Union(GlueTypeUnion cases) -> flattenCases cases
                     | _ -> failwith "Should not happen"
                 // Can't find cases so we return an empty list to discard the type
                 // Should we do something if we fall in this state?
@@ -444,11 +443,11 @@ let private transformTypeAliasDeclaration
             // for numeric literals
             not flattenedCases.IsEmpty
             && flattenedCases
-            |> List.forall (
-                function
-                | GlueType.Literal(GlueLiteral.Int _) -> true
-                | _ -> false
-            )
+               |> List.forall (
+                   function
+                   | GlueType.Literal(GlueLiteral.Int _) -> true
+                   | _ -> false
+               )
 
         // If the union contains only literal strings,
         // we can transform it into a StringEnum
@@ -536,7 +535,7 @@ let private transformTypeAliasDeclaration
                         | GlueMember.Property { Type = typ }
                         | GlueMember.CallSignature { Type = typ } ->
                             match typ with
-                            | GlueType.Union (GlueTypeUnion cases) -> cases
+                            | GlueType.Union(GlueTypeUnion cases) -> cases
                             | _ -> [ typ ]
                     )
                     // Remove duplicates
@@ -599,9 +598,9 @@ let private transformClassDeclaration
     : FSharpType
     =
     ({
-        Attributes = []
+        Attributes = [ FSharpAttribute.AllowNullLiteral ]
         Name = classDeclaration.Name
-        Members = []
+        Members = transformMembers classDeclaration.Members
     }
     : FSharpInterface)
     |> FSharpType.Interface

@@ -161,43 +161,52 @@ let private readTypeNode
             // Could this detect false positive, if the library defined
             // its own Exclude type?
             if fullName = "Exclude" then
-                let i = 0
                 let typ =
-                    checker.getTypeFromTypeNode typeReferenceNode :?> Ts.UnionOrIntersectionType
+                    checker.getTypeFromTypeNode typeReferenceNode
+                    :?> Ts.UnionOrIntersectionType
 
                 let cases =
                     typ.types
                     |> Seq.toList
                     |> List.choose (fun typ ->
-                        if TypeFlags.hasFlag typ.flags Ts.TypeFlags.StringLiteral then
-                            let literalType =
-                                typ :?> Ts.LiteralType
+                        if
+                            TypeFlags.hasFlag
+                                typ.flags
+                                Ts.TypeFlags.StringLiteral
+                        then
+                            let literalType = typ :?> Ts.LiteralType
 
                             let value = unbox<string> literalType.value
 
                             GlueLiteral.String value
                             |> GlueType.Literal
                             |> Some
-                        else if TypeFlags.hasFlag typ.flags Ts.TypeFlags.NumberLiteral then
-                            let literalType =
-                                typ :?> Ts.LiteralType
+                        else if
+                            TypeFlags.hasFlag
+                                typ.flags
+                                Ts.TypeFlags.NumberLiteral
+                        then
+                            let literalType = typ :?> Ts.LiteralType
 
                             let value =
-                                if Constructors.Number.isSafeInteger literalType.value then
-                                    GlueLiteral.Int(unbox<int> literalType.value)
+                                if
+                                    Constructors.Number.isSafeInteger
+                                        literalType.value
+                                then
+                                    GlueLiteral.Int(
+                                        unbox<int> literalType.value
+                                    )
                                 else
-                                    GlueLiteral.Float(unbox<float> literalType.value)
+                                    GlueLiteral.Float(
+                                        unbox<float> literalType.value
+                                    )
 
-                            value
-                            |> GlueType.Literal
-                            |> Some
+                            value |> GlueType.Literal |> Some
                         else
                             None
                     )
 
-                cases
-                |> GlueTypeUnion
-                |> GlueType.Union
+                cases |> GlueTypeUnion |> GlueType.Union
 
             else
                 ({
@@ -303,8 +312,7 @@ let rec private readUnionTypeCases
 
                     readNode checker declaration |> List.singleton |> Some
 
-            | None ->
-                failwith "readUnionTypeCases: Unsupported type reference"
+            | None -> failwith "readUnionTypeCases: Unsupported type reference"
 
         // else
         //     symbol.declarations
@@ -321,7 +329,8 @@ let rec private readUnionTypeCases
             | Ts.SyntaxKind.UnionType ->
                 let unionTypeNode = node :?> Ts.UnionTypeNode
                 // Unwrap union
-                let (GlueTypeUnion cases) = readUnionTypeCases checker unionTypeNode
+                let (GlueTypeUnion cases) =
+                    readUnionTypeCases checker unionTypeNode
 
                 Some cases
             | _ ->
@@ -441,52 +450,73 @@ let private readParameters
         }
     )
 
+let private tryReadNamedDeclaration
+    (checker: Ts.TypeChecker)
+    (declaration: Ts.NamedDeclaration)
+    =
+    match declaration.kind with
+    | Ts.SyntaxKind.PropertySignature ->
+
+        let propertySignature = declaration :?> Ts.PropertySignature
+        let name = unbox<Ts.Node> propertySignature.name
+
+        let accessor =
+            match propertySignature.modifiers with
+            | Some modifiers ->
+                modifiers
+                |> Seq.exists (fun modifier ->
+                    modifier?kind = Ts.SyntaxKind.ReadonlyKeyword
+                )
+                |> function
+                    | true -> GlueAccessor.ReadOnly
+                    | false -> GlueAccessor.ReadWrite
+            | None -> GlueAccessor.ReadWrite
+
+        {
+            Name = name.getText ()
+            Type = readTypeNode checker propertySignature.``type``
+            IsStatic = false
+            Accessor = accessor
+        }
+        |> GlueMember.Property
+
+    | Ts.SyntaxKind.CallSignature ->
+        let callSignature = declaration :?> Ts.CallSignatureDeclaration
+
+        {
+            Parameters = readParameters checker callSignature.parameters
+            Type = readTypeNode checker callSignature.``type``
+        }
+        |> GlueMember.CallSignature
+
+    | Ts.SyntaxKind.MethodDeclaration ->
+        let methodDeclaration = declaration :?> Ts.MethodDeclaration
+        let name = unbox<Ts.Identifier> methodDeclaration.name
+
+        {
+            Name = name.getText ()
+            Parameters = readParameters checker methodDeclaration.parameters
+            Type = readTypeNode checker methodDeclaration.``type``
+            IsOptional = methodDeclaration.questionToken.IsSome
+            IsStatic = methodDeclaration.modifiers
+                |> Option.map (fun modifiers ->
+                    modifiers
+                    |> Seq.exists (fun modifier ->
+                        modifier?kind = Ts.SyntaxKind.StaticKeyword
+                    )
+                )
+                |> Option.defaultValue false
+        }
+        |> GlueMember.Method
+
+    | _ ->
+        failwith $"tryReadNamedDeclaration: Unsupported kind {declaration.kind}"
+
 let private readInterfaceDeclaration
     (checker: Ts.TypeChecker)
     (declaration: Ts.InterfaceDeclaration)
     : GlueInterface
     =
-
-    let tryReadNamedDeclaration
-        (checker: Ts.TypeChecker)
-        (declaration: Ts.NamedDeclaration)
-        =
-        match declaration.kind with
-        | Ts.SyntaxKind.PropertySignature ->
-
-            let propertySignature = declaration :?> Ts.PropertySignature
-            let name = unbox<Ts.Node> propertySignature.name
-
-            let accessor =
-                match propertySignature.modifiers with
-                | Some modifiers ->
-                    modifiers
-                    |> Seq.exists (fun modifier ->
-                        modifier?kind = Ts.SyntaxKind.ReadonlyKeyword
-                    )
-                    |> function
-                        | true -> GlueAccessor.ReadOnly
-                        | false -> GlueAccessor.ReadWrite
-                | None -> GlueAccessor.ReadWrite
-
-            {
-                Name = name.getText ()
-                Type = readTypeNode checker propertySignature.``type``
-                IsStatic = false
-                Accessor = accessor
-            }
-            |> GlueMember.Property
-
-        | Ts.SyntaxKind.CallSignature ->
-            let callSignature = declaration :?> Ts.CallSignatureDeclaration
-
-            {
-                Parameters = readParameters checker callSignature.parameters
-                Type = readTypeNode checker callSignature.``type``
-            }
-            |> GlueMember.CallSignature
-
-        | _ -> failwith "tryReadNamedDeclaration: Unsupported kind"
 
     let members =
         declaration.members
@@ -607,9 +637,20 @@ let private readClassDeclaration
 
     let name = unbox<Ts.Identifier> declaration.name
 
-    let constructors =
+    let members =
         declaration.members
         |> Seq.toList
+
+    let constructors, members =
+        members
+        |> List.partition (fun m ->
+            match m.kind with
+            | Ts.SyntaxKind.Constructor -> true
+            | _ -> false
+        )
+
+    let constructors =
+        constructors
         |> List.choose (fun m ->
             match m.kind with
             | Ts.SyntaxKind.Constructor ->
@@ -622,9 +663,15 @@ let private readClassDeclaration
             | _ -> None
         )
 
+    let members =
+        members
+        |> Seq.toList
+        |> List.map (tryReadNamedDeclaration checker)
+
     {
         Name = name.getText ()
         Constructors = constructors
+        Members = members
     }
 
 let private readNode (checker: Ts.TypeChecker) (typeNode: Ts.Node) : GlueType =

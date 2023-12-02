@@ -219,13 +219,17 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
             else
                 printer.WriteInline(": ")
 
-                methodInfo.Parameters
-                |> List.iteri (fun index p ->
-                    if index <> 0 then
-                        printer.WriteInline(" -> ")
+                // Special case for functions with no parameters
+                if methodInfo.Parameters.Length = 0 then
+                    printer.WriteInline("unit")
+                else
+                    methodInfo.Parameters
+                    |> List.iteri (fun index p ->
+                        if index <> 0 then
+                            printer.WriteInline(" -> ")
 
-                    printer.WriteInline($"{p.Name}: {printType p.Type}")
-                )
+                        printer.WriteInline($"{p.Name}: {printType p.Type}")
+                    )
 
             if methodInfo.IsStatic then
                 printer.WriteInline(" : ")

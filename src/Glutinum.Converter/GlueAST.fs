@@ -131,6 +131,7 @@ type GlueTypeClassDeclaration =
     {
         Name: string
         Constructors: GlueConstructor list
+        Members: GlueMember list
     }
 
 type GlueTypeTypeReference =
