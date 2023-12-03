@@ -270,6 +270,9 @@ let private readTypeNode
 
             GlueType.Array elementType
 
+        | Ts.SyntaxKind.TypePredicate ->
+            GlueType.Primitive GluePrimitive.Bool
+
         | _ -> failwith $"readTypeNode: Unsupported kind {typeNode.kind}"
     | None -> GlueType.Primitive GluePrimitive.Unit
 
