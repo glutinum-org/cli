@@ -359,7 +359,15 @@ let rec private readUnionTypeCases
 
                     readNode checker declaration |> List.singleton |> Some
 
-            | None -> failwith "readUnionTypeCases: Unsupported type reference"
+            | None ->
+                let typ = checker.getTypeOfSymbol symbol
+
+                if TypeFlags.hasFlag typ.flags Ts.TypeFlags.Any then
+                    GlueType.Primitive GluePrimitive.Any
+                    |> List.singleton
+                    |> Some
+                else
+                    failwith "readUnionTypeCases: Unsupported type reference"
 
         // else
         //     symbol.declarations
