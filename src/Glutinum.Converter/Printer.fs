@@ -77,7 +77,17 @@ let attributeToText (fsharpAttribute: FSharpAttribute) =
         $"[<Import(\"{name}\", \"{module_}\")>]"
     | FSharpAttribute.Erase -> "[<Erase>]"
     | FSharpAttribute.AllowNullLiteral -> "[<AllowNullLiteral>]"
-    | FSharpAttribute.StringEnum -> "[<StringEnum>]"
+    | FSharpAttribute.StringEnum caseRules ->
+        let caseRulesText =
+            match caseRules with
+            | CaseRules.None -> "CaseRules.None"
+            | CaseRules.LowerFirst -> "CaseRules.LowerFirst"
+            | CaseRules.SnakeCase -> "CaseRules.SnakeCase"
+            | CaseRules.SnakeCaseAllCaps -> "CaseRules.SnakeCaseAllCaps"
+            | CaseRules.KebabCase -> "CaseRules.KebabCase"
+            | _ -> failwith "Unsupported case rules: %A{caseRules}"
+
+        $"[<StringEnum({caseRulesText})>]"
     | FSharpAttribute.CompiledName name -> $"[<CompiledName(\"{name}\")>]"
     | FSharpAttribute.RequireQualifiedAccess -> "[<RequireQualifiedAccess>]"
     | FSharpAttribute.EmitConstructor -> "[<EmitConstructor>]"

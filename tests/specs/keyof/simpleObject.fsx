@@ -13,7 +13,7 @@ type Point =
     abstract member y: float with get, set
 
 [<RequireQualifiedAccess>]
-[<StringEnum>]
+[<StringEnum(CaseRules.None)>]
 type P =
     | x
     | y

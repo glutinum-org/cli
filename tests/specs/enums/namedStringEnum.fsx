@@ -8,7 +8,7 @@ open Fable.Core
 open System
 
 [<RequireQualifiedAccess>]
-[<StringEnum>]
+[<StringEnum(CaseRules.None)>]
 type Direction =
     | [<CompiledName("UP")>] Up
     | [<CompiledName("DOWN")>] Down

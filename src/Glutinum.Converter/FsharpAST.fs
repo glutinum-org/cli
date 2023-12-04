@@ -154,7 +154,7 @@ type FSharpAttribute =
     | ImportAll of string
     | Erase
     | AllowNullLiteral
-    | StringEnum
+    | StringEnum of Fable.Core.CaseRules
     | CompiledName of string
     | RequireQualifiedAccess
     | EmitConstructor

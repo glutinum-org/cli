@@ -10,7 +10,7 @@ open System
 module dayjs =
 
     [<RequireQualifiedAccess>]
-    [<StringEnum>]
+    [<StringEnum(CaseRules.None)>]
     type UnitTypeShort =
-        | S
-        | Ms
+        | s
+        | ms

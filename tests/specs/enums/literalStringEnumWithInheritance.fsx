@@ -8,17 +8,17 @@ open Fable.Core
 open System
 
 [<RequireQualifiedAccess>]
-[<StringEnum>]
+[<StringEnum(CaseRules.None)>]
 type ColorA =
-    | Black
+    | black
 
 [<RequireQualifiedAccess>]
-[<StringEnum>]
+[<StringEnum(CaseRules.None)>]
 type ColorB =
-    | BgBlack
+    | bgBlack
 
 [<RequireQualifiedAccess>]
-[<StringEnum>]
+[<StringEnum(CaseRules.None)>]
 type Color =
-    | Black
-    | BgBlack
+    | black
+    | bgBlack

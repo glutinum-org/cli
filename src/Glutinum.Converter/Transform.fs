@@ -321,7 +321,10 @@ let private transformEnum (glueEnum: GlueEnum) : FSharpType =
 
         {
             Name = glueEnum.Name
-            Cases = integralValues |> List.map transformMembers
+            Cases =
+                integralValues
+                |> List.map transformMembers
+                |> List.distinct
         }
         |> FSharpType.Enum
 
@@ -336,7 +339,7 @@ let private transformEnum (glueEnum: GlueEnum) : FSharpType =
                 glueMember.Name
                 |> String.removeSingleQuote
                 |> String.removeDoubleQuote
-                |> String.capitalizeFirstLetter
+                // |> String.capitalizeFirstLetter
 
             let differentName =
                 Naming.nameNotEqualsDefaultFableValue caseName caseValue
@@ -354,16 +357,19 @@ let private transformEnum (glueEnum: GlueEnum) : FSharpType =
             Attributes =
                 [
                     FSharpAttribute.RequireQualifiedAccess
-                    FSharpAttribute.StringEnum
+                    FSharpAttribute.StringEnum CaseRules.None
                 ]
             Name = glueEnum.Name
-            Cases = stringValues |> List.map transformMembers
+            Cases =
+                stringValues
+                |> List.map transformMembers
+                |> List.distinct
             IsOptional = false
         }
         |> FSharpType.Union
     | _ ->
         failwith
-            $"""Mix enum are not supported in F#
+            $"""Mix enums are not supported in F#
 
 Errored enum: {glueEnum.Name}
 """
@@ -413,7 +419,7 @@ module TypeAliasDeclaration =
             Attributes =
                 [
                     FSharpAttribute.RequireQualifiedAccess
-                    FSharpAttribute.StringEnum
+                    FSharpAttribute.StringEnum CaseRules.None
                 ]
             Name = aliasName
             Cases = cases
@@ -489,7 +495,7 @@ let private transformTypeAliasDeclaration
                             value
                             |> String.removeSingleQuote
                             |> String.removeDoubleQuote
-                            |> String.capitalizeFirstLetter
+                            // |> String.capitalizeFirstLetter
 
                         {
                             Attributes = []
@@ -498,12 +504,13 @@ let private transformTypeAliasDeclaration
                         : FSharpUnionCase
                     | _ -> failwith "Should not happen"
                 )
+                |> List.distinct
 
             ({
                 Attributes =
                     [
                         FSharpAttribute.RequireQualifiedAccess
-                        FSharpAttribute.StringEnum
+                        FSharpAttribute.StringEnum CaseRules.None
                     ]
                 Name = glueTypeAliasDeclaration.Name
                 Cases = cases
@@ -526,6 +533,7 @@ let private transformTypeAliasDeclaration
                         : FSharpEnumCase
                     | _ -> failwith "Should not happen"
                 )
+                |> List.distinct
 
             ({
                 Name = glueTypeAliasDeclaration.Name

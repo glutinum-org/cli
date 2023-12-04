@@ -8,7 +8,10 @@ open Fable.Core
 open System
 
 [<RequireQualifiedAccess>]
-[<StringEnum>]
+[<StringEnum(CaseRules.None)>]
 type ForegroundColor =
-    | Black
+    | black
+    | red
     | Red
+    | m
+    | M

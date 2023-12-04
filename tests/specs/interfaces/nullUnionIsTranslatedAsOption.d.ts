@@ -1,3 +1,3 @@
-interface ConfigTypeMap {
-    default: string | null;
-}
+    interface ConfigTypeMap {
+        default: string | null;
+    }

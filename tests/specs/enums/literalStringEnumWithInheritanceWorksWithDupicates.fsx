@@ -9,13 +9,19 @@ open System
 
 [<RequireQualifiedAccess>]
 [<StringEnum(CaseRules.None)>]
-type ForegroundColor =
+type ColorA =
     | black
-    | red
-    | green
+    | bgRed
 
 [<RequireQualifiedAccess>]
 [<StringEnum(CaseRules.None)>]
-type NoBlack =
-    | red
-    | green
+type ColorB =
+    | bgBlack
+    | black
+
+[<RequireQualifiedAccess>]
+[<StringEnum(CaseRules.None)>]
+type Color =
+    | black
+    | bgRed
+    | bgBlack

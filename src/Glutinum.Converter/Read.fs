@@ -18,10 +18,12 @@ type JS.NumberConstructor with
 let private isNumericString (text: string) =
     jsTypeof text = "string" && unbox text |> Constructors.Number.isNaN |> not
 
-module TypeFlags =
 
-    let hasFlag (flags: Ts.TypeFlags) (flag: Ts.TypeFlags) =
-        int flags &&& int flag <> 0
+let (|HasTypeFlags|_|) (flag: Ts.TypeFlags) (flags: Ts.TypeFlags) =
+    if int flags &&& int flag <> 0 then
+        Some()
+    else
+        None
 
 let private tryReadNumericLiteral (text: string) =
     if isNumericString text then
@@ -169,11 +171,8 @@ let private readTypeNode
                     typ.types
                     |> Seq.toList
                     |> List.choose (fun typ ->
-                        if
-                            TypeFlags.hasFlag
-                                typ.flags
-                                Ts.TypeFlags.StringLiteral
-                        then
+                        match typ.flags with
+                        | HasTypeFlags Ts.TypeFlags.StringLiteral ->
                             let literalType = typ :?> Ts.LiteralType
 
                             let value = unbox<string> literalType.value
@@ -181,11 +180,7 @@ let private readTypeNode
                             GlueLiteral.String value
                             |> GlueType.Literal
                             |> Some
-                        else if
-                            TypeFlags.hasFlag
-                                typ.flags
-                                Ts.TypeFlags.NumberLiteral
-                        then
+                        | HasTypeFlags Ts.TypeFlags.NumberLiteral ->
                             let literalType = typ :?> Ts.LiteralType
 
                             let value =
@@ -202,8 +197,7 @@ let private readTypeNode
                                     )
 
                             value |> GlueType.Literal |> Some
-                        else
-                            None
+                        | _ -> None
                     )
 
                 cases |> GlueTypeUnion |> GlueType.Union
@@ -230,8 +224,7 @@ let private readTypeNode
 
                             // Take any of the members
                             let (_, refMember) =
-                                symbol.members.Value.entries()
-                                |> Seq.head
+                                symbol.members.Value.entries () |> Seq.head
 
                             let originalType =
                                 refMember.declarations.Value[0].parent
@@ -244,7 +237,9 @@ let private readTypeNode
                                 let members =
                                     interfaceDeclaration.members
                                     |> Seq.toList
-                                    |> List.map (tryReadNamedDeclaration checker)
+                                    |> List.map (
+                                        tryReadNamedDeclaration checker
+                                    )
 
                                 ({
                                     Name = interfaceDeclaration.name.getText ()
@@ -270,8 +265,7 @@ let private readTypeNode
 
             GlueType.Array elementType
 
-        | Ts.SyntaxKind.TypePredicate ->
-            GlueType.Primitive GluePrimitive.Bool
+        | Ts.SyntaxKind.TypePredicate -> GlueType.Primitive GluePrimitive.Bool
 
         | Ts.SyntaxKind.FunctionType ->
             let functionTypeNode = typeNode :?> Ts.FunctionTypeNode
@@ -287,15 +281,15 @@ let private readTypeNode
 
             let typ = checker.getTypeAtLocation typeNodeQuery
 
-            if TypeFlags.hasFlag typ.flags Ts.TypeFlags.Object then
+            match typ.flags with
+            | HasTypeFlags Ts.TypeFlags.Object ->
                 {
                     Name = typ.symbol.name
                     Constructors = []
                     Members = []
                 }
                 |> GlueType.ClassDeclaration
-            else
-                GlueType.Primitive GluePrimitive.Any
+            | _ -> GlueType.Primitive GluePrimitive.Any
 
         | _ -> failwith $"readTypeNode: Unsupported kind {typeNode.kind}"
     | None -> GlueType.Primitive GluePrimitive.Unit
@@ -389,11 +383,12 @@ let rec private readUnionTypeCases
             | None ->
                 let typ = checker.getTypeOfSymbol symbol
 
-                if TypeFlags.hasFlag typ.flags Ts.TypeFlags.Any then
+                match typ.flags with
+                | HasTypeFlags Ts.TypeFlags.Any ->
                     GlueType.Primitive GluePrimitive.Any
                     |> List.singleton
                     |> Some
-                else
+                | _ ->
                     failwith "readUnionTypeCases: Unsupported type reference"
 
         // else
@@ -429,7 +424,6 @@ let private readUnionType
     (unionTypeNode: Ts.UnionTypeNode)
     : GlueType
     =
-
     readUnionTypeCases checker unionTypeNode |> GlueType.Union
 
 let readTypeOperator
@@ -568,7 +562,8 @@ let private tryReadNamedDeclaration
         ({
             Parameters = readParameters checker callSignature.parameters
             Type = readTypeNode checker callSignature.``type``
-        } : GlueCallSignature)
+        }
+        : GlueCallSignature)
         |> GlueMember.CallSignature
 
     | Ts.SyntaxKind.MethodDeclaration ->
@@ -598,7 +593,8 @@ let private tryReadNamedDeclaration
         ({
             Parameters = readParameters checker indexSignature.parameters
             Type = readTypeNode checker (Some indexSignature.``type``)
-        } : GlueIndexSignature)
+        }
+        : GlueIndexSignature)
         |> GlueMember.IndexSignature
 
     | _ ->
