@@ -541,10 +541,10 @@ let private tryReadNamedDeclaration
     | Ts.SyntaxKind.CallSignature ->
         let callSignature = declaration :?> Ts.CallSignatureDeclaration
 
-        {
+        ({
             Parameters = readParameters checker callSignature.parameters
             Type = readTypeNode checker callSignature.``type``
-        }
+        } : GlueCallSignature)
         |> GlueMember.CallSignature
 
     | Ts.SyntaxKind.MethodDeclaration ->
@@ -567,6 +567,15 @@ let private tryReadNamedDeclaration
                 |> Option.defaultValue false
         }
         |> GlueMember.Method
+
+    | Ts.SyntaxKind.IndexSignature ->
+        let indexSignature = declaration :?> Ts.IndexSignatureDeclaration
+
+        ({
+            Parameters = readParameters checker indexSignature.parameters
+            Type = readTypeNode checker (Some indexSignature.``type``)
+        } : GlueIndexSignature)
+        |> GlueMember.IndexSignature
 
     | _ ->
         failwith $"tryReadNamedDeclaration: Unsupported kind {declaration.kind}"

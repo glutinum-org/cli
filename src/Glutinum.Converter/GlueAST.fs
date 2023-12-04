@@ -47,11 +47,18 @@ type GlueProperty =
         Accessor: GlueAccessor
     }
 
+type GlueIndexSignature =
+    {
+        Parameters: GlueParameter list
+        Type: GlueType
+    }
+
 [<RequireQualifiedAccess>]
 type GlueMember =
     | Method of GlueMethod
     | Property of GlueProperty
     | CallSignature of GlueCallSignature
+    | IndexSignature of GlueIndexSignature
 
 type GlueInterface =
     {

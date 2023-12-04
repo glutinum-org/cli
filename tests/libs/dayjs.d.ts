@@ -428,5 +428,5 @@ declare namespace dayjs {
 
   export function unix(t: number): Dayjs
 
-  const Ls : { [key: string] :  ILocale }
+  const Ls : { [key: string] : ILocale }
 }

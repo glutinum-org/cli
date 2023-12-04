@@ -262,6 +262,20 @@ let private transformMembers (members: GlueMember list) : FSharpMember list =
                 Accessibility = FSharpAccessiblity.Public
             }
             |> FSharpMember.Property
+
+        | GlueMember.IndexSignature indexSignature ->
+            {
+                Attributes = [ FSharpAttribute.EmitIndexer ]
+                Name = "Item"
+                Parameters =
+                    indexSignature.Parameters |> List.map transformParameter
+                Type = transformType indexSignature.Type
+                IsOptional = false
+                IsStatic = false
+                Accessor = Some FSharpAccessor.ReadWrite
+                Accessibility = FSharpAccessiblity.Public
+            }
+            |> FSharpMember.Property
     )
 
 let private transformInterface (info: GlueInterface) : FSharpInterface =

@@ -84,6 +84,7 @@ let attributeToText (fsharpAttribute: FSharpAttribute) =
     | FSharpAttribute.EmitMacroConstructor className ->
         $"[<Emit(\"new $0.{className}($1...)\")>]"
     | FSharpAttribute.ImportAll module_ -> $"[<ImportAll(\"{module_}\")>]"
+    | FSharpAttribute.EmitIndexer -> "[<EmitIndexer>]"
 
 let private printInlineAttribute
     (printer: Printer)
@@ -276,7 +277,28 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
                 printer.WriteInline(" = nativeOnly")
 
             else
-                printer.WriteInline($": {printType propertyInfo.Type}")
+                propertyInfo.Parameters
+                |> List.iteri (fun index p ->
+                    if index = 0 then
+                        printer.WriteInline(": ")
+                    else
+                        printer.WriteInline(" -> ")
+
+                    let option =
+                        if p.IsOptional then
+                            " option"
+                        else
+                            ""
+
+                    printer.WriteInline($"{p.Name}: {printType p.Type}{option}")
+                )
+
+                if propertyInfo.Parameters.Length > 0 then
+                    printer.WriteInline(" -> ")
+                else
+                    printer.WriteInline(": ")
+
+                printer.WriteInline($"{printType propertyInfo.Type}")
 
                 if propertyInfo.IsOptional then
                     printer.WriteInline(" option")
