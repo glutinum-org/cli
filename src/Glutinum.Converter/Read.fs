@@ -282,6 +282,20 @@ let private readTypeNode
             }
             |> GlueType.FunctionType
 
+        | Ts.SyntaxKind.TypeQuery ->
+            let typeNodeQuery = typeNode :?> Ts.TypeQueryNode
+
+            let typ = checker.getTypeAtLocation typeNodeQuery
+
+            if TypeFlags.hasFlag typ.flags Ts.TypeFlags.Object then
+                {
+                    Name = typ.symbol.name
+                    Constructors = []
+                    Members = []
+                }
+                |> GlueType.ClassDeclaration
+            else
+                GlueType.Primitive GluePrimitive.Any
 
         | _ -> failwith $"readTypeNode: Unsupported kind {typeNode.kind}"
     | None -> GlueType.Primitive GluePrimitive.Unit

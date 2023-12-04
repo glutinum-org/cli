@@ -80,7 +80,14 @@ let rec private transformType (glueType: GlueType) : FSharpType =
     | GlueType.Array glueType ->
         transformType glueType |> FSharpType.ResizeArray
 
-    | GlueType.ClassDeclaration _
+    | GlueType.ClassDeclaration classDeclaration ->
+         ({
+            Name = classDeclaration.Name
+            FullName = classDeclaration.Name
+        }
+        : FSharpTypeReference)
+        |> FSharpType.TypeReference
+
     | GlueType.ModuleDeclaration _
     | GlueType.IndexedAccessType _
     | GlueType.Literal _
