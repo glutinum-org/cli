@@ -155,6 +155,12 @@ type ExcludedMember =
     | Literal of GlueLiteral
     // | Function
 
+type GlueFunctionType =
+    {
+        Type: GlueType
+        Parameters: GlueParameter list
+    }
+
 [<RequireQualifiedAccess>]
 type GlueType =
     | Discard
@@ -173,6 +179,7 @@ type GlueType =
     | TypeReference of GlueTypeReference
     | Partial of GlueInterface
     | Array of GlueType
+    | FunctionType of GlueFunctionType
 
     member this.Name =
         match this with
@@ -201,4 +208,5 @@ type GlueType =
         | IndexedAccessType _
         | Union _
         | Partial _
+        | FunctionType _
         | Discard -> "obj"

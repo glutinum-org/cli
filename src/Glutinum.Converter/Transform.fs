@@ -90,6 +90,8 @@ let rec private transformType (glueType: GlueType) : FSharpType =
     | GlueType.Variable _
     | GlueType.KeyOf _
     | GlueType.Discard
+    | GlueType.FunctionType _
+    | GlueType.Partial _
     | GlueType.FunctionDeclaration _ ->
         printfn "Could not transform type: %A" glueType
         FSharpType.Discard
@@ -391,7 +393,12 @@ module TypeAliasDeclaration =
                         : FSharpUnionCase
                         |> Some
                     // Doesn't make sense to have a case for call signature
-                    | GlueMember.CallSignature _ -> None
+                    | GlueMember.CallSignature _
+                    // Doesn't make sense to have a case for index signature
+                    // because index signature is used because we don't know the name
+                    // of the properties and so it is used only to describe the
+                    // shape of the object
+                    | GlueMember.IndexSignature _ -> None
                 )
             | _ -> []
 
@@ -547,7 +554,8 @@ let private transformTypeAliasDeclaration
                         match m with
                         | GlueMember.Method { Type = typ }
                         | GlueMember.Property { Type = typ }
-                        | GlueMember.CallSignature { Type = typ } ->
+                        | GlueMember.CallSignature { Type = typ }
+                        | GlueMember.IndexSignature { Type = typ } ->
                             match typ with
                             | GlueType.Union(GlueTypeUnion cases) -> cases
                             | _ -> [ typ ]
@@ -617,6 +625,27 @@ let private transformTypeAliasDeclaration
 
         FSharpType.Interface partialInterface
 
+    | GlueType.FunctionType functionType ->
+        {
+            Attributes = [ FSharpAttribute.AllowNullLiteral ]
+            Name = glueTypeAliasDeclaration.Name
+            Members =
+                {
+                    Attributes =
+                        [ FSharpAttribute.EmitSelfInvoke ]
+                    Name = "Invoke"
+                    Parameters = functionType.Parameters |> List.map transformParameter
+                    Type = transformType functionType.Type
+                    IsOptional = false
+                    IsStatic = false
+                    Accessor = None
+                    Accessibility = FSharpAccessiblity.Public
+                }
+                |> FSharpMember.Method
+                |> List.singleton
+        }
+        |> FSharpType.Interface
+
     | _ -> FSharpType.Discard
 
 let private transformModuleDeclaration
@@ -661,6 +690,7 @@ let rec private transformToFsharp (glueTypes: GlueType list) : FSharpType list =
         | GlueType.ClassDeclaration classInfo ->
             transformClassDeclaration classInfo
 
+        | GlueType.FunctionType _
         | GlueType.Partial _
         | GlueType.Array _
         | GlueType.TypeReference _

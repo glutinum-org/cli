@@ -273,6 +273,16 @@ let private readTypeNode
         | Ts.SyntaxKind.TypePredicate ->
             GlueType.Primitive GluePrimitive.Bool
 
+        | Ts.SyntaxKind.FunctionType ->
+            let functionTypeNode = typeNode :?> Ts.FunctionTypeNode
+
+            {
+                Type = readTypeNode checker (Some functionTypeNode.``type``)
+                Parameters = readParameters checker functionTypeNode.parameters
+            }
+            |> GlueType.FunctionType
+
+
         | _ -> failwith $"readTypeNode: Unsupported kind {typeNode.kind}"
     | None -> GlueType.Primitive GluePrimitive.Unit
 
@@ -659,6 +669,25 @@ let private readFunctionDeclaration
         Parameters = readParameters checker declaration.parameters
     }
 
+
+// let private readFunctionTye
+//     (checker: Ts.TypeChecker)
+//     (declaration: Ts.FunctionTypeNode)
+//     : GlueFunctionType
+//     =
+
+//     let name =
+//         match declaration.name with
+//         | Some name -> name.getText ()
+//         | None -> failwith "readFunctionDeclaration: Missing name"
+
+//     {
+//         IsDeclared = isDeclared
+//         Name = name
+//         Type = readTypeNode checker declaration.``type``
+//         Parameters = readParameters checker declaration.parameters
+//     }
+
 let private readModuleDeclaration
     (checker: Ts.TypeChecker)
     (declaration: Ts.ModuleDeclaration)
@@ -779,6 +808,17 @@ let private readNode (checker: Ts.TypeChecker) (typeNode: Ts.Node) : GlueType =
         let declaration = typeNode :?> Ts.ClassDeclaration
 
         readClassDeclaration checker declaration |> GlueType.ClassDeclaration
+
+    | Ts.SyntaxKind.FunctionType ->
+        let functionType = typeNode :?> Ts.FunctionTypeNode
+
+        // ({
+        //     Parameters = readParameters checker functionType.parameters
+        //     Type = readTypeNode checker functionType.``type``
+        // } : GlueCallSignature)
+        // |> GlueType.FuncTionType
+        GlueType.Discard
+
 
     // | Ts.SyntaxKind.ExportAssignment ->
     //     let exportAssignment = typeNode :?> Ts.ExportAssignment
