@@ -180,13 +180,32 @@ let rec private printType (fsharpType: FSharpType) =
     | FSharpType.Module _
     | FSharpType.Interface _
     | FSharpType.Unsupported _
-    | FSharpType.Alias _
+    | FSharpType.TypeAlias _
     | FSharpType.Discard -> "obj"
+
+let private printTypeParameters
+    (printer: Printer)
+    (typeParameters: FSharpTypeParameter list)
+    =
+    if not typeParameters.IsEmpty then
+        printer.WriteInline("<")
+        typeParameters
+        |> List.iteri (fun index typeParameter ->
+            if index <> 0 then
+                printer.WriteInline(", ")
+
+            printer.WriteInline("'")
+            printer.WriteInline(typeParameter.Name)
+        )
+
+        printer.WriteInline(">")
 
 let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
     printAttributes printer interfaceInfo.Attributes
 
-    printer.Write($"type {interfaceInfo.Name} =")
+    printer.Write($"type {interfaceInfo.Name}")
+    printTypeParameters printer interfaceInfo.TypeParameters
+    printer.WriteInline(" =")
     printer.NewLine
 
     printer.Indent
@@ -237,7 +256,7 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
                     methodInfo.Parameters
                     |> List.iteri (fun index p ->
                         if index <> 0 then
-                            printer.WriteInline(" -> ")
+                            printer.WriteInline(" * ")
 
                         let option =
                             if p.IsOptional then
@@ -356,6 +375,20 @@ let private printEnum (printer: Printer) (enumInfo: FSharpEnum) =
 
     printer.Unindent
 
+let private printTypeAlias
+    (printer: Printer)
+    (aliasInfo: FSharpTypeAlias)
+    =
+    printer.Write($"type {aliasInfo.Name}")
+    printTypeParameters printer aliasInfo.TypeParameters
+    printer.WriteInline(" =")
+
+    printer.NewLine
+    printer.Indent
+    printer.Write(printType aliasInfo.Type)
+    printer.NewLine
+    printer.Unindent
+
 let rec print (printer: Printer) (fsharpTypes: FSharpType list) =
     match fsharpTypes with
     | fsharpType :: tail ->
@@ -409,13 +442,8 @@ let rec print (printer: Printer) (fsharpTypes: FSharpType list) =
 
         // printer.Unindent
 
-        | FSharpType.Alias aliasInfo ->
-            printer.Write($"type {aliasInfo.Name} =")
-            printer.NewLine
-            printer.Indent
-            printer.Write(printType aliasInfo.Type)
-            printer.NewLine
-            printer.Unindent
+        | FSharpType.TypeAlias aliasInfo ->
+            printTypeAlias printer aliasInfo
 
         | FSharpType.Mapped _
         | FSharpType.Primitive _

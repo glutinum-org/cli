@@ -18,6 +18,13 @@ type GlueParameter =
         Type: GlueType
     }
 
+type GlueTypeParameter =
+    {
+        Name: string
+        Constraint: GlueType option
+        Default: GlueType option
+    }
+
 type GlueMethod =
     {
         Name: string
@@ -64,6 +71,7 @@ type GlueInterface =
     {
         Name: string
         Members: GlueMember list
+        TypeParameters: GlueTypeParameter list
     }
 
 type GlueVariable =
@@ -114,6 +122,7 @@ type GlueTypeAliasDeclaration =
     {
         Name: string
         Type: GlueType
+        TypeParameters: GlueTypeParameter list
     }
 
 type GlueFunctionDeclaration =
@@ -139,6 +148,7 @@ type GlueClassDeclaration =
         Name: string
         Constructors: GlueConstructor list
         Members: GlueMember list
+        TypeParameters: GlueTypeParameter list
     }
 
 type GlueTypeReference =

@@ -18,7 +18,6 @@ type JS.NumberConstructor with
 let private isNumericString (text: string) =
     jsTypeof text = "string" && unbox text |> Constructors.Number.isNaN |> not
 
-
 let (|HasTypeFlags|_|) (flag: Ts.TypeFlags) (flags: Ts.TypeFlags) =
     if int flags &&& int flag <> 0 then
         Some()
@@ -108,6 +107,23 @@ let private readEnumMembers
             | _ -> state.NextCaseIndex + 1
         Members = state.Members @ [ newCase ]
     |}
+
+let private readTypeParameters
+    (checker: Ts.TypeChecker)
+    (typeParameters: ResizeArray<Ts.TypeParameterDeclaration> option) : GlueTypeParameter list =
+    match typeParameters with
+    | None -> []
+    | Some typeParameters ->
+        typeParameters
+        |> Seq.toList
+        |> List.map (fun typeParameter ->
+            {
+                Name = typeParameter.name.getText ()
+                Constraint = None
+                Default = None
+            }
+        )
+
 
 let private readEnum
     (checker: Ts.TypeChecker)
@@ -244,6 +260,7 @@ let private readTypeNode
                                 ({
                                     Name = interfaceDeclaration.name.getText ()
                                     Members = members
+                                    TypeParameters = []
                                 }
                                 : GlueInterface)
                                 |> GlueType.Partial
@@ -287,6 +304,7 @@ let private readTypeNode
                     Name = typ.symbol.name
                     Constructors = []
                     Members = []
+                    TypeParameters = []
                 }
                 |> GlueType.ClassDeclaration
             | _ -> GlueType.Primitive GluePrimitive.Any
@@ -507,6 +525,7 @@ let private readTypeAliasDeclaration
     {
         Name = declaration.name.getText ()
         Type = typ
+        TypeParameters = readTypeParameters checker declaration.typeParameters
     }
     |> GlueType.TypeAliasDeclaration
 
@@ -614,6 +633,7 @@ let private readInterfaceDeclaration
     {
         Name = declaration.name.getText ()
         Members = members
+        TypeParameters = []
     }
 
 let private tryReadVariableStatement
@@ -775,6 +795,7 @@ let private readClassDeclaration
         Name = name.getText ()
         Constructors = constructors
         Members = members
+        TypeParameters = []
     }
 
 let private readNode (checker: Ts.TypeChecker) (typeNode: Ts.Node) : GlueType =

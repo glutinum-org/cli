@@ -189,6 +189,7 @@ type FSharpInterface =
     {
         Attributes: FSharpAttribute list
         Name: string
+        TypeParameters: FSharpTypeParameter list
         Members: FSharpMember list
     }
 
@@ -208,10 +209,18 @@ type FSharpPrimitive =
     | Number
     | Null
 
+type FSharpTypeParameter =
+    {
+        Name: string
+        Constraint: FSharpType option
+        Default: FSharpType option
+    }
+
 type FSharpTypeAlias =
     {
         Name: string
         Type: FSharpType
+        TypeParameters: FSharpTypeParameter list
     }
 
 // type FSharpClass =
@@ -248,7 +257,7 @@ type FSharpType =
     | Unsupported of Ts.SyntaxKind
     | Mapped of FSharpMapped
     | Primitive of FSharpPrimitive
-    | Alias of FSharpTypeAlias
+    | TypeAlias of FSharpTypeAlias
     // | Class of FSharpClass
     | Discard
     | TypeReference of FSharpTypeReference

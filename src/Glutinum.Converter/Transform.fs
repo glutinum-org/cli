@@ -211,6 +211,7 @@ let private transformExports
         Attributes = [ FSharpAttribute.Erase ]
         Name = "Exports"
         Members = members
+        TypeParameters = []
     }
     |> FSharpType.Interface
 
@@ -292,6 +293,7 @@ let private transformInterface (info: GlueInterface) : FSharpInterface =
         Attributes = [ FSharpAttribute.AllowNullLiteral ]
         Name = info.Name
         Members = transformMembers info.Members
+        TypeParameters = transformTypeParameters info.TypeParameters
     }
 
 let private transformEnum (glueEnum: GlueEnum) : FSharpType =
@@ -428,6 +430,18 @@ module TypeAliasDeclaration =
         : FSharpUnion)
         |> FSharpType.Union
 
+let private transformTypeParameters
+    (typeParameters: GlueTypeParameter list) : FSharpTypeParameter list =
+    typeParameters
+    |> List.map (fun typeParameter ->
+        {
+            Name = typeParameter.Name
+            Constraint = typeParameter.Constraint |> Option.map transformType
+            Default = typeParameter.Default |> Option.map transformType
+        }
+    )
+
+
 let private transformTypeAliasDeclaration
     (glueTypeAliasDeclaration: GlueTypeAliasDeclaration)
     : FSharpType
@@ -548,9 +562,10 @@ let private transformTypeAliasDeclaration
             ({
                 Name = glueTypeAliasDeclaration.Name
                 Type = transformType unionType
+                TypeParameters = transformTypeParameters glueTypeAliasDeclaration.TypeParameters
             }
             : FSharpTypeAlias)
-            |> FSharpType.Alias
+            |> FSharpType.TypeAlias
 
     | GlueType.KeyOf glueType ->
         TypeAliasDeclaration.transformKeyOf
@@ -588,33 +603,37 @@ let private transformTypeAliasDeclaration
         ({
             Name = glueTypeAliasDeclaration.Name
             Type = typ
+            TypeParameters = transformTypeParameters glueTypeAliasDeclaration.TypeParameters
         }
         : FSharpTypeAlias)
-        |> FSharpType.Alias
+        |> FSharpType.TypeAlias
 
     | GlueType.Primitive primitiveInfo ->
         ({
             Name = glueTypeAliasDeclaration.Name
             Type = transformPrimitive primitiveInfo |> FSharpType.Primitive
+            TypeParameters = transformTypeParameters glueTypeAliasDeclaration.TypeParameters
         }
         : FSharpTypeAlias)
-        |> FSharpType.Alias
+        |> FSharpType.TypeAlias
 
     | GlueType.TypeReference typeReference ->
         ({
             Name = glueTypeAliasDeclaration.Name
             Type = transformType (GlueType.TypeReference typeReference)
+            TypeParameters = transformTypeParameters glueTypeAliasDeclaration.TypeParameters
         }
         : FSharpTypeAlias)
-        |> FSharpType.Alias
+        |> FSharpType.TypeAlias
 
     | GlueType.Array glueType ->
         ({
             Name = glueTypeAliasDeclaration.Name
             Type = transformType (GlueType.Array glueType)
+            TypeParameters = transformTypeParameters glueTypeAliasDeclaration.TypeParameters
         }
         : FSharpTypeAlias)
-        |> FSharpType.Alias
+        |> FSharpType.TypeAlias
 
     | GlueType.Partial interfaceInfo ->
         let originalInterface = transformInterface interfaceInfo
@@ -644,6 +663,7 @@ let private transformTypeAliasDeclaration
         {
             Attributes = [ FSharpAttribute.AllowNullLiteral ]
             Name = glueTypeAliasDeclaration.Name
+            TypeParameters = transformTypeParameters glueTypeAliasDeclaration.TypeParameters
             Members =
                 {
                     Attributes =
@@ -683,6 +703,7 @@ let private transformClassDeclaration
         Attributes = [ FSharpAttribute.AllowNullLiteral ]
         Name = classDeclaration.Name
         Members = transformMembers classDeclaration.Members
+        TypeParameters = transformTypeParameters classDeclaration.TypeParameters
     }
     : FSharpInterface)
     |> FSharpType.Interface
