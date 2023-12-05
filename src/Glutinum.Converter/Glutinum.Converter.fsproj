@@ -16,6 +16,24 @@
         <Compile Include="Log.fs" />
         <Compile Include="TypeScript.fs" />
         <Compile Include="GlueAST.fs" />
+        <Compile Include="Reader/Utils.fs" />
+        <Compile Include="Reader/Types.fs" />
+        <Compile Include="Reader/ClassDeclaration.fs" />
+        <Compile Include="Reader/EnumDeclaration.fs" />
+        <Compile Include="Reader/FunctionDeclaration.fs" />
+        <Compile Include="Reader/IndexedAccessType.fs" />
+        <Compile Include="Reader/InterfaceDeclaration.fs" />
+        <Compile Include="Reader/ModuleDeclaration.fs" />
+        <Compile Include="Reader/NamedDeclaration.fs" />
+        <Compile Include="Reader/Node.fs" />
+        <Compile Include="Reader/Parameters.fs" />
+        <Compile Include="Reader/TypeAliasDeclaration.fs" />
+        <Compile Include="Reader/TypeNode.fs" />
+        <Compile Include="Reader/TypeOperatorNode.fs" />
+        <Compile Include="Reader/TypeParameters.fs" />
+        <Compile Include="Reader/UnionTypeNode.fs" />
+        <Compile Include="Reader/VariableStatement.fs" />
+        <Compile Include="Reader/TypeScriptReader.fs" />
         <Compile Include="FsharpAST.fs" />
         <Compile Include="Read.fs" />
         <Compile Include="Transform.fs" />
@@ -23,7 +41,7 @@
         <Compile Include="Generate.fs" />
     </ItemGroup>
     <ItemGroup>
-      <PackageReference Include="Fable.Core" Version="4.0.0" />
+      <PackageReference Include="Fable.Core" Version="4.2.0" />
       <PackageReference Include="Fable.Node" Version="1.2.0" />
       <PackageReference Include="Glutinum.Chalk" Version="0.1.0-alpha-001" />
     </ItemGroup>
