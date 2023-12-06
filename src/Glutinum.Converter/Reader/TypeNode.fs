@@ -164,8 +164,8 @@ let readTypeNode
 
         let typ = checker.getTypeAtLocation typeNodeQuery
 
-        match typ.flags with
-        | HasTypeFlags Ts.TypeFlags.Object ->
+        match typ.symbol.flags with
+        | HasSymbolFlags Ts.SymbolFlags.Class ->
             {
                 Name = typ.symbol.name
                 Constructors = []
