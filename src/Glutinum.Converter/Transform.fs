@@ -81,13 +81,14 @@ let rec private transformType (glueType: GlueType) : FSharpType =
         transformType glueType |> FSharpType.ResizeArray
 
     | GlueType.ClassDeclaration classDeclaration ->
-         ({
+        ({
             Name = classDeclaration.Name
             FullName = classDeclaration.Name
         }
         : FSharpTypeReference)
         |> FSharpType.TypeReference
 
+    | GlueType.TypeParameter name -> FSharpType.TypeParameter name
     | GlueType.ModuleDeclaration _
     | GlueType.IndexedAccessType _
     | GlueType.Literal _
@@ -323,10 +324,7 @@ let private transformEnum (glueEnum: GlueEnum) : FSharpType =
 
         {
             Name = glueEnum.Name
-            Cases =
-                integralValues
-                |> List.map transformMembers
-                |> List.distinct
+            Cases = integralValues |> List.map transformMembers |> List.distinct
         }
         |> FSharpType.Enum
 
@@ -341,7 +339,7 @@ let private transformEnum (glueEnum: GlueEnum) : FSharpType =
                 glueMember.Name
                 |> String.removeSingleQuote
                 |> String.removeDoubleQuote
-                // |> String.capitalizeFirstLetter
+            // |> String.capitalizeFirstLetter
 
             let differentName =
                 Naming.nameNotEqualsDefaultFableValue caseName caseValue
@@ -362,10 +360,7 @@ let private transformEnum (glueEnum: GlueEnum) : FSharpType =
                     FSharpAttribute.StringEnum CaseRules.None
                 ]
             Name = glueEnum.Name
-            Cases =
-                stringValues
-                |> List.map transformMembers
-                |> List.distinct
+            Cases = stringValues |> List.map transformMembers |> List.distinct
             IsOptional = false
         }
         |> FSharpType.Union
@@ -431,7 +426,9 @@ module TypeAliasDeclaration =
         |> FSharpType.Union
 
 let private transformTypeParameters
-    (typeParameters: GlueTypeParameter list) : FSharpTypeParameter list =
+    (typeParameters: GlueTypeParameter list)
+    : FSharpTypeParameter list
+    =
     typeParameters
     |> List.map (fun typeParameter ->
         {
@@ -509,7 +506,7 @@ let private transformTypeAliasDeclaration
                             value
                             |> String.removeSingleQuote
                             |> String.removeDoubleQuote
-                            // |> String.capitalizeFirstLetter
+                        // |> String.capitalizeFirstLetter
 
                         {
                             Attributes = []
@@ -562,7 +559,9 @@ let private transformTypeAliasDeclaration
             ({
                 Name = glueTypeAliasDeclaration.Name
                 Type = transformType unionType
-                TypeParameters = transformTypeParameters glueTypeAliasDeclaration.TypeParameters
+                TypeParameters =
+                    transformTypeParameters
+                        glueTypeAliasDeclaration.TypeParameters
             }
             : FSharpTypeAlias)
             |> FSharpType.TypeAlias
@@ -603,7 +602,8 @@ let private transformTypeAliasDeclaration
         ({
             Name = glueTypeAliasDeclaration.Name
             Type = typ
-            TypeParameters = transformTypeParameters glueTypeAliasDeclaration.TypeParameters
+            TypeParameters =
+                transformTypeParameters glueTypeAliasDeclaration.TypeParameters
         }
         : FSharpTypeAlias)
         |> FSharpType.TypeAlias
@@ -612,7 +612,8 @@ let private transformTypeAliasDeclaration
         ({
             Name = glueTypeAliasDeclaration.Name
             Type = transformPrimitive primitiveInfo |> FSharpType.Primitive
-            TypeParameters = transformTypeParameters glueTypeAliasDeclaration.TypeParameters
+            TypeParameters =
+                transformTypeParameters glueTypeAliasDeclaration.TypeParameters
         }
         : FSharpTypeAlias)
         |> FSharpType.TypeAlias
@@ -621,7 +622,8 @@ let private transformTypeAliasDeclaration
         ({
             Name = glueTypeAliasDeclaration.Name
             Type = transformType (GlueType.TypeReference typeReference)
-            TypeParameters = transformTypeParameters glueTypeAliasDeclaration.TypeParameters
+            TypeParameters =
+                transformTypeParameters glueTypeAliasDeclaration.TypeParameters
         }
         : FSharpTypeAlias)
         |> FSharpType.TypeAlias
@@ -630,7 +632,8 @@ let private transformTypeAliasDeclaration
         ({
             Name = glueTypeAliasDeclaration.Name
             Type = transformType (GlueType.Array glueType)
-            TypeParameters = transformTypeParameters glueTypeAliasDeclaration.TypeParameters
+            TypeParameters =
+                transformTypeParameters glueTypeAliasDeclaration.TypeParameters
         }
         : FSharpTypeAlias)
         |> FSharpType.TypeAlias
@@ -663,13 +666,14 @@ let private transformTypeAliasDeclaration
         {
             Attributes = [ FSharpAttribute.AllowNullLiteral ]
             Name = glueTypeAliasDeclaration.Name
-            TypeParameters = transformTypeParameters glueTypeAliasDeclaration.TypeParameters
+            TypeParameters =
+                transformTypeParameters glueTypeAliasDeclaration.TypeParameters
             Members =
                 {
-                    Attributes =
-                        [ FSharpAttribute.EmitSelfInvoke ]
+                    Attributes = [ FSharpAttribute.EmitSelfInvoke ]
                     Name = "Invoke"
-                    Parameters = functionType.Parameters |> List.map transformParameter
+                    Parameters =
+                        functionType.Parameters |> List.map transformParameter
                     Type = transformType functionType.Type
                     IsOptional = false
                     IsStatic = false
@@ -726,6 +730,7 @@ let rec private transformToFsharp (glueTypes: GlueType list) : FSharpType list =
         | GlueType.ClassDeclaration classInfo ->
             transformClassDeclaration classInfo
 
+        | GlueType.TypeParameter _
         | GlueType.FunctionType _
         | GlueType.Partial _
         | GlueType.Array _

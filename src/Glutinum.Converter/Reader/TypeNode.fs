@@ -127,11 +127,18 @@ let readTypeNode
                         | _ -> GlueType.Discard
 
         else
-            ({
-                Name = typeReferenceNode.getText ()
-                FullName = fullName
-            })
-            |> GlueType.TypeReference
+            let ts = ts
+
+            match symbolOpt.Value.flags with
+            | HasSymbolFlags Ts.SymbolFlags.TypeParameter ->
+                symbolOpt.Value.name
+                |> GlueType.TypeParameter
+            | _ ->
+                ({
+                    Name = typeReferenceNode.getText ()
+                    FullName = fullName
+                })
+                |> GlueType.TypeReference
 
     | Ts.SyntaxKind.ArrayType ->
         let arrayTypeNode = typeNode :?> Ts.ArrayTypeNode

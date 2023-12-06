@@ -190,6 +190,7 @@ type GlueType =
     | Partial of GlueInterface
     | Array of GlueType
     | FunctionType of GlueFunctionType
+    | TypeParameter of string
 
     member this.Name =
         match this with
@@ -208,6 +209,7 @@ type GlueType =
             | GluePrimitive.Undefined -> "obj"
         | Enum info -> info.Name
         | TypeAliasDeclaration info -> info.Name
+        | TypeParameter name -> name
         | Literal info -> info.ToText()
         | KeyOf _ -> "string"
         | FunctionDeclaration info -> info.Name

@@ -11,6 +11,12 @@ let (|HasTypeFlags|_|) (flag: Ts.TypeFlags) (flags: Ts.TypeFlags) =
     else
         None
 
+let (|HasSymbolFlags|_|) (flag: Ts.SymbolFlags) (flags: Ts.SymbolFlags) =
+    if int flags &&& int flag <> 0 then
+        Some()
+    else
+        None
+
 let private isNumericString (text: string) =
     jsTypeof text = "string" && unbox text |> Constructors.Number.isNaN |> not
 

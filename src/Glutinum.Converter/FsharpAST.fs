@@ -261,6 +261,7 @@ type FSharpType =
     // | Class of FSharpClass
     | Discard
     | TypeReference of FSharpTypeReference
+    | TypeParameter of string
     | ResizeArray of FSharpType
 
 type FSharpOutFile =

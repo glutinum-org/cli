@@ -13,7 +13,7 @@
         <Compile Include="Program.fs" />
     </ItemGroup>
     <ItemGroup>
-      <PackageReference Include="Fable.Core" Version="4.0.0" />
+      <PackageReference Include="Fable.Core" Version="4.2.0" />
       <PackageReference Include="Fable.Node" Version="1.2.0" />
       <PackageReference Include="Glutinum.Chalk" Version="0.1.0-alpha-001" />
     </ItemGroup>

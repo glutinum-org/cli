@@ -175,6 +175,7 @@ let rec private printType (fsharpType: FSharpType) =
         | FSharpPrimitive.Number -> "float"
         | FSharpPrimitive.Null -> "obj"
     | FSharpType.TypeReference typeReference -> typeReference.Name
+    | FSharpType.TypeParameter name -> $"'{name}"
     | FSharpType.Option optionType -> printType optionType + " option"
     | FSharpType.ResizeArray arrayType -> $"ResizeArray<{printType arrayType}>"
     | FSharpType.Module _
@@ -450,6 +451,7 @@ let rec print (printer: Printer) (fsharpTypes: FSharpType list) =
         | FSharpType.TypeReference _
         | FSharpType.Option _
         | FSharpType.ResizeArray _
+        | FSharpType.TypeParameter _
         | FSharpType.Discard -> ()
 
         print printer tail
