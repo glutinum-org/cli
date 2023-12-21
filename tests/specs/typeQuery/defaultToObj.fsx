@@ -1,9 +1,5 @@
 module rec Glutinum
 
-(***)
-#r "nuget: Fable.Core"
-(***)
-
 open Fable.Core
 open System
 
@@ -16,3 +12,7 @@ type Exports =
 type PluginFunc =
     [<Emit("$0($1...)")>]
     abstract member Invoke: c: obj -> unit
+
+(***)
+#r "nuget: Fable.Core"
+(***)

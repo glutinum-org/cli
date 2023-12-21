@@ -1,9 +1,5 @@
 module rec Glutinum
 
-(***)
-#r "nuget: Fable.Core"
-(***)
-
 open Fable.Core
 open System
 
@@ -15,3 +11,7 @@ type Exports =
 [<AllowNullLiteral>]
 type Dayjs =
     abstract member locale: preset: U2<string, obj> -> Dayjs
+
+(***)
+#r "nuget: Fable.Core"
+(***)

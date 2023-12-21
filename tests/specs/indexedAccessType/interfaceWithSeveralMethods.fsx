@@ -1,9 +1,5 @@
 module rec Glutinum
 
-(***)
-#r "nuget: Fable.Core"
-(***)
-
 open Fable.Core
 open System
 
@@ -16,3 +12,7 @@ type ConfigTypeMap =
 
 type ConfigType =
     U4<string, float, bool, obj>
+
+(***)
+#r "nuget: Fable.Core"
+(***)

@@ -1,9 +1,5 @@
 module rec Glutinum
 
-(***)
-#r "nuget: Fable.Core"
-(***)
-
 open Fable.Core
 open System
 
@@ -23,3 +19,7 @@ module lib =
     [<AllowNullLiteral>]
     type Logger =
         interface end
+
+(***)
+#r "nuget: Fable.Core"
+(***)

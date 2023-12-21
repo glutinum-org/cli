@@ -1,9 +1,5 @@
 module rec Glutinum
 
-(***)
-#r "nuget: Fable.Core"
-(***)
-
 open Fable.Core
 open System
 
@@ -15,3 +11,7 @@ type FormatObject =
 
 type OptionType =
     U3<FormatObject, string, ResizeArray<string>>
+
+(***)
+#r "nuget: Fable.Core"
+(***)

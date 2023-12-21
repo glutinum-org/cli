@@ -1,9 +1,5 @@
 module rec Glutinum
 
-(***)
-#r "nuget: Fable.Core"
-(***)
-
 open Fable.Core
 open System
 
@@ -14,3 +10,7 @@ type Direction =
     | [<CompiledName("DOWN")>] Down
     | [<CompiledName("LEFT")>] Left
     | [<CompiledName("RIGHT")>] Right
+
+(***)
+#r "nuget: Fable.Core"
+(***)

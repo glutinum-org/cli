@@ -1,9 +1,5 @@
 module rec Glutinum
 
-(***)
-#r "nuget: Fable.Core"
-(***)
-
 open Fable.Core
 open System
 
@@ -20,3 +16,7 @@ type DayJs =
 type PluginFunc =
     [<Emit("$0($1...)")>]
     abstract member Invoke: c: DayJs -> unit
+
+(***)
+#r "nuget: Fable.Core"
+(***)

@@ -1,9 +1,5 @@
 module rec Glutinum
 
-(***)
-#r "nuget: Fable.Core"
-(***)
-
 open Fable.Core
 open System
 
@@ -13,3 +9,7 @@ type Exports =
     static member hello (name: string) : unit = nativeOnly
     [<Import("add", "module")>]
     static member add (a: float, b: float) : float = nativeOnly
+
+(***)
+#r "nuget: Fable.Core"
+(***)

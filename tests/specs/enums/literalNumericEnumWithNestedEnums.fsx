@@ -1,9 +1,5 @@
 module rec Glutinum
 
-(***)
-#r "nuget: Fable.Core"
-(***)
-
 open Fable.Core
 open System
 
@@ -40,3 +36,7 @@ type NumberG =
     | ``2`` = 2
     | ``3`` = 3
     | ``4`` = 4
+
+(***)
+#r "nuget: Fable.Core"
+(***)

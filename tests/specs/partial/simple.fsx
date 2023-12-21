@@ -1,9 +1,5 @@
 module rec Glutinum
 
-(***)
-#r "nuget: Fable.Core"
-(***)
-
 open Fable.Core
 open System
 
@@ -16,3 +12,7 @@ type Todo =
 type TodoPartial =
     abstract member title: string option with get, set
     abstract member description: string option with get, set
+
+(***)
+#r "nuget: Fable.Core"
+(***)

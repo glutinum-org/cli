@@ -1,9 +1,5 @@
 module rec Glutinum
 
-(***)
-#r "nuget: Fable.Core"
-(***)
-
 open Fable.Core
 open System
 
@@ -14,3 +10,7 @@ module dayjs =
     type UnitTypeShort =
         | s
         | ms
+
+(***)
+#r "nuget: Fable.Core"
+(***)

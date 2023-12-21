@@ -2,11 +2,10 @@
 
 | Tasks | Command |
 |---|---|
-| Test  | `dotnet fable tests --sourceMaps --run npx ava tests`  |
-| Watch test  |   `dotnet fable tests --watch --sourceMaps --run npx ava tests --watch` |
-| Watch specific test | `dotnet fable tests --watch --sourceMaps --run npx ava tests --watch --match="**XXX**"` |
+| Test  | `dotnet fable src/Glutinum.Converter --outDir fableBuild --sourceMaps --run vitest run`  |
+| Watch test  |   `dotnet fable src/Glutinum.Converter --outDir fableBuild --sourceMaps --watch --run vitest run` |
 
-You can also use attach a JavaScript debugger while debugging a specific test by compile the CLI tool:
+You can also attach a JavaScript debugger while debugging a specific test by compile the CLI tool:
 
 - Terminal: `dotnet fable src/Glutinum.Converter.CLI --watch --sourceMaps`
 - JavaScript debug terminal (VSCode): `node src/Glutinum.Converter.CLI/Program.fs.js ./tests/specs/enums/literalNumericEnum.d.ts`

@@ -1,9 +1,5 @@
 module rec Glutinum
 
-(***)
-#r "nuget: Fable.Core"
-(***)
-
 open Fable.Core
 open System
 
@@ -17,3 +13,7 @@ type Point =
 type P =
     | x
     | y
+
+(***)
+#r "nuget: Fable.Core"
+(***)

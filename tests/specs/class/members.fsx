@@ -1,9 +1,5 @@
 module rec Glutinum
 
-(***)
-#r "nuget: Fable.Core"
-(***)
-
 open Fable.Core
 open System
 
@@ -17,3 +13,7 @@ type Dayjs =
     abstract member clone: unit -> Dayjs
     abstract member isValid: unit -> bool
     abstract member locale: unit -> string
+
+(***)
+#r "nuget: Fable.Core"
+(***)

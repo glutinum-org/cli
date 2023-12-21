@@ -1,9 +1,5 @@
 module rec Glutinum
 
-(***)
-#r "nuget: Fable.Core"
-(***)
-
 open Fable.Core
 open System
 
@@ -15,3 +11,7 @@ type ForegroundColor =
     | Red
     | m
     | M
+
+(***)
+#r "nuget: Fable.Core"
+(***)

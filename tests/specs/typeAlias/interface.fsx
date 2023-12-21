@@ -1,9 +1,5 @@
 module rec Glutinum
 
-(***)
-#r "nuget: Fable.Core"
-(***)
-
 open Fable.Core
 open System
 
@@ -15,3 +11,7 @@ type FormatObject =
 
 type OptionType =
     FormatObject
+
+(***)
+#r "nuget: Fable.Core"
+(***)

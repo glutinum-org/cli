@@ -1,9 +1,5 @@
 module rec Glutinum
 
-(***)
-#r "nuget: Fable.Core"
-(***)
-
 open Fable.Core
 open System
 
@@ -11,3 +7,7 @@ open System
 type Exports =
     [<Import("hello", "module")>]
     static member hello (name: string) : unit = nativeOnly
+
+(***)
+#r "nuget: Fable.Core"
+(***)

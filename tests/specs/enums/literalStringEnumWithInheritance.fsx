@@ -1,9 +1,5 @@
 module rec Glutinum
 
-(***)
-#r "nuget: Fable.Core"
-(***)
-
 open Fable.Core
 open System
 
@@ -22,3 +18,7 @@ type ColorB =
 type Color =
     | black
     | bgBlack
+
+(***)
+#r "nuget: Fable.Core"
+(***)

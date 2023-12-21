@@ -1,9 +1,5 @@
 module rec Glutinum
 
-(***)
-#r "nuget: Fable.Core"
-(***)
-
 open Fable.Core
 open System
 
@@ -24,3 +20,7 @@ module dayjs =
     [<AllowNullLiteral>]
     type Dayjs =
         interface end
+
+(***)
+#r "nuget: Fable.Core"
+(***)

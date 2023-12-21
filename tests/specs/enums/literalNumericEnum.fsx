@@ -1,9 +1,5 @@
 module rec Glutinum
 
-(***)
-#r "nuget: Fable.Core"
-(***)
-
 open Fable.Core
 open System
 
@@ -11,3 +7,7 @@ open System
 type PossibleValues =
     | ``1`` = 1
     | ``2`` = 2
+
+(***)
+#r "nuget: Fable.Core"
+(***)
