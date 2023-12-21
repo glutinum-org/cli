@@ -9,4 +9,4 @@ open System
 
 [<AllowNullLiteral>]
 type ConfigTypeMap =
-    abstract member default: string option with get, set
+    abstract member ``default``: string option with get, set

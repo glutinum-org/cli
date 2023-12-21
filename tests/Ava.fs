@@ -84,11 +84,11 @@ type ExecutionContext<'Context> =
 [<Erase>]
 type test<'Context> =
 
-    [<ImportDefault("ava")>]
+    [<ImportDefault("vitest")>]
     static member test(title: string, t: ExecutionContext<'Context> -> unit) =
         nativeOnly
 
-    [<ImportDefault("ava")>]
+    [<ImportDefault("vitest")>]
     static member test
         (
             title: string,
