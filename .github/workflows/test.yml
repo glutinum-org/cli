@@ -25,8 +25,8 @@ jobs:
       with:
         version: 8
 
-    - name: Fable Tests - JavaScript
+    - name: Tests
       run: |
         pnpm install
         dotnet tool restore
-        dotnet fable tests --run npx ava tests
+        dotnet fable src/Glutinum.Converter --outDir fableBuild --sourceMaps --run vitest run
