@@ -1,4 +1,4 @@
 #!/bin/sh -x
 
 dotnet tool restore
-dotnet run --project Glutinum.Build/Glutinum.Build.fsproj -- $@
+dotnet run --project src/Glutinum.Build/Glutinum.Build.fsproj -- $@

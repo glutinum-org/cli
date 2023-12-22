@@ -1,8 +1,18 @@
 source https://api.nuget.org/v3/index.json
-
 storage: none
 
-nuget Semver
-nuget BlackFox.CommandLine
-nuget SimpleExec
-nuget FSharp.Management
+nuget FSharp.Core redirects: force
+
+nuget Fable.Core
+nuget Glutinum.Chalk
+nuget Fable.Node
+
+group Build
+
+    source https://api.nuget.org/v3/index.json
+    storage: none
+
+    nuget Semver
+    nuget BlackFox.CommandLine
+    nuget SimpleExec
+    nuget Thoth.Json.Newtonsoft

@@ -3,35 +3,47 @@ module Build.Publish
 open System
 open System.IO
 open SimpleExec
+open BlackFox.CommandLine
 open Build.Utils
+open Build.Utils.Pnpm
 
-let publish (projectDir: string) =
-    printfn $"Publishing {projectDir}"
 
-    let nugetKey = Environment.GetEnvironmentVariable("NUGET_KEY")
+let private publishNpm (projectDir: string) =
+    let packageJsonPath = Path.Combine(projectDir, "package.json")
+    let packageJsonContent = File.ReadAllText(packageJsonPath)
+    let changelogPath = Path.Combine(projectDir, "CHANGELOG.md")
 
-    // Delete the bin folder, so dotnet pack will always create a new package
-    // Otherwise, if the package already exists, it will not be created
-    // and we can't get the package path
-    let binFolder = Path.Combine(projectDir, "bin")
+    let lastChangelogVersion =
+        Changelog.getLastVersion changelogPath |> fun v -> v.Version.ToString()
 
-    if Directory.Exists binFolder then
-        Directory.Delete(binFolder, true)
+    printfn $"Publishing: %s{projectDir}"
 
-    if isNull nugetKey then
-        failwithf $"Missing NUGET_KEY environment variable"
+    if Npm.needPublishing packageJsonContent lastChangelogVersion then
+        let updatedPackageJsonContent =
+            Npm.replaceVersion packageJsonContent lastChangelogVersion
 
-    let nupkgPath = Dotnet.pack projectDir
-    Dotnet.Nuget.push (nupkgPath, nugetKey, skipDuplicate = true)
-
+        File.WriteAllText(packageJsonPath, updatedPackageJsonContent)
+        // Pnpm.publish ()
+        printfn $"Published!"
+    else
+        printfn $"Already up-to-date, skipping..."
 
 let handle (_args: string list) =
-    Build.Test.JavaScript.handle []
-    Build.Test.Newtonsoft.handle []
-    Build.Test.Python.handle []
+    Test.Specs.handle []
 
-    publish Workspace.ProjectDir.Packages.legacy
-    publish Workspace.ProjectDir.Packages.core
-    publish Workspace.ProjectDir.Packages.javascript
-    publish Workspace.ProjectDir.Packages.newtonsoft
-    publish Workspace.ProjectDir.Packages.python
+    if (Directory.Exists "dist") then
+        Directory.Delete("dist", true)
+
+    Command.Run("dotnet", "fantomas src")
+
+    Command.Run(
+        "dotnet",
+        CmdLine.empty
+        |> CmdLine.appendRaw "fable"
+        |> CmdLine.appendRaw "src/Glutinum.Converter.CLI"
+        |> CmdLine.appendPrefix "--outDir" "dist"
+        |> CmdLine.appendRaw "--sourceMaps"
+        |> CmdLine.toString
+    )
+
+    publishNpm "dist"

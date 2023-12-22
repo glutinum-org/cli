@@ -1,44 +1,27 @@
 module Build.Test.Specs
 
 open BlackFox.CommandLine
-open Build
 open SimpleExec
-
-let private outDir = "fableBuild"
-
-let private mochaComand =
-    CmdLine.empty
-    |> CmdLine.appendRaw "npx"
-    |> CmdLine.appendRaw "mocha"
-    |> CmdLine.appendRaw outDir
-    |> CmdLine.appendPrefix "--reporter" "dot"
-    |> CmdLine.toString
 
 let handle (args: string list) =
     let isWatch = args |> List.contains "--watch"
 
-    let fableArgs =
-        CmdLine.concat
-            [
-                CmdLine.empty
-                |> CmdLine.appendRaw "fable"
-                |> CmdLine.appendPrefix "--outDir" outDir
-                |> CmdLine.appendRaw "--noCache"
-
-                if isWatch then
-                    CmdLine.empty
-                    |> CmdLine.appendRaw "--watch"
-                    |> CmdLine.appendRaw "--runWatch"
-                    |> CmdLine.appendRaw mochaComand
-                else
-                    CmdLine.empty
-                    |> CmdLine.appendRaw "--run"
-                    |> CmdLine.appendRaw mochaComand
-            ]
+    let vitestCmd =
+        CmdLine.empty
+        |> CmdLine.appendRaw "npx"
+        |> CmdLine.appendRaw "vitest"
+        |> CmdLine.appendIf (not isWatch) "run"
         |> CmdLine.toString
 
-    Command.Run(
-        "dotnet",
-        fableArgs,
-        workingDirectory = Workspace.ProjectDir.Tests.javascript
-    )
+    let fableCmd =
+        CmdLine.empty
+        |> CmdLine.appendRaw "fable"
+        |> CmdLine.appendIf isWatch "watch"
+        |> CmdLine.appendRaw "src/Glutinum.Converter"
+        |> CmdLine.appendPrefix "--outDir" "fableBuild"
+        |> CmdLine.appendRaw "--sourceMaps"
+        |> CmdLine.appendRaw "--run"
+        |> CmdLine.appendRaw vitestCmd
+        |> CmdLine.toString
+
+    Command.Run("dotnet", fableCmd)

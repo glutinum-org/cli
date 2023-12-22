@@ -1,4 +1,6 @@
-Semver
-BlackFox.CommandLine
-SimpleExec
-FSharp.Management
+group Build
+    FSharp.Core
+    Semver
+    BlackFox.CommandLine
+    SimpleExec
+    Thoth.Json.Newtonsoft

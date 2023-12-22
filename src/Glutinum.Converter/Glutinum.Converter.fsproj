@@ -1,53 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-    <PropertyGroup>
-        <Version>0.1.0-alpha-001</Version>
-        <TargetFramework>netstandard2.0</TargetFramework>
-        <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <Authors>Maxime Mangel</Authors>
-        <Description>
+  <PropertyGroup>
+    <Version>0.1.0-alpha-001</Version>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Authors>Maxime Mangel</Authors>
+    <Description>
             Fable bindings for npm https://github.com/chalk/chalk package
         </Description>
-    </PropertyGroup>
-    <ItemGroup>
-        <Compile Include="Utils/String.fs" />
-        <Compile Include="Utils/Keywords.fs" />
-        <Compile Include="Utils/Naming.fs" />
-        <Compile Include="Log.fs" />
-        <Compile Include="TypeScript.fs" />
-        <Compile Include="GlueAST.fs" />
-        <Compile Include="Reader/Utils.fs" />
-        <Compile Include="Reader/Types.fs" />
-        <Compile Include="Reader/ClassDeclaration.fs" />
-        <Compile Include="Reader/EnumDeclaration.fs" />
-        <Compile Include="Reader/FunctionDeclaration.fs" />
-        <Compile Include="Reader/IndexedAccessType.fs" />
-        <Compile Include="Reader/InterfaceDeclaration.fs" />
-        <Compile Include="Reader/ModuleDeclaration.fs" />
-        <Compile Include="Reader/NamedDeclaration.fs" />
-        <Compile Include="Reader/Node.fs" />
-        <Compile Include="Reader/Parameters.fs" />
-        <Compile Include="Reader/TypeAliasDeclaration.fs" />
-        <Compile Include="Reader/TypeNode.fs" />
-        <Compile Include="Reader/TypeOperatorNode.fs" />
-        <Compile Include="Reader/TypeParameters.fs" />
-        <Compile Include="Reader/UnionTypeNode.fs" />
-        <Compile Include="Reader/VariableStatement.fs" />
-        <Compile Include="Reader/TypeScriptReader.fs" />
-        <Compile Include="FsharpAST.fs" />
-        <Compile Include="Read.fs" />
-        <Compile Include="Transform.fs" />
-        <Compile Include="Printer.fs" />
-        <Compile Include="Generate.fs" />
-    </ItemGroup>
-    <ItemGroup>
-      <PackageReference Include="Fable.Core" Version="4.2.0" />
-      <PackageReference Include="Fable.Node" Version="1.2.0" />
-      <PackageReference Include="Glutinum.Chalk" Version="0.1.0-alpha-001" />
-    </ItemGroup>
-    <!-- This package doesn't contain actual code
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Utils/String.fs" />
+    <Compile Include="Utils/Keywords.fs" />
+    <Compile Include="Utils/Naming.fs" />
+    <Compile Include="Log.fs" />
+    <Compile Include="TypeScript.fs" />
+    <Compile Include="GlueAST.fs" />
+    <Compile Include="Reader/Utils.fs" />
+    <Compile Include="Reader/Types.fs" />
+    <Compile Include="Reader/ClassDeclaration.fs" />
+    <Compile Include="Reader/EnumDeclaration.fs" />
+    <Compile Include="Reader/FunctionDeclaration.fs" />
+    <Compile Include="Reader/IndexedAccessType.fs" />
+    <Compile Include="Reader/InterfaceDeclaration.fs" />
+    <Compile Include="Reader/ModuleDeclaration.fs" />
+    <Compile Include="Reader/NamedDeclaration.fs" />
+    <Compile Include="Reader/Node.fs" />
+    <Compile Include="Reader/Parameters.fs" />
+    <Compile Include="Reader/TypeAliasDeclaration.fs" />
+    <Compile Include="Reader/TypeNode.fs" />
+    <Compile Include="Reader/TypeOperatorNode.fs" />
+    <Compile Include="Reader/TypeParameters.fs" />
+    <Compile Include="Reader/UnionTypeNode.fs" />
+    <Compile Include="Reader/VariableStatement.fs" />
+    <Compile Include="Reader/TypeScriptReader.fs" />
+    <Compile Include="FsharpAST.fs" />
+    <Compile Include="Read.fs" />
+    <Compile Include="Transform.fs" />
+    <Compile Include="Printer.fs" />
+    <Compile Include="Generate.fs" />
+  </ItemGroup>
+  <!-- This package doesn't contain actual code
         so we don't need to add the sources -->
-    <!-- <ItemGroup>
+  <!-- <ItemGroup>
     <Content Include="*.fsproj; *.fs" PackagePath="fable" />
     </ItemGroup> -->
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>
