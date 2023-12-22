@@ -157,13 +157,11 @@ type GlueTypeReference =
         FullName: string
     }
 
-type GlueTypeUnion =
-    GlueTypeUnion of GlueType list
+type GlueTypeUnion = | GlueTypeUnion of GlueType list
 
 [<RequireQualifiedAccess>]
-type ExcludedMember =
-    | Literal of GlueLiteral
-    // | Function
+type ExcludedMember = | Literal of GlueLiteral
+// | Function
 
 type GlueFunctionType =
     {

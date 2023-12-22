@@ -57,8 +57,7 @@ let typeScriptReader checker =
             readModuleDeclaration this moduleDeclaration
             |> GlueType.ModuleDeclaration
 
-        member this.ReadNode(node: Ts.Node) : GlueType =
-            readNode this node
+        member this.ReadNode(node: Ts.Node) : GlueType = readNode this node
 
         member this.ReadTypeAliasDeclaration
             (typeAliasDeclaration: Ts.TypeAliasDeclaration)
@@ -92,16 +91,10 @@ let typeScriptReader checker =
             =
             readParameters this parameters
 
-        member this.ReadUnionTypeNode
-            (unionType: Ts.UnionTypeNode)
-            : GlueType
-            =
+        member this.ReadUnionTypeNode(unionType: Ts.UnionTypeNode) : GlueType =
             readUnionTypeNode this unionType
 
-        member this.ReadTypeOperatorNode
-            (node: Ts.TypeOperatorNode)
-            : GlueType
-            =
+        member this.ReadTypeOperatorNode(node: Ts.TypeOperatorNode) : GlueType =
             readTypeOperatorNode this node
 
         member this.ReadIndexedAccessType

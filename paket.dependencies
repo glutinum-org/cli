@@ -1,0 +1,8 @@
+source https://api.nuget.org/v3/index.json
+
+storage: none
+
+nuget Semver
+nuget BlackFox.CommandLine
+nuget SimpleExec
+nuget FSharp.Management

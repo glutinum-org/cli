@@ -36,8 +36,7 @@ let readClassDeclaration
             | _ -> None
         )
 
-    let members =
-        members |> Seq.toList |> List.map reader.ReadNamedDeclaration
+    let members = members |> Seq.toList |> List.map reader.ReadNamedDeclaration
 
     {
         Name = name.getText ()

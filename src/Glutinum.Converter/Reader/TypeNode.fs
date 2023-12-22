@@ -7,11 +7,7 @@ open Fable.Core.JsInterop
 open Fable.Core.JS
 open Glutinum.Converter.Reader.Utils
 
-let readTypeNode
-    (reader: TypeScriptReader)
-    (typeNode: Ts.TypeNode)
-    : GlueType
-    =
+let readTypeNode (reader: TypeScriptReader) (typeNode: Ts.TypeNode) : GlueType =
     let checker = reader.checker
 
     match typeNode.kind with
@@ -24,13 +20,12 @@ let readTypeNode
     | Ts.SyntaxKind.UndefinedKeyword ->
         GlueType.Primitive GluePrimitive.Undefined
     | Ts.SyntaxKind.UnionType ->
-        reader.ReadUnionTypeNode (typeNode :?> Ts.UnionTypeNode)
+        reader.ReadUnionTypeNode(typeNode :?> Ts.UnionTypeNode)
 
     | Ts.SyntaxKind.TypeReference ->
         let typeReferenceNode = typeNode :?> Ts.TypeReferenceNode
 
-        let symbolOpt =
-            checker.getSymbolAtLocation !!typeReferenceNode.typeName
+        let symbolOpt = checker.getSymbolAtLocation !!typeReferenceNode.typeName
 
         let fullName =
             match symbolOpt with
@@ -54,9 +49,7 @@ let readTypeNode
 
                         let value = unbox<string> literalType.value
 
-                        GlueLiteral.String value
-                        |> GlueType.Literal
-                        |> Some
+                        GlueLiteral.String value |> GlueType.Literal |> Some
                     | HasTypeFlags Ts.TypeFlags.NumberLiteral ->
                         let literalType = typ :?> Ts.LiteralType
 
@@ -65,9 +58,7 @@ let readTypeNode
                                 Constructors.Number.isSafeInteger
                                     literalType.value
                             then
-                                GlueLiteral.Int(
-                                    unbox<int> literalType.value
-                                )
+                                GlueLiteral.Int(unbox<int> literalType.value)
                             else
                                 GlueLiteral.Float(
                                     unbox<float> literalType.value
@@ -131,8 +122,7 @@ let readTypeNode
 
             match symbolOpt.Value.flags with
             | HasSymbolFlags Ts.SymbolFlags.TypeParameter ->
-                symbolOpt.Value.name
-                |> GlueType.TypeParameter
+                symbolOpt.Value.name |> GlueType.TypeParameter
             | _ ->
                 ({
                     Name = typeReferenceNode.getText ()
@@ -143,8 +133,7 @@ let readTypeNode
     | Ts.SyntaxKind.ArrayType ->
         let arrayTypeNode = typeNode :?> Ts.ArrayTypeNode
 
-        let elementType =
-            reader.ReadTypeNode arrayTypeNode.elementType
+        let elementType = reader.ReadTypeNode arrayTypeNode.elementType
 
         GlueType.Array elementType
 

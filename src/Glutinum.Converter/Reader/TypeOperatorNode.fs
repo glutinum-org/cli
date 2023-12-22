@@ -6,8 +6,9 @@ open TypeScript
 open Fable.Core.JsInterop
 
 let readTypeOperatorNode
-    (reader : TypeScriptReader)
-    (node: Ts.TypeOperatorNode) =
+    (reader: TypeScriptReader)
+    (node: Ts.TypeOperatorNode)
+    =
 
     match node.operator with
     | Ts.SyntaxKind.KeyOfKeyword ->

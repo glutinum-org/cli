@@ -190,6 +190,7 @@ let private printTypeParameters
     =
     if not typeParameters.IsEmpty then
         printer.WriteInline("<")
+
         typeParameters
         |> List.iteri (fun index typeParameter ->
             if index <> 0 then
@@ -265,7 +266,9 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
                             else
                                 ""
 
-                        printer.WriteInline($"{p.Name}: {printType p.Type}{option}")
+                        printer.WriteInline(
+                            $"{p.Name}: {printType p.Type}{option}"
+                        )
                     )
 
             if methodInfo.IsStatic then
@@ -320,7 +323,9 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
                         else
                             ""
 
-                    printer.WriteInline($"{p.Name}: {printType p.Type}{option}")
+                    printer.WriteInline(
+                        $"{p.Name}: {printType p.Type}{option}"
+                    )
                 )
 
                 if propertyInfo.Parameters.Length > 0 then
@@ -376,10 +381,7 @@ let private printEnum (printer: Printer) (enumInfo: FSharpEnum) =
 
     printer.Unindent
 
-let private printTypeAlias
-    (printer: Printer)
-    (aliasInfo: FSharpTypeAlias)
-    =
+let private printTypeAlias (printer: Printer) (aliasInfo: FSharpTypeAlias) =
     printer.Write($"type {aliasInfo.Name}")
     printTypeParameters printer aliasInfo.TypeParameters
     printer.WriteInline(" =")
@@ -443,8 +445,7 @@ let rec print (printer: Printer) (fsharpTypes: FSharpType list) =
 
         // printer.Unindent
 
-        | FSharpType.TypeAlias aliasInfo ->
-            printTypeAlias printer aliasInfo
+        | FSharpType.TypeAlias aliasInfo -> printTypeAlias printer aliasInfo
 
         | FSharpType.Mapped _
         | FSharpType.Primitive _

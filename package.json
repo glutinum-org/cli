@@ -1,5 +1,5 @@
 {
-    "name": "glutinum.converter",
+    "name": "@glutinum/glue",
     "version": "0.0.0",
     "description": "Glutinum.Converter",
     "type": "module",
@@ -8,9 +8,14 @@
         "node": ">=16",
         "pnpm": "8"
     },
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+    "bin": {
+        "ts2fable": "./cli.js",
+        "glue": "./cli.js"
     },
+    "files": [
+        "dist",
+        "cli.js"
+    ],
     "repository": {
         "type": "git",
         "url": "git+https://github.com/glutinum-org/Glutinum.Converter.git"
@@ -23,6 +28,7 @@
     "homepage": "https://github.com/glutinum-org/Glutinum.Converter#readme",
     "devDependencies": {
         "dirname-filename-esm": "^1.1.1",
+        "shx": "^0.3.4",
         "typescript": "^5.2.2",
         "vitest": "^1.1.0"
     },

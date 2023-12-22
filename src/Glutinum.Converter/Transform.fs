@@ -335,11 +335,10 @@ let private transformEnum (glueEnum: GlueEnum) : FSharpType =
                 | GlueLiteral.String value -> value
                 | _ -> failwith "Should not happen"
 
-            let caseName =
-                Naming.escapeName glueMember.Name
+            let caseName = Naming.escapeName glueMember.Name
 
-                // |> String.removeSingleQuote
-                // |> String.removeDoubleQuote
+            // |> String.removeSingleQuote
+            // |> String.removeDoubleQuote
             // |> String.capitalizeFirstLetter
 
             let differentName =

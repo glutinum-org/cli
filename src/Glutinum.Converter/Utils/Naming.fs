@@ -17,7 +17,7 @@ let nameEqualsDefaultFableValue (name: string) (value: string) : bool =
 let nameNotEqualsDefaultFableValue (name: string) (value: string) : bool =
     not (nameEqualsDefaultFableValue name value)
 
-let escapeName (name : string) : string =
+let escapeName (name: string) : string =
     if Keywords.fsharp.Contains name then
         $"``%s{name}``"
     else
