@@ -27,6 +27,5 @@ jobs:
 
     - name: Tests
       run: |
-        pnpm install
-        dotnet tool restore
-        dotnet fable src/Glutinum.Converter --outDir fableBuild --sourceMaps --run vitest run
+        ./build.sh lint
+        ./build.sh test

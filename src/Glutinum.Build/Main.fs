@@ -15,6 +15,10 @@ Available commands:
         Options for all except integration and standalone:
             --watch                 Watch for changes and re-run the tests
 
+    lint                            Run the linter on the source code
+
+    format                          Format the source code
+
     publish                         Publish the different packages to NuGet and NPM
                                     based on the CHANGELOG.md files
                                     If the last version in the CHANGELOG.md is
@@ -33,6 +37,8 @@ let main argv =
     match argv with
     | "test" :: args -> Test.Specs.handle args
     | "publish" :: args -> Publish.handle args
+    | "lint" :: _ -> Command.Run("dotnet", "fantomas --check src")
+    | "format" :: _ -> Command.Run("dotnet", "fantomas src")
     | "help" :: _
     | "--help" :: _
     | _ -> printHelp ()

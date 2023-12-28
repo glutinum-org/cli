@@ -2,9 +2,12 @@ module Build.Test.Specs
 
 open BlackFox.CommandLine
 open SimpleExec
+open Build.Utils.Pnpm
 
 let handle (args: string list) =
     let isWatch = args |> List.contains "--watch"
+
+    Pnpm.install ()
 
     let vitestCmd =
         CmdLine.empty
