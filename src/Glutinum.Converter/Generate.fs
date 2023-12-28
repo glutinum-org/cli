@@ -33,11 +33,15 @@ let generateBindingFile (filePath: string) =
 
     let glueAst = Read.readSourceFile checker sourceFile
 
+#if DEBUG
     printfn "glueAst: %A" glueAst
+#endif
 
     let res = Transform.transform true glueAst
 
+#if DEBUG
     printfn "fsharpAst: %A" res
+#endif
 
     let outFile =
         {
