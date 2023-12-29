@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
+
+* Basic CLI interface (help, version, options)
+* Ability to write the output to a file (use `--out-file <file>`)
+
 ## 0.1.0 - 2023-12-22
+
+### Added
 
 * Initial release

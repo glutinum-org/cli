@@ -23,7 +23,7 @@ let private publishNpm (projectDir: string) =
             Npm.replaceVersion packageJsonContent lastChangelogVersion
 
         File.WriteAllText(packageJsonPath, updatedPackageJsonContent)
-        Pnpm.publish ()
+        Pnpm.publish (noGitChecks = true, access = Publish.Access.Public)
         printfn $"Published!"
     else
         printfn $"Already up-to-date, skipping..."

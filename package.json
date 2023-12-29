@@ -1,7 +1,7 @@
 {
-    "name": "@glutinum/glue",
-    "version": "0.0.0",
-    "description": "Glutinum.Converter",
+    "name": "@glutinum/cli",
+    "version": "0.1.0",
+    "description": "TypeScript definition to F# bindings converter",
     "type": "module",
     "main": "index.js",
     "engines": {
@@ -9,8 +9,8 @@
         "pnpm": "8"
     },
     "bin": {
-        "ts2fable": "./cli.js",
-        "glue": "./cli.js"
+        "glue": "./cli.js",
+        "glutinum": "./cli.js"
     },
     "files": [
         "dist",
@@ -18,17 +18,16 @@
     ],
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/glutinum-org/Glutinum.Converter.git"
+        "url": "git+https://github.com/glutinum-org/cli.git"
     },
     "author": "Maxime Mangel",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/glutinum-org/Glutinum.Converter/issues"
+        "url": "https://github.com/glutinum-org/cli/issues"
     },
-    "homepage": "https://github.com/glutinum-org/Glutinum.Converter#readme",
+    "homepage": "https://github.com/glutinum-org/cli#readme",
     "devDependencies": {
         "dirname-filename-esm": "^1.1.1",
-        "shx": "^0.3.4",
         "typescript": "^5.2.2",
         "vitest": "^1.1.0"
     },
