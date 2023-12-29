@@ -22,3 +22,8 @@ let escapeName (name: string) : string =
         $"``%s{name}``"
     else
         name
+
+let mapDateToDateTime (name: string) : string =
+    match name with
+    | "Date" -> "DateTime"
+    | name -> name

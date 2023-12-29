@@ -138,7 +138,7 @@ type FSharpAccessor =
     | ReadWrite
 
 [<RequireQualifiedAccess>]
-type FSharpAccessiblity =
+type FSharpAccessibility =
     | Public
     | Private
     | Protected
@@ -177,7 +177,7 @@ type FSharpMemberInfo =
         IsOptional: bool
         IsStatic: bool
         Accessor: FSharpAccessor option
-        Accessibility: FSharpAccessiblity
+        Accessibility: FSharpAccessibility
     }
 
 [<RequireQualifiedAccess>]

@@ -62,7 +62,7 @@ let rec private transformType (glueType: GlueType) : FSharpType =
                     |> List.map (fun caseType ->
                         {
                             Attributes = []
-                            Name = caseType.Name
+                            Name = Naming.mapDateToDateTime caseType.Name
                         }
                     )
                 IsOptional = isOptional
@@ -70,13 +70,8 @@ let rec private transformType (glueType: GlueType) : FSharpType =
             |> FSharpType.Union
 
     | GlueType.TypeReference typeReference ->
-        let replacedName =
-            match typeReference.Name with
-            | "Date" -> "DateTime"
-            | name -> name
-
         ({
-            Name = replacedName
+            Name = Naming.mapDateToDateTime typeReference.Name
             FullName = typeReference.FullName
         }
         : FSharpTypeReference)
@@ -130,7 +125,7 @@ let private transformExports
                     IsOptional = false
                     IsStatic = true
                     Accessor = None
-                    Accessibility = FSharpAccessiblity.Public
+                    Accessibility = FSharpAccessibility.Public
                 }
                 |> FSharpMember.Property
                 |> List.singleton
@@ -144,7 +139,7 @@ let private transformExports
                     IsOptional = false
                     IsStatic = true
                     Accessor = None
-                    Accessibility = FSharpAccessiblity.Public
+                    Accessibility = FSharpAccessibility.Public
                 }
                 |> FSharpMember.Method
                 |> List.singleton
@@ -175,7 +170,7 @@ let private transformExports
                         IsOptional = false
                         IsStatic = true
                         Accessor = None
-                        Accessibility = FSharpAccessiblity.Public
+                        Accessibility = FSharpAccessibility.Public
                     }
                     |> FSharpMember.Method
                 )
@@ -202,7 +197,7 @@ let private transformExports
                             IsOptional = false
                             IsStatic = true
                             Accessor = FSharpAccessor.ReadOnly |> Some
-                            Accessibility = FSharpAccessiblity.Public
+                            Accessibility = FSharpAccessibility.Public
                         }
                         |> FSharpMember.Property
                         |> Some
@@ -248,7 +243,7 @@ let private transformMembers (members: GlueMember list) : FSharpMember list =
                 IsOptional = methodInfo.IsOptional
                 IsStatic = methodInfo.IsStatic
                 Accessor = None
-                Accessibility = FSharpAccessiblity.Public
+                Accessibility = FSharpAccessibility.Public
             }
             |> FSharpMember.Method
 
@@ -262,7 +257,7 @@ let private transformMembers (members: GlueMember list) : FSharpMember list =
                 IsOptional = false
                 IsStatic = false
                 Accessor = None
-                Accessibility = FSharpAccessiblity.Public
+                Accessibility = FSharpAccessibility.Public
             }
             |> FSharpMember.Method
 
@@ -275,7 +270,7 @@ let private transformMembers (members: GlueMember list) : FSharpMember list =
                 IsOptional = false
                 IsStatic = propertyInfo.IsStatic
                 Accessor = transformAccessor propertyInfo.Accessor |> Some
-                Accessibility = FSharpAccessiblity.Public
+                Accessibility = FSharpAccessibility.Public
             }
             |> FSharpMember.Property
 
@@ -289,7 +284,7 @@ let private transformMembers (members: GlueMember list) : FSharpMember list =
                 IsOptional = false
                 IsStatic = false
                 Accessor = Some FSharpAccessor.ReadWrite
-                Accessibility = FSharpAccessiblity.Public
+                Accessibility = FSharpAccessibility.Public
             }
             |> FSharpMember.Property
     )
@@ -683,7 +678,7 @@ let private transformTypeAliasDeclaration
                     IsOptional = false
                     IsStatic = false
                     Accessor = None
-                    Accessibility = FSharpAccessiblity.Public
+                    Accessibility = FSharpAccessibility.Public
                 }
                 |> FSharpMember.Method
                 |> List.singleton
