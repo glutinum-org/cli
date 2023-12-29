@@ -70,8 +70,13 @@ let rec private transformType (glueType: GlueType) : FSharpType =
             |> FSharpType.Union
 
     | GlueType.TypeReference typeReference ->
+        let replacedName =
+            match typeReference.Name with
+            | "Date" -> "DateTime"
+            | name -> name
+
         ({
-            Name = typeReference.Name
+            Name = replacedName
             FullName = typeReference.FullName
         }
         : FSharpTypeReference)
