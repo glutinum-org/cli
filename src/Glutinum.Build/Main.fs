@@ -15,6 +15,9 @@ Available commands:
 
         Options:
             --watch                 Watch for changes and re-run the tests
+                                    You can pass additional arguments to 'ava'
+                                    by using '--' followed by the arguments
+                                    For example: -- --match="**class**"
 
     cli                             Build the CLI tool
         Options:

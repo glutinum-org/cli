@@ -6,6 +6,7 @@ nuget FSharp.Core redirects: force
 nuget Fable.Core
 nuget Glutinum.Chalk
 nuget Fable.Node
+nuget Fable.Promise
 
 group Build
 

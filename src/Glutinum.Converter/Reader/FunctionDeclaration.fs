@@ -30,4 +30,5 @@ let readFunctionDeclaration
         Name = name
         Type = reader.ReadTypeNode declaration.``type``
         Parameters = reader.ReadParameters declaration.parameters
+        TypeParameters = reader.ReadTypeParameters declaration.typeParameters
     }

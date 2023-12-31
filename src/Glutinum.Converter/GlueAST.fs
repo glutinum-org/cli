@@ -131,6 +131,7 @@ type GlueFunctionDeclaration =
         Name: string
         Type: GlueType
         Parameters: GlueParameter list
+        TypeParameters: GlueTypeParameter list
     }
 
 type GlueModuleDeclaration =

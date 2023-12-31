@@ -5,6 +5,9 @@ NUGET
     Fable.Node (1.2)
       Fable.Core (>= 3.1.2) - restriction: >= netstandard2.0
       FSharp.Core (>= 5.0) - restriction: >= netstandard2.0
+    Fable.Promise (3.2)
+      Fable.Core (>= 3.7.1) - restriction: >= netstandard2.0
+      FSharp.Core (>= 4.7.2) - restriction: >= netstandard2.0
     FSharp.Core (8.0.100) - redirects: force
     Glutinum.Chalk (1.0)
       Fable.Core (>= 3.2.5) - restriction: >= netstandard2.0

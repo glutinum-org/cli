@@ -121,6 +121,7 @@ let private transformExports
                     Attributes = [ FSharpAttribute.Import(info.Name, "module") ]
                     Name = Naming.escapeName info.Name
                     Parameters = []
+                    TypeParameters = []
                     Type = transformType info.Type
                     IsOptional = false
                     IsStatic = true
@@ -135,6 +136,7 @@ let private transformExports
                     Attributes = [ FSharpAttribute.Import(info.Name, "module") ]
                     Name = Naming.escapeName info.Name
                     Parameters = info.Parameters |> List.map transformParameter
+                    TypeParameters = transformTypeParameters info.TypeParameters
                     Type = transformType info.Type
                     IsOptional = false
                     IsStatic = true
@@ -161,6 +163,8 @@ let private transformExports
                             ]
                         Name = Naming.escapeName info.Name
                         Parameters = parameters |> List.map transformParameter
+                        TypeParameters =
+                            transformTypeParameters info.TypeParameters
                         Type =
                             ({
                                 Name = Naming.escapeName info.Name
@@ -188,6 +192,7 @@ let private transformExports
                             // TODO: Only add the "_" suffix if there is a name collision
                             Name = moduleDeclaration.Name + "_"
                             Parameters = []
+                            TypeParameters = []
                             Type =
                                 ({
                                     Name = $"{moduleDeclaration.Name}.Exports"
@@ -240,6 +245,7 @@ let private transformMembers (members: GlueMember list) : FSharpMember list =
                 Parameters =
                     methodInfo.Parameters |> List.map transformParameter
                 Type = transformType methodInfo.Type
+                TypeParameters = []
                 IsOptional = methodInfo.IsOptional
                 IsStatic = methodInfo.IsStatic
                 Accessor = None
@@ -254,6 +260,7 @@ let private transformMembers (members: GlueMember list) : FSharpMember list =
                 Parameters =
                     callSignatureInfo.Parameters |> List.map transformParameter
                 Type = transformType callSignatureInfo.Type
+                TypeParameters = []
                 IsOptional = false
                 IsStatic = false
                 Accessor = None
@@ -267,6 +274,7 @@ let private transformMembers (members: GlueMember list) : FSharpMember list =
                 Name = Naming.escapeName propertyInfo.Name
                 Parameters = []
                 Type = transformType propertyInfo.Type
+                TypeParameters = []
                 IsOptional = false
                 IsStatic = propertyInfo.IsStatic
                 Accessor = transformAccessor propertyInfo.Accessor |> Some
@@ -281,6 +289,7 @@ let private transformMembers (members: GlueMember list) : FSharpMember list =
                 Parameters =
                     indexSignature.Parameters |> List.map transformParameter
                 Type = transformType indexSignature.Type
+                TypeParameters = []
                 IsOptional = false
                 IsStatic = false
                 Accessor = Some FSharpAccessor.ReadWrite
@@ -466,7 +475,7 @@ let private transformTypeAliasDeclaration
                 // Should we do something if we fall in this state?
                 // I think the code below will be able to recover by generating
                 // an erased enum, but I don't know if there cases where we could
-                // be bitting ourselves in the foot
+                // be hitting ourselves in the foot
                 | _ -> []
             )
 
@@ -675,6 +684,7 @@ let private transformTypeAliasDeclaration
                     Parameters =
                         functionType.Parameters |> List.map transformParameter
                     Type = transformType functionType.Type
+                    TypeParameters = []
                     IsOptional = false
                     IsStatic = false
                     Accessor = None

@@ -172,6 +172,7 @@ type FSharpMemberInfo =
     {
         Attributes: FSharpAttribute list
         Name: string
+        TypeParameters: FSharpTypeParameter list
         Parameters: FSharpParameter list
         Type: FSharpType
         IsOptional: bool

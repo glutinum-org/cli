@@ -228,6 +228,8 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
 
             printer.WriteInline($"member {methodInfo.Name}")
 
+            printTypeParameters printer methodInfo.TypeParameters
+
             if methodInfo.IsStatic then
                 printer.WriteInline(" ")
                 // Special case for functions with no parameters
