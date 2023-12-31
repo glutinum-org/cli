@@ -156,6 +156,7 @@ type GlueTypeReference =
     {
         Name: string
         FullName: string
+        TypeArguments: GlueType list
     }
 
 type GlueTypeUnion = | GlueTypeUnion of GlueType list

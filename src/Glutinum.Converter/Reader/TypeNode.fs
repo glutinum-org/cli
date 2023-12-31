@@ -118,15 +118,23 @@ let readTypeNode (reader: TypeScriptReader) (typeNode: Ts.TypeNode) : GlueType =
                         | _ -> GlueType.Discard
 
         else
-            let ts = ts
 
             match symbolOpt.Value.flags with
             | HasSymbolFlags Ts.SymbolFlags.TypeParameter ->
                 symbolOpt.Value.name |> GlueType.TypeParameter
             | _ ->
+                let typeArguments =
+                    match typeReferenceNode.typeArguments with
+                    | None -> []
+                    | Some typeArguments ->
+                        typeArguments
+                        |> Seq.toList
+                        |> List.map (Some >> reader.ReadTypeNode)
+
                 ({
-                    Name = typeReferenceNode.getText ()
+                    Name = typeReferenceNode.typeName?getText () // TODO: Remove dynamic typing
                     FullName = fullName
+                    TypeArguments = typeArguments
                 })
                 |> GlueType.TypeReference
 

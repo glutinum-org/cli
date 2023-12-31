@@ -73,6 +73,8 @@ let rec private transformType (glueType: GlueType) : FSharpType =
         ({
             Name = Naming.mapDateToDateTime typeReference.Name
             FullName = typeReference.FullName
+            TypeArguments =
+                typeReference.TypeArguments |> List.map transformType
         }
         : FSharpTypeReference)
         |> FSharpType.TypeReference
@@ -84,6 +86,7 @@ let rec private transformType (glueType: GlueType) : FSharpType =
         ({
             Name = classDeclaration.Name
             FullName = classDeclaration.Name
+            TypeArguments = []
         }
         : FSharpTypeReference)
         |> FSharpType.TypeReference

@@ -174,7 +174,17 @@ let rec private printType (fsharpType: FSharpType) =
         | FSharpPrimitive.Unit -> "unit"
         | FSharpPrimitive.Number -> "float"
         | FSharpPrimitive.Null -> "obj"
-    | FSharpType.TypeReference typeReference -> typeReference.Name
+    | FSharpType.TypeReference typeReference ->
+        if typeReference.TypeArguments.Length > 0 then
+            let typeArguments =
+                typeReference.TypeArguments
+                |> List.map printType
+                |> String.concat ", "
+
+            $"{typeReference.Name}<{typeArguments}>"
+        else
+            typeReference.Name
+
     | FSharpType.TypeParameter name -> $"'{name}"
     | FSharpType.Option optionType -> printType optionType + " option"
     | FSharpType.ResizeArray arrayType -> $"ResizeArray<{printType arrayType}>"

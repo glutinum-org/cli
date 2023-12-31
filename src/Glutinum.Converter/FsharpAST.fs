@@ -234,6 +234,7 @@ type FSharpTypeReference =
     {
         Name: string
         FullName: string
+        TypeArguments: FSharpType list
     }
 
 [<RequireQualifiedAccess>]

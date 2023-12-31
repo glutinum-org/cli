@@ -6,7 +6,7 @@ open System
 [<Erase>]
 type Exports =
     [<Import("extend", "module")>]
-    static member extend (plugin: PluginFunc<'T>) : unit = nativeOnly
+    static member extend<'T> (plugin: PluginFunc<'T>) : unit = nativeOnly
 
 [<AllowNullLiteral>]
 type PluginFunc<'T> =
