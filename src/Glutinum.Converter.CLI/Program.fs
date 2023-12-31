@@ -67,6 +67,11 @@ let main (argv: string array) =
         fs?mkdirSync $ (outFileDir, {| recursive = true |})
         fs.writeFileSync (outFile, res)
 
+        let absoluteOutFile = path.join (``process``.cwd (), outFile)
+
+        Log.info $"Bindings written to: %s{absoluteOutFile}"
+        Log.success "Success!"
+
         0
 
     | input :: [] ->
@@ -74,6 +79,8 @@ let main (argv: string array) =
         let res = generateBindingFile input
 
         printfn "Generation result:\n%s" res
+
+        Log.success "Success!"
 
         0
     | _ ->

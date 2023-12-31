@@ -457,4 +457,4 @@ let rec print (printer: Printer) (fsharpTypes: FSharpType list) =
 
         print printer tail
 
-    | [] -> Log.success "Done"
+    | [] -> ()

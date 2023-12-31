@@ -29,12 +29,12 @@ let private publishNpm (projectDir: string) =
         printfn $"Already up-to-date, skipping..."
 
 let handle (_args: string list) =
+    Command.Run("dotnet", "fantomas src")
+
     Test.Specs.handle []
 
     if (Directory.Exists "dist") then
         Directory.Delete("dist", true)
-
-    Command.Run("dotnet", "fantomas src")
 
     Command.Run(
         "dotnet",
