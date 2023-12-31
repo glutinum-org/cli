@@ -8,10 +8,15 @@ let handle (args: string list) =
     let isWatch = args |> List.contains "--watch"
 
     let additionalArgs =
-        args
-        |> List.skipWhile (fun x -> x <> "--")
-        |> List.skip 1
-        |> String.concat " "
+        if isWatch then
+            let candidates = args |> List.skipWhile (fun x -> x <> "--")
+
+            if List.isEmpty candidates then
+                null
+            else
+                candidates |> List.skip 1 |> String.concat " "
+        else
+            null
 
     Pnpm.install ()
 
@@ -19,7 +24,7 @@ let handle (args: string list) =
         CmdLine.empty
         |> CmdLine.appendRaw "npx"
         |> CmdLine.appendRaw "ava"
-        |> CmdLine.appendIf isWatch additionalArgs
+        |> CmdLine.appendIfNotNullOrEmpty additionalArgs
         |> CmdLine.toString
 
     let runCommand =
