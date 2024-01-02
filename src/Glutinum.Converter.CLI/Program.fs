@@ -40,7 +40,7 @@ let private getVersion () =
 
 [<EntryPoint>]
 let main (argv: string array) =
-    let argv = argv |> Array.map (fun x -> x.ToLower()) |> Array.toList
+    let argv = argv |> Array.toList
 
     // Naive CLI parser
     // Order of matching is important !!!

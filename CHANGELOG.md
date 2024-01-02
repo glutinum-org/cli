@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 0.3.1 - 2024-01-02
+
+### Fixed
+
+* [GH-23](https://github.com/glutinum-org/cli/issues/23) Respect CLI arguments casing
+
 ## 0.3.0 - 2024-01-01
 
 ### Changed
