@@ -19,6 +19,12 @@ When using the test command, you can focus on a specific by forwarding arguments
 ./build.sh test --watch -- --match="**class**"
 ```
 
+If you need to run a local version of `@glutinum/cli`, you can use `./build.sh cli [--watch]` and then run `node cli.js <args>`.
+
+### Debugging
+
+If you use VSCode, you can run the build script/commands from the `JavaScript Debug Terminal`. This allows you to have access to the debugger, breakpoints, etc. (it works from the F# files too).
+
 ## Architecture
 
 ### Glutinum.Converter.CLI

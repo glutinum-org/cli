@@ -19,6 +19,8 @@ Available commands:
                                     For example: ./build.sh test --watch -- --match="**class**"
 
     cli                             Build the CLI tool
+                                    You can then invoke the local version of Glutinum
+                                    by running `node cli.js <args>`
         Options:
             --watch                 Watch for changes and re-build the CLI tool
 
