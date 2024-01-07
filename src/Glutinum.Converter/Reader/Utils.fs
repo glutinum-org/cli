@@ -46,3 +46,26 @@ let tryReadLiteral (expression: Ts.Node) =
         let text = expression.getText ()
 
         tryReadNumericLiteral text
+
+let generateReaderError
+    (errorContext: string)
+    (reason: string)
+    (node: Ts.Node)
+    =
+    let sourceFile = node.getSourceFile ()
+    let lineAndChar = sourceFile.getLineAndCharacterOfPosition node.pos
+    let line = int lineAndChar.line + 1
+    let column = int lineAndChar.character + 1
+
+    $"""Error while reading %s{errorContext} in
+%s{sourceFile.fileName}(%d{line},%d{column})
+
+%s{reason}
+
+--- Text ---
+%s{node.getFullText ()}
+---
+
+--- Parent text ---
+%s{node.parent.getFullText ()}
+---"""

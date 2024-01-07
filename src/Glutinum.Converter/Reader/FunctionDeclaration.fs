@@ -23,7 +23,13 @@ let readFunctionDeclaration
     let name =
         match declaration.name with
         | Some name -> name.getText ()
-        | None -> failwith "readFunctionDeclaration: Missing name"
+        | None ->
+            failwith (
+                Utils.generateReaderError
+                    "function declaration"
+                    "Missing name"
+                    declaration
+            )
 
     {
         IsDeclared = isDeclared
