@@ -28,5 +28,11 @@ let readNode (reader: TypeScriptReader) (node: Ts.Node) : GlueType =
         reader.ReadClassDeclaration(node :?> Ts.ClassDeclaration)
 
     | unsupported ->
-        printfn $"readNode: Unsupported kind {unsupported}"
+        printfn
+            "%s"
+            (Utils.generateReaderError
+                "node"
+                $"Unsupported node kind %A{unsupported}"
+                node)
+
         GlueType.Discard

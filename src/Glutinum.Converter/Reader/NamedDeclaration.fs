@@ -78,4 +78,9 @@ let readNamedDeclaration
         |> GlueMember.IndexSignature
 
     | _ ->
-        failwith $"tryReadNamedDeclaration: Unsupported kind {declaration.kind}"
+        failwith (
+            Utils.generateReaderError
+                "named declaration"
+                $"Unsupported kind %A{declaration.kind}"
+                declaration
+        )

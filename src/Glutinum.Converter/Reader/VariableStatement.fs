@@ -30,7 +30,13 @@ let readVariableStatement
             | Ts.SyntaxKind.Identifier ->
                 let id: Ts.Identifier = !!declaration.name
                 id.getText ()
-            | _ -> failwith "readVariableStatement: Unsupported kind"
+            | _ ->
+                failwith (
+                    Utils.generateReaderError
+                        "variable statement"
+                        "Unable to read variable name"
+                        declaration
+                )
 
         ({
             Name = name

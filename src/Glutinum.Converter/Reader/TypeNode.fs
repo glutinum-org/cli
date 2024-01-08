@@ -29,7 +29,13 @@ let readTypeNode (reader: TypeScriptReader) (typeNode: Ts.TypeNode) : GlueType =
 
         let fullName =
             match symbolOpt with
-            | None -> failwith "readTypeNode: Missing symbol"
+            | None ->
+                failwith (
+                    generateReaderError
+                        "type node"
+                        "Missing symbol"
+                        typeReferenceNode
+                )
             | Some symbol -> checker.getFullyQualifiedName symbol
 
         // Could this detect false positive, if the library defined
@@ -172,4 +178,10 @@ let readTypeNode (reader: TypeScriptReader) (typeNode: Ts.TypeNode) : GlueType =
             |> GlueType.ClassDeclaration
         | _ -> GlueType.Primitive GluePrimitive.Any
 
-    | _ -> failwith $"readTypeNode: Unsupported kind {typeNode.kind}"
+    | _ ->
+        failwith (
+            generateReaderError
+                "type node"
+                $"Unsupported kind %A{typeNode.kind}"
+                typeNode
+        )
