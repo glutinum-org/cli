@@ -7,11 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 0.4.0 - 2024-01-08
+
+### Changed
+
+* Improve unsupported syntax error message to provide more context information ([GH-26](https://github.com/glutinum-org/cli/pull/26))
+
 ## 0.3.1 - 2024-01-02
 
 ### Fixed
 
-* [GH-23](https://github.com/glutinum-org/cli/issues/23) Respect CLI arguments casing
+* Respect CLI arguments casing ([GH-23](https://github.com/glutinum-org/cli/issues/23))
 
 ## 0.3.0 - 2024-01-01
 
