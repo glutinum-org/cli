@@ -23,7 +23,8 @@ let escapeName (name: string) : string =
     else
         name
 
-let mapDateToDateTime (name: string) : string =
+let mapTypeNameToFableCoreAwareName (name: string) : string =
     match name with
     | "Date" -> "DateTime"
+    | "Promise" -> "JS.Promise"
     | name -> name
