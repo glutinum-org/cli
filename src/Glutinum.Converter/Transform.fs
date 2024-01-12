@@ -62,7 +62,9 @@ let rec private transformType (glueType: GlueType) : FSharpType =
                     |> List.map (fun caseType ->
                         {
                             Attributes = []
-                            Name = Naming.mapDateToDateTime caseType.Name
+                            Name =
+                                Naming.mapTypeNameToFableCoreAwareName
+                                    caseType.Name
                         }
                     )
                 IsOptional = isOptional
@@ -71,7 +73,7 @@ let rec private transformType (glueType: GlueType) : FSharpType =
 
     | GlueType.TypeReference typeReference ->
         ({
-            Name = Naming.mapDateToDateTime typeReference.Name
+            Name = Naming.mapTypeNameToFableCoreAwareName typeReference.Name
             FullName = typeReference.FullName
             TypeArguments =
                 typeReference.TypeArguments |> List.map transformType
