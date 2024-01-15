@@ -272,15 +272,10 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
                         if index <> 0 then
                             printer.WriteInline(" * ")
 
-                        let option =
-                            if p.IsOptional then
-                                " option"
-                            else
-                                ""
+                        if p.IsOptional then
+                            printer.WriteInline("?")
 
-                        printer.WriteInline(
-                            $"{p.Name}: {printType p.Type}{option}"
-                        )
+                        printer.WriteInline($"{p.Name}: {printType p.Type}")
                     )
 
             if methodInfo.IsStatic then
