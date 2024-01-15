@@ -18,9 +18,14 @@ let readIndexedAccessType
             let typeOperatorNode = declaration.indexType :?> Ts.TypeOperatorNode
             reader.ReadTypeOperatorNode typeOperatorNode
 
-        | _ ->
-            // readTypeNode checker declaration.symbol
-            // |>
+        | unsupported ->
+            printfn
+                "%s"
+                (Utils.generateReaderError
+                    "readIndexedAccessType"
+                    $"Unsupported node kind %A{unsupported}"
+                    nodeType)
+
             GlueType.Discard
 
     GlueType.IndexedAccessType typ

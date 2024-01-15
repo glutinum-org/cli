@@ -9,7 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-* Transform Promise to JS.Promise (by @nojaf) ([GH-33](https://github.com/glutinum-org/cli/pull/33))
+* Transform `Promise` to `JS.Promise` (by @nojaf) ([GH-33](https://github.com/glutinum-org/cli/pull/33))
+
+### Added
+
+* Add support for `MethodSignature` on interface ([GH-28](https://github.com/glutinum-org/cli/issues/28]))
 
 ## 0.4.0 - 2024-01-08
 

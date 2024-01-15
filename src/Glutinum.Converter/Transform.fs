@@ -301,6 +301,21 @@ let private transformMembers (members: GlueMember list) : FSharpMember list =
                 Accessibility = FSharpAccessibility.Public
             }
             |> FSharpMember.Property
+
+        | GlueMember.MethodSignature methodSignature ->
+            {
+                Attributes = []
+                Name = Naming.escapeName methodSignature.Name
+                Parameters =
+                    methodSignature.Parameters |> List.map transformParameter
+                Type = transformType methodSignature.Type
+                TypeParameters = []
+                IsOptional = false
+                IsStatic = false
+                Accessor = None
+                Accessibility = FSharpAccessibility.Public
+            }
+            |> FSharpMember.Method
     )
 
 let private transformInterface (info: GlueInterface) : FSharpInterface =
@@ -395,6 +410,7 @@ module TypeAliasDeclaration =
                 |> List.choose (fun m ->
                     match m with
                     | GlueMember.Method { Name = caseName }
+                    | GlueMember.MethodSignature { Name = caseName }
                     | GlueMember.Property { Name = caseName } ->
                         let caseValue =
                             caseName
@@ -598,6 +614,7 @@ let private transformTypeAliasDeclaration
                         | GlueMember.Method { Type = typ }
                         | GlueMember.Property { Type = typ }
                         | GlueMember.CallSignature { Type = typ }
+                        | GlueMember.MethodSignature { Type = typ }
                         | GlueMember.IndexSignature { Type = typ } ->
                             match typ with
                             | GlueType.Union(GlueTypeUnion cases) -> cases

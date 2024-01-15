@@ -1,0 +1,3 @@
+interface Locale {
+    hello(): string;
+}

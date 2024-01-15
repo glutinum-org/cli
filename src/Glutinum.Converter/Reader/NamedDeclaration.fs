@@ -77,6 +77,18 @@ let readNamedDeclaration
         : GlueIndexSignature)
         |> GlueMember.IndexSignature
 
+    | Ts.SyntaxKind.MethodSignature ->
+        let methodSignature = declaration :?> Ts.MethodSignature
+        let name = unbox<Ts.Identifier> methodSignature.name
+
+        ({
+            Name = name.getText ()
+            Parameters = reader.ReadParameters methodSignature.parameters
+            Type = reader.ReadTypeNode methodSignature.``type``
+        }
+        : GlueMethodSignature)
+        |> GlueMember.MethodSignature
+
     | _ ->
         failwith (
             Utils.generateReaderError
