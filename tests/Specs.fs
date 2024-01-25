@@ -43,7 +43,7 @@ let macroTestSpec (t: ExecutionContext<obj>) (specPath: string) =
             let expected =  expectedContent
             t.deepEqual.Invoke(res, expected) |> ignore
         else
-            let tmpFile = $"{__SOURCE_DIRECTORY__}/specs/{specPath}.tmp"
+            let tmpFile = $"{__SOURCE_DIRECTORY__}/specs/{specPath}.tmp.fsx"
             fs.writeFileSync(tmpFile, res)
     }
 
