@@ -27,6 +27,11 @@ let readNode (reader: TypeScriptReader) (node: Ts.Node) : GlueType =
     | Ts.SyntaxKind.ClassDeclaration ->
         reader.ReadClassDeclaration(node :?> Ts.ClassDeclaration)
 
+    | Ts.SyntaxKind.ExportAssignment ->
+        // Don't know what to do with, we handle the case to avoid
+        // writing a warning in the console
+        GlueType.Discard
+
     | unsupported ->
         printfn
             "%s"

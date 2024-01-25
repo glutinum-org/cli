@@ -339,3 +339,4 @@ ASALocalRun/
 fable_modules/
 fableBuild/
 dist/
+*.tmp.fsx
