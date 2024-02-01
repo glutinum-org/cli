@@ -1,5 +1,7 @@
 module Naming
 
+open System
+
 /// <summary>
 /// Check if the value is the same as the default Fable computed value computed from the name.
 /// </summary>
@@ -28,3 +30,20 @@ let mapTypeNameToFableCoreAwareName (name: string) : string =
     | "Date" -> "DateTime"
     | "Promise" -> "JS.Promise"
     | name -> name
+
+let removeSurroundingQuotes (text: string) : string =
+    if String.IsNullOrEmpty text then
+        ""
+    elif text.Length < 1 then
+        text
+    else
+        // only remove quotes when at start AND end
+        let startChar, endChar = text.[0], text.[text.Length - 1]
+
+        match startChar, endChar with
+        | '"', '"'
+        | ''', ''' -> text.Substring(1, text.Length - 2)
+        | _ -> text
+
+let sanitizeName (name: string) : string =
+    name |> removeSurroundingQuotes |> escapeName

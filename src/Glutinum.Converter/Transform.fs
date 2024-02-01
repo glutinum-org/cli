@@ -124,7 +124,7 @@ let private transformExports
             | GlueType.Variable info ->
                 {
                     Attributes = [ FSharpAttribute.Import(info.Name, "module") ]
-                    Name = Naming.escapeName info.Name
+                    Name = Naming.sanitizeName info.Name
                     Parameters = []
                     TypeParameters = []
                     Type = transformType info.Type
@@ -139,7 +139,7 @@ let private transformExports
             | GlueType.FunctionDeclaration info ->
                 {
                     Attributes = [ FSharpAttribute.Import(info.Name, "module") ]
-                    Name = Naming.escapeName info.Name
+                    Name = Naming.sanitizeName info.Name
                     Parameters = info.Parameters |> List.map transformParameter
                     TypeParameters = transformTypeParameters info.TypeParameters
                     Type = transformType info.Type
@@ -166,13 +166,13 @@ let private transformExports
                                     FSharpAttribute.EmitMacroConstructor
                                         info.Name
                             ]
-                        Name = Naming.escapeName info.Name
+                        Name = Naming.sanitizeName info.Name
                         Parameters = parameters |> List.map transformParameter
                         TypeParameters =
                             transformTypeParameters info.TypeParameters
                         Type =
                             ({
-                                Name = Naming.escapeName info.Name
+                                Name = Naming.sanitizeName info.Name
                                 Declarations = []
                             })
                             |> FSharpType.Mapped
@@ -228,7 +228,7 @@ let private transformExports
 
 let private transformParameter (parameter: GlueParameter) : FSharpParameter =
     {
-        Name = Naming.escapeName parameter.Name
+        Name = Naming.sanitizeName parameter.Name
         IsOptional = parameter.IsOptional
         Type = transformType parameter.Type
     }
@@ -246,7 +246,7 @@ let private transformMembers (members: GlueMember list) : FSharpMember list =
         | GlueMember.Method methodInfo ->
             {
                 Attributes = []
-                Name = Naming.escapeName methodInfo.Name
+                Name = Naming.sanitizeName methodInfo.Name
                 Parameters =
                     methodInfo.Parameters |> List.map transformParameter
                 Type = transformType methodInfo.Type
@@ -276,7 +276,7 @@ let private transformMembers (members: GlueMember list) : FSharpMember list =
         | GlueMember.Property propertyInfo ->
             {
                 Attributes = []
-                Name = Naming.escapeName propertyInfo.Name
+                Name = Naming.sanitizeName propertyInfo.Name
                 Parameters = []
                 Type = transformType propertyInfo.Type
                 TypeParameters = []
@@ -305,7 +305,7 @@ let private transformMembers (members: GlueMember list) : FSharpMember list =
         | GlueMember.MethodSignature methodSignature ->
             {
                 Attributes = []
-                Name = Naming.escapeName methodSignature.Name
+                Name = Naming.sanitizeName methodSignature.Name
                 Parameters =
                     methodSignature.Parameters |> List.map transformParameter
                 Type = transformType methodSignature.Type
@@ -321,7 +321,7 @@ let private transformMembers (members: GlueMember list) : FSharpMember list =
 let private transformInterface (info: GlueInterface) : FSharpInterface =
     {
         Attributes = [ FSharpAttribute.AllowNullLiteral ]
-        Name = Naming.escapeName info.Name
+        Name = Naming.sanitizeName info.Name
         Members = transformMembers info.Members
         TypeParameters = transformTypeParameters info.TypeParameters
     }
@@ -347,12 +347,12 @@ let private transformEnum (glueEnum: GlueEnum) : FSharpType =
     | integralValues, [] ->
         let transformMembers (glueMember: GlueEnumMember) : FSharpEnumCase =
             {
-                Name = Naming.escapeName glueMember.Name
+                Name = Naming.sanitizeName glueMember.Name
                 Value = transformLiteral glueMember.Value
             }
 
         {
-            Name = Naming.escapeName glueEnum.Name
+            Name = Naming.sanitizeName glueEnum.Name
             Cases = integralValues |> List.map transformMembers |> List.distinct
         }
         |> FSharpType.Enum
@@ -364,7 +364,7 @@ let private transformEnum (glueEnum: GlueEnum) : FSharpType =
                 | GlueLiteral.String value -> value
                 | _ -> failwith "Should not happen"
 
-            let caseName = Naming.escapeName glueMember.Name
+            let caseName = Naming.sanitizeName glueMember.Name
 
             // |> String.removeSingleQuote
             // |> String.removeDoubleQuote
@@ -377,9 +377,11 @@ let private transformEnum (glueEnum: GlueEnum) : FSharpType =
                 Attributes =
                     [
                         if differentName then
-                            FSharpAttribute.CompiledName(caseValue)
+                            caseValue
+                            |> Naming.removeSurroundingQuotes
+                            |> FSharpAttribute.CompiledName
                     ]
-                Name = Naming.escapeName caseName
+                Name = Naming.sanitizeName caseName
             }
 
         {
@@ -388,7 +390,7 @@ let private transformEnum (glueEnum: GlueEnum) : FSharpType =
                     FSharpAttribute.RequireQualifiedAccess
                     FSharpAttribute.StringEnum CaseRules.None
                 ]
-            Name = Naming.escapeName glueEnum.Name
+            Name = Naming.sanitizeName glueEnum.Name
             Cases = stringValues |> List.map transformMembers |> List.distinct
             IsOptional = false
         }
@@ -426,9 +428,11 @@ module TypeAliasDeclaration =
                             Attributes =
                                 [
                                     if differentName then
-                                        FSharpAttribute.CompiledName(caseName)
+                                        caseName
+                                        |> Naming.removeSurroundingQuotes
+                                        |> FSharpAttribute.CompiledName
                                 ]
-                            Name = Naming.escapeName caseValue
+                            Name = Naming.sanitizeName caseValue
                         }
                         : FSharpUnionCase
                         |> Some
@@ -448,7 +452,7 @@ module TypeAliasDeclaration =
                     FSharpAttribute.RequireQualifiedAccess
                     FSharpAttribute.StringEnum CaseRules.None
                 ]
-            Name = Naming.escapeName aliasName
+            Name = Naming.sanitizeName aliasName
             Cases = cases
             IsOptional = false
         }
@@ -462,7 +466,7 @@ let private transformTypeParameters
     typeParameters
     |> List.map (fun typeParameter ->
         {
-            Name = Naming.escapeName typeParameter.Name
+            Name = Naming.sanitizeName typeParameter.Name
             Constraint = typeParameter.Constraint |> Option.map transformType
             Default = typeParameter.Default |> Option.map transformType
         }
@@ -540,7 +544,7 @@ let private transformTypeAliasDeclaration
 
                         {
                             Attributes = []
-                            Name = Naming.escapeName caseName
+                            Name = Naming.sanitizeName caseName
                         }
                         : FSharpUnionCase
                     | _ -> failwith "Should not happen"
@@ -553,7 +557,7 @@ let private transformTypeAliasDeclaration
                         FSharpAttribute.RequireQualifiedAccess
                         FSharpAttribute.StringEnum CaseRules.None
                     ]
-                Name = Naming.escapeName glueTypeAliasDeclaration.Name
+                Name = Naming.sanitizeName glueTypeAliasDeclaration.Name
                 Cases = cases
                 IsOptional = false
             }
@@ -577,7 +581,7 @@ let private transformTypeAliasDeclaration
                 |> List.distinct
 
             ({
-                Name = Naming.escapeName glueTypeAliasDeclaration.Name
+                Name = Naming.sanitizeName glueTypeAliasDeclaration.Name
                 Cases = cases
             }
             : FSharpEnum)
@@ -587,7 +591,7 @@ let private transformTypeAliasDeclaration
         // Erased enum cases for improving the user experience
         else
             ({
-                Name = Naming.escapeName glueTypeAliasDeclaration.Name
+                Name = Naming.sanitizeName glueTypeAliasDeclaration.Name
                 Type = transformType unionType
                 TypeParameters =
                     transformTypeParameters
@@ -631,7 +635,7 @@ let private transformTypeAliasDeclaration
             | _ -> FSharpType.Discard
 
         ({
-            Name = Naming.escapeName glueTypeAliasDeclaration.Name
+            Name = Naming.sanitizeName glueTypeAliasDeclaration.Name
             Type = typ
             TypeParameters =
                 transformTypeParameters glueTypeAliasDeclaration.TypeParameters
@@ -641,7 +645,7 @@ let private transformTypeAliasDeclaration
 
     | GlueType.Primitive primitiveInfo ->
         ({
-            Name = Naming.escapeName glueTypeAliasDeclaration.Name
+            Name = Naming.sanitizeName glueTypeAliasDeclaration.Name
             Type = transformPrimitive primitiveInfo |> FSharpType.Primitive
             TypeParameters =
                 transformTypeParameters glueTypeAliasDeclaration.TypeParameters
@@ -651,7 +655,7 @@ let private transformTypeAliasDeclaration
 
     | GlueType.TypeReference typeReference ->
         ({
-            Name = Naming.escapeName glueTypeAliasDeclaration.Name
+            Name = Naming.sanitizeName glueTypeAliasDeclaration.Name
             Type = transformType (GlueType.TypeReference typeReference)
             TypeParameters =
                 transformTypeParameters glueTypeAliasDeclaration.TypeParameters
@@ -661,7 +665,7 @@ let private transformTypeAliasDeclaration
 
     | GlueType.Array glueType ->
         ({
-            Name = Naming.escapeName glueTypeAliasDeclaration.Name
+            Name = Naming.sanitizeName glueTypeAliasDeclaration.Name
             Type = transformType (GlueType.Array glueType)
             TypeParameters =
                 transformTypeParameters glueTypeAliasDeclaration.TypeParameters
@@ -676,7 +680,7 @@ let private transformTypeAliasDeclaration
         let partialInterface =
             { originalInterface with
                 // Use the alias name instead of the original interface name
-                Name = Naming.escapeName glueTypeAliasDeclaration.Name
+                Name = Naming.sanitizeName glueTypeAliasDeclaration.Name
                 // Transform all the members to optional
                 Members =
                     originalInterface.Members
@@ -696,7 +700,7 @@ let private transformTypeAliasDeclaration
     | GlueType.FunctionType functionType ->
         {
             Attributes = [ FSharpAttribute.AllowNullLiteral ]
-            Name = Naming.escapeName glueTypeAliasDeclaration.Name
+            Name = Naming.sanitizeName glueTypeAliasDeclaration.Name
             TypeParameters =
                 transformTypeParameters glueTypeAliasDeclaration.TypeParameters
             Members =
@@ -724,7 +728,7 @@ let private transformModuleDeclaration
     : FSharpType
     =
     ({
-        Name = Naming.escapeName moduleDeclaration.Name
+        Name = Naming.sanitizeName moduleDeclaration.Name
         IsRecursive = moduleDeclaration.IsRecursive
         Types = transform false moduleDeclaration.Types
     }
@@ -737,7 +741,7 @@ let private transformClassDeclaration
     =
     ({
         Attributes = [ FSharpAttribute.AllowNullLiteral ]
-        Name = Naming.escapeName classDeclaration.Name
+        Name = Naming.sanitizeName classDeclaration.Name
         Members = transformMembers classDeclaration.Members
         TypeParameters = transformTypeParameters classDeclaration.TypeParameters
     }
