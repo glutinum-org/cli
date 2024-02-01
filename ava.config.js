@@ -8,5 +8,6 @@ export default {
             "tests/**/*.fsproj",
             "tests/**/*.fs"
         ]
-    }
+    },
+    timeout: "3m"
 }
