@@ -8,8 +8,6 @@ open BlackFox.CommandLine
 let printHelp () =
     let helpText =
         """
-Usage: dotnet run <command> [<args>]
-
 Available commands:
     test                            Run the main tests suite
 
