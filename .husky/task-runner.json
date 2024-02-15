@@ -11,7 +11,10 @@
             "include": [
                 "src/**/*.fs",
                 "src/**/*.fsx",
-                "src/**/*.fsi"
+                "src/**/*.fsi",
+                "test/**/*.fs",
+                "test/**/*.fsx",
+                "test/**/*.fsi"
             ]
         },
         {

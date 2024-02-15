@@ -21,11 +21,7 @@ type Pnpm =
     static member install() = Command.Run("pnpm", "install")
 
     static member publish
-        (
-            ?projectDir: string,
-            ?noGitChecks: bool,
-            ?access: Publish.Access
-        )
+        (?projectDir: string, ?noGitChecks: bool, ?access: Publish.Access)
         =
         let noGitChecks = defaultArg noGitChecks false
 

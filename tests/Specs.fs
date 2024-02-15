@@ -30,7 +30,10 @@ let macroTestSpec (t: ExecutionContext<obj>) (specPath: string) =
     promise {
         let filepath = $"{__SOURCE_DIRECTORY__}/specs/{specPath}.d.ts"
         let res = generateBindingFile filepath
-        let res = res + """
+
+        let res =
+            res
+            + """
 (***)
 #r "nuget: Fable.Core"
 (***)
@@ -38,13 +41,13 @@ let macroTestSpec (t: ExecutionContext<obj>) (specPath: string) =
 
         let expectedFile = $"{__SOURCE_DIRECTORY__}/specs/{specPath}.fsx"
 
-        if fs.existsSync(!!expectedFile) then
+        if fs.existsSync (!!expectedFile) then
             let! expectedContent = Fs.readFile expectedFile
-            let expected =  expectedContent
+            let expected = expectedContent
             t.deepEqual.Invoke(res, expected) |> ignore
         else
             let tmpFile = $"{__SOURCE_DIRECTORY__}/specs/{specPath}.tmp.fsx"
-            fs.writeFileSync(tmpFile, res)
+            fs.writeFileSync (tmpFile, res)
     }
 
 [<ImportDefault("ava")>]

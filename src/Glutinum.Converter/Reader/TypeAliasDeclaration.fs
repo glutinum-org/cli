@@ -25,9 +25,7 @@ let readTypeAliasDeclaration
             let declaration = declaration.``type`` :?> Ts.IndexedAccessType
             reader.ReadIndexedAccessType declaration
 
-
         | _ -> reader.ReadTypeNode declaration.``type``
-
 
     {
         Name = declaration.name.getText ()

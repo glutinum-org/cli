@@ -114,7 +114,6 @@ let rec private readUnionTypeCases
                             typeReferenceNode
                     )
 
-
         // else
         //     symbol.declarations
         //     |> Seq.toList

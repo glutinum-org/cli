@@ -7,11 +7,7 @@ open BlackFox.CommandLine
 type Nuget =
 
     static member push
-        (
-            nupkgPath: string,
-            nugetKey: string,
-            ?skipDuplicate: bool
-        )
+        (nupkgPath: string, nugetKey: string, ?skipDuplicate: bool)
         =
         let skipDuplicate = defaultArg skipDuplicate false
 

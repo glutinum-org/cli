@@ -67,7 +67,6 @@ module Types =
         | SubSubSection of tag: string
         | ListItem of content: string
 
-
 [<RequireQualifiedAccess>]
 module Lexer =
 

@@ -3,7 +3,6 @@ module Glutinum.Ava
 open Fable.Core
 open System
 
-
 [<AllowNullLiteral>]
 type LogFn =
     /// Log one or more values.
@@ -25,7 +24,6 @@ type PlanFn =
     /// Don't plan assertions.
     abstract skip: count: float -> unit
 
-
 [<AllowNullLiteral>]
 type AssertAssertion =
     /// <summary>
@@ -37,7 +35,6 @@ type AssertAssertion =
 
     /// Skip this assertion.
     abstract skip: actual: obj option * ?message: string -> unit
-
 
 [<AllowNullLiteral>]
 type DeepEqualAssertion =
@@ -80,7 +77,6 @@ type ExecutionContext<'Context> =
     abstract log: LogFn
     abstract plan: PlanFn
 
-
 [<Erase>]
 type test<'Context> =
 
@@ -90,9 +86,6 @@ type test<'Context> =
 
     [<ImportDefault("ava")>]
     static member test
-        (
-            title: string,
-            t: ExecutionContext<'Context> -> JS.Promise<unit>
-        )
+        (title: string, t: ExecutionContext<'Context> -> JS.Promise<unit>)
         =
         nativeOnly

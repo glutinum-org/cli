@@ -150,7 +150,7 @@ type GlueModuleDeclaration =
         Types: GlueType list
     }
 
-type GlueConstructor = | GlueConstructor of GlueParameter list
+type GlueConstructor = GlueConstructor of GlueParameter list
 
 type GlueClassDeclaration =
     {
@@ -167,10 +167,10 @@ type GlueTypeReference =
         TypeArguments: GlueType list
     }
 
-type GlueTypeUnion = | GlueTypeUnion of GlueType list
+type GlueTypeUnion = GlueTypeUnion of GlueType list
 
 [<RequireQualifiedAccess>]
-type ExcludedMember = | Literal of GlueLiteral
+type ExcludedMember = Literal of GlueLiteral
 // | Function
 
 type GlueFunctionType =

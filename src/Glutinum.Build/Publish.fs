@@ -7,7 +7,6 @@ open BlackFox.CommandLine
 open Build.Utils
 open Build.Utils.Pnpm
 
-
 let private publishNpm (projectDir: string) =
     let packageJsonPath = Path.Combine(projectDir, "package.json")
     let packageJsonContent = File.ReadAllText(packageJsonPath)

@@ -60,8 +60,8 @@ let main argv =
     match argv with
     | "test" :: args -> Test.Specs.handle args
     | "publish" :: args -> Publish.handle args
-    | "lint" :: _ -> Command.Run("dotnet", "fantomas --check src")
-    | "format" :: _ -> Command.Run("dotnet", "fantomas src")
+    | "lint" :: _ -> Command.Run("dotnet", "fantomas --check src tests")
+    | "format" :: _ -> Command.Run("dotnet", "fantomas src tests")
     | "cli" :: args -> Cli.handle args
     | "help" :: _
     | "--help" :: _

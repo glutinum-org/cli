@@ -472,7 +472,6 @@ let private transformTypeParameters
         }
     )
 
-
 let private transformTypeAliasDeclaration
     (glueTypeAliasDeclaration: GlueTypeAliasDeclaration)
     : FSharpType
