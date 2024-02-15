@@ -178,6 +178,22 @@ let readTypeNode (reader: TypeScriptReader) (typeNode: Ts.TypeNode) : GlueType =
             |> GlueType.ClassDeclaration
         | _ -> GlueType.Primitive GluePrimitive.Any
 
+    | Ts.SyntaxKind.LiteralType ->
+        let literalTypeNode = typeNode :?> Ts.LiteralTypeNode
+
+        let literalExpression =
+            unbox<Ts.LiteralExpression> literalTypeNode.literal
+
+        match tryReadLiteral literalExpression with
+        | Some literal -> GlueType.Literal literal
+        | None ->
+            failwith (
+                generateReaderError
+                    "type node - literal type"
+                    $"Could not read literal type"
+                    typeNode
+            )
+
     | _ ->
         failwith (
             generateReaderError

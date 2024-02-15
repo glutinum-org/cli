@@ -459,23 +459,71 @@ module TypeAliasDeclaration =
         : FSharpUnion)
         |> FSharpType.Union
 
+    let transformLiteral (typeAliasName: string) (literalInfo: GlueLiteral) =
+        let makeTypeAlias primitiveType =
+            ({
+                Name = typeAliasName
+                Type = primitiveType |> FSharpType.Primitive
+                TypeParameters = []
+            }
+            : FSharpTypeAlias)
+            |> FSharpType.TypeAlias
+
+        // We can use StringEnum to represent the literal
+        match literalInfo with
+        | GlueLiteral.String value ->
+            let case =
+                let caseName =
+                    value
+                    |> String.removeSingleQuote
+                    |> String.removeDoubleQuote
+                // |> String.capitalizeFirstLetter
+
+                ({
+                    Attributes = []
+                    Name = Naming.sanitizeName caseName
+                }
+                : FSharpUnionCase)
+
+            ({
+                Attributes =
+                    [
+                        FSharpAttribute.RequireQualifiedAccess
+                        FSharpAttribute.StringEnum CaseRules.None
+                    ]
+                Name = typeAliasName
+                Cases = [ case ]
+                IsOptional = false
+            }
+            : FSharpUnion)
+            |> FSharpType.Union
+
+        // For others type we will default to a type alias
+
+        | GlueLiteral.Int _ -> makeTypeAlias FSharpPrimitive.Int
+        | GlueLiteral.Float _ -> makeTypeAlias FSharpPrimitive.Float
+        | GlueLiteral.Bool _ -> makeTypeAlias FSharpPrimitive.Bool
+
 let private transformTypeParameters
     (typeParameters: GlueTypeParameter list)
     : FSharpTypeParameter list
     =
     typeParameters
     |> List.map (fun typeParameter ->
-        {
-            Name = Naming.sanitizeName typeParameter.Name
-            Constraint = typeParameter.Constraint |> Option.map transformType
-            Default = typeParameter.Default |> Option.map transformType
-        }
+        FSharpTypeParameter.Create(
+            typeParameter.Name,
+            ?constraint_ =
+                (typeParameter.Constraint |> Option.map transformType),
+            ?default_ = (typeParameter.Default |> Option.map transformType)
+        )
     )
 
 let private transformTypeAliasDeclaration
     (glueTypeAliasDeclaration: GlueTypeAliasDeclaration)
     : FSharpType
     =
+
+    let typeAliasName = Naming.sanitizeName glueTypeAliasDeclaration.Name
 
     // TODO: Make the transformation more robust
     match glueTypeAliasDeclaration.Type with
@@ -556,7 +604,7 @@ let private transformTypeAliasDeclaration
                         FSharpAttribute.RequireQualifiedAccess
                         FSharpAttribute.StringEnum CaseRules.None
                     ]
-                Name = Naming.sanitizeName glueTypeAliasDeclaration.Name
+                Name = typeAliasName
                 Cases = cases
                 IsOptional = false
             }
@@ -580,7 +628,7 @@ let private transformTypeAliasDeclaration
                 |> List.distinct
 
             ({
-                Name = Naming.sanitizeName glueTypeAliasDeclaration.Name
+                Name = typeAliasName
                 Cases = cases
             }
             : FSharpEnum)
@@ -590,7 +638,7 @@ let private transformTypeAliasDeclaration
         // Erased enum cases for improving the user experience
         else
             ({
-                Name = Naming.sanitizeName glueTypeAliasDeclaration.Name
+                Name = typeAliasName
                 Type = transformType unionType
                 TypeParameters =
                     transformTypeParameters
@@ -634,7 +682,7 @@ let private transformTypeAliasDeclaration
             | _ -> FSharpType.Discard
 
         ({
-            Name = Naming.sanitizeName glueTypeAliasDeclaration.Name
+            Name = typeAliasName
             Type = typ
             TypeParameters =
                 transformTypeParameters glueTypeAliasDeclaration.TypeParameters
@@ -642,9 +690,12 @@ let private transformTypeAliasDeclaration
         : FSharpTypeAlias)
         |> FSharpType.TypeAlias
 
+    | GlueType.Literal literalInfo ->
+        TypeAliasDeclaration.transformLiteral typeAliasName literalInfo
+
     | GlueType.Primitive primitiveInfo ->
         ({
-            Name = Naming.sanitizeName glueTypeAliasDeclaration.Name
+            Name = typeAliasName
             Type = transformPrimitive primitiveInfo |> FSharpType.Primitive
             TypeParameters =
                 transformTypeParameters glueTypeAliasDeclaration.TypeParameters
@@ -654,7 +705,7 @@ let private transformTypeAliasDeclaration
 
     | GlueType.TypeReference typeReference ->
         ({
-            Name = Naming.sanitizeName glueTypeAliasDeclaration.Name
+            Name = typeAliasName
             Type = transformType (GlueType.TypeReference typeReference)
             TypeParameters =
                 transformTypeParameters glueTypeAliasDeclaration.TypeParameters
@@ -664,7 +715,7 @@ let private transformTypeAliasDeclaration
 
     | GlueType.Array glueType ->
         ({
-            Name = Naming.sanitizeName glueTypeAliasDeclaration.Name
+            Name = typeAliasName
             Type = transformType (GlueType.Array glueType)
             TypeParameters =
                 transformTypeParameters glueTypeAliasDeclaration.TypeParameters
@@ -679,7 +730,7 @@ let private transformTypeAliasDeclaration
         let partialInterface =
             { originalInterface with
                 // Use the alias name instead of the original interface name
-                Name = Naming.sanitizeName glueTypeAliasDeclaration.Name
+                Name = typeAliasName
                 // Transform all the members to optional
                 Members =
                     originalInterface.Members
@@ -699,7 +750,7 @@ let private transformTypeAliasDeclaration
     | GlueType.FunctionType functionType ->
         {
             Attributes = [ FSharpAttribute.AllowNullLiteral ]
-            Name = Naming.sanitizeName glueTypeAliasDeclaration.Name
+            Name = typeAliasName
             TypeParameters =
                 transformTypeParameters glueTypeAliasDeclaration.TypeParameters
             Members =

@@ -17,6 +17,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Add support for `MethodSignature` on interface ([GH-28](https://github.com/glutinum-org/cli/issues/28]))
 * Ignore `ExportAssignment` as we don't know what to do with it yet
+* Add support for literal type alias ([GH-45](https://github.com/glutinum-org/cli/issues/45))
+
+    ```ts
+    type Mode = "auto";
+    type Rank1 = 1;
+    type Trusty = true;
+    type Falsy = false;
+    type PiValue = 3.14;
+    ```
 
 ## 0.4.0 - 2024-01-08
 

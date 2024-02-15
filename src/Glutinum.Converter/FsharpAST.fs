@@ -217,6 +217,15 @@ type FSharpTypeParameter =
         Default: FSharpType option
     }
 
+    static member Create
+        (name: string, ?constraint_: FSharpType, ?default_: FSharpType)
+        =
+        {
+            Name = name
+            Constraint = constraint_
+            Default = default_
+        }
+
 type FSharpTypeAlias =
     {
         Name: string

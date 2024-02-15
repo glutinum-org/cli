@@ -1,0 +1,1 @@
+type Test = 0
