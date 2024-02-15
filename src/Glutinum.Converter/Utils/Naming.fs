@@ -20,7 +20,7 @@ let nameNotEqualsDefaultFableValue (name: string) (value: string) : bool =
     not (nameEqualsDefaultFableValue name value)
 
 let escapeName (name: string) : string =
-    if Keywords.fsharp.Contains name then
+    if Keywords.fsharp.Contains name || name.Contains("-") then
         $"``%s{name}``"
     else
         name
