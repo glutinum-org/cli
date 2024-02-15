@@ -19,8 +19,15 @@ let nameEqualsDefaultFableValue (name: string) (value: string) : bool =
 let nameNotEqualsDefaultFableValue (name: string) (value: string) : bool =
     not (nameEqualsDefaultFableValue name value)
 
+let startWithDigit (name: string) : bool =
+    name.Length > 0 && Char.IsDigit name.[0]
+
 let escapeName (name: string) : string =
-    if Keywords.fsharp.Contains name || name.Contains("-") then
+    if
+        name.Contains("-")
+        || startWithDigit name
+        || Keywords.fsharp.Contains name
+    then
         $"``%s{name}``"
     else
         name
