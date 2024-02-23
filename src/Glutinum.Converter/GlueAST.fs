@@ -199,6 +199,7 @@ type GlueType =
     | Array of GlueType
     | FunctionType of GlueFunctionType
     | TypeParameter of string
+    | ThisType of typeName: string
 
     member this.Name =
         match this with
@@ -225,6 +226,7 @@ type GlueType =
         | ClassDeclaration info -> info.Name
         | TypeReference info -> info.Name
         | Array info -> $"ResizeArray<{info.Name}>"
+        | ThisType typeName -> typeName
         | IndexedAccessType _
         | Union _
         | Partial _

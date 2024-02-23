@@ -194,6 +194,17 @@ let readTypeNode (reader: TypeScriptReader) (typeNode: Ts.TypeNode) : GlueType =
                     typeNode
             )
 
+    | Ts.SyntaxKind.ThisType ->
+        let thisTypeNode = typeNode :?> Ts.ThisTypeNode
+
+        // Probably a naive implementation but hopefully it will cover
+        // most of the cases
+        // We can't use the reader to get the fulltype because we would end
+        // up in a infinite loop
+        let typ = checker.getTypeAtLocation thisTypeNode
+
+        GlueType.ThisType typ.symbol.name
+
     | _ ->
         failwith (
             generateReaderError

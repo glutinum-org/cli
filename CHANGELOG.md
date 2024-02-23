@@ -29,6 +29,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     type PiValue = 3.14;
     ```
 
+* Add support for `ThisType` ([GH-13](https://github.com/glutinum-org/cli/issues/13))
+* Add support for `FunctionType` when used as a type
+
+    ```ts
+    export interface MyObject {
+        instance: () => this;
+        log: (a : Boolean, b : number) => this;
+    }
+    ```
+
+    ```fs
+    [<AllowNullLiteral>]
+    type MyObject =
+        abstract member instance: (unit -> MyObject) with get, set
+        abstract member log: (bool -> float -> MyObject) with get, set
+    ```
+
+### Changed
+
+* Replace `Boolean` with `bool`
+
 ## 0.4.0 - 2024-01-08
 
 ### Changed

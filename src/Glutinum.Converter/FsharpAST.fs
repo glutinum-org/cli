@@ -246,6 +246,13 @@ type FSharpTypeReference =
         TypeArguments: FSharpType list
     }
 
+type FSharpFunctionType =
+    {
+        Parameters: FSharpParameter list
+        TypeArguments: FSharpType list
+        ReturnType: FSharpType
+    }
+
 [<RequireQualifiedAccess>]
 type FSharpType =
     | Enum of FSharpEnum
@@ -274,6 +281,8 @@ type FSharpType =
     | TypeReference of FSharpTypeReference
     | TypeParameter of string
     | ResizeArray of FSharpType
+    | ThisType of typeName: string
+    | Function of FSharpFunctionType
 
 type FSharpOutFile =
     {

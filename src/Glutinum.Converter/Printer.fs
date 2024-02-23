@@ -164,6 +164,25 @@ let rec private printType (fsharpType: FSharpType) =
 
         $"{info.Name}<{cases}>{option}"
 
+    | FSharpType.ThisType name -> name
+
+    | FSharpType.Function functionInfo ->
+        match functionInfo.Parameters with
+        | [] ->
+            let suffix = printType functionInfo.ReturnType
+
+            $"(unit -> {suffix})"
+
+        | _ ->
+            let parameters =
+                functionInfo.Parameters
+                |> List.map (fun p -> printType p.Type)
+                |> String.concat " -> "
+
+            let returnType = printType functionInfo.ReturnType
+
+            $"({parameters} -> {returnType})"
+
     | FSharpType.Enum info -> info.Name
     | FSharpType.Primitive info ->
         match info with
@@ -175,15 +194,20 @@ let rec private printType (fsharpType: FSharpType) =
         | FSharpPrimitive.Number -> "float"
         | FSharpPrimitive.Null -> "obj"
     | FSharpType.TypeReference typeReference ->
+        let replacedName =
+            match typeReference.Name with
+            | "Boolean" -> "bool"
+            | name -> name
+
         if typeReference.TypeArguments.Length > 0 then
             let typeArguments =
                 typeReference.TypeArguments
                 |> List.map printType
                 |> String.concat ", "
 
-            $"{typeReference.Name}<{typeArguments}>"
+            $"{replacedName}<{typeArguments}>"
         else
-            typeReference.Name
+            replacedName
 
     | FSharpType.TypeParameter name -> $"'{name}"
     | FSharpType.Option optionType -> printType optionType + " option"
@@ -460,7 +484,9 @@ let rec print (printer: Printer) (fsharpTypes: FSharpType list) =
         | FSharpType.Option _
         | FSharpType.ResizeArray _
         | FSharpType.TypeParameter _
-        | FSharpType.Discard -> ()
+        | FSharpType.Discard
+        | FSharpType.Function _
+        | FSharpType.ThisType _ -> ()
 
         print printer tail
 

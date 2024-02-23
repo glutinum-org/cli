@@ -36,6 +36,9 @@ let rec private transformType (glueType: GlueType) : FSharpType =
     match glueType with
     | GlueType.Primitive primitiveInfo ->
         transformPrimitive primitiveInfo |> FSharpType.Primitive
+
+    | GlueType.ThisType typeName -> FSharpType.ThisType typeName
+
     | GlueType.Union(GlueTypeUnion cases) ->
         let optionalTypes, others =
             cases
@@ -94,6 +97,17 @@ let rec private transformType (glueType: GlueType) : FSharpType =
         |> FSharpType.TypeReference
 
     | GlueType.TypeParameter name -> FSharpType.TypeParameter name
+
+    | GlueType.FunctionType functionTypeInfo ->
+        ({
+            Parameters =
+                functionTypeInfo.Parameters |> List.map transformParameter
+            TypeArguments = []
+            ReturnType = transformType functionTypeInfo.Type
+        }
+        : FSharpFunctionType)
+        |> FSharpType.Function
+
     | GlueType.ModuleDeclaration _
     | GlueType.IndexedAccessType _
     | GlueType.Literal _
@@ -103,7 +117,6 @@ let rec private transformType (glueType: GlueType) : FSharpType =
     | GlueType.Variable _
     | GlueType.KeyOf _
     | GlueType.Discard
-    | GlueType.FunctionType _
     | GlueType.Partial _
     | GlueType.FunctionDeclaration _ ->
         printfn "Could not transform type: %A" glueType
@@ -798,6 +811,17 @@ let private transformClassDeclaration
     : FSharpInterface)
     |> FSharpType.Interface
 
+let private transformFunctionType (functionTypeInfo: GlueFunctionType) =
+
+    ({
+        Attributes = [ FSharpAttribute.AllowNullLiteral ]
+        Name = "dwdw"
+        Members = []
+        TypeParameters = []
+    }
+    : FSharpInterface)
+    |> FSharpType.Interface
+
 let rec private transformToFsharp (glueTypes: GlueType list) : FSharpType list =
     glueTypes
     |> List.map (
@@ -816,8 +840,10 @@ let rec private transformToFsharp (glueTypes: GlueType list) : FSharpType list =
         | GlueType.ClassDeclaration classInfo ->
             transformClassDeclaration classInfo
 
+        | GlueType.FunctionType functionTypeInfo ->
+            transformFunctionType functionTypeInfo
+
         | GlueType.TypeParameter _
-        | GlueType.FunctionType _
         | GlueType.Partial _
         | GlueType.Array _
         | GlueType.TypeReference _
@@ -828,7 +854,8 @@ let rec private transformToFsharp (glueTypes: GlueType list) : FSharpType list =
         | GlueType.Variable _
         | GlueType.Primitive _
         | GlueType.KeyOf _
-        | GlueType.Discard -> FSharpType.Discard
+        | GlueType.Discard
+        | GlueType.ThisType _ -> FSharpType.Discard
     )
 
 let transform (isTopLevel: bool) (glueAst: GlueType list) : FSharpType list =
