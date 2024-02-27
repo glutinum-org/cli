@@ -69,3 +69,8 @@ let generateReaderError
 --- Parent text ---
 %s{node.parent.getFullText ()}
 ---"""
+
+let tryGetFullName (checker: Ts.TypeChecker) (node: Ts.Node) =
+    match checker.getSymbolAtLocation node with
+    | None -> None
+    | Some symbol -> checker.getFullyQualifiedName symbol |> Some
