@@ -46,11 +46,7 @@ let generateBindingFile (filePath: string) =
     let outFile =
         {
             Name = "Glutinum"
-            Opens =
-                [
-                    "Fable.Core"
-                    "System"
-                ]
+            Opens = [ "Fable.Core"; "System" ]
         }
 
     Printer.printOutFile printer outFile

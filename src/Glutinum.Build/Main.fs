@@ -16,6 +16,11 @@ Available commands:
                                     You can pass additional arguments to 'ava' by using '--' followed by the arguments
                                     For example: ./build.sh test --watch -- --match="**class**"
 
+    web                             Command related to the web app
+
+        Options:
+            --watch                 Watch for changes and re-build the web app
+
     cli                             Build the CLI tool
                                     You can then invoke the local version of Glutinum
                                     by running `node cli.js <args>`
@@ -31,6 +36,12 @@ Available commands:
                                     If the last version in the CHANGELOG.md is
                                     different from the version in the packages,
                                     the package will be published
+
+        Options:
+            --web-only              Publish the web app only
+                                    This is useful when there is a bug related to the
+                                    Web app only for which we need to publish a new version
+                                    separately from the CLI tool
         """
 
     printfn $"%s{helpText}"
@@ -59,6 +70,7 @@ let main argv =
 
     match argv with
     | "test" :: args -> Test.Specs.handle args
+    | "web" :: args -> Web.handle args
     | "publish" :: args -> Publish.handle args
     | "lint" :: _ -> Command.Run("dotnet", "fantomas --check src tests")
     | "format" :: _ -> Command.Run("dotnet", "fantomas src tests")

@@ -6,43 +6,76 @@ open SimpleExec
 open BlackFox.CommandLine
 open Build.Utils
 open Build.Utils.Pnpm
+open System.Text.RegularExpressions
 
-let private publishNpm (projectDir: string) =
-    let packageJsonPath = Path.Combine(projectDir, "package.json")
-    let packageJsonContent = File.ReadAllText(packageJsonPath)
-    let changelogPath = Path.Combine(projectDir, "CHANGELOG.md")
+let cwd = Environment.CurrentDirectory
 
-    let lastChangelogVersion =
-        Changelog.getLastVersion changelogPath |> fun v -> v.Version.ToString()
+/// Updates the internal version of the project to the last version in the changelog
+/// This is used to display the version on the Web app
+let private updatePreludeVersion (newVersion: string) =
+    let prelude = Path.Combine(cwd, "src", "Glutinum.Converter", "Prelude.fs")
+    let preludeContent = File.ReadAllText(prelude)
 
-    printfn $"Publishing: %s{projectDir}"
+    let newPreludeContent =
+        Regex.Replace(
+            preludeContent,
+            $@"^(?'indentation'\s*)let VERSION = ""(?'version'.*?)""",
+            (fun (m: Match) ->
+                m.Groups.["indentation"].Value
+                + $"let VERSION = \"{newVersion}\""
+            ),
+            RegexOptions.Multiline
+        )
 
-    if Npm.needPublishing packageJsonContent lastChangelogVersion then
-        let updatedPackageJsonContent =
-            Npm.replaceVersion packageJsonContent lastChangelogVersion
+    File.WriteAllText(prelude, newPreludeContent)
 
-        File.WriteAllText(packageJsonPath, updatedPackageJsonContent)
-        Pnpm.publish (noGitChecks = true, access = Publish.Access.Public)
-        printfn $"Published!"
-    else
-        printfn $"Already up-to-date, skipping..."
+let private publishWebApp () =
+    // Compile the web app
+    Web.handle []
 
-let handle (_args: string list) =
-    Command.Run("dotnet", "fantomas src")
+    Command.Run("npx", "gh-pages -d ./src/Glutinum.Web/dist/")
 
+let handle (args: string list) =
     Test.Specs.handle []
+    let webAppOnly = args |> List.contains "--web-only"
 
     if (Directory.Exists "dist") then
         Directory.Delete("dist", true)
 
-    Command.Run(
-        "dotnet",
-        CmdLine.empty
-        |> CmdLine.appendRaw "fable"
-        |> CmdLine.appendRaw "src/Glutinum.Converter.CLI"
-        |> CmdLine.appendPrefix "--outDir" "dist"
-        |> CmdLine.appendRaw "--sourceMaps"
-        |> CmdLine.toString
-    )
+    let packageJsonPath = Path.Combine(cwd, "package.json")
+    let packageJsonContent = File.ReadAllText(packageJsonPath)
+    let changelogPath = Path.Combine(cwd, "CHANGELOG.md")
 
-    publishNpm Environment.CurrentDirectory
+    let lastChangelogVersion =
+        Changelog.getLastVersion changelogPath |> fun v -> v.Version.ToString()
+
+    updatePreludeVersion lastChangelogVersion
+
+    // We allow to force the publishing of the web app only
+    // The Web app doesn't have a CHANGELOG.md file, so in case there is a bug
+    // to fix, we can force the publishing of the web app only
+    if webAppOnly then
+        publishWebApp ()
+
+    else if Npm.needPublishing packageJsonContent lastChangelogVersion then
+        Command.Run(
+            "dotnet",
+            CmdLine.empty
+            |> CmdLine.appendRaw "fable"
+            |> CmdLine.appendRaw "src/Glutinum.Converter.CLI"
+            |> CmdLine.appendPrefix "--outDir" "dist"
+            |> CmdLine.appendRaw "--sourceMaps"
+            |> CmdLine.toString
+        )
+
+        // Update package.json with the new version
+        let updatedPackageJsonContent =
+            Npm.replaceVersion packageJsonContent lastChangelogVersion
+
+        File.WriteAllText(packageJsonPath, updatedPackageJsonContent)
+
+        Pnpm.publish (noGitChecks = true, access = Publish.Access.Public)
+
+        publishWebApp ()
+    else
+        printfn $"Already up-to-date, skipping..."

@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 * Transform `Promise` to `JS.Promise` (by @nojaf) ([GH-33](https://github.com/glutinum-org/cli/pull/33))
+* Transform `Uint8Array` to `JS.Uint8Array`
 * Optional argument of F# Method are prefixed with `?` instead of suffixing them with `option`
 * Sanitize names coming from TypeScript by removing surrounding quotes (`"`, `'`)
 * String enums containing a `-` should be escaped with backtick ([GH-44](https://github.com/glutinum-org/cli/issues/44))

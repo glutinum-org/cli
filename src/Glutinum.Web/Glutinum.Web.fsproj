@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Version>0.1.0-alpha-001</Version>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Libs/Glutinum.Feliz.MonacoEditor.fs" />
+    <Compile Include="Libs/Glutinum.LzString.fs" />
+    <Compile Include="CssModules.fs" />
+    <Compile Include="Extensions/Feliz.fs" />
+    <Compile Include="Extensions/Elmish.fs" />
+    <Compile Include="Global/Router.fs" />
+    <Compile Include="IssueGenerator.fs" />
+    <Compile Include="Pages/Editors.fs" />
+    <Compile Include="App.fs" />
+    <Compile Include="Main.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Glutinum.Converter\Glutinum.Converter.fsproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Fable.Browser.Navigator" />
+    <PackageReference Include="Fable.Core" />
+    <PackageReference Include="Fable.Elmish" />
+    <PackageReference Include="Fable.Elmish.Browser" />
+    <PackageReference Include="Fable.Elmish.HMR" />
+    <PackageReference Include="Fable.Elmish.React" />
+    <PackageReference Include="Fable.Elmish.UrlParser" />
+    <PackageReference Include="Feliz" />
+    <PackageReference Include="Feliz.Bulma" />
+    <PackageReference Include="Glutinum.Feliz.Iconify" />
+    <PackageReference Include="Glutinum.IconifyIcons.Lucide" />
+    <PackageReference Include="Glutinum.IconifyIcons.SimpleIcons" />
+    <PackageReference Include="Thoth.Elmish.Toast" />
+  </ItemGroup>
+</Project>

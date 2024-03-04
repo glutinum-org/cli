@@ -340,3 +340,7 @@ fable_modules/
 fableBuild/
 dist/
 *.tmp.fsx
+
+src/Glutinum.Web/CssModules.fs
+
+*.fable-temp.csproj

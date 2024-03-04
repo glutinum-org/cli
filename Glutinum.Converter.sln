@@ -13,6 +13,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Glutinum.Build", "src\Gluti
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Glutinum.Converter.Tests", "tests\Glutinum.Converter.Tests.fsproj", "{F75187C8-230D-408C-88E4-694651AECC85}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Glutinum.Web", "src\Glutinum.Web\Glutinum.Web.fsproj", "{A3123CF8-74D0-46FD-9558-BB22557DCD60}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,10 +40,15 @@ Global
 		{F75187C8-230D-408C-88E4-694651AECC85}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F75187C8-230D-408C-88E4-694651AECC85}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F75187C8-230D-408C-88E4-694651AECC85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3123CF8-74D0-46FD-9558-BB22557DCD60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3123CF8-74D0-46FD-9558-BB22557DCD60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3123CF8-74D0-46FD-9558-BB22557DCD60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3123CF8-74D0-46FD-9558-BB22557DCD60}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{58CF9C5B-77C4-4683-87B3-E62529CAAB09} = {C75BB3D7-CD0C-46A8-862E-4DEF5D95FB87}
 		{35A00569-9810-40D3-B36D-3D651F162831} = {C75BB3D7-CD0C-46A8-862E-4DEF5D95FB87}
 		{1566C4D2-0960-4F46-B6BB-F85426C277A4} = {C75BB3D7-CD0C-46A8-862E-4DEF5D95FB87}
+		{A3123CF8-74D0-46FD-9558-BB22557DCD60} = {C75BB3D7-CD0C-46A8-862E-4DEF5D95FB87}
 	EndGlobalSection
 EndGlobal

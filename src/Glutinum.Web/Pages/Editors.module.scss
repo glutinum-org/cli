@@ -1,0 +1,21 @@
+.editorsContainer {
+    display: flex;
+    flex: 1;
+    height: calc(100vh - 3.5rem);
+    position: relative;
+    // z-index just above the navbar otherwise the top of the editor is cropped
+    // Don't know why Bulma always have issues with fixed navbar
+    z-index: 31;
+
+    // Make the separator between the editors visible
+    & > :last-child {
+        border-left: 1px solid #dbdbdb;
+    }
+}
+
+.actions-container {
+    position: fixed;
+    bottom: 1rem;
+    right: 2rem;
+    z-index: 100;
+}
