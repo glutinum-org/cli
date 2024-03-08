@@ -18,7 +18,10 @@ importSideEffects "./scss/main.scss"
 let renderToastWithBulma =
     { new Toast.IRenderer<IconifyIcon> with
         member __.Toast children color =
-            Bulma.notification [ prop.className color; prop.children children ]
+            Bulma.notification [
+                prop.className color
+                prop.children children
+            ]
 
         member __.CloseButton onClick = Bulma.delete [ prop.onClick onClick ]
 
@@ -31,7 +34,11 @@ let renderToastWithBulma =
                 prop.children [ Icon [ icon.icon ico ] ]
             ]
 
-        member __.SingleLayout title message = Html.div [ title; message ]
+        member __.SingleLayout title message =
+            Html.div [
+                title
+                message
+            ]
 
         member __.Message txt = Html.span txt
 
@@ -46,7 +53,12 @@ let renderToastWithBulma =
                         column.is2
                         prop.children [ iconView ]
                     ]
-                    Bulma.column [ prop.children [ title; message ] ]
+                    Bulma.column [
+                        prop.children [
+                            title
+                            message
+                        ]
+                    ]
                 ]
             ]
 

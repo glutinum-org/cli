@@ -20,8 +20,12 @@ open Glutinum.Converter.Reader.UnionTypeNode
 open Glutinum.Converter.Reader.VariableStatement
 
 let typeScriptReader checker =
+    let warnings = ResizeArray<string>()
+
     { new TypeScriptReader(checker) with
         override _.checker: Ts.TypeChecker = checker
+
+        member _.Warnings = warnings
 
         member this.ReadClassDeclaration
             (classDeclaration: Ts.ClassDeclaration)

@@ -34,7 +34,7 @@ type Printer() =
 
     member __.NewLine = buffer.AppendLine() |> ignore
 
-    override __.ToString() = buffer.ToString()
+    override __.ToString() = buffer.ToString().Trim() + "\n"
 
 let printOutFile (printer: Printer) (outFile: FSharpOutFile) =
     printer.Write($"module rec {outFile.Name}")

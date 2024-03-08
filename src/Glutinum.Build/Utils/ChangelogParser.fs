@@ -293,7 +293,9 @@ module Transform =
 
             parse
                 tail
-                { changelog with Versions = version :: changelog.Versions }
+                { changelog with
+                    Versions = version :: changelog.Versions
+                }
 
         | Symbols.SubSection tag :: tail ->
             let (unparsedSymbols, categoryBody) = parseCategoryBody tail []
@@ -350,7 +352,9 @@ module Transform =
                         }
 
                 let versions =
-                    { currentVersion with Categories = updatedCategories }
+                    { currentVersion with
+                        Categories = updatedCategories
+                    }
                     :: otherVersions
 
                 parse unparsedSymbols { changelog with Versions = versions }
@@ -387,11 +391,7 @@ module Transform =
             | currentVersion :: otherVersions ->
                 let (unparsedSymbols, textBody) = tryEatRawText tail
 
-                let otherItemItem =
-                    {
-                        ListItem = text
-                        TextBody = textBody
-                    }
+                let otherItemItem = { ListItem = text; TextBody = textBody }
 
                 let versions =
                     { currentVersion with
@@ -408,17 +408,16 @@ module Transform =
                     text
                 |> Error
 
-        | [] -> Ok { changelog with Versions = changelog.Versions |> List.rev }
+        | [] ->
+            Ok
+                { changelog with
+                    Versions = changelog.Versions |> List.rev
+                }
 
     let fromSymbols (symbols: Symbols list) = parse symbols Changelog.Empty
 
 let parse (changelogContent: string) =
-    changelogContent.Split(
-        [|
-            '\r'
-            '\n'
-        |]
-    )
+    changelogContent.Split([| '\r'; '\n' |])
     |> Array.toList
     |> Lexer.toSymbols
     |> Transform.fromSymbols

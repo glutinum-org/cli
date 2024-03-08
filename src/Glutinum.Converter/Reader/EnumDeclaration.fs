@@ -80,11 +80,7 @@ let readEnumDeclaration
     (enumDeclaration: Ts.EnumDeclaration)
     : GlueEnum
     =
-    let initialState =
-        {|
-            NextCaseIndex = 0
-            Members = []
-        |}
+    let initialState = {| NextCaseIndex = 0; Members = [] |}
 
     let readEnumResults =
         enumDeclaration.members

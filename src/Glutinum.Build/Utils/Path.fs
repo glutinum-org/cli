@@ -20,11 +20,7 @@ type Path =
         // Use Environment.CurrentDirectory instead even if it means that we
         // need to be in the expected directory when running the build script
         let paths =
-            Array.concat
-                [
-                    [| Environment.CurrentDirectory |]
-                    segments
-                ]
+            Array.concat [ [| Environment.CurrentDirectory |]; segments ]
 
         // Use GetFullPath to clean the path
         Path.GetFullPath(Path.Combine(paths))

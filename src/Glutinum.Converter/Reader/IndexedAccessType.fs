@@ -19,12 +19,15 @@ let readIndexedAccessType
             reader.ReadTypeOperatorNode typeOperatorNode
 
         | unsupported ->
-            printfn
-                "%s"
-                (Utils.generateReaderError
+            let warning =
+                Utils.generateReaderError
                     "readIndexedAccessType"
                     $"Unsupported node kind %A{unsupported}"
-                    nodeType)
+                    nodeType
+
+            reader.Warnings.Add warning
+
+            printfn "%s" warning
 
             GlueType.Discard
 

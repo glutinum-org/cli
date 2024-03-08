@@ -146,6 +146,19 @@
           "Microsoft.NETCore.Platforms": "1.1.0"
         }
       },
+      "Thoth.Elmish.Debouncer": {
+        "type": "Direct",
+        "requested": "[2.1.0, )",
+        "resolved": "2.1.0",
+        "contentHash": "WD96bCfW6YsUeTfCmA5Usw13qaYwlL2gJWGh7gsuyNUHdQU0LmbkKfsPRwSk9Mbsam5dNAQzP8psuQdHQR34gw==",
+        "dependencies": {
+          "FSharp.Core": "7.0.200",
+          "Fable.Core": "4.0.0",
+          "Fable.Elmish": "4.0.1",
+          "Fable.Promise": "3.2.0",
+          "Fable.React": "9.3.0"
+        }
+      },
       "Thoth.Elmish.Toast": {
         "type": "Direct",
         "requested": "[4.0.0, )",
@@ -256,8 +269,8 @@
       },
       "Fable.React": {
         "type": "Transitive",
-        "resolved": "9.2.0",
-        "contentHash": "ZMRkZpBy+6ytUHPk0WjRh15kigncmSGLOAbtf12VaSy48mtgqIW4lC/23X/FEvz8tUGwHvBUen2GzUU1G/L+RQ==",
+        "resolved": "9.3.0",
+        "contentHash": "ssmZkNpklqD2Q+EGzkAtOpWVhMq4fOIxy3HHXdMZ2QchD2fnuHgXv0f1hjPbUS0F2crLR9/asSe84ED43P9HZQ==",
         "dependencies": {
           "FSharp.Core": "4.7.2",
           "Fable.React.Types": "18.3.0",

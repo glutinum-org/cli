@@ -3,9 +3,12 @@ module Glutinum.Converter.Reader.Types
 open TypeScript
 open Glutinum.Converter.GlueAST
 
+exception TypeScriptReaderException of message: string
+
 [<AbstractClass>]
 type TypeScriptReader(checker: Ts.TypeChecker) =
     abstract checker: Ts.TypeChecker with get
+    abstract Warnings: ResizeArray<string> with get
 
     abstract ReadNode: node: Ts.Node -> GlueType
 

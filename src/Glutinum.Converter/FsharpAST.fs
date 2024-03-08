@@ -21,11 +21,7 @@ type FSharpLiteral =
 //     | Int of int
 //     | Float of float
 
-type FSharpEnumCase =
-    {
-        Name: string
-        Value: FSharpLiteral
-    }
+type FSharpEnumCase = { Name: string; Value: FSharpLiteral }
 
 [<RequireQualifiedAccess>]
 type FSharpEnumType =
@@ -284,8 +280,4 @@ type FSharpType =
     | ThisType of typeName: string
     | Function of FSharpFunctionType
 
-type FSharpOutFile =
-    {
-        Name: string
-        Opens: string list
-    }
+type FSharpOutFile = { Name: string; Opens: string list }

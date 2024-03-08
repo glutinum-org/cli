@@ -82,11 +82,7 @@ type GlueInterface =
         TypeParameters: GlueTypeParameter list
     }
 
-type GlueVariable =
-    {
-        Name: string
-        Type: GlueType
-    }
+type GlueVariable = { Name: string; Type: GlueType }
 
 [<RequireQualifiedAccess>]
 type GluePrimitive =
@@ -114,11 +110,7 @@ type GlueLiteral =
         | Float value -> string value
         | Bool value -> string value
 
-type GlueEnumMember =
-    {
-        Name: string
-        Value: GlueLiteral
-    }
+type GlueEnumMember = { Name: string; Value: GlueLiteral }
 
 type GlueEnum =
     {

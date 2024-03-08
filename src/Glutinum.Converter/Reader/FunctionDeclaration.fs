@@ -24,12 +24,12 @@ let readFunctionDeclaration
         match declaration.name with
         | Some name -> name.getText ()
         | None ->
-            failwith (
-                Utils.generateReaderError
-                    "function declaration"
-                    "Missing name"
-                    declaration
-            )
+            Utils.generateReaderError
+                "function declaration"
+                "Missing name"
+                declaration
+            |> TypeScriptReaderException
+            |> raise
 
     {
         IsDeclared = isDeclared

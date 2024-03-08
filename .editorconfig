@@ -13,14 +13,13 @@ fsharp_alternative_long_member_definitions = true
 fsharp_multi_line_lambda_closing_newline = true
 fsharp_multiline_bracket_style = aligned
 fsharp_keep_max_number_of_blank_lines = 1
-# fsharp_record_multiline_formatter = number_of_items
-# fsharp_max_record_number_of_items = 1
-# fsharp_array_or_list_multiline_formatter = number_of_items
 fsharp_align_function_signature_to_indentation = true
 fsharp_max_if_then_else_short_width = 0
 
 [src/Glutinum.Web/**/*.{fs,fsx}]
 fsharp_experimental_elmish = true
+fsharp_record_multiline_formatter = number_of_items
+fsharp_array_or_list_multiline_formatter = number_of_items
 
 [*.yml]
 indent_size = 2

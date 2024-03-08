@@ -33,11 +33,12 @@ let readNode (reader: TypeScriptReader) (node: Ts.Node) : GlueType =
         GlueType.Discard
 
     | unsupported ->
-        printfn
-            "%s"
-            (Utils.generateReaderError
+        let warning =
+            Utils.generateReaderError
                 "node"
                 $"Unsupported node kind %A{unsupported}"
-                node)
+                node
+
+        reader.Warnings.Add warning
 
         GlueType.Discard

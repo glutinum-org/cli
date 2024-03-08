@@ -90,9 +90,9 @@ let readNamedDeclaration
         |> GlueMember.MethodSignature
 
     | _ ->
-        failwith (
-            Utils.generateReaderError
-                "named declaration"
-                $"Unsupported kind %A{declaration.kind}"
-                declaration
-        )
+        Utils.generateReaderError
+            "named declaration"
+            $"Unsupported kind %A{declaration.kind}"
+            declaration
+        |> TypeScriptReaderException
+        |> raise

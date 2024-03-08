@@ -8,4 +8,10 @@ let readSourceFile
     =
     let reader = Reader.TypeScriptReader.typeScriptReader checker
 
-    sourceFile.Value.statements |> List.ofSeq |> List.map reader.ReadNode
+    {|
+        GlueAST =
+            sourceFile.Value.statements
+            |> List.ofSeq
+            |> List.map reader.ReadNode
+        Warnings = reader.Warnings
+    |}

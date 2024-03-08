@@ -57,7 +57,7 @@ let generateReaderError
     let line = int lineAndChar.line + 1
     let column = int lineAndChar.character + 1
 
-    $"""Error while reading %s{errorContext} in
+    $"""Error while reading %s{errorContext} in:
 %s{sourceFile.fileName}(%d{line},%d{column})
 
 %s{reason}

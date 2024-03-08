@@ -19,6 +19,7 @@
     <PackageVersion Include="Glutinum.Feliz.Iconify" Version="2.0.0" />
     <PackageVersion Include="Glutinum.IconifyIcons.Lucide" Version="1.0.0" />
     <PackageVersion Include="Glutinum.IconifyIcons.SimpleIcons" Version="1.0.0" />
+    <PackageVersion Include="Thoth.Elmish.Debouncer" Version="2.1.0" />
     <PackageVersion Include="Thoth.Elmish.Toast" Version="4.0.0" />
   </ItemGroup>
 </Project>

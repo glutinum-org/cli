@@ -22,28 +22,29 @@ let readVariableStatement
         |> Option.defaultValue false
 
     if isExported then
-        let declaration =
-            statement.declarationList.declarations |> Seq.toList |> List.head
+        match statement.declarationList.declarations |> Seq.toList with
+        | [] -> GlueType.Discard
 
-        let name =
-            match declaration.name?kind with
-            | Ts.SyntaxKind.Identifier ->
-                let id: Ts.Identifier = !!declaration.name
-                id.getText ()
-            | _ ->
-                failwith (
+        | declaration :: _ ->
+            let name =
+                match declaration.name?kind with
+                | Ts.SyntaxKind.Identifier ->
+                    let id: Ts.Identifier = !!declaration.name
+                    id.getText ()
+                | _ ->
                     Utils.generateReaderError
                         "variable statement"
                         "Unable to read variable name"
                         declaration
-                )
+                    |> TypeScriptReaderException
+                    |> raise
 
-        ({
-            Name = name
-            Type = reader.ReadTypeNode declaration.``type``
-        }
-        : GlueVariable)
-        |> GlueType.Variable
+            ({
+                Name = name
+                Type = reader.ReadTypeNode declaration.``type``
+            }
+            : GlueVariable)
+            |> GlueType.Variable
 
     else
         GlueType.Discard

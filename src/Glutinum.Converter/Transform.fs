@@ -640,11 +640,7 @@ let private transformTypeAliasDeclaration
                 )
                 |> List.distinct
 
-            ({
-                Name = typeAliasName
-                Cases = cases
-            }
-            : FSharpEnum)
+            ({ Name = typeAliasName; Cases = cases }: FSharpEnum)
             |> FSharpType.Enum
         // Otherwise, we want to generate an erased Enum
         // Either by using U2, U3, etc. or by creating custom

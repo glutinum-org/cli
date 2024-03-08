@@ -21,12 +21,12 @@ let readTypeOperatorNode
 
             match symbolOpt with
             | None ->
-                failwith (
-                    Utils.generateReaderError
-                        "type operator (keyof)"
-                        "Missing symbol"
-                        node
-                )
+                Utils.generateReaderError
+                    "type operator (keyof)"
+                    "Missing symbol"
+                    node
+                |> TypeScriptReaderException
+                |> raise
 
             | Some symbol ->
                 match symbol.declarations with
@@ -38,25 +38,25 @@ let readTypeOperatorNode
                     |> GlueType.KeyOf
 
                 | None ->
-                    failwith (
-                        Utils.generateReaderError
-                            "type operator (keyof)"
-                            "Missing declarations"
-                            node
-                    )
+                    Utils.generateReaderError
+                        "type operator (keyof)"
+                        "Missing declarations"
+                        node
+                    |> TypeScriptReaderException
+                    |> raise
 
         else
-            failwith (
-                Utils.generateReaderError
-                    "type operator (keyof)"
-                    $"Was expecting a type reference instead got a Node of type %A{node.``type``.kind}"
-                    node
-            )
+            Utils.generateReaderError
+                "type operator (keyof)"
+                $"Was expecting a type reference instead got a Node of type %A{node.``type``.kind}"
+                node
+            |> TypeScriptReaderException
+            |> raise
 
     | _ ->
-        failwith (
-            Utils.generateReaderError
-                "type operator"
-                $"Unsupported operator %A{node.operator}"
-                node
-        )
+        Utils.generateReaderError
+            "type operator"
+            $"Unsupported operator %A{node.operator}"
+            node
+        |> TypeScriptReaderException
+        |> raise

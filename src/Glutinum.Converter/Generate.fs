@@ -31,13 +31,13 @@ let generateBindingFile (filePath: string) =
 
     let printer = new Printer.Printer()
 
-    let glueAst = Read.readSourceFile checker sourceFile
+    let readerResult = Read.readSourceFile checker sourceFile
 
 #if DEBUG
-    printfn "glueAst: %A" glueAst
+    printfn "glueAst: %A" readerResult
 #endif
 
-    let res = Transform.transform true glueAst
+    let res = Transform.transform true readerResult.GlueAST
 
 #if DEBUG
     printfn "fsharpAst: %A" res
