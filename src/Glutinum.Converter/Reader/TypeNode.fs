@@ -30,12 +30,12 @@ let readTypeNode (reader: TypeScriptReader) (typeNode: Ts.TypeNode) : GlueType =
         let fullName =
             match symbolOpt with
             | None ->
-                failwith (
-                    generateReaderError
-                        "type node"
-                        "Missing symbol"
-                        typeReferenceNode
-                )
+                generateReaderError
+                    "type node"
+                    "Missing symbol"
+                    typeReferenceNode
+                |> TypeScriptReaderException
+                |> raise
             | Some symbol -> checker.getFullyQualifiedName symbol
 
         // Could this detect false positive, if the library defined
@@ -187,12 +187,12 @@ let readTypeNode (reader: TypeScriptReader) (typeNode: Ts.TypeNode) : GlueType =
         match tryReadLiteral literalExpression with
         | Some literal -> GlueType.Literal literal
         | None ->
-            failwith (
-                generateReaderError
-                    "type node - literal type"
-                    $"Could not read literal type"
-                    typeNode
-            )
+            generateReaderError
+                "type node - literal type"
+                $"Could not read literal type"
+                typeNode
+            |> TypeScriptReaderException
+            |> raise
 
     | Ts.SyntaxKind.ThisType ->
         let thisTypeNode = typeNode :?> Ts.ThisTypeNode
@@ -206,9 +206,9 @@ let readTypeNode (reader: TypeScriptReader) (typeNode: Ts.TypeNode) : GlueType =
         GlueType.ThisType typ.symbol.name
 
     | _ ->
-        failwith (
-            generateReaderError
-                "type node"
-                $"Unsupported kind %A{typeNode.kind}"
-                typeNode
-        )
+        generateReaderError
+            "type node"
+            $"Unsupported kind %A{typeNode.kind}"
+            typeNode
+        |> TypeScriptReaderException
+        |> raise

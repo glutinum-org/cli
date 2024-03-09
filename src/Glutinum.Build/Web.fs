@@ -51,6 +51,10 @@ let handle (args: string list) =
         |> ignore
 
     else
+
+        if (Directory.Exists("src/Glutinum.Web/dist")) then
+            Directory.Delete("src/Glutinum.Web/dist", true)
+
         Command.Run(
             "dotnet",
             CmdLine.empty
