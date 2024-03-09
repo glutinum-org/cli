@@ -5,7 +5,7 @@ open Glutinum.Converter.GlueAST
 open Glutinum.Converter.Reader.Types
 
 let readInterfaceDeclaration
-    (reader: TypeScriptReader)
+    (reader: ITypeScriptReader)
     (declaration: Ts.InterfaceDeclaration)
     : GlueInterface
     =

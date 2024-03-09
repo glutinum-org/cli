@@ -5,7 +5,7 @@ open Glutinum.Converter.Reader.Types
 open TypeScript
 
 let readTypeAliasDeclaration
-    (reader: TypeScriptReader)
+    (reader: ITypeScriptReader)
     (declaration: Ts.TypeAliasDeclaration)
     : GlueType
     =

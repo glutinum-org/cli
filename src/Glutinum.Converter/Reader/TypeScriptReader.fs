@@ -19,10 +19,11 @@ open Glutinum.Converter.Reader.TypeParameters
 open Glutinum.Converter.Reader.UnionTypeNode
 open Glutinum.Converter.Reader.VariableStatement
 
-let typeScriptReader checker =
+type TypeScriptReader(checker: Ts.TypeChecker) =
     let warnings = ResizeArray<string>()
 
-    { new TypeScriptReader(checker) with
+    interface ITypeScriptReader with
+
         override _.checker: Ts.TypeChecker = checker
 
         member _.Warnings = warnings
@@ -70,7 +71,7 @@ let typeScriptReader checker =
             readTypeAliasDeclaration this typeAliasDeclaration
 
         member this.ReadTypeNode(typNode: Ts.TypeNode) : GlueType =
-            this.ReadTypeNode(Some typNode)
+            (this :> ITypeScriptReader).ReadTypeNode(Some typNode)
 
         member this.ReadTypeNode(typNode: Ts.TypeNode option) : GlueType =
             match typNode with
@@ -112,4 +113,3 @@ let typeScriptReader checker =
             : GlueTypeParameter list
             =
             readTypeParameters this typeParametersOpt
-    }

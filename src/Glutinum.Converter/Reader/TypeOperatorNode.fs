@@ -6,7 +6,7 @@ open TypeScript
 open Fable.Core.JsInterop
 
 let readTypeOperatorNode
-    (reader: TypeScriptReader)
+    (reader: ITypeScriptReader)
     (node: Ts.TypeOperatorNode)
     =
 

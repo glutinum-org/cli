@@ -6,7 +6,7 @@ open TypeScript
 open Fable.Core.JsInterop
 
 let readFunctionDeclaration
-    (reader: TypeScriptReader)
+    (reader: ITypeScriptReader)
     (declaration: Ts.FunctionDeclaration)
     : GlueFunctionDeclaration
     =

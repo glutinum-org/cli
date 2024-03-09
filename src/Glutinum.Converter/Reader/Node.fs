@@ -4,7 +4,7 @@ open Glutinum.Converter.GlueAST
 open Glutinum.Converter.Reader.Types
 open TypeScript
 
-let readNode (reader: TypeScriptReader) (node: Ts.Node) : GlueType =
+let readNode (reader: ITypeScriptReader) (node: Ts.Node) : GlueType =
     match node.kind with
     | Ts.SyntaxKind.EnumDeclaration ->
         reader.ReadEnumDeclaration(node :?> Ts.EnumDeclaration)
@@ -38,6 +38,8 @@ let readNode (reader: TypeScriptReader) (node: Ts.Node) : GlueType =
                 "node"
                 $"Unsupported node kind %A{unsupported}"
                 node
+
+        printfn "Warning: %s" warning
 
         reader.Warnings.Add warning
 

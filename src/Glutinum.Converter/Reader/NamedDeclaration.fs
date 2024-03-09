@@ -6,7 +6,7 @@ open TypeScript
 open Fable.Core.JsInterop
 
 let readNamedDeclaration
-    (reader: TypeScriptReader)
+    (reader: ITypeScriptReader)
     (declaration: Ts.NamedDeclaration)
     : GlueMember
     =

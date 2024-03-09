@@ -5,7 +5,7 @@ open Glutinum.Converter.Reader.Types
 open TypeScript
 
 let readClassDeclaration
-    (reader: TypeScriptReader)
+    (reader: ITypeScriptReader)
     (classDeclaration: Ts.ClassDeclaration)
     : GlueClassDeclaration
     =

@@ -5,7 +5,7 @@ open Glutinum.Converter.Reader.Types
 open TypeScript
 
 let readIndexedAccessType
-    (reader: TypeScriptReader)
+    (reader: ITypeScriptReader)
     (declaration: Ts.IndexedAccessType)
     : GlueType
     =

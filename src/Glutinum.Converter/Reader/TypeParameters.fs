@@ -6,7 +6,7 @@ open TypeScript
 open Fable.Core.JsInterop
 
 let readTypeParameters
-    (reader: TypeScriptReader)
+    (reader: ITypeScriptReader)
     (typeParameters: ResizeArray<Ts.TypeParameterDeclaration> option)
     : GlueTypeParameter list
     =

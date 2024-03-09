@@ -5,7 +5,7 @@ open Glutinum.Converter.Reader.Types
 open TypeScript
 
 let readModuleDeclaration
-    (reader: TypeScriptReader)
+    (reader: ITypeScriptReader)
     (declaration: Ts.ModuleDeclaration)
     : GlueModuleDeclaration
     =

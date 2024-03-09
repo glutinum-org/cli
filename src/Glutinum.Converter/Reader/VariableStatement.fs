@@ -6,7 +6,7 @@ open TypeScript
 open Fable.Core.JsInterop
 
 let readVariableStatement
-    (reader: TypeScriptReader)
+    (reader: ITypeScriptReader)
     (statement: Ts.VariableStatement)
     : GlueType
     =

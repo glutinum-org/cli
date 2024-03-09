@@ -7,7 +7,11 @@ open Fable.Core.JsInterop
 open Fable.Core.JS
 open Glutinum.Converter.Reader.Utils
 
-let readTypeNode (reader: TypeScriptReader) (typeNode: Ts.TypeNode) : GlueType =
+let readTypeNode
+    (reader: ITypeScriptReader)
+    (typeNode: Ts.TypeNode)
+    : GlueType
+    =
     let checker = reader.checker
 
     match typeNode.kind with

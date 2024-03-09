@@ -61,6 +61,7 @@ let handle (args: string list) =
             |> CmdLine.appendRaw "fable"
             |> CmdLine.appendRaw "--noCache"
             |> CmdLine.appendRaw "--verbose"
+            |> CmdLine.appendPrefix "--define" "DEBUG"
             |> CmdLine.toString,
             workingDirectory = "src/Glutinum.Web"
         )

@@ -76,7 +76,7 @@ let private readEnumMembers
     |}
 
 let readEnumDeclaration
-    (reader: TypeScriptReader)
+    (reader: ITypeScriptReader)
     (enumDeclaration: Ts.EnumDeclaration)
     : GlueEnum
     =

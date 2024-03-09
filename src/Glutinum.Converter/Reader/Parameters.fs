@@ -5,7 +5,7 @@ open Glutinum.Converter.Reader.Types
 open TypeScript
 
 let readParameters
-    (reader: TypeScriptReader)
+    (reader: ITypeScriptReader)
     (parameters: ResizeArray<Ts.ParameterDeclaration>)
     =
     parameters

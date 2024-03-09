@@ -7,7 +7,7 @@ open TypeScript
 open Fable.Core.JsInterop
 
 let rec private readUnionTypeCases
-    (reader: TypeScriptReader)
+    (reader: ITypeScriptReader)
     (unionTypeNode: Ts.UnionTypeNode)
     : GlueTypeUnion
     =
@@ -143,7 +143,7 @@ let rec private readUnionTypeCases
     |> GlueTypeUnion
 
 let readUnionTypeNode
-    (reader: TypeScriptReader)
+    (reader: ITypeScriptReader)
     (unionTypeNode: Ts.UnionTypeNode)
     : GlueType
     =

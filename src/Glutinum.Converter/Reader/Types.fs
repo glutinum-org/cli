@@ -1,12 +1,13 @@
 module Glutinum.Converter.Reader.Types
 
+open Fable.Core
 open TypeScript
 open Glutinum.Converter.GlueAST
 
 exception TypeScriptReaderException of message: string
 
-[<AbstractClass>]
-type TypeScriptReader(checker: Ts.TypeChecker) =
+[<Mangle>]
+type ITypeScriptReader =
     abstract checker: Ts.TypeChecker with get
     abstract Warnings: ResizeArray<string> with get
 
