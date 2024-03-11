@@ -40,7 +40,7 @@ let generateBindingFile (filePath: string) =
     let res = Transform.transform true readerResult.GlueAST
 
 #if DEBUG
-    printfn "fsharpAst: %A" res
+    printfn "fsharhpAst: %A" res
 #endif
 
     let outFile =
