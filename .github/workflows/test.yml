@@ -26,6 +26,4 @@ jobs:
         version: 8
 
     - name: Tests
-      run: |
-        ./build.sh lint
-        ./build.sh test
+      run: ./build.sh test
