@@ -9,6 +9,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    name: Run tests suite
 
     steps:
     - uses: actions/checkout@v2
@@ -26,6 +27,19 @@ jobs:
         version: 8
 
     - name: Tests
-      run: |
-        ./build.sh lint
-        ./build.sh test
+      run: ./build.sh test
+
+  lint:
+    runs-on: ubuntu-latest
+    name: Check formatting
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Check formatting
+      run: ./build.sh lint
