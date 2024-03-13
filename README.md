@@ -73,14 +73,69 @@ type FSharpAttribute =
 
 ### Tests
 
-Tests are generated based on the `tests/specs/` folder content.
+This project use [Vitest](https://vitest.dev/) for running tests.
 
-Each `.d.ts` correspond to a test and should have a matching `.fsx` file, the name of the test is the relative path to the `tests/specs/` folder without the `.d.ts` extension.
+Vitest was chosen because it seems to have a lot of attention and is actively maintained. Plus, it seems well integrated with VSCode and Rider, allowing us to use the test explorer and even debug the tests using source maps.
 
-For example, if you have a file `tests/specs/exports/variable.d.ts`, you should have a `tests/specs/exports/variable.fsx`.
+If you prefer, it is possible to run the tests via the CLI.
 
-The name of the test is `exports/variable`.
+#### VSCode
 
+Install [Vitest plugin](https://marketplace.visualstudio.com/items?itemName=vitest.explorer), then you will be able to run the tests from the test explorer.
+
+#### Rider
+
+You need to add a new configuration of type `Vitest`.
+
+1. `Run > Edit Configurations...`
+2. Add a new configuration of type `Vitest`
+3. Then you can run the tests by selecting the configuration in the top right corner of the IDE.
+
+#### Specs
+
+> [!TIP]
+> Run `./build.sh --help` to see the available options (look for `test specs` command).
+
+Specs tests are using to test isolated TypeScript syntax and their conversion to F#.
+
+They are generated based on the `tests/specs/references` folder.
+
+Each `.d.ts` correspond to a test and have a matching `.fsx` file.
+
+When running `./build.sh test specs`, it will generate a similar hierarchy in the `tests/specs/generated` folder.
+
+Example:
+
+```text
+tests/specs/references
+├── interfaces
+│   ├── callSignature.d.ts
+│   ├── callSignature.fsx
+│   └── indexSignature
+│       ├── numberParameter.d.ts
+│       └── numberParameter.fsx
+└── typeQuery
+    ├── class.d.ts
+    ├── class.fsx
+    ├── defaultToObj.d.ts
+    └── defaultToObj.fsx
+```
+
+generates:
+
+```text
+tests/specs/generated
+├── interfaces
+│   ├── index.test.js
+│   └── indexSignature
+│       └── index.test.js
+└── typeQuery
+    └── index.test.js
+```
+
+`index.test.js` contains all the tests for the `.d.ts` of the same folder.
+
+> [!NOTE]
 > If you are using VSCode, the `fsx` file will be nested under the `d.ts` file in your explorer.
 
 The `.fsx` correspond to the expected result suffixed with the following:

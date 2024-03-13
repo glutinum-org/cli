@@ -9,12 +9,28 @@ let printHelp () =
     let helpText =
         """
 Available commands:
-    test                            Run the main tests suite
+    test                            Run the specs and integration tests if no subcommand is provided
 
-        Options:
-            --watch                 Watch for changes and re-run the tests
-                                    You can pass additional arguments to 'ava' by using '--' followed by the arguments
-                                    For example: ./build.sh test --watch -- --match="**class**"
+        Subcommands:
+
+            specs                   Run tests testing isolated TypeScript syntax.
+
+                Options:
+                    --generate-only Only generate the tests files based on the `references` folder
+                                    This is the preferred way to generate the tests files of
+                                    you want to use the Test Explorer UI from your IDE.
+
+                                    You need to combine this options with `--watch` if you want
+                                    Fable to watch for changes and re-generate the files.
+
+                                    IMPORTANT: When adding or removing a file from the `references` folder,
+                                    you need to re-run this command. (Will be improved in the future)
+
+                    --watch         Watch for changes and re-run the tests
+                                    You can pass additional arguments to 'vitest' by using '--' followed by the arguments
+                                    For example:
+                                        ./build.sh test specs --watch -- --ui
+                                        ./build.sh test specs --watch -- -t date
 
     web                             Command related to the web app
 
@@ -69,7 +85,11 @@ let main argv =
     Command.Run("dotnet", "husky install")
 
     match argv with
-    | "test" :: args -> Test.Specs.handle args
+    | "test" :: args ->
+        match args with
+        | "specs" :: args -> Test.Specs.handle args
+        // | "integration" :: args -> Test.Integration.handle args
+        | _ -> Test.Specs.handle args
     | "web" :: args -> Web.handle args
     | "publish" :: args -> Publish.handle args
     | "lint" :: _ -> Command.Run("dotnet", "fantomas --check src tests")
