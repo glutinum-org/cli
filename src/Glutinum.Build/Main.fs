@@ -2,6 +2,7 @@ module Build.Main
 
 open SimpleExec
 open BlackFox.CommandLine
+open Build.Tasks
 
 // This is a basic help message, as the CLI parser is not a "real" CLI parser
 // For now, it is enough as this is just a dev tool

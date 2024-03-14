@@ -5,6 +5,7 @@ open System.IO
 open SimpleExec
 open BlackFox.CommandLine
 open Build.Utils
+open Build.Tasks
 open Build.Utils.Pnpm
 open System.Text.RegularExpressions
 

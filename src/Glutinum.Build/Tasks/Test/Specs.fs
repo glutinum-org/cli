@@ -1,4 +1,4 @@
-module Build.Test.Specs
+module Build.Tasks.Test.Specs
 
 open BlackFox.CommandLine
 open SimpleExec
@@ -39,6 +39,16 @@ let private generateSpecsTestFile () =
     // Ensure we start from a clean state
     if Directory.Exists(generatedSpecsTestDestination) then
         Directory.Delete(generatedSpecsTestDestination, true)
+
+    Directory.CreateDirectory(generatedSpecsTestDestination) |> ignore
+
+    // Copy the vitest.config.ts file, in the future we will be able to pass
+    // --clearScreen false to the CLI instead of relying on the config file
+    File.Copy(
+        "tests/specs/vitest.config.ts",
+        generatedSpecsTestDestination + "vitest.config.ts",
+        true
+    )
 
     let specFiles =
         Directory.GetFiles(
@@ -148,7 +158,7 @@ let handle (args: string list) =
             CmdLine.empty
             |> CmdLine.appendRaw "fable"
             |> CmdLine.appendIf isWatch "watch"
-            |> CmdLine.appendRaw "src/Glutinum.Converter"
+            |> CmdLine.appendRaw "../../src/Glutinum.Converter"
             |> CmdLine.appendRaw "--sourceMaps"
             // Avoid strange logs because both Fable and Vitest rewrite the console
             |> CmdLine.appendRaw "--verbose"
@@ -156,4 +166,4 @@ let handle (args: string list) =
             |> CmdLine.appendRaw vitestCmd
             |> CmdLine.toString
 
-        Command.Run("dotnet", fableCmd)
+        Command.Run("dotnet", fableCmd, workingDirectory = "tests/specs")
