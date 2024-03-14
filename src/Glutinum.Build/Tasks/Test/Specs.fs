@@ -23,7 +23,6 @@ let private testFile (hiearchyLevel: int) (content: string) =
 
 import {{ expect, test }} from 'vitest'
 import {{ generateBindingFile }} from '%s{generateFilePath}'
-// import {{ sum }} from './sum'
 import {{ dirname }} from "dirname-filename-esm";
 import path from 'node:path';
 

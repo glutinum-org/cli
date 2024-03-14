@@ -209,6 +209,17 @@ let readTypeNode
 
         GlueType.ThisType typ.symbol.name
 
+    | Ts.SyntaxKind.TupleType ->
+        let tupleTypeNode = typeNode :?> Ts.TupleTypeNode
+
+        tupleTypeNode.elements
+        |> Seq.toList
+        |> List.map (fun element ->
+            let element = unbox<Ts.TypeNode> element
+            reader.ReadTypeNode element
+        )
+        |> GlueType.TupleType
+
     | _ ->
         generateReaderError
             "type node"

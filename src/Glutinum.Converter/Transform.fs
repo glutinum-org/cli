@@ -32,12 +32,17 @@ let private transformPrimitive
     | GluePrimitive.Null -> FSharpPrimitive.Null
     | GluePrimitive.Undefined -> FSharpPrimitive.Null
 
+let private transformTupleType (glueTypes: GlueType list) : FSharpType =
+    glueTypes |> List.map transformType |> FSharpType.Tuple
+
 let rec private transformType (glueType: GlueType) : FSharpType =
     match glueType with
     | GlueType.Primitive primitiveInfo ->
         transformPrimitive primitiveInfo |> FSharpType.Primitive
 
     | GlueType.ThisType typeName -> FSharpType.ThisType typeName
+
+    | GlueType.TupleType glueTypes -> transformTupleType glueTypes
 
     | GlueType.Union(GlueTypeUnion cases) ->
         let optionalTypes, others =
@@ -780,6 +785,16 @@ let private transformTypeAliasDeclaration
         }
         |> FSharpType.Interface
 
+    | GlueType.TupleType glueTypes ->
+        ({
+            Name = typeAliasName
+            Type = transformTupleType glueTypes
+            TypeParameters =
+                transformTypeParameters glueTypeAliasDeclaration.TypeParameters
+        }
+        : FSharpTypeAlias)
+        |> FSharpType.TypeAlias
+
     | _ -> FSharpType.Discard
 
 let private transformModuleDeclaration
@@ -851,6 +866,7 @@ let rec private transformToFsharp (glueTypes: GlueType list) : FSharpType list =
         | GlueType.Primitive _
         | GlueType.KeyOf _
         | GlueType.Discard
+        | GlueType.TupleType _
         | GlueType.ThisType _ -> FSharpType.Discard
     )
 

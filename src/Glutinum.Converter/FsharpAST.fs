@@ -275,6 +275,7 @@ type FSharpType =
     // | Class of FSharpClass
     | Discard
     | TypeReference of FSharpTypeReference
+    | Tuple of FSharpType list
     | TypeParameter of string
     | ResizeArray of FSharpType
     | ThisType of typeName: string

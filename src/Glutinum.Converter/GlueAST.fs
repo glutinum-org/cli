@@ -192,6 +192,7 @@ type GlueType =
     | FunctionType of GlueFunctionType
     | TypeParameter of string
     | ThisType of typeName: string
+    | TupleType of GlueType list
 
     member this.Name =
         match this with
@@ -223,4 +224,5 @@ type GlueType =
         | Union _
         | Partial _
         | FunctionType _
+        | TupleType _
         | Discard -> "obj"

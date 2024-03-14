@@ -69,7 +69,7 @@ let private sanitizeEnumCaseName (name: string) =
         $"``{name}``"
     | _ -> name
 
-let attributeToText (fsharpAttribute: FSharpAttribute) =
+let private attributeToText (fsharpAttribute: FSharpAttribute) =
     match fsharpAttribute with
     | FSharpAttribute.Text text -> text
     | FSharpAttribute.EmitSelfInvoke -> "[<Emit(\"$0($1...)\")>]"
@@ -139,7 +139,7 @@ let private printCompactAttributesAndNewLine
         printer.Write(attributesText)
         printer.NewLine
 
-let printAttributes
+let private printAttributes
     (printer: Printer)
     (fsharpAttributes: FSharpAttribute list)
     =
@@ -165,6 +165,9 @@ let rec private printType (fsharpType: FSharpType) =
         $"{info.Name}<{cases}>{option}"
 
     | FSharpType.ThisType name -> name
+
+    | FSharpType.Tuple types ->
+        types |> List.map printType |> String.concat " * "
 
     | FSharpType.Function functionInfo ->
         match functionInfo.Parameters with
@@ -486,6 +489,7 @@ let rec print (printer: Printer) (fsharpTypes: FSharpType list) =
         | FSharpType.TypeParameter _
         | FSharpType.Discard
         | FSharpType.Function _
+        | FSharpType.Tuple _
         | FSharpType.ThisType _ -> ()
 
         print printer tail

@@ -47,6 +47,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
         abstract member log: (bool -> float -> MyObject) with get, set
     ```
 
+* Add support for `TupleType`
+
 ### Changed
 
 * Replace `Boolean` with `bool`

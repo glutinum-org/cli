@@ -1,0 +1,1 @@
+type LatLng = [number, number]
