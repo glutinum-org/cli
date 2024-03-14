@@ -1,0 +1,72 @@
+{
+  "version": 2,
+  "dependencies": {
+    ".NETStandard,Version=v2.0": {
+      "FSharp.Core": {
+        "type": "Direct",
+        "requested": "[8.0.101, )",
+        "resolved": "8.0.101",
+        "contentHash": "sOLz3O4BOxnTKfd5OChdRmDUy4Id0GfoEClRG4nzIod8LY1LJZcNyygKAV0A78XOLh8yvhA5hsDYKZXGCR9blw=="
+      },
+      "NETStandard.Library": {
+        "type": "Direct",
+        "requested": "[2.0.3, )",
+        "resolved": "2.0.3",
+        "contentHash": "st47PosZSHrjECdjeIzZQbzivYBJFv6P2nv4cj2ypdI204DO+vZ7l5raGMiX4eXMJ53RfOIg+/s4DHVZ54Nu2A==",
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "1.1.0"
+        }
+      },
+      "Microsoft.NETCore.Platforms": {
+        "type": "Transitive",
+        "resolved": "1.1.0",
+        "contentHash": "kz0PEW2lhqygehI/d6XsPCQzD7ff7gUJaVGPVETX611eadGsA3A877GdSlU0LRVMCTH/+P3o2iDTak+S08V2+A=="
+      },
+      "glutinum.converter": {
+        "type": "Project",
+        "dependencies": {
+          "Fable.Core": "[4.3.0, )",
+          "Fable.Node": "[1.2.0, )",
+          "Fable.Promise": "[3.2.0, )",
+          "Glutinum.Chalk": "[1.0.0, )"
+        }
+      },
+      "Fable.Core": {
+        "type": "CentralTransitive",
+        "requested": "[4.3.0, )",
+        "resolved": "4.3.0",
+        "contentHash": "sbK+hYs7H7I3b3sbgttI4GlvQfNPcIqSz1qPSagF3QbVA46KJ/pWSXC/Dwv0s9M6AeRGmoqcIeD7GUaLn41zkA=="
+      },
+      "Fable.Node": {
+        "type": "CentralTransitive",
+        "requested": "[1.2.0, )",
+        "resolved": "1.2.0",
+        "contentHash": "FVUFFcryE6pldYopULB+mpRtE6cmlG1evvVE9wDB0O8JKWLGrStHmNF4fqn7cyN1j2ufsvlPcw88PqoCt2OGuQ==",
+        "dependencies": {
+          "FSharp.Core": "5.0.0",
+          "Fable.Core": "3.1.2"
+        }
+      },
+      "Fable.Promise": {
+        "type": "CentralTransitive",
+        "requested": "[3.2.0, )",
+        "resolved": "3.2.0",
+        "contentHash": "4A+Iiembrny2h3AE2BIbchfuLmWHNhpkOTvbTtFXHtGzHVMqEVFRXrAfdy83wX2wK5Og3fqRo1y8t/Bqkd7j6g==",
+        "dependencies": {
+          "FSharp.Core": "4.7.2",
+          "Fable.Core": "3.7.1"
+        }
+      },
+      "Glutinum.Chalk": {
+        "type": "CentralTransitive",
+        "requested": "[1.0.0, )",
+        "resolved": "1.0.0",
+        "contentHash": "6WciC09BKrxA7r5fuWN+/mmlSMPaqnKZymljo9TiW4M6dO7k2HLn7jG4dGpSrhMiQFhCHxVR7mFtWWU6Jg80wQ==",
+        "dependencies": {
+          "FSharp.Core": "5.0.0",
+          "Fable.Core": "3.2.5"
+        }
+      }
+    }
+  }
+}

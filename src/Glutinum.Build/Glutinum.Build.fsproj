@@ -12,7 +12,9 @@
     <Compile Include="Utils/ChangelogParser.fs" />
     <Compile Include="Utils/Changelog.fs" />
     <Compile Include="Utils/Path.fs" />
-    <Compile Include="Test/Specs.fs" />
+    <Compile Include="Tasks/Cli.fs" />
+    <Compile Include="Tasks/Test/Specs.fs" />
+    <Compile Include="Tasks/Test/Integration.fs" />
     <Compile Include="Web.fs" />
     <Compile Include="Publish.fs" />
     <Compile Include="Main.fs" />

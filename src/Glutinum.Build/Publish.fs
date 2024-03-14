@@ -6,6 +6,7 @@ open SimpleExec
 open BlackFox.CommandLine
 open Build.Utils
 open Build.Utils.Pnpm
+open Build.Tasks
 open System.Text.RegularExpressions
 
 let cwd = Environment.CurrentDirectory

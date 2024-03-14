@@ -1,7 +1,7 @@
 module Build.Main
 
 open SimpleExec
-open BlackFox.CommandLine
+open Build.Tasks
 
 // This is a basic help message, as the CLI parser is not a "real" CLI parser
 // For now, it is enough as this is just a dev tool
@@ -31,6 +31,15 @@ Available commands:
                                     For example:
                                         ./build.sh test specs --watch -- --ui
                                         ./build.sh test specs --watch -- -t date
+
+            integration             Run integration tests, run tests on generated bindings
+
+                Options:
+                    --watch         Watch for changes and re-run the tests
+                                    You can pass additional arguments to 'vitest' by using '--' followed by the arguments
+                                    For example:
+                                        ./build.sh test integration --watch -- --ui
+                                        ./build.sh test integration --watch -- -t date
 
     web                             Command related to the web app
 
@@ -62,22 +71,6 @@ Available commands:
 
     printfn $"%s{helpText}"
 
-module Cli =
-
-    let handle (args: string list) =
-        let isWatch = args |> List.contains "--watch"
-
-        Command.Run(
-            "dotnet",
-            CmdLine.empty
-            |> CmdLine.appendRaw "fable"
-            |> CmdLine.appendRaw "src/Glutinum.Converter.CLI"
-            |> CmdLine.appendPrefix "--outDir" "dist"
-            |> CmdLine.appendRaw "--sourceMaps"
-            |> CmdLine.appendIf isWatch "--watch"
-            |> CmdLine.toString
-        )
-
 [<EntryPoint>]
 let main argv =
     let argv = argv |> Array.map (fun x -> x.ToLower()) |> Array.toList
@@ -88,8 +81,10 @@ let main argv =
     | "test" :: args ->
         match args with
         | "specs" :: args -> Test.Specs.handle args
-        // | "integration" :: args -> Test.Integration.handle args
-        | _ -> Test.Specs.handle args
+        | "integration" :: args -> Test.Integration.handle args
+        | _ ->
+            Test.Specs.handle []
+            Test.Integration.handle []
     | "web" :: args -> Web.handle args
     | "publish" :: args -> Publish.handle args
     | "lint" :: _ -> Command.Run("dotnet", "fantomas --check src tests")

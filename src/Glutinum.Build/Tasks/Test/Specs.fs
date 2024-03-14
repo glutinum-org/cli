@@ -1,4 +1,4 @@
-module Build.Test.Specs
+module Build.Tasks.Test.Specs
 
 open BlackFox.CommandLine
 open SimpleExec
@@ -148,7 +148,7 @@ let handle (args: string list) =
             CmdLine.empty
             |> CmdLine.appendRaw "fable"
             |> CmdLine.appendIf isWatch "watch"
-            |> CmdLine.appendRaw "src/Glutinum.Converter"
+            |> CmdLine.appendRaw "../../src/Glutinum.Converter"
             |> CmdLine.appendRaw "--sourceMaps"
             // Avoid strange logs because both Fable and Vitest rewrite the console
             |> CmdLine.appendRaw "--verbose"
@@ -156,4 +156,4 @@ let handle (args: string list) =
             |> CmdLine.appendRaw vitestCmd
             |> CmdLine.toString
 
-        Command.Run("dotnet", fableCmd)
+        Command.Run("dotnet", fableCmd, workingDirectory = "tests/specs")

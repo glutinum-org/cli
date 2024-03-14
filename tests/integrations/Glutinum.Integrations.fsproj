@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+    </PropertyGroup>
+    <ItemGroup>
+        <Compile Include="generated/Glutinum.Dayjs.fs" />
+        <Compile Include="Utils.fs" />
+        <Compile Include="Dayjs.test.fs" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\Glutinum.Converter\Glutinum.Converter.fsproj" />
+    </ItemGroup>
+</Project>

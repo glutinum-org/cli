@@ -348,3 +348,4 @@ src/Glutinum.Web/CssModules.fs
 .DS_Store
 
 tests/specs/generated/
+tests/integration/generated/
