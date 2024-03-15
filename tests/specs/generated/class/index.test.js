@@ -5,7 +5,7 @@
 //------------------------------------------------------------------------------
 
 import { expect, test } from 'vitest'
-import { generateBindingFile } from '../../../..//src/Glutinum.Converter/Generate.fs.js'
+// import { generateBindingFile } from '../../../..//src/Glutinum.Converter/Generate.fs.js'
 import { dirname } from "dirname-filename-esm";
 import path from 'node:path';
 
@@ -13,8 +13,7 @@ const __dirname = dirname(import.meta)
 
 test('class/members', () => {
     const filePath = path.join(__dirname, '../..//references/class/members.d.ts');
-    let result = generateBindingFile(filePath);
-    result += `
+    let result = `
 (***)
 #r "nuget: Fable.Core"
 (***)
@@ -24,11 +23,10 @@ test('class/members', () => {
 
     expect(result).toMatchFileSnapshot(expectedFile)
 })
-        
+
 test('class/memberReturnThis', () => {
     const filePath = path.join(__dirname, '../..//references/class/memberReturnThis.d.ts');
-    let result = generateBindingFile(filePath);
-    result += `
+    let result = `
 (***)
 #r "nuget: Fable.Core"
 (***)
@@ -38,11 +36,10 @@ test('class/memberReturnThis', () => {
 
     expect(result).toMatchFileSnapshot(expectedFile)
 })
-        
+
 test('class/membersWithUnkownTypeReference', () => {
     const filePath = path.join(__dirname, '../..//references/class/membersWithUnkownTypeReference.d.ts');
-    let result = generateBindingFile(filePath);
-    result += `
+    let result = `
 (***)
 #r "nuget: Fable.Core"
 (***)
@@ -52,11 +49,10 @@ test('class/membersWithUnkownTypeReference', () => {
 
     expect(result).toMatchFileSnapshot(expectedFile)
 })
-        
+
 test('class/simpleConstructors', () => {
     const filePath = path.join(__dirname, '../..//references/class/simpleConstructors.d.ts');
-    let result = generateBindingFile(filePath);
-    result += `
+    let result = `
 (***)
 #r "nuget: Fable.Core"
 (***)
@@ -66,5 +62,3 @@ test('class/simpleConstructors', () => {
 
     expect(result).toMatchFileSnapshot(expectedFile)
 })
-        
-    

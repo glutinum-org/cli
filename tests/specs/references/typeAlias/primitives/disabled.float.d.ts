@@ -1,1 +1,0 @@
-type MyFloat = float;

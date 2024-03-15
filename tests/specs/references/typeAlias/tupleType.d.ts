@@ -1,1 +1,0 @@
-type LatLng = [number, number]

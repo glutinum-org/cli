@@ -1,3 +1,0 @@
-interface Locale {
-    hello(): string;
-}

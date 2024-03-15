@@ -1,1 +1,0 @@
-type MyStringArray = string[];

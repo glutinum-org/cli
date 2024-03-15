@@ -1,3 +1,0 @@
-interface IntrinsicElements {
-    "var": string
-}
