@@ -346,5 +346,3 @@ src/Glutinum.Web/CssModules.fs
 *.fable-temp.csproj
 
 .DS_Store
-
-tests/specs/generated/
