@@ -240,6 +240,7 @@ type FSharpTypeReference =
         Name: string
         FullName: string
         TypeArguments: FSharpType list
+        Type: FSharpType
     }
 
 type FSharpFunctionType =

@@ -34,7 +34,7 @@ let generateBindingFile (filePath: string) =
     let readerResult = Read.readSourceFile checker sourceFile
 
 #if DEBUG
-    printfn "glueAst: %A" readerResult
+    printfn "glueAst: %A" readerResult.GlueAST
 #endif
 
     let res = Transform.transform true readerResult.GlueAST

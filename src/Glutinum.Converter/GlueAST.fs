@@ -259,6 +259,7 @@ type GlueTypeReference =
         Name: string
         FullName: string
         TypeArguments: GlueType list
+        Type: GlueType
     }
 
 type GlueTypeUnion = GlueTypeUnion of GlueType list
@@ -295,6 +296,7 @@ type GlueType =
     | TypeParameter of string
     | ThisType of typeName: string
     | TupleType of GlueType list
+    | IntersectionType of GlueType list
 
     member this.Name =
         match this with
@@ -322,6 +324,7 @@ type GlueType =
         | TypeReference info -> info.Name
         | Array info -> $"ResizeArray<{info.Name}>"
         | ThisType typeName -> typeName
+        | IntersectionType _
         | IndexedAccessType _
         | Union _
         | Partial _

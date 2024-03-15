@@ -89,6 +89,7 @@ let rec private readUnionTypeCases
                         Name = typeReferenceNode.getText ()
                         FullName = fullName
                         TypeArguments = []
+                        Type = GlueType.Discard // TODO: Retrieve the type
                     })
                     |> GlueType.TypeReference
                     |> List.singleton

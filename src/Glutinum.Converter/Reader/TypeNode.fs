@@ -141,10 +141,16 @@ let readTypeNode
                         |> Seq.toList
                         |> List.map (Some >> reader.ReadTypeNode)
 
+                // Note: Should this be made Lazy?
+                // Is there a risk for infinite loop?
+                let typ =
+                    symbolOpt.Value.declarations.Value[0] |> reader.ReadNode
+
                 ({
                     Name = typeReferenceNode.typeName?getText () // TODO: Remove dynamic typing
                     FullName = fullName
                     TypeArguments = typeArguments
+                    Type = typ
                 })
                 |> GlueType.TypeReference
 
@@ -219,6 +225,14 @@ let readTypeNode
             reader.ReadTypeNode element
         )
         |> GlueType.TupleType
+
+    | Ts.SyntaxKind.IntersectionType ->
+        let intersectionTypeNode = typeNode :?> Ts.IntersectionTypeNode
+
+        intersectionTypeNode.types
+        |> Seq.toList
+        |> List.map (Some >> reader.ReadTypeNode)
+        |> GlueType.IntersectionType
 
     | _ ->
         generateReaderError

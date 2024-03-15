@@ -85,6 +85,7 @@ let rec private transformType (glueType: GlueType) : FSharpType =
             FullName = typeReference.FullName
             TypeArguments =
                 typeReference.TypeArguments |> List.map transformType
+            Type = transformType typeReference.Type
         }
         : FSharpTypeReference)
         |> FSharpType.TypeReference
@@ -97,6 +98,7 @@ let rec private transformType (glueType: GlueType) : FSharpType =
             Name = classDeclaration.Name
             FullName = classDeclaration.Name
             TypeArguments = []
+            Type = FSharpType.Discard // TODO: Retrieve the type
         }
         : FSharpTypeReference)
         |> FSharpType.TypeReference
@@ -113,10 +115,12 @@ let rec private transformType (glueType: GlueType) : FSharpType =
         : FSharpFunctionType)
         |> FSharpType.Function
 
+    | GlueType.Interface interfaceInfo ->
+        FSharpType.Interface(transformInterface interfaceInfo)
+
     | GlueType.ModuleDeclaration _
     | GlueType.IndexedAccessType _
     | GlueType.Literal _
-    | GlueType.Interface _
     | GlueType.Enum _
     | GlueType.TypeAliasDeclaration _
     | GlueType.Variable _
@@ -795,7 +799,45 @@ let private transformTypeAliasDeclaration
         : FSharpTypeAlias)
         |> FSharpType.TypeAlias
 
-    | _ -> FSharpType.Discard
+    | GlueType.IntersectionType glueTypes2 ->
+        let test = glueTypes2 |> List.map transformType
+
+        printfn "IntersectionType: %A" test
+
+        let x = 1
+
+        {
+            Attributes = [ FSharpAttribute.AllowNullLiteral ]
+            Name = typeAliasName
+            TypeParameters =
+                transformTypeParameters glueTypeAliasDeclaration.TypeParameters
+            Members =
+                {
+                    Attributes = [ FSharpAttribute.EmitSelfInvoke ]
+                    Name = "Invoke"
+                    Parameters = []
+                    Type = FSharpType.Primitive FSharpPrimitive.Unit
+                    TypeParameters = []
+                    IsOptional = false
+                    IsStatic = false
+                    Accessor = None
+                    Accessibility = FSharpAccessibility.Public
+                }
+                |> FSharpMember.Method
+                |> List.singleton
+        }
+        |> FSharpType.Interface
+
+    | GlueType.ClassDeclaration _
+    | GlueType.Enum _
+    | GlueType.Interface _
+    | GlueType.ModuleDeclaration _
+    | GlueType.TypeAliasDeclaration _
+    | GlueType.TypeParameter _
+    | GlueType.Discard
+    | GlueType.FunctionDeclaration _
+    | GlueType.ThisType _
+    | GlueType.Variable _ -> FSharpType.Discard
 
 let private transformModuleDeclaration
     (moduleDeclaration: GlueModuleDeclaration)
