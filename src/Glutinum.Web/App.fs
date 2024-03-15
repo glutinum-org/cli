@@ -9,25 +9,32 @@ open type Offline.Exports
 open Glutinum.IconifyIcons.SimpleIcons
 open Glutinum.IconifyIcons.Lucide
 
+module Editors = Pages.Editors.Component
+
 type Model =
-    | Editors of Pages.Editors.Model
+    | Editors of Editors.Model
     | Initializing
 
-type Msg = EditorsMsg of Pages.Editors.Msg
+type Msg = EditorsMsg of Editors.Msg
 
 let setRoute (routeOpt: Router.Route option) (model: Model) =
     match routeOpt with
     // For now, we don't have 404 pages
     // because we only have the editors as a "main page"
-    | None -> model, None |> Router.Route.Editors |> Router.newUrl
+    | None ->
+        model,
+        None
+        |> Router.EditorsRoute.FSharpCode
+        |> Router.Route.Editors
+        |> Router.newUrl
 
     | Some route ->
         match route with
-        | Router.Route.Editors typeScriptCode ->
+        | Router.Route.Editors editorsRoute ->
             match model with
             | Editors _ -> model, Cmd.none
             | _ ->
-                let editorsModel, editorsCmd = Pages.Editors.init typeScriptCode
+                let editorsModel, editorsCmd = Editors.init editorsRoute
 
                 Editors editorsModel, Cmd.map EditorsMsg editorsCmd
 
@@ -38,7 +45,7 @@ let update msg model =
     | EditorsMsg msg ->
         match model with
         | Editors editorsModel ->
-            let newModel, cmd = Pages.Editors.update msg editorsModel
+            let newModel, cmd = Editors.update msg editorsModel
 
             newModel |> Editors, Cmd.map EditorsMsg cmd
 
@@ -52,7 +59,10 @@ let private navbar =
         prop.children [
             Bulma.navbarBrand.div [
                 Bulma.navbarItem.a [
-                    None |> Router.Route.Editors |> Router.href
+                    None
+                    |> Router.EditorsRoute.FSharpCode
+                    |> Router.Route.Editors
+                    |> Router.href
 
                     prop.text $"Glutinum tools - %s{Prelude.VERSION}"
                 ]
@@ -103,7 +113,7 @@ let view model dispatch =
 
         match model with
         | Editors editorsModel ->
-            Pages.Editors.view editorsModel (EditorsMsg >> dispatch)
+            Editors.view editorsModel (fun msg -> dispatch (EditorsMsg msg))
 
         | Initializing -> null
     ]

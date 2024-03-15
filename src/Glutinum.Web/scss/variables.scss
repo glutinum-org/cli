@@ -5,3 +5,16 @@ $text: #2b2b2b;
 $danger: #c43636;
 
 @import "./../../../node_modules/bulma/sass/utilities/_all.sass";
+@import "./../../../node_modules/bulma/sass/utilities/initial-variables.sass";
+@import "./../../../node_modules/bulma/sass/utilities/functions.sass";
+@import "./../../../node_modules/bulma/sass/utilities/derived-variables.sass";
+@import "./../../../node_modules/bulma/sass/utilities/mixins.sass";
+@import "./../../../node_modules/bulma/sass/utilities/controls.sass";
+@import "./../../../node_modules/bulma/sass/utilities/extends.sass";
+
+$tabs-toggle-link-radius: 0px;
+$tabs-toggle-link-active-background-color: $primary-light;
+$tabs-toggle-link-hover-background-color: $primary-light;
+$tabs-toggle-link-active-border-color: $primary;
+$tabs-toggle-link-hover-border-color: $primary;
+$tabs-toggle-link-active-color: $black;

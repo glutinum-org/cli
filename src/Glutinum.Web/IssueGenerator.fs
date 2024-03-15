@@ -60,7 +60,11 @@ let private compilationResultToText (result: CompilationResult) =
 
 let createUrl (args: CreateUrlArgs) =
     let hashUrl =
-        args.TypeScriptCode |> Some |> Router.Route.Editors |> Router.toHash
+        args.TypeScriptCode
+        |> Some
+        |> Router.EditorsRoute.FSharpCode
+        |> Router.Route.Editors
+        |> Router.toHash
 
     let toolUrl =
         [

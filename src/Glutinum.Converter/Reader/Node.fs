@@ -15,8 +15,8 @@ let readNode (reader: ITypeScriptReader) (node: Ts.Node) : GlueType =
     | Ts.SyntaxKind.InterfaceDeclaration ->
         reader.ReadInterfaceDeclaration(node :?> Ts.InterfaceDeclaration)
 
-    | Ts.SyntaxKind.VariableStatement ->
-        reader.ReadVariableStatement(node :?> Ts.VariableStatement)
+    // | Ts.SyntaxKind.VariableStatement ->
+    //     reader.ReadVariableStatement(node :?> Ts.VariableStatement)
 
     | Ts.SyntaxKind.FunctionDeclaration ->
         reader.ReadFunctionDeclaration(node :?> Ts.FunctionDeclaration)

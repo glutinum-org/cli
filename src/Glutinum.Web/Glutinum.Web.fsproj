@@ -14,6 +14,8 @@
     <Compile Include="Global/Types.fs" />
     <Compile Include="Components/Loader.fs" />
     <Compile Include="IssueGenerator.fs" />
+    <Compile Include="Pages/Editors.GlueAST.fs" />
+    <Compile Include="Pages/Editors.FSharpCode.fs" />
     <Compile Include="Pages/Editors.fs" />
     <Compile Include="App.fs" />
     <Compile Include="Main.fs" />
