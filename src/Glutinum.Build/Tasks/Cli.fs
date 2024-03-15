@@ -13,6 +13,7 @@ let handle (args: string list) =
         |> CmdLine.appendRaw "src/Glutinum.Converter.CLI"
         |> CmdLine.appendPrefix "--outDir" "dist"
         |> CmdLine.appendRaw "--sourceMaps"
+        |> CmdLine.appendRaw "--test:MSBuildCracker"
         |> CmdLine.appendIf isWatch "--watch"
         |> CmdLine.toString
     )

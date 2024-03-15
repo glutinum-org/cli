@@ -38,7 +38,7 @@ let handle (args: string list) =
                     |> CmdLine.appendRaw "--sourceMaps"
                     |> CmdLine.appendRaw "--verbose"
                     |> CmdLine.appendRaw "--watch"
-                    // |> CmdLine.appendRaw "--test:MSBuildCracker"
+                    |> CmdLine.appendRaw "--test:MSBuildCracker"
                     |> CmdLine.appendRaw "--run"
                     |> CmdLine.appendRaw "npx vite"
                     |> CmdLine.toString,
@@ -61,7 +61,7 @@ let handle (args: string list) =
             |> CmdLine.appendRaw "fable"
             |> CmdLine.appendRaw "--noCache"
             |> CmdLine.appendRaw "--verbose"
-            |> CmdLine.appendPrefix "--define" "DEBUG"
+            |> CmdLine.appendRaw "--test:MSBuildCracker"
             |> CmdLine.toString,
             workingDirectory = "src/Glutinum.Web"
         )

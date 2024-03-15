@@ -130,6 +130,7 @@ let handle (args: string list) =
             |> CmdLine.appendIf isWatch "watch"
             |> CmdLine.appendRaw "src/Glutinum.Converter"
             |> CmdLine.appendRaw "--sourceMaps"
+            |> CmdLine.appendRaw "--test:MSBuildCracker"
             |> CmdLine.toString
 
         Command.Run("dotnet", fableCmd)
@@ -159,6 +160,7 @@ let handle (args: string list) =
             |> CmdLine.appendIf isWatch "watch"
             |> CmdLine.appendRaw "../../src/Glutinum.Converter"
             |> CmdLine.appendRaw "--sourceMaps"
+            |> CmdLine.appendRaw "--test:MSBuildCracker"
             // Avoid strange logs because both Fable and Vitest rewrite the console
             |> CmdLine.appendRaw "--verbose"
             |> CmdLine.appendRaw "--run"
