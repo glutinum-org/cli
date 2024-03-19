@@ -1,0 +1,5 @@
+{
+    "explorer.fileNesting.patterns": {
+        "*.d.ts": "${capture}.fsx"
+    }
+}

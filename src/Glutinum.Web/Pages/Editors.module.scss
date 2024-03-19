@@ -1,6 +1,6 @@
 @import "./../scss/variables.scss";
 
-.editorsContainer {
+.panel-container {
     display: flex;
     flex: 1;
     height: calc(100vh - 3.5rem);
@@ -12,68 +12,30 @@
 
     // Make the separator between the editors visible
     & > :last-child {
-        border-left: 1px solid #dbdbdb;
+        border-left: 1px solid $border;
     }
 }
 
-$max-compilation-output-height: 25vh;
+.right-panel {
+    --tabs-min-height: 3.5rem;
 
-.output-panel {
-    display: grid;
-    grid-template-rows: 1fr;
-    max-height: calc(100vh - 3.5rem);
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 3.5rem);
     width: 50%;
 
-    // Actions
+    :global(.tabs) {
+        // Prevent Monaco editor to squeeze the tabs when resizing up
+        min-height: var(--tabs-min-height);
+        margin-bottom: 0 !important;
 
-    &__actions {
-        position: fixed;
-        bottom: 1rem;
-        right: 2rem;
-        z-index: 100;
-    }
-
-    // If we have warnings, we need now have 2 rows
-    // - 1 for the editor
-    // - 1 for the warnings output
-
-    &.has-warnings {
-        grid-template-rows: 1fr $max-compilation-output-height;
-    }
-
-    &.has-warnings & {
-
-        &__actions {
-            bottom: calc($max-compilation-output-height + 1rem);
+        :global(.is-active) {
+            font-weight: $weight-bold;
         }
     }
 
-    // Place the loader in the center of the output panel
-
-    &--is-loading {
-        justify-content: center;
-    }
-
-    &--is-error {
-        // display: flex;
-        background-color: $danger-light;
-        color: $danger-dark;
-        padding: 1rem;
-        white-space: break-spaces;
-    }
-
-}
-
-.compilation-output {
-    overflow-y: auto;
-    white-space: break-spaces;
-
-    &__warning {
-        background-color: $warning;
-        padding: 1rem;
-
-        &:not(:last-child) {
-            border-bottom: 1px solid $warning-dark;
-        }
+    .horizontal-divider {
+        border-top: 1px solid $border;
+        margin: 0 0 .5rem;
     }
 }

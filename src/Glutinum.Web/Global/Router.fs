@@ -9,19 +9,44 @@ let inline (</>) a b = a + "/" + string b
 let inline (<?>) a b = a + "?" + string b
 
 [<RequireQualifiedAccess>]
-type Route = Editors of typeScriptCode: string option
+type EditorsRoute =
+    | FSharpCode of typeScriptCode: string option
+    | GlueAST of typeScriptCode: string option
+    | FSharpAST of typeScriptCode: string option
 
-let toHash (route: Route) =
-    let segmentPath =
+    static member ToSegments(route: EditorsRoute) =
         match route with
-        | Route.Editors typeScriptCode ->
+        | FSharpCode typeScriptCode ->
             match typeScriptCode with
             | Some code ->
-                "editors"
+                "fsharp-code"
                 <?> "typeScriptCode=" + compressToEncodedURIComponent code
-            | None -> "editors"
+            | None -> "fsharp-code"
 
-    "#" </> segmentPath
+        | GlueAST typeScriptCode ->
+            match typeScriptCode with
+            | Some code ->
+                "glue-ast"
+                <?> "typeScriptCode=" + compressToEncodedURIComponent code
+            | None -> "glue-ast"
+
+        | FSharpAST typeScriptCode ->
+            match typeScriptCode with
+            | Some code ->
+                "fsharp-ast"
+                <?> "typeScriptCode=" + compressToEncodedURIComponent code
+            | None -> "fsharp-ast"
+
+[<RequireQualifiedAccess>]
+type Route =
+    | Editors of EditorsRoute
+
+    static member ToSegments(route: Route) =
+        match route with
+        | Editors typeScriptCode ->
+            "editors" </> EditorsRoute.ToSegments typeScriptCode
+
+let toHash (route: Route) = "#" </> Route.ToSegments route
 
 // Needs to be open here otherwise </> is shadowed by our inline operator
 open Elmish.UrlParser
@@ -34,11 +59,22 @@ let lzEncodedURIComponentParam name =
 let routeParser: Parser<Route -> Route, Route> =
     oneOf [
         map
-            Route.Editors
-            (s "editors" <?> lzEncodedURIComponentParam "typeScriptCode")
+            (EditorsRoute.FSharpCode >> Route.Editors)
+            (s "editors" </> s "fsharp-code"
+             <?> lzEncodedURIComponentParam "typeScriptCode")
+
+        map
+            (EditorsRoute.GlueAST >> Route.Editors)
+            (s "editors" </> s "glue-ast"
+             <?> lzEncodedURIComponentParam "typeScriptCode")
+
+        map
+            (EditorsRoute.FSharpAST >> Route.Editors)
+            (s "editors" </> s "fsharp-ast"
+             <?> lzEncodedURIComponentParam "typeScriptCode")
 
         // Default route
-        map (Route.Editors None) top
+        map (None |> EditorsRoute.FSharpCode |> Route.Editors) top
     ]
 
 /// <summary>Generate React <c>href</c> properties</summary>

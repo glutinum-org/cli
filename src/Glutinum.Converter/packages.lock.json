@@ -53,6 +53,27 @@
           "Microsoft.NETCore.Platforms": "1.1.0"
         }
       },
+      "Thoth.Json.Core": {
+        "type": "Direct",
+        "requested": "[0.2.1, )",
+        "resolved": "0.2.1",
+        "contentHash": "XcIxDwhCRpxMn5Oy9G9EjMAGCb4KRd+XJBroVNlsMJjkxDKpWniA9IRp+Ej5+FYUXb0PlcRl/zoRdMYStIFUXg==",
+        "dependencies": {
+          "FSharp.Core": "5.0.0",
+          "Fable.Core": "4.1.0"
+        }
+      },
+      "Thoth.Json.JavaScript": {
+        "type": "Direct",
+        "requested": "[0.1.0, )",
+        "resolved": "0.1.0",
+        "contentHash": "TugI+iR/NAA3gkzDZUDlNCpqi1FeqWGceJL4YiiV6XOFh4eNR2eVF57GCUrkRST1uqNXo6Uf7zekkLZjrvI9aA==",
+        "dependencies": {
+          "FSharp.Core": "5.0.0",
+          "Fable.Core": "4.1.0",
+          "Thoth.Json.Core": "0.1.0"
+        }
+      },
       "Microsoft.NETCore.Platforms": {
         "type": "Transitive",
         "resolved": "1.1.0",

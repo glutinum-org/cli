@@ -13,7 +13,14 @@
     <Compile Include="Global/Router.fs" />
     <Compile Include="Global/Types.fs" />
     <Compile Include="Components/Loader.fs" />
+    <Compile Include="Components/ASTViewer.fs" />
+    <Compile Include="Components/RightPanelContent.fs" />
     <Compile Include="IssueGenerator.fs" />
+    <Compile Include="Pages/Editors.GlueAST.GlueASTViewer.fs" />
+    <Compile Include="Pages/Editors.GlueAST.fs" />
+    <Compile Include="Pages/Editors.FSharpAST.FSharpASTViewer.fs" />
+    <Compile Include="Pages/Editors.FSharpAST.fs" />
+    <Compile Include="Pages/Editors.FSharpCode.fs" />
     <Compile Include="Pages/Editors.fs" />
     <Compile Include="App.fs" />
     <Compile Include="Main.fs" />
@@ -36,5 +43,6 @@
     <PackageReference Include="Glutinum.IconifyIcons.SimpleIcons" />
     <PackageReference Include="Thoth.Elmish.Debouncer" />
     <PackageReference Include="Thoth.Elmish.Toast" />
+    <PackageReference Include="Thoth.Json.JavaScript" />
   </ItemGroup>
 </Project>

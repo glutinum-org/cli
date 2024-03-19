@@ -11,6 +11,8 @@
 /// </summary>
 module rec Glutinum.Converter.GlueAST
 
+open Thoth.Json.Core
+
 type GlueParameter =
     {
         Name: string
@@ -18,12 +20,28 @@ type GlueParameter =
         Type: GlueType
     }
 
+    static member Encoder(value: GlueParameter) =
+        Encode.object
+            [
+                "Name", Encode.string value.Name
+                "IsOptional", Encode.bool value.IsOptional
+                "Type", GlueType.Encoder value.Type
+            ]
+
 type GlueTypeParameter =
     {
         Name: string
         Constraint: GlueType option
         Default: GlueType option
     }
+
+    static member Encoder(value: GlueTypeParameter) =
+        Encode.object
+            [
+                "Name", Encode.string value.Name
+                "Constraint", Encode.option GlueType.Encoder value.Constraint
+                "Default", Encode.option GlueType.Encoder value.Default
+            ]
 
 type GlueMethod =
     {
@@ -34,17 +52,46 @@ type GlueMethod =
         IsStatic: bool
     }
 
+    static member Encoder(value: GlueMethod) =
+        Encode.object
+            [
+                "Name", Encode.string value.Name
+                "Parameters",
+                value.Parameters
+                |> List.map GlueParameter.Encoder
+                |> Encode.list
+                "Type", GlueType.Encoder value.Type
+                "IsOptional", Encode.bool value.IsOptional
+                "IsStatic", Encode.bool value.IsStatic
+            ]
+
 type GlueCallSignature =
     {
         Parameters: GlueParameter list
         Type: GlueType
     }
 
+    static member Encoder(value: GlueCallSignature) =
+        Encode.object
+            [
+                "Parameters",
+                value.Parameters
+                |> List.map GlueParameter.Encoder
+                |> Encode.list
+                "Type", GlueType.Encoder value.Type
+            ]
+
 [<RequireQualifiedAccess>]
 type GlueAccessor =
     | ReadOnly
     | WriteOnly
     | ReadWrite
+
+    static member Encoder(value: GlueAccessor) =
+        match value with
+        | ReadOnly -> Encode.string "ReadOnly"
+        | WriteOnly -> Encode.string "WriteOnly"
+        | ReadWrite -> Encode.string "ReadWrite"
 
 type GlueProperty =
     {
@@ -54,11 +101,30 @@ type GlueProperty =
         Accessor: GlueAccessor
     }
 
+    static member Encoder(value: GlueProperty) =
+        Encode.object
+            [
+                "Name", Encode.string value.Name
+                "Type", GlueType.Encoder value.Type
+                "IsStatic", Encode.bool value.IsStatic
+                "Accessor", GlueAccessor.Encoder value.Accessor
+            ]
+
 type GlueIndexSignature =
     {
         Parameters: GlueParameter list
         Type: GlueType
     }
+
+    static member Encoder(value: GlueIndexSignature) =
+        Encode.object
+            [
+                "Parameters",
+                value.Parameters
+                |> List.map GlueParameter.Encoder
+                |> Encode.list
+                "Type", GlueType.Encoder value.Type
+            ]
 
 type GlueMethodSignature =
     {
@@ -66,6 +132,17 @@ type GlueMethodSignature =
         Parameters: GlueParameter list
         Type: GlueType
     }
+
+    static member Encoder(value: GlueMethodSignature) =
+        Encode.object
+            [
+                "Name", Encode.string value.Name
+                "Parameters",
+                value.Parameters
+                |> List.map GlueParameter.Encoder
+                |> Encode.list
+                "Type", GlueType.Encoder value.Type
+            ]
 
 [<RequireQualifiedAccess>]
 type GlueMember =
@@ -75,12 +152,37 @@ type GlueMember =
     | IndexSignature of GlueIndexSignature
     | MethodSignature of GlueMethodSignature
 
+    static member Encoder(value: GlueMember) =
+        match value with
+        | Method info -> Encode.object [ "Method", GlueMethod.Encoder info ]
+        | Property info ->
+            Encode.object [ "Property", GlueProperty.Encoder info ]
+        | CallSignature info ->
+            Encode.object [ "CallSignature", GlueCallSignature.Encoder info ]
+        | IndexSignature info ->
+            Encode.object [ "IndexSignature", GlueIndexSignature.Encoder info ]
+        | MethodSignature info ->
+            Encode.object
+                [ "MethodSignature", GlueMethodSignature.Encoder info ]
+
 type GlueInterface =
     {
         Name: string
         Members: GlueMember list
         TypeParameters: GlueTypeParameter list
     }
+
+    static member Encoder(value: GlueInterface) =
+        Encode.object
+            [
+                "Name", Encode.string value.Name
+                "Members",
+                value.Members |> List.map GlueMember.Encoder |> Encode.list
+                "TypeParameters",
+                value.TypeParameters
+                |> List.map GlueTypeParameter.Encoder
+                |> Encode.list
+            ]
 
 type GlueVariable = { Name: string; Type: GlueType }
 
@@ -226,3 +328,9 @@ type GlueType =
         | FunctionType _
         | TupleType _
         | Discard -> "obj"
+
+    static member Encoder(value: GlueType) =
+        match value with
+        | Interface interfaceInfo ->
+            Encode.object [ "Interface", GlueInterface.Encoder interfaceInfo ]
+        | _ -> Encode.string "not yet implemented"

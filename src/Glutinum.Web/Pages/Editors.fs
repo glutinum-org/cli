@@ -1,4 +1,4 @@
-module Glutinum.Web.Pages.Editors
+module Glutinum.Web.Pages.Editors.Component
 
 open System
 open Elmish
@@ -8,17 +8,9 @@ open Feliz.Bulma
 open Fable.Core.JsInterop
 open Glutinum.Feliz.MonacoEditor
 open type Glutinum.Feliz.MonacoEditor.Exports
-open Glutinum.Converter
-open TypeScript
-open Glutinum.Converter.Reader.Types
-open Glutinum.Converter.FSharpAST
-open Feliz.Iconify
-open type Offline.Exports
-open Glutinum.IconifyIcons.Lucide
-open Browser
-open Glutinum.Web
-open Glutinum.Web.Global.Types
-open Glutinum.Web.Components.Loader
+
+module GlueAST = GlueAST.Component
+module FSharpAST = FSharpAST.Component
 
 let private classes: CssModules.Pages.Editors =
     importDefault "./Editors.module.scss"
@@ -32,11 +24,32 @@ type Output =
     | Error of string
     | Compiling
 
+[<RequireQualifiedAccess>]
+type Tab =
+    | FSharpCode of FSharpCode.Model
+    | GlueAST of GlueAST.Model
+    | FSharpAST of FSharpAST.Model
+
+    member this.IsFSharpCodeActive =
+        match this with
+        | FSharpCode _ -> true
+        | _ -> false
+
+    member this.IsGlueASTActive =
+        match this with
+        | GlueAST _ -> true
+        | _ -> false
+
+    member this.IsFSharpASTActive =
+        match this with
+        | FSharpAST _ -> true
+        | _ -> false
+
 type Model =
     {
         Debouncer: Debouncer.State
         TypeScriptCode: string
-        Output: Output
+        CurrentTab: Tab
     }
 
 exception MissingClipboardApi
@@ -51,100 +64,121 @@ type CompilationSource =
 type Msg =
     | UpdateTypeScriptCode of string
     | DebouncerSelfMsg of Debouncer.SelfMessage<Msg>
-    | FailedToCopyFSharpCode of exn
-    | CodeCopied of unit
-    // Compile code can be requested from different sources
-    // - Source code changed
-    // - User clicking the "Copy F# code" button
-    // - User clicking the "Report an issue" button
-    | CompileCode of CompilationSource
-    // Memorise the source of the compilation request
-    // so we know what to do when the compilation is done
-    | CompileCodeResult of CompilationSource * CompilationResult
+    | FSharpCodeMsg of FSharpCode.Msg
+    | GlueASTMsg of GlueAST.Msg
+    | FSharpASTMsg of FSharpAST.Msg
+    | CompileCode
+    | MoveToFSharpCodeTab
+    | MoveToGlueASTTab
+    | MoveToFSharpASTTab
 
-let createProgram (_: string) : Ts.Program = importDefault "./bootstrap.ts"
+let init (route: Router.EditorsRoute) =
+    let config =
+        match route with
+        | Router.EditorsRoute.FSharpCode typeScriptCode ->
+            let fsharpCode, fsharpCmd = FSharpCode.init typeScriptCode
 
-let private generateFile
-    (typeScriptCode: string, compilationSource: CompilationSource)
-    =
-    let compilationResult =
-        try
-            let fileName = "index.d.ts"
+            {|
+                CurrentTab = Tab.FSharpCode fsharpCode
+                Cmd = Cmd.map FSharpCodeMsg fsharpCmd
+                TypeScriptCode = typeScriptCode
+            |}
 
-            let program = createProgram typeScriptCode
+        | Router.EditorsRoute.GlueAST typeScriptCode ->
+            let glueASTModel, glueASTCmd = GlueAST.init typeScriptCode
 
-            let checker = program.getTypeChecker ()
+            {|
+                CurrentTab = Tab.GlueAST glueASTModel
+                Cmd = Cmd.map GlueASTMsg glueASTCmd
+                TypeScriptCode = typeScriptCode
+            |}
 
-            let sourceFile = program.getSourceFile fileName
+        | Router.EditorsRoute.FSharpAST typeScriptCode ->
+            let fsharpASTModel, fsharpASTCmd = FSharpAST.init typeScriptCode
 
-            let printer = new Printer.Printer()
+            {|
+                CurrentTab = Tab.FSharpAST fsharpASTModel
+                Cmd = Cmd.map FSharpASTMsg fsharpASTCmd
+                TypeScriptCode = typeScriptCode
+            |}
 
-            let readerResult = Read.readSourceFile checker sourceFile
-
-            let res = Transform.transform true readerResult.GlueAST
-
-            let outFile =
-                {
-                    Name = "Glutinum"
-                    Opens =
-                        [
-                            "Fable.Core"
-                            "System"
-                        ]
-                }
-
-            Printer.printOutFile printer outFile
-
-            Printer.print printer res
-
-            CompilationResult.Success(
-                printer.ToString(),
-                readerResult.Warnings |> Seq.toList
-            )
-
-        with
-        | :? TypeScriptReaderException as error ->
-            printfn "TypeScriptReaderException: %s" error.Message
-            CompilationResult.TypeScriptReaderException error.message
-
-        | error ->
-            printfn "Error: %s" error.Message
-            console.error error
-            CompilationResult.Error error.Message
-
-    (compilationSource, compilationResult)
-
-let init (typeScriptCode: string option) =
     {
         Debouncer = Debouncer.create ()
-        TypeScriptCode = typeScriptCode |> Option.defaultValue ""
-        Output =
-            Success
-                {|
-                    FSharpCode = ""
-                    Warnings = []
-                |}
+        TypeScriptCode = config.TypeScriptCode |> Option.defaultValue ""
+        CurrentTab = config.CurrentTab
     },
-    Cmd.none
-
-let private reportIssue (args: IssueGenerator.CreateUrlArgs) =
-    // Make sure to have the latest version of the generated F# code
-    let issueUrl = IssueGenerator.createUrl args
-
-    window.``open`` (issueUrl, "_blank", "noopener noreferrer") |> ignore
-    ()
-
-let private copyFSharpCodeToClipboard (fsharpCode: string) =
-    promise {
-        match navigator.clipboard with
-        | Some clipboard ->
-            clipboard.writeText fsharpCode
-            |> Promise.catchEnd (fun _ -> raise ClipboardWriteError)
-        | None -> raise MissingClipboardApi
-    }
+    config.Cmd
 
 let update msg model =
     match msg with
+    | FSharpCodeMsg fsharpMsg ->
+        match model.CurrentTab with
+        | Tab.FSharpCode fsharpModel ->
+            let updatedModel, cmd =
+                FSharpCode.update fsharpMsg fsharpModel model.TypeScriptCode
+
+            { model with CurrentTab = Tab.FSharpCode updatedModel },
+            Cmd.map FSharpCodeMsg cmd
+
+        | _ -> model, Cmd.none
+
+    | GlueASTMsg glueMsg ->
+        match model.CurrentTab with
+        | Tab.GlueAST glueModel ->
+            let updatedModel, cmd =
+                GlueAST.update glueMsg glueModel model.TypeScriptCode
+
+            { model with CurrentTab = Tab.GlueAST updatedModel },
+            Cmd.map GlueASTMsg cmd
+
+        | _ -> model, Cmd.none
+
+    | FSharpASTMsg fsharpASTMsg ->
+        match model.CurrentTab with
+        | Tab.FSharpAST fsharpASTModel ->
+            let updatedModel, cmd =
+                FSharpAST.update
+                    fsharpASTMsg
+                    fsharpASTModel
+                    model.TypeScriptCode
+
+            { model with CurrentTab = Tab.FSharpAST updatedModel },
+            Cmd.map FSharpASTMsg cmd
+
+        | _ -> model, Cmd.none
+
+    | MoveToFSharpCodeTab ->
+        match model.CurrentTab with
+        | Tab.FSharpCode _ -> model, Cmd.none
+
+        | _ ->
+            let fsharpModel, fsharpCmd =
+                FSharpCode.init (Some model.TypeScriptCode)
+
+            { model with CurrentTab = Tab.FSharpCode fsharpModel },
+            Cmd.map FSharpCodeMsg fsharpCmd
+
+    | MoveToGlueASTTab ->
+        match model.CurrentTab with
+        | Tab.GlueAST _ -> model, Cmd.none
+
+        | _ ->
+            let glueModel, glueCmd = GlueAST.init (Some model.TypeScriptCode)
+
+            { model with CurrentTab = Tab.GlueAST glueModel },
+            Cmd.map GlueASTMsg glueCmd
+
+    | MoveToFSharpASTTab ->
+        match model.CurrentTab with
+        | Tab.FSharpAST _ -> model, Cmd.none
+
+        | _ ->
+            let fsharpASTModel, fsharpASTCmd =
+                FSharpAST.init (Some model.TypeScriptCode)
+
+            { model with CurrentTab = Tab.FSharpAST fsharpASTModel },
+            Cmd.map FSharpASTMsg fsharpASTCmd
+
     | DebouncerSelfMsg debouncerMsg ->
         let (debouncerModel, debouncerCmd) =
             Debouncer.update debouncerMsg model.Debouncer
@@ -157,7 +191,7 @@ let update msg model =
             |> Debouncer.bounce
                 (TimeSpan.FromSeconds 0.5)
                 "compile-code"
-                (CompileCode CompilationSource.EditorChanged)
+                CompileCode
 
         { model with
             TypeScriptCode = code
@@ -165,264 +199,72 @@ let update msg model =
         },
         Cmd.map DebouncerSelfMsg debouncerCmd
 
-    | CompileCodeResult(source, result) ->
-        match result with
-        | CompilationResult.Success(fsharpCode, warnings) ->
-            let updatedModel =
-                { model with
-                    Output =
-                        Success
-                            {|
-                                FSharpCode = fsharpCode
-                                Warnings = warnings
-                            |}
-                }
+    | CompileCode ->
+        match model.CurrentTab with
+        | Tab.FSharpCode _ ->
+            model, Cmd.ofMsg (FSharpCodeMsg(FSharpCode.triggerCompileCode ()))
 
-            let cmd =
-                match source with
-                | CompilationSource.EditorChanged -> Cmd.none
-                | CompilationSource.ReportIssue ->
-                    Cmd.OfFunc.exec
-                        reportIssue
-                        {
-                            TypeScriptCode = model.TypeScriptCode
-                            CompilationResult = result
-                        }
-                | CompilationSource.CopyFSharpCode ->
-                    Cmd.OfPromise.either
-                        copyFSharpCodeToClipboard
-                        fsharpCode
-                        CodeCopied
-                        FailedToCopyFSharpCode
+        | Tab.GlueAST _ ->
+            model, Cmd.ofMsg (GlueASTMsg(GlueAST.triggerCompileCode ()))
 
-            updatedModel, cmd
+        | Tab.FSharpAST _ ->
+            model, Cmd.ofMsg (FSharpASTMsg(FSharpAST.triggerCompileCode ()))
 
-        | CompilationResult.TypeScriptReaderException message
-        | CompilationResult.Error message ->
-            let cmd =
-                match source with
-                | CompilationSource.EditorChanged -> Cmd.none
-                | CompilationSource.ReportIssue ->
-                    Cmd.OfFunc.exec
-                        reportIssue
-                        {
-                            TypeScriptCode = model.TypeScriptCode
-                            CompilationResult = result
-                        }
-                | CompilationSource.CopyFSharpCode ->
-                    Toast.message
-                        "Can't copy F# code to clipboard because generation failed"
-                    |> Toast.position Toast.TopRight
-                    |> Toast.timeout (TimeSpan.FromSeconds 1.5)
-                    |> Toast.error
-
-            { model with Output = Error message }, cmd
-
-    | CompileCode source ->
-        { model with Output = Compiling },
-        Cmd.OfFunc.perform
-            generateFile
-            (model.TypeScriptCode, source)
-            CompileCodeResult
-
-    | FailedToCopyFSharpCode _ ->
-        model,
-        Toast.message "Failed to copy F# code to clipboard"
-        |> Toast.position Toast.TopRight
-        |> Toast.timeout (TimeSpan.FromSeconds 1.5)
-        |> Toast.error
-
-    | CodeCopied _ ->
-        model,
-        Toast.message "F# code copied to clipboard"
-        |> Toast.position Toast.TopRight
-        |> Toast.timeout (TimeSpan.FromSeconds 1.5)
-        |> Toast.success
-
-let private actions dispatch =
-    Bulma.field.div [
-        prop.className classes.``output-panel__actions``
-        field.isGrouped
-        prop.children [
-            Bulma.control.p [
-                Bulma.button.button [
-                    color.isSuccess
-                    prop.onClick (
-                        dispatch,
-                        CompileCode CompilationSource.CopyFSharpCode
-                    )
-                    prop.children [
-                        Bulma.icon [
-                            prop.children [
-                                Icon [ icon.icon lucide.clipboardCopy ]
-                            ]
-                        ]
-                        Html.span "Copy F# code"
-                    ]
-                ]
-            ]
-            Bulma.control.p [
-                Bulma.button.button [
-                    color.isDanger
-                    prop.onClick (
-                        dispatch,
-                        CompileCode CompilationSource.ReportIssue
-                    )
-                    prop.children [
-                        Bulma.icon [
-                            prop.children [
-                                Icon [ icon.icon lucide.alertTriangle ]
-                            ]
-                        ]
-                        Html.span "Report an issue"
-                    ]
+let private rightPanel model dispatch =
+    let tabItem (text: string) (isActive: bool) (moveTo: Msg) =
+        Bulma.tab [
+            if isActive then
+                tab.isActive
+            prop.children [
+                Html.a [
+                    prop.onClick (dispatch, moveTo)
+                    prop.children [ Html.span text ]
                 ]
             ]
         ]
-    ]
-
-type UpdateEditorHeightArgs =
-    {
-        EditorRef: Editor.IStandaloneCodeEditor
-        LastHeight: float
-        SetLastHeight: float -> unit
-        ContainerElement: Types.HTMLDivElement
-    }
-
-let private updateEditorHeight (args: UpdateEditorHeightArgs) =
-    let outputPanel =
-        args.ContainerElement.closest ("." + classes.``output-panel``)
-
-    let compilationOutputElement =
-        outputPanel.Value.querySelector ("." + classes.``compilation-output``)
-
-    let outputPanelRects = outputPanel.Value.getClientRects ()
-
-    let compilationOutputRects = compilationOutputElement.getClientRects ()
-
-    if outputPanelRects.Length > 0 && compilationOutputRects.Length > 0 then
-        let editorHeight =
-            outputPanelRects[0].height - compilationOutputRects[0].height
-
-        let editorWidth = outputPanelRects[0].width
-
-        if editorHeight <> args.LastHeight then
-            args.SetLastHeight editorHeight
-
-            args.EditorRef?layout(
-                {|
-                    width = editorWidth
-                    height = editorHeight
-                |}
-            )
-
-[<ReactComponent>]
-let private FSharpEditor fsharpCode (warnings: string list) dispatch =
-    let editorRef, setEditorRef =
-        React.useState (Unchecked.defaultof<Editor.IStandaloneCodeEditor>)
-
-    let lastHeight, setLastHeight = React.useState 0.0
-
-    React.useEffect (
-        fun () ->
-            if box editorRef <> null then
-                let containerElement: Types.HTMLDivElement =
-                    editorRef?_domElement
-
-                let intervalId =
-                    // Periodically recompute the editor's height to ensure it
-                    // takes only the space it needs
-                    window.setInterval (
-                        fun _ ->
-                            updateEditorHeight
-                                {
-                                    EditorRef = editorRef
-                                    LastHeight = lastHeight
-                                    SetLastHeight = setLastHeight
-                                    ContainerElement = containerElement
-                                }
-                        , 250
-                    )
-
-                { new IDisposable with
-                    member __.Dispose() = window.clearInterval intervalId
-                }
-
-            else
-                { new IDisposable with
-                    member __.Dispose() = ()
-                }
-        , [| box editorRef |]
-    )
 
     Html.div [
-        prop.classes [
-            classes.``output-panel``
-            if warnings.Length > 0 then
-                classes.``has-warnings``
-        ]
-
+        prop.className classes.``right-panel``
         prop.children [
-            Editor [
-                editor.width "100%"
-                editor.value fsharpCode
-                editor.language "fsharp"
-                editor.options
-                    {|
-                        minimap = {| enabled = false |}
-                        readOnly = true
-                        fontSize = 16
-                    |}
-                editor.onMount (fun editor _ -> setEditorRef editor)
-            ]
+            Bulma.tabs [
+                tabs.isCentered
+                tabs.isToggle
 
-            Html.div [
-                prop.className classes.``compilation-output``
-
-                warnings
-                |> List.map (fun warning ->
-                    Html.div [
-                        prop.className classes.``compilation-output__warning``
-                        prop.text warning
+                prop.children [
+                    Html.ul [
+                        tabItem
+                            "GlueAST"
+                            model.CurrentTab.IsGlueASTActive
+                            MoveToGlueASTTab
+                        tabItem
+                            "F# AST"
+                            model.CurrentTab.IsFSharpASTActive
+                            MoveToFSharpASTTab
+                        tabItem
+                            "F# Binding"
+                            model.CurrentTab.IsFSharpCodeActive
+                            MoveToFSharpCodeTab
                     ]
-                )
-                |> prop.children
+                ]
             ]
 
-            actions dispatch
+            Html.div [ prop.className classes.``horizontal-divider`` ]
+
+            match model.CurrentTab with
+            | Tab.FSharpCode fsharpModel ->
+                FSharpCode.view fsharpModel (FSharpCodeMsg >> dispatch)
+
+            | Tab.GlueAST glueModel ->
+                GlueAST.view glueModel (GlueASTMsg >> dispatch)
+
+            | Tab.FSharpAST fsharpASTModel ->
+                FSharpAST.view fsharpASTModel (FSharpASTMsg >> dispatch)
         ]
     ]
 
-let private outputArea (output: Output) dispatch =
-    match output with
-    | Compiling ->
-        Html.div [
-            prop.classes [
-                classes.``output-panel``
-                classes.``output-panel--is-loading``
-            ]
-
-            prop.children [ Loader.Loader() ]
-        ]
-
-    | Success data -> FSharpEditor data.FSharpCode data.Warnings dispatch
-
-    | Error message ->
-        Html.div [
-            prop.classes [
-                classes.``output-panel``
-                classes.``output-panel--is-error``
-            ]
-            prop.children [
-                Html.div message
-
-                actions dispatch
-            ]
-        ]
-
-let private editors (model: Model) dispatch =
+let view model dispatch =
     Bulma.text.div [
-        prop.className classes.editorsContainer
+        prop.className classes.``panel-container``
         spacing.mt1
         prop.children [
             Editor [
@@ -443,12 +285,6 @@ let private editors (model: Model) dispatch =
                     |}
             ]
 
-            outputArea model.Output dispatch
+            rightPanel model dispatch
         ]
-    ]
-
-let view model dispatch =
-    React.fragment [
-        editors model dispatch
-    // warnings model
     ]

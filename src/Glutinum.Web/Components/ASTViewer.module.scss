@@ -1,0 +1,103 @@
+@import "./../scss/variables.scss";
+
+$left-indent-size: 0.75rem;
+$indicator-margin: 0.25rem;
+
+.key {
+    margin-left: $left-indent-size;
+    color: #af00db;
+}
+
+.colon {
+    color: $danger;
+    margin: 0 0.25rem;
+}
+
+.value {
+    color: #795e26;
+    &--only {
+        margin-left: $left-indent-size;
+    }
+}
+
+.node {
+    // Allow us to have access to .node class in the CssModules.fs
+    color: $text;
+    font-family: Menlo, Monaco, "Courier New", monospace;
+
+    $self: &;
+
+    &__name {
+        margin-left: $left-indent-size;
+        color: #0000ff;
+    }
+
+    &__property {
+        color: $primary;
+    }
+
+    &--collapsed,
+    &--expanded {
+        > #{ $self }__name {
+            margin-left: 0;
+            &:hover {
+                text-decoration: underline;
+                cursor: pointer;
+            }
+
+            &::before {
+                display: inline-block;
+                margin-right: $indicator-margin;
+            }
+        }
+    }
+
+    &--collapsed {
+        > #{ $self }__name {
+            &::before {
+                content: "+";
+                color: $green;
+            }
+        }
+    }
+
+    &--expanded {
+        > #{ $self }__name {
+            &::before {
+                content: "-";
+                color: $red;
+            }
+        }
+    }
+
+    &__body {
+        padding-left: 1rem;
+        margin-left: $indicator-margin;
+        border-left: 2px solid $border;
+        $body_self: &;
+
+        &:hover:not(:has(#{$body_self}:hover)) {
+            border-left-color: $primary;
+            // cursor: pointer;
+        }
+    }
+
+    &--empty {
+        #{$self}__name {
+            // color: $grey;
+            // display: none;
+
+            &:hover {
+                cursor: default;
+            }
+
+            &:after {
+                margin-left: 0.5rem;
+                content: "empty";
+                color: $grey-dark;
+                font-weight: $weight-light;
+                font-style: italic;
+            }
+        }
+    }
+}

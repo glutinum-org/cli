@@ -41,5 +41,7 @@
     <PackageReference Include="Fable.Node" />
     <PackageReference Include="Fable.Promise" />
     <PackageReference Include="Glutinum.Chalk" />
+    <PackageReference Include="Thoth.Json.Core" />
+    <PackageReference Include="Thoth.Json.JavaScript" />
   </ItemGroup>
 </Project>

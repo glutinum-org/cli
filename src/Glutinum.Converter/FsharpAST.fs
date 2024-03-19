@@ -154,7 +154,7 @@ type FSharpAttribute =
     | CompiledName of string
     | RequireQualifiedAccess
     | EmitConstructor
-    | EmitMacroConstructor of className: string
+    | EmitMacroConstructor of text: string
     | EmitIndexer
 
 type FSharpParameter =

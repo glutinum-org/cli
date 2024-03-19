@@ -1,0 +1,79 @@
+@import "./../scss/variables.scss";
+
+$max-compilation-output-height: 25vh;
+
+.container {
+    display: flex;
+    flex-direction: column;
+    // .55rem remove the scrollbar from the body (not sure what is causing body
+    // to have a scrollbar)
+    max-height: calc(100vh - 3.5rem - var(--tabs-min-height) - .55rem);
+    height: 100%;
+    $self: &;
+
+    &__content {
+        flex: 2;
+        overflow: auto;
+        position: relative;
+    }
+
+    // Actions
+    &__actions {
+        position: absolute;
+        bottom: 1rem;
+        right: 2rem;
+        z-index: 100;
+    }
+
+    // Place the loader in the center of the output panel
+    &--is-loading {
+        justify-content: center;
+    }
+
+    &--is-error {
+        // display: flex;
+        background-color: $danger-light;
+        color: $danger-dark;
+        padding: 1rem;
+        white-space: break-spaces;
+    }
+
+    // If we have warnings, we need now have 2 rows
+    // - 1 for the main content
+    // - 1 for the warnings output
+    // &:has(&__warnings:has(:empty)) {
+    //     &__warnings {
+    //         display: none;
+    //     }
+    // }
+
+    // &:has(&__warnings:not(:empty)) {
+    //     #{$self}__actions {
+    //         bottom: 0;
+    //         background-color: red;
+    //     }
+    // }
+
+    &__warnings {
+        flex: 1;
+        overflow-y: auto;
+        white-space: break-spaces;
+        background-color: $warning;
+        border-top: 1px solid $border;
+        max-height: $max-compilation-output-height;
+        transition: max-height 0.2s ease;
+
+        &:empty {
+            height: 0;
+            max-height: 0;
+        }
+
+        &__warning {
+            padding: 1rem;
+
+            &:not(:last-child) {
+                border-bottom: 1px solid $warning-dark;
+            }
+        }
+    }
+}
