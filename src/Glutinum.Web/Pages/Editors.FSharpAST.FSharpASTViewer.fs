@@ -173,7 +173,14 @@ type FSharpASTViewer =
         | FSharpMember.Property propertyInfo ->
             ASTViewer.renderNode "Property" [
                 FSharpASTViewer.Name propertyInfo.Name
+                FSharpASTViewer.IsOptional propertyInfo.IsOptional
+                FSharpASTViewer.IsStatic propertyInfo.IsStatic
+                FSharpASTViewer.Accessor propertyInfo.Accessor
+                FSharpASTViewer.Accessibility propertyInfo.Accessibility
                 FSharpASTViewer.Attributes propertyInfo.Attributes
+                FSharpASTViewer.TypeParameters propertyInfo.TypeParameters
+                FSharpASTViewer.Parameters propertyInfo.Parameters
+                FSharpASTViewer.Type propertyInfo.Type
             ]
 
     static member private Members(members: FSharpMember list) =

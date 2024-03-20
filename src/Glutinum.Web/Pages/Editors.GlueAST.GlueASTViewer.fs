@@ -101,6 +101,7 @@ type GlueASTViewer =
             ASTViewer.renderNode "Property" [
                 GlueASTViewer.Name propertyInfo.Name
                 GlueASTViewer.IsStatic propertyInfo.IsStatic
+                GlueASTViewer.IsOptional propertyInfo.IsOptional
                 ASTViewer.renderKeyValue
                     "Accessor"
                     (GlueAccessor.toText propertyInfo.Accessor)
