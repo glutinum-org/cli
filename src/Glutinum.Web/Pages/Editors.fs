@@ -8,6 +8,7 @@ open Feliz.Bulma
 open Fable.Core.JsInterop
 open Glutinum.Feliz.MonacoEditor
 open type Glutinum.Feliz.MonacoEditor.Exports
+open Fable.Core
 
 module GlueAST = GlueAST.Component
 module FSharpAST = FSharpAST.Component
@@ -25,31 +26,20 @@ type Output =
     | Compiling
 
 [<RequireQualifiedAccess>]
+[<StringEnum>]
 type Tab =
-    | FSharpCode of FSharpCode.Model
-    | GlueAST of GlueAST.Model
-    | FSharpAST of FSharpAST.Model
-
-    member this.IsFSharpCodeActive =
-        match this with
-        | FSharpCode _ -> true
-        | _ -> false
-
-    member this.IsGlueASTActive =
-        match this with
-        | GlueAST _ -> true
-        | _ -> false
-
-    member this.IsFSharpASTActive =
-        match this with
-        | FSharpAST _ -> true
-        | _ -> false
+    | FSharpCode
+    | GlueAST
+    | FSharpAST
 
 type Model =
     {
         Debouncer: Debouncer.State
         TypeScriptCode: string
         CurrentTab: Tab
+        FSharpCode: FSharpCode.Model
+        GlueAST: GlueAST.Model
+        FSharpAST: FSharpAST.Model
     }
 
 exception MissingClipboardApi
@@ -68,116 +58,63 @@ type Msg =
     | GlueASTMsg of GlueAST.Msg
     | FSharpASTMsg of FSharpAST.Msg
     | CompileCode
-    | MoveToFSharpCodeTab
-    | MoveToGlueASTTab
-    | MoveToFSharpASTTab
+    | MoveTo of Tab
 
 let init (route: Router.EditorsRoute) =
-    let config =
+    let currentTab, typeScriptCodeOpt =
         match route with
-        | Router.EditorsRoute.FSharpCode typeScriptCode ->
-            let fsharpCode, fsharpCmd = FSharpCode.init typeScriptCode
+        | Router.EditorsRoute.FSharpCode typeScriptCodeOpt ->
+            Tab.FSharpCode, typeScriptCodeOpt
 
-            {|
-                CurrentTab = Tab.FSharpCode fsharpCode
-                Cmd = Cmd.map FSharpCodeMsg fsharpCmd
-                TypeScriptCode = typeScriptCode
-            |}
+        | Router.EditorsRoute.GlueAST typeScriptCodeOpt ->
+            Tab.GlueAST, typeScriptCodeOpt
 
-        | Router.EditorsRoute.GlueAST typeScriptCode ->
-            let glueASTModel, glueASTCmd = GlueAST.init typeScriptCode
+        | Router.EditorsRoute.FSharpAST typeScriptCodeOpt ->
+            Tab.FSharpAST, typeScriptCodeOpt
 
-            {|
-                CurrentTab = Tab.GlueAST glueASTModel
-                Cmd = Cmd.map GlueASTMsg glueASTCmd
-                TypeScriptCode = typeScriptCode
-            |}
+    let typescriptCode = typeScriptCodeOpt |> Option.defaultValue ""
 
-        | Router.EditorsRoute.FSharpAST typeScriptCode ->
-            let fsharpASTModel, fsharpASTCmd = FSharpAST.init typeScriptCode
+    let fsharpCodeModel, fsharpCodeCmd = FSharpCode.init ()
 
-            {|
-                CurrentTab = Tab.FSharpAST fsharpASTModel
-                Cmd = Cmd.map FSharpASTMsg fsharpASTCmd
-                TypeScriptCode = typeScriptCode
-            |}
+    let glueASTModel, glueASTCmd = GlueAST.init ()
+
+    let fsharpAstModel, fsharpAstCmd = FSharpAST.init ()
 
     {
         Debouncer = Debouncer.create ()
-        TypeScriptCode = config.TypeScriptCode |> Option.defaultValue ""
-        CurrentTab = config.CurrentTab
+        TypeScriptCode = typescriptCode
+        CurrentTab = currentTab
+        FSharpCode = fsharpCodeModel
+        GlueAST = glueASTModel
+        FSharpAST = fsharpAstModel
     },
-    config.Cmd
+    Cmd.batch [
+        Cmd.map FSharpCodeMsg fsharpCodeCmd
+        Cmd.map GlueASTMsg glueASTCmd
+        Cmd.map FSharpASTMsg fsharpAstCmd
+    ]
 
 let update msg model =
     match msg with
     | FSharpCodeMsg fsharpMsg ->
-        match model.CurrentTab with
-        | Tab.FSharpCode fsharpModel ->
-            let updatedModel, cmd =
-                FSharpCode.update fsharpMsg fsharpModel model.TypeScriptCode
+        let updatedModel, cmd =
+            FSharpCode.update fsharpMsg model.FSharpCode model.TypeScriptCode
 
-            { model with CurrentTab = Tab.FSharpCode updatedModel },
-            Cmd.map FSharpCodeMsg cmd
-
-        | _ -> model, Cmd.none
+        { model with FSharpCode = updatedModel }, Cmd.map FSharpCodeMsg cmd
 
     | GlueASTMsg glueMsg ->
-        match model.CurrentTab with
-        | Tab.GlueAST glueModel ->
-            let updatedModel, cmd =
-                GlueAST.update glueMsg glueModel model.TypeScriptCode
+        let updatedModel, cmd =
+            GlueAST.update glueMsg model.GlueAST model.TypeScriptCode
 
-            { model with CurrentTab = Tab.GlueAST updatedModel },
-            Cmd.map GlueASTMsg cmd
-
-        | _ -> model, Cmd.none
+        { model with GlueAST = updatedModel }, Cmd.map GlueASTMsg cmd
 
     | FSharpASTMsg fsharpASTMsg ->
-        match model.CurrentTab with
-        | Tab.FSharpAST fsharpASTModel ->
-            let updatedModel, cmd =
-                FSharpAST.update
-                    fsharpASTMsg
-                    fsharpASTModel
-                    model.TypeScriptCode
+        let updatedModel, cmd =
+            FSharpAST.update fsharpASTMsg model.FSharpAST model.TypeScriptCode
 
-            { model with CurrentTab = Tab.FSharpAST updatedModel },
-            Cmd.map FSharpASTMsg cmd
+        { model with FSharpAST = updatedModel }, Cmd.map FSharpASTMsg cmd
 
-        | _ -> model, Cmd.none
-
-    | MoveToFSharpCodeTab ->
-        match model.CurrentTab with
-        | Tab.FSharpCode _ -> model, Cmd.none
-
-        | _ ->
-            let fsharpModel, fsharpCmd =
-                FSharpCode.init (Some model.TypeScriptCode)
-
-            { model with CurrentTab = Tab.FSharpCode fsharpModel },
-            Cmd.map FSharpCodeMsg fsharpCmd
-
-    | MoveToGlueASTTab ->
-        match model.CurrentTab with
-        | Tab.GlueAST _ -> model, Cmd.none
-
-        | _ ->
-            let glueModel, glueCmd = GlueAST.init (Some model.TypeScriptCode)
-
-            { model with CurrentTab = Tab.GlueAST glueModel },
-            Cmd.map GlueASTMsg glueCmd
-
-    | MoveToFSharpASTTab ->
-        match model.CurrentTab with
-        | Tab.FSharpAST _ -> model, Cmd.none
-
-        | _ ->
-            let fsharpASTModel, fsharpASTCmd =
-                FSharpAST.init (Some model.TypeScriptCode)
-
-            { model with CurrentTab = Tab.FSharpAST fsharpASTModel },
-            Cmd.map FSharpASTMsg fsharpASTCmd
+    | MoveTo tab -> { model with CurrentTab = tab }, Cmd.none
 
     | DebouncerSelfMsg debouncerMsg ->
         let (debouncerModel, debouncerCmd) =
@@ -200,24 +137,21 @@ let update msg model =
         Cmd.map DebouncerSelfMsg debouncerCmd
 
     | CompileCode ->
-        match model.CurrentTab with
-        | Tab.FSharpCode _ ->
-            model, Cmd.ofMsg (FSharpCodeMsg(FSharpCode.triggerCompileCode ()))
-
-        | Tab.GlueAST _ ->
-            model, Cmd.ofMsg (GlueASTMsg(GlueAST.triggerCompileCode ()))
-
-        | Tab.FSharpAST _ ->
-            model, Cmd.ofMsg (FSharpASTMsg(FSharpAST.triggerCompileCode ()))
+        model,
+        Cmd.batch [
+            Cmd.ofMsg (FSharpCodeMsg(FSharpCode.triggerCompileCode ()))
+            Cmd.ofMsg (GlueASTMsg(GlueAST.triggerCompileCode ()))
+            Cmd.ofMsg (FSharpASTMsg(FSharpAST.triggerCompileCode ()))
+        ]
 
 let private rightPanel model dispatch =
-    let tabItem (text: string) (isActive: bool) (moveTo: Msg) =
+    let tabItem (text: string) (currentTab: Tab) (destinationTab: Tab) =
         Bulma.tab [
-            if isActive then
+            if currentTab = destinationTab then
                 tab.isActive
             prop.children [
                 Html.a [
-                    prop.onClick (dispatch, moveTo)
+                    prop.onClick (dispatch, MoveTo destinationTab)
                     prop.children [ Html.span text ]
                 ]
             ]
@@ -232,18 +166,9 @@ let private rightPanel model dispatch =
 
                 prop.children [
                     Html.ul [
-                        tabItem
-                            "GlueAST"
-                            model.CurrentTab.IsGlueASTActive
-                            MoveToGlueASTTab
-                        tabItem
-                            "F# AST"
-                            model.CurrentTab.IsFSharpASTActive
-                            MoveToFSharpASTTab
-                        tabItem
-                            "F# Binding"
-                            model.CurrentTab.IsFSharpCodeActive
-                            MoveToFSharpCodeTab
+                        tabItem "GlueAST" model.CurrentTab Tab.GlueAST
+                        tabItem "F# AST" model.CurrentTab Tab.FSharpAST
+                        tabItem "F# Binding" model.CurrentTab Tab.FSharpCode
                     ]
                 ]
             ]
@@ -251,14 +176,13 @@ let private rightPanel model dispatch =
             Html.div [ prop.className classes.``horizontal-divider`` ]
 
             match model.CurrentTab with
-            | Tab.FSharpCode fsharpModel ->
-                FSharpCode.view fsharpModel (FSharpCodeMsg >> dispatch)
+            | Tab.FSharpCode ->
+                FSharpCode.view model.FSharpCode (FSharpCodeMsg >> dispatch)
 
-            | Tab.GlueAST glueModel ->
-                GlueAST.view glueModel (GlueASTMsg >> dispatch)
+            | Tab.GlueAST -> GlueAST.view model.GlueAST (GlueASTMsg >> dispatch)
 
-            | Tab.FSharpAST fsharpASTModel ->
-                FSharpAST.view fsharpASTModel (FSharpASTMsg >> dispatch)
+            | Tab.FSharpAST ->
+                FSharpAST.view model.FSharpAST (FSharpASTMsg >> dispatch)
         ]
     ]
 

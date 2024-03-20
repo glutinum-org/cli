@@ -328,10 +328,19 @@ type GlueASTViewer =
                 [
                     GlueASTViewer.Name typeReference.Name
                     ASTViewer.renderKeyValue "FullName" typeReference.FullName
+
                     typeReference.TypeArguments
                     |> List.map GlueASTViewer.GlueType
                     |> ASTViewer.renderNode "TypeArguments"
+
+                    GlueASTViewer.Type typeReference.Type
                 ]
+                context
+
+        | GlueType.IntersectionType intersectionType ->
+            ASTViewer.renderNode
+                "IntersectionType"
+                (intersectionType |> List.map GlueASTViewer.GlueType)
                 context
 
     static member Render

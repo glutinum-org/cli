@@ -102,7 +102,13 @@ let private generateFile
         | :? TypeScriptReaderException as error ->
             CompilationResult.TypeScriptReaderException error.message
 
-        | error -> CompilationResult.Error error.Message
+        | error ->
+            console.log error
+
+            CompilationResult.Error
+                $"""%s{error.Message}
+
+%s{error.StackTrace}"""
 
     {
         Source = compilationSource
@@ -110,19 +116,13 @@ let private generateFile
         CompilationResult = compilationResult
     }
 
-let init (typeScriptCode: string option) =
-    // If we have TypeScript code, we schedule a compilation
-    let cmd =
-        match typeScriptCode with
-        | Some _ -> Cmd.ofMsg (CompileCode CompilationSource.EditorChanged)
-        | None -> Cmd.none
-
+let init () =
     Success
         {|
             FSharpCode = ""
             Warnings = []
         |},
-    cmd
+    Cmd.ofMsg (CompileCode CompilationSource.EditorChanged)
 
 let private reportIssue (args: IssueGenerator.CreateUrlArgs) =
     // Make sure to have the latest version of the generated F# code

@@ -61,22 +61,22 @@ let private generateAST (typeScriptCode: string) =
     | :? TypeScriptReaderException as error ->
         CompilationResult.TypeScriptReaderException error.message
 
-    | error -> CompilationResult.Error error.Message
+    | error ->
+        Fable.Core.JS.console.log error
 
-let init (typeScriptCode: string option) =
-    // If we have TypeScript code, we schedule a compilation
-    let cmd =
-        match typeScriptCode with
-        | Some _ -> Cmd.ofMsg Compile
-        | None -> Cmd.none
+        CompilationResult.Error
+            $"""%s{error.Message}
 
+%s{error.StackTrace}"""
+
+let init () =
     Success
         {
             FSharpAST = []
             Warnings = []
             CollapsedNodes = Set.empty
         },
-    cmd
+    Cmd.ofMsg Compile
 
 let triggerCompileCode () = Compile
 
