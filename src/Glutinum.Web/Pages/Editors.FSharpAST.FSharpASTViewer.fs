@@ -150,10 +150,7 @@ type FSharpASTViewer =
         ASTViewer.renderKeyValue "IsStatic" (string isStatic)
 
     static member private Accessor(accessor: FSharpAccessor option) =
-        ASTViewer.renderNodeOption
-            "Accessor"
-            (fun accessor _ -> FSharpAccessor.toText accessor |> Html.span)
-            accessor
+        ASTViewer.renderKeyValueOption "Accessor" FSharpAccessor.toText accessor
 
     static member private Member(memberInfo: FSharpMember) =
         match memberInfo with
@@ -175,8 +172,8 @@ type FSharpASTViewer =
                 FSharpASTViewer.Name propertyInfo.Name
                 FSharpASTViewer.IsOptional propertyInfo.IsOptional
                 FSharpASTViewer.IsStatic propertyInfo.IsStatic
-                FSharpASTViewer.Accessor propertyInfo.Accessor
                 FSharpASTViewer.Accessibility propertyInfo.Accessibility
+                FSharpASTViewer.Accessor propertyInfo.Accessor
                 FSharpASTViewer.Attributes propertyInfo.Attributes
                 FSharpASTViewer.TypeParameters propertyInfo.TypeParameters
                 FSharpASTViewer.Parameters propertyInfo.Parameters

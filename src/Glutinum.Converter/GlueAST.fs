@@ -185,6 +185,8 @@ type GlueInterface =
                 |> Encode.list
             ]
 
+type GlueTypeLiteral = { Members: GlueMember list }
+
 type GlueVariable = { Name: string; Type: GlueType }
 
 [<RequireQualifiedAccess>]
@@ -298,6 +300,7 @@ type GlueType =
     | ThisType of typeName: string
     | TupleType of GlueType list
     | IntersectionType of GlueType list
+    | TypeLiteral of GlueTypeLiteral
 
     member this.Name =
         match this with
@@ -325,6 +328,7 @@ type GlueType =
         | TypeReference info -> info.Name
         | Array info -> $"ResizeArray<{info.Name}>"
         | ThisType typeName -> typeName
+        | TypeLiteral _
         | IntersectionType _
         | IndexedAccessType _
         | Union _

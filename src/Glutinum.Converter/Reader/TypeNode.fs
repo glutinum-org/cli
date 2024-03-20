@@ -144,7 +144,13 @@ let readTypeNode
                 // Note: Should this be made Lazy?
                 // Is there a risk for infinite loop?
                 let typ =
-                    symbolOpt.Value.declarations.Value[0] |> reader.ReadNode
+                    match symbolOpt.Value.declarations with
+                    | Some declarations -> declarations[0] |> reader.ReadNode
+                    | None ->
+                        // TODO: Should we create a special type to represent a type information
+                        // we could not get?
+                        // Should we make the type of the TypeReference an option?
+                        GlueType.Discard
 
                 ({
                     Name = typeReferenceNode.typeName?getText () // TODO: Remove dynamic typing
@@ -233,6 +239,16 @@ let readTypeNode
         |> Seq.toList
         |> List.map (Some >> reader.ReadTypeNode)
         |> GlueType.IntersectionType
+
+    | Ts.SyntaxKind.TypeLiteral ->
+        let typeLiteralNode = typeNode :?> Ts.TypeLiteralNode
+
+        let members =
+            typeLiteralNode.members
+            |> Seq.toList
+            |> List.map reader.ReadNamedDeclaration
+
+        ({ Members = members }: GlueTypeLiteral) |> GlueType.TypeLiteral
 
     | _ ->
         generateReaderError

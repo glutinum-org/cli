@@ -127,6 +127,7 @@ let rec private transformType (glueType: GlueType) : FSharpType =
     | GlueType.KeyOf _
     | GlueType.Discard
     | GlueType.Partial _
+    | GlueType.IntersectionType _
     | GlueType.FunctionDeclaration _ ->
         printfn "Could not transform type: %A" glueType
         FSharpType.Discard
@@ -799,32 +800,37 @@ let private transformTypeAliasDeclaration
         : FSharpTypeAlias)
         |> FSharpType.TypeAlias
 
-    | GlueType.IntersectionType glueTypes2 ->
-        let test = glueTypes2 |> List.map transformType
-
-        printfn "IntersectionType: %A" test
-
-        let x = 1
+    | GlueType.IntersectionType types ->
+        let members =
+            types
+            |> List.map transformType
+            |> List.choose (fun typ ->
+                match typ with
+                | FSharpType.TypeReference typeReference ->
+                    match typeReference.Type with
+                    | FSharpType.Interface interfaceInfo ->
+                        Some interfaceInfo.Members
+                    | _ -> None
+                | _ -> None
+            )
+            |> List.concat
 
         {
             Attributes = [ FSharpAttribute.AllowNullLiteral ]
             Name = typeAliasName
             TypeParameters =
                 transformTypeParameters glueTypeAliasDeclaration.TypeParameters
-            Members =
-                {
-                    Attributes = [ FSharpAttribute.EmitSelfInvoke ]
-                    Name = "Invoke"
-                    Parameters = []
-                    Type = FSharpType.Primitive FSharpPrimitive.Unit
-                    TypeParameters = []
-                    IsOptional = false
-                    IsStatic = false
-                    Accessor = None
-                    Accessibility = FSharpAccessibility.Public
-                }
-                |> FSharpMember.Method
-                |> List.singleton
+            Members = members
+        }
+        |> FSharpType.Interface
+
+    | GlueType.TypeLiteral typeLiteralInfo ->
+        {
+            Attributes = [ FSharpAttribute.AllowNullLiteral ]
+            Name = typeAliasName
+            TypeParameters =
+                transformTypeParameters glueTypeAliasDeclaration.TypeParameters
+            Members = transformMembers typeLiteralInfo.Members
         }
         |> FSharpType.Interface
 
@@ -909,6 +915,7 @@ let rec private transformToFsharp (glueTypes: GlueType list) : FSharpType list =
         | GlueType.KeyOf _
         | GlueType.Discard
         | GlueType.TupleType _
+        | GlueType.IntersectionType _
         | GlueType.ThisType _ -> FSharpType.Discard
     )
 

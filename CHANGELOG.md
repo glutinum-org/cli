@@ -49,6 +49,51 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     ```
 
 * Add support for `TupleType`
+* Add support for `TupleLiteral`
+
+    ```ts
+    type Animal = {
+        name: string;
+    }
+    ```
+
+    ```fs
+    [<AllowNullLiteral>]
+    type Animal =
+        abstract member name: string with get, set
+    ```
+
+* Add support for `IntersectionType`
+
+    ```ts
+    interface ErrorHandling {
+        success: boolean;
+        error?: string;
+    }
+
+    interface ArtworksData {
+        artworks: string[];
+    }
+
+    type ArtworksResponse = ArtworksData & ErrorHandling;
+    ```
+
+    ```fs
+    [<AllowNullLiteral>]
+    type ErrorHandling =
+        abstract member success: bool with get, set
+        abstract member error: string option with get, set
+
+    [<AllowNullLiteral>]
+    type ArtworksData =
+        abstract member artworks: ResizeArray<string> with get, set
+
+    [<AllowNullLiteral>]
+    type ArtworksResponse =
+        abstract member artworks: ResizeArray<string> with get, set
+        abstract member success: bool with get, set
+        abstract member error: string option with get, set
+    ```
 
 ### Changed
 

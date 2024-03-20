@@ -343,6 +343,16 @@ type GlueASTViewer =
                 (intersectionType |> List.map GlueASTViewer.GlueType)
                 context
 
+        | GlueType.TypeLiteral typeLiteral ->
+            ASTViewer.renderNode
+                "TypeLiteral"
+                [
+                    typeLiteral.Members
+                    |> List.map GlueASTViewer.GlueMember
+                    |> ASTViewer.renderNode "Members"
+                ]
+                context
+
     static member Render
         (types: GlueType list)
         (dispatch: Dispatch<'Msg>)

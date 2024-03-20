@@ -111,6 +111,14 @@ type ASTViewer =
         (option: 'T option)
         =
         match option with
-        | Some constraint_ ->
-            ASTViewer.renderNode key [ renderFunc constraint_ ]
+        | Some value -> ASTViewer.renderNode key [ renderFunc value ]
+        | None -> ASTViewer.renderKeyValue key "None"
+
+    static member renderKeyValueOption
+        (key: string)
+        (toTextFunc: 'T -> string)
+        (valueOpt: 'T option)
+        =
+        match valueOpt with
+        | Some value -> ASTViewer.renderKeyValue key (toTextFunc value)
         | None -> ASTViewer.renderKeyValue key "None"

@@ -6,7 +6,7 @@ open System
 [<AllowNullLiteral>]
 type ErrorHandling =
     abstract member success: bool with get, set
-    abstract member error: string with get, set
+    abstract member error: string option with get, set
 
 [<AllowNullLiteral>]
 type ArtworksData =
@@ -14,9 +14,9 @@ type ArtworksData =
 
 [<AllowNullLiteral>]
 type ArtworksResponse =
-    abstract member success: bool with get, set
-    abstract member error: string with get, set
     abstract member artworks: ResizeArray<string> with get, set
+    abstract member success: bool with get, set
+    abstract member error: string option with get, set
 
 (***)
 #r "nuget: Fable.Core"
