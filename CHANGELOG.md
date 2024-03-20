@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Sanitize names coming from TypeScript by removing surrounding quotes (`"`, `'`)
 * String enums containing a `-` should be escaped with backtick ([GH-44](https://github.com/glutinum-org/cli/issues/44))
 * String enums starting with a number should be escaped with backtick ([GH-43](https://github.com/glutinum-org/cli/issues/43))
+* Optional interface properties should be transform into `'T option`
 
 ### Added
 

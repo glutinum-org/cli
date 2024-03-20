@@ -28,12 +28,14 @@ let readNamedDeclaration
                     | false -> GlueAccessor.ReadWrite
             | None -> GlueAccessor.ReadWrite
 
-        {
+        ({
             Name = name.getText ()
             Type = reader.ReadTypeNode propertySignature.``type``
+            IsOptional = propertySignature.questionToken.IsSome
             IsStatic = false
             Accessor = accessor
         }
+        : GlueProperty)
         |> GlueMember.Property
 
     | Ts.SyntaxKind.CallSignature ->

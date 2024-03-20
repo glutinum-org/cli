@@ -6,6 +6,7 @@ open Glutinum.Converter.GlueAST
 
 exception TypeScriptReaderException of message: string
 
+[<Mangle>]
 type ITypeScriptReader =
     abstract checker: Ts.TypeChecker with get
     abstract Warnings: ResizeArray<string> with get

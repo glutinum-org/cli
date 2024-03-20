@@ -98,6 +98,7 @@ type GlueProperty =
         Name: string
         Type: GlueType
         IsStatic: bool
+        IsOptional: bool
         Accessor: GlueAccessor
     }
 
