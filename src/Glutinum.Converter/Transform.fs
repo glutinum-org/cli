@@ -1,14 +1,83 @@
 module rec Glutinum.Converter.Transform
 
 open Fable.Core
-open System
-open Node
-open TypeScript
-open Fable.Core.JsInterop
 open Glutinum.Converter.FSharpAST
-open Node.Api
-open Fable.Core.JS
 open Glutinum.Converter.GlueAST
+
+// Not really proud of this implementation, but I was not able to make it in a
+// pure functional way, using a Tree structure or something similar
+// It seems like for now this implementation does the job which is the most important
+// And this is probably more readable than what a pure functional implementation would be
+type TransformContext(currentScopeName: string, ?parent: TransformContext) =
+
+    let types = ResizeArray<FSharpType>()
+    let modules = ResizeArray<TransformContext>()
+
+    member val FullName =
+        match parent with
+        | None -> ""
+        | Some parent ->
+            (parent.FullName + "." + currentScopeName).TrimStart '.'
+
+    member val CurrentScopeName = currentScopeName
+
+    // We need to expose the types for the children to be able to access
+    // push to them.
+    // This variable should not be accessed directly, but through the ExposeType method
+    // that's why we decorate it with the _ prefix
+    member val _types = types
+
+    member _.ExposeType(typ: FSharpType) =
+        match parent with
+        | None -> types.Add(typ)
+        // The default case is to expose the type to the parent
+        // For example, when we are at Locale.Hello.Config
+        // we want to expose the type to Locale.Hello
+        // because this will generate
+        // module Locale =
+        //     module Hello =
+        //         type Config = ...
+        // and not
+        // module Locale =
+        //     module Hello =
+        //         module Config = ...
+        //              type Config = ...
+        | Some parent -> parent._types.Add(typ)
+
+    member this.PushScope(scopeName: string) =
+        let childContext = TransformContext(scopeName, parent = this)
+        modules.Add childContext
+        childContext
+
+    member _.ToList() =
+        match parent with
+        | None ->
+            [
+                yield! types |> Seq.toList
+                for subModules in modules do
+                    yield! subModules.ToList()
+            ]
+        | Some _ ->
+            let types =
+                [
+                    yield! Seq.toList types
+
+                    for subModules in modules do
+                        yield! subModules.ToList()
+                ]
+
+            // Erase empty modules
+            if types.IsEmpty then
+                []
+            else
+                ({
+                    Name = currentScopeName
+                    Types = types
+                    IsRecursive = false
+                }
+                : FSharpModule)
+                |> FSharpType.Module
+                |> List.singleton
 
 let private transformLiteral (glueLiteral: GlueLiteral) : FSharpLiteral =
     match glueLiteral with
@@ -32,17 +101,25 @@ let private transformPrimitive
     | GluePrimitive.Null -> FSharpPrimitive.Null
     | GluePrimitive.Undefined -> FSharpPrimitive.Null
 
-let private transformTupleType (glueTypes: GlueType list) : FSharpType =
-    glueTypes |> List.map transformType |> FSharpType.Tuple
+let private transformTupleType
+    (context: TransformContext)
+    (glueTypes: GlueType list)
+    : FSharpType
+    =
+    glueTypes |> List.map (transformType context) |> FSharpType.Tuple
 
-let rec private transformType (glueType: GlueType) : FSharpType =
+let rec private transformType
+    (context: TransformContext)
+    (glueType: GlueType)
+    : FSharpType
+    =
     match glueType with
     | GlueType.Primitive primitiveInfo ->
         transformPrimitive primitiveInfo |> FSharpType.Primitive
 
     | GlueType.ThisType typeName -> FSharpType.ThisType typeName
 
-    | GlueType.TupleType glueTypes -> transformTupleType glueTypes
+    | GlueType.TupleType glueTypes -> transformTupleType context glueTypes
 
     | GlueType.Union(GlueTypeUnion cases) ->
         let optionalTypes, others =
@@ -60,7 +137,7 @@ let rec private transformType (glueType: GlueType) : FSharpType =
         let isOptional = not optionalTypes.IsEmpty
 
         if isOptional && others.Length = 1 then
-            FSharpType.Option(transformType others.Head)
+            FSharpType.Option(transformType context others.Head)
         else
             {
                 Attributes = []
@@ -84,14 +161,14 @@ let rec private transformType (glueType: GlueType) : FSharpType =
             Name = Naming.mapTypeNameToFableCoreAwareName typeReference.Name
             FullName = typeReference.FullName
             TypeArguments =
-                typeReference.TypeArguments |> List.map transformType
-            Type = transformType typeReference.Type
+                typeReference.TypeArguments |> List.map (transformType context)
+            Type = (transformType context) typeReference.Type
         }
         : FSharpTypeReference)
         |> FSharpType.TypeReference
 
     | GlueType.Array glueType ->
-        transformType glueType |> FSharpType.ResizeArray
+        (transformType context) glueType |> FSharpType.ResizeArray
 
     | GlueType.ClassDeclaration classDeclaration ->
         ({
@@ -108,15 +185,37 @@ let rec private transformType (glueType: GlueType) : FSharpType =
     | GlueType.FunctionType functionTypeInfo ->
         ({
             Parameters =
-                functionTypeInfo.Parameters |> List.map transformParameter
+                functionTypeInfo.Parameters
+                |> List.map (transformParameter context)
             TypeArguments = []
-            ReturnType = transformType functionTypeInfo.Type
+            ReturnType = (transformType context) functionTypeInfo.Type
         }
         : FSharpFunctionType)
         |> FSharpType.Function
 
     | GlueType.Interface interfaceInfo ->
-        FSharpType.Interface(transformInterface interfaceInfo)
+        FSharpType.Interface(transformInterface context interfaceInfo)
+
+    | GlueType.TypeLiteral typeLiteralInfo ->
+        {
+            Attributes = [ FSharpAttribute.AllowNullLiteral ]
+            Name = context.CurrentScopeName
+            Members = transformMembers context typeLiteralInfo.Members
+            TypeParameters = []
+        }
+        |> FSharpType.Interface
+        |> context.ExposeType
+
+        // Get fullname
+        // Store type in the exposed types memory
+        ({
+            Name = context.FullName
+            FullName = context.FullName
+            TypeArguments = []
+            Type = FSharpType.Discard
+        }
+        : FSharpTypeReference)
+        |> FSharpType.TypeReference
 
     | GlueType.ModuleDeclaration _
     | GlueType.IndexedAccessType _
@@ -136,6 +235,7 @@ let rec private transformType (glueType: GlueType) : FSharpType =
 /// <param name="exports"></param>
 /// <returns></returns>
 let private transformExports
+    (context: TransformContext)
     (isTopLevel: bool)
     (exports: GlueType list)
     : FSharpType
@@ -150,7 +250,7 @@ let private transformExports
                     Name = Naming.sanitizeName info.Name
                     Parameters = []
                     TypeParameters = []
-                    Type = transformType info.Type
+                    Type = (transformType context) info.Type
                     IsOptional = false
                     IsStatic = true
                     Accessor = None
@@ -163,9 +263,11 @@ let private transformExports
                 {
                     Attributes = [ FSharpAttribute.Import(info.Name, "module") ]
                     Name = Naming.sanitizeName info.Name
-                    Parameters = info.Parameters |> List.map transformParameter
-                    TypeParameters = transformTypeParameters info.TypeParameters
-                    Type = transformType info.Type
+                    Parameters =
+                        info.Parameters |> List.map (transformParameter context)
+                    TypeParameters =
+                        transformTypeParameters context info.TypeParameters
+                    Type = (transformType context) info.Type
                     IsOptional = false
                     IsStatic = true
                     Accessor = None
@@ -190,9 +292,10 @@ let private transformExports
                                         info.Name
                             ]
                         Name = Naming.sanitizeName info.Name
-                        Parameters = parameters |> List.map transformParameter
+                        Parameters =
+                            parameters |> List.map (transformParameter context)
                         TypeParameters =
-                            transformTypeParameters info.TypeParameters
+                            transformTypeParameters context info.TypeParameters
                         Type =
                             ({
                                 Name = Naming.sanitizeName info.Name
@@ -249,11 +352,17 @@ let private transformExports
     }
     |> FSharpType.Interface
 
-let private transformParameter (parameter: GlueParameter) : FSharpParameter =
+let private transformParameter
+    (context: TransformContext)
+    (parameter: GlueParameter)
+    : FSharpParameter
+    =
+    let context = context.PushScope(parameter.Name)
+
     {
         Name = Naming.sanitizeName parameter.Name
         IsOptional = parameter.IsOptional
-        Type = transformType parameter.Type
+        Type = (transformType context) parameter.Type
     }
 
 let private transformAccessor (accessor: GlueAccessor) : FSharpAccessor =
@@ -262,17 +371,24 @@ let private transformAccessor (accessor: GlueAccessor) : FSharpAccessor =
     | GlueAccessor.WriteOnly -> FSharpAccessor.WriteOnly
     | GlueAccessor.ReadWrite -> FSharpAccessor.ReadWrite
 
-let private transformMembers (members: GlueMember list) : FSharpMember list =
+let private transformMembers
+    (context: TransformContext)
+    (members: GlueMember list)
+    : FSharpMember list
+    =
     members
     |> List.map (
         function
         | GlueMember.Method methodInfo ->
+            let context = context.PushScope(methodInfo.Name)
+
             {
                 Attributes = []
                 Name = Naming.sanitizeName methodInfo.Name
                 Parameters =
-                    methodInfo.Parameters |> List.map transformParameter
-                Type = transformType methodInfo.Type
+                    methodInfo.Parameters
+                    |> List.map (transformParameter context)
+                Type = transformType context methodInfo.Type
                 TypeParameters = []
                 IsOptional = methodInfo.IsOptional
                 IsStatic = methodInfo.IsStatic
@@ -286,8 +402,9 @@ let private transformMembers (members: GlueMember list) : FSharpMember list =
                 Attributes = [ FSharpAttribute.EmitSelfInvoke ]
                 Name = "Invoke"
                 Parameters =
-                    callSignatureInfo.Parameters |> List.map transformParameter
-                Type = transformType callSignatureInfo.Type
+                    callSignatureInfo.Parameters
+                    |> List.map (transformParameter context)
+                Type = transformType context callSignatureInfo.Type
                 TypeParameters = []
                 IsOptional = false
                 IsStatic = false
@@ -301,7 +418,7 @@ let private transformMembers (members: GlueMember list) : FSharpMember list =
                 Attributes = []
                 Name = Naming.sanitizeName propertyInfo.Name
                 Parameters = []
-                Type = transformType propertyInfo.Type
+                Type = transformType context propertyInfo.Type
                 TypeParameters = []
                 IsOptional = propertyInfo.IsOptional
                 IsStatic = propertyInfo.IsStatic
@@ -315,8 +432,9 @@ let private transformMembers (members: GlueMember list) : FSharpMember list =
                 Attributes = [ FSharpAttribute.EmitIndexer ]
                 Name = "Item"
                 Parameters =
-                    indexSignature.Parameters |> List.map transformParameter
-                Type = transformType indexSignature.Type
+                    indexSignature.Parameters
+                    |> List.map (transformParameter context)
+                Type = transformType context indexSignature.Type
                 TypeParameters = []
                 IsOptional = false
                 IsStatic = false
@@ -326,12 +444,15 @@ let private transformMembers (members: GlueMember list) : FSharpMember list =
             |> FSharpMember.Property
 
         | GlueMember.MethodSignature methodSignature ->
+            let context = context.PushScope(methodSignature.Name)
+
             {
                 Attributes = []
                 Name = Naming.sanitizeName methodSignature.Name
                 Parameters =
-                    methodSignature.Parameters |> List.map transformParameter
-                Type = transformType methodSignature.Type
+                    methodSignature.Parameters
+                    |> List.map (transformParameter context)
+                Type = transformType context methodSignature.Type
                 TypeParameters = []
                 IsOptional = false
                 IsStatic = false
@@ -341,12 +462,16 @@ let private transformMembers (members: GlueMember list) : FSharpMember list =
             |> FSharpMember.Method
     )
 
-let private transformInterface (info: GlueInterface) : FSharpInterface =
+let private transformInterface
+    (context: TransformContext)
+    (info: GlueInterface)
+    : FSharpInterface
+    =
     {
         Attributes = [ FSharpAttribute.AllowNullLiteral ]
         Name = Naming.sanitizeName info.Name
-        Members = transformMembers info.Members
-        TypeParameters = transformTypeParameters info.TypeParameters
+        Members = transformMembers context info.Members
+        TypeParameters = transformTypeParameters context info.TypeParameters
     }
 
 let private transformEnum (glueEnum: GlueEnum) : FSharpType =
@@ -528,6 +653,7 @@ module TypeAliasDeclaration =
         | GlueLiteral.Bool _ -> makeTypeAlias FSharpPrimitive.Bool
 
 let private transformTypeParameters
+    (context: TransformContext)
     (typeParameters: GlueTypeParameter list)
     : FSharpTypeParameter list
     =
@@ -536,12 +662,14 @@ let private transformTypeParameters
         FSharpTypeParameter.Create(
             typeParameter.Name,
             ?constraint_ =
-                (typeParameter.Constraint |> Option.map transformType),
-            ?default_ = (typeParameter.Default |> Option.map transformType)
+                (typeParameter.Constraint |> Option.map (transformType context)),
+            ?default_ =
+                (typeParameter.Default |> Option.map (transformType context))
         )
     )
 
 let private transformTypeAliasDeclaration
+    (context: TransformContext)
     (glueTypeAliasDeclaration: GlueTypeAliasDeclaration)
     : FSharpType
     =
@@ -658,9 +786,10 @@ let private transformTypeAliasDeclaration
         else
             ({
                 Name = typeAliasName
-                Type = transformType unionType
+                Type = transformType context unionType
                 TypeParameters =
                     transformTypeParameters
+                        context
                         glueTypeAliasDeclaration.TypeParameters
             }
             : FSharpTypeAlias)
@@ -695,7 +824,7 @@ let private transformTypeAliasDeclaration
                     // Wrap inside of an union, so it can be transformed as U2, U3, etc.
                     |> GlueTypeUnion
                     |> GlueType.Union
-                    |> transformType
+                    |> transformType context
 
                 | _ -> FSharpType.Discard
             | _ -> FSharpType.Discard
@@ -704,7 +833,9 @@ let private transformTypeAliasDeclaration
             Name = typeAliasName
             Type = typ
             TypeParameters =
-                transformTypeParameters glueTypeAliasDeclaration.TypeParameters
+                transformTypeParameters
+                    context
+                    glueTypeAliasDeclaration.TypeParameters
         }
         : FSharpTypeAlias)
         |> FSharpType.TypeAlias
@@ -717,7 +848,9 @@ let private transformTypeAliasDeclaration
             Name = typeAliasName
             Type = transformPrimitive primitiveInfo |> FSharpType.Primitive
             TypeParameters =
-                transformTypeParameters glueTypeAliasDeclaration.TypeParameters
+                transformTypeParameters
+                    context
+                    glueTypeAliasDeclaration.TypeParameters
         }
         : FSharpTypeAlias)
         |> FSharpType.TypeAlias
@@ -725,9 +858,11 @@ let private transformTypeAliasDeclaration
     | GlueType.TypeReference typeReference ->
         ({
             Name = typeAliasName
-            Type = transformType (GlueType.TypeReference typeReference)
+            Type = transformType context (GlueType.TypeReference typeReference)
             TypeParameters =
-                transformTypeParameters glueTypeAliasDeclaration.TypeParameters
+                transformTypeParameters
+                    context
+                    glueTypeAliasDeclaration.TypeParameters
         }
         : FSharpTypeAlias)
         |> FSharpType.TypeAlias
@@ -735,15 +870,17 @@ let private transformTypeAliasDeclaration
     | GlueType.Array glueType ->
         ({
             Name = typeAliasName
-            Type = transformType (GlueType.Array glueType)
+            Type = transformType context (GlueType.Array glueType)
             TypeParameters =
-                transformTypeParameters glueTypeAliasDeclaration.TypeParameters
+                transformTypeParameters
+                    context
+                    glueTypeAliasDeclaration.TypeParameters
         }
         : FSharpTypeAlias)
         |> FSharpType.TypeAlias
 
     | GlueType.Partial interfaceInfo ->
-        let originalInterface = transformInterface interfaceInfo
+        let originalInterface = transformInterface context interfaceInfo
 
         // Adapt the original interface to make it partial
         let partialInterface =
@@ -771,14 +908,17 @@ let private transformTypeAliasDeclaration
             Attributes = [ FSharpAttribute.AllowNullLiteral ]
             Name = typeAliasName
             TypeParameters =
-                transformTypeParameters glueTypeAliasDeclaration.TypeParameters
+                transformTypeParameters
+                    context
+                    glueTypeAliasDeclaration.TypeParameters
             Members =
                 {
                     Attributes = [ FSharpAttribute.EmitSelfInvoke ]
                     Name = "Invoke"
                     Parameters =
-                        functionType.Parameters |> List.map transformParameter
-                    Type = transformType functionType.Type
+                        functionType.Parameters
+                        |> List.map (transformParameter context)
+                    Type = transformType context functionType.Type
                     TypeParameters = []
                     IsOptional = false
                     IsStatic = false
@@ -793,9 +933,11 @@ let private transformTypeAliasDeclaration
     | GlueType.TupleType glueTypes ->
         ({
             Name = typeAliasName
-            Type = transformTupleType glueTypes
+            Type = transformTupleType context glueTypes
             TypeParameters =
-                transformTypeParameters glueTypeAliasDeclaration.TypeParameters
+                transformTypeParameters
+                    context
+                    glueTypeAliasDeclaration.TypeParameters
         }
         : FSharpTypeAlias)
         |> FSharpType.TypeAlias
@@ -803,7 +945,7 @@ let private transformTypeAliasDeclaration
     | GlueType.IntersectionType types ->
         let members =
             types
-            |> List.map transformType
+            |> List.map (transformType context)
             |> List.choose (fun typ ->
                 match typ with
                 | FSharpType.TypeReference typeReference ->
@@ -819,7 +961,9 @@ let private transformTypeAliasDeclaration
             Attributes = [ FSharpAttribute.AllowNullLiteral ]
             Name = typeAliasName
             TypeParameters =
-                transformTypeParameters glueTypeAliasDeclaration.TypeParameters
+                transformTypeParameters
+                    context
+                    glueTypeAliasDeclaration.TypeParameters
             Members = members
         }
         |> FSharpType.Interface
@@ -829,8 +973,10 @@ let private transformTypeAliasDeclaration
             Attributes = [ FSharpAttribute.AllowNullLiteral ]
             Name = typeAliasName
             TypeParameters =
-                transformTypeParameters glueTypeAliasDeclaration.TypeParameters
-            Members = transformMembers typeLiteralInfo.Members
+                transformTypeParameters
+                    context
+                    glueTypeAliasDeclaration.TypeParameters
+            Members = transformMembers context typeLiteralInfo.Members
         }
         |> FSharpType.Interface
 
@@ -858,14 +1004,16 @@ let private transformModuleDeclaration
     |> FSharpType.Module
 
 let private transformClassDeclaration
+    (context: TransformContext)
     (classDeclaration: GlueClassDeclaration)
     : FSharpType
     =
     ({
         Attributes = [ FSharpAttribute.AllowNullLiteral ]
         Name = Naming.sanitizeName classDeclaration.Name
-        Members = transformMembers classDeclaration.Members
-        TypeParameters = transformTypeParameters classDeclaration.TypeParameters
+        Members = transformMembers context classDeclaration.Members
+        TypeParameters =
+            transformTypeParameters context classDeclaration.TypeParameters
     }
     : FSharpInterface)
     |> FSharpType.Interface
@@ -881,23 +1029,37 @@ let private transformFunctionType (functionTypeInfo: GlueFunctionType) =
     : FSharpInterface)
     |> FSharpType.Interface
 
-let rec private transformToFsharp (glueTypes: GlueType list) : FSharpType list =
+let rec private transformToFsharp
+    (context: TransformContext)
+    (glueTypes: GlueType list)
+    : FSharpType list
+    =
     glueTypes
     |> List.map (
         function
         | GlueType.Interface interfaceInfo ->
-            FSharpType.Interface(transformInterface interfaceInfo)
+            let context = context.PushScope(interfaceInfo.Name)
+
+            FSharpType.Interface(transformInterface context interfaceInfo)
+        // [
+        //     {
+        //         Name = interfaceInfo.Name
+        //         IsRecursive = false
+        //         Types = []
+        //     }
+        //     |> FSharpType.Module
+        // ]
 
         | GlueType.Enum enumInfo -> transformEnum enumInfo
 
         | GlueType.TypeAliasDeclaration typeAliasInfo ->
-            transformTypeAliasDeclaration typeAliasInfo
+            transformTypeAliasDeclaration context typeAliasInfo
 
         | GlueType.ModuleDeclaration moduleInfo ->
             transformModuleDeclaration moduleInfo
 
         | GlueType.ClassDeclaration classInfo ->
-            transformClassDeclaration classInfo
+            transformClassDeclaration context classInfo
 
         | GlueType.FunctionType functionTypeInfo ->
             transformFunctionType functionTypeInfo
@@ -944,19 +1106,23 @@ let transform (isTopLevel: bool) (glueAst: GlueType list) : FSharpType list =
             | _ -> false
         )
 
-    // let oneLevelDeeperClasses =
-    //     rest
-    //     |> List.choose (fun glueType ->
-    //         match glueType with
-    //         | GlueType.ModuleDeclaration _ -> true
-    //         | _ -> false
-    //     )
-
     let exports = exports @ classes
 
-    [
-        if not (List.isEmpty exports) then
-            transformExports isTopLevel exports
+    let rootTransformContext = TransformContext("")
 
-        yield! transformToFsharp rest
+    let rest = transformToFsharp rootTransformContext rest
+
+    [
+        // These are the exported functions, classes, etc. from the binding
+        if not (List.isEmpty exports) then
+            transformExports rootTransformContext isTopLevel exports
+
+        // "Standard" types which are a direct mapping to a TypeScript type
+        yield! rest
+
+        // Output the exposed types
+        // Exposed types are that don't directly map to a TypeScript type
+        // which we generate to improve the user experience. For example,
+        // this is used when we have a literal type as an argument of a function / method
+        yield! rootTransformContext.ToList()
     ]
