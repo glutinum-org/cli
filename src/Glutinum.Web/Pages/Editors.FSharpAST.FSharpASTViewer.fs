@@ -143,6 +143,9 @@ type FSharpASTViewer =
     static member private Name(name: string) =
         ASTViewer.renderKeyValue "Name" name
 
+    static member private FullName(fullName: string) =
+        ASTViewer.renderKeyValue "FullName" fullName
+
     static member private IsOptional(isOptional: bool) =
         ASTViewer.renderKeyValue "IsOptional" (string isOptional)
 
@@ -362,7 +365,7 @@ type FSharpASTViewer =
                 "TypeReference"
                 [
                     FSharpASTViewer.Name typeReference.Name
-                    FSharpASTViewer.Name typeReference.FullName
+                    FSharpASTViewer.FullName typeReference.FullName
                     FSharpASTViewer.TypeArguments typeReference.TypeArguments
                 ]
                 context
