@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * String enums containing a `-` should be escaped with backtick ([GH-44](https://github.com/glutinum-org/cli/issues/44))
 * String enums starting with a number should be escaped with backtick ([GH-43](https://github.com/glutinum-org/cli/issues/43))
 * Optional interface properties should be transform into `'T option`
+* Don't indent module name when printing the F# code
 
 ### Added
 
@@ -49,7 +50,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     ```
 
 * Add support for `TupleType`
-* Add support for `TupleLiteral`
+* Add support for `TypeLiteral`
 
     ```ts
     type Animal = {

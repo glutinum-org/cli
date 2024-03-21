@@ -465,9 +465,9 @@ let rec print (printer: Printer) (fsharpTypes: FSharpType list) =
             printer.Write($"module ")
 
             if moduleInfo.IsRecursive then
-                printer.Write($"rec ")
+                printer.WriteInline($"rec ")
 
-            printer.Write($"{moduleInfo.Name} =")
+            printer.WriteInline($"{moduleInfo.Name} =")
             printer.NewLine
 
             printer.Indent
