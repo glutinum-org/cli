@@ -8,7 +8,8 @@ open System.IO
 let private testFile (hiearchyLevel: int) (content: string) =
     let generateFilePath =
         [
-            String.replicate hiearchyLevel "../"
+            for _ in 1..hiearchyLevel do
+                ".."
             "src"
             "Glutinum.Converter"
             "Generate.fs.js"
@@ -41,14 +42,6 @@ let private generateSpecsTestFile () =
 
     Directory.CreateDirectory(generatedSpecsTestDestination) |> ignore
 
-    // Copy the vitest.config.ts file, in the future we will be able to pass
-    // --clearScreen false to the CLI instead of relying on the config file
-    File.Copy(
-        "tests/specs/vitest.config.ts",
-        generatedSpecsTestDestination + "vitest.config.ts",
-        true
-    )
-
     let specFiles =
         Directory.GetFiles(
             "tests/specs/references",
@@ -79,21 +72,25 @@ let private generateSpecsTestFile () =
         let tests =
             specFiles
             |> Seq.map (fun specFile ->
-                // let specFileName =
-                //     (Path.GetFileName specFile).Replace(".d.ts", ".fsx")
-
                 let testName = specFile.Replace(".d.ts", "")
 
-                let fileName =
+                let refereneFilePath =
                     [
-                        String.replicate hiearchyLevel "../"
+                        for _ in 1..hiearchyLevel do
+                            ".."
                         "references"
                         specFile
                     ]
                     |> String.concat "/"
 
-                $"""test('%s{testName}', () => {{
-    const filePath = path.join(__dirname, '%s{fileName}');
+                let expectedFilePath =
+                    refereneFilePath.Replace(".d.ts", ".fsx")
+
+                $"""test('%s{testName}', async () => {{
+    // Click the link below to go to the respective file
+    // Reference: file://./%s{refereneFilePath}
+    // Expected: file://./%s{expectedFilePath}
+    const filePath = path.join(__dirname, '%s{refereneFilePath}');
     let result = generateBindingFile(filePath);
     result += `
 (***)
@@ -103,7 +100,7 @@ let private generateSpecsTestFile () =
 
     const expectedFile = filePath.split('.').slice(0, -2).join('.') + '.fsx'
 
-    expect(result).toMatchFileSnapshot(expectedFile)
+    await expect(result).toMatchFileSnapshot(expectedFile)
 }})
         """
             )
@@ -151,6 +148,7 @@ let handle (args: string list) =
             CmdLine.empty
             |> CmdLine.appendRaw "npx"
             |> CmdLine.appendRaw "vitest"
+            |> CmdLine.appendPrefix "--clearScreen" "false"
             |> CmdLine.appendRaw additionalArgs
             |> CmdLine.toString
 
