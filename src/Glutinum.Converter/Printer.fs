@@ -95,6 +95,9 @@ let private attributeToText (fsharpAttribute: FSharpAttribute) =
         $"[<Emit(\"new $0.{className}($1...)\")>]"
     | FSharpAttribute.ImportAll module_ -> $"[<ImportAll(\"{module_}\")>]"
     | FSharpAttribute.EmitIndexer -> "[<EmitIndexer>]"
+    | FSharpAttribute.Global -> "[<Global>]"
+    | FSharpAttribute.ParamObject -> "[<ParamObject>]"
+    | FSharpAttribute.EmitSelf -> "[<Emit(\"$0\")>]"
 
 let private printInlineAttribute
     (printer: Printer)
@@ -217,6 +220,7 @@ let rec private printType (fsharpType: FSharpType) =
     | FSharpType.ResizeArray arrayType -> $"ResizeArray<{printType arrayType}>"
     | FSharpType.Module _
     | FSharpType.Interface _
+    | FSharpType.Class _
     | FSharpType.Unsupported _
     | FSharpType.TypeAlias _
     | FSharpType.Discard -> "obj"
@@ -238,6 +242,24 @@ let private printTypeParameters
         )
 
         printer.WriteInline(">")
+
+module FSharpAccessibility =
+
+    let print (printer: Printer) (accessibility: FSharpAccessibility) =
+        match accessibility with
+        // We print an empty string for public like that the indentation
+        // matches the other accessibilities
+        | FSharpAccessibility.Public -> printer.Write("")
+        | FSharpAccessibility.Private -> printer.Write("private ")
+        | FSharpAccessibility.Protected -> printer.Write("protected ")
+
+    let printInline (printer: Printer) (accessibility: FSharpAccessibility) =
+        match accessibility with
+        // We print an empty string for public like that the indentation
+        // matches the other accessibilities
+        | FSharpAccessibility.Public -> printer.WriteInline("")
+        | FSharpAccessibility.Private -> printer.WriteInline("private ")
+        | FSharpAccessibility.Protected -> printer.WriteInline("protected ")
 
 let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
     printAttributes printer interfaceInfo.Attributes
@@ -390,6 +412,92 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
 
     printer.Unindent
 
+let private printPrimaryConstructor
+    (printer: Printer)
+    (constructor: FSharpConstructor)
+    =
+    printCompactAttributesAndNewLine printer constructor.Attributes
+
+    FSharpAccessibility.print printer constructor.Accessibility
+
+    printer.WriteInline($"(")
+    printer.Indent
+
+    constructor.Parameters
+    |> List.iteri (fun index p ->
+        if index <> 0 then
+            printer.WriteInline(",")
+
+        printer.NewLine
+
+        if p.IsOptional then
+            printer.Write("?")
+        else
+            printer.Write("") // Empty string to have the correct indentation
+
+        printer.WriteInline($"{p.Name}: {printType p.Type}")
+    )
+
+    printer.Unindent
+    printer.NewLine
+    printer.Write(") =")
+    printer.NewLine
+
+let private printClass (printer: Printer) (classInfo: FSharpClass) =
+    printAttributes printer classInfo.Attributes
+
+    printer.Write($"type {classInfo.Name}")
+    printTypeParameters printer classInfo.TypeParameters
+    printer.NewLine
+    printer.Indent
+    printPrimaryConstructor printer classInfo.PrimaryConstructor
+    printer.NewLine
+
+    if not classInfo.SecondaryConstructors.IsEmpty then
+        classInfo.SecondaryConstructors
+        |> List.iter (fun constructor ->
+            printCompactAttributesAndNewLine printer constructor.Attributes
+            FSharpAccessibility.print printer constructor.Accessibility
+            printer.WriteInline($"new (")
+
+            constructor.Parameters
+            |> List.iteri (fun index p ->
+                if index <> 0 then
+                    printer.WriteInline(", ")
+
+                if p.IsOptional then
+                    printer.WriteInline("?")
+
+                printer.WriteInline($"{p.Name}: {printType p.Type}")
+            )
+
+            printer.WriteInline(") =")
+            printer.NewLine
+            printer.Indent
+            printer.Write($"%s{classInfo.Name}()")
+            printer.NewLine
+            printer.Unindent
+            printer.NewLine
+        )
+
+    if
+        classInfo.ExplicitFields.IsEmpty
+        && classInfo.SecondaryConstructors.IsEmpty
+    then
+        printer.Write("class end")
+        printer.NewLine
+
+    if not classInfo.ExplicitFields.IsEmpty then
+        classInfo.ExplicitFields
+        |> List.iter (fun explicitField ->
+            printer.Write($"member val {explicitField.Name} : ")
+            printer.WriteInline(printType explicitField.Type)
+            printer.WriteInline(" = nativeOnly with get, set")
+            printer.NewLine
+        )
+
+    printer.Unindent
+
 let private printEnum (printer: Printer) (enumInfo: FSharpEnum) =
     printer.Write("[<RequireQualifiedAccess>]")
     printer.NewLine
@@ -480,6 +588,7 @@ let rec print (printer: Printer) (fsharpTypes: FSharpType list) =
         // printer.Unindent
 
         | FSharpType.TypeAlias aliasInfo -> printTypeAlias printer aliasInfo
+        | FSharpType.Class classInfo -> printClass printer classInfo
 
         | FSharpType.Mapped _
         | FSharpType.Primitive _

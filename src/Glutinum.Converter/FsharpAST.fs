@@ -139,6 +139,12 @@ type FSharpAccessibility =
     | Private
     | Protected
 
+    member this.Text =
+        match this with
+        | Public -> "public"
+        | Private -> "private"
+        | Protected -> "protected"
+
 [<RequireQualifiedAccess>]
 type FSharpAttribute =
     | Text of string
@@ -146,16 +152,28 @@ type FSharpAttribute =
     /// Generates <c>[&lt;Emit("$0($1...)")&gt;]</c> attribute.
     /// </summary>
     | EmitSelfInvoke
-    | Import of string * string
-    | ImportAll of string
+    /// <summary>
+    /// Generates <c>[&lt;Emit("$0")&gt;]</c> attribute.
+    /// </summary>
+    | EmitSelf
+    /// <summary>
+    /// Generates <c>[&lt;Import(selector, from)&gt;]</c> attribute.
+    /// </summary>
+    | Import of selector: string * from: string
+    /// <summary>
+    /// Generates <c>[&lt;ImportAll(moduleName)&gt;]</c> attribute.
+    /// </summary>
+    | ImportAll of moduleName: string
     | Erase
     | AllowNullLiteral
     | StringEnum of Fable.Core.CaseRules
     | CompiledName of string
     | RequireQualifiedAccess
     | EmitConstructor
-    | EmitMacroConstructor of text: string
+    | EmitMacroConstructor of className: string
     | EmitIndexer
+    | Global
+    | ParamObject
 
 type FSharpParameter =
     {
@@ -188,6 +206,39 @@ type FSharpInterface =
         Name: string
         TypeParameters: FSharpTypeParameter list
         Members: FSharpMember list
+    }
+
+type FSharpExplicitField = { Name: string; Type: FSharpType }
+
+type FSharpConstructor =
+    {
+        Parameters: FSharpParameter list
+        Attributes: FSharpAttribute list
+        Accessibility: FSharpAccessibility
+    }
+
+    static member EmptyPublic =
+        {
+            Parameters = []
+            Attributes = []
+            Accessibility = FSharpAccessibility.Public
+        }
+
+    static member EmptyPrivate =
+        {
+            Parameters = []
+            Attributes = []
+            Accessibility = FSharpAccessibility.Private
+        }
+
+type FSharpClass =
+    {
+        Attributes: FSharpAttribute list
+        Name: string
+        TypeParameters: FSharpTypeParameter list
+        PrimaryConstructor: FSharpConstructor
+        SecondaryConstructors: FSharpConstructor list
+        ExplicitFields: FSharpExplicitField list
     }
 
 type FSharpMapped =
@@ -281,5 +332,6 @@ type FSharpType =
     | ResizeArray of FSharpType
     | ThisType of typeName: string
     | Function of FSharpFunctionType
+    | Class of FSharpClass
 
 type FSharpOutFile = { Name: string; Opens: string list }

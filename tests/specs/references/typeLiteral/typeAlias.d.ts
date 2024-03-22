@@ -1,3 +1,0 @@
-type Animal = {
-    name: string;
-}

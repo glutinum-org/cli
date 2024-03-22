@@ -67,13 +67,19 @@ type FSharpASTViewer =
 
         | FSharpAttribute.EmitMacroConstructor text ->
             ASTViewer.renderNode "EmitMacroConstructor" [
-                ASTViewer.renderKeyValue "Text" text
+                ASTViewer.renderKeyValue "ClassName" text
             ]
 
         | FSharpAttribute.RequireQualifiedAccess ->
             ASTViewer.renderValueOnly "RequireQualifiedAccess"
 
         | FSharpAttribute.EmitIndexer -> ASTViewer.renderValueOnly "EmitIndexer"
+
+        | FSharpAttribute.Global -> ASTViewer.renderValueOnly "Global"
+
+        | FSharpAttribute.ParamObject -> ASTViewer.renderValueOnly "ParamObject"
+
+        | FSharpAttribute.EmitSelf -> ASTViewer.renderValueOnly "EmitSelf"
 
     static member private Attributes(attributes: FSharpAttribute list) =
         attributes
@@ -235,6 +241,35 @@ type FSharpASTViewer =
         )
         |> ASTViewer.renderNode "Cases"
 
+    static member private Constructor(constructor: FSharpConstructor) =
+        ASTViewer.renderNode "Constructor" [
+            FSharpASTViewer.Parameters constructor.Parameters
+            FSharpASTViewer.Accessibility constructor.Accessibility
+            FSharpASTViewer.Parameters constructor.Parameters
+        ]
+
+    static member private PrimaryConstructor(constructor: FSharpConstructor) =
+        ASTViewer.renderNode "PrimaryConstructor" [
+            FSharpASTViewer.Constructor constructor
+        ]
+
+    static member private SecondaryConstructors
+        (constructors: FSharpConstructor list)
+        =
+        constructors
+        |> List.map FSharpASTViewer.Constructor
+        |> ASTViewer.renderNode "SecondaryConstructors"
+
+    static member private ExplicitFields(fields: FSharpExplicitField list) =
+        fields
+        |> List.map (fun field ->
+            ASTViewer.renderNode "Field" [
+                FSharpASTViewer.Name field.Name
+                FSharpASTViewer.Type field.Type
+            ]
+        )
+        |> ASTViewer.renderNode "ExplicitFields"
+
     static member private FSharpType
         (fsharpType: FSharpType)
         (context: NodeContext<'Msg>)
@@ -248,6 +283,21 @@ type FSharpASTViewer =
                     FSharpASTViewer.Attributes interfaceInfo.Attributes
                     FSharpASTViewer.Members interfaceInfo.Members
                     FSharpASTViewer.TypeParameters interfaceInfo.TypeParameters
+                ]
+                context
+
+        | FSharpType.Class classInfo ->
+            ASTViewer.renderNode
+                "Class"
+                [
+                    FSharpASTViewer.Name classInfo.Name
+                    FSharpASTViewer.Attributes classInfo.Attributes
+                    FSharpASTViewer.TypeParameters classInfo.TypeParameters
+                    FSharpASTViewer.PrimaryConstructor
+                        classInfo.PrimaryConstructor
+                    FSharpASTViewer.SecondaryConstructors
+                        classInfo.SecondaryConstructors
+                    FSharpASTViewer.ExplicitFields classInfo.ExplicitFields
                 ]
                 context
 

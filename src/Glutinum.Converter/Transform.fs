@@ -79,6 +79,14 @@ type TransformContext(currentScopeName: string, ?parent: TransformContext) =
                 |> FSharpType.Module
                 |> List.singleton
 
+let private sanitizeNameAndPushScope
+    (name: string)
+    (context: TransformContext)
+    =
+    let name = Naming.sanitizeName name
+    let context = context.PushScope name
+    (name, context)
+
 let private transformLiteral (glueLiteral: GlueLiteral) : FSharpLiteral =
     match glueLiteral with
     | GlueLiteral.String value -> FSharpLiteral.String value
@@ -197,13 +205,58 @@ let rec private transformType
         FSharpType.Interface(transformInterface context interfaceInfo)
 
     | GlueType.TypeLiteral typeLiteralInfo ->
-        {
-            Attributes = [ FSharpAttribute.AllowNullLiteral ]
+        let typeLiteralParameters =
+            typeLiteralInfo.Members
+            |> TransformMembers.toFSharpParameters context
+            // If the underlying type is an option, we want to make the field optional
+            // remove the option type
+            |> List.map (fun parameter ->
+                match parameter.Type with
+                | FSharpType.Option underlyingType ->
+                    { parameter with
+                        Type = underlyingType
+                        IsOptional = true
+                    }
+                | _ -> parameter
+            )
+            // Sort to have the optional fields at the end
+            |> List.sortBy _.IsOptional
+
+        let explicitFields =
+            typeLiteralParameters
+            |> List.map (fun parameter ->
+                {
+                    Name = parameter.Name
+                    Type =
+                        // If the argument is optional, we want to wrap it in an option
+                        if parameter.IsOptional then
+                            FSharpType.Option parameter.Type
+                        else
+                            parameter.Type
+                }
+                : FSharpExplicitField
+            )
+
+        ({
+            Attributes =
+                [ FSharpAttribute.Global; FSharpAttribute.AllowNullLiteral ]
             Name = context.CurrentScopeName
-            Members = transformMembers context typeLiteralInfo.Members
+            PrimaryConstructor =
+                {
+                    Parameters = typeLiteralParameters
+                    Attributes =
+                        [
+                            FSharpAttribute.ParamObject
+                            FSharpAttribute.EmitSelf
+                        ]
+                    Accessibility = FSharpAccessibility.Public
+                }
+            SecondaryConstructors = []
+            ExplicitFields = explicitFields
             TypeParameters = []
         }
-        |> FSharpType.Interface
+        : FSharpClass)
+        |> FSharpType.Class
         |> context.ExposeType
 
         // Get fullname
@@ -371,106 +424,181 @@ let private transformAccessor (accessor: GlueAccessor) : FSharpAccessor =
     | GlueAccessor.WriteOnly -> FSharpAccessor.WriteOnly
     | GlueAccessor.ReadWrite -> FSharpAccessor.ReadWrite
 
-let private transformMembers
-    (context: TransformContext)
-    (members: GlueMember list)
-    : FSharpMember list
-    =
-    members
-    |> List.map (
-        function
-        | GlueMember.Method methodInfo ->
-            let context = context.PushScope(methodInfo.Name)
+module private TransformMembers =
 
-            {
-                Attributes = []
-                Name = Naming.sanitizeName methodInfo.Name
-                Parameters =
-                    methodInfo.Parameters
-                    |> List.map (transformParameter context)
-                Type = transformType context methodInfo.Type
-                TypeParameters = []
-                IsOptional = methodInfo.IsOptional
-                IsStatic = methodInfo.IsStatic
-                Accessor = None
-                Accessibility = FSharpAccessibility.Public
-            }
-            |> FSharpMember.Method
+    let toFSharpMember
+        (context: TransformContext)
+        (members: GlueMember list)
+        : FSharpMember list
+        =
+        members
+        |> List.map (
+            function
+            | GlueMember.Method methodInfo ->
+                let name, context =
+                    sanitizeNameAndPushScope methodInfo.Name context
 
-        | GlueMember.CallSignature callSignatureInfo ->
-            {
-                Attributes = [ FSharpAttribute.EmitSelfInvoke ]
-                Name = "Invoke"
-                Parameters =
-                    callSignatureInfo.Parameters
-                    |> List.map (transformParameter context)
-                Type = transformType context callSignatureInfo.Type
-                TypeParameters = []
-                IsOptional = false
-                IsStatic = false
-                Accessor = None
-                Accessibility = FSharpAccessibility.Public
-            }
-            |> FSharpMember.Method
+                {
+                    Attributes = []
+                    Name = name
+                    Parameters =
+                        methodInfo.Parameters
+                        |> List.map (transformParameter context)
+                    Type = transformType context methodInfo.Type
+                    TypeParameters = []
+                    IsOptional = methodInfo.IsOptional
+                    IsStatic = methodInfo.IsStatic
+                    Accessor = None
+                    Accessibility = FSharpAccessibility.Public
+                }
+                |> FSharpMember.Method
 
-        | GlueMember.Property propertyInfo ->
-            {
-                Attributes = []
-                Name = Naming.sanitizeName propertyInfo.Name
-                Parameters = []
-                Type = transformType context propertyInfo.Type
-                TypeParameters = []
-                IsOptional = propertyInfo.IsOptional
-                IsStatic = propertyInfo.IsStatic
-                Accessor = transformAccessor propertyInfo.Accessor |> Some
-                Accessibility = FSharpAccessibility.Public
-            }
-            |> FSharpMember.Property
+            | GlueMember.CallSignature callSignatureInfo ->
+                let name, context = sanitizeNameAndPushScope "Invoke" context
 
-        | GlueMember.IndexSignature indexSignature ->
-            {
-                Attributes = [ FSharpAttribute.EmitIndexer ]
-                Name = "Item"
-                Parameters =
-                    indexSignature.Parameters
-                    |> List.map (transformParameter context)
-                Type = transformType context indexSignature.Type
-                TypeParameters = []
-                IsOptional = false
-                IsStatic = false
-                Accessor = Some FSharpAccessor.ReadWrite
-                Accessibility = FSharpAccessibility.Public
-            }
-            |> FSharpMember.Property
+                {
+                    Attributes = [ FSharpAttribute.EmitSelfInvoke ]
+                    Name = name
+                    Parameters =
+                        callSignatureInfo.Parameters
+                        |> List.map (transformParameter context)
+                    Type = transformType context callSignatureInfo.Type
+                    TypeParameters = []
+                    IsOptional = false
+                    IsStatic = false
+                    Accessor = None
+                    Accessibility = FSharpAccessibility.Public
+                }
+                |> FSharpMember.Method
 
-        | GlueMember.MethodSignature methodSignature ->
-            let context = context.PushScope(methodSignature.Name)
+            | GlueMember.Property propertyInfo ->
+                let name, context =
+                    sanitizeNameAndPushScope propertyInfo.Name context
 
-            {
-                Attributes = []
-                Name = Naming.sanitizeName methodSignature.Name
-                Parameters =
-                    methodSignature.Parameters
-                    |> List.map (transformParameter context)
-                Type = transformType context methodSignature.Type
-                TypeParameters = []
-                IsOptional = false
-                IsStatic = false
-                Accessor = None
-                Accessibility = FSharpAccessibility.Public
-            }
-            |> FSharpMember.Method
-    )
+                {
+                    Attributes = []
+                    Name = name
+                    Parameters = []
+                    Type = transformType context propertyInfo.Type
+                    TypeParameters = []
+                    IsOptional = propertyInfo.IsOptional
+                    IsStatic = propertyInfo.IsStatic
+                    Accessor = transformAccessor propertyInfo.Accessor |> Some
+                    Accessibility = FSharpAccessibility.Public
+                }
+                |> FSharpMember.Property
+
+            | GlueMember.IndexSignature indexSignature ->
+                let name, context = sanitizeNameAndPushScope "Item" context
+
+                {
+                    Attributes = [ FSharpAttribute.EmitIndexer ]
+                    Name = name
+                    Parameters =
+                        indexSignature.Parameters
+                        |> List.map (transformParameter context)
+                    Type = transformType context indexSignature.Type
+                    TypeParameters = []
+                    IsOptional = false
+                    IsStatic = false
+                    Accessor = Some FSharpAccessor.ReadWrite
+                    Accessibility = FSharpAccessibility.Public
+                }
+                |> FSharpMember.Property
+
+            | GlueMember.MethodSignature methodSignature ->
+                let name, context =
+                    sanitizeNameAndPushScope methodSignature.Name context
+
+                {
+                    Attributes = []
+                    Name = name
+                    Parameters =
+                        methodSignature.Parameters
+                        |> List.map (transformParameter context)
+                    Type = transformType context methodSignature.Type
+                    TypeParameters = []
+                    IsOptional = false
+                    IsStatic = false
+                    Accessor = None
+                    Accessibility = FSharpAccessibility.Public
+                }
+                |> FSharpMember.Method
+        )
+
+    let toFSharpParameters
+        (context: TransformContext)
+        (members: GlueMember list)
+        : FSharpParameter list
+        =
+        members
+        |> List.map (
+            function
+            | GlueMember.Method methodInfo ->
+                let name, context =
+                    sanitizeNameAndPushScope methodInfo.Name context
+
+                {
+                    Name = name
+                    IsOptional = methodInfo.IsOptional
+                    Type = transformType context methodInfo.Type
+                }
+                : FSharpParameter
+
+            | GlueMember.Property propertyInfo ->
+                let name, context =
+                    sanitizeNameAndPushScope propertyInfo.Name context
+
+                {
+                    Name = name
+                    IsOptional = propertyInfo.IsOptional
+                    Type = transformType context propertyInfo.Type
+                }
+                : FSharpParameter
+
+            | GlueMember.IndexSignature indexSignature ->
+                let name, context = sanitizeNameAndPushScope "Item" context
+
+                {
+                    Name = name
+                    IsOptional = false
+                    Type = transformType context indexSignature.Type
+                }
+                : FSharpParameter
+
+            | GlueMember.MethodSignature methodSignature ->
+                let name, context =
+                    sanitizeNameAndPushScope methodSignature.Name context
+
+                {
+                    Name = name
+                    IsOptional = false
+                    Type = transformType context methodSignature.Type
+                }
+                : FSharpParameter
+
+            | GlueMember.CallSignature callSignatureInfo ->
+                let name, context = sanitizeNameAndPushScope "Invoke" context
+
+                {
+                    Name = name
+                    IsOptional = false
+                    Type = transformType context callSignatureInfo.Type
+                }
+                : FSharpParameter
+        )
 
 let private transformInterface
     (context: TransformContext)
     (info: GlueInterface)
     : FSharpInterface
     =
+    let name, context = sanitizeNameAndPushScope info.Name context
+
     {
         Attributes = [ FSharpAttribute.AllowNullLiteral ]
-        Name = Naming.sanitizeName info.Name
-        Members = transformMembers context info.Members
+        Name = name
+        Members = TransformMembers.toFSharpMember context info.Members
         TypeParameters = transformTypeParameters context info.TypeParameters
     }
 
@@ -674,7 +802,8 @@ let private transformTypeAliasDeclaration
     : FSharpType
     =
 
-    let typeAliasName = Naming.sanitizeName glueTypeAliasDeclaration.Name
+    let typeAliasName, context =
+        sanitizeNameAndPushScope glueTypeAliasDeclaration.Name context
 
     // TODO: Make the transformation more robust
     match glueTypeAliasDeclaration.Type with
@@ -976,7 +1105,8 @@ let private transformTypeAliasDeclaration
                 transformTypeParameters
                     context
                     glueTypeAliasDeclaration.TypeParameters
-            Members = transformMembers context typeLiteralInfo.Members
+            Members =
+                TransformMembers.toFSharpMember context typeLiteralInfo.Members
         }
         |> FSharpType.Interface
 
@@ -1008,10 +1138,13 @@ let private transformClassDeclaration
     (classDeclaration: GlueClassDeclaration)
     : FSharpType
     =
+    let name, context = sanitizeNameAndPushScope classDeclaration.Name context
+
     ({
         Attributes = [ FSharpAttribute.AllowNullLiteral ]
-        Name = Naming.sanitizeName classDeclaration.Name
-        Members = transformMembers context classDeclaration.Members
+        Name = name
+        Members =
+            TransformMembers.toFSharpMember context classDeclaration.Members
         TypeParameters =
             transformTypeParameters context classDeclaration.TypeParameters
     }
@@ -1041,14 +1174,6 @@ let rec private transformToFsharp
             let context = context.PushScope(interfaceInfo.Name)
 
             FSharpType.Interface(transformInterface context interfaceInfo)
-        // [
-        //     {
-        //         Name = interfaceInfo.Name
-        //         IsRecursive = false
-        //         Types = []
-        //     }
-        //     |> FSharpType.Module
-        // ]
 
         | GlueType.Enum enumInfo -> transformEnum enumInfo
 
