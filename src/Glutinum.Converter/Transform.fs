@@ -299,12 +299,14 @@ let private transformExports
         |> List.collect (
             function
             | GlueType.Variable info ->
+                let name, context = sanitizeNameAndPushScope info.Name context
+
                 {
                     Attributes = [ FSharpAttribute.Import(info.Name, "module") ]
-                    Name = Naming.sanitizeName info.Name
+                    Name = name
                     Parameters = []
                     TypeParameters = []
-                    Type = (transformType context) info.Type
+                    Type = transformType context info.Type
                     IsOptional = false
                     IsStatic = true
                     Accessor = None
@@ -314,9 +316,11 @@ let private transformExports
                 |> List.singleton
 
             | GlueType.FunctionDeclaration info ->
+                let name, context = sanitizeNameAndPushScope info.Name context
+
                 {
                     Attributes = [ FSharpAttribute.Import(info.Name, "module") ]
-                    Name = Naming.sanitizeName info.Name
+                    Name = name
                     Parameters =
                         info.Parameters |> List.map (transformParameter context)
                     TypeParameters =
@@ -332,6 +336,7 @@ let private transformExports
 
             | GlueType.ClassDeclaration info ->
                 // TODO: Handle constructor overloads
+                let name, context = sanitizeNameAndPushScope info.Name context
 
                 info.Constructors
                 |> List.map (fun (GlueConstructor parameters) ->
@@ -345,7 +350,7 @@ let private transformExports
                                     FSharpAttribute.EmitMacroConstructor
                                         info.Name
                             ]
-                        Name = Naming.sanitizeName info.Name
+                        Name = name
                         Parameters =
                             parameters |> List.map (transformParameter context)
                         TypeParameters =
@@ -1200,6 +1205,7 @@ let rec private transformToFsharp
         | GlueType.Discard
         | GlueType.TupleType _
         | GlueType.IntersectionType _
+        | GlueType.TypeLiteral _
         | GlueType.ThisType _ -> FSharpType.Discard
     )
 
