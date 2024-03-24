@@ -6,14 +6,14 @@ open System
 [<Erase>]
 type Exports =
     [<Import("date", "module")>]
-    static member date: DateTime = nativeOnly
+    static member date: JS.Date = nativeOnly
 
 [<AllowNullLiteral>]
 type MyDate =
-    abstract member toDate: unit -> DateTime
+    abstract member toDate: unit -> JS.Date
 
 type MyDateUnion =
-    U2<string, DateTime>
+    U2<string, JS.Date>
 
 (***)
 #r "nuget: Fable.Core"

@@ -34,7 +34,7 @@ let escapeName (name: string) : string =
 
 let mapTypeNameToFableCoreAwareName (name: string) : string =
     match name with
-    | "Date" -> "DateTime"
+    | "Date" -> "JS.Date"
     | "Promise" -> "JS.Promise"
     | "Uint8Array" -> "JS.Uint8Array"
     | name -> name
