@@ -27,14 +27,17 @@ type GlueASTViewer =
     static member private IsStatic(isStatic: bool) =
         ASTViewer.renderKeyValue "IsStatic" (string isStatic)
 
+    static member private IsSpread(isSpread: bool) =
+        ASTViewer.renderKeyValue "IsSpread" (string isSpread)
+
     static member private Parameters(parameters: GlueParameter list) =
         parameters
         |> List.map (fun parameter ->
             ASTViewer.renderNode "Parameter" [
                 GlueASTViewer.Name parameter.Name
-                ASTViewer.renderNode "Type" [
-                    GlueASTViewer.GlueType parameter.Type
-                ]
+                GlueASTViewer.IsOptional parameter.IsOptional
+                GlueASTViewer.IsSpread parameter.IsSpread
+                GlueASTViewer.Type parameter.Type
             ]
         )
         |> ASTViewer.renderNode "Parameters"

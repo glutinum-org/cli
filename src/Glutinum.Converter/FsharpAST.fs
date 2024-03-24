@@ -174,9 +174,11 @@ type FSharpAttribute =
     | EmitIndexer
     | Global
     | ParamObject
+    | ParamArray
 
 type FSharpParameter =
     {
+        Attributes: FSharpAttribute list
         Name: string
         IsOptional: bool
         Type: FSharpType

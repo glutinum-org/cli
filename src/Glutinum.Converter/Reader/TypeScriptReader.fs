@@ -9,7 +9,7 @@ open Glutinum.Converter.Reader.FunctionDeclaration
 open Glutinum.Converter.Reader.IndexedAccessType
 open Glutinum.Converter.Reader.InterfaceDeclaration
 open Glutinum.Converter.Reader.ModuleDeclaration
-open Glutinum.Converter.Reader.NamedDeclaration
+open Glutinum.Converter.Reader.Declaration
 open Glutinum.Converter.Reader.Node
 open Glutinum.Converter.Reader.Parameters
 open Glutinum.Converter.Reader.TypeAliasDeclaration
@@ -85,11 +85,8 @@ type TypeScriptReader(checker: Ts.TypeChecker) =
             =
             readVariableStatement this variableStatement
 
-        member this.ReadNamedDeclaration
-            (declaration: Ts.Declaration)
-            : GlueMember
-            =
-            readNamedDeclaration this declaration
+        member this.ReadDeclaration(declaration: Ts.Declaration) : GlueMember =
+            readDeclaration this declaration
 
         member this.ReadParameters
             (parameters: ResizeArray<Ts.ParameterDeclaration>)

@@ -81,6 +81,8 @@ type FSharpASTViewer =
 
         | FSharpAttribute.EmitSelf -> ASTViewer.renderValueOnly "EmitSelf"
 
+        | FSharpAttribute.ParamArray -> ASTViewer.renderValueOnly "ParamArray"
+
     static member private Attributes(attributes: FSharpAttribute list) =
         attributes
         |> List.map FSharpASTViewer.FSharpAttribute
@@ -117,6 +119,7 @@ type FSharpASTViewer =
         ASTViewer.renderNode "Parameter" [
             FSharpASTViewer.Name parameter.Name
             FSharpASTViewer.IsOptional parameter.IsOptional
+            FSharpASTViewer.Attributes parameter.Attributes
             FSharpASTViewer.Type parameter.Type
         ]
 

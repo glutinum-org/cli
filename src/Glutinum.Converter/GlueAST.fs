@@ -15,6 +15,7 @@ type GlueParameter =
     {
         Name: string
         IsOptional: bool
+        IsSpread: bool
         Type: GlueType
     }
 

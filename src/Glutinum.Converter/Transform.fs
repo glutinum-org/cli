@@ -414,9 +414,14 @@ let private transformParameter
     let context = context.PushScope(parameter.Name)
 
     {
+        Attributes =
+            [
+                if parameter.IsSpread then
+                    FSharpAttribute.ParamArray
+            ]
         Name = Naming.sanitizeName parameter.Name
         IsOptional = parameter.IsOptional
-        Type = (transformType context) parameter.Type
+        Type = transformType context parameter.Type
     }
 
 let private transformAccessor (accessor: GlueAccessor) : FSharpAccessor =
@@ -540,6 +545,7 @@ module private TransformMembers =
                     sanitizeNameAndPushScope methodInfo.Name context
 
                 {
+                    Attributes = []
                     Name = name
                     IsOptional = methodInfo.IsOptional
                     Type = transformType context methodInfo.Type
@@ -551,6 +557,7 @@ module private TransformMembers =
                     sanitizeNameAndPushScope propertyInfo.Name context
 
                 {
+                    Attributes = []
                     Name = name
                     IsOptional = propertyInfo.IsOptional
                     Type = transformType context propertyInfo.Type
@@ -561,6 +568,7 @@ module private TransformMembers =
                 let name, context = sanitizeNameAndPushScope "Item" context
 
                 {
+                    Attributes = []
                     Name = name
                     IsOptional = false
                     Type = transformType context indexSignature.Type
@@ -572,6 +580,7 @@ module private TransformMembers =
                     sanitizeNameAndPushScope methodSignature.Name context
 
                 {
+                    Attributes = []
                     Name = name
                     IsOptional = false
                     Type = transformType context methodSignature.Type
@@ -582,6 +591,7 @@ module private TransformMembers =
                 let name, context = sanitizeNameAndPushScope "Invoke" context
 
                 {
+                    Attributes = []
                     Name = name
                     IsOptional = false
                     Type = transformType context callSignatureInfo.Type

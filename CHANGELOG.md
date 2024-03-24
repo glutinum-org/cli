@@ -97,6 +97,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
         abstract member error: string option with get, set
     ```
 
+* Add support for argument spread operator ([GH-57](https://github.com/glutinum-org/cli/issues/57))
+
 ### Changed
 
 * Replace `Boolean` with `bool`

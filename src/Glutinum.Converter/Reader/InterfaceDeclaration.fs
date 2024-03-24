@@ -11,9 +11,7 @@ let readInterfaceDeclaration
     =
 
     let members =
-        declaration.members
-        |> Seq.toList
-        |> List.map reader.ReadNamedDeclaration
+        declaration.members |> Seq.toList |> List.map reader.ReadDeclaration
 
     {
         Name = declaration.name.getText ()

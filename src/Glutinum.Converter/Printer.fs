@@ -69,6 +69,14 @@ let private sanitizeEnumCaseName (name: string) =
         $"``{name}``"
     | _ -> name
 
+let private hasParamArrayAttribute (attributes: FSharpAttribute list) =
+    attributes
+    |> List.exists (
+        function
+        | FSharpAttribute.ParamArray -> true
+        | _ -> false
+    )
+
 let private attributeToText (fsharpAttribute: FSharpAttribute) =
     match fsharpAttribute with
     | FSharpAttribute.Text text -> text
@@ -98,6 +106,7 @@ let private attributeToText (fsharpAttribute: FSharpAttribute) =
     | FSharpAttribute.Global -> "[<Global>]"
     | FSharpAttribute.ParamObject -> "[<ParamObject>]"
     | FSharpAttribute.EmitSelf -> "[<Emit(\"$0\")>]"
+    | FSharpAttribute.ParamArray -> "[<ParamArray>]"
 
 let private printInlineAttribute
     (printer: Printer)
@@ -302,10 +311,15 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
                         if index <> 0 then
                             printer.WriteInline(", ")
 
+                        printInlineAttributes printer p.Attributes
+
                         if p.IsOptional then
                             printer.WriteInline("?")
 
                         printer.WriteInline($"{p.Name}: {printType p.Type}")
+
+                        if hasParamArrayAttribute p.Attributes then
+                            printer.WriteInline(" []")
                     )
 
                     printer.WriteInline(")")
@@ -321,10 +335,15 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
                         if index <> 0 then
                             printer.WriteInline(" * ")
 
+                        printInlineAttributes printer p.Attributes
+
                         if p.IsOptional then
                             printer.WriteInline("?")
 
                         printer.WriteInline($"{p.Name}: {printType p.Type}")
+
+                        if hasParamArrayAttribute p.Attributes then
+                            printer.WriteInline(" []")
                     )
 
             if methodInfo.IsStatic then
@@ -436,6 +455,9 @@ let private printPrimaryConstructor
             printer.Write("") // Empty string to have the correct indentation
 
         printer.WriteInline($"{p.Name}: {printType p.Type}")
+
+        if hasParamArrayAttribute p.Attributes then
+            printer.WriteInline(" []")
     )
 
     printer.Unindent
@@ -469,6 +491,9 @@ let private printClass (printer: Printer) (classInfo: FSharpClass) =
                     printer.WriteInline("?")
 
                 printer.WriteInline($"{p.Name}: {printType p.Type}")
+
+                if hasParamArrayAttribute p.Attributes then
+                    printer.WriteInline(" []")
             )
 
             printer.WriteInline(") =")

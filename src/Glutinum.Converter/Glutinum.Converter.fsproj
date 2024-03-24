@@ -20,7 +20,7 @@
     <Compile Include="Reader/IndexedAccessType.fs" />
     <Compile Include="Reader/InterfaceDeclaration.fs" />
     <Compile Include="Reader/ModuleDeclaration.fs" />
-    <Compile Include="Reader/NamedDeclaration.fs" />
+    <Compile Include="Reader/Declaration.fs" />
     <Compile Include="Reader/Node.fs" />
     <Compile Include="Reader/Parameters.fs" />
     <Compile Include="Reader/TypeAliasDeclaration.fs" />

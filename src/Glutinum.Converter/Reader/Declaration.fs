@@ -1,11 +1,11 @@
-module Glutinum.Converter.Reader.NamedDeclaration
+module Glutinum.Converter.Reader.Declaration
 
 open Glutinum.Converter.GlueAST
 open Glutinum.Converter.Reader.Types
 open TypeScript
 open Fable.Core.JsInterop
 
-let readNamedDeclaration
+let readDeclaration
     (reader: ITypeScriptReader)
     (declaration: Ts.Declaration)
     : GlueMember

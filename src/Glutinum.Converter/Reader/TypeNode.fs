@@ -115,7 +115,7 @@ let readTypeNode
                             let members =
                                 interfaceDeclaration.members
                                 |> Seq.toList
-                                |> List.map reader.ReadNamedDeclaration
+                                |> List.map reader.ReadDeclaration
 
                             ({
                                 Name = interfaceDeclaration.name.getText ()
@@ -233,7 +233,7 @@ let readTypeNode
             match property.declarations with
             | Some declarations ->
                 if declarations.Count = 1 then
-                    reader.ReadNamedDeclaration declarations.[0]
+                    reader.ReadDeclaration declarations.[0]
                 else
                     generateReaderError
                         "type node"
@@ -248,70 +248,13 @@ let readTypeNode
         )
         |> GlueType.IntersectionType
 
-    // let properties =
-    //     unionOrIntersectionType.getProperties()
-    //     |> Seq.map (fun property ->
-    //         match property.declarations with
-    //         | Some declarations ->
-    //             if declarations.Count = 1 then
-    //                 let declaration = declarations.[0]
-
-    //                 let x = reader.ReadNamedDeclaration declaration
-
-    //                 match declaration.kind with
-    //                 | Ts.SyntaxKind.PropertySignature ->
-    //                     let propertySignature = declaration :?> Ts.PropertySignature
-    //                     let name = unbox<Ts.Node> propertySignature.name
-
-    //                     let accessor =
-    //                         match propertySignature.modifiers with
-    //                         | Some modifiers ->
-    //                             modifiers
-    //                             |> Seq.exists (fun modifier ->
-    //                                 modifier?kind = Ts.SyntaxKind.ReadonlyKeyword
-    //                             )
-    //                             |> function
-    //                                 | true -> GlueAccessor.ReadOnly
-    //                                 | false -> GlueAccessor.ReadWrite
-    //                         | None -> GlueAccessor.ReadWrite
-
-    //                     ({
-    //                         Name = name.getText ()
-    //                         Type = reader.ReadTypeNode propertySignature.``type``
-    //                         IsOptional = propertySignature.questionToken.IsSome
-    //                         IsStatic = false
-    //                         Accessor = accessor
-    //                     }
-    //                     : GlueProperty)
-    //                     |> GlueMember.Property
-    //             else
-    //                 generateReaderError
-    //                     "type node"
-    //                     "Gutinum expects only one declaration for a type reference. Please report this issue, if you see this message."
-    //                     typeNode
-    //                 |> TypeScriptReaderException
-    //                 |> raise
-    //         | None ->
-    //             generateReaderError
-    //                 "type node"
-    //                 "Missing declarations"
-    //                 typeNode
-    //             |> TypeScriptReaderException
-    //             |> raise
-    //     )
-
-    // // intersectionTypeNode.types
-    // // |> Seq.toList
-    // // |> List.map (Some >> reader.ReadTypeNode)
-    // // |> GlueType.IntersectionType
-
     | Ts.SyntaxKind.TypeLiteral ->
         let typeLiteralNode = typeNode :?> Ts.TypeLiteralNode
 
         let members =
             typeLiteralNode.members
             |> Seq.toList
-            |> List.map reader.ReadNamedDeclaration
+            |> List.map reader.ReadDeclaration
 
         ({ Members = members }: GlueTypeLiteral) |> GlueType.TypeLiteral
 

@@ -7,6 +7,7 @@ open TypeScript
 let readParameters
     (reader: ITypeScriptReader)
     (parameters: ResizeArray<Ts.ParameterDeclaration>)
+    : GlueParameter list
     =
     parameters
     |> Seq.toList
@@ -16,6 +17,7 @@ let readParameters
         {
             Name = name.getText ()
             IsOptional = parameter.questionToken.IsSome
+            IsSpread = parameter.dotDotDotToken.IsSome
             Type = reader.ReadTypeNode parameter.``type``
         }
     )

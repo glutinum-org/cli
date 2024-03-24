@@ -43,7 +43,7 @@ type ITypeScriptReader =
     abstract ReadParameters:
         parameters: ResizeArray<Ts.ParameterDeclaration> -> GlueParameter list
 
-    abstract ReadNamedDeclaration: declaration: Ts.Declaration -> GlueMember
+    abstract ReadDeclaration: declaration: Ts.Declaration -> GlueMember
 
     abstract ReadUnionTypeNode: unionType: Ts.UnionTypeNode -> GlueType
 
