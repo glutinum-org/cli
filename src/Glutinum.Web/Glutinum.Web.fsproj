@@ -43,6 +43,5 @@
     <PackageReference Include="Glutinum.IconifyIcons.SimpleIcons" />
     <PackageReference Include="Thoth.Elmish.Debouncer" />
     <PackageReference Include="Thoth.Elmish.Toast" />
-    <PackageReference Include="Thoth.Json.JavaScript" />
   </ItemGroup>
 </Project>

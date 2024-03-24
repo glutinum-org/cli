@@ -40,7 +40,6 @@ let readClassDeclaration
 
     {
         Name = name.getText ()
-        TypeRefId = Utils.getTypeRef reader.checker classDeclaration
         Constructors = constructors
         Members = members
         TypeParameters = []

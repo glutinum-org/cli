@@ -10,9 +10,8 @@ exception TypeScriptReaderException of message: string
 [<Mangle>]
 type ITypeScriptReader =
     abstract checker: Ts.TypeChecker with get
-    abstract ts: Ts.IExports with get
+
     abstract Warnings: ResizeArray<string> with get
-    abstract TypeReferences: Dictionary<string, GlueType> with get
 
     abstract ReadNode: node: Ts.Node -> GlueType
 

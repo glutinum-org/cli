@@ -1073,20 +1073,6 @@ let private transformTypeAliasDeclaration
         |> FSharpType.TypeAlias
 
     | GlueType.IntersectionType members ->
-        // let members =
-        //     types
-        //     |> List.map (transformType context)
-        //     |> List.choose (fun typ ->
-        //         match typ with
-        //         | FSharpType.TypeReference typeReference ->
-        //             match typeReference.Type with
-        //             | FSharpType.Interface interfaceInfo ->
-        //                 Some interfaceInfo.Members
-        //             | _ -> None
-        //         | _ -> None
-        //     )
-        //     |> List.concat
-
         {
             Attributes = [ FSharpAttribute.AllowNullLiteral ]
             Name = typeAliasName

@@ -84,39 +84,3 @@ let tryGetFullName (checker: Ts.TypeChecker) (node: Ts.Node) =
 
 let getFullNameOrEmpty (checker: Ts.TypeChecker) (node: Ts.Node) =
     tryGetFullName checker node |> Option.defaultValue ""
-
-let getTypeRef (checker: Ts.TypeChecker) (node: Ts.Node) =
-    match node.kind with
-    | Ts.SyntaxKind.ClassDeclaration ->
-        let classDeclaration = node :?> Ts.ClassDeclaration
-
-        match classDeclaration.name with
-        | None -> None
-
-        | Some name ->
-            let symbol = checker.getSymbolAtLocation name
-
-            match symbol with
-            | None -> None
-            | Some symbol ->
-                checker.getFullyQualifiedName symbol + "#ClassDeclaration"
-                |> Some
-
-    | Ts.SyntaxKind.InterfaceDeclaration ->
-        let interfaceDeclaration = node :?> Ts.InterfaceDeclaration
-
-        let symbol = checker.getSymbolAtLocation interfaceDeclaration.name
-
-        match symbol with
-        | None -> None
-        | Some symbol ->
-            checker.getFullyQualifiedName symbol + "#InterfaceDeclaration"
-            |> Some
-
-    | _ -> None
-// generateReaderError
-//     "getTypeRef"
-//     "Expected a class declaration"
-//     node
-// |> TypeScriptReaderException
-// |> raise

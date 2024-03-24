@@ -119,10 +119,6 @@ let readTypeNode
 
                             ({
                                 Name = interfaceDeclaration.name.getText ()
-                                TypeRefId =
-                                    getTypeRef
-                                        reader.checker
-                                        interfaceDeclaration
                                 Members = members
                                 TypeParameters = []
                             }
@@ -145,45 +141,10 @@ let readTypeNode
                         |> Seq.toList
                         |> List.map (Some >> reader.ReadTypeNode)
 
-                // Note: Should this be made Lazy?
-                // Is there a risk for infinite loop?
-                let typ =
-                    // match symbolOpt.Value.declarations with
-                    // | Some declarations ->
-                    //     if declarations.Count = 1 then
-                    //         let declarationSymbol : Ts.Symbol =
-                    //             declarations.[0]?symbol
-
-                    //         if declarationSymbol = null then
-                    //             None
-                    //         else
-                    //             checker.getFullyQualifiedName declarationSymbol
-                    //             |> Some
-                    //     else
-                    //         generateReaderError
-                    //             "type node"
-                    //             "Gutinum expects only one declaration for a type reference. Please report this issue, if you see this message."
-                    //             typeReferenceNode
-                    //         |> TypeScriptReaderException
-                    //         |> raise
-                    // | None ->
-                    //     // TODO: Should we create a special type to represent a type information
-                    //     // we could not get?
-                    //     // Should we make the type of the TypeReference an option?
-                    //     None
-                    match symbolOpt.Value.declarations with
-                    | Some declarations ->
-                        if declarations.Count = 1 then
-                            getTypeRef checker declarations.[0]
-                        else
-                            None
-                    | None -> None
-
                 ({
                     Name = typeReferenceNode.typeName?getText () // TODO: Remove dynamic typing
                     FullName = fullName
                     TypeArguments = typeArguments
-                    TypeRef = typ
                 })
                 |> GlueType.TypeReference
 
@@ -214,7 +175,6 @@ let readTypeNode
         | HasSymbolFlags Ts.SymbolFlags.Class ->
             {
                 Name = typ.symbol.name
-                TypeRefId = None //Utils.getTypeRef typ.symbol
                 Constructors = []
                 Members = []
                 TypeParameters = []

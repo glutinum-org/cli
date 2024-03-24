@@ -21,7 +21,5 @@
     <PackageVersion Include="Glutinum.IconifyIcons.SimpleIcons" Version="1.0.0" />
     <PackageVersion Include="Thoth.Elmish.Debouncer" Version="2.1.0" />
     <PackageVersion Include="Thoth.Elmish.Toast" Version="4.0.0" />
-    <PackageVersion Include="Thoth.Json.Core" Version="0.2.1" />
-    <PackageVersion Include="Thoth.Json.JavaScript" Version="0.1.0" />
   </ItemGroup>
 </Project>
