@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * String enums starting with a number should be escaped with backtick ([GH-43](https://github.com/glutinum-org/cli/issues/43))
 * Optional interface properties should be transform into `'T option`
 * Don't indent module name when printing the F# code
+* When leaving `module` scope, indent the printer memory
 
 ### Added
 

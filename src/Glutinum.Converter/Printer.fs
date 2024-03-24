@@ -580,6 +580,7 @@ let rec print (printer: Printer) (fsharpTypes: FSharpType list) =
 
             printer.Indent
             print printer moduleInfo.Types
+            printer.Unindent
 
         // TODO: Make print return the tail
         // Allowing module to eat they content and be able to unindent?
