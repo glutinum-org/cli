@@ -169,6 +169,7 @@ type GlueMember =
 type GlueInterface =
     {
         Name: string
+        TypeRefId: string option
         Members: GlueMember list
         TypeParameters: GlueTypeParameter list
     }
@@ -252,6 +253,7 @@ type GlueConstructor = GlueConstructor of GlueParameter list
 type GlueClassDeclaration =
     {
         Name: string
+        TypeRefId: string option
         Constructors: GlueConstructor list
         Members: GlueMember list
         TypeParameters: GlueTypeParameter list
@@ -262,7 +264,16 @@ type GlueTypeReference =
         Name: string
         FullName: string
         TypeArguments: GlueType list
-        Type: GlueType
+        /// <summary>
+        /// FullName of the type reference.
+        ///
+        /// <remarks>
+        /// We need to store the FullName of the type reference instead of a real
+        /// type because if a Type is using itself as a TypeReference, it will
+        /// create an infinite loop.
+        /// </remarks>
+        /// </summary>
+        TypeRef: string option
     }
 
 type GlueTypeUnion = GlueTypeUnion of GlueType list
@@ -299,7 +310,7 @@ type GlueType =
     | TypeParameter of string
     | ThisType of typeName: string
     | TupleType of GlueType list
-    | IntersectionType of GlueType list
+    | IntersectionType of GlueMember list
     | TypeLiteral of GlueTypeLiteral
 
     member this.Name =
@@ -342,3 +353,8 @@ type GlueType =
         | Interface interfaceInfo ->
             Encode.object [ "Interface", GlueInterface.Encoder interfaceInfo ]
         | _ -> Encode.string "not yet implemented"
+
+    member this.TypeReferenceId =
+        match this with
+        | ClassDeclaration info -> info.TypeRefId
+        | _ -> None

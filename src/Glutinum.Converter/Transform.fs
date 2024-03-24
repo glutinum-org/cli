@@ -170,7 +170,8 @@ let rec private transformType
             FullName = typeReference.FullName
             TypeArguments =
                 typeReference.TypeArguments |> List.map (transformType context)
-            Type = (transformType context) typeReference.Type
+            Type = //transformType context typeReference.TypeRef
+                FSharpType.Discard
         }
         : FSharpTypeReference)
         |> FSharpType.TypeReference
@@ -1071,20 +1072,20 @@ let private transformTypeAliasDeclaration
         : FSharpTypeAlias)
         |> FSharpType.TypeAlias
 
-    | GlueType.IntersectionType types ->
-        let members =
-            types
-            |> List.map (transformType context)
-            |> List.choose (fun typ ->
-                match typ with
-                | FSharpType.TypeReference typeReference ->
-                    match typeReference.Type with
-                    | FSharpType.Interface interfaceInfo ->
-                        Some interfaceInfo.Members
-                    | _ -> None
-                | _ -> None
-            )
-            |> List.concat
+    | GlueType.IntersectionType members ->
+        // let members =
+        //     types
+        //     |> List.map (transformType context)
+        //     |> List.choose (fun typ ->
+        //         match typ with
+        //         | FSharpType.TypeReference typeReference ->
+        //             match typeReference.Type with
+        //             | FSharpType.Interface interfaceInfo ->
+        //                 Some interfaceInfo.Members
+        //             | _ -> None
+        //         | _ -> None
+        //     )
+        //     |> List.concat
 
         {
             Attributes = [ FSharpAttribute.AllowNullLiteral ]
@@ -1093,7 +1094,7 @@ let private transformTypeAliasDeclaration
                 transformTypeParameters
                     context
                     glueTypeAliasDeclaration.TypeParameters
-            Members = members
+            Members = TransformMembers.toFSharpMember context members
         }
         |> FSharpType.Interface
 

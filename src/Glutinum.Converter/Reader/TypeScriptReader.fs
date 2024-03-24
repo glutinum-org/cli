@@ -18,15 +18,28 @@ open Glutinum.Converter.Reader.TypeOperatorNode
 open Glutinum.Converter.Reader.TypeParameters
 open Glutinum.Converter.Reader.UnionTypeNode
 open Glutinum.Converter.Reader.VariableStatement
+open System.Collections.Generic
 
 type TypeScriptReader(checker: Ts.TypeChecker) =
     let warnings = ResizeArray<string>()
+    let typeReferences = Dictionary<string, GlueType>()
+
+    let saveTypeReference (typ: GlueType) =
+        match typ.TypeReferenceId with
+        | Some id -> typeReferences.Add(id, typ)
+        | None -> ()
+
+        typ
 
     interface ITypeScriptReader with
 
         override _.checker: Ts.TypeChecker = checker
 
+        override _.ts: Ts.IExports = ts
+
         member _.Warnings = warnings
+
+        member _.TypeReferences = typeReferences
 
         member this.ReadClassDeclaration
             (classDeclaration: Ts.ClassDeclaration)
@@ -34,6 +47,7 @@ type TypeScriptReader(checker: Ts.TypeChecker) =
             =
             readClassDeclaration this classDeclaration
             |> GlueType.ClassDeclaration
+            |> saveTypeReference
 
         member this.ReadEnumDeclaration
             (enumDeclaration: Ts.EnumDeclaration)
@@ -85,7 +99,7 @@ type TypeScriptReader(checker: Ts.TypeChecker) =
             readVariableStatement this variableStatement
 
         member this.ReadNamedDeclaration
-            (declaration: Ts.NamedDeclaration)
+            (declaration: Ts.Declaration)
             : GlueMember
             =
             readNamedDeclaration this declaration

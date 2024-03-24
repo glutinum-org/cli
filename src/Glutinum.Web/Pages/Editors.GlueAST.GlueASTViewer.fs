@@ -18,6 +18,12 @@ type GlueASTViewer =
     static member private Name(name: string) =
         ASTViewer.renderKeyValue "Name" name
 
+    static member private FullName(fullName: string) =
+        ASTViewer.renderKeyValue "FullName" fullName
+
+    static member private TypeRefId(typeRefId: string option) =
+        ASTViewer.renderKeyValueOption "TypeRefId" id typeRefId
+
     static member private IsOptional(isOptional: bool) =
         ASTViewer.renderKeyValue "IsOptional" (string isOptional)
 
@@ -151,6 +157,7 @@ type GlueASTViewer =
                 "Interface"
                 [
                     GlueASTViewer.Name interfaceInfo.Name
+                    GlueASTViewer.TypeRefId interfaceInfo.TypeRefId
                     GlueASTViewer.Members interfaceInfo.Members
                 ]
                 context
@@ -232,6 +239,7 @@ type GlueASTViewer =
                 "ClassDeclaration"
                 [
                     GlueASTViewer.Name classDeclaration.Name
+                    GlueASTViewer.TypeRefId classDeclaration.TypeRefId
                     GlueASTViewer.Constructors classDeclaration.Constructors
                     GlueASTViewer.TypeParameters classDeclaration.TypeParameters
                     classDeclaration.Members
@@ -328,19 +336,22 @@ type GlueASTViewer =
                 [
                     GlueASTViewer.Name typeReference.Name
                     ASTViewer.renderKeyValue "FullName" typeReference.FullName
+                    ASTViewer.renderKeyValueOption
+                        "TypeRef"
+                        id
+                        typeReference.TypeRef
 
                     typeReference.TypeArguments
                     |> List.map GlueASTViewer.GlueType
                     |> ASTViewer.renderNode "TypeArguments"
 
-                    GlueASTViewer.Type typeReference.Type
                 ]
                 context
 
         | GlueType.IntersectionType intersectionType ->
             ASTViewer.renderNode
                 "IntersectionType"
-                (intersectionType |> List.map GlueASTViewer.GlueType)
+                (intersectionType |> List.map GlueASTViewer.GlueMember)
                 context
 
         | GlueType.TypeLiteral typeLiteral ->

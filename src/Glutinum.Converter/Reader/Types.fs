@@ -3,13 +3,16 @@ module Glutinum.Converter.Reader.Types
 open Fable.Core
 open TypeScript
 open Glutinum.Converter.GlueAST
+open System.Collections.Generic
 
 exception TypeScriptReaderException of message: string
 
 [<Mangle>]
 type ITypeScriptReader =
     abstract checker: Ts.TypeChecker with get
+    abstract ts: Ts.IExports with get
     abstract Warnings: ResizeArray<string> with get
+    abstract TypeReferences: Dictionary<string, GlueType> with get
 
     abstract ReadNode: node: Ts.Node -> GlueType
 
@@ -41,8 +44,7 @@ type ITypeScriptReader =
     abstract ReadParameters:
         parameters: ResizeArray<Ts.ParameterDeclaration> -> GlueParameter list
 
-    abstract ReadNamedDeclaration:
-        declaration: Ts.NamedDeclaration -> GlueMember
+    abstract ReadNamedDeclaration: declaration: Ts.Declaration -> GlueMember
 
     abstract ReadUnionTypeNode: unionType: Ts.UnionTypeNode -> GlueType
 

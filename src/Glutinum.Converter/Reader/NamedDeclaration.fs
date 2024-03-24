@@ -7,7 +7,7 @@ open Fable.Core.JsInterop
 
 let readNamedDeclaration
     (reader: ITypeScriptReader)
-    (declaration: Ts.NamedDeclaration)
+    (declaration: Ts.Declaration)
     : GlueMember
     =
     match declaration.kind with

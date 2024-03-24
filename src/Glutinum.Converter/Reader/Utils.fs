@@ -4,6 +4,7 @@ open TypeScript
 open Glutinum.Converter.GlueAST
 open Fable.Core.JS
 open Fable.Core.JsInterop
+open Glutinum.Converter.Reader.Types
 
 let (|HasTypeFlags|_|) (flag: Ts.TypeFlags) (flags: Ts.TypeFlags) =
     if int flags &&& int flag <> 0 then
@@ -12,6 +13,12 @@ let (|HasTypeFlags|_|) (flag: Ts.TypeFlags) (flags: Ts.TypeFlags) =
         None
 
 let (|HasSymbolFlags|_|) (flag: Ts.SymbolFlags) (flags: Ts.SymbolFlags) =
+    if int flags &&& int flag <> 0 then
+        Some()
+    else
+        None
+
+let (|HasObjectFlags|_|) (flag: Ts.ObjectFlags) (flags: Ts.ObjectFlags) =
     if int flags &&& int flag <> 0 then
         Some()
     else
@@ -74,3 +81,42 @@ let tryGetFullName (checker: Ts.TypeChecker) (node: Ts.Node) =
     match checker.getSymbolAtLocation node with
     | None -> None
     | Some symbol -> checker.getFullyQualifiedName symbol |> Some
+
+let getFullNameOrEmpty (checker: Ts.TypeChecker) (node: Ts.Node) =
+    tryGetFullName checker node |> Option.defaultValue ""
+
+let getTypeRef (checker: Ts.TypeChecker) (node: Ts.Node) =
+    match node.kind with
+    | Ts.SyntaxKind.ClassDeclaration ->
+        let classDeclaration = node :?> Ts.ClassDeclaration
+
+        match classDeclaration.name with
+        | None -> None
+
+        | Some name ->
+            let symbol = checker.getSymbolAtLocation name
+
+            match symbol with
+            | None -> None
+            | Some symbol ->
+                checker.getFullyQualifiedName symbol + "#ClassDeclaration"
+                |> Some
+
+    | Ts.SyntaxKind.InterfaceDeclaration ->
+        let interfaceDeclaration = node :?> Ts.InterfaceDeclaration
+
+        let symbol = checker.getSymbolAtLocation interfaceDeclaration.name
+
+        match symbol with
+        | None -> None
+        | Some symbol ->
+            checker.getFullyQualifiedName symbol + "#InterfaceDeclaration"
+            |> Some
+
+    | _ -> None
+// generateReaderError
+//     "getTypeRef"
+//     "Expected a class declaration"
+//     node
+// |> TypeScriptReaderException
+// |> raise

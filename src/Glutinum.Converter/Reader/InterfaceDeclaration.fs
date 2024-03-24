@@ -17,6 +17,7 @@ let readInterfaceDeclaration
 
     {
         Name = declaration.name.getText ()
+        TypeRefId = Utils.getTypeRef reader.checker declaration
         Members = members
         TypeParameters = []
     }
