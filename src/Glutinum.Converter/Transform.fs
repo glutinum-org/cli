@@ -406,6 +406,7 @@ let private transformExports
     {
         Attributes = [ FSharpAttribute.Erase ]
         Name = "Exports"
+        OriginalName = "Exports"
         Members = members
         TypeParameters = []
     }
@@ -449,20 +450,36 @@ module private TransformMembers =
                 let name, context =
                     sanitizeNameAndPushScope methodInfo.Name context
 
-                {
-                    Attributes = []
-                    Name = name
-                    Parameters =
-                        methodInfo.Parameters
-                        |> List.map (transformParameter context)
-                    Type = transformType context methodInfo.Type
-                    TypeParameters = []
-                    IsOptional = methodInfo.IsOptional
-                    IsStatic = methodInfo.IsStatic
-                    Accessor = None
-                    Accessibility = FSharpAccessibility.Public
-                }
-                |> FSharpMember.Method
+                if methodInfo.IsStatic then
+                    {
+                        Attributes = []
+                        Name = name
+                        OriginalName = methodInfo.Name
+                        Parameters =
+                            methodInfo.Parameters
+                            |> List.map (transformParameter context)
+                        Type = transformType context methodInfo.Type
+                        TypeParameters = []
+                        IsOptional = methodInfo.IsOptional
+                        Accessor = None
+                        Accessibility = FSharpAccessibility.Public
+                    }
+                    |> FSharpMember.StaticMember
+                else
+                    {
+                        Attributes = []
+                        Name = name
+                        Parameters =
+                            methodInfo.Parameters
+                            |> List.map (transformParameter context)
+                        Type = transformType context methodInfo.Type
+                        TypeParameters = []
+                        IsOptional = methodInfo.IsOptional
+                        IsStatic = methodInfo.IsStatic
+                        Accessor = None
+                        Accessibility = FSharpAccessibility.Public
+                    }
+                    |> FSharpMember.Method
 
             | GlueMember.CallSignature callSignatureInfo ->
                 let name, context = sanitizeNameAndPushScope "Invoke" context
@@ -641,8 +658,10 @@ let private transformInterface
     let name, context = sanitizeNameAndPushScope info.Name context
 
     {
-        Attributes = [ FSharpAttribute.AllowNullLiteral ]
+        Attributes =
+            [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
         Name = name
+        OriginalName = info.Name
         Members = TransformMembers.toFSharpMember context info.Members
         TypeParameters = transformTypeParameters context info.TypeParameters
     }
@@ -1074,6 +1093,9 @@ let private transformTypeAliasDeclaration
                         | FSharpMember.Property property ->
                             { property with IsOptional = true }
                             |> FSharpMember.Property
+                        | FSharpMember.StaticMember staticMember ->
+                            { staticMember with IsOptional = true }
+                            |> FSharpMember.StaticMember
                     )
             }
 
@@ -1081,8 +1103,10 @@ let private transformTypeAliasDeclaration
 
     | GlueType.FunctionType functionType ->
         {
-            Attributes = [ FSharpAttribute.AllowNullLiteral ]
+            Attributes =
+                [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
             Name = typeAliasName
+            OriginalName = glueTypeAliasDeclaration.Name
             TypeParameters =
                 transformTypeParameters
                     context
@@ -1120,8 +1144,10 @@ let private transformTypeAliasDeclaration
 
     | GlueType.IntersectionType members ->
         {
-            Attributes = [ FSharpAttribute.AllowNullLiteral ]
+            Attributes =
+                [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
             Name = typeAliasName
+            OriginalName = glueTypeAliasDeclaration.Name
             TypeParameters =
                 transformTypeParameters
                     context
@@ -1132,8 +1158,10 @@ let private transformTypeAliasDeclaration
 
     | GlueType.TypeLiteral typeLiteralInfo ->
         {
-            Attributes = [ FSharpAttribute.AllowNullLiteral ]
+            Attributes =
+                [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
             Name = typeAliasName
+            OriginalName = glueTypeAliasDeclaration.Name
             TypeParameters =
                 transformTypeParameters
                     context
@@ -1174,8 +1202,10 @@ let private transformClassDeclaration
     let name, context = sanitizeNameAndPushScope classDeclaration.Name context
 
     ({
-        Attributes = [ FSharpAttribute.AllowNullLiteral ]
+        Attributes =
+            [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
         Name = name
+        OriginalName = classDeclaration.Name
         Members =
             TransformMembers.toFSharpMember context classDeclaration.Members
         TypeParameters =
@@ -1187,8 +1217,10 @@ let private transformClassDeclaration
 let private transformFunctionType (functionTypeInfo: GlueFunctionType) =
 
     ({
-        Attributes = [ FSharpAttribute.AllowNullLiteral ]
+        Attributes =
+            [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
         Name = "dwdw"
+        OriginalName = "dwdw"
         Members = []
         TypeParameters = []
     }
@@ -1219,9 +1251,7 @@ let rec private transformToFsharp
         | GlueType.ClassDeclaration classInfo ->
             transformClassDeclaration context classInfo
 
-        | GlueType.FunctionType functionTypeInfo ->
-            transformFunctionType functionTypeInfo
-
+        | GlueType.FunctionType _
         | GlueType.TypeParameter _
         | GlueType.Partial _
         | GlueType.Array _

@@ -107,6 +107,7 @@ let private attributeToText (fsharpAttribute: FSharpAttribute) =
     | FSharpAttribute.ParamObject -> "[<ParamObject>]"
     | FSharpAttribute.EmitSelf -> "[<Emit(\"$0\")>]"
     | FSharpAttribute.ParamArray -> "[<ParamArray>]"
+    | FSharpAttribute.Interface -> "[<Interface>]"
 
 let private printInlineAttribute
     (printer: Printer)
@@ -423,6 +424,91 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
                 |> Option.iter printer.WriteInline
 
             printer.NewLine
+
+        | FSharpMember.StaticMember staticMemberInfo ->
+            printCompactAttributesAndNewLine printer staticMemberInfo.Attributes
+
+            printer.Write($"static member inline {staticMemberInfo.Name} ")
+
+            printTypeParameters printer staticMemberInfo.TypeParameters
+
+            if staticMemberInfo.Parameters.IsEmpty then
+                printer.WriteInline("() =")
+                printer.Indent
+                printer.NewLine
+
+                // I don't know how to print """ from inside an F# string interpolation
+                // so I am using a list of strings and joining them
+                // We want to generate the like with newlines ourselves
+                // like that we can control the indentation and have stuff from the second line
+                // indented on column 0
+                [
+                    "emitJsExpr () $$\"\"\""
+                    "import { Class } from \"module\";"
+                    $"%s{interfaceInfo.OriginalName}.%s{staticMemberInfo.OriginalName}()"
+                ]
+                |> String.concat "\n"
+                |> printer.Write
+
+                // Put the closing """ right after the last line of the list
+                printer.WriteInline "\"\"\""
+
+                printer.NewLine
+
+                printer.Unindent
+
+            else
+                printer.WriteInline("(")
+
+                staticMemberInfo.Parameters
+                |> List.iteri (fun index p ->
+                    if index <> 0 then
+                        printer.WriteInline(", ")
+
+                    printInlineAttributes printer p.Attributes
+
+                    if p.IsOptional then
+                        printer.WriteInline("?")
+
+                    printer.WriteInline($"{p.Name}: {printType p.Type}")
+
+                    if hasParamArrayAttribute p.Attributes then
+                        printer.WriteInline(" []")
+                )
+
+                printer.WriteInline(") =")
+                printer.NewLine
+
+                printer.Indent
+
+                let forwardedArgments =
+                    staticMemberInfo.Parameters
+                    |> List.map (fun p -> p.Name)
+                    |> String.concat ", "
+
+                let macroArguments =
+                    staticMemberInfo.Parameters
+                    |> List.mapi (fun index _ -> $"$%i{index}")
+                    |> String.concat ", "
+
+                // I don't know how to print """ from inside an F# string interpolation
+                // so I am using a list of strings and joining them
+                // We want to generate the like with newlines ourselves
+                // like that we can control the indentation and have stuff from the second line
+                // indented on column 0
+                [
+                    $"emitJsExpr (%s{forwardedArgments}) $$\"\"\""
+                    "import { Class } from \"module\";"
+                    $"%s{interfaceInfo.OriginalName}.%s{staticMemberInfo.OriginalName}(%s{macroArguments})"
+                ]
+                |> String.concat "\n"
+                |> printer.Write
+
+                // Put the closing """ right after the last line of the list
+                printer.WriteInline "\"\"\""
+
+                printer.NewLine
+                printer.Unindent
     )
 
     if interfaceInfo.Members.Length = 0 then

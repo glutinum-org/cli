@@ -178,6 +178,7 @@ type FSharpAttribute =
     | Global
     | ParamObject
     | ParamArray
+    | Interface
 
 type FSharpParameter =
     {
@@ -200,15 +201,43 @@ type FSharpMemberInfo =
         Accessibility: FSharpAccessibility
     }
 
+type FSharpStaticMemberInfo =
+    {
+        Attributes: FSharpAttribute list
+        Name: string
+        // We need the original because we emit actual JavaScript code
+        // for interface static members.
+        OriginalName: string
+        TypeParameters: FSharpTypeParameter list
+        Parameters: FSharpParameter list
+        Type: FSharpType
+        IsOptional: bool
+        Accessor: FSharpAccessor option
+        Accessibility: FSharpAccessibility
+    }
+
 [<RequireQualifiedAccess>]
 type FSharpMember =
     | Method of FSharpMemberInfo
     | Property of FSharpMemberInfo
+    /// <summary>
+    /// Special case for static members used, when generating a static interface
+    /// binding on a class.
+    ///
+    /// For binding a static method of a class, we need to generate the body of the
+    /// method so instead of trying to hack our way via the standard method binding
+    /// we use this special case.
+    /// See: https://github.com/glutinum-org/cli/issues/60
+    /// </summary>
+    | StaticMember of FSharpStaticMemberInfo
 
 type FSharpInterface =
     {
         Attributes: FSharpAttribute list
         Name: string
+        // We need the original because we emit actual JavaScript code
+        // for interface static members.
+        OriginalName: string
         TypeParameters: FSharpTypeParameter list
         Members: FSharpMember list
     }

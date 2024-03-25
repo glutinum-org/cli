@@ -1,9 +1,11 @@
 module rec Glutinum
 
 open Fable.Core
+open Fable.Core.JsInterop
 open System
 
 [<AllowNullLiteral>]
+[<Interface>]
 type Animal =
     abstract member name: Animal.name with get, set
 

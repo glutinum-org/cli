@@ -1,6 +1,7 @@
 module rec Glutinum
 
 open Fable.Core
+open Fable.Core.JsInterop
 open System
 
 [<Erase>]
@@ -18,6 +19,7 @@ module dayjs =
         static member Dayjs () : Dayjs = nativeOnly
 
     [<AllowNullLiteral>]
+    [<Interface>]
     type Dayjs =
         interface end
 

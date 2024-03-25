@@ -6,13 +6,15 @@ open System
 
 [<Erase>]
 type Exports =
-    [<Import("Logger", "module"); EmitConstructor>]
-    static member Logger () : Logger = nativeOnly
+    interface end
 
 [<AllowNullLiteral>]
 [<Interface>]
-type Logger =
-    interface end
+type Hello =
+    static member inline SayHello () =
+        emitJsExpr () $$"""
+import { Class } from "module";
+Hello.SayHello()"""
 
 (***)
 #r "nuget: Fable.Core"

@@ -99,11 +99,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Add support for argument spread operator ([GH-57](https://github.com/glutinum-org/cli/issues/57))
 * Add support for `{ new (...args: any): any}` (`ConstructSignaure`) ([GH-59](https://github.com/glutinum-org/cli/issues/59))
+* Add support for `static member` on classes ([GH-60](https://github.com/glutinum-org/cli/issues/60))
+
+    ```ts
+    export class Class {
+        static methodA(): void;
+
+        static methodB(arg1 : string, arg2: string): void;
+    }
+    ```
+
+    ```fs
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type Class =
+        static member inline methodA () =
+            emitJsExpr () $$"""
+    import { Class } from "module";
+    Class.methodA()"""
+        static member inline methodB (arg1: string, arg2: string) =
+            emitJsExpr (arg1, arg2) $$"""
+    import { Class } from "module";
+    Class.methodB($0, $1)"""
+    ```
 
 ### Changed
 
 * Replace `Boolean` with `bool`
 * Map `Date` type to `JS.Date` ([GH-48](https://github.com/glutinum-org/cli/issues/48))
+* Decorate all interface with `[<Interface>]` attribute this is to ensure they are erased at runtime even if they only have `static member` attached to them
 
 ## 0.4.0 - 2024-01-08
 

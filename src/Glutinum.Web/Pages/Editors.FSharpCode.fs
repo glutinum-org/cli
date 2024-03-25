@@ -85,6 +85,7 @@ let private generateFile
                     Opens =
                         [
                             "Fable.Core"
+                            "Fable.Core.JsInterop"
                             "System"
                         ]
                 }

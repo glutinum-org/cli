@@ -1,9 +1,11 @@
 module rec Glutinum
 
 open Fable.Core
+open Fable.Core.JsInterop
 open System
 
 [<AllowNullLiteral>]
+[<Interface>]
 type Locale =
     abstract member hello: config: Locale.Locale.hello.config -> string
 

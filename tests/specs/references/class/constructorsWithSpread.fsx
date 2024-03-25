@@ -1,6 +1,7 @@
 module rec Glutinum
 
 open Fable.Core
+open Fable.Core.JsInterop
 open System
 
 [<Erase>]
@@ -11,6 +12,7 @@ type Exports =
     static member Logger ([<ParamArray>] args: string []) : Logger = nativeOnly
 
 [<AllowNullLiteral>]
+[<Interface>]
 type Logger =
     interface end
 
