@@ -535,6 +535,24 @@ module private TransformMembers =
                     Accessibility = FSharpAccessibility.Public
                 }
                 |> FSharpMember.Method
+
+            | GlueMember.ConstructSignature constructSignature ->
+                let name, context = sanitizeNameAndPushScope "Create" context
+
+                {
+                    Attributes = [ FSharpAttribute.EmitConstructor ]
+                    Name = name
+                    Parameters =
+                        constructSignature.Parameters
+                        |> List.map (transformParameter context)
+                    Type = transformType context constructSignature.Type
+                    TypeParameters = []
+                    IsOptional = false
+                    IsStatic = false
+                    Accessor = None
+                    Accessibility = FSharpAccessibility.Public
+                }
+                |> FSharpMember.Method
         )
 
     let toFSharpParameters
@@ -600,6 +618,17 @@ module private TransformMembers =
                     Name = name
                     IsOptional = false
                     Type = transformType context callSignatureInfo.Type
+                }
+                : FSharpParameter
+
+            | GlueMember.ConstructSignature constructSignature ->
+                let name, context = sanitizeNameAndPushScope "Create" context
+
+                {
+                    Attributes = []
+                    Name = name
+                    IsOptional = false
+                    Type = transformType context constructSignature.Type
                 }
                 : FSharpParameter
         )
@@ -730,6 +759,7 @@ module TypeAliasDeclaration =
                         |> Some
                     // Doesn't make sense to have a case for call signature
                     | GlueMember.CallSignature _
+                    | GlueMember.ConstructSignature _
                     // Doesn't make sense to have a case for index signature
                     // because index signature is used because we don't know the name
                     // of the properties and so it is used only to describe the
@@ -958,6 +988,7 @@ let private transformTypeAliasDeclaration
                         | GlueMember.Method { Type = typ }
                         | GlueMember.Property { Type = typ }
                         | GlueMember.CallSignature { Type = typ }
+                        | GlueMember.ConstructSignature { Type = typ }
                         | GlueMember.MethodSignature { Type = typ }
                         | GlueMember.IndexSignature { Type = typ } ->
                             match typ with

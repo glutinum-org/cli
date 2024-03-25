@@ -91,6 +91,17 @@ let readDeclaration
         : GlueMethodSignature)
         |> GlueMember.MethodSignature
 
+    | Ts.SyntaxKind.ConstructSignature ->
+        let constructSignature =
+            declaration :?> Ts.ConstructSignatureDeclaration
+
+        ({
+            Parameters = reader.ReadParameters constructSignature.parameters
+            Type = reader.ReadTypeNode constructSignature.``type``
+        }
+        : GlueConstructSignature)
+        |> GlueMember.ConstructSignature
+
     | _ ->
         Utils.generateReaderError
             "named declaration"

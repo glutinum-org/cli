@@ -170,6 +170,9 @@ type FSharpAttribute =
     | CompiledName of string
     | RequireQualifiedAccess
     | EmitConstructor
+    /// <summary>
+    /// Generates <c>[&lt;Emit("new $0.className($1...)")&gt;]"</c> attribute.
+    /// </summary>
     | EmitMacroConstructor of className: string
     | EmitIndexer
     | Global

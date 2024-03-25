@@ -98,6 +98,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     ```
 
 * Add support for argument spread operator ([GH-57](https://github.com/glutinum-org/cli/issues/57))
+* Add support for `{ new (...args: any): any}` (`ConstructSignaure`) ([GH-59](https://github.com/glutinum-org/cli/issues/59))
 
 ### Changed
 

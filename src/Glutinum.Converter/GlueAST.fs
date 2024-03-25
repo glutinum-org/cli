@@ -69,6 +69,12 @@ type GlueMethodSignature =
         Type: GlueType
     }
 
+type GlueConstructSignature =
+    {
+        Parameters: GlueParameter list
+        Type: GlueType
+    }
+
 [<RequireQualifiedAccess>]
 type GlueMember =
     | Method of GlueMethod
@@ -76,6 +82,7 @@ type GlueMember =
     | CallSignature of GlueCallSignature
     | IndexSignature of GlueIndexSignature
     | MethodSignature of GlueMethodSignature
+    | ConstructSignature of GlueConstructSignature
 
 type GlueInterface =
     {

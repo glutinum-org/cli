@@ -114,6 +114,12 @@ type GlueASTViewer =
                 GlueASTViewer.Type propertyInfo.Type
             ]
 
+        | GlueMember.ConstructSignature constructSignature ->
+            ASTViewer.renderNode "ConstructSignature" [
+                GlueASTViewer.Parameters constructSignature.Parameters
+                GlueASTViewer.Type constructSignature.Type
+            ]
+
     static member private Members(members: GlueMember list) =
         members
         |> List.map GlueASTViewer.GlueMember
