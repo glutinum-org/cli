@@ -627,7 +627,8 @@ let private printEnum (printer: Printer) (enumInfo: FSharpEnum) =
 
         | FSharpLiteral.Bool _
         | FSharpLiteral.String _
-        | FSharpLiteral.Float _ -> ()
+        | FSharpLiteral.Float _
+        | FSharpLiteral.Null -> ()
 
         printer.NewLine
     )

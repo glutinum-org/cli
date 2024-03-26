@@ -123,6 +123,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     Class.methodB($0, $1)"""
     ```
 
+* Add support for more primitive `TypeQuery` (`Any`, `String`, `Number`, `Bool`, `Any`, `Unit`)
+* Add support for `TypeQuery` on a class declaration
+
 ### Changed
 
 * Replace `Boolean` with `bool`

@@ -8,6 +8,7 @@ type FSharpLiteral =
     | Int of int
     | Float of float
     | Bool of bool
+    | Null
 
     member this.ToText() =
         match this with
@@ -15,6 +16,7 @@ type FSharpLiteral =
         | Int value -> string value
         | Float value -> string value
         | Bool value -> string value
+        | Null -> "null"
 
 // [<RequireQualifiedAccess>]
 // type FSharpEnumCaseValue =
@@ -43,7 +45,8 @@ type FSharpEnum =
                 | FSharpLiteral.String _ -> true
                 | FSharpLiteral.Float _
                 | FSharpLiteral.Int _
-                | FSharpLiteral.Bool _ -> false
+                | FSharpLiteral.Bool _
+                | FSharpLiteral.Null -> false
             )
 
         let isNumeric =
@@ -53,7 +56,8 @@ type FSharpEnum =
                 | FSharpLiteral.String _
                 | FSharpLiteral.Bool _ -> false
                 | FSharpLiteral.Float _
-                | FSharpLiteral.Int _ -> true
+                | FSharpLiteral.Int _
+                | FSharpLiteral.Null -> true
             )
 
         if isNumeric then

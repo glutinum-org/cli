@@ -169,17 +169,36 @@ let readTypeNode
     | Ts.SyntaxKind.TypeQuery ->
         let typeNodeQuery = typeNode :?> Ts.TypeQueryNode
 
-        let typ = checker.getTypeAtLocation typeNodeQuery
+        let typ = checker.getTypeAtLocation !!typeNodeQuery.exprName
 
-        match typ.symbol.flags with
-        | HasSymbolFlags Ts.SymbolFlags.Class ->
-            {
-                Name = typ.symbol.name
-                Constructors = []
-                Members = []
-                TypeParameters = []
-            }
-            |> GlueType.ClassDeclaration
+        match typ.flags with
+        | HasTypeFlags Ts.TypeFlags.Object ->
+            // Try to find the declaration of the type, to get more information about it
+            match typ.symbol.declarations with
+            | Some declarations ->
+                let declaration = declarations.[0]
+
+                match declaration.kind with
+                | Ts.SyntaxKind.ClassDeclaration ->
+                    {
+                        Name = typ.symbol.name
+                        Constructors = []
+                        Members = []
+                        TypeParameters = []
+                    }
+                    |> GlueType.ClassDeclaration
+                | _ -> reader.ReadNode declaration
+
+            | None -> GlueType.Primitive GluePrimitive.Any
+        | HasTypeFlags Ts.TypeFlags.String ->
+            GlueType.Primitive GluePrimitive.String
+        | HasTypeFlags Ts.TypeFlags.Number ->
+            GlueType.Primitive GluePrimitive.Number
+        | HasTypeFlags Ts.TypeFlags.Boolean ->
+            GlueType.Primitive GluePrimitive.Bool
+        | HasTypeFlags Ts.TypeFlags.Any -> GlueType.Primitive GluePrimitive.Any
+        | HasTypeFlags Ts.TypeFlags.Void ->
+            GlueType.Primitive GluePrimitive.Unit
         | _ -> GlueType.Primitive GluePrimitive.Any
 
     | Ts.SyntaxKind.LiteralType ->

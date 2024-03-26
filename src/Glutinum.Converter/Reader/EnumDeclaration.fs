@@ -36,6 +36,7 @@ let private readEnumMembers
                 | GlueLiteral.String _
                 | GlueLiteral.Int _
                 | GlueLiteral.Float _ as value -> value
+                | GlueLiteral.Null
                 | GlueLiteral.Bool _ ->
                     generateReaderError
                         "enum member"

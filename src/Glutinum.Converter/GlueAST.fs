@@ -113,6 +113,7 @@ type GlueLiteral =
     | Int of int
     | Float of float
     | Bool of bool
+    | Null
 
     member this.ToText() =
         match this with
@@ -120,6 +121,7 @@ type GlueLiteral =
         | Int value -> string value
         | Float value -> string value
         | Bool value -> string value
+        | Null -> "null"
 
 type GlueEnumMember = { Name: string; Value: GlueLiteral }
 

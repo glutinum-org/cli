@@ -48,7 +48,7 @@ let tryReadLiteral (expression: Ts.Node) =
         GlueLiteral.String literal.text |> Some
     | Ts.SyntaxKind.TrueKeyword -> GlueLiteral.Bool true |> Some
     | Ts.SyntaxKind.FalseKeyword -> GlueLiteral.Bool false |> Some
-
+    | Ts.SyntaxKind.NullKeyword -> GlueLiteral.Null |> Some
     | _ ->
         let text = expression.getText ()
 

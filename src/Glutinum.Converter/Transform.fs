@@ -93,6 +93,7 @@ let private transformLiteral (glueLiteral: GlueLiteral) : FSharpLiteral =
     | GlueLiteral.Int value -> FSharpLiteral.Int value
     | GlueLiteral.Float value -> FSharpLiteral.Float value
     | GlueLiteral.Bool value -> FSharpLiteral.Bool value
+    | GlueLiteral.Null -> FSharpLiteral.Null
 
 let private transformPrimitive
     (gluePrimitive: GluePrimitive)
@@ -844,6 +845,7 @@ module TypeAliasDeclaration =
         | GlueLiteral.Int _ -> makeTypeAlias FSharpPrimitive.Int
         | GlueLiteral.Float _ -> makeTypeAlias FSharpPrimitive.Float
         | GlueLiteral.Bool _ -> makeTypeAlias FSharpPrimitive.Bool
+        | GlueLiteral.Null -> makeTypeAlias FSharpPrimitive.Null
 
 let private transformTypeParameters
     (context: TransformContext)
