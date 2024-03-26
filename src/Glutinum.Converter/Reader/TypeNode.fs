@@ -7,6 +7,10 @@ open Fable.Core.JsInterop
 open Fable.Core.JS
 open Glutinum.Converter.Reader.Utils
 
+type private IntersectionTypePropertyResult =
+    | Single of Ts.Declaration
+    | ForceAny
+
 let readTypeNode
     (reader: ITypeScriptReader)
     (typeNode: Ts.TypeNode)
@@ -253,14 +257,9 @@ let readTypeNode
                 match property.declarations with
                 | Some declarations ->
                     if declarations.Count = 1 then
-                        Some declarations.[0]
+                        Some(Single declarations.[0])
                     else
-                        generateReaderError
-                            "type node"
-                            "Gutinum expects only one declaration for a type reference. Please report this issue, if you see this message."
-                            typeNode
-                        |> TypeScriptReaderException
-                        |> raise
+                        Some ForceAny
                 | None ->
                     generateReaderError
                         "type node"
@@ -275,17 +274,24 @@ let readTypeNode
         // have a equivalent in F#
         let hasUnsupportedProperties =
             properties
-            |> List.exists (fun declaration ->
-                match declaration.kind with
-                | Ts.SyntaxKind.MethodDeclaration -> true
-                | _ -> false
+            |> List.exists (fun property ->
+                match property with
+                | ForceAny -> true // Force to generate obj
+                | Single declaration -> // Give a try to generate a real contract
+                    match declaration.kind with
+                    | Ts.SyntaxKind.MethodDeclaration -> true
+                    | _ -> false
             )
 
         if hasUnsupportedProperties then
             GlueType.Primitive GluePrimitive.Any
         else
             properties
-            |> List.map reader.ReadDeclaration
+            |> List.choose (
+                function
+                | Single declaration -> Some(reader.ReadDeclaration declaration)
+                | ForceAny -> failwith "Sould not happen here"
+            )
             |> GlueType.IntersectionType
 
     | Ts.SyntaxKind.TypeLiteral ->
