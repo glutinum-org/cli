@@ -12,11 +12,11 @@ You can see the available options by running:
 ./build.sh --help
 ```
 
-When using the test command, you can focus on a specific by forwarding arguments to the `ava`:
+When using the test command, you can focus on a specific by forwarding arguments to `vitest`:
 
 ```bash
-# Focus all tests containing "class"
-./build.sh test --watch -- --match="**class**"
+# Focus all tests containing related to specs/class/
+./build.sh test --watch -- -t class/
 ```
 
 If you need to run a local version of `@glutinum/cli`, you can use `./build.sh cli [--watch]` and then run `node cli.js <args>`.
@@ -73,17 +73,19 @@ type FSharpAttribute =
 
 ### Tests
 
+#### Vitest
+
 This project use [Vitest](https://vitest.dev/) for running tests.
 
 Vitest was chosen because it seems to have a lot of attention and is actively maintained. Plus, it seems well integrated with VSCode and Rider, allowing us to use the test explorer and even debug the tests using source maps.
 
 If you prefer, it is possible to run the tests via the CLI.
 
-#### VSCode
+##### VSCode
 
 Install [Vitest plugin](https://marketplace.visualstudio.com/items?itemName=vitest.explorer), then you will be able to run the tests from the test explorer.
 
-#### Rider
+##### Rider
 
 You need to add a new configuration of type `Vitest`.
 
@@ -91,7 +93,7 @@ You need to add a new configuration of type `Vitest`.
 2. Add a new configuration of type `Vitest`
 3. Then you can run the tests by selecting the configuration in the top right corner of the IDE.
 
-#### Specs
+##### Specs
 
 > [!TIP]
 > Run `./build.sh --help` to see the available options (look for `test specs` command).
@@ -149,6 +151,16 @@ The `.fsx` correspond to the expected result suffixed with the following:
 ```
 
 > This allows us to have IDE support in the `.fsx` file instead of having a lot of syntax errors.
+
+#### `tests/specs/index.js`
+
+Sometimes debugging tests through Vitest runner / extensions, is not easy. This is why, we provide a `./tests/index.js` scripts which allows you to manually check a specs transformation.
+
+```bash
+node --enable-source-maps tests/specs tests/specs/references/exports/variable.d.ts
+```
+
+This avoid situation where Vitest extension needs a restart of VSCode to work again, etc.
 
 ## Tools
 
