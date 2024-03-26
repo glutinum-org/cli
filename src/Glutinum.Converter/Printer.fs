@@ -433,7 +433,9 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
             printTypeParameters printer staticMemberInfo.TypeParameters
 
             if staticMemberInfo.Parameters.IsEmpty then
-                printer.WriteInline("() =")
+                printer.WriteInline("() : ")
+                printer.WriteInline(printType staticMemberInfo.Type)
+                printer.WriteInline(" =")
                 printer.Indent
                 printer.NewLine
 
@@ -476,7 +478,9 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
                         printer.WriteInline(" []")
                 )
 
-                printer.WriteInline(") =")
+                printer.WriteInline("): ")
+                printer.WriteInline(printType staticMemberInfo.Type)
+                printer.WriteInline(" =")
                 printer.NewLine
 
                 printer.Indent

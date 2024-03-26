@@ -10,11 +10,11 @@ type Exports =
 
 [<AllowNullLiteral>]
 [<Interface>]
-type Hello =
-    static member inline SayHello () : unit =
-        emitJsExpr () $$"""
+type Class =
+    static member inline extend (props: obj): obj =
+        emitJsExpr (props) $$"""
 import { Class } from "module";
-Hello.SayHello()"""
+Class.extend($0)"""
 
 (***)
 #r "nuget: Fable.Core"

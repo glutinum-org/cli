@@ -246,26 +246,47 @@ let readTypeNode
             checker.getTypeAtLocation intersectionTypeNode
             :?> Ts.UnionOrIntersectionType
 
-        unionOrIntersectionType.getProperties ()
-        |> Seq.toList
-        |> List.map (fun property ->
-            match property.declarations with
-            | Some declarations ->
-                if declarations.Count = 1 then
-                    reader.ReadDeclaration declarations.[0]
-                else
+        let properties =
+            unionOrIntersectionType.getProperties ()
+            |> Seq.toList
+            |> List.choose (fun property ->
+                match property.declarations with
+                | Some declarations ->
+                    if declarations.Count = 1 then
+                        Some declarations.[0]
+                    else
+                        generateReaderError
+                            "type node"
+                            "Gutinum expects only one declaration for a type reference. Please report this issue, if you see this message."
+                            typeNode
+                        |> TypeScriptReaderException
+                        |> raise
+                | None ->
                     generateReaderError
                         "type node"
-                        "Gutinum expects only one declaration for a type reference. Please report this issue, if you see this message."
+                        "Missing declarations"
                         typeNode
                     |> TypeScriptReaderException
                     |> raise
-            | None ->
-                generateReaderError "type node" "Missing declarations" typeNode
-                |> TypeScriptReaderException
-                |> raise
-        )
-        |> GlueType.IntersectionType
+            )
+
+        // We can't create a contract for some of the properties
+        // they would eiher end-up in a infinite loop or they are don't
+        // have a equivalent in F#
+        let hasUnsupportedProperties =
+            properties
+            |> List.exists (fun declaration ->
+                match declaration.kind with
+                | Ts.SyntaxKind.MethodDeclaration -> true
+                | _ -> false
+            )
+
+        if hasUnsupportedProperties then
+            GlueType.Primitive GluePrimitive.Any
+        else
+            properties
+            |> List.map reader.ReadDeclaration
+            |> GlueType.IntersectionType
 
     | Ts.SyntaxKind.TypeLiteral ->
         let typeLiteralNode = typeNode :?> Ts.TypeLiteralNode
