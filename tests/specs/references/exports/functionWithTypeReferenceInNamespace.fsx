@@ -9,7 +9,11 @@ type Exports =
     [<Import("dayjs", "module")>]
     static member dayjs () : dayjs.Dayjs = nativeOnly
     [<ImportAll("module")>]
-    static member dayjs_ with get () : dayjs.Exports = nativeOnly
+    static member inline dayjs_
+        with get () : dayjs.Exports =
+            emitJsExpr () $$"""
+import { Exports } from "module";
+Exports.dayjs"""
 
 module dayjs =
 

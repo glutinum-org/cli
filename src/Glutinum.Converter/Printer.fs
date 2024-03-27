@@ -364,28 +364,70 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
             printAttributes printer propertyInfo.Attributes
 
             if propertyInfo.IsStatic then
-                printer.Write("static ")
+                printer.Write($"static member inline {propertyInfo.Name}")
+
+                let printGetter () =
+                    printer.Indent
+
+                    printer.Write(
+                        $"with get () : {printType propertyInfo.Type} ="
+                    )
+
+                    printer.NewLine
+                    printer.Indent
+
+                    printer.Write
+                        $"emitJsExpr () $$\"\"\"
+import {{ %s{interfaceInfo.OriginalName} }} from \"module\";
+%s{interfaceInfo.OriginalName}.%s{propertyInfo.OriginalName}\"\"\""
+
+                    printer.Unindent
+                    printer.Unindent
+
+                let printerSetter (useAndKeyword: bool) =
+                    printer.Indent
+
+                    if useAndKeyword then
+                        printer.Write "and "
+                    else
+                        printer.Write "with "
+
+                    printer.WriteInline(
+                        $"set (value: {printType propertyInfo.Type}) ="
+                    )
+
+                    printer.NewLine
+                    printer.Indent
+
+                    printer.Write
+                        $"emitJsExpr (value) $$\"\"\"
+import {{ %s{interfaceInfo.OriginalName} }} from \"module\";
+%s{interfaceInfo.OriginalName}.%s{propertyInfo.OriginalName} = $0\"\"\""
+
+                    printer.Unindent
+                    printer.Unindent
+
+                match propertyInfo.Accessor with
+                | None ->
+                    printer.WriteInline($": {printType propertyInfo.Type}")
+                    printer.WriteInline(" = nativeOnly")
+                | Some accessor ->
+                    printer.NewLine
+
+                    match accessor with
+                    | FSharpAccessor.ReadOnly -> printGetter ()
+                    | FSharpAccessor.WriteOnly ->
+                        // I don't think this is possible in TypeScript but let's support it
+                        // to not crash the code generator
+                        printerSetter false
+                    | FSharpAccessor.ReadWrite ->
+                        printGetter ()
+                        printer.NewLine
+                        printerSetter true
+
             else
-                printer.Write("abstract ")
+                printer.Write($"abstract member {propertyInfo.Name}")
 
-            printer.WriteInline($"member {propertyInfo.Name}")
-
-            if propertyInfo.IsStatic then
-
-                propertyInfo.Accessor
-                |> Option.map (
-                    function
-                    | FSharpAccessor.ReadOnly -> " with get () "
-                    | FSharpAccessor.WriteOnly -> failwithf " with set "
-                    | FSharpAccessor.ReadWrite -> failwithf " with get, set "
-                )
-                |> Option.iter printer.WriteInline
-
-                printer.WriteInline($": {printType propertyInfo.Type}")
-
-                printer.WriteInline(" = nativeOnly")
-
-            else
                 propertyInfo.Parameters
                 |> List.iteri (fun index p ->
                     if index = 0 then
@@ -439,21 +481,10 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
                 printer.Indent
                 printer.NewLine
 
-                // I don't know how to print """ from inside an F# string interpolation
-                // so I am using a list of strings and joining them
-                // We want to generate the like with newlines ourselves
-                // like that we can control the indentation and have stuff from the second line
-                // indented on column 0
-                [
-                    "emitJsExpr () $$\"\"\""
-                    "import { Class } from \"module\";"
-                    $"%s{interfaceInfo.OriginalName}.%s{staticMemberInfo.OriginalName}()"
-                ]
-                |> String.concat "\n"
-                |> printer.Write
-
-                // Put the closing """ right after the last line of the list
-                printer.WriteInline "\"\"\""
+                printer.Write
+                    $"emitJsExpr () $$\"\"\"
+import {{ %s{interfaceInfo.OriginalName} }} from \"module\";
+%s{interfaceInfo.OriginalName}.%s{staticMemberInfo.OriginalName}()\"\"\""
 
                 printer.NewLine
 
@@ -495,21 +526,10 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
                     |> List.mapi (fun index _ -> $"$%i{index}")
                     |> String.concat ", "
 
-                // I don't know how to print """ from inside an F# string interpolation
-                // so I am using a list of strings and joining them
-                // We want to generate the like with newlines ourselves
-                // like that we can control the indentation and have stuff from the second line
-                // indented on column 0
-                [
-                    $"emitJsExpr (%s{forwardedArgments}) $$\"\"\""
-                    "import { Class } from \"module\";"
-                    $"%s{interfaceInfo.OriginalName}.%s{staticMemberInfo.OriginalName}(%s{macroArguments})"
-                ]
-                |> String.concat "\n"
-                |> printer.Write
-
-                // Put the closing """ right after the last line of the list
-                printer.WriteInline "\"\"\""
+                printer.Write
+                    $"emitJsExpr (%s{forwardedArgments}) $$\"\"\"
+import {{ %s{interfaceInfo.OriginalName} }} from \"module\";
+%s{interfaceInfo.OriginalName}.%s{staticMemberInfo.OriginalName}(%s{macroArguments})\"\"\""
 
                 printer.NewLine
                 printer.Unindent

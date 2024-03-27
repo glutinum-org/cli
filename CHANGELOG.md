@@ -125,6 +125,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Add support for more primitive `TypeQuery` (`Any`, `String`, `Number`, `Bool`, `Any`, `Unit`)
 * Add support for `TypeQuery` on a class declaration
+* Add support for `propertyDeclaration` on a class declaration
+
+    ```ts
+    declare class Fuse {
+        public version: string
+    }
+
+    ```
+
+    ```fs
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type Fuse =
+        abstract member version: string with get, set
+    ```
+
+    Works also for static properties
+
+    ```ts
+    declare class Fuse {
+        public static version: string
+    }
+    ```
+
+    ```fs
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type Fuse =
+        static member inline version
+            with get () : string =
+                emitJsExpr () $$"""
+    import { Fuse } from "module";
+    Fuse.version"""
+            and set (value: string) =
+                emitJsExpr (value) $$"""
+    import { Fuse } from "module";
+    Fuse.version = $0"""
+    ```
 
 ### Changed
 

@@ -7,7 +7,11 @@ open System
 [<Erase>]
 type Exports =
     [<ImportAll("module")>]
-    static member lib_ with get () : lib.Exports = nativeOnly
+    static member inline lib_
+        with get () : lib.Exports =
+            emitJsExpr () $$"""
+import { Exports } from "module";
+Exports.lib"""
 
 
 module lib =

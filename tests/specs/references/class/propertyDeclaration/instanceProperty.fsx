@@ -10,11 +10,8 @@ type Exports =
 
 [<AllowNullLiteral>]
 [<Interface>]
-type Hello =
-    static member inline SayHello () : unit =
-        emitJsExpr () $$"""
-import { Hello } from "module";
-Hello.SayHello()"""
+type Fuse =
+    abstract member version: string with get, set
 
 (***)
 #r "nuget: Fable.Core"

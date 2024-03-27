@@ -5,6 +5,47 @@ open Glutinum.Converter.Reader.Types
 open TypeScript
 open Fable.Core.JsInterop
 
+type ModifierUtil =
+
+    static member GetAccessor(modifiers: ResizeArray<Ts.Modifier> option) =
+        match modifiers with
+        | Some modifiers ->
+            modifiers
+            |> Seq.exists (fun modifier ->
+                modifier.kind = Ts.SyntaxKind.ReadonlyKeyword
+            )
+            |> function
+                | true -> GlueAccessor.ReadOnly
+                | false -> GlueAccessor.ReadWrite
+        | None -> GlueAccessor.ReadWrite
+
+    static member GetAccessor(modifiers: ResizeArray<Ts.ModifierLike> option) =
+        ModifierUtil.GetAccessor(
+            unbox<ResizeArray<Ts.Modifier> option> modifiers
+        )
+
+    static member HasModifier
+        (modifiers: ResizeArray<Ts.Modifier> option, modifier: Ts.SyntaxKind)
+        =
+        match modifiers with
+        | Some modifiers ->
+            modifiers
+            |> Seq.exists (fun currentModifier ->
+                currentModifier.kind = modifier
+            )
+        | None -> false
+
+    static member HasModifier
+        (
+            modifiers: option<ResizeArray<Ts.ModifierLike>>,
+            modifier: Ts.SyntaxKind
+        )
+        =
+        ModifierUtil.HasModifier(
+            unbox<ResizeArray<Ts.Modifier> option> modifiers,
+            modifier
+        )
+
 let readDeclaration
     (reader: ITypeScriptReader)
     (declaration: Ts.Declaration)
@@ -16,24 +57,12 @@ let readDeclaration
         let propertySignature = declaration :?> Ts.PropertySignature
         let name = unbox<Ts.Node> propertySignature.name
 
-        let accessor =
-            match propertySignature.modifiers with
-            | Some modifiers ->
-                modifiers
-                |> Seq.exists (fun modifier ->
-                    modifier?kind = Ts.SyntaxKind.ReadonlyKeyword
-                )
-                |> function
-                    | true -> GlueAccessor.ReadOnly
-                    | false -> GlueAccessor.ReadWrite
-            | None -> GlueAccessor.ReadWrite
-
         ({
             Name = name.getText ()
             Type = reader.ReadTypeNode propertySignature.``type``
             IsOptional = propertySignature.questionToken.IsSome
             IsStatic = false
-            Accessor = accessor
+            Accessor = ModifierUtil.GetAccessor propertySignature.modifiers
         }
         : GlueProperty)
         |> GlueMember.Property
@@ -102,9 +131,27 @@ let readDeclaration
         : GlueConstructSignature)
         |> GlueMember.ConstructSignature
 
+    | Ts.SyntaxKind.PropertyDeclaration ->
+        let propertyDeclaration = declaration :?> Ts.PropertyDeclaration
+        let name = unbox<Ts.Identifier> propertyDeclaration.name
+
+        ({
+            Name = name.getText ()
+            Type = reader.ReadTypeNode propertyDeclaration.``type``
+            IsOptional = propertyDeclaration.questionToken.IsSome
+            IsStatic =
+                ModifierUtil.HasModifier(
+                    propertyDeclaration.modifiers,
+                    Ts.SyntaxKind.StaticKeyword
+                )
+            Accessor = ModifierUtil.GetAccessor propertyDeclaration.modifiers
+        }
+        : GlueProperty)
+        |> GlueMember.Property
+
     | _ ->
         Utils.generateReaderError
-            "named declaration"
+            "declaration"
             $"Unsupported kind %A{declaration.kind}"
             declaration
         |> TypeScriptReaderException

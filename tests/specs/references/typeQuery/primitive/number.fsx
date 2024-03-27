@@ -7,7 +7,7 @@ open System
 [<Erase>]
 type Exports =
     [<Import("version", "module")>]
-    static member version: float = nativeOnly
+    static member inline version: float = nativeOnly
     [<Import("toVersion", "module")>]
     static member toVersion (text: float) : unit = nativeOnly
 

@@ -83,6 +83,8 @@ type FSharpASTViewer =
 
         | FSharpAttribute.ParamArray -> ASTViewer.renderValueOnly "ParamArray"
 
+        | FSharpAttribute.Interface -> ASTViewer.renderValueOnly "Interface"
+
     static member private Attributes(attributes: FSharpAttribute list) =
         attributes
         |> List.map FSharpASTViewer.FSharpAttribute
@@ -152,6 +154,9 @@ type FSharpASTViewer =
     static member private Name(name: string) =
         ASTViewer.renderKeyValue "Name" name
 
+    static member private OriginalName(originalName: string) =
+        ASTViewer.renderKeyValue "OriginalName" originalName
+
     static member private FullName(fullName: string) =
         ASTViewer.renderKeyValue "FullName" fullName
 
@@ -169,6 +174,7 @@ type FSharpASTViewer =
         | FSharpMember.Method methodInfo ->
             ASTViewer.renderNode "Method" [
                 FSharpASTViewer.Name methodInfo.Name
+                FSharpASTViewer.OriginalName methodInfo.OriginalName
                 FSharpASTViewer.Accessibility methodInfo.Accessibility
                 FSharpASTViewer.Accessor methodInfo.Accessor
                 FSharpASTViewer.IsOptional methodInfo.IsOptional
@@ -190,6 +196,19 @@ type FSharpASTViewer =
                 FSharpASTViewer.TypeParameters propertyInfo.TypeParameters
                 FSharpASTViewer.Parameters propertyInfo.Parameters
                 FSharpASTViewer.Type propertyInfo.Type
+            ]
+
+        | FSharpMember.StaticMember staticMemberInfo ->
+            ASTViewer.renderNode "StaticMember" [
+                FSharpASTViewer.Name staticMemberInfo.Name
+                FSharpASTViewer.OriginalName staticMemberInfo.OriginalName
+                FSharpASTViewer.Accessibility staticMemberInfo.Accessibility
+                FSharpASTViewer.Accessor staticMemberInfo.Accessor
+                FSharpASTViewer.IsOptional staticMemberInfo.IsOptional
+                FSharpASTViewer.Attributes staticMemberInfo.Attributes
+                FSharpASTViewer.Parameters staticMemberInfo.Parameters
+                FSharpASTViewer.TypeParameters staticMemberInfo.TypeParameters
+                FSharpASTViewer.Type staticMemberInfo.Type
             ]
 
     static member private Members(members: FSharpMember list) =
@@ -221,6 +240,8 @@ type FSharpASTViewer =
             ASTViewer.renderNode "Bool" [
                 ASTViewer.renderValueOnly (string value)
             ]
+
+        | FSharpLiteral.Null -> ASTViewer.renderValueOnly "Null"
 
     static member private EnumCases(cases: FSharpEnumCase list) =
         cases
@@ -283,6 +304,7 @@ type FSharpASTViewer =
                 "Interface"
                 [
                     FSharpASTViewer.Name interfaceInfo.Name
+                    FSharpASTViewer.OriginalName interfaceInfo.OriginalName
                     FSharpASTViewer.Attributes interfaceInfo.Attributes
                     FSharpASTViewer.Members interfaceInfo.Members
                     FSharpASTViewer.TypeParameters interfaceInfo.TypeParameters

@@ -305,6 +305,7 @@ let private transformExports
                 {
                     Attributes = [ FSharpAttribute.Import(info.Name, "module") ]
                     Name = name
+                    OriginalName = info.Name
                     Parameters = []
                     TypeParameters = []
                     Type = transformType context info.Type
@@ -322,6 +323,7 @@ let private transformExports
                 {
                     Attributes = [ FSharpAttribute.Import(info.Name, "module") ]
                     Name = name
+                    OriginalName = info.Name
                     Parameters =
                         info.Parameters |> List.map (transformParameter context)
                     TypeParameters =
@@ -352,6 +354,7 @@ let private transformExports
                                         info.Name
                             ]
                         Name = name
+                        OriginalName = info.Name
                         Parameters =
                             parameters |> List.map (transformParameter context)
                         TypeParameters =
@@ -382,6 +385,7 @@ let private transformExports
                             // the name of the module
                             // TODO: Only add the "_" suffix if there is a name collision
                             Name = moduleDeclaration.Name + "_"
+                            OriginalName = moduleDeclaration.Name
                             Parameters = []
                             TypeParameters = []
                             Type =
@@ -470,6 +474,7 @@ module private TransformMembers =
                     {
                         Attributes = []
                         Name = name
+                        OriginalName = methodInfo.Name
                         Parameters =
                             methodInfo.Parameters
                             |> List.map (transformParameter context)
@@ -488,6 +493,7 @@ module private TransformMembers =
                 {
                     Attributes = [ FSharpAttribute.EmitSelfInvoke ]
                     Name = name
+                    OriginalName = "Invoke"
                     Parameters =
                         callSignatureInfo.Parameters
                         |> List.map (transformParameter context)
@@ -507,6 +513,7 @@ module private TransformMembers =
                 {
                     Attributes = []
                     Name = name
+                    OriginalName = propertyInfo.Name
                     Parameters = []
                     Type = transformType context propertyInfo.Type
                     TypeParameters = []
@@ -523,6 +530,7 @@ module private TransformMembers =
                 {
                     Attributes = [ FSharpAttribute.EmitIndexer ]
                     Name = name
+                    OriginalName = "Item"
                     Parameters =
                         indexSignature.Parameters
                         |> List.map (transformParameter context)
@@ -542,6 +550,7 @@ module private TransformMembers =
                 {
                     Attributes = []
                     Name = name
+                    OriginalName = methodSignature.Name
                     Parameters =
                         methodSignature.Parameters
                         |> List.map (transformParameter context)
@@ -560,6 +569,7 @@ module private TransformMembers =
                 {
                     Attributes = [ FSharpAttribute.EmitConstructor ]
                     Name = name
+                    OriginalName = "Create"
                     Parameters =
                         constructSignature.Parameters
                         |> List.map (transformParameter context)
@@ -1117,6 +1127,7 @@ let private transformTypeAliasDeclaration
                 {
                     Attributes = [ FSharpAttribute.EmitSelfInvoke ]
                     Name = "Invoke"
+                    OriginalName = "Invoke"
                     Parameters =
                         functionType.Parameters
                         |> List.map (transformParameter context)
