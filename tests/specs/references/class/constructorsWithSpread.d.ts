@@ -1,5 +1,5 @@
 export class Logger {
     constructor()
 
-    constructor(...args: string)
+    constructor(...args: string[])
 }

@@ -1,3 +1,3 @@
 declare class Fuse {
-    static readonly public version: string
+    public static readonly version: string
 }

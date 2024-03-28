@@ -1,3 +1,3 @@
-declare class Fuse {
+export declare class Fuse {
     static version: string
 }
