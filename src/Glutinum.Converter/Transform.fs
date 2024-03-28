@@ -449,7 +449,7 @@ module private TransformMembers =
         : FSharpMember list
         =
         members
-        |> List.map (
+        |> List.choose (
             function
             | GlueMember.Method methodInfo ->
                 let name, context =
@@ -470,6 +470,7 @@ module private TransformMembers =
                         Accessibility = FSharpAccessibility.Public
                     }
                     |> FSharpMember.StaticMember
+                    |> Some
                 else
                     {
                         Attributes = []
@@ -486,6 +487,7 @@ module private TransformMembers =
                         Accessibility = FSharpAccessibility.Public
                     }
                     |> FSharpMember.Method
+                    |> Some
 
             | GlueMember.CallSignature callSignatureInfo ->
                 let name, context = sanitizeNameAndPushScope "Invoke" context
@@ -505,24 +507,34 @@ module private TransformMembers =
                     Accessibility = FSharpAccessibility.Public
                 }
                 |> FSharpMember.Method
+                |> Some
 
             | GlueMember.Property propertyInfo ->
                 let name, context =
                     sanitizeNameAndPushScope propertyInfo.Name context
 
-                {
-                    Attributes = []
-                    Name = name
-                    OriginalName = propertyInfo.Name
-                    Parameters = []
-                    Type = transformType context propertyInfo.Type
-                    TypeParameters = []
-                    IsOptional = propertyInfo.IsOptional
-                    IsStatic = propertyInfo.IsStatic
-                    Accessor = transformAccessor propertyInfo.Accessor |> Some
-                    Accessibility = FSharpAccessibility.Public
-                }
-                |> FSharpMember.Property
+                if propertyInfo.IsPrivate && not propertyInfo.IsStatic then
+                    None // F# interface can't have private properties
+                else
+                    {
+                        Attributes = []
+                        Name = name
+                        OriginalName = propertyInfo.Name
+                        Parameters = []
+                        Type = transformType context propertyInfo.Type
+                        TypeParameters = []
+                        IsOptional = propertyInfo.IsOptional
+                        IsStatic = propertyInfo.IsStatic
+                        Accessor =
+                            transformAccessor propertyInfo.Accessor |> Some
+                        Accessibility =
+                            if propertyInfo.IsPrivate then
+                                FSharpAccessibility.Private
+                            else
+                                FSharpAccessibility.Public
+                    }
+                    |> FSharpMember.Property
+                    |> Some
 
             | GlueMember.IndexSignature indexSignature ->
                 let name, context = sanitizeNameAndPushScope "Item" context
@@ -542,6 +554,7 @@ module private TransformMembers =
                     Accessibility = FSharpAccessibility.Public
                 }
                 |> FSharpMember.Property
+                |> Some
 
             | GlueMember.MethodSignature methodSignature ->
                 let name, context =
@@ -562,6 +575,7 @@ module private TransformMembers =
                     Accessibility = FSharpAccessibility.Public
                 }
                 |> FSharpMember.Method
+                |> Some
 
             | GlueMember.ConstructSignature constructSignature ->
                 let name, context = sanitizeNameAndPushScope "Create" context
@@ -581,6 +595,7 @@ module private TransformMembers =
                     Accessibility = FSharpAccessibility.Public
                 }
                 |> FSharpMember.Method
+                |> Some
         )
 
     let toFSharpParameters

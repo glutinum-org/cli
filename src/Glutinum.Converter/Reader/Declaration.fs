@@ -63,6 +63,7 @@ let readDeclaration
             IsOptional = propertySignature.questionToken.IsSome
             IsStatic = false
             Accessor = ModifierUtil.GetAccessor propertySignature.modifiers
+            IsPrivate = false
         }
         : GlueProperty)
         |> GlueMember.Property
@@ -135,6 +136,14 @@ let readDeclaration
         let propertyDeclaration = declaration :?> Ts.PropertyDeclaration
         let name = unbox<Ts.Identifier> propertyDeclaration.name
 
+        let hasPrivateModifier =
+            ModifierUtil.HasModifier(
+                propertyDeclaration.modifiers,
+                Ts.SyntaxKind.PrivateKeyword
+            )
+
+        let isPrivateIdentifier = name.kind = Ts.SyntaxKind.PrivateIdentifier
+
         ({
             Name = name.getText ()
             Type = reader.ReadTypeNode propertyDeclaration.``type``
@@ -145,6 +154,7 @@ let readDeclaration
                     Ts.SyntaxKind.StaticKeyword
                 )
             Accessor = ModifierUtil.GetAccessor propertyDeclaration.modifiers
+            IsPrivate = hasPrivateModifier || isPrivateIdentifier
         }
         : GlueProperty)
         |> GlueMember.Property

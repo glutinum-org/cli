@@ -28,10 +28,10 @@ log(chalk.grey(`Reference: file://${definitionFile}`));
 try {
     let actual = generateBindingFile(definitionFile);
     actual += `
-    (***)
-    #r "nuget: Fable.Core"
-    (***)
-    `;
+(***)
+#r "nuget: Fable.Core"
+(***)
+`;
 
     const expectedFile = definitionFile.split('.').slice(0, -2).join('.') + '.fsx'
     const expectedFileExists = fs.existsSync(expectedFile);

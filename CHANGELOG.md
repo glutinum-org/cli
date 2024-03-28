@@ -164,11 +164,48 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     Fuse.version = $0"""
     ```
 
+* Supports private static property
+
+    ```ts
+    export declare class SettingsContainer {
+        static #privateField;
+    }
+    ```
+
+    ```fs
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type SettingsContainer =
+        static member inline private ``#privateField``
+            with get () : unit =
+                emitJsExpr () $$"""
+    import { SettingsContainer } from "module";
+    SettingsContainer.#privateField"""
+            and set (value: unit) =
+                emitJsExpr (value) $$"""
+    import { SettingsContainer } from "module";
+    SettingsContainer.#privateField = $0"""
+    ```
+
 ### Changed
 
 * Replace `Boolean` with `bool`
 * Map `Date` type to `JS.Date` ([GH-48](https://github.com/glutinum-org/cli/issues/48))
 * Decorate all interface with `[<Interface>]` attribute this is to ensure they are erased at runtime even if they only have `static member` attached to them
+* Private field are not exposed in the F# code, because F# interface doesn't support them
+
+    ```ts
+    export declare class SettingsContainer {
+        #privateField;
+    }
+    ```
+
+    ```fs
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type SettingsContainer =
+        interface end
+    ```
 
 ## 0.4.0 - 2024-01-08
 

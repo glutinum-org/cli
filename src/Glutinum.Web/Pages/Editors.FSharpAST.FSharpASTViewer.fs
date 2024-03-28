@@ -95,7 +95,7 @@ type FSharpASTViewer =
             match accessibility with
             | FSharpAccessibility.Public -> "Public"
             | FSharpAccessibility.Protected -> "Protected"
-            | FSharpAccessibility.Private -> "Protected"
+            | FSharpAccessibility.Private -> "Private"
 
         ASTViewer.renderKeyValue "Accessibility" content
 

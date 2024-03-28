@@ -30,6 +30,9 @@ type GlueASTViewer =
     static member private IsSpread(isSpread: bool) =
         ASTViewer.renderKeyValue "IsSpread" (string isSpread)
 
+    static member private IsPrivate(isPrivate: bool) =
+        ASTViewer.renderKeyValue "IsPrivate" (string isPrivate)
+
     static member private Parameters(parameters: GlueParameter list) =
         parameters
         |> List.map (fun parameter ->
@@ -108,6 +111,7 @@ type GlueASTViewer =
                 GlueASTViewer.Name propertyInfo.Name
                 GlueASTViewer.IsStatic propertyInfo.IsStatic
                 GlueASTViewer.IsOptional propertyInfo.IsOptional
+                GlueASTViewer.IsPrivate propertyInfo.IsPrivate
                 ASTViewer.renderKeyValue
                     "Accessor"
                     (GlueAccessor.toText propertyInfo.Accessor)
@@ -143,6 +147,8 @@ type GlueASTViewer =
             ASTViewer.renderNode "Int" [
                 ASTViewer.renderKeyValue "Value" (string value)
             ]
+
+        | GlueLiteral.Null -> ASTViewer.renderNode "Null" []
 
     static member private GlueType
         (glueType: GlueType)

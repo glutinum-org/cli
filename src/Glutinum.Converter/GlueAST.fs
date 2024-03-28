@@ -54,6 +54,7 @@ type GlueProperty =
         IsStatic: bool
         IsOptional: bool
         Accessor: GlueAccessor
+        IsPrivate: bool
     }
 
 type GlueIndexSignature =

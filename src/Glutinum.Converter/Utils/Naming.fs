@@ -27,6 +27,7 @@ let escapeName (name: string) : string =
         name.Contains("-")
         || startWithDigit name
         || Keywords.fsharp.Contains name
+        || name.StartsWith("#")
     then
         $"``%s{name}``"
     else

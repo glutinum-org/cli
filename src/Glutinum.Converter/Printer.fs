@@ -364,7 +364,13 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
             printAttributes printer propertyInfo.Attributes
 
             if propertyInfo.IsStatic then
-                printer.Write($"static member inline {propertyInfo.Name}")
+                printer.Write($"static member inline ")
+
+                FSharpAccessibility.printInline
+                    printer
+                    propertyInfo.Accessibility
+
+                printer.WriteInline($"{propertyInfo.Name}")
 
                 let printGetter () =
                     printer.Indent
