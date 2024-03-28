@@ -126,6 +126,9 @@ let rec private transformType
     | GlueType.Primitive primitiveInfo ->
         transformPrimitive primitiveInfo |> FSharpType.Primitive
 
+    | GlueType.OptionalType glueType ->
+        transformType context glueType |> FSharpType.Option
+
     | GlueType.ThisType typeName -> FSharpType.ThisType typeName
 
     | GlueType.TupleType glueTypes -> transformTupleType context glueTypes
@@ -178,7 +181,7 @@ let rec private transformType
         |> FSharpType.TypeReference
 
     | GlueType.Array glueType ->
-        (transformType context) glueType |> FSharpType.ResizeArray
+        transformType context glueType |> FSharpType.ResizeArray
 
     | GlueType.ClassDeclaration classDeclaration ->
         ({
@@ -198,7 +201,7 @@ let rec private transformType
                 functionTypeInfo.Parameters
                 |> List.map (transformParameter context)
             TypeArguments = []
-            ReturnType = (transformType context) functionTypeInfo.Type
+            ReturnType = transformType context functionTypeInfo.Type
         }
         : FSharpFunctionType)
         |> FSharpType.Function
@@ -328,7 +331,7 @@ let private transformExports
                         info.Parameters |> List.map (transformParameter context)
                     TypeParameters =
                         transformTypeParameters context info.TypeParameters
-                    Type = (transformType context) info.Type
+                    Type = transformType context info.Type
                     IsOptional = false
                     IsStatic = true
                     Accessor = None
@@ -1208,7 +1211,8 @@ let private transformTypeAliasDeclaration
     | GlueType.Discard
     | GlueType.FunctionDeclaration _
     | GlueType.ThisType _
-    | GlueType.Variable _ -> FSharpType.Discard
+    | GlueType.Variable _
+    | GlueType.OptionalType _ -> FSharpType.Discard
 
 let private transformModuleDeclaration
     (moduleDeclaration: GlueModuleDeclaration)
@@ -1295,6 +1299,7 @@ let rec private transformToFsharp
         | GlueType.TupleType _
         | GlueType.IntersectionType _
         | GlueType.TypeLiteral _
+        | GlueType.OptionalType _
         | GlueType.ThisType _ -> FSharpType.Discard
     )
 

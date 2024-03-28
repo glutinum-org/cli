@@ -187,6 +187,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     SettingsContainer.#privateField = $0"""
     ```
 
+* Add support for optional type
+
+    ```ts
+    export type LatLngTuple = [number, number, number?];
+    ```
+
+    ```fs
+    type LatLngTuple = float * float * float option
+    ```
+
 ### Changed
 
 * Replace `Boolean` with `bool`

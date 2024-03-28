@@ -309,6 +309,11 @@ let readTypeNode
 
         reader.ReadTypeNode parenthesizedTypeNode.``type``
 
+    | Ts.SyntaxKind.OptionalType ->
+        let optionalTypeNode = typeNode :?> Ts.OptionalTypeNode
+
+        reader.ReadTypeNode optionalTypeNode.``type`` |> GlueType.OptionalType
+
     | _ ->
         generateReaderError
             "type node"

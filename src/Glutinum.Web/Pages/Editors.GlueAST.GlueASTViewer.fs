@@ -164,6 +164,12 @@ type GlueASTViewer =
                 ]
                 context
 
+        | GlueType.OptionalType optionalType ->
+            ASTViewer.renderNode
+                "OptionalType"
+                [ GlueASTViewer.Type optionalType ]
+                context
+
         | GlueType.Interface interfaceInfo ->
             ASTViewer.renderNode
                 "Interface"

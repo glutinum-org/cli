@@ -209,6 +209,7 @@ type GlueType =
     | TupleType of GlueType list
     | IntersectionType of GlueMember list
     | TypeLiteral of GlueTypeLiteral
+    | OptionalType of GlueType
 
     member this.Name =
         match this with
@@ -243,4 +244,5 @@ type GlueType =
         | Partial _
         | FunctionType _
         | TupleType _
+        | OptionalType _ // TODO: Should we take the name of the underlying type and add option to it?
         | Discard -> "obj"
