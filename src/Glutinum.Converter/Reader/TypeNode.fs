@@ -304,6 +304,11 @@ let readTypeNode
 
         ({ Members = members }: GlueTypeLiteral) |> GlueType.TypeLiteral
 
+    | Ts.SyntaxKind.ParenthesizedType ->
+        let parenthesizedTypeNode = typeNode :?> Ts.ParenthesizedTypeNode
+
+        reader.ReadTypeNode parenthesizedTypeNode.``type``
+
     | _ ->
         generateReaderError
             "type node"

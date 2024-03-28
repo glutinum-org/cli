@@ -1,13 +1,10 @@
 module rec Glutinum.Converter.Generate
 
 open Fable.Core
-open System
 open Node
 open TypeScript
 open Fable.Core.JsInterop
 open Glutinum.Converter.FSharpAST
-open Node.Api
-open Fable.Core.JS
 open Glutinum.Converter
 
 let generateBindingFile (filePath: string) =
@@ -46,9 +43,3 @@ let generateBindingFile (filePath: string) =
     Printer.print printer res
 
     printer.ToString()
-
-// print res
-
-// log(printer.ToString())
-
-// let res = main "tests/specs/functions/topLevelDeclaredBasicFunction.d.ts"
