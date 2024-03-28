@@ -33,6 +33,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
         U2<string, LatLngTuple>
     ```
 
+* Prevent infite loop when a class has a reference to a union type which reference the class itself
+
+    ```ts
+    export declare class MyClass {
+        contains(otherBoundsOrLatLng: MyUnion | string): boolean;
+    }
+
+    export type MyUnion = MyClass | string;
+    ```
+
+    ```fs
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type MyClass =
+        abstract member contains: otherBoundsOrLatLng: U2<MyUnion, string> -> bool
+
+    type MyUnion =
+        U2<MyClass, string>
+    ```
+
 ### Added
 
 * Add support for `MethodSignature` on interface ([GH-28](https://github.com/glutinum-org/cli/issues/28))
