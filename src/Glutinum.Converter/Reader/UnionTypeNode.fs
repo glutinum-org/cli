@@ -21,7 +21,6 @@ let rec private readUnionTypeCases
         if ts.isParenthesizedTypeNode node then
             let parenthesizedTypeNode = node :?> Ts.ParenthesizedTypeNode
 
-            let i = 0
             removeParenthesizedType parenthesizedTypeNode.``type``
         else
             node
@@ -95,8 +94,23 @@ let rec private readUnionTypeCases
                     |> Some
                 else
                     let declaration = declarations.[0]
+                    // TODO: This is an optimitic approach
+                    // But we should revisit how TypeReference is handled because of recursive types
+                    match declaration.kind with
+                    | Ts.SyntaxKind.TypeAliasDeclaration ->
+                        reader.ReadNode declaration |> List.singleton |> Some
 
-                    reader.ReadNode declaration |> List.singleton |> Some
+                    | _ ->
+                        let fullName = checker.getFullyQualifiedName symbol
+
+                        ({
+                            Name = typeReferenceNode.getText ()
+                            FullName = fullName
+                            TypeArguments = []
+                        })
+                        |> GlueType.TypeReference
+                        |> List.singleton
+                        |> Some
 
             | None ->
                 let typ = checker.getTypeOfSymbol symbol
