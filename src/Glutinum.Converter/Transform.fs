@@ -917,7 +917,7 @@ let private transformTypeAliasDeclaration
                 | GlueType.TypeAliasDeclaration aliasCases ->
                     match aliasCases.Type with
                     | GlueType.Union(GlueTypeUnion cases) -> flattenCases cases
-                    | _ -> failwith "Should not happen"
+                    | _ -> []
                 // Can't find cases so we return an empty list to discard the type
                 // Should we do something if we fall in this state?
                 // I think the code below will be able to recover by generating

@@ -18,6 +18,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Optional interface properties should be transform into `'T option`
 * Don't indent module name when printing the F# code
 * When leaving `module` scope, indent the printer memory
+* Don't crash when flattening a union
+
+    ```ts
+    export type LatLngTuple = [number, number, number?];
+
+    export type LatLngExpression = string | LatLngTuple;
+    ```
+
+    ```fs
+    type LatLngTuple = float * float * float option
+
+    type LatLngExpression =
+        U2<string, LatLngTuple>
+    ```
 
 ### Added
 
