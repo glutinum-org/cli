@@ -53,6 +53,8 @@ let readTypeOperatorNode
             |> TypeScriptReaderException
             |> raise
 
+    | Ts.SyntaxKind.ReadonlyKeyword -> reader.ReadTypeNode node.``type``
+
     | _ ->
         Utils.generateReaderError
             "type operator"

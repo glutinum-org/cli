@@ -314,6 +314,11 @@ let readTypeNode
 
         reader.ReadTypeNode optionalTypeNode.``type`` |> GlueType.OptionalType
 
+    | Ts.SyntaxKind.TypeOperator ->
+        let typeOperatorNode = typeNode :?> Ts.TypeOperatorNode
+
+        reader.ReadTypeOperatorNode typeOperatorNode
+
     | _ ->
         generateReaderError
             "type node"

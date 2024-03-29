@@ -231,6 +231,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     type LatLngTuple = float * float * float option
     ```
 
+* Add support for `readonly` TypeOperator
+
+    ```ts
+    export type ReadonlyArray<T> = readonly T[];
+    ```
+
+    ```fs
+    type ReadonlyArray<'T> = ResizeArray<'T>
+    ```
+
 ### Changed
 
 * Replace `Boolean` with `bool`
