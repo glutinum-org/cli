@@ -25,9 +25,10 @@ let startWithDigit (name: string) : bool =
 let escapeName (name: string) : string =
     if
         name.Contains("-")
+        || name.Contains("$")
+        || name.Contains("#")
         || startWithDigit name
         || Keywords.fsharp.Contains name
-        || name.StartsWith("#")
     then
         $"``%s{name}``"
     else
