@@ -16,3 +16,6 @@ let warn (text: string) =
 
 let error (text: string) =
     JS.console.error (chalk.redBright.Invoke text)
+
+let debug (text: string) =
+    JS.console.debug (chalk.gray.Invoke text)

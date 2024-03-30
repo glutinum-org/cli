@@ -241,6 +241,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     type ReadonlyArray<'T> = ResizeArray<'T>
     ```
 
+* Optimise `IntersectionType` inside of `TypeArguments`
+
+    ```ts
+    export type RecordEntryObject = {
+        v: string
+        n: number
+    }
+
+    export type RecordEntryArrayItem = ReadonlyArray<
+        RecordEntryObject & { i: number }
+    >
+    ```
+
+    ```fs
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type RecordEntryObject =
+    abstract member v: string with get, set
+    abstract member n: float with get, set
+
+    type RecordEntryArrayItem =
+    ResizeArray<RecordEntryArrayItem.ReadonlyArray.ReturnType>
+
+    module RecordEntryArrayItem =
+
+    module ReadonlyArray =
+
+        [<AllowNullLiteral>]
+        [<Interface>]
+        type ReturnType =
+            abstract member v: string with get, set
+            abstract member n: float with get, set
+            abstract member i: float with get, set
+    ```
+
 ### Changed
 
 * Replace `Boolean` with `bool`

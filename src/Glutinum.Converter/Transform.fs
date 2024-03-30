@@ -175,7 +175,7 @@ let rec private transformType
             TypeArguments =
                 typeReference.TypeArguments |> List.map (transformType context)
             Type = //transformType context typeReference.TypeRef
-                FSharpType.Discard
+                FSharpType.Primitive FSharpPrimitive.String
         }
         : FSharpTypeReference)
         |> FSharpType.TypeReference
@@ -1081,16 +1081,72 @@ let private transformTypeAliasDeclaration
         |> FSharpType.TypeAlias
 
     | GlueType.TypeReference typeReference ->
-        ({
-            Name = typeAliasName
-            Type = transformType context (GlueType.TypeReference typeReference)
-            TypeParameters =
-                transformTypeParameters
-                    context
-                    glueTypeAliasDeclaration.TypeParameters
-        }
-        : FSharpTypeAlias)
-        |> FSharpType.TypeAlias
+        let context = context.PushScope typeReference.Name
+
+        let handleDefaultCase () =
+            ({
+                Name = typeAliasName
+                Type =
+                    transformType context (GlueType.TypeReference typeReference)
+                TypeParameters =
+                    transformTypeParameters
+                        context
+                        glueTypeAliasDeclaration.TypeParameters
+            }
+            : FSharpTypeAlias)
+            |> FSharpType.TypeAlias
+
+        match typeReference.TypeArguments with
+        | head :: [] ->
+            // For intersection type we can do an optimisation here to generate a real interface
+            // and not just default to obj
+            // This code should probably be revisited to make it easier to read
+            // I think this would benefit from the gobal addition of the understand of
+            // Name / FullName / ReferenceName perhaps ?
+            // Where depending on where the type is used we could use one of the other name?
+            match head with
+            | GlueType.IntersectionType members ->
+                let makeInterfaceTyp name =
+                    {
+                        Attributes =
+                            [
+                                FSharpAttribute.AllowNullLiteral
+                                FSharpAttribute.Interface
+                            ]
+                        Name = name
+                        OriginalName = glueTypeAliasDeclaration.Name
+                        TypeParameters = []
+                        Members =
+                            TransformMembers.toFSharpMember context members
+                    }
+
+                let exposedType = makeInterfaceTyp "ReturnType"
+
+                let typeArgument =
+                    makeInterfaceTyp (context.FullName + ".ReturnType")
+
+                let context = context.PushScope typeReference.Name
+
+                context.ExposeType(FSharpType.Interface exposedType)
+
+                ({
+                    Name = typeAliasName
+                    Type =
+                        {
+                            Name = typeReference.Name
+                            FullName = typeReference.FullName
+                            TypeArguments =
+                                [ FSharpType.Interface typeArgument ]
+                            Type = FSharpType.Discard
+                        }
+                        |> FSharpType.TypeReference
+                    TypeParameters = []
+                }
+                : FSharpTypeAlias)
+                |> FSharpType.TypeAlias
+            | _ -> handleDefaultCase ()
+
+        | _ -> handleDefaultCase ()
 
     | GlueType.Array glueType ->
         ({

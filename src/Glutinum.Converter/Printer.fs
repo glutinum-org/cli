@@ -211,9 +211,7 @@ let rec private printType (fsharpType: FSharpType) =
         | FSharpPrimitive.Null -> "obj"
     | FSharpType.TypeReference typeReference ->
         let replacedName =
-            match typeReference.Name with
-            | "Boolean" -> "bool"
-            | name -> name
+            Naming.mapTypeNameToFableCoreAwareName typeReference.Name
 
         if typeReference.TypeArguments.Length > 0 then
             let typeArguments =
@@ -228,11 +226,11 @@ let rec private printType (fsharpType: FSharpType) =
     | FSharpType.TypeParameter name -> $"'{name}"
     | FSharpType.Option optionType -> printType optionType + " option"
     | FSharpType.ResizeArray arrayType -> $"ResizeArray<{printType arrayType}>"
+    | FSharpType.Interface interfaceInfo -> interfaceInfo.Name
+    | FSharpType.Class classInfo -> classInfo.Name
+    | FSharpType.TypeAlias aliasInfo -> aliasInfo.Name
     | FSharpType.Module _
-    | FSharpType.Interface _
-    | FSharpType.Class _
     | FSharpType.Unsupported _
-    | FSharpType.TypeAlias _
     | FSharpType.Discard -> "obj"
 
 let private printTypeParameters

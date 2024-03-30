@@ -38,6 +38,9 @@ let mapTypeNameToFableCoreAwareName (name: string) : string =
     | "Date" -> "JS.Date"
     | "Promise" -> "JS.Promise"
     | "Uint8Array" -> "JS.Uint8Array"
+    | "ReadonlyArray" -> "ResizeArray"
+    | "Array" -> "ResizeArray"
+    | "Boolean" -> "bool"
     | name -> name
 
 let removeSurroundingQuotes (text: string) : string =
