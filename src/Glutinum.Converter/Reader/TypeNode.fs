@@ -42,8 +42,7 @@ let readTypeNode
                     "type node"
                     "Missing symbol"
                     typeReferenceNode
-                |> TypeScriptReaderException
-                |> raise
+                |> failwith
             | Some symbol -> checker.getFullyQualifiedName symbol
 
         // Could this detect false positive, if the library defined
@@ -214,12 +213,12 @@ let readTypeNode
         match tryReadLiteral literalExpression with
         | Some literal -> GlueType.Literal literal
         | None ->
-            generateReaderError
-                "type node - literal type"
-                $"Could not read literal type"
-                typeNode
-            |> TypeScriptReaderException
-            |> raise
+            failwith (
+                generateReaderError
+                    "type node - literal type"
+                    $"Could not read literal type"
+                    typeNode
+            )
 
     | Ts.SyntaxKind.ThisType ->
         let thisTypeNode = typeNode :?> Ts.ThisTypeNode
@@ -261,12 +260,12 @@ let readTypeNode
                     else
                         Some ForceAny
                 | None ->
-                    generateReaderError
-                        "type node"
-                        "Missing declarations"
-                        typeNode
-                    |> TypeScriptReaderException
-                    |> raise
+                    failwith (
+                        generateReaderError
+                            "type node"
+                            "Missing declarations"
+                            typeNode
+                    )
             )
 
         // We can't create a contract for some of the properties
@@ -324,5 +323,6 @@ let readTypeNode
             "type node"
             $"Unsupported kind %A{typeNode.kind}"
             typeNode
-        |> TypeScriptReaderException
-        |> raise
+        |> reader.Warnings.Add
+
+        GlueType.Primitive GluePrimitive.Any

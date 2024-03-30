@@ -39,8 +39,6 @@ let readNode (reader: ITypeScriptReader) (node: Ts.Node) : GlueType =
                 $"Unsupported node kind %A{unsupported}"
                 node
 
-        printfn "Warning: %s" warning
-
         reader.Warnings.Add warning
 
         GlueType.Discard

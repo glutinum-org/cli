@@ -99,11 +99,7 @@ let private generateFile
                 readerResult.Warnings |> Seq.toList
             )
 
-        with
-        | :? TypeScriptReaderException as error ->
-            CompilationResult.TypeScriptReaderException error.message
-
-        | error ->
+        with error ->
             console.log error
 
             CompilationResult.Error
@@ -175,7 +171,6 @@ let update (msg: Msg) (model: Model) (currentTsCode: string) =
 
             updatedModel, cmd
 
-        | CompilationResult.TypeScriptReaderException message
         | CompilationResult.Error message ->
             let cmd =
                 match result.Source with

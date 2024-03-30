@@ -30,6 +30,9 @@ let generateBindingFile (filePath: string) =
 
     let readerResult = Read.readSourceFile checker sourceFile
 
+    for warning in readerResult.Warnings do
+        Log.warn warning
+
     let res = Transform.transform true readerResult.GlueAST
 
     let outFile =

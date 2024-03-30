@@ -16,7 +16,6 @@ open GlueASTViewer
 [<RequireQualifiedAccess>]
 type CompilationResult =
     | Success of ast: GlueType list * warnings: string list
-    | TypeScriptReaderException of string
     | Error of string
 
 type SuccessModel =
@@ -56,11 +55,7 @@ let private generateAST (typeScriptCode: string) =
             readerResult.Warnings |> Seq.toList
         )
 
-    with
-    | :? TypeScriptReaderException as error ->
-        CompilationResult.TypeScriptReaderException error.message
-
-    | error ->
+    with error ->
         Fable.Core.JS.console.log error
 
         CompilationResult.Error
@@ -96,9 +91,6 @@ let update (msg: Msg) (model: Model) (currentTsCode: string) =
             Cmd.none
 
         | CompilationResult.Error msg -> Errored msg, Cmd.none
-
-        | CompilationResult.TypeScriptReaderException msg ->
-            Errored msg, Cmd.none
 
     | Expand path ->
         match model with

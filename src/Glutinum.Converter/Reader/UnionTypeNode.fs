@@ -66,12 +66,12 @@ let rec private readUnionTypeCases
             let symbol =
                 Option.defaultWith
                     (fun () ->
-                        generateReaderError
-                            "union type cases"
-                            "Missing symbol"
-                            typeReferenceNode
-                        |> TypeScriptReaderException
-                        |> raise
+                        failwith (
+                            generateReaderError
+                                "union type cases"
+                                "Missing symbol"
+                                typeReferenceNode
+                        )
                     )
                     symbolOpt
 
@@ -121,12 +121,12 @@ let rec private readUnionTypeCases
                     |> List.singleton
                     |> Some
                 | _ ->
-                    generateReaderError
-                        "union type cases"
-                        "Unsupported type reference reach a point where it was expected to have flags like Any"
-                        typeReferenceNode
-                    |> TypeScriptReaderException
-                    |> raise
+                    failwith (
+                        generateReaderError
+                            "union type cases"
+                            "Unsupported type reference reach a point where it was expected to have flags like Any"
+                            typeReferenceNode
+                    )
 
         // else
         //     symbol.declarations

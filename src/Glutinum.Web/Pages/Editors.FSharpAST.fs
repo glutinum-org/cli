@@ -16,7 +16,6 @@ open FSharpASTViewer
 [<RequireQualifiedAccess>]
 type CompilationResult =
     | Success of ast: FSharpType list * warnings: string list
-    | TypeScriptReaderException of string
     | Error of string
 
 type SuccessModel =
@@ -58,8 +57,6 @@ let private generateAST (typeScriptCode: string) =
         )
 
     with
-    | :? TypeScriptReaderException as error ->
-        CompilationResult.TypeScriptReaderException error.message
 
     | error ->
         Fable.Core.JS.console.log error
@@ -97,9 +94,6 @@ let update (msg: Msg) (model: Model) (currentTsCode: string) =
             Cmd.none
 
         | CompilationResult.Error msg -> Errored msg, Cmd.none
-
-        | CompilationResult.TypeScriptReaderException msg ->
-            Errored msg, Cmd.none
 
     | Expand path ->
         match model with

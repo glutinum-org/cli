@@ -27,7 +27,7 @@ EXAMPLES
     glutinum ./node_modules/my-lib/index.d.ts
         """
 
-    printfn $"%s{helpText}"
+    Log.log $"%s{helpText}"
 
 let private getVersion () =
     emitJsStatement
@@ -55,12 +55,12 @@ let main (argv: string array) =
     | "--version" :: [] ->
         let version = getVersion ()
 
-        printfn $"%s{version}"
+        Log.log $"%s{version}"
         0
 
     | input :: "--out-file" :: outFile :: [] ->
 
-        printfn "Generating binding file for %s" input
+        Log.info $"Generating binding file for %s{input}"
         let res = generateBindingFile input
 
         let outFileDir = path.dirname (outFile)
@@ -75,15 +75,15 @@ let main (argv: string array) =
         0
 
     | input :: [] ->
-        printfn "Generating binding file for %s" input
+        Log.info $"Generating binding file for %s{input}"
         let res = generateBindingFile input
 
-        printfn "Generation result:\n%s" res
+        Log.log $"Generation result:\n%s{res}"
 
         Log.success "Success!"
 
         0
     | _ ->
-        printfn "Invalid arguments"
+        Log.error "Invalid arguments"
         printHelp ()
         1

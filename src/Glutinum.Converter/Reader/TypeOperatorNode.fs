@@ -25,8 +25,7 @@ let readTypeOperatorNode
                     "type operator (keyof)"
                     "Missing symbol"
                     node
-                |> TypeScriptReaderException
-                |> raise
+                |> failwith
 
             | Some symbol ->
                 match symbol.declarations with
@@ -42,16 +41,14 @@ let readTypeOperatorNode
                         "type operator (keyof)"
                         "Missing declarations"
                         node
-                    |> TypeScriptReaderException
-                    |> raise
+                    |> failwith
 
         else
             Utils.generateReaderError
                 "type operator (keyof)"
                 $"Was expecting a type reference instead got a Node of type %A{node.``type``.kind}"
                 node
-            |> TypeScriptReaderException
-            |> raise
+            |> failwith
 
     | Ts.SyntaxKind.ReadonlyKeyword -> reader.ReadTypeNode node.``type``
 
@@ -60,5 +57,6 @@ let readTypeOperatorNode
             "type operator"
             $"Unsupported operator %A{node.operator}"
             node
-        |> TypeScriptReaderException
-        |> raise
+        |> reader.Warnings.Add
+
+        GlueType.Primitive GluePrimitive.Any

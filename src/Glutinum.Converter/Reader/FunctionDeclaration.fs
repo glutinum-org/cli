@@ -28,8 +28,7 @@ let readFunctionDeclaration
                 "function declaration"
                 "Missing name"
                 declaration
-            |> TypeScriptReaderException
-            |> raise
+            |> failwith
 
     {
         IsDeclared = isDeclared

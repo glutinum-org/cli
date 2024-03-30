@@ -38,20 +38,20 @@ let private readEnumMembers
                 | GlueLiteral.Float _ as value -> value
                 | GlueLiteral.Null
                 | GlueLiteral.Bool _ ->
-                    generateReaderError
-                        "enum member"
-                        "Boolean literals are not supported in enums"
-                        initializer
-                    |> TypeScriptReaderException
-                    |> raise
+                    failwith (
+                        generateReaderError
+                            "enum member"
+                            "Boolean and null literals are not supported in enums"
+                            initializer
+                    )
 
             | None ->
-                generateReaderError
-                    "enum member"
-                    "readEnumCases: Unsupported enum initializer"
-                    initializer
-                |> TypeScriptReaderException
-                |> raise
+                failwith (
+                    generateReaderError
+                        "enum member"
+                        "readEnumCases: Unsupported enum initializer"
+                        initializer
+                )
 
     let name = unbox<Ts.Identifier> enumMember.name
 

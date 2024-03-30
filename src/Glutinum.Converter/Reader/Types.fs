@@ -5,8 +5,6 @@ open TypeScript
 open Glutinum.Converter.GlueAST
 open System.Collections.Generic
 
-exception TypeScriptReaderException of message: string
-
 [<Mangle>]
 type ITypeScriptReader =
     abstract checker: Ts.TypeChecker with get

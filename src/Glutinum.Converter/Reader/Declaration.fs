@@ -164,5 +164,4 @@ let readDeclaration
             "declaration"
             $"Unsupported kind %A{declaration.kind}"
             declaration
-        |> TypeScriptReaderException
-        |> raise
+        |> failwith

@@ -27,8 +27,6 @@ let readIndexedAccessType
 
             reader.Warnings.Add warning
 
-            printfn "%s" warning
-
             GlueType.Discard
 
     GlueType.IndexedAccessType typ

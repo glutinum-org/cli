@@ -26,11 +26,7 @@ let private compilationResultToText (result: CompilationResult) =
         else
             let warningsText =
                 warnings
-                |> List.map (fun warning ->
-                    printfn "%A" (warning.Split('\n'))
-
-                    warning.Replace("\n", "\n> ")
-                )
+                |> List.map _.Replace("\n", "\n> ")
                 |> String.concat "\n> ```\n> ```"
 
             $"""**FSharp (with warnings)**
@@ -43,13 +39,6 @@ let private compilationResultToText (result: CompilationResult) =
 > ```
 > %s{warningsText}
 > ```"""
-
-    | CompilationResult.TypeScriptReaderException error ->
-        $"""**Reader failed**
-
-```
-%s{error}
-```"""
 
     | CompilationResult.Error error ->
         $"""**Error**

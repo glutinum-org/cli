@@ -36,8 +36,7 @@ let readVariableStatement
                         "variable statement"
                         "Unable to read variable name"
                         declaration
-                    |> TypeScriptReaderException
-                    |> raise
+                    |> failwith
 
             ({
                 Name = name

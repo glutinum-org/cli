@@ -286,7 +286,7 @@ let rec private transformType
     | GlueType.Partial _
     | GlueType.IntersectionType _
     | GlueType.FunctionDeclaration _ ->
-        printfn "Could not transform type: %A" glueType
+        Log.error $"Could not transform type: %A{glueType}"
         FSharpType.Discard
 
 /// <summary></summary>
