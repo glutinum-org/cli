@@ -1,0 +1,1 @@
+type StringArray = Array<string>
