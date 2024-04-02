@@ -372,5 +372,6 @@ type FSharpType =
     | ThisType of typeName: string
     | Function of FSharpFunctionType
     | Class of FSharpClass
+    | Object
 
 type FSharpOutFile = { Name: string; Opens: string list }

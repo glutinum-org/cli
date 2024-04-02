@@ -164,6 +164,7 @@ let private printAttributes
 
 let rec private printType (fsharpType: FSharpType) =
     match fsharpType with
+    | FSharpType.Object -> "obj"
     | FSharpType.Mapped info -> info.Name
     | FSharpType.Union info ->
         let cases =
@@ -733,6 +734,7 @@ let rec print (printer: Printer) (fsharpTypes: FSharpType list) =
 
         | FSharpType.Mapped _
         | FSharpType.Primitive _
+        | FSharpType.Object
         | FSharpType.TypeReference _
         | FSharpType.Option _
         | FSharpType.ResizeArray _

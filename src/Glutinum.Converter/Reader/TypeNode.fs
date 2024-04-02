@@ -318,6 +318,8 @@ let readTypeNode
 
         reader.ReadTypeOperatorNode typeOperatorNode
 
+    | Ts.SyntaxKind.UnknownKeyword -> GlueType.Unknown
+
     | _ ->
         generateReaderError
             "type node"

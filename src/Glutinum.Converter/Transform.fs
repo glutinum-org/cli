@@ -123,6 +123,8 @@ let rec private transformType
     : FSharpType
     =
     match glueType with
+    | GlueType.Unknown -> FSharpType.Object
+
     | GlueType.Primitive primitiveInfo ->
         transformPrimitive primitiveInfo |> FSharpType.Primitive
 
@@ -1258,6 +1260,18 @@ let private transformTypeAliasDeclaration
         }
         |> FSharpType.Interface
 
+    | GlueType.Unknown ->
+        ({
+            Name = typeAliasName
+            Type = FSharpType.Object
+            TypeParameters =
+                transformTypeParameters
+                    context
+                    glueTypeAliasDeclaration.TypeParameters
+        }
+        : FSharpTypeAlias)
+        |> FSharpType.TypeAlias
+
     | GlueType.ClassDeclaration _
     | GlueType.Enum _
     | GlueType.Interface _
@@ -1350,6 +1364,7 @@ let rec private transformToFsharp
         | GlueType.Literal _
         | GlueType.Variable _
         | GlueType.Primitive _
+        | GlueType.Unknown
         | GlueType.KeyOf _
         | GlueType.Discard
         | GlueType.TupleType _

@@ -299,6 +299,8 @@ type FSharpASTViewer =
         (context: NodeContext<'Msg>)
         =
         match fsharpType with
+        | FSharpType.Object -> ASTViewer.renderValueOnly "Object" context
+
         | FSharpType.Interface interfaceInfo ->
             ASTViewer.renderNode
                 "Interface"

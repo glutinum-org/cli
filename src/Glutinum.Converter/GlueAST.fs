@@ -210,6 +210,7 @@ type GlueType =
     | IntersectionType of GlueMember list
     | TypeLiteral of GlueTypeLiteral
     | OptionalType of GlueType
+    | Unknown
 
     member this.Name =
         match this with
@@ -245,4 +246,5 @@ type GlueType =
         | FunctionType _
         | TupleType _
         | OptionalType _ // TODO: Should we take the name of the underlying type and add option to it?
-        | Discard -> "obj"
+        | Discard
+        | Unknown -> "obj"
