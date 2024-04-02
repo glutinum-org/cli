@@ -32,6 +32,11 @@ let readNode (reader: ITypeScriptReader) (node: Ts.Node) : GlueType =
         // writing a warning in the console
         GlueType.Discard
 
+    | Ts.SyntaxKind.ImportDeclaration ->
+        // Avoid writing a warning in the console for now
+        // Should be handled in the future
+        GlueType.Discard
+
     | unsupported ->
         let warning =
             Utils.generateReaderError
