@@ -155,6 +155,12 @@ type GlueASTViewer =
         (context: NodeContext<'Msg>)
         =
         match glueType with
+        | GlueType.ExportDefault glueType ->
+            ASTViewer.renderNode
+                "ExportDefault"
+                [ GlueASTViewer.GlueType glueType ]
+                context
+
         | GlueType.Unknown -> ASTViewer.renderValueOnly "Unknown" context
 
         | GlueType.Variable variableInfo ->

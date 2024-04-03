@@ -277,12 +277,15 @@ let rec private transformType
         : FSharpTypeReference)
         |> FSharpType.TypeReference
 
+    | GlueType.ExportDefault glueType -> transformType context glueType
+
+    | GlueType.Variable info -> transformType context info.Type
+
     | GlueType.ModuleDeclaration _
     | GlueType.IndexedAccessType _
     | GlueType.Literal _
     | GlueType.Enum _
     | GlueType.TypeAliasDeclaration _
-    | GlueType.Variable _
     | GlueType.KeyOf _
     | GlueType.Discard
     | GlueType.Partial _
@@ -408,6 +411,25 @@ let private transformExports
                         |> Some
                     | _ -> None
                 )
+
+            | GlueType.ExportDefault glueType ->
+                let name, context =
+                    sanitizeNameAndPushScope glueType.Name context
+
+                {
+                    Attributes = [ FSharpAttribute.ImportAll "module" ]
+                    Name = name
+                    OriginalName = glueType.Name
+                    Parameters = []
+                    TypeParameters = []
+                    Type = transformType context glueType
+                    IsOptional = false
+                    IsStatic = true
+                    Accessor = None
+                    Accessibility = FSharpAccessibility.Public
+                }
+                |> FSharpMember.Property
+                |> List.singleton
 
             | glueType ->
                 failwithf "Could not generate exportMembers for: %A" glueType
@@ -1282,6 +1304,7 @@ let private transformTypeAliasDeclaration
     | GlueType.FunctionDeclaration _
     | GlueType.ThisType _
     | GlueType.Variable _
+    | GlueType.ExportDefault _
     | GlueType.OptionalType _ -> FSharpType.Discard
 
 let private transformModuleDeclaration
@@ -1316,19 +1339,6 @@ let private transformClassDeclaration
     : FSharpInterface)
     |> FSharpType.Interface
 
-let private transformFunctionType (functionTypeInfo: GlueFunctionType) =
-
-    ({
-        Attributes =
-            [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
-        Name = "dwdw"
-        OriginalName = "dwdw"
-        Members = []
-        TypeParameters = []
-    }
-    : FSharpInterface)
-    |> FSharpType.Interface
-
 let rec private transformToFsharp
     (context: TransformContext)
     (glueTypes: GlueType list)
@@ -1337,6 +1347,7 @@ let rec private transformToFsharp
     glueTypes
     |> List.map (
         function
+
         | GlueType.Interface interfaceInfo ->
             let context = context.PushScope(interfaceInfo.Name)
 
@@ -1352,6 +1363,12 @@ let rec private transformToFsharp
 
         | GlueType.ClassDeclaration classInfo ->
             transformClassDeclaration context classInfo
+
+        | GlueType.ExportDefault exportedType ->
+            match exportedType with
+            | GlueType.ClassDeclaration classInfo ->
+                transformClassDeclaration context classInfo
+            | _ -> FSharpType.Discard
 
         | GlueType.FunctionType _
         | GlueType.TypeParameter _
@@ -1381,6 +1398,12 @@ let transform (isTopLevel: bool) (glueAst: GlueType list) : FSharpType list =
             match glueType with
             | GlueType.Variable _
             | GlueType.FunctionDeclaration _ -> true
+            | GlueType.ExportDefault exportedType ->
+                // We don't want to capture class definition here for example
+                // Because we need to generate both the class bindings and the exports
+                match exportedType with
+                | GlueType.Variable _ -> true
+                | _ -> false
             | _ -> false
         )
 
@@ -1396,6 +1419,12 @@ let transform (isTopLevel: bool) (glueAst: GlueType list) : FSharpType list =
                     | GlueType.ClassDeclaration _ -> true
                     | _ -> false
                 )
+            | GlueType.ExportDefault exportedType ->
+                // Capture default export of classes here so we can keep
+                // generate their actual bindings
+                match exportedType with
+                | GlueType.ClassDeclaration _ -> true
+                | _ -> false
             | _ -> false
         )
 

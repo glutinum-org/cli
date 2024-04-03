@@ -211,6 +211,7 @@ type GlueType =
     | TypeLiteral of GlueTypeLiteral
     | OptionalType of GlueType
     | Unknown
+    | ExportDefault of GlueType
 
     member this.Name =
         match this with
@@ -247,4 +248,5 @@ type GlueType =
         | TupleType _
         | OptionalType _ // TODO: Should we take the name of the underlying type and add option to it?
         | Discard
+        | ExportDefault _
         | Unknown -> "obj"

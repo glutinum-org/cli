@@ -38,6 +38,9 @@ type ITypeScriptReader =
     abstract ReadClassDeclaration:
         classDeclaration: Ts.ClassDeclaration -> GlueType
 
+    abstract ReadExportAssignment:
+        exportAssignment: Ts.ExportAssignment -> GlueType
+
     abstract ReadParameters:
         parameters: ResizeArray<Ts.ParameterDeclaration> -> GlueParameter list
 

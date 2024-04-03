@@ -276,6 +276,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
             abstract member i: float with get, set
     ```
 
+* Add support for default export assignment
+
 ### Changed
 
 * Replace `Boolean` with `bool`

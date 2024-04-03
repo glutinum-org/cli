@@ -2,12 +2,13 @@ module Glutinum.Converter.Reader.ClassDeclaration
 
 open Glutinum.Converter.GlueAST
 open Glutinum.Converter.Reader.Types
+open Glutinum.Converter.Reader.Utils
 open TypeScript
 
 let readClassDeclaration
     (reader: ITypeScriptReader)
     (classDeclaration: Ts.ClassDeclaration)
-    : GlueClassDeclaration
+    : GlueType
     =
 
     let name = unbox<Ts.Identifier> classDeclaration.name
@@ -38,9 +39,22 @@ let readClassDeclaration
 
     let members = members |> Seq.toList |> List.map reader.ReadDeclaration
 
-    {
-        Name = name.getText ()
-        Constructors = constructors
-        Members = members
-        TypeParameters = []
-    }
+    let isDefaultExport =
+        ModifierUtil.HasModifier(
+            classDeclaration.modifiers,
+            Ts.SyntaxKind.DefaultKeyword
+        )
+
+    let classDeclaration =
+        {
+            Name = name.getText ()
+            Constructors = constructors
+            Members = members
+            TypeParameters = []
+        }
+        |> GlueType.ClassDeclaration
+
+    if isDefaultExport then
+        classDeclaration |> GlueType.ExportDefault
+    else
+        classDeclaration

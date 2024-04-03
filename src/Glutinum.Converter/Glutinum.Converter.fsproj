@@ -29,6 +29,7 @@
     <Compile Include="Reader/TypeParameters.fs" />
     <Compile Include="Reader/UnionTypeNode.fs" />
     <Compile Include="Reader/VariableStatement.fs" />
+    <Compile Include="Reader/ExportAssignment.fs" />
     <Compile Include="Reader/TypeScriptReader.fs" />
     <Compile Include="FsharpAST.fs" />
     <Compile Include="Read.fs" />

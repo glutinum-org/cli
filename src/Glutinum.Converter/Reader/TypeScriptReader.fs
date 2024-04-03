@@ -18,7 +18,7 @@ open Glutinum.Converter.Reader.TypeOperatorNode
 open Glutinum.Converter.Reader.TypeParameters
 open Glutinum.Converter.Reader.UnionTypeNode
 open Glutinum.Converter.Reader.VariableStatement
-open System.Collections.Generic
+open Glutinum.Converter.Reader.ExportAssignment
 
 type TypeScriptReader(checker: Ts.TypeChecker) =
     let warnings = ResizeArray<string>()
@@ -34,7 +34,6 @@ type TypeScriptReader(checker: Ts.TypeChecker) =
             : GlueType
             =
             readClassDeclaration this classDeclaration
-            |> GlueType.ClassDeclaration
 
         member this.ReadEnumDeclaration
             (enumDeclaration: Ts.EnumDeclaration)
@@ -111,3 +110,9 @@ type TypeScriptReader(checker: Ts.TypeChecker) =
             : GlueTypeParameter list
             =
             readTypeParameters this typeParametersOpt
+
+        member this.ReadExportAssignment
+            (exportAssignment: Ts.ExportAssignment)
+            : GlueType
+            =
+            readExportAssignment this exportAssignment

@@ -84,3 +84,44 @@ let tryGetFullName (checker: Ts.TypeChecker) (node: Ts.Node) =
 
 let getFullNameOrEmpty (checker: Ts.TypeChecker) (node: Ts.Node) =
     tryGetFullName checker node |> Option.defaultValue ""
+
+type ModifierUtil =
+
+    static member GetAccessor(modifiers: ResizeArray<Ts.Modifier> option) =
+        match modifiers with
+        | Some modifiers ->
+            modifiers
+            |> Seq.exists (fun modifier ->
+                modifier.kind = Ts.SyntaxKind.ReadonlyKeyword
+            )
+            |> function
+                | true -> GlueAccessor.ReadOnly
+                | false -> GlueAccessor.ReadWrite
+        | None -> GlueAccessor.ReadWrite
+
+    static member GetAccessor(modifiers: ResizeArray<Ts.ModifierLike> option) =
+        ModifierUtil.GetAccessor(
+            unbox<ResizeArray<Ts.Modifier> option> modifiers
+        )
+
+    static member HasModifier
+        (modifiers: ResizeArray<Ts.Modifier> option, modifier: Ts.SyntaxKind)
+        =
+        match modifiers with
+        | Some modifiers ->
+            modifiers
+            |> Seq.exists (fun currentModifier ->
+                currentModifier.kind = modifier
+            )
+        | None -> false
+
+    static member HasModifier
+        (
+            modifiers: option<ResizeArray<Ts.ModifierLike>>,
+            modifier: Ts.SyntaxKind
+        )
+        =
+        ModifierUtil.HasModifier(
+            unbox<ResizeArray<Ts.Modifier> option> modifiers,
+            modifier
+        )

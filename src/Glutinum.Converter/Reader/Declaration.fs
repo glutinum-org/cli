@@ -1,50 +1,10 @@
 module Glutinum.Converter.Reader.Declaration
 
 open Glutinum.Converter.GlueAST
+open Glutinum.Converter.Reader.Utils
 open Glutinum.Converter.Reader.Types
 open TypeScript
 open Fable.Core.JsInterop
-
-type ModifierUtil =
-
-    static member GetAccessor(modifiers: ResizeArray<Ts.Modifier> option) =
-        match modifiers with
-        | Some modifiers ->
-            modifiers
-            |> Seq.exists (fun modifier ->
-                modifier.kind = Ts.SyntaxKind.ReadonlyKeyword
-            )
-            |> function
-                | true -> GlueAccessor.ReadOnly
-                | false -> GlueAccessor.ReadWrite
-        | None -> GlueAccessor.ReadWrite
-
-    static member GetAccessor(modifiers: ResizeArray<Ts.ModifierLike> option) =
-        ModifierUtil.GetAccessor(
-            unbox<ResizeArray<Ts.Modifier> option> modifiers
-        )
-
-    static member HasModifier
-        (modifiers: ResizeArray<Ts.Modifier> option, modifier: Ts.SyntaxKind)
-        =
-        match modifiers with
-        | Some modifiers ->
-            modifiers
-            |> Seq.exists (fun currentModifier ->
-                currentModifier.kind = modifier
-            )
-        | None -> false
-
-    static member HasModifier
-        (
-            modifiers: option<ResizeArray<Ts.ModifierLike>>,
-            modifier: Ts.SyntaxKind
-        )
-        =
-        ModifierUtil.HasModifier(
-            unbox<ResizeArray<Ts.Modifier> option> modifiers,
-            modifier
-        )
 
 let readDeclaration
     (reader: ITypeScriptReader)
@@ -160,7 +120,7 @@ let readDeclaration
         |> GlueMember.Property
 
     | _ ->
-        Utils.generateReaderError
+        generateReaderError
             "declaration"
             $"Unsupported kind %A{declaration.kind}"
             declaration

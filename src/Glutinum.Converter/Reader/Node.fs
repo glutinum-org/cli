@@ -28,9 +28,7 @@ let readNode (reader: ITypeScriptReader) (node: Ts.Node) : GlueType =
         reader.ReadClassDeclaration(node :?> Ts.ClassDeclaration)
 
     | Ts.SyntaxKind.ExportAssignment ->
-        // Don't know what to do with, we handle the case to avoid
-        // writing a warning in the console
-        GlueType.Discard
+        reader.ReadExportAssignment(node :?> Ts.ExportAssignment)
 
     | Ts.SyntaxKind.ImportDeclaration ->
         // Avoid writing a warning in the console for now
