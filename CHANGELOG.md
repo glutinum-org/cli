@@ -258,22 +258,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     [<AllowNullLiteral>]
     [<Interface>]
     type RecordEntryObject =
-    abstract member v: string with get, set
-    abstract member n: float with get, set
+        abstract member v: string with get, set
+        abstract member n: float with get, set
 
     type RecordEntryArrayItem =
-    ResizeArray<RecordEntryArrayItem.ReadonlyArray.ReturnType>
+        ResizeArray<RecordEntryArrayItem.ReadonlyArray.ReturnType>
 
     module RecordEntryArrayItem =
 
-    module ReadonlyArray =
+        module ReadonlyArray =
 
-        [<AllowNullLiteral>]
-        [<Interface>]
-        type ReturnType =
-            abstract member v: string with get, set
-            abstract member n: float with get, set
-            abstract member i: float with get, set
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type ReturnType =
+                abstract member v: string with get, set
+                abstract member n: float with get, set
+                abstract member i: float with get, set
     ```
 
 * Add support for default export assignment
