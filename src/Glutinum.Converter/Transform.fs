@@ -303,6 +303,8 @@ let private transformExports
     (exports: GlueType list)
     : FSharpType
     =
+    let context = context.PushScope "Exports"
+
     let members =
         exports
         |> List.collect (
