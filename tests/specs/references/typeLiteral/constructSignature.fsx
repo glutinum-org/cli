@@ -8,7 +8,7 @@ open System
 [<Interface>]
 type Test =
     [<EmitConstructor>]
-    abstract member Create: [<ParamArray>] args: ResizeArray<obj> [] -> obj
+    abstract member Create: [<ParamArray>] args: obj [] -> obj
 
 (***)
 #r "nuget: Fable.Core"

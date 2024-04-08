@@ -8,7 +8,7 @@ open System
 [<Interface>]
 type Log =
     [<Emit("$0($1...)")>]
-    abstract member Invoke: prefix: string * [<ParamArray>] args: ResizeArray<obj> [] -> obj
+    abstract member Invoke: prefix: string * [<ParamArray>] args: obj [] -> obj
 
 (***)
 #r "nuget: Fable.Core"

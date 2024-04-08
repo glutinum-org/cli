@@ -453,6 +453,20 @@ let private transformParameter
     =
     let context = context.PushScope(parameter.Name)
 
+    let typ =
+        let computedType = transformType context parameter.Type
+
+        // In TypeScript, if an argument is marked as spread, users is forced to
+        // use an array. We want to remove the default transformation for that
+        // array and use the underlying type instead
+        // By default, an array is transformed to ResizeArray in F#
+        if parameter.IsSpread then
+            match computedType with
+            | FSharpType.ResizeArray underlyingType -> underlyingType
+            | _ -> computedType
+        else
+            computedType
+
     {
         Attributes =
             [
@@ -461,7 +475,7 @@ let private transformParameter
             ]
         Name = Naming.sanitizeName parameter.Name
         IsOptional = parameter.IsOptional
-        Type = transformType context parameter.Type
+        Type = typ
     }
 
 let private transformAccessor (accessor: GlueAccessor) : FSharpAccessor =

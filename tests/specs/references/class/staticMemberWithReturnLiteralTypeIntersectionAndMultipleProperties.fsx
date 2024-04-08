@@ -27,7 +27,7 @@ Class.mergeOptions($0)"""
         emitJsExpr (initHookFn) $$"""
 import { Class } from "module";
 Class.addInitHook($0)"""
-    static member inline addInitHook (methodName: string, [<ParamArray>] args: ResizeArray<obj> []): obj =
+    static member inline addInitHook (methodName: string, [<ParamArray>] args: obj []): obj =
         emitJsExpr (methodName, args) $$"""
 import { Class } from "module";
 Class.addInitHook($0, $1)"""

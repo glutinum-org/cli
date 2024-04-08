@@ -9,7 +9,7 @@ type Exports =
     [<Import("Logger", "module"); EmitConstructor>]
     static member Logger () : Logger = nativeOnly
     [<Import("Logger", "module"); EmitConstructor>]
-    static member Logger ([<ParamArray>] args: ResizeArray<string> []) : Logger = nativeOnly
+    static member Logger ([<ParamArray>] args: string []) : Logger = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
