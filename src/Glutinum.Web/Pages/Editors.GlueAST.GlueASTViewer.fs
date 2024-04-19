@@ -228,6 +228,7 @@ type GlueASTViewer =
                 | GluePrimitive.Any -> Html.span "Any"
                 | GluePrimitive.Null -> Html.span "Null"
                 | GluePrimitive.Undefined -> Html.span "Undefined"
+                | GluePrimitive.Object -> Html.span "Object"
 
             ASTViewer.renderNode
                 "Primitive"

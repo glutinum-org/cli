@@ -109,6 +109,7 @@ let private transformPrimitive
     | GluePrimitive.Any -> FSharpPrimitive.Null
     | GluePrimitive.Null -> FSharpPrimitive.Null
     | GluePrimitive.Undefined -> FSharpPrimitive.Null
+    | GluePrimitive.Object -> FSharpPrimitive.Null
 
 let private transformTupleType
     (context: TransformContext)

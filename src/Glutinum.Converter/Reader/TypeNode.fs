@@ -320,6 +320,8 @@ let readTypeNode
 
     | Ts.SyntaxKind.UnknownKeyword -> GlueType.Unknown
 
+    | Ts.SyntaxKind.ObjectKeyword -> GlueType.Primitive GluePrimitive.Object
+
     | _ ->
         generateReaderError
             "type node"

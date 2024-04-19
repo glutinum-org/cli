@@ -107,6 +107,7 @@ type GluePrimitive =
     | Any
     | Null
     | Undefined
+    | Object
 
 [<RequireQualifiedAccess>]
 type GlueLiteral =
@@ -228,6 +229,7 @@ type GlueType =
             | GluePrimitive.Any -> "obj"
             | GluePrimitive.Null -> "obj option"
             | GluePrimitive.Undefined -> "obj"
+            | GluePrimitive.Object -> "obj"
         | Enum info -> info.Name
         | TypeAliasDeclaration info -> info.Name
         | TypeParameter name -> name

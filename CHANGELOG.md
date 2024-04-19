@@ -277,6 +277,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     ```
 
 * Add support for default export assignment
+* Add support for `object` type alias
+
+        ```ts
+        export type MyObject = object;
+        ```
+
+        ```fs
+        type MyObject = obj
+        ```
 
 ### Changed
 
