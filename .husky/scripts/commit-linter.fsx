@@ -149,7 +149,7 @@ match args with
     match commitMsgLines with
     // Standard case
     | commit :: secondLine :: tagLine :: _ -> validate commit secondLine tagLine
-    // Give a change to be a valid commit message if the type allows it
+    // Give a chance to be a valid commit message if the type allows it
     | commit :: [] -> validate commit "" ""
 
     | _ ->
