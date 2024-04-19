@@ -35,6 +35,16 @@ let readNode (reader: ITypeScriptReader) (node: Ts.Node) : GlueType =
         // Should be handled in the future
         GlueType.Discard
 
+    | Ts.SyntaxKind.TypeLiteral ->
+        let typeLiteralNode = node :?> Ts.TypeLiteralNode
+
+        let members =
+            typeLiteralNode.members
+            |> Seq.toList
+            |> List.map reader.ReadDeclaration
+
+        ({ Members = members }: GlueTypeLiteral) |> GlueType.TypeLiteral
+
     | unsupported ->
         let warning =
             Utils.generateReaderError
