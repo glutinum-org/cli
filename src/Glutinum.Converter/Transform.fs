@@ -1366,8 +1366,6 @@ let rec private transformToFsharp
         function
 
         | GlueType.Interface interfaceInfo ->
-            let context = context.PushScope(interfaceInfo.Name)
-
             FSharpType.Interface(transformInterface context interfaceInfo)
 
         | GlueType.Enum enumInfo -> transformEnum enumInfo
