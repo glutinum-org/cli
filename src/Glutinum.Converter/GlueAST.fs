@@ -11,6 +11,15 @@
 /// </summary>
 module rec Glutinum.Converter.GlueAST
 
+type GlueCommentParam =
+    { Name: string; Content: string option }
+
+[<RequireQualifiedAccess>]
+type GlueComment =
+    | Summary of string list
+    | Returns of string
+    | Param of GlueCommentParam
+
 type GlueParameter =
     {
         Name: string
@@ -142,6 +151,7 @@ type GlueTypeAliasDeclaration =
 
 type GlueFunctionDeclaration =
     {
+        Documentation: GlueComment list
         IsDeclared: bool
         Name: string
         Type: GlueType

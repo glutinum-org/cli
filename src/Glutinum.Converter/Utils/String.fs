@@ -14,3 +14,6 @@ let capitalizeFirstLetter (text: string) =
 
 let lowercaseFirstLetter (text: string) =
     (string text.[0]).ToLower() + text.[1..]
+
+let splitLines (text: string) =
+    text.Replace("\r\n", "\n").Replace("\r", "\n").Split('\n') |> Array.toList

@@ -4,6 +4,7 @@ open System
 open Glutinum.Chalk
 open Glutinum.Converter.FSharpAST
 open Fable.Core
+open System.Text.RegularExpressions
 
 type Printer() =
     let buffer = new Text.StringBuilder()
@@ -270,6 +271,63 @@ module FSharpAccessibility =
         | FSharpAccessibility.Private -> printer.WriteInline("private ")
         | FSharpAccessibility.Protected -> printer.WriteInline("protected ")
 
+let private codeInline (line: string) =
+    Regex("`(?<code>[^`]*)`")
+        .Replace(line, (fun m -> $"""<c>{m.Groups.["code"].Value}</c>"""))
+
+let private transformToXmlDoc (line: string) = line |> codeInline
+
+let private printBlockTag
+    (printer: Printer)
+    (tagName: string)
+    (attributes: (string * string) list)
+    (content: string)
+    =
+    let printXmlDocLine (line: string) = printer.Write($"/// {line}")
+
+    let lines = content |> transformToXmlDoc |> String.splitLines
+
+    let openTagText =
+        match attributes with
+        | [] -> tagName
+        | attributes ->
+            let attributesText =
+                attributes
+                |> List.map (fun (key, value) -> $"{key}=\"{value}\"")
+                |> String.concat " "
+
+            $"""{tagName} {attributesText}"""
+
+    printXmlDocLine $"<%s{openTagText}>"
+    printer.NewLine
+
+    lines
+    |> List.iter (fun line ->
+        printXmlDocLine line
+        printer.NewLine
+    )
+
+    printXmlDocLine $"</%s{tagName}>"
+    printer.NewLine
+
+let private printXmlDoc (printer: Printer) (elements: FSharpXmlDoc list) =
+    elements
+    |> List.iter (fun element ->
+        match element with
+        | FSharpXmlDoc.Summary lines ->
+            // Only generate the summary if there is content
+            if lines |> List.forall String.IsNullOrWhiteSpace |> not then
+                lines
+                |> String.concat "\n"
+                |> printBlockTag printer "summary" []
+
+        | FSharpXmlDoc.Returns content ->
+            printBlockTag printer "returns" [] content
+
+        | FSharpXmlDoc.Param info ->
+            printBlockTag printer "param" [ "name", info.Name ] info.Content
+    )
+
 let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
     printAttributes printer interfaceInfo.Attributes
 
@@ -287,6 +345,7 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
         // Right now there are a lots of duplication and special rules
         // Can these rules be represented in the AST to simplify the code?
         | FSharpMember.Method methodInfo ->
+            printXmlDoc printer methodInfo.XmlDoc
             printCompactAttributesAndNewLine printer methodInfo.Attributes
 
             if methodInfo.IsStatic then

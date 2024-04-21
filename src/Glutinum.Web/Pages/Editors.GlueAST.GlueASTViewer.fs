@@ -69,6 +69,27 @@ type GlueASTViewer =
         )
         |> ASTViewer.renderNode "TypeParameters"
 
+    static member private Documentation(documentation: GlueComment list) =
+        documentation
+        |> List.map (fun comment ->
+            match comment with
+            | GlueComment.Summary lines ->
+                lines
+                |> List.map (fun line -> ASTViewer.renderValueOnly line)
+                |> ASTViewer.renderNode "Summary"
+
+            | GlueComment.Returns content ->
+                [ ASTViewer.renderValueOnly content ]
+                |> ASTViewer.renderNode "Returns"
+
+            | GlueComment.Param param ->
+                ASTViewer.renderNode "Param" [
+                    GlueASTViewer.Name param.Name
+                    ASTViewer.renderKeyValueOption "Content" id param.Content
+                ]
+        )
+        |> ASTViewer.renderNode "Documentation"
+
     static member private Constructors(constructors: GlueConstructor list) =
         constructors
         |> List.map (fun (GlueConstructor parameters) ->
@@ -282,6 +303,8 @@ type GlueASTViewer =
                 "FunctionDeclaration"
                 [
                     GlueASTViewer.Name functionDeclaration.Name
+                    GlueASTViewer.Documentation
+                        functionDeclaration.Documentation
                     ASTViewer.renderKeyValue
                         "IsDeclared"
                         (string functionDeclaration.IsDeclared)

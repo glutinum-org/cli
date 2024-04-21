@@ -2,6 +2,14 @@ module rec Glutinum.Converter.FSharpAST
 
 open TypeScript
 
+type FSharpCommentParam = { Name: string; Content: string }
+
+[<RequireQualifiedAccess>]
+type FSharpXmlDoc =
+    | Summary of string list
+    | Param of FSharpCommentParam
+    | Returns of string
+
 [<RequireQualifiedAccess>]
 type FSharpLiteral =
     | String of string
@@ -204,6 +212,7 @@ type FSharpMemberInfo =
         IsStatic: bool
         Accessor: FSharpAccessor option
         Accessibility: FSharpAccessibility
+        XmlDoc: FSharpXmlDoc list
     }
 
 type FSharpStaticMemberInfo =

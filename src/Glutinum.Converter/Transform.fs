@@ -87,6 +87,24 @@ let private sanitizeNameAndPushScope
     let context = context.PushScope name
     (name, context)
 
+let private transformComment (comment: GlueAST.GlueComment list) =
+    comment
+    |> List.map (fun comment ->
+        match comment with
+        | GlueComment.Summary summary -> FSharpXmlDoc.Summary summary
+        | GlueComment.Returns returns -> FSharpXmlDoc.Returns returns
+        | GlueComment.Param param ->
+            let content =
+                param.Content
+                |> Option.map (fun content ->
+                    content.TrimStart().TrimStart('-').TrimStart()
+                )
+                |> Option.defaultValue ""
+
+            ({ Name = param.Name; Content = content }: FSharpCommentParam)
+            |> FSharpXmlDoc.Param
+    )
+
 let private transformLiteral (glueLiteral: GlueLiteral) : FSharpLiteral =
     match glueLiteral with
     | GlueLiteral.String value -> FSharpLiteral.String value
@@ -324,6 +342,7 @@ let private transformExports
                     IsStatic = true
                     Accessor = None
                     Accessibility = FSharpAccessibility.Public
+                    XmlDoc = []
                 }
                 |> FSharpMember.Property
                 |> List.singleton
@@ -344,6 +363,7 @@ let private transformExports
                     IsStatic = true
                     Accessor = None
                     Accessibility = FSharpAccessibility.Public
+                    XmlDoc = transformComment info.Documentation
                 }
                 |> FSharpMember.Method
                 |> List.singleton
@@ -380,6 +400,7 @@ let private transformExports
                         IsStatic = true
                         Accessor = None
                         Accessibility = FSharpAccessibility.Public
+                        XmlDoc = []
                     }
                     |> FSharpMember.Method
                 )
@@ -409,6 +430,7 @@ let private transformExports
                             IsStatic = true
                             Accessor = FSharpAccessor.ReadOnly |> Some
                             Accessibility = FSharpAccessibility.Public
+                            XmlDoc = []
                         }
                         |> FSharpMember.Property
                         |> Some
@@ -430,6 +452,7 @@ let private transformExports
                     IsStatic = true
                     Accessor = None
                     Accessibility = FSharpAccessibility.Public
+                    XmlDoc = []
                 }
                 |> FSharpMember.Property
                 |> List.singleton
@@ -529,6 +552,7 @@ module private TransformMembers =
                         IsStatic = methodInfo.IsStatic
                         Accessor = None
                         Accessibility = FSharpAccessibility.Public
+                        XmlDoc = []
                     }
                     |> FSharpMember.Method
                     |> Some
@@ -549,6 +573,7 @@ module private TransformMembers =
                     IsStatic = false
                     Accessor = None
                     Accessibility = FSharpAccessibility.Public
+                    XmlDoc = []
                 }
                 |> FSharpMember.Method
                 |> Some
@@ -576,6 +601,7 @@ module private TransformMembers =
                                 FSharpAccessibility.Private
                             else
                                 FSharpAccessibility.Public
+                        XmlDoc = []
                     }
                     |> FSharpMember.Property
                     |> Some
@@ -596,6 +622,7 @@ module private TransformMembers =
                     IsStatic = false
                     Accessor = Some FSharpAccessor.ReadWrite
                     Accessibility = FSharpAccessibility.Public
+                    XmlDoc = []
                 }
                 |> FSharpMember.Property
                 |> Some
@@ -617,6 +644,7 @@ module private TransformMembers =
                     IsStatic = false
                     Accessor = None
                     Accessibility = FSharpAccessibility.Public
+                    XmlDoc = []
                 }
                 |> FSharpMember.Method
                 |> Some
@@ -637,6 +665,7 @@ module private TransformMembers =
                     IsStatic = false
                     Accessor = None
                     Accessibility = FSharpAccessibility.Public
+                    XmlDoc = []
                 }
                 |> FSharpMember.Method
                 |> Some
@@ -1252,6 +1281,7 @@ let private transformTypeAliasDeclaration
                     IsStatic = false
                     Accessor = None
                     Accessibility = FSharpAccessibility.Public
+                    XmlDoc = []
                 }
                 |> FSharpMember.Method
                 |> List.singleton

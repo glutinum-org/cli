@@ -169,12 +169,34 @@ type FSharpASTViewer =
     static member private Accessor(accessor: FSharpAccessor option) =
         ASTViewer.renderKeyValueOption "Accessor" FSharpAccessor.toText accessor
 
+    static member private XmlDoc(elements: FSharpXmlDoc list) =
+        elements
+        |> List.map (fun element ->
+            match element with
+            | FSharpXmlDoc.Summary lines ->
+                lines
+                |> List.map ASTViewer.renderValueOnly
+                |> ASTViewer.renderNode "Summary"
+
+            | FSharpXmlDoc.Returns content ->
+                [ ASTViewer.renderValueOnly content ]
+                |> ASTViewer.renderNode "Returns"
+
+            | FSharpXmlDoc.Param param ->
+                ASTViewer.renderNode "Param" [
+                    FSharpASTViewer.Name param.Name
+                    ASTViewer.renderKeyValue "Content" param.Content
+                ]
+        )
+        |> ASTViewer.renderNode "XmlDoc"
+
     static member private Member(memberInfo: FSharpMember) =
         match memberInfo with
         | FSharpMember.Method methodInfo ->
             ASTViewer.renderNode "Method" [
                 FSharpASTViewer.Name methodInfo.Name
                 FSharpASTViewer.OriginalName methodInfo.OriginalName
+                FSharpASTViewer.XmlDoc methodInfo.XmlDoc
                 FSharpASTViewer.Accessibility methodInfo.Accessibility
                 FSharpASTViewer.Accessor methodInfo.Accessor
                 FSharpASTViewer.IsOptional methodInfo.IsOptional
@@ -183,6 +205,7 @@ type FSharpASTViewer =
                 FSharpASTViewer.Parameters methodInfo.Parameters
                 FSharpASTViewer.TypeParameters methodInfo.TypeParameters
                 FSharpASTViewer.Type methodInfo.Type
+
             ]
 
         | FSharpMember.Property propertyInfo ->

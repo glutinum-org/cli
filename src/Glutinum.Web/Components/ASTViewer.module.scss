@@ -15,6 +15,7 @@ $indicator-margin: 0.25rem;
 
 .value {
     color: #795e26;
+    white-space: pre;
     &--only {
         margin-left: $left-indent-size;
     }
