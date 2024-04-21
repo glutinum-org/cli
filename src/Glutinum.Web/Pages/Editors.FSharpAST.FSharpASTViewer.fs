@@ -187,6 +187,10 @@ type FSharpASTViewer =
                     FSharpASTViewer.Name param.Name
                     ASTViewer.renderKeyValue "Content" param.Content
                 ]
+
+            | FSharpXmlDoc.Remarks content ->
+                [ ASTViewer.renderValueOnly content ]
+                |> ASTViewer.renderNode "Remarks"
         )
         |> ASTViewer.renderNode "XmlDoc"
 

@@ -326,6 +326,9 @@ let private printXmlDoc (printer: Printer) (elements: FSharpXmlDoc list) =
 
         | FSharpXmlDoc.Param info ->
             printBlockTag printer "param" [ "name", info.Name ] info.Content
+
+        | FSharpXmlDoc.Remarks content ->
+            printBlockTag printer "remarks" [] content
     )
 
 let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =

@@ -87,6 +87,10 @@ type GlueASTViewer =
                     GlueASTViewer.Name param.Name
                     ASTViewer.renderKeyValueOption "Content" id param.Content
                 ]
+
+            | GlueComment.Remarks content ->
+                [ ASTViewer.renderValueOnly content ]
+                |> ASTViewer.renderNode "Remarks"
         )
         |> ASTViewer.renderNode "Documentation"
 

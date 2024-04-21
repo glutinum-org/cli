@@ -9,6 +9,7 @@ type FSharpXmlDoc =
     | Summary of string list
     | Param of FSharpCommentParam
     | Returns of string
+    | Remarks of string
 
 [<RequireQualifiedAccess>]
 type FSharpLiteral =

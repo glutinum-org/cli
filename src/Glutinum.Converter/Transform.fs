@@ -103,6 +103,7 @@ let private transformComment (comment: GlueAST.GlueComment list) =
 
             ({ Name = param.Name; Content = content }: FSharpCommentParam)
             |> FSharpXmlDoc.Param
+        | GlueComment.Remarks remarks -> FSharpXmlDoc.Remarks remarks
     )
 
 let private transformLiteral (glueLiteral: GlueLiteral) : FSharpLiteral =
