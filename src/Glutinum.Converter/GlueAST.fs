@@ -19,6 +19,7 @@ type GlueComment =
     | Summary of string list
     | Returns of string
     | Param of GlueCommentParam
+    | Deprecated of string option
     | Remarks of string
 
 type GlueParameter =

@@ -3,6 +3,7 @@ module rec Glutinum.Converter.Transform
 open Fable.Core
 open Glutinum.Converter.FSharpAST
 open Glutinum.Converter.GlueAST
+open System
 
 // Not really proud of this implementation, but I was not able to make it in a
 // pure functional way, using a Tree structure or something similar
@@ -88,23 +89,47 @@ let private sanitizeNameAndPushScope
     (name, context)
 
 let private transformComment (comment: GlueAST.GlueComment list) =
-    comment
-    |> List.map (fun comment ->
-        match comment with
-        | GlueComment.Summary summary -> FSharpXmlDoc.Summary summary
-        | GlueComment.Returns returns -> FSharpXmlDoc.Returns returns
-        | GlueComment.Param param ->
-            let content =
-                param.Content
-                |> Option.map (fun content ->
-                    content.TrimStart().TrimStart('-').TrimStart()
-                )
-                |> Option.defaultValue ""
+    let deprecated, others =
+        comment
+        |> List.partition (
+            function
+            | GlueComment.Deprecated _ -> true
+            | _ -> false
 
-            ({ Name = param.Name; Content = content }: FSharpCommentParam)
-            |> FSharpXmlDoc.Param
-        | GlueComment.Remarks remarks -> FSharpXmlDoc.Remarks remarks
-    )
+        )
+
+    let obsoleteAttributes =
+        deprecated
+        |> List.map (
+            function
+            | GlueComment.Deprecated content -> FSharpAttribute.Obsolete content
+            | _ -> failwith "Should not happen"
+        )
+
+    let others =
+        others
+        |> List.map (fun comment ->
+            match comment with
+            | GlueComment.Deprecated _ -> failwith "Should not happen"
+            | GlueComment.Summary summary -> FSharpXmlDoc.Summary summary
+            | GlueComment.Returns returns -> FSharpXmlDoc.Returns returns
+            | GlueComment.Param param ->
+                let content =
+                    param.Content
+                    |> Option.map (fun content ->
+                        content.TrimStart().TrimStart('-').TrimStart()
+                    )
+                    |> Option.defaultValue ""
+
+                ({ Name = param.Name; Content = content }: FSharpCommentParam)
+                |> FSharpXmlDoc.Param
+            | GlueComment.Remarks remarks -> FSharpXmlDoc.Remarks remarks
+        )
+
+    {|
+        ObsoleteAttributes = obsoleteAttributes
+        Others = others
+    |}
 
 let private transformLiteral (glueLiteral: GlueLiteral) : FSharpLiteral =
     match glueLiteral with
@@ -351,8 +376,14 @@ let private transformExports
             | GlueType.FunctionDeclaration info ->
                 let name, context = sanitizeNameAndPushScope info.Name context
 
+                let xmlDocInfo = transformComment info.Documentation
+
                 {
-                    Attributes = [ FSharpAttribute.Import(info.Name, "module") ]
+                    Attributes =
+                        [
+                            FSharpAttribute.Import(info.Name, "module")
+                            yield! xmlDocInfo.ObsoleteAttributes
+                        ]
                     Name = name
                     OriginalName = info.Name
                     Parameters =
@@ -364,7 +395,7 @@ let private transformExports
                     IsStatic = true
                     Accessor = None
                     Accessibility = FSharpAccessibility.Public
-                    XmlDoc = transformComment info.Documentation
+                    XmlDoc = xmlDocInfo.Others
                 }
                 |> FSharpMember.Method
                 |> List.singleton

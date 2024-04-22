@@ -85,6 +85,11 @@ type FSharpASTViewer =
 
         | FSharpAttribute.Interface -> ASTViewer.renderValueOnly "Interface"
 
+        | FSharpAttribute.Obsolete message ->
+            ASTViewer.renderNode "Obsolete" [
+                ASTViewer.renderKeyValueOption "Message" id message
+            ]
+
     static member private Attributes(attributes: FSharpAttribute list) =
         attributes
         |> List.map FSharpASTViewer.FSharpAttribute

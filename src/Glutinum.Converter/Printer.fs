@@ -109,6 +109,10 @@ let private attributeToText (fsharpAttribute: FSharpAttribute) =
     | FSharpAttribute.EmitSelf -> "[<Emit(\"$0\")>]"
     | FSharpAttribute.ParamArray -> "[<ParamArray>]"
     | FSharpAttribute.Interface -> "[<Interface>]"
+    | FSharpAttribute.Obsolete message ->
+        match message with
+        | Some message -> $"[<Obsolete(\"%s{message}\")>]"
+        | None -> "[<Obsolete>]"
 
 let private printInlineAttribute
     (printer: Printer)

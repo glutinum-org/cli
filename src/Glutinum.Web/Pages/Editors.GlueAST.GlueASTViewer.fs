@@ -91,6 +91,9 @@ type GlueASTViewer =
             | GlueComment.Remarks content ->
                 [ ASTViewer.renderValueOnly content ]
                 |> ASTViewer.renderNode "Remarks"
+
+            | GlueComment.Deprecated content ->
+                ASTViewer.renderKeyValueOption "Deprecated" id content
         )
         |> ASTViewer.renderNode "Documentation"
 

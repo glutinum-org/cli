@@ -74,6 +74,16 @@ let readFunctionDeclaration
                         |> GlueComment.Param
                         |> Some
 
+                    | Ts.SyntaxKind.JSDocDeprecatedTag ->
+                        match tag.comment with
+                        | Some comment ->
+                            ts.getTextOfJSDocComment comment
+                            |> GlueComment.Deprecated
+                            |> Some
+                        // We want to keep the deprecated tag even if there is no comment
+                        // as it is still useful information
+                        | None -> GlueComment.Deprecated None |> Some
+
                     | Ts.SyntaxKind.JSDocTag ->
                         match tag.tagName.getText () with
                         | "remarks" ->

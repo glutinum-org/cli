@@ -179,6 +179,7 @@ type FSharpAttribute =
     | ImportAll of moduleName: string
     | Erase
     | AllowNullLiteral
+    | Obsolete of string option
     | StringEnum of Fable.Core.CaseRules
     | CompiledName of string
     | RequireQualifiedAccess
