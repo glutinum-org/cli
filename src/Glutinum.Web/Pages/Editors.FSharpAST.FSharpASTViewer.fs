@@ -200,6 +200,10 @@ type FSharpASTViewer =
             | FSharpXmlDoc.DefaultValue content ->
                 [ ASTViewer.renderValueOnly content ]
                 |> ASTViewer.renderNode "DefaultValue"
+
+            | FSharpXmlDoc.Example content ->
+                [ ASTViewer.renderValueOnly content ]
+                |> ASTViewer.renderNode "Example"
         )
         |> ASTViewer.renderNode "XmlDoc"
 

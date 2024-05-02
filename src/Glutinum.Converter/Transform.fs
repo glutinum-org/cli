@@ -126,6 +126,7 @@ let private transformComment (comment: GlueAST.GlueComment list) =
             | GlueComment.Remarks remarks -> FSharpXmlDoc.Remarks remarks
             | GlueComment.DefaultValue defaultValue ->
                 FSharpXmlDoc.DefaultValue defaultValue
+            | GlueComment.Example example -> FSharpXmlDoc.Example example
         )
 
     {|

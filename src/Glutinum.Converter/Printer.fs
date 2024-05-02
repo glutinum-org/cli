@@ -275,11 +275,27 @@ module FSharpAccessibility =
         | FSharpAccessibility.Private -> printer.WriteInline("private ")
         | FSharpAccessibility.Protected -> printer.WriteInline("protected ")
 
+// Comment adaptation should be moved in the transform phase
 let private codeInline (line: string) =
     Regex("`(?<code>[^`]*)`")
         .Replace(line, (fun m -> $"""<c>{m.Groups.["code"].Value}</c>"""))
 
-let private transformToXmlDoc (line: string) = line |> codeInline
+let private codeBlock (line: string) =
+    Regex("```(?<lang>\S*)(?<code>[^`]+)```", RegexOptions.Multiline)
+        .Replace(
+            line,
+            (fun m ->
+                let lang = m.Groups.["lang"].Value
+                let code = m.Groups.["code"].Value
+
+                if String.IsNullOrWhiteSpace lang then
+                    $"""<code>{code}</code>"""
+                else
+                    $"""<code lang="{lang}">{code}</code>"""
+            )
+        )
+
+let private transformToXmlDoc (line: string) = line |> codeBlock |> codeInline
 
 let private printBlockTag
     (printer: Printer)
@@ -323,7 +339,8 @@ let private printXmlDoc (printer: Printer) (elements: FSharpXmlDoc list) =
             | FSharpXmlDoc.DefaultValue _ -> true
             | FSharpXmlDoc.Returns _
             | FSharpXmlDoc.Param _
-            | FSharpXmlDoc.Remarks _ -> false
+            | FSharpXmlDoc.Remarks _
+            | FSharpXmlDoc.Example _ -> false
         )
 
     // Print the summary first
@@ -358,6 +375,9 @@ let private printXmlDoc (printer: Printer) (elements: FSharpXmlDoc list) =
 
         | FSharpXmlDoc.Remarks content ->
             printBlockTag printer "remarks" [] content
+
+        | FSharpXmlDoc.Example content ->
+            printBlockTag printer "example" [] content
     )
 
 let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =

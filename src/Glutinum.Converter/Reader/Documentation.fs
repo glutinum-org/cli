@@ -81,6 +81,15 @@ let private readDocumentation
                         |> Some
                     | None -> None
 
+                | "example" ->
+                    match tag.comment with
+                    | Some comment ->
+                        ts.getTextOfJSDocComment comment
+                        |> Option.defaultValue ""
+                        |> GlueComment.Example
+                        |> Some
+                    | None -> None
+
                 | _ -> None
 
         )

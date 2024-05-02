@@ -22,6 +22,7 @@ type GlueComment =
     | Deprecated of string option
     | Remarks of string
     | DefaultValue of string
+    | Example of string
 
 type GlueParameter =
     {
