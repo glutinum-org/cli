@@ -25,6 +25,12 @@
       "commands": [
         "fantomas"
       ]
+    },
+    "easybuild.commitlinter": {
+      "version": "0.1.0",
+      "commands": [
+        "commit-linter"
+      ]
     }
   }
 }

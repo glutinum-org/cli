@@ -20,4 +20,4 @@
 #echo 'Husky.Net is awesome!'
 
 # bash .husky/scripts/commit-linter.sh
-dotnet fsi ".husky/scripts/commit-linter.fsx" "$1"
+dotnet commit-linter -c commit-linter.json "$1"
