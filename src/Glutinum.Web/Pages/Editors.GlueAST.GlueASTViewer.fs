@@ -82,6 +82,9 @@ type GlueASTViewer =
                 [ ASTViewer.renderValueOnly content ]
                 |> ASTViewer.renderNode "Returns"
 
+            | GlueComment.DefaultValue value ->
+                ASTViewer.renderKeyValue "DefaultValue" value
+
             | GlueComment.Param param ->
                 ASTViewer.renderNode "Param" [
                     GlueASTViewer.Name param.Name
@@ -137,6 +140,7 @@ type GlueASTViewer =
         | GlueMember.Property propertyInfo ->
             ASTViewer.renderNode "Property" [
                 GlueASTViewer.Name propertyInfo.Name
+                GlueASTViewer.Documentation propertyInfo.Documentation
                 GlueASTViewer.IsStatic propertyInfo.IsStatic
                 GlueASTViewer.IsOptional propertyInfo.IsOptional
                 GlueASTViewer.IsPrivate propertyInfo.IsPrivate

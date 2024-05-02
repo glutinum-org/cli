@@ -124,6 +124,8 @@ let private transformComment (comment: GlueAST.GlueComment list) =
                 ({ Name = param.Name; Content = content }: FSharpCommentParam)
                 |> FSharpXmlDoc.Param
             | GlueComment.Remarks remarks -> FSharpXmlDoc.Remarks remarks
+            | GlueComment.DefaultValue defaultValue ->
+                FSharpXmlDoc.DefaultValue defaultValue
         )
 
     {|
@@ -614,11 +616,13 @@ module private TransformMembers =
                 let name, context =
                     sanitizeNameAndPushScope propertyInfo.Name context
 
+                let xmlDocInfo = transformComment propertyInfo.Documentation
+
                 if propertyInfo.IsPrivate && not propertyInfo.IsStatic then
                     None // F# interface can't have private properties
                 else
                     {
-                        Attributes = []
+                        Attributes = [ yield! xmlDocInfo.ObsoleteAttributes ]
                         Name = name
                         OriginalName = propertyInfo.Name
                         Parameters = []
@@ -633,7 +637,7 @@ module private TransformMembers =
                                 FSharpAccessibility.Private
                             else
                                 FSharpAccessibility.Public
-                        XmlDoc = []
+                        XmlDoc = xmlDocInfo.Others
                     }
                     |> FSharpMember.Property
                     |> Some

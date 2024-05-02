@@ -31,85 +31,8 @@ let readFunctionDeclaration
                 declaration
             |> failwith
 
-    let documentation =
-        match reader.checker.getSignatureFromDeclaration declaration with
-        | Some signature ->
-            let summary =
-                let content =
-                    signature.getDocumentationComment (Some reader.checker)
-                    |> (Some >> ts.displayPartsToString)
-                    |> String.splitLines
-
-                if List.forall String.IsNullOrWhiteSpace content then
-                    None
-                else
-                    Some(GlueComment.Summary content)
-
-            let jsDocTags =
-                ts.getJSDocTags declaration
-                |> Seq.choose (fun tag ->
-                    match tag.kind with
-                    | Ts.SyntaxKind.JSDocReturnTag ->
-                        match tag.comment with
-                        | Some comment ->
-                            ts.getTextOfJSDocComment comment
-                            |> Option.defaultValue ""
-                            |> GlueComment.Returns
-                            |> Some
-                        | None -> None
-                    | Ts.SyntaxKind.JSDocParameterTag ->
-                        let parameterTag = tag :?> Ts.JSDocParameterTag
-
-                        let identifier = unbox<Ts.Identifier> parameterTag.name
-
-                        let content =
-                            match parameterTag.comment with
-                            | Some comment -> ts.getTextOfJSDocComment comment
-                            | None -> None
-
-                        {
-                            Name = identifier.getText ()
-                            Content = content
-                        }
-                        |> GlueComment.Param
-                        |> Some
-
-                    | Ts.SyntaxKind.JSDocDeprecatedTag ->
-                        match tag.comment with
-                        | Some comment ->
-                            ts.getTextOfJSDocComment comment
-                            |> GlueComment.Deprecated
-                            |> Some
-                        // We want to keep the deprecated tag even if there is no comment
-                        // as it is still useful information
-                        | None -> GlueComment.Deprecated None |> Some
-
-                    | Ts.SyntaxKind.JSDocTag ->
-                        match tag.tagName.getText () with
-                        | "remarks" ->
-                            match tag.comment with
-                            | Some comment ->
-                                ts.getTextOfJSDocComment comment
-                                |> Option.defaultValue ""
-                                |> GlueComment.Remarks
-                                |> Some
-                            | None -> None
-                        | _ -> None
-                )
-                |> Seq.toList
-
-            [
-                match summary with
-                | Some summary -> summary
-                | None -> ()
-
-                yield! jsDocTags
-            ]
-
-        | None -> []
-
     {
-        Documentation = documentation
+        Documentation = reader.ReadDocumentationFromSignature declaration
         IsDeclared = isDeclared
         Name = name
         Type = reader.ReadTypeNode declaration.``type``

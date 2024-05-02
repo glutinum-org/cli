@@ -19,6 +19,7 @@ let readDeclaration
 
         ({
             Name = name.getText ()
+            Documentation = reader.ReadDocumentationFromNode name
             Type = reader.ReadTypeNode propertySignature.``type``
             IsOptional = propertySignature.questionToken.IsSome
             IsStatic = false
@@ -106,6 +107,7 @@ let readDeclaration
 
         ({
             Name = name.getText ()
+            Documentation = reader.ReadDocumentationFromNode name
             Type = reader.ReadTypeNode propertyDeclaration.``type``
             IsOptional = propertyDeclaration.questionToken.IsSome
             IsStatic =

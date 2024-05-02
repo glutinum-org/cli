@@ -56,3 +56,8 @@ type ITypeScriptReader =
     abstract ReadTypeParameters:
         typeParametersOpt: ResizeArray<Ts.TypeParameterDeclaration> option ->
             GlueTypeParameter list
+
+    abstract ReadDocumentationFromSignature:
+        declaration: Ts.Declaration -> GlueComment list
+
+    abstract ReadDocumentationFromNode: node: Ts.Node -> GlueComment list

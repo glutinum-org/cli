@@ -196,6 +196,10 @@ type FSharpASTViewer =
             | FSharpXmlDoc.Remarks content ->
                 [ ASTViewer.renderValueOnly content ]
                 |> ASTViewer.renderNode "Remarks"
+
+            | FSharpXmlDoc.DefaultValue content ->
+                [ ASTViewer.renderValueOnly content ]
+                |> ASTViewer.renderNode "DefaultValue"
         )
         |> ASTViewer.renderNode "XmlDoc"
 
@@ -220,6 +224,7 @@ type FSharpASTViewer =
         | FSharpMember.Property propertyInfo ->
             ASTViewer.renderNode "Property" [
                 FSharpASTViewer.Name propertyInfo.Name
+                FSharpASTViewer.XmlDoc propertyInfo.XmlDoc
                 FSharpASTViewer.IsOptional propertyInfo.IsOptional
                 FSharpASTViewer.IsStatic propertyInfo.IsStatic
                 FSharpASTViewer.Accessibility propertyInfo.Accessibility

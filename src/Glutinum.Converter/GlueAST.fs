@@ -21,6 +21,7 @@ type GlueComment =
     | Param of GlueCommentParam
     | Deprecated of string option
     | Remarks of string
+    | DefaultValue of string
 
 type GlueParameter =
     {
@@ -61,6 +62,7 @@ type GlueAccessor =
 type GlueProperty =
     {
         Name: string
+        Documentation: GlueComment list
         Type: GlueType
         IsStatic: bool
         IsOptional: bool

@@ -9,6 +9,7 @@
     <Compile Include="Utils/String.fs" />
     <Compile Include="Utils/Keywords.fs" />
     <Compile Include="Utils/Naming.fs" />
+    <Compile Include="Utils/List.fs" />
     <Compile Include="Log.fs" />
     <Compile Include="TypeScript.fs" />
     <Compile Include="GlueAST.fs" />
@@ -30,6 +31,7 @@
     <Compile Include="Reader/UnionTypeNode.fs" />
     <Compile Include="Reader/VariableStatement.fs" />
     <Compile Include="Reader/ExportAssignment.fs" />
+    <Compile Include="Reader/Documentation.fs" />
     <Compile Include="Reader/TypeScriptReader.fs" />
     <Compile Include="FsharpAST.fs" />
     <Compile Include="Read.fs" />

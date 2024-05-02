@@ -19,6 +19,7 @@ open Glutinum.Converter.Reader.TypeParameters
 open Glutinum.Converter.Reader.UnionTypeNode
 open Glutinum.Converter.Reader.VariableStatement
 open Glutinum.Converter.Reader.ExportAssignment
+open Glutinum.Converter.Reader.Documentation
 
 type TypeScriptReader(checker: Ts.TypeChecker) =
     let warnings = ResizeArray<string>()
@@ -116,3 +117,15 @@ type TypeScriptReader(checker: Ts.TypeChecker) =
             : GlueType
             =
             readExportAssignment this exportAssignment
+
+        member this.ReadDocumentationFromSignature
+            (declaration: Ts.Declaration)
+            : GlueComment list
+            =
+            readDocumentationForSignature this declaration
+
+        member this.ReadDocumentationFromNode
+            (node: Ts.Node)
+            : GlueComment list
+            =
+            readDocumentationForNode this node

@@ -315,15 +315,40 @@ let private printBlockTag
     printer.NewLine
 
 let private printXmlDoc (printer: Printer) (elements: FSharpXmlDoc list) =
-    elements
+    let summary, others =
+        elements
+        |> List.partition (
+            function
+            | FSharpXmlDoc.Summary _
+            | FSharpXmlDoc.DefaultValue _ -> true
+            | FSharpXmlDoc.Returns _
+            | FSharpXmlDoc.Param _
+            | FSharpXmlDoc.Remarks _ -> false
+        )
+
+    // Print the summary first
+    let summaryLines =
+        summary
+        |> List.map (fun element ->
+            match element with
+            | FSharpXmlDoc.Summary lines -> lines
+            | FSharpXmlDoc.DefaultValue content -> [ ""; content; "" ] // Add a new line before the default value
+            | _ -> failwith "This element should not be in the summary list"
+        )
+        |> List.concat
+        |> List.removeConsecutiveEmptyLines
+        |> List.trimEmptyLines
+
+    // Only generate the summary if there is content
+    if summaryLines |> List.forall String.IsNullOrWhiteSpace |> not then
+        summaryLines |> String.concat "\n" |> printBlockTag printer "summary" []
+
+    others
     |> List.iter (fun element ->
         match element with
-        | FSharpXmlDoc.Summary lines ->
-            // Only generate the summary if there is content
-            if lines |> List.forall String.IsNullOrWhiteSpace |> not then
-                lines
-                |> String.concat "\n"
-                |> printBlockTag printer "summary" []
+        | FSharpXmlDoc.Summary _
+        | FSharpXmlDoc.DefaultValue _ ->
+            failwith "This element should have been processed in the summary"
 
         | FSharpXmlDoc.Returns content ->
             printBlockTag printer "returns" [] content
@@ -497,6 +522,7 @@ import {{ %s{interfaceInfo.OriginalName} }} from \"module\";
                         printerSetter true
 
             else
+                printXmlDoc printer propertyInfo.XmlDoc
                 printer.Write($"abstract member {propertyInfo.Name}")
 
                 propertyInfo.Parameters

@@ -1,3 +1,4 @@
+[<RequireQualifiedAccess>]
 module String
 
 open System
