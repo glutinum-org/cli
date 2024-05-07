@@ -92,6 +92,8 @@ let private readDocumentation
 
                 | _ -> None
 
+            | _ -> None
+
         )
         |> Seq.toList
 
