@@ -280,10 +280,10 @@ let private codeInline (line: string) =
     Regex("`(?<code>[^`]*)`")
         .Replace(line, (fun m -> $"""<c>{m.Groups.["code"].Value}</c>"""))
 
-let private codeBlock (line: string) =
+let private codeBlock (text: string) =
     Regex("```(?<lang>\S*)(?<code>[^`]+)```", RegexOptions.Multiline)
         .Replace(
-            line,
+            text,
             (fun m ->
                 let lang = m.Groups.["lang"].Value
                 let code = m.Groups.["code"].Value
@@ -295,7 +295,28 @@ let private codeBlock (line: string) =
             )
         )
 
-let private transformToXmlDoc (line: string) = line |> codeBlock |> codeInline
+let private link (text: string) =
+    // tsdoc link format is {@link link|customText}
+    // However when getting the text after `getDocumentationComment` and `displayPartsToString`
+    // the `|` seems to be replaced by a space
+    // Regex below tries to handle both cases
+    Regex("\{@link\s+(?<link>[^\s}|]+)\s*((\|)?\s*(?<customText>[^}]+))?\}")
+        .Replace(
+            text,
+            (fun m ->
+                let link = m.Groups.["link"].Value.Trim()
+                let customText = m.Groups.["customText"].Value
+
+                if String.IsNullOrWhiteSpace customText then
+                    $"""<see href="{link}">{link}</see>"""
+                else
+                    let customText = customText.Trim()
+                    $"""<see href="{link}">{customText}</see>" """.TrimEnd()
+            )
+        )
+
+let private transformToXmlDoc (line: string) =
+    line |> codeBlock |> codeInline |> link
 
 let private printBlockTag
     (printer: Printer)
