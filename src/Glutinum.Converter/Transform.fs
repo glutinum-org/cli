@@ -200,6 +200,9 @@ let rec private transformType
 
         if isOptional && others.Length = 1 then
             FSharpType.Option(transformType context others.Head)
+        // Don't wrap in a U1 if there is only one case
+        else if others.Length = 1 then
+            transformType context others.Head
         else
             {
                 Attributes = []
