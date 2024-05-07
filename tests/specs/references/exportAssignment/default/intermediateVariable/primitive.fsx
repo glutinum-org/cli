@@ -6,7 +6,7 @@ open System
 
 [<Erase>]
 type Exports =
-    [<ImportAll("module")>]
+    [<ImportDefault("module")>]
     static member inline version: string = nativeOnly
 
 (***)

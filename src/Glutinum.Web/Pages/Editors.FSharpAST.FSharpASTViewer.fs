@@ -47,6 +47,11 @@ type FSharpASTViewer =
                 ASTViewer.renderKeyValue "From" from
             ]
 
+        | FSharpAttribute.ImportDefault from ->
+            ASTViewer.renderNode "ImportDefault" [
+                ASTViewer.renderKeyValue "From" from
+            ]
+
         | FSharpAttribute.Erase -> ASTViewer.renderValueOnly "Erase"
 
         | FSharpAttribute.AllowNullLiteral ->

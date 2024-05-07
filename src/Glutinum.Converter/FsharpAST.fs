@@ -179,6 +179,10 @@ type FSharpAttribute =
     /// Generates <c>[&lt;ImportAll(moduleName)&gt;]</c> attribute.
     /// </summary>
     | ImportAll of moduleName: string
+    /// <summary>
+    /// Generates <c>[&lt;ImportDefault(moduleName)&gt;]</c> attribute.
+    /// </summary>
+    | ImportDefault of moduleName: string
     | Erase
     | AllowNullLiteral
     | Obsolete of string option

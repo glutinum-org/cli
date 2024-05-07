@@ -477,7 +477,7 @@ let private transformExports
                     sanitizeNameAndPushScope glueType.Name context
 
                 {
-                    Attributes = [ FSharpAttribute.ImportAll "module" ]
+                    Attributes = [ FSharpAttribute.ImportDefault "module" ]
                     Name = name
                     OriginalName = glueType.Name
                     Parameters = []

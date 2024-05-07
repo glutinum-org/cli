@@ -103,6 +103,8 @@ let private attributeToText (fsharpAttribute: FSharpAttribute) =
     | FSharpAttribute.EmitMacroConstructor className ->
         $"[<Emit(\"new $0.{className}($1...)\")>]"
     | FSharpAttribute.ImportAll module_ -> $"[<ImportAll(\"{module_}\")>]"
+    | FSharpAttribute.ImportDefault module_ ->
+        $"[<ImportDefault(\"{module_}\")>]"
     | FSharpAttribute.EmitIndexer -> "[<EmitIndexer>]"
     | FSharpAttribute.Global -> "[<Global>]"
     | FSharpAttribute.ParamObject -> "[<ParamObject>]"
