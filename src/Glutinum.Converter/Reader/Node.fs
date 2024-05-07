@@ -45,6 +45,8 @@ let readNode (reader: ITypeScriptReader) (node: Ts.Node) : GlueType =
 
         ({ Members = members }: GlueTypeLiteral) |> GlueType.TypeLiteral
 
+    | Ts.SyntaxKind.ExportDeclaration -> GlueType.Discard
+
     | unsupported ->
         let warning =
             Utils.generateReaderError
