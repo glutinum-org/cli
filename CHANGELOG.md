@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 0.5.0 - 2024-05-08
+
 ### Fixed
 
 * Transform `Promise` to `JS.Promise` (by @nojaf) ([GH-33](https://github.com/glutinum-org/cli/pull/33))
@@ -51,6 +53,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
     type MyUnion =
         U2<MyClass, string>
+    ```
+
+* Don't generate `U1` if an union is resolved to a single type
+
+    ```ts
+    export type ColorInfo = number | false;
+    ```
+
+    ```fs
+    // We can't represent false in F#
+    type ColorInfo = float
     ```
 
 ### Added
@@ -286,6 +299,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
         ```fs
         type MyObject = obj
         ```
+* Add support for converting tsdoc to xml doc comments
 
 ### Changed
 
