@@ -36,6 +36,12 @@ $max-compilation-output-height: 25vh;
         color: $danger-dark;
         padding: 1rem;
         white-space: break-spaces;
+
+        // Compensate for the padding
+        #{$self}__actions {
+            bottom: 0;
+            right: 1rem;
+        }
     }
 
     // If we have warnings, we need now have 2 rows

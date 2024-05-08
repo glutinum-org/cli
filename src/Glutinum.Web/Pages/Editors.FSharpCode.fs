@@ -283,4 +283,5 @@ let view model dispatch =
             actions dispatch
         )
 
-    | Errored message -> RightPanelContent.Error message
+    | Errored message ->
+        RightPanelContent.Error(message, actions = actions dispatch)

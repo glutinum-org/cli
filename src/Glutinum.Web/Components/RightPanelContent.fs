@@ -48,14 +48,27 @@ type RightPanelContent =
             |> prop.children
         ]
 
-    static member Error(error: string) =
+    static member Error(error: string, ?actions: ReactElement) =
         Html.div [
             prop.className [
                 classes.container
                 classes.``container--is-error``
             ]
 
-            prop.text error
+            prop.children [
+                Html.div [
+                    prop.className classes.container__content
+                    prop.children [
+                        Html.text error
+
+                        if actions.IsSome then
+                            Html.div [
+                                prop.className classes.container__actions
+                                prop.children [ actions.Value ]
+                            ]
+                    ]
+                ]
+            ]
         ]
 
     static member Loading() =
