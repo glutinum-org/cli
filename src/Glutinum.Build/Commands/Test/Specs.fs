@@ -1,9 +1,11 @@
-module Build.Tasks.Test.Specs
+module Build.Commands.Test.Specs
 
 open BlackFox.CommandLine
 open SimpleExec
 open Build.Utils.Pnpm
 open System.IO
+open Spectre.Console.Cli
+open System.ComponentModel
 
 let private testFile (hiearchyLevel: int) (content: string) =
     let generateFilePath =
@@ -112,57 +114,92 @@ let private generateSpecsTestFile () =
         )
     )
 
-let handle (args: string list) =
-    let isWatch = args |> List.contains "--watch"
-    let generateOnly = args |> List.contains "--generate-only"
+type SpecSettings() =
+    inherit CommandSettings()
 
-    // We always need to generate the specs test files
-    generateSpecsTestFile ()
-    Pnpm.install ()
+    [<CommandOption("-w|--watch")>]
+    [<Description("Watch for changes and re-run the tests
 
-    if generateOnly then
-        let fableCmd =
-            CmdLine.empty
-            |> CmdLine.appendRaw "fable"
-            |> CmdLine.appendIf isWatch "watch"
-            |> CmdLine.appendRaw "src/Glutinum.Converter"
-            |> CmdLine.appendRaw "--sourceMaps"
-            |> CmdLine.appendRaw "--test:MSBuildCracker"
-            |> CmdLine.toString
+You can pass additional arguments to 'vitest' by using '--' followed by the arguments
 
-        Command.Run("dotnet", fableCmd)
-    else
+For example:
+    ./build.sh test specs --watch -- --ui
+    ./build.sh test specs --watch -- -t date")>]
+    member val IsWatch: bool = false with get, set
 
-        let additionalArgs =
-            if isWatch then
-                let candidates = args |> List.skipWhile (fun x -> x <> "--")
+    [<CommandOption("--generate-only")>]
+    [<Description("Only generate the tests files based on the `references` folder
 
-                if List.isEmpty candidates then
-                    null
+This is the preferred way to generate the tests files of
+you want to use the Test Explorer UI from your IDE.
+
+You need to combine this options with `--watch` if you want
+Fable to watch for changes and re-generate the files.
+
+IMPORTANT: When adding or removing a file from the `references` folder,
+you need to re-run this command. (Will be improved in the future)")>]
+    member val GenerateOnly: bool = false with get, set
+
+type SpecCommand() =
+    inherit Command<SpecSettings>()
+    interface ICommandLimiter<SpecSettings>
+
+    override _.Execute(context, settings) =
+
+        // We always need to generate the specs test files
+        generateSpecsTestFile ()
+        Pnpm.install ()
+
+        if settings.GenerateOnly then
+            let fableCmd =
+                CmdLine.empty
+                |> CmdLine.appendRaw "fable"
+                |> CmdLine.appendIf settings.IsWatch "watch"
+                |> CmdLine.appendRaw "src/Glutinum.Converter"
+                |> CmdLine.appendRaw "--sourceMaps"
+                |> CmdLine.appendRaw "--test:MSBuildCracker"
+                |> CmdLine.toString
+
+            Command.Run("dotnet", fableCmd)
+
+            0
+        else
+
+            let additionalArgs =
+                if settings.IsWatch then
+                    let candidates =
+                        context.Arguments
+                        |> Seq.skipWhile (fun x -> x <> "--")
+                        |> Seq.toList
+
+                    if List.isEmpty candidates then
+                        null
+                    else
+                        candidates |> List.skip 1 |> String.concat " "
                 else
-                    candidates |> List.skip 1 |> String.concat " "
-            else
-                "run"
+                    "run"
 
-        let vitestCmd =
-            CmdLine.empty
-            |> CmdLine.appendRaw "npx"
-            |> CmdLine.appendRaw "vitest"
-            |> CmdLine.appendPrefix "--clearScreen" "false"
-            |> CmdLine.appendRaw additionalArgs
-            |> CmdLine.toString
+            let vitestCmd =
+                CmdLine.empty
+                |> CmdLine.appendRaw "npx"
+                |> CmdLine.appendRaw "vitest"
+                |> CmdLine.appendPrefix "--clearScreen" "false"
+                |> CmdLine.appendRaw additionalArgs
+                |> CmdLine.toString
 
-        let fableCmd =
-            CmdLine.empty
-            |> CmdLine.appendRaw "fable"
-            |> CmdLine.appendIf isWatch "watch"
-            |> CmdLine.appendRaw "../../src/Glutinum.Converter"
-            |> CmdLine.appendRaw "--sourceMaps"
-            |> CmdLine.appendRaw "--test:MSBuildCracker"
-            // Avoid strange logs because both Fable and Vitest rewrite the console
-            |> CmdLine.appendRaw "--verbose"
-            |> CmdLine.appendRaw "--run"
-            |> CmdLine.appendRaw vitestCmd
-            |> CmdLine.toString
+            let fableCmd =
+                CmdLine.empty
+                |> CmdLine.appendRaw "fable"
+                |> CmdLine.appendIf settings.IsWatch "watch"
+                |> CmdLine.appendRaw "../../src/Glutinum.Converter"
+                |> CmdLine.appendRaw "--sourceMaps"
+                |> CmdLine.appendRaw "--test:MSBuildCracker"
+                // Avoid strange logs because both Fable and Vitest rewrite the console
+                |> CmdLine.appendRaw "--verbose"
+                |> CmdLine.appendRaw "--run"
+                |> CmdLine.appendRaw vitestCmd
+                |> CmdLine.toString
 
-        Command.Run("dotnet", fableCmd, workingDirectory = "tests/specs")
+            Command.Run("dotnet", fableCmd, workingDirectory = "tests/specs")
+
+            0

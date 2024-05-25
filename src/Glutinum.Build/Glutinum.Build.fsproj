@@ -12,10 +12,12 @@
     <Compile Include="Utils/ChangelogParser.fs" />
     <Compile Include="Utils/Changelog.fs" />
     <Compile Include="Utils/Path.fs" />
-    <Compile Include="Tasks/Cli.fs" />
-    <Compile Include="Tasks/Test/Specs.fs" />
-    <Compile Include="Web.fs" />
-    <Compile Include="Publish.fs" />
+    <Compile Include="Commands/Lint.fs" />
+    <Compile Include="Commands/Format.fs" />
+    <Compile Include="Commands/Cli.fs" />
+    <Compile Include="Commands/Test/Specs.fs" />
+    <Compile Include="Commands/Web.fs" />
+    <Compile Include="Commands/Publish.fs" />
     <Compile Include="Main.fs" />
   </ItemGroup>
   <ItemGroup>
@@ -23,6 +25,7 @@
     <PackageReference Include="FSharp.Core" Version="8.0.101" />
     <PackageReference Include="Semver" Version="2.3.0" />
     <PackageReference Include="SimpleExec" Version="12.0.0" />
+    <PackageReference Include="Spectre.Console.Cli" Version="0.49.1" />
     <PackageReference Include="Thoth.Json.Newtonsoft" Version="0.1.0" />
   </ItemGroup>
 </Project>

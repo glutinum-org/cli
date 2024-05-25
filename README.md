@@ -98,7 +98,7 @@ You need to add a new configuration of type `Vitest`.
 > [!TIP]
 > Run `./build.sh --help` to see the available options (look for `test specs` command).
 
-Specs tests are using to test isolated TypeScript syntax and their conversion to F#.
+Specs tests are used to test isolated TypeScript syntax and their conversion to F#.
 
 They are generated based on the `tests/specs/references` folder.
 
