@@ -41,6 +41,9 @@ You can then invoke the local version of Glutinum by running `node cli.js <args>
                         """Run tests testing isolated TypeScript syntax."""
                     )
                 |> ignore
+
+                // TODO: Create a separate command to run all the tests when we have more than one type of tests
+                test.SetDefaultCommand<SpecCommand>()
         )
         |> ignore
 
