@@ -30,11 +30,16 @@ let readTypeOperatorNode
             | Some symbol ->
                 match symbol.declarations with
                 | Some declarations ->
-                    let interfaceDeclaration =
-                        declarations[0] :?> Ts.InterfaceDeclaration
 
-                    reader.ReadInterfaceDeclaration interfaceDeclaration
-                    |> GlueType.KeyOf
+                    if declarations.Count <> 1 then
+                        Utils.generateReaderError
+                            "type operator (keyof)"
+                            "Expected exactly one declaration"
+                            node
+                        |> failwith
+
+                    else
+                        reader.ReadNode declarations[0] |> GlueType.KeyOf
 
                 | None ->
                     Utils.generateReaderError
