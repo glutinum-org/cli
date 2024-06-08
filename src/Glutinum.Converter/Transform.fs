@@ -332,12 +332,31 @@ let rec private transformType
 
     | GlueType.Variable info -> transformType context info.Type
 
+    | GlueType.KeyOf innerGlueType ->
+        match
+            TypeAliasDeclaration.tryTransformKeyOf
+                context.CurrentScopeName
+                innerGlueType
+        with
+        | Some typ ->
+            context.ExposeType typ
+
+            ({
+                Name = context.FullName
+                FullName = context.FullName
+                TypeArguments = []
+                Type = FSharpType.Discard
+            }
+            : FSharpTypeReference)
+            |> FSharpType.TypeReference
+
+        | None -> FSharpType.Object
+
     | GlueType.ModuleDeclaration _
     | GlueType.IndexedAccessType _
     | GlueType.Literal _
     | GlueType.Enum _
     | GlueType.TypeAliasDeclaration _
-    | GlueType.KeyOf _
     | GlueType.Discard
     | GlueType.Partial _
     | GlueType.IntersectionType _
@@ -883,7 +902,11 @@ Errored enum: {glueEnum.Name}
 
 module TypeAliasDeclaration =
 
-    let transformKeyOf (aliasName: string) (glueType: GlueType) : FSharpType =
+    let tryTransformKeyOf
+        (aliasName: string)
+        (glueType: GlueType)
+        : FSharpType option
+        =
         let cases =
             match glueType with
             | GlueType.Interface interfaceInfo ->
@@ -926,18 +949,29 @@ module TypeAliasDeclaration =
                 )
             | _ -> []
 
-        ({
-            Attributes =
-                [
-                    FSharpAttribute.RequireQualifiedAccess
-                    FSharpAttribute.StringEnum CaseRules.None
-                ]
-            Name = Naming.sanitizeName aliasName
-            Cases = cases
-            IsOptional = false
-        }
-        : FSharpUnion)
-        |> FSharpType.Union
+        if cases.IsEmpty then
+            None
+        else
+            ({
+                Attributes =
+                    [
+                        FSharpAttribute.RequireQualifiedAccess
+                        FSharpAttribute.StringEnum CaseRules.None
+                    ]
+                Name = Naming.sanitizeName aliasName
+                Cases = cases
+                IsOptional = false
+            }
+            : FSharpUnion)
+            |> FSharpType.Union
+            |> Some
+
+    let transformKeyOf (aliasName: string) (glueType: GlueType) : FSharpType =
+        match tryTransformKeyOf aliasName glueType with
+        | Some typ -> typ
+        | None ->
+            Log.warn $"Could not transform KeyOf: {aliasName}"
+            FSharpType.Discard
 
     let transformLiteral (typeAliasName: string) (literalInfo: GlueLiteral) =
         let makeTypeAlias primitiveType =
