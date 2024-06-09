@@ -190,6 +190,10 @@ let readTypeNode
                         TypeParameters = []
                     }
                     |> GlueType.ClassDeclaration
+
+                // We don't support TypeQuery for ModuleDeclaration yet
+                // See https://github.com/glutinum-org/cli/issues/70 for a possible solution
+                | Ts.SyntaxKind.ModuleDeclaration -> GlueType.Discard
                 | _ -> reader.ReadNode declaration
 
             | None -> GlueType.Primitive GluePrimitive.Any
