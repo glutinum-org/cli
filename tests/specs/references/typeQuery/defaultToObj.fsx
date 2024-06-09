@@ -6,7 +6,7 @@ open System
 
 [<Erase>]
 type Exports =
-    [<Import("log", "module")>]
+    [<Import("log", "REPLACE_ME_WITH_MODULE_NAME")>]
     static member log () : unit = nativeOnly
 
 [<AllowNullLiteral>]

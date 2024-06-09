@@ -13,7 +13,7 @@ type Exports =
     /// <see href="my-control-library#Button">the Button class</see>"
     /// <see href="@microsoft/my-control-library/lib/Button#Button">the Button class</see>"
     /// </summary>
-    [<Import("isInlineTag", "module")>]
+    [<Import("isInlineTag", "REPLACE_ME_WITH_MODULE_NAME")>]
     static member isInlineTag (tagName: string) : bool = nativeOnly
 
 (***)

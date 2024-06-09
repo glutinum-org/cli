@@ -6,7 +6,7 @@ open System
 
 [<Erase>]
 type Exports =
-    [<Import("date", "module")>]
+    [<Import("date", "REPLACE_ME_WITH_MODULE_NAME")>]
     static member inline date: JS.Date = nativeOnly
 
 [<AllowNullLiteral>]

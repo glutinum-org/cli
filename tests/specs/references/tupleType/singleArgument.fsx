@@ -6,7 +6,7 @@ open System
 
 [<Erase>]
 type Exports =
-    [<Import("transformation", "module")>]
+    [<Import("transformation", "REPLACE_ME_WITH_MODULE_NAME")>]
     static member transformation (coefficients: float) : unit = nativeOnly
 
 (***)

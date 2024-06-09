@@ -8,7 +8,7 @@ module DomEvent =
 
     [<Erase>]
     type Exports =
-        [<Import("stop", "module")>]
+        [<Import("stop", "REPLACE_ME_WITH_MODULE_NAME")>]
         static member stop () : obj = nativeOnly
 
 (***)

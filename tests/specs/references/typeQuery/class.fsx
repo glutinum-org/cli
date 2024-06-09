@@ -6,7 +6,7 @@ open System
 
 [<Erase>]
 type Exports =
-    [<Import("DayJs", "module"); EmitConstructor>]
+    [<Import("DayJs", "REPLACE_ME_WITH_MODULE_NAME"); EmitConstructor>]
     static member DayJs () : DayJs = nativeOnly
 
 [<AllowNullLiteral>]

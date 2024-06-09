@@ -6,7 +6,7 @@ open System
 
 [<Erase>]
 type Exports =
-    [<Import("hello", "module")>]
+    [<Import("hello", "REPLACE_ME_WITH_MODULE_NAME")>]
     static member hello (?name: string) : unit = nativeOnly
 
 (***)

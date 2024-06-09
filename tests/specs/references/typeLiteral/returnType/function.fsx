@@ -6,7 +6,7 @@ open System
 
 [<Erase>]
 type Exports =
-    [<Import("Test", "module")>]
+    [<Import("Test", "REPLACE_ME_WITH_MODULE_NAME")>]
     static member Test () : Exports.Test = nativeOnly
 
 module Exports =

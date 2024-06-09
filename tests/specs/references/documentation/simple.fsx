@@ -13,7 +13,7 @@ type Exports =
     /// true if the specified tag is surrounded with <c>{</c>
     /// and <c>}</c> characters.
     /// </returns>
-    [<Import("isInlineTag", "module")>]
+    [<Import("isInlineTag", "REPLACE_ME_WITH_MODULE_NAME")>]
     static member isInlineTag (tagName: string) : bool = nativeOnly
 
 (***)

@@ -12,7 +12,7 @@ type Exports =
     /// <param name="arg2">
     /// The number of the tag.
     /// </param>
-    [<Import("isInlineTag", "module")>]
+    [<Import("isInlineTag", "REPLACE_ME_WITH_MODULE_NAME")>]
     static member isInlineTag (arg1: string, arg2: int) : bool = nativeOnly
 
 (***)

@@ -6,7 +6,7 @@ open System
 
 [<Erase>]
 type Exports =
-    [<Import("isDayjs", "module")>]
+    [<Import("isDayjs", "REPLACE_ME_WITH_MODULE_NAME")>]
     static member isDayjs (d: obj) : bool = nativeOnly
 
 (***)

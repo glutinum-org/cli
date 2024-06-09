@@ -6,9 +6,9 @@ open System
 
 [<Erase>]
 type Exports =
-    [<Import("dayjs", "module")>]
+    [<Import("dayjs", "REPLACE_ME_WITH_MODULE_NAME")>]
     static member dayjs () : dayjs.Dayjs = nativeOnly
-    [<ImportAll("module")>]
+    [<ImportAll("REPLACE_ME_WITH_MODULE_NAME")>]
     static member inline dayjs_
         with get () : dayjs.Exports =
             emitJsExpr () $$"""

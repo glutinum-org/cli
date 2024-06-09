@@ -9,7 +9,7 @@ type Exports =
     /// <returns>
     /// This is the return value of the documentation.
     /// </returns>
-    [<Import("isInlineTag", "module")>]
+    [<Import("isInlineTag", "REPLACE_ME_WITH_MODULE_NAME")>]
     static member isInlineTag (tagName: string) : bool = nativeOnly
 
 (***)

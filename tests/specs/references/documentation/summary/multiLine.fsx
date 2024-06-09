@@ -15,7 +15,7 @@ type Exports =
     /// And a third paragraph,
     /// with a line break.
     /// </summary>
-    [<Import("isInlineTag", "module")>]
+    [<Import("isInlineTag", "REPLACE_ME_WITH_MODULE_NAME")>]
     static member isInlineTag (tagName: string) : bool = nativeOnly
 
 (***)

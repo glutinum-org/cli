@@ -6,9 +6,9 @@ open System
 
 [<Erase>]
 type Exports =
-    [<Import("version", "module")>]
+    [<Import("version", "REPLACE_ME_WITH_MODULE_NAME")>]
     static member inline version: bool = nativeOnly
-    [<Import("isVersion", "module")>]
+    [<Import("isVersion", "REPLACE_ME_WITH_MODULE_NAME")>]
     static member isVersion (text: bool) : unit = nativeOnly
 
 (***)

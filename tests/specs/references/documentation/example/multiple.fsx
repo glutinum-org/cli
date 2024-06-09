@@ -23,7 +23,7 @@ type Exports =
     /// console.log(add(1,-1));
     /// </code>
     /// </example>
-    [<Import("add", "module")>]
+    [<Import("add", "REPLACE_ME_WITH_MODULE_NAME")>]
     static member add (a: float, b: float) : float = nativeOnly
 
 (***)

@@ -6,7 +6,7 @@ open System
 
 [<Erase>]
 type Exports =
-    [<Import("isInlineTag", "module"); Obsolete("Use the new base class instead.")>]
+    [<Import("isInlineTag", "REPLACE_ME_WITH_MODULE_NAME"); Obsolete("Use the new base class instead.")>]
     static member isInlineTag (tagName: string) : bool = nativeOnly
 
 (***)

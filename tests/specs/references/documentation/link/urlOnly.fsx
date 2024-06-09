@@ -12,7 +12,7 @@ type Exports =
     /// <see href="https://github.com/microsoft/tsdoc">https://github.com/microsoft/tsdoc</see>
     /// <see href="https://github.com/microsoft/tsdoc">https://github.com/microsoft/tsdoc</see>
     /// </summary>
-    [<Import("isInlineTag", "module")>]
+    [<Import("isInlineTag", "REPLACE_ME_WITH_MODULE_NAME")>]
     static member isInlineTag (tagName: string) : bool = nativeOnly
 
 (***)

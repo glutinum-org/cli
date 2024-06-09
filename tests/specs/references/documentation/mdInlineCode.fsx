@@ -10,7 +10,7 @@ type Exports =
     /// foo <c>{</c> bar
     /// and <c>}</c> characters.
     /// </summary>
-    [<Import("isInlineTag", "module")>]
+    [<Import("isInlineTag", "REPLACE_ME_WITH_MODULE_NAME")>]
     static member isInlineTag (tagName: string) : bool = nativeOnly
 
 (***)

@@ -386,7 +386,13 @@ let private transformExports
                 let name, context = sanitizeNameAndPushScope info.Name context
 
                 {
-                    Attributes = [ FSharpAttribute.Import(info.Name, "module") ]
+                    Attributes =
+                        [
+                            FSharpAttribute.Import(
+                                info.Name,
+                                Naming.MODULE_PLACEHOLDER
+                            )
+                        ]
                     Name = name
                     OriginalName = info.Name
                     Parameters = []
@@ -409,7 +415,10 @@ let private transformExports
                 {
                     Attributes =
                         [
-                            FSharpAttribute.Import(info.Name, "module")
+                            FSharpAttribute.Import(
+                                info.Name,
+                                Naming.MODULE_PLACEHOLDER
+                            )
                             yield! xmlDocInfo.ObsoleteAttributes
                         ]
                     Name = name
@@ -438,7 +447,11 @@ let private transformExports
                         Attributes =
                             [
                                 if isTopLevel then
-                                    FSharpAttribute.Import(info.Name, "module")
+                                    FSharpAttribute.Import(
+                                        info.Name,
+                                        Naming.MODULE_PLACEHOLDER
+                                    )
+
                                     FSharpAttribute.EmitConstructor
                                 else
                                     FSharpAttribute.EmitMacroConstructor
@@ -471,7 +484,11 @@ let private transformExports
                     match typ with
                     | GlueType.ClassDeclaration info ->
                         {
-                            Attributes = [ FSharpAttribute.ImportAll "module" ]
+                            Attributes =
+                                [
+                                    FSharpAttribute.ImportAll
+                                        Naming.MODULE_PLACEHOLDER
+                                ]
                             // "_" suffix is added to avoid name collision if
                             // there are some functions with the same name as
                             // the name of the module
@@ -502,7 +519,11 @@ let private transformExports
                     sanitizeNameAndPushScope glueType.Name context
 
                 {
-                    Attributes = [ FSharpAttribute.ImportDefault "module" ]
+                    Attributes =
+                        [
+                            FSharpAttribute.ImportDefault
+                                Naming.MODULE_PLACEHOLDER
+                        ]
                     Name = name
                     OriginalName = glueType.Name
                     Parameters = []

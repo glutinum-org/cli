@@ -6,7 +6,7 @@ open System
 
 [<Erase>]
 type Exports =
-    [<ImportAll("module")>]
+    [<ImportAll("REPLACE_ME_WITH_MODULE_NAME")>]
     static member inline lib_
         with get () : lib.Exports =
             emitJsExpr () $$"""

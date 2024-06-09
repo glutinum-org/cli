@@ -10,7 +10,7 @@ type Exports =
     /// This line is part of the remarks.
     /// This line is also part of the remarks.
     /// </remarks>
-    [<Import("isInlineTag", "module")>]
+    [<Import("isInlineTag", "REPLACE_ME_WITH_MODULE_NAME")>]
     static member isInlineTag (tagName: string) : bool = nativeOnly
 
 (***)

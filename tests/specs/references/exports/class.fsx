@@ -6,7 +6,7 @@ open System
 
 [<Erase>]
 type Exports =
-    [<Import("Logger", "module"); EmitConstructor>]
+    [<Import("Logger", "REPLACE_ME_WITH_MODULE_NAME"); EmitConstructor>]
     static member Logger () : Logger = nativeOnly
 
 [<AllowNullLiteral>]

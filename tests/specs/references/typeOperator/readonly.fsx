@@ -6,7 +6,7 @@ open System
 
 [<Erase>]
 type Exports =
-    [<Import("test", "module")>]
+    [<Import("test", "REPLACE_ME_WITH_MODULE_NAME")>]
     static member test (array: ResizeArray<string>) : unit = nativeOnly
 
 (***)

@@ -2,6 +2,9 @@ module Naming
 
 open System
 
+[<Literal>]
+let MODULE_PLACEHOLDER = "REPLACE_ME_WITH_MODULE_NAME"
+
 let private startWithDigit (name: string) : bool =
     name.Length > 0 && Char.IsDigit name.[0]
 
