@@ -32,6 +32,7 @@
     <Compile Include="Reader/VariableStatement.fs" />
     <Compile Include="Reader/ExportAssignment.fs" />
     <Compile Include="Reader/Documentation.fs" />
+    <Compile Include="Reader/NamedTupleMember.fs" />
     <Compile Include="Reader/TypeScriptReader.fs" />
     <Compile Include="FsharpAST.fs" />
     <Compile Include="Read.fs" />

@@ -51,10 +51,11 @@ let readExportAssignment
                         GlueType.Primitive GluePrimitive.Unit
                     | _ -> GlueType.Primitive GluePrimitive.Any
 
-                {
+                ({
                     Name = identiferNode.getText ()
                     Type = typ
                 }
+                : GlueVariable)
                 |> GlueType.Variable
                 |> GlueType.ExportDefault
 

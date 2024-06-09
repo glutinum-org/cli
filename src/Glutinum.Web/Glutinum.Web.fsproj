@@ -29,7 +29,7 @@
     <ProjectReference Include="..\Glutinum.Converter\Glutinum.Converter.fsproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Fable.Browser.Navigator" />
+    <PackageReference Include="fable.browser.navigator" />
     <PackageReference Include="Fable.Core" />
     <PackageReference Include="Fable.Elmish" />
     <PackageReference Include="Fable.Elmish.Browser" />

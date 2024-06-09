@@ -20,6 +20,7 @@ open Glutinum.Converter.Reader.UnionTypeNode
 open Glutinum.Converter.Reader.VariableStatement
 open Glutinum.Converter.Reader.ExportAssignment
 open Glutinum.Converter.Reader.Documentation
+open Glutinum.Converter.Reader.NamedTupleMember
 
 type TypeScriptReader(checker: Ts.TypeChecker) =
     let warnings = ResizeArray<string>()
@@ -129,3 +130,9 @@ type TypeScriptReader(checker: Ts.TypeChecker) =
             : GlueComment list
             =
             readDocumentationForNode this node
+
+        member this.ReadNamedTupleMember
+            (namedTupleMember: Ts.NamedTupleMember)
+            : GlueType
+            =
+            readNamedTupleMember this namedTupleMember

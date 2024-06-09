@@ -231,6 +231,15 @@ type GlueASTViewer =
 
         | GlueType.Discard -> ASTViewer.renderNode "Discard" [] context
 
+        | GlueType.NamedTupleType namedTupleType ->
+            ASTViewer.renderNode
+                "NamedTupleType"
+                [
+                    GlueASTViewer.Name namedTupleType.Name
+                    GlueASTViewer.Type namedTupleType.Type
+                ]
+                context
+
         | GlueType.Enum enumInfo ->
             ASTViewer.renderNode
                 "Enum"

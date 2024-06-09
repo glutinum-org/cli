@@ -201,6 +201,8 @@ type GlueFunctionType =
         Parameters: GlueParameter list
     }
 
+type NamedTupleType = { Name: string; Type: GlueType }
+
 [<RequireQualifiedAccess>]
 type GlueType =
     | Discard
@@ -223,6 +225,7 @@ type GlueType =
     | TypeParameter of string
     | ThisType of typeName: string
     | TupleType of GlueType list
+    | NamedTupleType of NamedTupleType
     | IntersectionType of GlueMember list
     | TypeLiteral of GlueTypeLiteral
     | OptionalType of GlueType
@@ -256,6 +259,7 @@ type GlueType =
         | TypeReference info -> info.Name
         | Array info -> $"ResizeArray<{info.Name}>"
         | ThisType typeName -> typeName
+        | NamedTupleType _
         | TypeLiteral _
         | IntersectionType _
         | IndexedAccessType _

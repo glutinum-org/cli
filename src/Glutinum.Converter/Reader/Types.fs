@@ -61,3 +61,6 @@ type ITypeScriptReader =
         declaration: Ts.Declaration -> GlueComment list
 
     abstract ReadDocumentationFromNode: node: Ts.Node -> GlueComment list
+
+    abstract ReadNamedTupleMember:
+        namedTupleMember: Ts.NamedTupleMember -> GlueType

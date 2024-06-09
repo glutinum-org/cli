@@ -352,6 +352,9 @@ let rec private transformType
 
         | None -> FSharpType.Object
 
+    | GlueType.NamedTupleType namedTupleType ->
+        transformType context namedTupleType.Type
+
     | GlueType.ModuleDeclaration _
     | GlueType.IndexedAccessType _
     | GlueType.Literal _
@@ -1426,6 +1429,7 @@ let private transformTypeAliasDeclaration
     | GlueType.ThisType _
     | GlueType.Variable _
     | GlueType.ExportDefault _
+    | GlueType.NamedTupleType _
     | GlueType.OptionalType _ -> FSharpType.Discard
 
 let private transformModuleDeclaration
@@ -1507,6 +1511,7 @@ let rec private transformToFsharp
         | GlueType.IntersectionType _
         | GlueType.TypeLiteral _
         | GlueType.OptionalType _
+        | GlueType.NamedTupleType _
         | GlueType.ThisType _ -> FSharpType.Discard
     )
 
