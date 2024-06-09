@@ -867,22 +867,15 @@ let private transformEnum (glueEnum: GlueEnum) : FSharpType =
 
             let caseName = Naming.sanitizeName glueMember.Name
 
-            // |> String.removeSingleQuote
-            // |> String.removeDoubleQuote
-            // |> String.capitalizeFirstLetter
-
-            let differentName =
-                Naming.nameNotEqualsDefaultFableValue caseName caseValue
-
             {
                 Attributes =
                     [
-                        if differentName then
+                        if caseName <> caseValue then
                             caseValue
                             |> Naming.removeSurroundingQuotes
                             |> FSharpAttribute.CompiledName
                     ]
-                Name = Naming.sanitizeName caseName
+                Name = caseName
             }
 
         {
@@ -919,25 +912,19 @@ module TypeAliasDeclaration =
                     | GlueMember.Method { Name = caseName }
                     | GlueMember.MethodSignature { Name = caseName }
                     | GlueMember.Property { Name = caseName } ->
-                        let caseValue =
-                            caseName
-                            |> String.removeSingleQuote
-                            |> String.removeDoubleQuote
 
-                        let differentName =
-                            Naming.nameNotEqualsDefaultFableValue
-                                caseName
-                                caseValue
+                        let sanitizeResult =
+                            Naming.sanitizeNameWithResult caseName
 
                         {
                             Attributes =
                                 [
-                                    if differentName then
+                                    if sanitizeResult.IsDifferent then
                                         caseName
                                         |> Naming.removeSurroundingQuotes
                                         |> FSharpAttribute.CompiledName
                                 ]
-                            Name = Naming.sanitizeName caseValue
+                            Name = sanitizeResult.Name
                         }
                         : FSharpUnionCase
                         |> Some
@@ -990,15 +977,9 @@ module TypeAliasDeclaration =
         match literalInfo with
         | GlueLiteral.String value ->
             let case =
-                let caseName =
-                    value
-                    |> String.removeSingleQuote
-                    |> String.removeDoubleQuote
-                // |> String.capitalizeFirstLetter
-
                 ({
                     Attributes = []
-                    Name = Naming.sanitizeName caseName
+                    Name = Naming.sanitizeName value
                 }
                 : FSharpUnionCase)
 
@@ -1105,15 +1086,18 @@ let private transformTypeAliasDeclaration
                 |> List.map (fun value ->
                     match value with
                     | GlueType.Literal(GlueLiteral.String value) ->
-                        let caseName =
-                            value
-                            |> String.removeSingleQuote
-                            |> String.removeDoubleQuote
-                        // |> String.capitalizeFirstLetter
+                        let sanitizeResult =
+                            Naming.sanitizeNameWithResult value
 
                         {
-                            Attributes = []
-                            Name = Naming.sanitizeName caseName
+                            Attributes =
+                                [
+                                    if sanitizeResult.IsDifferent then
+                                        value
+                                        |> Naming.removeSurroundingQuotes
+                                        |> FSharpAttribute.CompiledName
+                                ]
+                            Name = sanitizeResult.Name
                         }
                         : FSharpUnionCase
                     | _ -> failwith "Should not happen"
