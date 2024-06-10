@@ -254,8 +254,20 @@ let readTypeNode
             :?> Ts.UnionOrIntersectionType
 
         let properties =
-            unionOrIntersectionType.getProperties ()
-            |> Seq.toList
+            let computedProperties =
+                // If we detect an union type, we need to extract the properties from the inner types
+                if unionOrIntersectionType.isUnion () then
+                    unionOrIntersectionType.types
+                    |> Seq.toList
+                    |> List.map (checker.getPropertiesOfType >> Seq.toList)
+                    |> List.concat
+                    // Remove duplicates
+                    |> List.distinct
+
+                else
+                    unionOrIntersectionType.getProperties () |> Seq.toList
+
+            computedProperties
             |> List.choose (fun property ->
                 match property.declarations with
                 | Some declarations ->
