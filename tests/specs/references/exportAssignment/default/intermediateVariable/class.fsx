@@ -8,6 +8,8 @@ open System
 type Exports =
     [<ImportDefault("REPLACE_ME_WITH_MODULE_NAME")>]
     static member inline chalk: ChalkInstance = nativeOnly
+    [<Import("ChalkInstance", "REPLACE_ME_WITH_MODULE_NAME"); EmitConstructor>]
+    static member ChalkInstance () : ChalkInstance = nativeOnly
 
 
 [<AllowNullLiteral>]

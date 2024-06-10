@@ -8,6 +8,8 @@ open System
 type Exports =
     [<Import("date", "REPLACE_ME_WITH_MODULE_NAME")>]
     static member inline date: JS.Date = nativeOnly
+    [<Import("MyDate", "REPLACE_ME_WITH_MODULE_NAME"); EmitConstructor>]
+    static member MyDate () : MyDate = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

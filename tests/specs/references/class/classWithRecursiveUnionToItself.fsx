@@ -6,7 +6,8 @@ open System
 
 [<Erase>]
 type Exports =
-    interface end
+    [<Import("MyClass", "REPLACE_ME_WITH_MODULE_NAME"); EmitConstructor>]
+    static member MyClass () : MyClass = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

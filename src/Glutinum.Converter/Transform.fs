@@ -441,7 +441,14 @@ let private transformExports
                 // TODO: Handle constructor overloads
                 let name, context = sanitizeNameAndPushScope info.Name context
 
-                info.Constructors
+                // If the class has no constructor explicitly defined, we need to generate one
+                let constructors =
+                    if info.Constructors.IsEmpty then
+                        [ GlueConstructor [] ]
+                    else
+                        info.Constructors
+
+                constructors
                 |> List.map (fun (GlueConstructor parameters) ->
                     {
                         Attributes =

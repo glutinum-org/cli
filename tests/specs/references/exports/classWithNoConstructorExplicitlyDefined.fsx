@@ -6,12 +6,12 @@ open System
 
 [<Erase>]
 type Exports =
-    [<Import("SettingsContainer", "REPLACE_ME_WITH_MODULE_NAME"); EmitConstructor>]
-    static member SettingsContainer () : SettingsContainer = nativeOnly
+    [<Import("Logger", "REPLACE_ME_WITH_MODULE_NAME"); EmitConstructor>]
+    static member Logger () : Logger = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
-type SettingsContainer =
+type Logger =
     interface end
 
 (***)
