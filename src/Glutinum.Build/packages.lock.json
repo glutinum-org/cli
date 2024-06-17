@@ -11,6 +11,12 @@
           "FSharp.Core": "4.2.3"
         }
       },
+      "EasyBuild.FileSystemProvider": {
+        "type": "Direct",
+        "requested": "[0.3.0, )",
+        "resolved": "0.3.0",
+        "contentHash": "gdVJpqcMDJm4IfmITy3MtpEn/lo9pH8PirVlENtXGX9Sdw3rCgoo9ch1TAthUseh28RcUGWwza9BmEWlrQX/Aw=="
+      },
       "FSharp.Core": {
         "type": "Direct",
         "requested": "[8.0.101, )",

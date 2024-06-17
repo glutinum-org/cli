@@ -10,6 +10,7 @@ open Build.Utils.Pnpm
 open System.Text.RegularExpressions
 open Spectre.Console.Cli
 open System.ComponentModel
+open Build.Workspace
 
 let cwd = Environment.CurrentDirectory
 
@@ -83,6 +84,14 @@ type PublishCommand() =
                 |> CmdLine.toString
             )
 
+            let fableModuleGitignore =
+                FileInfo(VirtualWorkspace.dist.fable_modules.``.gitignore``)
+
+            // We need to delete the fable_modules/.gitignore file so NPM pack
+            // includes the fable_modules directory in the tarball
+            if fableModuleGitignore.Exists then
+                fableModuleGitignore.Delete()
+
             // Update package.json with the new version
             let updatedPackageJsonContent =
                 Npm.replaceVersion packageJsonContent lastChangelogVersion
@@ -92,6 +101,14 @@ type PublishCommand() =
             Pnpm.publish (noGitChecks = true, access = Publish.Access.Public)
 
             publishWebApp context
+
+            // Because we messed with Fable output, prefer to clean up
+            // So Fable will start from scratch next time
+            let fableModuleDir =
+                DirectoryInfo(VirtualWorkspace.dist.fable_modules.``.``)
+
+            if fableModuleDir.Exists then
+                fableModuleDir.Delete(true)
         else
             printfn $"Already up-to-date, skipping..."
 

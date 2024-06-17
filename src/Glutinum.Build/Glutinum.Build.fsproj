@@ -4,8 +4,10 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
     <ManagePackageVersionsCentrally>False</ManagePackageVersionsCentrally>
+    <ContinuousIntegrationBuild>false</ContinuousIntegrationBuild>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Workspace.fs" />
     <Compile Include="Utils/Nuget.fs" />
     <Compile Include="Utils/Pnpm.fs" />
     <Compile Include="Utils/Npm.fs" />
@@ -22,6 +24,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="BlackFox.CommandLine" Version="1.0.0" />
+    <PackageReference Include="EasyBuild.FileSystemProvider" Version="0.3.0" />
     <PackageReference Include="FSharp.Core" Version="8.0.101" />
     <PackageReference Include="Semver" Version="2.3.0" />
     <PackageReference Include="SimpleExec" Version="12.0.0" />
