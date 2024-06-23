@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 0.6.0 - 2024-05-08
+
+### 🚀 Features
+
+* Support IntersectionType with UnionType of TypeLiteral
+* Replace `"module"` placeholder with `"REPLACE_ME_WITH_MODULE_NAME"`
+* Add support for `NamedTuple`
+
+### 🐞 Bug Fixes
+
+* If no constructor is defined on an exported class generate a default one
+* Don't crash when encountering a `TypeQuery` against a module declaration
+* String enum containing a dot should be escaped
+* Allow resolution of `keyOf` as the return type of interface property
+* Don't assume that a node processed by `keyof` is always an interface, instead read it as standard node
+* Fix `@glutinum/cli` to include `fable_modules` in the output
+
 ## 0.5.0 - 2024-05-08
 
 ### Fixed
