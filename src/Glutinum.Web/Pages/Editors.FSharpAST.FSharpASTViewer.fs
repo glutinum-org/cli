@@ -313,7 +313,6 @@ type FSharpASTViewer =
 
     static member private Constructor(constructor: FSharpConstructor) =
         ASTViewer.renderNode "Constructor" [
-            FSharpASTViewer.Parameters constructor.Parameters
             FSharpASTViewer.Accessibility constructor.Accessibility
             FSharpASTViewer.Parameters constructor.Parameters
         ]
