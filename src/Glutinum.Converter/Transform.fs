@@ -263,59 +263,91 @@ let rec private transformType
         FSharpType.Interface(transformInterface context interfaceInfo)
 
     | GlueType.TypeLiteral typeLiteralInfo ->
-        let typeLiteralParameters =
+        let hasNoIndexSignature =
             typeLiteralInfo.Members
-            |> TransformMembers.toFSharpParameters context
-            // If the underlying type is an option, we want to make the field optional
-            // remove the option type
-            |> List.map (fun parameter ->
-                match parameter.Type with
-                | FSharpType.Option underlyingType ->
-                    { parameter with
-                        Type = underlyingType
-                        IsOptional = true
+            |> List.forall (
+                function
+                | GlueMember.IndexSignature _ -> false
+                | GlueMember.MethodSignature _
+                | GlueMember.Property _
+                | GlueMember.CallSignature _
+                | GlueMember.Method _
+                | GlueMember.ConstructSignature _ -> true
+            )
+
+        if hasNoIndexSignature then
+
+            let typeLiteralParameters =
+                typeLiteralInfo.Members
+                |> TransformMembers.toFSharpParameters context
+                // If the underlying type is an option, we want to make the field optional
+                // remove the option type
+                |> List.map (fun parameter ->
+                    match parameter.Type with
+                    | FSharpType.Option underlyingType ->
+                        { parameter with
+                            Type = underlyingType
+                            IsOptional = true
+                        }
+                    | _ -> parameter
+                )
+                // Sort to have the optional fields at the end
+                |> List.sortBy _.IsOptional
+
+            let explicitFields =
+                typeLiteralParameters
+                |> List.map (fun parameter ->
+                    {
+                        Name = parameter.Name
+                        Type =
+                            // If the argument is optional, we want to wrap it in an option
+                            if parameter.IsOptional then
+                                FSharpType.Option parameter.Type
+                            else
+                                parameter.Type
                     }
-                | _ -> parameter
-            )
-            // Sort to have the optional fields at the end
-            |> List.sortBy _.IsOptional
+                    : FSharpExplicitField
+                )
 
-        let explicitFields =
-            typeLiteralParameters
-            |> List.map (fun parameter ->
-                {
-                    Name = parameter.Name
-                    Type =
-                        // If the argument is optional, we want to wrap it in an option
-                        if parameter.IsOptional then
-                            FSharpType.Option parameter.Type
-                        else
-                            parameter.Type
-                }
-                : FSharpExplicitField
-            )
+            ({
+                Attributes =
+                    [ FSharpAttribute.Global; FSharpAttribute.AllowNullLiteral ]
+                Name = context.CurrentScopeName
+                PrimaryConstructor =
+                    {
+                        Parameters = typeLiteralParameters
+                        Attributes =
+                            [
+                                FSharpAttribute.ParamObject
+                                FSharpAttribute.EmitSelf
+                            ]
+                        Accessibility = FSharpAccessibility.Public
+                    }
+                SecondaryConstructors = []
+                ExplicitFields = explicitFields
+                TypeParameters = []
+            }
+            : FSharpClass)
+            |> FSharpType.Class
+            |> context.ExposeType
 
-        ({
-            Attributes =
-                [ FSharpAttribute.Global; FSharpAttribute.AllowNullLiteral ]
-            Name = context.CurrentScopeName
-            PrimaryConstructor =
-                {
-                    Parameters = typeLiteralParameters
-                    Attributes =
-                        [
-                            FSharpAttribute.ParamObject
-                            FSharpAttribute.EmitSelf
-                        ]
-                    Accessibility = FSharpAccessibility.Public
-                }
-            SecondaryConstructors = []
-            ExplicitFields = explicitFields
-            TypeParameters = []
-        }
-        : FSharpClass)
-        |> FSharpType.Class
-        |> context.ExposeType
+        else
+            {
+                Attributes =
+                    [
+                        FSharpAttribute.AllowNullLiteral
+                        FSharpAttribute.Interface
+                    ]
+                Name = context.CurrentScopeName
+                OriginalName = "" // This is a Fake type so we don't have an original name
+                TypeParameters = []
+                Members =
+                    TransformMembers.toFSharpMember
+                        context
+                        typeLiteralInfo.Members
+            }
+            |> FSharpType.Interface
+            |> context.ExposeType
 
         // Get fullname
         // Store type in the exposed types memory
