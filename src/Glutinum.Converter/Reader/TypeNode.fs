@@ -341,6 +341,8 @@ let readTypeNode
     | Ts.SyntaxKind.NamedTupleMember ->
         reader.ReadNamedTupleMember(typeNode :?> Ts.NamedTupleMember)
 
+    | Ts.SyntaxKind.SymbolKeyword -> GlueType.Primitive GluePrimitive.Symbol
+
     | _ ->
         generateReaderError
             "type node"
