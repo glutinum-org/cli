@@ -708,12 +708,24 @@ module private TransformMembers =
                 if propertyInfo.IsPrivate && not propertyInfo.IsStatic then
                     None // F# interface can't have private properties
                 else
+                    // If the property is optional, we want to unwrap the option type
+                    // This is to prevent generating a `string option option`
+                    let typ =
+                        let typ' = transformType context propertyInfo.Type
+
+                        if propertyInfo.IsOptional then
+                            match typ' with
+                            | FSharpType.Option underlyingType -> underlyingType
+                            | _ -> typ'
+                        else
+                            typ'
+
                     {
                         Attributes = [ yield! xmlDocInfo.ObsoleteAttributes ]
                         Name = name
                         OriginalName = propertyInfo.Name
                         Parameters = []
-                        Type = transformType context propertyInfo.Type
+                        Type = typ
                         TypeParameters = []
                         IsOptional = propertyInfo.IsOptional
                         IsStatic = propertyInfo.IsStatic
