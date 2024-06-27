@@ -14,6 +14,12 @@ module rec Glutinum.Converter.GlueAST
 type GlueCommentParam =
     { Name: string; Content: string option }
 
+type GlueCommentTypeParam =
+    {
+        TypeName: string
+        Content: string option
+    }
+
 [<RequireQualifiedAccess>]
 type GlueComment =
     | Summary of string list
@@ -23,6 +29,7 @@ type GlueComment =
     | Remarks of string
     | DefaultValue of string
     | Example of string
+    | TypeParam of GlueCommentTypeParam
 
 type GlueParameter =
     {
@@ -80,6 +87,7 @@ type GlueIndexSignature =
 type GlueMethodSignature =
     {
         Name: string
+        Documentation: GlueComment list
         Parameters: GlueParameter list
         Type: GlueType
     }
@@ -108,7 +116,12 @@ type GlueInterface =
 
 type GlueTypeLiteral = { Members: GlueMember list }
 
-type GlueVariable = { Name: string; Type: GlueType }
+type GlueVariable =
+    {
+        Documentation: GlueComment list
+        Name: string
+        Type: GlueType
+    }
 
 [<RequireQualifiedAccess>]
 type GluePrimitive =
@@ -150,6 +163,7 @@ type GlueEnum =
 
 type GlueTypeAliasDeclaration =
     {
+        Documentation: GlueComment list
         Name: string
         Type: GlueType
         TypeParameters: GlueTypeParameter list
@@ -173,7 +187,11 @@ type GlueModuleDeclaration =
         Types: GlueType list
     }
 
-type GlueConstructor = GlueConstructor of GlueParameter list
+type GlueConstructor =
+    {
+        Documentation: GlueComment list
+        Parameters: GlueParameter list
+    }
 
 type GlueClassDeclaration =
     {
@@ -198,6 +216,7 @@ type ExcludedMember = Literal of GlueLiteral
 
 type GlueFunctionType =
     {
+        Documentation: GlueComment list
         Type: GlueType
         Parameters: GlueParameter list
     }

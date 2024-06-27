@@ -101,13 +101,25 @@ type GlueASTViewer =
 
             | GlueComment.Deprecated content ->
                 ASTViewer.renderKeyValueOption "Deprecated" id content
+
+            | GlueComment.TypeParam typeParam ->
+                ASTViewer.renderNode "TypeParam" [
+                    ASTViewer.renderKeyValue "TypeName" typeParam.TypeName
+                    ASTViewer.renderKeyValueOption
+                        "Content"
+                        id
+                        typeParam.Content
+                ]
         )
         |> ASTViewer.renderNode "Documentation"
 
     static member private Constructors(constructors: GlueConstructor list) =
         constructors
-        |> List.map (fun (GlueConstructor parameters) ->
-            GlueASTViewer.Parameters parameters
+        |> List.map (fun constructorInfo ->
+            ASTViewer.renderNode "Constructor" [
+                GlueASTViewer.Documentation constructorInfo.Documentation
+                GlueASTViewer.Parameters constructorInfo.Parameters
+            ]
         )
         |> ASTViewer.renderNode "Constructors"
 
@@ -116,6 +128,7 @@ type GlueASTViewer =
         | GlueMember.MethodSignature methodSignature ->
             ASTViewer.renderNode "MethodSignature" [
                 GlueASTViewer.Name methodSignature.Name
+                GlueASTViewer.Documentation methodSignature.Documentation
                 GlueASTViewer.Parameters methodSignature.Parameters
                 GlueASTViewer.Type methodSignature.Type
             ]
@@ -204,6 +217,7 @@ type GlueASTViewer =
                 "Variable"
                 [
                     GlueASTViewer.Name variableInfo.Name
+                    GlueASTViewer.Documentation variableInfo.Documentation
                     GlueASTViewer.Type variableInfo.Type
                 ]
                 context
@@ -274,6 +288,7 @@ type GlueASTViewer =
                 | GluePrimitive.Null -> Html.span "Null"
                 | GluePrimitive.Undefined -> Html.span "Undefined"
                 | GluePrimitive.Object -> Html.span "Object"
+                | GluePrimitive.Symbol -> Html.span "Symbol"
 
             ASTViewer.renderNode
                 "Primitive"
@@ -288,6 +303,7 @@ type GlueASTViewer =
                 "TypeAliasDeclaration"
                 [
                     GlueASTViewer.Name typeAliasInfo.Name
+                    GlueASTViewer.Documentation typeAliasInfo.Documentation
                     GlueASTViewer.Type typeAliasInfo.Type
                     GlueASTViewer.TypeParameters typeAliasInfo.TypeParameters
                 ]

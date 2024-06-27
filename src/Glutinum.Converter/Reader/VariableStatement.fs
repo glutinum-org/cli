@@ -39,6 +39,7 @@ let readVariableStatement
                     |> failwith
 
             ({
+                Documentation = reader.ReadDocumentationFromNode declaration
                 Name = name
                 Type = reader.ReadTypeNode declaration.``type``
             }

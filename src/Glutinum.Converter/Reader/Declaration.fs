@@ -75,6 +75,7 @@ let readDeclaration
         let name = unbox<Ts.Identifier> methodSignature.name
 
         ({
+            Documentation = reader.ReadDocumentationFromNode name
             Name = name.getText ()
             Parameters = reader.ReadParameters methodSignature.parameters
             Type = reader.ReadTypeNode methodSignature.``type``

@@ -52,6 +52,7 @@ let readExportAssignment
                     | _ -> GlueType.Primitive GluePrimitive.Any
 
                 ({
+                    Documentation = reader.ReadDocumentationFromNode exportNode
                     Name = identiferNode.getText ()
                     Type = typ
                 }

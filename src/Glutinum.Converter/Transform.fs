@@ -127,6 +127,13 @@ let private transformComment (comment: GlueAST.GlueComment list) =
             | GlueComment.DefaultValue defaultValue ->
                 FSharpXmlDoc.DefaultValue defaultValue
             | GlueComment.Example example -> FSharpXmlDoc.Example example
+            | GlueComment.TypeParam typeParam ->
+                ({
+                    TypeName = typeParam.TypeName
+                    Content = typeParam.Content |> Option.defaultValue ""
+                }
+                : FSharpCommentTypeParam)
+                |> FSharpXmlDoc.TypeParam
         )
 
     {|
@@ -417,6 +424,7 @@ let private transformExports
             function
             | GlueType.Variable info ->
                 let name, context = sanitizeNameAndPushScope info.Name context
+                let xmlDocInfo = transformComment info.Documentation
 
                 {
                     Attributes =
@@ -425,6 +433,7 @@ let private transformExports
                                 info.Name,
                                 Naming.MODULE_PLACEHOLDER
                             )
+                            yield! xmlDocInfo.ObsoleteAttributes
                         ]
                     Name = name
                     OriginalName = info.Name
@@ -435,7 +444,7 @@ let private transformExports
                     IsStatic = true
                     Accessor = None
                     Accessibility = FSharpAccessibility.Public
-                    XmlDoc = []
+                    XmlDoc = xmlDocInfo.Others
                 }
                 |> FSharpMember.Property
                 |> List.singleton
@@ -477,12 +486,15 @@ let private transformExports
                 // If the class has no constructor explicitly defined, we need to generate one
                 let constructors =
                     if info.Constructors.IsEmpty then
-                        [ GlueConstructor [] ]
+                        [ { Documentation = []; Parameters = [] } ]
                     else
                         info.Constructors
 
                 constructors
-                |> List.map (fun (GlueConstructor parameters) ->
+                |> List.map (fun constructorInfo ->
+                    let xmlDocInfo =
+                        transformComment constructorInfo.Documentation
+
                     {
                         Attributes =
                             [
@@ -496,11 +508,14 @@ let private transformExports
                                 else
                                     FSharpAttribute.EmitMacroConstructor
                                         info.Name
+
+                                yield! xmlDocInfo.ObsoleteAttributes
                             ]
                         Name = name
                         OriginalName = info.Name
                         Parameters =
-                            parameters |> List.map (transformParameter context)
+                            constructorInfo.Parameters
+                            |> List.map (transformParameter context)
                         TypeParameters =
                             transformTypeParameters context info.TypeParameters
                         Type =
@@ -513,7 +528,7 @@ let private transformExports
                         IsStatic = true
                         Accessor = None
                         Accessibility = FSharpAccessibility.Public
-                        XmlDoc = []
+                        XmlDoc = xmlDocInfo.Others
                     }
                     |> FSharpMember.Method
                 )
@@ -766,8 +781,10 @@ module private TransformMembers =
                 let name, context =
                     sanitizeNameAndPushScope methodSignature.Name context
 
+                let xmlDocInfo = transformComment methodSignature.Documentation
+
                 {
-                    Attributes = []
+                    Attributes = [ yield! xmlDocInfo.ObsoleteAttributes ]
                     Name = name
                     OriginalName = methodSignature.Name
                     Parameters =
@@ -779,7 +796,7 @@ module private TransformMembers =
                     IsStatic = false
                     Accessor = None
                     Accessibility = FSharpAccessibility.Public
-                    XmlDoc = []
+                    XmlDoc = xmlDocInfo.Others
                 }
                 |> FSharpMember.Method
                 |> Some

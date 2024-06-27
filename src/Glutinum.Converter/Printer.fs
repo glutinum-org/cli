@@ -363,6 +363,7 @@ let private printXmlDoc (printer: Printer) (elements: FSharpXmlDoc list) =
             | FSharpXmlDoc.Returns _
             | FSharpXmlDoc.Param _
             | FSharpXmlDoc.Remarks _
+            | FSharpXmlDoc.TypeParam _
             | FSharpXmlDoc.Example _ -> false
         )
 
@@ -401,6 +402,13 @@ let private printXmlDoc (printer: Printer) (elements: FSharpXmlDoc list) =
 
         | FSharpXmlDoc.Example content ->
             printBlockTag printer "example" [] content
+
+        | FSharpXmlDoc.TypeParam info ->
+            printBlockTag
+                printer
+                "typeparam"
+                [ "name", info.TypeName ]
+                info.Content
     )
 
 let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
@@ -494,6 +502,7 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
 
         | FSharpMember.Property propertyInfo ->
 
+            printXmlDoc printer propertyInfo.XmlDoc
             printAttributes printer propertyInfo.Attributes
 
             if propertyInfo.IsStatic then
@@ -565,7 +574,6 @@ import {{ %s{interfaceInfo.OriginalName} }} from \"module\";
                         printerSetter true
 
             else
-                printXmlDoc printer propertyInfo.XmlDoc
                 printer.Write($"abstract member {propertyInfo.Name}")
 
                 propertyInfo.Parameters

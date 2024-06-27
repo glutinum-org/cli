@@ -28,6 +28,7 @@ let readTypeAliasDeclaration
         | _ -> reader.ReadTypeNode declaration.``type``
 
     {
+        Documentation = reader.ReadDocumentationFromNode declaration
         Name = declaration.name.getText ()
         Type = typ
         TypeParameters = reader.ReadTypeParameters declaration.typeParameters

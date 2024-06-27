@@ -30,8 +30,12 @@ let readClassDeclaration
             | Ts.SyntaxKind.Constructor ->
                 let constructor = m :?> Ts.ConstructorDeclaration
 
-                reader.ReadParameters constructor.parameters
-                |> GlueConstructor
+                ({
+                    Documentation =
+                        reader.ReadDocumentationFromSignature constructor
+                    Parameters = reader.ReadParameters constructor.parameters
+                }
+                : GlueConstructor)
                 |> Some
 
             | _ -> None

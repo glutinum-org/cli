@@ -164,6 +164,7 @@ let readTypeNode
         let functionTypeNode = typeNode :?> Ts.FunctionTypeNode
 
         {
+            Documentation = reader.ReadDocumentationFromNode typeNode
             Type = reader.ReadTypeNode functionTypeNode.``type``
             Parameters = reader.ReadParameters functionTypeNode.parameters
         }

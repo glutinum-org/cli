@@ -4,6 +4,8 @@ open TypeScript
 
 type FSharpCommentParam = { Name: string; Content: string }
 
+type FSharpCommentTypeParam = { TypeName: string; Content: string }
+
 [<RequireQualifiedAccess>]
 type FSharpXmlDoc =
     | Summary of string list
@@ -12,6 +14,7 @@ type FSharpXmlDoc =
     | Remarks of string
     | DefaultValue of string
     | Example of string
+    | TypeParam of FSharpCommentTypeParam
 
 [<RequireQualifiedAccess>]
 type FSharpLiteral =

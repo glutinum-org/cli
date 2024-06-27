@@ -1,13 +1,14 @@
 module Glutinum.Converter.Reader.Documentation
 
 open Glutinum.Converter.GlueAST
-open Glutinum.Converter.Reader.Utils
 open Glutinum.Converter.Reader.Types
 open TypeScript
-open Fable.Core.JsInterop
 open System
+open System.Text.RegularExpressions
+open Fable.Core.JsInterop
 
 let private readDocumentation
+    (reader: ITypeScriptReader)
     (summary: ResizeArray<Ts.SymbolDisplayPart>)
     (jsDocTags: ResizeArray<Ts.JSDocTag>)
     =
@@ -90,6 +91,42 @@ let private readDocumentation
                         |> Some
                     | None -> None
 
+                | "typeParam" ->
+                    match tag.comment with
+                    | Some comment ->
+                        match ts.getTextOfJSDocComment comment with
+                        | Some text ->
+                            let regex =
+                                Regex(
+                                    "\s*(?<type>[^-\s]*)\s*-\s*(?<description>.*)",
+                                    RegexOptions.Singleline
+                                )
+
+                            let m = regex.Match(text)
+
+                            if m.Success then
+                                ({
+                                    TypeName = m.Groups.["type"].Value
+                                    Content =
+                                        if
+                                            m.Groups.["description"].Success
+                                        then
+                                            Some m.Groups.["description"].Value
+                                        else
+                                            None
+                                }
+                                : GlueCommentTypeParam)
+                                |> GlueComment.TypeParam
+                                |> Some
+                            else
+                                $"Invalid typeParam tag format: {text}"
+                                |> reader.Warnings.Add
+
+                                None
+
+                        | None -> None
+                    | None -> None
+
                 | _ -> None
 
             | _ -> None
@@ -113,16 +150,25 @@ let readDocumentationForSignature
     match reader.checker.getSignatureFromDeclaration declaration with
     | Some signature ->
         readDocumentation
+            reader
             (signature.getDocumentationComment (Some reader.checker))
             (ts.getJSDocTags declaration)
 
     | None -> []
 
 let readDocumentationForNode (reader: ITypeScriptReader) (node: Ts.Node) =
+    let symbolOpt =
+        match reader.checker.getSymbolAtLocation node with
+        | Some symbol -> Some symbol
+        // I don't know why sometimes TypeScript doesn't return a symbol
+        // for a node, even if it has a symbol property
+        // This is a workaround to get the symbol from the node which seems to work in most cases
+        | None -> node?symbol
 
-    match reader.checker.getSymbolAtLocation node with
+    match symbolOpt with
     | Some symbol ->
         readDocumentation
+            reader
             (symbol.getDocumentationComment (Some reader.checker))
             (ts.getJSDocTags node.parent)
 
