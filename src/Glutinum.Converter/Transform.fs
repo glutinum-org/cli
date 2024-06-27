@@ -1492,12 +1492,23 @@ let private transformTypeAliasDeclaration
         : FSharpTypeAlias)
         |> FSharpType.TypeAlias
 
+    | GlueType.TypeParameter typeParameterInfo ->
+        ({
+            Name = typeAliasName
+            Type = FSharpType.TypeParameter typeParameterInfo
+            TypeParameters =
+                transformTypeParameters
+                    context
+                    glueTypeAliasDeclaration.TypeParameters
+        }
+        : FSharpTypeAlias)
+        |> FSharpType.TypeAlias
+
     | GlueType.ClassDeclaration _
     | GlueType.Enum _
     | GlueType.Interface _
     | GlueType.ModuleDeclaration _
     | GlueType.TypeAliasDeclaration _
-    | GlueType.TypeParameter _
     | GlueType.Discard
     | GlueType.FunctionDeclaration _
     | GlueType.ThisType _
