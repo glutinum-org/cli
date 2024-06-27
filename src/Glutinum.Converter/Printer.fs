@@ -808,6 +808,10 @@ let private printEnum (printer: Printer) (enumInfo: FSharpEnum) =
     printer.Unindent
 
 let private printTypeAlias (printer: Printer) (aliasInfo: FSharpTypeAlias) =
+
+    printXmlDoc printer aliasInfo.XmlDoc
+    printAttributes printer aliasInfo.Attributes
+
     printer.Write($"type {aliasInfo.Name}")
     printTypeParameters printer aliasInfo.TypeParameters
     printer.WriteInline(" =")

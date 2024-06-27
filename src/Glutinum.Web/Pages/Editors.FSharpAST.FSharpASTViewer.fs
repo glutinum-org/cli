@@ -424,6 +424,8 @@ type FSharpASTViewer =
                 "TypeAlias"
                 [
                     FSharpASTViewer.Name typeAlias.Name
+                    FSharpASTViewer.XmlDoc typeAlias.XmlDoc
+                    FSharpASTViewer.Attributes typeAlias.Attributes
                     FSharpASTViewer.Type typeAlias.Type
                     FSharpASTViewer.TypeParameters typeAlias.TypeParameters
                 ]

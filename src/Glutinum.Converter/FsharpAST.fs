@@ -334,7 +334,9 @@ type FSharpTypeParameter =
 
 type FSharpTypeAlias =
     {
+        Attributes: FSharpAttribute list
         Name: string
+        XmlDoc: FSharpXmlDoc list
         Type: FSharpType
         TypeParameters: FSharpTypeParameter list
     }

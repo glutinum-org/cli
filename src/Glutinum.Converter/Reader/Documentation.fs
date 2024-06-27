@@ -157,19 +157,23 @@ let readDocumentationForSignature
     | None -> []
 
 let readDocumentationForNode (reader: ITypeScriptReader) (node: Ts.Node) =
-    let symbolOpt =
-        match reader.checker.getSymbolAtLocation node with
-        | Some symbol -> Some symbol
-        // I don't know why sometimes TypeScript doesn't return a symbol
-        // for a node, even if it has a symbol property
-        // This is a workaround to get the symbol from the node which seems to work in most cases
-        | None -> node?symbol
-
-    match symbolOpt with
+    match reader.checker.getSymbolAtLocation node with
     | Some symbol ->
         readDocumentation
             reader
             (symbol.getDocumentationComment (Some reader.checker))
             (ts.getJSDocTags node.parent)
 
-    | None -> []
+    | None ->
+        // I don't know why sometimes TypeScript doesn't return a symbol
+        // for a node, even if it has a symbol property
+        // This is a workaround to get the symbol from the node which seems to work in most cases
+        match node?symbol with
+        | Some symbol ->
+            readDocumentation
+                reader
+                ((unbox<Ts.Symbol> symbol)
+                    .getDocumentationComment (Some reader.checker))
+                (ts.getJSDocTags node)
+
+        | None -> []
