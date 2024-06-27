@@ -30,6 +30,7 @@ type GlueComment =
     | DefaultValue of string
     | Example of string
     | TypeParam of GlueCommentTypeParam
+    | Throws of string
 
 type GlueParameter =
     {

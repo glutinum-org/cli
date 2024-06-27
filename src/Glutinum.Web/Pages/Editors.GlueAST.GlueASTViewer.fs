@@ -110,6 +110,10 @@ type GlueASTViewer =
                         id
                         typeParam.Content
                 ]
+
+            | GlueComment.Throws content ->
+                [ ASTViewer.renderValueOnly content ]
+                |> ASTViewer.renderNode "Throws"
         )
         |> ASTViewer.renderNode "Documentation"
 

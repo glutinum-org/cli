@@ -62,6 +62,15 @@ let private readDocumentation
                 // as it is still useful information
                 | None -> GlueComment.Deprecated None |> Some
 
+            | Ts.SyntaxKind.JSDocThrowsTag ->
+                match tag.comment with
+                | Some comment ->
+                    ts.getTextOfJSDocComment comment
+                    |> Option.defaultValue ""
+                    |> GlueComment.Throws
+                    |> Some
+                | None -> None
+
             | Ts.SyntaxKind.JSDocTag ->
                 match tag.tagName.getText () with
                 | "remarks" ->
