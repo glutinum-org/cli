@@ -297,7 +297,9 @@ let rec private transformType
         else if others.Length = 1 then
             transformType context others.Head
         else
-            match tryOptimizeUnionType context.CurrentScopeName others with
+            match
+                tryOptimizeUnionType context context.CurrentScopeName others
+            with
             | Some typ ->
                 typ |> context.ExposeType
 
@@ -1218,6 +1220,7 @@ let private transformTypeParameters
     )
 
 let private tryOptimizeUnionType
+    (context: TransformContext)
     (typeName: string)
     (cases: GlueType list)
     : FSharpType option
@@ -1326,11 +1329,51 @@ let private tryOptimizeUnionType
         ({ Name = typeName; Cases = cases }: FSharpEnum)
         |> FSharpType.Enum
         |> Some
-    // Otherwise, we want to generate an erased Enum
-    // Either by using U2, U3, etc. or by creating custom
-    // Erased enum cases for improving the user experience
+
     else
-        None
+        let isTypeLiteralOnly =
+            // If the list is empty, it means that there was no candidates
+            // for type literals
+            cases
+            |> List.forall (
+                function
+                | GlueType.TypeLiteral _ -> true
+                | _ -> false
+            )
+
+        // If the union contains only type literals, we can generate an interface
+        // instead of an erased enum
+        if isTypeLiteralOnly then
+            let members =
+                cases
+                |> List.collect (
+                    function
+                    | GlueType.TypeLiteral typeLiteralInfo ->
+                        TransformMembers.toFSharpMember
+                            context
+                            typeLiteralInfo.Members
+                    | _ -> []
+                )
+
+            {
+                Attributes =
+                    [
+                        FSharpAttribute.AllowNullLiteral
+                        FSharpAttribute.Interface
+                    ]
+                Name = typeName
+                OriginalName = context.CurrentScopeName
+                TypeParameters = []
+                Members = members
+            }
+            |> FSharpType.Interface
+            |> Some
+
+        // Otherwise, we want to generate an erased Enum
+        // Either by using U2, U3, etc. or by creating custom
+        // Erased enum cases for improving the user experience
+        else
+            None
 
 let private transformTypeAliasDeclaration
     (context: TransformContext)
@@ -1346,7 +1389,7 @@ let private transformTypeAliasDeclaration
     // TODO: Make the transformation more robust
     match glueTypeAliasDeclaration.Type with
     | GlueType.Union(GlueTypeUnion cases) as unionType ->
-        match tryOptimizeUnionType typeAliasName cases with
+        match tryOptimizeUnionType context typeAliasName cases with
         | Some typ -> typ
         | None ->
             ({
