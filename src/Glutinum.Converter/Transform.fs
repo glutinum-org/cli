@@ -297,22 +297,39 @@ let rec private transformType
         else if others.Length = 1 then
             transformType context others.Head
         else
-            {
-                Attributes = []
-                Name = $"U{others.Length}"
-                Cases =
-                    others
-                    |> List.map (fun caseType ->
-                        {
-                            Attributes = []
-                            Name =
-                                Naming.mapTypeNameToFableCoreAwareName
-                                    caseType.Name
-                        }
-                    )
-                IsOptional = isOptional
-            }
-            |> FSharpType.Union
+            match tryOptimizeUnionType context.CurrentScopeName others with
+            | Some typ ->
+                typ |> context.ExposeType
+
+                // Get fullname
+                // Store type in the exposed types memory
+                ({
+                    Name = context.FullName
+                    FullName = context.FullName
+                    TypeArguments = []
+                    Type = FSharpType.Discard
+                }
+                : FSharpTypeReference)
+                |> FSharpType.TypeReference
+
+            | None ->
+
+                {
+                    Attributes = []
+                    Name = $"U{others.Length}"
+                    Cases =
+                        others
+                        |> List.map (fun caseType ->
+                            {
+                                Attributes = []
+                                Name =
+                                    Naming.mapTypeNameToFableCoreAwareName
+                                        caseType.Name
+                            }
+                        )
+                    IsOptional = isOptional
+                }
+                |> FSharpType.Union
 
     | GlueType.TypeReference typeReference ->
         ({
@@ -1200,6 +1217,121 @@ let private transformTypeParameters
         )
     )
 
+let private tryOptimizeUnionType
+    (typeName: string)
+    (cases: GlueType list)
+    : FSharpType option
+    =
+    // Unions can have nested unions, so we need to flatten them
+    // TODO: Is there cases where we don't want to flatten?
+    // U2<U2<int, string>, bool>
+    let rec flattenCases (cases: GlueType list) : GlueType list =
+        cases
+        |> List.collect (
+            function
+            // We are inside an union, and have access to the literal types
+            | GlueType.Literal _ as literal -> [ literal ]
+            | GlueType.Union(GlueTypeUnion cases) -> flattenCases cases
+            | GlueType.TypeAliasDeclaration aliasCases ->
+                match aliasCases.Type with
+                | GlueType.Union(GlueTypeUnion cases) -> flattenCases cases
+                | _ -> []
+            // Can't find cases so we return an empty list to discard the type
+            // Should we do something if we fall in this state?
+            // I think the code below will be able to recover by generating
+            // an erased enum, but I don't know if there cases where we could
+            // be hitting ourselves in the foot
+            | _ -> []
+        )
+
+    let flattenedCases = flattenCases cases
+
+    let isStringOnly =
+        // If the list is empty, it means that there was no candidates
+        // for string literals
+        not flattenedCases.IsEmpty
+        && flattenedCases
+           |> List.forall (
+               function
+               | GlueType.Literal(GlueLiteral.String _) -> true
+               | _ -> false
+           )
+
+    let isNumericOnly =
+        // If the list is empty, it means that there was no candidates
+        // for numeric literals
+        not flattenedCases.IsEmpty
+        && flattenedCases
+           |> List.forall (
+               function
+               | GlueType.Literal(GlueLiteral.Int _) -> true
+               | _ -> false
+           )
+
+    // If the union contains only literal strings,
+    // we can transform it into a StringEnum
+    if isStringOnly then
+        let cases =
+            flattenedCases
+            |> List.map (fun value ->
+                match value with
+                | GlueType.Literal(GlueLiteral.String value) ->
+                    let sanitizeResult = Naming.sanitizeNameWithResult value
+
+                    {
+                        Attributes =
+                            [
+                                if sanitizeResult.IsDifferent then
+                                    value
+                                    |> Naming.removeSurroundingQuotes
+                                    |> FSharpAttribute.CompiledName
+                            ]
+                        Name = sanitizeResult.Name
+                    }
+                    : FSharpUnionCase
+                | _ -> failwith "Should not happen"
+            )
+            |> List.distinct
+
+        ({
+            Attributes =
+                [
+                    FSharpAttribute.RequireQualifiedAccess
+                    FSharpAttribute.StringEnum CaseRules.None
+                ]
+            Name = typeName
+            Cases = cases
+            IsOptional = false
+        }
+        : FSharpUnion)
+        |> FSharpType.Union
+        |> Some
+    // If the union contains only literal numbers,
+    // we can transform it into a standard F# enum
+    else if isNumericOnly then
+        let cases =
+            flattenedCases
+            |> List.map (fun value ->
+                match value with
+                | GlueType.Literal(GlueLiteral.Int value) ->
+                    {
+                        Name = value.ToString()
+                        Value = FSharpLiteral.Int value
+                    }
+                    : FSharpEnumCase
+                | _ -> failwith "Should not happen"
+            )
+            |> List.distinct
+
+        ({ Name = typeName; Cases = cases }: FSharpEnum)
+        |> FSharpType.Enum
+        |> Some
+    // Otherwise, we want to generate an erased Enum
+    // Either by using U2, U3, etc. or by creating custom
+    // Erased enum cases for improving the user experience
+    else
+        None
+
 let private transformTypeAliasDeclaration
     (context: TransformContext)
     (glueTypeAliasDeclaration: GlueTypeAliasDeclaration)
@@ -1214,114 +1346,9 @@ let private transformTypeAliasDeclaration
     // TODO: Make the transformation more robust
     match glueTypeAliasDeclaration.Type with
     | GlueType.Union(GlueTypeUnion cases) as unionType ->
-
-        // Unions can have nested unions, so we need to flatten them
-        // TODO: Is there cases where we don't want to flatten?
-        // U2<U2<int, string>, bool>
-        let rec flattenCases (cases: GlueType list) : GlueType list =
-            cases
-            |> List.collect (
-                function
-                // We are inside an union, and have access to the literal types
-                | GlueType.Literal _ as literal -> [ literal ]
-                | GlueType.Union(GlueTypeUnion cases) -> flattenCases cases
-                | GlueType.TypeAliasDeclaration aliasCases ->
-                    match aliasCases.Type with
-                    | GlueType.Union(GlueTypeUnion cases) -> flattenCases cases
-                    | _ -> []
-                // Can't find cases so we return an empty list to discard the type
-                // Should we do something if we fall in this state?
-                // I think the code below will be able to recover by generating
-                // an erased enum, but I don't know if there cases where we could
-                // be hitting ourselves in the foot
-                | _ -> []
-            )
-
-        let flattenedCases = flattenCases cases
-
-        let isStringOnly =
-            // If the list is empty, it means that there was no candidates
-            // for string literals
-            not flattenedCases.IsEmpty
-            && flattenedCases
-               |> List.forall (
-                   function
-                   | GlueType.Literal(GlueLiteral.String _) -> true
-                   | _ -> false
-               )
-
-        let isNumericOnly =
-            // If the list is empty, it means that there was no candidates
-            // for numeric literals
-            not flattenedCases.IsEmpty
-            && flattenedCases
-               |> List.forall (
-                   function
-                   | GlueType.Literal(GlueLiteral.Int _) -> true
-                   | _ -> false
-               )
-
-        // If the union contains only literal strings,
-        // we can transform it into a StringEnum
-        if isStringOnly then
-            let cases =
-                flattenedCases
-                |> List.map (fun value ->
-                    match value with
-                    | GlueType.Literal(GlueLiteral.String value) ->
-                        let sanitizeResult =
-                            Naming.sanitizeNameWithResult value
-
-                        {
-                            Attributes =
-                                [
-                                    if sanitizeResult.IsDifferent then
-                                        value
-                                        |> Naming.removeSurroundingQuotes
-                                        |> FSharpAttribute.CompiledName
-                                ]
-                            Name = sanitizeResult.Name
-                        }
-                        : FSharpUnionCase
-                    | _ -> failwith "Should not happen"
-                )
-                |> List.distinct
-
-            ({
-                Attributes =
-                    [
-                        FSharpAttribute.RequireQualifiedAccess
-                        FSharpAttribute.StringEnum CaseRules.None
-                    ]
-                Name = typeAliasName
-                Cases = cases
-                IsOptional = false
-            }
-            : FSharpUnion)
-            |> FSharpType.Union
-        // If the union contains only literal numbers,
-        // we can transform it into a standard F# enum
-        else if isNumericOnly then
-            let cases =
-                flattenedCases
-                |> List.map (fun value ->
-                    match value with
-                    | GlueType.Literal(GlueLiteral.Int value) ->
-                        {
-                            Name = value.ToString()
-                            Value = FSharpLiteral.Int value
-                        }
-                        : FSharpEnumCase
-                    | _ -> failwith "Should not happen"
-                )
-                |> List.distinct
-
-            ({ Name = typeAliasName; Cases = cases }: FSharpEnum)
-            |> FSharpType.Enum
-        // Otherwise, we want to generate an erased Enum
-        // Either by using U2, U3, etc. or by creating custom
-        // Erased enum cases for improving the user experience
-        else
+        match tryOptimizeUnionType typeAliasName cases with
+        | Some typ -> typ
+        | None ->
             ({
                 Attributes = [ yield! xmlDoc.ObsoleteAttributes ]
                 XmlDoc = xmlDoc.XmlDoc
