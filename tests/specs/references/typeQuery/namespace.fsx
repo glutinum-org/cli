@@ -4,12 +4,22 @@ open Fable.Core
 open Fable.Core.JsInterop
 open System
 
+[<AbstractClass>]
+[<Erase>]
+type Exports =
+    [<ImportAll("REPLACE_ME_WITH_MODULE_NAME")>]
+    [<Emit("$0.DomEvent")>]
+    static member inline DomEvent_
+        with get () : DomEvent.Exports =
+            nativeOnly
+
 module DomEvent =
 
+    [<AbstractClass>]
     [<Erase>]
     type Exports =
-        [<Import("stop", "REPLACE_ME_WITH_MODULE_NAME")>]
-        static member stop () : obj = nativeOnly
+        [<Emit("$0.stop($1...)")>]
+        abstract member stop: unit -> obj
 
 (***)
 #r "nuget: Fable.Core"

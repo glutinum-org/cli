@@ -187,6 +187,7 @@ type FSharpAttribute =
     /// </summary>
     | ImportDefault of moduleName: string
     | Erase
+    | AbstractClass
     | AllowNullLiteral
     | Obsolete of string option
     | StringEnum of Fable.Core.CaseRules
@@ -197,6 +198,10 @@ type FSharpAttribute =
     /// Generates <c>[&lt;Emit("new $0.className($1...)")&gt;]"</c> attribute.
     /// </summary>
     | EmitMacroConstructor of className: string
+    /// <summary>
+    /// Generates <c>[&lt;Emit("$0($1...)")&gt;]</c> attribute.
+    /// </summary>
+    | EmitMacroInvoke of methodName: string
     | EmitIndexer
     | Global
     | ParamObject
@@ -211,6 +216,11 @@ type FSharpParameter =
         Type: FSharpType
     }
 
+[<RequireQualifiedAccess>]
+type FSharpMemberInfoBody =
+    | NativeOnly
+    | JavaScriptStaticProperty
+
 type FSharpMemberInfo =
     {
         Attributes: FSharpAttribute list
@@ -224,6 +234,7 @@ type FSharpMemberInfo =
         Accessor: FSharpAccessor option
         Accessibility: FSharpAccessibility
         XmlDoc: FSharpXmlDoc list
+        Body: FSharpMemberInfoBody
     }
 
 type FSharpStaticMemberInfo =

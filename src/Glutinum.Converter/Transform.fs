@@ -516,12 +516,13 @@ let rec private transformType
         : FSharpTypeReference)
         |> FSharpType.TypeReference
 
+    | GlueType.Discard -> FSharpType.Object
+
     | GlueType.ModuleDeclaration _
     | GlueType.IndexedAccessType _
     | GlueType.Literal _
     | GlueType.Enum _
     | GlueType.TypeAliasDeclaration _
-    | GlueType.Discard
     | GlueType.IntersectionType _
     | GlueType.FunctionDeclaration _ ->
         Log.error $"Could not transform type: %A{glueType}"
@@ -565,6 +566,7 @@ let private transformExports
                     Accessor = None
                     Accessibility = FSharpAccessibility.Public
                     XmlDoc = xmlDocInfo.XmlDoc
+                    Body = FSharpMemberInfoBody.NativeOnly
                 }
                 |> FSharpMember.Property
                 |> List.singleton
@@ -577,10 +579,13 @@ let private transformExports
                 {
                     Attributes =
                         [
-                            FSharpAttribute.Import(
-                                info.Name,
-                                Naming.MODULE_PLACEHOLDER
-                            )
+                            if isTopLevel then
+                                FSharpAttribute.Import(
+                                    info.Name,
+                                    Naming.MODULE_PLACEHOLDER
+                                )
+                            else
+                                FSharpAttribute.EmitMacroInvoke info.Name
                             yield! xmlDocInfo.ObsoleteAttributes
                         ]
                     Name = name
@@ -591,10 +596,11 @@ let private transformExports
                         transformTypeParameters context info.TypeParameters
                     Type = transformType context info.Type
                     IsOptional = false
-                    IsStatic = true
+                    IsStatic = isTopLevel
                     Accessor = None
                     Accessibility = FSharpAccessibility.Public
                     XmlDoc = xmlDocInfo.XmlDoc
+                    Body = FSharpMemberInfoBody.NativeOnly
                 }
                 |> FSharpMember.Method
                 |> List.singleton
@@ -645,10 +651,11 @@ let private transformExports
                             })
                             |> FSharpType.Mapped
                         IsOptional = false
-                        IsStatic = true
+                        IsStatic = isTopLevel
                         Accessor = None
                         Accessibility = FSharpAccessibility.Public
                         XmlDoc = xmlDocInfo.XmlDoc
+                        Body = FSharpMemberInfoBody.NativeOnly
                     }
                     |> FSharpMember.Method
                 )
@@ -657,12 +664,15 @@ let private transformExports
                 moduleDeclaration.Types
                 |> List.choose (fun typ ->
                     match typ with
-                    | GlueType.ClassDeclaration info ->
+                    | GlueType.ClassDeclaration _ ->
                         {
                             Attributes =
                                 [
                                     FSharpAttribute.ImportAll
                                         Naming.MODULE_PLACEHOLDER
+                                    FSharpAttribute.Text(
+                                        $$"""Emit("$0.{{moduleDeclaration.Name}}")"""
+                                    )
                                 ]
                             // "_" suffix is added to avoid name collision if
                             // there are some functions with the same name as
@@ -683,9 +693,45 @@ let private transformExports
                             Accessor = FSharpAccessor.ReadOnly |> Some
                             Accessibility = FSharpAccessibility.Public
                             XmlDoc = []
+                            Body = FSharpMemberInfoBody.NativeOnly
                         }
                         |> FSharpMember.Property
                         |> Some
+
+                    | GlueType.FunctionDeclaration _ ->
+                        {
+                            Attributes =
+                                [
+                                    FSharpAttribute.ImportAll
+                                        Naming.MODULE_PLACEHOLDER
+                                    FSharpAttribute.Text(
+                                        $$"""Emit("$0.{{moduleDeclaration.Name}}")"""
+                                    )
+                                ]
+                            // "_" suffix is added to avoid name collision if
+                            // there are some functions with the same name as
+                            // the name of the module
+                            // TODO: Only add the "_" suffix if there is a name collision
+                            Name = moduleDeclaration.Name + "_"
+                            OriginalName = $"{moduleDeclaration.Name}.Exports"
+                            Parameters = []
+                            TypeParameters = []
+                            Type =
+                                ({
+                                    Name = $"{moduleDeclaration.Name}.Exports"
+                                    Declarations = []
+                                })
+                                |> FSharpType.Mapped
+                            IsOptional = false
+                            IsStatic = isTopLevel
+                            Accessor = FSharpAccessor.ReadOnly |> Some
+                            Accessibility = FSharpAccessibility.Public
+                            XmlDoc = []
+                            Body = FSharpMemberInfoBody.NativeOnly
+                        }
+                        |> FSharpMember.Property
+                        |> Some
+
                     | _ -> None
                 )
 
@@ -709,6 +755,7 @@ let private transformExports
                     Accessor = None
                     Accessibility = FSharpAccessibility.Public
                     XmlDoc = []
+                    Body = FSharpMemberInfoBody.NativeOnly
                 }
                 |> FSharpMember.Property
                 |> List.singleton
@@ -718,7 +765,7 @@ let private transformExports
         )
 
     {
-        Attributes = [ FSharpAttribute.Erase ]
+        Attributes = [ FSharpAttribute.AbstractClass; FSharpAttribute.Erase ]
         Name = "Exports"
         OriginalName = "Exports"
         Members = members
@@ -809,6 +856,7 @@ module private TransformMembers =
                         Accessor = None
                         Accessibility = FSharpAccessibility.Public
                         XmlDoc = []
+                        Body = FSharpMemberInfoBody.NativeOnly
                     }
                     |> FSharpMember.Method
                     |> Some
@@ -830,6 +878,7 @@ module private TransformMembers =
                     Accessor = None
                     Accessibility = FSharpAccessibility.Public
                     XmlDoc = []
+                    Body = FSharpMemberInfoBody.NativeOnly
                 }
                 |> FSharpMember.Method
                 |> Some
@@ -872,6 +921,7 @@ module private TransformMembers =
                             else
                                 FSharpAccessibility.Public
                         XmlDoc = xmlDocInfo.XmlDoc
+                        Body = FSharpMemberInfoBody.JavaScriptStaticProperty
                     }
                     |> FSharpMember.Property
                     |> Some
@@ -893,6 +943,7 @@ module private TransformMembers =
                     Accessor = Some FSharpAccessor.ReadWrite
                     Accessibility = FSharpAccessibility.Public
                     XmlDoc = []
+                    Body = FSharpMemberInfoBody.NativeOnly
                 }
                 |> FSharpMember.Property
                 |> Some
@@ -917,6 +968,7 @@ module private TransformMembers =
                     Accessor = None
                     Accessibility = FSharpAccessibility.Public
                     XmlDoc = xmlDocInfo.XmlDoc
+                    Body = FSharpMemberInfoBody.NativeOnly
                 }
                 |> FSharpMember.Method
                 |> Some
@@ -938,6 +990,7 @@ module private TransformMembers =
                     Accessor = None
                     Accessibility = FSharpAccessibility.Public
                     XmlDoc = []
+                    Body = FSharpMemberInfoBody.NativeOnly
                 }
                 |> FSharpMember.Method
                 |> Some
@@ -1626,6 +1679,7 @@ let private transformTypeAliasDeclaration
                     Accessor = None
                     Accessibility = FSharpAccessibility.Public
                     XmlDoc = []
+                    Body = FSharpMemberInfoBody.NativeOnly
                 }
                 |> FSharpMember.Method
                 |> List.singleton
@@ -1824,7 +1878,8 @@ let transform (isTopLevel: bool) (glueAst: GlueType list) : FSharpType list =
                 info.Types
                 |> List.exists (fun glueType ->
                     match glueType with
-                    | GlueType.ClassDeclaration _ -> true
+                    | GlueType.ClassDeclaration _
+                    | GlueType.FunctionDeclaration _ -> true
                     | _ -> false
                 )
             | GlueType.ExportDefault exportedType ->

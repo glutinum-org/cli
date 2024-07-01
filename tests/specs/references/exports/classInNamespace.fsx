@@ -4,22 +4,23 @@ open Fable.Core
 open Fable.Core.JsInterop
 open System
 
+[<AbstractClass>]
 [<Erase>]
 type Exports =
     [<ImportAll("REPLACE_ME_WITH_MODULE_NAME")>]
+    [<Emit("$0.lib")>]
     static member inline lib_
         with get () : lib.Exports =
-            emitJsExpr () $$"""
-import { Exports } from "module";
-Exports.lib"""
+            nativeOnly
 
 
 module lib =
 
+    [<AbstractClass>]
     [<Erase>]
     type Exports =
         [<Emit("new $0.Logger($1...)")>]
-        static member Logger () : Logger = nativeOnly
+        abstract member Logger: unit -> Logger
 
     [<AllowNullLiteral>]
     [<Interface>]

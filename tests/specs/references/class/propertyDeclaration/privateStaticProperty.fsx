@@ -4,6 +4,7 @@ open Fable.Core
 open Fable.Core.JsInterop
 open System
 
+[<AbstractClass>]
 [<Erase>]
 type Exports =
     [<Import("SettingsContainer", "REPLACE_ME_WITH_MODULE_NAME"); EmitConstructor>]
@@ -15,11 +16,11 @@ type SettingsContainer =
     static member inline private ``#privateField``
         with get () : unit =
             emitJsExpr () $$"""
-import { SettingsContainer } from "module";
+import { SettingsContainer } from "REPLACE_ME_WITH_MODULE_NAME";
 SettingsContainer.#privateField"""
         and set (value: unit) =
             emitJsExpr (value) $$"""
-import { SettingsContainer } from "module";
+import { SettingsContainer } from "REPLACE_ME_WITH_MODULE_NAME";
 SettingsContainer.#privateField = $0"""
 
 (***)

@@ -75,6 +75,11 @@ type FSharpASTViewer =
                 ASTViewer.renderKeyValue "ClassName" text
             ]
 
+        | FSharpAttribute.EmitMacroInvoke methodName ->
+            ASTViewer.renderNode "EmitMacroInvoke" [
+                ASTViewer.renderKeyValue "MethodName" methodName
+            ]
+
         | FSharpAttribute.RequireQualifiedAccess ->
             ASTViewer.renderValueOnly "RequireQualifiedAccess"
 
@@ -94,6 +99,9 @@ type FSharpASTViewer =
             ASTViewer.renderNode "Obsolete" [
                 ASTViewer.renderKeyValueOption "Message" id message
             ]
+
+        | FSharpAttribute.AbstractClass ->
+            ASTViewer.renderValueOnly "AbstractClass"
 
     static member private Attributes(attributes: FSharpAttribute list) =
         attributes

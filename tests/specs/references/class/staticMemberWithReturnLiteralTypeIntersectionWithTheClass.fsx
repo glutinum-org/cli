@@ -4,6 +4,7 @@ open Fable.Core
 open Fable.Core.JsInterop
 open System
 
+[<AbstractClass>]
 [<Erase>]
 type Exports =
     [<Import("Class", "REPLACE_ME_WITH_MODULE_NAME"); EmitConstructor>]

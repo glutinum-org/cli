@@ -80,7 +80,7 @@ let private hasParamArrayAttribute (attributes: FSharpAttribute list) =
 
 let private attributeToText (fsharpAttribute: FSharpAttribute) =
     match fsharpAttribute with
-    | FSharpAttribute.Text text -> text
+    | FSharpAttribute.Text text -> $"[<%s{text}>]"
     | FSharpAttribute.EmitSelfInvoke -> "[<Emit(\"$0($1...)\")>]"
     | FSharpAttribute.Import(name, module_) ->
         $"[<Import(\"{name}\", \"{module_}\")>]"
@@ -115,6 +115,9 @@ let private attributeToText (fsharpAttribute: FSharpAttribute) =
         match message with
         | Some message -> $"[<Obsolete(\"%s{message}\")>]"
         | None -> "[<Obsolete>]"
+    | FSharpAttribute.AbstractClass -> "[<AbstractClass>]"
+    | FSharpAttribute.EmitMacroInvoke methodName ->
+        $"[<Emit(\"$0.{methodName}($1...)\")>]"
 
 let private printInlineAttribute
     (printer: Printer)
@@ -524,9 +527,13 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
                     printer.NewLine
                     printer.Indent
 
-                    printer.Write
-                        $"emitJsExpr () $$\"\"\"
-import {{ %s{interfaceInfo.OriginalName} }} from \"module\";
+                    match propertyInfo.Body with
+                    | FSharpMemberInfoBody.NativeOnly ->
+                        printer.Write("nativeOnly")
+                    | FSharpMemberInfoBody.JavaScriptStaticProperty ->
+                        printer.Write
+                            $"emitJsExpr () $$\"\"\"
+import {{ %s{interfaceInfo.OriginalName} }} from \"{Naming.MODULE_PLACEHOLDER}\";
 %s{interfaceInfo.OriginalName}.%s{propertyInfo.OriginalName}\"\"\""
 
                     printer.Unindent
@@ -547,9 +554,13 @@ import {{ %s{interfaceInfo.OriginalName} }} from \"module\";
                     printer.NewLine
                     printer.Indent
 
-                    printer.Write
-                        $"emitJsExpr (value) $$\"\"\"
-import {{ %s{interfaceInfo.OriginalName} }} from \"module\";
+                    match propertyInfo.Body with
+                    | FSharpMemberInfoBody.NativeOnly ->
+                        printer.Write("nativeOnly")
+                    | FSharpMemberInfoBody.JavaScriptStaticProperty ->
+                        printer.Write
+                            $"emitJsExpr (value) $$\"\"\"
+import {{ %s{interfaceInfo.OriginalName} }} from \"{Naming.MODULE_PLACEHOLDER}\";
 %s{interfaceInfo.OriginalName}.%s{propertyInfo.OriginalName} = $0\"\"\""
 
                     printer.Unindent
