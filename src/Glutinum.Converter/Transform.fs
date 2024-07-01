@@ -457,6 +457,7 @@ let rec private transformType
                     TransformMembers.toFSharpMember
                         context
                         typeLiteralInfo.Members
+                Inheritance = []
             }
             |> FSharpType.Interface
             |> context.ExposeType
@@ -648,6 +649,10 @@ let private transformExports
                             ({
                                 Name = Naming.sanitizeName info.Name
                                 Declarations = []
+                                TypeParameters =
+                                    transformTypeParameters
+                                        context
+                                        info.TypeParameters
                             })
                             |> FSharpType.Mapped
                         IsOptional = false
@@ -686,6 +691,7 @@ let private transformExports
                                 ({
                                     Name = $"{moduleDeclaration.Name}.Exports"
                                     Declarations = []
+                                    TypeParameters = []
                                 })
                                 |> FSharpType.Mapped
                             IsOptional = false
@@ -720,6 +726,7 @@ let private transformExports
                                 ({
                                     Name = $"{moduleDeclaration.Name}.Exports"
                                     Declarations = []
+                                    TypeParameters = []
                                 })
                                 |> FSharpType.Mapped
                             IsOptional = false
@@ -770,6 +777,7 @@ let private transformExports
         OriginalName = "Exports"
         Members = members
         TypeParameters = []
+        Inheritance = []
     }
     |> FSharpType.Interface
 
@@ -1081,6 +1089,8 @@ let private transformInterface
     =
     let name, context = sanitizeNameAndPushScope info.Name context
 
+    let inheritance = info.HeritageClauses |> List.map (transformType context)
+
     {
         Attributes =
             [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
@@ -1088,6 +1098,7 @@ let private transformInterface
         OriginalName = info.Name
         Members = TransformMembers.toFSharpMember context info.Members
         TypeParameters = transformTypeParameters context info.TypeParameters
+        Inheritance = inheritance
     }
 
 module Interface =
@@ -1457,6 +1468,7 @@ let private tryOptimizeUnionType
                 OriginalName = context.CurrentScopeName
                 TypeParameters = []
                 Members = members
+                Inheritance = []
             }
             |> FSharpType.Interface
             |> Some
@@ -1602,6 +1614,7 @@ let private transformTypeAliasDeclaration
                         TypeParameters = []
                         Members =
                             TransformMembers.toFSharpMember context members
+                        Inheritance = []
                     }
 
                 let exposedType = makeInterfaceTyp "ReturnType"
@@ -1683,6 +1696,7 @@ let private transformTypeAliasDeclaration
                 }
                 |> FSharpMember.Method
                 |> List.singleton
+            Inheritance = []
         }
         |> FSharpType.Interface
 
@@ -1711,6 +1725,7 @@ let private transformTypeAliasDeclaration
                     context
                     glueTypeAliasDeclaration.TypeParameters
             Members = TransformMembers.toFSharpMember context members
+            Inheritance = []
         }
         |> FSharpType.Interface
 
@@ -1726,6 +1741,7 @@ let private transformTypeAliasDeclaration
                     glueTypeAliasDeclaration.TypeParameters
             Members =
                 TransformMembers.toFSharpMember context typeLiteralInfo.Members
+            Inheritance = []
         }
         |> FSharpType.Interface
 
@@ -1798,6 +1814,7 @@ let private transformClassDeclaration
             TransformMembers.toFSharpMember context classDeclaration.Members
         TypeParameters =
             transformTypeParameters context classDeclaration.TypeParameters
+        Inheritance = []
     }
     : FSharpInterface)
     |> FSharpType.Interface

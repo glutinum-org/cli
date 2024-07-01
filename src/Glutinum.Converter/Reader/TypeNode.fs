@@ -124,6 +124,7 @@ let readTypeNode
                                 Name = interfaceDeclaration.name.getText ()
                                 Members = members
                                 TypeParameters = []
+                                HeritageClauses = []
                             }
                             : GlueInterface)
                             |> GlueType.Partial
@@ -136,18 +137,10 @@ let readTypeNode
             | HasSymbolFlags Ts.SymbolFlags.TypeParameter ->
                 symbolOpt.Value.name |> GlueType.TypeParameter
             | _ ->
-                let typeArguments =
-                    match typeReferenceNode.typeArguments with
-                    | None -> []
-                    | Some typeArguments ->
-                        typeArguments
-                        |> Seq.toList
-                        |> List.map (Some >> reader.ReadTypeNode)
-
                 ({
                     Name = typeReferenceNode.typeName?getText () // TODO: Remove dynamic typing
                     FullName = fullName
-                    TypeArguments = typeArguments
+                    TypeArguments = readTypeArguments reader typeReferenceNode
                 })
                 |> GlueType.TypeReference
 
@@ -343,6 +336,16 @@ let readTypeNode
         reader.ReadNamedTupleMember(typeNode :?> Ts.NamedTupleMember)
 
     | Ts.SyntaxKind.SymbolKeyword -> GlueType.Primitive GluePrimitive.Symbol
+
+    | Ts.SyntaxKind.ExpressionWithTypeArguments ->
+        let expression = typeNode :?> Ts.ExpressionWithTypeArguments
+
+        ({
+            Name = expression.expression.getText () // Keep the double expression !!!
+            FullName = getFullNameOrEmpty checker expression
+            TypeArguments = readTypeArguments reader expression
+        })
+        |> GlueType.TypeReference
 
     | _ ->
         generateReaderError

@@ -48,6 +48,15 @@ type GlueASTViewer =
     static member private Type(glueType: GlueType) =
         ASTViewer.renderNode "Type" [ GlueASTViewer.GlueType glueType ]
 
+    static member private HeritageClauses(heritageClauses: GlueType list) =
+        heritageClauses
+        |> List.map (fun heritageClause ->
+            ASTViewer.renderNode "HeritageClause" [
+                GlueASTViewer.GlueType heritageClause
+            ]
+        )
+        |> ASTViewer.renderNode "HeritageClauses"
+
     static member private TypeParameters
         (typeParameters: GlueTypeParameter list)
         =
@@ -237,7 +246,9 @@ type GlueASTViewer =
                 "Interface"
                 [
                     GlueASTViewer.Name interfaceInfo.Name
+                    GlueASTViewer.TypeParameters interfaceInfo.TypeParameters
                     GlueASTViewer.Members interfaceInfo.Members
+                    GlueASTViewer.HeritageClauses interfaceInfo.HeritageClauses
                 ]
                 context
 

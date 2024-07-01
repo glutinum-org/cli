@@ -37,6 +37,8 @@ type Printer() =
 
     override __.ToString() = buffer.ToString().Trim() + "\n"
 
+    member __.ToStringWithoutTrailNewLine() = buffer.ToString().Trim()
+
 let printOutFile (printer: Printer) (outFile: FSharpOutFile) =
     printer.Write($"module rec {outFile.Name}")
     printer.NewLine
@@ -172,10 +174,46 @@ let private printAttributes
         printer.NewLine
     )
 
+let private tryTransformTypeParametersToText
+    (typeParameters: FSharpTypeParameter list)
+    =
+    let printer = new Printer()
+
+    if not typeParameters.IsEmpty then
+        printer.WriteInline("<")
+
+        typeParameters
+        |> List.iteri (fun index typeParameter ->
+            if index <> 0 then
+                printer.WriteInline(", ")
+
+            printer.WriteInline("'")
+            printer.WriteInline(typeParameter.Name)
+        )
+
+        printer.WriteInline(">")
+
+        printer.ToStringWithoutTrailNewLine() |> Some
+
+    else
+        None
+
+let private printTypeParameters
+    (printer: Printer)
+    (typeParameters: FSharpTypeParameter list)
+    =
+    match tryTransformTypeParametersToText typeParameters with
+    | Some typeParameters -> printer.WriteInline(typeParameters)
+    | None -> ()
+
 let rec private printType (fsharpType: FSharpType) =
     match fsharpType with
     | FSharpType.Object -> "obj"
-    | FSharpType.Mapped info -> info.Name
+    | FSharpType.Mapped info ->
+        match tryTransformTypeParametersToText info.TypeParameters with
+        | Some typeParameters -> $"{info.Name}{typeParameters}"
+        | None -> info.Name
+
     | FSharpType.Union info ->
         let cases =
             info.Cases |> List.map (fun c -> c.Name) |> String.concat ", "
@@ -243,24 +281,6 @@ let rec private printType (fsharpType: FSharpType) =
     | FSharpType.Module _
     | FSharpType.Unsupported _
     | FSharpType.Discard -> "obj"
-
-let private printTypeParameters
-    (printer: Printer)
-    (typeParameters: FSharpTypeParameter list)
-    =
-    if not typeParameters.IsEmpty then
-        printer.WriteInline("<")
-
-        typeParameters
-        |> List.iteri (fun index typeParameter ->
-            if index <> 0 then
-                printer.WriteInline(", ")
-
-            printer.WriteInline("'")
-            printer.WriteInline(typeParameter.Name)
-        )
-
-        printer.WriteInline(">")
 
 module FSharpAccessibility =
 
@@ -423,6 +443,12 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
     printer.NewLine
 
     printer.Indent
+
+    interfaceInfo.Inheritance
+    |> List.iter (fun typ ->
+        printer.Write($"inherit %s{printType typ}")
+        printer.NewLine
+    )
 
     interfaceInfo.Members
     |> List.iter (
@@ -694,7 +720,7 @@ import {{ %s{interfaceInfo.OriginalName} }} from \"module\";
                 printer.Unindent
     )
 
-    if interfaceInfo.Members.Length = 0 then
+    if interfaceInfo.Members.IsEmpty && interfaceInfo.Inheritance.IsEmpty then
         printer.Write("interface end")
         printer.NewLine
 

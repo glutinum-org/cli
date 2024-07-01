@@ -113,6 +113,7 @@ type GlueInterface =
         Name: string
         Members: GlueMember list
         TypeParameters: GlueTypeParameter list
+        HeritageClauses: GlueType list
     }
 
 type GlueTypeLiteral = { Members: GlueMember list }

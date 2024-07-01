@@ -125,3 +125,12 @@ type ModifierUtil =
             unbox<ResizeArray<Ts.Modifier> option> modifiers,
             modifier
         )
+
+let readTypeArguments
+    (reader: ITypeScriptReader)
+    (node: Ts.NodeWithTypeArguments)
+    =
+    match node.typeArguments with
+    | None -> []
+    | Some typeArguments ->
+        typeArguments |> Seq.toList |> List.map (Some >> reader.ReadTypeNode)

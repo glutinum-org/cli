@@ -54,7 +54,8 @@ let readClassDeclaration
             Name = name.getText ()
             Constructors = constructors
             Members = members
-            TypeParameters = []
+            TypeParameters =
+                reader.ReadTypeParameters classDeclaration.typeParameters
         }
         |> GlueType.ClassDeclaration
 

@@ -120,6 +120,11 @@ type FSharpASTViewer =
     static member private Type(fsharpType: FSharpType) =
         ASTViewer.renderNode "Type" [ FSharpASTViewer.FSharpType fsharpType ]
 
+    static member private Inheritance(types: FSharpType list) =
+        types
+        |> List.map FSharpASTViewer.FSharpType
+        |> ASTViewer.renderNode "Inheritance"
+
     static member private Types types =
         types
         |> List.map FSharpASTViewer.FSharpType
@@ -369,6 +374,7 @@ type FSharpASTViewer =
                     FSharpASTViewer.Attributes interfaceInfo.Attributes
                     FSharpASTViewer.Members interfaceInfo.Members
                     FSharpASTViewer.TypeParameters interfaceInfo.TypeParameters
+                    FSharpASTViewer.Inheritance interfaceInfo.Inheritance
                 ]
                 context
 

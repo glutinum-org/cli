@@ -276,6 +276,7 @@ type FSharpInterface =
         OriginalName: string
         TypeParameters: FSharpTypeParameter list
         Members: FSharpMember list
+        Inheritance: FSharpType list
     }
 
 type FSharpExplicitField = { Name: string; Type: FSharpType }
@@ -315,6 +316,7 @@ type FSharpMapped =
     {
         Name: string
         Declarations: FSharpType list
+        TypeParameters: FSharpTypeParameter list
     }
 
 [<RequireQualifiedAccess>]

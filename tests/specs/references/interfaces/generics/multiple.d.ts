@@ -1,0 +1,1 @@
+interface IUser<A, B> {}
