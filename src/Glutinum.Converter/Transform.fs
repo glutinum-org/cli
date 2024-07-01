@@ -499,13 +499,29 @@ let rec private transformType
     | GlueType.NamedTupleType namedTupleType ->
         transformType context namedTupleType.Type
 
+    | GlueType.Partial interfaceInfo ->
+        transformInterface context interfaceInfo
+        |> Interface.makePartial context.CurrentScopeName
+        |> FSharpType.Interface
+        |> context.ExposeType
+
+        // Get fullname
+        // Store type in the exposed types memory
+        ({
+            Name = context.FullName
+            FullName = context.FullName
+            TypeArguments = []
+            Type = FSharpType.Discard
+        }
+        : FSharpTypeReference)
+        |> FSharpType.TypeReference
+
     | GlueType.ModuleDeclaration _
     | GlueType.IndexedAccessType _
     | GlueType.Literal _
     | GlueType.Enum _
     | GlueType.TypeAliasDeclaration _
     | GlueType.Discard
-    | GlueType.Partial _
     | GlueType.IntersectionType _
     | GlueType.FunctionDeclaration _ ->
         Log.error $"Could not transform type: %A{glueType}"
@@ -1020,6 +1036,29 @@ let private transformInterface
         Members = TransformMembers.toFSharpMember context info.Members
         TypeParameters = transformTypeParameters context info.TypeParameters
     }
+
+module Interface =
+
+    // Adapt the original interface to make it partial
+    let makePartial (name: string) (originalInterface: FSharpInterface) =
+        { originalInterface with
+            Name = name
+            // Transform all the members to optional
+            Members =
+                originalInterface.Members
+                |> List.map (fun m ->
+                    match m with
+                    | FSharpMember.Method method ->
+                        { method with IsOptional = true }
+                        |> FSharpMember.Method
+                    | FSharpMember.Property property ->
+                        { property with IsOptional = true }
+                        |> FSharpMember.Property
+                    | FSharpMember.StaticMember staticMember ->
+                        { staticMember with IsOptional = true }
+                        |> FSharpMember.StaticMember
+                )
+        }
 
 let private transformEnum (glueEnum: GlueEnum) : FSharpType =
     let (integralValues, stringValues) =
@@ -1557,31 +1596,10 @@ let private transformTypeAliasDeclaration
         |> FSharpType.TypeAlias
 
     | GlueType.Partial interfaceInfo ->
-        let originalInterface = transformInterface context interfaceInfo
-
-        // Adapt the original interface to make it partial
-        let partialInterface =
-            { originalInterface with
-                // Use the alias name instead of the original interface name
-                Name = typeAliasName
-                // Transform all the members to optional
-                Members =
-                    originalInterface.Members
-                    |> List.map (fun m ->
-                        match m with
-                        | FSharpMember.Method method ->
-                            { method with IsOptional = true }
-                            |> FSharpMember.Method
-                        | FSharpMember.Property property ->
-                            { property with IsOptional = true }
-                            |> FSharpMember.Property
-                        | FSharpMember.StaticMember staticMember ->
-                            { staticMember with IsOptional = true }
-                            |> FSharpMember.StaticMember
-                    )
-            }
-
-        FSharpType.Interface partialInterface
+        transformInterface context interfaceInfo
+        // Use the alias name instead of the original interface name
+        |> Interface.makePartial typeAliasName
+        |> FSharpType.Interface
 
     | GlueType.FunctionType functionType ->
         {
