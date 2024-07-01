@@ -1,0 +1,1 @@
+type TodoPartial = Partial<any>;

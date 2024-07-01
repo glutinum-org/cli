@@ -99,8 +99,8 @@ let readTypeNode
                 else
                     let symbol = aliasTypeArguments.[0].symbol
 
-                    if symbol.members.IsNone then
-                        GlueType.Discard
+                    if isNull symbol || symbol.members.IsNone then
+                        GlueType.Unknown
                     else
 
                         // Take any of the members
