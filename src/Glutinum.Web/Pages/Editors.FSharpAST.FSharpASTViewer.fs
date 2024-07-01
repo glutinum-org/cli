@@ -209,6 +209,12 @@ type FSharpASTViewer =
             | FSharpXmlDoc.Example content ->
                 [ ASTViewer.renderValueOnly content ]
                 |> ASTViewer.renderNode "Example"
+
+            | FSharpXmlDoc.TypeParam param ->
+                ASTViewer.renderNode "TypeParam" [
+                    ASTViewer.renderKeyValue "TypeName" param.TypeName
+                    ASTViewer.renderKeyValue "Content" param.Content
+                ]
         )
         |> ASTViewer.renderNode "XmlDoc"
 
