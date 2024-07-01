@@ -182,6 +182,7 @@ let readTypeNode
                         Constructors = []
                         Members = []
                         TypeParameters = []
+                        HeritageClauses = []
                     }
                     |> GlueType.ClassDeclaration
 

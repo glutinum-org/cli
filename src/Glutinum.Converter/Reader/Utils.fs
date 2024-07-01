@@ -134,3 +134,16 @@ let readTypeArguments
     | None -> []
     | Some typeArguments ->
         typeArguments |> Seq.toList |> List.map (Some >> reader.ReadTypeNode)
+
+let readHeritageClauses
+    (reader: ITypeScriptReader)
+    (heritageClauses: ResizeArray<Ts.HeritageClause> option)
+    =
+    match heritageClauses with
+    | Some heritageClauses ->
+        heritageClauses
+        |> Seq.toList
+        |> List.collect (fun clause ->
+            clause.types |> Seq.toList |> List.map reader.ReadTypeNode
+        )
+    | None -> []

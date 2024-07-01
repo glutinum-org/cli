@@ -1089,8 +1089,6 @@ let private transformInterface
     =
     let name, context = sanitizeNameAndPushScope info.Name context
 
-    let inheritance = info.HeritageClauses |> List.map (transformType context)
-
     {
         Attributes =
             [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
@@ -1098,7 +1096,7 @@ let private transformInterface
         OriginalName = info.Name
         Members = TransformMembers.toFSharpMember context info.Members
         TypeParameters = transformTypeParameters context info.TypeParameters
-        Inheritance = inheritance
+        Inheritance = info.HeritageClauses |> List.map (transformType context)
     }
 
 module Interface =
@@ -1814,7 +1812,8 @@ let private transformClassDeclaration
             TransformMembers.toFSharpMember context classDeclaration.Members
         TypeParameters =
             transformTypeParameters context classDeclaration.TypeParameters
-        Inheritance = []
+        Inheritance =
+            classDeclaration.HeritageClauses |> List.map (transformType context)
     }
     : FSharpInterface)
     |> FSharpType.Interface

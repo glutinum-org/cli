@@ -201,6 +201,7 @@ type GlueClassDeclaration =
         Constructors: GlueConstructor list
         Members: GlueMember list
         TypeParameters: GlueTypeParameter list
+        HeritageClauses: GlueType list
     }
 
 type GlueTypeReference =

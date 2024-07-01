@@ -56,6 +56,8 @@ let readClassDeclaration
             Members = members
             TypeParameters =
                 reader.ReadTypeParameters classDeclaration.typeParameters
+            HeritageClauses =
+                readHeritageClauses reader classDeclaration.heritageClauses
         }
         |> GlueType.ClassDeclaration
 
