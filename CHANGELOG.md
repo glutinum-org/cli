@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 0.7.0 - 2024-07-01
+
+### 🚀 Features
+
+* Generate an interface instead of an erased union when handling an union of type literal
+* Add support for `@throws` in TSDoc
+* Add TSDoc support for TypeAlias
+* Add support for TSDoc `typeParam` + add support for TSDoc on constructors, variables, methodSignature
+
+### 🐞 Bug Fixes
+
+* Apply union type optimisation on return type
+* Support typeAlias exporting a single typeParameters: `type PluginFunc<T> = T;`
+* If a property is decorated with `?` and `undefined` or `null` only wrap it inside a single option
+* Handle `symbol` correctly to not emit a warning because of an unsupported kind
+* Generate a normal interface if a type literal has an `IndexSignature`
+
 ## 0.6.0 - 2024-05-08
 
 ### 🚀 Features
