@@ -79,6 +79,24 @@ type GlueProperty =
         IsPrivate: bool
     }
 
+type GlueSetAccessor =
+    {
+        Name: string
+        Documentation: GlueComment list
+        ArgumentType: GlueType
+        IsStatic: bool
+        IsPrivate: bool
+    }
+
+type GlueGetAccessor =
+    {
+        Name: string
+        Documentation: GlueComment list
+        Type: GlueType
+        IsStatic: bool
+        IsPrivate: bool
+    }
+
 type GlueIndexSignature =
     {
         Parameters: GlueParameter list
@@ -103,6 +121,8 @@ type GlueConstructSignature =
 type GlueMember =
     | Method of GlueMethod
     | Property of GlueProperty
+    | GetAccessor of GlueGetAccessor
+    | SetAccessor of GlueSetAccessor
     | CallSignature of GlueCallSignature
     | IndexSignature of GlueIndexSignature
     | MethodSignature of GlueMethodSignature

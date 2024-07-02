@@ -186,6 +186,26 @@ type GlueASTViewer =
                 GlueASTViewer.Type constructSignature.Type
             ]
 
+        | GlueMember.GetAccessor getAccessorInfo ->
+            ASTViewer.renderNode "GetAccessor" [
+                GlueASTViewer.Name getAccessorInfo.Name
+                GlueASTViewer.Documentation getAccessorInfo.Documentation
+                GlueASTViewer.IsStatic getAccessorInfo.IsStatic
+                GlueASTViewer.IsPrivate getAccessorInfo.IsPrivate
+                GlueASTViewer.Type getAccessorInfo.Type
+            ]
+
+        | GlueMember.SetAccessor setAccessorInfo ->
+            ASTViewer.renderNode "SetAccessor" [
+                GlueASTViewer.Name setAccessorInfo.Name
+                GlueASTViewer.Documentation setAccessorInfo.Documentation
+                GlueASTViewer.IsStatic setAccessorInfo.IsStatic
+                GlueASTViewer.IsPrivate setAccessorInfo.IsPrivate
+                ASTViewer.renderNode "ArgumentType" [
+                    GlueASTViewer.GlueType setAccessorInfo.ArgumentType
+                ]
+            ]
+
     static member private Members(members: GlueMember list) =
         members
         |> List.map GlueASTViewer.GlueMember

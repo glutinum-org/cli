@@ -122,6 +122,60 @@ let readDeclaration
         : GlueProperty)
         |> GlueMember.Property
 
+    | Ts.SyntaxKind.GetAccessor ->
+        let getAccessorDeclaration = declaration :?> Ts.GetAccessorDeclaration
+        let name = unbox<Ts.Identifier> getAccessorDeclaration.name
+
+        let hasPrivateModifier =
+            ModifierUtil.HasModifier(
+                getAccessorDeclaration.modifiers,
+                Ts.SyntaxKind.PrivateKeyword
+            )
+
+        let isPrivateIdentifier = name.kind = Ts.SyntaxKind.PrivateIdentifier
+
+        ({
+            Name = name.getText ()
+            Documentation = reader.ReadDocumentationFromNode name
+            Type = reader.ReadTypeNode getAccessorDeclaration.``type``
+            IsStatic =
+                ModifierUtil.HasModifier(
+                    getAccessorDeclaration.modifiers,
+                    Ts.SyntaxKind.StaticKeyword
+                )
+            IsPrivate = hasPrivateModifier || isPrivateIdentifier
+        }
+        : GlueGetAccessor)
+        |> GlueMember.GetAccessor
+
+    | Ts.SyntaxKind.SetAccessor ->
+        let setAccessorDeclaration = declaration :?> Ts.SetAccessorDeclaration
+        let name = unbox<Ts.Identifier> setAccessorDeclaration.name
+
+        let hasPrivateModifier =
+            ModifierUtil.HasModifier(
+                setAccessorDeclaration.modifiers,
+                Ts.SyntaxKind.PrivateKeyword
+            )
+
+        let isPrivateIdentifier = name.kind = Ts.SyntaxKind.PrivateIdentifier
+
+        ({
+            Name = name.getText ()
+            Documentation = reader.ReadDocumentationFromNode name
+            ArgumentType =
+                reader.ReadTypeNode
+                    setAccessorDeclaration.parameters.[0].``type``
+            IsStatic =
+                ModifierUtil.HasModifier(
+                    setAccessorDeclaration.modifiers,
+                    Ts.SyntaxKind.StaticKeyword
+                )
+            IsPrivate = hasPrivateModifier || isPrivateIdentifier
+        }
+        : GlueSetAccessor)
+        |> GlueMember.SetAccessor
+
     | _ ->
         generateReaderError
             "declaration"

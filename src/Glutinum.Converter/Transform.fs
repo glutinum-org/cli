@@ -382,6 +382,8 @@ let rec private transformType
                 | GlueMember.IndexSignature _ -> false
                 | GlueMember.MethodSignature _
                 | GlueMember.Property _
+                | GlueMember.GetAccessor _
+                | GlueMember.SetAccessor _
                 | GlueMember.CallSignature _
                 | GlueMember.Method _
                 | GlueMember.ConstructSignature _ -> true
@@ -827,6 +829,61 @@ module private TransformMembers =
         : FSharpMember list
         =
         members
+        // We want to transform GetAccessor / SetAccessor
+        // into a single Property if they are related to the same property
+        |> List.choose (
+            function
+            | GlueMember.GetAccessor getAccessorInfo as self ->
+                let associatedSetAccessor =
+                    members
+                    |> List.tryFind (
+                        function
+                        | GlueMember.SetAccessor setPropertyInfo ->
+                            getAccessorInfo.Name = setPropertyInfo.Name
+                        | _ -> false
+                    )
+
+                match associatedSetAccessor with
+                // If we found an associated SetAccessor, we want to transform into a Property
+                // and it is now a read-write property
+                | Some _ ->
+                    {
+                        Name = getAccessorInfo.Name
+                        Documentation = getAccessorInfo.Documentation
+                        Type = getAccessorInfo.Type
+                        IsOptional = false
+                        IsStatic = getAccessorInfo.IsStatic
+                        Accessor = GlueAccessor.ReadWrite
+                        IsPrivate = getAccessorInfo.IsPrivate
+                    }
+                    |> GlueMember.Property
+                    |> Some
+                // Otherwise, we keep the GetAccessor as is
+                | None -> Some self
+
+            | GlueMember.SetAccessor setAccessorInfo as self ->
+                let associatedGetAccessor =
+                    members
+                    |> List.tryFind (
+                        function
+                        | GlueMember.GetAccessor getPropertyInfo ->
+                            setAccessorInfo.Name = getPropertyInfo.Name
+                        | _ -> false
+                    )
+
+                // If we found an associated GetAccessor, we want to remove the SetAccessor
+                // the property has been transformed into a Property during the GetAccessor check
+                match associatedGetAccessor with
+                | Some _ -> None
+                // Otherwise, we keep the SetAccessor as is
+                | None -> Some self
+            | GlueMember.CallSignature _ as self -> Some self
+            | GlueMember.Method _ as self -> Some self
+            | GlueMember.Property _ as self -> Some self
+            | GlueMember.IndexSignature _ as self -> Some self
+            | GlueMember.MethodSignature _ as self -> Some self
+            | GlueMember.ConstructSignature _ as self -> Some self
+        )
         |> List.choose (
             function
             | GlueMember.Method methodInfo ->
@@ -934,6 +991,52 @@ module private TransformMembers =
                     |> FSharpMember.Property
                     |> Some
 
+            | GlueMember.GetAccessor getAccessorInfo ->
+                let name, context =
+                    sanitizeNameAndPushScope getAccessorInfo.Name context
+
+                let xmlDocInfo = transformComment getAccessorInfo.Documentation
+
+                {
+                    Attributes = [ yield! xmlDocInfo.ObsoleteAttributes ]
+                    Name = name
+                    OriginalName = getAccessorInfo.Name
+                    Parameters = []
+                    Type = transformType context getAccessorInfo.Type
+                    TypeParameters = []
+                    IsOptional = false
+                    IsStatic = getAccessorInfo.IsStatic
+                    Accessor = Some FSharpAccessor.ReadOnly
+                    Accessibility = FSharpAccessibility.Public
+                    XmlDoc = xmlDocInfo.XmlDoc
+                    Body = FSharpMemberInfoBody.NativeOnly
+                }
+                |> FSharpMember.Property
+                |> Some
+
+            | GlueMember.SetAccessor setAccessorInfo ->
+                let name, context =
+                    sanitizeNameAndPushScope setAccessorInfo.Name context
+
+                let xmlDocInfo = transformComment setAccessorInfo.Documentation
+
+                {
+                    Attributes = [ yield! xmlDocInfo.ObsoleteAttributes ]
+                    Name = name
+                    OriginalName = setAccessorInfo.Name
+                    Parameters = []
+                    Type = transformType context setAccessorInfo.ArgumentType
+                    TypeParameters = []
+                    IsOptional = false
+                    IsStatic = setAccessorInfo.IsStatic
+                    Accessor = Some FSharpAccessor.WriteOnly
+                    Accessibility = FSharpAccessibility.Public
+                    XmlDoc = xmlDocInfo.XmlDoc
+                    Body = FSharpMemberInfoBody.NativeOnly
+                }
+                |> FSharpMember.Property
+                |> Some
+
             | GlueMember.IndexSignature indexSignature ->
                 let name, context = sanitizeNameAndPushScope "Item" context
 
@@ -1033,6 +1136,30 @@ module private TransformMembers =
                     Name = name
                     IsOptional = propertyInfo.IsOptional
                     Type = transformType context propertyInfo.Type
+                }
+                : FSharpParameter
+
+            | GlueMember.GetAccessor getAccessorInfo ->
+                let name, context =
+                    sanitizeNameAndPushScope getAccessorInfo.Name context
+
+                {
+                    Attributes = []
+                    Name = name
+                    IsOptional = false
+                    Type = transformType context getAccessorInfo.Type
+                }
+                : FSharpParameter
+
+            | GlueMember.SetAccessor setAccessorInfo ->
+                let name, context =
+                    sanitizeNameAndPushScope setAccessorInfo.Name context
+
+                {
+                    Attributes = []
+                    Name = name
+                    IsOptional = false
+                    Type = transformType context setAccessorInfo.ArgumentType
                 }
                 : FSharpParameter
 
@@ -1206,7 +1333,9 @@ module TypeAliasDeclaration =
                     match m with
                     | GlueMember.Method { Name = caseName }
                     | GlueMember.MethodSignature { Name = caseName }
-                    | GlueMember.Property { Name = caseName } ->
+                    | GlueMember.Property { Name = caseName }
+                    | GlueMember.GetAccessor { Name = caseName }
+                    | GlueMember.SetAccessor { Name = caseName } ->
 
                         let sanitizeResult =
                             Naming.sanitizeNameWithResult caseName
@@ -1524,6 +1653,8 @@ let private transformTypeAliasDeclaration
                         match m with
                         | GlueMember.Method { Type = typ }
                         | GlueMember.Property { Type = typ }
+                        | GlueMember.GetAccessor { Type = typ }
+                        | GlueMember.SetAccessor { ArgumentType = typ }
                         | GlueMember.CallSignature { Type = typ }
                         | GlueMember.ConstructSignature { Type = typ }
                         | GlueMember.MethodSignature { Type = typ }
