@@ -2,11 +2,14 @@ module Build.Workspace
 
 open EasyBuild.FileSystemProvider
 
-type Workspace = RelativeFileSystem<".">
+[<Literal>]
+let root = __SOURCE_DIRECTORY__ + "/../../"
+
+type Workspace = RelativeFileSystem<root>
 
 type VirtualWorkspace =
     VirtualFileSystem<
-        ".",
+        root,
         """
 dist
     fable_modules

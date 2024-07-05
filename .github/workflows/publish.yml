@@ -1,0 +1,38 @@
+name: build
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  publish_web:
+    runs-on: ubuntu-latest
+    name: Publish to GitHub Pages
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        # We need more that the HEAD to find the last_released_commit
+        # For now, we use a depth of 100 but if this is too limiting we can use the full history
+        fetch-depth: 100
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Setup Node.js environment
+      uses: actions/setup-node@v4
+
+    - uses: pnpm/action-setup@v2
+      with:
+        version: 8
+
+    - name: Build the web app for publishing
+      run: ./build.sh publish --web-only
+
+    - name: Publish
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./src/Glutinum.Web/dist
