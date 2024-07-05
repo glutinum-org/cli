@@ -154,6 +154,19 @@ let private getReleaseContext (settings: PublishSettings) =
             | "fix" -> true
             | _ -> false
         )
+        // Only keep the commits related to the tool we are releasing
+        // Each tool should have its own generation but I am waiting for EasyBuild.ChangelogGen to be ready
+        // for implementing this correctly.
+        // For now, this is good enough because we only have a single changelog
+        |> Seq.filter (fun commits ->
+            match commits.SemanticCommit.Tags with
+            | Some tags ->
+                if settings.IsWebOnly then
+                    List.contains "converter" tags || List.contains "web" tags
+                else
+                    List.contains "converter" tags || List.contains "cli" tags
+            | None -> false
+        )
 
     let lastChangelogVersion =
         Changelog.tryGetLastVersion Workspace.``CHANGELOG.md``
