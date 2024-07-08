@@ -90,8 +90,8 @@ let private getReleaseContext (settings: PublishSettings) =
     if repository.Head.FriendlyName <> "main" then
         failwith "You must be on the main branch to publish"
 
-    // if repository.RetrieveStatus().IsDirty then
-    //     failwith "You must commit your changes before publishing"
+    if repository.RetrieveStatus().IsDirty then
+        failwith "You must commit your changes before publishing"
 
     let changelogContent =
         File
@@ -249,6 +249,8 @@ let private updateChangelog (releaseContext: ReleaseContext) =
                 capitalizeFirstLetter commit.SemanticCommit.Description
 
             $"- %s{description} ([%s{shortSha}](%s{commitUrl}))" |> appendLine
+
+        newLine ()
     )
 
     newLine ()
