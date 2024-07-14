@@ -1,6 +1,6 @@
 {
     "name": "@glutinum/cli",
-    "version": "0.7.0",
+    "version": "0.8.0",
     "description": "TypeScript definition to F# bindings converter",
     "type": "module",
     "main": "index.js",

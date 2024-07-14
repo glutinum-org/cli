@@ -248,7 +248,7 @@ let private updateChangelog (releaseContext: ReleaseContext) =
             let description =
                 capitalizeFirstLetter commit.SemanticCommit.Description
 
-            $"- %s{description} ([%s{shortSha}](%s{commitUrl}))" |> appendLine
+            $"* %s{description} ([%s{shortSha}](%s{commitUrl}))" |> appendLine
 
         newLine ()
     )

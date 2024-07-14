@@ -5,8 +5,22 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 <!-- EasyBuild: START -->
-<!-- last_commit_released: 9eab1fa876986bb3442e79d53213a3dd27025c96 -->
+<!-- last_commit_released: 76cde14a53c677a589b66d6770d89b9b466ba804 -->
 <!-- EasyBuild: END -->
+
+## 0.8.0
+
+### 🚀 Features
+
+* Add supports for split get/set declaration field ([fa6128f](https://github.com/glutinum-org/cli/commit/fa6128f46761a24864b6a364b92ed38dafdb2148))
+* Add support for `HeritageClauses` on classes ([70c6e11](https://github.com/glutinum-org/cli/commit/70c6e116069c6fcaa9a73585d2e95653e89c5752))
+* Add support for `HeritageClauses` on interfaces ([046bccd](https://github.com/glutinum-org/cli/commit/046bccd2c791e16b18f0df76c9a820cf6da6219a))
+* Improve `Exports` generation to use `abstract` when the exports is not at the top level ([6fb991c](https://github.com/glutinum-org/cli/commit/6fb991c0815cc5882d14749635248bd885083b64))
+* Support transforming `Partial<T>` types ([9b01819](https://github.com/glutinum-org/cli/commit/9b018198870a39e1c10b5c20dcfa7679dbb75859))
+
+### 🐞 Bug Fixes
+
+* Don't crash when handling a type which resolves to `Partial<unknown>` ([0b91986](https://github.com/glutinum-org/cli/commit/0b919869a278a0b1aea5068899de1b21a87a8338))
 
 ## 0.7.0 - 2024-07-01
 
