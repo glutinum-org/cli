@@ -174,7 +174,7 @@ let private printAttributes
         printer.NewLine
     )
 
-let private tryTransformTypeParametersToText
+let rec private tryTransformTypeParametersToText
     (typeParameters: FSharpTypeParameter list)
     =
     let printer = new Printer()
@@ -187,8 +187,23 @@ let private tryTransformTypeParametersToText
             if index <> 0 then
                 printer.WriteInline(", ")
 
-            printer.WriteInline("'")
-            printer.WriteInline(typeParameter.Name)
+            printer.WriteInline($"'{typeParameter.Name}")
+        )
+
+        typeParameters
+        |> List.filter _.Constraint.IsSome
+        |> List.iteri (fun index typeParameter ->
+            match typeParameter.Constraint with
+            | Some constraint_ ->
+                if index = 0 then
+                    printer.WriteInline(" when ")
+                else
+                    printer.WriteInline(" and ")
+
+                printer.WriteInline($"'{typeParameter.Name}")
+                printer.WriteInline(" :> ")
+                printer.WriteInline(printType constraint_)
+            | None -> ()
         )
 
         printer.WriteInline(">")
@@ -198,7 +213,7 @@ let private tryTransformTypeParametersToText
     else
         None
 
-let private printTypeParameters
+and printTypeParameters
     (printer: Printer)
     (typeParameters: FSharpTypeParameter list)
     =
@@ -206,7 +221,7 @@ let private printTypeParameters
     | Some typeParameters -> printer.WriteInline(typeParameters)
     | None -> ()
 
-let rec private printType (fsharpType: FSharpType) =
+and printType (fsharpType: FSharpType) =
     match fsharpType with
     | FSharpType.Object -> "obj"
     | FSharpType.Mapped info ->

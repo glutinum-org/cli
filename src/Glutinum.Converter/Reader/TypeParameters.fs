@@ -3,7 +3,6 @@ module Glutinum.Converter.Reader.TypeParameters
 open Glutinum.Converter.GlueAST
 open Glutinum.Converter.Reader.Types
 open TypeScript
-open Fable.Core.JsInterop
 
 let readTypeParameters
     (reader: ITypeScriptReader)
@@ -18,7 +17,9 @@ let readTypeParameters
         |> List.map (fun typeParameter ->
             {
                 Name = typeParameter.name.getText ()
-                Constraint = None
+                Constraint =
+                    typeParameter.``constraint``
+                    |> Option.map reader.ReadTypeNode
                 Default = None
             }
         )
