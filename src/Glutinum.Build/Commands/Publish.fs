@@ -40,12 +40,6 @@ let private updatePreludeVersion (newVersion: string) =
 
     File.WriteAllText(preludePath, newPreludeContent)
 
-let private publishWebApp (context) =
-    // Compile the web app
-    Web.WebCommand().Execute(context, Web.WebSettings()) |> ignore
-
-    Command.Run("npx", "gh-pages -d ./src/Glutinum.Web/dist/")
-
 let private capitalizeFirstLetter (text: string) =
     (string text.[0]).ToUpper() + text.[1..]
 
@@ -198,6 +192,12 @@ let private getReleaseContext (settings: PublishSettings) =
             refVersion.WithMinor(refVersion.Minor + 1).WithPatch(0)
         elif shouldBumpPatch then
             refVersion.WithPatch(refVersion.Patch + 1)
+        else if
+            // On CI, we allow to publish without a version bump
+            // It happens when we just released a new stable version, the changelog is already up-to-date
+            Environment.GetEnvironmentVariable("CI") <> null
+        then
+            refVersion
         else
             failwith "No version bump required"
 
@@ -373,9 +373,9 @@ type PublishCommand() =
 
             Pnpm.publish (noGitChecks = true, access = Publish.Access.Public)
 
-            Web.WebCommand().Execute(context, Web.WebSettings()) |> ignore
-
-            Command.Run("npx", "gh-pages -d ./src/Glutinum.Web/dist/")
+            // Web app is going to be published via CI
+            // Web.WebCommand().Execute(context, Web.WebSettings()) |> ignore
+            // Command.Run("npx", "gh-pages -d ./src/Glutinum.Web/dist/")
 
             // Because we messed with Fable output, prefer to clean up
             // So Fable will start from scratch next time
