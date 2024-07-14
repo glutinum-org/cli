@@ -668,81 +668,40 @@ let private transformExports
                 )
 
             | GlueType.ModuleDeclaration moduleDeclaration ->
-                moduleDeclaration.Types
-                |> List.choose (fun typ ->
-                    match typ with
-                    | GlueType.ClassDeclaration _ ->
-                        {
-                            Attributes =
-                                [
-                                    FSharpAttribute.ImportAll
-                                        Naming.MODULE_PLACEHOLDER
-                                    FSharpAttribute.Text(
-                                        $$"""Emit("$0.{{moduleDeclaration.Name}}")"""
-                                    )
-                                ]
-                            // "_" suffix is added to avoid name collision if
-                            // there are some functions with the same name as
-                            // the name of the module
-                            // TODO: Only add the "_" suffix if there is a name collision
-                            Name = moduleDeclaration.Name + "_"
-                            OriginalName = moduleDeclaration.Name
-                            Parameters = []
-                            TypeParameters = []
-                            Type =
-                                ({
-                                    Name = $"{moduleDeclaration.Name}.Exports"
-                                    Declarations = []
-                                    TypeParameters = []
-                                })
-                                |> FSharpType.Mapped
-                            IsOptional = false
-                            IsStatic = true
-                            Accessor = FSharpAccessor.ReadOnly |> Some
-                            Accessibility = FSharpAccessibility.Public
-                            XmlDoc = []
-                            Body = FSharpMemberInfoBody.NativeOnly
-                        }
-                        |> FSharpMember.Property
-                        |> Some
+                let sanitizedName = Naming.sanitizeName moduleDeclaration.Name
 
-                    | GlueType.FunctionDeclaration _ ->
-                        {
-                            Attributes =
-                                [
-                                    FSharpAttribute.ImportAll
-                                        Naming.MODULE_PLACEHOLDER
-                                    FSharpAttribute.Text(
-                                        $$"""Emit("$0.{{moduleDeclaration.Name}}")"""
-                                    )
-                                ]
-                            // "_" suffix is added to avoid name collision if
-                            // there are some functions with the same name as
-                            // the name of the module
-                            // TODO: Only add the "_" suffix if there is a name collision
-                            Name = moduleDeclaration.Name + "_"
-                            OriginalName = $"{moduleDeclaration.Name}.Exports"
-                            Parameters = []
+                {
+                    Attributes =
+                        [
+                            FSharpAttribute.ImportAll Naming.MODULE_PLACEHOLDER
+                            FSharpAttribute.Text(
+                                $$"""Emit("$0.{{Naming.removeSurroundingQuotes moduleDeclaration.Name}}")"""
+                            )
+                        ]
+                    // "_" suffix is added to avoid name collision if
+                    // there are some functions with the same name as
+                    // the name of the module
+                    // TODO: Only add the "_" suffix if there is a name collision
+                    Name = sanitizedName + "_"
+                    OriginalName = $"{moduleDeclaration.Name}.Exports"
+                    Parameters = []
+                    TypeParameters = []
+                    Type =
+                        ({
+                            Name = $"{sanitizedName}.Exports"
+                            Declarations = []
                             TypeParameters = []
-                            Type =
-                                ({
-                                    Name = $"{moduleDeclaration.Name}.Exports"
-                                    Declarations = []
-                                    TypeParameters = []
-                                })
-                                |> FSharpType.Mapped
-                            IsOptional = false
-                            IsStatic = isTopLevel
-                            Accessor = FSharpAccessor.ReadOnly |> Some
-                            Accessibility = FSharpAccessibility.Public
-                            XmlDoc = []
-                            Body = FSharpMemberInfoBody.NativeOnly
-                        }
-                        |> FSharpMember.Property
-                        |> Some
-
-                    | _ -> None
-                )
+                        })
+                        |> FSharpType.Mapped
+                    IsOptional = false
+                    IsStatic = isTopLevel
+                    Accessor = FSharpAccessor.ReadOnly |> Some
+                    Accessibility = FSharpAccessibility.Public
+                    XmlDoc = []
+                    Body = FSharpMemberInfoBody.NativeOnly
+                }
+                |> FSharpMember.Property
+                |> List.singleton
 
             | GlueType.ExportDefault glueType ->
                 let name, context =
