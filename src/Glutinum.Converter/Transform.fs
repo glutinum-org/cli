@@ -1397,12 +1397,19 @@ let private transformTypeParameters
     (typeParameters: GlueTypeParameter list)
     : FSharpTypeParameter list
     =
+    let transformConstraint (context: TransformContext) (glueType: GlueType) =
+        // Manual optimization to remove constraints that are not supported by F#
+        match transformType context glueType with
+        | FSharpType.Function _ -> None
+        | forward -> Some forward
+
     typeParameters
     |> List.map (fun typeParameter ->
         FSharpTypeParameter.Create(
             typeParameter.Name,
             ?constraint_ =
-                (typeParameter.Constraint |> Option.map (transformType context)),
+                (typeParameter.Constraint
+                 |> Option.bind (transformConstraint context)),
             ?default_ =
                 (typeParameter.Default |> Option.map (transformType context))
         )
