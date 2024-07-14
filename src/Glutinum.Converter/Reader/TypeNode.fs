@@ -11,6 +11,41 @@ type private IntersectionTypePropertyResult =
     | Single of Ts.Declaration
     | ForceAny
 
+let private readTypeUsingFlags (reader: ITypeScriptReader) (typ: Ts.Type) =
+
+    match typ.flags with
+    | HasTypeFlags Ts.TypeFlags.Object ->
+        // Try to find the declaration of the type, to get more information about it
+        match typ.symbol.declarations with
+        | Some declarations ->
+            let declaration = declarations.[0]
+
+            match declaration.kind with
+            | Ts.SyntaxKind.ClassDeclaration ->
+                {
+                    Name = typ.symbol.name
+                    Constructors = []
+                    Members = []
+                    TypeParameters = []
+                    HeritageClauses = []
+                }
+                |> GlueType.ClassDeclaration
+
+            // We don't support TypeQuery for ModuleDeclaration yet
+            // See https://github.com/glutinum-org/cli/issues/70 for a possible solution
+            | Ts.SyntaxKind.ModuleDeclaration -> GlueType.Discard
+            | _ -> reader.ReadNode declaration
+
+        | None -> GlueType.Primitive GluePrimitive.Any
+    | HasTypeFlags Ts.TypeFlags.String ->
+        GlueType.Primitive GluePrimitive.String
+    | HasTypeFlags Ts.TypeFlags.Number ->
+        GlueType.Primitive GluePrimitive.Number
+    | HasTypeFlags Ts.TypeFlags.Boolean -> GlueType.Primitive GluePrimitive.Bool
+    | HasTypeFlags Ts.TypeFlags.Any -> GlueType.Primitive GluePrimitive.Any
+    | HasTypeFlags Ts.TypeFlags.Void -> GlueType.Primitive GluePrimitive.Unit
+    | _ -> GlueType.Primitive GluePrimitive.Any
+
 let readTypeNode
     (reader: ITypeScriptReader)
     (typeNode: Ts.TypeNode)
@@ -168,40 +203,7 @@ let readTypeNode
 
         let typ = checker.getTypeAtLocation !!typeNodeQuery.exprName
 
-        match typ.flags with
-        | HasTypeFlags Ts.TypeFlags.Object ->
-            // Try to find the declaration of the type, to get more information about it
-            match typ.symbol.declarations with
-            | Some declarations ->
-                let declaration = declarations.[0]
-
-                match declaration.kind with
-                | Ts.SyntaxKind.ClassDeclaration ->
-                    {
-                        Name = typ.symbol.name
-                        Constructors = []
-                        Members = []
-                        TypeParameters = []
-                        HeritageClauses = []
-                    }
-                    |> GlueType.ClassDeclaration
-
-                // We don't support TypeQuery for ModuleDeclaration yet
-                // See https://github.com/glutinum-org/cli/issues/70 for a possible solution
-                | Ts.SyntaxKind.ModuleDeclaration -> GlueType.Discard
-                | _ -> reader.ReadNode declaration
-
-            | None -> GlueType.Primitive GluePrimitive.Any
-        | HasTypeFlags Ts.TypeFlags.String ->
-            GlueType.Primitive GluePrimitive.String
-        | HasTypeFlags Ts.TypeFlags.Number ->
-            GlueType.Primitive GluePrimitive.Number
-        | HasTypeFlags Ts.TypeFlags.Boolean ->
-            GlueType.Primitive GluePrimitive.Bool
-        | HasTypeFlags Ts.TypeFlags.Any -> GlueType.Primitive GluePrimitive.Any
-        | HasTypeFlags Ts.TypeFlags.Void ->
-            GlueType.Primitive GluePrimitive.Unit
-        | _ -> GlueType.Primitive GluePrimitive.Any
+        readTypeUsingFlags reader typ
 
     | Ts.SyntaxKind.LiteralType ->
         let literalTypeNode = typeNode :?> Ts.LiteralTypeNode
@@ -347,6 +349,22 @@ let readTypeNode
             TypeArguments = readTypeArguments reader expression
         })
         |> GlueType.TypeReference
+
+    | Ts.SyntaxKind.ConditionalType ->
+        let conditionalTypeNode = typeNode :?> Ts.ConditionalTypeNode
+
+        let typ = checker.getTypeAtLocation conditionalTypeNode
+
+        // If we resolved the type to Any, we fallback to the generic type
+        // This is because in F#, we can write
+        // type ReturnType<'T> = obj
+        // because 'T is not used in the type
+        // This is perhaps a bit aggressive, so if needed we can re-visit `readTypeUsingFlags`
+        // usage by inlining the logic here and make it more specific
+        match readTypeUsingFlags reader typ with
+        | GlueType.Primitive GluePrimitive.Any ->
+            reader.ReadTypeNode conditionalTypeNode.checkType
+        | forward -> forward
 
     | _ ->
         generateReaderError
