@@ -15,8 +15,8 @@ type CreateUrlArgs =
 
 let private compilationResultToText (result: CompilationResult) =
     match result with
-    | CompilationResult.Success(fsharpCode, warnings) ->
-        if warnings.IsEmpty then
+    | CompilationResult.Success(fsharpCode, warnings, errors) ->
+        if warnings.IsEmpty && errors.IsEmpty then
             $"""**FSharp**
 
 ```fs
@@ -25,20 +25,43 @@ let private compilationResultToText (result: CompilationResult) =
 
         else
             let warningsText =
-                warnings
-                |> List.map _.Replace("\n", "\n> ")
-                |> String.concat "\n> ```\n> ```"
+                if warnings.IsEmpty then
+                    ""
+                else
+                    let warningsList =
+                        warnings
+                        |> List.map _.Replace("\n", "\n> ")
+                        |> String.concat "\n> ```\n> ```"
 
-            $"""**FSharp (with warnings)**
+                    $"""
+> [!WARNING]
+> ```
+> %s{warningsList}
+> ```
+"""
+
+            let errorsText =
+                if errors.IsEmpty then
+                    ""
+                else
+                    let errorsList =
+                        errors
+                        |> List.map _.Replace("\n", "\n> ")
+                        |> String.concat "\n> ```\n> ```"
+
+                    $"""
+> [!CAUTION]
+> ```
+> %s{errorsList}
+> ```
+"""
+
+            $"""**FSharp (with warnings/errors)**
 
 ```fs
 %s{fsharpCode}
 ```
-
-> [!WARNING]
-> ```
-> %s{warningsText}
-> ```"""
+%s{warningsText}%s{errorsText}"""
 
     | CompilationResult.Error error ->
         $"""**Error**
