@@ -13,15 +13,23 @@ open Glutinum.Converter.Reader.Types
 open Fable.Core
 open FSharpASTViewer
 
+type CompilationResultSuccess =
+    {
+        AST: FSharpType list
+        Warnings: string list
+        Errors: string list
+    }
+
 [<RequireQualifiedAccess>]
 type CompilationResult =
-    | Success of ast: FSharpType list * warnings: string list
+    | Success of CompilationResultSuccess
     | Error of string
 
 type SuccessModel =
     {
         FSharpAST: FSharpType list
         Warnings: string list
+        Errors: string list
         CollapsedNodes: Set<string>
     }
 
@@ -49,12 +57,19 @@ let private generateAST (typeScriptCode: string) =
         let sourceFile = program.getSourceFile fileName
 
         let readerResult = Read.readSourceFile checker sourceFile
-        let fsharpTypes = Transform.transform true readerResult.GlueAST
 
-        CompilationResult.Success(
-            fsharpTypes,
-            readerResult.Warnings |> Seq.toList
-        )
+        let transformResult = Transform.apply readerResult.GlueAST
+
+        {
+            AST = transformResult.FSharpAST
+            Warnings =
+                [
+                    yield! readerResult.Warnings |> Seq.toList
+                    yield! transformResult.Warnings |> Seq.toList
+                ]
+            Errors = transformResult.Errors |> Seq.toList
+        }
+        |> CompilationResult.Success
 
     with
 
@@ -71,6 +86,7 @@ let init () =
         {
             FSharpAST = []
             Warnings = []
+            Errors = []
             CollapsedNodes = Set.empty
         },
     Cmd.ofMsg Compile
@@ -84,11 +100,12 @@ let update (msg: Msg) (model: Model) (currentTsCode: string) =
 
     | CompileResult result ->
         match result with
-        | CompilationResult.Success(glueAST, warnings) ->
+        | CompilationResult.Success result ->
             Success
                 {
-                    FSharpAST = glueAST
-                    Warnings = warnings
+                    FSharpAST = result.AST
+                    Warnings = result.Warnings
+                    Errors = result.Errors
                     CollapsedNodes = Set.empty
                 },
             Cmd.none
@@ -129,7 +146,7 @@ let view (model: Model) (dispatch: Dispatch<Msg>) =
                 )
             ]
 
-        RightPanelContent.Success(content, data.Warnings)
+        RightPanelContent.Success(content, data.Warnings, data.Errors)
 
     | Errored msg -> RightPanelContent.Error msg
 

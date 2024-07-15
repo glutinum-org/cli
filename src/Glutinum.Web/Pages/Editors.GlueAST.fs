@@ -126,7 +126,8 @@ let view (model: Model) (dispatch: Dispatch<Msg>) =
                 )
             ]
 
-        RightPanelContent.Success(content, data.Warnings)
+        // Generating GlueAST doesn't produce errors
+        RightPanelContent.Success(content, data.Warnings, [])
 
     | Errored msg -> RightPanelContent.Error msg
 

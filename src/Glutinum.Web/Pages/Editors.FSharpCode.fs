@@ -26,6 +26,7 @@ type Model =
         {|
             FSharpCode: string
             Warnings: string list
+            Errors: string list
         |}
     | Errored of string
     | Compiling
@@ -77,7 +78,7 @@ let private generateFile
 
             let readerResult = Read.readSourceFile checker sourceFile
 
-            let res = Transform.transform true readerResult.GlueAST
+            let transformResult = Transform.apply readerResult.GlueAST
 
             let outFile =
                 {
@@ -92,11 +93,15 @@ let private generateFile
 
             Printer.printOutFile printer outFile
 
-            Printer.print printer res
+            Printer.print printer transformResult.FSharpAST
 
             CompilationResult.Success(
                 printer.ToString(),
-                readerResult.Warnings |> Seq.toList
+                [
+                    yield! readerResult.Warnings |> Seq.toList
+                    yield! transformResult.Warnings |> Seq.toList
+                ],
+                transformResult.Errors |> Seq.toList
             )
 
         with error ->
@@ -118,6 +123,7 @@ let init () =
         {|
             FSharpCode = ""
             Warnings = []
+            Errors = []
         |},
     Cmd.ofMsg (CompileCode CompilationSource.EditorChanged)
 
@@ -144,12 +150,13 @@ let update (msg: Msg) (model: Model) (currentTsCode: string) =
     match msg with
     | CompileCodeResult result ->
         match result.CompilationResult with
-        | CompilationResult.Success(fsharpCode, warnings) ->
+        | CompilationResult.Success(fsharpCode, warnings, errors) ->
             let updatedModel =
                 Success
                     {|
                         FSharpCode = fsharpCode
                         Warnings = warnings
+                        Errors = errors
                     |}
 
             let cmd =
@@ -280,6 +287,7 @@ let view model dispatch =
         RightPanelContent.Success(
             FSharpEditor data.FSharpCode,
             data.Warnings,
+            data.Errors,
             actions dispatch
         )
 

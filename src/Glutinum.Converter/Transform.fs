@@ -5,11 +5,21 @@ open Glutinum.Converter.FSharpAST
 open Glutinum.Converter.GlueAST
 open System
 
+type Reporter() =
+    let warnings = ResizeArray<string>()
+    let errors = ResizeArray<string>()
+
+    member val Warnings = warnings
+
+    member val Errors = errors
+
 // Not really proud of this implementation, but I was not able to make it in a
 // pure functional way, using a Tree structure or something similar
 // It seems like for now this implementation does the job which is the most important
 // And this is probably more readable than what a pure functional implementation would be
-type TransformContext(currentScopeName: string, ?parent: TransformContext) =
+type TransformContext
+    (reporter: Reporter, currentScopeName: string, ?parent: TransformContext)
+    =
 
     let types = ResizeArray<FSharpType>()
     let modules = ResizeArray<TransformContext>()
@@ -27,6 +37,11 @@ type TransformContext(currentScopeName: string, ?parent: TransformContext) =
     // This variable should not be accessed directly, but through the ExposeType method
     // that's why we decorate it with the _ prefix
     member val _types = types
+
+    // We expose an access to the reporter so we can propagate its instance
+    // when needed
+    // You should not use this directly, but instead use the AddWarning and AddError methods
+    member val _Reporter = reporter
 
     member _.ExposeType(typ: FSharpType) =
         match parent with
@@ -46,7 +61,7 @@ type TransformContext(currentScopeName: string, ?parent: TransformContext) =
         | Some parent -> parent._types.Add(typ)
 
     member this.PushScope(scopeName: string) =
-        let childContext = TransformContext(scopeName, parent = this)
+        let childContext = TransformContext(reporter, scopeName, parent = this)
         modules.Add childContext
         childContext
 
@@ -79,6 +94,10 @@ type TransformContext(currentScopeName: string, ?parent: TransformContext) =
                 : FSharpModule)
                 |> FSharpType.Module
                 |> List.singleton
+
+    member _.AddWarning(warning: string) = reporter.Warnings.Add warning
+
+    member _.AddError(error: string) = reporter.Errors.Add error
 
 let private sanitizeNameAndPushScope
     (name: string)
@@ -547,6 +566,7 @@ let rec private transformType
         | GlueLiteral.Bool _ -> FSharpType.Primitive FSharpPrimitive.Bool
         | GlueLiteral.Null -> FSharpType.Primitive FSharpPrimitive.Null
 
+    | GlueType.Literal _
     | GlueType.Record _
     | GlueType.ModuleDeclaration _
     | GlueType.IndexedAccessType _
@@ -554,7 +574,7 @@ let rec private transformType
     | GlueType.TypeAliasDeclaration _
     | GlueType.IntersectionType _
     | GlueType.FunctionDeclaration _ ->
-        Log.error $"Could not transform type: %A{glueType}"
+        context.AddError $"Could not transform type: %A{glueType}"
         FSharpType.Discard
 
 /// <summary></summary>
@@ -1365,11 +1385,16 @@ module TypeAliasDeclaration =
             |> FSharpType.Union
             |> Some
 
-    let transformKeyOf (aliasName: string) (glueType: GlueType) : FSharpType =
+    let transformKeyOf
+        (context: TransformContext)
+        (aliasName: string)
+        (glueType: GlueType)
+        : FSharpType
+        =
         match tryTransformKeyOf aliasName glueType with
         | Some typ -> typ
         | None ->
-            Log.warn $"Could not transform KeyOf: {aliasName}"
+            context.AddWarning $"Could not transform KeyOf: {aliasName}"
             FSharpType.Discard
 
     let transformLiteral
@@ -1677,6 +1702,7 @@ let private transformTypeAliasDeclaration
 
     | GlueType.KeyOf glueType ->
         TypeAliasDeclaration.transformKeyOf
+            context
             glueTypeAliasDeclaration.Name
             glueType
 
@@ -1962,13 +1988,14 @@ let private transformTypeAliasDeclaration
     | GlueType.OptionalType _ -> FSharpType.Discard
 
 let private transformModuleDeclaration
+    (reporter: Reporter)
     (moduleDeclaration: GlueModuleDeclaration)
     : FSharpType
     =
     ({
         Name = Naming.sanitizeName moduleDeclaration.Name
         IsRecursive = moduleDeclaration.IsRecursive
-        Types = transform false moduleDeclaration.Types
+        Types = transform reporter false moduleDeclaration.Types
     }
     : FSharpModule)
     |> FSharpType.Module
@@ -2013,7 +2040,7 @@ let rec private transformToFsharp
             transformTypeAliasDeclaration context typeAliasInfo
 
         | GlueType.ModuleDeclaration moduleInfo ->
-            transformModuleDeclaration moduleInfo
+            transformModuleDeclaration context._Reporter moduleInfo
 
         | GlueType.ClassDeclaration classInfo ->
             transformClassDeclaration context classInfo
@@ -2047,7 +2074,12 @@ let rec private transformToFsharp
         | GlueType.ThisType _ -> FSharpType.Discard
     )
 
-let transform (isTopLevel: bool) (glueAst: GlueType list) : FSharpType list =
+let private transform
+    (reporter: Reporter)
+    (isTopLevel: bool)
+    (glueAst: GlueType list)
+    : FSharpType list
+    =
     let exports, rest =
         glueAst
         |> List.partition (fun glueType ->
@@ -2087,7 +2119,7 @@ let transform (isTopLevel: bool) (glueAst: GlueType list) : FSharpType list =
 
     let exports = exports @ classes
 
-    let rootTransformContext = TransformContext("")
+    let rootTransformContext = TransformContext(reporter, "")
 
     let rest = transformToFsharp rootTransformContext rest
 
@@ -2105,3 +2137,12 @@ let transform (isTopLevel: bool) (glueAst: GlueType list) : FSharpType list =
         // this is used when we have a literal type as an argument of a function / method
         yield! rootTransformContext.ToList()
     ]
+
+let apply (glueAst: GlueType list) =
+    let reporter = Reporter()
+
+    {|
+        FSharpAST = transform reporter true glueAst
+        Warnings = reporter.Warnings
+        Errors = reporter.Errors
+    |}

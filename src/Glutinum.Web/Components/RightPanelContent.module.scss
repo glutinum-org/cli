@@ -54,13 +54,14 @@ $max-compilation-output-height: 25vh;
     //     }
     // }
 
-    &__warnings {
+    &__problems {
         flex: 1;
         overflow-y: auto;
+        background-color: #efeffb;
         white-space: break-spaces;
-        background-color: $warning;
         border-top: 1px solid $border;
         max-height: $max-compilation-output-height;
+        height: auto;
         transition: max-height 0.2s ease;
 
         &:empty {
@@ -68,12 +69,23 @@ $max-compilation-output-height: 25vh;
             max-height: 0;
         }
 
-        &__warning {
+        &__warning,
+        &__error {
             padding: 1rem;
 
             &:not(:last-child) {
                 border-bottom: 1px solid $warning-dark;
             }
+        }
+
+        &__warning {
+            background-color: #fff1cc;
+            color: #89680c;
+        }
+
+        &__error {
+            background-color: #f4dbd7;
+            color: #8e3c2e;
         }
     }
 }

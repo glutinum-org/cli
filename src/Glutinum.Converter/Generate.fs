@@ -30,10 +30,18 @@ let generateBindingFile (filePath: string) =
 
     let readerResult = Read.readSourceFile checker sourceFile
 
+    // Log reader warnings
     for warning in readerResult.Warnings do
         Log.warn warning
 
-    let res = Transform.transform true readerResult.GlueAST
+    let transformResult = Transform.apply readerResult.GlueAST
+
+    // Log transform warnings and errors
+    for reporter in transformResult.Warnings do
+        Log.warn reporter
+
+    for reporter in transformResult.Errors do
+        Log.error reporter
 
     let outFile =
         {
@@ -43,6 +51,6 @@ let generateBindingFile (filePath: string) =
 
     Printer.printOutFile printer outFile
 
-    Printer.print printer res
+    Printer.print printer transformResult.FSharpAST
 
     printer.ToString()
