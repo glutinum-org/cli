@@ -315,20 +315,38 @@ let rec private transformType
                 |> FSharpType.TypeReference
 
             | None ->
+                let name, context =
+                    sanitizeNameAndPushScope $"U{others.Length}" context
+
+                let cases =
+                    others
+                    |> List.mapi (fun index caseType ->
+                        let name, context =
+                            sanitizeNameAndPushScope
+                                $"Case%i{index + 1}"
+                                context
+
+                        let caseTypeName =
+                            match caseType with
+                            | GlueType.Record recordInfo ->
+                                transformRecord context name [] recordInfo
+                                |> context.ExposeType
+
+                                context.FullName
+                            | caseType -> caseType.Name
+
+                        {
+                            Attributes = []
+                            Name =
+                                Naming.mapTypeNameToFableCoreAwareName
+                                    caseTypeName
+                        }
+                    )
 
                 {
                     Attributes = []
-                    Name = $"U{others.Length}"
-                    Cases =
-                        others
-                        |> List.map (fun caseType ->
-                            {
-                                Attributes = []
-                                Name =
-                                    Naming.mapTypeNameToFableCoreAwareName
-                                        caseType.Name
-                            }
-                        )
+                    Name = name
+                    Cases = cases
                     IsOptional = isOptional
                 }
                 |> FSharpType.Union
@@ -521,6 +539,7 @@ let rec private transformType
 
     | GlueType.Discard -> FSharpType.Object
 
+    | GlueType.Record _
     | GlueType.ModuleDeclaration _
     | GlueType.IndexedAccessType _
     | GlueType.Literal _
@@ -1392,6 +1411,53 @@ module TypeAliasDeclaration =
         | GlueLiteral.Bool _ -> makeTypeAlias FSharpPrimitive.Bool
         | GlueLiteral.Null -> makeTypeAlias FSharpPrimitive.Null
 
+let private transformRecord
+    (context: TransformContext)
+    (name: string)
+    (typeParameters: GlueTypeParameter list)
+    (recordInfo: GlueRecord)
+    : FSharpType
+    =
+    let name, context = sanitizeNameAndPushScope name context
+
+    let parameters =
+        let name, context = sanitizeNameAndPushScope "key" context
+
+        {
+            Attributes = []
+            Name = name
+            IsOptional = false
+            Type = transformType context recordInfo.KeyType
+        }
+        |> List.singleton
+
+    {
+        Attributes =
+            [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
+        Name = name
+        OriginalName = name
+        TypeParameters = transformTypeParameters context typeParameters
+        Members =
+            {
+                Attributes = [ FSharpAttribute.EmitIndexer ]
+                Name = "Item"
+                OriginalName = "Item"
+                Parameters = parameters
+                Type = transformType context recordInfo.ValueType
+                TypeParameters = []
+                IsOptional = false
+                IsStatic = false
+                Accessor = Some FSharpAccessor.ReadWrite
+                Accessibility = FSharpAccessibility.Public
+                XmlDoc = []
+                Body = FSharpMemberInfoBody.NativeOnly
+            }
+            |> FSharpMember.Property
+            |> List.singleton
+        Inheritance = []
+    }
+    |> FSharpType.Interface
+
 let private transformTypeParameters
     (context: TransformContext)
     (typeParameters: GlueTypeParameter list)
@@ -1762,6 +1828,13 @@ let private transformTypeAliasDeclaration
         |> Interface.makePartial typeAliasName
         |> FSharpType.Interface
 
+    | GlueType.Record recordInfo ->
+        transformRecord
+            context
+            typeAliasName
+            glueTypeAliasDeclaration.TypeParameters
+            recordInfo
+
     | GlueType.FunctionType functionType ->
         {
             Attributes =
@@ -1961,6 +2034,7 @@ let rec private transformToFsharp
         | GlueType.TupleType _
         | GlueType.IntersectionType _
         | GlueType.TypeLiteral _
+        | GlueType.Record _
         | GlueType.OptionalType _
         | GlueType.NamedTupleType _
         | GlueType.ThisType _ -> FSharpType.Discard

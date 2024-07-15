@@ -246,6 +246,12 @@ type GlueFunctionType =
 
 type NamedTupleType = { Name: string; Type: GlueType }
 
+type GlueRecord =
+    {
+        KeyType: GlueType
+        ValueType: GlueType
+    }
+
 [<RequireQualifiedAccess>]
 type GlueType =
     | Discard
@@ -263,6 +269,7 @@ type GlueType =
     | ClassDeclaration of GlueClassDeclaration
     | TypeReference of GlueTypeReference
     | Partial of GlueInterface
+    | Record of GlueRecord
     | Array of GlueType
     | FunctionType of GlueFunctionType
     | TypeParameter of string
@@ -314,4 +321,5 @@ type GlueType =
         | OptionalType _ // TODO: Should we take the name of the underlying type and add option to it?
         | Discard
         | ExportDefault _
+        | Record _
         | Unknown -> "obj"

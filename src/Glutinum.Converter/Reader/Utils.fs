@@ -147,3 +147,26 @@ let readHeritageClauses
             clause.types |> Seq.toList |> List.map reader.ReadTypeNode
         )
     | None -> []
+
+/// <summary>
+/// Determine if the type is from the ES5 library
+///
+/// This is to detect native utility types usage
+/// </summary>
+/// <param name="symbolOpt"></param>
+/// <returns>
+/// <c>True</c> if the type is from the ES5 library otherwise <c>False</c>
+/// </returns>
+let isFromEs5Lib (symbolOpt: Ts.Symbol option) =
+    match symbolOpt with
+    | None -> false
+    | Some symbol ->
+        match symbol.declarations with
+        | None -> false
+        | Some declarations ->
+            match declarations[0].parent.kind with
+            | Ts.SyntaxKind.SourceFile ->
+                let sourceFile = declarations[0].parent :?> Ts.SourceFile
+
+                sourceFile.fileName.EndsWith("lib/lib.es5.d.ts")
+            | _ -> false

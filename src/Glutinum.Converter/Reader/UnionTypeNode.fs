@@ -58,8 +58,6 @@ let rec private readUnionTypeCases
         else if ts.isTypeReferenceNode node then
             let typeReferenceNode = node :?> Ts.TypeReferenceNode
 
-            // let typeReferenceNode = typeNode :?> Ts.TypeReferenceNode
-
             let symbolOpt =
                 checker.getSymbolAtLocation !!typeReferenceNode.typeName
 
@@ -74,6 +72,16 @@ let rec private readUnionTypeCases
                         )
                     )
                     symbolOpt
+
+            let readTypeReference () =
+                ({
+                    Name = typeReferenceNode.getText ()
+                    FullName = checker.getFullyQualifiedName symbol
+                    TypeArguments = []
+                })
+                |> GlueType.TypeReference
+                |> List.singleton
+                |> Some
 
             // TODO: How to differentiate TypeReference to Enum/Union vs others
             // Check below is really hacky / not robust
@@ -92,6 +100,20 @@ let rec private readUnionTypeCases
                     |> GlueType.TypeReference
                     |> List.singleton
                     |> Some
+                else if isFromEs5Lib symbolOpt then
+                    match
+                        getFullNameOrEmpty
+                            checker
+                            (!!typeReferenceNode.typeName)
+                    with
+                    | "Record" ->
+                        TypeNode.UtilityType.readRecord
+                            reader
+                            typeReferenceNode
+                        |> List.singleton
+                        |> Some
+
+                    | _ -> readTypeReference ()
                 else
                     let declaration = declarations.[0]
                     // TODO: This is an optimitic approach
@@ -100,17 +122,7 @@ let rec private readUnionTypeCases
                     | Ts.SyntaxKind.TypeAliasDeclaration ->
                         reader.ReadNode declaration |> List.singleton |> Some
 
-                    | _ ->
-                        let fullName = checker.getFullyQualifiedName symbol
-
-                        ({
-                            Name = typeReferenceNode.getText ()
-                            FullName = fullName
-                            TypeArguments = []
-                        })
-                        |> GlueType.TypeReference
-                        |> List.singleton
-                        |> Some
+                    | _ -> readTypeReference ()
 
             | None ->
                 let typ = checker.getTypeOfSymbol symbol

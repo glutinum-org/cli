@@ -435,6 +435,19 @@ type GlueASTViewer =
                 ]
                 context
 
+        | GlueType.Record recordInfo ->
+            ASTViewer.renderNode
+                "Record"
+                [
+                    ASTViewer.renderNode "KeyType" [
+                        GlueASTViewer.GlueType recordInfo.KeyType
+                    ]
+                    ASTViewer.renderNode "ValueType" [
+                        GlueASTViewer.GlueType recordInfo.ValueType
+                    ]
+                ]
+                context
+
         | GlueType.ThisType typeName ->
             ASTViewer.renderNode
                 "ThisType"
