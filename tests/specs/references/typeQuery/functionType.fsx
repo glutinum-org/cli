@@ -14,7 +14,7 @@ type Exports =
 [<Interface>]
 type PluginFunc =
     [<Emit("$0($1...)")>]
-    abstract member Invoke: c: obj -> unit
+    abstract member Invoke: c: (unit -> unit) -> unit
 
 (***)
 #r "nuget: Fable.Core"

@@ -371,7 +371,6 @@ type FSharpTypeReference =
 type FSharpFunctionType =
     {
         Parameters: FSharpParameter list
-        TypeArguments: FSharpType list
         ReturnType: FSharpType
     }
 

@@ -456,7 +456,6 @@ type FSharpASTViewer =
                 "Function"
                 [
                     FSharpASTViewer.Parameters functionType.Parameters
-                    FSharpASTViewer.TypeArguments functionType.TypeArguments
                     FSharpASTViewer.Type functionType.ReturnType
                 ]
                 context

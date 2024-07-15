@@ -402,7 +402,6 @@ let rec private transformType
             Parameters =
                 functionTypeInfo.Parameters
                 |> List.map (transformParameter context)
-            TypeArguments = []
             ReturnType = transformType context functionTypeInfo.Type
         }
         : FSharpFunctionType)
@@ -566,14 +565,23 @@ let rec private transformType
         | GlueLiteral.Bool _ -> FSharpType.Primitive FSharpPrimitive.Bool
         | GlueLiteral.Null -> FSharpType.Primitive FSharpPrimitive.Null
 
+    | GlueType.FunctionDeclaration functionDeclaration ->
+        ({
+            Parameters =
+                functionDeclaration.Parameters
+                |> List.map (transformParameter context)
+            ReturnType = transformType context functionDeclaration.Type
+        }
+        : FSharpFunctionType)
+        |> FSharpType.Function
+
     | GlueType.Literal _
     | GlueType.Record _
     | GlueType.ModuleDeclaration _
     | GlueType.IndexedAccessType _
     | GlueType.Enum _
     | GlueType.TypeAliasDeclaration _
-    | GlueType.IntersectionType _
-    | GlueType.FunctionDeclaration _ ->
+    | GlueType.IntersectionType _ ->
         context.AddError $"Could not transform type: %A{glueType}"
         FSharpType.Discard
 
