@@ -539,10 +539,17 @@ let rec private transformType
 
     | GlueType.Discard -> FSharpType.Object
 
+    | GlueType.Literal glueLiteral ->
+        match glueLiteral with
+        | GlueLiteral.String _ -> FSharpType.Primitive FSharpPrimitive.String
+        | GlueLiteral.Int _ -> FSharpType.Primitive FSharpPrimitive.Int
+        | GlueLiteral.Float _ -> FSharpType.Primitive FSharpPrimitive.Float
+        | GlueLiteral.Bool _ -> FSharpType.Primitive FSharpPrimitive.Bool
+        | GlueLiteral.Null -> FSharpType.Primitive FSharpPrimitive.Null
+
     | GlueType.Record _
     | GlueType.ModuleDeclaration _
     | GlueType.IndexedAccessType _
-    | GlueType.Literal _
     | GlueType.Enum _
     | GlueType.TypeAliasDeclaration _
     | GlueType.IntersectionType _
