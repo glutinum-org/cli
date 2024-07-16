@@ -683,7 +683,7 @@ import {{ %s{interfaceInfo.OriginalName} }} from \"{Naming.MODULE_PLACEHOLDER}\"
 
                 printer.Write
                     $"emitJsExpr () $$\"\"\"
-import {{ %s{interfaceInfo.OriginalName} }} from \"module\";
+import {{ %s{interfaceInfo.OriginalName} }} from \"{Naming.MODULE_PLACEHOLDER}\";
 %s{interfaceInfo.OriginalName}.%s{staticMemberInfo.OriginalName}()\"\"\""
 
                 printer.NewLine
@@ -728,7 +728,7 @@ import {{ %s{interfaceInfo.OriginalName} }} from \"module\";
 
                 printer.Write
                     $"emitJsExpr (%s{forwardedArgments}) $$\"\"\"
-import {{ %s{interfaceInfo.OriginalName} }} from \"module\";
+import {{ %s{interfaceInfo.OriginalName} }} from \"{Naming.MODULE_PLACEHOLDER}\";
 %s{interfaceInfo.OriginalName}.%s{staticMemberInfo.OriginalName}(%s{macroArguments})\"\"\""
 
                 printer.NewLine

@@ -15,7 +15,7 @@ type Exports =
 type Hello =
     static member inline SayHello () : unit =
         emitJsExpr () $$"""
-import { Hello } from "module";
+import { Hello } from "REPLACE_ME_WITH_MODULE_NAME";
 Hello.SayHello()"""
 
 (***)

@@ -15,7 +15,7 @@ type Exports =
 type Class =
     static member inline extend (props: obj): obj =
         emitJsExpr (props) $$"""
-import { Class } from "module";
+import { Class } from "REPLACE_ME_WITH_MODULE_NAME";
 Class.extend($0)"""
 
 (***)
