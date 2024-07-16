@@ -315,7 +315,6 @@ type FSharpClass =
 type FSharpMapped =
     {
         Name: string
-        Declarations: FSharpType list
         TypeParameters: FSharpTypeParameter list
     }
 

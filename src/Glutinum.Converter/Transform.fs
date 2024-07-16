@@ -575,13 +575,37 @@ let rec private transformType
         : FSharpFunctionType)
         |> FSharpType.Function
 
+    | GlueType.IntersectionType members ->
+        if members.IsEmpty then
+            FSharpType.Object
+        else
+            {
+                Attributes =
+                    [
+                        FSharpAttribute.AllowNullLiteral
+                        FSharpAttribute.Interface
+                    ]
+                Name = context.CurrentScopeName
+                OriginalName = context.CurrentScopeName
+                TypeParameters = []
+                Members = TransformMembers.toFSharpMember context members
+                Inheritance = []
+            }
+            |> FSharpType.Interface
+            |> context.ExposeType
+
+            ({
+                Name = context.FullName
+                TypeParameters = []
+            })
+            |> FSharpType.Mapped
+
     | GlueType.Literal _
     | GlueType.Record _
     | GlueType.ModuleDeclaration _
     | GlueType.IndexedAccessType _
     | GlueType.Enum _
-    | GlueType.TypeAliasDeclaration _
-    | GlueType.IntersectionType _ ->
+    | GlueType.TypeAliasDeclaration _ ->
         context.AddError $"Could not transform type: %A{glueType}"
         FSharpType.Discard
 
@@ -704,7 +728,6 @@ let private transformExports
                         Type =
                             ({
                                 Name = Naming.sanitizeName info.Name
-                                Declarations = []
                                 TypeParameters =
                                     transformTypeParameters
                                         context
@@ -743,7 +766,6 @@ let private transformExports
                     Type =
                         ({
                             Name = $"{sanitizedName}.Exports"
-                            Declarations = []
                             TypeParameters = []
                         })
                         |> FSharpType.Mapped

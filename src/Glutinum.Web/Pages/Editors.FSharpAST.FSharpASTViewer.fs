@@ -281,11 +281,6 @@ type FSharpASTViewer =
         |> List.map FSharpASTViewer.Member
         |> ASTViewer.renderNode "Members"
 
-    static member private Declarations(declarations: FSharpType list) =
-        declarations
-        |> List.map FSharpASTViewer.FSharpType
-        |> ASTViewer.renderNode "Declarations"
-
     static member private FSharpLiteral(literal: FSharpLiteral) =
         match literal with
         | FSharpLiteral.String value ->
@@ -396,10 +391,7 @@ type FSharpASTViewer =
         | FSharpType.Mapped mapped ->
             ASTViewer.renderNode
                 "Mapped"
-                [
-                    FSharpASTViewer.Name mapped.Name
-                    FSharpASTViewer.Declarations mapped.Declarations
-                ]
+                [ FSharpASTViewer.Name mapped.Name ]
                 context
 
         | FSharpType.Discard -> ASTViewer.renderValueOnly "Discard" context
