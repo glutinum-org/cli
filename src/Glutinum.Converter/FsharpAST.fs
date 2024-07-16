@@ -88,11 +88,16 @@ type FSharpUnionCaseType =
 // | Float of float
 // | Int of int
 
-type FSharpUnionCase =
+type FSharpUnionCaseNamed =
     {
         Attributes: FSharpAttribute list
         Name: string
     }
+
+[<RequireQualifiedAccess>]
+type FSharpUnionCase =
+    | Named of FSharpUnionCaseNamed
+    | Typed of FSharpType
 
 [<RequireQualifiedAccess>]
 type FSharpUnionType =

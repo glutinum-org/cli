@@ -317,10 +317,18 @@ type FSharpASTViewer =
 
     static member private UnionCases(cases: FSharpUnionCase list) =
         cases
-        |> List.map (fun case_ ->
+        |> List.map (fun case ->
             ASTViewer.renderNode "FSharpUnionCase" [
-                FSharpASTViewer.Name case_.Name
-                FSharpASTViewer.Attributes case_.Attributes
+                match case with
+                | FSharpUnionCase.Named caseInfo ->
+                    ASTViewer.renderNode "Named" [
+                        FSharpASTViewer.Name caseInfo.Name
+                        FSharpASTViewer.Attributes caseInfo.Attributes
+                    ]
+                | FSharpUnionCase.Typed typ ->
+                    ASTViewer.renderNode "Typed" [
+                        FSharpASTViewer.FSharpType typ
+                    ]
             ]
         )
         |> ASTViewer.renderNode "Cases"

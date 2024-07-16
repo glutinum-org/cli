@@ -358,26 +358,9 @@ let rec private transformType
                 let cases =
                     others
                     |> List.mapi (fun index caseType ->
-                        let name, context =
-                            sanitizeNameAndPushScope
-                                $"Case%i{index + 1}"
-                                context
+                        let context = context.PushScope $"Case%i{index + 1}"
 
-                        let caseTypeName =
-                            match caseType with
-                            | GlueType.Record recordInfo ->
-                                transformRecord context name [] recordInfo
-                                |> context.ExposeType
-
-                                context.FullName
-                            | caseType -> caseType.Name
-
-                        {
-                            Attributes = []
-                            Name =
-                                Naming.mapTypeNameToFableCoreAwareName
-                                    caseTypeName
-                        }
+                        transformType context caseType |> FSharpUnionCase.Typed
                     )
 
                 {
@@ -1364,6 +1347,7 @@ let private transformEnum (glueEnum: GlueEnum) : FSharpType =
                     ]
                 Name = caseName
             }
+            |> FSharpUnionCase.Named
 
         {
             Attributes =
@@ -1415,7 +1399,7 @@ module TypeAliasDeclaration =
                                 ]
                             Name = sanitizeResult.Name
                         }
-                        : FSharpUnionCase
+                        |> FSharpUnionCase.Named
                         |> Some
                     // Doesn't make sense to have a case for call signature
                     | GlueMember.CallSignature _
@@ -1480,8 +1464,8 @@ module TypeAliasDeclaration =
                 ({
                     Attributes = []
                     Name = Naming.sanitizeName value
-                }
-                : FSharpUnionCase)
+                 }
+                 |> FSharpUnionCase.Named)
 
             ({
                 Attributes =
@@ -1645,7 +1629,7 @@ let private tryOptimizeUnionType
                             ]
                         Name = sanitizeResult.Name
                     }
-                    : FSharpUnionCase
+                    |> FSharpUnionCase.Named
                 | _ -> failwith "Should not happen"
             )
             |> List.distinct

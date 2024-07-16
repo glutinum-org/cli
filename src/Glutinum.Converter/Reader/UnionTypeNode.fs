@@ -73,16 +73,6 @@ let rec private readUnionTypeCases
                     )
                     symbolOpt
 
-            let readTypeReference () =
-                ({
-                    Name = typeReferenceNode.getText ()
-                    FullName = checker.getFullyQualifiedName symbol
-                    TypeArguments = []
-                })
-                |> GlueType.TypeReference
-                |> List.singleton
-                |> Some
-
             // TODO: How to differentiate TypeReference to Enum/Union vs others
             // Check below is really hacky / not robust
             match symbol.declarations with
@@ -101,19 +91,10 @@ let rec private readUnionTypeCases
                     |> List.singleton
                     |> Some
                 else if isFromEs5Lib symbolOpt then
-                    match
-                        getFullNameOrEmpty
-                            checker
-                            (!!typeReferenceNode.typeName)
-                    with
-                    | "Record" ->
-                        TypeNode.UtilityType.readRecord
-                            reader
-                            typeReferenceNode
-                        |> List.singleton
-                        |> Some
+                    reader.ReadTypeNode typeReferenceNode
+                    |> List.singleton
+                    |> Some
 
-                    | _ -> readTypeReference ()
                 else
                     let declaration = declarations.[0]
                     // TODO: This is an optimitic approach
@@ -122,7 +103,10 @@ let rec private readUnionTypeCases
                     | Ts.SyntaxKind.TypeAliasDeclaration ->
                         reader.ReadNode declaration |> List.singleton |> Some
 
-                    | _ -> readTypeReference ()
+                    | _ ->
+                        reader.ReadTypeNode typeReferenceNode
+                        |> List.singleton
+                        |> Some
 
             | None ->
                 let typ = checker.getTypeOfSymbol symbol
@@ -140,16 +124,6 @@ let rec private readUnionTypeCases
                             typeReferenceNode
                     )
 
-        // else
-        //     symbol.declarations
-        //     |> Seq.toList
-        //     |> List.collect (fun declaration ->
-        //         // We use the readUnionType to handle nested unions
-        //         let enum = readUnionType checker declaration?``type``
-
-        //         [ enum ]
-        //     )
-        //     |> Some
         else
             match node.kind with
             | Ts.SyntaxKind.UnionType ->

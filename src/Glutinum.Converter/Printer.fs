@@ -231,7 +231,13 @@ and printType (fsharpType: FSharpType) =
 
     | FSharpType.Union info ->
         let cases =
-            info.Cases |> List.map (fun c -> c.Name) |> String.concat ", "
+            info.Cases
+            |> List.map (fun case ->
+                match case with
+                | FSharpUnionCase.Named caseInfo -> caseInfo.Name
+                | FSharpUnionCase.Typed typ -> printType typ
+            )
+            |> String.concat ", "
 
         let option =
             if info.IsOptional then
@@ -891,9 +897,14 @@ let rec print (printer: Printer) (fsharpTypes: FSharpType list) =
             |> List.iter (fun enumCaseInfo ->
                 printer.Write($"""| """)
 
-                printInlineAttributes printer enumCaseInfo.Attributes
+                match enumCaseInfo with
+                | FSharpUnionCase.Named enumCaseInfo ->
+                    printInlineAttributes printer enumCaseInfo.Attributes
 
-                printer.WriteInline(enumCaseInfo.Name)
+                    printer.WriteInline(enumCaseInfo.Name)
+                | FSharpUnionCase.Typed typ ->
+                    printer.WriteInline(printType typ)
+                    printer.NewLine
 
                 printer.NewLine
             )
