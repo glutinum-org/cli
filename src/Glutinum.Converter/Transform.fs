@@ -610,6 +610,13 @@ let rec private transformType
         })
         |> FSharpType.Mapped
 
+    | GlueType.TypeAliasDeclaration typeAliasDeclaration ->
+        ({
+            Name = typeAliasDeclaration.Name
+            TypeParameters = []
+        })
+        |> FSharpType.Mapped
+
     | GlueType.Literal _
     | GlueType.ModuleDeclaration _
     | GlueType.IndexedAccessType _
