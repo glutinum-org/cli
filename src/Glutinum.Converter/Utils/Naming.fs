@@ -20,16 +20,6 @@ let private escapeName (name: string) : string =
     else
         name
 
-let mapTypeNameToFableCoreAwareName (name: string) : string =
-    match name with
-    | "Date" -> "JS.Date"
-    | "Promise" -> "JS.Promise"
-    | "Uint8Array" -> "JS.Uint8Array"
-    | "ReadonlyArray" -> "ResizeArray"
-    | "Array" -> "ResizeArray"
-    | "Boolean" -> "bool"
-    | name -> name
-
 let removeSurroundingQuotes (text: string) : string =
     if String.IsNullOrEmpty text then
         ""

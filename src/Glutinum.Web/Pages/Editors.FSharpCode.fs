@@ -80,20 +80,7 @@ let private generateFile
 
             let transformResult = Transform.apply readerResult.GlueAST
 
-            let outFile =
-                {
-                    Name = "Glutinum"
-                    Opens =
-                        [
-                            "Fable.Core"
-                            "Fable.Core.JsInterop"
-                            "System"
-                        ]
-                }
-
-            Printer.printOutFile printer outFile
-
-            Printer.print printer transformResult.FSharpAST
+            Printer.printFile printer transformResult
 
             CompilationResult.Success(
                 printer.ToString(),

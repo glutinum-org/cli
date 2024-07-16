@@ -86,6 +86,7 @@ let rec private readUnionTypeCases
                         Name = typeReferenceNode.getText ()
                         FullName = fullName
                         TypeArguments = []
+                        IsStandardLibrary = isFromEs5Lib symbolOpt
                     })
                     |> GlueType.TypeReference
                     |> List.singleton

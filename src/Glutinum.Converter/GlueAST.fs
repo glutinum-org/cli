@@ -229,6 +229,13 @@ type GlueTypeReference =
         Name: string
         FullName: string
         TypeArguments: GlueType list
+        // Should we replace that with a real computation of the FullName
+        // and use it to determine if it's from standard library?
+        // I think right now, we don't have a correct FullName because I didn't know how to get it
+        // but a few days ago, I found a way to access the source file information
+        // this is how the isStandardLibrary is determined
+        // so we can perhaps revisit the FullName reader logic with this new knowledge
+        IsStandardLibrary: bool
     }
 
 type GlueTypeUnion = GlueTypeUnion of GlueType list

@@ -11,11 +11,11 @@ type RecordEntryObject =
     abstract member n: float with get, set
 
 type RecordEntryArrayItem =
-    ResizeArray<RecordEntryArrayItem.ReadonlyArray.ReturnType>
+    ResizeArray<RecordEntryArrayItem.ResizeArray.ReturnType>
 
 module RecordEntryArrayItem =
 
-    module ReadonlyArray =
+    module ResizeArray =
 
         [<AllowNullLiteral>]
         [<Interface>]

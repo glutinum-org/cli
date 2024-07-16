@@ -39,17 +39,6 @@ type Printer() =
 
     member __.ToStringWithoutTrailNewLine() = buffer.ToString().Trim()
 
-let printOutFile (printer: Printer) (outFile: FSharpOutFile) =
-    printer.Write($"module rec {outFile.Name}")
-    printer.NewLine
-    printer.NewLine
-
-    outFile.Opens
-    |> List.iter (fun o ->
-        printer.Write($"open {o}")
-        printer.NewLine
-    )
-
 module Naming =
     let (|Digit|_|) (digit: string) =
         if String.IsNullOrWhiteSpace digit then
@@ -280,18 +269,15 @@ and printType (fsharpType: FSharpType) =
         | FSharpPrimitive.Number -> "float"
         | FSharpPrimitive.Null -> "obj"
     | FSharpType.TypeReference typeReference ->
-        let replacedName =
-            Naming.mapTypeNameToFableCoreAwareName typeReference.Name
-
         if typeReference.TypeArguments.Length > 0 then
             let typeArguments =
                 typeReference.TypeArguments
                 |> List.map printType
                 |> String.concat ", "
 
-            $"{replacedName}<{typeArguments}>"
+            $"{typeReference.Name}<{typeArguments}>"
         else
-            replacedName
+            typeReference.Name
 
     | FSharpType.TypeParameter name -> $"'{name}"
     | FSharpType.Option optionType -> printType optionType + " option"
@@ -880,7 +866,7 @@ let private printTypeAlias (printer: Printer) (aliasInfo: FSharpTypeAlias) =
     printer.NewLine
     printer.Unindent
 
-let rec print (printer: Printer) (fsharpTypes: FSharpType list) =
+let rec private print (printer: Printer) (fsharpTypes: FSharpType list) =
     match fsharpTypes with
     | fsharpType :: tail ->
         printer.NewLine
@@ -957,3 +943,28 @@ let rec print (printer: Printer) (fsharpTypes: FSharpType list) =
         print printer tail
 
     | [] -> ()
+
+let printFile (printer: Printer) (transformResult: Transform.TransformResult) =
+
+    let outFile =
+        {
+            Name = "Glutinum"
+            Opens = [ "Fable.Core"; "Fable.Core.JsInterop"; "System" ]
+        }
+
+    printer.Write($"module rec {outFile.Name}")
+    printer.NewLine
+    printer.NewLine
+
+    outFile.Opens
+    |> List.iter (fun o ->
+        printer.Write($"open {o}")
+        printer.NewLine
+    )
+
+    if transformResult.IncludeRegExpAlias then
+        printer.NewLine
+        printer.Write "type RegExp = Text.RegularExpressions.Regex"
+        printer.NewLine
+
+    print printer transformResult.FSharpAST

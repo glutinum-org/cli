@@ -43,14 +43,6 @@ let generateBindingFile (filePath: string) =
     for reporter in transformResult.Errors do
         Log.error reporter
 
-    let outFile =
-        {
-            Name = "Glutinum"
-            Opens = [ "Fable.Core"; "Fable.Core.JsInterop"; "System" ]
-        }
-
-    Printer.printOutFile printer outFile
-
-    Printer.print printer transformResult.FSharpAST
+    Printer.printFile printer transformResult
 
     printer.ToString()

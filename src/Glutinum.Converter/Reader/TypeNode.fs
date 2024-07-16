@@ -170,7 +170,7 @@ let readTypeNode
 
         let symbolOpt = checker.getSymbolAtLocation !!typeReferenceNode.typeName
 
-        let readTypeReference () =
+        let readTypeReference (isStandardLibrary: bool) =
             match symbolOpt.Value.flags with
             | HasSymbolFlags Ts.SymbolFlags.TypeParameter ->
                 symbolOpt.Value.name |> GlueType.TypeParameter
@@ -182,6 +182,7 @@ let readTypeNode
                             checker
                             (!!typeReferenceNode.typeName)
                     TypeArguments = readTypeArguments reader typeReferenceNode
+                    IsStandardLibrary = isStandardLibrary
                 })
                 |> GlueType.TypeReference
 
@@ -190,9 +191,9 @@ let readTypeNode
             | "Exclude" -> UtilityType.readExclude reader typeReferenceNode
             | "Partial" -> UtilityType.readPartial reader typeReferenceNode
             | "Record" -> UtilityType.readRecord reader typeReferenceNode
-            | _ -> readTypeReference ()
+            | _ -> readTypeReference true
         else
-            readTypeReference ()
+            readTypeReference false
 
     | Ts.SyntaxKind.ArrayType ->
         let arrayTypeNode = typeNode :?> Ts.ArrayTypeNode
@@ -362,6 +363,7 @@ let readTypeNode
             Name = expression.expression.getText () // Keep the double expression !!!
             FullName = getFullNameOrEmpty checker expression
             TypeArguments = readTypeArguments reader expression
+            IsStandardLibrary = false // TODO: Should we check if it's from the standard library?
         })
         |> GlueType.TypeReference
 

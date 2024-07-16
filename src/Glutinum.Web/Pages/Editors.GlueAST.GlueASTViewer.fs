@@ -475,6 +475,9 @@ type GlueASTViewer =
                 [
                     GlueASTViewer.Name typeReference.Name
                     ASTViewer.renderKeyValue "FullName" typeReference.FullName
+                    ASTViewer.renderKeyValue
+                        "IsStandardLibrary"
+                        (string typeReference.IsStandardLibrary)
 
                     typeReference.TypeArguments
                     |> List.map GlueASTViewer.GlueType

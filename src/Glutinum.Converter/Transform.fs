@@ -13,6 +13,8 @@ type Reporter() =
 
     member val Errors = errors
 
+    member val HasRegEpx = false with get, set
+
 // Not really proud of this implementation, but I was not able to make it in a
 // pure functional way, using a Tree structure or something similar
 // It seems like for now this implementation does the job which is the most important
@@ -42,6 +44,15 @@ type TransformContext
     // when needed
     // You should not use this directly, but instead use the AddWarning and AddError methods
     member val _Reporter = reporter
+
+    member _.ExposeRegExp() =
+        // TODO: Rework how we memorize if need to expose RegExp alias
+        // Perhaps, before the printer phase we should traverse the whole AST to find information
+        // like aliases that we need to expose
+        // We could propagate the IsStandardLibrary flag to the F# AST to check such information
+        // Example: If we find an F# TypeReference with the name "RegExp" and the IsStandardLibrary flag is true
+        // then we need to expose the RegExp alias
+        reporter.HasRegEpx <- true
 
     member _.ExposeType(typ: FSharpType) =
         match parent with
@@ -98,6 +109,26 @@ type TransformContext
     member _.AddWarning(warning: string) = reporter.Warnings.Add warning
 
     member _.AddError(error: string) = reporter.Errors.Add error
+
+let private mapTypeNameToFableCoreAwareName
+    (context: TransformContext)
+    (typeReference: GlueTypeReference)
+    =
+
+    if typeReference.IsStandardLibrary then
+        match typeReference.Name with
+        | "Date" -> "JS.Date"
+        | "Promise" -> "JS.Promise"
+        | "Uint8Array" -> "JS.Uint8Array"
+        | "ReadonlyArray" -> "ResizeArray"
+        | "Array" -> "ResizeArray"
+        | "Boolean" -> "bool"
+        | "RegExp" ->
+            context.ExposeRegExp()
+            "RegExp"
+        | name -> name
+    else
+        typeReference.Name
 
 let private unwrapOptionIfAlreadyOptional
     (context: TransformContext)
@@ -373,11 +404,15 @@ let rec private transformType
 
     | GlueType.TypeReference typeReference ->
         ({
-            Name = Naming.mapTypeNameToFableCoreAwareName typeReference.Name
+            Name = mapTypeNameToFableCoreAwareName context typeReference
             FullName = typeReference.FullName
             TypeArguments =
                 typeReference.TypeArguments |> List.map (transformType context)
             Type = //transformType context typeReference.TypeRef
+                // TODO: This code looks suspicious
+                // Why would a typeReference always be a string? I think I added that here to make
+                // the compiler happy because we don't have a concrete type for the TypeReference
+                // this is because of the recursive types which creates infinite loops in the reader
                 FSharpType.Primitive FSharpPrimitive.String
         }
         : FSharpTypeReference)
@@ -1827,7 +1862,8 @@ let private transformTypeAliasDeclaration
         |> FSharpType.TypeAlias
 
     | GlueType.TypeReference typeReference ->
-        let context = context.PushScope typeReference.Name
+        let mappedName = mapTypeNameToFableCoreAwareName context typeReference
+        let context = context.PushScope mappedName
 
         let handleDefaultCase () =
             ({
@@ -1884,7 +1920,7 @@ let private transformTypeAliasDeclaration
                     Name = typeAliasName
                     Type =
                         {
-                            Name = typeReference.Name
+                            Name = mappedName
                             FullName = typeReference.FullName
                             TypeArguments =
                                 [ FSharpType.Interface typeArgument ]
@@ -2197,11 +2233,20 @@ let private transform
         yield! rootTransformContext.ToList()
     ]
 
+type TransformResult =
+    {
+        FSharpAST: FSharpType list
+        Warnings: ResizeArray<string>
+        Errors: ResizeArray<string>
+        IncludeRegExpAlias: bool
+    }
+
 let apply (glueAst: GlueType list) =
     let reporter = Reporter()
 
-    {|
+    {
         FSharpAST = transform reporter true glueAst
         Warnings = reporter.Warnings
         Errors = reporter.Errors
-    |}
+        IncludeRegExpAlias = reporter.HasRegEpx
+    }
