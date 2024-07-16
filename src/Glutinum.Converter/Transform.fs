@@ -99,6 +99,22 @@ type TransformContext
 
     member _.AddError(error: string) = reporter.Errors.Add error
 
+let private unwrapOptionIfAlreadyOptional
+    (context: TransformContext)
+    (typ: GlueType)
+    (isOptional: bool)
+    =
+    // If the property is optional, we want to unwrap the option type
+    // This is to prevent generating a `string option option`
+    let typ' = transformType context typ
+
+    if isOptional then
+        match typ' with
+        | FSharpType.Option underlyingType -> underlyingType
+        | _ -> typ'
+    else
+        typ'
+
 let private sanitizeNameAndPushScope
     (name: string)
     (context: TransformContext)
@@ -844,7 +860,11 @@ let private transformParameter
     let context = context.PushScope(parameter.Name)
 
     let typ =
-        let computedType = transformType context parameter.Type
+        let computedType =
+            unwrapOptionIfAlreadyOptional
+                context
+                parameter.Type
+                parameter.IsOptional
 
         // In TypeScript, if an argument is marked as spread, users is forced to
         // use an array. We want to remove the default transformation for that
@@ -1010,24 +1030,16 @@ module private TransformMembers =
                 if propertyInfo.IsPrivate && not propertyInfo.IsStatic then
                     None // F# interface can't have private properties
                 else
-                    // If the property is optional, we want to unwrap the option type
-                    // This is to prevent generating a `string option option`
-                    let typ =
-                        let typ' = transformType context propertyInfo.Type
-
-                        if propertyInfo.IsOptional then
-                            match typ' with
-                            | FSharpType.Option underlyingType -> underlyingType
-                            | _ -> typ'
-                        else
-                            typ'
-
                     {
                         Attributes = [ yield! xmlDocInfo.ObsoleteAttributes ]
                         Name = name
                         OriginalName = propertyInfo.Name
                         Parameters = []
-                        Type = typ
+                        Type =
+                            unwrapOptionIfAlreadyOptional
+                                context
+                                propertyInfo.Type
+                                propertyInfo.IsOptional
                         TypeParameters = []
                         IsOptional = propertyInfo.IsOptional
                         IsStatic = propertyInfo.IsStatic
