@@ -288,6 +288,8 @@ let rec private transformType
     | GlueType.Primitive primitiveInfo ->
         transformPrimitive primitiveInfo |> FSharpType.Primitive
 
+    | GlueType.TemplateLiteral -> FSharpType.Primitive FSharpPrimitive.String
+
     | GlueType.OptionalType glueType ->
         transformType context glueType |> FSharpType.Option
 
@@ -1814,6 +1816,20 @@ let private transformTypeAliasDeclaration
         : FSharpTypeAlias)
         |> FSharpType.TypeAlias
 
+    | GlueType.TemplateLiteral ->
+        ({
+            Attributes = [ yield! xmlDoc.ObsoleteAttributes ]
+            XmlDoc = xmlDoc.XmlDoc
+            Name = typeAliasName
+            Type = FSharpType.Primitive FSharpPrimitive.String
+            TypeParameters =
+                transformTypeParameters
+                    context
+                    glueTypeAliasDeclaration.TypeParameters
+        }
+        : FSharpTypeAlias)
+        |> FSharpType.TypeAlias
+
     | GlueType.TypeReference typeReference ->
         let context = context.PushScope typeReference.Name
 
@@ -2117,6 +2133,7 @@ let rec private transformToFsharp
         | GlueType.Record _
         | GlueType.OptionalType _
         | GlueType.NamedTupleType _
+        | GlueType.TemplateLiteral
         | GlueType.ThisType _ -> FSharpType.Discard
     )
 

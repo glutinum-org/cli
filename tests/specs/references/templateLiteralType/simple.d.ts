@@ -1,0 +1,1 @@
+type AutoFillSection = `section-${string}`;

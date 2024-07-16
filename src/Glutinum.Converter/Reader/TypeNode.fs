@@ -381,6 +381,8 @@ let readTypeNode
             reader.ReadTypeNode conditionalTypeNode.checkType
         | forward -> forward
 
+    | Ts.SyntaxKind.TemplateLiteralType -> GlueType.TemplateLiteral
+
     | _ ->
         generateReaderError
             "type node"

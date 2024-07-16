@@ -281,6 +281,7 @@ type GlueType =
     | OptionalType of GlueType
     | Unknown
     | ExportDefault of GlueType
+    | TemplateLiteral
 
     member this.Name =
         match this with
@@ -299,6 +300,7 @@ type GlueType =
             | GluePrimitive.Undefined -> "obj"
             | GluePrimitive.Object -> "obj"
             | GluePrimitive.Symbol -> "obj"
+        | TemplateLiteral -> "string"
         | Enum info -> info.Name
         | TypeAliasDeclaration info -> info.Name
         | TypeParameter name -> name

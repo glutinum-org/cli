@@ -245,6 +245,9 @@ type GlueASTViewer =
 
         | GlueType.Unknown -> ASTViewer.renderValueOnly "Unknown" context
 
+        | GlueType.TemplateLiteral ->
+            ASTViewer.renderValueOnly "TemplateLiteral" context
+
         | GlueType.Variable variableInfo ->
             ASTViewer.renderNode
                 "Variable"
