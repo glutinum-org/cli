@@ -600,8 +600,17 @@ let rec private transformType
             })
             |> FSharpType.Mapped
 
+    | GlueType.Record recordInfo ->
+        transformRecord context context.CurrentScopeName [] recordInfo
+        |> context.ExposeType
+
+        ({
+            Name = context.FullName
+            TypeParameters = []
+        })
+        |> FSharpType.Mapped
+
     | GlueType.Literal _
-    | GlueType.Record _
     | GlueType.ModuleDeclaration _
     | GlueType.IndexedAccessType _
     | GlueType.Enum _
