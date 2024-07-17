@@ -5,8 +5,32 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 <!-- EasyBuild: START -->
-<!-- last_commit_released: 76cde14a53c677a589b66d6770d89b9b466ba804 -->
+<!-- last_commit_released: bd975809a7d884e35ac6f19967148e3bc7418f02 -->
 <!-- EasyBuild: END -->
+
+## 0.9.0
+
+### 🚀 Features
+
+* Improve detection of StandardLibrary types like `Promise`, `Boolean` and add supports for `RegExp` via a type alias ([bd97580](https://github.com/glutinum-org/cli/commit/bd975809a7d884e35ac6f19967148e3bc7418f02))
+* Add support for `TemplateLiteralType` ([e75209f](https://github.com/glutinum-org/cli/commit/e75209f538de5056b00e6fa677a1ab7252b01074))
+* Add supports for `TypeAliasDeclaration` when used as a returned type ([cd58d28](https://github.com/glutinum-org/cli/commit/cd58d28fb0caab0ccada9d8d2809e1a24ce538a8))
+* Add supports for `Record<A,B>` when used as a returned type ([b705f37](https://github.com/glutinum-org/cli/commit/b705f372811f1204209e97f62ad7fd40f9139087))
+* Add supports for `IntersectionType` when used as a type signature ([9d12fce](https://github.com/glutinum-org/cli/commit/9d12fcede395414f4630e5ee41f8399d227a28ee))
+* During transformation phase accumulate errors and warnings in memory, so they can be reported in the web tool ([7548317](https://github.com/glutinum-org/cli/commit/7548317cd1a7ce40e4990704b2f556f0c13b156e))
+* Add support for `LiteralType` (aka literal values used as types) ([2cce022](https://github.com/glutinum-org/cli/commit/2cce022d9327ff098d4ad49d6d1a9839d5d18e0d))
+* Add support for `Record<A,B>` ([1a94129](https://github.com/glutinum-org/cli/commit/1a941296384f3a5509c4486caa66cd4d074f1fbf))
+* Add support for `ConditionalType` ([6279137](https://github.com/glutinum-org/cli/commit/6279137c315c0dfa3505db53f3400b672eaf958d))
+* Add supports for generics constraints ([b1dff0e](https://github.com/glutinum-org/cli/commit/b1dff0e12f105a3dbdb510892702de00407548ff))
+
+### 🐞 Bug Fixes
+
+* Improve `TypeReference` supports when inside of an Union especially when dealing with `TypeParameters` ([cc99bab](https://github.com/glutinum-org/cli/commit/cc99bab60f370c29a4d35e31260e5cbec5630e03))
+* If an argument is decorated with `?` and `undefined` or `null` remove the option type ([a413d14](https://github.com/glutinum-org/cli/commit/a413d14af55a3946b02fd886b4a46980afab17dd))
+* Use `REPLACE_ME_WITH_MODULE_NAME` everywhere instead of `module` ([1c78943](https://github.com/glutinum-org/cli/commit/1c789431d09cdfcab3568701d75b08bdcead4b83))
+* Supports `TypeQuery` against `FunctionType` ([8fd0e35](https://github.com/glutinum-org/cli/commit/8fd0e35188958c8ea003a3a4d1ce07ddc4c59824))
+* Don't generate constraints for `Function` as this is not supported by F# ([e3a573d](https://github.com/glutinum-org/cli/commit/e3a573d224088cf1ac82f2552a5fa68d0084d566))
+* Sanitize `ModuleDeclaration` name + generates only 1 `exports` property per `ModuleDeclaration` ([8d40f9f](https://github.com/glutinum-org/cli/commit/8d40f9f343cb98e9a7b52530ddb2c012b419ee09))
 
 ## 0.8.0
 
