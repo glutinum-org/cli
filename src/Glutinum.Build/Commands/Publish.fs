@@ -196,6 +196,7 @@ let private getReleaseContext (settings: PublishSettings) =
             // On CI, we allow to publish without a version bump
             // It happens when we just released a new stable version, the changelog is already up-to-date
             Environment.GetEnvironmentVariable("CI") <> null
+            || settings.IsWebOnly
         then
             refVersion
         else
