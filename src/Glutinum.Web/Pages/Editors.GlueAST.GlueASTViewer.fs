@@ -428,28 +428,30 @@ type GlueASTViewer =
                 ]
                 context
 
-        | GlueType.Partial partialInfo ->
-            ASTViewer.renderNode
-                "Partial"
-                [
-                    GlueASTViewer.Name partialInfo.Name
-                    GlueASTViewer.Members partialInfo.Members
-                    GlueASTViewer.TypeParameters partialInfo.TypeParameters
-                ]
-                context
+        | GlueType.UtilityType utilityType ->
+            match utilityType with
+            | GlueUtilityType.Partial partialInfo ->
+                ASTViewer.renderNode
+                    "Partial"
+                    [
+                        GlueASTViewer.Name partialInfo.Name
+                        GlueASTViewer.Members partialInfo.Members
+                        GlueASTViewer.TypeParameters partialInfo.TypeParameters
+                    ]
+                    context
 
-        | GlueType.Record recordInfo ->
-            ASTViewer.renderNode
-                "Record"
-                [
-                    ASTViewer.renderNode "KeyType" [
-                        GlueASTViewer.GlueType recordInfo.KeyType
+            | GlueUtilityType.Record recordInfo ->
+                ASTViewer.renderNode
+                    "Record"
+                    [
+                        ASTViewer.renderNode "KeyType" [
+                            GlueASTViewer.GlueType recordInfo.KeyType
+                        ]
+                        ASTViewer.renderNode "ValueType" [
+                            GlueASTViewer.GlueType recordInfo.ValueType
+                        ]
                     ]
-                    ASTViewer.renderNode "ValueType" [
-                        GlueASTViewer.GlueType recordInfo.ValueType
-                    ]
-                ]
-                context
+                    context
 
         | GlueType.ThisType typeName ->
             ASTViewer.renderNode

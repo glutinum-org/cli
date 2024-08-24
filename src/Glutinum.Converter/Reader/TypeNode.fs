@@ -129,7 +129,8 @@ module UtilityType =
                             HeritageClauses = []
                         }
                         : GlueInterface)
-                        |> GlueType.Partial
+                        |> GlueUtilityType.Partial
+                        |> GlueType.UtilityType
 
                     | _ -> GlueType.Discard
 
@@ -144,7 +145,8 @@ module UtilityType =
             ValueType = typeArguments.[1]
         }
         : GlueRecord)
-        |> GlueType.Record
+        |> GlueUtilityType.Record
+        |> GlueType.UtilityType
 
 let readTypeNode
     (reader: ITypeScriptReader)

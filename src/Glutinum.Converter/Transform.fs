@@ -577,23 +577,6 @@ let rec private transformType
     | GlueType.NamedTupleType namedTupleType ->
         transformType context namedTupleType.Type
 
-    | GlueType.Partial interfaceInfo ->
-        transformInterface context interfaceInfo
-        |> Interface.makePartial context.CurrentScopeName
-        |> FSharpType.Interface
-        |> context.ExposeType
-
-        // Get fullname
-        // Store type in the exposed types memory
-        ({
-            Name = context.FullName
-            FullName = context.FullName
-            TypeArguments = []
-            Type = FSharpType.Discard
-        }
-        : FSharpTypeReference)
-        |> FSharpType.TypeReference
-
     | GlueType.Discard -> FSharpType.Object
 
     | GlueType.Literal glueLiteral ->
@@ -639,15 +622,34 @@ let rec private transformType
             })
             |> FSharpType.Mapped
 
-    | GlueType.Record recordInfo ->
-        transformRecord context context.CurrentScopeName [] recordInfo
-        |> context.ExposeType
+    | GlueType.UtilityType utilityType ->
+        match utilityType with
+        | GlueUtilityType.Partial interfaceInfo ->
+            transformInterface context interfaceInfo
+            |> Interface.makePartial context.CurrentScopeName
+            |> FSharpType.Interface
+            |> context.ExposeType
 
-        ({
-            Name = context.FullName
-            TypeParameters = []
-        })
-        |> FSharpType.Mapped
+            // Get fullname
+            // Store type in the exposed types memory
+            ({
+                Name = context.FullName
+                FullName = context.FullName
+                TypeArguments = []
+                Type = FSharpType.Discard
+            }
+            : FSharpTypeReference)
+            |> FSharpType.TypeReference
+
+        | GlueUtilityType.Record recordInfo ->
+            transformRecord context context.CurrentScopeName [] recordInfo
+            |> context.ExposeType
+
+            ({
+                Name = context.FullName
+                TypeParameters = []
+            })
+            |> FSharpType.Mapped
 
     | GlueType.TypeAliasDeclaration typeAliasDeclaration ->
         ({
@@ -1953,18 +1955,20 @@ let private transformTypeAliasDeclaration
         : FSharpTypeAlias)
         |> FSharpType.TypeAlias
 
-    | GlueType.Partial interfaceInfo ->
-        transformInterface context interfaceInfo
-        // Use the alias name instead of the original interface name
-        |> Interface.makePartial typeAliasName
-        |> FSharpType.Interface
+    | GlueType.UtilityType utilityType ->
+        match utilityType with
+        | GlueUtilityType.Partial interfaceInfo ->
+            transformInterface context interfaceInfo
+            // Use the alias name instead of the original interface name
+            |> Interface.makePartial typeAliasName
+            |> FSharpType.Interface
 
-    | GlueType.Record recordInfo ->
-        transformRecord
-            context
-            typeAliasName
-            glueTypeAliasDeclaration.TypeParameters
-            recordInfo
+        | GlueUtilityType.Record recordInfo ->
+            transformRecord
+                context
+                typeAliasName
+                glueTypeAliasDeclaration.TypeParameters
+                recordInfo
 
     | GlueType.FunctionType functionType ->
         {
@@ -2151,7 +2155,6 @@ let rec private transformToFsharp
 
         | GlueType.FunctionType _
         | GlueType.TypeParameter _
-        | GlueType.Partial _
         | GlueType.Array _
         | GlueType.TypeReference _
         | GlueType.FunctionDeclaration _
@@ -2166,10 +2169,10 @@ let rec private transformToFsharp
         | GlueType.TupleType _
         | GlueType.IntersectionType _
         | GlueType.TypeLiteral _
-        | GlueType.Record _
         | GlueType.OptionalType _
         | GlueType.NamedTupleType _
         | GlueType.TemplateLiteral
+        | GlueType.UtilityType _
         | GlueType.ThisType _ -> FSharpType.Discard
     )
 

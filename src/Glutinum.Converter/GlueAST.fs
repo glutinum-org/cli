@@ -260,6 +260,12 @@ type GlueRecord =
     }
 
 [<RequireQualifiedAccess>]
+type GlueUtilityType =
+    | Partial of GlueInterface
+    | Record of GlueRecord
+// | ReadOnly of GlueType
+
+[<RequireQualifiedAccess>]
 type GlueType =
     | Discard
     | Interface of GlueInterface
@@ -275,8 +281,6 @@ type GlueType =
     | ModuleDeclaration of GlueModuleDeclaration
     | ClassDeclaration of GlueClassDeclaration
     | TypeReference of GlueTypeReference
-    | Partial of GlueInterface
-    | Record of GlueRecord
     | Array of GlueType
     | FunctionType of GlueFunctionType
     | TypeParameter of string
@@ -289,6 +293,7 @@ type GlueType =
     | Unknown
     | ExportDefault of GlueType
     | TemplateLiteral
+    | UtilityType of GlueUtilityType
 
     member this.Name =
         match this with
@@ -324,11 +329,13 @@ type GlueType =
         | IntersectionType _
         | IndexedAccessType _
         | Union _
-        | Partial _
         | FunctionType _
         | TupleType _
         | OptionalType _ // TODO: Should we take the name of the underlying type and add option to it?
         | Discard
         | ExportDefault _
-        | Record _
         | Unknown -> "obj"
+        | UtilityType utilityType ->
+            match utilityType with
+            | GlueUtilityType.Partial _
+            | GlueUtilityType.Record _ -> "obj"
