@@ -7,12 +7,12 @@ open System
 [<AbstractClass>]
 [<Erase>]
 type Exports =
-    [<Import("ChalkInstance", "REPLACE_ME_WITH_MODULE_NAME"); EmitConstructor>]
-    static member ChalkInstance () : ChalkInstance = nativeOnly
+    [<Import("SignaturePad", "REPLACE_ME_WITH_MODULE_NAME"); EmitConstructor>]
+    static member SignaturePad (canvas: string) : SignaturePad = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
-type ChalkInstance =
+type SignaturePad =
     interface end
 
 (***)

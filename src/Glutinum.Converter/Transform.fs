@@ -741,7 +741,8 @@ let private transformExports
                 |> FSharpMember.Method
                 |> List.singleton
 
-            | GlueType.ClassDeclaration info ->
+            | GlueType.ClassDeclaration info
+            | GlueType.ExportDefault(GlueType.ClassDeclaration info) ->
                 // TODO: Handle constructor overloads
                 let name, context = sanitizeNameAndPushScope info.Name context
 
