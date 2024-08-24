@@ -437,6 +437,9 @@ let rec private transformType
         ({
             Parameters =
                 functionTypeInfo.Parameters
+                // TypeScript allows to annotate the `this` parameter but it is not actually part
+                // of the function signature that the user will call.
+                |> List.filter (fun parameter -> parameter.Name <> "this")
                 |> List.map (transformParameter context)
             ReturnType = transformType context functionTypeInfo.Type
         }
