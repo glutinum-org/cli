@@ -2320,7 +2320,7 @@ let apply (typeMemory: GlueType list) (glueAst: GlueType list) =
     let reporter = Reporter()
 
     {
-        FSharpAST = transform typeMemory reporter true glueAst
+        FSharpAST = transform typeMemory reporter true glueAst |> Merge.apply
         Warnings = reporter.Warnings
         Errors = reporter.Errors
         IncludeRegExpAlias = reporter.HasRegEpx
