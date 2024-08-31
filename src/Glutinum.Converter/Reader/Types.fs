@@ -11,6 +11,8 @@ type ITypeScriptReader =
 
     abstract Warnings: ResizeArray<string> with get
 
+    abstract TypeMemory: ResizeArray<GlueType> with get
+
     abstract ReadNode: node: Ts.Node -> GlueType
 
     abstract ReadTypeNode: typNode: Ts.TypeNode -> GlueType

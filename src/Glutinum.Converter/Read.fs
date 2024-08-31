@@ -16,4 +16,5 @@ let readSourceFile
             |> List.ofSeq
             |> List.map reader.ReadNode
         Warnings = reader.Warnings
+        TypeMemory = reader.TypeMemory |> List.ofSeq
     |}

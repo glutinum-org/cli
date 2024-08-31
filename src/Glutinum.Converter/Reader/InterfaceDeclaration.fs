@@ -14,6 +14,7 @@ let readInterfaceDeclaration
         declaration.members |> Seq.toList |> List.map reader.ReadDeclaration
 
     {
+        FullName = Utils.getFullNameOrEmpty reader.checker declaration
         Name = declaration.name.getText ()
         Members = members
         TypeParameters = reader.ReadTypeParameters declaration.typeParameters

@@ -123,6 +123,8 @@ module UtilityType =
                             |> List.map reader.ReadDeclaration
 
                         ({
+                            FullName =
+                                getFullNameOrEmpty reader.checker originalType
                             Name = interfaceDeclaration.name.getText ()
                             Members = members
                             TypeParameters = []
@@ -361,11 +363,14 @@ let readTypeNode
     | Ts.SyntaxKind.ExpressionWithTypeArguments ->
         let expression = typeNode :?> Ts.ExpressionWithTypeArguments
 
+        let symbolOpt = checker.getSymbolAtLocation (expression.expression)
+
+        // Should we try to specialize the type for UtilityTypes like we do for TypeReference?
         ({
             Name = expression.expression.getText () // Keep the double expression !!!
-            FullName = getFullNameOrEmpty checker expression
+            FullName = getFullNameOrEmpty checker expression.expression
             TypeArguments = readTypeArguments reader expression
-            IsStandardLibrary = false // TODO: Should we check if it's from the standard library?
+            IsStandardLibrary = isFromEs5Lib symbolOpt
         })
         |> GlueType.TypeReference
 

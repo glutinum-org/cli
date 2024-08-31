@@ -78,7 +78,8 @@ let private generateFile
 
             let readerResult = Read.readSourceFile checker sourceFile
 
-            let transformResult = Transform.apply readerResult.GlueAST
+            let transformResult =
+                Transform.apply readerResult.TypeMemory readerResult.GlueAST
 
             Printer.printFile printer transformResult
 

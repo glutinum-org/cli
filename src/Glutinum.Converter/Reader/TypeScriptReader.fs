@@ -25,11 +25,18 @@ open Glutinum.Converter.Reader.NamedTupleMember
 type TypeScriptReader(checker: Ts.TypeChecker) =
     let warnings = ResizeArray<string>()
 
+    // Store all types in memory for later use
+    // We use a list because in TypeScript, types declarations can be duplicated
+    // A dictionary would only store the last declaration
+    let typeMemory = ResizeArray<GlueType>()
+
     interface ITypeScriptReader with
 
         override _.checker: Ts.TypeChecker = checker
 
         member _.Warnings = warnings
+
+        member _.TypeMemory = typeMemory
 
         member this.ReadClassDeclaration
             (classDeclaration: Ts.ClassDeclaration)
@@ -64,7 +71,10 @@ type TypeScriptReader(checker: Ts.TypeChecker) =
             readModuleDeclaration this moduleDeclaration
             |> GlueType.ModuleDeclaration
 
-        member this.ReadNode(node: Ts.Node) : GlueType = readNode this node
+        member this.ReadNode(node: Ts.Node) : GlueType =
+            let typ = readNode this node
+            typeMemory.Add(typ) // Store the type in memory for later use
+            typ
 
         member this.ReadTypeAliasDeclaration
             (typeAliasDeclaration: Ts.TypeAliasDeclaration)

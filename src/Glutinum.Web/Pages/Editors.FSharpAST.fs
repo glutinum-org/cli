@@ -58,7 +58,8 @@ let private generateAST (typeScriptCode: string) =
 
         let readerResult = Read.readSourceFile checker sourceFile
 
-        let transformResult = Transform.apply readerResult.GlueAST
+        let transformResult =
+            Transform.apply readerResult.TypeMemory readerResult.GlueAST
 
         {
             AST = transformResult.FSharpAST

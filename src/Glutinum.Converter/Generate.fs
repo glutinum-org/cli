@@ -34,7 +34,8 @@ let generateBindingFile (filePath: string) =
     for warning in readerResult.Warnings do
         Log.warn warning
 
-    let transformResult = Transform.apply readerResult.GlueAST
+    let transformResult =
+        Transform.apply readerResult.TypeMemory readerResult.GlueAST
 
     // Log transform warnings and errors
     for reporter in transformResult.Warnings do

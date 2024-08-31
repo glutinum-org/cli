@@ -269,6 +269,7 @@ type GlueASTViewer =
                 "Interface"
                 [
                     GlueASTViewer.Name interfaceInfo.Name
+                    GlueASTViewer.FullName interfaceInfo.FullName
                     GlueASTViewer.TypeParameters interfaceInfo.TypeParameters
                     GlueASTViewer.Members interfaceInfo.Members
                     GlueASTViewer.HeritageClauses interfaceInfo.HeritageClauses

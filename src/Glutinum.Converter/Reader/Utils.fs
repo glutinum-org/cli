@@ -78,9 +78,15 @@ let generateReaderError
 ---"""
 
 let tryGetFullName (checker: Ts.TypeChecker) (node: Ts.Node) =
-    match checker.getSymbolAtLocation node with
-    | None -> None
-    | Some symbol -> checker.getFullyQualifiedName symbol |> Some
+    // Naive way to check if the node has a symbol
+    // The others solutions is to redo a pattern matching on the node.type
+    // but it's more complex (can be changed if this solution is too permissive)
+    if isNull node?symbol then
+        match checker.getSymbolAtLocation node with
+        | None -> None
+        | Some symbol -> checker.getFullyQualifiedName symbol |> Some
+    else
+        checker.getFullyQualifiedName node?symbol |> Some
 
 let getFullNameOrEmpty (checker: Ts.TypeChecker) (node: Ts.Node) =
     tryGetFullName checker node |> Option.defaultValue ""
@@ -167,6 +173,8 @@ let isFromEs5Lib (symbolOpt: Ts.Symbol option) =
             match declarations[0].parent.kind with
             | Ts.SyntaxKind.SourceFile ->
                 let sourceFile = declarations[0].parent :?> Ts.SourceFile
+
+                printfn "%s" sourceFile.fileName
 
                 sourceFile.fileName.EndsWith("lib/lib.es5.d.ts")
             | _ -> false

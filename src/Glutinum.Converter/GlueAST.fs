@@ -130,6 +130,7 @@ type GlueMember =
 
 type GlueInterface =
     {
+        FullName: string
         Name: string
         Members: GlueMember list
         TypeParameters: GlueTypeParameter list

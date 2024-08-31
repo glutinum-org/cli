@@ -3,7 +3,6 @@ module rec Glutinum.Converter.Transform
 open Fable.Core
 open Glutinum.Converter.FSharpAST
 open Glutinum.Converter.GlueAST
-open System
 
 type Reporter() =
     let warnings = ResizeArray<string>()
@@ -20,7 +19,12 @@ type Reporter() =
 // It seems like for now this implementation does the job which is the most important
 // And this is probably more readable than what a pure functional implementation would be
 type TransformContext
-    (reporter: Reporter, currentScopeName: string, ?parent: TransformContext)
+    (
+        reporter: Reporter,
+        currentScopeName: string,
+        typeMemory: GlueType list,
+        ?parent: TransformContext
+    )
     =
 
     let types = ResizeArray<FSharpType>()
@@ -33,6 +37,8 @@ type TransformContext
             (parent.FullName + "." + currentScopeName).TrimStart '.'
 
     member val CurrentScopeName = currentScopeName
+
+    member val TypeMemory = typeMemory
 
     // We need to expose the types for the children to be able to access
     // push to them.
@@ -72,7 +78,9 @@ type TransformContext
         | Some parent -> parent._types.Add(typ)
 
     member this.PushScope(scopeName: string) =
-        let childContext = TransformContext(reporter, scopeName, parent = this)
+        let childContext =
+            TransformContext(reporter, scopeName, typeMemory, parent = this)
+
         modules.Add childContext
         childContext
 
@@ -1305,14 +1313,69 @@ let private transformInterface
     =
     let name, context = sanitizeNameAndPushScope info.Name context
 
+    let membersComingFromPartial =
+        info.HeritageClauses
+        |> List.choose (fun heritageClause ->
+            match heritageClause with
+            | GlueType.TypeReference typeReference ->
+                if
+                    typeReference.IsStandardLibrary
+                    && typeReference.Name = "Partial"
+                then
+                    if typeReference.TypeArguments.Length = 1 then
+                        match typeReference.TypeArguments[0] with
+                        | GlueType.TypeReference typeReference ->
+                            Some typeReference.FullName
+                        | _ -> None
+                    else
+                        // Should we throw an error or warning here?
+                        // Reason: Partial should always have one type argument
+                        None
+                else
+                    None
+            | _ -> None
+        )
+        |> List.map (fun fullName ->
+            context.TypeMemory
+            |> List.choose (fun glueType ->
+                match glueType with
+                | GlueType.Interface glueInterface ->
+                    if glueInterface.FullName = fullName then
+                        transformInterface context glueInterface
+                        |> Interface.makePartial "FakeName"
+                        |> _.Members
+                        |> Some
+
+                    else
+                        None
+                | _ -> None
+            )
+            |> List.concat
+        )
+        |> List.concat
+
+    let standardMembers = TransformMembers.toFSharpMember context info.Members
+
+    let inheritance =
+        info.HeritageClauses
+        |> List.filter (fun heritageClause ->
+            match heritageClause with
+            | GlueType.TypeReference typeReference ->
+                not (
+                    typeReference.IsStandardLibrary
+                    && typeReference.Name = "Partial"
+                )
+            | _ -> true
+        )
+
     {
         Attributes =
             [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
         Name = name
         OriginalName = info.Name
-        Members = TransformMembers.toFSharpMember context info.Members
+        Members = standardMembers @ membersComingFromPartial
         TypeParameters = transformTypeParameters context info.TypeParameters
-        Inheritance = info.HeritageClauses |> List.map (transformType context)
+        Inheritance = inheritance |> List.map (transformType context)
     }
 
 module Interface =
@@ -1326,15 +1389,15 @@ module Interface =
                 originalInterface.Members
                 |> List.map (fun m ->
                     match m with
-                    | FSharpMember.Method method ->
-                        { method with IsOptional = true }
-                        |> FSharpMember.Method
                     | FSharpMember.Property property ->
-                        { property with IsOptional = true }
-                        |> FSharpMember.Property
-                    | FSharpMember.StaticMember staticMember ->
-                        { staticMember with IsOptional = true }
-                        |> FSharpMember.StaticMember
+                        // If the property inner type is already optional, we forward it as is
+                        // otherwise we mark it as optional
+                        match property.Type with
+                        | FSharpType.Option _ -> m
+                        | _ ->
+                            { property with IsOptional = true }
+                            |> FSharpMember.Property
+                    | _ -> m
                 )
         }
 
@@ -2090,6 +2153,7 @@ let private transformTypeAliasDeclaration
     | GlueType.OptionalType _ -> FSharpType.Discard
 
 let private transformModuleDeclaration
+    (typeMemory: GlueType list)
     (reporter: Reporter)
     (moduleDeclaration: GlueModuleDeclaration)
     : FSharpType
@@ -2097,7 +2161,7 @@ let private transformModuleDeclaration
     ({
         Name = Naming.sanitizeName moduleDeclaration.Name
         IsRecursive = moduleDeclaration.IsRecursive
-        Types = transform reporter false moduleDeclaration.Types
+        Types = transform typeMemory reporter false moduleDeclaration.Types
     }
     : FSharpModule)
     |> FSharpType.Module
@@ -2142,7 +2206,10 @@ let rec private transformToFsharp
             transformTypeAliasDeclaration context typeAliasInfo
 
         | GlueType.ModuleDeclaration moduleInfo ->
-            transformModuleDeclaration context._Reporter moduleInfo
+            transformModuleDeclaration
+                context.TypeMemory
+                context._Reporter
+                moduleInfo
 
         | GlueType.ClassDeclaration classInfo ->
             transformClassDeclaration context classInfo
@@ -2177,6 +2244,7 @@ let rec private transformToFsharp
     )
 
 let private transform
+    (typeMemory: GlueType list)
     (reporter: Reporter)
     (isTopLevel: bool)
     (glueAst: GlueType list)
@@ -2221,7 +2289,7 @@ let private transform
 
     let exports = exports @ classes
 
-    let rootTransformContext = TransformContext(reporter, "")
+    let rootTransformContext = TransformContext(reporter, "", typeMemory)
 
     let rest = transformToFsharp rootTransformContext rest
 
@@ -2248,11 +2316,11 @@ type TransformResult =
         IncludeRegExpAlias: bool
     }
 
-let apply (glueAst: GlueType list) =
+let apply (typeMemory: GlueType list) (glueAst: GlueType list) =
     let reporter = Reporter()
 
     {
-        FSharpAST = transform reporter true glueAst
+        FSharpAST = transform typeMemory reporter true glueAst
         Warnings = reporter.Warnings
         Errors = reporter.Errors
         IncludeRegExpAlias = reporter.HasRegEpx
