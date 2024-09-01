@@ -5,8 +5,105 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 <!-- EasyBuild: START -->
-<!-- last_commit_released: bd975809a7d884e35ac6f19967148e3bc7418f02 -->
+<!-- last_commit_released: 6fc5e4e84be3c12637af924c8cb612bbb9f35f77 -->
 <!-- EasyBuild: END -->
+
+## 0.10.0
+
+### 🚀 Features
+
+* Merge duplicated `types` and `module` ([acf4571](https://github.com/glutinum-org/cli/commit/acf45717dc0b950e79d5c0f2123f112aa3da5fe3))
+
+    Interfaces exemple:
+
+    ```ts
+    export interface PointGroupOptions {
+        size: number;
+    }
+
+    export interface PointGroupOptions {
+        label: string;
+    }
+    ```
+
+    ```fs
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type PointGroupOptions =
+        abstract member size: float with get, set
+        abstract member label: string with get, set
+    ```
+
+    Modules example:
+
+    ```ts
+    export module Log {
+
+        export interface Options {
+            prefix: string
+        }
+
+        export interface Options {
+            suffix: string
+        }
+    }
+
+    export module Log {
+
+        export function log() : void;
+
+        export interface Options {
+            level: number
+        }
+    }
+    ```
+
+    ```fs
+    module Log =
+
+        [<AllowNullLiteral>]
+        [<Interface>]
+        type Options =
+            abstract member prefix: string with get, set
+            abstract member suffix: string with get, set
+            abstract member level: float with get, set
+
+        [<AbstractClass>]
+        [<Erase>]
+        type Exports =
+            [<Emit("$0.log($1...)")>]
+            abstract member log: unit -> unit
+    ```
+
+* Add `Partial<T>` supports + add `typeMemory` access for later reference ([38eb08e](https://github.com/glutinum-org/cli/commit/38eb08ee26f7cf946aceda4aad5c50a1946c3a18))
+
+    ```ts
+    export interface PointGroupOptions {
+        dotSize: number;
+    }
+
+    export interface Options extends Partial<PointGroupOptions> {
+        minDistance?: number;
+    }
+    ```
+
+    ```fs
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type PointGroupOptions =
+        abstract member dotSize: float with get, set
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type Options =
+        abstract member minDistance: float option with get, set
+        abstract member dotSize: float option with get, set
+    ```
+
+### 🐞 Bug Fixes
+
+* Generate constructor when a class is exported as `default` ([8e60ee7](https://github.com/glutinum-org/cli/commit/8e60ee765ccd30ef7dfd3057c07c7a09b18f0606))
+* Do not include `this` argument when generating signature of a `FunctionType` ([dd86e28](https://github.com/glutinum-org/cli/commit/dd86e282fda872f98d485c7a5f54ddecf7eacd66))
 
 ## 0.9.0
 
