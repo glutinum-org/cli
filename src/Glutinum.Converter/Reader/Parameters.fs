@@ -11,11 +11,26 @@ let readParameters
     =
     parameters
     |> Seq.toList
-    |> List.map (fun parameter ->
-        let name = unbox<Ts.Identifier> parameter.name
+    |> List.mapi (fun index parameter ->
+        let nameNode = unbox<Ts.Node> parameter.name
+
+        let name =
+            match nameNode.kind with
+            | Ts.SyntaxKind.Identifier ->
+                let name = nameNode :?> Ts.Identifier
+                name.getText ()
+            | Ts.SyntaxKind.ObjectBindingPattern -> $"arg%i{index}"
+            | _ ->
+                Utils.generateReaderError
+                    "name"
+                    $"Unsupported kind %A{nameNode.kind}"
+                    nameNode
+                |> reader.Warnings.Add
+
+                $"arg%i{index}"
 
         {
-            Name = name.getText ()
+            Name = name
             IsOptional = parameter.questionToken.IsSome
             IsSpread = parameter.dotDotDotToken.IsSome
             Type = reader.ReadTypeNode parameter.``type``
