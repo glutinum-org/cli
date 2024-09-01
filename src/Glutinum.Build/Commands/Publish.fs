@@ -218,6 +218,29 @@ let private getReleaseContext (settings: PublishSettings) =
             LastCommitSha = commits[0].Sha
         }
 
+let private tryFindAdditionalChangelogContent (text: string) =
+    let lines = text.Replace("\r\n", "\n").Split('\n') |> Seq.toList
+
+    let rec apply
+        (acc: string list)
+        (lines: string list)
+        (isInsideChangelogBlock: bool)
+        =
+        match lines with
+        | [] -> acc
+        | line :: rest ->
+            if isInsideChangelogBlock then
+                if line = "=== changelog ===" then
+                    apply acc rest false
+                else
+                    apply (acc @ [ line ]) rest true
+            else if line = "=== changelog ===" then
+                apply acc rest true
+            else
+                apply acc rest false
+
+    apply [] lines false
+
 let private updateChangelog (releaseContext: ReleaseContext) =
     let newVersionLines = ResizeArray<string>()
 
@@ -250,6 +273,16 @@ let private updateChangelog (releaseContext: ReleaseContext) =
                 capitalizeFirstLetter commit.SemanticCommit.Description
 
             $"* %s{description} ([%s{shortSha}](%s{commitUrl}))" |> appendLine
+
+            let additionalChangelogContent =
+                tryFindAdditionalChangelogContent commit.OriginalCommit.Message
+                // Indent the additional lines to be under item bullet point
+                |> List.map (fun line -> $"    %s{line}")
+
+            if not additionalChangelogContent.IsEmpty then
+                appendLine ""
+                additionalChangelogContent |> List.iter appendLine
+                appendLine ""
 
         newLine ()
     )
