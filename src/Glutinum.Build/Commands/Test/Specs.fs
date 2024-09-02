@@ -52,15 +52,17 @@ let private generateSpecsTestFile () =
         )
 
     specFiles
-    |> Seq.filter (fun file -> not (file.Contains("/disabled.")))
     // Normalize the path
-    |> Seq.map _.Replace("tests/specs/references/", "").Replace("\\", "/")
+    |> Seq.map _.Replace('\\', '/')
+    |> Seq.filter (fun file -> not (file.Contains("/disabled.")))
+    |> Seq.map _.Replace("tests/specs/references/", "")
     // Group by folder
     |> Seq.groupBy (fun specFile ->
         if specFile.Split('/').Length <= 1 then
             failwithf "Spec files should be inside a folder: %s" specFile
         else
-            Path.GetDirectoryName specFile
+            // Normalize the dir path
+            (Path.GetDirectoryName specFile).Replace('\\', '/')
     )
     |> Seq.iter (fun (folder, specFiles) ->
         let destinationFolder = generatedSpecsTestDestination + folder
