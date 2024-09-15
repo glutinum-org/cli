@@ -1826,37 +1826,39 @@ let private transformMappedTypeMembers
     match mappedType.TypeParameter.Constraint with
     | Some(GlueType.IndexedAccessType idxTyp) ->
         match idxTyp.ObjectType with
-        | GlueType.TupleType tupTyp ->
-            tupTyp
+        | GlueType.TupleType glueTypes ->
+            glueTypes
             |> List.choose (
                 function
-                | GlueType.Literal l ->
-                    Some(
-                        GlueMember.Property
-                            {
-                                Name = l.ToText()
-                                Documentation = []
-                                Type =
-                                    mappedType.Type
-                                    |> Option.defaultValue GlueType.Unknown
-                                IsStatic = false
-                                IsOptional = false
-                                Accessor = GlueAccessor.ReadWrite
-                                IsPrivate = false
-                            }
-                    )
-                | x ->
+                | GlueType.Literal literalInfo ->
+                    {
+                        Name = literalInfo.ToText()
+                        Documentation = []
+                        Type =
+                            mappedType.Type
+                            |> Option.defaultValue GlueType.Unknown
+                        IsStatic = false
+                        IsOptional = false
+                        Accessor = GlueAccessor.ReadWrite
+                        IsPrivate = false
+                    }
+                    |> GlueMember.Property
+                    |> Some
+
+                | invalid ->
                     context.AddError
-                        $"MappedType: Unexpected type for member %A{x}"
+                        $"MappedType: Unexpected type for member %A{invalid}"
 
                     None
             )
-        | x ->
-            context.AddError $"MappedType: Unexpected type for members %A{x}"
+        | invalid ->
+            context.AddError
+                $"MappedType: Unexpected type for members %A{invalid}"
 
             []
-    | x ->
-        context.AddError $"MappedType: Unexpected type for members %A{x}"
+    | invalid ->
+        context.AddError $"MappedType: Unexpected type for members %A{invalid}"
+
         []
 
 let private transformTypeAliasDeclaration
