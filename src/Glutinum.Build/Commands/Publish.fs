@@ -278,8 +278,13 @@ let private updateChangelog (releaseContext: ReleaseContext) =
                 tryFindAdditionalChangelogContent commit.OriginalCommit.Message
                 // Indent the additional lines to be under item bullet point
                 |> List.map (fun line -> $"    %s{line}")
-                // Trim the lines (this is mostly to spaces on "empty" lines)
-                |> List.map _.Trim()
+                // Trim empty lines
+                |> List.map (fun line ->
+                    if String.IsNullOrWhiteSpace line then
+                        ""
+                    else
+                        line
+                )
 
             if not additionalChangelogContent.IsEmpty then
                 appendLine ""
