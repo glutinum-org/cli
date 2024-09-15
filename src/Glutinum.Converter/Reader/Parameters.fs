@@ -3,6 +3,7 @@ module Glutinum.Converter.Reader.Parameters
 open Glutinum.Converter.GlueAST
 open Glutinum.Converter.Reader.Types
 open TypeScript
+open TypeScriptHelpers
 
 let readParameters
     (reader: ITypeScriptReader)
@@ -23,7 +24,7 @@ let readParameters
             | _ ->
                 Utils.generateReaderError
                     "name"
-                    $"Unsupported kind %A{nameNode.kind}"
+                    $"Unsupported kind {SyntaxKind.name nameNode.kind} in {__SOURCE_FILE__}"
                     nameNode
                 |> reader.Warnings.Add
 

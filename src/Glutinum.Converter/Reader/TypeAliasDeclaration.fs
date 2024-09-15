@@ -25,6 +25,10 @@ let readTypeAliasDeclaration
             let declaration = declaration.``type`` :?> Ts.IndexedAccessType
             reader.ReadIndexedAccessType declaration
 
+        | Ts.SyntaxKind.MappedType ->
+            let mappedTypeNode = declaration.``type`` :?> Ts.MappedTypeNode
+            reader.ReadMappedTypeNode mappedTypeNode
+
         | _ -> reader.ReadTypeNode declaration.``type``
 
     {

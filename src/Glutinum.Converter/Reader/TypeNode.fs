@@ -3,6 +3,7 @@ module Glutinum.Converter.Reader.TypeNode
 open Glutinum.Converter.GlueAST
 open Glutinum.Converter.Reader.Types
 open TypeScript
+open TypeScriptHelpers
 open Fable.Core.JsInterop
 open Fable.Core.JS
 open Glutinum.Converter.Reader.Utils
@@ -37,6 +38,7 @@ let private readTypeUsingFlags (reader: ITypeScriptReader) (typ: Ts.Type) =
             | _ -> reader.ReadNode declaration
 
         | None -> GlueType.Primitive GluePrimitive.Any
+
     | HasTypeFlags Ts.TypeFlags.String ->
         GlueType.Primitive GluePrimitive.String
     | HasTypeFlags Ts.TypeFlags.Number ->
@@ -100,15 +102,14 @@ module UtilityType =
             if aliasTypeArguments.Count <> 1 then
                 GlueType.Discard
             else
-                let symbol = aliasTypeArguments.[0].symbol
+                let symbol = aliasTypeArguments.[0].getSymbol ()
 
-                if isNull symbol || symbol.members.IsNone then
-                    GlueType.Unknown
-                else
+                match symbol |> Option.bind _.members with
+                | None -> GlueType.Unknown
+                | Some members ->
 
                     // Take any of the members
-                    let (_, refMember) =
-                        symbol.members.Value.entries () |> Seq.head
+                    let (_, refMember) = members.entries () |> Seq.head
 
                     let originalType = refMember.declarations.Value[0].parent
 
@@ -223,7 +224,25 @@ let readTypeNode
 
         let typ = checker.getTypeAtLocation !!typeNodeQuery.exprName
 
-        readTypeUsingFlags reader typ
+        // This is safe as both cases have a `kind` field
+        let exprNameKind: Ts.SyntaxKind = typeNodeQuery.exprName?kind
+        // This logic is highly overlapping with readTypeUsingFlags
+        // It should be refactored to achieve a sane flow
+        match typ.flags, typ.getSymbol (), exprNameKind with
+        | HasTypeFlags Ts.TypeFlags.Object, None, Ts.SyntaxKind.Identifier ->
+            let exprName: Ts.Identifier = !!typeNodeQuery.exprName
+
+            let aliasSymbol = checker.getSymbolAtLocation(exprName).Value
+
+            let typNode: Ts.TypeNode =
+                aliasSymbol.declarations.Value[0]?``type``
+
+            match typNode.kind with
+            | Ts.SyntaxKind.TypeOperator ->
+                reader.ReadTypeOperatorNode(unbox typNode)
+            | _ -> readTypeUsingFlags reader typ
+
+        | _ -> readTypeUsingFlags reader typ
 
     | Ts.SyntaxKind.LiteralType ->
         let literalTypeNode = typeNode :?> Ts.LiteralTypeNode
@@ -392,10 +411,14 @@ let readTypeNode
 
     | Ts.SyntaxKind.TemplateLiteralType -> GlueType.TemplateLiteral
 
+    | Ts.SyntaxKind.IndexedAccessType ->
+        let indexedAccessType = typeNode :?> Ts.IndexedAccessType
+        reader.ReadIndexedAccessType indexedAccessType
+
     | _ ->
         generateReaderError
             "type node"
-            $"Unsupported kind %A{typeNode.kind}"
+            $"Unsupported kind {SyntaxKind.name typeNode.kind} in {__SOURCE_FILE__}"
             typeNode
         |> reader.Warnings.Add
 

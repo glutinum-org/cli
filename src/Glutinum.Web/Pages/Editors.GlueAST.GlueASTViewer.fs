@@ -406,7 +406,10 @@ type GlueASTViewer =
         | GlueType.IndexedAccessType indexedAccessType ->
             ASTViewer.renderNode
                 "IndexedAccessType"
-                [ GlueASTViewer.Type indexedAccessType ]
+                [
+                    GlueASTViewer.Type indexedAccessType.IndexType
+                    GlueASTViewer.Type indexedAccessType.ObjectType
+                ]
                 context
 
         | GlueType.KeyOf keyOf ->
@@ -426,6 +429,18 @@ type GlueASTViewer =
                     moduleDeclaration.Types
                     |> List.map GlueASTViewer.GlueType
                     |> ASTViewer.renderNode "Types"
+                ]
+                context
+
+        | GlueType.MappedType mappedType ->
+            ASTViewer.renderNode
+                "MappedType"
+                [
+                    match mappedType.Type with
+                    | Some ty -> GlueASTViewer.Type ty
+                    | None -> ()
+
+                    GlueASTViewer.TypeParameters [ mappedType.TypeParameter ]
                 ]
                 context
 

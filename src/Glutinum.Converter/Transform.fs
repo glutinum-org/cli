@@ -666,6 +666,7 @@ let rec private transformType
         })
         |> FSharpType.Mapped
 
+    | GlueType.MappedType _
     | GlueType.Literal _
     | GlueType.ModuleDeclaration _
     | GlueType.IndexedAccessType _
@@ -1818,6 +1819,46 @@ let private tryOptimizeUnionType
         else
             None
 
+let private transformMappedTypeMembers
+    (context: TransformContext)
+    (mappedType: GlueMappedType)
+    =
+    match mappedType.TypeParameter.Constraint with
+    | Some(GlueType.IndexedAccessType idxTyp) ->
+        match idxTyp.ObjectType with
+        | GlueType.TupleType tupTyp ->
+            tupTyp
+            |> List.choose (
+                function
+                | GlueType.Literal l ->
+                    Some(
+                        GlueMember.Property
+                            {
+                                Name = l.ToText()
+                                Documentation = []
+                                Type =
+                                    mappedType.Type
+                                    |> Option.defaultValue GlueType.Unknown
+                                IsStatic = false
+                                IsOptional = false
+                                Accessor = GlueAccessor.ReadWrite
+                                IsPrivate = false
+                            }
+                    )
+                | x ->
+                    context.AddError
+                        $"MappedType: Unexpected type for member %A{x}"
+
+                    None
+            )
+        | x ->
+            context.AddError $"MappedType: Unexpected type for members %A{x}"
+
+            []
+    | x ->
+        context.AddError $"MappedType: Unexpected type for members %A{x}"
+        []
+
 let private transformTypeAliasDeclaration
     (context: TransformContext)
     (glueTypeAliasDeclaration: GlueTypeAliasDeclaration)
@@ -1854,9 +1895,12 @@ let private transformTypeAliasDeclaration
             glueTypeAliasDeclaration.Name
             glueType
 
-    | GlueType.IndexedAccessType glueType ->
+    | GlueType.IndexedAccessType {
+                                     IndexType = indexType
+                                     ObjectType = objectType
+                                 } ->
         let typ =
-            match glueType with
+            match indexType with
             | GlueType.KeyOf glueType ->
                 match glueType with
                 | GlueType.Interface interfaceInfo ->
@@ -2139,6 +2183,24 @@ let private transformTypeAliasDeclaration
         : FSharpTypeAlias)
         |> FSharpType.TypeAlias
 
+    | GlueType.MappedType mappedType ->
+        {
+            Attributes =
+                [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
+            Name = typeAliasName
+            OriginalName = glueTypeAliasDeclaration.Name
+            TypeParameters =
+                transformTypeParameters
+                    context
+                    glueTypeAliasDeclaration.TypeParameters
+            Members =
+                mappedType
+                |> transformMappedTypeMembers context
+                |> TransformMembers.toFSharpMember context
+            Inheritance = []
+        }
+        |> FSharpType.Interface
+
     | GlueType.ClassDeclaration _
     | GlueType.Enum _
     | GlueType.Interface _
@@ -2220,6 +2282,7 @@ let rec private transformToFsharp
                 transformClassDeclaration context classInfo
             | _ -> FSharpType.Discard
 
+        | GlueType.MappedType _
         | GlueType.FunctionType _
         | GlueType.TypeParameter _
         | GlueType.Array _

@@ -55,6 +55,8 @@ type ITypeScriptReader =
     abstract ReadIndexedAccessType:
         declaration: Ts.IndexedAccessType -> GlueType
 
+    abstract ReadMappedTypeNode: declaration: Ts.MappedTypeNode -> GlueType
+
     abstract ReadTypeParameters:
         typeParametersOpt: ResizeArray<Ts.TypeParameterDeclaration> option ->
             GlueTypeParameter list

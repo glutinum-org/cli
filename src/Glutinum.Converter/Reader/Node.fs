@@ -3,6 +3,7 @@ module Glutinum.Converter.Reader.Node
 open Glutinum.Converter.GlueAST
 open Glutinum.Converter.Reader.Types
 open TypeScript
+open TypeScriptHelpers
 
 let readNode (reader: ITypeScriptReader) (node: Ts.Node) : GlueType =
     match node.kind with
@@ -47,11 +48,13 @@ let readNode (reader: ITypeScriptReader) (node: Ts.Node) : GlueType =
 
     | Ts.SyntaxKind.ExportDeclaration -> GlueType.Discard
 
+    | Ts.SyntaxKind.BooleanKeyword -> reader.ReadTypeNode(node :?> Ts.TypeNode)
+
     | unsupported ->
         let warning =
             Utils.generateReaderError
                 "node"
-                $"Unsupported node kind %A{unsupported}"
+                $"Unsupported node kind {SyntaxKind.name unsupported} at {__SOURCE_FILE__}"
                 node
 
         reader.Warnings.Add warning

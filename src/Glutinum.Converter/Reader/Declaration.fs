@@ -4,6 +4,7 @@ open Glutinum.Converter.GlueAST
 open Glutinum.Converter.Reader.Utils
 open Glutinum.Converter.Reader.Types
 open TypeScript
+open TypeScriptHelpers
 open Fable.Core.JsInterop
 
 let readDeclaration
@@ -179,6 +180,6 @@ let readDeclaration
     | _ ->
         generateReaderError
             "declaration"
-            $"Unsupported kind %A{declaration.kind}"
+            $"Unsupported kind {SyntaxKind.name declaration.kind} in {__SOURCE_FILE__}"
             declaration
         |> failwith

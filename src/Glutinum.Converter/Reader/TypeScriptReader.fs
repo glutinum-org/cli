@@ -8,6 +8,7 @@ open Glutinum.Converter.Reader.EnumDeclaration
 open Glutinum.Converter.Reader.FunctionDeclaration
 open Glutinum.Converter.Reader.IndexedAccessType
 open Glutinum.Converter.Reader.InterfaceDeclaration
+open Glutinum.Converter.Reader.MappedTypeNode
 open Glutinum.Converter.Reader.ModuleDeclaration
 open Glutinum.Converter.Reader.Declaration
 open Glutinum.Converter.Reader.Node
@@ -146,3 +147,9 @@ type TypeScriptReader(checker: Ts.TypeChecker) =
             : GlueType
             =
             readNamedTupleMember this namedTupleMember
+
+        member this.ReadMappedTypeNode
+            (declaration: Ts.MappedTypeNode)
+            : GlueType
+            =
+            readMappedTypeNode this declaration

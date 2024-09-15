@@ -266,6 +266,18 @@ type GlueUtilityType =
     | Record of GlueRecord
 // | ReadOnly of GlueType
 
+type GlueMappedType =
+    {
+        TypeParameter: GlueTypeParameter
+        Type: GlueType option
+    }
+
+type GlueIndexedAccessType =
+    {
+        IndexType: GlueType
+        ObjectType: GlueType
+    }
+
 [<RequireQualifiedAccess>]
 type GlueType =
     | Discard
@@ -278,7 +290,7 @@ type GlueType =
     | Union of GlueTypeUnion
     | Literal of GlueLiteral
     | KeyOf of GlueType
-    | IndexedAccessType of GlueType
+    | IndexedAccessType of GlueIndexedAccessType
     | ModuleDeclaration of GlueModuleDeclaration
     | ClassDeclaration of GlueClassDeclaration
     | TypeReference of GlueTypeReference
@@ -295,6 +307,7 @@ type GlueType =
     | ExportDefault of GlueType
     | TemplateLiteral
     | UtilityType of GlueUtilityType
+    | MappedType of GlueMappedType
 
     member this.Name =
         match this with
@@ -340,3 +353,4 @@ type GlueType =
             match utilityType with
             | GlueUtilityType.Partial _
             | GlueUtilityType.Record _ -> "obj"
+        | MappedType _ -> "anonymous"
