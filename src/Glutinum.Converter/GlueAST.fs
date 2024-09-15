@@ -353,4 +353,4 @@ type GlueType =
             match utilityType with
             | GlueUtilityType.Partial _
             | GlueUtilityType.Record _ -> "obj"
-        | MappedType _ -> "anonymous"
+        | MappedType _ -> "obj"
