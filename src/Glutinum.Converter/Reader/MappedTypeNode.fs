@@ -12,10 +12,19 @@ let readMappedTypeNode
 
     let typParam =
         // TODO: Make a single reader.ReadTypeParameter method
-        reader.ReadTypeParameters(
-            Some(ResizeArray([ mappedTypeNode.typeParameter ]))
-        )
-        |> List.head
+        let typeParameters =
+            reader.ReadTypeParameters(
+                Some(ResizeArray([ mappedTypeNode.typeParameter ]))
+            )
+
+        match typeParameters with
+        | [ tp ] -> tp
+        | _ ->
+            Utils.generateReaderError
+                "readMappedTypeNode"
+                $"Expected exactly one type parameter but was {List.length typeParameters} in {__SOURCE_FILE__}"
+                mappedTypeNode
+            |> failwith
 
     {
         TypeParameter = typParam
