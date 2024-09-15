@@ -22,7 +22,7 @@ let readMappedTypeNode
         | _ ->
             Utils.generateReaderError
                 "readMappedTypeNode"
-                $"Expected exactly one type parameter but was {List.length typeParameters} in {__SOURCE_FILE__}"
+                $"Expected exactly one type parameter but was {List.length typeParameters}"
                 mappedTypeNode
             |> failwith
 

@@ -3,6 +3,7 @@ module Glutinum.Converter.Reader.TypeOperatorNode
 open Glutinum.Converter.GlueAST
 open Glutinum.Converter.Reader.Types
 open TypeScript
+open TypeScriptHelpers
 open Fable.Core.JsInterop
 
 let readTypeOperatorNode
@@ -51,7 +52,7 @@ let readTypeOperatorNode
         else
             Utils.generateReaderError
                 "type operator (keyof)"
-                $"Was expecting a type reference instead got a Node of type %A{node.``type``.kind}"
+                $"Was expecting a type reference instead got a Node of type {SyntaxKind.name node.``type``.kind}"
                 node
             |> failwith
 
@@ -60,7 +61,7 @@ let readTypeOperatorNode
     | _ ->
         Utils.generateReaderError
             "type operator"
-            $"Unsupported operator %A{node.operator}"
+            $"Unsupported operator {SyntaxKind.name node.operator} in {__SOURCE_FILE__}"
             node
         |> reader.Warnings.Add
 
