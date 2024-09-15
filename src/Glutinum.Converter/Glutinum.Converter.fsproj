@@ -46,6 +46,7 @@
     <PackageReference Include="Fable.Core" />
     <PackageReference Include="Fable.Node" />
     <PackageReference Include="Fable.Promise" />
+    <PackageReference Include="FsToolkit.ErrorHandling" />
     <PackageReference Include="Glutinum.Chalk" />
   </ItemGroup>
 </Project>
