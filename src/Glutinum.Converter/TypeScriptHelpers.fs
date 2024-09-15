@@ -355,8 +355,6 @@ module SyntaxKind =
         | SyntaxKind.JSDocVariadicType -> "JSDocVariadicType"
         | SyntaxKind.JSDocNamepathType -> "JSDocNamepathType"
         | SyntaxKind.JSDoc -> "JSDoc"
-        //SyntaxKind./ -> "/"
-        | SyntaxKind.JSDocComment -> "JSDocComment"
         | SyntaxKind.JSDocText -> "JSDocText"
         | SyntaxKind.JSDocTypeLiteral -> "JSDocTypeLiteral"
         | SyntaxKind.JSDocSignature -> "JSDocSignature"
