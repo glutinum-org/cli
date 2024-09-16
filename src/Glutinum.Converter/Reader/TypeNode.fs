@@ -234,12 +234,12 @@ let readTypeNode
         match tryReadLiteral literalExpression with
         | Some literal -> GlueType.Literal literal
         | None ->
-            failwith (
-                generateReaderError
-                    "type node - literal type"
-                    $"Could not read literal type"
-                    typeNode
+            Report.readerError (
+                "type node - literal type",
+                $"Could not read literal type",
+                typeNode
             )
+            |> failwith
 
     | Ts.SyntaxKind.ThisType ->
         let thisTypeNode = typeNode :?> Ts.ThisTypeNode
@@ -293,12 +293,12 @@ let readTypeNode
                     else
                         Some ForceAny
                 | None ->
-                    failwith (
-                        generateReaderError
-                            "type node"
-                            "Missing declarations"
-                            typeNode
+                    Report.readerError (
+                        "type node",
+                        "Missing declarations",
+                        typeNode
                     )
+                    |> failwith
             )
 
         // We can't create a contract for some of the properties
@@ -393,10 +393,11 @@ let readTypeNode
     | Ts.SyntaxKind.TemplateLiteralType -> GlueType.TemplateLiteral
 
     | _ ->
-        generateReaderError
-            "type node"
-            $"Unsupported kind %A{typeNode.kind}"
+        Report.readerError (
+            "type node",
+            $"Unsupported kind %s{typeNode.kind.Name}",
             typeNode
+        )
         |> reader.Warnings.Add
 
         GlueType.Primitive GluePrimitive.Any

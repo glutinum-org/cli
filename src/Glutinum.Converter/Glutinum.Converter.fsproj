@@ -12,7 +12,9 @@
     <Compile Include="Utils/List.fs" />
     <Compile Include="Log.fs" />
     <Compile Include="TypeScript.fs" />
+    <Compile Include="TypeScript.Extensions.fs" />
     <Compile Include="GlueAST.fs" />
+    <Compile Include="Reader/Report.fs" />
     <Compile Include="Reader/Types.fs" />
     <Compile Include="Reader/Utils.fs" />
     <Compile Include="Reader/ClassDeclaration.fs" />

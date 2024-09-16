@@ -4,7 +4,6 @@ open Glutinum.Converter.GlueAST
 open Glutinum.Converter.Reader.Types
 open TypeScript
 open Fable.Core.JsInterop
-open System
 
 let readFunctionDeclaration
     (reader: ITypeScriptReader)
@@ -25,10 +24,11 @@ let readFunctionDeclaration
         match declaration.name with
         | Some name -> name.getText ()
         | None ->
-            Utils.generateReaderError
-                "function declaration"
-                "Missing name"
+            Report.readerError (
+                "function declaration",
+                "Missing name",
                 declaration
+            )
             |> failwith
 
     {

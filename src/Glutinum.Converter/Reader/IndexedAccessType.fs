@@ -20,10 +20,11 @@ let readIndexedAccessType
 
         | unsupported ->
             let warning =
-                Utils.generateReaderError
-                    "readIndexedAccessType"
-                    $"Unsupported node kind %A{unsupported}"
+                Report.readerError (
+                    "readIndexedAccessType",
+                    $"Unsupported node kind %s{unsupported.Name}",
                     nodeType
+                )
 
             reader.Warnings.Add warning
 

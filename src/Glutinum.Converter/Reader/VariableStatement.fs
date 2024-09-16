@@ -32,10 +32,11 @@ let readVariableStatement
                     let id: Ts.Identifier = !!declaration.name
                     id.getText ()
                 | _ ->
-                    Utils.generateReaderError
-                        "variable statement"
-                        "Unable to read variable name"
+                    Report.readerError (
+                        "variable statement",
+                        "Unable to read variable name",
                         declaration
+                    )
                     |> failwith
 
             ({

@@ -177,8 +177,9 @@ let readDeclaration
         |> GlueMember.SetAccessor
 
     | _ ->
-        generateReaderError
-            "declaration"
-            $"Unsupported kind %A{declaration.kind}"
+        Report.readerError (
+            "declaration",
+            $"Unsupported kind %s{declaration.kind.Name}",
             declaration
+        )
         |> failwith

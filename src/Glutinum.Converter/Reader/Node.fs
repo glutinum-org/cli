@@ -49,10 +49,11 @@ let readNode (reader: ITypeScriptReader) (node: Ts.Node) : GlueType =
 
     | unsupported ->
         let warning =
-            Utils.generateReaderError
-                "node"
-                $"Unsupported node kind %A{unsupported}"
+            Report.readerError (
+                "node",
+                $"Unsupported node kind %s{unsupported.Name}",
                 node
+            )
 
         reader.Warnings.Add warning
 

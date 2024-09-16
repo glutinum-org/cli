@@ -21,10 +21,11 @@ let readParameters
                 name.getText ()
             | Ts.SyntaxKind.ObjectBindingPattern -> $"arg%i{index}"
             | _ ->
-                Utils.generateReaderError
-                    "name"
-                    $"Unsupported kind %A{nameNode.kind}"
+                Report.readerError (
+                    "name",
+                    $"Unsupported kind %s{nameNode.kind.Name}",
                     nameNode
+                )
                 |> reader.Warnings.Add
 
                 $"arg%i{index}"

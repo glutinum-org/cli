@@ -21,10 +21,11 @@ let readTypeOperatorNode
 
             match symbolOpt with
             | None ->
-                Utils.generateReaderError
-                    "type operator (keyof)"
-                    "Missing symbol"
+                Report.readerError (
+                    "type operator (keyof)",
+                    "Missing symbol",
                     node
+                )
                 |> failwith
 
             | Some symbol ->
@@ -32,36 +33,40 @@ let readTypeOperatorNode
                 | Some declarations ->
 
                     if declarations.Count <> 1 then
-                        Utils.generateReaderError
-                            "type operator (keyof)"
-                            "Expected exactly one declaration"
+                        Report.readerError (
+                            "type operator (keyof)",
+                            "Expected exactly one declaration",
                             node
+                        )
                         |> failwith
 
                     else
                         reader.ReadNode declarations[0] |> GlueType.KeyOf
 
                 | None ->
-                    Utils.generateReaderError
-                        "type operator (keyof)"
-                        "Missing declarations"
+                    Report.readerError (
+                        "type operator (keyof)",
+                        "Missing declarations",
                         node
+                    )
                     |> failwith
 
         else
-            Utils.generateReaderError
-                "type operator (keyof)"
-                $"Was expecting a type reference instead got a Node of type %A{node.``type``.kind}"
+            Report.readerError (
+                "type operator (keyof)",
+                $"Was expecting a type reference instead got a Node of type %s{node.``type``.kind.Name}",
                 node
+            )
             |> failwith
 
     | Ts.SyntaxKind.ReadonlyKeyword -> reader.ReadTypeNode node.``type``
 
     | _ ->
-        Utils.generateReaderError
-            "type operator"
-            $"Unsupported operator %A{node.operator}"
+        Report.readerError (
+            "type operator",
+            $"Unsupported operator %s{node.operator.Name}",
             node
+        )
         |> reader.Warnings.Add
 
         GlueType.Primitive GluePrimitive.Any
