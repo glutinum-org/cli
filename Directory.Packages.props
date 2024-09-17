@@ -15,6 +15,7 @@
     <PackageVersion Include="Feliz" Version="2.7.0" />
     <PackageVersion Include="Feliz.Bulma" Version="3.0.0" />
     <PackageVersion Include="FSharp.Core" Version="8.0.101" />
+    <PackageVersion Include="FsToolkit.ErrorHandling" Version="4.16.0" />
     <PackageVersion Include="Glutinum.Chalk" Version="1.0.0" />
     <PackageVersion Include="Glutinum.Feliz.Iconify" Version="2.0.0" />
     <PackageVersion Include="Glutinum.IconifyIcons.Lucide" Version="1.0.0" />

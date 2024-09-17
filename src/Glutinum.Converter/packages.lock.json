@@ -34,6 +34,15 @@
         "resolved": "8.0.101",
         "contentHash": "sOLz3O4BOxnTKfd5OChdRmDUy4Id0GfoEClRG4nzIod8LY1LJZcNyygKAV0A78XOLh8yvhA5hsDYKZXGCR9blw=="
       },
+      "FsToolkit.ErrorHandling": {
+        "type": "Direct",
+        "requested": "[4.16.0, )",
+        "resolved": "4.16.0",
+        "contentHash": "GG4LtvJ/UkdyjGQUd+uPYN/g1GNlHyzMPDmwcnYvBn0V1dD4xJiiRE5N8UCgq+TSRQP11NNQUbzpU0zdxkrNbw==",
+        "dependencies": {
+          "FSharp.Core": "4.7.2"
+        }
+      },
       "Glutinum.Chalk": {
         "type": "Direct",
         "requested": "[1.0.0, )",

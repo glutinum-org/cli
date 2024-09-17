@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Version>0.1.0-alpha-001</Version>
@@ -27,10 +26,12 @@
     <Compile Include="Reader/Node.fs" />
     <Compile Include="Reader/Parameters.fs" />
     <Compile Include="Reader/TypeAliasDeclaration.fs" />
+    <Compile Include="Reader/TypeQueryNode.fs" />
     <Compile Include="Reader/TypeNode.fs" />
     <Compile Include="Reader/TypeOperatorNode.fs" />
     <Compile Include="Reader/TypeParameters.fs" />
     <Compile Include="Reader/UnionTypeNode.fs" />
+    <Compile Include="Reader/MappedTypeNode.fs" />
     <Compile Include="Reader/VariableStatement.fs" />
     <Compile Include="Reader/ExportAssignment.fs" />
     <Compile Include="Reader/Documentation.fs" />
@@ -47,6 +48,7 @@
     <PackageReference Include="Fable.Core" />
     <PackageReference Include="Fable.Node" />
     <PackageReference Include="Fable.Promise" />
+    <PackageReference Include="FSToolkit.ErrorHandling" />
     <PackageReference Include="Glutinum.Chalk" />
   </ItemGroup>
 </Project>

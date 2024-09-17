@@ -219,11 +219,8 @@ let readTypeNode
         |> GlueType.FunctionType
 
     | Ts.SyntaxKind.TypeQuery ->
-        let typeNodeQuery = typeNode :?> Ts.TypeQueryNode
-
-        let typ = checker.getTypeAtLocation !!typeNodeQuery.exprName
-
-        readTypeUsingFlags reader typ
+        let typeQueryNode = typeNode :?> Ts.TypeQueryNode
+        TypeQueryNode.readTypeQueryNode reader typeQueryNode
 
     | Ts.SyntaxKind.LiteralType ->
         let literalTypeNode = typeNode :?> Ts.LiteralTypeNode
@@ -391,6 +388,10 @@ let readTypeNode
         | forward -> forward
 
     | Ts.SyntaxKind.TemplateLiteralType -> GlueType.TemplateLiteral
+
+    | Ts.SyntaxKind.IndexedAccessType ->
+        let indexedAccessType = typeNode :?> Ts.IndexedAccessType
+        reader.ReadIndexedAccessType indexedAccessType
 
     | _ ->
         Report.readerError (

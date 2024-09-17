@@ -31,6 +31,7 @@
       "glutinum.converter": {
         "type": "Project",
         "dependencies": {
+          "FSToolkit.ErrorHandling": "[4.16.0, )",
           "Fable.Core": "[4.3.0, )",
           "Fable.Node": "[1.2.0, )",
           "Fable.Promise": "[3.2.0, )",
@@ -55,6 +56,15 @@
         "dependencies": {
           "FSharp.Core": "4.7.2",
           "Fable.Core": "3.7.1"
+        }
+      },
+      "FsToolkit.ErrorHandling": {
+        "type": "CentralTransitive",
+        "requested": "[4.16.0, )",
+        "resolved": "4.16.0",
+        "contentHash": "GG4LtvJ/UkdyjGQUd+uPYN/g1GNlHyzMPDmwcnYvBn0V1dD4xJiiRE5N8UCgq+TSRQP11NNQUbzpU0zdxkrNbw==",
+        "dependencies": {
+          "FSharp.Core": "4.7.2"
         }
       },
       "Glutinum.Chalk": {
