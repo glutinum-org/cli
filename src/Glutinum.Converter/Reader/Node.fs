@@ -47,6 +47,8 @@ let readNode (reader: ITypeScriptReader) (node: Ts.Node) : GlueType =
 
     | Ts.SyntaxKind.ExportDeclaration -> GlueType.Discard
 
+    | Ts.SyntaxKind.BooleanKeyword -> reader.ReadTypeNode(node :?> Ts.TypeNode)
+
     | unsupported ->
         let warning =
             Report.readerError (

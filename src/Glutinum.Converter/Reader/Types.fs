@@ -66,3 +66,5 @@ type ITypeScriptReader =
 
     abstract ReadNamedTupleMember:
         namedTupleMember: Ts.NamedTupleMember -> GlueType
+
+    abstract ReadMappedTypeNode: declaration: Ts.MappedTypeNode -> GlueType
