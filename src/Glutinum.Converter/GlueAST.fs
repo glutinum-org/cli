@@ -308,6 +308,7 @@ type GlueType =
     | TemplateLiteral
     | UtilityType of GlueUtilityType
     | MappedType of GlueMappedType
+    | ConstructorType
 
     member this.Name =
         match this with
@@ -348,6 +349,7 @@ type GlueType =
         | OptionalType _ // TODO: Should we take the name of the underlying type and add option to it?
         | Discard
         | ExportDefault _
+        | ConstructorType
         | Unknown -> "obj"
         | UtilityType utilityType ->
             match utilityType with

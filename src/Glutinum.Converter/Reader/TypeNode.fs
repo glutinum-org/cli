@@ -393,6 +393,8 @@ let readTypeNode
         let indexedAccessType = typeNode :?> Ts.IndexedAccessType
         reader.ReadIndexedAccessType indexedAccessType
 
+    | Ts.SyntaxKind.ConstructorType -> GlueType.ConstructorType
+
     | _ ->
         Report.readerError (
             "type node",

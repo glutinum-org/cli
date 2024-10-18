@@ -338,6 +338,7 @@ let rec private transformType
     : FSharpType
     =
     match glueType with
+    | GlueType.ConstructorType
     | GlueType.Unknown -> FSharpType.Object
 
     | GlueType.Primitive primitiveInfo ->
@@ -2200,6 +2201,8 @@ let private transformTypeAliasDeclaration
         }
         |> FSharpType.Interface
 
+    // We don't know how to handle these types yet, so we default to obj
+    | GlueType.ConstructorType
     | GlueType.ClassDeclaration _
     | GlueType.Enum _
     | GlueType.Interface _
@@ -2211,7 +2214,19 @@ let private transformTypeAliasDeclaration
     | GlueType.Variable _
     | GlueType.ExportDefault _
     | GlueType.NamedTupleType _
-    | GlueType.OptionalType _ -> FSharpType.Discard
+    | GlueType.OptionalType _ ->
+        ({
+            Attributes = [ yield! xmlDoc.ObsoleteAttributes ]
+            XmlDoc = xmlDoc.XmlDoc
+            Name = typeAliasName
+            Type = FSharpType.Object
+            TypeParameters =
+                transformTypeParameters
+                    context
+                    glueTypeAliasDeclaration.TypeParameters
+        }
+        : FSharpTypeAlias)
+        |> FSharpType.TypeAlias
 
 let private transformModuleDeclaration
     (typeMemory: GlueType list)
@@ -2281,6 +2296,7 @@ let rec private transformToFsharp
                 transformClassDeclaration context classInfo
             | _ -> FSharpType.Discard
 
+        | GlueType.ConstructorType
         | GlueType.MappedType _
         | GlueType.FunctionType _
         | GlueType.TypeParameter _

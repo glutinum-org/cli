@@ -520,6 +520,9 @@ type GlueASTViewer =
                 ]
                 context
 
+        | GlueType.ConstructorType ->
+            ASTViewer.renderNode "ConstructorType" [] context
+
     static member Render
         (types: GlueType list)
         (dispatch: Dispatch<'Msg>)
