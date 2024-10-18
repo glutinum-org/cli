@@ -79,18 +79,6 @@ let rec private readUnionTypeCases
             | Some declarations ->
                 if declarations.Count = 0 then
                     None // Should it be obj ?
-                else if declarations.Count > 1 then
-                    let fullName = checker.getFullyQualifiedName symbol
-
-                    ({
-                        Name = typeReferenceNode.getText ()
-                        FullName = fullName
-                        TypeArguments = []
-                        IsStandardLibrary = isFromEs5Lib symbolOpt
-                    })
-                    |> GlueType.TypeReference
-                    |> List.singleton
-                    |> Some
                 else if isFromEs5Lib symbolOpt then
                     reader.ReadTypeNode typeReferenceNode
                     |> List.singleton
