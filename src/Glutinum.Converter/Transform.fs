@@ -1516,6 +1516,15 @@ module TypeAliasDeclaration =
                     // shape of the object
                     | GlueMember.IndexSignature _ -> None
                 )
+            | GlueType.Enum enumInfo ->
+                enumInfo.Members
+                |> List.map (fun m ->
+                    {
+                        Attributes = []
+                        Name = Naming.sanitizeName m.Name
+                    }
+                    |> FSharpUnionCase.Named
+                )
             | _ -> []
 
         if cases.IsEmpty then

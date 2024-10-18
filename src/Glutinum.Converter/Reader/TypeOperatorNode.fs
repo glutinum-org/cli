@@ -12,7 +12,8 @@ let readTypeOperatorNode
 
     match node.operator with
     | Ts.SyntaxKind.KeyOfKeyword ->
-        if ts.isTypeReferenceNode node.``type`` then
+        match node.``type``.kind with
+        | Ts.SyntaxKind.TypeReference ->
             let typeReferenceNode = node.``type`` :?> Ts.TypeReferenceNode
 
             // TODO: Remove unboxing
@@ -51,7 +52,13 @@ let readTypeOperatorNode
                     )
                     |> failwith
 
-        else
+        | Ts.SyntaxKind.TypeQuery ->
+            let typeQueryNode = node.``type`` :?> Ts.TypeQueryNode
+
+            TypeQueryNode.readTypeQueryNode reader typeQueryNode
+            |> GlueType.KeyOf
+
+        | _ ->
             Report.readerError (
                 "type operator (keyof)",
                 $"Was expecting a type reference instead got a Node of type %s{node.``type``.kind.Name}",
