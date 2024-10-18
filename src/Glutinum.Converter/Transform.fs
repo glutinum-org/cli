@@ -131,6 +131,7 @@ let private mapTypeNameToFableCoreAwareName
         | "ReadonlyArray" -> "ResizeArray"
         | "Array" -> "ResizeArray"
         | "Boolean" -> "bool"
+        | "Function" -> "Action"
         | "RegExp" ->
             context.ExposeRegExp()
             "RegExp"
