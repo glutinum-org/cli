@@ -45,7 +45,8 @@ let readNode (reader: ITypeScriptReader) (node: Ts.Node) : GlueType =
 
         ({ Members = members }: GlueTypeLiteral) |> GlueType.TypeLiteral
 
-    | Ts.SyntaxKind.ExportDeclaration -> GlueType.Discard
+    | Ts.SyntaxKind.ExportDeclaration
+    | Ts.SyntaxKind.EmptyStatement -> GlueType.Discard
 
     | Ts.SyntaxKind.BooleanKeyword -> reader.ReadTypeNode(node :?> Ts.TypeNode)
 
