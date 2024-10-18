@@ -33,6 +33,15 @@ type Report =
 
         let typeFileName = sourceFile.fileName.Replace("\\", "/")
 
+        let parentText =
+            if isNull node.parent then
+                ""
+            else
+                $"""
+--- Parent text ---
+%s{node.parent.getFullText ()}
+---"""
+
         $"""%s{errorOrigin}: Error while reading %s{errorContext} from:
 %s{typeFileName}(%d{line},%d{column})
 
@@ -40,8 +49,4 @@ type Report =
 
 --- Text ---
 %s{node.getFullText ()}
----
-
---- Parent text ---
-%s{node.parent.getFullText ()}
----"""
+---%s{parentText}"""
