@@ -151,7 +151,5 @@ let isFromEs5Lib (symbolOpt: Ts.Symbol option) =
             | Ts.SyntaxKind.SourceFile ->
                 let sourceFile = declarations[0].parent :?> Ts.SourceFile
 
-                printfn "%s" sourceFile.fileName
-
                 sourceFile.fileName.EndsWith("lib/lib.es5.d.ts")
             | _ -> false
