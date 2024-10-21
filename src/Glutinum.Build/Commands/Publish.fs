@@ -307,7 +307,6 @@ let private updateChangelog (releaseContext: ReleaseContext) =
         match lines with
         | [] -> result
         | line :: rest ->
-            // printfn $"%A{String.IsNullOrWhiteSpace(line)}"
             if previousLineWasBlank && String.IsNullOrWhiteSpace(line) then
                 removeConsecutiveEmptyLines true result rest
             else

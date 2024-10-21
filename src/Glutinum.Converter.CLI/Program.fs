@@ -2,6 +2,7 @@ module Glutinum.Converter.Program
 
 open Glutinum.Converter.Generate
 open Node
+open Node.Api
 open Fable.Core.JsInterop
 
 // TODO: Create a real CLI parser
@@ -78,7 +79,7 @@ let main (argv: string array) =
         Log.info $"Generating binding file for %s{input}"
         let res = generateBindingFile input
 
-        Log.log $"Generation result:\n%s{res}"
+        ``process``.stdout.write res |> ignore
 
         Log.success "Success!"
 
