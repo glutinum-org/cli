@@ -4,23 +4,19 @@ open Fable.Core
 open Node
 open TypeScript
 open Fable.Core.JsInterop
-open Glutinum.Converter.FSharpAST
 open Glutinum.Converter
+
+let createProgramForCLI (_fileName: string) (_source: string) : Ts.Program =
+    importDefault "./js/bootstrap.js"
 
 let generateBindingFile (filePath: string) =
 
     if fs.existsSync (U2.Case1 filePath) |> not then
         failwith $"File does not exist: {filePath}"
 
-    let files = [ filePath ]
+    let fileContent = fs.readFileSync filePath
 
-    let options =
-        jsOptions<Ts.CompilerOptions> (fun o ->
-            o.target <- Some Ts.ScriptTarget.ES2015
-            o.``module`` <- Some Ts.ModuleKind.CommonJS
-        )
-
-    let program = ts.createProgram (ResizeArray files, options)
+    let program = createProgramForCLI filePath (fileContent.ToString())
 
     let checker = program.getTypeChecker ()
 
