@@ -251,7 +251,17 @@ and printType (fsharpType: FSharpType) =
         | _ ->
             let parameters =
                 functionInfo.Parameters
-                |> List.map (fun p -> printType p.Type)
+                |> List.map (fun p ->
+                    let typ = printType p.Type
+
+                    let option =
+                        if p.IsOptional then
+                            " option"
+                        else
+                            ""
+
+                    $"{typ}{option}"
+                )
                 |> String.concat " -> "
 
             let returnType = printType functionInfo.ReturnType
