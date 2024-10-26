@@ -7,7 +7,7 @@ open System
 [<AllowNullLiteral>]
 [<Interface>]
 type Database =
-    abstract member run: sql: string * ?callback: (Error option -> unit) -> Database
+    abstract member run: sql: string * ?callback: (Exception option -> unit) -> Database
 
 (***)
 #r "nuget: Fable.Core"
