@@ -140,6 +140,7 @@ let private mapTypeNameToFableCoreAwareName
         | "RegExp" ->
             context.ExposeRegExp()
             "RegExp"
+        | "Error" -> "Exception"
         | name -> name
     else
         typeReference.Name
