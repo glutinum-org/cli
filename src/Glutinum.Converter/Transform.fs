@@ -1157,7 +1157,11 @@ module private TransformMembers =
                     TypeParameters = []
                     IsOptional = false
                     IsStatic = false
-                    Accessor = Some FSharpAccessor.ReadWrite
+                    Accessor =
+                        if indexSignature.IsReadOnly then
+                            Some FSharpAccessor.ReadOnly
+                        else
+                            Some FSharpAccessor.ReadWrite
                     Accessibility = FSharpAccessibility.Public
                     XmlDoc = []
                     Body = FSharpMemberInfoBody.NativeOnly

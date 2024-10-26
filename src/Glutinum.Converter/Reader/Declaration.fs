@@ -66,6 +66,14 @@ let readDeclaration
         ({
             Parameters = reader.ReadParameters indexSignature.parameters
             Type = reader.ReadTypeNode(Some indexSignature.``type``)
+            IsReadOnly =
+                match indexSignature.modifiers with
+                | Some modifiers ->
+                    modifiers
+                    |> Seq.exists (fun modifier ->
+                        modifier?kind = Ts.SyntaxKind.ReadonlyKeyword
+                    )
+                | None -> false
         }
         : GlueIndexSignature)
         |> GlueMember.IndexSignature

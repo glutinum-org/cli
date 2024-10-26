@@ -101,6 +101,7 @@ type GlueIndexSignature =
     {
         Parameters: GlueParameter list
         Type: GlueType
+        IsReadOnly: bool
     }
 
 type GlueMethodSignature =

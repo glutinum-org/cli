@@ -24,6 +24,9 @@ type GlueASTViewer =
     static member private IsOptional(isOptional: bool) =
         ASTViewer.renderKeyValue "IsOptional" (string isOptional)
 
+    static member private IsReadOnly(isReadOnly: bool) =
+        ASTViewer.renderKeyValue "IsReadOnly" (string isReadOnly)
+
     static member private IsStatic(isStatic: bool) =
         ASTViewer.renderKeyValue "IsStatic" (string isStatic)
 
@@ -165,6 +168,7 @@ type GlueASTViewer =
             ASTViewer.renderNode "IndexSignature" [
                 GlueASTViewer.Parameters indexSignature.Parameters
                 GlueASTViewer.Type indexSignature.Type
+                GlueASTViewer.IsReadOnly indexSignature.IsReadOnly
             ]
 
         | GlueMember.Property propertyInfo ->
