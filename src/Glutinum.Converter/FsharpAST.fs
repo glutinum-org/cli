@@ -349,6 +349,12 @@ type FSharpSingleErasedCaseUnion =
         TypeParameter: FSharpTypeParameter
     }
 
+type FSharpThisType =
+    {
+        Name: string
+        TypeParameters: FSharpTypeParameter list
+    }
+
 [<RequireQualifiedAccess>]
 type FSharpType =
     | Enum of FSharpEnum
@@ -388,7 +394,7 @@ type FSharpType =
     | Tuple of FSharpType list
     | TypeParameter of string
     | ResizeArray of FSharpType
-    | ThisType of typeName: string
+    | ThisType of FSharpThisType
     | Function of FSharpFunctionType
     | Class of FSharpClass
     | Object

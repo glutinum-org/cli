@@ -247,7 +247,33 @@ let readTypeNode
         // up in a infinite loop
         let typ = checker.getTypeAtLocation thisTypeNode
 
-        GlueType.ThisType typ.symbol.name
+        let typParameters =
+            match typ.symbol.declarations with
+            | Some declarations ->
+                // We don't know how to read the type parameters
+                if declarations.Count <> 1 then
+                    []
+                else
+                    let declaration = declarations.[0]
+
+                    match declaration.kind with
+                    | Ts.SyntaxKind.ClassDeclaration
+                    | Ts.SyntaxKind.InterfaceDeclaration ->
+                        // We regroup the case to the same type because we just want to read the type parameters
+                        let classDeclaration =
+                            declaration :?> Ts.InterfaceDeclaration
+
+                        reader.ReadTypeParameters
+                            classDeclaration.typeParameters
+                    | _ -> []
+            | None -> []
+
+        ({
+            Name = typ.symbol.name
+            TypeParameters = typParameters
+        }
+        : GlueThisType)
+        |> GlueType.ThisType
 
     | Ts.SyntaxKind.TupleType ->
         let tupleTypeNode = typeNode :?> Ts.TupleTypeNode

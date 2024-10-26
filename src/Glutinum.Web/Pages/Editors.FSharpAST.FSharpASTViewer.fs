@@ -497,10 +497,13 @@ type FSharpASTViewer =
                 [ FSharpASTViewer.Type resizeArrayType ]
                 context
 
-        | FSharpType.ThisType typeName ->
+        | FSharpType.ThisType thisTypeInfo ->
             ASTViewer.renderNode
                 "ThisType"
-                [ FSharpASTViewer.Name typeName ]
+                [
+                    FSharpASTViewer.Name thisTypeInfo.Name
+                    FSharpASTViewer.TypeParameters thisTypeInfo.TypeParameters
+                ]
                 context
 
         | FSharpType.Tuple tupleTypes ->

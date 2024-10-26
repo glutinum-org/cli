@@ -473,10 +473,13 @@ type GlueASTViewer =
                     ]
                     context
 
-        | GlueType.ThisType typeName ->
+        | GlueType.ThisType thisTypeInfo ->
             ASTViewer.renderNode
                 "ThisType"
-                [ GlueASTViewer.Name typeName ]
+                [
+                    GlueASTViewer.Name thisTypeInfo.Name
+                    GlueASTViewer.TypeParameters thisTypeInfo.TypeParameters
+                ]
                 context
 
         | GlueType.TupleType tupleTypes ->

@@ -279,6 +279,12 @@ type GlueIndexedAccessType =
         ObjectType: GlueType
     }
 
+type GlueThisType =
+    {
+        Name: string
+        TypeParameters: GlueTypeParameter list
+    }
+
 [<RequireQualifiedAccess>]
 type GlueType =
     | Discard
@@ -298,7 +304,7 @@ type GlueType =
     | Array of GlueType
     | FunctionType of GlueFunctionType
     | TypeParameter of string
-    | ThisType of typeName: string
+    | ThisType of GlueThisType
     | TupleType of GlueType list
     | NamedTupleType of NamedTupleType
     | IntersectionType of GlueMember list
@@ -339,7 +345,7 @@ type GlueType =
         | ClassDeclaration info -> info.Name
         | TypeReference info -> info.Name
         | Array info -> $"ResizeArray<{info.Name}>"
-        | ThisType typeName -> typeName
+        | ThisType thisTypeInfo -> thisTypeInfo.Name
         | NamedTupleType _
         | TypeLiteral _
         | IntersectionType _

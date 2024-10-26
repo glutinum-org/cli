@@ -238,7 +238,15 @@ and printType (fsharpType: FSharpType) =
 
         $"{info.Name}<{cases}>{option}"
 
-    | FSharpType.ThisType name -> name
+    | FSharpType.ThisType thisTypeInfo ->
+        if thisTypeInfo.TypeParameters.Length > 0 then
+            match
+                tryTransformTypeParametersToText thisTypeInfo.TypeParameters
+            with
+            | Some typeParameters -> $"{thisTypeInfo.Name}{typeParameters}"
+            | None -> thisTypeInfo.Name
+        else
+            thisTypeInfo.Name
 
     | FSharpType.Tuple types ->
         types |> List.map printType |> String.concat " * "

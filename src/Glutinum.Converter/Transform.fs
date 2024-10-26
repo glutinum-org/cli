@@ -356,7 +356,14 @@ let rec private transformType
     | GlueType.OptionalType glueType ->
         transformType context glueType |> FSharpType.Option
 
-    | GlueType.ThisType typeName -> FSharpType.ThisType typeName
+    | GlueType.ThisType thisTypeInfo ->
+        ({
+            Name = thisTypeInfo.Name
+            TypeParameters =
+                transformTypeParameters context thisTypeInfo.TypeParameters
+        }
+        : FSharpThisType)
+        |> FSharpType.ThisType
 
     | GlueType.TupleType glueTypes -> transformTupleType context glueTypes
 
@@ -635,7 +642,8 @@ let rec private transformType
             ({
                 Name = context.FullName
                 TypeParameters = []
-            })
+            }
+            : FSharpMapped)
             |> FSharpType.Mapped
 
     | GlueType.UtilityType utilityType ->
@@ -664,14 +672,16 @@ let rec private transformType
             ({
                 Name = context.FullName
                 TypeParameters = []
-            })
+            }
+            : FSharpMapped)
             |> FSharpType.Mapped
 
     | GlueType.TypeAliasDeclaration typeAliasDeclaration ->
         ({
             Name = typeAliasDeclaration.Name
             TypeParameters = []
-        })
+        }
+        : FSharpMapped)
         |> FSharpType.Mapped
 
     | GlueType.MappedType _
@@ -807,7 +817,8 @@ let private transformExports
                                     transformTypeParameters
                                         context
                                         info.TypeParameters
-                            })
+                            }
+                            : FSharpMapped)
                             |> FSharpType.Mapped
                         IsOptional = false
                         IsStatic = isTopLevel
@@ -842,7 +853,8 @@ let private transformExports
                         ({
                             Name = $"{sanitizedName}.Exports"
                             TypeParameters = []
-                        })
+                        }
+                        : FSharpMapped)
                         |> FSharpType.Mapped
                     IsOptional = false
                     IsStatic = isTopLevel
