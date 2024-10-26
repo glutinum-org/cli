@@ -79,7 +79,12 @@ type TransformContext
 
     member this.PushScope(scopeName: string) =
         let childContext =
-            TransformContext(reporter, scopeName, typeMemory, parent = this)
+            TransformContext(
+                reporter,
+                Naming.sanitizeName scopeName,
+                typeMemory,
+                parent = this
+            )
 
         modules.Add childContext
         childContext
