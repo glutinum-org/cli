@@ -1656,10 +1656,10 @@ let private transformRecord
     }
     |> FSharpType.Interface
 
-let private transformTypeParameters
+let private transformTypeParameter
     (context: TransformContext)
-    (typeParameters: GlueTypeParameter list)
-    : FSharpTypeParameter list
+    (typeParameter: GlueTypeParameter)
+    : FSharpTypeParameter
     =
     let transformConstraint (context: TransformContext) (glueType: GlueType) =
         // Manual optimization to remove constraints that are not supported by F#
@@ -1667,17 +1667,21 @@ let private transformTypeParameters
         | FSharpType.Function _ -> None
         | forward -> Some forward
 
-    typeParameters
-    |> List.map (fun typeParameter ->
-        FSharpTypeParameter.Create(
-            typeParameter.Name,
-            ?constraint_ =
-                (typeParameter.Constraint
-                 |> Option.bind (transformConstraint context)),
-            ?default_ =
-                (typeParameter.Default |> Option.map (transformType context))
-        )
+    FSharpTypeParameter.Create(
+        typeParameter.Name,
+        ?constraint_ =
+            (typeParameter.Constraint
+             |> Option.bind (transformConstraint context)),
+        ?default_ =
+            (typeParameter.Default |> Option.map (transformType context))
     )
+
+let private transformTypeParameters
+    (context: TransformContext)
+    (typeParameters: GlueTypeParameter list)
+    : FSharpTypeParameter list
+    =
+    typeParameters |> List.map (transformTypeParameter context)
 
 let private tryOptimizeUnionType
     (context: TransformContext)
@@ -2217,8 +2221,49 @@ let private transformTypeAliasDeclaration
         }
         |> FSharpType.Interface
 
+    | GlueType.ConstructorType ->
+        match glueTypeAliasDeclaration.TypeParameters with
+        | [] ->
+            ({
+                Attributes = [ yield! xmlDoc.ObsoleteAttributes ]
+                XmlDoc = xmlDoc.XmlDoc
+                Name = typeAliasName
+                Type = FSharpType.Object
+                TypeParameters =
+                    transformTypeParameters
+                        context
+                        glueTypeAliasDeclaration.TypeParameters
+            }
+            : FSharpTypeAlias)
+            |> FSharpType.TypeAlias
+        | typeParameter :: [] ->
+            ({
+                Attributes = [ yield! xmlDoc.ObsoleteAttributes ]
+                XmlDoc = xmlDoc.XmlDoc
+                Name = typeAliasName
+                TypeParameter = transformTypeParameter context typeParameter
+            }
+            : FSharpSingleErasedCaseUnion)
+            |> FSharpType.SingleErasedCaseUnion
+        | _ ->
+            context.AddWarning
+                $"%s{glueTypeAliasDeclaration.Name} contains a ConstructorType with multiple type parameters, please open an issue at https://github.com/glutinum-org/cli/issues"
+
+            // This is probably going to generate invalid F# code,
+            // especially if the type is used as a signature type somewhere
+            // But it is better to remove the TypeParameters to make it easier for the user to fix
+            // by removing the TypeParameters from the type signature
+            ({
+                Attributes = [ yield! xmlDoc.ObsoleteAttributes ]
+                XmlDoc = xmlDoc.XmlDoc
+                Name = typeAliasName
+                Type = FSharpType.Object
+                TypeParameters = []
+            }
+            : FSharpTypeAlias)
+            |> FSharpType.TypeAlias
+
     // We don't know how to handle these types yet, so we default to obj
-    | GlueType.ConstructorType
     | GlueType.ClassDeclaration _
     | GlueType.Enum _
     | GlueType.Interface _

@@ -153,25 +153,26 @@ type FSharpASTViewer =
         |> List.map FSharpASTViewer.Parameter
         |> ASTViewer.renderNode "Parameters"
 
+    static member private TypeParameter(typeParameter: FSharpTypeParameter) =
+        ASTViewer.renderNode "TypeParameter" [
+            FSharpASTViewer.Name typeParameter.Name
+
+            ASTViewer.renderNodeOption
+                "Constraint"
+                FSharpASTViewer.FSharpType
+                typeParameter.Constraint
+
+            ASTViewer.renderNodeOption
+                "Default"
+                FSharpASTViewer.FSharpType
+                typeParameter.Default
+        ]
+
     static member private TypeParameters
         (typeParameters: FSharpTypeParameter list)
         =
         typeParameters
-        |> List.map (fun typeParameter ->
-            ASTViewer.renderNode "TypeParameter" [
-                FSharpASTViewer.Name typeParameter.Name
-
-                ASTViewer.renderNodeOption
-                    "Constraint"
-                    FSharpASTViewer.FSharpType
-                    typeParameter.Constraint
-
-                ASTViewer.renderNodeOption
-                    "Default"
-                    FSharpASTViewer.FSharpType
-                    typeParameter.Default
-            ]
-        )
+        |> List.map FSharpASTViewer.TypeParameter
         |> ASTViewer.renderNode "TypeParameters"
 
     static member private Name(name: string) =
@@ -367,6 +368,17 @@ type FSharpASTViewer =
         =
         match fsharpType with
         | FSharpType.Object -> ASTViewer.renderValueOnly "Object" context
+
+        | FSharpType.SingleErasedCaseUnion info ->
+            ASTViewer.renderNode
+                "SingleErasedCaseUnion"
+                [
+                    FSharpASTViewer.Name info.Name
+                    FSharpASTViewer.XmlDoc info.XmlDoc
+                    FSharpASTViewer.Attributes info.Attributes
+                    FSharpASTViewer.TypeParameter info.TypeParameter
+                ]
+                context
 
         | FSharpType.Interface interfaceInfo ->
             ASTViewer.renderNode

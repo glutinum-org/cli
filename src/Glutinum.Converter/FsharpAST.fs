@@ -81,13 +81,6 @@ type FSharpEnum =
         else
             FSharpEnumType.Unknown
 
-[<RequireQualifiedAccess>]
-type FSharpUnionCaseType =
-    | Named of string
-    | Literal of string
-// | Float of float
-// | Int of int
-
 type FSharpUnionCaseNamed =
     {
         Attributes: FSharpAttribute list
@@ -112,36 +105,6 @@ type FSharpUnion =
         Cases: FSharpUnionCase list
         IsOptional: bool
     }
-
-// member this.Type =
-//     let isString =
-//         this.Cases
-//         |> List.forall (fun c ->
-//             match c.Value with
-//             | FSharpUnionCaseType.Literal _ ->
-//                 true
-//             | FSharpUnionCaseType.Float _
-//             | FSharpUnionCaseType.Int _ ->
-//                 false
-//         )
-
-//     let isNumeric =
-//         this.Cases
-//         |> List.forall (fun c ->
-//             match c.Value with
-//             | FSharpUnionCaseType.String _ ->
-//                 false
-//             | FSharpUnionCaseType.Float _
-//             | FSharpUnionCaseType.Int _ ->
-//                 true
-//         )
-
-//     if isNumeric then
-//         FSharpUnionType.Numeric
-//     elif isString then
-//         FSharpUnionType.String
-//     else
-//         FSharpUnionType.Unknown
 
 type FSharpModule =
     {
@@ -378,10 +341,28 @@ type FSharpFunctionType =
         ReturnType: FSharpType
     }
 
+type FSharpSingleErasedCaseUnion =
+    {
+        Attributes: FSharpAttribute list
+        Name: string
+        XmlDoc: FSharpXmlDoc list
+        TypeParameter: FSharpTypeParameter
+    }
+
 [<RequireQualifiedAccess>]
 type FSharpType =
     | Enum of FSharpEnum
     | Union of FSharpUnion
+    // This is not a real FSharpType, but allows to represent a single case union
+    // which are used to represent some special cases from TypeScript:
+    // [<Erase>]
+    // type Test<'T> =
+    //     | Test of 'T
+    //
+    //     member inline this.Value =
+    //         let (Test.Test v) = this
+    //         v
+    | SingleErasedCaseUnion of FSharpSingleErasedCaseUnion
     | Option of FSharpType
     // Create ErasedUnion type to make a difference between standard F# union
     // and Fable U2, U3, etc. types.

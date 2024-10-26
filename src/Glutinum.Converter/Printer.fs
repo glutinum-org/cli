@@ -218,6 +218,8 @@ and printType (fsharpType: FSharpType) =
         | Some typeParameters -> $"{info.Name}{typeParameters}"
         | None -> info.Name
 
+    | FSharpType.SingleErasedCaseUnion info -> info.Name
+
     | FSharpType.Union info ->
         let cases =
             info.Cases
@@ -937,6 +939,35 @@ let rec private print (printer: Printer) (fsharpTypes: FSharpType list) =
 
         | FSharpType.TypeAlias aliasInfo -> printTypeAlias printer aliasInfo
         | FSharpType.Class classInfo -> printClass printer classInfo
+        | FSharpType.SingleErasedCaseUnion erasedCaseUnionInfo ->
+            printXmlDoc printer erasedCaseUnionInfo.XmlDoc
+
+            printAttributes
+                printer
+                (FSharpAttribute.Erase :: erasedCaseUnionInfo.Attributes)
+
+            printer.Write($"type {erasedCaseUnionInfo.Name}")
+            printTypeParameters printer [ erasedCaseUnionInfo.TypeParameter ]
+            printer.WriteInline(" =")
+
+            printer.NewLine
+            printer.Indent
+
+            printer.Write(
+                $"| %s{erasedCaseUnionInfo.Name} of '%s{erasedCaseUnionInfo.TypeParameter.Name}"
+            )
+
+            printer.NewLine
+            printer.NewLine
+            printer.Write("member inline this.Value =")
+            printer.NewLine
+            printer.Indent
+            printer.Write($"let (%s{erasedCaseUnionInfo.Name} output) = this")
+            printer.NewLine
+            printer.Write("output")
+            printer.NewLine
+            printer.Unindent
+            printer.Unindent
 
         | FSharpType.Mapped _
         | FSharpType.Primitive _
