@@ -66,7 +66,8 @@ let readTypeOperatorNode
             )
             |> failwith
 
-    | Ts.SyntaxKind.ReadonlyKeyword -> reader.ReadTypeNode node.``type``
+    | Ts.SyntaxKind.ReadonlyKeyword ->
+        reader.ReadTypeNode node.``type`` |> GlueType.ReadOnly
 
     | _ ->
         Report.readerError (

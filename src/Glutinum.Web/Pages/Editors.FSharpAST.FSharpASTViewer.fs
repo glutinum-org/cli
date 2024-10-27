@@ -543,6 +543,18 @@ type FSharpASTViewer =
                 [ ASTViewer.renderKeyValue "SyntaxKind" (string syntaxKind) ]
                 context
 
+        | FSharpType.JSApi jsApi ->
+            ASTViewer.renderNode
+                "JSApi"
+                [
+                    match jsApi with
+                    | FSharpJSApi.ReadonlyArray innerType ->
+                        ASTViewer.renderNode "ReadonlyArray" [
+                            FSharpASTViewer.Type innerType
+                        ]
+                ]
+                context
+
     static member Render
         (types: FSharpType list)
         (dispatch: Dispatch<'Msg>)

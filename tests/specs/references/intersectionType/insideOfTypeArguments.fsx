@@ -4,6 +4,8 @@ open Fable.Core
 open Fable.Core.JsInterop
 open System
 
+type ReadonlyArray<'T> = JS.ReadonlyArray<'T>
+
 [<AllowNullLiteral>]
 [<Interface>]
 type RecordEntryObject =
@@ -11,11 +13,11 @@ type RecordEntryObject =
     abstract member n: float with get, set
 
 type RecordEntryArrayItem =
-    ResizeArray<RecordEntryArrayItem.ResizeArray.ReturnType>
+    ReadonlyArray<RecordEntryArrayItem.ReadonlyArray.ReturnType>
 
 module RecordEntryArrayItem =
 
-    module ResizeArray =
+    module ReadonlyArray =
 
         [<AllowNullLiteral>]
         [<Interface>]

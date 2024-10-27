@@ -302,6 +302,9 @@ and printType (fsharpType: FSharpType) =
     | FSharpType.TypeParameter name -> $"'{name}"
     | FSharpType.Option optionType -> printType optionType + " option"
     | FSharpType.ResizeArray arrayType -> $"ResizeArray<{printType arrayType}>"
+    | FSharpType.JSApi apiInfo ->
+        match apiInfo with
+        | FSharpJSApi.ReadonlyArray typ -> $"ReadonlyArray<{printType typ}>"
     | FSharpType.Interface interfaceInfo -> interfaceInfo.Name
     | FSharpType.Class classInfo -> classInfo.Name
     | FSharpType.TypeAlias aliasInfo -> aliasInfo.Name
@@ -983,6 +986,7 @@ let rec private print (printer: Printer) (fsharpTypes: FSharpType list) =
         | FSharpType.TypeReference _
         | FSharpType.Option _
         | FSharpType.ResizeArray _
+        | FSharpType.JSApi _
         | FSharpType.TypeParameter _
         | FSharpType.Discard
         | FSharpType.Function _
@@ -1014,6 +1018,11 @@ let printFile (printer: Printer) (transformResult: Transform.TransformResult) =
     if transformResult.IncludeRegExpAlias then
         printer.NewLine
         printer.Write "type RegExp = Text.RegularExpressions.Regex"
+        printer.NewLine
+
+    if transformResult.IncludeReadonlyArrayAlias then
+        printer.NewLine
+        printer.Write "type ReadonlyArray<'T> = JS.ReadonlyArray<'T>"
         printer.NewLine
 
     print printer transformResult.FSharpAST

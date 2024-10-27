@@ -1,1 +1,1 @@
-type T = Boolean
+export type T = Boolean

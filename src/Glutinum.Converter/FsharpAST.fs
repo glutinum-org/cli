@@ -356,6 +356,9 @@ type FSharpThisType =
     }
 
 [<RequireQualifiedAccess>]
+type FSharpJSApi = ReadonlyArray of FSharpType
+
+[<RequireQualifiedAccess>]
 type FSharpType =
     | Enum of FSharpEnum
     | Union of FSharpUnion
@@ -398,5 +401,6 @@ type FSharpType =
     | Function of FSharpFunctionType
     | Class of FSharpClass
     | Object
+    | JSApi of FSharpJSApi
 
 type FSharpOutFile = { Name: string; Opens: string list }

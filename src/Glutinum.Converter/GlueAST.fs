@@ -316,6 +316,7 @@ type GlueType =
     | UtilityType of GlueUtilityType
     | MappedType of GlueMappedType
     | ConstructorType
+    | ReadOnly of GlueType
 
     member this.Name =
         match this with
@@ -345,6 +346,10 @@ type GlueType =
         | ClassDeclaration info -> info.Name
         | TypeReference info -> info.Name
         | Array info -> $"ResizeArray<{info.Name}>"
+        | ReadOnly info ->
+            match info with
+            | Array arrayInfo -> $"ReadonlyArray<{arrayInfo.Name}>"
+            | _ -> info.Name
         | ThisType thisTypeInfo -> thisTypeInfo.Name
         | NamedTupleType _
         | TypeLiteral _

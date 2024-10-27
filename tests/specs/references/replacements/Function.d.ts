@@ -1,3 +1,3 @@
-interface sharedEvents {
+export interface sharedEvents {
     getEventState: Function
 }

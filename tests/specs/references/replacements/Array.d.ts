@@ -1,1 +1,1 @@
-type T = Array<number>
+export type T = Array<number>

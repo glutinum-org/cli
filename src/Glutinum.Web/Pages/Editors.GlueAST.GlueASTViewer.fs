@@ -252,6 +252,12 @@ type GlueASTViewer =
         | GlueType.TemplateLiteral ->
             ASTViewer.renderValueOnly "TemplateLiteral" context
 
+        | GlueType.ReadOnly readOnlyType ->
+            ASTViewer.renderNode
+                "ReadOnly"
+                [ GlueASTViewer.Type readOnlyType ]
+                context
+
         | GlueType.Variable variableInfo ->
             ASTViewer.renderNode
                 "Variable"

@@ -14,6 +14,8 @@ type Reporter() =
 
     member val HasRegEpx = false with get, set
 
+    member val HasReadonlyArray = false with get, set
+
 // Not really proud of this implementation, but I was not able to make it in a
 // pure functional way, using a Tree structure or something similar
 // It seems like for now this implementation does the job which is the most important
@@ -52,13 +54,15 @@ type TransformContext
     member val _Reporter = reporter
 
     member _.ExposeRegExp() =
-        // TODO: Rework how we memorize if need to expose RegExp alias
+        // TODO: Rework how we memorize if we need to expose RegExp alias
         // Perhaps, before the printer phase we should traverse the whole AST to find information
         // like aliases that we need to expose
         // We could propagate the IsStandardLibrary flag to the F# AST to check such information
         // Example: If we find an F# TypeReference with the name "RegExp" and the IsStandardLibrary flag is true
         // then we need to expose the RegExp alias
         reporter.HasRegEpx <- true
+
+    member _.ExposeReadonlyArray() = reporter.HasReadonlyArray <- true
 
     member _.ExposeType(typ: FSharpType) =
         match parent with
@@ -133,7 +137,9 @@ let private mapTypeNameToFableCoreAwareName
         | "Date" -> "JS.Date"
         | "Promise" -> "JS.Promise"
         | "Uint8Array" -> "JS.Uint8Array"
-        | "ReadonlyArray" -> "ResizeArray"
+        | "ReadonlyArray" ->
+            context.ExposeReadonlyArray()
+            "ReadonlyArray"
         | "Array" -> "ResizeArray"
         | "Boolean" -> "bool"
         | "Function" -> "Action"
@@ -366,6 +372,8 @@ let rec private transformType
         |> FSharpType.ThisType
 
     | GlueType.TupleType glueTypes -> transformTupleType context glueTypes
+
+    | GlueType.ReadOnly glueType -> transformReadOnly context glueType
 
     | GlueType.Union(GlueTypeUnion cases) ->
         let optionalTypes, others =
@@ -1863,6 +1871,7 @@ let private transformMappedTypeMembers
     match mappedType.TypeParameter.Constraint with
     | Some(GlueType.IndexedAccessType idxTyp) ->
         match idxTyp.ObjectType with
+        | GlueType.ReadOnly(GlueType.TupleType glueTypes)
         | GlueType.TupleType glueTypes ->
             glueTypes
             |> List.choose (
@@ -1898,6 +1907,19 @@ let private transformMappedTypeMembers
 
         []
 
+let private transformReadOnly (context: TransformContext) (glueType: GlueType) =
+
+    match glueType with
+    | GlueType.Array arrayType ->
+        context.ExposeReadonlyArray()
+
+        transformType context arrayType
+        |> FSharpJSApi.ReadonlyArray
+        |> FSharpType.JSApi
+
+    // Ignore readonly for other types
+    | _ -> transformType context glueType
+
 let private transformTypeAliasDeclaration
     (context: TransformContext)
     (glueTypeAliasDeclaration: GlueTypeAliasDeclaration)
@@ -1909,24 +1931,26 @@ let private transformTypeAliasDeclaration
 
     let xmlDoc = transformComment glueTypeAliasDeclaration.Documentation
 
+    let makeTypeAlias typ =
+        ({
+            Attributes = [ yield! xmlDoc.ObsoleteAttributes ]
+            XmlDoc = xmlDoc.XmlDoc
+            Name = typeAliasName
+            Type = typ
+            TypeParameters =
+                transformTypeParameters
+                    context
+                    glueTypeAliasDeclaration.TypeParameters
+        }
+        : FSharpTypeAlias)
+        |> FSharpType.TypeAlias
+
     // TODO: Make the transformation more robust
     match glueTypeAliasDeclaration.Type with
     | GlueType.Union(GlueTypeUnion cases) as unionType ->
         match tryOptimizeUnionType context typeAliasName cases with
         | Some typ -> typ
-        | None ->
-            ({
-                Attributes = [ yield! xmlDoc.ObsoleteAttributes ]
-                XmlDoc = xmlDoc.XmlDoc
-                Name = typeAliasName
-                Type = transformType context unionType
-                TypeParameters =
-                    transformTypeParameters
-                        context
-                        glueTypeAliasDeclaration.TypeParameters
-            }
-            : FSharpTypeAlias)
-            |> FSharpType.TypeAlias
+        | None -> transformType context unionType |> makeTypeAlias
 
     | GlueType.KeyOf glueType ->
         TypeAliasDeclaration.transformKeyOf
@@ -1966,68 +1990,26 @@ let private transformTypeAliasDeclaration
                 | _ -> FSharpType.Discard
             | _ -> FSharpType.Discard
 
-        ({
-            Attributes = [ yield! xmlDoc.ObsoleteAttributes ]
-            XmlDoc = xmlDoc.XmlDoc
-            Name = typeAliasName
-            Type = typ
-            TypeParameters =
-                transformTypeParameters
-                    context
-                    glueTypeAliasDeclaration.TypeParameters
-        }
-        : FSharpTypeAlias)
-        |> FSharpType.TypeAlias
+        makeTypeAlias typ
 
     | GlueType.Literal literalInfo ->
         TypeAliasDeclaration.transformLiteral xmlDoc typeAliasName literalInfo
 
     | GlueType.Primitive primitiveInfo ->
-        ({
-            Attributes = [ yield! xmlDoc.ObsoleteAttributes ]
-            XmlDoc = xmlDoc.XmlDoc
-            Name = typeAliasName
-            Type = transformPrimitive primitiveInfo |> FSharpType.Primitive
-            TypeParameters =
-                transformTypeParameters
-                    context
-                    glueTypeAliasDeclaration.TypeParameters
-        }
-        : FSharpTypeAlias)
-        |> FSharpType.TypeAlias
+        transformPrimitive primitiveInfo
+        |> FSharpType.Primitive
+        |> makeTypeAlias
 
     | GlueType.TemplateLiteral ->
-        ({
-            Attributes = [ yield! xmlDoc.ObsoleteAttributes ]
-            XmlDoc = xmlDoc.XmlDoc
-            Name = typeAliasName
-            Type = FSharpType.Primitive FSharpPrimitive.String
-            TypeParameters =
-                transformTypeParameters
-                    context
-                    glueTypeAliasDeclaration.TypeParameters
-        }
-        : FSharpTypeAlias)
-        |> FSharpType.TypeAlias
+        FSharpType.Primitive FSharpPrimitive.String |> makeTypeAlias
 
     | GlueType.TypeReference typeReference ->
         let mappedName = mapTypeNameToFableCoreAwareName context typeReference
         let context = context.PushScope mappedName
 
         let handleDefaultCase () =
-            ({
-                Attributes = [ yield! xmlDoc.ObsoleteAttributes ]
-                XmlDoc = xmlDoc.XmlDoc
-                Name = typeAliasName
-                Type =
-                    transformType context (GlueType.TypeReference typeReference)
-                TypeParameters =
-                    transformTypeParameters
-                        context
-                        glueTypeAliasDeclaration.TypeParameters
-            }
-            : FSharpTypeAlias)
-            |> FSharpType.TypeAlias
+            transformType context (GlueType.TypeReference typeReference)
+            |> makeTypeAlias
 
         match typeReference.TypeArguments with
         | head :: [] ->
@@ -2085,18 +2067,7 @@ let private transformTypeAliasDeclaration
         | _ -> handleDefaultCase ()
 
     | GlueType.Array glueType ->
-        ({
-            Attributes = [ yield! xmlDoc.ObsoleteAttributes ]
-            XmlDoc = xmlDoc.XmlDoc
-            Name = typeAliasName
-            Type = transformType context (GlueType.Array glueType)
-            TypeParameters =
-                transformTypeParameters
-                    context
-                    glueTypeAliasDeclaration.TypeParameters
-        }
-        : FSharpTypeAlias)
-        |> FSharpType.TypeAlias
+        transformType context (GlueType.Array glueType) |> makeTypeAlias
 
     | GlueType.UtilityType utilityType ->
         match utilityType with
@@ -2147,18 +2118,7 @@ let private transformTypeAliasDeclaration
         |> FSharpType.Interface
 
     | GlueType.TupleType glueTypes ->
-        ({
-            Attributes = [ yield! xmlDoc.ObsoleteAttributes ]
-            XmlDoc = xmlDoc.XmlDoc
-            Name = typeAliasName
-            Type = transformTupleType context glueTypes
-            TypeParameters =
-                transformTypeParameters
-                    context
-                    glueTypeAliasDeclaration.TypeParameters
-        }
-        : FSharpTypeAlias)
-        |> FSharpType.TypeAlias
+        transformTupleType context glueTypes |> makeTypeAlias
 
     | GlueType.IntersectionType members ->
         {
@@ -2191,33 +2151,10 @@ let private transformTypeAliasDeclaration
         }
         |> FSharpType.Interface
 
-    | GlueType.Unknown ->
-        ({
-            Attributes = [ yield! xmlDoc.ObsoleteAttributes ]
-            XmlDoc = xmlDoc.XmlDoc
-            Name = typeAliasName
-            Type = FSharpType.Object
-            TypeParameters =
-                transformTypeParameters
-                    context
-                    glueTypeAliasDeclaration.TypeParameters
-        }
-        : FSharpTypeAlias)
-        |> FSharpType.TypeAlias
+    | GlueType.Unknown -> makeTypeAlias FSharpType.Object
 
     | GlueType.TypeParameter typeParameterInfo ->
-        ({
-            Attributes = [ yield! xmlDoc.ObsoleteAttributes ]
-            XmlDoc = xmlDoc.XmlDoc
-            Name = typeAliasName
-            Type = FSharpType.TypeParameter typeParameterInfo
-            TypeParameters =
-                transformTypeParameters
-                    context
-                    glueTypeAliasDeclaration.TypeParameters
-        }
-        : FSharpTypeAlias)
-        |> FSharpType.TypeAlias
+        FSharpType.TypeParameter typeParameterInfo |> makeTypeAlias
 
     | GlueType.MappedType mappedType ->
         {
@@ -2239,19 +2176,8 @@ let private transformTypeAliasDeclaration
 
     | GlueType.ConstructorType ->
         match glueTypeAliasDeclaration.TypeParameters with
-        | [] ->
-            ({
-                Attributes = [ yield! xmlDoc.ObsoleteAttributes ]
-                XmlDoc = xmlDoc.XmlDoc
-                Name = typeAliasName
-                Type = FSharpType.Object
-                TypeParameters =
-                    transformTypeParameters
-                        context
-                        glueTypeAliasDeclaration.TypeParameters
-            }
-            : FSharpTypeAlias)
-            |> FSharpType.TypeAlias
+        | [] -> makeTypeAlias FSharpType.Object
+
         | typeParameter :: [] ->
             ({
                 Attributes = [ yield! xmlDoc.ObsoleteAttributes ]
@@ -2269,15 +2195,10 @@ let private transformTypeAliasDeclaration
             // especially if the type is used as a signature type somewhere
             // But it is better to remove the TypeParameters to make it easier for the user to fix
             // by removing the TypeParameters from the type signature
-            ({
-                Attributes = [ yield! xmlDoc.ObsoleteAttributes ]
-                XmlDoc = xmlDoc.XmlDoc
-                Name = typeAliasName
-                Type = FSharpType.Object
-                TypeParameters = []
-            }
-            : FSharpTypeAlias)
-            |> FSharpType.TypeAlias
+            makeTypeAlias FSharpType.Object
+
+    | GlueType.ReadOnly glueType ->
+        transformReadOnly context glueType |> makeTypeAlias
 
     // We don't know how to handle these types yet, so we default to obj
     | GlueType.ClassDeclaration _
@@ -2291,19 +2212,7 @@ let private transformTypeAliasDeclaration
     | GlueType.Variable _
     | GlueType.ExportDefault _
     | GlueType.NamedTupleType _
-    | GlueType.OptionalType _ ->
-        ({
-            Attributes = [ yield! xmlDoc.ObsoleteAttributes ]
-            XmlDoc = xmlDoc.XmlDoc
-            Name = typeAliasName
-            Type = FSharpType.Object
-            TypeParameters =
-                transformTypeParameters
-                    context
-                    glueTypeAliasDeclaration.TypeParameters
-        }
-        : FSharpTypeAlias)
-        |> FSharpType.TypeAlias
+    | GlueType.OptionalType _ -> makeTypeAlias FSharpType.Object
 
 let private transformModuleDeclaration
     (typeMemory: GlueType list)
@@ -2395,6 +2304,7 @@ let rec private transformToFsharp
         | GlueType.NamedTupleType _
         | GlueType.TemplateLiteral
         | GlueType.UtilityType _
+        | GlueType.ReadOnly _
         | GlueType.ThisType _ -> FSharpType.Discard
     )
 
@@ -2469,6 +2379,7 @@ type TransformResult =
         Warnings: ResizeArray<string>
         Errors: ResizeArray<string>
         IncludeRegExpAlias: bool
+        IncludeReadonlyArrayAlias: bool
     }
 
 let apply (typeMemory: GlueType list) (glueAst: GlueType list) =
@@ -2479,4 +2390,5 @@ let apply (typeMemory: GlueType list) (glueAst: GlueType list) =
         Warnings = reporter.Warnings
         Errors = reporter.Errors
         IncludeRegExpAlias = reporter.HasRegEpx
+        IncludeReadonlyArrayAlias = reporter.HasReadonlyArray
     }
