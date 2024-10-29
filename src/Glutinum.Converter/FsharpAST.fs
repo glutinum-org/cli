@@ -358,6 +358,14 @@ type FSharpThisType =
 [<RequireQualifiedAccess>]
 type FSharpJSApi = ReadonlyArray of FSharpType
 
+type FSharpDelegate =
+    {
+        Name: string
+        TypeParameters: FSharpTypeParameter list
+        Parameters: FSharpParameter list
+        ReturnType: FSharpType
+    }
+
 [<RequireQualifiedAccess>]
 type FSharpType =
     | Enum of FSharpEnum
@@ -402,5 +410,6 @@ type FSharpType =
     | Class of FSharpClass
     | Object
     | JSApi of FSharpJSApi
+    | Delegate of FSharpDelegate
 
 type FSharpOutFile = { Name: string; Opens: string list }

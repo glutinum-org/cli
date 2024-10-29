@@ -465,17 +465,60 @@ let rec private transformType
     | GlueType.TypeParameter name -> FSharpType.TypeParameter name
 
     | GlueType.FunctionType functionTypeInfo ->
-        ({
-            Parameters =
-                functionTypeInfo.Parameters
-                // TypeScript allows to annotate the `this` parameter but it is not actually part
-                // of the function signature that the user will call.
-                |> List.filter (fun parameter -> parameter.Name <> "this")
-                |> List.map (transformParameter context)
-            ReturnType = transformType context functionTypeInfo.Type
-        }
-        : FSharpFunctionType)
-        |> FSharpType.Function
+        let paremeters =
+            functionTypeInfo.Parameters
+            // TypeScript allows to annotate the `this` parameter but it is not actually part
+            // of the function signature that the user will call.
+            |> List.filter (fun parameter -> parameter.Name <> "this")
+
+        match paremeters with
+        // If there is no parameter or only one parameter, we want to generate a lambda
+        // We consider that using a delegate is not necessary in this case
+        // it adds an unnecessary complexity for the user
+        | []
+        | _ :: [] ->
+            ({
+                Parameters = paremeters |> List.map (transformParameter context)
+                ReturnType = transformType context functionTypeInfo.Type
+            }
+            : FSharpFunctionType)
+            |> FSharpType.Function
+
+        // More than 1 parameter, we generate a delegate
+        | _ ->
+            let typParameters =
+                functionTypeInfo.TypeParameters
+                // TypeParameters are coming from the parent scope
+                // so we need to filter them to only keep the ones that are used
+                // See file://./../../tests/specs/references/functionType/interface/generics/moreGenericsOnParentThanNeeded.d.ts
+                |> List.filter (fun typeParameter ->
+                    List.exists
+                        (fun (parameter: GlueParameter) ->
+                            typeParameter.Name = parameter.Type.Name
+                        )
+                        paremeters
+                )
+                |> transformTypeParameters context
+
+            ({
+                Name = context.CurrentScopeName
+                TypeParameters = typParameters
+                Parameters = paremeters |> List.map (transformParameter context)
+                ReturnType = transformType context functionTypeInfo.Type
+            }
+            : FSharpDelegate)
+            |> FSharpType.Delegate
+            |> context.ExposeType
+
+            ({
+                Attributes = []
+                Name = context.FullName
+                TypeParameters = typParameters
+                XmlDoc = []
+                Type = FSharpType.Discard
+            }
+            : FSharpTypeAlias)
+            |> FSharpType.TypeAlias
 
     | GlueType.Interface interfaceInfo ->
         FSharpType.Interface(transformInterface context interfaceInfo)

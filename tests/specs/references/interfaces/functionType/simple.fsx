@@ -7,7 +7,12 @@ open System
 [<AllowNullLiteral>]
 [<Interface>]
 type AlertStatic =
-    abstract member alert: (string -> string option -> unit) with get, set
+    abstract member alert: AlertStatic.alert with get, set
+
+module AlertStatic =
+
+    type alert =
+        delegate of title: string * ?message: string -> unit
 
 (***)
 #r "nuget: Fable.Core"

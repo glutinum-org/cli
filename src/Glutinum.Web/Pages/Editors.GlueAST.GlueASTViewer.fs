@@ -408,8 +408,10 @@ type GlueASTViewer =
             ASTViewer.renderNode
                 "FunctionType"
                 [
-                    GlueASTViewer.Type functionType.Type
+                    GlueASTViewer.Documentation functionType.Documentation
+                    GlueASTViewer.TypeParameters functionType.TypeParameters
                     GlueASTViewer.Parameters functionType.Parameters
+                    GlueASTViewer.Type functionType.Type
                 ]
                 context
 

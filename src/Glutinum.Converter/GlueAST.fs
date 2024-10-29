@@ -250,6 +250,10 @@ type GlueFunctionType =
     {
         Documentation: GlueComment list
         Type: GlueType
+        // When generating F# delegates, we need to have access to the TypeParameters or the parent type
+        // To avoid passing it TypeParameters around in Transform, for now we add it here
+        // even if it doesn't make sense for TypeScript
+        TypeParameters: GlueTypeParameter list
         Parameters: GlueParameter list
     }
 

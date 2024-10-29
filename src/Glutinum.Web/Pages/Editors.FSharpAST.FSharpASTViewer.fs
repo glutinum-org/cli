@@ -369,6 +369,17 @@ type FSharpASTViewer =
         match fsharpType with
         | FSharpType.Object -> ASTViewer.renderValueOnly "Object" context
 
+        | FSharpType.Delegate delegateInfo ->
+            ASTViewer.renderNode
+                "Delegate"
+                [
+                    FSharpASTViewer.Name delegateInfo.Name
+                    FSharpASTViewer.Parameters delegateInfo.Parameters
+                    FSharpASTViewer.TypeParameters delegateInfo.TypeParameters
+                    FSharpASTViewer.ReturnType delegateInfo.ReturnType
+                ]
+                context
+
         | FSharpType.SingleErasedCaseUnion info ->
             ASTViewer.renderNode
                 "SingleErasedCaseUnion"

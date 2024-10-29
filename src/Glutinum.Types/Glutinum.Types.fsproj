@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <PackageProjectUrl>https://github.com/glutinum-org/cli</PackageProjectUrl>
+        <Authors>Mangel Maxime</Authors>
+        <FablePackageType>binding</FablePackageType>
+        <PackageTags>fable-javascript</PackageTags>
+    </PropertyGroup>
+    <PropertyGroup>
+        <!-- This will use an absolute path -->
+        <ChangelogFile>CHANGELOG.md</ChangelogFile>
+    </PropertyGroup>
+    <ItemGroup>
+        <Compile Include="TypeScript.fs" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="EasyBuild.PackageReleaseNotes.Tasks">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="Fable.Core" />
+        <PackageReference Include="Fable.Package.SDK">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+    </ItemGroup>
+</Project>

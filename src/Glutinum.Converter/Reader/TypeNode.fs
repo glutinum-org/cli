@@ -211,9 +211,46 @@ let readTypeNode
     | Ts.SyntaxKind.FunctionType ->
         let functionTypeNode = typeNode :?> Ts.FunctionTypeNode
 
+        let typeParameters =
+            try
+                match functionTypeNode.parent.parent.kind with
+                | Ts.SyntaxKind.InterfaceDeclaration ->
+                    let interfaceDeclaration =
+                        functionTypeNode.parent.parent
+                        :?> Ts.InterfaceDeclaration
+
+                    reader.ReadTypeParameters
+                        interfaceDeclaration.typeParameters
+                | Ts.SyntaxKind.ClassDeclaration ->
+                    let classDeclaration =
+                        functionTypeNode.parent.parent :?> Ts.ClassDeclaration
+
+                    reader.ReadTypeParameters classDeclaration.typeParameters
+                | _ ->
+                    reader.Warnings.Add(
+                        Report.readerError (
+                            "FunctionType",
+                            $"Unexpected parent type : %s{functionTypeNode.parent.parent.kind.Name} was expected a InterfaceDeclaration or a ClassDeclaration",
+                            functionTypeNode
+                        )
+                    )
+
+                    []
+            with _ ->
+                reader.Warnings.Add(
+                    Report.readerError (
+                        "FunctionType",
+                        $"Unable to find TypeParameters information",
+                        functionTypeNode
+                    )
+                )
+
+                []
+
         {
             Documentation = reader.ReadDocumentationFromNode typeNode
             Type = reader.ReadTypeNode functionTypeNode.``type``
+            TypeParameters = typeParameters
             Parameters = reader.ReadParameters functionTypeNode.parameters
         }
         |> GlueType.FunctionType

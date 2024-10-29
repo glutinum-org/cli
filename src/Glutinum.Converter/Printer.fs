@@ -211,6 +211,14 @@ and printTypeParameters
     | None -> ()
 
 and printType (fsharpType: FSharpType) =
+    let printTypeNameWithTypeParemeters
+        (name: string)
+        (typeParameters: FSharpTypeParameter list)
+        =
+        match tryTransformTypeParametersToText typeParameters with
+        | Some typeParameters -> $"{name}{typeParameters}"
+        | None -> name
+
     match fsharpType with
     | FSharpType.Object -> "obj"
     | FSharpType.Mapped info ->
@@ -239,14 +247,9 @@ and printType (fsharpType: FSharpType) =
         $"{info.Name}<{cases}>{option}"
 
     | FSharpType.ThisType thisTypeInfo ->
-        if thisTypeInfo.TypeParameters.Length > 0 then
-            match
-                tryTransformTypeParametersToText thisTypeInfo.TypeParameters
-            with
-            | Some typeParameters -> $"{thisTypeInfo.Name}{typeParameters}"
-            | None -> thisTypeInfo.Name
-        else
+        printTypeNameWithTypeParemeters
             thisTypeInfo.Name
+            thisTypeInfo.TypeParameters
 
     | FSharpType.Tuple types ->
         types |> List.map printType |> String.concat " * "
@@ -307,7 +310,12 @@ and printType (fsharpType: FSharpType) =
         | FSharpJSApi.ReadonlyArray typ -> $"ReadonlyArray<{printType typ}>"
     | FSharpType.Interface interfaceInfo -> interfaceInfo.Name
     | FSharpType.Class classInfo -> classInfo.Name
-    | FSharpType.TypeAlias aliasInfo -> aliasInfo.Name
+    | FSharpType.TypeAlias aliasInfo ->
+        printTypeNameWithTypeParemeters aliasInfo.Name aliasInfo.TypeParameters
+    | FSharpType.Delegate delegateInfo ->
+        printTypeNameWithTypeParemeters
+            delegateInfo.Name
+            delegateInfo.TypeParameters
     | FSharpType.Module _
     | FSharpType.Unsupported _
     | FSharpType.Discard -> "obj"
@@ -464,6 +472,26 @@ let private printXmlDoc (printer: Printer) (elements: FSharpXmlDoc list) =
                 info.Content
     )
 
+let printParameters (printer: Printer) (parameters: FSharpParameter list) =
+    if parameters.Length = 0 then
+        printer.WriteInline("unit")
+    else
+        parameters
+        |> List.iteri (fun index p ->
+            if index <> 0 then
+                printer.WriteInline(" * ")
+
+            printInlineAttributes printer p.Attributes
+
+            if p.IsOptional then
+                printer.WriteInline("?")
+
+            printer.WriteInline($"{p.Name}: {printType p.Type}")
+
+            if hasParamArrayAttribute p.Attributes then
+                printer.WriteInline(" []")
+        )
+
 let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
     printAttributes printer interfaceInfo.Attributes
 
@@ -527,25 +555,7 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
             else
                 printer.WriteInline(": ")
 
-                // Special case for functions with no parameters
-                if methodInfo.Parameters.Length = 0 then
-                    printer.WriteInline("unit")
-                else
-                    methodInfo.Parameters
-                    |> List.iteri (fun index p ->
-                        if index <> 0 then
-                            printer.WriteInline(" * ")
-
-                        printInlineAttributes printer p.Attributes
-
-                        if p.IsOptional then
-                            printer.WriteInline("?")
-
-                        printer.WriteInline($"{p.Name}: {printType p.Type}")
-
-                        if hasParamArrayAttribute p.Attributes then
-                            printer.WriteInline(" []")
-                    )
+                printParameters printer methodInfo.Parameters
 
             if methodInfo.IsStatic then
                 printer.WriteInline(" : ")
@@ -889,6 +899,23 @@ let private printTypeAlias (printer: Printer) (aliasInfo: FSharpTypeAlias) =
     printer.NewLine
     printer.Unindent
 
+let private printDelegate (printer: Printer) (delegateInfo: FSharpDelegate) =
+    printer.Write($"type {delegateInfo.Name}")
+    printTypeParameters printer delegateInfo.TypeParameters
+    printer.WriteInline(" =")
+
+    printer.NewLine
+    printer.Indent
+
+    printer.Write("delegate of ")
+
+    printParameters printer delegateInfo.Parameters
+
+    printer.WriteInline $" -> {printType delegateInfo.ReturnType}"
+
+    printer.NewLine
+    printer.Unindent
+
 let rec private print (printer: Printer) (fsharpTypes: FSharpType list) =
     match fsharpTypes with
     | fsharpType :: tail ->
@@ -979,6 +1006,8 @@ let rec private print (printer: Printer) (fsharpTypes: FSharpType list) =
             printer.NewLine
             printer.Unindent
             printer.Unindent
+
+        | FSharpType.Delegate delegateInfo -> printDelegate printer delegateInfo
 
         | FSharpType.Mapped _
         | FSharpType.Primitive _
