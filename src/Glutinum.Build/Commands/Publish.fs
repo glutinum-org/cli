@@ -16,10 +16,35 @@ open EasyBuild.CommitParser
 open System.Linq
 open EasyBuild.CommitParser.Types
 open Thoth.Json.Newtonsoft
-open EasyBuild.CommitParser.Types
+open Build.Utils.Dotnet
 open Semver
 
-let cwd = Environment.CurrentDirectory
+[<RequireQualifiedAccess>]
+type Project =
+    | GlutinumCli
+    | GlutinumWeb
+    | GlutinumTypes
+    | All
+
+type ProjectTypeConverter() =
+    inherit TypeConverter()
+
+    override _.ConvertFrom(_: ITypeDescriptorContext, _, value: obj) =
+        match value with
+        | :? string as text ->
+            match text with
+            | "Glutinum.Converter.CLI"
+            | "Glutinum.CLI"
+            | "cli" -> Project.GlutinumCli
+            | "Glutinum.Web"
+            | "web" -> Project.GlutinumWeb
+            | "Glutinum.Types"
+            | "types" -> Project.GlutinumTypes
+            | "all"
+            | "All" -> Project.All
+            | _ -> raise <| InvalidOperationException("Invalid project name")
+
+        | _ -> raise <| InvalidOperationException("Invalid project name")
 
 /// Updates the internal version of the project to the last version in the changelog
 /// This is used to display the version on the Web app
@@ -62,6 +87,35 @@ for which we need to publish a new version separately from the CLI tool")>]
     [<CommandOption("--patch")>]
     member val BumpPatch = false with get, set
 
+    [<CommandOption("--version")>]
+    member val Version = None with get, set
+
+    [<CommandOption("--project")>]
+    [<TypeConverter(typeof<ProjectTypeConverter>)>]
+    [<Description("""Name of the project to release
+
+Possible values:
+- Glutinum.Converter.CLI | Glutinum.CLI | cli
+- Glutinum.Web | web
+- Glutinum.Types | types
+- All
+
+If not specified, all projects will be released.
+    """)>]
+    member val Project = Project.All with get, set
+
+    [<CommandOption("--allow-dirty")>]
+    [<Description("Allow to run in a dirty repository (having not commit changes in your reporitory)")>]
+    member val AllowDirty: bool = false with get, set
+
+    [<CommandOption("--allow-branch <VALUES>")>]
+    [<Description("List of branches that are allowed to be used to generate the changelog. Default is 'main'")>]
+    member val AllowBranch: string array = [| "main" |] with get, set
+
+    [<CommandOption("--dry-run")>]
+    [<Description("Run the command without publishing the package. Allows to check the generated CHANGELOG.md (don't forget to revert the changes)")>]
+    member val IsDryRun = false with get, set
+
 type ReleaseContext =
     {
         NewVersion: SemVersion
@@ -74,24 +128,13 @@ type ReleaseContext =
         LastCommitSha: string
     }
 
-let private getReleaseContext (settings: PublishSettings) =
-    // TODO: Replace libgit2sharp with using CLI directly
-    // libgit2sharp seems all nice at first, but I find the API to be a bit cumbersome
-    // when manipulating the repository for (commit, stage, etc.)
-    // It also doesn't support SSH
-    use repository = new Repository(Workspace.``.``)
-
-    if repository.Head.FriendlyName <> "main" then
-        failwith "You must be on the main branch to publish"
-
-    if repository.RetrieveStatus().IsDirty then
-        failwith "You must commit your changes before publishing"
-
+let private getReleaseContext
+    (repository: Repository)
+    (settings: PublishSettings)
+    (changelogPath: string)
+    =
     let changelogContent =
-        File
-            .ReadAllText(Workspace.``CHANGELOG.md``)
-            .Replace("\r\n", "\n")
-            .Split('\n')
+        File.ReadAllText(changelogPath).Replace("\r\n", "\n").Split('\n')
 
     let changelogConfigSection =
         changelogContent
@@ -155,15 +198,17 @@ let private getReleaseContext (settings: PublishSettings) =
         |> Seq.filter (fun commits ->
             match commits.SemanticCommit.Tags with
             | Some tags ->
-                if settings.IsWebOnly then
-                    List.contains "converter" tags || List.contains "web" tags
-                else
-                    List.contains "converter" tags || List.contains "cli" tags
+                match settings.Project with
+                | Project.GlutinumCli -> List.contains "cli" tags
+                | Project.GlutinumWeb -> List.contains "web" tags
+                | Project.GlutinumTypes -> List.contains "Glutinum.Types" tags
+                | Project.All ->
+                    failwith
+                        "Can't get release context for the \"All\" projects case"
             | None -> false
         )
 
-    let lastChangelogVersion =
-        Changelog.tryGetLastVersion Workspace.``CHANGELOG.md``
+    let lastChangelogVersion = Changelog.tryFindLastVersion changelogPath
 
     let shouldBumpMajor =
         settings.BumpMajor
@@ -182,25 +227,32 @@ let private getReleaseContext (settings: PublishSettings) =
 
     let refVersion =
         match lastChangelogVersion with
-        | Some version -> version.Version
-        | None -> SemVersion(0, 0, 0)
+        | Ok version -> version.Version
+        | Error Changelog.NoVersionFound -> SemVersion(0, 0, 0)
+        | Error error -> error.ToText() |> failwith
 
     let newVersion =
-        if shouldBumpMajor then
-            refVersion.WithMajor(refVersion.Major + 1).WithMinor(0).WithPatch(0)
-        elif shouldBumpMinor then
-            refVersion.WithMinor(refVersion.Minor + 1).WithPatch(0)
-        elif shouldBumpPatch then
-            refVersion.WithPatch(refVersion.Patch + 1)
-        else if
-            // On CI, we allow to publish without a version bump
-            // It happens when we just released a new stable version, the changelog is already up-to-date
-            Environment.GetEnvironmentVariable("CI") <> null
-            || settings.IsWebOnly
-        then
-            refVersion
-        else
-            failwith "No version bump required"
+        match settings.Version with
+        | Some version -> SemVersion.Parse(version, SemVersionStyles.Strict)
+        | None ->
+            if shouldBumpMajor then
+                refVersion
+                    .WithMajor(refVersion.Major + 1)
+                    .WithMinor(0)
+                    .WithPatch(0)
+            elif shouldBumpMinor then
+                refVersion.WithMinor(refVersion.Minor + 1).WithPatch(0)
+            elif shouldBumpPatch then
+                refVersion.WithPatch(refVersion.Patch + 1)
+            else if
+                // On CI, we allow to publish without a version bump
+                // It happens when we just released a new stable version, the changelog is already up-to-date
+                Environment.GetEnvironmentVariable("CI") <> null
+                || settings.IsWebOnly
+            then
+                refVersion
+            else
+                failwith "No version bump required"
 
     if settings.IsWebOnly then
         {
@@ -241,7 +293,10 @@ let private tryFindAdditionalChangelogContent (text: string) =
 
     apply [] lines false
 
-let private updateChangelog (releaseContext: ReleaseContext) =
+let private updateChangelog
+    (releaseContext: ReleaseContext)
+    (changelogPath: string)
+    =
     let newVersionLines = ResizeArray<string>()
 
     let appendLine (line: string) = newVersionLines.Add(line)
@@ -307,6 +362,7 @@ let private updateChangelog (releaseContext: ReleaseContext) =
         match lines with
         | [] -> result
         | line :: rest ->
+            // printfn $"%A{String.IsNullOrWhiteSpace(line)}"
             if previousLineWasBlank && String.IsNullOrWhiteSpace(line) then
                 removeConsecutiveEmptyLines true result rest
             else
@@ -341,102 +397,189 @@ let private updateChangelog (releaseContext: ReleaseContext) =
         |> removeConsecutiveEmptyLines false []
         |> String.concat "\n"
 
-    File.WriteAllText(Workspace.``CHANGELOG.md``, newChangelogContent)
+    File.WriteAllText(changelogPath, newChangelogContent)
+
+let private releaseWebOnly
+    (repository: Repository)
+    (context: CommandContext)
+    (settings: PublishSettings)
+    =
+    // Force project to be GlutinumWeb
+    settings.Project <- Project.GlutinumWeb
+
+    let releaseContext =
+        getReleaseContext repository settings Workspace.``CHANGELOG.md``
+
+    updatePreludeVersion (releaseContext.NewVersion.ToString())
+
+    Web.WebCommand().Execute(context, Web.WebSettings()) |> ignore
+
+    // If we are not in a CI environment, we can publish the web app
+    // Otherwise, we want to let the CI handle it
+    if Environment.GetEnvironmentVariable("CI") = null then
+        Command.Run("npx", "gh-pages -d ./src/Glutinum.Web/dist/")
+
+        // Reset the changes made to the Prelude file, as we only needed it for the publish
+        Command.Run("git", "checkout HEAD -- src/Glutinum.Converter/Prelude.fs")
+
+let private releaseGlutinumCli
+    (repository: Repository)
+    (settings: PublishSettings)
+    =
+
+    let releaseContext =
+        getReleaseContext repository settings Workspace.``CHANGELOG.md``
+
+    updatePreludeVersion (releaseContext.NewVersion.ToString())
+
+    if (Directory.Exists VirtualWorkspace.dist.``.``) then
+        Directory.Delete(VirtualWorkspace.dist.``.``, true)
+
+    updateChangelog releaseContext Workspace.``CHANGELOG.md``
+
+    let packageJsonContent = File.ReadAllText(Workspace.``package.json``)
+
+    // Update package.json with the new version
+    let updatedPackageJsonContent =
+        Npm.replaceVersion
+            packageJsonContent
+            (releaseContext.NewVersion.ToString())
+
+    File.WriteAllText(Workspace.``package.json``, updatedPackageJsonContent)
+
+    if settings.IsDryRun then
+        printfn $"Dry run completed for project %A{settings.Project}"
+
+        printfn
+            "Please revert the changes after inspecting the generated CHANGELOG.md, package.json and Prelude.fs"
+
+    else
+        Command.Run(
+            "dotnet",
+            CmdLine.empty
+            |> CmdLine.appendRaw "fable"
+            |> CmdLine.appendRaw "src/Glutinum.Converter.CLI"
+            |> CmdLine.appendPrefix "--outDir" VirtualWorkspace.dist.``.``
+            |> CmdLine.appendRaw "--sourceMaps"
+            |> CmdLine.appendRaw "--test:MSBuildCracker"
+            |> CmdLine.toString
+        )
+
+        let fableModuleGitignore =
+            FileInfo(VirtualWorkspace.dist.fable_modules.``.gitignore``)
+
+        // We need to delete the fable_modules/.gitignore file so NPM pack
+        // includes the fable_modules directory in the tarball
+        if fableModuleGitignore.Exists then
+            fableModuleGitignore.Delete()
+
+        Pnpm.publish (noGitChecks = true, access = Publish.Access.Public)
+
+        // Web app is going to be published via CI
+        // Web.WebCommand().Execute(context, Web.WebSettings()) |> ignore
+        // Command.Run("npx", "gh-pages -d ./src/Glutinum.Web/dist/")
+
+        // Because we messed with Fable output, prefer to clean up
+        // So Fable will start from scratch next time
+        let fableModuleDir =
+            DirectoryInfo(VirtualWorkspace.dist.fable_modules.``.``)
+
+        if fableModuleDir.Exists then
+            fableModuleDir.Delete(true)
+
+        Command.Run("git", "add .")
+
+        Command.Run(
+            "git",
+            CmdLine.empty
+            |> CmdLine.appendRaw "commit"
+            |> CmdLine.appendPrefix
+                "-m"
+                $"chore: release %s{releaseContext.NewVersion.ToString()}"
+            |> CmdLine.toString
+        )
+
+        Command.Run("git", "push")
+
+let private releaseGlutinumTypes
+    (repository: Repository)
+    (settings: PublishSettings)
+    =
+
+    let changelogPath = Workspace.src.``Glutinum.Types``.``CHANGELOG.md``
+    let releaseContext = getReleaseContext repository settings changelogPath
+
+    if Seq.isEmpty releaseContext.ReleaseCommits then
+        printfn $"No commits to release for project %A{settings.Project}"
+
+    else
+        updateChangelog releaseContext changelogPath
+
+        if settings.IsDryRun then
+            printfn $"Dry run completed for project %A{settings.Project}"
+
+            printfn
+                "Please revert the changes after inspecting the generated CHANGELOG.md"
+        else
+
+            let projectFileInfo =
+                FileInfo
+                    Workspace.src.``Glutinum.Types``.``Glutinum.Types.fsproj``
+
+            let binDir = projectFileInfo.DirectoryName + "/bin" |> DirectoryInfo
+
+            if binDir.Exists then
+                binDir.Delete(true)
+
+            let nupkgPath = Dotnet.pack projectFileInfo.DirectoryName
+
+            let nugetKey = Environment.GetEnvironmentVariable("NUGET_KEY")
+
+            if isNull nugetKey then
+                failwith "NUGET_KEY environment variable is not set"
+
+            Nuget.push (
+                nupkgPath,
+                Environment.GetEnvironmentVariable("NUGET_KEY")
+            )
 
 type PublishCommand() =
     inherit Command<PublishSettings>()
 
     override _.Execute(context, settings) =
-        Test.Specs.SpecCommand().Execute(context, Test.Specs.SpecSettings())
-        |> ignore
+        // TODO: Replace libgit2sharp with using CLI directly
+        // libgit2sharp seems all nice at first, but I find the API to be a bit cumbersome
+        // when manipulating the repository for (commit, stage, etc.)
+        // It also doesn't support SSH
+        use repository = new Repository(Workspace.``.``)
 
-        let releaseContext = getReleaseContext settings
-        updatePreludeVersion (releaseContext.NewVersion.ToString())
+        if
+            not (
+                Array.contains repository.Head.FriendlyName settings.AllowBranch
+            )
+        then
+            failwith
+                $"Branch '{repository.Head.FriendlyName}' is not allowed to make a release"
+
+        if repository.RetrieveStatus().IsDirty && not settings.AllowDirty then
+            failwith "You must commit your changes before publishing"
+
+        // Test.Specs.SpecCommand().Execute(context, Test.Specs.SpecSettings())
+        // |> ignore
+
+        // let releaseContext = getReleaseContext repository settings
+        // updatePreludeVersion (releaseContext.NewVersion.ToString())
 
         if settings.IsWebOnly then
-            Web.WebCommand().Execute(context, Web.WebSettings()) |> ignore
-
-            // If we are not in a CI environment, we can publish the web app
-            // Otherwise, we want to let the CI handle it
-            if Environment.GetEnvironmentVariable("CI") = null then
-                Command.Run("npx", "gh-pages -d ./src/Glutinum.Web/dist/")
-
-                // Reset the changes to the Prelude file, as we only needed it for the publish
-                Command.Run(
-                    "git",
-                    "checkout HEAD -- src/Glutinum.Converter/Prelude.fs"
-                )
-
-            0
-        else if Seq.isEmpty releaseContext.ReleaseCommits then
-            printfn $"No new commits to release, skipping..."
-            0
+            releaseWebOnly repository context settings
         else
+            match settings.Project with
+            | Project.GlutinumCli -> releaseGlutinumCli repository settings
+            | Project.GlutinumWeb -> releaseWebOnly repository context settings
+            | Project.GlutinumTypes -> releaseGlutinumTypes repository settings
+            | Project.All ->
+                releaseGlutinumCli repository settings
+                releaseWebOnly repository context settings
+                releaseGlutinumTypes repository settings
 
-            if (Directory.Exists "dist") then
-                Directory.Delete("dist", true)
-
-            updateChangelog releaseContext
-
-            Command.Run(
-                "dotnet",
-                CmdLine.empty
-                |> CmdLine.appendRaw "fable"
-                |> CmdLine.appendRaw "src/Glutinum.Converter.CLI"
-                |> CmdLine.appendPrefix "--outDir" "dist"
-                |> CmdLine.appendRaw "--sourceMaps"
-                |> CmdLine.appendRaw "--test:MSBuildCracker"
-                |> CmdLine.toString
-            )
-
-            let fableModuleGitignore =
-                FileInfo(VirtualWorkspace.dist.fable_modules.``.gitignore``)
-
-            // We need to delete the fable_modules/.gitignore file so NPM pack
-            // includes the fable_modules directory in the tarball
-            if fableModuleGitignore.Exists then
-                fableModuleGitignore.Delete()
-
-            let packageJsonContent =
-                File.ReadAllText(Workspace.``package.json``)
-
-            // Update package.json with the new version
-            let updatedPackageJsonContent =
-                Npm.replaceVersion
-                    packageJsonContent
-                    (releaseContext.NewVersion.ToString())
-
-            File.WriteAllText(
-                Workspace.``package.json``,
-                updatedPackageJsonContent
-            )
-
-            Pnpm.publish (noGitChecks = true, access = Publish.Access.Public)
-
-            // Web app is going to be published via CI
-            // Web.WebCommand().Execute(context, Web.WebSettings()) |> ignore
-            // Command.Run("npx", "gh-pages -d ./src/Glutinum.Web/dist/")
-
-            // Because we messed with Fable output, prefer to clean up
-            // So Fable will start from scratch next time
-            let fableModuleDir =
-                DirectoryInfo(VirtualWorkspace.dist.fable_modules.``.``)
-
-            if fableModuleDir.Exists then
-                fableModuleDir.Delete(true)
-
-            Command.Run("git", "add .")
-
-            Command.Run(
-                "git",
-                CmdLine.empty
-                |> CmdLine.appendRaw "commit"
-                |> CmdLine.appendPrefix
-                    "-m"
-                    $"chore: release %s{releaseContext.NewVersion.ToString()}"
-                |> CmdLine.toString
-            )
-
-            Command.Run("git", "push")
-
-            0
+        0

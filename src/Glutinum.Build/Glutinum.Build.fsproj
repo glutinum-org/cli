@@ -11,7 +11,6 @@
     <Compile Include="Utils/Nuget.fs" />
     <Compile Include="Utils/Pnpm.fs" />
     <Compile Include="Utils/Npm.fs" />
-    <Compile Include="Utils/ChangelogParser.fs" />
     <Compile Include="Utils/Changelog.fs" />
     <Compile Include="Utils/Path.fs" />
     <Compile Include="Commands/Lint.fs" />

@@ -23,26 +23,31 @@ type Nuget =
             |> CmdLine.toString
         )
 
-let pack (projectDir: string) =
-    let struct (standardOutput, _) =
-        Command.ReadAsync(
-            "dotnet",
-            "pack -c Release",
-            workingDirectory = projectDir
-        )
-        |> Async.AwaitTask
-        |> Async.RunSynchronously
+type Dotnet =
 
-    let m =
-        Regex.Match(
-            standardOutput,
-            "Successfully created package '(?'nupkgPath'.*\.nupkg)'"
-        )
+    static member pack(projectDir: string) =
+        let struct (standardOutput, standardError) =
+            Command.ReadAsync(
+                "dotnet",
+                "pack -c Release",
+                workingDirectory = projectDir
+            )
+            |> Async.AwaitTask
+            |> Async.RunSynchronously
 
-    if m.Success then
-        m.Groups.["nupkgPath"].Value
-    else
-        failwithf
-            $"""Failed to find nupkg path in output:
-Output:
-{standardOutput}"""
+        printfn "stdout: %s" standardOutput
+        printfn "stderr: %s" standardError
+
+        let m =
+            Regex.Match(
+                standardOutput,
+                "Successfully created package '(?'nupkgPath'.*\.nupkg)'"
+            )
+
+        if m.Success then
+            m.Groups.["nupkgPath"].Value
+        else
+            failwithf
+                $"""Failed to find nupkg path in output:
+    Output:
+    {standardOutput}"""
