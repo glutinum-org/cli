@@ -1044,14 +1044,19 @@ let printFile (printer: Printer) (transformResult: Transform.TransformResult) =
         printer.NewLine
     )
 
+    if transformResult.IncludeReadonlyArrayAlias then
+        printer.NewLine
+
+        printer.Write
+            "// You need to add Glutinum.Types NuGet package to your project"
+
+        printer.NewLine
+        printer.Write "open Glutinum.Types"
+        printer.NewLine
+
     if transformResult.IncludeRegExpAlias then
         printer.NewLine
         printer.Write "type RegExp = Text.RegularExpressions.Regex"
-        printer.NewLine
-
-    if transformResult.IncludeReadonlyArrayAlias then
-        printer.NewLine
-        printer.Write "type ReadonlyArray<'T> = JS.ReadonlyArray<'T>"
         printer.NewLine
 
     print printer transformResult.FSharpAST

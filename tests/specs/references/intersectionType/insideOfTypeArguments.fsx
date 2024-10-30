@@ -4,7 +4,8 @@ open Fable.Core
 open Fable.Core.JsInterop
 open System
 
-type ReadonlyArray<'T> = JS.ReadonlyArray<'T>
+// You need to add Glutinum.Types NuGet package to your project
+open Glutinum.Types
 
 [<AllowNullLiteral>]
 [<Interface>]
