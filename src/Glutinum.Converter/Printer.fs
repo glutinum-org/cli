@@ -1051,7 +1051,7 @@ let printFile (printer: Printer) (transformResult: Transform.TransformResult) =
             "// You need to add Glutinum.Types NuGet package to your project"
 
         printer.NewLine
-        printer.Write "open Glutinum.Types"
+        printer.Write "open Glutinum.Types.TypeScript"
         printer.NewLine
 
     if transformResult.IncludeRegExpAlias then
