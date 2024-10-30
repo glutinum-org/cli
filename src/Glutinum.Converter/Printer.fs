@@ -387,7 +387,11 @@ let private printBlockTag
     (attributes: (string * string) list)
     (content: string)
     =
-    let printXmlDocLine (line: string) = printer.Write($"/// {line}")
+    let printXmlDocLine (line: string) =
+        if String.IsNullOrWhiteSpace line then
+            printer.Write("///")
+        else
+            printer.Write($"/// {line}")
 
     let lines = content |> transformToXmlDoc |> String.splitLines
 
