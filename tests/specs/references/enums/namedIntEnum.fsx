@@ -13,4 +13,5 @@ type Direction =
 
 (***)
 #r "nuget: Fable.Core"
+#r "nuget: Glutinum.Types"
 (***)

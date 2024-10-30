@@ -11,4 +11,5 @@ type Database =
 
 (***)
 #r "nuget: Fable.Core"
+#r "nuget: Glutinum.Types"
 (***)

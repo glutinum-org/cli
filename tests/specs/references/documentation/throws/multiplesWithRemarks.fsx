@@ -9,12 +9,12 @@ open System
 type Exports =
     /// <remarks>
     /// This is a remarks section.
-    /// 
+    ///
     /// Throws:
     /// -------
-    /// 
+    ///
     /// Thrown if the ISBN number is valid, but no such book exists in the catalog.
-    /// 
+    ///
     /// Thrown if the network is down.
     /// </remarks>
     [<Import("fetchBookByIsbn", "REPLACE_ME_WITH_MODULE_NAME")>]
@@ -22,4 +22,5 @@ type Exports =
 
 (***)
 #r "nuget: Fable.Core"
+#r "nuget: Glutinum.Types"
 (***)

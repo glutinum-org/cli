@@ -27,4 +27,5 @@ type Signature =
 
 (***)
 #r "nuget: Fable.Core"
+#r "nuget: Glutinum.Types"
 (***)

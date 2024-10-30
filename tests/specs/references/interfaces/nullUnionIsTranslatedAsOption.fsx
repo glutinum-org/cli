@@ -11,4 +11,5 @@ type ConfigTypeMap =
 
 (***)
 #r "nuget: Fable.Core"
+#r "nuget: Glutinum.Types"
 (***)

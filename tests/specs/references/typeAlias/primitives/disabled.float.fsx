@@ -8,4 +8,5 @@ type MyFloat =
 
 (***)
 #r "nuget: Fable.Core"
+#r "nuget: Glutinum.Types"
 (***)

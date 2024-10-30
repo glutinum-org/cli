@@ -19,4 +19,5 @@ module OptionsInline =
 
 (***)
 #r "nuget: Fable.Core"
+#r "nuget: Glutinum.Types"
 (***)

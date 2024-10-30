@@ -10,7 +10,7 @@ type Exports =
     /// <returns>
     /// Returns true if the specified
     /// else false.
-    /// 
+    ///
     /// This is the return value of the documentation.
     /// </returns>
     [<Import("isInlineTag", "REPLACE_ME_WITH_MODULE_NAME")>]
@@ -18,4 +18,5 @@ type Exports =
 
 (***)
 #r "nuget: Fable.Core"
+#r "nuget: Glutinum.Types"
 (***)

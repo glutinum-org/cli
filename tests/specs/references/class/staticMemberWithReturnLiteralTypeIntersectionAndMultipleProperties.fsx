@@ -40,4 +40,5 @@ Class.callInitHooks()"""
 
 (***)
 #r "nuget: Fable.Core"
+#r "nuget: Glutinum.Types"
 (***)

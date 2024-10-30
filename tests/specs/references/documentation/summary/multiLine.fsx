@@ -10,9 +10,9 @@ type Exports =
     /// <summary>
     /// First line of the summary.
     /// Second line of the summary.
-    /// 
+    ///
     /// Another paragraph in the summary.
-    /// 
+    ///
     /// And a third paragraph,
     /// with a line break.
     /// </summary>
@@ -21,4 +21,5 @@ type Exports =
 
 (***)
 #r "nuget: Fable.Core"
+#r "nuget: Glutinum.Types"
 (***)

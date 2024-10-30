@@ -11,4 +11,5 @@ type PossibleValues =
 
 (***)
 #r "nuget: Fable.Core"
+#r "nuget: Glutinum.Types"
 (***)

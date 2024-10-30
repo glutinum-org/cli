@@ -23,4 +23,5 @@ type PluginFunc =
 
 (***)
 #r "nuget: Fable.Core"
+#r "nuget: Glutinum.Types"
 (***)

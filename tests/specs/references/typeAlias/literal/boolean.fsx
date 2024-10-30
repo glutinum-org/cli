@@ -12,4 +12,5 @@ type Test3 =
 
 (***)
 #r "nuget: Fable.Core"
+#r "nuget: Glutinum.Types"
 (***)

@@ -9,4 +9,5 @@ type LatLngTuple =
 
 (***)
 #r "nuget: Fable.Core"
+#r "nuget: Glutinum.Types"
 (***)

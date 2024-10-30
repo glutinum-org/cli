@@ -28,4 +28,5 @@ Hello.SayHelloTo3Persons($0, $1, $2)"""
 
 (***)
 #r "nuget: Fable.Core"
+#r "nuget: Glutinum.Types"
 (***)

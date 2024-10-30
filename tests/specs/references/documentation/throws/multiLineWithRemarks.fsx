@@ -9,10 +9,10 @@ open System
 type Exports =
     /// <remarks>
     /// This is a remarks section.
-    /// 
+    ///
     /// Throws:
     /// -------
-    /// 
+    ///
     /// This is line 1
     /// Thrown if the ISBN number is valid, but no such book exists in the catalog.
     /// </remarks>
@@ -21,4 +21,5 @@ type Exports =
 
 (***)
 #r "nuget: Fable.Core"
+#r "nuget: Glutinum.Types"
 (***)

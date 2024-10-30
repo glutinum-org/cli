@@ -15,4 +15,5 @@ type ForegroundColor =
 
 (***)
 #r "nuget: Fable.Core"
+#r "nuget: Glutinum.Types"
 (***)

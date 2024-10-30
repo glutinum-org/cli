@@ -16,4 +16,5 @@ module MyObject2 =
 
 (***)
 #r "nuget: Fable.Core"
+#r "nuget: Glutinum.Types"
 (***)

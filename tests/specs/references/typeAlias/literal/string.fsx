@@ -11,4 +11,5 @@ type GPUAutoLayoutMode =
 
 (***)
 #r "nuget: Fable.Core"
+#r "nuget: Glutinum.Types"
 (***)

@@ -9,7 +9,7 @@ open System
 type Exports =
     /// <summary>
     /// Links can point to a URL:
-    /// 
+    ///
     /// <see href="https://github.com/microsoft/tsdoc">https://github.com/microsoft/tsdoc</see>
     /// <see href="https://github.com/microsoft/tsdoc">https://github.com/microsoft/tsdoc</see>
     /// </summary>
@@ -18,4 +18,5 @@ type Exports =
 
 (***)
 #r "nuget: Fable.Core"
+#r "nuget: Glutinum.Types"
 (***)

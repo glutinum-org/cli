@@ -29,4 +29,5 @@ module Locale =
 
 (***)
 #r "nuget: Fable.Core"
+#r "nuget: Glutinum.Types"
 (***)

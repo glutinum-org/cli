@@ -25,4 +25,5 @@ Fuse.member = $0"""
 
 (***)
 #r "nuget: Fable.Core"
+#r "nuget: Glutinum.Types"
 (***)

@@ -9,4 +9,5 @@ type SymbolAlias =
 
 (***)
 #r "nuget: Fable.Core"
+#r "nuget: Glutinum.Types"
 (***)

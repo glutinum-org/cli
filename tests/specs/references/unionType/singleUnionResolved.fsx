@@ -9,4 +9,5 @@ type ColorInfo =
 
 (***)
 #r "nuget: Fable.Core"
+#r "nuget: Glutinum.Types"
 (***)

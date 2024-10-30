@@ -11,4 +11,5 @@ type MyObject<'T> =
 
 (***)
 #r "nuget: Fable.Core"
+#r "nuget: Glutinum.Types"
 (***)

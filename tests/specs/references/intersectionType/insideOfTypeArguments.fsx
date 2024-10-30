@@ -5,7 +5,7 @@ open Fable.Core.JsInterop
 open System
 
 // You need to add Glutinum.Types NuGet package to your project
-open Glutinum.Types
+open Glutinum.Types.TypeScript
 
 [<AllowNullLiteral>]
 [<Interface>]
@@ -29,4 +29,5 @@ module RecordEntryArrayItem =
 
 (***)
 #r "nuget: Fable.Core"
+#r "nuget: Glutinum.Types"
 (***)

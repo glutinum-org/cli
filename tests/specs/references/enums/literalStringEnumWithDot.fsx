@@ -11,4 +11,5 @@ type FirebaseSignInProvider =
 
 (***)
 #r "nuget: Fable.Core"
+#r "nuget: Glutinum.Types"
 (***)

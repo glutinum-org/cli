@@ -9,11 +9,12 @@ open System
 type Logger =
     /// <summary>
     /// The prefix of the log message.
-    /// 
+    ///
     /// <c>[timestamp]</c>
     /// </summary>
     abstract member prefix: string option with get, set
 
 (***)
 #r "nuget: Fable.Core"
+#r "nuget: Glutinum.Types"
 (***)

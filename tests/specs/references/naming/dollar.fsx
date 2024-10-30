@@ -13,4 +13,5 @@ type FuseSortFunctionItem =
 
 (***)
 #r "nuget: Fable.Core"
+#r "nuget: Glutinum.Types"
 (***)

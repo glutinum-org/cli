@@ -11,4 +11,5 @@ type IUser<'A, 'B> =
 
 (***)
 #r "nuget: Fable.Core"
+#r "nuget: Glutinum.Types"
 (***)

@@ -16,4 +16,5 @@ type Keys =
 
 (***)
 #r "nuget: Fable.Core"
+#r "nuget: Glutinum.Types"
 (***)

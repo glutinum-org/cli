@@ -17,4 +17,5 @@ type User<'A, 'B> =
 
 (***)
 #r "nuget: Fable.Core"
+#r "nuget: Glutinum.Types"
 (***)

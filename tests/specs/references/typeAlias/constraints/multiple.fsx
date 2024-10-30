@@ -20,4 +20,5 @@ type ReturnType<'A, 'T, 'B when 'T :> Foo<'A> and 'B :> Foo<'A>> =
 
 (***)
 #r "nuget: Fable.Core"
+#r "nuget: Glutinum.Types"
 (***)

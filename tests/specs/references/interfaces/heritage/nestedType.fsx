@@ -28,4 +28,5 @@ type IUser<'Bag> =
 
 (***)
 #r "nuget: Fable.Core"
+#r "nuget: Glutinum.Types"
 (***)
