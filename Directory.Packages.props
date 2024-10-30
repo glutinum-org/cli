@@ -3,6 +3,10 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
+    <PackageVersion Include="EasyBuild.PackageReleaseNotes.Tasks" Version="1.2.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageVersion>
     <PackageVersion Include="Fable.Browser.Navigator" Version="2.4.0" />
     <PackageVersion Include="Fable.Core" Version="4.3.0" />
     <PackageVersion Include="Fable.Elmish" Version="4.1.0" />
@@ -11,10 +15,14 @@
     <PackageVersion Include="Fable.Elmish.React" Version="4.0.0" />
     <PackageVersion Include="Fable.Elmish.UrlParser" Version="1.0.2" />
     <PackageVersion Include="Fable.Node" Version="1.2.0" />
+    <PackageVersion Include="Fable.Package.SDK" Version="1.3.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageVersion>
     <PackageVersion Include="Fable.Promise" Version="3.2.0" />
     <PackageVersion Include="Feliz" Version="2.7.0" />
     <PackageVersion Include="Feliz.Bulma" Version="3.0.0" />
-    <PackageVersion Include="FSharp.Core" Version="8.0.101" />
+    <PackageVersion Include="FSharp.Core" Version="5.0.2" />
     <PackageVersion Include="FsToolkit.ErrorHandling" Version="4.16.0" />
     <PackageVersion Include="Glutinum.Chalk" Version="1.0.0" />
     <PackageVersion Include="Glutinum.Feliz.Iconify" Version="2.0.0" />

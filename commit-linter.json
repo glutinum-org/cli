@@ -11,6 +11,7 @@
     ],
     "tags": [
         "cli",
-        "converter"
+        "converter",
+        "Glutinum.Types"
     ]
 }

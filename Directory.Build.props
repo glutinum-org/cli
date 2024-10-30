@@ -20,6 +20,6 @@
             Excepts Glutinum.Build which is isolated from the others -->
     <ItemGroup Condition="'$(PackageId)'!='Glutinum.Build'">
         <!-- Depends on the same version of FSharp.Core for all the projects -->
-        <PackageReference Include="FSharp.Core" PrivateAssets="all" />
+        <PackageReference Include="FSharp.Core" />
     </ItemGroup>
 </Project>

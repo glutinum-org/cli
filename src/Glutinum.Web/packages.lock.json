@@ -98,9 +98,9 @@
       },
       "FSharp.Core": {
         "type": "Direct",
-        "requested": "[8.0.101, )",
-        "resolved": "8.0.101",
-        "contentHash": "sOLz3O4BOxnTKfd5OChdRmDUy4Id0GfoEClRG4nzIod8LY1LJZcNyygKAV0A78XOLh8yvhA5hsDYKZXGCR9blw=="
+        "requested": "[8.0.100, )",
+        "resolved": "8.0.100",
+        "contentHash": "ZOVZ/o+jI3ormTZOa28Wh0tSRoyle1f7lKFcUN61sPiXI7eDZu8eSveFybgTeyIEyW0ujjp31cp7GOglDgsNEg=="
       },
       "Glutinum.Feliz.Iconify": {
         "type": "Direct",
@@ -323,6 +323,7 @@
         "type": "Project",
         "dependencies": {
           "FSToolkit.ErrorHandling": "[4.16.0, )",
+          "FSharp.Core": "[5.0.2, )",
           "Fable.Core": "[4.3.0, )",
           "Fable.Node": "[1.2.0, )",
           "Fable.Promise": "[3.2.0, )",

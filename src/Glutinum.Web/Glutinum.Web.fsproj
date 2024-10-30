@@ -29,6 +29,7 @@
     <ProjectReference Include="..\Glutinum.Converter\Glutinum.Converter.fsproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Update="FSharp.Core" VersionOverride= "8.0.100" />
     <PackageReference Include="fable.browser.navigator" />
     <PackageReference Include="Fable.Core" />
     <PackageReference Include="Fable.Elmish" />
