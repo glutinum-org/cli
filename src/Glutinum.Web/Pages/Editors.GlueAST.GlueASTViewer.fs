@@ -21,6 +21,9 @@ type GlueASTViewer =
     static member private FullName(fullName: string) =
         ASTViewer.renderKeyValue "FullName" fullName
 
+    static member private IsStandardLibrary(isStandardLibrary: bool) =
+        ASTViewer.renderKeyValue "IsStandardLibrary" (string isStandardLibrary)
+
     static member private IsOptional(isOptional: bool) =
         ASTViewer.renderKeyValue "IsOptional" (string isOptional)
 
@@ -338,6 +341,7 @@ type GlueASTViewer =
                 | GluePrimitive.Undefined -> Html.span "Undefined"
                 | GluePrimitive.Object -> Html.span "Object"
                 | GluePrimitive.Symbol -> Html.span "Symbol"
+                | GluePrimitive.Never -> Html.span "Never"
 
             ASTViewer.renderNode
                 "Primitive"
@@ -481,6 +485,12 @@ type GlueASTViewer =
                     ]
                     context
 
+            | GlueUtilityType.ReturnType returnType ->
+                ASTViewer.renderNode
+                    "ReturnType"
+                    [ GlueASTViewer.Type returnType ]
+                    context
+
         | GlueType.ThisType thisTypeInfo ->
             ASTViewer.renderNode
                 "ThisType"
@@ -507,10 +517,9 @@ type GlueASTViewer =
                 "TypeReference"
                 [
                     GlueASTViewer.Name typeReference.Name
-                    ASTViewer.renderKeyValue "FullName" typeReference.FullName
-                    ASTViewer.renderKeyValue
-                        "IsStandardLibrary"
-                        (string typeReference.IsStandardLibrary)
+                    GlueASTViewer.FullName typeReference.FullName
+                    GlueASTViewer.IsStandardLibrary
+                        typeReference.IsStandardLibrary
 
                     typeReference.TypeArguments
                     |> List.map GlueASTViewer.GlueType

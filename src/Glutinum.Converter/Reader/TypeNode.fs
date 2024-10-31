@@ -150,6 +150,22 @@ module UtilityType =
         |> GlueUtilityType.Record
         |> GlueType.UtilityType
 
+    let readReturnType
+        (reader: ITypeScriptReader)
+        (typeReferenceNode: Ts.TypeReferenceNode)
+        =
+        let typ = reader.checker.getTypeFromTypeNode typeReferenceNode
+
+        match reader.checker.typeToTypeNode (typ, None, None) with
+        | Some typeNode ->
+            reader.ReadTypeNode typeNode
+            |> GlueUtilityType.ReturnType
+            |> GlueType.UtilityType
+        | None ->
+            readTypeUsingFlags reader typ
+            |> GlueUtilityType.ReturnType
+            |> GlueType.UtilityType
+
 let readTypeNode
     (reader: ITypeScriptReader)
     (typeNode: Ts.TypeNode)
@@ -195,6 +211,8 @@ let readTypeNode
             | "Exclude" -> UtilityType.readExclude reader typeReferenceNode
             | "Partial" -> UtilityType.readPartial reader typeReferenceNode
             | "Record" -> UtilityType.readRecord reader typeReferenceNode
+            | "ReturnType" ->
+                UtilityType.readReturnType reader typeReferenceNode
             | _ -> readTypeReference true
         else
             readTypeReference false
@@ -213,29 +231,13 @@ let readTypeNode
 
         let typeParameters =
             try
-                match functionTypeNode.parent.parent.kind with
-                | Ts.SyntaxKind.InterfaceDeclaration ->
-                    let interfaceDeclaration =
-                        functionTypeNode.parent.parent
-                        :?> Ts.InterfaceDeclaration
+                let typParameters
+                    : option<ResizeArray<Ts.TypeParameterDeclaration>> =
+                    functionTypeNode.parent.parent?typeParameters
 
-                    reader.ReadTypeParameters
-                        interfaceDeclaration.typeParameters
-                | Ts.SyntaxKind.ClassDeclaration ->
-                    let classDeclaration =
-                        functionTypeNode.parent.parent :?> Ts.ClassDeclaration
+                reader.ReadTypeParameters typParameters
 
-                    reader.ReadTypeParameters classDeclaration.typeParameters
-                | _ ->
-                    reader.Warnings.Add(
-                        Report.readerError (
-                            "FunctionType",
-                            $"Unexpected parent type : %s{functionTypeNode.parent.parent.kind.Name} was expected a InterfaceDeclaration or a ClassDeclaration",
-                            functionTypeNode
-                        )
-                    )
-
-                    []
+            // Protect the direct access to the parent of parent
             with _ ->
                 reader.Warnings.Add(
                     Report.readerError (
@@ -457,6 +459,8 @@ let readTypeNode
         reader.ReadIndexedAccessType indexedAccessType
 
     | Ts.SyntaxKind.ConstructorType -> GlueType.ConstructorType
+
+    | Ts.SyntaxKind.NeverKeyword -> GlueType.Primitive GluePrimitive.Never
 
     | _ ->
         Report.readerError (

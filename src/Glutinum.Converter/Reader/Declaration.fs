@@ -17,8 +17,14 @@ let readDeclaration
         let propertySignature = declaration :?> Ts.PropertySignature
         let name = unbox<Ts.Node> propertySignature.name
 
+        let getName (name: Ts.PropertyName) : string =
+            if isNull name?text then
+                name?getText ()
+            else
+                name?text
+
         ({
-            Name = name.getText ()
+            Name = getName propertySignature.name
             Documentation = reader.ReadDocumentationFromNode name
             Type = reader.ReadTypeNode propertySignature.``type``
             IsOptional = propertySignature.questionToken.IsSome

@@ -12,7 +12,7 @@ type IntrinsicElements =
 [<RequireQualifiedAccess>]
 [<StringEnum(CaseRules.None)>]
 type Keys =
-    | [<CompiledName("var")>] var
+    | var
 
 (***)
 #r "nuget: Fable.Core"

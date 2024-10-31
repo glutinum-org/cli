@@ -337,6 +337,7 @@ let private transformPrimitive
     | GluePrimitive.Undefined -> FSharpPrimitive.Null
     | GluePrimitive.Object -> FSharpPrimitive.Null
     | GluePrimitive.Symbol -> FSharpPrimitive.Null
+    | GluePrimitive.Never -> FSharpPrimitive.Null
 
 let private transformTupleType
     (context: TransformContext)
@@ -726,6 +727,9 @@ let rec private transformType
             }
             : FSharpMapped)
             |> FSharpType.Mapped
+
+        | GlueUtilityType.ReturnType returnType ->
+            transformType context returnType
 
     | GlueType.TypeAliasDeclaration typeAliasDeclaration ->
         ({
@@ -2126,6 +2130,11 @@ let private transformTypeAliasDeclaration
                 typeAliasName
                 glueTypeAliasDeclaration.TypeParameters
                 recordInfo
+
+        | GlueUtilityType.ReturnType returnType ->
+            let context = context.PushScope "ReturnType"
+
+            transformType context returnType |> makeTypeAlias
 
     | GlueType.FunctionType functionType ->
         {

@@ -160,6 +160,7 @@ type GluePrimitive =
     | Undefined
     | Object
     | Symbol
+    | Never
 
 [<RequireQualifiedAccess>]
 type GlueLiteral =
@@ -269,7 +270,7 @@ type GlueRecord =
 type GlueUtilityType =
     | Partial of GlueInterface
     | Record of GlueRecord
-// | ReadOnly of GlueType
+    | ReturnType of GlueType
 
 type GlueMappedType =
     {
@@ -339,6 +340,7 @@ type GlueType =
             | GluePrimitive.Undefined -> "obj"
             | GluePrimitive.Object -> "obj"
             | GluePrimitive.Symbol -> "obj"
+            | GluePrimitive.Never -> "obj"
         | TemplateLiteral -> "string"
         | Enum info -> info.Name
         | TypeAliasDeclaration info -> info.Name
@@ -371,4 +373,5 @@ type GlueType =
             match utilityType with
             | GlueUtilityType.Partial _
             | GlueUtilityType.Record _ -> "obj"
+            | GlueUtilityType.ReturnType returnType -> returnType.Name
         | MappedType _ -> "obj"
