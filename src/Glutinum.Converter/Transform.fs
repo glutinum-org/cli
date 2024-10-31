@@ -728,8 +728,9 @@ let rec private transformType
             : FSharpMapped)
             |> FSharpType.Mapped
 
-        | GlueUtilityType.ReturnType returnType ->
-            transformType context returnType
+        | GlueUtilityType.ReturnType innerType
+        | GlueUtilityType.ThisParameterType innerType ->
+            transformType context innerType
 
     | GlueType.TypeAliasDeclaration typeAliasDeclaration ->
         ({
@@ -2135,6 +2136,9 @@ let private transformTypeAliasDeclaration
             let context = context.PushScope "ReturnType"
 
             transformType context returnType |> makeTypeAlias
+
+        | GlueUtilityType.ThisParameterType innerType ->
+            transformType context innerType |> makeTypeAlias
 
     | GlueType.FunctionType functionType ->
         {

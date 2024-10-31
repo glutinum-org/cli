@@ -271,6 +271,7 @@ type GlueUtilityType =
     | Partial of GlueInterface
     | Record of GlueRecord
     | ReturnType of GlueType
+    | ThisParameterType of GlueType
 
 type GlueMappedType =
     {
@@ -374,4 +375,5 @@ type GlueType =
             | GlueUtilityType.Partial _
             | GlueUtilityType.Record _ -> "obj"
             | GlueUtilityType.ReturnType returnType -> returnType.Name
+            | GlueUtilityType.ThisParameterType thisType -> thisType.Name
         | MappedType _ -> "obj"

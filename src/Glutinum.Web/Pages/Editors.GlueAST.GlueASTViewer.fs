@@ -491,6 +491,12 @@ type GlueASTViewer =
                     [ GlueASTViewer.Type returnType ]
                     context
 
+            | GlueUtilityType.ThisParameterType thisParameterType ->
+                ASTViewer.renderNode
+                    "ThisParameterType"
+                    [ GlueASTViewer.Type thisParameterType ]
+                    context
+
         | GlueType.ThisType thisTypeInfo ->
             ASTViewer.renderNode
                 "ThisType"

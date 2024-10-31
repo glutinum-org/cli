@@ -166,6 +166,22 @@ module UtilityType =
             |> GlueUtilityType.ReturnType
             |> GlueType.UtilityType
 
+    let thisParameterType
+        (reader: ITypeScriptReader)
+        (typeReferenceNode: Ts.TypeReferenceNode)
+        =
+        let typ = reader.checker.getTypeFromTypeNode typeReferenceNode
+
+        match reader.checker.typeToTypeNode (typ, None, None) with
+        | Some typeNode ->
+            reader.ReadTypeNode typeNode
+            |> GlueUtilityType.ThisParameterType
+            |> GlueType.UtilityType
+        | None ->
+            readTypeUsingFlags reader typ
+            |> GlueUtilityType.ThisParameterType
+            |> GlueType.UtilityType
+
 let readTypeNode
     (reader: ITypeScriptReader)
     (typeNode: Ts.TypeNode)
@@ -213,6 +229,8 @@ let readTypeNode
             | "Record" -> UtilityType.readRecord reader typeReferenceNode
             | "ReturnType" ->
                 UtilityType.readReturnType reader typeReferenceNode
+            | "ThisParameterType" ->
+                UtilityType.thisParameterType reader typeReferenceNode
             | _ -> readTypeReference true
         else
             readTypeReference false
