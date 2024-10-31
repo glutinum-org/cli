@@ -308,7 +308,10 @@ and printType (fsharpType: FSharpType) =
     | FSharpType.JSApi apiInfo ->
         match apiInfo with
         | FSharpJSApi.ReadonlyArray typ -> $"ReadonlyArray<{printType typ}>"
-    | FSharpType.Interface interfaceInfo -> interfaceInfo.Name
+    | FSharpType.Interface interfaceInfo ->
+        printTypeNameWithTypeParemeters
+            interfaceInfo.Name
+            interfaceInfo.TypeParameters
     | FSharpType.Class classInfo -> classInfo.Name
     | FSharpType.TypeAlias aliasInfo ->
         printTypeNameWithTypeParemeters aliasInfo.Name aliasInfo.TypeParameters
