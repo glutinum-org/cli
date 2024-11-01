@@ -199,8 +199,10 @@ let private getReleaseContext
             match commits.SemanticCommit.Tags with
             | Some tags ->
                 match settings.Project with
-                | Project.GlutinumCli -> List.contains "cli" tags
-                | Project.GlutinumWeb -> List.contains "web" tags
+                | Project.GlutinumCli ->
+                    List.contains "cli" tags || List.contains "converter" tags
+                | Project.GlutinumWeb ->
+                    List.contains "web" tags || List.contains "converter" tags
                 | Project.GlutinumTypes -> List.contains "Glutinum.Types" tags
                 | Project.All ->
                     failwith

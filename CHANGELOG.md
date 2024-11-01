@@ -5,8 +5,335 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 <!-- EasyBuild: START -->
-<!-- last_commit_released: 6fc5e4e84be3c12637af924c8cb612bbb9f35f77 -->
+<!-- last_commit_released: dba758860fabb533a408a08ff7f137c88d79db2d -->
 <!-- EasyBuild: END -->
+
+## 0.11.0
+
+### 🚀 Features
+
+* Add support for `ThisParameterType` ([dba7588](https://github.com/glutinum-org/cli/commit/dba758860fabb533a408a08ff7f137c88d79db2d))
+
+    ```ts
+    declare function toHex(this: number): string;
+    declare function numberToString(n: ThisParameterType<typeof toHex>): string;
+    ```
+
+    ```fs
+    [<AbstractClass>]
+    [<Erase>]
+    type Exports =
+        [<Import("toHex", "REPLACE_ME_WITH_MODULE_NAME")>]
+        static member toHex (this: float) : string = nativeOnly
+        [<Import("numberToString", "REPLACE_ME_WITH_MODULE_NAME")>]
+        static member numberToString (n: float) : string = nativeOnly
+    ```
+
+* Alias `Error` to `Exception` ([a5078c8](https://github.com/glutinum-org/cli/commit/a5078c8e9060c43848c3074f9745fcc8a7c1ed11))
+
+    ```ts
+    export type T = Error
+    ```
+
+    ```fs
+    type T =
+        Exception
+    ```
+
+* Use `ReadonlyArray` from `Glutinum.Types` ([205b596](https://github.com/glutinum-org/cli/commit/205b59603b97bd8a9b5b114381988a7d3b3181a9))
+
+    ```ts
+    export type T = ReadonlyArray<number>
+    ```
+
+    ```fs
+    // You need to add Glutinum.Types NuGet package to your project
+    open Glutinum.Types
+
+    type T =
+        ReadonlyArray<float>
+    ```
+
+* Add support for `ReturnType` ([6075659](https://github.com/glutinum-org/cli/commit/6075659dac8d88bf037537fad6c7328ea9218704))
+
+    ```ts
+    export type T1 = ReturnType<any>;
+    export type T2 = ReturnType<(s: string) => void>;
+    export type T3 = ReturnType<<T extends U, U extends number[]>() => T>;
+    ```
+
+    ```fs
+    type T1 =
+        obj
+
+    type T2 =
+        unit
+
+    type T3 =
+        ResizeArray<float>
+    ```
+
+* Transform `FunctionType` to delegate if there are 2 or more parameters ([b7150a7](https://github.com/glutinum-org/cli/commit/b7150a77683760d366aa774161d8508781fedd79))
+
+    ```ts
+    export interface MyObject<A,B, NotNeeded> {
+        upper: (s : string) => string;
+        random: (min: number, max: number) => number;
+        foo: (min: A, max: B) => B;
+    }
+    ```
+
+    ```fs
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type MyObject<'A, 'B, 'NotNeeded> =
+        abstract member upper: (string -> string) with get, set
+        abstract member random: MyObject.random with get, set
+        abstract member foo: MyObject.foo<'A, 'B> with get, set
+
+    module MyObject =
+
+        type random =
+            delegate of min: float * max: float -> float
+
+        type foo<'A, 'B> =
+            delegate of min: 'A * max: 'B -> 'B
+    ```
+
+* Add support for `ReadonlyArray` and it's equivalent `readonly T[]` ([a24335b](https://github.com/glutinum-org/cli/commit/a24335bdd1342dafa41586b72b82c65642ab3b97))
+
+    ```ts
+    export type Standard = ReadonlyArray<number>
+
+    export type Alias = readonly number[];
+    ```
+
+    ```fs
+    type ReadonlyArray<'T> = JS.ReadonlyArray<'T>
+
+    type Standard =
+        ReadonlyArray<float>
+
+    type Alias =
+        ReadonlyArray<float>
+    ```
+
+* Support piping CLI output to a file ([14ba216](https://github.com/glutinum-org/cli/commit/14ba2163fa2e6bd4b7d695deed4d84db46f9480e))
+* Add replacement for `Function` to `System.Action` ([23ef41f](https://github.com/glutinum-org/cli/commit/23ef41fc7e03bd45e11da60a6ff1bae9a206c535))
+
+    ```ts
+    interface sharedEvents {
+        getEventState: Function
+    }
+    ```
+
+    ```fs
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type sharedEvents =
+        abstract member getEventState: Action with get, set
+    ```
+
+* Remove warning when seeing `ConstructorType` + keep in the output TypeAlias that we don't know how to handle ([60a0f83](https://github.com/glutinum-org/cli/commit/60a0f8368e1a8f357e7b3fa214369d543180f9ed))
+* Improve reader error message to include the caller file + use the name of the `SyntaxKind` instead of its numeric value ([54913da](https://github.com/glutinum-org/cli/commit/54913da8887cc04e2e025a71edc1dc9baeb69fa3))
+
+### 🐞 Bug Fixes
+
+* Make Reader error reporter support node without a source file attached to them ([190ea17](https://github.com/glutinum-org/cli/commit/190ea170f7f1b3208c25c6dc8098d97728b2bba3))
+* `IndexSignature` decorated with `readonly` should not generate a `setter` ([5cb91ef](https://github.com/glutinum-org/cli/commit/5cb91ef86db0a9695c4d7a1e22d394e756e94b1b))
+
+    ```ts
+    export interface MyType {
+        readonly [n: number]: string;
+    }
+    ```
+
+    ```fs
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type MyType =
+        [<EmitIndexer>]
+        abstract member Item: n: float -> string with get
+    ```
+
+* Improve support for `ConstructorType` ([d4512a9](https://github.com/glutinum-org/cli/commit/d4512a968374eaa57bb00053dab45f912771c4be))
+
+    ```ts
+    type Simple = new(config?: string) => number;
+
+    type WitGeneric<T> = new(config?: string) => T;
+    ```
+
+    ```fs
+    type Simple =
+        obj
+
+    [<Erase>]
+    type WitGeneric<'T> =
+        | WitGeneric of 'T
+
+        member inline this.Value =
+            let (WitGeneric output) = this
+            output
+    ```
+
+* Allows interface to be printed as type with generics ([f63db34](https://github.com/glutinum-org/cli/commit/f63db3433aab8293bb8ea15bbebfaaafb94463a5))
+* Open statement from `open Glutinum.Types` to `open Glutinum.Types.TypeScript` ([7325d86](https://github.com/glutinum-org/cli/commit/7325d86ca0b0ecdb0c7e725b003fdb9a576bb7d7))
+* Sanitise the `scopeName` when generating additional types ([0f5228b](https://github.com/glutinum-org/cli/commit/0f5228baef81bdf1c3edf73fbcd7379820eeb566))
+
+    *Note how `params` is escaped*
+
+    ```ts
+    export interface Test {
+        callback: ((params: {
+            table: string;
+        }) => void)
+    }
+    ```
+
+    ```fs
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type Test =
+        abstract member callback: (Test.callback.``params`` -> unit) with get, set
+
+    module Test =
+
+        module callback =
+
+            [<Global>]
+            [<AllowNullLiteral>]
+            type ``params``
+                [<ParamObject; Emit("$0")>]
+                (
+                    table: string
+                ) =
+
+                member val table : string = nativeOnly with get, set
+    ```
+
+* Don’t add a space if `XmlDocLine` is empty ([f1be351](https://github.com/glutinum-org/cli/commit/f1be351391a5d907d4b082a6c8be637c73c4b464))
+* Supports generics for `ThisType` ([886d8a5](https://github.com/glutinum-org/cli/commit/886d8a530b81a779f640a58b77a50d42cd066990))
+
+    ```ts
+    export interface MyObject<T> {
+        instance: () => this;
+    }
+    ```
+
+    ```fs
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type MyObject<'T> =
+        abstract member instance: (unit -> MyObject<'T>) with get, set
+    ```
+
+* Add `option` when printing F# `Function` if the parameter is marked as optional ([8be3190](https://github.com/glutinum-org/cli/commit/8be3190f5cd442c5d502fc2163e4406b0d213718))
+
+    ```ts
+    interface AlertStatic {
+      alert: (
+        title: string,
+        message?: string
+      ) => void;
+    }
+    ```
+
+    ```fs
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type AlertStatic =
+        abstract member alert: (string -> string option -> unit) with get, set
+    ```
+
+* Use `@ts-morph/bootstrap` to setup TypeScript for CLI usage ([8521fc6](https://github.com/glutinum-org/cli/commit/8521fc644ceb8f997bc197ef15769156858806e8))
+* Remove debug log ([9567a12](https://github.com/glutinum-org/cli/commit/9567a1247ed32e7529fa304b1d886263c25e9ac0))
+* Don't emit warning when seeing an `EmptyStatement` ([85bb658](https://github.com/glutinum-org/cli/commit/85bb65875757414dec40f2d167f295e890656f6c))
+
+    Empty statement happens when a `;` is used in a place where it is not needed
+
+    ```ts
+    ;
+    ```
+
+    or
+
+    ```ts
+    interface sharedEvents {
+        getEventState: Function
+    };
+    ```
+
+* Prevent error reporter to crash if the parent node is `undefined` ([bf0cb8f](https://github.com/glutinum-org/cli/commit/bf0cb8f2211f70b272861ee83cc8360e4fdc5a7d))
+* Add support for combination `keyof typeof` ([a0babc8](https://github.com/glutinum-org/cli/commit/a0babc89cd345d103a7e94014429aa6dabb4f1d2))
+
+    ```ts
+    export enum ColorsEnum {
+        white = '#ffffff',
+        black = '#000000',
+    }
+
+    export type Colors = keyof typeof ColorsEnum;
+    ```
+
+    ```fs
+    [<RequireQualifiedAccess>]
+    [<StringEnum(CaseRules.None)>]
+    type ColorsEnum =
+        | [<CompiledName("#ffffff")>] white
+        | [<CompiledName("#000000")>] black
+
+    [<RequireQualifiedAccess>]
+    [<StringEnum(CaseRules.None)>]
+    type Colors =
+        | white
+        | black
+    ```
+
+* Support for union using `Array` interface ([1a35d4c](https://github.com/glutinum-org/cli/commit/1a35d4c9d8b96d530c513b63c820da92c660174b))
+
+    ```ts
+    export type NumberOrNumberArray = number | Array<number>
+    ```
+
+    ```fs
+    type NumberOrNumberArray =
+        U2<float, ResizeArray<float>>
+    ```
+
+* Add support for literal enums with `@`, `<`, `>`, ` ` (space) ([883829c](https://github.com/glutinum-org/cli/commit/883829c647a40ec883a6a40586b833c57b0e4bc6))
+* Support resolving name when deconstructing a parameter ([04a82dc](https://github.com/glutinum-org/cli/commit/04a82dccc6663e823d4701447bb4b543a0e1a77c))
+
+    ```ts
+    export interface LogOptions {
+        prefix: string;
+    }
+
+    export interface Context {
+        indentationLevel: number;
+    }
+
+    declare class Signature {
+        toText({ indentationLevel }: Context, data : string, {prefix }?: LogOptions): string;
+    }
+    ```
+
+    ```fs
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type LogOptions =
+        abstract member prefix: string with get, set
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type Context =
+        abstract member indentationLevel: float with get, set
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type Signature =
+        abstract member toText: arg0: Context * data: string * ?arg2: LogOptions -> string
+    ```
 
 ## 0.10.0
 
