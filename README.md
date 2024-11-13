@@ -2,6 +2,23 @@
 
 This is a compiler from `.d.ts` to F# bindings for [Fable](https://fable.io/).
 
+## Getting Started
+
+install [glutinum npm package](https://www.npmjs.com/package/@glutinum/cli) 
+
+`npm i -D @glutinum/cli`
+
+#### Usage
+
+```cli
+    glutinum <input> [--out-file <output>]
+    glue <input> [--out-file <output>]
+```
+
+#### Example
+
+`glue ./node_modules/my-lib/index.d.ts --out-file ./Glutinum.MyLib.fs` 
+
 ## Contributing
 
 Glutinum.CLI use `./build.sh` or `./build.bat` as a build script.
