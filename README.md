@@ -4,7 +4,9 @@ This is a compiler from `.d.ts` to F# bindings for [Fable](https://fable.io/).
 
 ## Getting Started
 
-install [glutinum npm package](https://www.npmjs.com/package/@glutinum/cli) 
+`npx @glutinum/cli path/file-name.d.ts`
+
+or install it locally [glutinum npm package](https://www.npmjs.com/package/@glutinum/cli) 
 
 `npm i -D @glutinum/cli`
 
