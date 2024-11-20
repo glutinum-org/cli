@@ -180,6 +180,11 @@ let rec private tryTransformTypeParametersToText
             printer.WriteInline($"'{typeParameter.Name}")
         )
 
+        // Print the constraints only if we are in the initial declaration.
+        // We want to avoid situations like the following:
+        // static member User<'T when 'T :> A> () : User<'T when 'T :> A> = nativeOnly
+        // Which should be:
+        // static member User<'T when 'T :> A> () : User<'T> = nativeOnly
         if isDeclaration then
             typeParameters
             |> List.filter _.Constraint.IsSome
