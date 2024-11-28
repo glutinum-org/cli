@@ -71,6 +71,8 @@ type FSharpAttribute =
     | EmitIndexer
 ```
 
+You can find more information about the internals of Glutinum and the developer workflow by watching the following [Amplifying F# session.](https://www.youtube.com/watch?v=Bq00D2xsa7Q)
+
 ### Tests
 
 #### Vitest
