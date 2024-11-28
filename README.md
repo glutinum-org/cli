@@ -4,22 +4,49 @@ This is a compiler from `.d.ts` to F# bindings for [Fable](https://fable.io/).
 
 ## Getting Started
 
-`npx @glutinum/cli path/file-name.d.ts`
+Glutinum is delivered both as a CLI tool and web interface.
 
-or install it locally [glutinum npm package](https://www.npmjs.com/package/@glutinum/cli) 
+### Web Interface
 
-`npm i -D @glutinum/cli`
+The web interface is available [here](https://glutinum.net/).
 
-#### Usage
+It is a simple and easy-to-use tool, allowing you to convert `.d.ts` files to F# bindings directly from your browser without installing anything.
 
-```cli
-    glutinum <input> [--out-file <output>]
-    glue <input> [--out-file <output>]
+This is also the tool that you should use to report issues if possible.
+
+💡 The web interface is more often updated than the NPM package
+
+### CLI via NPM
+
+The CLI can be invoked using `npx`:
+
+```bash
+npx @glutinum/cli --help
 ```
 
-#### Example
+or installed locally:
 
-`glue ./node_modules/my-lib/index.d.ts --out-file ./Glutinum.MyLib.fs` 
+```bash
+npm i -D @glutinum/cli
+```
+
+### Usage
+
+```bash
+# Without installing the package
+npx @glutinum/cli ./node_modules/my-lib/index.d.ts --out-file ./Glutinum.MyLib.fs
+# Or with the installed package
+npx glue ./node_modules/my-lib/index.d.ts --out-file ./Glutinum.MyLib.fs
+```
+
+or if you prefer you can pipe the output to a file:
+
+```bash
+# Without installing the package
+npx @glutinum/cli ./node_modules/my-lib/index.d.ts > ./Glutinum.MyLib.fs
+# Or with the installed package
+npx glue ./node_modules/my-lib/index.d.ts > ./Glutinum.MyLib.fs
+```
 
 ## Contributing
 
