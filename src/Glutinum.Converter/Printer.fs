@@ -163,8 +163,50 @@ let private printAttributes
         printer.NewLine
     )
 
-let rec private tryTransformTypeParametersToText
-    (isDeclaration: bool)
+let rec printTypeParametersDeclaration
+    (printer: Printer)
+    (typeParameters: FSharpTypeParameter list)
+    =
+    let innterPrinter = new Printer()
+
+    if not typeParameters.IsEmpty then
+        innterPrinter.WriteInline("<")
+
+        typeParameters
+        |> List.iteri (fun index typeParameter ->
+            if index <> 0 then
+                innterPrinter.WriteInline(", ")
+
+            innterPrinter.WriteInline($"'{typeParameter.Name}")
+        )
+
+        // Print the constraints only if we are in the initial declaration.
+        // We want to avoid situations like the following:
+        // static member User<'T when 'T :> A> () : User<'T when 'T :> A> = nativeOnly
+        // Which should be:
+        // static member User<'T when 'T :> A> () : User<'T> = nativeOnly
+        typeParameters
+        |> List.filter _.Constraint.IsSome
+        |> List.iteri (fun index typeParameter ->
+            match typeParameter.Constraint with
+            | Some constraint_ ->
+                if index = 0 then
+                    innterPrinter.WriteInline(" when ")
+                else
+                    innterPrinter.WriteInline(" and ")
+
+                innterPrinter.WriteInline($"'{typeParameter.Name}")
+                innterPrinter.WriteInline(" :> ")
+                innterPrinter.WriteInline(printType constraint_)
+            | None -> ()
+        )
+
+        innterPrinter.WriteInline(">")
+
+        innterPrinter.ToStringWithoutTrailNewLine() |> printer.WriteInline
+
+and printTypeNameWithTypeParameters
+    (name: string)
     (typeParameters: FSharpTypeParameter list)
     =
     let printer = new Printer()
@@ -180,66 +222,15 @@ let rec private tryTransformTypeParametersToText
             printer.WriteInline($"'{typeParameter.Name}")
         )
 
-        // Print the constraints only if we are in the initial declaration.
-        // We want to avoid situations like the following:
-        // static member User<'T when 'T :> A> () : User<'T when 'T :> A> = nativeOnly
-        // Which should be:
-        // static member User<'T when 'T :> A> () : User<'T> = nativeOnly
-        if isDeclaration then
-            typeParameters
-            |> List.filter _.Constraint.IsSome
-            |> List.iteri (fun index typeParameter ->
-                match typeParameter.Constraint with
-                | Some constraint_ ->
-                    if index = 0 then
-                        printer.WriteInline(" when ")
-                    else
-                        printer.WriteInline(" and ")
-
-                    printer.WriteInline($"'{typeParameter.Name}")
-                    printer.WriteInline(" :> ")
-                    printer.WriteInline(printType constraint_)
-                | None -> ()
-            )
-
         printer.WriteInline(">")
 
-        printer.ToStringWithoutTrailNewLine() |> Some
-
-    else
-        None
-
-and printTypeParameters
-    (printer: Printer)
-    (typeParameters: FSharpTypeParameter list)
-    =
-    let isDeclaration = true
-
-    match tryTransformTypeParametersToText isDeclaration typeParameters with
-    | Some typeParameters -> printer.WriteInline(typeParameters)
-    | None -> ()
+    $"{name}{printer.ToStringWithoutTrailNewLine()}"
 
 and printType (fsharpType: FSharpType) =
-    let printTypeNameWithTypeParameters
-        (name: string)
-        (typeParameters: FSharpTypeParameter list)
-        =
-        let isDeclaration = false
-
-        match tryTransformTypeParametersToText isDeclaration typeParameters with
-        | Some typeParameters -> $"{name}{typeParameters}"
-        | None -> name
-
     match fsharpType with
     | FSharpType.Object -> "obj"
     | FSharpType.Mapped info ->
-        let isDeclaration = false
-
-        match
-            tryTransformTypeParametersToText isDeclaration info.TypeParameters
-        with
-        | Some typeParameters -> $"{info.Name}{typeParameters}"
-        | None -> info.Name
+        printTypeNameWithTypeParameters info.Name info.TypeParameters
 
     | FSharpType.SingleErasedCaseUnion info -> info.Name
 
@@ -518,7 +509,7 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
     printAttributes printer interfaceInfo.Attributes
 
     printer.Write($"type {interfaceInfo.Name}")
-    printTypeParameters printer interfaceInfo.TypeParameters
+    printTypeParametersDeclaration printer interfaceInfo.TypeParameters
     printer.WriteInline(" =")
     printer.NewLine
 
@@ -547,7 +538,7 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
 
             printer.WriteInline($"member {methodInfo.Name}")
 
-            printTypeParameters printer methodInfo.TypeParameters
+            printTypeParametersDeclaration printer methodInfo.TypeParameters
 
             if methodInfo.IsStatic then
                 printer.WriteInline(" ")
@@ -719,7 +710,9 @@ import {{ %s{interfaceInfo.OriginalName} }} from \"{Naming.MODULE_PLACEHOLDER}\"
 
             printer.Write($"static member inline {staticMemberInfo.Name} ")
 
-            printTypeParameters printer staticMemberInfo.TypeParameters
+            printTypeParametersDeclaration
+                printer
+                staticMemberInfo.TypeParameters
 
             if staticMemberInfo.Parameters.IsEmpty then
                 printer.WriteInline("() : ")
@@ -826,7 +819,7 @@ let private printClass (printer: Printer) (classInfo: FSharpClass) =
     printAttributes printer classInfo.Attributes
 
     printer.Write($"type {classInfo.Name}")
-    printTypeParameters printer classInfo.TypeParameters
+    printTypeParametersDeclaration printer classInfo.TypeParameters
     printer.NewLine
     printer.Indent
     printPrimaryConstructor printer classInfo.PrimaryConstructor
@@ -912,7 +905,7 @@ let private printTypeAlias (printer: Printer) (aliasInfo: FSharpTypeAlias) =
     printAttributes printer aliasInfo.Attributes
 
     printer.Write($"type {aliasInfo.Name}")
-    printTypeParameters printer aliasInfo.TypeParameters
+    printTypeParametersDeclaration printer aliasInfo.TypeParameters
     printer.WriteInline(" =")
 
     printer.NewLine
@@ -923,7 +916,7 @@ let private printTypeAlias (printer: Printer) (aliasInfo: FSharpTypeAlias) =
 
 let private printDelegate (printer: Printer) (delegateInfo: FSharpDelegate) =
     printer.Write($"type {delegateInfo.Name}")
-    printTypeParameters printer delegateInfo.TypeParameters
+    printTypeParametersDeclaration printer delegateInfo.TypeParameters
     printer.WriteInline(" =")
 
     printer.NewLine
@@ -1007,7 +1000,11 @@ let rec private print (printer: Printer) (fsharpTypes: FSharpType list) =
                 (FSharpAttribute.Erase :: erasedCaseUnionInfo.Attributes)
 
             printer.Write($"type {erasedCaseUnionInfo.Name}")
-            printTypeParameters printer [ erasedCaseUnionInfo.TypeParameter ]
+
+            printTypeParametersDeclaration
+                printer
+                [ erasedCaseUnionInfo.TypeParameter ]
+
             printer.WriteInline(" =")
 
             printer.NewLine
