@@ -732,6 +732,29 @@ let rec private transformType
         | GlueUtilityType.ThisParameterType innerType ->
             transformType context innerType
 
+        | GlueUtilityType.Omit members ->
+            {
+                Attributes =
+                    [
+                        FSharpAttribute.AllowNullLiteral
+                        FSharpAttribute.Interface
+                    ]
+                Name = context.CurrentScopeName
+                OriginalName = context.CurrentScopeName
+                TypeParameters = []
+                Members = TransformMembers.toFSharpMember context members
+                Inheritance = []
+            }
+            |> FSharpType.Interface
+            |> context.ExposeType
+
+            ({
+                Name = context.FullName
+                TypeParameters = []
+            }
+            : FSharpMapped)
+            |> FSharpType.Mapped
+
     | GlueType.TypeAliasDeclaration typeAliasDeclaration ->
         ({
             Name = typeAliasDeclaration.Name
@@ -2139,6 +2162,24 @@ let private transformTypeAliasDeclaration
 
         | GlueUtilityType.ThisParameterType innerType ->
             transformType context innerType |> makeTypeAlias
+
+        | GlueUtilityType.Omit members ->
+            {
+                Attributes =
+                    [
+                        FSharpAttribute.AllowNullLiteral
+                        FSharpAttribute.Interface
+                    ]
+                Name = typeAliasName
+                OriginalName = glueTypeAliasDeclaration.Name
+                TypeParameters =
+                    transformTypeParameters
+                        context
+                        glueTypeAliasDeclaration.TypeParameters
+                Members = TransformMembers.toFSharpMember context members
+                Inheritance = []
+            }
+            |> FSharpType.Interface
 
     | GlueType.FunctionType functionType ->
         {

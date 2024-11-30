@@ -166,7 +166,7 @@ module UtilityType =
             |> GlueUtilityType.ReturnType
             |> GlueType.UtilityType
 
-    let thisParameterType
+    let readThisParameterType
         (reader: ITypeScriptReader)
         (typeReferenceNode: Ts.TypeReferenceNode)
         =
@@ -181,6 +181,88 @@ module UtilityType =
             readTypeUsingFlags reader typ
             |> GlueUtilityType.ThisParameterType
             |> GlueType.UtilityType
+
+    let readOmit
+        (reader: ITypeScriptReader)
+        (typeReferenceNode: Ts.TypeReferenceNode)
+        =
+
+        let keysToOmitType =
+            typeReferenceNode.typeArguments.Value[1]
+            |> reader.checker.getTypeFromTypeNode
+
+        let tryReadValueOfKeys (typ: Ts.Type) =
+            match Type.StringLiteral.tryReadValue typ with
+            | Some value -> Some value
+            | None ->
+                Report.readerError (
+                    "keysToOmit",
+                    "Expected a string literal",
+                    typeReferenceNode
+                )
+                |> reader.Warnings.Add
+
+                None
+
+        let keysToOmit =
+            if keysToOmitType.isUnion () then
+                (keysToOmitType :?> Ts.UnionOrIntersectionType).types
+                |> Seq.choose tryReadValueOfKeys
+            else
+                tryReadValueOfKeys keysToOmitType
+                |> Option.map Seq.singleton
+                |> Option.defaultValue []
+
+        let baseType =
+            typeReferenceNode.typeArguments.Value[0]
+            |> reader.checker.getTypeFromTypeNode
+
+        let baseProperties =
+            match baseType.flags with
+            | HasTypeFlags Ts.TypeFlags.Any ->
+                Report.readerError (
+                    "omit base type",
+                    "Was not able to resolve the base type, and defaulting to any. If the base type is defined, in another file, please make sure to include it in the input files",
+                    typeReferenceNode
+                )
+                |> reader.Warnings.Add
+
+                ResizeArray []
+            | _ -> baseType |> reader.checker.getPropertiesOfType
+
+        let filteredProperties =
+            baseProperties
+            |> Seq.filter (fun prop ->
+                not (keysToOmit |> Seq.contains prop.name)
+            )
+            |> Seq.toList
+
+        let members =
+            filteredProperties
+            |> List.choose (fun property ->
+                match property.declarations with
+                | Some declarations ->
+                    if declarations.Count = 1 then
+                        Some(reader.ReadDeclaration declarations.[0])
+                    else
+                        Report.readerError (
+                            "type node",
+                            "Expected exactly one declaration",
+                            typeReferenceNode
+                        )
+                        |> reader.Warnings.Add
+
+                        None
+                | None ->
+                    Report.readerError (
+                        "type node",
+                        "Missing declarations",
+                        typeReferenceNode
+                    )
+                    |> failwith
+            )
+
+        members |> GlueUtilityType.Omit |> GlueType.UtilityType
 
 let readTypeNode
     (reader: ITypeScriptReader)
@@ -230,7 +312,8 @@ let readTypeNode
             | "ReturnType" ->
                 UtilityType.readReturnType reader typeReferenceNode
             | "ThisParameterType" ->
-                UtilityType.thisParameterType reader typeReferenceNode
+                UtilityType.readThisParameterType reader typeReferenceNode
+            | "Omit" -> UtilityType.readOmit reader typeReferenceNode
             | _ -> readTypeReference true
         else
             readTypeReference false

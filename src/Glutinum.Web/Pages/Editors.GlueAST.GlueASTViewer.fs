@@ -497,6 +497,12 @@ type GlueASTViewer =
                     [ GlueASTViewer.Type thisParameterType ]
                     context
 
+            | GlueUtilityType.Omit members ->
+                ASTViewer.renderNode
+                    "Omit"
+                    (members |> List.map GlueASTViewer.GlueMember)
+                    context
+
         | GlueType.ThisType thisTypeInfo ->
             ASTViewer.renderNode
                 "ThisType"

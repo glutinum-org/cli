@@ -49,7 +49,6 @@ let readTypeQueryNode
                 let! declaration =
                     if declarations.Count <> 1 then
                         Report.readerError (
-
                             "type node (TypeQuery)",
                             "Expected exactly one declaration",
                             typeQueryNode

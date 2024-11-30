@@ -153,3 +153,15 @@ let isFromEs5Lib (symbolOpt: Ts.Symbol option) =
 
                 sourceFile.fileName.EndsWith("lib/lib.es5.d.ts")
             | _ -> false
+
+module Type =
+
+    module StringLiteral =
+
+        let tryReadValue (literalType: Ts.Type) =
+            match literalType.flags with
+            | HasTypeFlags Ts.TypeFlags.StringLiteral ->
+                let literalType = literalType :?> Ts.LiteralType
+
+                Some(unbox<string> literalType.value)
+            | _ -> None

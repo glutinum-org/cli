@@ -272,6 +272,7 @@ type GlueUtilityType =
     | Record of GlueRecord
     | ReturnType of GlueType
     | ThisParameterType of GlueType
+    | Omit of GlueMember list
 
 type GlueMappedType =
     {
