@@ -158,10 +158,23 @@ module Type =
 
     module StringLiteral =
 
-        let tryReadValue (literalType: Ts.Type) =
+        let (|String|Other|) (literalType: Ts.Type) =
             match literalType.flags with
             | HasTypeFlags Ts.TypeFlags.StringLiteral ->
                 let literalType = literalType :?> Ts.LiteralType
 
-                Some(unbox<string> literalType.value)
-            | _ -> None
+                String(unbox<string> literalType.value)
+            | _ -> Other
+
+    module NumberLiteral =
+
+        let (|Int|Float|Other|) (literalType: Ts.Type) =
+            match literalType.flags with
+            | HasTypeFlags Ts.TypeFlags.NumberLiteral ->
+                let literalType = literalType :?> Ts.LiteralType
+
+                if Constructors.Number.isSafeInteger literalType.value then
+                    Int(unbox<int> literalType.value)
+                else
+                    Float(unbox<float> literalType.value)
+            | _ -> Other

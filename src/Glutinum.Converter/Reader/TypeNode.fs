@@ -56,30 +56,65 @@ module UtilityType =
             :?> Ts.UnionOrIntersectionType
 
         let cases =
-            typ.types
-            |> Seq.toList
-            |> List.choose (fun typ ->
-                match typ.flags with
-                | HasTypeFlags Ts.TypeFlags.StringLiteral ->
-                    let literalType = typ :?> Ts.LiteralType
+            match typ.flags with
+            | HasTypeFlags Ts.TypeFlags.StringLiteral ->
+                match typ with
+                | Type.StringLiteral.String value ->
+                    [ GlueLiteral.String value |> GlueType.Literal ]
+                | Type.StringLiteral.Other ->
+                    Report.readerError (
+                        "Exclude",
+                        "Expected a string literal",
+                        typeReferenceNode
+                    )
+                    |> reader.Warnings.Add
 
-                    let value = unbox<string> literalType.value
+                    []
 
-                    GlueLiteral.String value |> GlueType.Literal |> Some
-                | HasTypeFlags Ts.TypeFlags.NumberLiteral ->
-                    let literalType = typ :?> Ts.LiteralType
+            | HasTypeFlags Ts.TypeFlags.NumberLiteral ->
+                match typ with
+                | Type.NumberLiteral.Int value ->
+                    [ GlueLiteral.Int value |> GlueType.Literal ]
+                | Type.NumberLiteral.Float value ->
+                    [ GlueLiteral.Float value |> GlueType.Literal ]
+                | Type.NumberLiteral.Other ->
+                    Report.readerError (
+                        "Exclude",
+                        "Expected a number literal",
+                        typeReferenceNode
+                    )
+                    |> reader.Warnings.Add
 
-                    let value =
-                        if
-                            Constructors.Number.isSafeInteger literalType.value
-                        then
-                            GlueLiteral.Int(unbox<int> literalType.value)
-                        else
-                            GlueLiteral.Float(unbox<float> literalType.value)
+                    []
 
-                    value |> GlueType.Literal |> Some
-                | _ -> None
-            )
+            | _ ->
+                typ.types
+                |> Seq.toList
+                |> List.choose (fun typ ->
+                    match typ.flags with
+                    | HasTypeFlags Ts.TypeFlags.StringLiteral ->
+                        let literalType = typ :?> Ts.LiteralType
+
+                        let value = unbox<string> literalType.value
+
+                        GlueLiteral.String value |> GlueType.Literal |> Some
+                    | HasTypeFlags Ts.TypeFlags.NumberLiteral ->
+                        match typ with
+                        | Type.NumberLiteral.Int value ->
+                            GlueLiteral.Int value |> GlueType.Literal |> Some
+                        | Type.NumberLiteral.Float value ->
+                            GlueLiteral.Float value |> GlueType.Literal |> Some
+                        | Type.NumberLiteral.Other ->
+                            Report.readerError (
+                                "Exclude",
+                                "Expected a number literal",
+                                typeReferenceNode
+                            )
+                            |> reader.Warnings.Add
+
+                            None
+                    | _ -> None
+                )
 
         cases |> GlueTypeUnion |> GlueType.Union
 
@@ -192,9 +227,9 @@ module UtilityType =
             |> reader.checker.getTypeFromTypeNode
 
         let tryReadValueOfKeys (typ: Ts.Type) =
-            match Type.StringLiteral.tryReadValue typ with
-            | Some value -> Some value
-            | None ->
+            match typ with
+            | Type.StringLiteral.String value -> Some value
+            | Type.StringLiteral.Other ->
                 Report.readerError (
                     "keysToOmit",
                     "Expected a string literal",

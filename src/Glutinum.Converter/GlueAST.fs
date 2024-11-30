@@ -374,6 +374,7 @@ type GlueType =
         | UtilityType utilityType ->
             match utilityType with
             | GlueUtilityType.Partial _
+            | GlueUtilityType.Omit _
             | GlueUtilityType.Record _ -> "obj"
             | GlueUtilityType.ReturnType returnType -> returnType.Name
             | GlueUtilityType.ThisParameterType thisType -> thisType.Name
