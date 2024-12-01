@@ -6,8 +6,9 @@ open System
 
 [<AllowNullLiteral>]
 [<Interface>]
-type TodoPartial =
-    interface end
+type TodoPreview =
+    abstract member title: string option with get, set
+    abstract member description: string option with get, set
 
 (***)
 #r "nuget: Fable.Core"

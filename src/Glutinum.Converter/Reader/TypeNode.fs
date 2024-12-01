@@ -103,51 +103,47 @@ module UtilityType =
         cases |> GlueTypeUnion |> GlueType.Union
 
     let readPartial (reader: ITypeScriptReader) (typeReferenceNode: Ts.TypeReferenceNode) =
-        let typ = reader.checker.getTypeFromTypeNode typeReferenceNode
+        let baseType =
+            typeReferenceNode.typeArguments.Value[0] |> reader.checker.getTypeFromTypeNode
 
-        // Try find the original type
-        // For now, I am navigating inside of the symbol information
-        // to find a reference to the interface declaration via one of
-        // the members of the type
-        // Is there a better way of doing it?
-        match typ.aliasTypeArguments with
-        | None -> GlueType.Discard
-        | Some aliasTypeArguments ->
-            if aliasTypeArguments.Count <> 1 then
-                GlueType.Discard
-            else
-                let symbol = aliasTypeArguments.[0].symbol
+        let baseProperties =
+            match baseType.flags with
+            | HasTypeFlags Ts.TypeFlags.Any ->
+                Report.readerError (
+                    "partial inner type",
+                    "Was not able to resolve the inner type, and defaulting to any. If the base type is defined, in another file, please make sure to include it in the input files",
+                    typeReferenceNode
+                )
+                |> reader.Warnings.Add
 
-                if isNull symbol || symbol.members.IsNone then
-                    GlueType.Unknown
-                else
+                ResizeArray []
+            | _ -> baseType |> reader.checker.getPropertiesOfType
 
-                    // Take any of the members
-                    let (_, refMember) = symbol.members.Value.entries () |> Seq.head
+        let members =
+            baseProperties
+            |> Seq.toList
+            |> List.choose (fun property ->
+                match property.declarations with
+                | Some declarations -> declarations |> Seq.map reader.ReadDeclaration |> Some
+                | None ->
+                    Report.readerError ("type node", "Missing declarations", typeReferenceNode)
+                    |> reader.Warnings.Add
 
-                    let originalType = refMember.declarations.Value[0].parent
+                    None
+            )
+            |> Seq.concat
+            |> Seq.toList
 
-                    match originalType.kind with
-                    | Ts.SyntaxKind.InterfaceDeclaration ->
-                        let interfaceDeclaration = originalType :?> Ts.InterfaceDeclaration
-
-                        let members =
-                            interfaceDeclaration.members
-                            |> Seq.toList
-                            |> List.map reader.ReadDeclaration
-
-                        ({
-                            FullName = getFullNameOrEmpty reader.checker originalType
-                            Name = interfaceDeclaration.name.getText ()
-                            Members = members
-                            TypeParameters = []
-                            HeritageClauses = []
-                        }
-                        : GlueInterface)
-                        |> GlueUtilityType.Partial
-                        |> GlueType.UtilityType
-
-                    | _ -> GlueType.Discard
+        ({
+            FullName = getFullNameOrEmpty reader.checker typeReferenceNode
+            Name = typeReferenceNode.typeName?getText ()
+            Members = members
+            TypeParameters = []
+            HeritageClauses = []
+        }
+        : GlueInterface)
+        |> GlueUtilityType.Partial
+        |> GlueType.UtilityType
 
     let readRecord (reader: ITypeScriptReader) (typeReferenceNode: Ts.TypeReferenceNode) =
         let typeArguments = readTypeArguments reader typeReferenceNode
