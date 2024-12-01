@@ -7,10 +7,7 @@ open Fable.Core.JsInterop
 open Glutinum.Converter.Reader.Utils
 open FsToolkit.ErrorHandling
 
-let readTypeQueryNode
-    (reader: ITypeScriptReader)
-    (typeQueryNode: Ts.TypeQueryNode)
-    =
+let readTypeQueryNode (reader: ITypeScriptReader) (typeQueryNode: Ts.TypeQueryNode) =
 
     let checker = reader.checker
     let typ = checker.getTypeAtLocation !!typeQueryNode.exprName
@@ -74,11 +71,7 @@ let readTypeQueryNode
                 let! typeNode =
                     variableDeclaration.``type``
                     |> Result.requireSome (
-                        Report.readerError (
-                            "type node (TypeQuery)",
-                            "Missing type",
-                            typeQueryNode
-                        )
+                        Report.readerError ("type node (TypeQuery)", "Missing type", typeQueryNode)
                     )
 
                 match typeNode.kind with
@@ -137,11 +130,9 @@ let readTypeQueryNode
 
             | None -> GlueType.Primitive GluePrimitive.Any
 
-    | HasTypeFlags Ts.TypeFlags.String ->
-        GlueType.Primitive GluePrimitive.String
+    | HasTypeFlags Ts.TypeFlags.String -> GlueType.Primitive GluePrimitive.String
 
-    | HasTypeFlags Ts.TypeFlags.Number ->
-        GlueType.Primitive GluePrimitive.Number
+    | HasTypeFlags Ts.TypeFlags.Number -> GlueType.Primitive GluePrimitive.Number
 
     | HasTypeFlags Ts.TypeFlags.Boolean -> GlueType.Primitive GluePrimitive.Bool
 

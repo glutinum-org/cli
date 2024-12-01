@@ -5,19 +5,13 @@ open Glutinum.Converter.Reader.Types
 open TypeScript
 open Fable.Core.JsInterop
 
-let readVariableStatement
-    (reader: ITypeScriptReader)
-    (statement: Ts.VariableStatement)
-    : GlueType
-    =
+let readVariableStatement (reader: ITypeScriptReader) (statement: Ts.VariableStatement) : GlueType =
 
     let isExported =
         statement.modifiers
         |> Option.map (fun modifiers ->
             modifiers
-            |> Seq.exists (fun modifier ->
-                modifier?kind = Ts.SyntaxKind.ExportKeyword
-            )
+            |> Seq.exists (fun modifier -> modifier?kind = Ts.SyntaxKind.ExportKeyword)
         )
         |> Option.defaultValue false
 

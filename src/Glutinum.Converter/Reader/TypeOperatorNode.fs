@@ -5,10 +5,7 @@ open Glutinum.Converter.Reader.Types
 open TypeScript
 open Fable.Core.JsInterop
 
-let readTypeOperatorNode
-    (reader: ITypeScriptReader)
-    (node: Ts.TypeOperatorNode)
-    =
+let readTypeOperatorNode (reader: ITypeScriptReader) (node: Ts.TypeOperatorNode) =
 
     match node.operator with
     | Ts.SyntaxKind.KeyOfKeyword ->
@@ -17,17 +14,11 @@ let readTypeOperatorNode
             let typeReferenceNode = node.``type`` :?> Ts.TypeReferenceNode
 
             // TODO: Remove unboxing
-            let symbolOpt =
-                reader.checker.getSymbolAtLocation !!typeReferenceNode.typeName
+            let symbolOpt = reader.checker.getSymbolAtLocation !!typeReferenceNode.typeName
 
             match symbolOpt with
             | None ->
-                Report.readerError (
-                    "type operator (keyof)",
-                    "Missing symbol",
-                    node
-                )
-                |> failwith
+                Report.readerError ("type operator (keyof)", "Missing symbol", node) |> failwith
 
             | Some symbol ->
                 match symbol.declarations with
@@ -45,18 +36,13 @@ let readTypeOperatorNode
                         reader.ReadNode declarations[0] |> GlueType.KeyOf
 
                 | None ->
-                    Report.readerError (
-                        "type operator (keyof)",
-                        "Missing declarations",
-                        node
-                    )
+                    Report.readerError ("type operator (keyof)", "Missing declarations", node)
                     |> failwith
 
         | Ts.SyntaxKind.TypeQuery ->
             let typeQueryNode = node.``type`` :?> Ts.TypeQueryNode
 
-            TypeQueryNode.readTypeQueryNode reader typeQueryNode
-            |> GlueType.KeyOf
+            TypeQueryNode.readTypeQueryNode reader typeQueryNode |> GlueType.KeyOf
 
         | _ ->
             Report.readerError (
@@ -66,15 +52,10 @@ let readTypeOperatorNode
             )
             |> failwith
 
-    | Ts.SyntaxKind.ReadonlyKeyword ->
-        reader.ReadTypeNode node.``type`` |> GlueType.ReadOnly
+    | Ts.SyntaxKind.ReadonlyKeyword -> reader.ReadTypeNode node.``type`` |> GlueType.ReadOnly
 
     | _ ->
-        Report.readerError (
-            "type operator",
-            $"Unsupported operator %s{node.operator.Name}",
-            node
-        )
+        Report.readerError ("type operator", $"Unsupported operator %s{node.operator.Name}", node)
         |> reader.Warnings.Add
 
         GlueType.Primitive GluePrimitive.Any

@@ -27,8 +27,7 @@ type ASTViewer =
         =
         let newContext = { context with Path = context.Path + "." + name }
 
-        let isExpanded =
-            Set.contains newContext.Path context.CollapsedNodes |> not
+        let isExpanded = Set.contains newContext.Path context.CollapsedNodes |> not
 
         let onClickMsg =
             if isExpanded then

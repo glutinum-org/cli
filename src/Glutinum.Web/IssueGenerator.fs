@@ -45,9 +45,7 @@ let private compilationResultToText (result: CompilationResult) =
                     ""
                 else
                     let errorsList =
-                        errors
-                        |> List.map _.Replace("\n", "\n> ")
-                        |> String.concat "\n> ```\n> ```"
+                        errors |> List.map _.Replace("\n", "\n> ") |> String.concat "\n> ```\n> ```"
 
                     $"""
 > [!CAUTION]

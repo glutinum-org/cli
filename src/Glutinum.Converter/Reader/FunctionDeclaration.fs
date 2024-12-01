@@ -15,20 +15,14 @@ let readFunctionDeclaration
         match declaration.modifiers with
         | Some modifiers ->
             modifiers
-            |> Seq.exists (fun modifier ->
-                modifier?kind = Ts.SyntaxKind.DeclareKeyword
-            )
+            |> Seq.exists (fun modifier -> modifier?kind = Ts.SyntaxKind.DeclareKeyword)
         | None -> false
 
     let name =
         match declaration.name with
         | Some name -> name.getText ()
         | None ->
-            Report.readerError (
-                "function declaration",
-                "Missing name",
-                declaration
-            )
+            Report.readerError ("function declaration", "Missing name", declaration)
             |> failwith
 
     {

@@ -5,18 +5,12 @@ open Glutinum.Converter.Reader.Types
 open TypeScript
 open FsToolkit.ErrorHandling
 
-let readMappedTypeNode
-    (reader: ITypeScriptReader)
-    (mappedTypeNode: Ts.MappedTypeNode)
-    : GlueType
-    =
+let readMappedTypeNode (reader: ITypeScriptReader) (mappedTypeNode: Ts.MappedTypeNode) : GlueType =
     result {
         let! typParam =
             // TODO: Make a single reader.ReadTypeParameter method
             let typeParameters =
-                reader.ReadTypeParameters(
-                    Some(ResizeArray([ mappedTypeNode.typeParameter ]))
-                )
+                reader.ReadTypeParameters(Some(ResizeArray([ mappedTypeNode.typeParameter ])))
 
             match typeParameters with
             | [ tp ] -> Ok tp

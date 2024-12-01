@@ -31,8 +31,7 @@ let readClassDeclaration
                 let constructor = m :?> Ts.ConstructorDeclaration
 
                 ({
-                    Documentation =
-                        reader.ReadDocumentationFromSignature constructor
+                    Documentation = reader.ReadDocumentationFromSignature constructor
                     Parameters = reader.ReadParameters constructor.parameters
                 }
                 : GlueConstructor)
@@ -44,20 +43,15 @@ let readClassDeclaration
     let members = members |> Seq.toList |> List.map reader.ReadDeclaration
 
     let isDefaultExport =
-        ModifierUtil.HasModifier(
-            classDeclaration.modifiers,
-            Ts.SyntaxKind.DefaultKeyword
-        )
+        ModifierUtil.HasModifier(classDeclaration.modifiers, Ts.SyntaxKind.DefaultKeyword)
 
     let classDeclaration =
         {
             Name = name.getText ()
             Constructors = constructors
             Members = members
-            TypeParameters =
-                reader.ReadTypeParameters classDeclaration.typeParameters
-            HeritageClauses =
-                readHeritageClauses reader classDeclaration.heritageClauses
+            TypeParameters = reader.ReadTypeParameters classDeclaration.typeParameters
+            HeritageClauses = readHeritageClauses reader classDeclaration.heritageClauses
         }
         |> GlueType.ClassDeclaration
 

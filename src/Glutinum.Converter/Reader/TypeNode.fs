@@ -37,23 +37,17 @@ let private readTypeUsingFlags (reader: ITypeScriptReader) (typ: Ts.Type) =
             | _ -> reader.ReadNode declaration
 
         | None -> GlueType.Primitive GluePrimitive.Any
-    | HasTypeFlags Ts.TypeFlags.String ->
-        GlueType.Primitive GluePrimitive.String
-    | HasTypeFlags Ts.TypeFlags.Number ->
-        GlueType.Primitive GluePrimitive.Number
+    | HasTypeFlags Ts.TypeFlags.String -> GlueType.Primitive GluePrimitive.String
+    | HasTypeFlags Ts.TypeFlags.Number -> GlueType.Primitive GluePrimitive.Number
     | HasTypeFlags Ts.TypeFlags.Boolean -> GlueType.Primitive GluePrimitive.Bool
     | HasTypeFlags Ts.TypeFlags.Any -> GlueType.Primitive GluePrimitive.Any
     | HasTypeFlags Ts.TypeFlags.Void -> GlueType.Primitive GluePrimitive.Unit
     | _ -> GlueType.Primitive GluePrimitive.Any
 
 module UtilityType =
-    let readExclude
-        (reader: ITypeScriptReader)
-        (typeReferenceNode: Ts.TypeReferenceNode)
-        =
+    let readExclude (reader: ITypeScriptReader) (typeReferenceNode: Ts.TypeReferenceNode) =
         let typ =
-            reader.checker.getTypeFromTypeNode typeReferenceNode
-            :?> Ts.UnionOrIntersectionType
+            reader.checker.getTypeFromTypeNode typeReferenceNode :?> Ts.UnionOrIntersectionType
 
         let cases =
             match typ.flags with
@@ -62,27 +56,17 @@ module UtilityType =
                 | Type.StringLiteral.String value ->
                     [ GlueLiteral.String value |> GlueType.Literal ]
                 | Type.StringLiteral.Other ->
-                    Report.readerError (
-                        "Exclude",
-                        "Expected a string literal",
-                        typeReferenceNode
-                    )
+                    Report.readerError ("Exclude", "Expected a string literal", typeReferenceNode)
                     |> reader.Warnings.Add
 
                     []
 
             | HasTypeFlags Ts.TypeFlags.NumberLiteral ->
                 match typ with
-                | Type.NumberLiteral.Int value ->
-                    [ GlueLiteral.Int value |> GlueType.Literal ]
-                | Type.NumberLiteral.Float value ->
-                    [ GlueLiteral.Float value |> GlueType.Literal ]
+                | Type.NumberLiteral.Int value -> [ GlueLiteral.Int value |> GlueType.Literal ]
+                | Type.NumberLiteral.Float value -> [ GlueLiteral.Float value |> GlueType.Literal ]
                 | Type.NumberLiteral.Other ->
-                    Report.readerError (
-                        "Exclude",
-                        "Expected a number literal",
-                        typeReferenceNode
-                    )
+                    Report.readerError ("Exclude", "Expected a number literal", typeReferenceNode)
                     |> reader.Warnings.Add
 
                     []
@@ -118,10 +102,7 @@ module UtilityType =
 
         cases |> GlueTypeUnion |> GlueType.Union
 
-    let readPartial
-        (reader: ITypeScriptReader)
-        (typeReferenceNode: Ts.TypeReferenceNode)
-        =
+    let readPartial (reader: ITypeScriptReader) (typeReferenceNode: Ts.TypeReferenceNode) =
         let typ = reader.checker.getTypeFromTypeNode typeReferenceNode
 
         // Try find the original type
@@ -142,15 +123,13 @@ module UtilityType =
                 else
 
                     // Take any of the members
-                    let (_, refMember) =
-                        symbol.members.Value.entries () |> Seq.head
+                    let (_, refMember) = symbol.members.Value.entries () |> Seq.head
 
                     let originalType = refMember.declarations.Value[0].parent
 
                     match originalType.kind with
                     | Ts.SyntaxKind.InterfaceDeclaration ->
-                        let interfaceDeclaration =
-                            originalType :?> Ts.InterfaceDeclaration
+                        let interfaceDeclaration = originalType :?> Ts.InterfaceDeclaration
 
                         let members =
                             interfaceDeclaration.members
@@ -158,8 +137,7 @@ module UtilityType =
                             |> List.map reader.ReadDeclaration
 
                         ({
-                            FullName =
-                                getFullNameOrEmpty reader.checker originalType
+                            FullName = getFullNameOrEmpty reader.checker originalType
                             Name = interfaceDeclaration.name.getText ()
                             Members = members
                             TypeParameters = []
@@ -171,10 +149,7 @@ module UtilityType =
 
                     | _ -> GlueType.Discard
 
-    let readRecord
-        (reader: ITypeScriptReader)
-        (typeReferenceNode: Ts.TypeReferenceNode)
-        =
+    let readRecord (reader: ITypeScriptReader) (typeReferenceNode: Ts.TypeReferenceNode) =
         let typeArguments = readTypeArguments reader typeReferenceNode
 
         ({
@@ -185,10 +160,7 @@ module UtilityType =
         |> GlueUtilityType.Record
         |> GlueType.UtilityType
 
-    let readReturnType
-        (reader: ITypeScriptReader)
-        (typeReferenceNode: Ts.TypeReferenceNode)
-        =
+    let readReturnType (reader: ITypeScriptReader) (typeReferenceNode: Ts.TypeReferenceNode) =
         let typ = reader.checker.getTypeFromTypeNode typeReferenceNode
 
         match reader.checker.typeToTypeNode (typ, None, None) with
@@ -217,24 +189,16 @@ module UtilityType =
             |> GlueUtilityType.ThisParameterType
             |> GlueType.UtilityType
 
-    let readOmit
-        (reader: ITypeScriptReader)
-        (typeReferenceNode: Ts.TypeReferenceNode)
-        =
+    let readOmit (reader: ITypeScriptReader) (typeReferenceNode: Ts.TypeReferenceNode) =
 
         let keysToOmitType =
-            typeReferenceNode.typeArguments.Value[1]
-            |> reader.checker.getTypeFromTypeNode
+            typeReferenceNode.typeArguments.Value[1] |> reader.checker.getTypeFromTypeNode
 
         let tryReadValueOfKeys (typ: Ts.Type) =
             match typ with
             | Type.StringLiteral.String value -> Some value
             | Type.StringLiteral.Other ->
-                Report.readerError (
-                    "keysToOmit",
-                    "Expected a string literal",
-                    typeReferenceNode
-                )
+                Report.readerError ("keysToOmit", "Expected a string literal", typeReferenceNode)
                 |> reader.Warnings.Add
 
                 None
@@ -249,8 +213,7 @@ module UtilityType =
                 |> Option.defaultValue []
 
         let baseType =
-            typeReferenceNode.typeArguments.Value[0]
-            |> reader.checker.getTypeFromTypeNode
+            typeReferenceNode.typeArguments.Value[0] |> reader.checker.getTypeFromTypeNode
 
         let baseProperties =
             match baseType.flags with
@@ -267,9 +230,7 @@ module UtilityType =
 
         let filteredProperties =
             baseProperties
-            |> Seq.filter (fun prop ->
-                not (keysToOmit |> Seq.contains prop.name)
-            )
+            |> Seq.filter (fun prop -> not (keysToOmit |> Seq.contains prop.name))
             |> Seq.toList
 
         let members =
@@ -289,21 +250,13 @@ module UtilityType =
 
                         None
                 | None ->
-                    Report.readerError (
-                        "type node",
-                        "Missing declarations",
-                        typeReferenceNode
-                    )
+                    Report.readerError ("type node", "Missing declarations", typeReferenceNode)
                     |> failwith
             )
 
         members |> GlueUtilityType.Omit |> GlueType.UtilityType
 
-let readTypeNode
-    (reader: ITypeScriptReader)
-    (typeNode: Ts.TypeNode)
-    : GlueType
-    =
+let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType =
     let checker = reader.checker
 
     match typeNode.kind with
@@ -313,10 +266,8 @@ let readTypeNode
     | Ts.SyntaxKind.BooleanKeyword -> GlueType.Primitive GluePrimitive.Bool
     | Ts.SyntaxKind.AnyKeyword -> GlueType.Primitive GluePrimitive.Any
     | Ts.SyntaxKind.NullKeyword -> GlueType.Primitive GluePrimitive.Null
-    | Ts.SyntaxKind.UndefinedKeyword ->
-        GlueType.Primitive GluePrimitive.Undefined
-    | Ts.SyntaxKind.UnionType ->
-        reader.ReadUnionTypeNode(typeNode :?> Ts.UnionTypeNode)
+    | Ts.SyntaxKind.UndefinedKeyword -> GlueType.Primitive GluePrimitive.Undefined
+    | Ts.SyntaxKind.UnionType -> reader.ReadUnionTypeNode(typeNode :?> Ts.UnionTypeNode)
 
     | Ts.SyntaxKind.TypeReference ->
         let typeReferenceNode = typeNode :?> Ts.TypeReferenceNode
@@ -330,10 +281,7 @@ let readTypeNode
             | _ ->
                 ({
                     Name = typeReferenceNode.typeName?getText () // TODO: Remove dynamic typing
-                    FullName =
-                        getFullNameOrEmpty
-                            checker
-                            (!!typeReferenceNode.typeName)
+                    FullName = getFullNameOrEmpty checker (!!typeReferenceNode.typeName)
                     TypeArguments = readTypeArguments reader typeReferenceNode
                     IsStandardLibrary = isStandardLibrary
                 })
@@ -344,10 +292,8 @@ let readTypeNode
             | "Exclude" -> UtilityType.readExclude reader typeReferenceNode
             | "Partial" -> UtilityType.readPartial reader typeReferenceNode
             | "Record" -> UtilityType.readRecord reader typeReferenceNode
-            | "ReturnType" ->
-                UtilityType.readReturnType reader typeReferenceNode
-            | "ThisParameterType" ->
-                UtilityType.readThisParameterType reader typeReferenceNode
+            | "ReturnType" -> UtilityType.readReturnType reader typeReferenceNode
+            | "ThisParameterType" -> UtilityType.readThisParameterType reader typeReferenceNode
             | "Omit" -> UtilityType.readOmit reader typeReferenceNode
             | _ -> readTypeReference true
         else
@@ -367,8 +313,7 @@ let readTypeNode
 
         let typeParameters =
             try
-                let typParameters
-                    : option<ResizeArray<Ts.TypeParameterDeclaration>> =
+                let typParameters: option<ResizeArray<Ts.TypeParameterDeclaration>> =
                     functionTypeNode.parent.parent?typeParameters
 
                 reader.ReadTypeParameters typParameters
@@ -400,8 +345,7 @@ let readTypeNode
     | Ts.SyntaxKind.LiteralType ->
         let literalTypeNode = typeNode :?> Ts.LiteralTypeNode
 
-        let literalExpression =
-            unbox<Ts.LiteralExpression> literalTypeNode.literal
+        let literalExpression = unbox<Ts.LiteralExpression> literalTypeNode.literal
 
         match tryReadLiteral literalExpression with
         | Some literal -> GlueType.Literal literal
@@ -435,11 +379,9 @@ let readTypeNode
                     | Ts.SyntaxKind.ClassDeclaration
                     | Ts.SyntaxKind.InterfaceDeclaration ->
                         // We regroup the case to the same type because we just want to read the type parameters
-                        let classDeclaration =
-                            declaration :?> Ts.InterfaceDeclaration
+                        let classDeclaration = declaration :?> Ts.InterfaceDeclaration
 
-                        reader.ReadTypeParameters
-                            classDeclaration.typeParameters
+                        reader.ReadTypeParameters classDeclaration.typeParameters
                     | _ -> []
             | None -> []
 
@@ -465,8 +407,7 @@ let readTypeNode
         let intersectionTypeNode = typeNode :?> Ts.IntersectionTypeNode
         // Make TypeScript resolve the type for us
         let unionOrIntersectionType =
-            checker.getTypeAtLocation intersectionTypeNode
-            :?> Ts.UnionOrIntersectionType
+            checker.getTypeAtLocation intersectionTypeNode :?> Ts.UnionOrIntersectionType
 
         let properties =
             let computedProperties =
@@ -491,12 +432,7 @@ let readTypeNode
                     else
                         Some ForceAny
                 | None ->
-                    Report.readerError (
-                        "type node",
-                        "Missing declarations",
-                        typeNode
-                    )
-                    |> failwith
+                    Report.readerError ("type node", "Missing declarations", typeNode) |> failwith
             )
 
         // We can't create a contract for some of the properties
@@ -528,9 +464,7 @@ let readTypeNode
         let typeLiteralNode = typeNode :?> Ts.TypeLiteralNode
 
         let members =
-            typeLiteralNode.members
-            |> Seq.toList
-            |> List.map reader.ReadDeclaration
+            typeLiteralNode.members |> Seq.toList |> List.map reader.ReadDeclaration
 
         ({ Members = members }: GlueTypeLiteral) |> GlueType.TypeLiteral
 
@@ -589,8 +523,7 @@ let readTypeNode
         // This is perhaps a bit aggressive, so if needed we can re-visit `readTypeUsingFlags`
         // usage by inlining the logic here and make it more specific
         match readTypeUsingFlags reader typ with
-        | GlueType.Primitive GluePrimitive.Any ->
-            reader.ReadTypeNode conditionalTypeNode.checkType
+        | GlueType.Primitive GluePrimitive.Any -> reader.ReadTypeNode conditionalTypeNode.checkType
         | forward -> forward
 
     | Ts.SyntaxKind.TemplateLiteralType -> GlueType.TemplateLiteral
@@ -604,11 +537,7 @@ let readTypeNode
     | Ts.SyntaxKind.NeverKeyword -> GlueType.Primitive GluePrimitive.Never
 
     | _ ->
-        Report.readerError (
-            "type node",
-            $"Unsupported kind %s{typeNode.kind.Name}",
-            typeNode
-        )
+        Report.readerError ("type node", $"Unsupported kind %s{typeNode.kind.Name}", typeNode)
         |> reader.Warnings.Add
 
         GlueType.Primitive GluePrimitive.Any

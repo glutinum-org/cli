@@ -39,38 +39,26 @@ type TypeScriptReader(checker: Ts.TypeChecker) =
 
         member _.TypeMemory = typeMemory
 
-        member this.ReadClassDeclaration
-            (classDeclaration: Ts.ClassDeclaration)
-            : GlueType
-            =
+        member this.ReadClassDeclaration(classDeclaration: Ts.ClassDeclaration) : GlueType =
             readClassDeclaration this classDeclaration
 
-        member this.ReadEnumDeclaration
-            (enumDeclaration: Ts.EnumDeclaration)
-            : GlueType
-            =
+        member this.ReadEnumDeclaration(enumDeclaration: Ts.EnumDeclaration) : GlueType =
             readEnumDeclaration this enumDeclaration |> GlueType.Enum
 
         member this.ReadFunctionDeclaration
             (functionDeclaration: Ts.FunctionDeclaration)
             : GlueType
             =
-            readFunctionDeclaration this functionDeclaration
-            |> GlueType.FunctionDeclaration
+            readFunctionDeclaration this functionDeclaration |> GlueType.FunctionDeclaration
 
         member this.ReadInterfaceDeclaration
             (interfaceDeclaration: Ts.InterfaceDeclaration)
             : GlueType
             =
-            readInterfaceDeclaration this interfaceDeclaration
-            |> GlueType.Interface
+            readInterfaceDeclaration this interfaceDeclaration |> GlueType.Interface
 
-        member this.ReadModuleDeclaration
-            (moduleDeclaration: Ts.ModuleDeclaration)
-            : GlueType
-            =
-            readModuleDeclaration this moduleDeclaration
-            |> GlueType.ModuleDeclaration
+        member this.ReadModuleDeclaration(moduleDeclaration: Ts.ModuleDeclaration) : GlueType =
+            readModuleDeclaration this moduleDeclaration |> GlueType.ModuleDeclaration
 
         member this.ReadNode(node: Ts.Node) : GlueType =
             let typ = readNode this node
@@ -91,10 +79,7 @@ type TypeScriptReader(checker: Ts.TypeChecker) =
             | Some typNode -> readTypeNode this typNode
             | None -> GlueType.Primitive GluePrimitive.Unit
 
-        member this.ReadVariableStatement
-            (variableStatement: Ts.VariableStatement)
-            : GlueType
-            =
+        member this.ReadVariableStatement(variableStatement: Ts.VariableStatement) : GlueType =
             readVariableStatement this variableStatement
 
         member this.ReadDeclaration(declaration: Ts.Declaration) : GlueMember =
@@ -112,10 +97,7 @@ type TypeScriptReader(checker: Ts.TypeChecker) =
         member this.ReadTypeOperatorNode(node: Ts.TypeOperatorNode) : GlueType =
             readTypeOperatorNode this node
 
-        member this.ReadIndexedAccessType
-            (declaration: Ts.IndexedAccessType)
-            : GlueType
-            =
+        member this.ReadIndexedAccessType(declaration: Ts.IndexedAccessType) : GlueType =
             readIndexedAccessType this declaration
 
         member this.ReadTypeParameters
@@ -124,32 +106,17 @@ type TypeScriptReader(checker: Ts.TypeChecker) =
             =
             readTypeParameters this typeParametersOpt
 
-        member this.ReadExportAssignment
-            (exportAssignment: Ts.ExportAssignment)
-            : GlueType
-            =
+        member this.ReadExportAssignment(exportAssignment: Ts.ExportAssignment) : GlueType =
             readExportAssignment this exportAssignment
 
-        member this.ReadDocumentationFromSignature
-            (declaration: Ts.Declaration)
-            : GlueComment list
-            =
+        member this.ReadDocumentationFromSignature(declaration: Ts.Declaration) : GlueComment list =
             readDocumentationForSignature this declaration
 
-        member this.ReadDocumentationFromNode
-            (node: Ts.Node)
-            : GlueComment list
-            =
+        member this.ReadDocumentationFromNode(node: Ts.Node) : GlueComment list =
             readDocumentationForNode this node
 
-        member this.ReadNamedTupleMember
-            (namedTupleMember: Ts.NamedTupleMember)
-            : GlueType
-            =
+        member this.ReadNamedTupleMember(namedTupleMember: Ts.NamedTupleMember) : GlueType =
             readNamedTupleMember this namedTupleMember
 
-        member this.ReadMappedTypeNode
-            (declaration: Ts.MappedTypeNode)
-            : GlueType
-            =
+        member this.ReadMappedTypeNode(declaration: Ts.MappedTypeNode) : GlueType =
             readMappedTypeNode this declaration

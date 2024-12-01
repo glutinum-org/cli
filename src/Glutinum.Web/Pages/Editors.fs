@@ -63,14 +63,11 @@ type Msg =
 let init (route: Router.EditorsRoute) =
     let currentTab, typeScriptCodeOpt =
         match route with
-        | Router.EditorsRoute.FSharpCode typeScriptCodeOpt ->
-            Tab.FSharpCode, typeScriptCodeOpt
+        | Router.EditorsRoute.FSharpCode typeScriptCodeOpt -> Tab.FSharpCode, typeScriptCodeOpt
 
-        | Router.EditorsRoute.GlueAST typeScriptCodeOpt ->
-            Tab.GlueAST, typeScriptCodeOpt
+        | Router.EditorsRoute.GlueAST typeScriptCodeOpt -> Tab.GlueAST, typeScriptCodeOpt
 
-        | Router.EditorsRoute.FSharpAST typeScriptCodeOpt ->
-            Tab.FSharpAST, typeScriptCodeOpt
+        | Router.EditorsRoute.FSharpAST typeScriptCodeOpt -> Tab.FSharpAST, typeScriptCodeOpt
 
     let typescriptCode = typeScriptCodeOpt |> Option.defaultValue ""
 
@@ -103,8 +100,7 @@ let update msg model =
         { model with FSharpCode = updatedModel }, Cmd.map FSharpCodeMsg cmd
 
     | GlueASTMsg glueMsg ->
-        let updatedModel, cmd =
-            GlueAST.update glueMsg model.GlueAST model.TypeScriptCode
+        let updatedModel, cmd = GlueAST.update glueMsg model.GlueAST model.TypeScriptCode
 
         { model with GlueAST = updatedModel }, Cmd.map GlueASTMsg cmd
 
@@ -117,18 +113,14 @@ let update msg model =
     | MoveTo tab -> { model with CurrentTab = tab }, Cmd.none
 
     | DebouncerSelfMsg debouncerMsg ->
-        let (debouncerModel, debouncerCmd) =
-            Debouncer.update debouncerMsg model.Debouncer
+        let (debouncerModel, debouncerCmd) = Debouncer.update debouncerMsg model.Debouncer
 
         { model with Debouncer = debouncerModel }, debouncerCmd
 
     | UpdateTypeScriptCode code ->
         let (debouncerModel, debouncerCmd) =
             model.Debouncer
-            |> Debouncer.bounce
-                (TimeSpan.FromSeconds 0.5)
-                "compile-code"
-                CompileCode
+            |> Debouncer.bounce (TimeSpan.FromSeconds 0.5) "compile-code" CompileCode
 
         { model with
             TypeScriptCode = code
@@ -176,13 +168,11 @@ let private rightPanel model dispatch =
             Html.div [ prop.className classes.``horizontal-divider`` ]
 
             match model.CurrentTab with
-            | Tab.FSharpCode ->
-                FSharpCode.view model.FSharpCode (FSharpCodeMsg >> dispatch)
+            | Tab.FSharpCode -> FSharpCode.view model.FSharpCode (FSharpCodeMsg >> dispatch)
 
             | Tab.GlueAST -> GlueAST.view model.GlueAST (GlueASTMsg >> dispatch)
 
-            | Tab.FSharpAST ->
-                FSharpAST.view model.FSharpAST (FSharpASTMsg >> dispatch)
+            | Tab.FSharpAST -> FSharpAST.view model.FSharpAST (FSharpASTMsg >> dispatch)
         ]
     ]
 

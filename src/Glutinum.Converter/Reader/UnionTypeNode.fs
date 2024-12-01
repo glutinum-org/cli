@@ -33,17 +33,11 @@ let rec private readUnionTypeCases
         if ts.isLiteralTypeNode node then
             let literalTypeNode = node :?> Ts.LiteralTypeNode
 
-            let literalExpression =
-                unbox<Ts.LiteralExpression> literalTypeNode.literal
+            let literalExpression = unbox<Ts.LiteralExpression> literalTypeNode.literal
 
-            if
-                ts.isStringLiteral literalExpression
-                || ts.isNumericLiteral literalExpression
-            then
+            if ts.isStringLiteral literalExpression || ts.isNumericLiteral literalExpression then
                 tryReadLiteral literalExpression
-                |> Option.defaultWith (fun () ->
-                    failwith "Expected a NumericLiteral"
-                )
+                |> Option.defaultWith (fun () -> failwith "Expected a NumericLiteral")
                 |> GlueType.Literal
                 |> fun case -> [ case ]
                 |> Some
@@ -51,15 +45,12 @@ let rec private readUnionTypeCases
                 match literalExpression.kind with
                 | Ts.SyntaxKind.NullKeyword
                 | Ts.SyntaxKind.UndefinedKeyword ->
-                    GlueType.Primitive GluePrimitive.Null
-                    |> List.singleton
-                    |> Some
+                    GlueType.Primitive GluePrimitive.Null |> List.singleton |> Some
                 | _ -> None
         else if ts.isTypeReferenceNode node then
             let typeReferenceNode = node :?> Ts.TypeReferenceNode
 
-            let symbolOpt =
-                checker.getSymbolAtLocation !!typeReferenceNode.typeName
+            let symbolOpt = checker.getSymbolAtLocation !!typeReferenceNode.typeName
 
             let symbol =
                 Option.defaultWith
@@ -80,9 +71,7 @@ let rec private readUnionTypeCases
                 if declarations.Count = 0 then
                     None // Should it be obj ?
                 else if isFromEs5Lib symbolOpt then
-                    reader.ReadTypeNode typeReferenceNode
-                    |> List.singleton
-                    |> Some
+                    reader.ReadTypeNode typeReferenceNode |> List.singleton |> Some
 
                 else
                     let declaration = declarations.[0]
@@ -92,19 +81,14 @@ let rec private readUnionTypeCases
                     | Ts.SyntaxKind.TypeAliasDeclaration ->
                         reader.ReadNode declaration |> List.singleton |> Some
 
-                    | _ ->
-                        reader.ReadTypeNode typeReferenceNode
-                        |> List.singleton
-                        |> Some
+                    | _ -> reader.ReadTypeNode typeReferenceNode |> List.singleton |> Some
 
             | None ->
                 let typ = checker.getTypeOfSymbol symbol
 
                 match typ.flags with
                 | HasTypeFlags Ts.TypeFlags.Any ->
-                    GlueType.Primitive GluePrimitive.Any
-                    |> List.singleton
-                    |> Some
+                    GlueType.Primitive GluePrimitive.Any |> List.singleton |> Some
                 | _ ->
                     Report.readerError (
                         "union type cases",
@@ -118,22 +102,15 @@ let rec private readUnionTypeCases
             | Ts.SyntaxKind.UnionType ->
                 let unionTypeNode = node :?> Ts.UnionTypeNode
                 // Unwrap union
-                let (GlueTypeUnion cases) =
-                    readUnionTypeCases reader unionTypeNode
+                let (GlueTypeUnion cases) = readUnionTypeCases reader unionTypeNode
 
                 Some cases
             | _ ->
                 // Capture simple types like string, number, real type, etc.
-                reader.ReadTypeNode(node :?> Ts.TypeNode)
-                |> List.singleton
-                |> Some
+                reader.ReadTypeNode(node :?> Ts.TypeNode) |> List.singleton |> Some
     )
     |> List.concat
     |> GlueTypeUnion
 
-let readUnionTypeNode
-    (reader: ITypeScriptReader)
-    (unionTypeNode: Ts.UnionTypeNode)
-    : GlueType
-    =
+let readUnionTypeNode (reader: ITypeScriptReader) (unionTypeNode: Ts.UnionTypeNode) : GlueType =
     readUnionTypeCases reader unionTypeNode |> GlueType.Union

@@ -33,8 +33,7 @@ type FSharpASTViewer =
         | FSharpAttribute.Text text ->
             ASTViewer.renderNode "Text" [ ASTViewer.renderValueOnly text ]
 
-        | FSharpAttribute.EmitSelfInvoke ->
-            ASTViewer.renderValueOnly "EmitSelfInvoke"
+        | FSharpAttribute.EmitSelfInvoke -> ASTViewer.renderValueOnly "EmitSelfInvoke"
 
         | FSharpAttribute.Import(selector, from) ->
             ASTViewer.renderNode "Import" [
@@ -43,32 +42,24 @@ type FSharpASTViewer =
             ]
 
         | FSharpAttribute.ImportAll from ->
-            ASTViewer.renderNode "ImportAll" [
-                ASTViewer.renderKeyValue "From" from
-            ]
+            ASTViewer.renderNode "ImportAll" [ ASTViewer.renderKeyValue "From" from ]
 
         | FSharpAttribute.ImportDefault from ->
-            ASTViewer.renderNode "ImportDefault" [
-                ASTViewer.renderKeyValue "From" from
-            ]
+            ASTViewer.renderNode "ImportDefault" [ ASTViewer.renderKeyValue "From" from ]
 
         | FSharpAttribute.Erase -> ASTViewer.renderValueOnly "Erase"
 
-        | FSharpAttribute.AllowNullLiteral ->
-            ASTViewer.renderValueOnly "AllowNullLiteral"
+        | FSharpAttribute.AllowNullLiteral -> ASTViewer.renderValueOnly "AllowNullLiteral"
 
         | FSharpAttribute.StringEnum caseRules ->
             ASTViewer.renderNode "StringEnum" [
-                ASTViewer.renderKeyValue
-                    "CaseRules"
-                    (CaseRules.toText caseRules)
+                ASTViewer.renderKeyValue "CaseRules" (CaseRules.toText caseRules)
             ]
 
         | FSharpAttribute.CompiledName name ->
             ASTViewer.renderNode "CompiledName" [ FSharpASTViewer.Name name ]
 
-        | FSharpAttribute.EmitConstructor ->
-            ASTViewer.renderValueOnly "EmitConstructor"
+        | FSharpAttribute.EmitConstructor -> ASTViewer.renderValueOnly "EmitConstructor"
 
         | FSharpAttribute.EmitMacroConstructor text ->
             ASTViewer.renderNode "EmitMacroConstructor" [
@@ -96,12 +87,9 @@ type FSharpASTViewer =
         | FSharpAttribute.Interface -> ASTViewer.renderValueOnly "Interface"
 
         | FSharpAttribute.Obsolete message ->
-            ASTViewer.renderNode "Obsolete" [
-                ASTViewer.renderKeyValueOption "Message" id message
-            ]
+            ASTViewer.renderNode "Obsolete" [ ASTViewer.renderKeyValueOption "Message" id message ]
 
-        | FSharpAttribute.AbstractClass ->
-            ASTViewer.renderValueOnly "AbstractClass"
+        | FSharpAttribute.AbstractClass -> ASTViewer.renderValueOnly "AbstractClass"
 
     static member private Attributes(attributes: FSharpAttribute list) =
         attributes
@@ -126,19 +114,13 @@ type FSharpASTViewer =
         |> ASTViewer.renderNode "Inheritance"
 
     static member private Types types =
-        types
-        |> List.map FSharpASTViewer.FSharpType
-        |> ASTViewer.renderNode "Types"
+        types |> List.map FSharpASTViewer.FSharpType |> ASTViewer.renderNode "Types"
 
     static member private ReturnType(fsharpType: FSharpType) =
-        ASTViewer.renderNode "ReturnType" [
-            FSharpASTViewer.FSharpType fsharpType
-        ]
+        ASTViewer.renderNode "ReturnType" [ FSharpASTViewer.FSharpType fsharpType ]
 
     static member private TypeArguments(types: FSharpType list) =
-        types
-        |> List.map FSharpASTViewer.Type
-        |> ASTViewer.renderNode "TypeArguments"
+        types |> List.map FSharpASTViewer.Type |> ASTViewer.renderNode "TypeArguments"
 
     static member private Parameter(parameter: FSharpParameter) =
         ASTViewer.renderNode "Parameter" [
@@ -156,8 +138,7 @@ type FSharpASTViewer =
     static member private TypeParameter(typeParameter: FSharpTypeParameter) =
         ASTViewer.renderNode "TypeParameter" [
             match typeParameter with
-            | FSharpTypeParameter.FSharpType type_ ->
-                FSharpASTViewer.FSharpType type_
+            | FSharpTypeParameter.FSharpType type_ -> FSharpASTViewer.FSharpType type_
             | FSharpTypeParameter.FSharpTypeParameter typeParameter ->
                 FSharpASTViewer.Name typeParameter.Name
 
@@ -172,15 +153,12 @@ type FSharpASTViewer =
                     typeParameter.Default
         ]
 
-    static member private TypeParameters
-        (typeParameters: FSharpTypeParameter list)
-        =
+    static member private TypeParameters(typeParameters: FSharpTypeParameter list) =
         typeParameters
         |> List.map FSharpASTViewer.TypeParameter
         |> ASTViewer.renderNode "TypeParameters"
 
-    static member private Name(name: string) =
-        ASTViewer.renderKeyValue "Name" name
+    static member private Name(name: string) = ASTViewer.renderKeyValue "Name" name
 
     static member private OriginalName(originalName: string) =
         ASTViewer.renderKeyValue "OriginalName" originalName
@@ -202,13 +180,10 @@ type FSharpASTViewer =
         |> List.map (fun element ->
             match element with
             | FSharpXmlDoc.Summary lines ->
-                lines
-                |> List.map ASTViewer.renderValueOnly
-                |> ASTViewer.renderNode "Summary"
+                lines |> List.map ASTViewer.renderValueOnly |> ASTViewer.renderNode "Summary"
 
             | FSharpXmlDoc.Returns content ->
-                [ ASTViewer.renderValueOnly content ]
-                |> ASTViewer.renderNode "Returns"
+                [ ASTViewer.renderValueOnly content ] |> ASTViewer.renderNode "Returns"
 
             | FSharpXmlDoc.Param param ->
                 ASTViewer.renderNode "Param" [
@@ -217,16 +192,13 @@ type FSharpASTViewer =
                 ]
 
             | FSharpXmlDoc.Remarks content ->
-                [ ASTViewer.renderValueOnly content ]
-                |> ASTViewer.renderNode "Remarks"
+                [ ASTViewer.renderValueOnly content ] |> ASTViewer.renderNode "Remarks"
 
             | FSharpXmlDoc.DefaultValue content ->
-                [ ASTViewer.renderValueOnly content ]
-                |> ASTViewer.renderNode "DefaultValue"
+                [ ASTViewer.renderValueOnly content ] |> ASTViewer.renderNode "DefaultValue"
 
             | FSharpXmlDoc.Example content ->
-                [ ASTViewer.renderValueOnly content ]
-                |> ASTViewer.renderNode "Example"
+                [ ASTViewer.renderValueOnly content ] |> ASTViewer.renderNode "Example"
 
             | FSharpXmlDoc.TypeParam param ->
                 ASTViewer.renderNode "TypeParam" [
@@ -282,9 +254,7 @@ type FSharpASTViewer =
             ]
 
     static member private Members(members: FSharpMember list) =
-        members
-        |> List.map FSharpASTViewer.Member
-        |> ASTViewer.renderNode "Members"
+        members |> List.map FSharpASTViewer.Member |> ASTViewer.renderNode "Members"
 
     static member private FSharpLiteral(literal: FSharpLiteral) =
         match literal with
@@ -292,19 +262,13 @@ type FSharpASTViewer =
             ASTViewer.renderNode "String" [ ASTViewer.renderValueOnly value ]
 
         | FSharpLiteral.Int value ->
-            ASTViewer.renderNode "Int" [
-                ASTViewer.renderValueOnly (string value)
-            ]
+            ASTViewer.renderNode "Int" [ ASTViewer.renderValueOnly (string value) ]
 
         | FSharpLiteral.Float value ->
-            ASTViewer.renderNode "Float" [
-                ASTViewer.renderValueOnly (string value)
-            ]
+            ASTViewer.renderNode "Float" [ ASTViewer.renderValueOnly (string value) ]
 
         | FSharpLiteral.Bool value ->
-            ASTViewer.renderNode "Bool" [
-                ASTViewer.renderValueOnly (string value)
-            ]
+            ASTViewer.renderNode "Bool" [ ASTViewer.renderValueOnly (string value) ]
 
         | FSharpLiteral.Null -> ASTViewer.renderValueOnly "Null"
 
@@ -313,9 +277,7 @@ type FSharpASTViewer =
         |> List.map (fun case_ ->
             ASTViewer.renderNode "FSharpEnumCase" [
                 FSharpASTViewer.Name case_.Name
-                ASTViewer.renderNode "Value" [
-                    FSharpASTViewer.FSharpLiteral case_.Value
-                ]
+                ASTViewer.renderNode "Value" [ FSharpASTViewer.FSharpLiteral case_.Value ]
             ]
         )
         |> ASTViewer.renderNode "Cases"
@@ -331,9 +293,7 @@ type FSharpASTViewer =
                         FSharpASTViewer.Attributes caseInfo.Attributes
                     ]
                 | FSharpUnionCase.Typed typ ->
-                    ASTViewer.renderNode "Typed" [
-                        FSharpASTViewer.FSharpType typ
-                    ]
+                    ASTViewer.renderNode "Typed" [ FSharpASTViewer.FSharpType typ ]
             ]
         )
         |> ASTViewer.renderNode "Cases"
@@ -345,13 +305,9 @@ type FSharpASTViewer =
         ]
 
     static member private PrimaryConstructor(constructor: FSharpConstructor) =
-        ASTViewer.renderNode "PrimaryConstructor" [
-            FSharpASTViewer.Constructor constructor
-        ]
+        ASTViewer.renderNode "PrimaryConstructor" [ FSharpASTViewer.Constructor constructor ]
 
-    static member private SecondaryConstructors
-        (constructors: FSharpConstructor list)
-        =
+    static member private SecondaryConstructors(constructors: FSharpConstructor list) =
         constructors
         |> List.map FSharpASTViewer.Constructor
         |> ASTViewer.renderNode "SecondaryConstructors"
@@ -366,10 +322,7 @@ type FSharpASTViewer =
         )
         |> ASTViewer.renderNode "ExplicitFields"
 
-    static member private FSharpType
-        (fsharpType: FSharpType)
-        (context: NodeContext<'Msg>)
-        =
+    static member private FSharpType (fsharpType: FSharpType) (context: NodeContext<'Msg>) =
         match fsharpType with
         | FSharpType.Object -> ASTViewer.renderValueOnly "Object" context
 
@@ -415,10 +368,8 @@ type FSharpASTViewer =
                     FSharpASTViewer.Name classInfo.Name
                     FSharpASTViewer.Attributes classInfo.Attributes
                     FSharpASTViewer.TypeParameters classInfo.TypeParameters
-                    FSharpASTViewer.PrimaryConstructor
-                        classInfo.PrimaryConstructor
-                    FSharpASTViewer.SecondaryConstructors
-                        classInfo.SecondaryConstructors
+                    FSharpASTViewer.PrimaryConstructor classInfo.PrimaryConstructor
+                    FSharpASTViewer.SecondaryConstructors classInfo.SecondaryConstructors
                     FSharpASTViewer.ExplicitFields classInfo.ExplicitFields
                 ]
                 context
@@ -495,25 +446,17 @@ type FSharpASTViewer =
                 "Module"
                 [
                     FSharpASTViewer.Name moduleInfo.Name
-                    ASTViewer.renderKeyValue
-                        "IsRecursive"
-                        (string moduleInfo.IsRecursive)
+                    ASTViewer.renderKeyValue "IsRecursive" (string moduleInfo.IsRecursive)
 
                     FSharpASTViewer.Types moduleInfo.Types
                 ]
                 context
 
         | FSharpType.Option optionType ->
-            ASTViewer.renderNode
-                "Option"
-                [ FSharpASTViewer.Type optionType ]
-                context
+            ASTViewer.renderNode "Option" [ FSharpASTViewer.Type optionType ] context
 
         | FSharpType.ResizeArray resizeArrayType ->
-            ASTViewer.renderNode
-                "ResizeArray"
-                [ FSharpASTViewer.Type resizeArrayType ]
-                context
+            ASTViewer.renderNode "ResizeArray" [ FSharpASTViewer.Type resizeArrayType ] context
 
         | FSharpType.ThisType thisTypeInfo ->
             ASTViewer.renderNode
@@ -525,16 +468,10 @@ type FSharpASTViewer =
                 context
 
         | FSharpType.Tuple tupleTypes ->
-            ASTViewer.renderNode
-                "Tuple"
-                [ FSharpASTViewer.Types tupleTypes ]
-                context
+            ASTViewer.renderNode "Tuple" [ FSharpASTViewer.Types tupleTypes ] context
 
         | FSharpType.TypeParameter typeParameter ->
-            ASTViewer.renderNode
-                "TypeParameter"
-                [ FSharpASTViewer.Name typeParameter ]
-                context
+            ASTViewer.renderNode "TypeParameter" [ FSharpASTViewer.Name typeParameter ] context
 
         | FSharpType.TypeReference typeReference ->
             ASTViewer.renderNode
@@ -567,9 +504,7 @@ type FSharpASTViewer =
                 [
                     match jsApi with
                     | FSharpJSApi.ReadonlyArray innerType ->
-                        ASTViewer.renderNode "ReadonlyArray" [
-                            FSharpASTViewer.Type innerType
-                        ]
+                        ASTViewer.renderNode "ReadonlyArray" [ FSharpASTViewer.Type innerType ]
                 ]
                 context
 

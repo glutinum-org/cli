@@ -6,11 +6,7 @@ open TypeScript
 open Fable.Core.JsInterop
 open Glutinum.Converter.Reader.Utils
 
-let readExportAssignment
-    (reader: ITypeScriptReader)
-    (exportNode: Ts.ExportAssignment)
-    : GlueType
-    =
+let readExportAssignment (reader: ITypeScriptReader) (exportNode: Ts.ExportAssignment) : GlueType =
 
     // Not sure why we don't have symbol property in the type definition
     let symbolOpt: Ts.Symbol option = exportNode?symbol
@@ -25,8 +21,7 @@ let readExportAssignment
                 let identiferNode: Ts.Identifier = !!exportNode.expression
                 // Determine the type of the default export
                 let typ =
-                    let tsTyp =
-                        reader.checker.getTypeAtLocation (exportNode.expression)
+                    let tsTyp = reader.checker.getTypeAtLocation (exportNode.expression)
 
                     match tsTyp.flags with
                     | HasTypeFlags Ts.TypeFlags.Object ->
@@ -39,16 +34,11 @@ let readExportAssignment
                                 GlueType.Primitive GluePrimitive.Any
 
                         | None -> GlueType.Primitive GluePrimitive.Any
-                    | HasTypeFlags Ts.TypeFlags.String ->
-                        GlueType.Primitive GluePrimitive.String
-                    | HasTypeFlags Ts.TypeFlags.Number ->
-                        GlueType.Primitive GluePrimitive.Number
-                    | HasTypeFlags Ts.TypeFlags.Boolean ->
-                        GlueType.Primitive GluePrimitive.Bool
-                    | HasTypeFlags Ts.TypeFlags.Any ->
-                        GlueType.Primitive GluePrimitive.Any
-                    | HasTypeFlags Ts.TypeFlags.Void ->
-                        GlueType.Primitive GluePrimitive.Unit
+                    | HasTypeFlags Ts.TypeFlags.String -> GlueType.Primitive GluePrimitive.String
+                    | HasTypeFlags Ts.TypeFlags.Number -> GlueType.Primitive GluePrimitive.Number
+                    | HasTypeFlags Ts.TypeFlags.Boolean -> GlueType.Primitive GluePrimitive.Bool
+                    | HasTypeFlags Ts.TypeFlags.Any -> GlueType.Primitive GluePrimitive.Any
+                    | HasTypeFlags Ts.TypeFlags.Void -> GlueType.Primitive GluePrimitive.Unit
                     | _ -> GlueType.Primitive GluePrimitive.Any
 
                 ({

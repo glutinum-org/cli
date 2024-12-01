@@ -74,10 +74,6 @@ type WebCommand() =
                 workingDirectory = "src/Glutinum.Web"
             )
 
-            Command.Run(
-                "npx",
-                "vite build",
-                workingDirectory = "src/Glutinum.Web"
-            )
+            Command.Run("npx", "vite build", workingDirectory = "src/Glutinum.Web")
 
         0

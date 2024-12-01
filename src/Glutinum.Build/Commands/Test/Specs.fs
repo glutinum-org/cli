@@ -45,11 +45,7 @@ let private generateSpecsTestFile () =
     Directory.CreateDirectory(generatedSpecsTestDestination) |> ignore
 
     let specFiles =
-        Directory.GetFiles(
-            "tests/specs/references",
-            "*.d.ts",
-            SearchOption.AllDirectories
-        )
+        Directory.GetFiles("tests/specs/references", "*.d.ts", SearchOption.AllDirectories)
 
     specFiles
     // Normalize the path
@@ -87,8 +83,7 @@ let private generateSpecsTestFile () =
                     ]
                     |> String.concat "/"
 
-                let expectedFilePath =
-                    refereneFilePath.Replace(".d.ts", ".fsx")
+                let expectedFilePath = refereneFilePath.Replace(".d.ts", ".fsx")
 
                 $"""test('%s{testName}', async () => {{
     // Click the link below to go to the respective file
@@ -111,10 +106,7 @@ let private generateSpecsTestFile () =
             )
             |> String.concat "\n"
 
-        File.WriteAllText(
-            destinationFolder + "/index.test.js",
-            testFile (hiearchyLevel + 2) tests
-        )
+        File.WriteAllText(destinationFolder + "/index.test.js", testFile (hiearchyLevel + 2) tests)
     )
 
 type SpecSettings() =
@@ -171,9 +163,7 @@ type SpecCommand() =
             let additionalArgs =
                 if settings.IsWatch then
                     let candidates =
-                        context.Arguments
-                        |> Seq.skipWhile (fun x -> x <> "--")
-                        |> Seq.toList
+                        context.Arguments |> Seq.skipWhile (fun x -> x <> "--") |> Seq.toList
 
                     if List.isEmpty candidates then
                         null

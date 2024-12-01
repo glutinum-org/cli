@@ -74,49 +74,30 @@ type ModifierUtil =
         match modifiers with
         | Some modifiers ->
             modifiers
-            |> Seq.exists (fun modifier ->
-                modifier.kind = Ts.SyntaxKind.ReadonlyKeyword
-            )
+            |> Seq.exists (fun modifier -> modifier.kind = Ts.SyntaxKind.ReadonlyKeyword)
             |> function
                 | true -> GlueAccessor.ReadOnly
                 | false -> GlueAccessor.ReadWrite
         | None -> GlueAccessor.ReadWrite
 
     static member GetAccessor(modifiers: ResizeArray<Ts.ModifierLike> option) =
-        ModifierUtil.GetAccessor(
-            unbox<ResizeArray<Ts.Modifier> option> modifiers
-        )
+        ModifierUtil.GetAccessor(unbox<ResizeArray<Ts.Modifier> option> modifiers)
 
-    static member HasModifier
-        (modifiers: ResizeArray<Ts.Modifier> option, modifier: Ts.SyntaxKind)
-        =
+    static member HasModifier(modifiers: ResizeArray<Ts.Modifier> option, modifier: Ts.SyntaxKind) =
         match modifiers with
         | Some modifiers ->
-            modifiers
-            |> Seq.exists (fun currentModifier ->
-                currentModifier.kind = modifier
-            )
+            modifiers |> Seq.exists (fun currentModifier -> currentModifier.kind = modifier)
         | None -> false
 
     static member HasModifier
-        (
-            modifiers: option<ResizeArray<Ts.ModifierLike>>,
-            modifier: Ts.SyntaxKind
-        )
+        (modifiers: option<ResizeArray<Ts.ModifierLike>>, modifier: Ts.SyntaxKind)
         =
-        ModifierUtil.HasModifier(
-            unbox<ResizeArray<Ts.Modifier> option> modifiers,
-            modifier
-        )
+        ModifierUtil.HasModifier(unbox<ResizeArray<Ts.Modifier> option> modifiers, modifier)
 
-let readTypeArguments
-    (reader: ITypeScriptReader)
-    (node: Ts.NodeWithTypeArguments)
-    =
+let readTypeArguments (reader: ITypeScriptReader) (node: Ts.NodeWithTypeArguments) =
     match node.typeArguments with
     | None -> []
-    | Some typeArguments ->
-        typeArguments |> Seq.toList |> List.map (Some >> reader.ReadTypeNode)
+    | Some typeArguments -> typeArguments |> Seq.toList |> List.map (Some >> reader.ReadTypeNode)
 
 let readHeritageClauses
     (reader: ITypeScriptReader)
@@ -126,9 +107,7 @@ let readHeritageClauses
     | Some heritageClauses ->
         heritageClauses
         |> Seq.toList
-        |> List.collect (fun clause ->
-            clause.types |> Seq.toList |> List.map reader.ReadTypeNode
-        )
+        |> List.collect (fun clause -> clause.types |> Seq.toList |> List.map reader.ReadTypeNode)
     | None -> []
 
 /// <summary>

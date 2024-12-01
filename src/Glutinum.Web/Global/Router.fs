@@ -18,23 +18,17 @@ type EditorsRoute =
         match route with
         | FSharpCode typeScriptCode ->
             match typeScriptCode with
-            | Some code ->
-                "fsharp-code"
-                <?> "typeScriptCode=" + compressToEncodedURIComponent code
+            | Some code -> "fsharp-code" <?> "typeScriptCode=" + compressToEncodedURIComponent code
             | None -> "fsharp-code"
 
         | GlueAST typeScriptCode ->
             match typeScriptCode with
-            | Some code ->
-                "glue-ast"
-                <?> "typeScriptCode=" + compressToEncodedURIComponent code
+            | Some code -> "glue-ast" <?> "typeScriptCode=" + compressToEncodedURIComponent code
             | None -> "glue-ast"
 
         | FSharpAST typeScriptCode ->
             match typeScriptCode with
-            | Some code ->
-                "fsharp-ast"
-                <?> "typeScriptCode=" + compressToEncodedURIComponent code
+            | Some code -> "fsharp-ast" <?> "typeScriptCode=" + compressToEncodedURIComponent code
             | None -> "fsharp-ast"
 
 [<RequireQualifiedAccess>]
@@ -43,8 +37,7 @@ type Route =
 
     static member ToSegments(route: Route) =
         match route with
-        | Editors typeScriptCode ->
-            "editors" </> EditorsRoute.ToSegments typeScriptCode
+        | Editors typeScriptCode -> "editors" </> EditorsRoute.ToSegments typeScriptCode
 
 let toHash (route: Route) = "#" </> Route.ToSegments route
 
@@ -60,18 +53,15 @@ let routeParser: Parser<Route -> Route, Route> =
     oneOf [
         map
             (EditorsRoute.FSharpCode >> Route.Editors)
-            (s "editors" </> s "fsharp-code"
-             <?> lzEncodedURIComponentParam "typeScriptCode")
+            (s "editors" </> s "fsharp-code" <?> lzEncodedURIComponentParam "typeScriptCode")
 
         map
             (EditorsRoute.GlueAST >> Route.Editors)
-            (s "editors" </> s "glue-ast"
-             <?> lzEncodedURIComponentParam "typeScriptCode")
+            (s "editors" </> s "glue-ast" <?> lzEncodedURIComponentParam "typeScriptCode")
 
         map
             (EditorsRoute.FSharpAST >> Route.Editors)
-            (s "editors" </> s "fsharp-ast"
-             <?> lzEncodedURIComponentParam "typeScriptCode")
+            (s "editors" </> s "fsharp-ast" <?> lzEncodedURIComponentParam "typeScriptCode")
 
         // Default route
         map (None |> EditorsRoute.FSharpCode |> Route.Editors) top

@@ -65,12 +65,7 @@ let tryFindLastVersion (changeLogPath: string) =
             | Some data ->
                 result {
                     let! version =
-                        match
-                            SemVersion.TryParse(
-                                data.Version,
-                                SemVersionStyles.Strict
-                            )
-                        with
+                        match SemVersion.TryParse(data.Version, SemVersionStyles.Strict) with
                         | true, version -> Ok version
                         | false, _ -> Error(InvalidVersionFormat data.Version)
 

@@ -18,23 +18,16 @@ type Exports =
     static member decompressFromUTF16(compressed: string) : string = nativeOnly
 
     [<Import("compressToUint8Array", "lz-string")>]
-    static member compressToUint8Array(uncompressed: string) : JS.Uint8Array =
-        nativeOnly
+    static member compressToUint8Array(uncompressed: string) : JS.Uint8Array = nativeOnly
 
     [<Import("decompressFromUint8Array", "lz-string")>]
-    static member decompressFromUint8Array(compressed: JS.Uint8Array) : string =
-        nativeOnly
+    static member decompressFromUint8Array(compressed: JS.Uint8Array) : string = nativeOnly
 
     [<Import("compressToEncodedURIComponent", "lz-string")>]
-    static member compressToEncodedURIComponent(input: string) : string =
-        nativeOnly
+    static member compressToEncodedURIComponent(input: string) : string = nativeOnly
 
     [<Import("decompressFromEncodedURIComponent", "lz-string")>]
-    static member decompressFromEncodedURIComponent
-        (compressed: string)
-        : string
-        =
-        nativeOnly
+    static member decompressFromEncodedURIComponent(compressed: string) : string = nativeOnly
 
     [<Import("compress", "lz-string")>]
     static member compress(input: string) : string = nativeOnly

@@ -73,8 +73,7 @@ let private attributeToText (fsharpAttribute: FSharpAttribute) =
     match fsharpAttribute with
     | FSharpAttribute.Text text -> $"[<%s{text}>]"
     | FSharpAttribute.EmitSelfInvoke -> "[<Emit(\"$0($1...)\")>]"
-    | FSharpAttribute.Import(name, module_) ->
-        $"[<Import(\"{name}\", \"{module_}\")>]"
+    | FSharpAttribute.Import(name, module_) -> $"[<Import(\"{name}\", \"{module_}\")>]"
     | FSharpAttribute.Erase -> "[<Erase>]"
     | FSharpAttribute.AllowNullLiteral -> "[<AllowNullLiteral>]"
     | FSharpAttribute.StringEnum caseRules ->
@@ -91,11 +90,9 @@ let private attributeToText (fsharpAttribute: FSharpAttribute) =
     | FSharpAttribute.CompiledName name -> $"[<CompiledName(\"{name}\")>]"
     | FSharpAttribute.RequireQualifiedAccess -> "[<RequireQualifiedAccess>]"
     | FSharpAttribute.EmitConstructor -> "[<EmitConstructor>]"
-    | FSharpAttribute.EmitMacroConstructor className ->
-        $"[<Emit(\"new $0.{className}($1...)\")>]"
+    | FSharpAttribute.EmitMacroConstructor className -> $"[<Emit(\"new $0.{className}($1...)\")>]"
     | FSharpAttribute.ImportAll module_ -> $"[<ImportAll(\"{module_}\")>]"
-    | FSharpAttribute.ImportDefault module_ ->
-        $"[<ImportDefault(\"{module_}\")>]"
+    | FSharpAttribute.ImportDefault module_ -> $"[<ImportDefault(\"{module_}\")>]"
     | FSharpAttribute.EmitIndexer -> "[<EmitIndexer>]"
     | FSharpAttribute.Global -> "[<Global>]"
     | FSharpAttribute.ParamObject -> "[<ParamObject>]"
@@ -107,20 +104,13 @@ let private attributeToText (fsharpAttribute: FSharpAttribute) =
         | Some message -> $"[<Obsolete(\"%s{message}\")>]"
         | None -> "[<Obsolete>]"
     | FSharpAttribute.AbstractClass -> "[<AbstractClass>]"
-    | FSharpAttribute.EmitMacroInvoke methodName ->
-        $"[<Emit(\"$0.{methodName}($1...)\")>]"
+    | FSharpAttribute.EmitMacroInvoke methodName -> $"[<Emit(\"$0.{methodName}($1...)\")>]"
 
-let private printInlineAttribute
-    (printer: Printer)
-    (fsharpAttribute: FSharpAttribute)
-    =
+let private printInlineAttribute (printer: Printer) (fsharpAttribute: FSharpAttribute) =
     printer.WriteInline(attributeToText fsharpAttribute)
     printer.WriteInline(" ")
 
-let private printInlineAttributes
-    (printer: Printer)
-    (fsharpAttributes: FSharpAttribute list)
-    =
+let private printInlineAttributes (printer: Printer) (fsharpAttributes: FSharpAttribute list) =
     if fsharpAttributes.Length > 0 then
         let attributesText =
             fsharpAttributes
@@ -153,10 +143,7 @@ let private printCompactAttributesAndNewLine
         printer.Write(attributesText)
         printer.NewLine
 
-let private printAttributes
-    (printer: Printer)
-    (fsharpAttributes: FSharpAttribute list)
-    =
+let private printAttributes (printer: Printer) (fsharpAttributes: FSharpAttribute list) =
     fsharpAttributes
     |> List.iter (fun fsharpAttribute ->
         printer.Write(attributeToText fsharpAttribute)
@@ -178,8 +165,7 @@ let rec printTypeParametersDeclaration
                 innterPrinter.WriteInline(", ")
 
             match typeParameter with
-            | FSharpTypeParameter.FSharpType _ ->
-                innterPrinter.WriteInline $"'T{index}"
+            | FSharpTypeParameter.FSharpType _ -> innterPrinter.WriteInline $"'T{index}"
             | FSharpTypeParameter.FSharpTypeParameter typeParameter ->
                 innterPrinter.WriteInline $"'{typeParameter.Name}"
         )
@@ -193,8 +179,7 @@ let rec printTypeParametersDeclaration
         |> List.choose (
             function
             | FSharpTypeParameter.FSharpType _ -> None
-            | FSharpTypeParameter.FSharpTypeParameter typeParameter ->
-                Some typeParameter
+            | FSharpTypeParameter.FSharpTypeParameter typeParameter -> Some typeParameter
         )
         |> List.filter _.Constraint.IsSome
         |> List.iteri (fun index typeParameter ->
@@ -215,10 +200,7 @@ let rec printTypeParametersDeclaration
 
         innterPrinter.ToStringWithoutTrailNewLine() |> printer.WriteInline
 
-and printTypeNameWithTypeParameters
-    (name: string)
-    (typeParameters: FSharpTypeParameter list)
-    =
+and printTypeNameWithTypeParameters (name: string) (typeParameters: FSharpTypeParameter list) =
     let printer = new Printer()
 
     if not typeParameters.IsEmpty then
@@ -230,8 +212,7 @@ and printTypeNameWithTypeParameters
                 printer.WriteInline(", ")
 
             match typeParameter with
-            | FSharpTypeParameter.FSharpType innerType ->
-                printer.WriteInline(printType innerType)
+            | FSharpTypeParameter.FSharpType innerType -> printer.WriteInline(printType innerType)
             | FSharpTypeParameter.FSharpTypeParameter typeParameter ->
                 printer.WriteInline $"'{typeParameter.Name}"
         )
@@ -243,8 +224,7 @@ and printTypeNameWithTypeParameters
 and printType (fsharpType: FSharpType) =
     match fsharpType with
     | FSharpType.Object -> "obj"
-    | FSharpType.Mapped info ->
-        printTypeNameWithTypeParameters info.Name info.TypeParameters
+    | FSharpType.Mapped info -> printTypeNameWithTypeParameters info.Name info.TypeParameters
 
     | FSharpType.SingleErasedCaseUnion info -> info.Name
 
@@ -267,12 +247,9 @@ and printType (fsharpType: FSharpType) =
         $"{info.Name}<{cases}>{option}"
 
     | FSharpType.ThisType thisTypeInfo ->
-        printTypeNameWithTypeParameters
-            thisTypeInfo.Name
-            thisTypeInfo.TypeParameters
+        printTypeNameWithTypeParameters thisTypeInfo.Name thisTypeInfo.TypeParameters
 
-    | FSharpType.Tuple types ->
-        types |> List.map printType |> String.concat " * "
+    | FSharpType.Tuple types -> types |> List.map printType |> String.concat " * "
 
     | FSharpType.Function functionInfo ->
         match functionInfo.Parameters with
@@ -314,9 +291,7 @@ and printType (fsharpType: FSharpType) =
     | FSharpType.TypeReference typeReference ->
         if typeReference.TypeArguments.Length > 0 then
             let typeArguments =
-                typeReference.TypeArguments
-                |> List.map printType
-                |> String.concat ", "
+                typeReference.TypeArguments |> List.map printType |> String.concat ", "
 
             $"{typeReference.Name}<{typeArguments}>"
         else
@@ -329,16 +304,12 @@ and printType (fsharpType: FSharpType) =
         match apiInfo with
         | FSharpJSApi.ReadonlyArray typ -> $"ReadonlyArray<{printType typ}>"
     | FSharpType.Interface interfaceInfo ->
-        printTypeNameWithTypeParameters
-            interfaceInfo.Name
-            interfaceInfo.TypeParameters
+        printTypeNameWithTypeParameters interfaceInfo.Name interfaceInfo.TypeParameters
     | FSharpType.Class classInfo -> classInfo.Name
     | FSharpType.TypeAlias aliasInfo ->
         printTypeNameWithTypeParameters aliasInfo.Name aliasInfo.TypeParameters
     | FSharpType.Delegate delegateInfo ->
-        printTypeNameWithTypeParameters
-            delegateInfo.Name
-            delegateInfo.TypeParameters
+        printTypeNameWithTypeParameters delegateInfo.Name delegateInfo.TypeParameters
     | FSharpType.Module _
     | FSharpType.Unsupported _
     | FSharpType.Discard -> "obj"
@@ -401,8 +372,7 @@ let private link (text: string) =
             )
         )
 
-let private transformToXmlDoc (line: string) =
-    line |> codeBlock |> codeInline |> link
+let private transformToXmlDoc (line: string) = line |> codeBlock |> codeInline |> link
 
 let private printBlockTag
     (printer: Printer)
@@ -479,24 +449,17 @@ let private printXmlDoc (printer: Printer) (elements: FSharpXmlDoc list) =
         | FSharpXmlDoc.DefaultValue _ ->
             failwith "This element should have been processed in the summary"
 
-        | FSharpXmlDoc.Returns content ->
-            printBlockTag printer "returns" [] content
+        | FSharpXmlDoc.Returns content -> printBlockTag printer "returns" [] content
 
         | FSharpXmlDoc.Param info ->
             printBlockTag printer "param" [ "name", info.Name ] info.Content
 
-        | FSharpXmlDoc.Remarks content ->
-            printBlockTag printer "remarks" [] content
+        | FSharpXmlDoc.Remarks content -> printBlockTag printer "remarks" [] content
 
-        | FSharpXmlDoc.Example content ->
-            printBlockTag printer "example" [] content
+        | FSharpXmlDoc.Example content -> printBlockTag printer "example" [] content
 
         | FSharpXmlDoc.TypeParam info ->
-            printBlockTag
-                printer
-                "typeparam"
-                [ "name", info.TypeName ]
-                info.Content
+            printBlockTag printer "typeparam" [ "name", info.TypeName ] info.Content
     )
 
 let printParameters (printer: Printer) (parameters: FSharpParameter list) =
@@ -604,25 +567,20 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
             if propertyInfo.IsStatic then
                 printer.Write($"static member inline ")
 
-                FSharpAccessibility.printInline
-                    printer
-                    propertyInfo.Accessibility
+                FSharpAccessibility.printInline printer propertyInfo.Accessibility
 
                 printer.WriteInline($"{propertyInfo.Name}")
 
                 let printGetter () =
                     printer.Indent
 
-                    printer.Write(
-                        $"with get () : {printType propertyInfo.Type} ="
-                    )
+                    printer.Write($"with get () : {printType propertyInfo.Type} =")
 
                     printer.NewLine
                     printer.Indent
 
                     match propertyInfo.Body with
-                    | FSharpMemberInfoBody.NativeOnly ->
-                        printer.Write("nativeOnly")
+                    | FSharpMemberInfoBody.NativeOnly -> printer.Write("nativeOnly")
                     | FSharpMemberInfoBody.JavaScriptStaticProperty ->
                         printer.Write
                             $"emitJsExpr () $$\"\"\"
@@ -640,16 +598,13 @@ import {{ %s{interfaceInfo.OriginalName} }} from \"{Naming.MODULE_PLACEHOLDER}\"
                     else
                         printer.Write "with "
 
-                    printer.WriteInline(
-                        $"set (value: {printType propertyInfo.Type}) ="
-                    )
+                    printer.WriteInline($"set (value: {printType propertyInfo.Type}) =")
 
                     printer.NewLine
                     printer.Indent
 
                     match propertyInfo.Body with
-                    | FSharpMemberInfoBody.NativeOnly ->
-                        printer.Write("nativeOnly")
+                    | FSharpMemberInfoBody.NativeOnly -> printer.Write("nativeOnly")
                     | FSharpMemberInfoBody.JavaScriptStaticProperty ->
                         printer.Write
                             $"emitJsExpr (value) $$\"\"\"
@@ -693,9 +648,7 @@ import {{ %s{interfaceInfo.OriginalName} }} from \"{Naming.MODULE_PLACEHOLDER}\"
                         else
                             ""
 
-                    printer.WriteInline(
-                        $"{p.Name}: {printType p.Type}{option}"
-                    )
+                    printer.WriteInline($"{p.Name}: {printType p.Type}{option}")
                 )
 
                 if propertyInfo.Parameters.Length > 0 then
@@ -724,9 +677,7 @@ import {{ %s{interfaceInfo.OriginalName} }} from \"{Naming.MODULE_PLACEHOLDER}\"
 
             printer.Write($"static member inline {staticMemberInfo.Name} ")
 
-            printTypeParametersDeclaration
-                printer
-                staticMemberInfo.TypeParameters
+            printTypeParametersDeclaration printer staticMemberInfo.TypeParameters
 
             if staticMemberInfo.Parameters.IsEmpty then
                 printer.WriteInline("() : ")
@@ -771,9 +722,7 @@ import {{ %s{interfaceInfo.OriginalName} }} from \"{Naming.MODULE_PLACEHOLDER}\"
                 printer.Indent
 
                 let forwardedArgments =
-                    staticMemberInfo.Parameters
-                    |> List.map (fun p -> p.Name)
-                    |> String.concat ", "
+                    staticMemberInfo.Parameters |> List.map (fun p -> p.Name) |> String.concat ", "
 
                 let macroArguments =
                     staticMemberInfo.Parameters
@@ -795,10 +744,7 @@ import {{ %s{interfaceInfo.OriginalName} }} from \"{Naming.MODULE_PLACEHOLDER}\"
 
     printer.Unindent
 
-let private printPrimaryConstructor
-    (printer: Printer)
-    (constructor: FSharpConstructor)
-    =
+let private printPrimaryConstructor (printer: Printer) (constructor: FSharpConstructor) =
     printCompactAttributesAndNewLine printer constructor.Attributes
 
     FSharpAccessibility.print printer constructor.Accessibility
@@ -869,10 +815,7 @@ let private printClass (printer: Printer) (classInfo: FSharpClass) =
             printer.NewLine
         )
 
-    if
-        classInfo.ExplicitFields.IsEmpty
-        && classInfo.SecondaryConstructors.IsEmpty
-    then
+    if classInfo.ExplicitFields.IsEmpty && classInfo.SecondaryConstructors.IsEmpty then
         printer.Write("class end")
         printer.NewLine
 
@@ -900,8 +843,7 @@ let private printEnum (printer: Printer) (enumInfo: FSharpEnum) =
         let enumCaseName = enumCaseInfo.Name |> sanitizeEnumCaseName
 
         match enumCaseInfo.Value with
-        | FSharpLiteral.Int value ->
-            printer.Write($"""| {enumCaseName} = %i{value}""")
+        | FSharpLiteral.Int value -> printer.Write($"""| {enumCaseName} = %i{value}""")
 
         | FSharpLiteral.Bool _
         | FSharpLiteral.String _
@@ -978,8 +920,7 @@ let rec private print (printer: Printer) (fsharpTypes: FSharpType list) =
 
         | FSharpType.Enum enumInfo -> printEnum printer enumInfo
 
-        | FSharpType.Interface interfaceInfo ->
-            printInterface printer interfaceInfo
+        | FSharpType.Interface interfaceInfo -> printInterface printer interfaceInfo
 
         | FSharpType.Unsupported syntaxKind ->
             printer.Write($"obj // Unsupported syntax kind: %A{syntaxKind}")
@@ -1009,15 +950,11 @@ let rec private print (printer: Printer) (fsharpTypes: FSharpType list) =
         | FSharpType.SingleErasedCaseUnion erasedCaseUnionInfo ->
             printXmlDoc printer erasedCaseUnionInfo.XmlDoc
 
-            printAttributes
-                printer
-                (FSharpAttribute.Erase :: erasedCaseUnionInfo.Attributes)
+            printAttributes printer (FSharpAttribute.Erase :: erasedCaseUnionInfo.Attributes)
 
             printer.Write($"type {erasedCaseUnionInfo.Name}")
 
-            printTypeParametersDeclaration
-                printer
-                [ erasedCaseUnionInfo.TypeParameter ]
+            printTypeParametersDeclaration printer [ erasedCaseUnionInfo.TypeParameter ]
 
             printer.WriteInline(" =")
 
@@ -1027,8 +964,7 @@ let rec private print (printer: Printer) (fsharpTypes: FSharpType list) =
             printer.Write($"| %s{erasedCaseUnionInfo.Name} of ")
 
             match erasedCaseUnionInfo.TypeParameter with
-            | FSharpTypeParameter.FSharpType erasedType ->
-                printer.WriteInline(printType erasedType)
+            | FSharpTypeParameter.FSharpType erasedType -> printer.WriteInline(printType erasedType)
             | FSharpTypeParameter.FSharpTypeParameter typeParameter ->
                 printer.WriteInline($"'%s{typeParameter.Name}")
 
@@ -1084,8 +1020,7 @@ let printFile (printer: Printer) (transformResult: Transform.TransformResult) =
     if transformResult.IncludeReadonlyArrayAlias then
         printer.NewLine
 
-        printer.Write
-            "// You need to add Glutinum.Types NuGet package to your project"
+        printer.Write "// You need to add Glutinum.Types NuGet package to your project"
 
         printer.NewLine
         printer.Write "open Glutinum.Types.TypeScript"

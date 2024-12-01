@@ -15,8 +15,7 @@ module GlueAccessor =
 
 type GlueASTViewer =
 
-    static member private Name(name: string) =
-        ASTViewer.renderKeyValue "Name" name
+    static member private Name(name: string) = ASTViewer.renderKeyValue "Name" name
 
     static member private FullName(fullName: string) =
         ASTViewer.renderKeyValue "FullName" fullName
@@ -57,15 +56,11 @@ type GlueASTViewer =
     static member private HeritageClauses(heritageClauses: GlueType list) =
         heritageClauses
         |> List.map (fun heritageClause ->
-            ASTViewer.renderNode "HeritageClause" [
-                GlueASTViewer.GlueType heritageClause
-            ]
+            ASTViewer.renderNode "HeritageClause" [ GlueASTViewer.GlueType heritageClause ]
         )
         |> ASTViewer.renderNode "HeritageClauses"
 
-    static member private TypeParameters
-        (typeParameters: GlueTypeParameter list)
-        =
+    static member private TypeParameters(typeParameters: GlueTypeParameter list) =
         typeParameters
         |> List.map (fun typeParameter ->
             ASTViewer.renderNode "TypeParameter" [
@@ -76,10 +71,7 @@ type GlueASTViewer =
                     GlueASTViewer.GlueType
                     typeParameter.Constraint
 
-                ASTViewer.renderNodeOption
-                    "Default"
-                    GlueASTViewer.GlueType
-                    typeParameter.Default
+                ASTViewer.renderNodeOption "Default" GlueASTViewer.GlueType typeParameter.Default
             ]
         )
         |> ASTViewer.renderNode "TypeParameters"
@@ -94,11 +86,9 @@ type GlueASTViewer =
                 |> ASTViewer.renderNode "Summary"
 
             | GlueComment.Returns content ->
-                [ ASTViewer.renderValueOnly content ]
-                |> ASTViewer.renderNode "Returns"
+                [ ASTViewer.renderValueOnly content ] |> ASTViewer.renderNode "Returns"
 
-            | GlueComment.DefaultValue value ->
-                ASTViewer.renderKeyValue "DefaultValue" value
+            | GlueComment.DefaultValue value -> ASTViewer.renderKeyValue "DefaultValue" value
 
             | GlueComment.Param param ->
                 ASTViewer.renderNode "Param" [
@@ -107,12 +97,10 @@ type GlueASTViewer =
                 ]
 
             | GlueComment.Remarks content ->
-                [ ASTViewer.renderValueOnly content ]
-                |> ASTViewer.renderNode "Remarks"
+                [ ASTViewer.renderValueOnly content ] |> ASTViewer.renderNode "Remarks"
 
             | GlueComment.Example content ->
-                [ ASTViewer.renderValueOnly content ]
-                |> ASTViewer.renderNode "Example"
+                [ ASTViewer.renderValueOnly content ] |> ASTViewer.renderNode "Example"
 
             | GlueComment.Deprecated content ->
                 ASTViewer.renderKeyValueOption "Deprecated" id content
@@ -120,15 +108,11 @@ type GlueASTViewer =
             | GlueComment.TypeParam typeParam ->
                 ASTViewer.renderNode "TypeParam" [
                     ASTViewer.renderKeyValue "TypeName" typeParam.TypeName
-                    ASTViewer.renderKeyValueOption
-                        "Content"
-                        id
-                        typeParam.Content
+                    ASTViewer.renderKeyValueOption "Content" id typeParam.Content
                 ]
 
             | GlueComment.Throws content ->
-                [ ASTViewer.renderValueOnly content ]
-                |> ASTViewer.renderNode "Throws"
+                [ ASTViewer.renderValueOnly content ] |> ASTViewer.renderNode "Throws"
         )
         |> ASTViewer.renderNode "Documentation"
 
@@ -181,9 +165,7 @@ type GlueASTViewer =
                 GlueASTViewer.IsStatic propertyInfo.IsStatic
                 GlueASTViewer.IsOptional propertyInfo.IsOptional
                 GlueASTViewer.IsPrivate propertyInfo.IsPrivate
-                ASTViewer.renderKeyValue
-                    "Accessor"
-                    (GlueAccessor.toText propertyInfo.Accessor)
+                ASTViewer.renderKeyValue "Accessor" (GlueAccessor.toText propertyInfo.Accessor)
                 GlueASTViewer.Type propertyInfo.Type
             ]
 
@@ -214,52 +196,32 @@ type GlueASTViewer =
             ]
 
     static member private Members(members: GlueMember list) =
-        members
-        |> List.map GlueASTViewer.GlueMember
-        |> ASTViewer.renderNode "Members"
+        members |> List.map GlueASTViewer.GlueMember |> ASTViewer.renderNode "Members"
 
     static member private GlueLiteral(glueLiteral: GlueLiteral) =
         match glueLiteral with
         | GlueLiteral.String value ->
-            ASTViewer.renderNode "String" [
-                ASTViewer.renderKeyValue "Value" value
-            ]
+            ASTViewer.renderNode "String" [ ASTViewer.renderKeyValue "Value" value ]
         | GlueLiteral.Bool value ->
-            ASTViewer.renderNode "Bool" [
-                ASTViewer.renderKeyValue "Value" (string value)
-            ]
+            ASTViewer.renderNode "Bool" [ ASTViewer.renderKeyValue "Value" (string value) ]
         | GlueLiteral.Float value ->
-            ASTViewer.renderNode "Float" [
-                ASTViewer.renderKeyValue "Value" (string value)
-            ]
+            ASTViewer.renderNode "Float" [ ASTViewer.renderKeyValue "Value" (string value) ]
         | GlueLiteral.Int value ->
-            ASTViewer.renderNode "Int" [
-                ASTViewer.renderKeyValue "Value" (string value)
-            ]
+            ASTViewer.renderNode "Int" [ ASTViewer.renderKeyValue "Value" (string value) ]
 
         | GlueLiteral.Null -> ASTViewer.renderNode "Null" []
 
-    static member private GlueType
-        (glueType: GlueType)
-        (context: NodeContext<'Msg>)
-        =
+    static member private GlueType (glueType: GlueType) (context: NodeContext<'Msg>) =
         match glueType with
         | GlueType.ExportDefault glueType ->
-            ASTViewer.renderNode
-                "ExportDefault"
-                [ GlueASTViewer.GlueType glueType ]
-                context
+            ASTViewer.renderNode "ExportDefault" [ GlueASTViewer.GlueType glueType ] context
 
         | GlueType.Unknown -> ASTViewer.renderValueOnly "Unknown" context
 
-        | GlueType.TemplateLiteral ->
-            ASTViewer.renderValueOnly "TemplateLiteral" context
+        | GlueType.TemplateLiteral -> ASTViewer.renderValueOnly "TemplateLiteral" context
 
         | GlueType.ReadOnly readOnlyType ->
-            ASTViewer.renderNode
-                "ReadOnly"
-                [ GlueASTViewer.Type readOnlyType ]
-                context
+            ASTViewer.renderNode "ReadOnly" [ GlueASTViewer.Type readOnlyType ] context
 
         | GlueType.Variable variableInfo ->
             ASTViewer.renderNode
@@ -272,10 +234,7 @@ type GlueASTViewer =
                 context
 
         | GlueType.OptionalType optionalType ->
-            ASTViewer.renderNode
-                "OptionalType"
-                [ GlueASTViewer.Type optionalType ]
-                context
+            ASTViewer.renderNode "OptionalType" [ GlueASTViewer.Type optionalType ] context
 
         | GlueType.Interface interfaceInfo ->
             ASTViewer.renderNode
@@ -290,10 +249,7 @@ type GlueASTViewer =
                 context
 
         | GlueType.Array arrayInfo ->
-            ASTViewer.renderNode
-                "Array"
-                [ GlueASTViewer.Name arrayInfo.Name ]
-                context
+            ASTViewer.renderNode "Array" [ GlueASTViewer.Name arrayInfo.Name ] context
 
         | GlueType.Discard -> ASTViewer.renderNode "Discard" [] context
 
@@ -363,16 +319,10 @@ type GlueASTViewer =
                 context
 
         | GlueType.Union(GlueTypeUnion unionTypes) ->
-            ASTViewer.renderNode
-                "Union"
-                (unionTypes |> List.map GlueASTViewer.GlueType)
-                context
+            ASTViewer.renderNode "Union" (unionTypes |> List.map GlueASTViewer.GlueType) context
 
         | GlueType.Literal literalInfo ->
-            ASTViewer.renderNode
-                "Literal"
-                [ GlueASTViewer.GlueLiteral literalInfo ]
-                context
+            ASTViewer.renderNode "Literal" [ GlueASTViewer.GlueLiteral literalInfo ] context
 
         | GlueType.ClassDeclaration classDeclaration ->
             ASTViewer.renderNode
@@ -388,8 +338,7 @@ type GlueASTViewer =
                         |> ASTViewer.renderNode "Member"
                     )
                     |> ASTViewer.renderNode "Members"
-                    GlueASTViewer.HeritageClauses
-                        classDeclaration.HeritageClauses
+                    GlueASTViewer.HeritageClauses classDeclaration.HeritageClauses
                 ]
                 context
 
@@ -398,15 +347,11 @@ type GlueASTViewer =
                 "FunctionDeclaration"
                 [
                     GlueASTViewer.Name functionDeclaration.Name
-                    GlueASTViewer.Documentation
-                        functionDeclaration.Documentation
-                    ASTViewer.renderKeyValue
-                        "IsDeclared"
-                        (string functionDeclaration.IsDeclared)
+                    GlueASTViewer.Documentation functionDeclaration.Documentation
+                    ASTViewer.renderKeyValue "IsDeclared" (string functionDeclaration.IsDeclared)
                     GlueASTViewer.Parameters functionDeclaration.Parameters
                     GlueASTViewer.Type functionDeclaration.Type
-                    GlueASTViewer.TypeParameters
-                        functionDeclaration.TypeParameters
+                    GlueASTViewer.TypeParameters functionDeclaration.TypeParameters
                 ]
                 context
 
@@ -430,20 +375,15 @@ type GlueASTViewer =
                 ]
                 context
 
-        | GlueType.KeyOf keyOf ->
-            ASTViewer.renderNode "KeyOf" [ GlueASTViewer.Type keyOf ] context
+        | GlueType.KeyOf keyOf -> ASTViewer.renderNode "KeyOf" [ GlueASTViewer.Type keyOf ] context
 
         | GlueType.ModuleDeclaration moduleDeclaration ->
             ASTViewer.renderNode
                 "ModuleDeclaration"
                 [
                     GlueASTViewer.Name moduleDeclaration.Name
-                    ASTViewer.renderKeyValue
-                        "IsNamespace"
-                        (string moduleDeclaration.IsNamespace)
-                    ASTViewer.renderKeyValue
-                        "IsRecursive"
-                        (string moduleDeclaration.IsRecursive)
+                    ASTViewer.renderKeyValue "IsNamespace" (string moduleDeclaration.IsNamespace)
+                    ASTViewer.renderKeyValue "IsRecursive" (string moduleDeclaration.IsRecursive)
                     moduleDeclaration.Types
                     |> List.map GlueASTViewer.GlueType
                     |> ASTViewer.renderNode "Types"
@@ -478,9 +418,7 @@ type GlueASTViewer =
                 ASTViewer.renderNode
                     "Record"
                     [
-                        ASTViewer.renderNode "KeyType" [
-                            GlueASTViewer.GlueType recordInfo.KeyType
-                        ]
+                        ASTViewer.renderNode "KeyType" [ GlueASTViewer.GlueType recordInfo.KeyType ]
                         ASTViewer.renderNode "ValueType" [
                             GlueASTViewer.GlueType recordInfo.ValueType
                         ]
@@ -488,10 +426,7 @@ type GlueASTViewer =
                     context
 
             | GlueUtilityType.ReturnType returnType ->
-                ASTViewer.renderNode
-                    "ReturnType"
-                    [ GlueASTViewer.Type returnType ]
-                    context
+                ASTViewer.renderNode "ReturnType" [ GlueASTViewer.Type returnType ] context
 
             | GlueUtilityType.ThisParameterType thisParameterType ->
                 ASTViewer.renderNode
@@ -500,10 +435,7 @@ type GlueASTViewer =
                     context
 
             | GlueUtilityType.Omit members ->
-                ASTViewer.renderNode
-                    "Omit"
-                    (members |> List.map GlueASTViewer.GlueMember)
-                    context
+                ASTViewer.renderNode "Omit" (members |> List.map GlueASTViewer.GlueMember) context
 
         | GlueType.ThisType thisTypeInfo ->
             ASTViewer.renderNode
@@ -515,16 +447,10 @@ type GlueASTViewer =
                 context
 
         | GlueType.TupleType tupleTypes ->
-            ASTViewer.renderNode
-                "TupleType"
-                (tupleTypes |> List.map GlueASTViewer.GlueType)
-                context
+            ASTViewer.renderNode "TupleType" (tupleTypes |> List.map GlueASTViewer.GlueType) context
 
         | GlueType.TypeParameter typeParameterName ->
-            ASTViewer.renderNode
-                "TypeParameter"
-                [ GlueASTViewer.Name typeParameterName ]
-                context
+            ASTViewer.renderNode "TypeParameter" [ GlueASTViewer.Name typeParameterName ] context
 
         | GlueType.TypeReference typeReference ->
             ASTViewer.renderNode
@@ -532,8 +458,7 @@ type GlueASTViewer =
                 [
                     GlueASTViewer.Name typeReference.Name
                     GlueASTViewer.FullName typeReference.FullName
-                    GlueASTViewer.IsStandardLibrary
-                        typeReference.IsStandardLibrary
+                    GlueASTViewer.IsStandardLibrary typeReference.IsStandardLibrary
 
                     typeReference.TypeArguments
                     |> List.map GlueASTViewer.GlueType
@@ -558,8 +483,7 @@ type GlueASTViewer =
                 ]
                 context
 
-        | GlueType.ConstructorType ->
-            ASTViewer.renderNode "ConstructorType" [] context
+        | GlueType.ConstructorType -> ASTViewer.renderNode "ConstructorType" [] context
 
     static member Render
         (types: GlueType list)

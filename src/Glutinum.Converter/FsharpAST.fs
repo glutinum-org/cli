@@ -303,9 +303,7 @@ type FSharpTypeParameterInfo =
         Default: FSharpType option
     }
 
-    static member Create
-        (name: string, ?constraint_: FSharpType, ?default_: FSharpType)
-        =
+    static member Create(name: string, ?constraint_: FSharpType, ?default_: FSharpType) =
         {
             Name = name
             Constraint = constraint_

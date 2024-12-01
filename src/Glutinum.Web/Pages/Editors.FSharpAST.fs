@@ -58,8 +58,7 @@ let private generateAST (typeScriptCode: string) =
 
         let readerResult = Read.readSourceFile checker sourceFile
 
-        let transformResult =
-            Transform.apply readerResult.TypeMemory readerResult.GlueAST
+        let transformResult = Transform.apply readerResult.TypeMemory readerResult.GlueAST
 
         {
             AST = transformResult.FSharpAST
@@ -96,8 +95,7 @@ let triggerCompileCode () = Compile
 
 let update (msg: Msg) (model: Model) (currentTsCode: string) =
     match msg with
-    | Compile ->
-        Compiling, Cmd.OfFunc.perform generateAST currentTsCode CompileResult
+    | Compile -> Compiling, Cmd.OfFunc.perform generateAST currentTsCode CompileResult
 
     | CompileResult result ->
         match result with

@@ -10,8 +10,7 @@ module Types =
 
 module Interop =
 
-    let mkEditorProps (name: string) (value: obj) =
-        unbox<Types.IEditorProps> (name, value)
+    let mkEditorProps (name: string) (value: obj) = unbox<Types.IEditorProps> (name, value)
 
 [<Erase>]
 type editor =
@@ -33,20 +32,17 @@ type editor =
         Interop.mkEditorProps "defaultPath" value
 
     /// Value of the current model
-    static member inline value(value: string) =
-        Interop.mkEditorProps "value" value
+    static member inline value(value: string) = Interop.mkEditorProps "value" value
 
     /// Language of the current model
-    static member inline language(value: string) =
-        Interop.mkEditorProps "language" value
+    static member inline language(value: string) = Interop.mkEditorProps "language" value
 
     /// <summary>
     /// Path of the current model
     /// Will be passed as the third argument to <c>.createModel</c> method
     /// <c>monaco.editor.createModel(..., ..., monaco.Uri.parse(defaultPath))</c>
     /// </summary>
-    static member inline path(value: string) =
-        Interop.mkEditorProps "path" value
+    static member inline path(value: string) = Interop.mkEditorProps "path" value
 
     /// <summary>
     /// The theme for the monaco
@@ -54,8 +50,7 @@ type editor =
     /// Define new themes by <c>monaco.editor.defineTheme</c>
     /// </summary>
     /// <default>"light"</default>
-    static member inline theme(value: string) =
-        Interop.mkEditorProps "theme" value
+    static member inline theme(value: string) = Interop.mkEditorProps "theme" value
 
     /// <summary>
     /// The theme for the monaco
@@ -63,27 +58,21 @@ type editor =
     /// Define new themes by <c>monaco.editor.defineTheme</c>
     /// </summary>
     /// <default>"light"</default>
-    static member inline theme(value: Theme) =
-        Interop.mkEditorProps "theme" value
+    static member inline theme(value: Theme) = Interop.mkEditorProps "theme" value
 
     /// The line to jump on it
     static member inline line(value: float) = Interop.mkEditorProps "line" value
 
     /// <summary>The loading screen before the editor will be mounted</summary>
     /// <default>"Loading..."</default>
-    static member inline loading(value: ReactElement) =
-        Interop.mkEditorProps "loading" value
+    static member inline loading(value: ReactElement) = Interop.mkEditorProps "loading" value
 
     /// IStandaloneEditorConstructionOptions
-    static member inline options
-        (value: Editor.IStandaloneEditorConstructionOptions)
-        =
+    static member inline options(value: Editor.IStandaloneEditorConstructionOptions) =
         Interop.mkEditorProps "options" value
 
     /// IEditorOverrideServices
-    static member inline overrideServices
-        (value: Editor.IEditorOverrideServices)
-        =
+    static member inline overrideServices(value: Editor.IEditorOverrideServices) =
         Interop.mkEditorProps "overrideServices" value
 
     /// Indicator whether to save the models' view states between model changes or not
@@ -98,27 +87,22 @@ type editor =
 
     /// <summary>Width of the editor wrapper</summary>
     /// <default>"100%"</default>
-    static member inline width(value: string) =
-        Interop.mkEditorProps "width" value
+    static member inline width(value: string) = Interop.mkEditorProps "width" value
 
     /// <summary>Width of the editor wrapper</summary>
     /// <default>"100%"</default>
-    static member inline width(value: float) =
-        Interop.mkEditorProps "width" value
+    static member inline width(value: float) = Interop.mkEditorProps "width" value
 
     /// <summary>Height of the editor wrapper</summary>
     /// <default>"100%"</default>
-    static member inline height(value: string) =
-        Interop.mkEditorProps "height" value
+    static member inline height(value: string) = Interop.mkEditorProps "height" value
 
     /// <summary>Height of the editor wrapper</summary>
     /// <default>"100%"</default>
-    static member inline height(value: float) =
-        Interop.mkEditorProps "height" value
+    static member inline height(value: float) = Interop.mkEditorProps "height" value
 
     /// Class name for the editor container
-    static member inline className(value: string) =
-        Interop.mkEditorProps "className" value
+    static member inline className(value: string) = Interop.mkEditorProps "className" value
 
     /// Props applied to the wrapper element
     static member inline wrapperProps(value: obj) =

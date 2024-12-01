@@ -14,8 +14,7 @@ let private readDocumentation
     =
 
     let summary =
-        let content =
-            summary |> (Some >> ts.displayPartsToString) |> String.splitLines
+        let content = summary |> (Some >> ts.displayPartsToString) |> String.splitLines
 
         if List.forall String.IsNullOrWhiteSpace content then
             None
@@ -55,9 +54,7 @@ let private readDocumentation
             | Ts.SyntaxKind.JSDocDeprecatedTag ->
                 match tag.comment with
                 | Some comment ->
-                    ts.getTextOfJSDocComment comment
-                    |> GlueComment.Deprecated
-                    |> Some
+                    ts.getTextOfJSDocComment comment |> GlueComment.Deprecated |> Some
                 // We want to keep the deprecated tag even if there is no comment
                 // as it is still useful information
                 | None -> GlueComment.Deprecated None |> Some
@@ -117,9 +114,7 @@ let private readDocumentation
                                 ({
                                     TypeName = m.Groups.["type"].Value
                                     Content =
-                                        if
-                                            m.Groups.["description"].Success
-                                        then
+                                        if m.Groups.["description"].Success then
                                             Some m.Groups.["description"].Value
                                         else
                                             None
@@ -128,8 +123,7 @@ let private readDocumentation
                                 |> GlueComment.TypeParam
                                 |> Some
                             else
-                                $"Invalid typeParam tag format: {text}"
-                                |> reader.Warnings.Add
+                                $"Invalid typeParam tag format: {text}" |> reader.Warnings.Add
 
                                 None
 
@@ -151,10 +145,7 @@ let private readDocumentation
         yield! jsDocTags
     ]
 
-let readDocumentationForSignature
-    (reader: ITypeScriptReader)
-    (declaration: Ts.Declaration)
-    =
+let readDocumentationForSignature (reader: ITypeScriptReader) (declaration: Ts.Declaration) =
 
     match reader.checker.getSignatureFromDeclaration declaration with
     | Some signature ->
@@ -181,8 +172,7 @@ let readDocumentationForNode (reader: ITypeScriptReader) (node: Ts.Node) =
         | Some symbol ->
             readDocumentation
                 reader
-                ((unbox<Ts.Symbol> symbol)
-                    .getDocumentationComment (Some reader.checker))
+                ((unbox<Ts.Symbol> symbol).getDocumentationComment (Some reader.checker))
                 (ts.getJSDocTags node)
 
         | None -> []

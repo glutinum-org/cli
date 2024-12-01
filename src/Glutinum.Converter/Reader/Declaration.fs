@@ -6,11 +6,7 @@ open Glutinum.Converter.Reader.Types
 open TypeScript
 open Fable.Core.JsInterop
 
-let readDeclaration
-    (reader: ITypeScriptReader)
-    (declaration: Ts.Declaration)
-    : GlueMember
-    =
+let readDeclaration (reader: ITypeScriptReader) (declaration: Ts.Declaration) : GlueMember =
     match declaration.kind with
     | Ts.SyntaxKind.PropertySignature ->
 
@@ -58,9 +54,7 @@ let readDeclaration
                 methodDeclaration.modifiers
                 |> Option.map (fun modifiers ->
                     modifiers
-                    |> Seq.exists (fun modifier ->
-                        modifier?kind = Ts.SyntaxKind.StaticKeyword
-                    )
+                    |> Seq.exists (fun modifier -> modifier?kind = Ts.SyntaxKind.StaticKeyword)
                 )
                 |> Option.defaultValue false
         }
@@ -76,9 +70,7 @@ let readDeclaration
                 match indexSignature.modifiers with
                 | Some modifiers ->
                     modifiers
-                    |> Seq.exists (fun modifier ->
-                        modifier?kind = Ts.SyntaxKind.ReadonlyKeyword
-                    )
+                    |> Seq.exists (fun modifier -> modifier?kind = Ts.SyntaxKind.ReadonlyKeyword)
                 | None -> false
         }
         : GlueIndexSignature)
@@ -98,8 +90,7 @@ let readDeclaration
         |> GlueMember.MethodSignature
 
     | Ts.SyntaxKind.ConstructSignature ->
-        let constructSignature =
-            declaration :?> Ts.ConstructSignatureDeclaration
+        let constructSignature = declaration :?> Ts.ConstructSignatureDeclaration
 
         ({
             Parameters = reader.ReadParameters constructSignature.parameters
@@ -113,10 +104,7 @@ let readDeclaration
         let name = unbox<Ts.Identifier> propertyDeclaration.name
 
         let hasPrivateModifier =
-            ModifierUtil.HasModifier(
-                propertyDeclaration.modifiers,
-                Ts.SyntaxKind.PrivateKeyword
-            )
+            ModifierUtil.HasModifier(propertyDeclaration.modifiers, Ts.SyntaxKind.PrivateKeyword)
 
         let isPrivateIdentifier = name.kind = Ts.SyntaxKind.PrivateIdentifier
 
@@ -126,10 +114,7 @@ let readDeclaration
             Type = reader.ReadTypeNode propertyDeclaration.``type``
             IsOptional = propertyDeclaration.questionToken.IsSome
             IsStatic =
-                ModifierUtil.HasModifier(
-                    propertyDeclaration.modifiers,
-                    Ts.SyntaxKind.StaticKeyword
-                )
+                ModifierUtil.HasModifier(propertyDeclaration.modifiers, Ts.SyntaxKind.StaticKeyword)
             Accessor = ModifierUtil.GetAccessor propertyDeclaration.modifiers
             IsPrivate = hasPrivateModifier || isPrivateIdentifier
         }
@@ -141,10 +126,7 @@ let readDeclaration
         let name = unbox<Ts.Identifier> getAccessorDeclaration.name
 
         let hasPrivateModifier =
-            ModifierUtil.HasModifier(
-                getAccessorDeclaration.modifiers,
-                Ts.SyntaxKind.PrivateKeyword
-            )
+            ModifierUtil.HasModifier(getAccessorDeclaration.modifiers, Ts.SyntaxKind.PrivateKeyword)
 
         let isPrivateIdentifier = name.kind = Ts.SyntaxKind.PrivateIdentifier
 
@@ -167,19 +149,14 @@ let readDeclaration
         let name = unbox<Ts.Identifier> setAccessorDeclaration.name
 
         let hasPrivateModifier =
-            ModifierUtil.HasModifier(
-                setAccessorDeclaration.modifiers,
-                Ts.SyntaxKind.PrivateKeyword
-            )
+            ModifierUtil.HasModifier(setAccessorDeclaration.modifiers, Ts.SyntaxKind.PrivateKeyword)
 
         let isPrivateIdentifier = name.kind = Ts.SyntaxKind.PrivateIdentifier
 
         ({
             Name = name.getText ()
             Documentation = reader.ReadDocumentationFromNode name
-            ArgumentType =
-                reader.ReadTypeNode
-                    setAccessorDeclaration.parameters.[0].``type``
+            ArgumentType = reader.ReadTypeNode setAccessorDeclaration.parameters.[0].``type``
             IsStatic =
                 ModifierUtil.HasModifier(
                     setAccessorDeclaration.modifiers,

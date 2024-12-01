@@ -56,10 +56,7 @@ let private updatePreludeVersion (newVersion: string) =
         Regex.Replace(
             preludeContent,
             $@"^(?'indentation'\s*)let VERSION = ""(?'version'.*?)""",
-            (fun (m: Match) ->
-                m.Groups.["indentation"].Value
-                + $"let VERSION = \"{newVersion}\""
-            ),
+            (fun (m: Match) -> m.Groups.["indentation"].Value + $"let VERSION = \"{newVersion}\""),
             RegexOptions.Multiline
         )
 
@@ -172,10 +169,7 @@ let private getReleaseContext
         commits
         // Parse the commit message
         |> Seq.choose (fun commit ->
-            match
-                Parser.tryParseCommitMessage commitParserConfig commit.Message,
-                commit
-            with
+            match Parser.tryParseCommitMessage commitParserConfig commit.Message, commit with
             | Ok semanticCommit, commit ->
                 Some
                     {|
@@ -199,14 +193,10 @@ let private getReleaseContext
             match commits.SemanticCommit.Tags with
             | Some tags ->
                 match settings.Project with
-                | Project.GlutinumCli ->
-                    List.contains "cli" tags || List.contains "converter" tags
-                | Project.GlutinumWeb ->
-                    List.contains "web" tags || List.contains "converter" tags
+                | Project.GlutinumCli -> List.contains "cli" tags || List.contains "converter" tags
+                | Project.GlutinumWeb -> List.contains "web" tags || List.contains "converter" tags
                 | Project.GlutinumTypes -> List.contains "Glutinum.Types" tags
-                | Project.All ->
-                    failwith
-                        "Can't get release context for the \"All\" projects case"
+                | Project.All -> failwith "Can't get release context for the \"All\" projects case"
             | None -> false
         )
 
@@ -219,13 +209,11 @@ let private getReleaseContext
 
     let shouldBumpMinor =
         settings.BumpMinor
-        || releaseCommits
-           |> Seq.exists (fun commit -> commit.SemanticCommit.Type = "feat")
+        || releaseCommits |> Seq.exists (fun commit -> commit.SemanticCommit.Type = "feat")
 
     let shouldBumpPatch =
         settings.BumpPatch
-        || releaseCommits
-           |> Seq.exists (fun commit -> commit.SemanticCommit.Type = "fix")
+        || releaseCommits |> Seq.exists (fun commit -> commit.SemanticCommit.Type = "fix")
 
     let refVersion =
         match lastChangelogVersion with
@@ -238,10 +226,7 @@ let private getReleaseContext
         | Some version -> SemVersion.Parse(version, SemVersionStyles.Strict)
         | None ->
             if shouldBumpMajor then
-                refVersion
-                    .WithMajor(refVersion.Major + 1)
-                    .WithMinor(0)
-                    .WithPatch(0)
+                refVersion.WithMajor(refVersion.Major + 1).WithMinor(0).WithPatch(0)
             elif shouldBumpMinor then
                 refVersion.WithMinor(refVersion.Minor + 1).WithPatch(0)
             elif shouldBumpPatch then
@@ -249,8 +234,7 @@ let private getReleaseContext
             else if
                 // On CI, we allow to publish without a version bump
                 // It happens when we just released a new stable version, the changelog is already up-to-date
-                Environment.GetEnvironmentVariable("CI") <> null
-                || settings.IsWebOnly
+                Environment.GetEnvironmentVariable("CI") <> null || settings.IsWebOnly
             then
                 refVersion
             else
@@ -275,11 +259,7 @@ let private getReleaseContext
 let private tryFindAdditionalChangelogContent (text: string) =
     let lines = text.Replace("\r\n", "\n").Split('\n') |> Seq.toList
 
-    let rec apply
-        (acc: string list)
-        (lines: string list)
-        (isInsideChangelogBlock: bool)
-        =
+    let rec apply (acc: string list) (lines: string list) (isInsideChangelogBlock: bool) =
         match lines with
         | [] -> acc
         | line :: rest ->
@@ -295,10 +275,7 @@ let private tryFindAdditionalChangelogContent (text: string) =
 
     apply [] lines false
 
-let private updateChangelog
-    (releaseContext: ReleaseContext)
-    (changelogPath: string)
-    =
+let private updateChangelog (releaseContext: ReleaseContext) (changelogPath: string) =
     let newVersionLines = ResizeArray<string>()
 
     let appendLine (line: string) = newVersionLines.Add(line)
@@ -326,8 +303,7 @@ let private updateChangelog
 
             let commitUrl = githubCommitUrl commit.OriginalCommit.Sha
 
-            let description =
-                capitalizeFirstLetter commit.SemanticCommit.Description
+            let description = capitalizeFirstLetter commit.SemanticCommit.Description
 
             $"* %s{description} ([%s{shortSha}](%s{commitUrl}))" |> appendLine
 
@@ -378,9 +354,7 @@ let private updateChangelog
             // Add title and description of the original changelog
             yield!
                 releaseContext.ChangelogContent
-                |> Seq.takeWhile (fun line ->
-                    "<!-- EasyBuild: START -->" <> line
-                )
+                |> Seq.takeWhile (fun line -> "<!-- EasyBuild: START -->" <> line)
 
             // Ad EasyBuild metadata
             "<!-- EasyBuild: START -->"
@@ -424,10 +398,7 @@ let private releaseWebOnly
         // Reset the changes made to the Prelude file, as we only needed it for the publish
         Command.Run("git", "checkout HEAD -- src/Glutinum.Converter/Prelude.fs")
 
-let private releaseGlutinumCli
-    (repository: Repository)
-    (settings: PublishSettings)
-    =
+let private releaseGlutinumCli (repository: Repository) (settings: PublishSettings) =
 
     let releaseContext =
         getReleaseContext repository settings Workspace.``CHANGELOG.md``
@@ -443,9 +414,7 @@ let private releaseGlutinumCli
 
     // Update package.json with the new version
     let updatedPackageJsonContent =
-        Npm.replaceVersion
-            packageJsonContent
-            (releaseContext.NewVersion.ToString())
+        Npm.replaceVersion packageJsonContent (releaseContext.NewVersion.ToString())
 
     File.WriteAllText(Workspace.``package.json``, updatedPackageJsonContent)
 
@@ -483,8 +452,7 @@ let private releaseGlutinumCli
 
         // Because we messed with Fable output, prefer to clean up
         // So Fable will start from scratch next time
-        let fableModuleDir =
-            DirectoryInfo(VirtualWorkspace.dist.fable_modules.``.``)
+        let fableModuleDir = DirectoryInfo(VirtualWorkspace.dist.fable_modules.``.``)
 
         if fableModuleDir.Exists then
             fableModuleDir.Delete(true)
@@ -495,18 +463,13 @@ let private releaseGlutinumCli
             "git",
             CmdLine.empty
             |> CmdLine.appendRaw "commit"
-            |> CmdLine.appendPrefix
-                "-m"
-                $"chore: release %s{releaseContext.NewVersion.ToString()}"
+            |> CmdLine.appendPrefix "-m" $"chore: release %s{releaseContext.NewVersion.ToString()}"
             |> CmdLine.toString
         )
 
         Command.Run("git", "push")
 
-let private releaseGlutinumTypes
-    (repository: Repository)
-    (settings: PublishSettings)
-    =
+let private releaseGlutinumTypes (repository: Repository) (settings: PublishSettings) =
 
     let changelogPath = Workspace.src.``Glutinum.Types``.``CHANGELOG.md``
     let releaseContext = getReleaseContext repository settings changelogPath
@@ -520,13 +483,11 @@ let private releaseGlutinumTypes
         if settings.IsDryRun then
             printfn $"Dry run completed for project %A{settings.Project}"
 
-            printfn
-                "Please revert the changes after inspecting the generated CHANGELOG.md"
+            printfn "Please revert the changes after inspecting the generated CHANGELOG.md"
         else
 
             let projectFileInfo =
-                FileInfo
-                    Workspace.src.``Glutinum.Types``.``Glutinum.Types.fsproj``
+                FileInfo Workspace.src.``Glutinum.Types``.``Glutinum.Types.fsproj``
 
             let binDir = projectFileInfo.DirectoryName + "/bin" |> DirectoryInfo
 
@@ -540,10 +501,7 @@ let private releaseGlutinumTypes
             if isNull nugetKey then
                 failwith "NUGET_KEY environment variable is not set"
 
-            Nuget.push (
-                nupkgPath,
-                Environment.GetEnvironmentVariable("NUGET_KEY")
-            )
+            Nuget.push (nupkgPath, Environment.GetEnvironmentVariable("NUGET_KEY"))
 
 type PublishCommand() =
     inherit Command<PublishSettings>()
@@ -555,13 +513,8 @@ type PublishCommand() =
         // It also doesn't support SSH
         use repository = new Repository(Workspace.``.``)
 
-        if
-            not (
-                Array.contains repository.Head.FriendlyName settings.AllowBranch
-            )
-        then
-            failwith
-                $"Branch '{repository.Head.FriendlyName}' is not allowed to make a release"
+        if not (Array.contains repository.Head.FriendlyName settings.AllowBranch) then
+            failwith $"Branch '{repository.Head.FriendlyName}' is not allowed to make a release"
 
         if repository.RetrieveStatus().IsDirty && not settings.AllowDirty then
             failwith "You must commit your changes before publishing"

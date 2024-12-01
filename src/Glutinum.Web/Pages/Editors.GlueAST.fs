@@ -50,10 +50,7 @@ let private generateAST (typeScriptCode: string) =
 
         let readerResult = Read.readSourceFile checker sourceFile
 
-        CompilationResult.Success(
-            readerResult.GlueAST,
-            readerResult.Warnings |> Seq.toList
-        )
+        CompilationResult.Success(readerResult.GlueAST, readerResult.Warnings |> Seq.toList)
 
     with error ->
         Fable.Core.JS.console.log error
@@ -76,8 +73,7 @@ let triggerCompileCode () = Compile
 
 let update (msg: Msg) (model: Model) (currentTsCode: string) =
     match msg with
-    | Compile ->
-        Compiling, Cmd.OfFunc.perform generateAST currentTsCode CompileResult
+    | Compile -> Compiling, Cmd.OfFunc.perform generateAST currentTsCode CompileResult
 
     | CompileResult result ->
         match result with
@@ -117,12 +113,7 @@ let view (model: Model) (dispatch: Dispatch<Msg>) =
             Bulma.text.div [
                 spacing.ml3
                 prop.children (
-                    GlueASTViewer.Render
-                        data.GlueAST
-                        dispatch
-                        data.CollapsedNodes
-                        Collapse
-                        Expand
+                    GlueASTViewer.Render data.GlueAST dispatch data.CollapsedNodes Collapse Expand
                 )
             ]
 

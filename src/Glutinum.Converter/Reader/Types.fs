@@ -19,32 +19,23 @@ type ITypeScriptReader =
 
     abstract ReadTypeNode: typNode: Ts.TypeNode option -> GlueType
 
-    abstract ReadEnumDeclaration:
-        enumDeclaration: Ts.EnumDeclaration -> GlueType
+    abstract ReadEnumDeclaration: enumDeclaration: Ts.EnumDeclaration -> GlueType
 
-    abstract ReadTypeAliasDeclaration:
-        typeAliasDeclaration: Ts.TypeAliasDeclaration -> GlueType
+    abstract ReadTypeAliasDeclaration: typeAliasDeclaration: Ts.TypeAliasDeclaration -> GlueType
 
-    abstract ReadInterfaceDeclaration:
-        interfaceDeclaration: Ts.InterfaceDeclaration -> GlueType
+    abstract ReadInterfaceDeclaration: interfaceDeclaration: Ts.InterfaceDeclaration -> GlueType
 
-    abstract ReadVariableStatement:
-        variableStatement: Ts.VariableStatement -> GlueType
+    abstract ReadVariableStatement: variableStatement: Ts.VariableStatement -> GlueType
 
-    abstract ReadFunctionDeclaration:
-        functionDeclaration: Ts.FunctionDeclaration -> GlueType
+    abstract ReadFunctionDeclaration: functionDeclaration: Ts.FunctionDeclaration -> GlueType
 
-    abstract ReadModuleDeclaration:
-        moduleDeclaration: Ts.ModuleDeclaration -> GlueType
+    abstract ReadModuleDeclaration: moduleDeclaration: Ts.ModuleDeclaration -> GlueType
 
-    abstract ReadClassDeclaration:
-        classDeclaration: Ts.ClassDeclaration -> GlueType
+    abstract ReadClassDeclaration: classDeclaration: Ts.ClassDeclaration -> GlueType
 
-    abstract ReadExportAssignment:
-        exportAssignment: Ts.ExportAssignment -> GlueType
+    abstract ReadExportAssignment: exportAssignment: Ts.ExportAssignment -> GlueType
 
-    abstract ReadParameters:
-        parameters: ResizeArray<Ts.ParameterDeclaration> -> GlueParameter list
+    abstract ReadParameters: parameters: ResizeArray<Ts.ParameterDeclaration> -> GlueParameter list
 
     abstract ReadDeclaration: declaration: Ts.Declaration -> GlueMember
 
@@ -52,19 +43,15 @@ type ITypeScriptReader =
 
     abstract ReadTypeOperatorNode: node: Ts.TypeOperatorNode -> GlueType
 
-    abstract ReadIndexedAccessType:
-        declaration: Ts.IndexedAccessType -> GlueType
+    abstract ReadIndexedAccessType: declaration: Ts.IndexedAccessType -> GlueType
 
     abstract ReadTypeParameters:
-        typeParametersOpt: ResizeArray<Ts.TypeParameterDeclaration> option ->
-            GlueTypeParameter list
+        typeParametersOpt: ResizeArray<Ts.TypeParameterDeclaration> option -> GlueTypeParameter list
 
-    abstract ReadDocumentationFromSignature:
-        declaration: Ts.Declaration -> GlueComment list
+    abstract ReadDocumentationFromSignature: declaration: Ts.Declaration -> GlueComment list
 
     abstract ReadDocumentationFromNode: node: Ts.Node -> GlueComment list
 
-    abstract ReadNamedTupleMember:
-        namedTupleMember: Ts.NamedTupleMember -> GlueType
+    abstract ReadNamedTupleMember: namedTupleMember: Ts.NamedTupleMember -> GlueType
 
     abstract ReadMappedTypeNode: declaration: Ts.MappedTypeNode -> GlueType

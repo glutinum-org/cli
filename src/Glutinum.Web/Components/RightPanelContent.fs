@@ -11,12 +11,7 @@ let private classes: CssModules.Components.RightPanelContent = nativeOnly
 type RightPanelContent =
 
     static member Success
-        (
-            content: ReactElement,
-            warnings: string list,
-            errors: string list,
-            ?actions: ReactElement
-        )
+        (content: ReactElement, warnings: string list, errors: string list, ?actions: ReactElement)
         =
         Html.div [
             prop.className classes.container
@@ -39,11 +34,7 @@ type RightPanelContent =
             ]
         ]
 
-    static member Problems
-        (warnings: string list)
-        (errors: string list)
-        : ReactElement
-        =
+    static member Problems (warnings: string list) (errors: string list) : ReactElement =
         Html.div [
             prop.className classes.container__problems
 

@@ -40,12 +40,9 @@ let private mergeTypes (types: FSharpType list) =
                 | FSharpType.Interface existingInterfaceInfo ->
                     let merged =
                         { existingInterfaceInfo with
-                            Members =
-                                existingInterfaceInfo.Members
-                                @ interfaceInfo.Members
+                            Members = existingInterfaceInfo.Members @ interfaceInfo.Members
                             Inheritance =
-                                existingInterfaceInfo.Inheritance
-                                @ interfaceInfo.Inheritance
+                                existingInterfaceInfo.Inheritance @ interfaceInfo.Inheritance
                         }
 
                     result.[index] <- FSharpType.Interface merged

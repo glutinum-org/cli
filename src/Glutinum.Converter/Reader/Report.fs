@@ -12,10 +12,8 @@ type Report =
             errorContext: string,
             reason: string,
             node: Ts.Node,
-            [<CallerFilePath; Optional; DefaultParameterValue("")>] filePath:
-                string,
-            [<CallerLineNumber; Optional; DefaultParameterValue(0)>] fileLine:
-                int
+            [<CallerFilePath; Optional; DefaultParameterValue("")>] filePath: string,
+            [<CallerLineNumber; Optional; DefaultParameterValue(0)>] fileLine: int
         )
 
         =

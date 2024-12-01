@@ -61,9 +61,7 @@ type Msg =
 
 let createProgram (_: string) : Ts.Program = importDefault "./bootstrap.ts"
 
-let private generateFile
-    (typeScriptCode: string, compilationSource: CompilationSource)
-    =
+let private generateFile (typeScriptCode: string, compilationSource: CompilationSource) =
     let compilationResult =
         try
             let fileName = "index.d.ts"
@@ -78,8 +76,7 @@ let private generateFile
 
             let readerResult = Read.readSourceFile checker sourceFile
 
-            let transformResult =
-                Transform.apply readerResult.TypeMemory readerResult.GlueAST
+            let transformResult = Transform.apply readerResult.TypeMemory readerResult.GlueAST
 
             Printer.printFile printer transformResult
 
@@ -178,8 +175,7 @@ let update (msg: Msg) (model: Model) (currentTsCode: string) =
                             CompilationResult = result.CompilationResult
                         }
                 | CompilationSource.CopyFSharpCode ->
-                    Toast.message
-                        "Can't copy F# code to clipboard because generation failed"
+                    Toast.message "Can't copy F# code to clipboard because generation failed"
                     |> Toast.position Toast.TopRight
                     |> Toast.timeout (TimeSpan.FromSeconds 1.5)
                     |> Toast.error
@@ -187,11 +183,7 @@ let update (msg: Msg) (model: Model) (currentTsCode: string) =
             Errored message, cmd
 
     | CompileCode source ->
-        Compiling,
-        Cmd.OfFunc.perform
-            generateFile
-            (currentTsCode, source)
-            CompileCodeResult
+        Compiling, Cmd.OfFunc.perform generateFile (currentTsCode, source) CompileCodeResult
 
     | FailedToCopyFSharpCode _ ->
         model,
@@ -214,16 +206,9 @@ let private actions dispatch =
             Bulma.control.p [
                 Bulma.button.button [
                     color.isSuccess
-                    prop.onClick (
-                        dispatch,
-                        CompileCode CompilationSource.CopyFSharpCode
-                    )
+                    prop.onClick (dispatch, CompileCode CompilationSource.CopyFSharpCode)
                     prop.children [
-                        Bulma.icon [
-                            prop.children [
-                                Icon [ icon.icon lucide.clipboardCopy ]
-                            ]
-                        ]
+                        Bulma.icon [ prop.children [ Icon [ icon.icon lucide.clipboardCopy ] ] ]
                         Html.span "Copy F# code"
                     ]
                 ]
@@ -231,16 +216,9 @@ let private actions dispatch =
             Bulma.control.p [
                 Bulma.button.button [
                     color.isDanger
-                    prop.onClick (
-                        dispatch,
-                        CompileCode CompilationSource.ReportIssue
-                    )
+                    prop.onClick (dispatch, CompileCode CompilationSource.ReportIssue)
                     prop.children [
-                        Bulma.icon [
-                            prop.children [
-                                Icon [ icon.icon lucide.alertTriangle ]
-                            ]
-                        ]
+                        Bulma.icon [ prop.children [ Icon [ icon.icon lucide.alertTriangle ] ] ]
                         Html.span "Report an issue"
                     ]
                 ]
@@ -279,5 +257,4 @@ let view model dispatch =
             actions dispatch
         )
 
-    | Errored message ->
-        RightPanelContent.Error(message, actions = actions dispatch)
+    | Errored message -> RightPanelContent.Error(message, actions = actions dispatch)

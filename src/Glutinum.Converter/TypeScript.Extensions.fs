@@ -22,8 +22,7 @@ type Ts.SyntaxKind with
         | Ts.SyntaxKind.JsxText -> "JsxText"
         | Ts.SyntaxKind.JsxTextAllWhiteSpaces -> "JsxTextAllWhiteSpaces"
         | Ts.SyntaxKind.RegularExpressionLiteral -> "RegularExpressionLiteral"
-        | Ts.SyntaxKind.NoSubstitutionTemplateLiteral ->
-            "NoSubstitutionTemplateLiteral"
+        | Ts.SyntaxKind.NoSubstitutionTemplateLiteral -> "NoSubstitutionTemplateLiteral"
         | Ts.SyntaxKind.TemplateHead -> "TemplateHead"
         | Ts.SyntaxKind.TemplateMiddle -> "TemplateMiddle"
         | Ts.SyntaxKind.TemplateTail -> "TemplateTail"
@@ -46,8 +45,7 @@ type Ts.SyntaxKind with
         | Ts.SyntaxKind.EqualsEqualsToken -> "EqualsEqualsToken"
         | Ts.SyntaxKind.ExclamationEqualsToken -> "ExclamationEqualsToken"
         | Ts.SyntaxKind.EqualsEqualsEqualsToken -> "EqualsEqualsEqualsToken"
-        | Ts.SyntaxKind.ExclamationEqualsEqualsToken ->
-            "ExclamationEqualsEqualsToken"
+        | Ts.SyntaxKind.ExclamationEqualsEqualsToken -> "ExclamationEqualsEqualsToken"
         | Ts.SyntaxKind.EqualsGreaterThanToken -> "EqualsGreaterThanToken"
         | Ts.SyntaxKind.PlusToken -> "PlusToken"
         | Ts.SyntaxKind.MinusToken -> "MinusToken"
@@ -58,8 +56,7 @@ type Ts.SyntaxKind with
         | Ts.SyntaxKind.PlusPlusToken -> "PlusPlusToken"
         | Ts.SyntaxKind.MinusMinusToken -> "MinusMinusToken"
         | Ts.SyntaxKind.LessThanLessThanToken -> "LessThanLessThanToken"
-        | Ts.SyntaxKind.GreaterThanGreaterThanToken ->
-            "GreaterThanGreaterThanToken"
+        | Ts.SyntaxKind.GreaterThanGreaterThanToken -> "GreaterThanGreaterThanToken"
         | Ts.SyntaxKind.GreaterThanGreaterThanGreaterThanToken ->
             "GreaterThanGreaterThanGreaterThanToken"
         | Ts.SyntaxKind.AmpersandToken -> "AmpersandToken"
@@ -79,23 +76,18 @@ type Ts.SyntaxKind with
         | Ts.SyntaxKind.PlusEqualsToken -> "PlusEqualsToken"
         | Ts.SyntaxKind.MinusEqualsToken -> "MinusEqualsToken"
         | Ts.SyntaxKind.AsteriskEqualsToken -> "AsteriskEqualsToken"
-        | Ts.SyntaxKind.AsteriskAsteriskEqualsToken ->
-            "AsteriskAsteriskEqualsToken"
+        | Ts.SyntaxKind.AsteriskAsteriskEqualsToken -> "AsteriskAsteriskEqualsToken"
         | Ts.SyntaxKind.SlashEqualsToken -> "SlashEqualsToken"
         | Ts.SyntaxKind.PercentEqualsToken -> "PercentEqualsToken"
-        | Ts.SyntaxKind.LessThanLessThanEqualsToken ->
-            "LessThanLessThanEqualsToken"
-        | Ts.SyntaxKind.GreaterThanGreaterThanEqualsToken ->
-            "GreaterThanGreaterThanEqualsToken"
+        | Ts.SyntaxKind.LessThanLessThanEqualsToken -> "LessThanLessThanEqualsToken"
+        | Ts.SyntaxKind.GreaterThanGreaterThanEqualsToken -> "GreaterThanGreaterThanEqualsToken"
         | Ts.SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken ->
             "GreaterThanGreaterThanGreaterThanEqualsToken"
         | Ts.SyntaxKind.AmpersandEqualsToken -> "AmpersandEqualsToken"
         | Ts.SyntaxKind.BarEqualsToken -> "BarEqualsToken"
         | Ts.SyntaxKind.BarBarEqualsToken -> "BarBarEqualsToken"
-        | Ts.SyntaxKind.AmpersandAmpersandEqualsToken ->
-            "AmpersandAmpersandEqualsToken"
-        | Ts.SyntaxKind.QuestionQuestionEqualsToken ->
-            "QuestionQuestionEqualsToken"
+        | Ts.SyntaxKind.AmpersandAmpersandEqualsToken -> "AmpersandAmpersandEqualsToken"
+        | Ts.SyntaxKind.QuestionQuestionEqualsToken -> "QuestionQuestionEqualsToken"
         | Ts.SyntaxKind.CaretEqualsToken -> "CaretEqualsToken"
         | Ts.SyntaxKind.Identifier -> "Identifier"
         | Ts.SyntaxKind.PrivateIdentifier -> "PrivateIdentifier"
@@ -191,8 +183,7 @@ type Ts.SyntaxKind with
         | Ts.SyntaxKind.PropertyDeclaration -> "PropertyDeclaration"
         | Ts.SyntaxKind.MethodSignature -> "MethodSignature"
         | Ts.SyntaxKind.MethodDeclaration -> "MethodDeclaration"
-        | Ts.SyntaxKind.ClassStaticBlockDeclaration ->
-            "ClassStaticBlockDeclaration"
+        | Ts.SyntaxKind.ClassStaticBlockDeclaration -> "ClassStaticBlockDeclaration"
         | Ts.SyntaxKind.Constructor -> "Constructor"
         | Ts.SyntaxKind.GetAccessor -> "GetAccessor"
         | Ts.SyntaxKind.SetAccessor -> "SetAccessor"
@@ -250,8 +241,7 @@ type Ts.SyntaxKind with
         | Ts.SyntaxKind.SpreadElement -> "SpreadElement"
         | Ts.SyntaxKind.ClassExpression -> "ClassExpression"
         | Ts.SyntaxKind.OmittedExpression -> "OmittedExpression"
-        | Ts.SyntaxKind.ExpressionWithTypeArguments ->
-            "ExpressionWithTypeArguments"
+        | Ts.SyntaxKind.ExpressionWithTypeArguments -> "ExpressionWithTypeArguments"
         | Ts.SyntaxKind.AsExpression -> "AsExpression"
         | Ts.SyntaxKind.NonNullExpression -> "NonNullExpression"
         | Ts.SyntaxKind.MetaProperty -> "MetaProperty"
@@ -288,8 +278,7 @@ type Ts.SyntaxKind with
         | Ts.SyntaxKind.ModuleDeclaration -> "ModuleDeclaration"
         | Ts.SyntaxKind.ModuleBlock -> "ModuleBlock"
         | Ts.SyntaxKind.CaseBlock -> "CaseBlock"
-        | Ts.SyntaxKind.NamespaceExportDeclaration ->
-            "NamespaceExportDeclaration"
+        | Ts.SyntaxKind.NamespaceExportDeclaration -> "NamespaceExportDeclaration"
         | Ts.SyntaxKind.ImportEqualsDeclaration -> "ImportEqualsDeclaration"
         | Ts.SyntaxKind.ImportDeclaration -> "ImportDeclaration"
         | Ts.SyntaxKind.ImportClause -> "ImportClause"
@@ -321,19 +310,16 @@ type Ts.SyntaxKind with
         | Ts.SyntaxKind.CatchClause -> "CatchClause"
         | Ts.SyntaxKind.AssertClause -> "AssertClause"
         | Ts.SyntaxKind.AssertEntry -> "AssertEntry"
-        | Ts.SyntaxKind.ImportTypeAssertionContainer ->
-            "ImportTypeAssertionContainer"
+        | Ts.SyntaxKind.ImportTypeAssertionContainer -> "ImportTypeAssertionContainer"
         | Ts.SyntaxKind.PropertyAssignment -> "PropertyAssignment"
-        | Ts.SyntaxKind.ShorthandPropertyAssignment ->
-            "ShorthandPropertyAssignment"
+        | Ts.SyntaxKind.ShorthandPropertyAssignment -> "ShorthandPropertyAssignment"
         | Ts.SyntaxKind.SpreadAssignment -> "SpreadAssignment"
         | Ts.SyntaxKind.EnumMember -> "EnumMember"
         | Ts.SyntaxKind.UnparsedPrologue -> "UnparsedPrologue"
         | Ts.SyntaxKind.UnparsedPrepend -> "UnparsedPrepend"
         | Ts.SyntaxKind.UnparsedText -> "UnparsedText"
         | Ts.SyntaxKind.UnparsedInternalText -> "UnparsedInternalText"
-        | Ts.SyntaxKind.UnparsedSyntheticReference ->
-            "UnparsedSyntheticReference"
+        | Ts.SyntaxKind.UnparsedSyntheticReference -> "UnparsedSyntheticReference"
         | Ts.SyntaxKind.SourceFile -> "SourceFile"
         | Ts.SyntaxKind.Bundle -> "Bundle"
         | Ts.SyntaxKind.UnparsedSource -> "UnparsedSource"
@@ -382,10 +368,8 @@ type Ts.SyntaxKind with
         | Ts.SyntaxKind.JSDocSatisfiesTag -> "JSDocSatisfiesTag"
         | Ts.SyntaxKind.SyntaxList -> "SyntaxList"
         | Ts.SyntaxKind.NotEmittedStatement -> "NotEmittedStatement"
-        | Ts.SyntaxKind.PartiallyEmittedExpression ->
-            "PartiallyEmittedExpression"
+        | Ts.SyntaxKind.PartiallyEmittedExpression -> "PartiallyEmittedExpression"
         | Ts.SyntaxKind.CommaListExpression -> "CommaListExpression"
-        | Ts.SyntaxKind.SyntheticReferenceExpression ->
-            "SyntheticReferenceExpression"
+        | Ts.SyntaxKind.SyntheticReferenceExpression -> "SyntheticReferenceExpression"
         | Ts.SyntaxKind.Count -> "Count"
         | unknown -> $"Unknown {unknown}"

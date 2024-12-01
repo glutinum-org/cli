@@ -17,9 +17,7 @@ let readTypeParameters
         |> List.map (fun typeParameter ->
             {
                 Name = typeParameter.name.getText ()
-                Constraint =
-                    typeParameter.``constraint``
-                    |> Option.map reader.ReadTypeNode
+                Constraint = typeParameter.``constraint`` |> Option.map reader.ReadTypeNode
                 Default = None
             }
         )

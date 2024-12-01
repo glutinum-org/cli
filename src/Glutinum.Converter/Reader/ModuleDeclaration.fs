@@ -14,8 +14,7 @@ let readModuleDeclaration
     let children = declaration.getChildren ()
 
     let isNamespace =
-        children
-        |> Seq.exists (fun node -> node.kind = Ts.SyntaxKind.NamespaceKeyword)
+        children |> Seq.exists (fun node -> node.kind = Ts.SyntaxKind.NamespaceKeyword)
 
     let types =
         children
@@ -24,10 +23,7 @@ let readModuleDeclaration
             | Ts.SyntaxKind.ModuleBlock ->
                 let moduleBlock = child :?> Ts.ModuleBlock
 
-                moduleBlock.statements
-                |> List.ofSeq
-                |> List.map reader.ReadNode
-                |> Some
+                moduleBlock.statements |> List.ofSeq |> List.map reader.ReadNode |> Some
 
             | Ts.SyntaxKind.NamespaceKeyword
             | _ -> None

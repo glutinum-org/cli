@@ -10,14 +10,12 @@ let readInterfaceDeclaration
     : GlueInterface
     =
 
-    let members =
-        declaration.members |> Seq.toList |> List.map reader.ReadDeclaration
+    let members = declaration.members |> Seq.toList |> List.map reader.ReadDeclaration
 
     {
         FullName = Utils.getFullNameOrEmpty reader.checker declaration
         Name = declaration.name.getText ()
         Members = members
         TypeParameters = reader.ReadTypeParameters declaration.typeParameters
-        HeritageClauses =
-            Utils.readHeritageClauses reader declaration.heritageClauses
+        HeritageClauses = Utils.readHeritageClauses reader declaration.heritageClauses
     }

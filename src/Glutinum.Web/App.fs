@@ -21,12 +21,7 @@ let setRoute (routeOpt: Router.Route option) (model: Model) =
     match routeOpt with
     // For now, we don't have 404 pages
     // because we only have the editors as a "main page"
-    | None ->
-        model,
-        None
-        |> Router.EditorsRoute.FSharpCode
-        |> Router.Route.Editors
-        |> Router.newUrl
+    | None -> model, None |> Router.EditorsRoute.FSharpCode |> Router.Route.Editors |> Router.newUrl
 
     | Some route ->
         match route with
@@ -59,10 +54,7 @@ let private navbar =
         prop.children [
             Bulma.navbarBrand.div [
                 Bulma.navbarItem.a [
-                    None
-                    |> Router.EditorsRoute.FSharpCode
-                    |> Router.Route.Editors
-                    |> Router.href
+                    None |> Router.EditorsRoute.FSharpCode |> Router.Route.Editors |> Router.href
 
                     prop.text $"Glutinum tools - %s{Prelude.VERSION}"
                 ]
@@ -94,9 +86,7 @@ let private navbar =
                             prop.href "https://github.com/glutinum-org/cli"
                             prop.children [
                                 Bulma.icon [
-                                    prop.children [
-                                        Icon [ icon.icon simpleIcons.github ]
-                                    ]
+                                    prop.children [ Icon [ icon.icon simpleIcons.github ] ]
                                 ]
                                 Html.span "Github"
                             ]
@@ -112,8 +102,7 @@ let view model dispatch =
         navbar
 
         match model with
-        | Editors editorsModel ->
-            Editors.view editorsModel (fun msg -> dispatch (EditorsMsg msg))
+        | Editors editorsModel -> Editors.view editorsModel (fun msg -> dispatch (EditorsMsg msg))
 
         | Initializing -> null
     ]

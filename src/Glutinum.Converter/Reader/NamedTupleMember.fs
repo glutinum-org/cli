@@ -4,11 +4,7 @@ open Glutinum.Converter.GlueAST
 open Glutinum.Converter.Reader.Types
 open TypeScript
 
-let readNamedTupleMember
-    (reader: ITypeScriptReader)
-    (declaration: Ts.NamedTupleMember)
-    : GlueType
-    =
+let readNamedTupleMember (reader: ITypeScriptReader) (declaration: Ts.NamedTupleMember) : GlueType =
 
     ({
         Name = declaration.name.getText ()
