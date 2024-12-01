@@ -16,6 +16,8 @@ type Reporter() =
 
     member val HasReadonlyArray = false with get, set
 
+    member val HasIterable = false with get, set
+
 // Not really proud of this implementation, but I was not able to make it in a
 // pure functional way, using a Tree structure or something similar
 // It seems like for now this implementation does the job which is the most important
@@ -63,6 +65,8 @@ type TransformContext
         reporter.HasRegEpx <- true
 
     member _.ExposeReadonlyArray() = reporter.HasReadonlyArray <- true
+
+    member _.ExposeIterable() = reporter.HasIterable <- true
 
     member _.ExposeType(typ: FSharpType) =
         match parent with
@@ -127,29 +131,45 @@ type TransformContext
 
     member _.AddError(error: string) = reporter.Errors.Add error
 
+    member this.ExposeTypeAlias(name: string) =
+        match name with
+        | "RegExp" -> this.ExposeRegExp()
+        | "ReadonlyArray" -> this.ExposeReadonlyArray()
+        | "Iterable" -> this.ExposeIterable()
+        | _ -> ()
+
+    member this.ExposeTypeAlias(typ: GlueType) =
+        match typ with
+        | GlueType.TypeReference typeReference ->
+            if typeReference.IsStandardLibrary then
+                this.ExposeTypeAlias typeReference.Name
+
+            typ
+        | _ -> typ
+
 let private mapTypeNameToFableCoreAwareName
     (context: TransformContext)
     (typeReference: GlueTypeReference)
     =
 
-    if typeReference.IsStandardLibrary then
-        match typeReference.Name with
-        | "Date" -> "JS.Date"
-        | "Promise" -> "JS.Promise"
-        | "Uint8Array" -> "JS.Uint8Array"
-        | "ReadonlyArray" ->
-            context.ExposeReadonlyArray()
-            "ReadonlyArray"
-        | "Array" -> "ResizeArray"
-        | "Boolean" -> "bool"
-        | "Function" -> "Action"
-        | "RegExp" ->
-            context.ExposeRegExp()
-            "RegExp"
-        | "Error" -> "Exception"
-        | name -> name
-    else
-        typeReference.Name
+    let mappedName =
+        // When exposing a type, we also need to do it
+        if typeReference.IsStandardLibrary then
+            match typeReference.Name with
+            | "Date" -> "JS.Date"
+            | "Promise" -> "JS.Promise"
+            | "Uint8Array" -> "JS.Uint8Array"
+            | "Array" -> "ResizeArray"
+            | "Boolean" -> "bool"
+            | "Function" -> "Action"
+            | "Error" -> "Exception"
+            | name -> name
+        else
+            typeReference.Name
+
+    context.ExposeTypeAlias mappedName
+
+    mappedName
 
 let private unwrapOptionIfAlreadyOptional
     (context: TransformContext)
@@ -345,6 +365,84 @@ let private transformTupleType
     : FSharpType
     =
     glueTypes |> List.map (transformType context) |> FSharpType.Tuple
+
+module TypeLiteral =
+
+    let tryFindIterableType
+        (context: TransformContext)
+        (typeLiteralInfo: GlueTypeLiteral)
+        =
+
+        let makeIterable (typeParameter: FSharpTypeParameter) =
+            ({
+                Name = "Iterable"
+                TypeParameters = [ typeParameter ]
+            }
+            : FSharpMapped)
+            |> FSharpType.Mapped
+
+        let makeIterableObj () =
+            FSharpType.Object |> FSharpTypeParameter.FSharpType |> makeIterable
+
+        typeLiteralInfo.Members
+        |> List.choose (
+            function
+            | GlueMember.MethodSignature methodSignature ->
+                if methodSignature.Name = "[Symbol.iterator]" then
+                    context.ExposeIterable()
+
+                    Some methodSignature
+                else
+                    None
+            | _ -> None
+        )
+        // I believe, we can only have 1 iterable method
+        // but using List.tryHead make it safe and convenient to go from a list to a single option
+        |> List.tryHead
+        |> Option.map (fun methodSignature ->
+            match methodSignature.Type with
+            | GlueType.TypeReference typeReference ->
+                if typeReference.Name = "IterableIterator" then
+                    transformType context typeReference.TypeArguments.Head
+                    |> FSharpTypeParameter.FSharpType
+                    |> makeIterable
+
+                else
+                    // Can't determine the concreate type of the iterable, default to object
+                    makeIterableObj ()
+
+            // If we find a type literal, we try to determine the type of the iterable by looking at the next method
+            | GlueType.TypeLiteral typeLiteralInfo ->
+                let mutable returnType =
+                    FSharpType.Object |> FSharpTypeParameter.FSharpType
+
+                for m in typeLiteralInfo.Members do
+                    match m with
+                    | GlueMember.MethodSignature nextMethodSignature when
+                        nextMethodSignature.Name = "next"
+                        ->
+                        match nextMethodSignature.Type with
+                        | GlueType.TypeLiteral nextTypeLiteralInfo ->
+                            nextTypeLiteralInfo.Members
+                            |> List.iter (
+                                function
+                                | GlueMember.Property property when
+                                    property.Name = "value"
+                                    ->
+                                    returnType <-
+                                        property.Type
+                                        |> transformType context
+                                        |> FSharpTypeParameter.FSharpType
+                                | _ -> ()
+                            )
+                        | _ -> ()
+                    | _ -> ()
+
+                makeIterable returnType
+            | _ ->
+                // Can't determine the concreate type of the iterable, default to object
+                makeIterableObj ()
+        )
 
 let rec private transformType
     (context: TransformContext)
@@ -609,7 +707,16 @@ let rec private transformType
                     TransformMembers.toFSharpMember
                         context
                         typeLiteralInfo.Members
-                Inheritance = []
+                Inheritance =
+                    [
+                        match
+                            TypeLiteral.tryFindIterableType
+                                context
+                                typeLiteralInfo
+                        with
+                        | Some iterable -> iterable
+                        | None -> ()
+                    ]
             }
             |> FSharpType.Interface
             |> context.ExposeType
@@ -1034,6 +1141,20 @@ module private TransformMembers =
         : FSharpMember list
         =
         members
+        // Remove the Symbol.iterator method in F#, we don't have a direct equivalent
+        // the iterator information is stored in the Iterable<T> inheritance
+        |> List.filter (
+            function
+            | GlueMember.Method { Name = name }
+            | GlueMember.MethodSignature { Name = name } ->
+                name <> "[Symbol.iterator]"
+            | GlueMember.GetAccessor _
+            | GlueMember.SetAccessor _
+            | GlueMember.Property _
+            | GlueMember.CallSignature _
+            | GlueMember.ConstructSignature _
+            | GlueMember.IndexSignature _ -> true
+        )
         // We want to transform GetAccessor / SetAccessor
         // into a single Property if they are related to the same property
         |> List.choose (
@@ -1419,6 +1540,7 @@ let private transformInterface
 
     let membersComingFromPartial =
         info.HeritageClauses
+        |> List.map context.ExposeTypeAlias
         |> List.choose (fun heritageClause ->
             match heritageClause with
             | GlueType.TypeReference typeReference ->
@@ -1462,6 +1584,7 @@ let private transformInterface
 
     let inheritance =
         info.HeritageClauses
+        |> List.map context.ExposeTypeAlias
         |> List.filter (fun heritageClause ->
             match heritageClause with
             | GlueType.TypeReference typeReference ->
@@ -1762,7 +1885,7 @@ let private transformTypeParameter
         | FSharpType.Function _ -> None
         | forward -> Some forward
 
-    FSharpTypeParameter.Create(
+    FSharpTypeParameterInfo.Create(
         typeParameter.Name,
         ?constraint_ =
             (typeParameter.Constraint
@@ -1770,6 +1893,7 @@ let private transformTypeParameter
         ?default_ =
             (typeParameter.Default |> Option.map (transformType context))
     )
+    |> FSharpTypeParameter.FSharpTypeParameter
 
 let private transformTypeParameters
     (context: TransformContext)
@@ -2244,7 +2368,14 @@ let private transformTypeAliasDeclaration
                     glueTypeAliasDeclaration.TypeParameters
             Members =
                 TransformMembers.toFSharpMember context typeLiteralInfo.Members
-            Inheritance = []
+            Inheritance =
+                [
+                    match
+                        TypeLiteral.tryFindIterableType context typeLiteralInfo
+                    with
+                    | Some iterableType -> iterableType
+                    | None -> ()
+                ]
         }
         |> FSharpType.Interface
 
@@ -2342,7 +2473,8 @@ let private transformClassDeclaration
         TypeParameters =
             transformTypeParameters context classDeclaration.TypeParameters
         Inheritance =
-            classDeclaration.HeritageClauses |> List.map (transformType context)
+            classDeclaration.HeritageClauses
+            |> List.map (context.ExposeTypeAlias >> transformType context)
     }
     : FSharpInterface)
     |> FSharpType.Interface
@@ -2477,6 +2609,7 @@ type TransformResult =
         Errors: ResizeArray<string>
         IncludeRegExpAlias: bool
         IncludeReadonlyArrayAlias: bool
+        IncludeIterableAlias: bool
     }
 
 let apply (typeMemory: GlueType list) (glueAst: GlueType list) =
@@ -2488,4 +2621,5 @@ let apply (typeMemory: GlueType list) (glueAst: GlueType list) =
         Errors = reporter.Errors
         IncludeRegExpAlias = reporter.HasRegEpx
         IncludeReadonlyArrayAlias = reporter.HasReadonlyArray
+        IncludeIterableAlias = reporter.HasIterable
     }

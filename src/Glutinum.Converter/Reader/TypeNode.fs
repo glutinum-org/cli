@@ -561,14 +561,19 @@ let readTypeNode
     | Ts.SyntaxKind.ExpressionWithTypeArguments ->
         let expression = typeNode :?> Ts.ExpressionWithTypeArguments
 
-        let symbolOpt = checker.getSymbolAtLocation (expression.expression)
+        let typ = checker.getTypeFromTypeNode expression
+
+        // Getting the type from the expression seems more robust for getting a Symbol resolved
+        // than using:
+        //
+        // let symbolOpt = checker.getSymbolAtLocation (expression.expression)
 
         // Should we try to specialize the type for UtilityTypes like we do for TypeReference?
         ({
             Name = expression.expression.getText () // Keep the double expression !!!
             FullName = getFullNameOrEmpty checker expression.expression
             TypeArguments = readTypeArguments reader expression
-            IsStandardLibrary = isFromEs5Lib symbolOpt
+            IsStandardLibrary = isFromEs5Lib typ.aliasSymbol
         })
         |> GlueType.TypeReference
 

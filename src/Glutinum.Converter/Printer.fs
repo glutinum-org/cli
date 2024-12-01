@@ -177,7 +177,11 @@ let rec printTypeParametersDeclaration
             if index <> 0 then
                 innterPrinter.WriteInline(", ")
 
-            innterPrinter.WriteInline($"'{typeParameter.Name}")
+            match typeParameter with
+            | FSharpTypeParameter.FSharpType _ ->
+                innterPrinter.WriteInline $"'T{index}"
+            | FSharpTypeParameter.FSharpTypeParameter typeParameter ->
+                innterPrinter.WriteInline $"'{typeParameter.Name}"
         )
 
         // Print the constraints only if we are in the initial declaration.
@@ -186,6 +190,12 @@ let rec printTypeParametersDeclaration
         // Which should be:
         // static member User<'T when 'T :> A> () : User<'T> = nativeOnly
         typeParameters
+        |> List.choose (
+            function
+            | FSharpTypeParameter.FSharpType _ -> None
+            | FSharpTypeParameter.FSharpTypeParameter typeParameter ->
+                Some typeParameter
+        )
         |> List.filter _.Constraint.IsSome
         |> List.iteri (fun index typeParameter ->
             match typeParameter.Constraint with
@@ -219,7 +229,11 @@ and printTypeNameWithTypeParameters
             if index <> 0 then
                 printer.WriteInline(", ")
 
-            printer.WriteInline($"'{typeParameter.Name}")
+            match typeParameter with
+            | FSharpTypeParameter.FSharpType innerType ->
+                printer.WriteInline(printType innerType)
+            | FSharpTypeParameter.FSharpTypeParameter typeParameter ->
+                printer.WriteInline $"'{typeParameter.Name}"
         )
 
         printer.WriteInline(">")
@@ -1010,9 +1024,13 @@ let rec private print (printer: Printer) (fsharpTypes: FSharpType list) =
             printer.NewLine
             printer.Indent
 
-            printer.Write(
-                $"| %s{erasedCaseUnionInfo.Name} of '%s{erasedCaseUnionInfo.TypeParameter.Name}"
-            )
+            printer.Write($"| %s{erasedCaseUnionInfo.Name} of ")
+
+            match erasedCaseUnionInfo.TypeParameter with
+            | FSharpTypeParameter.FSharpType erasedType ->
+                printer.WriteInline(printType erasedType)
+            | FSharpTypeParameter.FSharpTypeParameter typeParameter ->
+                printer.WriteInline($"'%s{typeParameter.Name}")
 
             printer.NewLine
             printer.NewLine
@@ -1076,6 +1094,11 @@ let printFile (printer: Printer) (transformResult: Transform.TransformResult) =
     if transformResult.IncludeRegExpAlias then
         printer.NewLine
         printer.Write "type RegExp = Text.RegularExpressions.Regex"
+        printer.NewLine
+
+    if transformResult.IncludeIterableAlias then
+        printer.NewLine
+        printer.Write "type Iterable<'T> = Collections.Generic.IEnumerable<'T>"
         printer.NewLine
 
     print printer transformResult.FSharpAST

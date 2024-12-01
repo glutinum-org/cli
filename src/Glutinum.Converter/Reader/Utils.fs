@@ -145,7 +145,10 @@ let isFromEs5Lib (symbolOpt: Ts.Symbol option) =
     | None -> false
     | Some symbol ->
         match symbol.declarations with
-        | None -> false
+        | None ->
+            // For some reason, I can't seem to resolve the actual symbol for some Es5 types
+            // So, we make a naive fallback checking the name of the symbol
+            [ "Iterable"; "IterableIterator" ] |> List.contains symbol.name
         | Some declarations ->
             match declarations[0].parent.kind with
             | Ts.SyntaxKind.SourceFile ->

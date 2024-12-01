@@ -155,17 +155,21 @@ type FSharpASTViewer =
 
     static member private TypeParameter(typeParameter: FSharpTypeParameter) =
         ASTViewer.renderNode "TypeParameter" [
-            FSharpASTViewer.Name typeParameter.Name
+            match typeParameter with
+            | FSharpTypeParameter.FSharpType type_ ->
+                FSharpASTViewer.FSharpType type_
+            | FSharpTypeParameter.FSharpTypeParameter typeParameter ->
+                FSharpASTViewer.Name typeParameter.Name
 
-            ASTViewer.renderNodeOption
-                "Constraint"
-                FSharpASTViewer.FSharpType
-                typeParameter.Constraint
+                ASTViewer.renderNodeOption
+                    "Constraint"
+                    FSharpASTViewer.FSharpType
+                    typeParameter.Constraint
 
-            ASTViewer.renderNodeOption
-                "Default"
-                FSharpASTViewer.FSharpType
-                typeParameter.Default
+                ASTViewer.renderNodeOption
+                    "Default"
+                    FSharpASTViewer.FSharpType
+                    typeParameter.Default
         ]
 
     static member private TypeParameters
@@ -422,7 +426,10 @@ type FSharpASTViewer =
         | FSharpType.Mapped mapped ->
             ASTViewer.renderNode
                 "Mapped"
-                [ FSharpASTViewer.Name mapped.Name ]
+                [
+                    FSharpASTViewer.Name mapped.Name
+                    FSharpASTViewer.TypeParameters mapped.TypeParameters
+                ]
                 context
 
         | FSharpType.Discard -> ASTViewer.renderValueOnly "Discard" context

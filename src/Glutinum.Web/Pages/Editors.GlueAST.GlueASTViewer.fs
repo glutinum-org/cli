@@ -388,6 +388,8 @@ type GlueASTViewer =
                         |> ASTViewer.renderNode "Member"
                     )
                     |> ASTViewer.renderNode "Members"
+                    GlueASTViewer.HeritageClauses
+                        classDeclaration.HeritageClauses
                 ]
                 context
 

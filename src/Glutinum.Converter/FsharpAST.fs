@@ -296,7 +296,7 @@ type FSharpPrimitive =
     | Number
     | Null
 
-type FSharpTypeParameter =
+type FSharpTypeParameterInfo =
     {
         Name: string
         Constraint: FSharpType option
@@ -311,6 +311,11 @@ type FSharpTypeParameter =
             Constraint = constraint_
             Default = default_
         }
+
+[<RequireQualifiedAccess>]
+type FSharpTypeParameter =
+    | FSharpType of FSharpType
+    | FSharpTypeParameter of FSharpTypeParameterInfo
 
 type FSharpTypeAlias =
     {
