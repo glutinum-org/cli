@@ -5,8 +5,198 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 <!-- EasyBuild: START -->
-<!-- last_commit_released: dba758860fabb533a408a08ff7f137c88d79db2d -->
+<!-- last_commit_released: 20dab778db50f4529c7c641da8e8e51463b00eef -->
 <!-- EasyBuild: END -->
+
+## 0.12.0
+
+### 🚀 Features
+
+* Add basic support for `Readonly<T>` ([20dab77](https://github.com/glutinum-org/cli/commit/20dab778db50f4529c7c641da8e8e51463b00eef))
+
+    ```ts
+    export interface TerminalOptions {
+        prefix: string
+    }
+
+    export type ReadonlyTerminalOptions = Readonly<TerminalOptions>
+    ```
+
+    ```fs
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type TerminalOptions =
+        abstract member prefix: string with get, set
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type ReadonlyTerminalOptions =
+        abstract member prefix: string with get
+    ```
+
+* Make `Partial<T>` support more robust ([b7e9030](https://github.com/glutinum-org/cli/commit/b7e90308e4986429df8389fcb215a03d09c2f7da))
+
+    * Support literal types:
+
+        ```ts
+        export type TodoPreview = Partial<{
+            title: string;
+            description: string;
+        }>;
+        ```
+
+        ```fs
+        [<AllowNullLiteral>]
+        [<Interface>]
+        type TodoPreview =
+            abstract member title: string option with get, set
+            abstract member description: string option with get, set
+        ```
+
+    * Support intersection
+
+        ```ts
+        interface Todo {
+            title: string;
+        }
+
+        interface TodoExtra {
+            author: string;
+        }
+
+        export type TodoPreview = Partial<Todo & TodoExtra>;
+        ```
+
+        ```fs
+        [<AllowNullLiteral>]
+        [<Interface>]
+        type Todo =
+            abstract member title: string with get, set
+
+        [<AllowNullLiteral>]
+        [<Interface>]
+        type TodoExtra =
+            abstract member author: string with get, set
+
+        [<AllowNullLiteral>]
+        [<Interface>]
+        type TodoPreview =
+            abstract member title: string option with get, set
+            abstract member author: string option with get, set
+        ```
+
+* Add support for `Iterable` type ([12ad780](https://github.com/glutinum-org/cli/commit/12ad780b6050dc54eeb288859c2f7aec30551aaa))
+
+    Iterable can be detect if a type `implements Iterable<...>` or if a TypeLiteral has a `[Symbol.iterator]()` method signature.
+
+    For `[Symbol.iterator]()`, we also support auto detection of the type looking at the `next.value` signature type.
+
+    ```ts
+    export declare class DataTransfer implements Iterable<string> {
+        [Symbol.iterator](): IterableIterator<string>
+    }
+
+    export type MyIterable = {
+        [Symbol.iterator](): {
+            next(): {
+                done: boolean;
+                value: number;
+            };
+            return(): {
+                done: boolean;
+            };
+        };
+    };
+    ```
+
+    ```fs
+    <AllowNullLiteral>]
+    [<Interface>]
+    type DataTransfer =
+        inherit Iterable<string>
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type MyIterable =
+        inherit Iterable<float>
+    ```
+
+* Add support for `Omit<Type, Keys>` ([3e00942](https://github.com/glutinum-org/cli/commit/3e009427578702cbc0863b0be80003e4eec8d2f4))
+
+    ```ts
+    export interface Todo {
+        title: string;
+        description: string;
+        completed: boolean;
+        createdAt: number;
+    }
+
+    export type TodoPreview = Omit<Todo, "description">;
+    ```
+
+    ```fs
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type Todo =
+        abstract member title: string with get, set
+        abstract member description: string with get, set
+        abstract member completed: bool with get, set
+        abstract member createdAt: float with get, set
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type TodoPreview =
+        abstract member title: string with get, set
+        abstract member completed: bool with get, set
+        abstract member createdAt: float with get, set
+    ```
+
+### 🐞 Bug Fixes
+
+* Support single case out of `Exclude<UnionType, ExcludedMembers>` ([7b8a7c0](https://github.com/glutinum-org/cli/commit/7b8a7c029f873df20678fef644617b39f5b7de07))
+
+    ```ts
+    export type NumberB = Exclude<1 | 2, 2>;
+
+    export type PrimitiveResult = Exclude<"a" | "b", "a">;
+    ```
+
+    ```fs
+    [<RequireQualifiedAccess>]
+    type NumberB =
+        | ``1`` = 1
+
+    [<RequireQualifiedAccess>]
+    [<StringEnum(CaseRules.None)>]
+    type PrimitiveResult =
+        | b
+    ```
+
+* Type constraint should not be generated when the type is a "return type" ([73d6cd7](https://github.com/glutinum-org/cli/commit/73d6cd734fd815508d29c9e430727db1ecc45d6b))
+
+    ```ts
+    class A {}
+
+    class User<T extends A = A> {}
+    ```
+
+    ```fs
+    [<AbstractClass>]
+    [<Erase>]
+    type Exports =
+        [<Import("User", "REPLACE_ME_WITH_MODULE_NAME"); EmitConstructor>]
+        static member User<'T when 'T :> A> () : User<'T> = nativeOnly
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type A =
+        interface end
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type User<'T when 'T :> A> =
+        interface end
+    ```
 
 ## 0.11.0
 
