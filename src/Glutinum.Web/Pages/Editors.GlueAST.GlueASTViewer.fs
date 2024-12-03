@@ -211,6 +211,15 @@ type GlueASTViewer =
 
         | GlueLiteral.Null -> ASTViewer.renderNode "Null" []
 
+    static member private Interface(interfaceInfo: GlueInterface) =
+        ASTViewer.renderNode "Interface" [
+            GlueASTViewer.Name interfaceInfo.Name
+            GlueASTViewer.FullName interfaceInfo.FullName
+            GlueASTViewer.TypeParameters interfaceInfo.TypeParameters
+            GlueASTViewer.Members interfaceInfo.Members
+            GlueASTViewer.HeritageClauses interfaceInfo.HeritageClauses
+        ]
+
     static member private GlueType (glueType: GlueType) (context: NodeContext<'Msg>) =
         match glueType with
         | GlueType.ExportDefault glueType ->
@@ -236,17 +245,7 @@ type GlueASTViewer =
         | GlueType.OptionalType optionalType ->
             ASTViewer.renderNode "OptionalType" [ GlueASTViewer.Type optionalType ] context
 
-        | GlueType.Interface interfaceInfo ->
-            ASTViewer.renderNode
-                "Interface"
-                [
-                    GlueASTViewer.Name interfaceInfo.Name
-                    GlueASTViewer.FullName interfaceInfo.FullName
-                    GlueASTViewer.TypeParameters interfaceInfo.TypeParameters
-                    GlueASTViewer.Members interfaceInfo.Members
-                    GlueASTViewer.HeritageClauses interfaceInfo.HeritageClauses
-                ]
-                context
+        | GlueType.Interface interfaceInfo -> GlueASTViewer.Interface interfaceInfo context
 
         | GlueType.Array arrayInfo ->
             ASTViewer.renderNode "Array" [ GlueASTViewer.Name arrayInfo.Name ] context
@@ -436,6 +435,23 @@ type GlueASTViewer =
 
             | GlueUtilityType.Omit members ->
                 ASTViewer.renderNode "Omit" (members |> List.map GlueASTViewer.GlueMember) context
+
+            | GlueUtilityType.Readonly readonlyType ->
+                ASTViewer.renderNode
+                    "Readonly"
+                    [
+                        match readonlyType with
+                        | GlueReadonly.Members members ->
+                            members
+                            |> List.map GlueASTViewer.GlueMember
+                            |> ASTViewer.renderNode "Members"
+                        | GlueReadonly.Union interfaces ->
+                            ASTViewer.renderNode
+                                "Union"
+                                (interfaces
+                                 |> List.map (fun glueType -> GlueASTViewer.Interface glueType))
+                    ]
+                    context
 
         | GlueType.ThisType thisTypeInfo ->
             ASTViewer.renderNode

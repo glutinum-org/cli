@@ -415,6 +415,80 @@ module TypeLiteral =
                 makeIterableObj ()
         )
 
+module private UtilityType =
+    let transformReadOnly
+        (context: TransformContext)
+        (readonlyInfo: GlueReadonly)
+        (makeTypeAlias: (FSharpType -> FSharpType) option)
+        =
+        match readonlyInfo with
+        | GlueReadonly.Members members ->
+            let interfaceTyp =
+                {
+                    Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
+                    Name = context.CurrentScopeName
+                    OriginalName = context.CurrentScopeName
+                    TypeParameters = []
+                    Members =
+                        TransformMembers.toFSharpMember context members
+                        |> TransformMembers.forceReadonly
+                    Inheritance = []
+                }
+                |> FSharpType.Interface
+
+            match makeTypeAlias with
+            | Some _ -> interfaceTyp
+            | None ->
+                context.ExposeType interfaceTyp
+
+                ({
+                    Name = context.FullName
+                    TypeParameters = []
+                }
+                : FSharpMapped)
+                |> FSharpType.Mapped
+
+        | GlueReadonly.Union interfaces ->
+            let name, context = sanitizeNameAndPushScope $"U{interfaces.Length}" context
+
+            let cases =
+                interfaces
+                |> List.map (fun glueInterface ->
+                    let context = context.PushScope $"ReadOnly{glueInterface.Name}"
+                    let initialInterface = transformInterface context glueInterface
+
+                    let adaptedInterface =
+                        { initialInterface with
+                            Members = initialInterface.Members |> TransformMembers.forceReadonly
+                        }
+
+                    { adaptedInterface with
+                        Name = context.CurrentScopeName
+                    }
+                    |> FSharpType.Interface
+                    |> context.ExposeType
+
+                    { adaptedInterface with
+                        Name = context.FullName
+                    }
+                    |> FSharpType.Interface
+                    |> FSharpUnionCase.Typed
+                )
+
+            let unionType =
+                ({
+                    Attributes = []
+                    Name = name
+                    Cases = cases
+                    IsOptional = false
+                }
+                : FSharpUnion)
+                |> FSharpType.Union
+
+            match makeTypeAlias with
+            | Some makeTypeAlias -> makeTypeAlias unionType
+            | None -> unionType
+
 let rec private transformType (context: TransformContext) (glueType: GlueType) : FSharpType =
     match glueType with
     | GlueType.ConstructorType
@@ -498,12 +572,16 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
             Name = mapTypeNameToFableCoreAwareName context typeReference
             FullName = typeReference.FullName
             TypeArguments = typeReference.TypeArguments |> List.map (transformType context)
-            Type = //transformType context typeReference.TypeRef
-                // TODO: This code looks suspicious
-                // Why would a typeReference always be a string? I think I added that here to make
-                // the compiler happy because we don't have a concrete type for the TypeReference
-                // this is because of the recursive types which creates infinite loops in the reader
-                FSharpType.Primitive FSharpPrimitive.String
+            Type =
+                context.TypeMemory
+                |> List.tryFind (fun glueType ->
+                    match glueType with
+                    | GlueType.Interface glueInterface ->
+                        glueInterface.FullName = typeReference.FullName
+                    | _ -> false
+                )
+                |> Option.map (transformType context)
+                |> Option.defaultValue FSharpType.Discard
         }
         : FSharpTypeReference)
         |> FSharpType.TypeReference
@@ -788,6 +866,9 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
             }
             : FSharpMapped)
             |> FSharpType.Mapped
+
+        | GlueUtilityType.Readonly readonlyInfo ->
+            UtilityType.transformReadOnly context readonlyInfo None
 
     | GlueType.TypeAliasDeclaration typeAliasDeclaration ->
         ({
@@ -1307,6 +1388,18 @@ module private TransformMembers =
                 }
                 |> FSharpMember.Method
                 |> Some
+        )
+
+    let forceReadonly (members: FSharpMember list) =
+        members
+        |> List.map (
+            function
+            | FSharpMember.Property property ->
+                { property with
+                    Accessor = Some FSharpAccessor.ReadOnly
+                }
+                |> FSharpMember.Property
+            | m -> m
         )
 
     let toFSharpParameters
@@ -2111,6 +2204,9 @@ let private transformTypeAliasDeclaration
                 Inheritance = []
             }
             |> FSharpType.Interface
+
+        | GlueUtilityType.Readonly readonlyInfo ->
+            UtilityType.transformReadOnly context readonlyInfo (Some makeTypeAlias)
 
     | GlueType.FunctionType functionType ->
         {

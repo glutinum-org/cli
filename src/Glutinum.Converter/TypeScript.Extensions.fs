@@ -373,3 +373,62 @@ type Ts.SyntaxKind with
         | Ts.SyntaxKind.SyntheticReferenceExpression -> "SyntheticReferenceExpression"
         | Ts.SyntaxKind.Count -> "Count"
         | unknown -> $"Unknown {unknown}"
+
+type Ts.TypeFlags with
+
+    member this.Debug() =
+
+        [
+            Ts.TypeFlags.Any, "Any"
+            Ts.TypeFlags.Unknown, "Unknown"
+            Ts.TypeFlags.String, "String"
+            Ts.TypeFlags.Number, "Number"
+            Ts.TypeFlags.Boolean, "Boolean"
+            Ts.TypeFlags.Enum, "Enum"
+            Ts.TypeFlags.BigInt, "BigInt"
+            Ts.TypeFlags.StringLiteral, "StringLiteral"
+            Ts.TypeFlags.NumberLiteral, "NumberLiteral"
+            Ts.TypeFlags.BooleanLiteral, "BooleanLiteral"
+            Ts.TypeFlags.EnumLiteral, "EnumLiteral"
+            Ts.TypeFlags.BigIntLiteral, "BigIntLiteral"
+            Ts.TypeFlags.ESSymbol, "ESSymbol"
+            Ts.TypeFlags.UniqueESSymbol, "UniqueESSymbol"
+            Ts.TypeFlags.Void, "Void"
+            Ts.TypeFlags.Undefined, "Undefined"
+            Ts.TypeFlags.Null, "Null"
+            Ts.TypeFlags.Never, "Never"
+            Ts.TypeFlags.TypeParameter, "TypeParameter"
+            Ts.TypeFlags.Object, "Object"
+            Ts.TypeFlags.Union, "Union"
+            Ts.TypeFlags.Intersection, "Intersection"
+            Ts.TypeFlags.Index, "Index"
+            Ts.TypeFlags.IndexedAccess, "IndexedAccess"
+            Ts.TypeFlags.Conditional, "Conditional"
+            Ts.TypeFlags.Substitution, "Substitution"
+            Ts.TypeFlags.NonPrimitive, "NonPrimitive"
+            Ts.TypeFlags.TemplateLiteral, "TemplateLiteral"
+            Ts.TypeFlags.StringMapping, "StringMapping"
+            Ts.TypeFlags.Literal, "Literal"
+            Ts.TypeFlags.Unit, "Unit"
+            Ts.TypeFlags.Freshable, "Freshable"
+            Ts.TypeFlags.StringOrNumberLiteral, "StringOrNumberLiteral"
+            Ts.TypeFlags.PossiblyFalsy, "PossiblyFalsy"
+            Ts.TypeFlags.StringLike, "StringLike"
+            Ts.TypeFlags.NumberLike, "NumberLike"
+            Ts.TypeFlags.BigIntLike, "BigIntLike"
+            Ts.TypeFlags.BooleanLike, "BooleanLike"
+            Ts.TypeFlags.EnumLike, "EnumLike"
+            Ts.TypeFlags.ESSymbolLike, "ESSymbolLike"
+            Ts.TypeFlags.VoidLike, "VoidLike"
+            Ts.TypeFlags.UnionOrIntersection, "UnionOrIntersection"
+            Ts.TypeFlags.StructuredType, "StructuredType"
+            Ts.TypeFlags.TypeVariable, "TypeVariable"
+            Ts.TypeFlags.InstantiableNonPrimitive, "InstantiableNonPrimitive"
+            Ts.TypeFlags.InstantiablePrimitive, "InstantiablePrimitive"
+            Ts.TypeFlags.Instantiable, "Instantiable"
+            Ts.TypeFlags.StructuredOrInstantiable, "StructuredOrInstantiable"
+        ]
+        |> List.iter (fun (flag, name) ->
+            if this.HasFlag flag then
+                printfn "%s" name
+        )

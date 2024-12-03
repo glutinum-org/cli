@@ -267,12 +267,18 @@ type GlueRecord =
     }
 
 [<RequireQualifiedAccess>]
+type GlueReadonly =
+    | Members of GlueMember list
+    | Union of GlueInterface list
+
+[<RequireQualifiedAccess>]
 type GlueUtilityType =
     | Partial of GlueInterface
     | Record of GlueRecord
     | ReturnType of GlueType
     | ThisParameterType of GlueType
     | Omit of GlueMember list
+    | Readonly of GlueReadonly
 
 type GlueMappedType =
     {
@@ -359,11 +365,11 @@ type GlueType =
             | Array arrayInfo -> $"ReadonlyArray<{arrayInfo.Name}>"
             | _ -> info.Name
         | ThisType thisTypeInfo -> thisTypeInfo.Name
+        | Union(GlueTypeUnion cases) -> cases |> List.map (fun x -> x.Name) |> String.concat (" | ")
         | NamedTupleType _
         | TypeLiteral _
         | IntersectionType _
         | IndexedAccessType _
-        | Union _
         | FunctionType _
         | TupleType _
         | OptionalType _ // TODO: Should we take the name of the underlying type and add option to it?
@@ -375,6 +381,7 @@ type GlueType =
             match utilityType with
             | GlueUtilityType.Partial _
             | GlueUtilityType.Omit _
+            | GlueUtilityType.Readonly _
             | GlueUtilityType.Record _ -> "obj"
             | GlueUtilityType.ReturnType returnType -> returnType.Name
             | GlueUtilityType.ThisParameterType thisType -> thisType.Name

@@ -102,11 +102,34 @@ module UtilityType =
 
         cases |> GlueTypeUnion |> GlueType.Union
 
+    /// <summary></summary>
+    /// <param name="reader"></param>
+    /// <param name="contextNode">Node used to report errors</param>
+    /// <param name="typ">Type to read the members from</param>
+    /// <returns></returns>
+    let private readMembers (reader: ITypeScriptReader) (contextNode: Ts.Node) (typ: Ts.Type) =
+
+        typ
+        |> reader.checker.getPropertiesOfType
+        |> Seq.toList
+        |> List.choose (fun property ->
+            match property.declarations with
+            | Some declarations -> declarations |> Seq.map reader.ReadDeclaration |> Some
+            | None ->
+                Report.readerError ("type node", "Missing declarations", contextNode)
+                |> reader.Warnings.Add
+
+                None
+        )
+        |> Seq.concat
+        |> Seq.distinct
+        |> Seq.toList
+
     let readPartial (reader: ITypeScriptReader) (typeReferenceNode: Ts.TypeReferenceNode) =
         let baseType =
             typeReferenceNode.typeArguments.Value[0] |> reader.checker.getTypeFromTypeNode
 
-        let baseProperties =
+        let members =
             match baseType.flags with
             | HasTypeFlags Ts.TypeFlags.Any ->
                 Report.readerError (
@@ -116,23 +139,9 @@ module UtilityType =
                 )
                 |> reader.Warnings.Add
 
-                ResizeArray []
-            | _ -> baseType |> reader.checker.getPropertiesOfType
+                []
 
-        let members =
-            baseProperties
-            |> Seq.toList
-            |> List.choose (fun property ->
-                match property.declarations with
-                | Some declarations -> declarations |> Seq.map reader.ReadDeclaration |> Some
-                | None ->
-                    Report.readerError ("type node", "Missing declarations", typeReferenceNode)
-                    |> reader.Warnings.Add
-
-                    None
-            )
-            |> Seq.concat
-            |> Seq.toList
+            | _ -> baseType |> readMembers reader typeReferenceNode
 
         ({
             FullName = getFullNameOrEmpty reader.checker typeReferenceNode
@@ -252,6 +261,60 @@ module UtilityType =
 
         members |> GlueUtilityType.Omit |> GlueType.UtilityType
 
+    let readReadonly (reader: ITypeScriptReader) (typeReferenceNode: Ts.TypeReferenceNode) =
+
+        let typ = reader.checker.getTypeFromTypeNode typeReferenceNode
+
+        match typ.flags with
+        | HasTypeFlags Ts.TypeFlags.Object
+        | HasTypeFlags Ts.TypeFlags.Intersection ->
+            typ
+            |> readMembers reader typeReferenceNode
+            |> GlueReadonly.Members
+            |> GlueUtilityType.Readonly
+            |> GlueType.UtilityType
+        | HasTypeFlags Ts.TypeFlags.Union ->
+            let unionType = typ :?> Ts.UnionOrIntersectionType
+
+            try
+
+                let interfaces =
+                    unionType.types
+                    |> Seq.choose (fun innerType ->
+                        if innerType.flags.HasFlag Ts.TypeFlags.Object then
+
+                            ({
+                                Name = innerType.aliasTypeArguments.Value[0].symbol.name
+                                FullName =
+                                    reader.checker.getFullyQualifiedName
+                                        innerType.aliasTypeArguments.Value[0].symbol
+                                Members = readMembers reader typeReferenceNode innerType
+                                TypeParameters = []
+                                HeritageClauses = []
+                            }
+                            : GlueInterface)
+                            |> Some
+                        else
+                            None
+                    )
+                    |> Seq.toList
+
+                interfaces
+                |> GlueReadonly.Union
+                |> GlueUtilityType.Readonly
+                |> GlueType.UtilityType
+            with _ ->
+                Report.readerError (
+                    "Readonly",
+                    "Unable to read the members of the union type",
+                    typeReferenceNode
+                )
+                |> reader.Warnings.Add
+
+                GlueType.Primitive GluePrimitive.Any
+
+        | _ -> GlueType.Primitive GluePrimitive.Any
+
 let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType =
     let checker = reader.checker
 
@@ -291,6 +354,7 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
             | "ReturnType" -> UtilityType.readReturnType reader typeReferenceNode
             | "ThisParameterType" -> UtilityType.readThisParameterType reader typeReferenceNode
             | "Omit" -> UtilityType.readOmit reader typeReferenceNode
+            | "Readonly" -> UtilityType.readReadonly reader typeReferenceNode
             | _ -> readTypeReference true
         else
             readTypeReference false

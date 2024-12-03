@@ -480,6 +480,7 @@ type FSharpASTViewer =
                     FSharpASTViewer.Name typeReference.Name
                     FSharpASTViewer.FullName typeReference.FullName
                     FSharpASTViewer.TypeArguments typeReference.TypeArguments
+                    FSharpASTViewer.Type typeReference.Type
                 ]
                 context
 
