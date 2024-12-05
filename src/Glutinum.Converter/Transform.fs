@@ -572,16 +572,19 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
             Name = mapTypeNameToFableCoreAwareName context typeReference
             FullName = typeReference.FullName
             TypeArguments = typeReference.TypeArguments |> List.map (transformType context)
-            Type =
-                context.TypeMemory
-                |> List.tryFind (fun glueType ->
-                    match glueType with
-                    | GlueType.Interface glueInterface ->
-                        glueInterface.FullName = typeReference.FullName
-                    | _ -> false
-                )
-                |> Option.map (transformType context)
-                |> Option.defaultValue FSharpType.Discard
+            Type = FSharpType.Discard
+        // We don't want to transform the type here, because if the type use itself
+        // we will end up in an infinite loop.
+        // Can be revisited if needed
+        // context.TypeMemory
+        // |> List.tryFind (fun glueType ->
+        //     match glueType with
+        //     | GlueType.Interface glueInterface ->
+        //         glueInterface.FullName = typeReference.FullName
+        //     | _ -> false
+        // )
+        // |> Option.map (transformType context)
+        // |> Option.defaultValue FSharpType.Discard
         }
         : FSharpTypeReference)
         |> FSharpType.TypeReference
