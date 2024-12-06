@@ -61,8 +61,10 @@ You can see the available options by running:
 When using the test command, you can focus on a specific by forwarding arguments to `vitest`:
 
 ```bash
-# Focus all tests containing related to specs/class/
-./build.sh test --watch -- -t class/
+# Focus on all tests containing related to specs/references/class/
+./build.sh test specs -- -t class/
+# Do the same, but in watch mode
+./build.sh test specs --watch -- -t class/
 ```
 
 If you need to run a local version of `@glutinum/cli`, you can use `./build.sh cli [--watch]` and then run `node cli.js <args>`.
