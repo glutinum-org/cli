@@ -101,7 +101,11 @@ let private attributeToText (fsharpAttribute: FSharpAttribute) =
     | FSharpAttribute.Interface -> "[<Interface>]"
     | FSharpAttribute.Obsolete message ->
         match message with
-        | Some message -> $"[<Obsolete(\"%s{message}\")>]"
+        | Some message ->
+            if message.Contains("\n") then
+                $"[<Obsolete(\"\"\"%s{message}\"\"\")>]"
+            else
+                $"[<Obsolete(\"%s{message}\")>]"
         | None -> "[<Obsolete>]"
     | FSharpAttribute.AbstractClass -> "[<AbstractClass>]"
     | FSharpAttribute.EmitMacroInvoke methodName -> $"[<Emit(\"$0.{methodName}($1...)\")>]"
