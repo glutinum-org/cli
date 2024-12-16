@@ -145,7 +145,6 @@ let private mapTypeNameToFableCoreAwareName
     (context: TransformContext)
     (typeReference: GlueTypeReference)
     =
-
     let mappedName =
         // When exposing a type, we also need to do it
         if typeReference.IsStandardLibrary then
@@ -153,6 +152,14 @@ let private mapTypeNameToFableCoreAwareName
             | "Date" -> "JS.Date"
             | "Promise" -> "JS.Promise"
             | "Uint8Array" -> "JS.Uint8Array"
+            | "Int8Array" -> "JS.Int8Array"
+            | "Uint8ClampedArray" -> "JS.Uint8ClampedArray"
+            | "Int16Array" -> "JS.Int16Array"
+            | "Uint16Array" -> "JS.Uint16Array"
+            | "Int32Array" -> "JS.Int32Array"
+            | "Uint32Array" -> "JS.Uint32Array"
+            | "Float32Array" -> "JS.Float32Array"
+            | "Float64Array" -> "JS.Float64Array"
             | "Array" -> "ResizeArray"
             | "Boolean" -> "bool"
             | "Function" -> "Action"
