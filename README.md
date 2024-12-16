@@ -69,6 +69,18 @@ When using the test command, you can focus on a specific by forwarding arguments
 
 If you need to run a local version of `@glutinum/cli`, you can use `./build.sh cli [--watch]` and then run `node cli.js <args>`.
 
+### Tmux setup
+
+When working on Glutinum, I often need to start both the web interface and the tests watcher.
+
+To make it easier, I created a tmux script that starts both in a single command.
+
+```bash
+./start-dev.sh
+```
+
+> ℹ You need to have `tmux` installed.
+
 ### Debugging
 
 If you use VSCode, you can run the build script/commands from the `JavaScript Debug Terminal`. This allows you to have access to the debugger, breakpoints, etc. (it works from the F# files too).
