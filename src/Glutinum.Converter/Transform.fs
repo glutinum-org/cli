@@ -348,7 +348,9 @@ let private transformPrimitive (gluePrimitive: GluePrimitive) : FSharpPrimitive 
     | GluePrimitive.Never -> FSharpPrimitive.Null
 
 let private transformTupleType (context: TransformContext) (glueTypes: GlueType list) : FSharpType =
-    glueTypes |> List.map (transformType context) |> FSharpType.Tuple
+    match glueTypes with
+    | [] -> FSharpType.Object
+    | _ -> glueTypes |> List.map (transformType context) |> FSharpType.Tuple
 
 module TypeLiteral =
 
