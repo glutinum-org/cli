@@ -686,6 +686,23 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
                 | GlueMember.ConstructSignature _ -> true
             )
 
+        let typeParameterNames =
+            typeLiteralInfo.Members
+            |> List.choose (fun m ->
+                match m with
+                | GlueMember.MethodSignature { Type = typ }
+                | GlueMember.Method { Type = typ }
+                | GlueMember.Property { Type = typ }
+                | GlueMember.GetAccessor { Type = typ }
+                | GlueMember.SetAccessor { ArgumentType = typ }
+                | GlueMember.CallSignature { Type = typ }
+                | GlueMember.IndexSignature { Type = typ }
+                | GlueMember.ConstructSignature { Type = typ } ->
+                    match typ with
+                    | GlueType.TypeParameter name -> Some name
+                    | _ -> None
+            )
+
         if hasNoIndexSignature then
 
             let typeLiteralParameters =
@@ -720,6 +737,19 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
                     : FSharpExplicitField
                 )
 
+            let typeParameters =
+                typeParameterNames
+                |> List.map (fun name ->
+                    ({
+                        Name = name
+                        Constraint = None
+                        Default = None
+                    }
+                    : FSharpTypeParameterInfo)
+                    |> FSharpTypeParameter.FSharpTypeParameter
+
+                )
+
             ({
                 Attributes = [ FSharpAttribute.Global; FSharpAttribute.AllowNullLiteral ]
                 Name = context.CurrentScopeName
@@ -731,7 +761,7 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
                     }
                 SecondaryConstructors = []
                 ExplicitFields = explicitFields
-                TypeParameters = []
+                TypeParameters = typeParameters
             }
             : FSharpClass)
             |> FSharpType.Class
@@ -759,7 +789,16 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
         ({
             Name = context.FullName
             FullName = context.FullName
-            TypeArguments = []
+            TypeArguments =
+                typeParameterNames
+                |> List.map (fun name ->
+                    ({
+                        Name = $"'%s{name}"
+                        TypeParameters = []
+                    }
+                    : FSharpMapped)
+                    |> FSharpType.Mapped
+                )
             Type = FSharpType.Discard
         }
         : FSharpTypeReference)
