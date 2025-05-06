@@ -733,6 +733,13 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
                                 FSharpType.Option parameter.Type
                             else
                                 parameter.Type
+                        Accessor =
+                            match parameter.OriginalGlueMember with
+                            | Some glueMember ->
+                                match glueMember.TryGetAccessor() with
+                                | Some accessor -> Some(transformAccessor accessor)
+                                | None -> None
+                            | None -> None
                     }
                     : FSharpExplicitField
                 )
@@ -1158,6 +1165,7 @@ let private transformParameter
         Name = Naming.sanitizeName parameter.Name
         IsOptional = parameter.IsOptional
         Type = typ
+        OriginalGlueMember = None
     }
 
 let private transformAccessor (accessor: GlueAccessor) : FSharpAccessor =
@@ -1459,8 +1467,8 @@ module private TransformMembers =
         : FSharpParameter list
         =
         members
-        |> List.map (
-            function
+        |> List.map (fun glueMember ->
+            match glueMember with
             | GlueMember.Method methodInfo ->
                 let name, context = sanitizeNameAndPushScope methodInfo.Name context
 
@@ -1469,6 +1477,7 @@ module private TransformMembers =
                     Name = name
                     IsOptional = methodInfo.IsOptional
                     Type = transformType context methodInfo.Type
+                    OriginalGlueMember = Some glueMember
                 }
                 : FSharpParameter
 
@@ -1480,6 +1489,7 @@ module private TransformMembers =
                     Name = name
                     IsOptional = propertyInfo.IsOptional
                     Type = transformType context propertyInfo.Type
+                    OriginalGlueMember = Some glueMember
                 }
                 : FSharpParameter
 
@@ -1491,6 +1501,7 @@ module private TransformMembers =
                     Name = name
                     IsOptional = false
                     Type = transformType context getAccessorInfo.Type
+                    OriginalGlueMember = Some glueMember
                 }
                 : FSharpParameter
 
@@ -1502,6 +1513,7 @@ module private TransformMembers =
                     Name = name
                     IsOptional = false
                     Type = transformType context setAccessorInfo.ArgumentType
+                    OriginalGlueMember = Some glueMember
                 }
                 : FSharpParameter
 
@@ -1513,6 +1525,7 @@ module private TransformMembers =
                     Name = name
                     IsOptional = false
                     Type = transformType context indexSignature.Type
+                    OriginalGlueMember = Some glueMember
                 }
                 : FSharpParameter
 
@@ -1524,6 +1537,7 @@ module private TransformMembers =
                     Name = name
                     IsOptional = false
                     Type = transformType context methodSignature.Type
+                    OriginalGlueMember = Some glueMember
                 }
                 : FSharpParameter
 
@@ -1535,6 +1549,7 @@ module private TransformMembers =
                     Name = name
                     IsOptional = false
                     Type = transformType context callSignatureInfo.Type
+                    OriginalGlueMember = Some glueMember
                 }
                 : FSharpParameter
 
@@ -1546,6 +1561,7 @@ module private TransformMembers =
                     Name = name
                     IsOptional = false
                     Type = transformType context constructSignature.Type
+                    OriginalGlueMember = Some glueMember
                 }
                 : FSharpParameter
         )
@@ -1844,6 +1860,7 @@ let private transformRecord
             Name = name
             IsOptional = false
             Type = transformType context recordInfo.KeyType
+            OriginalGlueMember = None
         }
         |> List.singleton
 

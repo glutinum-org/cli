@@ -182,6 +182,10 @@ type FSharpParameter =
         Name: string
         IsOptional: bool
         Type: FSharpType
+        // During the transform process, we need access to information hosted on GlueMember
+        // so for now we keep a reference the complete item and not just the wanted information
+        // Can be revisited later if needed
+        OriginalGlueMember: GlueAST.GlueMember option
     }
 
 [<RequireQualifiedAccess>]
@@ -247,7 +251,12 @@ type FSharpInterface =
         Inheritance: FSharpType list
     }
 
-type FSharpExplicitField = { Name: string; Type: FSharpType }
+type FSharpExplicitField =
+    {
+        Name: string
+        Type: FSharpType
+        Accessor: FSharpAccessor option
+    }
 
 type FSharpConstructor =
     {

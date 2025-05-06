@@ -129,6 +129,17 @@ type GlueMember =
     | MethodSignature of GlueMethodSignature
     | ConstructSignature of GlueConstructSignature
 
+    member this.TryGetAccessor() =
+        match this with
+        | Property p -> Some p.Accessor
+        | GetAccessor _ -> Some GlueAccessor.ReadOnly
+        | SetAccessor _ -> Some GlueAccessor.WriteOnly
+        | Method _
+        | CallSignature _
+        | IndexSignature _
+        | MethodSignature _
+        | ConstructSignature _ -> None
+
 type GlueInterface =
     {
         FullName: string

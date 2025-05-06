@@ -828,7 +828,17 @@ let private printClass (printer: Printer) (classInfo: FSharpClass) =
         |> List.iter (fun explicitField ->
             printer.Write($"member val {explicitField.Name} : ")
             printer.WriteInline(printType explicitField.Type)
-            printer.WriteInline(" = nativeOnly with get, set")
+            printer.WriteInline(" = nativeOnly")
+
+            explicitField.Accessor
+            |> Option.map (
+                function
+                | FSharpAccessor.ReadOnly -> " with get"
+                | FSharpAccessor.WriteOnly -> " with set"
+                | FSharpAccessor.ReadWrite -> " with get, set"
+            )
+            |> Option.iter printer.WriteInline
+
             printer.NewLine
         )
 
