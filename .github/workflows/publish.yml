@@ -26,7 +26,7 @@ jobs:
 
     - uses: pnpm/action-setup@v2
       with:
-        version: 9
+        version: 10
 
     - name: Build the web app for publishing
       run: ./build.sh publish --web-only

@@ -24,7 +24,7 @@ jobs:
 
     - uses: pnpm/action-setup@v2
       with:
-        version: 9
+        version: 10
 
     - name: Tests
       run: ./build.sh test
