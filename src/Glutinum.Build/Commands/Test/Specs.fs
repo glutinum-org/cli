@@ -36,6 +36,15 @@ const __dirname = dirname(import.meta)
 
 let private generatedSpecsTestDestination = "tests/specs/generated/"
 
+type Target =
+    | Fable
+    | WebSharper
+
+    member this.FolderName =
+        match this with
+        | Fable -> "fable"
+        | WebSharper -> "websharper"
+
 let private generateSpecsTestFile () =
 
     // Ensure we start from a clean state
@@ -44,35 +53,20 @@ let private generateSpecsTestFile () =
 
     Directory.CreateDirectory(generatedSpecsTestDestination) |> ignore
 
-    let specFiles =
-        Directory.GetFiles("tests/specs/references", "*.d.ts", SearchOption.AllDirectories)
-
-    specFiles
-    // Normalize the path
-    |> Seq.map _.Replace('\\', '/')
-    |> Seq.filter (fun file -> not (file.Contains("/disabled.")))
-    |> Seq.map _.Replace("tests/specs/references/", "")
-    // Group by folder
-    |> Seq.groupBy (fun specFile ->
-        if specFile.Split('/').Length <= 1 then
-            failwithf "Spec files should be inside a folder: %s" specFile
-        else
-            // Normalize the dir path
-            (Path.GetDirectoryName specFile).Replace('\\', '/')
-    )
-    |> Seq.iter (fun (folder, specFiles) ->
-        let destinationFolder = generatedSpecsTestDestination + folder
+    let generateTestFor (target: Target) (folder: string, specFiles: string seq) =
+        let destinationFolder =
+            generatedSpecsTestDestination + target.FolderName + "/" + folder
 
         // Ensure destination folder exists
         if not (Directory.Exists(destinationFolder)) then
             Directory.CreateDirectory(destinationFolder) |> ignore
 
-        let hiearchyLevel = folder.Split('/').Length + 1
+        let hiearchyLevel = folder.Split('/').Length + 2
 
         let tests =
             specFiles
             |> Seq.map (fun specFile ->
-                let testName = specFile.Replace(".d.ts", "")
+                let testName = target.FolderName + "/" + specFile.Replace(".d.ts", "")
 
                 let refereneFilePath =
                     [
@@ -83,9 +77,25 @@ let private generateSpecsTestFile () =
                     ]
                     |> String.concat "/"
 
-                let expectedFilePath = refereneFilePath.Replace(".d.ts", ".fsx")
+                let expectedExtension =
+                    match target with
+                    | Fable -> ".fable.fsx"
+                    | WebSharper -> ".websharper.fsx"
 
-                $"""test('%s{testName}', async () => {{
+                let expectedFilePath = refereneFilePath.Replace(".d.ts", expectedExtension)
+
+                // If the expected file doesn't exist, mark the test as skipped instead
+                // This is to make the transition to adding Websharper easier as it will
+                // allows to convert the tests one by one and still have the CI pass
+                // instead of having a lot of errors because we didn't add/migrate the tests for
+                // websharper yet
+                let testFunc =
+                    if File.Exists(Path.Join(destinationFolder, expectedFilePath)) then
+                        "test"
+                    else
+                        "test.skip"
+
+                $"""%s{testFunc}('%s{testName}', async () => {{
     // Click the link below to go to the respective file
     // Reference: file://./%s{refereneFilePath}
     // Expected: file://./%s{expectedFilePath}
@@ -107,7 +117,24 @@ let private generateSpecsTestFile () =
             |> String.concat "\n"
 
         File.WriteAllText(destinationFolder + "/index.test.js", testFile (hiearchyLevel + 2) tests)
-    )
+
+    let specFiles =
+        Directory.GetFiles("tests/specs/references", "*.d.ts", SearchOption.AllDirectories)
+        // Normalize the path
+        |> Seq.map _.Replace('\\', '/')
+        |> Seq.filter (fun file -> not (file.Contains("/disabled.")))
+        |> Seq.map _.Replace("tests/specs/references/", "")
+        // Group by folder
+        |> Seq.groupBy (fun specFile ->
+            if specFile.Split('/').Length <= 1 then
+                failwithf "Spec files should be inside a folder: %s" specFile
+            else
+                // Normalize the dir path
+                (Path.GetDirectoryName specFile).Replace('\\', '/')
+        )
+
+    specFiles |> Seq.iter (generateTestFor Fable)
+    specFiles |> Seq.iter (generateTestFor WebSharper)
 
 type SpecSettings() =
     inherit CommandSettings()
