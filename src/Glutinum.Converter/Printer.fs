@@ -263,24 +263,31 @@ and printType (fsharpType: FSharpType) =
             $"(unit -> {suffix})"
 
         | _ ->
-            let parameters =
+            let shouldAliasToDelegate =
                 functionInfo.Parameters
-                |> List.map (fun p ->
-                    let typ = printType p.Type
+                |> List.exists (fun p -> hasParamArrayAttribute p.Attributes)
 
-                    let option =
-                        if p.IsOptional then
-                            " option"
-                        else
-                            ""
+            if shouldAliasToDelegate then
+                $"System.Delegate"
+            else
+                let parameters =
+                    functionInfo.Parameters
+                    |> List.map (fun p ->
+                        let typ = printType p.Type
 
-                    $"{typ}{option}"
-                )
-                |> String.concat " -> "
+                        let option =
+                            if p.IsOptional then
+                                " option"
+                            else
+                                ""
 
-            let returnType = printType functionInfo.ReturnType
+                        $"{typ}{option}"
+                    )
+                    |> String.concat " -> "
 
-            $"({parameters} -> {returnType})"
+                let returnType = printType functionInfo.ReturnType
+
+                $"({parameters} -> {returnType})"
 
     | FSharpType.Enum info -> info.Name
     | FSharpType.Primitive info ->
