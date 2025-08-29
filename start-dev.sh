@@ -2,25 +2,38 @@
 
 # Set Session Name
 SESSION="Glutinum"
-SESSIONEXISTS=$(tmux list-sessions | grep $SESSION)
+SESSION_EXISTS=$(tmux list-sessions 2>/dev/null | grep $SESSION)
 
 # Only create tmux session if it doesn't already exist
-if [ "$SESSIONEXISTS" = "" ]; then
+if [ "$SESSION_EXISTS" = "" ]; then
     # Start New Session with our name
     tmux new-session -d -s $SESSION
 
-    # Run 'echo "hello world"' in the first pane
-    tmux send-keys -t $SESSION "./build.sh test specs --generate-only --watch" C-m
+    starting_index=$(tmux show-options -v -g base-index)
+    window_index=$((starting_index))
+    left_pane_index=$((starting_index))
+    right_pane_index=$((starting_index + 1))
+
+    tmux rename-window -t $SESSION:$window_index "Watchers"
+
+    specs_pane_target="$SESSION:Watchers.$left_pane_index"
+    web_pane_target="$SESSION:Watchers.$right_pane_index"
 
     # Split the window horizontally to create a second pane
-    tmux split-window -h -t $SESSION
+    tmux split-window -h -t $specs_pane_target
+    # Add label to panes
+    tmux select-pane -t $specs_pane_target -T "Specs"
+    tmux select-pane -t $web_pane_target -T "Web app"
 
-    # Run 'pwd' in the second pane
-    tmux send-keys -t $SESSION:0.1 "./build.sh web --watch" C-m
-
-    # Attach to the tmux session
-    tmux attach -t $SESSION:0.0
+    tmux send-keys -t $specs_pane_target "./build.sh test specs --generate-only --watch" C-m
+    tmux send-keys -t $web_pane_target "./build.sh web --watch" C-m
 fi
 
 # Attach Session, on the Main window
-tmux attach-session -t $SESSION:0.0
+if [ -z "$TMUX" ]; then
+    tmux attach-session -t $SESSION
+else
+    # If already in a tmux session, just switch to the target session
+    tmux switch-client -t $SESSION
+    tmux select-window -t $SESSION:Watchers
+fi
