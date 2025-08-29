@@ -334,6 +334,7 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
         let symbolOpt = checker.getSymbolAtLocation !!typeReferenceNode.typeName
 
         let readTypeReference (isStandardLibrary: bool) =
+
             match symbolOpt.Value.flags with
             | HasSymbolFlags Ts.SymbolFlags.TypeParameter ->
                 symbolOpt.Value.name |> GlueType.TypeParameter
@@ -374,7 +375,10 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
         let typeParameters =
             try
                 let typParameters: option<ResizeArray<Ts.TypeParameterDeclaration>> =
-                    functionTypeNode.parent.parent?typeParameters
+                    if functionTypeNode.typeParameters.IsSome then
+                        functionTypeNode.typeParameters
+                    else
+                        functionTypeNode.parent.parent?typeParameters
 
                 reader.ReadTypeParameters typParameters
 
