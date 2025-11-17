@@ -1,0 +1,9 @@
+﻿<Solution>
+  <Folder Name="/src/">
+    <Project Path="src\Glutinum.Build\Glutinum.Build.fsproj" Type="Classic F#" />
+    <Project Path="src\Glutinum.Converter.CLI\Glutinum.Converter.CLI.fsproj" Type="Classic F#" />
+    <Project Path="src\Glutinum.Converter\Glutinum.Converter.fsproj" Type="Classic F#" />
+    <Project Path="src\Glutinum.Types\Glutinum.Types.fsproj" Type="Classic F#" />
+    <Project Path="src\Glutinum.Web\Glutinum.Web.fsproj" Type="Classic F#" />
+  </Folder>
+</Solution>

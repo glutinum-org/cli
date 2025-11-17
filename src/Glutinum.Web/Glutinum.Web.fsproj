@@ -2,12 +2,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Version>0.1.0-alpha-001</Version>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Libs/Glutinum.Feliz.MonacoEditor.fs" />
     <Compile Include="Libs/Glutinum.LzString.fs" />
-    <Compile Include="CssModules.fs" />
     <Compile Include="Extensions/Feliz.fs" />
     <Compile Include="Extensions/Elmish.fs" />
     <Compile Include="Global/Router.fs" />
@@ -29,7 +28,7 @@
     <ProjectReference Include="..\Glutinum.Converter\Glutinum.Converter.fsproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Update="FSharp.Core" VersionOverride= "8.0.100" />
+    <PackageReference Update="FSharp.Core" VersionOverride="9.0.300" />
     <PackageReference Include="fable.browser.navigator" />
     <PackageReference Include="Fable.Core" />
     <PackageReference Include="Fable.Elmish" />
