@@ -6,4 +6,7 @@
     <Project Path="src\Glutinum.Types\Glutinum.Types.fsproj" Type="Classic F#" />
     <Project Path="src\Glutinum.Web\Glutinum.Web.fsproj" Type="Classic F#" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests\Tests.fsproj" Type="Classic F#" />
+  </Folder>
 </Solution>
