@@ -50,7 +50,7 @@ let readTypeQueryNode (reader: ITypeScriptReader) (typeQueryNode: Ts.TypeQueryNo
                             "Expected exactly one declaration",
                             typeQueryNode
                         )
-                        |> Error
+                        |> Result.Error
 
                     else
                         Ok(declarations.[0])
@@ -66,7 +66,7 @@ let readTypeQueryNode (reader: ITypeScriptReader) (typeQueryNode: Ts.TypeQueryNo
                             $"Unsupported declaration kind {unsupported.Name}",
                             typeQueryNode
                         )
-                        |> Error
+                        |> Result.Error
 
                 let! typeNode =
                     variableDeclaration.``type``
@@ -86,7 +86,7 @@ let readTypeQueryNode (reader: ITypeScriptReader) (typeQueryNode: Ts.TypeQueryNo
                             $"Unsupported declaration kind {unsupported.Name}",
                             typeQueryNode
                         )
-                        |> Error
+                        |> Result.Error
 
             }
             |> function

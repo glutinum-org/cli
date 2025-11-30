@@ -496,7 +496,16 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                     else
                         Some ForceAny
                 | None ->
-                    Report.readerError ("type node", "Missing declarations", typeNode) |> failwith
+                    Report.readerError (
+                        "type node",
+                        $"
+    Node is IntersectionType
+    Node.isUnionType(): {unionOrIntersectionType.isUnion ()}
+    Missing declarations {unionOrIntersectionType.getProperties () |> Seq.toList}
+",
+                        typeNode
+                    )
+                    |> failwith
             )
 
         // We can't create a contract for some of the properties
