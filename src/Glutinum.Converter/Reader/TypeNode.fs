@@ -496,12 +496,17 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                     else
                         Some ForceAny
                 | None ->
+                    let isUnion = unionOrIntersectionType.isUnion ()
+                    let propsType = unionOrIntersectionType.getProperties () |> Seq.toList
+                    let declrs = propsType |> List.map (_.declarations >> Option.map Seq.toList)
+
                     Report.readerError (
                         "type node",
                         $"
     Node is IntersectionType
-    Node.isUnionType(): {unionOrIntersectionType.isUnion ()}
-    Missing declarations {unionOrIntersectionType.getProperties () |> Seq.toList}
+    Node.isUnionType(): {isUnion}
+    Missing declarations {propsType}
+    Mapped declrs {declrs}
 ",
                         typeNode
                     )
