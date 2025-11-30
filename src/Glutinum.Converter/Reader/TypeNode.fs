@@ -495,6 +495,7 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                         Some(Single declarations.[0])
                     else
                         Some ForceAny
+                | None when property.flags.HasFlag(Ts.SymbolFlags.Prototype) -> Some ForceAny
                 | None ->
                     let isUnion = unionOrIntersectionType.isUnion ()
                     let propsType = unionOrIntersectionType.getProperties () |> Seq.toList
