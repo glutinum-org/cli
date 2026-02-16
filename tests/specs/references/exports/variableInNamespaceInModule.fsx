@@ -17,13 +17,16 @@ module vscode =
     [<AbstractClass>]
     [<Erase>]
     type Exports =
-        [<Emit("new $0.LanguageModelError($1...)")>]
-        abstract member LanguageModelError: unit -> LanguageModelError
+        [<Emit("$0.workspace")>]
+        abstract member workspace_: workspace.Exports with get
 
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type LanguageModelError =
-        interface end
+    module workspace =
+
+        [<AbstractClass>]
+        [<Erase>]
+        type Exports =
+            [<Emit("$0.workspaceFolders")>]
+            abstract member workspaceFolders: ResizeArray<obj>
 
 (***)
 #r "nuget: Fable.Core"

@@ -8,7 +8,6 @@ open System
 [<Erase>]
 type Exports =
     [<ImportAll("REPLACE_ME_WITH_MODULE_NAME")>]
-    [<Emit("$0.Log")>]
     static member inline Log_
         with get () : Log.Exports =
             nativeOnly

@@ -170,6 +170,10 @@ type FSharpAttribute =
     /// Generates <c>[&lt;Emit("$0($1...)")&gt;]</c> attribute.
     /// </summary>
     | EmitMacroInvoke of methodName: string
+    /// <summary>
+    /// Generates <c>[&lt;Emit("$0.{{propertyName}}")&gt;]</c> attribute.
+    /// </summary>
+    | EmitMacroProperty of propertyName: string
     | EmitIndexer
     | Global
     | ParamObject

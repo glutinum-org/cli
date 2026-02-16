@@ -8,17 +8,17 @@ open System
 [<Erase>]
 type Exports =
     [<ImportAll("REPLACE_ME_WITH_MODULE_NAME")>]
-    static member inline DomEvent_
-        with get () : DomEvent.Exports =
+    static member inline vscode_
+        with get () : vscode.Exports =
             nativeOnly
 
-module DomEvent =
+module vscode =
 
     [<AbstractClass>]
     [<Erase>]
     type Exports =
-        [<Emit("$0.stop($1...)")>]
-        abstract member stop: unit -> obj
+        [<Emit("$0.version")>]
+        abstract member version: string
 
 (***)
 #r "nuget: Fable.Core"

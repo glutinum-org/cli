@@ -8,7 +8,6 @@ open System
 [<Erase>]
 type Exports =
     [<ImportAll("REPLACE_ME_WITH_MODULE_NAME")>]
-    [<Emit("$0.lib")>]
     static member inline lib_
         with get () : lib.Exports =
             nativeOnly

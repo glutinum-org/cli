@@ -967,7 +967,10 @@ let private transformExports
                 {
                     Attributes =
                         [
-                            FSharpAttribute.Import(info.Name, Naming.MODULE_PLACEHOLDER)
+                            if isTopLevel then
+                                FSharpAttribute.Import(info.Name, Naming.MODULE_PLACEHOLDER)
+                            else
+                                FSharpAttribute.EmitMacroProperty info.Name
                             yield! xmlDocInfo.ObsoleteAttributes
                         ]
                     Name = name
@@ -976,7 +979,7 @@ let private transformExports
                     TypeParameters = []
                     Type = transformType context info.Type
                     IsOptional = false
-                    IsStatic = true
+                    IsStatic = isTopLevel
                     Accessor = None
                     Accessibility = FSharpAccessibility.Public
                     XmlDoc = xmlDocInfo.XmlDoc
@@ -1068,13 +1071,20 @@ let private transformExports
             | GlueType.ModuleDeclaration moduleDeclaration ->
                 let sanitizedName = Naming.sanitizeName moduleDeclaration.Name
 
+                printfn
+                    "Module declaration found: %s, sanitized to: %s"
+                    moduleDeclaration.Name
+                    sanitizedName
+
                 {
                     Attributes =
                         [
-                            FSharpAttribute.ImportAll Naming.MODULE_PLACEHOLDER
-                            FSharpAttribute.Text(
-                                $$"""Emit("$0.{{Naming.removeSurroundingQuotes moduleDeclaration.Name}}")"""
-                            )
+                            if isTopLevel then
+                                FSharpAttribute.ImportAll Naming.MODULE_PLACEHOLDER
+                            else
+                                FSharpAttribute.EmitMacroProperty(
+                                    Naming.removeSurroundingQuotes moduleDeclaration.Name
+                                )
                         ]
                     // "_" suffix is added to avoid name collision if
                     // there are some functions with the same name as
@@ -2396,13 +2406,17 @@ let private transformModuleDeclaration
     (moduleDeclaration: GlueModuleDeclaration)
     : FSharpType
     =
-    ({
-        Name = Naming.sanitizeName moduleDeclaration.Name
-        IsRecursive = moduleDeclaration.IsRecursive
-        Types = transform typeMemory reporter false moduleDeclaration.Types
-    }
-    : FSharpModule)
-    |> FSharpType.Module
+    if moduleDeclaration.Types.IsEmpty then
+        // We don't want to generate empty modules
+        FSharpType.Discard
+    else
+        ({
+            Name = Naming.sanitizeName moduleDeclaration.Name
+            IsRecursive = moduleDeclaration.IsRecursive
+            Types = transform typeMemory reporter false moduleDeclaration.Types
+        }
+        : FSharpModule)
+        |> FSharpType.Module
 
 let private transformClassDeclaration
     (context: TransformContext)
@@ -2500,18 +2514,26 @@ let private transform
         )
 
     let classes =
-        rest
-        |> List.filter (fun glueType ->
-            match glueType with
-            | GlueType.ClassDeclaration _ -> true
-            | GlueType.ModuleDeclaration info ->
+        let rec applyModuleDeclaration (info: GlueModuleDeclaration) : bool =
+            if info.Types.IsEmpty then
+                false
+            else
                 info.Types
                 |> List.exists (fun glueType ->
                     match glueType with
                     | GlueType.ClassDeclaration _
+                    | GlueType.Variable _
                     | GlueType.FunctionDeclaration _ -> true
+                    | GlueType.ModuleDeclaration info -> applyModuleDeclaration info
                     | _ -> false
                 )
+
+        rest
+        |> List.filter (fun glueType ->
+            match glueType with
+            | GlueType.ClassDeclaration _ -> true
+            | GlueType.Variable _ -> true
+            | GlueType.ModuleDeclaration info -> applyModuleDeclaration info
             | GlueType.ExportDefault exportedType ->
                 // Capture default export of classes here so we can keep
                 // generate their actual bindings

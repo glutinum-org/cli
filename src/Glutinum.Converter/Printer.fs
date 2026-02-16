@@ -109,6 +109,7 @@ let private attributeToText (fsharpAttribute: FSharpAttribute) =
         | None -> "[<Obsolete>]"
     | FSharpAttribute.AbstractClass -> "[<AbstractClass>]"
     | FSharpAttribute.EmitMacroInvoke methodName -> $"[<Emit(\"$0.{methodName}($1...)\")>]"
+    | FSharpAttribute.EmitMacroProperty propertyName -> $"[<Emit(\"$0.{propertyName}\")>]"
 
 let private printInlineAttribute (printer: Printer) (fsharpAttribute: FSharpAttribute) =
     printer.WriteInline(attributeToText fsharpAttribute)

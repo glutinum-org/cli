@@ -91,6 +91,11 @@ type FSharpASTViewer =
 
         | FSharpAttribute.AbstractClass -> ASTViewer.renderValueOnly "AbstractClass"
 
+        | FSharpAttribute.EmitMacroProperty propertyName ->
+            ASTViewer.renderNode "EmitMacroProperty" [
+                ASTViewer.renderKeyValue "PropertyName" propertyName
+            ]
+
     static member private Attributes(attributes: FSharpAttribute list) =
         attributes
         |> List.map FSharpASTViewer.FSharpAttribute
