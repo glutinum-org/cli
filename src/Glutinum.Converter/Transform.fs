@@ -702,6 +702,7 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
                     | GlueType.TypeParameter name -> Some name
                     | _ -> None
             )
+            |> List.distinct
 
         if hasNoIndexSignature then
 
