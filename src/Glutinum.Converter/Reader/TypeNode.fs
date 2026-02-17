@@ -565,13 +565,18 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
         // than using:
         //
         // let symbolOpt = checker.getSymbolAtLocation (expression.expression)
+        let symbolOpt =
+            // Alias symbol give us better result for utility types like Omit, Partial, etc...
+            typ.aliasSymbol
+            // If not available, we fallback to the symbol of the type
+            |> Option.orElse (Some typ.symbol)
 
         // Should we try to specialize the type for UtilityTypes like we do for TypeReference?
         ({
             Name = expression.expression.getText () // Keep the double expression !!!
             FullName = getFullNameOrEmpty checker expression.expression
             TypeArguments = readTypeArguments reader expression
-            IsStandardLibrary = isFromEs5Lib typ.aliasSymbol
+            IsStandardLibrary = isFromEs5Lib symbolOpt
         })
         |> GlueType.TypeReference
 

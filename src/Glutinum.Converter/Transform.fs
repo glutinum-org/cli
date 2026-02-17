@@ -2648,17 +2648,48 @@ let private transformClassDeclaration
     let typeParametersResult =
         transformTypeParameters context classDeclaration.TypeParameters
 
+    let errorInheritance, otherInheritance =
+        classDeclaration.HeritageClauses
+        |> List.partition (fun heritageClause ->
+            match heritageClause with
+            | GlueType.TypeReference typeReference ->
+                typeReference.IsStandardLibrary && typeReference.Name = "Error"
+            | forward -> false
+        )
+
+    let hasErrorInheritance = not (List.isEmpty errorInheritance)
+
+    let inheritance =
+        [
+            if hasErrorInheritance then
+                {
+                    Name = "Exception"
+                    FullName = "System.Exception"
+                    TypeArguments = []
+                    IsStandardLibrary = true
+                }
+                |> GlueType.TypeReference
+            yield! otherInheritance
+        ]
+        |> List.map (context.ExposeTypeAlias >> transformType context)
+
     ({
-        Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
+        Attributes =
+            [
+                FSharpAttribute.AllowNullLiteral
+
+                if hasErrorInheritance then
+                    FSharpAttribute.AbstractClass
+                else
+                    FSharpAttribute.Interface
+            ]
         Name = name
         OriginalName = classDeclaration.Name
         Members =
             TransformMembers.toFSharpMember context classDeclaration.Members
             |> TypeParameter.mapFsharpMembers typeParametersResult.SealedTypes
         TypeParameters = typeParametersResult.TypeParameters
-        Inheritance =
-            classDeclaration.HeritageClauses
-            |> List.map (context.ExposeTypeAlias >> transformType context)
+        Inheritance = inheritance
     }
     : FSharpInterface)
     |> FSharpType.Interface
