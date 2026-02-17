@@ -43,15 +43,15 @@ type TransformContext
 
     member val TypeMemory = typeMemory
 
-    // We need to expose the types for the children to be able to access
-    // push to them.
-    // This variable should not be accessed directly, but through the ExposeType method
-    // that's why we decorate it with the _ prefix
+    /// We need to expose the types for the children to be able to access
+    /// push to them.
+    /// This variable should not be accessed directly, but through the ExposeType method
+    /// that's why we decorate it with the _ prefix
     member val _types = types
 
-    // We expose an access to the reporter so we can propagate its instance
-    // when needed
-    // You should not use this directly, but instead use the AddWarning and AddError methods
+    /// We expose an access to the reporter so we can propagate its instance
+    /// when needed
+    /// You should not use this directly, but instead use the AddWarning and AddError methods
     member val _Reporter = reporter
 
     member _.ExposeRegExp() =
