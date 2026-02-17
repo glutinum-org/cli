@@ -512,7 +512,8 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
     | GlueType.ThisType thisTypeInfo ->
         ({
             Name = thisTypeInfo.Name
-            TypeParameters = transformTypeParameters context thisTypeInfo.TypeParameters
+            TypeParameters =
+                transformTypeParameters context thisTypeInfo.TypeParameters |> _.TypeParameters
         }
         : FSharpThisType)
         |> FSharpType.ThisType
@@ -650,8 +651,13 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
 
             ({
                 Name = context.CurrentScopeName
-                TypeParameters = typParameters
-                Parameters = paremeters |> List.map (transformParameter context)
+                TypeParameters = typParameters.TypeParameters
+                Parameters =
+                    paremeters
+                    |> List.map (
+                        transformParameter context
+                        >> TypeParameter.mapFsharpParameter typParameters.SealedTypes
+                    )
                 ReturnType = transformType context functionTypeInfo.Type
             }
             : FSharpDelegate)
@@ -661,7 +667,7 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
             ({
                 Attributes = []
                 Name = context.FullName
-                TypeParameters = typParameters
+                TypeParameters = typParameters.TypeParameters
                 XmlDoc = []
                 Type = FSharpType.Discard
             }
@@ -994,6 +1000,8 @@ let private transformExports
 
                 let xmlDocInfo = transformComment info.Documentation
 
+                let typeParameters = transformTypeParameters context info.TypeParameters
+
                 {
                     Attributes =
                         [
@@ -1005,9 +1013,16 @@ let private transformExports
                         ]
                     Name = name
                     OriginalName = info.Name
-                    Parameters = info.Parameters |> List.map (transformParameter context)
-                    TypeParameters = transformTypeParameters context info.TypeParameters
-                    Type = transformType context info.Type
+                    Parameters =
+                        info.Parameters
+                        |> List.map (
+                            transformParameter context
+                            >> TypeParameter.mapFsharpParameter typeParameters.SealedTypes
+                        )
+                    TypeParameters = typeParameters.TypeParameters
+                    Type =
+                        transformType context info.Type
+                        |> TypeParameter.mapFSharpType typeParameters.SealedTypes
                     IsOptional = false
                     IsStatic = isTopLevel
                     Accessor = None
@@ -1034,6 +1049,8 @@ let private transformExports
                 |> List.map (fun constructorInfo ->
                     let xmlDocInfo = transformComment constructorInfo.Documentation
 
+                    let typParameters = transformTypeParameters context info.TypeParameters
+
                     {
                         Attributes =
                             [
@@ -1049,13 +1066,16 @@ let private transformExports
                         Name = name
                         OriginalName = info.Name
                         Parameters =
-                            constructorInfo.Parameters |> List.map (transformParameter context)
-                        TypeParameters = transformTypeParameters context info.TypeParameters
+                            constructorInfo.Parameters
+                            |> List.map (
+                                transformParameter context
+                                >> TypeParameter.mapFsharpParameter typParameters.SealedTypes
+                            )
+                        TypeParameters = typParameters.TypeParameters
                         Type =
                             ({
                                 Name = Naming.sanitizeName info.Name
-                                TypeParameters =
-                                    transformTypeParameters context info.TypeParameters
+                                TypeParameters = typParameters.TypeParameters
                             }
                             : FSharpMapped)
                             |> FSharpType.Mapped
@@ -1071,11 +1091,6 @@ let private transformExports
 
             | GlueType.ModuleDeclaration moduleDeclaration ->
                 let sanitizedName = Naming.sanitizeName moduleDeclaration.Name
-
-                printfn
-                    "Module declaration found: %s, sanitized to: %s"
-                    moduleDeclaration.Name
-                    sanitizedName
 
                 {
                     Attributes =
@@ -1630,12 +1645,16 @@ let private transformInterface (context: TransformContext) (info: GlueInterface)
             | _ -> true
         )
 
+    let typeParameters = transformTypeParameters context info.TypeParameters
+
     {
         Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
         Name = name
         OriginalName = info.Name
-        Members = standardMembers @ membersComingFromPartial
-        TypeParameters = transformTypeParameters context info.TypeParameters
+        Members =
+            standardMembers @ membersComingFromPartial
+            |> TypeParameter.mapFsharpMembers typeParameters.SealedTypes
+        TypeParameters = typeParameters.TypeParameters
         Inheritance = inheritance |> List.map (transformType context)
     }
 
@@ -1879,7 +1898,7 @@ let private transformRecord
         Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
         Name = name
         OriginalName = name
-        TypeParameters = transformTypeParameters context typeParameters
+        TypeParameters = transformTypeParameters context typeParameters |> _.TypeParameters
         Members =
             {
                 Attributes = [ FSharpAttribute.EmitIndexer ]
@@ -1901,30 +1920,201 @@ let private transformRecord
     }
     |> FSharpType.Interface
 
-let private transformTypeParameter
-    (context: TransformContext)
-    (typeParameter: GlueTypeParameter)
-    : FSharpTypeParameter
-    =
-    let transformConstraint (context: TransformContext) (glueType: GlueType) =
-        // Manual optimization to remove constraints that are not supported by F#
-        match transformType context glueType with
-        | FSharpType.Function _ -> None
-        | forward -> Some forward
+type TransformTypeParameterConstraintResult =
+    | NoConstraint
+    | Constraint of FSharpType
+    | DiscardConstraint
 
-    FSharpTypeParameterInfo.Create(
-        typeParameter.Name,
-        ?constraint_ = (typeParameter.Constraint |> Option.bind (transformConstraint context)),
-        ?default_ = (typeParameter.Default |> Option.map (transformType context))
-    )
-    |> FSharpTypeParameter.FSharpTypeParameter
+    | SealedConstraint of FSharpType
+
+module private TypeParameter =
+
+    type SealedTypeInfo =
+        {
+            TypeParameterName: string
+            FSharpType: FSharpType
+        }
+
+    type TransformResult =
+        {
+            FSharpTypeParameter: FSharpTypeParameter
+            SealedTypeOpt: SealedTypeInfo option
+        }
+
+        static member Create
+            (
+                typeParameterName: string,
+                default_: FSharpType option,
+                ?constraint_: FSharpType,
+                ?sealedType: FSharpType
+            )
+            =
+            let fsharpTypeParameter =
+                FSharpTypeParameterInfo.Create(
+                    typeParameterName,
+                    ?default_ = default_,
+                    ?constraint_ = constraint_
+                )
+                |> FSharpTypeParameter.FSharpTypeParameter
+
+            let sealedType =
+                match sealedType with
+                | Some sealedType ->
+                    {
+                        TypeParameterName = typeParameterName
+                        FSharpType = sealedType
+                    }
+                    |> Some
+                | None -> None
+
+            {
+                FSharpTypeParameter = fsharpTypeParameter
+                SealedTypeOpt = sealedType
+            }
+
+    let transform (context: TransformContext) (typeParameter: GlueTypeParameter) : TransformResult =
+        let default_ = typeParameter.Default |> Option.map (transformType context)
+
+        match typeParameter.Constraint with
+        | None -> TransformResult.Create(typeParameter.Name, default_ = default_)
+
+        | Some constraintType ->
+            // Manual optimization to remove constraints that are not supported by F#
+            match transformType context constraintType with
+            | FSharpType.Function _ ->
+                TransformResult.Create(typeParameter.Name, default_ = default_)
+
+            // Try to resolve sealed constraints
+            //
+            // A sealed constraint means that the type parameter can only be the specified type.
+            // Example: <'T when 'T :> string>
+            //
+            // The above is invalid in F#, so we manually resolve to `string` directly and notify the caller
+            // to adap the code accordingly
+            | FSharpType.Primitive _
+            | FSharpType.Union _ as fsharpType ->
+                TransformResult.Create(
+                    typeParameter.Name,
+                    sealedType = fsharpType,
+                    default_ = default_
+                )
+
+            | forward ->
+                TransformResult.Create(
+                    typeParameter.Name,
+                    constraint_ = forward,
+                    default_ = default_
+                )
+
+    let rec mapFSharpType (seadledTypes: SealedTypeInfo list) (typ: FSharpType) =
+        match typ with
+        | FSharpType.TypeParameter typeParameter ->
+            let needMapping =
+                seadledTypes
+                |> List.tryFind (fun mapperInfo -> mapperInfo.TypeParameterName = typeParameter)
+
+            match needMapping with
+            | Some mapperInfo -> mapperInfo.FSharpType
+            | None -> typ
+        | FSharpType.Option innerType -> FSharpType.Option(mapFSharpType seadledTypes innerType)
+        | FSharpType.TypeReference typeReference ->
+            { typeReference with
+                TypeArguments = typeReference.TypeArguments |> List.map (mapFSharpType seadledTypes)
+            }
+            |> FSharpType.TypeReference
+        | FSharpType.Union unionInfo ->
+            { unionInfo with
+                Cases =
+                    unionInfo.Cases
+                    |> List.map (fun case ->
+                        match case with
+                        | FSharpUnionCase.Named _ -> case
+                        | FSharpUnionCase.Typed typ ->
+                            mapFSharpType seadledTypes typ |> FSharpUnionCase.Typed
+                    )
+            }
+            |> FSharpType.Union
+
+        | FSharpType.Tuple types ->
+            types |> List.map (mapFSharpType seadledTypes) |> FSharpType.Tuple
+
+        | FSharpType.Enum _
+        | FSharpType.SingleErasedCaseUnion _
+        | FSharpType.Module _
+        | FSharpType.Interface _
+        | FSharpType.Unsupported _
+        | FSharpType.Mapped _
+        | FSharpType.Primitive _
+        | FSharpType.TypeAlias _
+        | FSharpType.Discard
+        | FSharpType.ResizeArray _
+        | FSharpType.ThisType _
+        | FSharpType.Function _
+        | FSharpType.Class _
+        | FSharpType.Object
+        | FSharpType.JSApi _
+        | FSharpType.Delegate _ -> typ
+
+    let mapFsharpParameter (seadledTypes: SealedTypeInfo list) (parameter: FSharpParameter) =
+        { parameter with
+            Type = mapFSharpType seadledTypes parameter.Type
+        }
+
+    let mapFsharpMembers (seadledTypes: SealedTypeInfo list) (members: FSharpMember list) =
+        members
+        |> List.map (fun memberInfo ->
+            match memberInfo with
+            | FSharpMember.Method methodInfo ->
+                { methodInfo with
+                    Parameters =
+                        methodInfo.Parameters |> List.map (mapFsharpParameter seadledTypes)
+                    Type = mapFSharpType seadledTypes methodInfo.Type
+                }
+                |> FSharpMember.Method
+            | FSharpMember.Property propertyInfo ->
+                { propertyInfo with
+                    Parameters =
+                        propertyInfo.Parameters |> List.map (mapFsharpParameter seadledTypes)
+                    Type = mapFSharpType seadledTypes propertyInfo.Type
+                }
+                |> FSharpMember.Property
+            | FSharpMember.StaticMember staticMemberInfo ->
+                { staticMemberInfo with
+                    Parameters =
+                        staticMemberInfo.Parameters |> List.map (mapFsharpParameter seadledTypes)
+                    Type = mapFSharpType seadledTypes staticMemberInfo.Type
+                }
+                |> FSharpMember.StaticMember
+        )
+
+type private TransformTypeParametersResult =
+    {
+        TypeParameters: FSharpTypeParameter list
+        SealedTypes: TypeParameter.SealedTypeInfo list
+    }
 
 let private transformTypeParameters
     (context: TransformContext)
     (typeParameters: GlueTypeParameter list)
-    : FSharpTypeParameter list
+    : TransformTypeParametersResult
     =
-    typeParameters |> List.map (transformTypeParameter context)
+    let transformedTypeParameters =
+        typeParameters |> List.map (TypeParameter.transform context)
+
+    let sealedTypes = transformedTypeParameters |> List.choose _.SealedTypeOpt
+
+    // Only keep typeParameters not mapped to a sealed type
+    // If they are mapped to a sealed type, it means that the constraint is not supported in F#
+    // and we directly use the sealed type in the signature, inteas of as a generic parameter
+    let typeParameters =
+        transformedTypeParameters
+        |> List.filter _.SealedTypeOpt.IsNone
+        |> List.map _.FSharpTypeParameter
+
+    {
+        TypeParameters = typeParameters
+        SealedTypes = sealedTypes
+    }
 
 let private tryOptimizeUnionType
     (context: TransformContext)
@@ -2139,7 +2329,9 @@ let private transformTypeAliasDeclaration
             XmlDoc = xmlDoc.XmlDoc
             Name = typeAliasName
             Type = typ
-            TypeParameters = transformTypeParameters context glueTypeAliasDeclaration.TypeParameters
+            TypeParameters =
+                transformTypeParameters context glueTypeAliasDeclaration.TypeParameters
+                |> _.TypeParameters
         }
         : FSharpTypeAlias)
         |> FSharpType.TypeAlias
@@ -2273,13 +2465,17 @@ let private transformTypeAliasDeclaration
             transformType context innerType |> makeTypeAlias
 
         | GlueUtilityType.Omit members ->
+            let typParameters =
+                transformTypeParameters context glueTypeAliasDeclaration.TypeParameters
+
             {
                 Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
                 Name = typeAliasName
                 OriginalName = glueTypeAliasDeclaration.Name
-                TypeParameters =
-                    transformTypeParameters context glueTypeAliasDeclaration.TypeParameters
-                Members = TransformMembers.toFSharpMember context members
+                TypeParameters = typParameters.TypeParameters
+                Members =
+                    TransformMembers.toFSharpMember context members
+                    |> TypeParameter.mapFsharpMembers typParameters.SealedTypes
                 Inheritance = []
             }
             |> FSharpType.Interface
@@ -2288,17 +2484,25 @@ let private transformTypeAliasDeclaration
             UtilityType.transformReadOnly context readonlyInfo (Some makeTypeAlias)
 
     | GlueType.FunctionType functionType ->
+        let typParameters =
+            transformTypeParameters context glueTypeAliasDeclaration.TypeParameters
+
         {
             Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
             Name = typeAliasName
             OriginalName = glueTypeAliasDeclaration.Name
-            TypeParameters = transformTypeParameters context glueTypeAliasDeclaration.TypeParameters
+            TypeParameters = typParameters.TypeParameters
             Members =
                 {
                     Attributes = [ FSharpAttribute.EmitSelfInvoke ]
                     Name = "Invoke"
                     OriginalName = "Invoke"
-                    Parameters = functionType.Parameters |> List.map (transformParameter context)
+                    Parameters =
+                        functionType.Parameters
+                        |> List.map (
+                            transformParameter context
+                            >> TypeParameter.mapFsharpParameter typParameters.SealedTypes
+                        )
                     Type = transformType context functionType.Type
                     TypeParameters = []
                     IsOptional = false
@@ -2317,23 +2521,33 @@ let private transformTypeAliasDeclaration
     | GlueType.TupleType glueTypes -> transformTupleType context glueTypes |> makeTypeAlias
 
     | GlueType.IntersectionType members ->
+        let typParameters =
+            transformTypeParameters context glueTypeAliasDeclaration.TypeParameters
+
         {
             Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
             Name = typeAliasName
             OriginalName = glueTypeAliasDeclaration.Name
-            TypeParameters = transformTypeParameters context glueTypeAliasDeclaration.TypeParameters
-            Members = TransformMembers.toFSharpMember context members
+            TypeParameters = typParameters.TypeParameters
+            Members =
+                TransformMembers.toFSharpMember context members
+                |> TypeParameter.mapFsharpMembers typParameters.SealedTypes
             Inheritance = []
         }
         |> FSharpType.Interface
 
     | GlueType.TypeLiteral typeLiteralInfo ->
+        let typParameters =
+            transformTypeParameters context glueTypeAliasDeclaration.TypeParameters
+
         {
             Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
             Name = typeAliasName
             OriginalName = glueTypeAliasDeclaration.Name
-            TypeParameters = transformTypeParameters context glueTypeAliasDeclaration.TypeParameters
-            Members = TransformMembers.toFSharpMember context typeLiteralInfo.Members
+            TypeParameters = typParameters.TypeParameters
+            Members =
+                TransformMembers.toFSharpMember context typeLiteralInfo.Members
+                |> TypeParameter.mapFsharpMembers typParameters.SealedTypes
             Inheritance =
                 [
                     match TypeLiteral.tryFindIterableType context typeLiteralInfo with
@@ -2349,15 +2563,19 @@ let private transformTypeAliasDeclaration
         FSharpType.TypeParameter typeParameterInfo |> makeTypeAlias
 
     | GlueType.MappedType mappedType ->
+        let typParameters =
+            transformTypeParameters context glueTypeAliasDeclaration.TypeParameters
+
         {
             Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
             Name = typeAliasName
             OriginalName = glueTypeAliasDeclaration.Name
-            TypeParameters = transformTypeParameters context glueTypeAliasDeclaration.TypeParameters
+            TypeParameters = typParameters.TypeParameters
             Members =
                 mappedType
                 |> transformMappedTypeMembers context
                 |> TransformMembers.toFSharpMember context
+                |> TypeParameter.mapFsharpMembers typParameters.SealedTypes
             Inheritance = []
         }
         |> FSharpType.Interface
@@ -2371,7 +2589,8 @@ let private transformTypeAliasDeclaration
                 Attributes = [ yield! xmlDoc.ObsoleteAttributes ]
                 XmlDoc = xmlDoc.XmlDoc
                 Name = typeAliasName
-                TypeParameter = transformTypeParameter context typeParameter
+                TypeParameter =
+                    TypeParameter.transform context typeParameter |> _.FSharpTypeParameter
             }
             : FSharpSingleErasedCaseUnion)
             |> FSharpType.SingleErasedCaseUnion
@@ -2426,12 +2645,17 @@ let private transformClassDeclaration
     =
     let name, context = sanitizeNameAndPushScope classDeclaration.Name context
 
+    let typeParametersResult =
+        transformTypeParameters context classDeclaration.TypeParameters
+
     ({
         Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
         Name = name
         OriginalName = classDeclaration.Name
-        Members = TransformMembers.toFSharpMember context classDeclaration.Members
-        TypeParameters = transformTypeParameters context classDeclaration.TypeParameters
+        Members =
+            TransformMembers.toFSharpMember context classDeclaration.Members
+            |> TypeParameter.mapFsharpMembers typeParametersResult.SealedTypes
+        TypeParameters = typeParametersResult.TypeParameters
         Inheritance =
             classDeclaration.HeritageClauses
             |> List.map (context.ExposeTypeAlias >> transformType context)
