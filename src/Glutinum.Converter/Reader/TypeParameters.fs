@@ -18,6 +18,6 @@ let readTypeParameters
             {
                 Name = typeParameter.name.getText ()
                 Constraint = typeParameter.``constraint`` |> Option.map reader.ReadTypeNode
-                Default = None
+                Default = typeParameter.``default`` |> Option.map reader.ReadTypeNode
             }
         )

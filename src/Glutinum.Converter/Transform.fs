@@ -2641,7 +2641,7 @@ let private transformModuleDeclaration
 let private transformClassDeclaration
     (context: TransformContext)
     (classDeclaration: GlueClassDeclaration)
-    : FSharpType
+    : FSharpType list
     =
     let name, context = sanitizeNameAndPushScope classDeclaration.Name context
 
@@ -2654,7 +2654,7 @@ let private transformClassDeclaration
             match heritageClause with
             | GlueType.TypeReference typeReference ->
                 typeReference.IsStandardLibrary && typeReference.Name = "Error"
-            | forward -> false
+            | _ -> false
         )
 
     let hasErrorInheritance = not (List.isEmpty errorInheritance)
@@ -2673,26 +2673,87 @@ let private transformClassDeclaration
         ]
         |> List.map (context.ExposeTypeAlias >> transformType context)
 
-    ({
-        Attributes =
-            [
-                FSharpAttribute.AllowNullLiteral
+    // When a class is declared with a generic and a default type, we need to expose an alias for
+    // for the version with the default type set instead of a generic parameter.
+    //
+    // TypeScript:
+    //
+    // interface Task {}
+    // export class Type1<A extends Task = Task> {}
+    //
+    // F#:
+    //
+    // type User<'T when 'T :> Task> = interface end
+    // type User = User<Task>
+    let rec exposeSpecializedAlias
+        (acc: FSharpType list)
+        (tailedTypeParameters: FSharpTypeParameter list)
+        (typeParameters: FSharpTypeParameter list)
+        =
+        match typeParameters with
+        | head :: tail ->
+            match head with
+            | FSharpTypeParameter.FSharpType _ -> acc
+            | FSharpTypeParameter.FSharpTypeParameter typeParameter ->
+                match typeParameter.Default with
+                | None -> acc
+                | Some defaultType ->
+                    let orderedTail = tail |> List.rev
 
-                if hasErrorInheritance then
-                    FSharpAttribute.AbstractClass
-                else
-                    FSharpAttribute.Interface
-            ]
-        Name = name
-        OriginalName = classDeclaration.Name
-        Members =
-            TransformMembers.toFSharpMember context classDeclaration.Members
-            |> TypeParameter.mapFsharpMembers typeParametersResult.SealedTypes
-        TypeParameters = typeParametersResult.TypeParameters
-        Inheritance = inheritance
-    }
-    : FSharpInterface)
-    |> FSharpType.Interface
+                    let typeAlias =
+                        ({
+                            Attributes = []
+                            XmlDoc = []
+                            Name = name
+                            Type =
+                                ({
+                                    Name = name
+                                    TypeParameters =
+                                        orderedTail
+                                        @ FSharpTypeParameter.FSharpType defaultType
+                                          :: tailedTypeParameters
+                                }
+                                : FSharpMapped)
+                                |> FSharpType.Mapped
+                            TypeParameters = orderedTail
+                        }
+                        : FSharpTypeAlias)
+                        |> FSharpType.TypeAlias
+
+                    let newTailedTypeParameters =
+                        FSharpTypeParameter.FSharpType defaultType
+                        |> List.singleton
+                        |> List.append tailedTypeParameters
+
+                    exposeSpecializedAlias (acc @ [ typeAlias ]) newTailedTypeParameters tail
+        | [] -> acc
+
+    let specialiazedAlias =
+        typeParametersResult.TypeParameters |> List.rev |> exposeSpecializedAlias [] []
+
+    let classDefinition =
+        ({
+            Attributes =
+                [
+                    FSharpAttribute.AllowNullLiteral
+
+                    if hasErrorInheritance then
+                        FSharpAttribute.AbstractClass
+                    else
+                        FSharpAttribute.Interface
+                ]
+            Name = name
+            OriginalName = classDeclaration.Name
+            Members =
+                TransformMembers.toFSharpMember context classDeclaration.Members
+                |> TypeParameter.mapFsharpMembers typeParametersResult.SealedTypes
+            TypeParameters = typeParametersResult.TypeParameters
+            Inheritance = inheritance
+        }
+        : FSharpInterface)
+        |> FSharpType.Interface
+
+    classDefinition :: specialiazedAlias
 
 let rec private transformToFsharp
     (context: TransformContext)
@@ -2700,26 +2761,27 @@ let rec private transformToFsharp
     : FSharpType list
     =
     glueTypes
-    |> List.map (
+    |> List.collect (
         function
 
         | GlueType.Interface interfaceInfo ->
-            FSharpType.Interface(transformInterface context interfaceInfo)
+            FSharpType.Interface(transformInterface context interfaceInfo) |> List.singleton
 
-        | GlueType.Enum enumInfo -> transformEnum enumInfo
+        | GlueType.Enum enumInfo -> transformEnum enumInfo |> List.singleton
 
         | GlueType.TypeAliasDeclaration typeAliasInfo ->
-            transformTypeAliasDeclaration context typeAliasInfo
+            transformTypeAliasDeclaration context typeAliasInfo |> List.singleton
 
         | GlueType.ModuleDeclaration moduleInfo ->
             transformModuleDeclaration context.TypeMemory context._Reporter moduleInfo
+            |> List.singleton
 
         | GlueType.ClassDeclaration classInfo -> transformClassDeclaration context classInfo
 
         | GlueType.ExportDefault exportedType ->
             match exportedType with
             | GlueType.ClassDeclaration classInfo -> transformClassDeclaration context classInfo
-            | _ -> FSharpType.Discard
+            | _ -> FSharpType.Discard |> List.singleton
 
         | GlueType.ConstructorType
         | GlueType.MappedType _
@@ -2744,7 +2806,7 @@ let rec private transformToFsharp
         | GlueType.TemplateLiteral
         | GlueType.UtilityType _
         | GlueType.ReadOnly _
-        | GlueType.ThisType _ -> FSharpType.Discard
+        | GlueType.ThisType _ -> FSharpType.Discard |> List.singleton
     )
 
 let private transform

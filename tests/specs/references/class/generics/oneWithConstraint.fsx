@@ -7,20 +7,23 @@ open System
 [<AbstractClass>]
 [<Erase>]
 type Exports =
-    [<Import("A", "REPLACE_ME_WITH_MODULE_NAME"); EmitConstructor>]
-    static member A () : A = nativeOnly
+    [<Import("Options", "REPLACE_ME_WITH_MODULE_NAME"); EmitConstructor>]
+    static member Options () : Options = nativeOnly
     [<Import("User", "REPLACE_ME_WITH_MODULE_NAME"); EmitConstructor>]
-    static member User<'T when 'T :> A> () : User<'T> = nativeOnly
+    static member User<'T when 'T :> Options> () : User<'T> = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
-type A =
+type Options =
     interface end
 
 [<AllowNullLiteral>]
 [<Interface>]
-type User<'T when 'T :> A> =
+type User<'T when 'T :> Options> =
     interface end
+
+type User =
+    User<Options>
 
 (***)
 #r "nuget: Fable.Core"

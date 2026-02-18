@@ -1,3 +1,3 @@
-class A {}
+declare class Options {}
 
-class User<T extends A = A> {}
+declare class User<T extends Options = Options> {}
