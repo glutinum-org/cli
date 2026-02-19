@@ -3,6 +3,7 @@ module rec Glutinum.Converter.Transform
 open Fable.Core
 open Glutinum.Converter.FSharpAST
 open Glutinum.Converter.GlueAST
+open System.Collections.Generic
 
 type Reporter() =
     let warnings = ResizeArray<string>()
@@ -18,6 +19,57 @@ type Reporter() =
 
     member val HasIterable = false with get, set
 
+// When generation type literals, we need to keep track of the named used
+// to avoid generating duplicated types.
+//
+// This can happen when TypeScript uses function overload
+// See: https://github.com/glutinum-org/cli/issues/197
+//
+// The way the memory works is by keeping track of the fullname
+// and associating it with a count.
+//
+// When we want to generate a Type literal, we check if the fullname is already in the memory
+// If it is, we increment the count and generate a new name with the count as suffix
+// If it is not, we add it to the memory with a count of 0 and
+//
+// When we want to reference a type literal, we check if the fullname is in the memory
+// If it is, we check the count, if the count is 0, we use the original name
+// If the count is greater than 0, we use the name with the count as suffix
+//
+// IMPORTANT: This memory works because it makes the assumption that
+// we will always generate the type literal before referencing it.
+type TypeLiteralsMemory() =
+    let memory = Dictionary<string, int>()
+
+    member _.GetTypeName(fullName: string, currentScopeName: string) =
+        let name =
+            if memory.ContainsKey fullName then
+                memory.[fullName] <- memory.[fullName] + 1
+                currentScopeName + "_" + string memory.[fullName]
+            else
+                memory.[fullName] <- 0
+                currentScopeName
+
+        name
+
+    member private _.GetReference(fullName: string, prefixName: string) =
+        if memory.ContainsKey fullName then
+            let count = memory.[fullName]
+
+            if count = 0 then
+                prefixName
+            else
+                prefixName + "_" + string count
+        // By safety, if we don't find a match in the memory, we return the name as is
+        else
+            prefixName
+
+    member this.GetReferenceTypeName(fullName: string, currentScopeName: string) =
+        this.GetReference(fullName, currentScopeName)
+
+    member this.GetFullTypeNameReference(fullName: string, currentScopeName: string) =
+        this.GetReference(fullName, fullName)
+
 // Not really proud of this implementation, but I was not able to make it in a
 // pure functional way, using a Tree structure or something similar
 // It seems like for now this implementation does the job which is the most important
@@ -27,6 +79,7 @@ type TransformContext
         reporter: Reporter,
         currentScopeName: string,
         typeMemory: GlueType list,
+        typeLiteralsMemory: TypeLiteralsMemory,
         ?parent: TransformContext
     )
     =
@@ -42,6 +95,8 @@ type TransformContext
     member val CurrentScopeName = currentScopeName
 
     member val TypeMemory = typeMemory
+
+    member val TypeLiteralsMemory = typeLiteralsMemory
 
     /// We need to expose the types for the children to be able to access
     /// push to them.
@@ -86,7 +141,13 @@ type TransformContext
 
     member this.PushScope(scopeName: string) =
         let childContext =
-            TransformContext(reporter, Naming.sanitizeName scopeName, typeMemory, parent = this)
+            TransformContext(
+                reporter,
+                Naming.sanitizeName scopeName,
+                typeMemory,
+                typeLiteralsMemory,
+                parent = this
+            )
 
         modules.Add childContext
         childContext
@@ -766,7 +827,11 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
 
             ({
                 Attributes = [ FSharpAttribute.Global; FSharpAttribute.AllowNullLiteral ]
-                Name = context.CurrentScopeName
+                Name =
+                    context.TypeLiteralsMemory.GetTypeName(
+                        context.FullName,
+                        context.CurrentScopeName
+                    )
                 PrimaryConstructor =
                     {
                         Parameters = typeLiteralParameters
@@ -798,10 +863,16 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
             |> FSharpType.Interface
             |> context.ExposeType
 
+        let name =
+            context.TypeLiteralsMemory.GetFullTypeNameReference(
+                context.FullName,
+                context.CurrentScopeName
+            )
+
         // Get fullname
         // Store type in the exposed types memory
         ({
-            Name = context.FullName
+            Name = name
             FullName = context.FullName
             TypeArguments =
                 typeParameterNames
@@ -900,15 +971,18 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
             |> FSharpType.TypeReference
 
         | GlueUtilityType.Record recordInfo ->
-            transformRecord context context.CurrentScopeName [] recordInfo
-            |> context.ExposeType
+            let name =
+                context.TypeLiteralsMemory.GetTypeName(context.FullName, context.CurrentScopeName)
 
-            ({
-                Name = context.FullName
-                TypeParameters = []
-            }
-            : FSharpMapped)
-            |> FSharpType.Mapped
+            transformRecord context name [] recordInfo |> context.ExposeType
+
+            let n =
+                context.TypeLiteralsMemory.GetFullTypeNameReference(
+                    context.FullName,
+                    context.CurrentScopeName
+                )
+
+            ({ Name = n; TypeParameters = [] }: FSharpMapped) |> FSharpType.Mapped
 
         | GlueUtilityType.ReturnType innerType
         | GlueUtilityType.ThisParameterType innerType -> transformType context innerType
@@ -1165,7 +1239,7 @@ let private transformParameter
     (parameter: GlueParameter)
     : FSharpParameter
     =
-    let context = context.PushScope(parameter.Name)
+    let name, context = sanitizeNameAndPushScope parameter.Name context
 
     let typ =
         let computedType =
@@ -1188,7 +1262,7 @@ let private transformParameter
                 if parameter.IsSpread then
                     FSharpAttribute.ParamArray
             ]
-        Name = Naming.sanitizeName parameter.Name
+        Name = name
         IsOptional = parameter.IsOptional
         Type = typ
         OriginalGlueMember = None
@@ -2623,6 +2697,7 @@ let private transformTypeAliasDeclaration
 let private transformModuleDeclaration
     (typeMemory: GlueType list)
     (reporter: Reporter)
+    (typeLiteralsMemory: TypeLiteralsMemory)
     (moduleDeclaration: GlueModuleDeclaration)
     : FSharpType
     =
@@ -2633,7 +2708,7 @@ let private transformModuleDeclaration
         ({
             Name = Naming.sanitizeName moduleDeclaration.Name
             IsRecursive = moduleDeclaration.IsRecursive
-            Types = transform typeMemory reporter false moduleDeclaration.Types
+            Types = transform typeMemory reporter typeLiteralsMemory false moduleDeclaration.Types
         }
         : FSharpModule)
         |> FSharpType.Module
@@ -2773,7 +2848,11 @@ let rec private transformToFsharp
             transformTypeAliasDeclaration context typeAliasInfo |> List.singleton
 
         | GlueType.ModuleDeclaration moduleInfo ->
-            transformModuleDeclaration context.TypeMemory context._Reporter moduleInfo
+            transformModuleDeclaration
+                context.TypeMemory
+                context._Reporter
+                context.TypeLiteralsMemory
+                moduleInfo
             |> List.singleton
 
         | GlueType.ClassDeclaration classInfo -> transformClassDeclaration context classInfo
@@ -2812,6 +2891,7 @@ let rec private transformToFsharp
 let private transform
     (typeMemory: GlueType list)
     (reporter: Reporter)
+    (typeLiteralsMemory: TypeLiteralsMemory)
     (isTopLevel: bool)
     (glueAst: GlueType list)
     : FSharpType list
@@ -2863,7 +2943,8 @@ let private transform
 
     let exports = exports @ classes
 
-    let rootTransformContext = TransformContext(reporter, "", typeMemory)
+    let rootTransformContext =
+        TransformContext(reporter, "", typeMemory, typeLiteralsMemory)
 
     let rest = transformToFsharp rootTransformContext rest
 
@@ -2894,9 +2975,10 @@ type TransformResult =
 
 let apply (typeMemory: GlueType list) (glueAst: GlueType list) =
     let reporter = Reporter()
+    let typeLiteralsMemory = TypeLiteralsMemory()
 
     {
-        FSharpAST = transform typeMemory reporter true glueAst |> Merge.apply
+        FSharpAST = transform typeMemory reporter typeLiteralsMemory true glueAst |> Merge.apply
         Warnings = reporter.Warnings
         Errors = reporter.Errors
         IncludeRegExpAlias = reporter.HasRegEpx
