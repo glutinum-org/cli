@@ -339,8 +339,19 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
             | HasSymbolFlags Ts.SymbolFlags.TypeParameter ->
                 symbolOpt.Value.name |> GlueType.TypeParameter
             | _ ->
+                let name =
+                    symbolOpt.Value.valueDeclaration
+                    |> Option.map (fun valueDeclaration ->
+                        // If the type reference an enum member,
+                        // we need to find the name of the Enum type, not the name of the member
+                        match valueDeclaration.kind with
+                        | Ts.SyntaxKind.EnumMember -> valueDeclaration?symbol?parent?getName ()
+                        | _ -> typeReferenceNode.typeName?getText ()
+                    )
+                    |> Option.defaultValue (typeReferenceNode.typeName?getText ())
+
                 ({
-                    Name = typeReferenceNode.typeName?getText () // TODO: Remove dynamic typing
+                    Name = name
                     FullName = getFullNameOrEmpty checker (!!typeReferenceNode.typeName)
                     TypeArguments = readTypeArguments reader typeReferenceNode
                     IsStandardLibrary = isStandardLibrary

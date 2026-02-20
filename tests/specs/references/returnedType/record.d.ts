@@ -1,1 +1,1 @@
-export function t(args: Record<string, any>);
+export function t(args: Record<string, any>) : void;
