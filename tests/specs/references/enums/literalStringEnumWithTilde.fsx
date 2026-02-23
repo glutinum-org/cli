@@ -6,9 +6,8 @@ open System
 
 [<RequireQualifiedAccess>]
 [<StringEnum(CaseRules.None)>]
-type DevToolPosition =
-    | ``eval-``
-    | [<CompiledName("")>] _EMPTY_
+type ClauseCombinator =
+    | ``~``
 
 (***)
 #r "nuget: Fable.Core"

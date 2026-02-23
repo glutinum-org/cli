@@ -16,6 +16,7 @@ let private escapeName (name: string) : string =
         || name.Contains("<")
         || name.Contains(">")
         || name.Contains(" ")
+        || name.Contains("~")
         || startWithDigit name
         || Keywords.fsharp.Contains name
     then
@@ -37,21 +38,28 @@ let removeSurroundingQuotes (text: string) : string =
         | ''', ''' -> text.Substring(1, text.Length - 2)
         | _ -> text
 
-let replaceDot (text: string) : string = text.Replace(".", "_")
+let private replaceDot (text: string) : string = text.Replace(".", "_")
 
-let replaceAt (text: string) : string = text.Replace("@", "_AT_")
+let private replaceAt (text: string) : string = text.Replace("@", "_AT_")
 
-let replaceEmpty (text: string) : string =
+let private replaceEmpty (text: string) : string =
     if String.IsNullOrWhiteSpace text then
-        "Empty"
+        "_EMPTY_"
     else
         text
+
+let private replacePlus (text: string) : string = text.Replace("+", "_PLUS_")
 
 type SanitizeNameResult = { Name: string; IsDifferent: bool }
 
 let sanitizeNameWithResult (name: string) : SanitizeNameResult =
     let sanitizedName =
-        name |> replaceDot |> replaceAt |> replaceEmpty |> removeSurroundingQuotes
+        name
+        |> replaceDot
+        |> replaceAt
+        |> replaceEmpty
+        |> replacePlus
+        |> removeSurroundingQuotes
 
     // Check if the name is different after sanitization
     // This is used to check if the value is different from the default Fable computed value

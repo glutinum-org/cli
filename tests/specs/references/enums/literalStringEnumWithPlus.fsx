@@ -6,9 +6,8 @@ open System
 
 [<RequireQualifiedAccess>]
 [<StringEnum(CaseRules.None)>]
-type DevToolPosition =
-    | ``eval-``
-    | [<CompiledName("")>] _EMPTY_
+type FirebaseSignInProvider =
+    | [<CompiledName("+")>] _PLUS_
 
 (***)
 #r "nuget: Fable.Core"
