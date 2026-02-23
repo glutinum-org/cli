@@ -495,8 +495,9 @@ let printParameters (printer: Printer) (parameters: FSharpParameter list) =
         )
 
 let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
-    printAttributes printer interfaceInfo.Attributes
 
+    printXmlDoc printer interfaceInfo.XmlDoc
+    printAttributes printer interfaceInfo.Attributes
     printer.Write($"type {interfaceInfo.Name}")
     printTypeParametersDeclaration printer interfaceInfo.TypeParameters
     printer.WriteInline(" =")
@@ -685,6 +686,7 @@ import {{ %s{interfaceInfo.OriginalName} }} from \"{Naming.MODULE_PLACEHOLDER}\"
             printer.NewLine
 
         | FSharpMember.StaticMember staticMemberInfo ->
+            printXmlDoc printer staticMemberInfo.XmlDoc
             printCompactAttributesAndNewLine printer staticMemberInfo.Attributes
 
             printer.Write($"static member inline {staticMemberInfo.Name} ")

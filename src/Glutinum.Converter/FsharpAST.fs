@@ -226,6 +226,7 @@ type FSharpStaticMemberInfo =
         IsOptional: bool
         Accessor: FSharpAccessor option
         Accessibility: FSharpAccessibility
+        XmlDoc: FSharpXmlDoc list
     }
 
 [<RequireQualifiedAccess>]
@@ -247,6 +248,7 @@ type FSharpInterface =
     {
         Attributes: FSharpAttribute list
         Name: string
+        XmlDoc: FSharpXmlDoc list
         // We need the original because we emit actual JavaScript code
         // for interface static members.
         OriginalName: string

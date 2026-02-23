@@ -115,6 +115,7 @@ let readTypeQueryNode (reader: ITypeScriptReader) (typeQueryNode: Ts.TypeQueryNo
                 match declaration.kind with
                 | Ts.SyntaxKind.ClassDeclaration ->
                     {
+                        Documentation = []
                         Name = symbol.name
                         Constructors = []
                         Members = []

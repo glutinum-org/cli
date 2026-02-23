@@ -145,6 +145,7 @@ type GlueASTViewer =
         | GlueMember.Method methodInfo ->
             ASTViewer.renderNode "Method" [
                 GlueASTViewer.Name methodInfo.Name
+                GlueASTViewer.Documentation methodInfo.Documentation
                 GlueASTViewer.IsOptional methodInfo.IsOptional
                 GlueASTViewer.IsStatic methodInfo.IsStatic
                 GlueASTViewer.Parameters methodInfo.Parameters
@@ -328,6 +329,7 @@ type GlueASTViewer =
                 "ClassDeclaration"
                 [
                     GlueASTViewer.Name classDeclaration.Name
+                    GlueASTViewer.Documentation classDeclaration.Documentation
                     GlueASTViewer.Constructors classDeclaration.Constructors
                     GlueASTViewer.TypeParameters classDeclaration.TypeParameters
                     classDeclaration.Members

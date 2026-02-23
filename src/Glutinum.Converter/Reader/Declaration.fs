@@ -47,6 +47,7 @@ let readDeclaration (reader: ITypeScriptReader) (declaration: Ts.Declaration) : 
 
         {
             Name = name.getText ()
+            Documentation = reader.ReadDocumentationFromNode name
             Parameters = reader.ReadParameters methodDeclaration.parameters
             Type = reader.ReadTypeNode methodDeclaration.``type``
             IsOptional = methodDeclaration.questionToken.IsSome

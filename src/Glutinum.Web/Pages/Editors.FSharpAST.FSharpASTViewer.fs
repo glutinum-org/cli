@@ -248,6 +248,7 @@ type FSharpASTViewer =
         | FSharpMember.StaticMember staticMemberInfo ->
             ASTViewer.renderNode "StaticMember" [
                 FSharpASTViewer.Name staticMemberInfo.Name
+                FSharpASTViewer.XmlDoc staticMemberInfo.XmlDoc
                 FSharpASTViewer.OriginalName staticMemberInfo.OriginalName
                 FSharpASTViewer.Accessibility staticMemberInfo.Accessibility
                 FSharpASTViewer.Accessor staticMemberInfo.Accessor
@@ -358,6 +359,7 @@ type FSharpASTViewer =
                 "Interface"
                 [
                     FSharpASTViewer.Name interfaceInfo.Name
+                    FSharpASTViewer.XmlDoc interfaceInfo.XmlDoc
                     FSharpASTViewer.OriginalName interfaceInfo.OriginalName
                     FSharpASTViewer.Attributes interfaceInfo.Attributes
                     FSharpASTViewer.Members interfaceInfo.Members

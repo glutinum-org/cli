@@ -50,6 +50,7 @@ type GlueTypeParameter =
 type GlueMethod =
     {
         Name: string
+        Documentation: GlueComment list
         Parameters: GlueParameter list
         Type: GlueType
         IsOptional: bool
@@ -242,6 +243,7 @@ type GlueConstructor =
 
 type GlueClassDeclaration =
     {
+        Documentation: GlueComment list
         Name: string
         Constructors: GlueConstructor list
         Members: GlueMember list

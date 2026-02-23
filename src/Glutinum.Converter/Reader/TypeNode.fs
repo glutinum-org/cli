@@ -23,6 +23,7 @@ let private readTypeUsingFlags (reader: ITypeScriptReader) (typ: Ts.Type) =
             match declaration.kind with
             | Ts.SyntaxKind.ClassDeclaration ->
                 {
+                    Documentation = []
                     Name = typ.symbol.name
                     Constructors = []
                     Members = []

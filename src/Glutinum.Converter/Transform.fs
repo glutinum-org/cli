@@ -495,6 +495,7 @@ module private UtilityType =
         | GlueReadonly.Members members ->
             let interfaceTyp =
                 {
+                    XmlDoc = []
                     Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
                     Name = context.CurrentScopeName
                     OriginalName = context.CurrentScopeName
@@ -859,6 +860,7 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
 
         else
             {
+                XmlDoc = []
                 Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
                 Name = context.CurrentScopeName
                 OriginalName = "" // This is a Fake type so we don't have an original name
@@ -945,6 +947,7 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
             FSharpType.Object
         else
             {
+                XmlDoc = []
                 Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
                 Name = context.CurrentScopeName
                 OriginalName = context.CurrentScopeName
@@ -1000,6 +1003,7 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
 
         | GlueUtilityType.Omit members ->
             {
+                XmlDoc = []
                 Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
                 Name = context.CurrentScopeName
                 OriginalName = context.CurrentScopeName
@@ -1236,6 +1240,7 @@ let private transformExports
         )
 
     {
+        XmlDoc = []
         Attributes = [ FSharpAttribute.AbstractClass; FSharpAttribute.Erase ]
         Name = "Exports"
         OriginalName = "Exports"
@@ -1362,9 +1367,11 @@ module private TransformMembers =
             | GlueMember.Method methodInfo ->
                 let name, context = sanitizeNameAndPushScope methodInfo.Name context
 
+                let xmlDocInfo = transformComment methodInfo.Documentation
+
                 if methodInfo.IsStatic then
                     {
-                        Attributes = []
+                        Attributes = [ yield! xmlDocInfo.ObsoleteAttributes ]
                         Name = name
                         OriginalName = methodInfo.Name
                         Parameters = methodInfo.Parameters |> List.map (transformParameter context)
@@ -1373,12 +1380,13 @@ module private TransformMembers =
                         IsOptional = methodInfo.IsOptional
                         Accessor = None
                         Accessibility = FSharpAccessibility.Public
+                        XmlDoc = xmlDocInfo.XmlDoc
                     }
                     |> FSharpMember.StaticMember
                     |> Some
                 else
                     {
-                        Attributes = []
+                        Attributes = [ yield! xmlDocInfo.ObsoleteAttributes ]
                         Name = name
                         OriginalName = methodInfo.Name
                         Parameters = methodInfo.Parameters |> List.map (transformParameter context)
@@ -1388,7 +1396,7 @@ module private TransformMembers =
                         IsStatic = methodInfo.IsStatic
                         Accessor = None
                         Accessibility = FSharpAccessibility.Public
-                        XmlDoc = []
+                        XmlDoc = xmlDocInfo.XmlDoc
                         Body = FSharpMemberInfoBody.NativeOnly
                     }
                     |> FSharpMember.Method
@@ -1733,6 +1741,7 @@ let private transformInterface (context: TransformContext) (info: GlueInterface)
     let typeParameters = transformTypeParameters context info.TypeParameters
 
     {
+        XmlDoc = []
         Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
         Name = name
         OriginalName = info.Name
@@ -1980,6 +1989,7 @@ let private transformRecord
         |> List.singleton
 
     {
+        XmlDoc = []
         Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
         Name = name
         OriginalName = name
@@ -2334,6 +2344,7 @@ let private tryOptimizeUnionType
                 )
 
             {
+                XmlDoc = []
                 Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
                 Name = typeName
                 OriginalName = context.CurrentScopeName
@@ -2492,6 +2503,7 @@ let private transformTypeAliasDeclaration
             | GlueType.IntersectionType members ->
                 let makeInterfaceTyp name =
                     {
+                        XmlDoc = []
                         Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
                         Name = name
                         OriginalName = glueTypeAliasDeclaration.Name
@@ -2554,6 +2566,7 @@ let private transformTypeAliasDeclaration
                 transformTypeParameters context glueTypeAliasDeclaration.TypeParameters
 
             {
+                XmlDoc = []
                 Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
                 Name = typeAliasName
                 OriginalName = glueTypeAliasDeclaration.Name
@@ -2574,6 +2587,7 @@ let private transformTypeAliasDeclaration
 
         {
             Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
+            XmlDoc = []
             Name = typeAliasName
             OriginalName = glueTypeAliasDeclaration.Name
             TypeParameters = typParameters.TypeParameters
@@ -2610,6 +2624,7 @@ let private transformTypeAliasDeclaration
             transformTypeParameters context glueTypeAliasDeclaration.TypeParameters
 
         {
+            XmlDoc = []
             Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
             Name = typeAliasName
             OriginalName = glueTypeAliasDeclaration.Name
@@ -2626,6 +2641,7 @@ let private transformTypeAliasDeclaration
             transformTypeParameters context glueTypeAliasDeclaration.TypeParameters
 
         {
+            XmlDoc = []
             Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
             Name = typeAliasName
             OriginalName = glueTypeAliasDeclaration.Name
@@ -2652,6 +2668,7 @@ let private transformTypeAliasDeclaration
             transformTypeParameters context glueTypeAliasDeclaration.TypeParameters
 
         {
+            XmlDoc = []
             Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
             Name = typeAliasName
             OriginalName = glueTypeAliasDeclaration.Name
@@ -2817,6 +2834,8 @@ let private transformClassDeclaration
     let specialiazedAlias =
         typeParametersResult.TypeParameters |> List.rev |> exposeSpecializedAlias [] []
 
+    let xmlDoc = transformComment classDeclaration.Documentation
+
     let classDefinition =
         ({
             Attributes =
@@ -2827,7 +2846,10 @@ let private transformClassDeclaration
                         FSharpAttribute.AbstractClass
                     else
                         FSharpAttribute.Interface
+
+                    yield! xmlDoc.ObsoleteAttributes
                 ]
+            XmlDoc = xmlDoc.XmlDoc
             Name = name
             OriginalName = classDeclaration.Name
             Members =
