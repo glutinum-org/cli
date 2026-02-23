@@ -369,8 +369,12 @@ type GlueASTViewer =
             ASTViewer.renderNode
                 "IndexedAccessType"
                 [
-                    GlueASTViewer.Type indexedAccessType.IndexType
-                    GlueASTViewer.Type indexedAccessType.ObjectType
+                    ASTViewer.renderNode "IndexType" [
+                        GlueASTViewer.GlueType indexedAccessType.IndexType
+                    ]
+                    ASTViewer.renderNode "ObjectType" [
+                        GlueASTViewer.GlueType indexedAccessType.ObjectType
+                    ]
                 ]
                 context
 
