@@ -41,10 +41,17 @@ let replaceDot (text: string) : string = text.Replace(".", "_")
 
 let replaceAt (text: string) : string = text.Replace("@", "_AT_")
 
+let replaceEmpty (text: string) : string =
+    if String.IsNullOrWhiteSpace text then
+        "Empty"
+    else
+        text
+
 type SanitizeNameResult = { Name: string; IsDifferent: bool }
 
 let sanitizeNameWithResult (name: string) : SanitizeNameResult =
-    let sanitizedName = name |> replaceDot |> replaceAt |> removeSurroundingQuotes
+    let sanitizedName =
+        name |> replaceDot |> replaceAt |> replaceEmpty |> removeSurroundingQuotes
 
     // Check if the name is different after sanitization
     // This is used to check if the value is different from the default Fable computed value
