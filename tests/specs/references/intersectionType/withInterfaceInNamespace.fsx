@@ -9,7 +9,7 @@ open System
 type ArtworksData =
     abstract member artworks: ResizeArray<string> with get, set
 
-module Error =
+module Error_ =
 
     [<AllowNullLiteral>]
     [<Interface>]

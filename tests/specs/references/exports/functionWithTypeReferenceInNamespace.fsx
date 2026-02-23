@@ -11,10 +11,10 @@ type Exports =
     static member dayjs () : dayjs.Dayjs = nativeOnly
     [<ImportAll("REPLACE_ME_WITH_MODULE_NAME")>]
     static member inline dayjs_
-        with get () : dayjs.Exports =
+        with get () : dayjs_.Exports =
             nativeOnly
 
-module dayjs =
+module dayjs_ =
 
     [<AbstractClass>]
     [<Erase>]

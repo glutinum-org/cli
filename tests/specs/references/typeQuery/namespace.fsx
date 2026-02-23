@@ -8,11 +8,11 @@ open System
 [<Erase>]
 type Exports =
     [<ImportAll("REPLACE_ME_WITH_MODULE_NAME")>]
-    static member inline DomEvent_
-        with get () : DomEvent.Exports =
+    static member inline DomEvent
+        with get () : DomEvent_.Exports =
             nativeOnly
 
-module DomEvent =
+module DomEvent_ =
 
     [<AbstractClass>]
     [<Erase>]

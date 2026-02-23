@@ -387,6 +387,7 @@ type GlueASTViewer =
                 "ModuleDeclaration"
                 [
                     GlueASTViewer.Name moduleDeclaration.Name
+                    ASTViewer.renderKeyValue "IsTopLevel" (string moduleDeclaration.IsTopLevel)
                     ASTViewer.renderKeyValue "IsNamespace" (string moduleDeclaration.IsNamespace)
                     ASTViewer.renderKeyValue "IsRecursive" (string moduleDeclaration.IsRecursive)
                     moduleDeclaration.Types

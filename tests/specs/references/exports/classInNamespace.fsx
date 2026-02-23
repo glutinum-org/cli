@@ -8,12 +8,12 @@ open System
 [<Erase>]
 type Exports =
     [<ImportAll("REPLACE_ME_WITH_MODULE_NAME")>]
-    static member inline lib_
-        with get () : lib.Exports =
+    static member inline lib
+        with get () : lib_.Exports =
             nativeOnly
 
 
-module lib =
+module lib_ =
 
     [<AbstractClass>]
     [<Erase>]

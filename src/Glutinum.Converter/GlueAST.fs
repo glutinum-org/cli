@@ -230,6 +230,7 @@ type GlueFunctionDeclaration =
 type GlueModuleDeclaration =
     {
         Name: string
+        IsTopLevel: bool
         IsNamespace: bool
         IsRecursive: bool
         Types: GlueType list

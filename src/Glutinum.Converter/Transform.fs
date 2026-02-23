@@ -1053,191 +1053,243 @@ let private transformExports
     let context = context.PushScope "Exports"
 
     let members =
-        exports
-        |> List.collect (
-            function
-            | GlueType.Variable info ->
-                let name, context = sanitizeNameAndPushScope info.Name context
-                let xmlDocInfo = transformComment info.Documentation
+        let sortedExports =
+            exports
+            // We want to have the module declaration at the end
+            // This is because, we want to detect conflict between the module declaration
+            // and the functions or variables that have the same name as the module
+            //
+            // If there is a conflict, we will add a "_" suffix to the module declaration to avoid the conflict
+            // In the future, we could consider add "_nsp" or "_namespace" to make it more clear
+            |> List.sortBy (
+                function
+                | GlueType.ModuleDeclaration _ -> 1
+                | _ -> 0
+            )
 
-                {
-                    Attributes =
-                        [
-                            if isTopLevel then
-                                FSharpAttribute.Import(info.Name, Naming.MODULE_PLACEHOLDER)
-                            else
-                                FSharpAttribute.EmitMacroProperty info.Name
-                            yield! xmlDocInfo.ObsoleteAttributes
-                        ]
-                    Name = name
-                    OriginalName = info.Name
-                    Parameters = []
-                    TypeParameters = []
-                    Type = transformType context info.Type
-                    IsOptional = false
-                    IsStatic = isTopLevel
-                    Accessor = None
-                    Accessibility = FSharpAccessibility.Public
-                    XmlDoc = xmlDocInfo.XmlDoc
-                    Body = FSharpMemberInfoBody.NativeOnly
-                }
-                |> FSharpMember.Property
-                |> List.singleton
+        let rec apply (acc: FSharpMember list) (seenNames: Set<string>) (glueTypes: GlueType list) =
+            match glueTypes with
+            | [] -> acc
+            | head :: tail ->
 
-            | GlueType.FunctionDeclaration info ->
-                let name, context = sanitizeNameAndPushScope info.Name context
+                let applyHelper newTypes newNames =
+                    apply (acc @ newTypes) (Set.union seenNames newNames) tail
 
-                let xmlDocInfo = transformComment info.Documentation
+                match head with
+                | GlueType.Variable info ->
+                    let name, context = sanitizeNameAndPushScope info.Name context
+                    let xmlDocInfo = transformComment info.Documentation
 
-                let typeParameters = transformTypeParameters context info.TypeParameters
-
-                {
-                    Attributes =
-                        [
-                            if isTopLevel then
-                                FSharpAttribute.Import(info.Name, Naming.MODULE_PLACEHOLDER)
-                            else
-                                FSharpAttribute.EmitMacroInvoke info.Name
-                            yield! xmlDocInfo.ObsoleteAttributes
-                        ]
-                    Name = name
-                    OriginalName = info.Name
-                    Parameters =
-                        info.Parameters
-                        |> List.map (
-                            transformParameter context
-                            >> TypeParameter.mapFsharpParameter typeParameters.SealedTypes
-                        )
-                    TypeParameters = typeParameters.TypeParameters
-                    Type =
-                        transformType context info.Type
-                        |> TypeParameter.mapFSharpType typeParameters.SealedTypes
-                    IsOptional = false
-                    IsStatic = isTopLevel
-                    Accessor = None
-                    Accessibility = FSharpAccessibility.Public
-                    XmlDoc = xmlDocInfo.XmlDoc
-                    Body = FSharpMemberInfoBody.NativeOnly
-                }
-                |> FSharpMember.Method
-                |> List.singleton
-
-            | GlueType.ClassDeclaration info
-            | GlueType.ExportDefault(GlueType.ClassDeclaration info) ->
-                // TODO: Handle constructor overloads
-                let name, context = sanitizeNameAndPushScope info.Name context
-
-                // If the class has no constructor explicitly defined, we need to generate one
-                let constructors =
-                    if info.Constructors.IsEmpty then
-                        [ { Documentation = []; Parameters = [] } ]
-                    else
-                        info.Constructors
-
-                constructors
-                |> List.map (fun constructorInfo ->
-                    let xmlDocInfo = transformComment constructorInfo.Documentation
-
-                    let typParameters = transformTypeParameters context info.TypeParameters
-
-                    {
-                        Attributes =
-                            [
-                                if isTopLevel then
-                                    FSharpAttribute.Import(info.Name, Naming.MODULE_PLACEHOLDER)
-
-                                    FSharpAttribute.EmitConstructor
-                                else
-                                    FSharpAttribute.EmitMacroConstructor info.Name
-
-                                yield! xmlDocInfo.ObsoleteAttributes
-                            ]
-                        Name = name
-                        OriginalName = info.Name
-                        Parameters =
-                            constructorInfo.Parameters
-                            |> List.map (
-                                transformParameter context
-                                >> TypeParameter.mapFsharpParameter typParameters.SealedTypes
-                            )
-                        TypeParameters = typParameters.TypeParameters
-                        Type =
-                            ({
-                                Name = Naming.sanitizeName info.Name
-                                TypeParameters = typParameters.TypeParameters
-                            }
-                            : FSharpMapped)
-                            |> FSharpType.Mapped
-                        IsOptional = false
-                        IsStatic = isTopLevel
-                        Accessor = None
-                        Accessibility = FSharpAccessibility.Public
-                        XmlDoc = xmlDocInfo.XmlDoc
-                        Body = FSharpMemberInfoBody.NativeOnly
-                    }
-                    |> FSharpMember.Method
-                )
-
-            | GlueType.ModuleDeclaration moduleDeclaration ->
-                let sanitizedName = Naming.sanitizeName moduleDeclaration.Name
-
-                {
-                    Attributes =
-                        [
-                            if isTopLevel then
-                                FSharpAttribute.ImportAll Naming.MODULE_PLACEHOLDER
-                            else
-                                FSharpAttribute.EmitMacroProperty(
-                                    Naming.removeSurroundingQuotes moduleDeclaration.Name
-                                )
-                        ]
-                    // "_" suffix is added to avoid name collision if
-                    // there are some functions with the same name as
-                    // the name of the module
-                    // TODO: Only add the "_" suffix if there is a name collision
-                    Name = sanitizedName + "_"
-                    OriginalName = $"{moduleDeclaration.Name}.Exports"
-                    Parameters = []
-                    TypeParameters = []
-                    Type =
-                        ({
-                            Name = $"{sanitizedName}.Exports"
+                    let newTypes =
+                        {
+                            Attributes =
+                                [
+                                    if isTopLevel then
+                                        FSharpAttribute.Import(info.Name, Naming.MODULE_PLACEHOLDER)
+                                    else
+                                        FSharpAttribute.EmitMacroProperty info.Name
+                                    yield! xmlDocInfo.ObsoleteAttributes
+                                ]
+                            Name = name
+                            OriginalName = info.Name
+                            Parameters = []
                             TypeParameters = []
+                            Type = transformType context info.Type
+                            IsOptional = false
+                            IsStatic = isTopLevel
+                            Accessor = None
+                            Accessibility = FSharpAccessibility.Public
+                            XmlDoc = xmlDocInfo.XmlDoc
+                            Body = FSharpMemberInfoBody.NativeOnly
                         }
-                        : FSharpMapped)
-                        |> FSharpType.Mapped
-                    IsOptional = false
-                    IsStatic = isTopLevel
-                    Accessor = FSharpAccessor.ReadOnly |> Some
-                    Accessibility = FSharpAccessibility.Public
-                    XmlDoc = []
-                    Body = FSharpMemberInfoBody.NativeOnly
-                }
-                |> FSharpMember.Property
-                |> List.singleton
+                        |> FSharpMember.Property
+                        |> List.singleton
 
-            | GlueType.ExportDefault glueType ->
-                let name, context = sanitizeNameAndPushScope glueType.Name context
+                    applyHelper newTypes (Set.singleton name)
 
-                {
-                    Attributes = [ FSharpAttribute.ImportDefault Naming.MODULE_PLACEHOLDER ]
-                    Name = name
-                    OriginalName = glueType.Name
-                    Parameters = []
-                    TypeParameters = []
-                    Type = transformType context glueType
-                    IsOptional = false
-                    IsStatic = true
-                    Accessor = None
-                    Accessibility = FSharpAccessibility.Public
-                    XmlDoc = []
-                    Body = FSharpMemberInfoBody.NativeOnly
-                }
-                |> FSharpMember.Property
-                |> List.singleton
+                | GlueType.FunctionDeclaration info ->
+                    let name, context = sanitizeNameAndPushScope info.Name context
 
-            | glueType -> failwithf "Could not generate exportMembers for: %A" glueType
-        )
+                    let xmlDocInfo = transformComment info.Documentation
+
+                    let typeParameters = transformTypeParameters context info.TypeParameters
+
+                    let newTypes =
+                        {
+                            Attributes =
+                                [
+                                    if isTopLevel then
+                                        FSharpAttribute.Import(info.Name, Naming.MODULE_PLACEHOLDER)
+                                    else
+                                        FSharpAttribute.EmitMacroInvoke info.Name
+                                    yield! xmlDocInfo.ObsoleteAttributes
+                                ]
+                            Name = name
+                            OriginalName = info.Name
+                            Parameters =
+                                info.Parameters
+                                |> List.map (
+                                    transformParameter context
+                                    >> TypeParameter.mapFsharpParameter typeParameters.SealedTypes
+                                )
+                            TypeParameters = typeParameters.TypeParameters
+                            Type =
+                                transformType context info.Type
+                                |> TypeParameter.mapFSharpType typeParameters.SealedTypes
+                            IsOptional = false
+                            IsStatic = isTopLevel
+                            Accessor = None
+                            Accessibility = FSharpAccessibility.Public
+                            XmlDoc = xmlDocInfo.XmlDoc
+                            Body = FSharpMemberInfoBody.NativeOnly
+                        }
+                        |> FSharpMember.Method
+                        |> List.singleton
+
+                    applyHelper newTypes (Set.singleton name)
+
+                | GlueType.ClassDeclaration info
+                | GlueType.ExportDefault(GlueType.ClassDeclaration info) ->
+                    // TODO: Handle constructor overloads
+                    let name, context = sanitizeNameAndPushScope info.Name context
+
+                    // If the class has no constructor explicitly defined, we need to generate one
+                    let constructors =
+                        if info.Constructors.IsEmpty then
+                            [ { Documentation = []; Parameters = [] } ]
+                        else
+                            info.Constructors
+
+                    let newNames, newTypes =
+                        constructors
+                        |> List.map (fun constructorInfo ->
+                            let xmlDocInfo = transformComment constructorInfo.Documentation
+
+                            let typParameters = transformTypeParameters context info.TypeParameters
+
+                            let newType =
+                                {
+                                    Attributes =
+                                        [
+                                            if isTopLevel then
+                                                FSharpAttribute.Import(
+                                                    info.Name,
+                                                    Naming.MODULE_PLACEHOLDER
+                                                )
+
+                                                FSharpAttribute.EmitConstructor
+                                            else
+                                                FSharpAttribute.EmitMacroConstructor info.Name
+
+                                            yield! xmlDocInfo.ObsoleteAttributes
+                                        ]
+                                    Name = name
+                                    OriginalName = info.Name
+                                    Parameters =
+                                        constructorInfo.Parameters
+                                        |> List.map (
+                                            transformParameter context
+                                            >> TypeParameter.mapFsharpParameter
+                                                typParameters.SealedTypes
+                                        )
+                                    TypeParameters = typParameters.TypeParameters
+                                    Type =
+                                        ({
+                                            Name = Naming.sanitizeName info.Name
+                                            TypeParameters = typParameters.TypeParameters
+                                        }
+                                        : FSharpMapped)
+                                        |> FSharpType.Mapped
+                                    IsOptional = false
+                                    IsStatic = isTopLevel
+                                    Accessor = None
+                                    Accessibility = FSharpAccessibility.Public
+                                    XmlDoc = xmlDocInfo.XmlDoc
+                                    Body = FSharpMemberInfoBody.NativeOnly
+                                }
+                                |> FSharpMember.Method
+
+                            (name, newType)
+                        )
+                        |> List.unzip
+
+                    applyHelper newTypes (Set.ofList newNames)
+
+                | GlueType.ModuleDeclaration moduleDeclaration ->
+                    let sanitizedName = Naming.sanitizeName moduleDeclaration.Name
+
+                    let mangledName =
+                        if seenNames.Contains sanitizedName then
+                            $"{sanitizedName}_"
+                        else
+                            sanitizedName
+
+                    let exportTypeName =
+                        if isTopLevel then
+                            $"{sanitizedName}_.Exports"
+                        else
+                            $"{sanitizedName}.Exports"
+
+                    let newTypes =
+                        {
+                            Attributes =
+                                [
+                                    if isTopLevel then
+                                        FSharpAttribute.ImportAll Naming.MODULE_PLACEHOLDER
+                                    else
+                                        FSharpAttribute.EmitMacroProperty(
+                                            Naming.removeSurroundingQuotes moduleDeclaration.Name
+                                        )
+                                ]
+                            Name = mangledName
+                            OriginalName = $"{moduleDeclaration.Name}.Exports"
+                            Parameters = []
+                            TypeParameters = []
+                            Type =
+                                ({
+                                    Name = exportTypeName
+                                    TypeParameters = []
+                                }
+                                : FSharpMapped)
+                                |> FSharpType.Mapped
+                            IsOptional = false
+                            IsStatic = isTopLevel
+                            Accessor = FSharpAccessor.ReadOnly |> Some
+                            Accessibility = FSharpAccessibility.Public
+                            XmlDoc = []
+                            Body = FSharpMemberInfoBody.NativeOnly
+                        }
+                        |> FSharpMember.Property
+                        |> List.singleton
+
+                    applyHelper newTypes (Set.singleton mangledName)
+
+                | GlueType.ExportDefault glueType ->
+                    let name, context = sanitizeNameAndPushScope glueType.Name context
+
+                    let newTypes =
+                        {
+                            Attributes = [ FSharpAttribute.ImportDefault Naming.MODULE_PLACEHOLDER ]
+                            Name = name
+                            OriginalName = glueType.Name
+                            Parameters = []
+                            TypeParameters = []
+                            Type = transformType context glueType
+                            IsOptional = false
+                            IsStatic = true
+                            Accessor = None
+                            Accessibility = FSharpAccessibility.Public
+                            XmlDoc = []
+                            Body = FSharpMemberInfoBody.NativeOnly
+                        }
+                        |> FSharpMember.Property
+                        |> List.singleton
+
+                    applyHelper newTypes (Set.singleton name)
+
+                | glueType -> failwithf "Could not generate exportMembers for: %A" glueType
+
+        apply [] Set.empty sortedExports
 
     {
         XmlDoc = []
@@ -2733,8 +2785,19 @@ let private transformModuleDeclaration
         // We don't want to generate empty modules
         FSharpType.Discard
     else
+        // If the module is a top level module we add a suffix to avoid conflicts when
+        // trying to access a type from the F# module directly.
+        //
+        // We only do it on the top level module to try to reduce the amount of code suffixed
+        // as this is not great looking
+        let moduleSuffix =
+            if moduleDeclaration.IsTopLevel then
+                "_"
+            else
+                ""
+
         ({
-            Name = Naming.sanitizeName moduleDeclaration.Name
+            Name = Naming.sanitizeName moduleDeclaration.Name + moduleSuffix
             IsRecursive = moduleDeclaration.IsRecursive
             Types = transform typeMemory reporter typeLiteralsMemory false moduleDeclaration.Types
         }
@@ -2863,7 +2926,7 @@ let private transformClassDeclaration
 
     classDefinition :: specialiazedAlias
 
-let rec private transformToFsharp
+let private transformToFsharp
     (context: TransformContext)
     (glueTypes: GlueType list)
     : FSharpType list

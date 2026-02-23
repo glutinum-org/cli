@@ -4,7 +4,7 @@ open Fable.Core
 open Fable.Core.JsInterop
 open System
 
-module dayjs =
+module dayjs_ =
 
     [<RequireQualifiedAccess>]
     [<StringEnum(CaseRules.None)>]

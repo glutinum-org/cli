@@ -3,6 +3,7 @@ module Glutinum.Converter.Reader.ModuleDeclaration
 open Glutinum.Converter.GlueAST
 open Glutinum.Converter.Reader.Types
 open TypeScript
+open Fable.Core.JsInterop
 
 let readModuleDeclaration
     (reader: ITypeScriptReader)
@@ -31,8 +32,14 @@ let readModuleDeclaration
         |> Seq.concat
         |> Seq.toList
 
+    let isTopLevel =
+        match declaration.parent?kind with
+        | Ts.SyntaxKind.SourceFile -> true
+        | _ -> false
+
     {
         Name = name.getText ()
+        IsTopLevel = isTopLevel
         IsNamespace = isNamespace
         IsRecursive = false
         Types = types

@@ -8,11 +8,11 @@ open System
 [<Erase>]
 type Exports =
     [<ImportAll("REPLACE_ME_WITH_MODULE_NAME")>]
-    static member inline vscode_
-        with get () : vscode.Exports =
+    static member inline vscode
+        with get () : vscode_.Exports =
             nativeOnly
 
-module vscode =
+module vscode_ =
 
     [<AbstractClass>]
     [<Erase>]

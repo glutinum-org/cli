@@ -8,17 +8,17 @@ open System
 [<Erase>]
 type Exports =
     [<ImportAll("REPLACE_ME_WITH_MODULE_NAME")>]
-    static member inline vscode_
-        with get () : vscode.Exports =
+    static member inline vscode
+        with get () : vscode_.Exports =
             nativeOnly
 
-module vscode =
+module vscode_ =
 
     [<AbstractClass>]
     [<Erase>]
     type Exports =
         [<Emit("$0.workspace")>]
-        abstract member workspace_: workspace.Exports with get
+        abstract member workspace: workspace.Exports with get
 
     module workspace =
 
