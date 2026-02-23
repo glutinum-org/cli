@@ -702,11 +702,22 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
                 // so we need to filter them to only keep the ones that are used
                 // See file://./../../tests/specs/references/functionType/interface/generics/moreGenericsOnParentThanNeeded.d.ts
                 |> List.filter (fun typeParameter ->
-                    List.exists
-                        (fun (parameter: GlueParameter) ->
-                            typeParameter.Name = parameter.Type.Name
-                        )
-                        paremeters
+
+                    let usedInParameters =
+                        List.exists
+                            (fun (parameter: GlueParameter) ->
+                                typeParameter.Name = parameter.Type.Name
+                            )
+                            paremeters
+
+                    let usedInReturnType =
+                        List.exists
+                            (fun (parameterType: GlueTypeParameter) ->
+                                typeParameter.Name = parameterType.Name
+                            )
+                            functionTypeInfo.Type.TypeParameters
+
+                    usedInParameters || usedInReturnType
                 )
                 |> transformTypeParameters context
 

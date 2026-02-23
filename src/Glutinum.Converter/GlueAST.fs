@@ -140,6 +140,17 @@ type GlueMember =
         | MethodSignature _
         | ConstructSignature _ -> None
 
+    member this.TypeParameters =
+        match this with
+        | Method methodInfo -> methodInfo.Type.TypeParameters
+        | Property propertyInfo -> propertyInfo.Type.TypeParameters
+        | GetAccessor _ -> []
+        | SetAccessor _ -> []
+        | CallSignature callSignatureInfo -> callSignatureInfo.Type.TypeParameters
+        | IndexSignature indexSignatureInfo -> indexSignatureInfo.Type.TypeParameters
+        | MethodSignature methodSignatureInfo -> methodSignatureInfo.Type.TypeParameters
+        | ConstructSignature constructSignatureInfo -> constructSignatureInfo.Type.TypeParameters
+
 type GlueInterface =
     {
         FullName: string
@@ -291,6 +302,18 @@ type GlueUtilityType =
     | Omit of GlueMember list
     | Readonly of GlueReadonly
 
+    member this.TypeParameters =
+        match this with
+        | Partial info -> info.TypeParameters
+        | Record _ -> []
+        | ReturnType returnType -> returnType.TypeParameters
+        | ThisParameterType thisType -> thisType.TypeParameters
+        | Omit members -> members |> List.collect (fun memberInfo -> memberInfo.TypeParameters)
+        | Readonly(GlueReadonly.Members members) ->
+            members |> List.collect (fun memberInfo -> memberInfo.TypeParameters)
+        | Readonly(GlueReadonly.Union interfaces) ->
+            interfaces |> List.collect (fun interfaceInfo -> interfaceInfo.TypeParameters)
+
 type GlueMappedType =
     {
         TypeParameter: GlueTypeParameter
@@ -397,3 +420,45 @@ type GlueType =
             | GlueUtilityType.ReturnType returnType -> returnType.Name
             | GlueUtilityType.ThisParameterType thisType -> thisType.Name
         | MappedType _ -> "obj"
+
+    member this.TypeParameters =
+        match this with
+        | Interface info -> info.TypeParameters
+        | TypeAliasDeclaration info -> info.TypeParameters
+        | ClassDeclaration info -> info.TypeParameters
+        | TypeReference info ->
+            info.TypeArguments
+            |> List.map (fun t ->
+                {
+                    Name = t.Name
+                    Constraint = None
+                    Default = None
+                }
+            )
+        | FunctionDeclaration info -> info.TypeParameters
+        | Variable info -> info.Type.TypeParameters
+        | Union(GlueTypeUnion cases) -> cases |> List.collect (fun t -> t.TypeParameters)
+        | KeyOf info -> info.TypeParameters
+        | Array info -> info.TypeParameters
+        | FunctionType info -> info.TypeParameters
+        | ThisType thisTypeInfo -> thisTypeInfo.TypeParameters
+        | TupleType cases -> cases |> List.collect (fun t -> t.TypeParameters)
+        | NamedTupleType info -> info.Type.TypeParameters
+        | OptionalType info -> info.TypeParameters
+        | MappedType info -> [ info.TypeParameter ]
+        | ReadOnly info -> info.TypeParameters
+        | IntersectionType members ->
+            members |> List.collect (fun memberInfo -> memberInfo.TypeParameters)
+        | UtilityType info -> info.TypeParameters
+        | Unknown
+        | ExportDefault _
+        | TemplateLiteral
+        | Discard
+        | Primitive _
+        | Enum _
+        | Literal _
+        | IndexedAccessType _
+        | ModuleDeclaration _
+        | TypeParameter _
+        | TypeLiteral _
+        | ConstructorType -> []
