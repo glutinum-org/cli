@@ -1790,7 +1790,12 @@ let private transformInterface (context: TransformContext) (info: GlueInterface)
             | _ -> true
         )
 
-    let typeParameters = transformTypeParameters context info.TypeParameters
+    let typeParametersResult = transformTypeParameters context info.TypeParameters
+
+    typeParametersResult.TypeParameters
+    |> List.rev
+    |> exposeSpecializedAlias name [] []
+    |> List.iter context.ExposeType
 
     {
         XmlDoc = []
@@ -1799,8 +1804,8 @@ let private transformInterface (context: TransformContext) (info: GlueInterface)
         OriginalName = info.Name
         Members =
             standardMembers @ membersComingFromPartial
-            |> TypeParameter.mapFsharpMembers typeParameters.SealedTypes
-        TypeParameters = typeParameters.TypeParameters
+            |> TypeParameter.mapFsharpMembers typeParametersResult.SealedTypes
+        TypeParameters = typeParametersResult.TypeParameters
         Inheritance = inheritance |> List.map (transformType context)
     }
 
@@ -2804,6 +2809,62 @@ let private transformModuleDeclaration
         : FSharpModule)
         |> FSharpType.Module
 
+// When a class or interface is declared with a generic and a default type, we need to expose an alias
+// for all the version with the default type set instead of a generic parameter.
+//
+// TypeScript:
+//
+// interface Task {}
+// export class Type1<A extends Task = Task> {}
+//
+// F#:
+//
+// type User<'T when 'T :> Task> = interface end
+// type User = User<Task>
+let rec private exposeSpecializedAlias
+    (name: string)
+    (acc: FSharpType list)
+    (tailedTypeParameters: FSharpTypeParameter list)
+    (typeParameters: FSharpTypeParameter list)
+    =
+    match typeParameters with
+    | head :: tail ->
+        match head with
+        | FSharpTypeParameter.FSharpType _ -> acc
+        | FSharpTypeParameter.FSharpTypeParameter typeParameter ->
+            match typeParameter.Default with
+            | None -> acc
+            | Some defaultType ->
+                let orderedTail = tail |> List.rev
+
+                let typeAlias =
+                    ({
+                        Attributes = []
+                        XmlDoc = []
+                        Name = name
+                        Type =
+                            ({
+                                Name = name
+                                TypeParameters =
+                                    orderedTail
+                                    @ FSharpTypeParameter.FSharpType defaultType
+                                      :: tailedTypeParameters
+                            }
+                            : FSharpMapped)
+                            |> FSharpType.Mapped
+                        TypeParameters = orderedTail
+                    }
+                    : FSharpTypeAlias)
+                    |> FSharpType.TypeAlias
+
+                let newTailedTypeParameters =
+                    FSharpTypeParameter.FSharpType defaultType
+                    |> List.singleton
+                    |> List.append tailedTypeParameters
+
+                exposeSpecializedAlias name (acc @ [ typeAlias ]) newTailedTypeParameters tail
+    | [] -> acc
+
 let private transformClassDeclaration
     (context: TransformContext)
     (classDeclaration: GlueClassDeclaration)
@@ -2839,63 +2900,10 @@ let private transformClassDeclaration
         ]
         |> List.map (context.ExposeTypeAlias >> transformType context)
 
-    // When a class is declared with a generic and a default type, we need to expose an alias for
-    // for the version with the default type set instead of a generic parameter.
-    //
-    // TypeScript:
-    //
-    // interface Task {}
-    // export class Type1<A extends Task = Task> {}
-    //
-    // F#:
-    //
-    // type User<'T when 'T :> Task> = interface end
-    // type User = User<Task>
-    let rec exposeSpecializedAlias
-        (acc: FSharpType list)
-        (tailedTypeParameters: FSharpTypeParameter list)
-        (typeParameters: FSharpTypeParameter list)
-        =
-        match typeParameters with
-        | head :: tail ->
-            match head with
-            | FSharpTypeParameter.FSharpType _ -> acc
-            | FSharpTypeParameter.FSharpTypeParameter typeParameter ->
-                match typeParameter.Default with
-                | None -> acc
-                | Some defaultType ->
-                    let orderedTail = tail |> List.rev
-
-                    let typeAlias =
-                        ({
-                            Attributes = []
-                            XmlDoc = []
-                            Name = name
-                            Type =
-                                ({
-                                    Name = name
-                                    TypeParameters =
-                                        orderedTail
-                                        @ FSharpTypeParameter.FSharpType defaultType
-                                          :: tailedTypeParameters
-                                }
-                                : FSharpMapped)
-                                |> FSharpType.Mapped
-                            TypeParameters = orderedTail
-                        }
-                        : FSharpTypeAlias)
-                        |> FSharpType.TypeAlias
-
-                    let newTailedTypeParameters =
-                        FSharpTypeParameter.FSharpType defaultType
-                        |> List.singleton
-                        |> List.append tailedTypeParameters
-
-                    exposeSpecializedAlias (acc @ [ typeAlias ]) newTailedTypeParameters tail
-        | [] -> acc
-
     let specialiazedAlias =
-        typeParametersResult.TypeParameters |> List.rev |> exposeSpecializedAlias [] []
+        typeParametersResult.TypeParameters
+        |> List.rev
+        |> exposeSpecializedAlias name [] []
 
     let xmlDoc = transformComment classDeclaration.Documentation
 
