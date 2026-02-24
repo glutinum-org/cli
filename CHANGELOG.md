@@ -5,8 +5,383 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 <!-- EasyBuild: START -->
-<!-- last_commit_released: 20dab778db50f4529c7c641da8e8e51463b00eef -->
+<!-- last_commit_released: 24210b74ed4fac16d7c232d822ede822c7a2c38b -->
 <!-- EasyBuild: END -->
+
+## 0.13.0
+
+### 🐞 Bug Fixes
+
+* Fix: Generate a concrete version of interface with constrained/default type parameters ([24210b7](https://github.com/glutinum-org/cli/commit/24210b74ed4fac16d7c232d822ede822c7a2c38b))
+
+    ```ts
+    declare interface Options {}
+
+    declare interface User<T extends Options = Options> {}
+    ```
+
+    ```fs
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type User<'T when 'T :> Options> =
+        interface end
+
+    type User =
+        User<Options>
+    ```
+
+    Fix #211
+
+* Add support for `+`, `~` and `""` (empty strings) in string enum literals ([73c5803](https://github.com/glutinum-org/cli/commit/73c5803b3f8d6f088afbace9a4f50ae2fbd83234))
+
+    ```ts
+    type ClauseCombinator = '' | '>' | '+' | '~' | '>='
+    ```
+
+    ```fs
+    [<RequireQualifiedAccess>]
+    [<StringEnum(CaseRules.None)>]
+    type ClauseCombinator =
+        | [<CompiledName("")>] _EMPTY_
+        | ``>``
+        | [<CompiledName("+")>] _PLUS_
+        | ``~``
+        | ``>=``
+    ```
+
+* Alias empty literal string enum case to `Empty` ([903ac33](https://github.com/glutinum-org/cli/commit/903ac33abc292e5c7cdbe3afe8a23ce877daf839))
+
+    ```ts
+    type DevToolPosition = 'eval-' | '';
+    ```
+
+    ```fs
+    [<RequireQualifiedAccess>]
+    [<StringEnum(CaseRules.None)>]
+    type DevToolPosition =
+        | ``eval-``
+        | [<CompiledName("")>] Empty
+    ```
+
+    Fix #206
+
+* Transform Documentation for class and methods ([c69e79b](https://github.com/glutinum-org/cli/commit/c69e79b5bd705262cf05303cda56fa0a6c9d603d))
+
+    ```ts
+    /**
+     * Represents a type which can release resources, such
+     * as event listening or a timer.
+     */
+    declare class Disposable {
+        /**
+         * Dispose this object.
+         */
+        dispose(): any;
+    }
+    ```
+
+    ```fs
+    /// <summary>
+    /// Represents a type which can release resources, such
+    /// as event listening or a timer.
+    /// </summary>
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type Disposable =
+        /// <summary>
+        /// Dispose this object.
+        /// </summary>
+        abstract member dispose: unit -> obj
+    ```
+
+    Fix #196
+
+* Make generated delegate inherit the generic from their parent ([55d66ae](https://github.com/glutinum-org/cli/commit/55d66ae0db77cf626b1f0f2d18e380be116bb4b0))
+
+    ```ts
+    interface Thenable<R> {}
+
+    declare function funcA<R>(task: (progress: any, data: any) =>
+    Thenable<R>): Thenable<R>;
+    ```
+
+    ```fs
+    [<AbstractClass>]
+    [<Erase>]
+    type Exports =
+        [<Import("funcA", "REPLACE_ME_WITH_MODULE_NAME")>]
+        static member funcA<'R> (task: Exports.funcA.task<'R>) :
+    Thenable<'R> = nativeOnly
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type Thenable<'R> =
+        interface end
+
+    module Exports =
+
+        module funcA =
+
+            type task<'R> =
+                delegate of progress: obj * data: obj -> Thenable<'R>
+    ```
+
+* Enum value in signature should be alias to their type directly ([2227bab](https://github.com/glutinum-org/cli/commit/2227bab3b03180965347a67c0a8b1f4e8fac5d53))
+* Mangle generated types due to overload resolution (mainly for TypeLiterals, Records, etc.) ([b22c85c](https://github.com/glutinum-org/cli/commit/b22c85c1eecc37a0d8cd0b342dd36bb17e279fed))
+
+    ```ts
+    export interface TelemetryLogger {
+        logError(eventName: string, data?: Record<string, any>): void;
+        logError(error: Error, data?: Record<string, any>): void;
+    }
+    ```
+
+    ```fs
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type TelemetryLogger =
+        abstract member logError: eventName: string * ?data:
+    TelemetryLogger.logError.data -> unit
+        abstract member logError: error: Exception * ?data:
+    TelemetryLogger.logError.data_1 -> unit
+
+    module TelemetryLogger =
+
+        module logError =
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type data =
+                [<EmitIndexer>]
+                abstract member Item: key: string -> obj with get, set
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type data_1 =
+                [<EmitIndexer>]
+                abstract member Item: key: string -> obj with get, set
+    ```
+
+    Notice how each overload as its dedicated "data" type generated
+
+* Generate a concrete version of `TaskProvider<T extends Task = Task>` ([b0c15ef](https://github.com/glutinum-org/cli/commit/b0c15ef073f3ef2366f4441c5c877bc0bdc244cd))
+
+    ```ts
+    export class Type2<A = string> {}
+    ```
+
+    ```fs
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type Type2<'A> =
+        interface end
+
+    type Type2 =
+        Type2<string>
+    ```
+
+* Use `AbstractClass` to represent class extending `Error` from ES5 module ([5142edc](https://github.com/glutinum-org/cli/commit/5142edc4d760f0fb8cd3f25ef52b07990458642f))
+
+    ```ts
+    export class CancellationError extends Error {
+        constructor();
+    }
+    ```
+
+    ```fs
+    [<AbstractClass>]
+    [<Erase>]
+    type Exports =
+        [<Import("CancellationError", "REPLACE_ME_WITH_MODULE_NAME");
+    EmitConstructor>]
+        static member CancellationError () : CancellationError = nativeOnly
+
+    [<AllowNullLiteral>]
+    [<AbstractClass>]
+    type CancellationError =
+        inherit Exception
+    ```
+
+* Remove duplicates from Generics generated from TypeLiteral ([5541a34](https://github.com/glutinum-org/cli/commit/5541a341c23ed9aaa0cb86e4c0105dfafe3754c2))
+* Re-work how workspace exports their function/variable declaration ([fada073](https://github.com/glutinum-org/cli/commit/fada073b541bd72c5481850ba010b960b3b8a079))
+
+    We are now using `abstract member` with `Emit` instead of static member
+
+    ```ts
+    declare module 'vscode' {
+        export const version: string;
+    }
+    ```
+
+    ```fs
+    [<AbstractClass>]
+    [<Erase>]
+    type Exports =
+        [<ImportAll("REPLACE_ME_WITH_MODULE_NAME")>]
+        static member inline vscode_
+            with get () : vscode.Exports =
+                nativeOnly
+
+    module vscode =
+
+        [<AbstractClass>]
+        [<Erase>]
+        type Exports =
+            [<Emit("$0.version")>]
+            abstract member version: string
+    ```
+
+* Resolve type parameter when it is attached to the signature instead of the member ([63d5b05](https://github.com/glutinum-org/cli/commit/63d5b053384d2afb3df39a4ca7167068bf14229f))
+
+    ```ts
+    declare class Test {
+        parseArg?: <T>(value: string, previous: T) => T;
+    }
+    ```
+
+    ```fs
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type Test =
+        abstract member parseArg: Test.parseArg<'T> option with get, set
+
+    module Test =
+
+        type parseArg<'T> =
+            delegate of value: string * previous: 'T -> 'T
+    ```
+
+    Note: The generated code is invalid because 'T definition is missing on
+    `Test` type but this can be improved later. And user can more easily fix
+    the code with the new version
+
+* Alias functions with `...args` in signature as `System.Delegate` ([30c9fe2](https://github.com/glutinum-org/cli/commit/30c9fe29f0a50b4f4588aaa7c9d9a95b64b647cb))
+
+    ```ts
+    export class Commander {
+        action(fn: (...args: any[]) => Promise<void>);
+    }
+    ```
+
+    ```fs
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type Commander =
+        abstract member action: fn: System.Delegate -> unit
+    ```
+
+* Respect `readonly` property when defining type literal ([8d89cbe](https://github.com/glutinum-org/cli/commit/8d89cbeb15457085f95f50c484f9b777eba3b9d0))
+
+    ```ts
+    export declare const settings: {
+        readonly enable: boolean;
+    }
+    ```
+
+    ```fs
+    module Exports =
+
+        [<Global>]
+        [<AllowNullLiteral>]
+        type settings
+            [<ParamObject; Emit("$0")>]
+            (
+                enable: bool
+            ) =
+
+            member val enable : bool = nativeOnly with get
+    ```
+
+    Fix #179
+
+* Forward generics to the generated types when transforming a `TypeLiteral` ([e0039f4](https://github.com/glutinum-org/cli/commit/e0039f4b43737324b6cf7b056e85d046e4b7bf02))
+
+    ```ts
+    export type Callback<Param, AtomType> = (event: {
+        atom: AtomType;
+    }) => void;
+    ```
+
+    ```fs
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type Callback<'Param, 'AtomType> =
+        [<Emit("$0($1...)")>]
+        abstract member Invoke: event: Callback.event<'AtomType> -> unit
+
+    module Callback =
+
+        [<Global>]
+        [<AllowNullLiteral>]
+        type event<'AtomType>
+            [<ParamObject; Emit("$0")>]
+            (
+                atom: 'AtomType
+            ) =
+
+            member val atom : 'AtomType = nativeOnly with get, set
+    ```
+
+    Fix #148
+
+* If a tuple is empty generate `obj` (we don't have an equivalent to empty tuple in F#) ([ea1c0ce](https://github.com/glutinum-org/cli/commit/ea1c0ce2fa67e820edcfba66da57d66222618de9))
+
+    ```ts
+    type MyType = []
+    ```
+
+    ```fs
+    type MyType =
+        obj
+    ```
+
+* Support `@deprecated` with a multiline comment ([82766ab](https://github.com/glutinum-org/cli/commit/82766ab3737a9c0b24f4999133790c3dbbb1d00d))
+* Prevent infinite loop on recursive type ([092b4f7](https://github.com/glutinum-org/cli/commit/092b4f7111783ce2631ef464a2c2b3b0ca0a3a98))
+
+    ```ts
+    export interface DiagnosticCollection {
+        forEach(callback: (collection: DiagnosticCollection) => any): void;
+    }
+    ```
+
+    ```fs
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type DiagnosticCollection =
+        abstract member forEach: callback: (DiagnosticCollection -> obj) -> unit
+    ```
+
+### 🚀 Features
+
+* Detect generic resulting in sealed type ([229a893](https://github.com/glutinum-org/cli/commit/229a893d161c81129874980ed40c84cab8f7b0a8))
+
+    ```ts
+    export function showInformationMessage<T extends string>() : T | number;
+    ```
+
+    ```fs
+    [<AbstractClass>]
+    [<Erase>]
+    type Exports =
+        [<Import("showInformationMessage", "REPLACE_ME_WITH_MODULE_NAME")>]
+        static member showInformationMessage () : U2<string, float> =
+    nativeOnly
+    ```
+
+    Without this feature, we would resolve `<'T when 'T :> string>` which is
+    not valid in F# because `:> string` is a sealed type and can only
+    resolved to `string`
+
+* Add support for additional Fable.Core.JS types (#172) ([01fa782](https://github.com/glutinum-org/cli/commit/01fa7828d9058ca23cec7d19691163926430d910))
+
+    * `Int8Array`
+    * `Uint8ClampedArray`
+    * `Int16Array`
+    * `Uint16Array`
+    * `Int32Array`
+    * `Uint32Array`
+    * `Float32Array`
+    * `Float64Array`
 
 ## 0.12.0
 
