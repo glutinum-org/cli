@@ -507,8 +507,23 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                         Some(Single declarations.[0])
                     else
                         Some ForceAny
+                | None when property.flags.HasFlag(Ts.SymbolFlags.Prototype) -> Some ForceAny
                 | None ->
-                    Report.readerError ("type node", "Missing declarations", typeNode) |> failwith
+                    let isUnion = unionOrIntersectionType.isUnion ()
+                    let propsType = unionOrIntersectionType.getProperties () |> Seq.toList
+                    let declrs = propsType |> List.map (_.declarations >> Option.map Seq.toList)
+
+                    Report.readerError (
+                        "type node",
+                        $"
+    Node is IntersectionType
+    Node.isUnionType(): {isUnion}
+    Missing declarations {propsType}
+    Mapped declrs {declrs}
+",
+                        typeNode
+                    )
+                    |> failwith
             )
 
         // We can't create a contract for some of the properties

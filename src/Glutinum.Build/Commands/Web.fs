@@ -46,7 +46,6 @@ type WebCommand() =
                         |> CmdLine.appendRaw "--sourceMaps"
                         |> CmdLine.appendRaw "--verbose"
                         |> CmdLine.appendRaw "--watch"
-                        |> CmdLine.appendRaw "--test:MSBuildCracker"
                         |> CmdLine.appendRaw "--run"
                         |> CmdLine.appendRaw "npx vite"
                         |> CmdLine.toString,
@@ -69,7 +68,6 @@ type WebCommand() =
                 |> CmdLine.appendRaw "fable"
                 |> CmdLine.appendRaw "--noCache"
                 |> CmdLine.appendRaw "--verbose"
-                |> CmdLine.appendRaw "--test:MSBuildCracker"
                 |> CmdLine.toString,
                 workingDirectory = "src/Glutinum.Web"
             )

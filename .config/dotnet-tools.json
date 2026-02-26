@@ -3,34 +3,39 @@
   "isRoot": true,
   "tools": {
     "fable": {
-      "version": "4.14.0",
+      "version": "5.0.0-alpha.14",
       "commands": [
         "fable"
-      ]
+      ],
+      "rollForward": false
     },
     "husky": {
       "version": "0.6.4",
       "commands": [
         "husky"
-      ]
+      ],
+      "rollForward": false
     },
     "femto": {
       "version": "0.19.0",
       "commands": [
         "femto"
-      ]
+      ],
+      "rollForward": false
     },
     "fantomas": {
       "version": "6.3.0-beta-001",
       "commands": [
         "fantomas"
-      ]
+      ],
+      "rollForward": false
     },
     "easybuild.commitlinter": {
       "version": "0.1.0",
       "commands": [
         "commit-linter"
-      ]
+      ],
+      "rollForward": false
     }
   }
 }

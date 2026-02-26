@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <ManagePackageVersionsCentrally>False</ManagePackageVersionsCentrally>
+        <ContinuousIntegrationBuild>false</ContinuousIntegrationBuild>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+    <ItemGroup>
+        <Content Include="./specs/**/*.*"/>
+    </ItemGroup>
+</Project>

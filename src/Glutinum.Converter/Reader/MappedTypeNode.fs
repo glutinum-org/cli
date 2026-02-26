@@ -20,7 +20,7 @@ let readMappedTypeNode (reader: ITypeScriptReader) (mappedTypeNode: Ts.MappedTyp
                     $"Expected exactly one type parameter but was {List.length typeParameters}",
                     mappedTypeNode
                 )
-                |> Error
+                |> Result.Error
 
         return
             {

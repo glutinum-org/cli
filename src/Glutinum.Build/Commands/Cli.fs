@@ -23,7 +23,6 @@ type CliCommand() =
             |> CmdLine.appendRaw "src/Glutinum.Converter.CLI"
             |> CmdLine.appendPrefix "--outDir" "dist"
             |> CmdLine.appendRaw "--sourceMaps"
-            |> CmdLine.appendRaw "--test:MSBuildCracker"
             |> CmdLine.appendIf settings.IsWatch "--watch"
             |> CmdLine.toString
         )
