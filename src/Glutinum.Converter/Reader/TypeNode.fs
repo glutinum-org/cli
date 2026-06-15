@@ -607,7 +607,34 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
         | GlueType.Primitive GluePrimitive.Any -> reader.ReadTypeNode conditionalTypeNode.checkType
         | forward -> forward
 
-    | Ts.SyntaxKind.TemplateLiteralType -> GlueType.TemplateLiteral
+    | Ts.SyntaxKind.TemplateLiteralType ->
+        let templateLiteralTypeNode = typeNode :?> Ts.TemplateLiteralTypeNode
+
+        // Ask the type checker to resolve the template literal type.
+        // When the template is made of finite parts (e.g. unions of string
+        // literals), TypeScript expands it into a union of string literals
+        // that we can represent as a StringEnum.
+        // Otherwise (e.g. `section-${string}`) the type stays a template
+        // literal / string and we fallback to `string`.
+        let typ = checker.getTypeAtLocation templateLiteralTypeNode
+
+        let rec readResolvedLiterals (typ: Ts.Type) : GlueType list =
+            match typ.flags with
+            | HasTypeFlags Ts.TypeFlags.StringLiteral ->
+                match typ with
+                | Type.StringLiteral.String value ->
+                    [ GlueLiteral.String value |> GlueType.Literal ]
+                | Type.StringLiteral.Other -> []
+            | HasTypeFlags Ts.TypeFlags.Union ->
+                (typ :?> Ts.UnionType).types |> Seq.toList |> List.collect readResolvedLiterals
+            | _ -> []
+
+        match readResolvedLiterals typ with
+        // The type checker couldn't resolve the template to a finite set of
+        // string literals, so we fallback to a plain `string`.
+        | [] -> GlueType.TemplateLiteral
+        | [ single ] -> single
+        | cases -> cases |> GlueTypeUnion |> GlueType.Union
 
     | Ts.SyntaxKind.IndexedAccessType ->
         let indexedAccessType = typeNode :?> Ts.IndexedAccessType
