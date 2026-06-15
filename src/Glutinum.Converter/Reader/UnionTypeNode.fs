@@ -43,6 +43,12 @@ let rec private readUnionTypeCases
                 |> Some
             else
                 match literalExpression.kind with
+                | Ts.SyntaxKind.TrueKeyword
+                | Ts.SyntaxKind.FalseKeyword ->
+                    // Keep boolean literals so a union like `false | 'eval'` can be
+                    // represented as a StringEnum using [<CompiledValue(...)>]
+                    tryReadLiteral literalExpression
+                    |> Option.map (GlueType.Literal >> List.singleton)
                 | Ts.SyntaxKind.NullKeyword
                 | Ts.SyntaxKind.UndefinedKeyword ->
                     GlueType.Primitive GluePrimitive.Null |> List.singleton |> Some

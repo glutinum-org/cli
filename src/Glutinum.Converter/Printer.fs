@@ -88,6 +88,20 @@ let private attributeToText (fsharpAttribute: FSharpAttribute) =
 
         $"[<StringEnum({caseRulesText})>]"
     | FSharpAttribute.CompiledName name -> $"[<CompiledName(\"{name}\")>]"
+    | FSharpAttribute.CompiledValue value ->
+        let valueText =
+            match value with
+            | FSharpLiteral.Bool value ->
+                if value then
+                    "true"
+                else
+                    "false"
+            | FSharpLiteral.Int value -> string value
+            | FSharpLiteral.Float value -> string value
+            | FSharpLiteral.String value -> $"\"{value}\""
+            | FSharpLiteral.Null -> "null"
+
+        $"[<CompiledValue({valueText})>]"
     | FSharpAttribute.RequireQualifiedAccess -> "[<RequireQualifiedAccess>]"
     | FSharpAttribute.EmitConstructor -> "[<EmitConstructor>]"
     | FSharpAttribute.EmitMacroConstructor className -> $"[<Emit(\"new $0.{className}($1...)\")>]"

@@ -160,6 +160,13 @@ type FSharpAttribute =
     | Obsolete of string option
     | StringEnum of Fable.Core.CaseRules
     | CompiledName of string
+    /// <summary>
+    /// Generates <c>[&lt;CompiledValue(value)&gt;]</c> attribute.
+    ///
+    /// Used on a <c>StringEnum</c> case to emit a raw value (e.g. a boolean)
+    /// instead of the case name as a string.
+    /// </summary>
+    | CompiledValue of FSharpLiteral
     | RequireQualifiedAccess
     | EmitConstructor
     /// <summary>

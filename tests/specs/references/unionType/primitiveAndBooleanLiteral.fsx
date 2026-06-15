@@ -5,7 +5,7 @@ open Fable.Core.JsInterop
 open System
 
 type ColorInfo =
-    float
+    U2<float, bool>
 
 (***)
 #r "nuget: Fable.Core"

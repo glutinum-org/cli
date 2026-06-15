@@ -2298,14 +2298,25 @@ let private tryOptimizeUnionType
 
     let flattenedCases = flattenCases cases
 
-    let isStringOnly =
+    // A union made only of string literals, or of string and boolean literals
+    // (with at least one string) can be represented as a Fable StringEnum.
+    // Boolean cases are emitted using [<CompiledValue(...)>] so that Fable
+    // compiles them to the raw `true`/`false` value instead of a string.
+    let isStringEnumCompatible =
         // If the list is empty, it means that there was no candidates
         // for string literals
         not flattenedCases.IsEmpty
         && flattenedCases
-           |> List.forall (
+           |> List.exists (
                function
                | GlueType.Literal(GlueLiteral.String _) -> true
+               | _ -> false
+           )
+        && flattenedCases
+           |> List.forall (
+               function
+               | GlueType.Literal(GlueLiteral.String _)
+               | GlueType.Literal(GlueLiteral.Bool _) -> true
                | _ -> false
            )
 
@@ -2320,9 +2331,9 @@ let private tryOptimizeUnionType
                | _ -> false
            )
 
-    // If the union contains only literal strings,
+    // If the union contains only literal strings (and optionally booleans),
     // we can transform it into a StringEnum
-    if isStringOnly then
+    if isStringEnumCompatible then
         let cases =
             flattenedCases
             |> List.map (fun value ->
@@ -2339,6 +2350,18 @@ let private tryOptimizeUnionType
                                     |> FSharpAttribute.CompiledName
                             ]
                         Name = sanitizeResult.Name
+                    }
+                    |> FSharpUnionCase.Named
+                | GlueType.Literal(GlueLiteral.Bool value) ->
+                    // Booleans can't be represented as a StringEnum case name,
+                    // so we use [<CompiledValue(...)>] to emit the raw value
+                    {
+                        Attributes = [ FSharpAttribute.CompiledValue(FSharpLiteral.Bool value) ]
+                        Name =
+                            if value then
+                                "True"
+                            else
+                                "False"
                     }
                     |> FSharpUnionCase.Named
                 | _ -> failwith "Should not happen"
