@@ -432,7 +432,6 @@ let private releaseGlutinumCli (repository: Repository) (settings: PublishSettin
             |> CmdLine.appendRaw "src/Glutinum.Converter.CLI"
             |> CmdLine.appendPrefix "--outDir" VirtualWorkspace.dist.``.``
             |> CmdLine.appendRaw "--sourceMaps"
-            |> CmdLine.appendRaw "--test:MSBuildCracker"
             |> CmdLine.toString
         )
 
