@@ -30,7 +30,7 @@ let private readEnumMembers
                     GlueLiteral.Float num
             | None -> GlueLiteral.Int(state.NextCaseIndex)
         | Some initializer ->
-            match tryReadLiteral initializer with
+            match tryReadLiteral checker initializer with
             | Some glueLiteral ->
                 match glueLiteral with
                 | GlueLiteral.String _

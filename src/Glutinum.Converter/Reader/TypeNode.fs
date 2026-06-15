@@ -423,7 +423,7 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
 
         let literalExpression = unbox<Ts.LiteralExpression> literalTypeNode.literal
 
-        match tryReadLiteral literalExpression with
+        match tryReadLiteral checker literalExpression with
         | Some literal -> GlueType.Literal literal
         | None ->
             Report.readerError (

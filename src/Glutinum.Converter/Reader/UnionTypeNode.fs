@@ -36,7 +36,7 @@ let rec private readUnionTypeCases
             let literalExpression = unbox<Ts.LiteralExpression> literalTypeNode.literal
 
             if ts.isStringLiteral literalExpression || ts.isNumericLiteral literalExpression then
-                tryReadLiteral literalExpression
+                tryReadLiteral checker literalExpression
                 |> Option.defaultWith (fun () -> failwith "Expected a NumericLiteral")
                 |> GlueType.Literal
                 |> fun case -> [ case ]
@@ -47,7 +47,7 @@ let rec private readUnionTypeCases
                 | Ts.SyntaxKind.FalseKeyword ->
                     // Keep boolean literals so a union like `false | 'eval'` can be
                     // represented as a StringEnum using [<CompiledValue(...)>]
-                    tryReadLiteral literalExpression
+                    tryReadLiteral checker literalExpression
                     |> Option.map (GlueType.Literal >> List.singleton)
                 | Ts.SyntaxKind.NullKeyword
                 | Ts.SyntaxKind.UndefinedKeyword ->

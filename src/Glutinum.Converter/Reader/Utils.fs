@@ -40,7 +40,22 @@ let private tryReadNumericLiteral (text: string) =
     else
         None
 
-let tryReadLiteral (expression: Ts.Node) =
+/// <summary>
+/// Determine if a numeric literal source text denotes a float (i.e. has a
+/// decimal point or a decimal exponent), as opposed to an integer.
+///
+/// Radix literals (<c>0x</c>, <c>0b</c>, <c>0o</c>) are always integers, so we
+/// don't mistake the <c>e</c> in <c>0xE</c> for an exponent.
+/// </summary>
+let private isWrittenAsFloat (text: string) =
+    let lower = text.ToLower()
+
+    if lower.StartsWith "0x" || lower.StartsWith "0b" || lower.StartsWith "0o" then
+        false
+    else
+        text.Contains "." || lower.Contains "e"
+
+let tryReadLiteral (checker: Ts.TypeChecker) (expression: Ts.Node) =
     match expression.kind with
     | Ts.SyntaxKind.StringLiteral ->
         let literal = (expression :?> Ts.StringLiteral)
@@ -52,7 +67,24 @@ let tryReadLiteral (expression: Ts.Node) =
     | _ ->
         let text = expression.getText ()
 
-        tryReadNumericLiteral text
+        // Source the numeric value from the type checker (robust against
+        // numeric separators, hex/binary/octal literals, large values, ...)
+        // but decide int vs float from the source text so that `10.0` and
+        // `1e3` are kept as floats even though TypeScript normalises them to
+        // the integer-valued literal type `10` / `1000`.
+        let resolvedType = checker.getTypeAtLocation expression
+
+        match resolvedType.flags with
+        | HasTypeFlags Ts.TypeFlags.NumberLiteral ->
+            let value = unbox<float> (resolvedType :?> Ts.LiteralType).value
+
+            if Constructors.Number.isSafeInteger value && not (isWrittenAsFloat text) then
+                GlueLiteral.Int(unbox<int> value) |> Some
+            else
+                GlueLiteral.Float value |> Some
+        | _ ->
+            // Fallback to parsing the source text directly
+            tryReadNumericLiteral text
 
 let tryGetFullName (checker: Ts.TypeChecker) (node: Ts.Node) =
     // Naive way to check if the node has a symbol
