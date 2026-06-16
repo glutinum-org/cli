@@ -1352,6 +1352,36 @@ let private transformAccessor (accessor: GlueAccessor) : FSharpAccessor =
 
 module private TransformMembers =
 
+    /// <summary>
+    /// Detect methods whose first parameter is a string literal (the
+    /// event-emitter pattern, e.g. <c>on(event: 'console', listener)</c>) and
+    /// turn them into a dedicated member (e.g. <c>on_console</c>) where the
+    /// literal is baked into an <c>Emit</c> so the caller doesn't pass it.
+    /// </summary>
+    /// <returns>
+    /// <c>Some (emitText, specializedName, remainingParameters)</c> when the
+    /// pattern matches, otherwise <c>None</c>.
+    /// </returns>
+    let private trySpecializeStringLiteralMethod
+        (methodName: string)
+        (parameters: GlueParameter list)
+        =
+        match parameters with
+        | firstParameter :: remainingParameters ->
+            match firstParameter.Type with
+            | GlueType.Literal(GlueLiteral.String literalValue) ->
+                let specializedName = $"{methodName}_{literalValue}"
+
+                let emitText =
+                    if remainingParameters.IsEmpty then
+                        $"Emit(\"$0.{methodName}('{literalValue}')\")"
+                    else
+                        $"Emit(\"$0.{methodName}('{literalValue}',$1...)\")"
+
+                Some(emitText, specializedName, remainingParameters)
+            | _ -> None
+        | [] -> None
+
     let toFSharpMember (context: TransformContext) (members: GlueMember list) : FSharpMember list =
         members
         // Remove the Symbol.iterator method in F#, we don't have a direct equivalent
@@ -1425,16 +1455,30 @@ module private TransformMembers =
         |> List.choose (
             function
             | GlueMember.Method methodInfo ->
-                let name, context = sanitizeNameAndPushScope methodInfo.Name context
-
                 let xmlDocInfo = transformComment methodInfo.Documentation
+
+                // We only specialize instance methods; a static event-emitter
+                // method is unusual and the `$0` Emit placeholder targets the
+                // instance.
+                let methodName, parameters, emitAttributes =
+                    if methodInfo.IsStatic then
+                        methodInfo.Name, methodInfo.Parameters, []
+                    else
+                        match
+                            trySpecializeStringLiteralMethod methodInfo.Name methodInfo.Parameters
+                        with
+                        | Some(emitText, specializedName, remainingParameters) ->
+                            specializedName, remainingParameters, [ FSharpAttribute.Text emitText ]
+                        | None -> methodInfo.Name, methodInfo.Parameters, []
+
+                let name, context = sanitizeNameAndPushScope methodName context
 
                 if methodInfo.IsStatic then
                     {
                         Attributes = [ yield! xmlDocInfo.ObsoleteAttributes ]
                         Name = name
                         OriginalName = methodInfo.Name
-                        Parameters = methodInfo.Parameters |> List.map (transformParameter context)
+                        Parameters = parameters |> List.map (transformParameter context)
                         Type = transformType context methodInfo.Type
                         TypeParameters = []
                         IsOptional = methodInfo.IsOptional
@@ -1446,10 +1490,10 @@ module private TransformMembers =
                     |> Some
                 else
                     {
-                        Attributes = [ yield! xmlDocInfo.ObsoleteAttributes ]
+                        Attributes = [ yield! xmlDocInfo.ObsoleteAttributes; yield! emitAttributes ]
                         Name = name
                         OriginalName = methodInfo.Name
-                        Parameters = methodInfo.Parameters |> List.map (transformParameter context)
+                        Parameters = parameters |> List.map (transformParameter context)
                         Type = transformType context methodInfo.Type
                         TypeParameters = []
                         IsOptional = methodInfo.IsOptional
@@ -1585,15 +1629,25 @@ module private TransformMembers =
                 |> Some
 
             | GlueMember.MethodSignature methodSignature ->
-                let name, context = sanitizeNameAndPushScope methodSignature.Name context
-
                 let xmlDocInfo = transformComment methodSignature.Documentation
 
+                let methodName, parameters, emitAttributes =
+                    match
+                        trySpecializeStringLiteralMethod
+                            methodSignature.Name
+                            methodSignature.Parameters
+                    with
+                    | Some(emitText, specializedName, remainingParameters) ->
+                        specializedName, remainingParameters, [ FSharpAttribute.Text emitText ]
+                    | None -> methodSignature.Name, methodSignature.Parameters, []
+
+                let name, context = sanitizeNameAndPushScope methodName context
+
                 {
-                    Attributes = [ yield! xmlDocInfo.ObsoleteAttributes ]
+                    Attributes = [ yield! xmlDocInfo.ObsoleteAttributes; yield! emitAttributes ]
                     Name = name
                     OriginalName = methodSignature.Name
-                    Parameters = methodSignature.Parameters |> List.map (transformParameter context)
+                    Parameters = parameters |> List.map (transformParameter context)
                     Type = transformType context methodSignature.Type
                     TypeParameters = []
                     IsOptional = false
