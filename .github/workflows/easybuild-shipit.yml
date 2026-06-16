@@ -34,7 +34,9 @@ jobs:
         with:
           global-json-file: global.json
       - name: ShipIt (Pull Request)
-        run: dotnet shipit
+        run: |
+          dotnet tool restore
+          dotnet shipit
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
