@@ -216,7 +216,20 @@ module UtilityType =
         |> GlueType.UtilityType
 
     let readReturnType (reader: ITypeScriptReader) (typeReferenceNode: Ts.TypeReferenceNode) =
-        let typ = reader.checker.getTypeFromTypeNode typeReferenceNode
+        let rawTyp = reader.checker.getTypeFromTypeNode typeReferenceNode
+
+        // When the type is still deferred (e.g. `ReturnType<this["clone"]>` where
+        // `this` is polymorphic), resolve it to its apparent type so we get a
+        // concrete type instead of an unusable reference. We only do this for
+        // deferred types to avoid widening primitives (`string` -> `String`) or
+        // type parameters.
+        let typ =
+            match rawTyp.flags with
+            | HasTypeFlags Ts.TypeFlags.Conditional
+            | HasTypeFlags Ts.TypeFlags.IndexedAccess
+            | HasTypeFlags Ts.TypeFlags.Substitution
+            | HasTypeFlags Ts.TypeFlags.Index -> reader.checker.getApparentType rawTyp
+            | _ -> rawTyp
 
         match reader.checker.typeToTypeNode (typ, None, None) with
         | Some typeNode ->
@@ -386,24 +399,40 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
 
         let readTypeReference (isStandardLibrary: bool) =
 
-            match symbolOpt.Value.flags with
-            | HasSymbolFlags Ts.SymbolFlags.TypeParameter ->
+            let isTypeParameter =
+                match symbolOpt with
+                | Some symbol ->
+                    match symbol.flags with
+                    | HasSymbolFlags Ts.SymbolFlags.TypeParameter -> true
+                    | _ -> false
+                | None -> false
+
+            if isTypeParameter then
                 symbolOpt.Value.name |> GlueType.TypeParameter
-            | _ ->
+            else
 
                 match UtilityType.tryExpandAnonymousObjectApplication reader typeReferenceNode with
                 | Some glueType -> glueType
                 | None ->
                     let name =
-                        symbolOpt.Value.valueDeclaration
-                        |> Option.map (fun valueDeclaration ->
-                            // If the type reference an enum member,
-                            // we need to find the name of the Enum type, not the name of the member
-                            match valueDeclaration.kind with
-                            | Ts.SyntaxKind.EnumMember -> valueDeclaration?symbol?parent?getName ()
-                            | _ -> typeReferenceNode.typeName?getText ()
-                        )
-                        |> Option.defaultValue (typeReferenceNode.typeName?getText ())
+                        match symbolOpt with
+                        | Some symbol ->
+                            symbol.valueDeclaration
+                            |> Option.map (fun valueDeclaration ->
+                                // If the type reference an enum member,
+                                // we need to find the name of the Enum type, not the name of the member
+                                match valueDeclaration.kind with
+                                | Ts.SyntaxKind.EnumMember ->
+                                    valueDeclaration?symbol?parent?getName ()
+                                | _ -> typeReferenceNode.typeName?getText ()
+                            )
+                            |> Option.defaultValue (typeReferenceNode.typeName?getText ())
+                        | None ->
+                            // Synthesized node (e.g. produced by `typeToTypeNode` when
+                            // resolving `ReturnType<...>`). It has no symbol and no source
+                            // position, so we read the identifier name directly instead of
+                            // calling `getText()`.
+                            typeReferenceNode.typeName?text
 
                     ({
                         Name = name
