@@ -145,6 +145,7 @@ module UtilityType =
             | _ -> baseType |> readMembers reader typeReferenceNode
 
         ({
+            Documentation = []
             FullName = getFullNameOrEmpty reader.checker typeReferenceNode
             Name = typeReferenceNode.typeName?getText ()
             Members = members
@@ -285,6 +286,7 @@ module UtilityType =
                         if innerType.flags.HasFlag Ts.TypeFlags.Object then
 
                             ({
+                                Documentation = []
                                 Name = innerType.aliasTypeArguments.Value[0].symbol.name
                                 FullName =
                                     reader.checker.getFullyQualifiedName

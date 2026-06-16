@@ -1748,6 +1748,8 @@ module private TransformMembers =
 let private transformInterface (context: TransformContext) (info: GlueInterface) : FSharpInterface =
     let name, context = sanitizeTypeNameAndPushScope info.Name context
 
+    let xmlDocInfo = transformComment info.Documentation
+
     let membersComingFromPartial =
         info.HeritageClauses
         |> List.map context.ExposeTypeAlias
@@ -1806,8 +1808,13 @@ let private transformInterface (context: TransformContext) (info: GlueInterface)
     |> List.iter context.ExposeType
 
     {
-        XmlDoc = []
-        Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
+        XmlDoc = xmlDocInfo.XmlDoc
+        Attributes =
+            [
+                yield! xmlDocInfo.ObsoleteAttributes
+                FSharpAttribute.AllowNullLiteral
+                FSharpAttribute.Interface
+            ]
         Name = name
         OriginalName = info.Name
         Members =

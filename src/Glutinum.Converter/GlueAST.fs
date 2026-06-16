@@ -154,6 +154,7 @@ type GlueMember =
 
 type GlueInterface =
     {
+        Documentation: GlueComment list
         FullName: string
         Name: string
         Members: GlueMember list

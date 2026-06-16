@@ -13,6 +13,7 @@ let readInterfaceDeclaration
     let members = declaration.members |> Seq.toList |> List.map reader.ReadDeclaration
 
     {
+        Documentation = reader.ReadDocumentationFromNode declaration
         FullName = Utils.getFullNameOrEmpty reader.checker declaration
         Name = declaration.name.getText ()
         Members = members
