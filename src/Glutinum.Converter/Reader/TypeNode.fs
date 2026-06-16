@@ -126,6 +126,54 @@ module UtilityType =
         |> Seq.distinct
         |> Seq.toList
 
+    /// <summary>
+    /// When a generic type reference is applied with concrete type arguments
+    /// (e.g. a custom utility type like <c>Picked&lt;User, "id"&gt;</c>), the
+    /// TypeChecker resolves it to an anonymous object type. We read its resolved
+    /// members (via <see cref="readMembers"/>) and expand it into a TypeLiteral
+    /// so it is generated as a concrete interface instead of an unusable
+    /// reference to the (generic) utility.
+    /// </summary>
+    let tryExpandAnonymousObjectApplication
+        (reader: ITypeScriptReader)
+        (typeReferenceNode: Ts.TypeReferenceNode)
+        : GlueType option
+        =
+        let hasTypeArguments =
+            match typeReferenceNode.typeArguments with
+            | Some typeArguments -> typeArguments.Count > 0
+            | None -> false
+
+        if not hasTypeArguments then
+            None
+        else
+            let typ = reader.checker.getTypeFromTypeNode typeReferenceNode
+
+            // Only expand *anonymous* object types synthesized by the utility
+            // (e.g. a TypeLiteral or a mapped type like `Pick`). References to
+            // named interfaces/classes (e.g. `Foo<string>`) must stay references.
+            let isNamedDeclaration =
+                if isNull (box typ.symbol) then
+                    false
+                else
+                    match typ.symbol.declarations with
+                    | Some declarations when declarations.Count > 0 ->
+                        match declarations.[0].kind with
+                        | Ts.SyntaxKind.InterfaceDeclaration
+                        | Ts.SyntaxKind.ClassDeclaration -> true
+                        | _ -> false
+                    | _ -> false
+
+            match typ.flags with
+            | HasTypeFlags Ts.TypeFlags.Object when not isNamedDeclaration ->
+                let members = readMembers reader typeReferenceNode typ
+
+                if members.IsEmpty then
+                    None
+                else
+                    ({ Members = members }: GlueTypeLiteral) |> GlueType.TypeLiteral |> Some
+            | _ -> None
+
     let readPartial (reader: ITypeScriptReader) (typeReferenceNode: Ts.TypeReferenceNode) =
         let baseType =
             typeReferenceNode.typeArguments.Value[0] |> reader.checker.getTypeFromTypeNode
@@ -342,24 +390,28 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
             | HasSymbolFlags Ts.SymbolFlags.TypeParameter ->
                 symbolOpt.Value.name |> GlueType.TypeParameter
             | _ ->
-                let name =
-                    symbolOpt.Value.valueDeclaration
-                    |> Option.map (fun valueDeclaration ->
-                        // If the type reference an enum member,
-                        // we need to find the name of the Enum type, not the name of the member
-                        match valueDeclaration.kind with
-                        | Ts.SyntaxKind.EnumMember -> valueDeclaration?symbol?parent?getName ()
-                        | _ -> typeReferenceNode.typeName?getText ()
-                    )
-                    |> Option.defaultValue (typeReferenceNode.typeName?getText ())
 
-                ({
-                    Name = name
-                    FullName = getFullNameOrEmpty checker (!!typeReferenceNode.typeName)
-                    TypeArguments = readTypeArguments reader typeReferenceNode
-                    IsStandardLibrary = isStandardLibrary
-                })
-                |> GlueType.TypeReference
+                match UtilityType.tryExpandAnonymousObjectApplication reader typeReferenceNode with
+                | Some glueType -> glueType
+                | None ->
+                    let name =
+                        symbolOpt.Value.valueDeclaration
+                        |> Option.map (fun valueDeclaration ->
+                            // If the type reference an enum member,
+                            // we need to find the name of the Enum type, not the name of the member
+                            match valueDeclaration.kind with
+                            | Ts.SyntaxKind.EnumMember -> valueDeclaration?symbol?parent?getName ()
+                            | _ -> typeReferenceNode.typeName?getText ()
+                        )
+                        |> Option.defaultValue (typeReferenceNode.typeName?getText ())
+
+                    ({
+                        Name = name
+                        FullName = getFullNameOrEmpty checker (!!typeReferenceNode.typeName)
+                        TypeArguments = readTypeArguments reader typeReferenceNode
+                        IsStandardLibrary = isStandardLibrary
+                    })
+                    |> GlueType.TypeReference
 
         if isFromEs5Lib symbolOpt then
             match getFullNameOrEmpty checker (!!typeReferenceNode.typeName) with
