@@ -18,40 +18,19 @@ let private readEnumMembers
     (enumMember: Ts.EnumMember)
     =
 
+    // Ask the type checker for the resolved constant value of the member.
+    // This handles auto-incremented members (no initializer) as well as
+    // computed constant initializers (e.g. `1 << 2`, `Read | Write`, string
+    // concatenation), which we could not evaluate ourselves.
     let caseValue =
-        match enumMember.initializer with
-        | None ->
-            match checker.getConstantValue (!^enumMember) with
-            | Some(U2.Case1 str) -> GlueLiteral.String str
-            | Some(U2.Case2 num) ->
-                if Constructors.Number.isSafeInteger num then
-                    GlueLiteral.Int(int num)
-                else
-                    GlueLiteral.Float num
-            | None -> GlueLiteral.Int(state.NextCaseIndex)
-        | Some initializer ->
-            match tryReadLiteral checker initializer with
-            | Some glueLiteral ->
-                match glueLiteral with
-                | GlueLiteral.String _
-                | GlueLiteral.Int _
-                | GlueLiteral.Float _ as value -> value
-                | GlueLiteral.Null
-                | GlueLiteral.Bool _ ->
-                    Report.readerError (
-                        "enum member",
-                        "Boolean and null literals are not supported in enums",
-                        initializer
-                    )
-                    |> failwith
-
-            | None ->
-                Report.readerError (
-                    "enum member",
-                    "readEnumCases: Unsupported enum initializer",
-                    initializer
-                )
-                |> failwith
+        match checker.getConstantValue (!^enumMember) with
+        | Some(U2.Case1 str) -> GlueLiteral.String str
+        | Some(U2.Case2 num) ->
+            if Constructors.Number.isSafeInteger num then
+                GlueLiteral.Int(int num)
+            else
+                GlueLiteral.Float num
+        | None -> GlueLiteral.Int(state.NextCaseIndex)
 
     let name = unbox<Ts.Identifier> enumMember.name
 
