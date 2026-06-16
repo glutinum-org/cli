@@ -613,7 +613,7 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
         else if others.Length = 1 then
             transformType context others.Head
         else
-            match tryOptimizeUnionType context context.CurrentScopeName others with
+            match tryOptimizeUnionType context.CurrentScopeName others with
             | Some typ ->
                 typ |> context.ExposeType
 
@@ -2291,12 +2291,7 @@ let private transformTypeParameters
         SealedTypes = sealedTypes
     }
 
-let private tryOptimizeUnionType
-    (context: TransformContext)
-    (typeName: string)
-    (cases: GlueType list)
-    : FSharpType option
-    =
+let private tryOptimizeUnionType (typeName: string) (cases: GlueType list) : FSharpType option =
     // Unions can have nested unions, so we need to flatten them
     // TODO: Is there cases where we don't want to flatten?
     // U2<U2<int, string>, bool>
@@ -2424,45 +2419,8 @@ let private tryOptimizeUnionType
         ({ Name = typeName; Cases = cases }: FSharpEnum) |> FSharpType.Enum |> Some
 
     else
-        let isTypeLiteralOnly =
-            // If the list is empty, it means that there was no candidates
-            // for type literals
-            cases
-            |> List.forall (
-                function
-                | GlueType.TypeLiteral _ -> true
-                | _ -> false
-            )
-
-        // If the union contains only type literals, we can generate an interface
-        // instead of an erased enum
-        if isTypeLiteralOnly then
-            let members =
-                cases
-                |> List.collect (
-                    function
-                    | GlueType.TypeLiteral typeLiteralInfo ->
-                        TransformMembers.toFSharpMember context typeLiteralInfo.Members
-                    | _ -> []
-                )
-
-            {
-                XmlDoc = []
-                Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
-                Name = typeName
-                OriginalName = context.CurrentScopeName
-                TypeParameters = []
-                Members = members
-                Inheritance = []
-            }
-            |> FSharpType.Interface
-            |> Some
-
-        // Otherwise, we want to generate an erased Enum
-        // Either by using U2, U3, etc. or by creating custom
-        // Erased enum cases for improving the user experience
-        else
-            None
+        // Let the caller generate an erased union (`U2`, `U3`, ...). See #55
+        None
 
 let private transformMappedTypeMembers (context: TransformContext) (mappedType: GlueMappedType) =
     match mappedType.TypeParameter.Constraint with
@@ -2538,7 +2496,7 @@ let private transformTypeAliasDeclaration
     // TODO: Make the transformation more robust
     match glueTypeAliasDeclaration.Type with
     | GlueType.Union(GlueTypeUnion cases) as unionType ->
-        match tryOptimizeUnionType context typeAliasName cases with
+        match tryOptimizeUnionType typeAliasName cases with
         | Some typ -> typ
         | None -> transformType context unionType |> makeTypeAlias
 
