@@ -759,18 +759,22 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
         FSharpType.Interface(transformInterface context interfaceInfo)
 
     | GlueType.TypeLiteral typeLiteralInfo ->
-        let hasNoIndexSignature =
+        // A `[<ParamObject>]` class only makes sense for a plain data object.
+        // If the type literal is callable/constructable (call or construct
+        // signatures) or has an index signature, we generate an interface
+        // instead (e.g. a function value with overloads).
+        let isParamObjectCandidate =
             typeLiteralInfo.Members
             |> List.forall (
                 function
-                | GlueMember.IndexSignature _ -> false
+                | GlueMember.IndexSignature _
+                | GlueMember.CallSignature _
+                | GlueMember.ConstructSignature _ -> false
                 | GlueMember.MethodSignature _
                 | GlueMember.Property _
                 | GlueMember.GetAccessor _
                 | GlueMember.SetAccessor _
-                | GlueMember.CallSignature _
-                | GlueMember.Method _
-                | GlueMember.ConstructSignature _ -> true
+                | GlueMember.Method _ -> true
             )
 
         let typeParameterNames =
@@ -791,7 +795,7 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
             )
             |> List.distinct
 
-        if hasNoIndexSignature then
+        if isParamObjectCandidate then
 
             let typeLiteralParameters =
                 typeLiteralInfo.Members
