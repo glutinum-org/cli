@@ -38,6 +38,7 @@ let readModuleDeclaration
         | _ -> false
 
     {
+        Documentation = reader.ReadDocumentationFromNode declaration
         Name = name.getText ()
         IsTopLevel = isTopLevel
         IsNamespace = isNamespace

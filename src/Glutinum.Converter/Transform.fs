@@ -1238,10 +1238,13 @@ let private transformExports
                         else
                             $"{sanitizedName}.Exports"
 
+                    let xmlDocInfo = transformComment moduleDeclaration.Documentation
+
                     let newTypes =
                         {
                             Attributes =
                                 [
+                                    yield! xmlDocInfo.ObsoleteAttributes
                                     if isTopLevel then
                                         FSharpAttribute.ImportAll Naming.MODULE_PLACEHOLDER
                                     else
@@ -1264,7 +1267,7 @@ let private transformExports
                             IsStatic = isTopLevel
                             Accessor = FSharpAccessor.ReadOnly |> Some
                             Accessibility = FSharpAccessibility.Public
-                            XmlDoc = []
+                            XmlDoc = xmlDocInfo.XmlDoc
                             Body = FSharpMemberInfoBody.NativeOnly
                         }
                         |> FSharpMember.Property

@@ -230,6 +230,7 @@ type GlueFunctionDeclaration =
 
 type GlueModuleDeclaration =
     {
+        Documentation: GlueComment list
         Name: string
         IsTopLevel: bool
         IsNamespace: bool
