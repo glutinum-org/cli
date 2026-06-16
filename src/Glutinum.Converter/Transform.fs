@@ -254,6 +254,14 @@ let private sanitizeNameAndPushScope (name: string) (context: TransformContext) 
     let context = context.PushScope name
     (name, context)
 
+// Same as `sanitizeNameAndPushScope` but for type-level names (interfaces,
+// classes, modules, type aliases) where `$` and `/` are invalid even when
+// escaped with double-backticks.
+let private sanitizeTypeNameAndPushScope (name: string) (context: TransformContext) =
+    let name = Naming.sanitizeTypeName name
+    let context = context.PushScope name
+    (name, context)
+
 type TransformCommentResult =
     {
         ObsoleteAttributes: FSharpAttribute list
@@ -1195,7 +1203,7 @@ let private transformExports
                                     TypeParameters = typParameters.TypeParameters
                                     Type =
                                         ({
-                                            Name = Naming.sanitizeName info.Name
+                                            Name = Naming.sanitizeTypeName info.Name
                                             TypeParameters = typParameters.TypeParameters
                                         }
                                         : FSharpMapped)
@@ -1216,7 +1224,7 @@ let private transformExports
                     applyHelper newTypes (Set.ofList newNames)
 
                 | GlueType.ModuleDeclaration moduleDeclaration ->
-                    let sanitizedName = Naming.sanitizeName moduleDeclaration.Name
+                    let sanitizedName = Naming.sanitizeTypeName moduleDeclaration.Name
 
                     let mangledName =
                         if seenNames.Contains sanitizedName then
@@ -1738,7 +1746,7 @@ module private TransformMembers =
         )
 
 let private transformInterface (context: TransformContext) (info: GlueInterface) : FSharpInterface =
-    let name, context = sanitizeNameAndPushScope info.Name context
+    let name, context = sanitizeTypeNameAndPushScope info.Name context
 
     let membersComingFromPartial =
         info.HeritageClauses
@@ -1851,12 +1859,12 @@ let private transformEnum (glueEnum: GlueEnum) : FSharpType =
     | integralValues, [] ->
         let transformMembers (glueMember: GlueEnumMember) : FSharpEnumCase =
             {
-                Name = Naming.sanitizeName glueMember.Name
+                Name = Naming.sanitizeTypeName glueMember.Name
                 Value = transformLiteral glueMember.Value
             }
 
         {
-            Name = Naming.sanitizeName glueEnum.Name
+            Name = Naming.sanitizeTypeName glueEnum.Name
             Cases = integralValues |> List.map transformMembers |> List.distinct
         }
         |> FSharpType.Enum
@@ -1868,7 +1876,7 @@ let private transformEnum (glueEnum: GlueEnum) : FSharpType =
                 | GlueLiteral.String value -> value
                 | _ -> failwith "Should not happen"
 
-            let caseName = Naming.sanitizeName glueMember.Name
+            let caseName = Naming.sanitizeTypeName glueMember.Name
 
             {
                 Attributes =
@@ -1888,7 +1896,7 @@ let private transformEnum (glueEnum: GlueEnum) : FSharpType =
                     FSharpAttribute.RequireQualifiedAccess
                     FSharpAttribute.StringEnum CaseRules.None
                 ]
-            Name = Naming.sanitizeName glueEnum.Name
+            Name = Naming.sanitizeTypeName glueEnum.Name
             Cases = stringValues |> List.map transformMembers |> List.distinct
             IsOptional = false
         }
@@ -1915,7 +1923,7 @@ module TypeAliasDeclaration =
                     | GlueMember.GetAccessor { Name = caseName }
                     | GlueMember.SetAccessor { Name = caseName } ->
 
-                        let sanitizeResult = Naming.sanitizeNameWithResult caseName
+                        let sanitizeResult = Naming.sanitizeTypeNameWithResult caseName
 
                         {
                             Attributes =
@@ -1943,7 +1951,7 @@ module TypeAliasDeclaration =
                 |> List.map (fun m ->
                     {
                         Attributes = []
-                        Name = Naming.sanitizeName m.Name
+                        Name = Naming.sanitizeTypeName m.Name
                     }
                     |> FSharpUnionCase.Named
                 )
@@ -1958,7 +1966,7 @@ module TypeAliasDeclaration =
                         FSharpAttribute.RequireQualifiedAccess
                         FSharpAttribute.StringEnum CaseRules.None
                     ]
-                Name = Naming.sanitizeName aliasName
+                Name = Naming.sanitizeTypeName aliasName
                 Cases = cases
                 IsOptional = false
             }
@@ -1997,10 +2005,18 @@ module TypeAliasDeclaration =
         // We can use StringEnum to represent the literal
         match literalInfo with
         | GlueLiteral.String value ->
+            let sanitizeResult = Naming.sanitizeTypeNameWithResult value
+
             let case =
                 ({
-                    Attributes = []
-                    Name = Naming.sanitizeName value
+                    Attributes =
+                        [
+                            if sanitizeResult.IsDifferent then
+                                value
+                                |> Naming.removeSurroundingQuotes
+                                |> FSharpAttribute.CompiledName
+                        ]
+                    Name = sanitizeResult.Name
                  }
                  |> FSharpUnionCase.Named)
 
@@ -2339,7 +2355,7 @@ let private tryOptimizeUnionType
             |> List.map (fun value ->
                 match value with
                 | GlueType.Literal(GlueLiteral.String value) ->
-                    let sanitizeResult = Naming.sanitizeNameWithResult value
+                    let sanitizeResult = Naming.sanitizeTypeNameWithResult value
 
                     {
                         Attributes =
@@ -2495,7 +2511,7 @@ let private transformTypeAliasDeclaration
     =
 
     let typeAliasName, context =
-        sanitizeNameAndPushScope glueTypeAliasDeclaration.Name context
+        sanitizeTypeNameAndPushScope glueTypeAliasDeclaration.Name context
 
     let xmlDoc = transformComment glueTypeAliasDeclaration.Documentation
 
@@ -2825,7 +2841,7 @@ let private transformModuleDeclaration
                 ""
 
         ({
-            Name = Naming.sanitizeName moduleDeclaration.Name + moduleSuffix
+            Name = Naming.sanitizeTypeName moduleDeclaration.Name + moduleSuffix
             IsRecursive = moduleDeclaration.IsRecursive
             Types = transform typeMemory reporter typeLiteralsMemory false moduleDeclaration.Types
         }
@@ -2893,7 +2909,7 @@ let private transformClassDeclaration
     (classDeclaration: GlueClassDeclaration)
     : FSharpType list
     =
-    let name, context = sanitizeNameAndPushScope classDeclaration.Name context
+    let name, context = sanitizeTypeNameAndPushScope classDeclaration.Name context
 
     let typeParametersResult =
         transformTypeParameters context classDeclaration.TypeParameters
