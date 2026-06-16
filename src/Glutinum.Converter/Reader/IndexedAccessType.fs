@@ -34,25 +34,7 @@ let readIndexedAccessType
 
             GlueType.Discard
 
-    let objectType =
-        let objNodeType = declaration.objectType :?> Ts.TypeNode
-
-        match objNodeType.kind with
-        | Ts.SyntaxKind.ParenthesizedType ->
-            let pType = declaration.objectType :?> Ts.ParenthesizedTypeNode
-            reader.ReadTypeNode pType
-
-        | unsupported ->
-            let warning =
-                Report.readerError (
-                    "readIndexedAccessType",
-                    $"Unsupported node kind %s{unsupported.Name}",
-                    objNodeType
-                )
-
-            reader.Warnings.Add warning
-
-            GlueType.Discard
+    let objectType = reader.ReadTypeNode(declaration.objectType :?> Ts.TypeNode)
 
     GlueType.IndexedAccessType
         {
