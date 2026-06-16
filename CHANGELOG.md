@@ -1,6 +1,6 @@
 ---
+last_commit_released: 4ee01d2be21466424ee066afbedb1cfcb85f893b
 name: Glutinum.Converter.CLI
-last_commit_released: 24210b74ed4fac16d7c232d822ede822c7a2c38b
 exclude:
   - src/Glutinum.Types/
 updaters:
@@ -16,6 +16,48 @@ updaters:
 All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## 0.14.0 - 2026-06-16
+
+### 🚀 Features
+
+* Forward interface documentation to F# code ([e4c9598](https://github.com/glutinum-org/cli/commit/e4c9598c135a6cf12218ff95894326e657ffc78e))
+* Unwrap methods with a string-literal first argument ([9afcfab](https://github.com/glutinum-org/cli/commit/9afcfabf5971c7611a3583fbe1eb67180c208e38))
+* Forward namespace documentation to F# code ([d533e05](https://github.com/glutinum-org/cli/commit/d533e05d891a996dcd0b77997c11e7253658b448))
+* Generate a concrete type when applying a generic type alias ([d4bcb96](https://github.com/glutinum-org/cli/commit/d4bcb96be9e2081149279ff39f7d5bd9a97e1463))
+
+### 🐞 Bug Fixes
+
+* Keep boolean literals in unions instead of dropping them ([0e1a3fb](https://github.com/glutinum-org/cli/commit/0e1a3fb3daab0286a5dd07e2bf1b7751c79d89ba))
+
+    A union mixing a boolean literal with string literals is now represented
+    as a `StringEnum` using `[<CompiledValue(...)>]` for the boolean case,
+    and a union mixing a boolean literal with another primitive is
+    represented
+    as an erased union (`U2`).
+
+    ```ts
+    export type DevTool = false | 'eval'
+    ```
+
+    ```fs
+    [<RequireQualifiedAccess>]
+    [<StringEnum(CaseRules.None)>]
+    type DevTool =
+        | [<CompiledValue(false)>] False
+        | eval
+    ```
+* Resolve template literal types to a StringEnum when possible ([3ba3335](https://github.com/glutinum-org/cli/commit/3ba33350fbb5c1be19177c5f8f514dbd64a374e5))
+* Read numeric literal values from the TypeChecker ([22b2a53](https://github.com/glutinum-org/cli/commit/22b2a53c9c6dae3e117c158f53eaa9100294b5dc))
+* Replace `$` and `/` in type and union case names ([482388c](https://github.com/glutinum-org/cli/commit/482388ca51a36bc9329702850f982988b7f06269))
+* Don't merge a union of type literals into a single interface ([0c7d9ba](https://github.com/glutinum-org/cli/commit/0c7d9ba51b0acb63b8163fcd3b2e4ffc9614579e))
+* Resolve enum member values via the TypeChecker ([8ecdd5f](https://github.com/glutinum-org/cli/commit/8ecdd5f58f2d0345bb23b9e88de04adb2a3b9366))
+* Remove unecessary warning on the reader side ([c036674](https://github.com/glutinum-org/cli/commit/c0366740275ff9cec674b39a6be7d958b127c486))
+* Resolve `ReturnType<this[...]>` ([5ccc8dd](https://github.com/glutinum-org/cli/commit/5ccc8ddbd75921de2aece807b3798653ef026e72))
+* Resolve `Omit<_>` in interface heritage clause ([73c771f](https://github.com/glutinum-org/cli/commit/73c771f71b0b271c9f96281aa906b18eeea765ed))
+* Generate an interface for callable type literals ([4ee01d2](https://github.com/glutinum-org/cli/commit/4ee01d2be21466424ee066afbedb1cfcb85f893b))
+
+<strong><small>[View changes on Github](https://github.com/glutinum-org/cli/compare/24210b74ed4fac16d7c232d822ede822c7a2c38b..4ee01d2be21466424ee066afbedb1cfcb85f893b)</small></strong>
 
 ## 0.13.0
 
