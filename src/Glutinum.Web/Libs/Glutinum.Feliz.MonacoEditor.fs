@@ -162,8 +162,8 @@ module Editor =
 type Exports =
 
     static member inline Editor(properties: Types.IEditorProps seq) =
-        Interop.reactApi.createElement (
-            importDefault "@monaco-editor/react",
+        ReactLegacy.createElement (
+            importDefault "@monaco-editor/react" |> unbox<ReactElement>,
             createObj !!properties
         )
 

@@ -5,7 +5,7 @@ open EasyBuild.FileSystemProvider
 [<Literal>]
 let root = __SOURCE_DIRECTORY__ + "/../../"
 
-type Workspace = RelativeFileSystem<root>
+type Workspace = AbsoluteFileSystem<root>
 
 type VirtualWorkspace =
     VirtualFileSystem<

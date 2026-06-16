@@ -13,47 +13,50 @@
       },
       "EasyBuild.CommitParser": {
         "type": "Direct",
-        "requested": "[1.0.0, )",
-        "resolved": "1.0.0",
-        "contentHash": "PSsqV5/9YXJUBNRtc+H6NgZ68UrRFAuKpUUFP41eg0YI7z//NGbwAz7D6kI4mlzY1Xd6JD2brb3gzlyR4qFuMA==",
+        "requested": "[3.0.0, )",
+        "resolved": "3.0.0",
+        "contentHash": "4N8zQ3nXEdmsp8txFrrxz2SbB6ZCQ6/OYDdgrU8G9brUY17s6DYEkPL0tnWdGfjDPufBPO3Uvz4yIB8HonkY4w==",
         "dependencies": {
-          "FSharp.Core": "8.0.101",
-          "FsToolkit.ErrorHandling": "4.15.1",
+          "FSharp.Core": "7.0.300",
+          "FsToolkit.ErrorHandling": "4.18.0",
           "Thoth.Json.Newtonsoft": "0.1.0"
         }
       },
       "EasyBuild.FileSystemProvider": {
         "type": "Direct",
-        "requested": "[0.3.0, )",
-        "resolved": "0.3.0",
-        "contentHash": "gdVJpqcMDJm4IfmITy3MtpEn/lo9pH8PirVlENtXGX9Sdw3rCgoo9ch1TAthUseh28RcUGWwza9BmEWlrQX/Aw=="
+        "requested": "[1.1.0, )",
+        "resolved": "1.1.0",
+        "contentHash": "O+/pVoGDLO6zzwacz/Ayi5DkOaGLOVfPMAe3EGjOda8D0RRgc23gbbH9bYONIHB7hb07Rc4tg4F4Da6GmlKqHQ=="
       },
       "FSharp.Core": {
         "type": "Direct",
-        "requested": "[8.0.101, )",
-        "resolved": "8.0.101",
-        "contentHash": "sOLz3O4BOxnTKfd5OChdRmDUy4Id0GfoEClRG4nzIod8LY1LJZcNyygKAV0A78XOLh8yvhA5hsDYKZXGCR9blw=="
+        "requested": "[10.1.301, )",
+        "resolved": "10.1.301",
+        "contentHash": "excLf2zM/qUB3WhRUfI0xvOOaPwcRAEdYT/BXe9eiTKySnWVuIKMQTf5+6ETy5nsb1dpLp1s2j2yAM/XcRgFMg=="
       },
       "LibGit2Sharp": {
         "type": "Direct",
-        "requested": "[0.30.0, )",
-        "resolved": "0.30.0",
-        "contentHash": "1cBg/7nz6q+yzvComhqQaTS4nbXloLp/x29ZgY/Rr82ohpkuaWT8ZYzsPLFvs1zmCh/4xQbVt5sQxazGblgRig==",
+        "requested": "[0.31.0, )",
+        "resolved": "0.31.0",
+        "contentHash": "b3+UfV7LjKMjAHWwl7VawejiOv2gJIC6dTCA/S0puLTHACAA/Oeb5JJmWUQMeyH/T/WR/LaIK8bk2RbdFnrZvg==",
         "dependencies": {
-          "LibGit2Sharp.NativeBinaries": "[2.0.322]"
+          "LibGit2Sharp.NativeBinaries": "[2.0.323]"
         }
       },
       "Semver": {
         "type": "Direct",
-        "requested": "[2.3.0, )",
-        "resolved": "2.3.0",
-        "contentHash": "4vYo1zqn6pJ1YrhjuhuOSbIIm0CpM47grbpTJ5ABjOlfGt/EhMEM9ed4MRK5Jr6gVnntWDqOUzGeUJp68PZGjw=="
+        "requested": "[3.0.0, )",
+        "resolved": "3.0.0",
+        "contentHash": "9jZCicsVgTebqkAujRWtC9J1A5EQVlu0TVKHcgoCuv345ve5DYf4D1MjhKEnQjdRZo6x/vdv6QQrYFs7ilGzLA==",
+        "dependencies": {
+          "Microsoft.Extensions.Primitives": "5.0.1"
+        }
       },
       "SimpleExec": {
         "type": "Direct",
-        "requested": "[12.0.0, )",
-        "resolved": "12.0.0",
-        "contentHash": "ptxlWtxC8vM6Y6e3h9ZTxBBkOWnWrm/Sa1HT+2i1xcXY3Hx2hmKDZP5RShPf8Xr9D+ivlrXNy57ktzyH8kyt+Q=="
+        "requested": "[13.0.0, )",
+        "resolved": "13.0.0",
+        "contentHash": "zcCR1pupa1wI1VqBULRiQKeHKKZOuJhi/K+4V5oO+rHJZlaOD53ViFo1c3PavDoMAfSn/FAXGAWpPoF57rwhYg=="
       },
       "Spectre.Console.Cli": {
         "type": "Direct",
@@ -66,39 +69,32 @@
       },
       "Thoth.Json.Newtonsoft": {
         "type": "Direct",
-        "requested": "[0.2.0, )",
-        "resolved": "0.2.0",
-        "contentHash": "dMQOT6TJftO97c8gHWFegfSw/0/E+VdhGaSkf3e1Ba+DjrAESLA9HMlYyE30x7nhn7w5SfH1WO9YyzSRTV4Ysg==",
+        "requested": "[0.4.0, )",
+        "resolved": "0.4.0",
+        "contentHash": "EWFXybYZU10ecUNcZlYGsBW5UykqnhQLUFYsGtrT5Mk0DxseHRIcPyEGwKRAoC+kmcZldO3hTpQH/49XHsiTFw==",
         "dependencies": {
-          "FSharp.Core": "5.0.0",
-          "Fable.Core": "4.1.0",
-          "Fable.Package.SDK": "0.1.0",
+          "FSharp.Core": "10.1.203",
           "Newtonsoft.Json": "13.0.1",
-          "Thoth.Json.Core": "0.3.0"
+          "Thoth.Json.Core": "0.9.0"
         }
-      },
-      "Fable.Core": {
-        "type": "Transitive",
-        "resolved": "4.1.0",
-        "contentHash": "NISAbAVGEcvH2s+vHLSOCzh98xMYx4aIadWacQdWPcQLploxpSQXLEe9SeszUBhbHa73KMiKREsH4/W3q4A4iA=="
-      },
-      "Fable.Package.SDK": {
-        "type": "Transitive",
-        "resolved": "0.1.0",
-        "contentHash": "wrEcGovUimN0PRGgVHlX/gsqCm5d/p9eOG74iaHoteX2dsFZQ9P7d066LRAl5Gj7GUHy7azLyDE41KFvZx1v9A=="
       },
       "FsToolkit.ErrorHandling": {
         "type": "Transitive",
-        "resolved": "4.15.1",
-        "contentHash": "zf8o4N954UWhkVQd2tc1u65sjSxZJ8WGprZJcfh1Hmp4OfXcTEnKX0DjMY2yET+BzvsLKembgGq9HBChFYeTlQ==",
+        "resolved": "4.18.0",
+        "contentHash": "cGtOP6lWcnLcXiLTGZLHi+8JAyuUDjGhZOmJWnZfd5aPCUIyL+DqUIwmfEGkUk3j/gpcchLDk9BNwUTc1oM30w==",
         "dependencies": {
           "FSharp.Core": "7.0.300"
         }
       },
       "LibGit2Sharp.NativeBinaries": {
         "type": "Transitive",
-        "resolved": "2.0.322",
-        "contentHash": "EWQaEevzc8uS1ZGS6T83jqUPBY//2WUSCHwbZHBoHOjlfSehqr30nm/VAhJPzjam/69sv7nlLKVcho9t2XuR/Q=="
+        "resolved": "2.0.323",
+        "contentHash": "Kg+fJGWhGj5qRXG0Ilj4ddhuodGXZg57yhfX6OVUDR0M2DKg/UR42/d74+qv5l1qotc1qJilo/ho7xQnULP6yA=="
+      },
+      "Microsoft.Extensions.Primitives": {
+        "type": "Transitive",
+        "resolved": "5.0.1",
+        "contentHash": "5WPSmL4YeP7eW+Vc8XZ4DwjYWBAiSwDV9Hm63JJWcz1Ie3Xjv4KuJXzgCstj48LkLfVCYa7mLcx7y+q6yqVvtw=="
       },
       "Newtonsoft.Json": {
         "type": "Transitive",
@@ -112,12 +108,10 @@
       },
       "Thoth.Json.Core": {
         "type": "Transitive",
-        "resolved": "0.3.0",
-        "contentHash": "6JNLVfP7ne16TvgKXpmhQru1VwXs5QGdQ6YZNdAL84e11MvxJFXKlcbNSNRw3dOI3yruYz0OKvpCRaHpV6JGcA==",
+        "resolved": "0.9.0",
+        "contentHash": "Z5YCva8cyeOVYvzUBFIqU/VQ76Comqpqx7eCaUj8srHUw9gwrBcypMk0z/JIVtGhCdzY0ij4IqvZP1RFq+dhUA==",
         "dependencies": {
-          "FSharp.Core": "5.0.0",
-          "Fable.Core": "4.1.0",
-          "Fable.Package.SDK": "0.1.0"
+          "FSharp.Core": "10.1.203"
         }
       }
     }

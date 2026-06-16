@@ -98,7 +98,7 @@ let private navbar =
     ]
 
 let view model dispatch =
-    React.fragment [
+    React.Fragment [
         navbar
 
         match model with
