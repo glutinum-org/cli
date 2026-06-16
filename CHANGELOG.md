@@ -1,12 +1,21 @@
+---
+name: Glutinum.Converter.CLI
+last_commit_released: 24210b74ed4fac16d7c232d822ede822c7a2c38b
+exclude:
+  - src/Glutinum.Types/
+updaters:
+  - package.json:
+      file: package.json
+  - regex:
+      file: src/Glutinum.Converter/Prelude.fs
+      pattern: (?<=let VERSION = ").*(?=")
+---
+
 # Changelog
 
 All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
-<!-- EasyBuild: START -->
-<!-- last_commit_released: 24210b74ed4fac16d7c232d822ede822c7a2c38b -->
-<!-- EasyBuild: END -->
 
 ## 0.13.0
 

@@ -43,6 +43,13 @@
         "dotnet-outdated"
       ],
       "rollForward": false
+    },
+    "easybuild.shipit": {
+      "version": "3.0.0",
+      "commands": [
+        "shipit"
+      ],
+      "rollForward": false
     }
   }
 }

@@ -2,29 +2,27 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ManagePackageVersionsCentrally>False</ManagePackageVersionsCentrally>
     <ContinuousIntegrationBuild>false</ContinuousIntegrationBuild>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Workspace.fs" />
-    <Compile Include="Utils/Nuget.fs" />
     <Compile Include="Utils/Pnpm.fs" />
-    <Compile Include="Utils/Npm.fs" />
-    <Compile Include="Utils/Changelog.fs" />
     <Compile Include="Utils/Path.fs" />
     <Compile Include="Commands/Lint.fs" />
     <Compile Include="Commands/Format.fs" />
     <Compile Include="Commands/Cli.fs" />
     <Compile Include="Commands/Test/Specs.fs" />
     <Compile Include="Commands/Web.fs" />
-    <Compile Include="Commands/Publish.fs" />
     <Compile Include="Main.fs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="BlackFox.CommandLine" Version="1.0.0" />
     <PackageReference Include="EasyBuild.CommitParser" Version="3.0.0" />
     <PackageReference Include="EasyBuild.FileSystemProvider" Version="1.1.0" />
+    <PackageReference Include="EasyBuild.Tools" Version="8.0.0" />
     <PackageReference Include="FSharp.Core" Version="10.1.301" />
     <PackageReference Include="LibGit2Sharp" Version="0.31.0" />
     <PackageReference Include="Semver" Version="3.0.0" />

@@ -28,8 +28,14 @@ jobs:
       with:
         version: 10
 
+    - name: Restore .NET dependencies
+      run: dotnet tool restore
+
+    - name: Generate preview version
+      run: dotnet shipit --mode local --pre-release preview
+
     - name: Build the web app for publishing
-      run: ./build.sh publish --web-only
+      run: ./build.sh web
 
     - name: Publish
       uses: peaceiris/actions-gh-pages@v3

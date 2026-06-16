@@ -1,0 +1,83 @@
+# Run this workflow when the "test" workflow completes successfully on the main branch.
+#
+# Please adapt the "test" workflow name and the branch filter to your needs.
+on:
+  workflow_run:
+    workflows: ["test"]
+    types:
+      - completed
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write
+
+name: EasyBuild ShipIt
+
+# Learn more at https://github.com/easybuild-org/EasyBuild.ShipIt#github-actions-auto-release
+
+jobs:
+  # Generate a Pull Request to prepare a release
+  shipit-pr:
+    name: ShipIt - Pull Request
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          # We need to fetch more than the last commit to be able to generate the changelog based on the commit history.
+          # Adapt this value based on your needs.
+          fetch-depth: 100
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: global.json
+      - name: ShipIt (Pull Request)
+        run: dotnet shipit
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Release your packages when the PR is merged (or if you create a 'chore: release ...' commit directly on main).
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    # Only trigger this workflow when a commit starting with `chore: release ` is pushed.
+    if: "startsWith(github.event.workflow_run.head_commit.message, 'chore: release ')"
+    steps:
+      - uses: actions/checkout@v6
+      # Configure how you want to publish your package, e.g. using the NuGet CLI, dotnet CLI, NPM, etc.
+      # It is recommanded to use Trusted Publishing to avoid having to manage API keys in your repository.
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: global.json
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 10
+
+      # Below is an example, for NuGet packages (to demonstrate that we are getting
+      # the API key from the OIDC token exchange and not from a secret in the repository).
+      #
+      # Learn more at https://github.com/NuGet/login
+      - name: NuGet login (OIDC → temp API key)
+        uses: NuGet/login@v1
+        id: login
+        with:
+          # Secret is your NuGet username, e.g. andrewlock
+          # This is actually a public information, so using a secret is probably overkill
+          # if you want you can just hardcode your NuGet username here and not use a secret at all.
+          user: ${{ secrets.NUGET_USER }}
+
+      - name: Build, Test and Release
+        run: |
+            ./build.sh cli
+            dotnet pack -c Release -o ./nupkgs
+            dotnet nuget push ./nupkgs/*.nupkg --api-key $NUGET_KEY
+            pnpm publish --no-git-checks --access public
+        env:
+          NUGET_KEY: ${{ steps.login.outputs.NUGET_API_KEY }}

@@ -2,7 +2,6 @@ module Build.Main
 
 open SimpleExec
 open Build.Commands.Cli
-open Build.Commands.Publish
 open Build.Commands.Web
 open Build.Commands.Test.Specs
 open Build.Commands.Lint
@@ -58,17 +57,6 @@ You can then invoke the local version of Glutinum by running `node cli.js <args>
         config
             .AddCommand<FormatCommand>("format")
             .WithDescription("Format the source code")
-        |> ignore
-
-        config
-            .AddCommand<PublishCommand>("publish")
-            .WithDescription(
-                """Publish the different packages to NuGet and NPM based on the CHANGELOG.md files
-
-If the last version in the CHANGELOG.md is different from the version in the packages,
-the package will be published
-        """
-            )
         |> ignore
 
     )

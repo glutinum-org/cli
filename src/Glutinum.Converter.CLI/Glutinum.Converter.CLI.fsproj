@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>0.1.0-alpha-001</Version>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <ChangelogFile>$(MSBuildThisFileDirectory)/../../CHANGELOG.md</ChangelogFile>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Program.fs" />
@@ -11,6 +11,10 @@
     <ProjectReference Include="..\Glutinum.Converter\Glutinum.Converter.fsproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="EasyBuild.PackageReleaseNotes.Tasks">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Fable.Core" />
   </ItemGroup>
 </Project>
