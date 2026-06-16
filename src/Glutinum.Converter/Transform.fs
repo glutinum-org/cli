@@ -1845,6 +1845,19 @@ let private transformInterface (context: TransformContext) (info: GlueInterface)
         )
         |> List.concat
 
+    // `Omit<T, K>` resolves to an anonymous object, so when used in a heritage
+    // clause (e.g. `interface Y extends Omit<X, "a">`) we inline its members
+    // rather than generating an unusable `inherit Omit<...>`.
+    let membersComingFromOmit =
+        info.HeritageClauses
+        |> List.map context.ExposeTypeAlias
+        |> List.collect (fun heritageClause ->
+            match heritageClause with
+            | GlueType.UtilityType(GlueUtilityType.Omit members) ->
+                TransformMembers.toFSharpMember context members
+            | _ -> []
+        )
+
     let standardMembers = TransformMembers.toFSharpMember context info.Members
 
     let inheritance =
@@ -1854,6 +1867,8 @@ let private transformInterface (context: TransformContext) (info: GlueInterface)
             match heritageClause with
             | GlueType.TypeReference typeReference ->
                 not (typeReference.IsStandardLibrary && typeReference.Name = "Partial")
+            // Omit members are inlined above, don't keep it as inheritance
+            | GlueType.UtilityType(GlueUtilityType.Omit _) -> false
             | _ -> true
         )
 
@@ -1875,7 +1890,7 @@ let private transformInterface (context: TransformContext) (info: GlueInterface)
         Name = name
         OriginalName = info.Name
         Members =
-            standardMembers @ membersComingFromPartial
+            standardMembers @ membersComingFromPartial @ membersComingFromOmit
             |> TypeParameter.mapFsharpMembers typeParametersResult.SealedTypes
         TypeParameters = typeParametersResult.TypeParameters
         Inheritance = inheritance |> List.map (transformType context)

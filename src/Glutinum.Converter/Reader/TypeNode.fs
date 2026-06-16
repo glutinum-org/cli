@@ -666,14 +666,20 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
             // If not available, we fallback to the symbol of the type
             |> Option.orElse (Some typ.symbol)
 
-        // Should we try to specialize the type for UtilityTypes like we do for TypeReference?
-        ({
-            Name = expression.expression.getText () // Keep the double expression !!!
-            FullName = getFullNameOrEmpty checker expression.expression
-            TypeArguments = readTypeArguments reader expression
-            IsStandardLibrary = isFromEs5Lib symbolOpt
-        })
-        |> GlueType.TypeReference
+        // Specialize the utility types we know how to resolve so they work in
+        // heritage clauses too (e.g. `interface Y extends Omit<X, "a">`). The
+        // node is structurally compatible with a `TypeReferenceNode` for the
+        // properties the reader needs (`typeArguments`).
+        match isFromEs5Lib symbolOpt, getFullNameOrEmpty checker expression.expression with
+        | true, "Omit" -> UtilityType.readOmit reader (unbox<Ts.TypeReferenceNode> expression)
+        | _ ->
+            ({
+                Name = expression.expression.getText () // Keep the double expression !!!
+                FullName = getFullNameOrEmpty checker expression.expression
+                TypeArguments = readTypeArguments reader expression
+                IsStandardLibrary = isFromEs5Lib symbolOpt
+            })
+            |> GlueType.TypeReference
 
     | Ts.SyntaxKind.ConditionalType ->
         let conditionalTypeNode = typeNode :?> Ts.ConditionalTypeNode
