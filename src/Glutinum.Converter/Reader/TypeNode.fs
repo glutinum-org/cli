@@ -187,6 +187,14 @@ module UtilityType =
                         | _ -> false
                     | _ -> false
 
+            let isTypeAliasApplication =
+                match reader.checker.getSymbolAtLocation !!typeReferenceNode.typeName with
+                | Some symbol ->
+                    match symbol.flags with
+                    | HasSymbolFlags Ts.SymbolFlags.TypeAlias -> true
+                    | _ -> false
+                | None -> false
+
             match typ.flags with
             | HasTypeFlags Ts.TypeFlags.Object when not isNamedDeclaration ->
                 let members = readMembers reader typeReferenceNode typ
@@ -195,6 +203,10 @@ module UtilityType =
                     None
                 else
                     ({ Members = members }: GlueTypeLiteral) |> GlueType.TypeLiteral |> Some
+            | HasTypeFlags Ts.TypeFlags.String
+            | HasTypeFlags Ts.TypeFlags.Number
+            | HasTypeFlags Ts.TypeFlags.Boolean when isTypeAliasApplication ->
+                readTypeUsingFlags reader typ |> Some
             | _ -> None
 
     let private partialsBeingRead = ResizeArray<Ts.Type>()
