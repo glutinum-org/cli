@@ -7,6 +7,9 @@ open Glutinum.Web.Global.Types
 
 let private baseUrl = "https://github.com/glutinum-org/cli/issues/new"
 
+// GitHub fails to open a new issue page when the URL is longer than about 7100 characters
+let maxUrlLength = 7000
+
 type CreateUrlArgs =
     {
         TypeScriptCode: string

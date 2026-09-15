@@ -112,12 +112,22 @@ let init () =
         |},
     Cmd.ofMsg (CompileCode CompilationSource.EditorChanged)
 
+let private openIssueUrl (issueUrl: string) =
+    window.``open`` (issueUrl, "_blank", "noopener noreferrer") |> ignore
+
 let private reportIssue (args: IssueGenerator.CreateUrlArgs) =
     // Make sure to have the latest version of the generated F# code
     let issueUrl = IssueGenerator.createUrl args
 
-    window.``open`` (issueUrl, "_blank", "noopener noreferrer") |> ignore
-    ()
+    if issueUrl.Length > IssueGenerator.maxUrlLength then
+        Toast.message
+            "The code is too long to be reported from here. Please reduce it to the minimal code reproducing the problem."
+        |> Toast.position Toast.TopRight
+        |> Toast.timeout (TimeSpan.FromSeconds 5.0)
+        |> Toast.dismissOnClick
+        |> Toast.warning
+    else
+        Cmd.OfFunc.exec openIssueUrl issueUrl
 
 let private copyFSharpCodeToClipboard (fsharpCode: string) =
     promise {
@@ -148,8 +158,7 @@ let update (msg: Msg) (model: Model) (currentTsCode: string) =
                 match result.Source with
                 | CompilationSource.EditorChanged -> Cmd.none
                 | CompilationSource.ReportIssue ->
-                    Cmd.OfFunc.exec
-                        reportIssue
+                    reportIssue
                         {
                             TypeScriptCode = result.TypeScriptCode
                             CompilationResult = result.CompilationResult
@@ -168,8 +177,7 @@ let update (msg: Msg) (model: Model) (currentTsCode: string) =
                 match result.Source with
                 | CompilationSource.EditorChanged -> Cmd.none
                 | CompilationSource.ReportIssue ->
-                    Cmd.OfFunc.exec
-                        reportIssue
+                    reportIssue
                         {
                             TypeScriptCode = result.TypeScriptCode
                             CompilationResult = result.CompilationResult
