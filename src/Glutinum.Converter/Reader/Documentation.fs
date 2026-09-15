@@ -13,11 +13,31 @@ let private readDocumentation
     (jsDocTags: ResizeArray<Ts.JSDocTag>)
     =
 
+    // TypeScript reads `@returns {@link Foo} text` as `@returns {` followed by a `@link Foo} text` tag
+    let isInlineLinkReadAsTag (tag: Ts.JSDocTag) =
+        tag.kind = Ts.SyntaxKind.JSDocTag
+        && tag.tagName.getText () = "link"
+        && (let start = int (tag.getStart ())
+            start > 0 && (tag.getSourceFile ()).text.[start - 1] = '{')
+
+    let readTagComment (index: int) (tag: Ts.JSDocTag) =
+        match tag.comment with
+        | Some comment -> ts.getTextOfJSDocComment comment |> Option.defaultValue "" |> Some
+        | None ->
+            match Seq.tryItem (index + 1) jsDocTags with
+            | Some nextTag when isInlineLinkReadAsTag nextTag ->
+                nextTag.comment
+                |> Option.bind (fun comment -> ts.getTextOfJSDocComment comment)
+                |> Option.map (fun text -> $"{{@link %s{text}")
+            | _ -> None
+
     let blockLinks =
         jsDocTags
         |> Seq.choose (fun tag ->
             match tag.kind, tag.comment with
-            | Ts.SyntaxKind.JSDocTag, Some comment when tag.tagName.getText () = "link" ->
+            | Ts.SyntaxKind.JSDocTag, Some comment when
+                tag.tagName.getText () = "link" && not (isInlineLinkReadAsTag tag)
+                ->
                 ts.getTextOfJSDocComment comment
                 |> Option.map (fun text ->
                     let m = Regex.Match(text.Trim(), "^\[(?<label>[^\]]+)\]\((?<url>[^)\s]+)\)$")
@@ -42,16 +62,11 @@ let private readDocumentation
 
     let jsDocTags =
         jsDocTags
-        |> Seq.choose (fun tag ->
+        |> Seq.indexed
+        |> Seq.choose (fun (index, tag) ->
             match tag.kind with
             | Ts.SyntaxKind.JSDocReturnTag ->
-                match tag.comment with
-                | Some comment ->
-                    ts.getTextOfJSDocComment comment
-                    |> Option.defaultValue ""
-                    |> GlueComment.Returns
-                    |> Some
-                | None -> None
+                readTagComment index tag |> Option.map GlueComment.Returns
 
             | Ts.SyntaxKind.JSDocParameterTag ->
                 let parameterTag = tag :?> Ts.JSDocParameterTag
@@ -79,13 +94,7 @@ let private readDocumentation
                 | None -> GlueComment.Deprecated None |> Some
 
             | Ts.SyntaxKind.JSDocThrowsTag ->
-                match tag.comment with
-                | Some comment ->
-                    ts.getTextOfJSDocComment comment
-                    |> Option.defaultValue ""
-                    |> GlueComment.Throws
-                    |> Some
-                | None -> None
+                readTagComment index tag |> Option.map GlueComment.Throws
 
             | Ts.SyntaxKind.JSDocTag ->
                 match tag.tagName.getText () with
