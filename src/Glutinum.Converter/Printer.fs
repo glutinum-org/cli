@@ -894,19 +894,60 @@ let private printEnum (printer: Printer) (enumInfo: FSharpEnum) =
     printer.Unindent
 
 let private printTypeAlias (printer: Printer) (aliasInfo: FSharpTypeAlias) =
+    let aliasedType = printType aliasInfo.Type
 
-    printXmlDoc printer aliasInfo.XmlDoc
-    printAttributes printer aliasInfo.Attributes
+    let usageText =
+        aliasInfo.TypeParameters
+        |> List.choose (
+            function
+            | FSharpTypeParameter.FSharpTypeParameter { Constraint = Some constraint_ } ->
+                Some(printType constraint_)
+            | _ -> None
+        )
+        |> List.append [ aliasedType ]
+        |> String.concat " "
 
-    printer.Write($"type {aliasInfo.Name}")
-    printTypeParametersDeclaration printer aliasInfo.TypeParameters
-    printer.WriteInline(" =")
+    let hasUnusedTypeParameter =
+        aliasInfo.TypeParameters
+        |> List.mapi (fun index typeParameter ->
+            match typeParameter with
+            | FSharpTypeParameter.FSharpType _ -> $"T{index}"
+            | FSharpTypeParameter.FSharpTypeParameter typeParameter -> typeParameter.Name
+        )
+        |> List.exists (fun name ->
+            not (Regex.IsMatch(usageText, $"'{Regex.Escape name}(?![\\w'])"))
+        )
 
-    printer.NewLine
-    printer.Indent
-    printer.Write(printType aliasInfo.Type)
-    printer.NewLine
-    printer.Unindent
+    // F# rejects type abbreviations which don't use all their type parameters (FS0035)
+    if hasUnusedTypeParameter then
+        {
+            Attributes =
+                [
+                    yield! aliasInfo.Attributes
+                    FSharpAttribute.AllowNullLiteral
+                    FSharpAttribute.Interface
+                ]
+            Name = aliasInfo.Name
+            XmlDoc = aliasInfo.XmlDoc
+            OriginalName = aliasInfo.Name
+            TypeParameters = aliasInfo.TypeParameters
+            Members = []
+            Inheritance = []
+        }
+        |> printInterface printer
+    else
+        printXmlDoc printer aliasInfo.XmlDoc
+        printAttributes printer aliasInfo.Attributes
+
+        printer.Write($"type {aliasInfo.Name}")
+        printTypeParametersDeclaration printer aliasInfo.TypeParameters
+        printer.WriteInline(" =")
+
+        printer.NewLine
+        printer.Indent
+        printer.Write(aliasedType)
+        printer.NewLine
+        printer.Unindent
 
 let private printDelegate (printer: Printer) (delegateInfo: FSharpDelegate) =
     printer.Write($"type {delegateInfo.Name}")
