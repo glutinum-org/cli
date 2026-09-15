@@ -13,7 +13,7 @@ type ReadonlyArray<'T> = System.Collections.Generic.IReadOnlyList<'T>
 type ReadonlyMap<'K, 'V> = Map<'K, 'V>
 type Symbol = obj
 
-let [<ImportDefault("typescript")>] ts: Ts.IExports = jsNative
+let [<Import("ts", "@ts-morph/bootstrap")>] ts: Ts.IExports = jsNative
 
 module Ts =
     let [<Import("ScriptSnapshot","module/ts")>] scriptSnapshot: ScriptSnapshot.IExports = jsNative
