@@ -197,35 +197,52 @@ module UtilityType =
                     ({ Members = members }: GlueTypeLiteral) |> GlueType.TypeLiteral |> Some
             | _ -> None
 
+    let private partialsBeingRead = ResizeArray<Ts.Type>()
+
     let readPartial (reader: ITypeScriptReader) (typeReferenceNode: Ts.TypeReferenceNode) =
         let baseType =
             typeReferenceNode.typeArguments.Value[0] |> reader.checker.getTypeFromTypeNode
 
-        let members =
-            match baseType.flags with
-            | HasTypeFlags Ts.TypeFlags.Any ->
-                Report.readerError (
-                    "partial inner type",
-                    "Was not able to resolve the inner type, and defaulting to any. If the base type is defined, in another file, please make sure to include it in the input files",
-                    typeReferenceNode
-                )
-                |> reader.Warnings.Add
+        if partialsBeingRead |> Seq.exists (fun typ -> obj.ReferenceEquals(typ, baseType)) then
+            Report.readerError (
+                "Partial",
+                "Recursive Partial is not supported, defaulting to obj",
+                typeReferenceNode
+            )
+            |> reader.Warnings.Add
 
-                []
+            GlueType.Primitive GluePrimitive.Any
+        else
+            partialsBeingRead.Add baseType
 
-            | _ -> baseType |> readMembers reader typeReferenceNode
+            try
+                let members =
+                    match baseType.flags with
+                    | HasTypeFlags Ts.TypeFlags.Any ->
+                        Report.readerError (
+                            "partial inner type",
+                            "Was not able to resolve the inner type, and defaulting to any. If the base type is defined, in another file, please make sure to include it in the input files",
+                            typeReferenceNode
+                        )
+                        |> reader.Warnings.Add
 
-        ({
-            Documentation = []
-            FullName = getFullNameOrEmpty reader.checker typeReferenceNode
-            Name = typeReferenceNode.typeName?getText ()
-            Members = members
-            TypeParameters = []
-            HeritageClauses = []
-        }
-        : GlueInterface)
-        |> GlueUtilityType.Partial
-        |> GlueType.UtilityType
+                        []
+
+                    | _ -> baseType |> readMembers reader typeReferenceNode
+
+                ({
+                    Documentation = []
+                    FullName = getFullNameOrEmpty reader.checker typeReferenceNode
+                    Name = typeReferenceNode.typeName?getText ()
+                    Members = members
+                    TypeParameters = []
+                    HeritageClauses = []
+                }
+                : GlueInterface)
+                |> GlueUtilityType.Partial
+                |> GlueType.UtilityType
+            finally
+                partialsBeingRead.RemoveAt(partialsBeingRead.Count - 1)
 
     let readRecord (reader: ITypeScriptReader) (typeReferenceNode: Ts.TypeReferenceNode) =
         let typeArguments = readTypeArguments reader typeReferenceNode
