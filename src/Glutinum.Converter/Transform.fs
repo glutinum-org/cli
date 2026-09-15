@@ -731,7 +731,11 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
                 |> transformTypeParameters context
 
             ({
-                Name = context.CurrentScopeName
+                Name =
+                    context.TypeLiteralsMemory.GetTypeName(
+                        context.FullName,
+                        context.CurrentScopeName
+                    )
                 TypeParameters = typParameters.TypeParameters
                 Parameters =
                     paremeters
@@ -747,7 +751,11 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
 
             ({
                 Attributes = []
-                Name = context.FullName
+                Name =
+                    context.TypeLiteralsMemory.GetFullTypeNameReference(
+                        context.FullName,
+                        context.CurrentScopeName
+                    )
                 TypeParameters = typParameters.TypeParameters
                 XmlDoc = []
                 Type = FSharpType.Discard
