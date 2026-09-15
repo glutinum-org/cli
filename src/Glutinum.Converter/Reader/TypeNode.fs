@@ -50,58 +50,81 @@ module UtilityType =
         let typ =
             reader.checker.getTypeFromTypeNode typeReferenceNode :?> Ts.UnionOrIntersectionType
 
-        let cases =
-            match typ.flags with
-            | HasTypeFlags Ts.TypeFlags.StringLiteral ->
-                match typ with
-                | Type.StringLiteral.String value ->
-                    [ GlueLiteral.String value |> GlueType.Literal ]
-                | Type.StringLiteral.Other ->
-                    Report.readerError ("Exclude", "Expected a string literal", typeReferenceNode)
-                    |> reader.Warnings.Add
+        match typ.flags with
+        | HasTypeFlags Ts.TypeFlags.StringLiteral
+        | HasTypeFlags Ts.TypeFlags.NumberLiteral
+        | HasTypeFlags Ts.TypeFlags.Union ->
+            let cases =
+                match typ.flags with
+                | HasTypeFlags Ts.TypeFlags.StringLiteral ->
+                    match typ with
+                    | Type.StringLiteral.String value ->
+                        [ GlueLiteral.String value |> GlueType.Literal ]
+                    | Type.StringLiteral.Other ->
+                        Report.readerError (
+                            "Exclude",
+                            "Expected a string literal",
+                            typeReferenceNode
+                        )
+                        |> reader.Warnings.Add
 
-                    []
+                        []
 
-            | HasTypeFlags Ts.TypeFlags.NumberLiteral ->
-                match typ with
-                | Type.NumberLiteral.Int value -> [ GlueLiteral.Int value |> GlueType.Literal ]
-                | Type.NumberLiteral.Float value -> [ GlueLiteral.Float value |> GlueType.Literal ]
-                | Type.NumberLiteral.Other ->
-                    Report.readerError ("Exclude", "Expected a number literal", typeReferenceNode)
-                    |> reader.Warnings.Add
+                | HasTypeFlags Ts.TypeFlags.NumberLiteral ->
+                    match typ with
+                    | Type.NumberLiteral.Int value -> [ GlueLiteral.Int value |> GlueType.Literal ]
+                    | Type.NumberLiteral.Float value ->
+                        [ GlueLiteral.Float value |> GlueType.Literal ]
+                    | Type.NumberLiteral.Other ->
+                        Report.readerError (
+                            "Exclude",
+                            "Expected a number literal",
+                            typeReferenceNode
+                        )
+                        |> reader.Warnings.Add
 
-                    []
+                        []
 
-            | _ ->
-                typ.types
-                |> Seq.toList
-                |> List.choose (fun typ ->
-                    match typ.flags with
-                    | HasTypeFlags Ts.TypeFlags.StringLiteral ->
-                        let literalType = typ :?> Ts.LiteralType
+                | _ ->
+                    typ.types
+                    |> Seq.toList
+                    |> List.choose (fun typ ->
+                        match typ.flags with
+                        | HasTypeFlags Ts.TypeFlags.StringLiteral ->
+                            let literalType = typ :?> Ts.LiteralType
 
-                        let value = unbox<string> literalType.value
+                            let value = unbox<string> literalType.value
 
-                        GlueLiteral.String value |> GlueType.Literal |> Some
-                    | HasTypeFlags Ts.TypeFlags.NumberLiteral ->
-                        match typ with
-                        | Type.NumberLiteral.Int value ->
-                            GlueLiteral.Int value |> GlueType.Literal |> Some
-                        | Type.NumberLiteral.Float value ->
-                            GlueLiteral.Float value |> GlueType.Literal |> Some
-                        | Type.NumberLiteral.Other ->
-                            Report.readerError (
-                                "Exclude",
-                                "Expected a number literal",
-                                typeReferenceNode
-                            )
-                            |> reader.Warnings.Add
+                            GlueLiteral.String value |> GlueType.Literal |> Some
+                        | HasTypeFlags Ts.TypeFlags.NumberLiteral ->
+                            match typ with
+                            | Type.NumberLiteral.Int value ->
+                                GlueLiteral.Int value |> GlueType.Literal |> Some
+                            | Type.NumberLiteral.Float value ->
+                                GlueLiteral.Float value |> GlueType.Literal |> Some
+                            | Type.NumberLiteral.Other ->
+                                Report.readerError (
+                                    "Exclude",
+                                    "Expected a number literal",
+                                    typeReferenceNode
+                                )
+                                |> reader.Warnings.Add
 
-                            None
-                    | _ -> None
-                )
+                                None
+                        | _ -> None
+                    )
 
-        cases |> GlueTypeUnion |> GlueType.Union
+            cases |> GlueTypeUnion |> GlueType.Union
+
+        | _ ->
+            Report.readerError (
+                "Exclude",
+                "Was expecting the resolved type to be a literal or a union",
+                typeReferenceNode
+            )
+            |> reader.Warnings.Add
+
+            GlueType.Primitive GluePrimitive.Any
 
     /// <summary></summary>
     /// <param name="reader"></param>
