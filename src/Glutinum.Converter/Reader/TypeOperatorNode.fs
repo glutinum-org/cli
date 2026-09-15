@@ -5,13 +5,21 @@ open Glutinum.Converter.Reader.Types
 open TypeScript
 open Fable.Core.JsInterop
 
+let rec private removeParenthesizedType (node: Ts.TypeNode) =
+    match node.kind with
+    | Ts.SyntaxKind.ParenthesizedType ->
+        removeParenthesizedType (node :?> Ts.ParenthesizedTypeNode).``type``
+    | _ -> node
+
 let readTypeOperatorNode (reader: ITypeScriptReader) (node: Ts.TypeOperatorNode) =
 
     match node.operator with
     | Ts.SyntaxKind.KeyOfKeyword ->
-        match node.``type``.kind with
+        let operandNode = removeParenthesizedType node.``type``
+
+        match operandNode.kind with
         | Ts.SyntaxKind.TypeReference ->
-            let typeReferenceNode = node.``type`` :?> Ts.TypeReferenceNode
+            let typeReferenceNode = operandNode :?> Ts.TypeReferenceNode
 
             // TODO: Remove unboxing
             let symbolOpt = reader.checker.getSymbolAtLocation !!typeReferenceNode.typeName
@@ -40,17 +48,19 @@ let readTypeOperatorNode (reader: ITypeScriptReader) (node: Ts.TypeOperatorNode)
                     |> failwith
 
         | Ts.SyntaxKind.TypeQuery ->
-            let typeQueryNode = node.``type`` :?> Ts.TypeQueryNode
+            let typeQueryNode = operandNode :?> Ts.TypeQueryNode
 
             TypeQueryNode.readTypeQueryNode reader typeQueryNode |> GlueType.KeyOf
 
         | _ ->
             Report.readerError (
                 "type operator (keyof)",
-                $"Was expecting a type reference instead got a Node of type %s{node.``type``.kind.Name}",
+                $"Was expecting a type reference or a type query instead got a Node of type %s{operandNode.kind.Name}",
                 node
             )
-            |> failwith
+            |> reader.Warnings.Add
+
+            GlueType.Primitive GluePrimitive.Any
 
     | Ts.SyntaxKind.ReadonlyKeyword -> reader.ReadTypeNode node.``type`` |> GlueType.ReadOnly
 
