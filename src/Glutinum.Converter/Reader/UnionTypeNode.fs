@@ -119,4 +119,12 @@ let rec private readUnionTypeCases
     |> GlueTypeUnion
 
 let readUnionTypeNode (reader: ITypeScriptReader) (unionTypeNode: Ts.UnionTypeNode) : GlueType =
-    readUnionTypeCases reader unionTypeNode |> GlueType.Union
+    // TypeScript creates a UnionType with a single type for `type A = | B`
+    if
+        unionTypeNode.types.Count = 1
+        && not (ts.isLiteralTypeNode unionTypeNode.types.[0])
+        && not (ts.isTypeReferenceNode unionTypeNode.types.[0])
+    then
+        reader.ReadTypeNode unionTypeNode.types.[0]
+    else
+        readUnionTypeCases reader unionTypeNode |> GlueType.Union
