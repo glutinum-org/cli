@@ -997,14 +997,20 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
         match utilityType with
         | GlueUtilityType.Partial interfaceInfo ->
             transformInterface context interfaceInfo
-            |> Interface.makePartial context.CurrentScopeName
+            |> Interface.makePartial (
+                context.TypeLiteralsMemory.GetTypeName(context.FullName, context.CurrentScopeName)
+            )
             |> FSharpType.Interface
             |> context.ExposeType
 
             // Get fullname
             // Store type in the exposed types memory
             ({
-                Name = context.FullName
+                Name =
+                    context.TypeLiteralsMemory.GetFullTypeNameReference(
+                        context.FullName,
+                        context.CurrentScopeName
+                    )
                 FullName = context.FullName
                 TypeArguments = []
                 Type = FSharpType.Discard
