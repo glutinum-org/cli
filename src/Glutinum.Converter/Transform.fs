@@ -1938,7 +1938,17 @@ let private transformEnum (glueEnum: GlueEnum) : FSharpType =
         )
 
     match integralValues, stringValues with
-    | [], [] -> failwith $"""Empty enum: {glueEnum.Name}"""
+    | [], [] ->
+        {
+            XmlDoc = []
+            Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
+            Name = Naming.sanitizeTypeName glueEnum.Name
+            OriginalName = glueEnum.Name
+            TypeParameters = []
+            Members = []
+            Inheritance = []
+        }
+        |> FSharpType.Interface
     | integralValues, [] ->
         let transformMembers (glueMember: GlueEnumMember) : FSharpEnumCase =
             {
