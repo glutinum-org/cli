@@ -2442,10 +2442,10 @@ let private tryOptimizeUnionType
             | _ -> false
         )
 
-    // A union made only of string literals, or of string and boolean literals
+    // A union made only of string, boolean and integer literals
     // (with at least one string) can be represented as a Fable StringEnum.
-    // Boolean cases are emitted using [<CompiledValue(...)>] so that Fable
-    // compiles them to the raw `true`/`false` value instead of a string.
+    // Boolean and integer cases are emitted using [<CompiledValue(...)>] so that Fable
+    // compiles them to the raw value instead of a string.
     let isStringEnumCompatible =
         // If the list is empty, it means that there was no candidates
         // for string literals
@@ -2460,7 +2460,8 @@ let private tryOptimizeUnionType
            |> List.forall (
                function
                | GlueType.Literal(GlueLiteral.String _)
-               | GlueType.Literal(GlueLiteral.Bool _) -> true
+               | GlueType.Literal(GlueLiteral.Bool _)
+               | GlueType.Literal(GlueLiteral.Int _) -> true
                | _ -> false
            )
 
@@ -2537,9 +2538,63 @@ let private tryOptimizeUnionType
                                 "False"
                     }
                     |> FSharpUnionCase.Named
+                | GlueType.Literal(GlueLiteral.Int value) ->
+                    {
+                        Attributes = [ FSharpAttribute.CompiledValue(FSharpLiteral.Int value) ]
+                        Name = $"``%i{value}``"
+                    }
+                    |> FSharpUnionCase.Named
                 | _ -> failwith "Should not happen"
             )
             |> List.distinct
+            |> List.mapFold
+                (fun usedNames case ->
+                    match case with
+                    | FSharpUnionCase.Named caseInfo when Set.contains caseInfo.Name usedNames ->
+                        let isEscaped = caseInfo.Name.StartsWith("``")
+                        let baseName = caseInfo.Name.Trim('`')
+
+                        let rec nextName index =
+                            let candidate =
+                                if isEscaped then
+                                    $"``%s{baseName}_%i{index}``"
+                                else
+                                    $"%s{baseName}_%i{index}"
+
+                            if Set.contains candidate usedNames then
+                                nextName (index + 1)
+                            else
+                                candidate
+
+                        let name = nextName 1
+
+                        let hasCompiledValue =
+                            caseInfo.Attributes
+                            |> List.exists (
+                                function
+                                | FSharpAttribute.CompiledName _
+                                | FSharpAttribute.CompiledValue _ -> true
+                                | _ -> false
+                            )
+
+                        let renamedCase =
+                            {
+                                Attributes =
+                                    if hasCompiledValue then
+                                        caseInfo.Attributes
+                                    else
+                                        caseInfo.Attributes
+                                        @ [ FSharpAttribute.CompiledName baseName ]
+                                Name = name
+                            }
+                            |> FSharpUnionCase.Named
+
+                        renamedCase, Set.add name usedNames
+                    | FSharpUnionCase.Named caseInfo -> case, Set.add caseInfo.Name usedNames
+                    | _ -> case, usedNames
+                )
+                Set.empty
+            |> fst
 
         let fieldCases = transformFieldCases literalCases
 
