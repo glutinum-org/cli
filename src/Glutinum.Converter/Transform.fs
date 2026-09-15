@@ -2475,6 +2475,37 @@ let private tryOptimizeUnionType
                | _ -> false
            )
 
+    let transformFieldCases (literalCases: FSharpUnionCase list) =
+        let literalNames =
+            literalCases
+            |> List.choose (
+                function
+                | FSharpUnionCase.Named caseInfo -> Some caseInfo.Name
+                | _ -> None
+            )
+            |> Set.ofList
+
+        otherCases
+        |> List.fold
+            (fun (index, fieldCases) caseType ->
+                let rec nextName index =
+                    let name = $"Case%i{index}"
+
+                    if Set.contains name literalNames then
+                        nextName (index + 1)
+                    else
+                        index, name
+
+                let index, name = nextName index
+                let context = context.PushScope("Cases").PushScope name
+
+                index + 1,
+                FSharpUnionCase.Field(name, transformType context caseType) :: fieldCases
+            )
+            (1, [])
+        |> snd
+        |> List.rev
+
     if isStringEnumCompatible then
         let literalCases =
             flattenedCases
@@ -2510,36 +2541,7 @@ let private tryOptimizeUnionType
             )
             |> List.distinct
 
-        let literalNames =
-            literalCases
-            |> List.choose (
-                function
-                | FSharpUnionCase.Named caseInfo -> Some caseInfo.Name
-                | _ -> None
-            )
-            |> Set.ofList
-
-        let fieldCases =
-            otherCases
-            |> List.fold
-                (fun (index, fieldCases) caseType ->
-                    let rec nextName index =
-                        let name = $"Case%i{index}"
-
-                        if Set.contains name literalNames then
-                            nextName (index + 1)
-                        else
-                            index, name
-
-                    let index, name = nextName index
-                    let context = context.PushScope("Cases").PushScope name
-
-                    index + 1,
-                    FSharpUnionCase.Field(name, transformType context caseType) :: fieldCases
-                )
-                (1, [])
-            |> snd
-            |> List.rev
+        let fieldCases = transformFieldCases literalCases
 
         ({
             Attributes =
@@ -2552,6 +2554,34 @@ let private tryOptimizeUnionType
                 ]
             Name = typeName
             Cases = literalCases @ fieldCases
+            IsOptional = false
+        }
+        : FSharpUnion)
+        |> FSharpType.Union
+        |> Some
+    else if isNumericOnly && not otherCases.IsEmpty then
+        let literalCases =
+            flattenedCases
+            |> List.map (fun value ->
+                match value with
+                | GlueType.Literal(GlueLiteral.Int value) ->
+                    {
+                        Attributes = [ FSharpAttribute.CompiledValue(FSharpLiteral.Int value) ]
+                        Name = $"``%i{value}``"
+                    }
+                    |> FSharpUnionCase.Named
+                | _ -> failwith "Should not happen"
+            )
+            |> List.distinct
+
+        ({
+            Attributes =
+                [
+                    FSharpAttribute.RequireQualifiedAccess
+                    FSharpAttribute.EraseWithCaseRules CaseRules.None
+                ]
+            Name = typeName
+            Cases = literalCases @ transformFieldCases literalCases
             IsOptional = false
         }
         : FSharpUnion)
