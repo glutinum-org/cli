@@ -13,8 +13,27 @@ let private readDocumentation
     (jsDocTags: ResizeArray<Ts.JSDocTag>)
     =
 
+    let blockLinks =
+        jsDocTags
+        |> Seq.choose (fun tag ->
+            match tag.kind, tag.comment with
+            | Ts.SyntaxKind.JSDocTag, Some comment when tag.tagName.getText () = "link" ->
+                ts.getTextOfJSDocComment comment
+                |> Option.map (fun text ->
+                    let m = Regex.Match(text.Trim(), "^\[(?<label>[^\]]+)\]\((?<url>[^)\s]+)\)$")
+
+                    if m.Success then
+                        $"""{{@link {m.Groups.["url"].Value} | {m.Groups.["label"].Value}}}"""
+                    else
+                        $"{{@link {text.Trim()}}}"
+                )
+            | _ -> None
+        )
+        |> Seq.toList
+
     let summary =
-        let content = summary |> (Some >> ts.displayPartsToString) |> String.splitLines
+        let content =
+            (summary |> (Some >> ts.displayPartsToString) |> String.splitLines) @ blockLinks
 
         if List.forall String.IsNullOrWhiteSpace content then
             None
