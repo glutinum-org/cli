@@ -95,6 +95,10 @@ type FSharpUnionCase =
     /// Generates <c>| name of typ</c> case.
     /// </summary>
     | Field of name: string * typ: FSharpType
+    /// <summary>
+    /// Generates <c>| name of field1: typ1 * field2: typ2</c> case.
+    /// </summary>
+    | NamedFields of info: FSharpUnionCaseNamed * fields: (string * FSharpType) list
 
 [<RequireQualifiedAccess>]
 type FSharpUnionType =
@@ -163,6 +167,10 @@ type FSharpAttribute =
     /// Generates <c>[&lt;Erase(caseRules)&gt;]</c> attribute.
     /// </summary>
     | EraseWithCaseRules of Fable.Core.CaseRules
+    /// <summary>
+    /// Generates <c>[&lt;TypeScriptTaggedUnion(tagName, caseRules)&gt;]</c> attribute.
+    /// </summary>
+    | TypeScriptTaggedUnion of tagName: string * caseRules: Fable.Core.CaseRules
     | AbstractClass
     | AllowNullLiteral
     | Obsolete of string option

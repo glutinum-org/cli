@@ -2348,6 +2348,14 @@ module private TypeParameter =
                             mapFSharpType seadledTypes typ |> FSharpUnionCase.Typed
                         | FSharpUnionCase.Field(name, typ) ->
                             FSharpUnionCase.Field(name, mapFSharpType seadledTypes typ)
+                        | FSharpUnionCase.NamedFields(caseInfo, fields) ->
+                            FSharpUnionCase.NamedFields(
+                                caseInfo,
+                                fields
+                                |> List.map (fun (name, typ) ->
+                                    name, mapFSharpType seadledTypes typ
+                                )
+                            )
                     )
             }
             |> FSharpType.Union
@@ -2597,163 +2605,265 @@ let private tryOptimizeUnionType
         |> snd
         |> List.rev
 
-    if isStringEnumCompatible then
-        let literalCases =
-            flattenedCases
-            |> List.map (fun value ->
-                match value with
-                | GlueType.Literal(GlueLiteral.String value) ->
-                    let sanitizeResult = Naming.sanitizeTypeNameWithResult value
+    let literalCaseInfo (literal: GlueLiteral) : FSharpUnionCaseNamed =
+        match literal with
+        | GlueLiteral.String value ->
+            let sanitizeResult = Naming.sanitizeTypeNameWithResult value
+
+            {
+                Attributes =
+                    [
+                        if sanitizeResult.IsDifferent then
+                            value |> Naming.removeSurroundingQuotes |> FSharpAttribute.CompiledName
+                    ]
+                Name = sanitizeResult.Name
+            }
+        | GlueLiteral.Bool value ->
+            // Booleans can't be represented as a StringEnum case name,
+            // so we use [<CompiledValue(...)>] to emit the raw value
+            {
+                Attributes = [ FSharpAttribute.CompiledValue(FSharpLiteral.Bool value) ]
+                Name =
+                    if value then
+                        "True"
+                    else
+                        "False"
+            }
+        | GlueLiteral.Int value ->
+            {
+                Attributes = [ FSharpAttribute.CompiledValue(FSharpLiteral.Int value) ]
+                Name = $"``%i{value}``"
+            }
+        | GlueLiteral.Float _
+        | GlueLiteral.Null -> failwith "Should not happen"
+
+    let deduplicateCaseNames (caseInfos: FSharpUnionCaseNamed list) =
+        caseInfos
+        |> List.mapFold
+            (fun usedNames (caseInfo: FSharpUnionCaseNamed) ->
+                if Set.contains caseInfo.Name usedNames then
+                    let isEscaped = caseInfo.Name.StartsWith("``")
+                    let baseName = caseInfo.Name.Trim('`')
+
+                    let rec nextName index =
+                        let candidate =
+                            if isEscaped then
+                                $"``%s{baseName}_%i{index}``"
+                            else
+                                $"%s{baseName}_%i{index}"
+
+                        if Set.contains candidate usedNames then
+                            nextName (index + 1)
+                        else
+                            candidate
+
+                    let name = nextName 1
+
+                    let hasCompiledValue =
+                        caseInfo.Attributes
+                        |> List.exists (
+                            function
+                            | FSharpAttribute.CompiledName _
+                            | FSharpAttribute.CompiledValue _ -> true
+                            | _ -> false
+                        )
 
                     {
                         Attributes =
-                            [
-                                if sanitizeResult.IsDifferent then
-                                    value
-                                    |> Naming.removeSurroundingQuotes
-                                    |> FSharpAttribute.CompiledName
-                            ]
-                        Name = sanitizeResult.Name
-                    }
-                    |> FSharpUnionCase.Named
-                | GlueType.Literal(GlueLiteral.Bool value) ->
-                    // Booleans can't be represented as a StringEnum case name,
-                    // so we use [<CompiledValue(...)>] to emit the raw value
-                    {
-                        Attributes = [ FSharpAttribute.CompiledValue(FSharpLiteral.Bool value) ]
-                        Name =
-                            if value then
-                                "True"
+                            if hasCompiledValue then
+                                caseInfo.Attributes
                             else
-                                "False"
-                    }
-                    |> FSharpUnionCase.Named
-                | GlueType.Literal(GlueLiteral.Int value) ->
-                    {
-                        Attributes = [ FSharpAttribute.CompiledValue(FSharpLiteral.Int value) ]
-                        Name = $"``%i{value}``"
-                    }
-                    |> FSharpUnionCase.Named
-                | _ -> failwith "Should not happen"
+                                caseInfo.Attributes @ [ FSharpAttribute.CompiledName baseName ]
+                        Name = name
+                    },
+                    Set.add name usedNames
+                else
+                    caseInfo, Set.add caseInfo.Name usedNames
             )
-            |> List.distinct
-            |> List.mapFold
-                (fun usedNames case ->
-                    match case with
-                    | FSharpUnionCase.Named caseInfo when Set.contains caseInfo.Name usedNames ->
-                        let isEscaped = caseInfo.Name.StartsWith("``")
-                        let baseName = caseInfo.Name.Trim('`')
+            Set.empty
+        |> fst
 
-                        let rec nextName index =
-                            let candidate =
-                                if isEscaped then
-                                    $"``%s{baseName}_%i{index}``"
-                                else
-                                    $"%s{baseName}_%i{index}"
+    let tryFindTaggedUnion () =
+        let casesProperties =
+            otherCases
+            |> List.map (
+                function
+                | GlueType.TypeLiteral typeLiteral ->
+                    typeLiteral.Members
+                    |> List.map (
+                        function
+                        | GlueMember.Property property -> Some property
+                        | _ -> None
+                    )
+                    |> fun properties ->
+                        if List.forall Option.isSome properties then
+                            properties |> List.choose id |> Some
+                        else
+                            None
+                | _ -> None
+            )
 
-                            if Set.contains candidate usedNames then
-                                nextName (index + 1)
-                            else
-                                candidate
+        if
+            flattenedCases.IsEmpty
+            && casesProperties.Length >= 2
+            && List.forall Option.isSome casesProperties
+        then
+            let casesProperties = casesProperties |> List.choose id
 
-                        let name = nextName 1
-
-                        let hasCompiledValue =
-                            caseInfo.Attributes
-                            |> List.exists (
-                                function
-                                | FSharpAttribute.CompiledName _
-                                | FSharpAttribute.CompiledValue _ -> true
-                                | _ -> false
-                            )
-
-                        let renamedCase =
-                            {
-                                Attributes =
-                                    if hasCompiledValue then
-                                        caseInfo.Attributes
-                                    else
-                                        caseInfo.Attributes
-                                        @ [ FSharpAttribute.CompiledName baseName ]
-                                Name = name
-                            }
-                            |> FSharpUnionCase.Named
-
-                        renamedCase, Set.add name usedNames
-                    | FSharpUnionCase.Named caseInfo -> case, Set.add caseInfo.Name usedNames
-                    | _ -> case, usedNames
+            let tagValue (tagName: string) (properties: GlueProperty list) =
+                properties
+                |> List.tryFind (fun property -> property.Name = tagName)
+                |> Option.bind (fun property ->
+                    match property.Type with
+                    | GlueType.Literal(GlueLiteral.String _ as literal)
+                    | GlueType.Literal(GlueLiteral.Int _ as literal)
+                    | GlueType.Literal(GlueLiteral.Bool _ as literal) when not property.IsOptional ->
+                        Some literal
+                    | _ -> None
                 )
-                Set.empty
-            |> fst
 
-        let fieldCases = transformFieldCases literalCases
+            casesProperties.Head
+            |> List.tryPick (fun candidate ->
+                let tagValues = casesProperties |> List.map (tagValue candidate.Name)
 
-        ({
-            Attributes =
-                [
-                    FSharpAttribute.RequireQualifiedAccess
-                    if fieldCases.IsEmpty then
-                        FSharpAttribute.StringEnum CaseRules.None
-                    else
-                        FSharpAttribute.EraseWithCaseRules CaseRules.None
-                ]
-            Name = typeName
-            Cases = literalCases @ fieldCases
-            IsOptional = false
-        }
-        : FSharpUnion)
-        |> FSharpType.Union
-        |> Some
-    else if isNumericOnly && not otherCases.IsEmpty then
-        let literalCases =
-            flattenedCases
-            |> List.map (fun value ->
-                match value with
-                | GlueType.Literal(GlueLiteral.Int value) ->
-                    {
-                        Attributes = [ FSharpAttribute.CompiledValue(FSharpLiteral.Int value) ]
-                        Name = $"``%i{value}``"
-                    }
-                    |> FSharpUnionCase.Named
-                | _ -> failwith "Should not happen"
+                if
+                    List.forall Option.isSome tagValues
+                    && (List.distinct tagValues).Length = tagValues.Length
+                then
+                    Some(candidate.Name, List.zip (List.choose id tagValues) casesProperties)
+                else
+                    None
             )
-            |> List.distinct
+        else
+            None
 
-        ({
-            Attributes =
-                [
-                    FSharpAttribute.RequireQualifiedAccess
-                    FSharpAttribute.EraseWithCaseRules CaseRules.None
-                ]
-            Name = typeName
-            Cases = literalCases @ transformFieldCases literalCases
-            IsOptional = false
-        }
-        : FSharpUnion)
-        |> FSharpType.Union
-        |> Some
-    // If the union contains only literal numbers,
-    // we can transform it into a standard F# enum
-    else if isNumericOnly then
+    match tryFindTaggedUnion () with
+    | Some(tagName, taggedCases) ->
+        let caseInfos =
+            taggedCases |> List.map (fst >> literalCaseInfo) |> deduplicateCaseNames
+
         let cases =
-            flattenedCases
-            |> List.map (fun value ->
-                match value with
-                | GlueType.Literal(GlueLiteral.Int value) ->
-                    {
-                        Name = value.ToString()
-                        Value = FSharpLiteral.Int value
-                    }
-                    : FSharpEnumCase
-                | _ -> failwith "Should not happen"
+            List.zip caseInfos taggedCases
+            |> List.map (fun (caseInfo, (_, properties)) ->
+                let caseContext = context.PushScope("Cases").PushScope(caseInfo.Name.Trim('`'))
+
+                let fields =
+                    properties
+                    |> List.filter (fun property -> property.Name <> tagName)
+                    |> List.map (fun property ->
+                        let fieldName, fieldContext =
+                            sanitizeNameAndPushScope property.Name caseContext
+
+                        let fieldType =
+                            match transformType fieldContext property.Type with
+                            | FSharpType.Option _ as optionType -> optionType
+                            | fieldType when property.IsOptional -> FSharpType.Option fieldType
+                            | fieldType -> fieldType
+
+                        fieldName, fieldType
+                    )
+
+                FSharpUnionCase.NamedFields(caseInfo, fields)
             )
-            |> List.distinct
 
-        ({ Name = typeName; Cases = cases }: FSharpEnum) |> FSharpType.Enum |> Some
+        ({
+            Attributes =
+                [
+                    FSharpAttribute.RequireQualifiedAccess
+                    FSharpAttribute.TypeScriptTaggedUnion(
+                        Naming.removeSurroundingQuotes tagName,
+                        CaseRules.None
+                    )
+                ]
+            Name = typeName
+            Cases = cases
+            IsOptional = false
+        }
+        : FSharpUnion)
+        |> FSharpType.Union
+        |> Some
 
-    else
-        // Let the caller generate an erased union (`U2`, `U3`, ...). See #55
-        None
+    | None ->
+        if isStringEnumCompatible then
+            let literalCases =
+                flattenedCases
+                |> List.map (
+                    function
+                    | GlueType.Literal literal -> literalCaseInfo literal
+                    | _ -> failwith "Should not happen"
+                )
+                |> List.distinct
+                |> deduplicateCaseNames
+                |> List.map FSharpUnionCase.Named
+
+            let fieldCases = transformFieldCases literalCases
+
+            ({
+                Attributes =
+                    [
+                        FSharpAttribute.RequireQualifiedAccess
+                        if fieldCases.IsEmpty then
+                            FSharpAttribute.StringEnum CaseRules.None
+                        else
+                            FSharpAttribute.EraseWithCaseRules CaseRules.None
+                    ]
+                Name = typeName
+                Cases = literalCases @ fieldCases
+                IsOptional = false
+            }
+            : FSharpUnion)
+            |> FSharpType.Union
+            |> Some
+        else if isNumericOnly && not otherCases.IsEmpty then
+            let literalCases =
+                flattenedCases
+                |> List.map (fun value ->
+                    match value with
+                    | GlueType.Literal(GlueLiteral.Int value) ->
+                        {
+                            Attributes = [ FSharpAttribute.CompiledValue(FSharpLiteral.Int value) ]
+                            Name = $"``%i{value}``"
+                        }
+                        |> FSharpUnionCase.Named
+                    | _ -> failwith "Should not happen"
+                )
+                |> List.distinct
+
+            ({
+                Attributes =
+                    [
+                        FSharpAttribute.RequireQualifiedAccess
+                        FSharpAttribute.EraseWithCaseRules CaseRules.None
+                    ]
+                Name = typeName
+                Cases = literalCases @ transformFieldCases literalCases
+                IsOptional = false
+            }
+            : FSharpUnion)
+            |> FSharpType.Union
+            |> Some
+        // If the union contains only literal numbers,
+        // we can transform it into a standard F# enum
+        else if isNumericOnly then
+            let cases =
+                flattenedCases
+                |> List.map (fun value ->
+                    match value with
+                    | GlueType.Literal(GlueLiteral.Int value) ->
+                        {
+                            Name = value.ToString()
+                            Value = FSharpLiteral.Int value
+                        }
+                        : FSharpEnumCase
+                    | _ -> failwith "Should not happen"
+                )
+                |> List.distinct
+
+            ({ Name = typeName; Cases = cases }: FSharpEnum) |> FSharpType.Enum |> Some
+
+        else
+            // Let the caller generate an erased union (`U2`, `U3`, ...). See #55
+            None
 
 let private transformMappedTypeMembers (context: TransformContext) (mappedType: GlueMappedType) =
     match mappedType.TypeParameter.Constraint with

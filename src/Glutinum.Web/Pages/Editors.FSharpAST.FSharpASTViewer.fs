@@ -54,6 +54,12 @@ type FSharpASTViewer =
                 ASTViewer.renderKeyValue "CaseRules" (CaseRules.toText caseRules)
             ]
 
+        | FSharpAttribute.TypeScriptTaggedUnion(tagName, caseRules) ->
+            ASTViewer.renderNode "TypeScriptTaggedUnion" [
+                ASTViewer.renderKeyValue "TagName" tagName
+                ASTViewer.renderKeyValue "CaseRules" (CaseRules.toText caseRules)
+            ]
+
         | FSharpAttribute.AllowNullLiteral -> ASTViewer.renderValueOnly "AllowNullLiteral"
 
         | FSharpAttribute.StringEnum caseRules ->
@@ -309,6 +315,19 @@ type FSharpASTViewer =
                     ASTViewer.renderNode "Field" [
                         FSharpASTViewer.Name name
                         FSharpASTViewer.FSharpType typ
+                    ]
+                | FSharpUnionCase.NamedFields(caseInfo, fields) ->
+                    ASTViewer.renderNode "NamedFields" [
+                        FSharpASTViewer.Name caseInfo.Name
+                        FSharpASTViewer.Attributes caseInfo.Attributes
+                        yield!
+                            fields
+                            |> List.map (fun (name, typ) ->
+                                ASTViewer.renderNode "Field" [
+                                    FSharpASTViewer.Name name
+                                    FSharpASTViewer.FSharpType typ
+                                ]
+                            )
                     ]
             ]
         )

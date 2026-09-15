@@ -87,6 +87,8 @@ let private attributeToText (fsharpAttribute: FSharpAttribute) =
     | FSharpAttribute.AllowNullLiteral -> "[<AllowNullLiteral>]"
     | FSharpAttribute.StringEnum caseRules -> $"[<StringEnum({caseRulesToText caseRules})>]"
     | FSharpAttribute.EraseWithCaseRules caseRules -> $"[<Erase({caseRulesToText caseRules})>]"
+    | FSharpAttribute.TypeScriptTaggedUnion(tagName, caseRules) ->
+        $"[<TypeScriptTaggedUnion(\"{tagName}\", {caseRulesToText caseRules})>]"
     | FSharpAttribute.CompiledName name -> $"[<CompiledName(\"{name}\")>]"
     | FSharpAttribute.CompiledValue value ->
         let valueText =
@@ -255,6 +257,7 @@ and printType (fsharpType: FSharpType) =
                 | FSharpUnionCase.Named caseInfo -> caseInfo.Name
                 | FSharpUnionCase.Typed typ -> printType typ
                 | FSharpUnionCase.Field(_, typ) -> printType typ
+                | FSharpUnionCase.NamedFields(caseInfo, _) -> caseInfo.Name
             )
             |> String.concat ", "
 
@@ -994,6 +997,18 @@ let rec private print (printer: Printer) (fsharpTypes: FSharpType list) =
                     printer.NewLine
                 | FSharpUnionCase.Field(name, typ) ->
                     printer.WriteInline($"{name} of {printType typ}")
+                | FSharpUnionCase.NamedFields(caseInfo, fields) ->
+                    printInlineAttributes printer caseInfo.Attributes
+
+                    printer.WriteInline(caseInfo.Name)
+
+                    if not fields.IsEmpty then
+                        let fieldsText =
+                            fields
+                            |> List.map (fun (name, typ) -> $"{name}: {printType typ}")
+                            |> String.concat " * "
+
+                        printer.WriteInline($" of {fieldsText}")
 
                 printer.NewLine
             )
