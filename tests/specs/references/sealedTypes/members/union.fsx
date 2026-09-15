@@ -12,8 +12,11 @@ type Exports =
 
 [<AllowNullLiteral>]
 [<Interface>]
+type Log4<'T, 'R1, 'R2> =
+    abstract member info: data: U2<'T, float> -> U2<'R1, 'R2>
+
 type Log4<'R2> =
-    abstract member info: data: U2<string, float> -> U2<float, 'R2>
+    Log4<string, float, 'R2>
 
 (***)
 #r "nuget: Fable.Core"

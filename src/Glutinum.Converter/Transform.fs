@@ -1906,12 +1906,21 @@ let private transformInterface (context: TransformContext) (info: GlueInterface)
             | _ -> true
         )
 
-    let typeParametersResult = transformTypeParameters context info.TypeParameters
+    let typeParametersResult =
+        transformDeclarationTypeParameters context info.TypeParameters
 
-    typeParametersResult.TypeParameters
-    |> List.rev
-    |> exposeSpecializedAlias name [] []
-    |> List.iter context.ExposeType
+    let specializedAliases =
+        typeParametersResult.TypeParameters
+        |> List.rev
+        |> exposeSpecializedAlias name [] []
+
+    specializedAliases |> List.iter context.ExposeType
+
+    typeParametersResult
+    |> makeSealedTypeAlias
+        name
+        (aliasArities typeParametersResult.TypeParameters specializedAliases)
+    |> Option.iter context.ExposeType
 
     {
         XmlDoc = xmlDocInfo.XmlDoc
@@ -1923,9 +1932,7 @@ let private transformInterface (context: TransformContext) (info: GlueInterface)
             ]
         Name = name
         OriginalName = info.Name
-        Members =
-            standardMembers @ membersComingFromPartial @ membersComingFromOmit
-            |> TypeParameter.mapFsharpMembers typeParametersResult.SealedTypes
+        Members = standardMembers @ membersComingFromPartial @ membersComingFromOmit
         TypeParameters = typeParametersResult.TypeParameters
         Inheritance = inheritance |> List.map (transformType context)
     }
@@ -2269,6 +2276,23 @@ module private TypeParameter =
         match typeParameter.Constraint with
         | None -> TransformResult.Create(typeParameter.Name, default_ = default_)
 
+        | Some(GlueType.KeyOf _ as constraintType) ->
+            let context = context.PushScope typeParameter.Name
+
+            match transformType context constraintType with
+            | FSharpType.TypeReference _ as fsharpType ->
+                TransformResult.Create(
+                    typeParameter.Name,
+                    sealedType = fsharpType,
+                    default_ = default_
+                )
+            | fsharpType ->
+                TransformResult.Create(
+                    typeParameter.Name,
+                    constraint_ = fsharpType,
+                    default_ = default_
+                )
+
         | Some constraintType ->
             // Manual optimization to remove constraints that are not supported by F#
             match transformType context constraintType with
@@ -2408,6 +2432,72 @@ let private transformTypeParameters
         TypeParameters = typeParameters
         SealedTypes = sealedTypes
     }
+
+type private TransformDeclarationTypeParametersResult =
+    {
+        TypeParameters: FSharpTypeParameter list
+        SealedTypeArguments: FSharpTypeParameter list option
+    }
+
+let private transformDeclarationTypeParameters
+    (context: TransformContext)
+    (typeParameters: GlueTypeParameter list)
+    : TransformDeclarationTypeParametersResult
+    =
+    let transformedTypeParameters =
+        typeParameters |> List.map (TypeParameter.transform context)
+
+    {
+        TypeParameters = transformedTypeParameters |> List.map _.FSharpTypeParameter
+        SealedTypeArguments =
+            if transformedTypeParameters |> List.exists _.SealedTypeOpt.IsSome then
+                transformedTypeParameters
+                |> List.map (fun result ->
+                    match result.SealedTypeOpt with
+                    | Some sealedType -> FSharpTypeParameter.FSharpType sealedType.FSharpType
+                    | None -> result.FSharpTypeParameter
+                )
+                |> Some
+            else
+                None
+    }
+
+let private makeSealedTypeAlias
+    (name: string)
+    (existingArities: int list)
+    (typeParametersResult: TransformDeclarationTypeParametersResult)
+    : FSharpType option
+    =
+    match typeParametersResult.SealedTypeArguments with
+    | None -> None
+    | Some sealedTypeArguments ->
+        let aliasTypeParameters =
+            sealedTypeArguments
+            |> List.filter (
+                function
+                | FSharpTypeParameter.FSharpTypeParameter _ -> true
+                | FSharpTypeParameter.FSharpType _ -> false
+            )
+
+        if List.contains aliasTypeParameters.Length existingArities then
+            None
+        else
+            ({
+                Attributes = []
+                XmlDoc = []
+                Name = name
+                Type =
+                    ({
+                        Name = name
+                        TypeParameters = sealedTypeArguments
+                    }
+                    : FSharpMapped)
+                    |> FSharpType.Mapped
+                TypeParameters = aliasTypeParameters
+            }
+            : FSharpTypeAlias)
+            |> FSharpType.TypeAlias
+            |> Some
 
 let private tryOptimizeUnionType
     (context: TransformContext)
@@ -2723,151 +2813,246 @@ let private transformTypeAliasDeclaration
 
     let xmlDoc = transformComment glueTypeAliasDeclaration.Documentation
 
+    let declarationTypeParameters =
+        lazy (transformDeclarationTypeParameters context glueTypeAliasDeclaration.TypeParameters)
+
     let makeTypeAlias typ =
         ({
             Attributes = [ yield! xmlDoc.ObsoleteAttributes ]
             XmlDoc = xmlDoc.XmlDoc
             Name = typeAliasName
             Type = typ
-            TypeParameters =
-                transformTypeParameters context glueTypeAliasDeclaration.TypeParameters
-                |> _.TypeParameters
+            TypeParameters = declarationTypeParameters.Value.TypeParameters
         }
         : FSharpTypeAlias)
         |> FSharpType.TypeAlias
 
-    // TODO: Make the transformation more robust
-    match glueTypeAliasDeclaration.Type with
-    | GlueType.Union(GlueTypeUnion cases) as unionType ->
-        match tryOptimizeUnionType context typeAliasName cases with
-        | Some typ -> typ
-        | None -> transformType context unionType |> makeTypeAlias
+    let fsharpType =
+        // TODO: Make the transformation more robust
+        match glueTypeAliasDeclaration.Type with
+        | GlueType.Union(GlueTypeUnion cases) as unionType ->
+            match tryOptimizeUnionType context typeAliasName cases with
+            | Some typ -> typ
+            | None -> transformType context unionType |> makeTypeAlias
 
-    | GlueType.KeyOf glueType ->
-        TypeAliasDeclaration.transformKeyOf context glueTypeAliasDeclaration.Name glueType
+        | GlueType.KeyOf glueType ->
+            TypeAliasDeclaration.transformKeyOf context glueTypeAliasDeclaration.Name glueType
 
-    | GlueType.IndexedAccessType glueType ->
-        let typ =
-            match glueType.IndexType with
-            | GlueType.KeyOf glueType ->
-                match glueType with
-                | GlueType.Interface interfaceInfo ->
-                    interfaceInfo.Members
-                    // Flatten all the types
-                    |> List.collect (fun m ->
-                        match m with
-                        | GlueMember.Method { Type = typ }
-                        | GlueMember.Property { Type = typ }
-                        | GlueMember.GetAccessor { Type = typ }
-                        | GlueMember.SetAccessor { ArgumentType = typ }
-                        | GlueMember.CallSignature { Type = typ }
-                        | GlueMember.ConstructSignature { Type = typ }
-                        | GlueMember.MethodSignature { Type = typ }
-                        | GlueMember.IndexSignature { Type = typ } ->
-                            match typ with
-                            | GlueType.Union(GlueTypeUnion cases) -> cases
-                            | _ -> [ typ ]
-                    )
-                    // Remove duplicates
-                    |> List.distinct
-                    // Wrap inside of an union, so it can be transformed as U2, U3, etc.
-                    |> GlueTypeUnion
-                    |> GlueType.Union
-                    |> transformType context
+        | GlueType.IndexedAccessType glueType ->
+            let typ =
+                match glueType.IndexType with
+                | GlueType.KeyOf glueType ->
+                    match glueType with
+                    | GlueType.Interface interfaceInfo ->
+                        interfaceInfo.Members
+                        // Flatten all the types
+                        |> List.collect (fun m ->
+                            match m with
+                            | GlueMember.Method { Type = typ }
+                            | GlueMember.Property { Type = typ }
+                            | GlueMember.GetAccessor { Type = typ }
+                            | GlueMember.SetAccessor { ArgumentType = typ }
+                            | GlueMember.CallSignature { Type = typ }
+                            | GlueMember.ConstructSignature { Type = typ }
+                            | GlueMember.MethodSignature { Type = typ }
+                            | GlueMember.IndexSignature { Type = typ } ->
+                                match typ with
+                                | GlueType.Union(GlueTypeUnion cases) -> cases
+                                | _ -> [ typ ]
+                        )
+                        // Remove duplicates
+                        |> List.distinct
+                        // Wrap inside of an union, so it can be transformed as U2, U3, etc.
+                        |> GlueTypeUnion
+                        |> GlueType.Union
+                        |> transformType context
 
+                    | _ -> FSharpType.Discard
                 | _ -> FSharpType.Discard
-            | _ -> FSharpType.Discard
 
-        makeTypeAlias typ
+            makeTypeAlias typ
 
-    | GlueType.Literal literalInfo ->
-        TypeAliasDeclaration.transformLiteral xmlDoc typeAliasName literalInfo
+        | GlueType.Literal literalInfo ->
+            TypeAliasDeclaration.transformLiteral xmlDoc typeAliasName literalInfo
 
-    | GlueType.Primitive primitiveInfo ->
-        transformPrimitive primitiveInfo |> FSharpType.Primitive |> makeTypeAlias
+        | GlueType.Primitive primitiveInfo ->
+            transformPrimitive primitiveInfo |> FSharpType.Primitive |> makeTypeAlias
 
-    | GlueType.TemplateLiteral -> FSharpType.Primitive FSharpPrimitive.String |> makeTypeAlias
+        | GlueType.TemplateLiteral -> FSharpType.Primitive FSharpPrimitive.String |> makeTypeAlias
 
-    | GlueType.TypeReference typeReference ->
-        let mappedName = mapTypeNameToFableCoreAwareName context typeReference
-        let context = context.PushScope mappedName
+        | GlueType.TypeReference typeReference ->
+            let mappedName = mapTypeNameToFableCoreAwareName context typeReference
+            let context = context.PushScope mappedName
 
-        let handleDefaultCase () =
-            transformType context (GlueType.TypeReference typeReference) |> makeTypeAlias
+            let handleDefaultCase () =
+                transformType context (GlueType.TypeReference typeReference) |> makeTypeAlias
 
-        match typeReference.TypeArguments with
-        | head :: [] ->
-            // For intersection type we can do an optimisation here to generate a real interface
-            // and not just default to obj
-            // This code should probably be revisited to make it easier to read
-            // I think this would benefit from the gobal addition of the understand of
-            // Name / FullName / ReferenceName perhaps ?
-            // Where depending on where the type is used we could use one of the other name?
-            match head with
-            | GlueType.IntersectionType members ->
-                let makeInterfaceTyp name =
-                    {
-                        XmlDoc = []
-                        Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
-                        Name = name
-                        OriginalName = glueTypeAliasDeclaration.Name
-                        TypeParameters = []
-                        Members = TransformMembers.toFSharpMember context members
-                        Inheritance = []
-                    }
-
-                let exposedType = makeInterfaceTyp "ReturnType"
-
-                let typeArgument = makeInterfaceTyp (context.FullName + ".ReturnType")
-
-                let context = context.PushScope typeReference.Name
-
-                context.ExposeType(FSharpType.Interface exposedType)
-
-                ({
-                    Attributes = [ yield! xmlDoc.ObsoleteAttributes ]
-                    XmlDoc = xmlDoc.XmlDoc
-                    Name = typeAliasName
-                    Type =
+            match typeReference.TypeArguments with
+            | head :: [] ->
+                // For intersection type we can do an optimisation here to generate a real interface
+                // and not just default to obj
+                // This code should probably be revisited to make it easier to read
+                // I think this would benefit from the gobal addition of the understand of
+                // Name / FullName / ReferenceName perhaps ?
+                // Where depending on where the type is used we could use one of the other name?
+                match head with
+                | GlueType.IntersectionType members ->
+                    let makeInterfaceTyp name =
                         {
-                            Name = mappedName
-                            FullName = typeReference.FullName
-                            TypeArguments = [ FSharpType.Interface typeArgument ]
-                            Type = FSharpType.Discard
+                            XmlDoc = []
+                            Attributes =
+                                [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
+                            Name = name
+                            OriginalName = glueTypeAliasDeclaration.Name
+                            TypeParameters = []
+                            Members = TransformMembers.toFSharpMember context members
+                            Inheritance = []
                         }
-                        |> FSharpType.TypeReference
-                    TypeParameters = []
-                }
-                : FSharpTypeAlias)
-                |> FSharpType.TypeAlias
+
+                    let exposedType = makeInterfaceTyp "ReturnType"
+
+                    let typeArgument = makeInterfaceTyp (context.FullName + ".ReturnType")
+
+                    let context = context.PushScope typeReference.Name
+
+                    context.ExposeType(FSharpType.Interface exposedType)
+
+                    ({
+                        Attributes = [ yield! xmlDoc.ObsoleteAttributes ]
+                        XmlDoc = xmlDoc.XmlDoc
+                        Name = typeAliasName
+                        Type =
+                            {
+                                Name = mappedName
+                                FullName = typeReference.FullName
+                                TypeArguments = [ FSharpType.Interface typeArgument ]
+                                Type = FSharpType.Discard
+                            }
+                            |> FSharpType.TypeReference
+                        TypeParameters = []
+                    }
+                    : FSharpTypeAlias)
+                    |> FSharpType.TypeAlias
+                | _ -> handleDefaultCase ()
+
             | _ -> handleDefaultCase ()
 
-        | _ -> handleDefaultCase ()
+        | GlueType.Array glueType ->
+            transformType context (GlueType.Array glueType) |> makeTypeAlias
 
-    | GlueType.Array glueType -> transformType context (GlueType.Array glueType) |> makeTypeAlias
+        | GlueType.UtilityType utilityType ->
+            match utilityType with
+            | GlueUtilityType.Partial interfaceInfo ->
+                transformInterface context interfaceInfo
+                // Use the alias name instead of the original interface name
+                |> Interface.makePartial typeAliasName
+                |> FSharpType.Interface
 
-    | GlueType.UtilityType utilityType ->
-        match utilityType with
-        | GlueUtilityType.Partial interfaceInfo ->
-            transformInterface context interfaceInfo
-            // Use the alias name instead of the original interface name
-            |> Interface.makePartial typeAliasName
+            | GlueUtilityType.Record recordInfo ->
+                transformRecord
+                    context
+                    typeAliasName
+                    glueTypeAliasDeclaration.TypeParameters
+                    recordInfo
+
+            | GlueUtilityType.ReturnType returnType ->
+                let context = context.PushScope "ReturnType"
+
+                transformType context returnType |> makeTypeAlias
+
+            | GlueUtilityType.ThisParameterType innerType ->
+                transformType context innerType |> makeTypeAlias
+
+            | GlueUtilityType.Omit members ->
+                let typParameters = declarationTypeParameters.Value
+
+                {
+                    XmlDoc = []
+                    Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
+                    Name = typeAliasName
+                    OriginalName = glueTypeAliasDeclaration.Name
+                    TypeParameters = typParameters.TypeParameters
+                    Members = TransformMembers.toFSharpMember context members
+                    Inheritance = []
+                }
+                |> FSharpType.Interface
+
+            | GlueUtilityType.Readonly readonlyInfo ->
+                UtilityType.transformReadOnly context readonlyInfo (Some makeTypeAlias)
+
+        | GlueType.FunctionType functionType ->
+            let typParameters = declarationTypeParameters.Value
+
+            {
+                Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
+                XmlDoc = []
+                Name = typeAliasName
+                OriginalName = glueTypeAliasDeclaration.Name
+                TypeParameters = typParameters.TypeParameters
+                Members =
+                    {
+                        Attributes = [ FSharpAttribute.EmitSelfInvoke ]
+                        Name = "Invoke"
+                        OriginalName = "Invoke"
+                        Parameters =
+                            functionType.Parameters |> List.map (transformParameter context)
+                        Type = transformType context functionType.Type
+                        TypeParameters = []
+                        IsOptional = false
+                        IsStatic = false
+                        Accessor = None
+                        Accessibility = FSharpAccessibility.Public
+                        XmlDoc = []
+                        Body = FSharpMemberInfoBody.NativeOnly
+                    }
+                    |> FSharpMember.Method
+                    |> List.singleton
+                Inheritance = []
+            }
             |> FSharpType.Interface
 
-        | GlueUtilityType.Record recordInfo ->
-            transformRecord context typeAliasName glueTypeAliasDeclaration.TypeParameters recordInfo
+        | GlueType.TupleType glueTypes -> transformTupleType context glueTypes |> makeTypeAlias
 
-        | GlueUtilityType.ReturnType returnType ->
-            let context = context.PushScope "ReturnType"
+        | GlueType.IntersectionType members ->
+            let typParameters = declarationTypeParameters.Value
 
-            transformType context returnType |> makeTypeAlias
+            {
+                XmlDoc = []
+                Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
+                Name = typeAliasName
+                OriginalName = glueTypeAliasDeclaration.Name
+                TypeParameters = typParameters.TypeParameters
+                Members = TransformMembers.toFSharpMember context members
+                Inheritance = []
+            }
+            |> FSharpType.Interface
 
-        | GlueUtilityType.ThisParameterType innerType ->
-            transformType context innerType |> makeTypeAlias
+        | GlueType.TypeLiteral typeLiteralInfo ->
+            let typParameters = declarationTypeParameters.Value
 
-        | GlueUtilityType.Omit members ->
-            let typParameters =
-                transformTypeParameters context glueTypeAliasDeclaration.TypeParameters
+            {
+                XmlDoc = []
+                Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
+                Name = typeAliasName
+                OriginalName = glueTypeAliasDeclaration.Name
+                TypeParameters = typParameters.TypeParameters
+                Members = TransformMembers.toFSharpMember context typeLiteralInfo.Members
+                Inheritance =
+                    [
+                        match TypeLiteral.tryFindIterableType context typeLiteralInfo with
+                        | Some iterableType -> iterableType
+                        | None -> ()
+                    ]
+            }
+            |> FSharpType.Interface
+
+        | GlueType.Unknown -> makeTypeAlias FSharpType.Object
+
+        | GlueType.TypeParameter typeParameterInfo ->
+            FSharpType.TypeParameter typeParameterInfo |> makeTypeAlias
+
+        | GlueType.MappedType mappedType ->
+            let typParameters = declarationTypeParameters.Value
 
             {
                 XmlDoc = []
@@ -2876,155 +3061,61 @@ let private transformTypeAliasDeclaration
                 OriginalName = glueTypeAliasDeclaration.Name
                 TypeParameters = typParameters.TypeParameters
                 Members =
-                    TransformMembers.toFSharpMember context members
-                    |> TypeParameter.mapFsharpMembers typParameters.SealedTypes
+                    mappedType
+                    |> transformMappedTypeMembers context
+                    |> TransformMembers.toFSharpMember context
                 Inheritance = []
             }
             |> FSharpType.Interface
 
-        | GlueUtilityType.Readonly readonlyInfo ->
-            UtilityType.transformReadOnly context readonlyInfo (Some makeTypeAlias)
+        | GlueType.ConstructorType ->
+            match glueTypeAliasDeclaration.TypeParameters with
+            | [] -> makeTypeAlias FSharpType.Object
 
-    | GlueType.FunctionType functionType ->
-        let typParameters =
-            transformTypeParameters context glueTypeAliasDeclaration.TypeParameters
-
-        {
-            Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
-            XmlDoc = []
-            Name = typeAliasName
-            OriginalName = glueTypeAliasDeclaration.Name
-            TypeParameters = typParameters.TypeParameters
-            Members =
-                {
-                    Attributes = [ FSharpAttribute.EmitSelfInvoke ]
-                    Name = "Invoke"
-                    OriginalName = "Invoke"
-                    Parameters =
-                        functionType.Parameters
-                        |> List.map (
-                            transformParameter context
-                            >> TypeParameter.mapFsharpParameter typParameters.SealedTypes
-                        )
-                    Type = transformType context functionType.Type
-                    TypeParameters = []
-                    IsOptional = false
-                    IsStatic = false
-                    Accessor = None
-                    Accessibility = FSharpAccessibility.Public
-                    XmlDoc = []
-                    Body = FSharpMemberInfoBody.NativeOnly
+            | typeParameter :: [] ->
+                ({
+                    Attributes = [ yield! xmlDoc.ObsoleteAttributes ]
+                    XmlDoc = xmlDoc.XmlDoc
+                    Name = typeAliasName
+                    TypeParameter =
+                        TypeParameter.transform context typeParameter |> _.FSharpTypeParameter
                 }
-                |> FSharpMember.Method
-                |> List.singleton
-            Inheritance = []
-        }
-        |> FSharpType.Interface
+                : FSharpSingleErasedCaseUnion)
+                |> FSharpType.SingleErasedCaseUnion
+            | _ ->
+                context.AddWarning
+                    $"%s{glueTypeAliasDeclaration.Name} contains a ConstructorType with multiple type parameters, please open an issue at https://github.com/glutinum-org/cli/issues"
 
-    | GlueType.TupleType glueTypes -> transformTupleType context glueTypes |> makeTypeAlias
+                // This is probably going to generate invalid F# code,
+                // especially if the type is used as a signature type somewhere
+                // But it is better to remove the TypeParameters to make it easier for the user to fix
+                // by removing the TypeParameters from the type signature
+                makeTypeAlias FSharpType.Object
 
-    | GlueType.IntersectionType members ->
-        let typParameters =
-            transformTypeParameters context glueTypeAliasDeclaration.TypeParameters
+        | GlueType.ReadOnly glueType -> transformReadOnly context glueType |> makeTypeAlias
 
-        {
-            XmlDoc = []
-            Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
-            Name = typeAliasName
-            OriginalName = glueTypeAliasDeclaration.Name
-            TypeParameters = typParameters.TypeParameters
-            Members =
-                TransformMembers.toFSharpMember context members
-                |> TypeParameter.mapFsharpMembers typParameters.SealedTypes
-            Inheritance = []
-        }
-        |> FSharpType.Interface
+        // We don't know how to handle these types yet, so we default to obj
+        | GlueType.ClassDeclaration _
+        | GlueType.Enum _
+        | GlueType.Interface _
+        | GlueType.ModuleDeclaration _
+        | GlueType.TypeAliasDeclaration _
+        | GlueType.Discard
+        | GlueType.FunctionDeclaration _
+        | GlueType.ThisType _
+        | GlueType.Variable _
+        | GlueType.ExportDefault _
+        | GlueType.NamedTupleType _
+        | GlueType.OptionalType _ -> makeTypeAlias FSharpType.Object
 
-    | GlueType.TypeLiteral typeLiteralInfo ->
-        let typParameters =
-            transformTypeParameters context glueTypeAliasDeclaration.TypeParameters
+    if declarationTypeParameters.IsValueCreated then
+        declarationTypeParameters.Value
+        |> makeSealedTypeAlias
+            typeAliasName
+            [ declarationTypeParameters.Value.TypeParameters.Length ]
+        |> Option.iter context.ExposeType
 
-        {
-            XmlDoc = []
-            Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
-            Name = typeAliasName
-            OriginalName = glueTypeAliasDeclaration.Name
-            TypeParameters = typParameters.TypeParameters
-            Members =
-                TransformMembers.toFSharpMember context typeLiteralInfo.Members
-                |> TypeParameter.mapFsharpMembers typParameters.SealedTypes
-            Inheritance =
-                [
-                    match TypeLiteral.tryFindIterableType context typeLiteralInfo with
-                    | Some iterableType -> iterableType
-                    | None -> ()
-                ]
-        }
-        |> FSharpType.Interface
-
-    | GlueType.Unknown -> makeTypeAlias FSharpType.Object
-
-    | GlueType.TypeParameter typeParameterInfo ->
-        FSharpType.TypeParameter typeParameterInfo |> makeTypeAlias
-
-    | GlueType.MappedType mappedType ->
-        let typParameters =
-            transformTypeParameters context glueTypeAliasDeclaration.TypeParameters
-
-        {
-            XmlDoc = []
-            Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
-            Name = typeAliasName
-            OriginalName = glueTypeAliasDeclaration.Name
-            TypeParameters = typParameters.TypeParameters
-            Members =
-                mappedType
-                |> transformMappedTypeMembers context
-                |> TransformMembers.toFSharpMember context
-                |> TypeParameter.mapFsharpMembers typParameters.SealedTypes
-            Inheritance = []
-        }
-        |> FSharpType.Interface
-
-    | GlueType.ConstructorType ->
-        match glueTypeAliasDeclaration.TypeParameters with
-        | [] -> makeTypeAlias FSharpType.Object
-
-        | typeParameter :: [] ->
-            ({
-                Attributes = [ yield! xmlDoc.ObsoleteAttributes ]
-                XmlDoc = xmlDoc.XmlDoc
-                Name = typeAliasName
-                TypeParameter =
-                    TypeParameter.transform context typeParameter |> _.FSharpTypeParameter
-            }
-            : FSharpSingleErasedCaseUnion)
-            |> FSharpType.SingleErasedCaseUnion
-        | _ ->
-            context.AddWarning
-                $"%s{glueTypeAliasDeclaration.Name} contains a ConstructorType with multiple type parameters, please open an issue at https://github.com/glutinum-org/cli/issues"
-
-            // This is probably going to generate invalid F# code,
-            // especially if the type is used as a signature type somewhere
-            // But it is better to remove the TypeParameters to make it easier for the user to fix
-            // by removing the TypeParameters from the type signature
-            makeTypeAlias FSharpType.Object
-
-    | GlueType.ReadOnly glueType -> transformReadOnly context glueType |> makeTypeAlias
-
-    // We don't know how to handle these types yet, so we default to obj
-    | GlueType.ClassDeclaration _
-    | GlueType.Enum _
-    | GlueType.Interface _
-    | GlueType.ModuleDeclaration _
-    | GlueType.TypeAliasDeclaration _
-    | GlueType.Discard
-    | GlueType.FunctionDeclaration _
-    | GlueType.ThisType _
-    | GlueType.Variable _
-    | GlueType.ExportDefault _
-    | GlueType.NamedTupleType _
-    | GlueType.OptionalType _ -> makeTypeAlias FSharpType.Object
+    fsharpType
 
 let private transformModuleDeclaration
     (typeMemory: GlueType list)
@@ -3068,6 +3159,15 @@ let private transformModuleDeclaration
 //
 // type User<'T when 'T :> Task> = interface end
 // type User = User<Task>
+let private aliasArities (typeParameters: FSharpTypeParameter list) (aliases: FSharpType list) =
+    typeParameters.Length
+    :: (aliases
+        |> List.choose (
+            function
+            | FSharpType.TypeAlias aliasInfo -> Some aliasInfo.TypeParameters.Length
+            | _ -> None
+        ))
+
 let rec private exposeSpecializedAlias
     (name: string)
     (acc: FSharpType list)
@@ -3120,7 +3220,7 @@ let private transformClassDeclaration
     let name, context = sanitizeTypeNameAndPushScope classDeclaration.Name context
 
     let typeParametersResult =
-        transformTypeParameters context classDeclaration.TypeParameters
+        transformDeclarationTypeParameters context classDeclaration.TypeParameters
 
     let errorInheritance, otherInheritance =
         classDeclaration.HeritageClauses
@@ -3148,9 +3248,19 @@ let private transformClassDeclaration
         |> List.map (context.ExposeTypeAlias >> transformType context)
 
     let specialiazedAlias =
-        typeParametersResult.TypeParameters
-        |> List.rev
-        |> exposeSpecializedAlias name [] []
+        let defaultAliases =
+            typeParametersResult.TypeParameters
+            |> List.rev
+            |> exposeSpecializedAlias name [] []
+
+        let sealedAlias =
+            typeParametersResult
+            |> makeSealedTypeAlias
+                name
+                (aliasArities typeParametersResult.TypeParameters defaultAliases)
+            |> Option.toList
+
+        defaultAliases @ sealedAlias
 
     let xmlDoc = transformComment classDeclaration.Documentation
 
@@ -3170,9 +3280,7 @@ let private transformClassDeclaration
             XmlDoc = xmlDoc.XmlDoc
             Name = name
             OriginalName = classDeclaration.Name
-            Members =
-                TransformMembers.toFSharpMember context classDeclaration.Members
-                |> TypeParameter.mapFsharpMembers typeParametersResult.SealedTypes
+            Members = TransformMembers.toFSharpMember context classDeclaration.Members
             TypeParameters = typeParametersResult.TypeParameters
             Inheritance = inheritance
         }
