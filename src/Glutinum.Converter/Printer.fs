@@ -69,6 +69,15 @@ let private hasParamArrayAttribute (attributes: FSharpAttribute list) =
         | _ -> false
     )
 
+let private caseRulesToText (caseRules: CaseRules) =
+    match caseRules with
+    | CaseRules.None -> "CaseRules.None"
+    | CaseRules.LowerFirst -> "CaseRules.LowerFirst"
+    | CaseRules.SnakeCase -> "CaseRules.SnakeCase"
+    | CaseRules.SnakeCaseAllCaps -> "CaseRules.SnakeCaseAllCaps"
+    | CaseRules.KebabCase -> "CaseRules.KebabCase"
+    | _ -> failwith "Unsupported case rules: %A{caseRules}"
+
 let private attributeToText (fsharpAttribute: FSharpAttribute) =
     match fsharpAttribute with
     | FSharpAttribute.Text text -> $"[<%s{text}>]"
@@ -76,17 +85,8 @@ let private attributeToText (fsharpAttribute: FSharpAttribute) =
     | FSharpAttribute.Import(name, module_) -> $"[<Import(\"{name}\", \"{module_}\")>]"
     | FSharpAttribute.Erase -> "[<Erase>]"
     | FSharpAttribute.AllowNullLiteral -> "[<AllowNullLiteral>]"
-    | FSharpAttribute.StringEnum caseRules ->
-        let caseRulesText =
-            match caseRules with
-            | CaseRules.None -> "CaseRules.None"
-            | CaseRules.LowerFirst -> "CaseRules.LowerFirst"
-            | CaseRules.SnakeCase -> "CaseRules.SnakeCase"
-            | CaseRules.SnakeCaseAllCaps -> "CaseRules.SnakeCaseAllCaps"
-            | CaseRules.KebabCase -> "CaseRules.KebabCase"
-            | _ -> failwith "Unsupported case rules: %A{caseRules}"
-
-        $"[<StringEnum({caseRulesText})>]"
+    | FSharpAttribute.StringEnum caseRules -> $"[<StringEnum({caseRulesToText caseRules})>]"
+    | FSharpAttribute.EraseWithCaseRules caseRules -> $"[<Erase({caseRulesToText caseRules})>]"
     | FSharpAttribute.CompiledName name -> $"[<CompiledName(\"{name}\")>]"
     | FSharpAttribute.CompiledValue value ->
         let valueText =
@@ -254,6 +254,7 @@ and printType (fsharpType: FSharpType) =
                 match case with
                 | FSharpUnionCase.Named caseInfo -> caseInfo.Name
                 | FSharpUnionCase.Typed typ -> printType typ
+                | FSharpUnionCase.Field(_, typ) -> printType typ
             )
             |> String.concat ", "
 
@@ -991,6 +992,8 @@ let rec private print (printer: Printer) (fsharpTypes: FSharpType list) =
                 | FSharpUnionCase.Typed typ ->
                     printer.WriteInline(printType typ)
                     printer.NewLine
+                | FSharpUnionCase.Field(name, typ) ->
+                    printer.WriteInline($"{name} of {printType typ}")
 
                 printer.NewLine
             )

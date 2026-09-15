@@ -91,6 +91,10 @@ type FSharpUnionCaseNamed =
 type FSharpUnionCase =
     | Named of FSharpUnionCaseNamed
     | Typed of FSharpType
+    /// <summary>
+    /// Generates <c>| name of typ</c> case.
+    /// </summary>
+    | Field of name: string * typ: FSharpType
 
 [<RequireQualifiedAccess>]
 type FSharpUnionType =
@@ -155,6 +159,10 @@ type FSharpAttribute =
     /// </summary>
     | ImportDefault of moduleName: string
     | Erase
+    /// <summary>
+    /// Generates <c>[&lt;Erase(caseRules)&gt;]</c> attribute.
+    /// </summary>
+    | EraseWithCaseRules of Fable.Core.CaseRules
     | AbstractClass
     | AllowNullLiteral
     | Obsolete of string option

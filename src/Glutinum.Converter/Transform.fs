@@ -613,7 +613,7 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
         else if others.Length = 1 then
             transformType context others.Head
         else
-            match tryOptimizeUnionType context.CurrentScopeName others with
+            match tryOptimizeUnionType context context.CurrentScopeName others with
             | Some typ ->
                 typ |> context.ExposeType
 
@@ -2322,6 +2322,8 @@ module private TypeParameter =
                         | FSharpUnionCase.Named _ -> case
                         | FSharpUnionCase.Typed typ ->
                             mapFSharpType seadledTypes typ |> FSharpUnionCase.Typed
+                        | FSharpUnionCase.Field(name, typ) ->
+                            FSharpUnionCase.Field(name, mapFSharpType seadledTypes typ)
                     )
             }
             |> FSharpType.Union
@@ -2407,7 +2409,12 @@ let private transformTypeParameters
         SealedTypes = sealedTypes
     }
 
-let private tryOptimizeUnionType (typeName: string) (cases: GlueType list) : FSharpType option =
+let private tryOptimizeUnionType
+    (context: TransformContext)
+    (typeName: string)
+    (cases: GlueType list)
+    : FSharpType option
+    =
     // Unions can have nested unions, so we need to flatten them
     // TODO: Is there cases where we don't want to flatten?
     // U2<U2<int, string>, bool>
@@ -2418,19 +2425,22 @@ let private tryOptimizeUnionType (typeName: string) (cases: GlueType list) : FSh
             // We are inside an union, and have access to the literal types
             | GlueType.Literal _ as literal -> [ literal ]
             | GlueType.Union(GlueTypeUnion cases) -> flattenCases cases
-            | GlueType.TypeAliasDeclaration aliasCases ->
+            | GlueType.TypeAliasDeclaration aliasCases as aliasType ->
                 match aliasCases.Type with
                 | GlueType.Union(GlueTypeUnion cases) -> flattenCases cases
-                | _ -> []
-            // Can't find cases so we return an empty list to discard the type
-            // Should we do something if we fall in this state?
-            // I think the code below will be able to recover by generating
-            // an erased enum, but I don't know if there cases where we could
-            // be hitting ourselves in the foot
-            | _ -> []
+                | _ -> [ aliasType ]
+            | GlueType.Primitive GluePrimitive.Null
+            | GlueType.Primitive GluePrimitive.Undefined -> []
+            | otherType -> [ otherType ]
         )
 
-    let flattenedCases = flattenCases cases
+    let flattenedCases, otherCases =
+        flattenCases cases
+        |> List.partition (
+            function
+            | GlueType.Literal _ -> true
+            | _ -> false
+        )
 
     // A union made only of string literals, or of string and boolean literals
     // (with at least one string) can be represented as a Fable StringEnum.
@@ -2465,10 +2475,8 @@ let private tryOptimizeUnionType (typeName: string) (cases: GlueType list) : FSh
                | _ -> false
            )
 
-    // If the union contains only literal strings (and optionally booleans),
-    // we can transform it into a StringEnum
     if isStringEnumCompatible then
-        let cases =
+        let literalCases =
             flattenedCases
             |> List.map (fun value ->
                 match value with
@@ -2502,14 +2510,48 @@ let private tryOptimizeUnionType (typeName: string) (cases: GlueType list) : FSh
             )
             |> List.distinct
 
+        let literalNames =
+            literalCases
+            |> List.choose (
+                function
+                | FSharpUnionCase.Named caseInfo -> Some caseInfo.Name
+                | _ -> None
+            )
+            |> Set.ofList
+
+        let fieldCases =
+            otherCases
+            |> List.fold
+                (fun (index, fieldCases) caseType ->
+                    let rec nextName index =
+                        let name = $"Case%i{index}"
+
+                        if Set.contains name literalNames then
+                            nextName (index + 1)
+                        else
+                            index, name
+
+                    let index, name = nextName index
+                    let context = context.PushScope("Cases").PushScope name
+
+                    index + 1,
+                    FSharpUnionCase.Field(name, transformType context caseType) :: fieldCases
+                )
+                (1, [])
+            |> snd
+            |> List.rev
+
         ({
             Attributes =
                 [
                     FSharpAttribute.RequireQualifiedAccess
-                    FSharpAttribute.StringEnum CaseRules.None
+                    if fieldCases.IsEmpty then
+                        FSharpAttribute.StringEnum CaseRules.None
+                    else
+                        FSharpAttribute.EraseWithCaseRules CaseRules.None
                 ]
             Name = typeName
-            Cases = cases
+            Cases = literalCases @ fieldCases
             IsOptional = false
         }
         : FSharpUnion)
@@ -2612,7 +2654,7 @@ let private transformTypeAliasDeclaration
     // TODO: Make the transformation more robust
     match glueTypeAliasDeclaration.Type with
     | GlueType.Union(GlueTypeUnion cases) as unionType ->
-        match tryOptimizeUnionType typeAliasName cases with
+        match tryOptimizeUnionType context typeAliasName cases with
         | Some typ -> typ
         | None -> transformType context unionType |> makeTypeAlias
 

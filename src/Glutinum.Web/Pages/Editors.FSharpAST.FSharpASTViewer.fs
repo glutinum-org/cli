@@ -49,6 +49,11 @@ type FSharpASTViewer =
 
         | FSharpAttribute.Erase -> ASTViewer.renderValueOnly "Erase"
 
+        | FSharpAttribute.EraseWithCaseRules caseRules ->
+            ASTViewer.renderNode "Erase" [
+                ASTViewer.renderKeyValue "CaseRules" (CaseRules.toText caseRules)
+            ]
+
         | FSharpAttribute.AllowNullLiteral -> ASTViewer.renderValueOnly "AllowNullLiteral"
 
         | FSharpAttribute.StringEnum caseRules ->
@@ -300,6 +305,11 @@ type FSharpASTViewer =
                     ]
                 | FSharpUnionCase.Typed typ ->
                     ASTViewer.renderNode "Typed" [ FSharpASTViewer.FSharpType typ ]
+                | FSharpUnionCase.Field(name, typ) ->
+                    ASTViewer.renderNode "Field" [
+                        FSharpASTViewer.Name name
+                        FSharpASTViewer.FSharpType typ
+                    ]
             ]
         )
         |> ASTViewer.renderNode "Cases"
