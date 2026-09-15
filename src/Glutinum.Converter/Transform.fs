@@ -969,7 +969,11 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
             {
                 XmlDoc = []
                 Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
-                Name = context.CurrentScopeName
+                Name =
+                    context.TypeLiteralsMemory.GetTypeName(
+                        context.FullName,
+                        context.CurrentScopeName
+                    )
                 OriginalName = context.CurrentScopeName
                 TypeParameters = []
                 Members = TransformMembers.toFSharpMember context members
@@ -979,7 +983,11 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
             |> context.ExposeType
 
             ({
-                Name = context.FullName
+                Name =
+                    context.TypeLiteralsMemory.GetFullTypeNameReference(
+                        context.FullName,
+                        context.CurrentScopeName
+                    )
                 TypeParameters = []
             }
             : FSharpMapped)
@@ -1025,7 +1033,11 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
             {
                 XmlDoc = []
                 Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
-                Name = context.CurrentScopeName
+                Name =
+                    context.TypeLiteralsMemory.GetTypeName(
+                        context.FullName,
+                        context.CurrentScopeName
+                    )
                 OriginalName = context.CurrentScopeName
                 TypeParameters = []
                 Members = TransformMembers.toFSharpMember context members
@@ -1035,7 +1047,11 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
             |> context.ExposeType
 
             ({
-                Name = context.FullName
+                Name =
+                    context.TypeLiteralsMemory.GetFullTypeNameReference(
+                        context.FullName,
+                        context.CurrentScopeName
+                    )
                 TypeParameters = []
             }
             : FSharpMapped)
