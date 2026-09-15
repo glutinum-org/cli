@@ -394,7 +394,7 @@ let private link (text: string) =
                     $"""<see href="{link}">{link}</see>"""
                 else
                     let customText = customText.Trim()
-                    $"""<see href="{link}">{customText}</see>" """.TrimEnd()
+                    $"""<see href="{link}">{customText}</see>"""
             )
         )
 
