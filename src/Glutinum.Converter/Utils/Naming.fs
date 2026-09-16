@@ -13,14 +13,8 @@ let private escapeName (name: string) : string =
         name
     elif
         name = "_"
-        || name.Contains("-")
-        || name.Contains("$")
-        || name.Contains("/")
-        || name.Contains("#")
-        || name.Contains("<")
-        || name.Contains(">")
-        || name.Contains(" ")
-        || name.Contains("~")
+        || name
+           |> Seq.exists (fun c -> not (Char.IsLetterOrDigit c || c = '_' || c = '\''))
         || startWithDigit name
         || Keywords.fsharp.Contains name
     then
@@ -31,7 +25,7 @@ let private escapeName (name: string) : string =
 let removeSurroundingQuotes (text: string) : string =
     if String.IsNullOrEmpty text then
         ""
-    elif text.Length < 1 then
+    elif text.Length < 2 then
         text
     else
         // only remove quotes when at start AND end
@@ -58,6 +52,16 @@ let private replaceDollar (text: string) : string = text.Replace("$", "_DOLLAR_"
 
 let private replaceForwardSlash (text: string) : string = text.Replace("/", "_SLASH_")
 
+// Characters rejected by F# in type and union case names even inside backticks
+let private replaceTypeNameInvalidChars (text: string) : string =
+    text
+        .Replace("\\", "_BACKSLASH_")
+        .Replace("*", "_STAR_")
+        .Replace("&", "_AMP_")
+        .Replace("[", "_LBRACKET_")
+        .Replace("]", "_RBRACKET_")
+        .Replace("\"", "_QUOTE_")
+
 type SanitizeNameResult = { Name: string; IsDifferent: bool }
 
 let private sanitizeWith (extraReplace: string -> string) (name: string) : SanitizeNameResult =
@@ -67,8 +71,8 @@ let private sanitizeWith (extraReplace: string -> string) (name: string) : Sanit
         |> replaceAt
         |> replaceEmpty
         |> replacePlus
-        |> extraReplace
         |> removeSurroundingQuotes
+        |> extraReplace
 
     // Check if the name is different after sanitization
     // This is used to check if the value is different from the default Fable computed value
@@ -90,7 +94,7 @@ let sanitizeNameWithResult (name: string) : SanitizeNameResult = sanitizeWith id
 /// member names.
 /// </summary>
 let sanitizeTypeNameWithResult (name: string) : SanitizeNameResult =
-    sanitizeWith (replaceDollar >> replaceForwardSlash) name
+    sanitizeWith (replaceDollar >> replaceForwardSlash >> replaceTypeNameInvalidChars) name
 
 let sanitizeName (name: string) =
     let result = sanitizeNameWithResult name

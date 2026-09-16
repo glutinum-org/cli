@@ -91,7 +91,9 @@ let private attributeToText (fsharpAttribute: FSharpAttribute) =
     | FSharpAttribute.EraseWithCaseRules caseRules -> $"[<Erase({caseRulesToText caseRules})>]"
     | FSharpAttribute.TypeScriptTaggedUnion(tagName, caseRules) ->
         $"[<TypeScriptTaggedUnion(\"{tagName}\", {caseRulesToText caseRules})>]"
-    | FSharpAttribute.CompiledName name -> $"[<CompiledName(\"{name}\")>]"
+    | FSharpAttribute.CompiledName name ->
+        let name = name.Replace("\\", "\\\\").Replace("\"", "\\\"")
+        $"[<CompiledName(\"{name}\")>]"
     | FSharpAttribute.CompiledValue value ->
         let valueText =
             match value with

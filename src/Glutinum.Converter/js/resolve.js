@@ -39,7 +39,10 @@ export function findPackageDir(file) {
     let dir = path.dirname(path.resolve(file));
 
     while (true) {
-        if (fs.existsSync(path.join(dir, "package.json"))) {
+        const packageJsonPath = path.join(dir, "package.json");
+
+        // `dist/esm/package.json` files only holding `{ "type": "module" }` do not delimit a package
+        if (fs.existsSync(packageJsonPath) && JSON.parse(fs.readFileSync(packageJsonPath, "utf8")).name !== undefined) {
             return dir;
         }
 

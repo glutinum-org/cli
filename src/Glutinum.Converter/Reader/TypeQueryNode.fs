@@ -7,6 +7,8 @@ open Fable.Core.JsInterop
 open Glutinum.Converter.Reader.Utils
 open FsToolkit.ErrorHandling
 
+let private declarationsInProgress = ResizeArray<Ts.Node>()
+
 let readTypeQueryNode (reader: ITypeScriptReader) (typeQueryNode: Ts.TypeQueryNode) =
 
     let checker = reader.checker
@@ -147,7 +149,16 @@ let readTypeQueryNode (reader: ITypeScriptReader) (typeQueryNode: Ts.TypeQueryNo
                     | GlueMember.MethodSignature info ->
                         toFunctionDeclaration info.Name info.Documentation info.Parameters info.Type
                     | _ -> GlueType.Primitive GluePrimitive.Any
-                | _ -> reader.ReadNode declaration
+                | _ ->
+                    if declarationsInProgress.Contains declaration then
+                        GlueType.Primitive GluePrimitive.Any
+                    else
+                        declarationsInProgress.Add declaration
+
+                        try
+                            reader.ReadNode declaration
+                        finally
+                            declarationsInProgress.RemoveAt(declarationsInProgress.Count - 1)
 
             | None -> GlueType.Primitive GluePrimitive.Any
 

@@ -64,6 +64,8 @@ let readTypeOperatorNode (reader: ITypeScriptReader) (node: Ts.TypeOperatorNode)
 
     | Ts.SyntaxKind.ReadonlyKeyword -> reader.ReadTypeNode node.``type`` |> GlueType.ReadOnly
 
+    | Ts.SyntaxKind.UniqueKeyword -> reader.ReadTypeNode node.``type``
+
     | _ ->
         Report.readerError ("type operator", $"Unsupported operator %s{node.operator.Name}", node)
         |> reader.Warnings.Add

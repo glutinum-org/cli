@@ -626,6 +626,8 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
 
         if isOptional && others.Length = 1 then
             FSharpType.Option(transformType context others.Head)
+        else if others.IsEmpty then
+            transformType context optionalTypes.Head
         // Don't wrap in a U1 if there is only one case
         else if others.Length = 1 then
             transformType context others.Head
@@ -2333,7 +2335,7 @@ let private transformInterface (context: TransformContext) (info: GlueInterface)
 
             standardMembers @ inheritedMembers
         TypeParameters = typeParametersResult.TypeParameters
-        Inheritance = inheritance |> List.map (transformType context)
+        Inheritance = inheritance |> List.map (transformType (context.PushScope "Extends"))
     }
 
 module Interface =
@@ -3875,7 +3877,7 @@ let private transformClassDeclaration
             | GlueType.Discard -> false
             | _ -> true
         )
-        |> List.map (context.ExposeTypeAlias >> transformType context)
+        |> List.map (context.ExposeTypeAlias >> transformType (context.PushScope "Extends"))
 
     let specialiazedAlias =
         let defaultAliases =
