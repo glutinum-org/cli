@@ -14,8 +14,14 @@ let readModuleDeclaration
     let name = unbox<Ts.Identifier> declaration.name
     let children = declaration.getChildren ()
 
+    // For `namespace A.B {}`, TypeScript creates `B` as the body of `A` and the keyword belongs to `A`
+    let isBodyOfDottedName =
+        declaration.parent?kind = Ts.SyntaxKind.ModuleDeclaration
+        && obj.ReferenceEquals(declaration.parent?body, declaration)
+
     let isNamespace =
-        children |> Seq.exists (fun node -> node.kind = Ts.SyntaxKind.NamespaceKeyword)
+        isBodyOfDottedName
+        || children |> Seq.exists (fun node -> node.kind = Ts.SyntaxKind.NamespaceKeyword)
 
     let types =
         children
@@ -25,6 +31,8 @@ let readModuleDeclaration
                 let moduleBlock = child :?> Ts.ModuleBlock
 
                 moduleBlock.statements |> List.ofSeq |> List.map reader.ReadNode |> Some
+
+            | Ts.SyntaxKind.ModuleDeclaration -> reader.ReadNode child |> List.singleton |> Some
 
             | Ts.SyntaxKind.NamespaceKeyword
             | _ -> None
