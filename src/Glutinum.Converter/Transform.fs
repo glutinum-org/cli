@@ -2682,6 +2682,18 @@ module private TypeParameter =
                 SealedTypeOpt = sealedType
             }
 
+    let private isUnionAlias (context: TransformContext) (constraintType: GlueType) =
+        match constraintType with
+        | GlueType.TypeReference typeReference ->
+            context.TypeMemory
+            |> List.exists (
+                function
+                | GlueType.TypeAliasDeclaration { Name = name; Type = GlueType.Union _ } ->
+                    name = typeReference.Name
+                | _ -> false
+            )
+        | _ -> false
+
     let transform (context: TransformContext) (typeParameter: GlueTypeParameter) : TransformResult =
         let default_ = typeParameter.Default |> Option.map (transformType context)
 
@@ -2727,6 +2739,14 @@ module private TypeParameter =
             | FSharpType.Primitive _
             | FSharpType.Option(FSharpType.Primitive _)
             | FSharpType.Union _ as fsharpType ->
+                TransformResult.Create(
+                    typeParameter.Name,
+                    sealedType = fsharpType,
+                    default_ = default_
+                )
+
+            // An alias of a union is generated as an erased union, which is sealed too
+            | FSharpType.TypeReference _ as fsharpType when isUnionAlias context constraintType ->
                 TransformResult.Create(
                     typeParameter.Name,
                     sealedType = fsharpType,
@@ -3864,11 +3884,29 @@ let private transformClassDeclaration
             | _ -> false
         )
 
-    let hasErrorInheritance = not (List.isEmpty errorInheritance)
+    // A class extending an `Error` subclass has to be a class too
+    let rec isErrorDerived (visited: string list) (heritageClause: GlueType) =
+        match heritageClause with
+        | GlueType.TypeReference typeReference ->
+            (typeReference.IsStandardLibrary && typeReference.Name = "Error")
+            || (not (List.contains typeReference.Name visited)
+                && context.TypeMemory
+                   |> List.exists (
+                       function
+                       | GlueType.ClassDeclaration info when info.Name = typeReference.Name ->
+                           info.HeritageClauses
+                           |> List.exists (isErrorDerived (typeReference.Name :: visited))
+                       | _ -> false
+                   ))
+        | _ -> false
+
+    let hasErrorInheritance =
+        not (List.isEmpty errorInheritance)
+        || otherInheritance |> List.exists (isErrorDerived [])
 
     let inheritance =
         [
-            if hasErrorInheritance then
+            if not (List.isEmpty errorInheritance) then
                 {
                     Name = "Exception"
                     FullName = "System.Exception"
