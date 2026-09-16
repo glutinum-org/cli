@@ -1136,12 +1136,11 @@ and private memberTypeParameterNames (glueMember: GlueMember) : string list =
     | GlueMember.GetAccessor { Type = typ }
     | GlueMember.SetAccessor { ArgumentType = typ }
     | GlueMember.IndexSignature { Type = typ } -> typeParameterNames typ
-    | GlueMember.Method { Type = typ; Parameters = parameters }
-    | GlueMember.MethodSignature { Type = typ; Parameters = parameters }
-    | GlueMember.CallSignature { Type = typ; Parameters = parameters }
-    | GlueMember.ConstructSignature { Type = typ; Parameters = parameters } ->
-        typeParameterNames typ
-        @ (parameters |> List.collect (fun parameter -> typeParameterNames parameter.Type))
+    // A method declares the type parameters it mentions, a property can't
+    | GlueMember.Method _
+    | GlueMember.MethodSignature _
+    | GlueMember.CallSignature _
+    | GlueMember.ConstructSignature _ -> []
 
 let rec private mentionsTypeParameter (name: string) (glueType: GlueType) : bool =
     let mentions = mentionsTypeParameter name
