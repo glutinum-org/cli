@@ -4,6 +4,7 @@
     "description": "TypeScript definition to F# bindings converter",
     "type": "module",
     "main": "index.js",
+    "packageManager": "pnpm@11.17.0",
     "engines": {
         "node": ">=16",
         "pnpm": "11"

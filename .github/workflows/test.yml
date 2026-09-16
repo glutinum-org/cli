@@ -12,19 +12,19 @@ jobs:
     name: Run tests suite
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v7
 
     - name: Setup .NET
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v6
       with:
         global-json-file: global.json
 
     - name: Setup Node.js environment
-      uses: actions/setup-node@v4
-
-    - uses: pnpm/action-setup@v2
+      uses: actions/setup-node@v7
       with:
-        version: 10
+        node-version-file: package.json
+
+    - uses: pnpm/action-setup@v6
 
     - name: Tests
       run: ./build.sh test
@@ -34,10 +34,10 @@ jobs:
     name: Check formatting
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v7
 
     - name: Setup .NET
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v6
       with:
         global-json-file: global.json
 

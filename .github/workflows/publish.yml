@@ -10,23 +10,23 @@ jobs:
     name: Publish to GitHub Pages
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v7
       with:
         # We need more that the HEAD to find the last_released_commit
         # For now, we use a depth of 100 but if this is too limiting we can use the full history
         fetch-depth: 300
 
     - name: Setup .NET
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v6
       with:
         global-json-file: global.json
 
     - name: Setup Node.js environment
-      uses: actions/setup-node@v4
-
-    - uses: pnpm/action-setup@v2
+      uses: actions/setup-node@v7
       with:
-        version: 10
+        node-version-file: package.json
+
+    - uses: pnpm/action-setup@v6
 
     - name: Restore .NET dependencies
       run: dotnet tool restore
@@ -38,7 +38,7 @@ jobs:
       run: ./build.sh web
 
     - name: Publish
-      uses: peaceiris/actions-gh-pages@v3
+      uses: peaceiris/actions-gh-pages@v4
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./src/Glutinum.Web/dist

@@ -24,13 +24,13 @@ jobs:
     name: ShipIt - Pull Request
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           # We need to fetch more than the last commit to be able to generate the changelog based on the commit history.
           # Adapt this value based on your needs.
           fetch-depth: 300
       - name: Setup .NET
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
       - name: ShipIt (Pull Request)
@@ -47,20 +47,20 @@ jobs:
     # Only trigger this workflow when a commit starting with `chore: release ` is pushed.
     if: "startsWith(github.event.workflow_run.head_commit.message, 'chore: release ')"
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       # Configure how you want to publish your package, e.g. using the NuGet CLI, dotnet CLI, NPM, etc.
       # It is recommanded to use Trusted Publishing to avoid having to manage API keys in your repository.
       - name: Setup .NET
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
 
       - name: Setup Node.js environment
-        uses: actions/setup-node@v4
-
-      - uses: pnpm/action-setup@v2
+        uses: actions/setup-node@v7
         with:
-          version: 10
+          node-version-file: package.json
+
+      - uses: pnpm/action-setup@v6
 
       # Below is an example, for NuGet packages (to demonstrate that we are getting
       # the API key from the OIDC token exchange and not from a secret in the repository).
