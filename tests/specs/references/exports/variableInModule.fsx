@@ -7,7 +7,7 @@ open System
 [<AbstractClass>]
 [<Erase>]
 type Exports =
-    [<ImportAll("REPLACE_ME_WITH_MODULE_NAME")>]
+    [<ImportAll("vscode")>]
     static member inline vscode
         with get () : vscode_.Exports =
             nativeOnly

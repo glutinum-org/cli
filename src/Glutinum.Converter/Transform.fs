@@ -1381,6 +1381,23 @@ let private transformExports
                         else
                             $"{sanitizedName}.Exports"
 
+                    // `declare module "path" { ... }` is imported by its name
+                    let isAmbientModule =
+                        moduleDeclaration.Name.StartsWith "\""
+                        || moduleDeclaration.Name.StartsWith "'"
+
+                    // `export = path` of a variable, the module is the variable
+                    let exportEqualsType =
+                        moduleDeclaration.Types
+                        |> List.tryPick (
+                            function
+                            | GlueType.ExportDefault(GlueType.Variable {
+                                                                           Name = "export="
+                                                                           Type = typ
+                                                                       }) -> Some typ
+                            | _ -> None
+                        )
+
                     let xmlDocInfo = transformComment moduleDeclaration.Documentation
 
                     let newTypes =
@@ -1388,7 +1405,11 @@ let private transformExports
                             Attributes =
                                 [
                                     yield! xmlDocInfo.ObsoleteAttributes
-                                    if isTopLevel then
+                                    if isAmbientModule then
+                                        FSharpAttribute.ImportAll(
+                                            Naming.removeSurroundingQuotes moduleDeclaration.Name
+                                        )
+                                    elif isTopLevel then
                                         FSharpAttribute.ImportAll context.ImportSpecifier
                                     else
                                         FSharpAttribute.EmitMacroProperty(
@@ -1400,14 +1421,17 @@ let private transformExports
                             Parameters = []
                             TypeParameters = []
                             Type =
-                                ({
-                                    Name = exportTypeName
-                                    TypeParameters = []
-                                }
-                                : FSharpMapped)
-                                |> FSharpType.Mapped
+                                match exportEqualsType with
+                                | Some typ -> transformType (context.PushScope mangledName) typ
+                                | None ->
+                                    ({
+                                        Name = exportTypeName
+                                        TypeParameters = []
+                                    }
+                                    : FSharpMapped)
+                                    |> FSharpType.Mapped
                             IsOptional = false
-                            IsStatic = isTopLevel
+                            IsStatic = isTopLevel || isAmbientModule
                             Accessor = FSharpAccessor.ReadOnly |> Some
                             Accessibility = FSharpAccessibility.Public
                             XmlDoc = xmlDocInfo.XmlDoc
@@ -1417,6 +1441,10 @@ let private transformExports
                         |> List.singleton
 
                     applyHelper newTypes (Set.singleton mangledName)
+
+                // Consumed by the module it belongs to
+                | GlueType.ExportDefault(GlueType.Variable { Name = "export=" }) ->
+                    applyHelper [] Set.empty
 
                 | GlueType.ExportDefault glueType ->
                     let name, context = sanitizeNameAndPushScope glueType.Name context

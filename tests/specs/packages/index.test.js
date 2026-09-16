@@ -15,6 +15,7 @@ const fixtures = [
     "reExports",
     "renamedImport",
     "unionAlias",
+    "ambientModules",
 ]
 
 const footer = `
