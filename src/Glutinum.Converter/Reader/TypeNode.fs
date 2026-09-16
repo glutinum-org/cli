@@ -102,6 +102,38 @@ let private readInstantiatedMember
 
 let private intersectionsInProgress = ResizeArray<Ts.Type>()
 
+/// A conditional type the checker can't resolve without its type arguments
+let private isDeferredConditional (typ: Ts.Type) =
+    match typ.flags with
+    | HasTypeFlags Ts.TypeFlags.Conditional -> true
+    | _ -> false
+
+let private truncateToDeclaredArity
+    (reader: ITypeScriptReader)
+    (symbolOpt: Ts.Symbol option)
+    (typeArguments: GlueType list)
+    : GlueType list
+    =
+    let declaredArity =
+        symbolOpt
+        |> Option.bind (resolveAlias reader.checker)
+        |> Option.bind (mainDeclaration reader.PackageContext)
+        |> Option.bind (fun declaration ->
+            match declaration.kind with
+            | Ts.SyntaxKind.InterfaceDeclaration
+            | Ts.SyntaxKind.ClassDeclaration
+            | Ts.SyntaxKind.TypeAliasDeclaration ->
+                let typeParameters: ResizeArray<Ts.TypeParameterDeclaration> option =
+                    declaration?typeParameters
+
+                typeParameters |> Option.map _.Count |> Option.defaultValue 0 |> Some
+            | _ -> None
+        )
+
+    match declaredArity with
+    | Some arity when arity < typeArguments.Length -> List.truncate arity typeArguments
+    | _ -> typeArguments
+
 let private isGlobalThisQuery (typeNode: Ts.TypeNode) =
     typeNode.kind = Ts.SyntaxKind.TypeQuery
     && entityNameText !!(typeNode :?> Ts.TypeQueryNode).exprName = "globalThis"
@@ -616,8 +648,15 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
 
                     let isExternal = isExternalToPackages checker reader.PackageContext symbolOpt
 
+                    // `Key<K, T>` standing for a conditional type is the unresolved type itself
+                    let isDeferredConditionalAlias =
+                        typeReferenceNode.pos >= 0
+                        && isDeferredConditional (checker.getTypeFromTypeNode typeReferenceNode)
+
                     if
-                        isUnresolved || (isExternal && not (knownExternalTypeNames.Contains name))
+                        isUnresolved
+                        || isDeferredConditionalAlias
+                        || (isExternal && not (knownExternalTypeNames.Contains name))
                     then
                         GlueType.Primitive GluePrimitive.Any
                     else
@@ -634,7 +673,12 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                                     reader.PackageContext
                                     isQualified
                                     symbolOpt
-                            TypeArguments = readTypeArguments reader typeReferenceNode
+                            TypeArguments =
+                                // `MessageEvent<T>` of the DOM lib merged with a non-generic
+                                // `interface MessageEvent` of a package: the arguments of the
+                                // declaration read are kept
+                                readTypeArguments reader typeReferenceNode
+                                |> truncateToDeclaredArity reader symbolOpt
                             // `Uint8Array` from `lib.es2015` is mapped like the `lib.es5` types
                             IsStandardLibrary = isStandardLibrary || isExternal
                         })
@@ -708,6 +752,9 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
         let importTypeNode = typeNode :?> Ts.ImportTypeNode
 
         match importTypeNode.qualifier with
+        // `typeof import("./file").fn` is the type of the value
+        | Some qualifier when importTypeNode.isTypeOf ->
+            ts.factory.createTypeQueryNode qualifier |> reader.ReadTypeNode
         | Some qualifier ->
             ts.factory.createTypeReferenceNode (
                 U2.Case2 qualifier,
@@ -977,15 +1024,21 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
 
         let typ = checker.getTypeAtLocation conditionalTypeNode
 
-        // If we resolved the type to Any, we fallback to the generic type
-        // This is because in F#, we can write
-        // type ReturnType<'T> = obj
-        // because 'T is not used in the type
-        // This is perhaps a bit aggressive, so if needed we can re-visit `readTypeUsingFlags`
-        // usage by inlining the logic here and make it more specific
-        match readTypeUsingFlags reader typ with
-        | GlueType.Primitive GluePrimitive.Any -> reader.ReadTypeNode conditionalTypeNode.checkType
-        | forward -> forward
+        // The branch depends on the type arguments, F# has no equivalent
+        if isDeferredConditional typ then
+            GlueType.Primitive GluePrimitive.Any
+        else
+
+            // If we resolved the type to Any, we fallback to the generic type
+            // This is because in F#, we can write
+            // type ReturnType<'T> = obj
+            // because 'T is not used in the type
+            // This is perhaps a bit aggressive, so if needed we can re-visit `readTypeUsingFlags`
+            // usage by inlining the logic here and make it more specific
+            match readTypeUsingFlags reader typ with
+            | GlueType.Primitive GluePrimitive.Any ->
+                reader.ReadTypeNode conditionalTypeNode.checkType
+            | forward -> forward
 
     | Ts.SyntaxKind.TemplateLiteralType ->
         let templateLiteralTypeNode = typeNode :?> Ts.TemplateLiteralTypeNode

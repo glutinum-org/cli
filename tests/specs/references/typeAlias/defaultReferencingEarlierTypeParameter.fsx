@@ -9,11 +9,8 @@ open System
 type Node =
     abstract member kind: float with get, set
 
-[<AllowNullLiteral>]
-[<Interface>]
 type Visitor<'TIn, 'TOut> =
-    [<Emit("$0($1...)")>]
-    abstract member Invoke: node: 'TIn -> 'TOut
+    delegate of node: 'TIn -> 'TOut
 
 type Visitor<'TIn> =
     Visitor<'TIn, 'TIn option>

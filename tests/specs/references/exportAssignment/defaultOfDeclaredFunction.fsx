@@ -7,10 +7,8 @@ open System
 [<AbstractClass>]
 [<Erase>]
 type Exports =
-    [<Import("RAL", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member RAL () : RAL = nativeOnly
     [<ImportDefault("REPLACE_ME_WITH_MODULE_NAME")>]
-    static member inline RAL_: obj = nativeOnly
+    static member RAL () : RAL = nativeOnly
 
 module RAL_ =
 

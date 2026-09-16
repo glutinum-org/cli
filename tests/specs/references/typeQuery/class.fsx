@@ -15,11 +15,8 @@ type Exports =
 type DayJs =
     interface end
 
-[<AllowNullLiteral>]
-[<Interface>]
 type PluginFunc =
-    [<Emit("$0($1...)")>]
-    abstract member Invoke: c: DayJs -> unit
+    delegate of c: DayJs -> unit
 
 (***)
 #r "nuget: Fable.Core"

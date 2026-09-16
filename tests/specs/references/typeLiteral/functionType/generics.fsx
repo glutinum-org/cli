@@ -4,11 +4,8 @@ open Fable.Core
 open Fable.Core.JsInterop
 open System
 
-[<AllowNullLiteral>]
-[<Interface>]
 type Callback<'Param, 'AtomType> =
-    [<Emit("$0($1...)")>]
-    abstract member Invoke: event: Callback.event<'Param, 'AtomType> -> unit
+    delegate of event: Callback.event<'Param, 'AtomType> -> unit
 
 module Callback =
 

@@ -246,6 +246,18 @@ let private typedArrayNames =
             "BigUint64Array"
         ]
 
+/// The iterators of the standard library are iterable, `Iterable<T>` of their first argument
+let private iteratorNames =
+    set
+        [
+            "IterableIterator"
+            "IteratorObject"
+            "ArrayIterator"
+            "MapIterator"
+            "SetIterator"
+            "StringIterator"
+        ]
+
 let private mapTypeNameToFableCoreAwareName
     (context: TransformContext)
     (typeReference: GlueTypeReference)
@@ -254,6 +266,7 @@ let private mapTypeNameToFableCoreAwareName
         // When exposing a type, we also need to do it
         if typeReference.IsStandardLibrary then
             match typeReference.Name with
+            | name when iteratorNames.Contains name -> "Iterable"
             | "Date" -> "JS.Date"
             | "Promise" -> "JS.Promise"
             | "Uint8Array" -> "JS.Uint8Array"
@@ -473,7 +486,7 @@ let private transformTupleType (context: TransformContext) (glueTypes: GlueType 
 
 module TypeLiteral =
 
-    let tryFindIterableType (context: TransformContext) (typeLiteralInfo: GlueTypeLiteral) =
+    let tryFindIterableType (context: TransformContext) (members: GlueMember list) =
 
         let makeIterable (typeParameter: FSharpTypeParameter) =
             ({
@@ -486,7 +499,7 @@ module TypeLiteral =
         let makeIterableObj () =
             FSharpType.Object |> FSharpTypeParameter.FSharpType |> makeIterable
 
-        typeLiteralInfo.Members
+        members
         |> List.choose (
             function
             | GlueMember.MethodSignature methodSignature ->
@@ -503,15 +516,13 @@ module TypeLiteral =
         |> List.tryHead
         |> Option.map (fun methodSignature ->
             match methodSignature.Type with
-            | GlueType.TypeReference typeReference ->
-                if typeReference.Name = "IterableIterator" then
-                    transformType context typeReference.TypeArguments.Head
-                    |> FSharpTypeParameter.FSharpType
-                    |> makeIterable
+            // `IterableIterator<T>`, `ArrayIterator<T>`, `Iterator<T>`: the element is the first argument
+            | GlueType.TypeReference { TypeArguments = elementType :: _ } ->
+                transformType context elementType
+                |> FSharpTypeParameter.FSharpType
+                |> makeIterable
 
-                else
-                    // Can't determine the concreate type of the iterable, default to object
-                    makeIterableObj ()
+            | GlueType.TypeReference _ -> makeIterableObj ()
 
             // If we find a type literal, we try to determine the type of the iterable by looking at the next method
             | GlueType.TypeLiteral typeLiteralInfo ->
@@ -738,6 +749,13 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
                     typeReference.IsStandardLibrary && typedArrayNames.Contains typeReference.Name
                 then
                     []
+                // `IterableIterator<T, TReturn, TNext>` is an `Iterable<T>`
+                elif
+                    typeReference.IsStandardLibrary && iteratorNames.Contains typeReference.Name
+                then
+                    typeReference.TypeArguments
+                    |> List.truncate 1
+                    |> List.map (transformType context)
                 else
                     typeReference.TypeArguments |> List.map (transformType context)
             Type = FSharpType.Discard
@@ -815,6 +833,7 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
                 |> transformTypeParameters context
 
             ({
+                XmlDoc = []
                 Name =
                     context.TypeLiteralsMemory.GetTypeName(
                         context.FullName,
@@ -849,7 +868,9 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
             |> FSharpType.TypeAlias
 
     | GlueType.Interface interfaceInfo ->
-        FSharpType.Interface(transformInterface context interfaceInfo)
+        match tryTransformCallableInterface context interfaceInfo with
+        | Some delegateType -> delegateType
+        | None -> FSharpType.Interface(transformInterface context interfaceInfo)
 
     // `{}` is any non-null value
     | GlueType.TypeLiteral { Members = [] } -> FSharpType.Object
@@ -914,7 +935,7 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
                 Members = TransformMembers.toFSharpMember context typeLiteralInfo.Members
                 Inheritance =
                     [
-                        match TypeLiteral.tryFindIterableType context typeLiteralInfo with
+                        match TypeLiteral.tryFindIterableType context typeLiteralInfo.Members with
                         | Some iterable -> iterable
                         | None -> ()
                     ]
@@ -1161,8 +1182,10 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
     // `T[K]` outside of a mapped type has no equivalent in F#
     | GlueType.IndexedAccessType _ -> FSharpType.Object
 
+    // `typeof import('./errors').default` of a namespace, the namespace object has no F# type
+    | GlueType.ModuleDeclaration _ -> FSharpType.Object
+
     | GlueType.Literal _
-    | GlueType.ModuleDeclaration _
     | GlueType.FileModule _
     | GlueType.ReExport _
     | GlueType.Enum _
@@ -1288,9 +1311,32 @@ let private transformExports
                 | _ -> 0
             )
 
+        // `declare class Agent {}; export default Agent`: the declaration is the default import
+        let defaultExportedDeclarations =
+            sortedExports
+            |> List.choose (
+                function
+                | GlueType.ExportDefault(GlueType.Variable { Name = name }) when
+                    sortedExports
+                    |> List.exists (
+                        function
+                        | GlueType.ClassDeclaration info -> info.Name = name
+                        | GlueType.FunctionDeclaration info -> info.Name = name
+                        | _ -> false
+                    )
+                    ->
+                    Some name
+                | _ -> None
+            )
+            |> set
+
         let rec apply (acc: FSharpMember list) (seenNames: Set<string>) (glueTypes: GlueType list) =
             match glueTypes with
             | [] -> acc
+            | GlueType.ExportDefault(GlueType.Variable { Name = name }) :: tail when
+                defaultExportedDeclarations.Contains name
+                ->
+                apply acc seenNames tail
             | head :: tail ->
 
                 let applyHelper newTypes newNames =
@@ -1342,7 +1388,10 @@ let private transformExports
                             Attributes =
                                 [
                                     if isTopLevel then
-                                        importAttribute info.Name context.ImportSource
+                                        if defaultExportedDeclarations.Contains info.Name then
+                                            importDefaultAttribute info.Name context.ImportSource
+                                        else
+                                            importAttribute info.Name context.ImportSource
                                     else
                                         FSharpAttribute.EmitMacroInvoke info.Name
                                     yield! xmlDocInfo.ObsoleteAttributes
@@ -1396,7 +1445,14 @@ let private transformExports
                                     Attributes =
                                         [
                                             if isTopLevel then
-                                                importAttribute info.Name context.ImportSource
+                                                if
+                                                    defaultExportedDeclarations.Contains info.Name
+                                                then
+                                                    importDefaultAttribute
+                                                        info.Name
+                                                        context.ImportSource
+                                                else
+                                                    importAttribute info.Name context.ImportSource
 
                                                 FSharpAttribute.EmitConstructor
                                             else
@@ -1614,6 +1670,55 @@ let private transformExports
 
                         apply (acc @ newTypes) (Set.add name seenNames) (memberExports @ tail)
 
+                // `export default Errors` of a namespace: its members through the default import
+                | GlueType.ExportDefault(GlueType.ModuleDeclaration moduleDeclaration) ->
+                    let sanitizedName = Naming.sanitizeTypeName moduleDeclaration.Name
+
+                    let withSuffix =
+                        Naming.sanitizeTypeName (
+                            Naming.removeSurroundingQuotes moduleDeclaration.Name + "_"
+                        )
+
+                    let name =
+                        if seenNames.Contains sanitizedName then
+                            withSuffix
+                        else
+                            sanitizedName
+
+                    let xmlDocInfo = transformComment moduleDeclaration.Documentation
+
+                    let newTypes =
+                        {
+                            Attributes =
+                                [
+                                    yield! xmlDocInfo.ObsoleteAttributes
+                                    importDefaultAttribute
+                                        moduleDeclaration.Name
+                                        context.ImportSource
+                                ]
+                            Name = name
+                            OriginalName = $"{moduleDeclaration.Name}.Exports"
+                            Parameters = []
+                            TypeParameters = []
+                            Type =
+                                ({
+                                    Name = $"{withSuffix}.Exports"
+                                    TypeParameters = []
+                                }
+                                : FSharpMapped)
+                                |> FSharpType.Mapped
+                            IsOptional = false
+                            IsStatic = true
+                            Accessor = FSharpAccessor.ReadOnly |> Some
+                            Accessibility = FSharpAccessibility.Public
+                            XmlDoc = xmlDocInfo.XmlDoc
+                            Body = FSharpMemberInfoBody.NativeOnly
+                        }
+                        |> FSharpMember.Property
+                        |> List.singleton
+
+                    applyHelper newTypes (Set.singleton name)
+
                 | GlueType.ExportDefault glueType ->
                     let name, context = sanitizeNameAndPushScope glueType.Name context
 
@@ -1722,6 +1827,78 @@ module private TransformMembers =
     let withoutComputedNames (members: GlueMember list) =
         members |> List.filter (hasComputedName >> not)
 
+    /// Declared next to the overload made of the defaults, so F# tells the two apart
+    let private explicitTypeParameters
+        (context: TransformContext)
+        (typeParameters: GlueTypeParameter list)
+        : FSharpTypeParameter list
+        =
+        if typeParameters |> List.exists _.Default.IsSome then
+            (transformTypeParameters context typeParameters).TypeParameters
+        else
+            []
+
+    /// `querySelector<E = Element>(s: string): E` also gets `querySelector(s: string): Element`,
+    /// the F# call without a type argument resolves to it
+    let private withDefaultedTypeParameterOverloads (members: GlueMember list) =
+        let defaults (typeParameters: GlueTypeParameter list) =
+            typeParameters
+            |> List.choose (fun typeParameter ->
+                typeParameter.Default
+                |> Option.map (fun default_ -> typeParameter.Name, default_)
+            )
+            |> Map.ofList
+
+        let isUsed (substitutions: Map<string, GlueType>) (parameters: GlueParameter list) typ =
+            substitutions
+            |> Map.exists (fun name _ ->
+                mentionsTypeParameter name typ
+                || parameters
+                   |> List.exists (fun parameter -> mentionsTypeParameter name parameter.Type)
+            )
+
+        members
+        |> List.collect (fun glueMember ->
+            match glueMember with
+            | GlueMember.MethodSignature info ->
+                let substitutions = defaults info.TypeParameters
+
+                if isUsed substitutions info.Parameters info.Type then
+                    [
+                        glueMember
+                        GlueMember.MethodSignature
+                            { info with
+                                TypeParameters =
+                                    info.TypeParameters |> List.filter _.Default.IsNone
+                                Parameters =
+                                    info.Parameters |> List.map (substituteParameter substitutions)
+                                Type = substituteTypeParameters substitutions info.Type
+                            }
+                    ]
+                else
+                    [ glueMember ]
+
+            | GlueMember.Method info ->
+                let substitutions = defaults info.TypeParameters
+
+                if isUsed substitutions info.Parameters info.Type then
+                    [
+                        glueMember
+                        GlueMember.Method
+                            { info with
+                                TypeParameters =
+                                    info.TypeParameters |> List.filter _.Default.IsNone
+                                Parameters =
+                                    info.Parameters |> List.map (substituteParameter substitutions)
+                                Type = substituteTypeParameters substitutions info.Type
+                            }
+                    ]
+                else
+                    [ glueMember ]
+
+            | _ -> [ glueMember ]
+        )
+
     /// <summary>
     /// Detect methods whose first parameter is a string literal (the
     /// event-emitter pattern, e.g. <c>on(event: 'console', listener)</c>) and
@@ -1756,6 +1933,7 @@ module private TransformMembers =
         members
         // The iterator information is stored in the Iterable<T> inheritance
         |> withoutComputedNames
+        |> withDefaultedTypeParameterOverloads
         // We want to transform GetAccessor / SetAccessor
         // into a single Property if they are related to the same property
         |> List.choose (
@@ -1860,7 +2038,7 @@ module private TransformMembers =
                             |> List.map (transformParameter context)
                             |> requiredBeforeParamArray
                         Type = transformType context methodInfo.Type
-                        TypeParameters = []
+                        TypeParameters = explicitTypeParameters context methodInfo.TypeParameters
                         IsOptional = methodInfo.IsOptional
                         IsStatic = methodInfo.IsStatic
                         Accessor = None
@@ -2027,7 +2205,7 @@ module private TransformMembers =
                         |> List.map (transformParameter context)
                         |> requiredBeforeParamArray
                     Type = transformType context methodSignature.Type
-                    TypeParameters = []
+                    TypeParameters = explicitTypeParameters context methodSignature.TypeParameters
                     IsOptional = false
                     IsStatic = false
                     Accessor = None
@@ -2623,6 +2801,101 @@ let private isArrayHeritage (heritageClause: GlueType) =
 
 let private partialHeritageBeingExpanded = ResizeArray<string>()
 
+/// Whether one of the base interfaces declares `[Symbol.iterator]`, directly or through its bases
+let private inheritsIterable (typeMemory: GlueType list) (heritageClauses: GlueType list) =
+    let rec check (visited: Set<string>) (heritageClauses: GlueType list) =
+        heritageClauses
+        |> List.exists (fun heritageClause ->
+            match heritageClause with
+            | GlueType.TypeReference typeReference when
+                not (visited.Contains typeReference.FullName)
+                ->
+                typeMemory
+                |> List.exists (fun glueType ->
+                    match glueType with
+                    | GlueType.Interface candidate when
+                        candidate.FullName = typeReference.FullName
+                        ->
+                        candidate.Members
+                        |> List.exists (
+                            function
+                            | GlueMember.MethodSignature { Name = "[Symbol.iterator]" } -> true
+                            | _ -> false
+                        )
+                        || check (visited.Add typeReference.FullName) candidate.HeritageClauses
+                    | _ -> false
+                )
+            | _ -> false
+        )
+
+    check Set.empty heritageClauses
+
+/// The call signature of a base type generated as a delegate, F# can't inherit it
+let private tryCallableHeritage
+    (typeMemory: GlueType list)
+    (heritageClause: GlueType)
+    : GlueCallSignature option
+    =
+    match heritageClause with
+    | GlueType.TypeReference typeReference ->
+        typeMemory
+        |> List.tryPick (fun glueType ->
+            match glueType with
+            | GlueType.TypeAliasDeclaration {
+                                                FullName = fullName
+                                                Type = GlueType.FunctionType functionType
+                                            } when fullName = typeReference.FullName ->
+                Some
+                    {
+                        TypeParameters = []
+                        Parameters = functionType.Parameters
+                        Type = functionType.Type
+                    }
+            | GlueType.Interface {
+                                     FullName = fullName
+                                     Members = [ GlueMember.CallSignature callSignature ]
+                                     HeritageClauses = []
+                                 } when fullName = typeReference.FullName -> Some callSignature
+            | _ -> None
+        )
+    | _ -> None
+
+/// `interface Listener { (event: Event): void }` is a function, an F# delegate takes a lambda
+let private tryTransformCallableInterface
+    (context: TransformContext)
+    (info: GlueInterface)
+    : FSharpType option
+    =
+    match info.Members, info.HeritageClauses with
+    | [ GlueMember.CallSignature callSignature ], [] ->
+        let name, context = sanitizeTypeNameAndPushScope info.Name context
+        let xmlDocInfo = transformComment info.Documentation
+
+        let typeParameters =
+            transformDeclarationTypeParameters
+                context
+                (info.TypeParameters @ callSignature.TypeParameters)
+
+        typeParameters.TypeParameters
+        |> List.rev
+        |> exposeSpecializedAlias name [] []
+        |> List.iter context.ExposeType
+
+        ({
+            XmlDoc = xmlDocInfo.XmlDoc
+            Name = name
+            TypeParameters = typeParameters.TypeParameters
+            Parameters =
+                callSignature.Parameters
+                |> List.map (transformParameter context)
+                |> requiredBeforeParamArray
+            ReturnType = transformType (context.PushScope "ReturnType") callSignature.Type
+        }
+        : FSharpDelegate)
+        |> FSharpType.Delegate
+        |> Some
+    | _ -> None
+
 let private transformInterface (context: TransformContext) (info: GlueInterface) : FSharpInterface =
     let name, context = sanitizeTypeNameAndPushScope info.Name context
 
@@ -2692,9 +2965,19 @@ let private transformInterface (context: TransformContext) (info: GlueInterface)
 
     let standardMembers = TransformMembers.toFSharpMember context info.Members
 
+    // `interface DebugLogger extends DebugLoggerFunction`: the call is a member instead
+    let membersComingFromCallable =
+        info.HeritageClauses
+        |> List.choose (tryCallableHeritage context.TypeMemory)
+        |> List.map GlueMember.CallSignature
+        |> TransformMembers.toFSharpMember context
+
     let inheritance =
         info.HeritageClauses
         |> List.map context.ExposeTypeAlias
+        |> List.filter (fun heritageClause ->
+            (tryCallableHeritage context.TypeMemory heritageClause).IsNone
+        )
         |> List.filter (fun heritageClause ->
             match heritageClause with
             | GlueType.TypeReference typeReference ->
@@ -2747,7 +3030,7 @@ let private transformInterface (context: TransformContext) (info: GlueInterface)
                 |> Set.ofList
 
             let inheritedMembers =
-                membersComingFromPartial @ membersComingFromOmit
+                membersComingFromPartial @ membersComingFromOmit @ membersComingFromCallable
                 |> List.filter (
                     function
                     | FSharpMember.Method info
@@ -2758,9 +3041,18 @@ let private transformInterface (context: TransformContext) (info: GlueInterface)
             standardMembers @ inheritedMembers
         TypeParameters = typeParametersResult.TypeParameters
         Inheritance =
-            inheritance
-            |> List.map (transformType (context.PushScope "Extends"))
-            |> List.filter isInheritableType
+            [
+                yield!
+                    inheritance
+                    |> List.map (transformType (context.PushScope "Extends"))
+                    |> List.filter isInheritableType
+
+                // F# rejects two `IEnumerable<_>` instantiations, the one of the base type stays
+                if not (inheritsIterable context.TypeMemory info.HeritageClauses) then
+                    match TypeLiteral.tryFindIterableType context info.Members with
+                    | Some iterableType -> iterableType
+                    | None -> ()
+            ]
     }
 
 module Interface =
@@ -3827,6 +4119,46 @@ let private transformReadOnly (context: TransformContext) (glueType: GlueType) =
     // Ignore readonly for other types
     | _ -> transformType context glueType
 
+let rec private substituteTypeParameters
+    (substitutions: Map<string, GlueType>)
+    (glueType: GlueType)
+    : GlueType
+    =
+    let substitute = substituteTypeParameters substitutions
+
+    match glueType with
+    | GlueType.TypeParameter name ->
+        match Map.tryFind name substitutions with
+        | Some replacement -> replacement
+        | None -> glueType
+    | GlueType.TypeReference typeReference ->
+        GlueType.TypeReference
+            { typeReference with
+                TypeArguments = typeReference.TypeArguments |> List.map substitute
+            }
+    | GlueType.Union(GlueTypeUnion cases) ->
+        GlueType.Union(GlueTypeUnion(cases |> List.map substitute))
+    | GlueType.Array elementType -> GlueType.Array(substitute elementType)
+    | GlueType.ReadOnly innerType -> GlueType.ReadOnly(substitute innerType)
+    | GlueType.OptionalType innerType -> GlueType.OptionalType(substitute innerType)
+    | GlueType.TupleType elements -> GlueType.TupleType(elements |> List.map substitute)
+    | GlueType.FunctionType functionType ->
+        GlueType.FunctionType
+            { functionType with
+                Parameters = functionType.Parameters |> List.map (substituteParameter substitutions)
+                Type = substitute functionType.Type
+            }
+    | _ -> glueType
+
+let private substituteParameter
+    (substitutions: Map<string, GlueType>)
+    (parameter: GlueParameter)
+    : GlueParameter
+    =
+    { parameter with
+        Type = substituteTypeParameters substitutions parameter.Type
+    }
+
 /// `type Key = string | Key[]`: an F# abbreviation can't refer to itself
 let rec private replaceSelfReference (name: string) (glueType: GlueType) : GlueType =
     let replace = replaceSelfReference name
@@ -4044,37 +4376,35 @@ let private transformTypeAliasDeclaration
                 UtilityType.transformReadOnly context readonlyInfo (Some makeTypeAlias)
 
         | GlueType.FunctionType functionType ->
-            let typParameters = declarationTypeParameters.Value
+            let declaredNames =
+                glueTypeAliasDeclaration.TypeParameters |> List.map _.Name |> set
 
-            {
-                Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
-                XmlDoc = []
+            // `type Event = <T>(body: T) => void` declares its own type parameters
+            let ownTypeParameters =
+                functionType.TypeParameters
+                |> List.filter (fun typeParameter ->
+                    not (declaredNames.Contains typeParameter.Name)
+                )
+                |> transformTypeParameters context
+
+            ({
+                XmlDoc = xmlDoc.XmlDoc
                 Name = typeAliasName
-                OriginalName = glueTypeAliasDeclaration.Name
-                TypeParameters = typParameters.TypeParameters
-                Members =
-                    {
-                        Attributes = [ FSharpAttribute.EmitSelfInvoke ]
-                        Name = "Invoke"
-                        OriginalName = "Invoke"
-                        Parameters =
-                            functionType.Parameters
-                            |> List.map (transformParameter context)
-                            |> requiredBeforeParamArray
-                        Type = transformType context functionType.Type
-                        TypeParameters = []
-                        IsOptional = false
-                        IsStatic = false
-                        Accessor = None
-                        Accessibility = FSharpAccessibility.Public
-                        XmlDoc = []
-                        Body = FSharpMemberInfoBody.NativeOnly
-                    }
-                    |> FSharpMember.Method
-                    |> List.singleton
-                Inheritance = []
+                TypeParameters =
+                    declarationTypeParameters.Value.TypeParameters
+                    @ ownTypeParameters.TypeParameters
+                Parameters =
+                    functionType.Parameters
+                    |> List.map (
+                        transformParameter context
+                        >> TypeParameter.mapFsharpParameter ownTypeParameters.SealedTypes
+                    )
+                    |> requiredBeforeParamArray
+                // The scope keeps an anonymous return type from taking the name of the delegate
+                ReturnType = transformType (context.PushScope "ReturnType") functionType.Type
             }
-            |> FSharpType.Interface
+            : FSharpDelegate)
+            |> FSharpType.Delegate
 
         // The scope avoids naming an anonymous element type after the alias
         | GlueType.TupleType glueTypes ->
@@ -4106,7 +4436,7 @@ let private transformTypeAliasDeclaration
                 Members = TransformMembers.toFSharpMember context typeLiteralInfo.Members
                 Inheritance =
                     [
-                        match TypeLiteral.tryFindIterableType context typeLiteralInfo with
+                        match TypeLiteral.tryFindIterableType context typeLiteralInfo.Members with
                         | Some iterableType -> iterableType
                         | None -> ()
                     ]
@@ -4416,6 +4746,53 @@ let rec private exposeSpecializedAlias
                 exposeSpecializedAlias name (acc @ [ typeAlias ]) newTailedTypeParameters tail
     | [] -> acc
 
+/// F# rejects an abstract property redeclared with the signature of a base class one
+let private withoutBaseClassProperties
+    (typeMemory: GlueType list)
+    (heritageClauses: GlueType list)
+    (members: GlueMember list)
+    : GlueMember list
+    =
+    // The base class can be declared in a namespace
+    let rec tryFindClass (name: string) (glueTypes: GlueType list) : GlueClassDeclaration option =
+        glueTypes
+        |> List.tryPick (fun glueType ->
+            match glueType with
+            | GlueType.ClassDeclaration candidate when candidate.Name = name -> Some candidate
+            | GlueType.ModuleDeclaration moduleDeclaration ->
+                tryFindClass name moduleDeclaration.Types
+            | GlueType.FileModule fileModule -> tryFindClass name fileModule.Types
+            | _ -> None
+        )
+
+    let rec baseProperties (visited: Set<string>) (heritageClauses: GlueType list) =
+        heritageClauses
+        |> List.collect (fun heritageClause ->
+            match heritageClause with
+            | GlueType.TypeReference typeReference when not (visited.Contains typeReference.Name) ->
+                tryFindClass typeReference.Name typeMemory
+                |> Option.map (fun baseClass ->
+                    (baseClass.Members
+                     |> List.choose (
+                         function
+                         | GlueMember.Property property -> Some property.Name
+                         | _ -> None
+                     ))
+                    @ baseProperties (visited.Add typeReference.Name) baseClass.HeritageClauses
+                )
+                |> Option.defaultValue []
+            | _ -> []
+        )
+
+    let inherited = baseProperties Set.empty heritageClauses |> set
+
+    members
+    |> List.filter (
+        function
+        | GlueMember.Property property -> not (inherited.Contains property.Name)
+        | _ -> true
+    )
+
 let private transformClassDeclaration
     (context: TransformContext)
     (classDeclaration: GlueClassDeclaration)
@@ -4509,7 +4886,10 @@ let private transformClassDeclaration
             XmlDoc = xmlDoc.XmlDoc
             Name = name
             OriginalName = classDeclaration.Name
-            Members = TransformMembers.toFSharpMember context classDeclaration.Members
+            Members =
+                classDeclaration.Members
+                |> withoutBaseClassProperties context.TypeMemory classDeclaration.HeritageClauses
+                |> TransformMembers.toFSharpMember context
             TypeParameters = typeParametersResult.TypeParameters
             Inheritance = inheritance
         }
@@ -4601,7 +4981,10 @@ let private transformToFsharp
             |> List.singleton
 
         | GlueType.Interface interfaceInfo ->
-            FSharpType.Interface(transformInterface context interfaceInfo) |> List.singleton
+            match tryTransformCallableInterface context interfaceInfo with
+            | Some delegateType -> delegateType |> List.singleton
+            | None ->
+                FSharpType.Interface(transformInterface context interfaceInfo) |> List.singleton
 
         | GlueType.Enum enumInfo -> transformEnum enumInfo |> List.singleton
 
@@ -4647,6 +5030,14 @@ let private transformToFsharp
         | GlueType.ExportDefault exportedType ->
             match exportedType with
             | GlueType.ClassDeclaration classInfo -> transformClassDeclaration context classInfo
+            | GlueType.ModuleDeclaration moduleInfo ->
+                transformModuleDeclaration
+                    context.TypeMemory
+                    context._Reporter
+                    context.TypeLiteralsMemory
+                    context.ImportSource
+                    moduleInfo
+                |> List.singleton
             | _ -> FSharpType.Discard |> List.singleton
 
         | GlueType.ConstructorType _

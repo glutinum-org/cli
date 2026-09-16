@@ -10,11 +10,8 @@ type TypeLiteral =
     abstract member kind: string with get, set
     abstract member x: float with get, set
 
-[<AllowNullLiteral>]
-[<Interface>]
 type FunctionType =
-    [<Emit("$0($1...)")>]
-    abstract member Invoke: a: string * b: float -> unit
+    delegate of a: string * b: float -> unit
 
 [<AllowNullLiteral>]
 [<Interface>]

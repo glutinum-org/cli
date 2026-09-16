@@ -28,8 +28,10 @@ type ReturnType =
 type ReturnType1<'A> =
     Bar<'A>
 
+[<AllowNullLiteral>]
+[<Interface>]
 type ReturnType2<'T> =
-    'T
+    interface end
 
 (***)
 #r "nuget: Fable.Core"

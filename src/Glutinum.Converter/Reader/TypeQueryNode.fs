@@ -133,6 +133,21 @@ let readTypeQueryNode (reader: ITypeScriptReader) (typeQueryNode: Ts.TypeQueryNo
                 // We don't support TypeQuery for ModuleDeclaration yet
                 // See https://github.com/glutinum-org/cli/issues/70 for a possible solution
                 | Ts.SyntaxKind.ModuleDeclaration -> GlueType.Discard
+                // `typeof fn` is the function type, a generic one has no F# delegate at the use site
+                | Ts.SyntaxKind.FunctionDeclaration ->
+                    match reader.ReadNode declaration with
+                    | GlueType.FunctionDeclaration info when not info.TypeParameters.IsEmpty ->
+                        GlueType.Primitive GluePrimitive.Any
+                    | GlueType.FunctionDeclaration info ->
+                        ({
+                            Documentation = info.Documentation
+                            Type = info.Type
+                            TypeParameters = info.TypeParameters
+                            Parameters = info.Parameters
+                        }
+                        : GlueFunctionType)
+                        |> GlueType.FunctionType
+                    | glueType -> glueType
                 | Ts.SyntaxKind.MethodDeclaration
                 | Ts.SyntaxKind.MethodSignature ->
                     let toFunctionDeclaration name documentation parameters returnType =

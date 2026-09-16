@@ -4,11 +4,8 @@ open Fable.Core
 open Fable.Core.JsInterop
 open System
 
-[<AllowNullLiteral>]
-[<Interface>]
 type GreetFunction =
-    [<Emit("$0($1...)")>]
-    abstract member Invoke: a: string -> unit
+    delegate of a: string -> unit
 
 (***)
 #r "nuget: Fable.Core"

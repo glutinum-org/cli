@@ -51,6 +51,7 @@ type GlueMethod =
     {
         Name: string
         Documentation: GlueComment list
+        TypeParameters: GlueTypeParameter list
         Parameters: GlueParameter list
         Type: GlueType
         IsOptional: bool
@@ -59,6 +60,7 @@ type GlueMethod =
 
 type GlueCallSignature =
     {
+        TypeParameters: GlueTypeParameter list
         Parameters: GlueParameter list
         Type: GlueType
     }
@@ -109,6 +111,7 @@ type GlueMethodSignature =
     {
         Name: string
         Documentation: GlueComment list
+        TypeParameters: GlueTypeParameter list
         Parameters: GlueParameter list
         Type: GlueType
     }
@@ -225,6 +228,7 @@ type GlueEnum =
 type GlueTypeAliasDeclaration =
     {
         Documentation: GlueComment list
+        FullName: string
         Name: string
         Type: GlueType
         TypeParameters: GlueTypeParameter list

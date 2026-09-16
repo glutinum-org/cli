@@ -7,6 +7,25 @@ open TypeScript
 open Fable.Core
 open Fable.Core.JsInterop
 
+/// The constraints of a method stay implicit in F#, only the defaults make an overload
+let private readMethodTypeParameters
+    (reader: ITypeScriptReader)
+    (typeParameters: ResizeArray<Ts.TypeParameterDeclaration> option)
+    : GlueTypeParameter list
+    =
+    match typeParameters with
+    | None -> []
+    | Some typeParameters ->
+        typeParameters
+        |> Seq.toList
+        |> List.map (fun typeParameter ->
+            {
+                Name = identifierText typeParameter.name
+                Constraint = None
+                Default = typeParameter.``default`` |> Option.map reader.ReadTypeNode
+            }
+        )
+
 let readDeclaration (reader: ITypeScriptReader) (declaration: Ts.Declaration) : GlueMember =
     match declaration.kind with
     | Ts.SyntaxKind.PropertySignature ->
@@ -41,6 +60,7 @@ let readDeclaration (reader: ITypeScriptReader) (declaration: Ts.Declaration) : 
         let callSignature = declaration :?> Ts.CallSignatureDeclaration
 
         ({
+            TypeParameters = readMethodTypeParameters reader callSignature.typeParameters
             Parameters = reader.ReadParameters callSignature.parameters
             Type = reader.ReadTypeNode callSignature.``type``
         }
@@ -54,6 +74,7 @@ let readDeclaration (reader: ITypeScriptReader) (declaration: Ts.Declaration) : 
         {
             Name = identifierText name
             Documentation = reader.ReadDocumentationFromNode name
+            TypeParameters = readMethodTypeParameters reader methodDeclaration.typeParameters
             Parameters = reader.ReadParameters methodDeclaration.parameters
             Type = reader.ReadTypeNode methodDeclaration.``type``
             IsOptional = methodDeclaration.questionToken.IsSome
@@ -90,6 +111,7 @@ let readDeclaration (reader: ITypeScriptReader) (declaration: Ts.Declaration) : 
         ({
             Documentation = reader.ReadDocumentationFromNode name
             Name = identifierText name
+            TypeParameters = readMethodTypeParameters reader methodSignature.typeParameters
             Parameters = reader.ReadParameters methodSignature.parameters
             Type = reader.ReadTypeNode methodSignature.``type``
         }
@@ -223,6 +245,7 @@ let readDeclaration (reader: ITypeScriptReader) (declaration: Ts.Declaration) : 
             ({
                 Name = info.Name
                 Documentation = info.Documentation
+                TypeParameters = info.TypeParameters
                 Parameters = info.Parameters
                 Type = info.Type
                 IsOptional = false

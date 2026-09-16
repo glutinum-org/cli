@@ -981,6 +981,7 @@ let private printTypeAlias (printer: Printer) (aliasInfo: FSharpTypeAlias) =
         printer.Unindent
 
 let private printDelegate (printer: Printer) (delegateInfo: FSharpDelegate) =
+    printXmlDoc printer delegateInfo.XmlDoc
     printer.Write($"type {delegateInfo.Name}")
     printTypeParametersDeclaration printer delegateInfo.TypeParameters
     printer.WriteInline(" =")

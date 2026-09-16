@@ -33,6 +33,7 @@ let readTypeAliasDeclaration
 
     {
         Documentation = reader.ReadDocumentationFromNode declaration
+        FullName = Utils.getFullNameOrEmpty reader.checker declaration
         Name = declaration.name.getText ()
         Type = typ
         TypeParameters = reader.ReadTypeParameters declaration.typeParameters

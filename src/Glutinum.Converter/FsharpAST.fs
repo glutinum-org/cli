@@ -411,6 +411,7 @@ type FSharpJSApi = ReadonlyArray of FSharpType
 
 type FSharpDelegate =
     {
+        XmlDoc: FSharpXmlDoc list
         Name: string
         TypeParameters: FSharpTypeParameter list
         Parameters: FSharpParameter list
