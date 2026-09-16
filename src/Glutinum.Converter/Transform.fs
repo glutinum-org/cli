@@ -1294,6 +1294,13 @@ let private transformExports
                 | GlueType.ExportDefault glueType ->
                     let name, context = sanitizeNameAndPushScope glueType.Name context
 
+                    // `declare function RAL(): RAL; export default RAL;` already generated a `RAL` member
+                    let name =
+                        if seenNames.Contains name then
+                            $"{name}_"
+                        else
+                            name
+
                     let context =
                         match glueType with
                         | GlueType.Variable _ -> context.PushScope "Type"
@@ -3741,7 +3748,18 @@ module private ReExport =
             match typeParameter.Constraint with
             | None
             | Some(GlueType.TypeReference _)
-            | Some(GlueType.Primitive _) -> true
+            | Some(GlueType.Primitive _)
+            // Dropped by the transform
+            | Some(GlueType.TypeLiteral _)
+            | Some(GlueType.IntersectionType _) -> true
+            // Sealed to the same type by the transform
+            | Some(GlueType.Union(GlueTypeUnion cases)) ->
+                cases
+                |> List.forall (
+                    function
+                    | GlueType.Primitive _ -> true
+                    | _ -> false
+                )
             | Some _ -> false
         )
 
