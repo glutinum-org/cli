@@ -3616,10 +3616,15 @@ let private transformTypeAliasDeclaration
         | GlueType.OptionalType _ -> makeTypeAlias FSharpType.Object
 
     if declarationTypeParameters.IsValueCreated then
+        let typeParameters = declarationTypeParameters.Value.TypeParameters
+
+        let defaultAliases =
+            typeParameters |> List.rev |> exposeSpecializedAlias typeAliasName [] []
+
+        defaultAliases |> List.iter context.ExposeType
+
         declarationTypeParameters.Value
-        |> makeSealedTypeAlias
-            typeAliasName
-            [ declarationTypeParameters.Value.TypeParameters.Length ]
+        |> makeSealedTypeAlias typeAliasName (aliasArities typeParameters defaultAliases)
         |> Option.iter context.ExposeType
 
     fsharpType

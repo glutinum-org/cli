@@ -16,6 +16,9 @@ type PluginFunc<'T> =
     [<Emit("$0($1...)")>]
     abstract member Invoke: unit -> unit
 
+type PluginFunc =
+    PluginFunc<obj>
+
 (***)
 #r "nuget: Fable.Core"
 #r "nuget: Glutinum.Types"
