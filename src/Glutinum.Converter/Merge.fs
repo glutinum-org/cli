@@ -25,9 +25,36 @@ open System.Collections.Generic
 /// <returns>
 /// A new list of types with the duplicates merged.
 /// </returns>
+/// The parameterless type aliases of the output by their full path, an overload taking
+/// `PlusToken` is the one taking `MinusToken` when both alias the same type
+let private aliasTargets = Dictionary<string, FSharpType>()
+
+let rec private collectAliases (path: string list) (types: FSharpType list) =
+    for typ in types do
+        match typ with
+        | FSharpType.TypeAlias {
+                                   Name = name
+                                   TypeParameters = []
+                                   Type = target
+                               } -> aliasTargets.[String.concat "." (path @ [ name ])] <- target
+        | FSharpType.Module moduleInfo ->
+            collectAliases (path @ [ moduleInfo.Name ]) moduleInfo.Types
+        | _ -> ()
+
 // Two references to the same type differ by their `FullName` (`SyntaxKind.A` vs `SyntaxKind.B`)
-let rec signatureType (typ: FSharpType) : FSharpType =
+let rec private signatureTypeAt (depth: int) (typ: FSharpType) : FSharpType =
+    let signatureType = signatureTypeAt (depth + 1)
+
     match typ with
+    | FSharpType.TypeReference typeReference when
+        depth < 8
+        && typeReference.TypeArguments.IsEmpty
+        && aliasTargets.ContainsKey(
+            String.concat "." (typeReference.ModulePath @ [ typeReference.Name ])
+        )
+        ->
+        aliasTargets.[String.concat "." (typeReference.ModulePath @ [ typeReference.Name ])]
+        |> signatureType
     | FSharpType.TypeReference typeReference ->
         { typeReference with
             FullName = ""
@@ -52,6 +79,8 @@ let rec signatureType (typ: FSharpType) : FSharpType =
         }
         |> FSharpType.Function
     | typ -> typ
+
+let signatureType (typ: FSharpType) : FSharpType = signatureTypeAt 0 typ
 
 let parametersSignature (parameters: FSharpParameter list) =
     parameters
@@ -102,6 +131,12 @@ let private mergeTypes (types: FSharpType list) =
                 | _ -> failwith "Invalid state"
             else
                 indexes.Add(interfaceInfo.Name, result.Count)
+                result.Add(typ)
+
+        // The overloads of a function expose the same sealed type parameter
+        | FSharpType.Union _
+        | FSharpType.Delegate _ ->
+            if not (result.Contains typ) then
                 result.Add(typ)
 
         | _ -> result.Add(typ)
@@ -157,5 +192,25 @@ let rec private dropEmptyModules (types: FSharpType list) =
         | _ -> Some typ
     )
 
+let rec private distinctMembers (types: FSharpType list) =
+    types
+    |> List.map (fun typ ->
+        match typ with
+        | FSharpType.Interface interfaceInfo ->
+            FSharpType.Interface
+                { interfaceInfo with
+                    Members = distinctBySignature interfaceInfo.Members
+                }
+        | FSharpType.Module moduleInfo ->
+            FSharpType.Module
+                { moduleInfo with
+                    Types = distinctMembers moduleInfo.Types
+                }
+        | _ -> typ
+    )
+
 let apply (types: FSharpType list) =
-    types |> mergeTypes |> mergeModules |> dropEmptyModules
+    aliasTargets.Clear()
+    collectAliases [] types
+
+    types |> mergeTypes |> mergeModules |> dropEmptyModules |> distinctMembers
