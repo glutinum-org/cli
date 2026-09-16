@@ -1051,6 +1051,21 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
 /// <summary></summary>
 /// <param name="exports"></param>
 /// <returns></returns>
+let private parametersSignature (parameters: FSharpParameter list) =
+    parameters |> List.map (fun parameter -> parameter.Type, parameter.IsOptional)
+
+/// Overloads only differing by their parameter names are the same member for F#
+let private distinctBySignature (members: FSharpMember list) : FSharpMember list =
+    members
+    |> List.distinctBy (
+        function
+        | FSharpMember.Method info ->
+            Choice1Of3(info.Name, info.TypeParameters.Length, parametersSignature info.Parameters)
+        | FSharpMember.Property info -> Choice2Of3(info.Name, parametersSignature info.Parameters)
+        | FSharpMember.StaticMember info ->
+            Choice3Of3(info.Name, info.TypeParameters.Length, parametersSignature info.Parameters)
+    )
+
 let private transformExports
     (context: TransformContext)
     (isTopLevel: bool)
@@ -1313,7 +1328,7 @@ let private transformExports
         Attributes = [ FSharpAttribute.AbstractClass; FSharpAttribute.Erase ]
         Name = "Exports"
         OriginalName = "Exports"
-        Members = members
+        Members = distinctBySignature members
         TypeParameters = []
         Inheritance = []
     }
@@ -1694,6 +1709,7 @@ module private TransformMembers =
                 |> FSharpMember.Method
                 |> Some
         )
+        |> distinctBySignature
 
     let forceReadonly (members: FSharpMember list) =
         members
@@ -1947,21 +1963,30 @@ let private transformParamObjectClass
                 )
                 |> List.map (List.choose id >> List.sortBy _.IsOptional)
 
-            // The secondary constructors call the primary one, so it takes no parameter
-            let emptyCombination, secondaryCombinations =
-                combinations |> List.partition List.isEmpty
+            // Properties accepting the same type give constructors F# can't tell apart
+            let hasDuplicateSignatures =
+                let signatures = combinations |> List.map parametersSignature
 
-            let primaryConstructor =
-                if emptyCombination.IsEmpty then
-                    {
-                        Parameters = []
-                        Attributes = []
-                        Accessibility = FSharpAccessibility.Private
-                    }
-                else
-                    paramObjectConstructor []
+                (List.distinct signatures).Length <> signatures.Length
 
-            primaryConstructor, secondaryCombinations |> List.map paramObjectConstructor
+            if hasDuplicateSignatures then
+                paramObjectConstructor typeLiteralParameters, []
+            else
+                // The secondary constructors call the primary one, so it takes no parameter
+                let emptyCombination, secondaryCombinations =
+                    combinations |> List.partition List.isEmpty
+
+                let primaryConstructor =
+                    if emptyCombination.IsEmpty then
+                        {
+                            Parameters = []
+                            Attributes = []
+                            Accessibility = FSharpAccessibility.Private
+                        }
+                    else
+                        paramObjectConstructor []
+
+                primaryConstructor, secondaryCombinations |> List.map paramObjectConstructor
 
     let typeParameters =
         typeParameterNames
