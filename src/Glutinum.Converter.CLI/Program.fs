@@ -13,16 +13,17 @@ Generate Fable bindings from TypeScript definitions - https://github.com/glutinu
 
 USAGE
 
-    glutinum <input> [--out-file <output>]
+    glutinum <input>... [--out-file <output>]
     glutinum --all [--out-file <output>]
-    glue <input> [--out-file <output>]
+    glue <input>... [--out-file <output>]
 
     <input> can be:
       - an installed package name           (e.g. chalk, @types/vscode)
       - a path to a package directory       (e.g. ./node_modules/chalk)
       - a path to a .d.ts file              (e.g. ./node_modules/chalk/source/index.d.ts)
 
-    A package is generated with every package it depends on.
+    Several packages are generated in the same file, each one with every
+    package it depends on. A .d.ts file is generated alone.
     --all generates every package installed in the nearest node_modules.
 
 OPTIONS
@@ -34,6 +35,7 @@ OPTIONS
 EXAMPLES
 
     glutinum chalk --out-file ./Glutinum.Chalk.fs
+    glutinum vscode vscode-languageclient --out-file ./Glutinum.Vscode.fs
     glutinum --all --out-file ./Glutinum.fs
     glutinum ./node_modules/my-lib/index.d.ts
         """
@@ -49,13 +51,11 @@ let private getVersion () =
     return pkg.version;
     """
 
-let private generate (input: string) =
-    if input = "--all" then
-        generatePackages []
-    elif input.EndsWith ".d.ts" then
-        generateBindingFile input
-    else
-        generatePackages [ input ]
+let private generate (inputs: string list) =
+    match inputs with
+    | [ "--all" ] -> generatePackages []
+    | [ input ] when input.EndsWith ".d.ts" -> generateBindingFile input
+    | inputs -> generatePackages inputs
 
 [<EntryPoint>]
 let main (argv: string array) =
@@ -77,32 +77,40 @@ let main (argv: string array) =
         Log.log $"%s{version}"
         0
 
-    | input :: "--out-file" :: outFile :: [] ->
-
-        Log.info $"Generating binding file for %s{input}"
-        let res = generate input
-
-        let outFileDir = path.dirname (outFile)
-        fs?mkdirSync $ (outFileDir, {| recursive = true |})
-        fs.writeFileSync (outFile, res)
-
-        let absoluteOutFile = path.join (``process``.cwd (), outFile)
-
-        Log.info $"Bindings written to: %s{absoluteOutFile}"
-        Log.success "Success!"
-
-        0
-
-    | input :: [] ->
-        Log.info $"Generating binding file for %s{input}"
-        let res = generate input
-
-        ``process``.stdout.write res |> ignore
-
-        Log.success "Success!"
-
-        0
     | _ ->
-        Log.error "Invalid arguments"
-        printHelp ()
-        1
+        let inputs, outFile =
+            match List.rev argv with
+            | outFile :: "--out-file" :: inputs -> List.rev inputs, Some outFile
+            | _ -> argv, None
+
+        let hasUnknownOption =
+            inputs |> List.exists (fun input -> input.StartsWith "-" && input <> "--all")
+
+        let mixesFileAndPackages =
+            inputs.Length > 1 && inputs |> List.exists (fun input -> input.EndsWith ".d.ts")
+
+        if inputs.IsEmpty || hasUnknownOption then
+            Log.error "Invalid arguments"
+            printHelp ()
+            1
+        elif mixesFileAndPackages then
+            Log.error "A .d.ts file is generated alone, it can't be combined with other inputs"
+            1
+        else
+            Log.info $"""Generating binding file for %s{String.concat ", " inputs}"""
+            let res = generate inputs
+
+            match outFile with
+            | Some outFile ->
+                let outFileDir = path.dirname (outFile)
+                fs?mkdirSync $ (outFileDir, {| recursive = true |})
+                fs.writeFileSync (outFile, res)
+
+                let absoluteOutFile = path.join (``process``.cwd (), outFile)
+
+                Log.info $"Bindings written to: %s{absoluteOutFile}"
+            | None -> ``process``.stdout.write res |> ignore
+
+            Log.success "Success!"
+
+            0
