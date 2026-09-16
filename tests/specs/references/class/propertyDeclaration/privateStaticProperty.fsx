@@ -14,11 +14,11 @@ type Exports =
 [<Interface>]
 type SettingsContainer =
     static member inline private ``#privateField``
-        with get () : unit =
+        with get () : obj =
             emitJsExpr () $$"""
 import { SettingsContainer } from "REPLACE_ME_WITH_MODULE_NAME";
 SettingsContainer.#privateField"""
-        and set (value: unit) =
+        and set (value: obj) =
             emitJsExpr (value) $$"""
 import { SettingsContainer } from "REPLACE_ME_WITH_MODULE_NAME";
 SettingsContainer.#privateField = $0"""

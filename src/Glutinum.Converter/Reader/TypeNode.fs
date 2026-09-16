@@ -592,6 +592,7 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                                     match valueDeclaration.kind with
                                     | Ts.SyntaxKind.EnumMember ->
                                         valueDeclaration?symbol?parent?getName ()
+                                    | Ts.SyntaxKind.EnumDeclaration when isQualified -> symbol.name
                                     | _ -> writtenName ()
                                 )
                             )

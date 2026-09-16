@@ -103,6 +103,15 @@ let symbolAtLocation (checker: Ts.TypeChecker) (node: Ts.Node) : Ts.Symbol optio
         && not (isNull (node :?> Ts.QualifiedName).right?symbol)
     then
         Some (node :?> Ts.QualifiedName).right?symbol
+    // `SyntaxKind.ImportKeyword` synthesized for an enum literal only carries the enum
+    elif
+        node.kind = Ts.SyntaxKind.QualifiedName
+        && not (isNull (node :?> Ts.QualifiedName).left?symbol)
+        && (unbox<Ts.Symbol> (node :?> Ts.QualifiedName).left?symbol).flags
+           &&& Ts.SymbolFlags.Enum
+           <> enum 0
+    then
+        Some (node :?> Ts.QualifiedName).left?symbol
     else
         checker.getSymbolAtLocation node
 

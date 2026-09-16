@@ -1085,8 +1085,37 @@ let rec private mentionsTypeParameter (name: string) (glueType: GlueType) : bool
         )
     | _ -> false
 
+// Two references to the same type differ by their `FullName` (`SyntaxKind.A` vs `SyntaxKind.B`)
+let rec private signatureType (typ: FSharpType) : FSharpType =
+    match typ with
+    | FSharpType.TypeReference typeReference ->
+        { typeReference with
+            FullName = ""
+            TypeArguments = typeReference.TypeArguments |> List.map signatureType
+            Type = FSharpType.Discard
+        }
+        |> FSharpType.TypeReference
+    | FSharpType.Option typ -> FSharpType.Option(signatureType typ)
+    | FSharpType.ResizeArray typ -> FSharpType.ResizeArray(signatureType typ)
+    | FSharpType.Tuple types -> FSharpType.Tuple(types |> List.map signatureType)
+    | FSharpType.Function functionType ->
+        { functionType with
+            Parameters =
+                functionType.Parameters
+                |> List.map (fun parameter ->
+                    { parameter with
+                        Type = signatureType parameter.Type
+                        OriginalGlueMember = None
+                    }
+                )
+            ReturnType = signatureType functionType.ReturnType
+        }
+        |> FSharpType.Function
+    | typ -> typ
+
 let private parametersSignature (parameters: FSharpParameter list) =
-    parameters |> List.map (fun parameter -> parameter.Type, parameter.IsOptional)
+    parameters
+    |> List.map (fun parameter -> signatureType parameter.Type, parameter.IsOptional)
 
 /// Overloads only differing by their parameter names are the same member for F#
 let private distinctBySignature (members: FSharpMember list) : FSharpMember list =
@@ -1610,10 +1639,15 @@ module private TransformMembers =
                         OriginalName = propertyInfo.Name
                         Parameters = []
                         Type =
-                            unwrapOptionIfAlreadyOptional
-                                context
-                                propertyInfo.Type
-                                propertyInfo.IsOptional
+                            // A `void` brand property has no valid setter type in F#
+                            match
+                                unwrapOptionIfAlreadyOptional
+                                    context
+                                    propertyInfo.Type
+                                    propertyInfo.IsOptional
+                            with
+                            | FSharpType.Primitive FSharpPrimitive.Unit -> FSharpType.Object
+                            | typ -> typ
                         TypeParameters = []
                         IsOptional = propertyInfo.IsOptional
                         IsStatic = propertyInfo.IsStatic
