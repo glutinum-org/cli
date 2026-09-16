@@ -9,7 +9,44 @@ open Glutinum.Converter.Reader.Utils
 
 type private IntersectionTypePropertyResult =
     | Single of Ts.Declaration
+    | WithoutDeclaration of Ts.Symbol
     | ForceAny
+
+// Properties created by a mapped type (e.g. `{ [K in Keys]: string }`) have no declaration
+let private readPropertyWithoutDeclaration
+    (reader: ITypeScriptReader)
+    (contextNode: Ts.Node)
+    (property: Ts.Symbol)
+    : GlueMember option
+    =
+    let typ = reader.checker.getTypeOfSymbol property
+
+    match reader.checker.typeToTypeNode (typ, None, None) with
+    | Some typeNode ->
+        ({
+            Name = property.name
+            Documentation = []
+            Type = reader.ReadTypeNode typeNode
+            IsOptional =
+                match property.flags with
+                | HasSymbolFlags Ts.SymbolFlags.Optional -> true
+                | _ -> false
+            IsStatic = false
+            Accessor = GlueAccessor.ReadWrite
+            IsPrivate = false
+        }
+        : GlueProperty)
+        |> GlueMember.Property
+        |> Some
+    | None ->
+        Report.readerError (
+            "type node",
+            $"Could not resolve the type of the property '%s{property.name}'",
+            contextNode
+        )
+        |> reader.Warnings.Add
+
+        None
 
 let private readTypeUsingFlags (reader: ITypeScriptReader) (typ: Ts.Type) =
 
@@ -140,10 +177,8 @@ module UtilityType =
             match property.declarations with
             | Some declarations -> declarations |> Seq.map reader.ReadDeclaration |> Some
             | None ->
-                Report.readerError ("type node", "Missing declarations", contextNode)
-                |> reader.Warnings.Add
-
-                None
+                readPropertyWithoutDeclaration reader contextNode property
+                |> Option.map Seq.singleton
         )
         |> Seq.concat
         |> Seq.distinct
@@ -642,8 +677,7 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                         Some(Single declarations.[0])
                     else
                         Some ForceAny
-                | None ->
-                    Report.readerError ("type node", "Missing declarations", typeNode) |> failwith
+                | None -> Some(WithoutDeclaration property)
             )
 
         // We can't create a contract for some of the properties
@@ -654,6 +688,7 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
             |> List.exists (fun property ->
                 match property with
                 | ForceAny -> true // Force to generate obj
+                | WithoutDeclaration _ -> false
                 | Single declaration -> // Give a try to generate a real contract
                     match declaration.kind with
                     | Ts.SyntaxKind.MethodDeclaration -> true
@@ -667,6 +702,8 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
             |> List.choose (
                 function
                 | Single declaration -> Some(reader.ReadDeclaration declaration)
+                | WithoutDeclaration property ->
+                    readPropertyWithoutDeclaration reader typeNode property
                 | ForceAny -> failwith "Sould not happen here"
             )
             |> GlueType.IntersectionType
