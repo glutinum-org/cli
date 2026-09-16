@@ -4,40 +4,41 @@ open Fable.Core
 open Fable.Core.JsInterop
 open System
 
-[<AbstractClass>]
-[<Erase>]
-type Exports =
-    [<Import("AST", "union-alias"); EmitConstructor>]
-    static member AST () : AST = nativeOnly
+module UnionAlias =
 
-[<AllowNullLiteral>]
-[<Interface>]
-type AST =
-    abstract member ``type``: ast.ExtglobType option with get, set
+    [<AbstractClass>]
+    [<Erase>]
+    type Exports =
+        [<Import("AST", "union-alias"); EmitConstructor>]
+        static member AST () : AST = nativeOnly
 
-[<RequireQualifiedAccess>]
-[<StringEnum(CaseRules.None)>]
-type Local =
-    | a
-    | b
-
-[<RequireQualifiedAccess>]
-[<StringEnum(CaseRules.None)>]
-type WithLocal =
-    | a
-    | b
-    | c
-
-module ast =
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type AST =
+        abstract member ``type``: UnionAlias.ast.ExtglobType option with get, set
 
     [<RequireQualifiedAccess>]
     [<StringEnum(CaseRules.None)>]
-    type ExtglobType =
-        | ``!``
-        | ``?``
-        | [<CompiledName("+")>] _PLUS_
-        | [<CompiledName("*")>] _STAR_
-        | [<CompiledName("@")>] _AT_
+    type Local =
+        | a
+        | b
+
+    [<RequireQualifiedAccess>]
+    [<Erase(CaseRules.None)>]
+    type WithLocal =
+        | c
+        | Case1 of UnionAlias.Local
+
+    module ast =
+
+        [<RequireQualifiedAccess>]
+        [<StringEnum(CaseRules.None)>]
+        type ExtglobType =
+            | ``!``
+            | ``?``
+            | [<CompiledName("+")>] _PLUS_
+            | [<CompiledName("*")>] _STAR_
+            | [<CompiledName("@")>] _AT_
 
 (***)
 #r "nuget: Fable.Core"

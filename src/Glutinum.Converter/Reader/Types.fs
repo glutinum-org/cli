@@ -17,7 +17,6 @@ type PackageInfo =
         EntryFile: string
         /// Other declaration entry points, with the subpath to import them from
         SubpathEntries: (string * string) list
-        IsTarget: bool
     }
 
 type PackageContext =
@@ -72,8 +71,7 @@ type PackageContext =
             let fileName = String.normalizePath fileName
 
             [
-                if not package.IsTarget then
-                    package.ModuleName
+                package.ModuleName
 
                 if fileName <> package.EntryFile then
                     this.FileModuleName(package, fileName)

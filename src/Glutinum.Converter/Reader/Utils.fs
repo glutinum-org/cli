@@ -65,6 +65,11 @@ let tryReadLiteral (checker: Ts.TypeChecker) (expression: Ts.Node) =
     | Ts.SyntaxKind.TrueKeyword -> GlueLiteral.Bool true |> Some
     | Ts.SyntaxKind.FalseKeyword -> GlueLiteral.Bool false |> Some
     | Ts.SyntaxKind.NullKeyword -> GlueLiteral.Null |> Some
+    // A node synthesized by `typeToTypeNode` has no source text nor location for the checker
+    | _ when expression.pos < 0 ->
+        match expression?text with
+        | null -> None
+        | text -> tryReadNumericLiteral text
     | _ ->
         let text = expression.getText ()
 
@@ -93,6 +98,13 @@ let identifierText (node: Ts.Node) : string =
         node.getText ()
     else
         node?text
+
+/// The last name of `ns.Foo`, `Foo` for an identifier
+let entityNameText (node: Ts.Node) : string =
+    if node.kind = Ts.SyntaxKind.QualifiedName then
+        identifierText (node :?> Ts.QualifiedName).right
+    else
+        identifierText node
 
 /// Identifiers synthesized by <c>typeToTypeNode</c> carry their symbol, they can't be resolved by position
 let symbolAtLocation (checker: Ts.TypeChecker) (node: Ts.Node) : Ts.Symbol option =

@@ -4,117 +4,119 @@ open Fable.Core
 open Fable.Core.JsInterop
 open System
 
-[<AbstractClass>]
-[<Erase>]
-type Exports =
-    [<Import("createLogger", "re-exports")>]
-    static member createLogger (?options: logger.Options) : logger.Logger = nativeOnly
-    [<Import("isEnabled", "re-exports")>]
-    static member isEnabled (level: float) : bool = nativeOnly
-    [<Import("defaultLevel", "re-exports")>]
-    static member inline defaultLevel: float = nativeOnly
-    [<Import("configure", "re-exports")>]
-    static member configure (config: DepLib.DepConfig) : unit = nativeOnly
-    [<Import("Logger", "re-exports"); EmitConstructor>]
-    static member Logger (?options: logger.Options) : Logger = nativeOnly
+module ReExports =
 
-type Options =
-    logger.Options
+    [<AbstractClass>]
+    [<Erase>]
+    type Exports =
+        [<Import("createLogger", "re-exports")>]
+        static member createLogger (?options: ReExports.logger.Options) : ReExports.logger.Logger = nativeOnly
+        [<Import("isEnabled", "re-exports")>]
+        static member isEnabled (level: float) : bool = nativeOnly
+        [<Import("defaultLevel", "re-exports")>]
+        static member inline defaultLevel: float = nativeOnly
+        [<Import("configure", "re-exports")>]
+        static member configure (config: DepLib.DepConfig) : unit = nativeOnly
+        [<Import("Logger", "re-exports"); EmitConstructor>]
+        static member Logger (?options: ReExports.logger.Options) : Logger = nativeOnly
 
-type LogLevel =
-    logger.LogLevel
+    type Options =
+        ReExports.logger.Options
 
-type Logger =
-    logger.Logger
+    type LogLevel =
+        ReExports.logger.LogLevel
 
-type OutputFormatter =
-    formatter.Formatter
+    type Logger =
+        ReExports.logger.Logger
 
-type Level =
-    helpers.Level
+    type OutputFormatter =
+        ReExports.formatter.Formatter
 
-type DepConfig =
-    DepLib.DepConfig
+    type Level =
+        ReExports.helpers.Level
 
-type Kind =
-    compiler.compiler_.Kind
+    type DepConfig =
+        DepLib.DepConfig
 
-type Node =
-    compiler.compiler_.Node
+    type Kind =
+        ReExports.compiler.compiler_.Kind
 
-[<AllowNullLiteral>]
-[<Interface>]
-type Sink =
-    abstract member write: entry: string -> unit
+    type Node =
+        ReExports.compiler.compiler_.Node
 
-module compiler =
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type Sink =
+        abstract member write: entry: string -> unit
 
-    module compiler_ =
+    module compiler =
 
-        [<RequireQualifiedAccess>]
-        type Kind =
-            | A = 1
-            | B = 2
+        module compiler_ =
+
+            [<RequireQualifiedAccess>]
+            type Kind =
+                | A = 1
+                | B = 2
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type Node =
+                abstract member kind: ReExports.compiler.compiler_.Kind with get, set
+
+    module formatter =
 
         [<AllowNullLiteral>]
         [<Interface>]
-        type Node =
-            abstract member kind: compiler.compiler_.Kind with get, set
+        type Formatter =
+            abstract member format: message: string -> string
 
-module formatter =
+    module helpers =
 
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type Formatter =
-        abstract member format: message: string -> string
+        [<AbstractClass>]
+        [<Erase>]
+        type Exports =
+            [<Import("defaultLevel", "re-exports/helpers.js")>]
+            static member inline defaultLevel: float = nativeOnly
+            [<Import("isEnabled", "re-exports/helpers.js")>]
+            static member isEnabled (level: float) : bool = nativeOnly
 
-module helpers =
+        [<RequireQualifiedAccess>]
+        [<StringEnum(CaseRules.None)>]
+        type Level =
+            | debug
+            | info
 
-    [<AbstractClass>]
-    [<Erase>]
-    type Exports =
-        [<Import("defaultLevel", "re-exports/helpers.js")>]
-        static member inline defaultLevel: float = nativeOnly
-        [<Import("isEnabled", "re-exports/helpers.js")>]
-        static member isEnabled (level: float) : bool = nativeOnly
+    module logger =
 
-    [<RequireQualifiedAccess>]
-    [<StringEnum(CaseRules.None)>]
-    type Level =
-        | debug
-        | info
+        [<AbstractClass>]
+        [<Erase>]
+        type Exports =
+            [<Import("createLogger", "re-exports/logger.js")>]
+            static member createLogger (?options: ReExports.logger.Options) : ReExports.logger.Logger = nativeOnly
+            [<Import("Logger", "re-exports/logger.js"); EmitConstructor>]
+            static member Logger (?options: ReExports.logger.Options) : Logger = nativeOnly
 
-module logger =
+        [<Global>]
+        [<AllowNullLiteral>]
+        type Options
+            [<ParamObject; Emit("$0")>]
+            (
+                ?level: ReExports.logger.LogLevel,
+                ?formatter: ReExports.formatter.Formatter
+            ) =
 
-    [<AbstractClass>]
-    [<Erase>]
-    type Exports =
-        [<Import("createLogger", "re-exports/logger.js")>]
-        static member createLogger (?options: logger.Options) : logger.Logger = nativeOnly
-        [<Import("Logger", "re-exports/logger.js"); EmitConstructor>]
-        static member Logger (?options: logger.Options) : Logger = nativeOnly
+            member val level : ReExports.logger.LogLevel option = nativeOnly with get, set
+            member val formatter : ReExports.formatter.Formatter option = nativeOnly with get, set
 
-    [<Global>]
-    [<AllowNullLiteral>]
-    type Options
-        [<ParamObject; Emit("$0")>]
-        (
-            ?level: logger.LogLevel,
-            ?formatter: formatter.Formatter
-        ) =
+        [<RequireQualifiedAccess>]
+        type LogLevel =
+            | Debug = 0
+            | Info = 1
 
-        member val level : logger.LogLevel option = nativeOnly with get, set
-        member val formatter : formatter.Formatter option = nativeOnly with get, set
-
-    [<RequireQualifiedAccess>]
-    type LogLevel =
-        | Debug = 0
-        | Info = 1
-
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type Logger =
-        abstract member log: message: string -> unit
+        [<AllowNullLiteral>]
+        [<Interface>]
+        type Logger =
+            abstract member log: message: string -> unit
 
 module DepLib =
 

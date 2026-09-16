@@ -134,20 +134,15 @@ let readPackages
     let glueAst =
         packageContext.Packages
         |> List.collect (fun package ->
-            let types = readPackage package
-
-            if package.IsTarget then
-                types
-            else
-                [
-                    ({
-                        Name = package.ModuleName
-                        ImportSpecifier = package.RuntimeName
-                        Types = types
-                    }
-                    : GlueFileModule)
-                    |> GlueType.FileModule
-                ]
+            [
+                ({
+                    Name = package.ModuleName
+                    ImportSpecifier = package.RuntimeName
+                    Types = readPackage package
+                }
+                : GlueFileModule)
+                |> GlueType.FileModule
+            ]
         )
 
     {|

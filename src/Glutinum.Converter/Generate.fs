@@ -87,11 +87,7 @@ let private moduleNameForPackage (runtimeName: string) =
     |> Array.map (fun part -> string (System.Char.ToUpper part.[0]) + part.Substring(1))
     |> String.concat ""
 
-let private toPackageInfo
-    (isTarget: bool)
-    (description: PackageDescription)
-    : Reader.Types.PackageInfo
-    =
+let private toPackageInfo (description: PackageDescription) : Reader.Types.PackageInfo =
     {
         ModuleName = moduleNameForPackage description.runtimeName
         RuntimeName = description.runtimeName
@@ -101,7 +97,6 @@ let private toPackageInfo
             description.subpathEntries
             |> Array.toList
             |> List.map (fun entry -> String.normalizePath entry.file, entry.subpath)
-        IsTarget = isTarget
     }
 
 let private isTypeScriptLibFile (fileName: string) =
@@ -170,13 +165,10 @@ let generatePackages (inputs: string list) =
         |> List.filter (fun description -> description.runtimeName <> "node")
         |> List.sortBy _.runtimeName
 
-    let isSingleTarget = targets.Length = 1
-
     let packageContext: Reader.Types.PackageContext =
         {
             Packages =
-                (targets |> List.map (toPackageInfo isSingleTarget))
-                @ (dependencies |> List.map (toPackageInfo false))
+                (targets |> List.map toPackageInfo) @ (dependencies |> List.map toPackageInfo)
         }
 
     let sourceFiles =
@@ -191,11 +183,8 @@ let generatePackages (inputs: string list) =
     for warning in readerResult.Warnings do
         Log.warn warning
 
-    let importSpecifier =
-        if isSingleTarget then
-            targets.Head.runtimeName
-        else
-            Naming.MODULE_PLACEHOLDER
+    // Every package is a module with its own import specifier
+    let importSpecifier = Naming.MODULE_PLACEHOLDER
 
     let transformResult =
         Transform.applyWith importSpecifier readerResult.TypeMemory readerResult.GlueAST

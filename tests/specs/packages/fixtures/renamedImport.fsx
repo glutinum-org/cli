@@ -4,18 +4,20 @@ open Fable.Core
 open Fable.Core.JsInterop
 open System
 
-[<AllowNullLiteral>]
-[<Interface>]
-type Provider =
-    abstract member provide: position: DepLib.Position -> DepLib.Range option
-    abstract member mark: marker: marker.Marker -> unit
-
-module marker =
+module RenamedImport =
 
     [<AllowNullLiteral>]
     [<Interface>]
-    type Marker =
-        abstract member position: DepLib.Position with get, set
+    type Provider =
+        abstract member provide: position: DepLib.Position -> DepLib.Range option
+        abstract member mark: marker: RenamedImport.marker.Marker -> unit
+
+    module marker =
+
+        [<AllowNullLiteral>]
+        [<Interface>]
+        type Marker =
+            abstract member position: DepLib.Position with get, set
 
 module DepLib =
 

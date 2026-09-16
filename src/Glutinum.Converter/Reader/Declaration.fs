@@ -168,6 +168,25 @@ let readDeclaration (reader: ITypeScriptReader) (declaration: Ts.Declaration) : 
         : GlueSetAccessor)
         |> GlueMember.SetAccessor
 
+    // `function f(): void` inside a namespace read as a member (`typeof ns`)
+    | Ts.SyntaxKind.FunctionDeclaration ->
+        let functionDeclaration =
+            reader.ReadFunctionDeclaration(declaration :?> Ts.FunctionDeclaration)
+
+        match functionDeclaration with
+        | GlueType.FunctionDeclaration info ->
+            ({
+                Name = info.Name
+                Documentation = info.Documentation
+                Parameters = info.Parameters
+                Type = info.Type
+                IsOptional = false
+                IsStatic = false
+            }
+            : GlueMethod)
+            |> GlueMember.Method
+        | _ -> failwith "Expected a function declaration"
+
     // `const X: number` inside a namespace read as a member (`typeof ns`)
     | Ts.SyntaxKind.VariableDeclaration ->
         let variableDeclaration = declaration :?> Ts.VariableDeclaration

@@ -105,10 +105,14 @@ let private intersectionsInProgress = ResizeArray<Ts.Type>()
 let private readTypeUsingFlags (reader: ITypeScriptReader) (typ: Ts.Type) =
 
     match typ.flags with
+    // An erroneous type has no symbol
+    | HasTypeFlags Ts.TypeFlags.Object when isNull (box typ.symbol) ->
+        GlueType.Primitive GluePrimitive.Any
+
     | HasTypeFlags Ts.TypeFlags.Object ->
         // Try to find the declaration of the type, to get more information about it
         match typ.symbol.declarations with
-        | Some declarations ->
+        | Some declarations when declarations.Count > 0 ->
             let declaration = declarations.[0]
 
             match declaration.kind with
@@ -360,7 +364,7 @@ module UtilityType =
                 ({
                     Documentation = []
                     FullName = getFullNameOrEmpty reader.checker typeReferenceNode
-                    Name = typeReferenceNode.typeName?getText ()
+                    Name = entityNameText !!typeReferenceNode.typeName
                     Members = members
                     TypeParameters = []
                     HeritageClauses = []
@@ -741,7 +745,12 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
         let typ = checker.getTypeAtLocation thisTypeNode
 
         let typParameters =
-            match typ.symbol.declarations with
+            match
+                (if isNull (box typ.symbol) then
+                     None
+                 else
+                     typ.symbol.declarations)
+            with
             | Some declarations ->
                 // We don't know how to read the type parameters
                 if declarations.Count <> 1 then
@@ -759,12 +768,16 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                     | _ -> []
             | None -> []
 
-        ({
-            Name = typ.symbol.name
-            TypeParameters = typParameters
-        }
-        : GlueThisType)
-        |> GlueType.ThisType
+        if isNull (box typ.symbol) then
+            GlueType.Primitive GluePrimitive.Any
+        else
+
+            ({
+                Name = typ.symbol.name
+                TypeParameters = typParameters
+            }
+            : GlueThisType)
+            |> GlueType.ThisType
 
     | Ts.SyntaxKind.TupleType ->
         let tupleTypeNode = typeNode :?> Ts.TupleTypeNode
