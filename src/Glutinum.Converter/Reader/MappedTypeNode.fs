@@ -25,7 +25,7 @@ let readMappedTypeNode (reader: ITypeScriptReader) (mappedTypeNode: Ts.MappedTyp
         return
             {
                 TypeParameter = typParam
-                Type = mappedTypeNode.``type`` |> Option.map reader.ReadNode
+                Type = mappedTypeNode.``type`` |> Option.map reader.ReadTypeNode
             }
             |> GlueType.MappedType
     }

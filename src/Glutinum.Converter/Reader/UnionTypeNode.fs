@@ -52,6 +52,10 @@ let rec private readUnionTypeCases
                 | Ts.SyntaxKind.NullKeyword
                 | Ts.SyntaxKind.UndefinedKeyword ->
                     GlueType.Primitive GluePrimitive.Null |> List.singleton |> Some
+                // `-1`
+                | Ts.SyntaxKind.PrefixUnaryExpression ->
+                    tryReadLiteral checker literalExpression
+                    |> Option.map (GlueType.Literal >> List.singleton)
                 | _ -> None
         else if ts.isTypeReferenceNode node then
             let typeReferenceNode = node :?> Ts.TypeReferenceNode

@@ -62,6 +62,7 @@ type PackageContext =
             |> String.concat "_"
         )
         |> String.concat "_"
+        |> Naming.sanitizeTypeName
 
     /// F# modules qualifying a type declared in `fileName`, empty for the target entry file
     member this.ModulePath(fileName: string) : string list =

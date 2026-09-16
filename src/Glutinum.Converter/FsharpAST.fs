@@ -337,6 +337,7 @@ type FSharpPrimitive =
     | Unit
     | Number
     | Null
+    | BigInt
 
 type FSharpTypeParameterInfo =
     {

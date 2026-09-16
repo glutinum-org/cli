@@ -25,12 +25,62 @@ open System.Collections.Generic
 /// <returns>
 /// A new list of types with the duplicates merged.
 /// </returns>
+// Two references to the same type differ by their `FullName` (`SyntaxKind.A` vs `SyntaxKind.B`)
+let rec signatureType (typ: FSharpType) : FSharpType =
+    match typ with
+    | FSharpType.TypeReference typeReference ->
+        { typeReference with
+            FullName = ""
+            TypeArguments = typeReference.TypeArguments |> List.map signatureType
+            Type = FSharpType.Discard
+        }
+        |> FSharpType.TypeReference
+    | FSharpType.Option typ -> FSharpType.Option(signatureType typ)
+    | FSharpType.ResizeArray typ -> FSharpType.ResizeArray(signatureType typ)
+    | FSharpType.Tuple types -> FSharpType.Tuple(types |> List.map signatureType)
+    | FSharpType.Function functionType ->
+        { functionType with
+            Parameters =
+                functionType.Parameters
+                |> List.map (fun parameter ->
+                    { parameter with
+                        Type = signatureType parameter.Type
+                        OriginalGlueMember = None
+                    }
+                )
+            ReturnType = signatureType functionType.ReturnType
+        }
+        |> FSharpType.Function
+    | typ -> typ
+
+let parametersSignature (parameters: FSharpParameter list) =
+    parameters
+    |> List.map (fun parameter -> signatureType parameter.Type, parameter.IsOptional)
+
+/// Overloads only differing by their parameter names are the same member for F#
+let distinctBySignature (members: FSharpMember list) : FSharpMember list =
+    members
+    |> List.distinctBy (
+        function
+        | FSharpMember.Method info ->
+            Choice1Of3(info.Name, info.TypeParameters.Length, parametersSignature info.Parameters)
+        | FSharpMember.Property info -> Choice2Of3(info.Name, parametersSignature info.Parameters)
+        | FSharpMember.StaticMember info ->
+            Choice3Of3(info.Name, info.TypeParameters.Length, parametersSignature info.Parameters)
+    )
+
 let private mergeTypes (types: FSharpType list) =
     let indexes = Dictionary<string, int>()
+    let aliases = HashSet<string>()
     let result = ResizeArray<FSharpType>()
 
     for typ in types do
         match typ with
+        // A merged interface and class with a default type parameter both generate the arity alias
+        | FSharpType.TypeAlias aliasInfo ->
+            if aliases.Add($"{aliasInfo.Name}/{aliasInfo.TypeParameters.Length}") then
+                result.Add(typ)
+
         | FSharpType.Interface interfaceInfo ->
             if indexes.ContainsKey(interfaceInfo.Name) then
                 let index = indexes.[interfaceInfo.Name]
@@ -40,9 +90,12 @@ let private mergeTypes (types: FSharpType list) =
                 | FSharpType.Interface existingInterfaceInfo ->
                     let merged =
                         { existingInterfaceInfo with
-                            Members = existingInterfaceInfo.Members @ interfaceInfo.Members
+                            Members =
+                                existingInterfaceInfo.Members @ interfaceInfo.Members
+                                |> distinctBySignature
                             Inheritance =
                                 existingInterfaceInfo.Inheritance @ interfaceInfo.Inheritance
+                                |> List.distinct
                         }
 
                     result.[index] <- FSharpType.Interface merged

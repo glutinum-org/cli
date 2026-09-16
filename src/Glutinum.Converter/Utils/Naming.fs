@@ -73,26 +73,31 @@ let private replaceTypeNameInvalidChars (text: string) : string =
 type SanitizeNameResult = { Name: string; IsDifferent: bool }
 
 let private sanitizeWith (extraReplace: string -> string) (name: string) : SanitizeNameResult =
-    let sanitizedName =
-        name
-        |> replaceDot
-        |> replaceAt
-        |> replaceControlChars
-        |> replaceEmpty
-        |> replacePlus
-        |> removeSurroundingQuotes
-        |> extraReplace
+    // An escaped name is sanitized already, the backticks must not be replaced
+    if name.Length > 4 && name.StartsWith("``") && name.EndsWith("``") then
+        { Name = name; IsDifferent = false }
+    else
 
-    // Check if the name is different after sanitization
-    // This is used to check if the value is different from the default Fable computed value
-    // Especially useful for StringEnum values where we sometimes need to use [<CompiledValue(...)>]
-    // to provide a different value than the default Fable computed value from the name
-    let isDifferent = name <> sanitizedName
+        let sanitizedName =
+            name
+            |> replaceDot
+            |> replaceAt
+            |> replaceControlChars
+            |> replaceEmpty
+            |> replacePlus
+            |> removeSurroundingQuotes
+            |> extraReplace
 
-    {
-        Name = sanitizedName |> escapeName
-        IsDifferent = isDifferent
-    }
+        // Check if the name is different after sanitization
+        // This is used to check if the value is different from the default Fable computed value
+        // Especially useful for StringEnum values where we sometimes need to use [<CompiledValue(...)>]
+        // to provide a different value than the default Fable computed value from the name
+        let isDifferent = name <> sanitizedName
+
+        {
+            Name = sanitizedName |> escapeName
+            IsDifferent = isDifferent
+        }
 
 let sanitizeNameWithResult (name: string) : SanitizeNameResult = sanitizeWith id name
 

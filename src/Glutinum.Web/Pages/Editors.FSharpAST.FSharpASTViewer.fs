@@ -431,6 +431,7 @@ type FSharpASTViewer =
                 | FSharpPrimitive.Unit -> Html.span "Unit"
                 | FSharpPrimitive.Number -> Html.span "Number"
                 | FSharpPrimitive.Null -> Html.span "Null"
+                | FSharpPrimitive.BigInt -> Html.span "BigInt"
 
             ASTViewer.renderNode
                 "Primitive"

@@ -282,17 +282,19 @@ let private namespaceChain (declaration: Ts.Node) =
             | Ts.SyntaxKind.ModuleDeclaration ->
                 let moduleDeclaration = node :?> Ts.ModuleDeclaration
 
-                let name =
-                    Naming.sanitizeTypeName ((unbox<Ts.Node> moduleDeclaration.name).getText ())
+                let rawName =
+                    (unbox<Ts.Node> moduleDeclaration.name).getText ()
+                    |> Naming.removeSurroundingQuotes
 
                 let isTopLevel =
                     not (isNull node.parent) && node.parent.kind = Ts.SyntaxKind.SourceFile
 
+                // The suffix is part of the name to escape (`assert_`, not ``` ``assert``_ ```)
                 let name =
                     if isTopLevel then
-                        name + "_"
+                        Naming.sanitizeTypeName (rawName + "_")
                     else
-                        name
+                        Naming.sanitizeTypeName rawName
 
                 collect node.parent (name :: acc)
             | _ -> collect node.parent acc

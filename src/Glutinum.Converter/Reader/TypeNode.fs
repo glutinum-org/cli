@@ -126,6 +126,16 @@ let private readTypeUsingFlags (reader: ITypeScriptReader) (typ: Ts.Type) =
             // We don't support TypeQuery for ModuleDeclaration yet
             // See https://github.com/glutinum-org/cli/issues/70 for a possible solution
             | Ts.SyntaxKind.ModuleDeclaration -> GlueType.Discard
+            // A reference keeps the module path of the declaration, its inlined declaration would not
+            | Ts.SyntaxKind.InterfaceDeclaration
+            | Ts.SyntaxKind.TypeAliasDeclaration ->
+                let flags =
+                    Ts.NodeBuilderFlags.NoTruncation
+                    ||| Ts.NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope
+
+                match reader.checker.typeToTypeNode (typ, None, Some flags) with
+                | Some typeNode -> reader.ReadTypeNode typeNode
+                | None -> reader.ReadNode declaration
             | _ -> reader.ReadNode declaration
 
         | None -> GlueType.Primitive GluePrimitive.Any
@@ -605,10 +615,10 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                         && symbolOpt.IsNone
                         && typeReferenceNode.pos >= 0
 
+                    let isExternal = isExternalToPackages checker reader.PackageContext symbolOpt
+
                     if
-                        isUnresolved
-                        || (isExternalToPackages checker reader.PackageContext symbolOpt
-                            && not (knownExternalTypeNames.Contains name))
+                        isUnresolved || (isExternal && not (knownExternalTypeNames.Contains name))
                     then
                         GlueType.Primitive GluePrimitive.Any
                     else
@@ -626,7 +636,8 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                                     isQualified
                                     symbolOpt
                             TypeArguments = readTypeArguments reader typeReferenceNode
-                            IsStandardLibrary = isStandardLibrary
+                            // `Uint8Array` from `lib.es2015` is mapped like the `lib.es5` types
+                            IsStandardLibrary = isStandardLibrary || isExternal
                         })
                         |> GlueType.TypeReference
 
@@ -702,11 +713,8 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                 ?typeArguments = importTypeNode.typeArguments
             )
             |> reader.ReadTypeNode
-        | None ->
-            Report.readerError ("type node", "Unsupported import type without qualifier", typeNode)
-            |> reader.Warnings.Add
-
-            GlueType.Primitive GluePrimitive.Any
+        // `typeof import("./file")`, the module object
+        | None -> GlueType.Primitive GluePrimitive.Any
 
     | Ts.SyntaxKind.LiteralType ->
         let literalTypeNode = typeNode :?> Ts.LiteralTypeNode
@@ -878,6 +886,8 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
 
     | Ts.SyntaxKind.SymbolKeyword -> GlueType.Primitive GluePrimitive.Symbol
 
+    | Ts.SyntaxKind.BigIntKeyword -> GlueType.Primitive GluePrimitive.BigInt
+
     | Ts.SyntaxKind.ExpressionWithTypeArguments ->
         let expression = typeNode :?> Ts.ExpressionWithTypeArguments
 
@@ -891,7 +901,14 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
             // Alias symbol give us better result for utility types like Omit, Partial, etc...
             typ.aliasSymbol
             // If not available, we fallback to the symbol of the type
-            |> Option.orElse (Some typ.symbol)
+            |> Option.orElse (
+                if isNull (box typ.symbol) then
+                    None
+                else
+                    Some typ.symbol
+            )
+            // An erroneous type (`Uint8Array<T>` with an older lib) has no symbol, its name has
+            |> Option.orElse (checker.getSymbolAtLocation expression.expression)
 
         // Specialize the utility types we know how to resolve so they work in
         // heritage clauses too (e.g. `interface Y extends Omit<X, "a">`). The
@@ -913,20 +930,23 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                     else
                         expression.expression.getText ()
 
+            let isExternal = isExternalToPackages checker reader.PackageContext symbolOpt
+
             // An external base type can't be inherited, `inherit obj` is invalid
-            if
-                isExternalToPackages checker reader.PackageContext symbolOpt
-                && not (knownExternalTypeNames.Contains name)
-            then
+            if isExternal && not (knownExternalTypeNames.Contains name) then
                 GlueType.Discard
             else
                 ({
                     Name = name
-                    FullName = getFullNameOrEmpty checker expression.expression
+                    // The name of the declaration, not of an import alias
+                    FullName =
+                        match symbolOpt |> Option.bind (resolveAlias checker) with
+                        | Some symbol -> checker.getFullyQualifiedName symbol
+                        | None -> getFullNameOrEmpty checker expression.expression
                     ModulePath =
                         modulePathForSymbol checker reader.PackageContext isQualified symbolOpt
                     TypeArguments = readTypeArguments reader expression
-                    IsStandardLibrary = isFromEs5Lib symbolOpt
+                    IsStandardLibrary = isFromEs5Lib symbolOpt || isExternal
                 })
                 |> GlueType.TypeReference
 

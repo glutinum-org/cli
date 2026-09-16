@@ -129,7 +129,7 @@ let private attributeToText (fsharpAttribute: FSharpAttribute) =
     | FSharpAttribute.Obsolete message ->
         match message with
         | Some message ->
-            if message.Contains("\n") then
+            if message.Contains("\n") || message.Contains("\"") then
                 $"[<Obsolete(\"\"\"%s{message}\"\"\")>]"
             else
                 $"[<Obsolete(\"%s{message}\")>]"
@@ -227,6 +227,10 @@ let rec printTypeParametersDeclaration
                 innterPrinter.WriteInline(printType constraint_)
             | None -> ()
         )
+
+        // `Foo<Bar>>:` would be lexed as an operator
+        if innterPrinter.ToStringWithoutTrailNewLine().EndsWith(">") then
+            innterPrinter.WriteInline(" ")
 
         innterPrinter.WriteInline(">")
 
@@ -329,6 +333,7 @@ and printType (fsharpType: FSharpType) =
         | FSharpPrimitive.Unit -> "unit"
         | FSharpPrimitive.Number -> "float"
         | FSharpPrimitive.Null -> "obj"
+        | FSharpPrimitive.BigInt -> "bigint"
     | FSharpType.TypeReference typeReference ->
         let name = (typeReference.ModulePath @ [ typeReference.Name ]) |> String.concat "."
 

@@ -196,6 +196,7 @@ type GluePrimitive =
     | Object
     | Symbol
     | Never
+    | BigInt
 
 [<RequireQualifiedAccess>]
 type GlueLiteral =
@@ -404,6 +405,7 @@ type GlueType =
             | GluePrimitive.Undefined -> "obj"
             | GluePrimitive.Object -> "obj"
             | GluePrimitive.Symbol -> "obj"
+            | GluePrimitive.BigInt -> "bigint"
             | GluePrimitive.Never -> "obj"
         | TemplateLiteral -> "string"
         | Enum info -> info.Name

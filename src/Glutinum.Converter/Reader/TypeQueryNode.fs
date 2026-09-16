@@ -119,15 +119,16 @@ let readTypeQueryNode (reader: ITypeScriptReader) (typeQueryNode: Ts.TypeQueryNo
 
                 match declaration.kind with
                 | Ts.SyntaxKind.ClassDeclaration ->
-                    {
-                        Documentation = []
+                    ({
                         Name = symbol.name
-                        Constructors = []
-                        Members = []
-                        TypeParameters = []
-                        HeritageClauses = []
+                        FullName = checker.getFullyQualifiedName symbol
+                        ModulePath =
+                            modulePathForSymbol checker reader.PackageContext false (Some symbol)
+                        TypeArguments = []
+                        IsStandardLibrary = false
                     }
-                    |> GlueType.ClassDeclaration
+                    : GlueTypeReference)
+                    |> GlueType.TypeReference
 
                 // We don't support TypeQuery for ModuleDeclaration yet
                 // See https://github.com/glutinum-org/cli/issues/70 for a possible solution
