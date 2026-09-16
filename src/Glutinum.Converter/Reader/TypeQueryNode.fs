@@ -127,6 +127,26 @@ let readTypeQueryNode (reader: ITypeScriptReader) (typeQueryNode: Ts.TypeQueryNo
                 // We don't support TypeQuery for ModuleDeclaration yet
                 // See https://github.com/glutinum-org/cli/issues/70 for a possible solution
                 | Ts.SyntaxKind.ModuleDeclaration -> GlueType.Discard
+                | Ts.SyntaxKind.MethodDeclaration
+                | Ts.SyntaxKind.MethodSignature ->
+                    let toFunctionDeclaration name documentation parameters returnType =
+                        ({
+                            Documentation = documentation
+                            IsDeclared = true
+                            Name = name
+                            Type = returnType
+                            Parameters = parameters
+                            TypeParameters = []
+                        }
+                        : GlueFunctionDeclaration)
+                        |> GlueType.FunctionDeclaration
+
+                    match reader.ReadDeclaration declaration with
+                    | GlueMember.Method info ->
+                        toFunctionDeclaration info.Name info.Documentation info.Parameters info.Type
+                    | GlueMember.MethodSignature info ->
+                        toFunctionDeclaration info.Name info.Documentation info.Parameters info.Type
+                    | _ -> GlueType.Primitive GluePrimitive.Any
                 | _ -> reader.ReadNode declaration
 
             | None -> GlueType.Primitive GluePrimitive.Any
