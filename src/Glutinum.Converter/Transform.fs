@@ -804,77 +804,10 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
             |> List.distinct
 
         if isParamObjectCandidate then
+            let name =
+                context.TypeLiteralsMemory.GetTypeName(context.FullName, context.CurrentScopeName)
 
-            let typeLiteralParameters =
-                typeLiteralInfo.Members
-                |> TransformMembers.toFSharpParameters context
-                // If the underlying type is an option, we want to make the field optional
-                // remove the option type
-                |> List.map (fun parameter ->
-                    match parameter.Type with
-                    | FSharpType.Option underlyingType ->
-                        { parameter with
-                            Type = underlyingType
-                            IsOptional = true
-                        }
-                    | _ -> parameter
-                )
-                // Sort to have the optional fields at the end
-                |> List.sortBy _.IsOptional
-
-            let explicitFields =
-                typeLiteralParameters
-                |> List.map (fun parameter ->
-                    {
-                        Name = parameter.Name
-                        Type =
-                            // If the argument is optional, we want to wrap it in an option
-                            if parameter.IsOptional then
-                                FSharpType.Option parameter.Type
-                            else
-                                parameter.Type
-                        Accessor =
-                            match parameter.OriginalGlueMember with
-                            | Some glueMember ->
-                                match glueMember.TryGetAccessor() with
-                                | Some accessor -> Some(transformAccessor accessor)
-                                | None -> None
-                            | None -> None
-                    }
-                    : FSharpExplicitField
-                )
-
-            let typeParameters =
-                typeParameterNames
-                |> List.map (fun name ->
-                    ({
-                        Name = name
-                        Constraint = None
-                        Default = None
-                    }
-                    : FSharpTypeParameterInfo)
-                    |> FSharpTypeParameter.FSharpTypeParameter
-
-                )
-
-            ({
-                Attributes = [ FSharpAttribute.Global; FSharpAttribute.AllowNullLiteral ]
-                Name =
-                    context.TypeLiteralsMemory.GetTypeName(
-                        context.FullName,
-                        context.CurrentScopeName
-                    )
-                PrimaryConstructor =
-                    {
-                        Parameters = typeLiteralParameters
-                        Attributes = [ FSharpAttribute.ParamObject; FSharpAttribute.EmitSelf ]
-                        Accessibility = FSharpAccessibility.Public
-                    }
-                SecondaryConstructors = []
-                ExplicitFields = explicitFields
-                TypeParameters = typeParameters
-            }
-            : FSharpClass)
+            transformParamObjectClass context name [] typeLiteralInfo.Members
             |> FSharpType.Class
             |> context.ExposeType
 
@@ -1835,6 +1768,319 @@ module private TransformMembers =
                 }
                 : FSharpParameter
         )
+
+let private transformParamObjectClass
+    (context: TransformContext)
+    (name: string)
+    (documentation: GlueComment list)
+    (members: GlueMember list)
+    : FSharpClass
+    =
+    let xmlDocInfo = transformComment documentation
+
+    let typeParameterNames =
+        members
+        |> List.choose (fun m ->
+            match m with
+            | GlueMember.MethodSignature { Type = typ }
+            | GlueMember.Method { Type = typ }
+            | GlueMember.Property { Type = typ }
+            | GlueMember.GetAccessor { Type = typ }
+            | GlueMember.SetAccessor { ArgumentType = typ }
+            | GlueMember.CallSignature { Type = typ }
+            | GlueMember.IndexSignature { Type = typ }
+            | GlueMember.ConstructSignature { Type = typ } ->
+                match typ with
+                | GlueType.TypeParameter name -> Some name
+                | _ -> None
+        )
+        |> List.distinct
+
+    let typeLiteralParameters =
+        members
+        |> TransformMembers.toFSharpParameters context
+        // If the underlying type is an option, we want to make the field optional
+        // remove the option type
+        |> List.map (fun parameter ->
+            match parameter.Type with
+            | FSharpType.Option underlyingType ->
+                { parameter with
+                    Type = underlyingType
+                    IsOptional = true
+                }
+            | _ -> parameter
+        )
+        // Sort to have the optional fields at the end
+        |> List.sortBy _.IsOptional
+
+    let explicitFields =
+        typeLiteralParameters
+        |> List.map (fun parameter ->
+            {
+                Name = parameter.Name
+                XmlDoc =
+                    match parameter.OriginalGlueMember with
+                    | Some glueMember -> (transformComment glueMember.Documentation).XmlDoc
+                    | None -> []
+                Type =
+                    // If the argument is optional, we want to wrap it in an option
+                    if parameter.IsOptional then
+                        FSharpType.Option parameter.Type
+                    else
+                        parameter.Type
+                Accessor =
+                    match parameter.OriginalGlueMember with
+                    | Some glueMember ->
+                        match glueMember.TryGetAccessor() with
+                        | Some accessor -> Some(transformAccessor accessor)
+                        | None -> None
+                    | None -> None
+            }
+            : FSharpExplicitField
+        )
+
+    let typeParameters =
+        typeParameterNames
+        |> List.map (fun name ->
+            ({
+                Name = name
+                Constraint = None
+                Default = None
+            }
+            : FSharpTypeParameterInfo)
+            |> FSharpTypeParameter.FSharpTypeParameter
+
+        )
+
+    ({
+        Attributes =
+            [
+                yield! xmlDocInfo.ObsoleteAttributes
+                FSharpAttribute.Global
+                FSharpAttribute.AllowNullLiteral
+            ]
+        XmlDoc = xmlDocInfo.XmlDoc
+        Name = name
+        PrimaryConstructor =
+            {
+                Parameters = typeLiteralParameters
+                Attributes = [ FSharpAttribute.ParamObject; FSharpAttribute.EmitSelf ]
+                Accessibility = FSharpAccessibility.Public
+            }
+        SecondaryConstructors = []
+        ExplicitFields = explicitFields
+        TypeParameters = typeParameters
+    }
+    : FSharpClass)
+
+module private ParamObjectCandidate =
+
+    let rec private typeReferenceFullNames (glueType: GlueType) =
+        match glueType with
+        | GlueType.TypeReference typeReference -> [ typeReference.FullName ]
+        | GlueType.Union(GlueTypeUnion cases) -> cases |> List.collect typeReferenceFullNames
+        | _ -> []
+
+    let private memberParameters (glueMember: GlueMember) =
+        match glueMember with
+        | GlueMember.Method info -> info.Parameters
+        | GlueMember.MethodSignature info -> info.Parameters
+        | GlueMember.CallSignature info -> info.Parameters
+        | GlueMember.ConstructSignature info -> info.Parameters
+        | GlueMember.Property _
+        | GlueMember.GetAccessor _
+        | GlueMember.SetAccessor _
+        | GlueMember.IndexSignature _ -> []
+
+    let rec private parameters (glueType: GlueType) =
+        match glueType with
+        | GlueType.FunctionDeclaration info -> info.Parameters
+        | GlueType.ClassDeclaration info ->
+            (info.Constructors |> List.collect _.Parameters)
+            @ (info.Members |> List.collect memberParameters)
+        | GlueType.Interface info -> info.Members |> List.collect memberParameters
+        | GlueType.TypeLiteral info -> info.Members |> List.collect memberParameters
+        | GlueType.FunctionType info -> info.Parameters
+        | GlueType.TypeAliasDeclaration info -> parameters info.Type
+        | GlueType.Variable info -> parameters info.Type
+        | GlueType.ExportDefault innerType -> parameters innerType
+        | _ -> []
+
+    let private memberReturnTypes (glueMember: GlueMember) =
+        match glueMember with
+        | GlueMember.Method info -> [ info.Type ]
+        | GlueMember.MethodSignature info -> [ info.Type ]
+        | GlueMember.CallSignature info -> [ info.Type ]
+        | GlueMember.GetAccessor info -> [ info.Type ]
+        | GlueMember.ConstructSignature _
+        | GlueMember.Property _
+        | GlueMember.SetAccessor _
+        | GlueMember.IndexSignature _ -> []
+
+    let private hasMethods (members: GlueMember list) =
+        members
+        |> List.exists (
+            function
+            | GlueMember.Method _
+            | GlueMember.MethodSignature _
+            | GlueMember.CallSignature _ -> true
+            | _ -> false
+        )
+
+    let private propertyTypes (members: GlueMember list) =
+        members
+        |> List.choose (
+            function
+            | GlueMember.Property info -> Some info.Type
+            | _ -> None
+        )
+
+    let rec private outputTypes (glueType: GlueType) =
+        match glueType with
+        | GlueType.ExportDefault innerType -> outputTypes innerType
+        | GlueType.FunctionDeclaration info -> [ info.Type ]
+        | GlueType.Variable info -> [ info.Type ]
+        | GlueType.ClassDeclaration info ->
+            (info.Members |> List.collect memberReturnTypes)
+            @ (if hasMethods info.Members || not info.Constructors.IsEmpty then
+                   propertyTypes info.Members
+               else
+                   [])
+        | GlueType.Interface info ->
+            (info.Members |> List.collect memberReturnTypes)
+            @ (if hasMethods info.Members then
+                   propertyTypes info.Members
+               else
+                   [])
+        | _ -> []
+
+    let rec private heritageClauses (glueType: GlueType) =
+        match glueType with
+        | GlueType.Interface info -> info.HeritageClauses
+        | GlueType.ClassDeclaration info -> info.HeritageClauses
+        | GlueType.ExportDefault innerType -> heritageClauses innerType
+        | _ -> []
+
+    let tryResolveMembers (typeMemory: GlueType list) (info: GlueInterface) =
+        let tryFindInterface (fullName: string) =
+            typeMemory
+            |> List.tryPick (
+                function
+                | GlueType.Interface candidate when candidate.FullName = fullName -> Some candidate
+                | _ -> None
+            )
+
+        let rec resolve (visited: Set<string>) (info: GlueInterface) =
+            if Set.contains info.FullName visited then
+                None
+            else
+                let visited = Set.add info.FullName visited
+
+                let fromHeritageClause (heritageClause: GlueType) =
+                    match heritageClause with
+                    | GlueType.TypeReference typeReference when
+                        typeReference.IsStandardLibrary && typeReference.Name = "Partial"
+                        ->
+                        match typeReference.TypeArguments with
+                        | [ GlueType.TypeReference baseReference ] ->
+                            tryFindInterface baseReference.FullName
+                            |> Option.bind (resolve visited)
+                            |> Option.map (
+                                List.map (
+                                    function
+                                    | GlueMember.Property property ->
+                                        GlueMember.Property { property with IsOptional = true }
+                                    | glueMember -> glueMember
+                                )
+                            )
+                        | _ -> None
+
+                    | GlueType.UtilityType(GlueUtilityType.Omit members) -> Some members
+
+                    | GlueType.TypeReference typeReference when typeReference.TypeArguments.IsEmpty ->
+                        tryFindInterface typeReference.FullName |> Option.bind (resolve visited)
+
+                    | _ -> None
+
+                (Some [], info.HeritageClauses)
+                ||> List.fold (fun acc heritageClause ->
+                    match acc, fromHeritageClause heritageClause with
+                    | Some acc, Some members -> Some(acc @ members)
+                    | _ -> None
+                )
+                |> Option.map (fun inheritedMembers ->
+                    let ownNames =
+                        info.Members
+                        |> List.choose (
+                            function
+                            | GlueMember.Property property -> Some property.Name
+                            | _ -> None
+                        )
+                        |> Set.ofList
+
+                    let inheritedMembers =
+                        inheritedMembers
+                        |> List.filter (
+                            function
+                            | GlueMember.Property property ->
+                                not (Set.contains property.Name ownNames)
+                            | _ -> true
+                        )
+
+                    inheritedMembers @ info.Members
+                )
+
+        resolve Set.empty info
+
+    let isCandidate (typeMemory: GlueType list) (info: GlueInterface) =
+        let members = tryResolveMembers typeMemory info
+
+        let hasOnlyProperties =
+            match members with
+            | Some members ->
+                not members.IsEmpty
+                && members
+                   |> List.forall (
+                       function
+                       | GlueMember.Property _ -> true
+                       | _ -> false
+                   )
+            | None -> false
+
+        let isUsedAsArgument =
+            typeMemory
+            |> List.exists (fun glueType ->
+                parameters glueType
+                |> List.exists (fun parameter ->
+                    typeReferenceFullNames parameter.Type |> List.contains info.FullName
+                )
+            )
+
+        let isUsedAsOutput =
+            typeMemory
+            |> List.exists (fun glueType ->
+                outputTypes glueType
+                |> List.collect (fun typ ->
+                    match typ with
+                    | GlueType.Array innerType -> typeReferenceFullNames innerType
+                    | _ -> typeReferenceFullNames typ
+                )
+                |> List.contains info.FullName
+            )
+
+        let isInherited =
+            typeMemory
+            |> List.exists (fun glueType ->
+                heritageClauses glueType
+                |> List.collect typeReferenceFullNames
+                |> List.contains info.FullName
+            )
+
+        hasOnlyProperties
+        && info.TypeParameters.IsEmpty
+        && isUsedAsArgument
+        && not isUsedAsOutput
+        && not isInherited
 
 let private transformInterface (context: TransformContext) (info: GlueInterface) : FSharpInterface =
     let name, context = sanitizeTypeNameAndPushScope info.Name context
@@ -3407,6 +3653,19 @@ let private transformToFsharp
     glueTypes
     |> List.collect (
         function
+
+        | GlueType.Interface interfaceInfo when
+            ParamObjectCandidate.isCandidate context.TypeMemory interfaceInfo
+            ->
+            let name, context = sanitizeTypeNameAndPushScope interfaceInfo.Name context
+
+            let members =
+                ParamObjectCandidate.tryResolveMembers context.TypeMemory interfaceInfo
+                |> Option.defaultValue interfaceInfo.Members
+
+            transformParamObjectClass context name interfaceInfo.Documentation members
+            |> FSharpType.Class
+            |> List.singleton
 
         | GlueType.Interface interfaceInfo ->
             FSharpType.Interface(transformInterface context interfaceInfo) |> List.singleton
