@@ -1,5 +1,4 @@
 import { createProjectSync, ts } from "@ts-morph/bootstrap";
-import path from "node:path";
 import { describePackage, findPackageDir } from "./resolve.js";
 
 /**
@@ -19,19 +18,17 @@ export default function createProgramForCLI(filePath, source) {
 }
 
 /**
- * Create a program from declaration files on disk, following their imports.
+ * Create a program from declaration files of the host, following their imports.
  *
+ * @param {import("./host.js").Host} host
  * @param {string[]} entryFiles
  * @returns
  */
-export function createProgramFromFiles(entryFiles) {
+export function createProgramFromFiles(host, entryFiles) {
     // ESNext, so that lib types such as `AsyncIterable` resolve instead of being left undefined.
     // `types: []` stops TypeScript from loading every package under `node_modules/@types`.
-    const project = createProjectSync({
-        // ESNext module + Bundler resolution: follows `exports` maps and node_modules
-        compilerOptions: { target: 99, module: 99, moduleResolution: 100, types: [], strict: true },
-        skipAddingFilesFromTsConfig: true,
-    })
+    // ESNext module + Bundler resolution: follows `exports` maps and node_modules
+    const project = host.createProject({ target: 99, module: 99, moduleResolution: 100, types: [], strict: true })
 
     for (const entryFile of entryFiles) {
         project.addSourceFileAtPathSync(entryFile)
@@ -46,23 +43,24 @@ export function createProgramFromFiles(entryFiles) {
  * The files reachable from the entry files through imports and references, without
  * going through a package of `excludedRuntimeNames` (`node` for `@types/node`).
  *
+ * @param {import("./host.js").Host} host
  * @param {import("typescript").Program} program
  * @param {string[]} entryFiles
  * @param {string[]} excludedRuntimeNames
  * @returns {string[]}
  */
-export function reachableFiles(program, entryFiles, excludedRuntimeNames) {
+export function reachableFiles(host, program, entryFiles, excludedRuntimeNames) {
     const runtimeNames = new Map();
 
     const isExcluded = (fileName) => {
-        const dir = findPackageDir(fileName);
+        const dir = findPackageDir(host, fileName);
 
         if (dir === null) {
             return false;
         }
 
         if (!runtimeNames.has(dir)) {
-            const description = describePackage(dir);
+            const description = describePackage(host, dir);
             runtimeNames.set(dir, description === null ? null : description.runtimeName);
         }
 
@@ -99,7 +97,7 @@ export function reachableFiles(program, entryFiles, excludedRuntimeNames) {
         }
 
         for (const reference of sourceFile.referencedFiles ?? []) {
-            visit(path.resolve(path.dirname(sourceFile.fileName), reference.fileName));
+            visit(host.path.resolve(host.path.dirname(sourceFile.fileName), reference.fileName));
         }
 
         for (const reference of sourceFile.typeReferenceDirectives ?? []) {

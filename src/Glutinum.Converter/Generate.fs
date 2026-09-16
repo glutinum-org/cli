@@ -26,24 +26,35 @@ type PackageDescription =
     abstract entryFile: string
     abstract subpathEntries: SubpathEntry[]
 
+/// The file system the packages are read from: the disk for the CLI, an in-memory one in the browser
+[<AllowNullLiteral>]
+type Host =
+    abstract cwd: string
+
+[<Import("createNodeHost", "./js/host.js")>]
+let private createNodeHost (_fs: obj, _path: obj, _cwd: string) : Host = jsNative
+
+[<Import("createInMemoryHost", "./js/host.js")>]
+let createInMemoryHost (_cwd: string) : Host = jsNative
+
 [<Import("resolveInput", "./js/resolve.js")>]
-let private resolveInput (_input: string) : ResolvedInput = jsNative
+let private resolveInput (_host: Host, _input: string) : ResolvedInput = jsNative
 
 [<Import("describePackage", "./js/resolve.js")>]
-let private describePackage (_packageDir: string) : PackageDescription = jsNative
+let private describePackage (_host: Host, _packageDir: string) : PackageDescription = jsNative
 
 [<Import("findPackageDir", "./js/resolve.js")>]
-let private findPackageDir (_file: string) : string = jsNative
+let private findPackageDir (_host: Host, _file: string) : string = jsNative
 
 [<Import("listInstalledPackages", "./js/resolve.js")>]
-let private listInstalledPackages () : string[] = jsNative
+let private listInstalledPackages (_host: Host) : string[] = jsNative
 
 [<Import("createProgramFromFiles", "./js/bootstrap.js")>]
-let private createProgramFromFiles (_entryFiles: string[]) : Ts.Program = jsNative
+let private createProgramFromFiles (_host: Host, _entryFiles: string[]) : Ts.Program = jsNative
 
 [<Import("reachableFiles", "./js/bootstrap.js")>]
 let private reachableFiles
-    (_program: Ts.Program, _entryFiles: string[], _excludedRuntimeNames: string[])
+    (_host: Host, _program: Ts.Program, _entryFiles: string[], _excludedRuntimeNames: string[])
     : string[]
     =
     jsNative
@@ -110,19 +121,19 @@ let private isTypeScriptLibFile (fileName: string) =
 /// Generate a single binding file for the packages, and the packages they depend on.
 /// An empty list generates every package installed in the nearest <c>node_modules</c>.
 /// </summary>
-let generatePackages (inputs: string list) =
+let generatePackagesWith (host: Host) (inputs: string list) =
     let targetDirs =
         match inputs with
-        | [] -> listInstalledPackages () |> Array.toList
+        | [] -> listInstalledPackages host |> Array.toList
         | inputs ->
             inputs
             |> List.map (fun input ->
-                let resolved = resolveInput input
+                let resolved = resolveInput (host, input)
 
                 match resolved.kind with
                 | "package" -> resolved.packageDir
                 | _ ->
-                    match findPackageDir resolved.file with
+                    match findPackageDir (host, resolved.file) with
                     | null -> failwith $"Could not find the package of {resolved.file}"
                     | packageDir -> packageDir
             )
@@ -130,7 +141,7 @@ let generatePackages (inputs: string list) =
     let targets =
         targetDirs
         |> List.map (fun dir ->
-            match describePackage dir with
+            match describePackage (host, dir) with
             | null -> failwith $"Could not find a declaration file for the package in {dir}"
             | description -> description
         )
@@ -142,7 +153,7 @@ let generatePackages (inputs: string list) =
         )
         |> List.toArray
 
-    let program = createProgramFromFiles entryFiles
+    let program = createProgramFromFiles (host, entryFiles)
 
     let checker = program.getTypeChecker ()
 
@@ -151,18 +162,18 @@ let generatePackages (inputs: string list) =
 
     // `@types/node` describes the runtime like `lib.dom.d.ts`, it is generated on request only
     let dependencies =
-        reachableFiles (program, entryFiles, [| "node" |])
+        reachableFiles (host, program, entryFiles, [| "node" |])
         |> Array.toList
         |> List.filter (fun fileName -> not (isTypeScriptLibFile fileName))
         |> List.choose (fun fileName ->
-            match findPackageDir fileName with
+            match findPackageDir (host, fileName) with
             | null -> None
             | dir -> Some(String.normalizePath dir)
         )
         |> List.distinct
         |> List.filter (fun dir -> not (targetDirs.Contains dir))
         |> List.choose (fun dir ->
-            match describePackage dir with
+            match describePackage (host, dir) with
             | null -> None
             | description -> Some description
         )
@@ -204,3 +215,7 @@ let generatePackages (inputs: string list) =
     Printer.printFile printer transformResult
 
     printer.ToString()
+
+/// The packages installed on the disk, from the current directory
+let generatePackages (inputs: string list) =
+    generatePackagesWith (createNodeHost (fs, path, ``process``.cwd ())) inputs

@@ -1,21 +1,20 @@
-import fs from "node:fs";
-import path from "node:path";
-
 const DECLARATION_FILE = /\.d\.[cm]?ts$/;
 
 /**
  * Directory of the nearest `node_modules` folder, walking up from `cwd`.
  *
+ * @param {import("./host.js").Host} host
  * @param {string} cwd
  * @returns {string | null}
  */
-export function findNodeModules(cwd) {
+export function findNodeModules(host, cwd) {
+    const { path, fs } = host;
     let dir = path.resolve(cwd);
 
     while (true) {
         const candidate = path.join(dir, "node_modules");
 
-        if (fs.existsSync(candidate) && fs.statSync(candidate).isDirectory()) {
+        if (fs.directoryExists(candidate)) {
             return candidate;
         }
 
@@ -36,29 +35,27 @@ export function findNodeModules(cwd) {
  * @param {string} dir
  * @returns {string}
  */
-function realDir(dir) {
-    try {
-        return fs.realpathSync(dir);
-    } catch {
-        return dir;
-    }
+function realDir(host, dir) {
+    return host.fs.realPath(dir);
 }
 
 /**
  * Directory of the package that owns `file`: the closest parent directory containing a `package.json`.
  *
+ * @param {import("./host.js").Host} host
  * @param {string} file
  * @returns {string | null}
  */
-export function findPackageDir(file) {
+export function findPackageDir(host, file) {
+    const { path, fs } = host;
     let dir = path.dirname(path.resolve(file));
 
     while (true) {
         const packageJsonPath = path.join(dir, "package.json");
 
         // `dist/esm/package.json` files only holding `{ "type": "module" }` do not delimit a package
-        if (fs.existsSync(packageJsonPath) && JSON.parse(fs.readFileSync(packageJsonPath, "utf8")).name !== undefined) {
-            return realDir(dir);
+        if (fs.fileExists(packageJsonPath) && JSON.parse(fs.readFile(packageJsonPath)).name !== undefined) {
+            return realDir(host, dir);
         }
 
         const parent = path.dirname(dir);
@@ -128,17 +125,19 @@ function collectExportsTypes(exportsField) {
 /**
  * Describe an installed package: its runtime name and declaration entry points.
  *
+ * @param {import("./host.js").Host} host
  * @param {string} packageDir
  * @returns {{ name: string, runtimeName: string, dir: string, entryFile: string, subpathEntries: { subpath: string, file: string }[] } | null}
  */
-export function describePackage(packageDir) {
+export function describePackage(host, packageDir) {
+    const { path, fs } = host;
     const packageJsonPath = path.join(packageDir, "package.json");
 
-    if (!fs.existsSync(packageJsonPath)) {
+    if (!fs.fileExists(packageJsonPath)) {
         return null;
     }
 
-    const pkg = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
+    const pkg = JSON.parse(fs.readFile(packageJsonPath));
     const name = pkg.name ?? path.basename(packageDir);
 
     // `@types/foo` describes the `foo` package, `@types/scope__foo` the `@scope/foo` one
@@ -170,11 +169,11 @@ export function describePackage(packageDir) {
         let file = path.resolve(packageDir, candidate.file);
 
         // `"types": "./lib/umd/main"` is allowed without an extension
-        if (!DECLARATION_FILE.test(file) && fs.existsSync(file + ".d.ts")) {
+        if (!DECLARATION_FILE.test(file) && fs.fileExists(file + ".d.ts")) {
             file = file + ".d.ts";
         }
 
-        if (!fs.existsSync(file) || !DECLARATION_FILE.test(file)) {
+        if (!fs.fileExists(file) || !DECLARATION_FILE.test(file)) {
             continue;
         }
 
@@ -203,29 +202,30 @@ export function describePackage(packageDir) {
 /**
  * Resolve the CLI input to a package directory or a declaration file.
  *
+ * @param {import("./host.js").Host} host
  * @param {string} input package name, package directory or `.d.ts` path
- * @param {string} cwd
  * @returns {{ kind: "file", file: string } | { kind: "package", packageDir: string }}
  */
-export function resolveInput(input, cwd = process.cwd()) {
-    const asPath = path.resolve(cwd, input);
+export function resolveInput(host, input) {
+    const { path, fs } = host;
+    const asPath = path.resolve(host.cwd, input);
 
-    if (DECLARATION_FILE.test(input) && fs.existsSync(asPath)) {
+    if (DECLARATION_FILE.test(input) && fs.fileExists(asPath)) {
         return { kind: "file", file: asPath };
     }
 
-    if (fs.existsSync(asPath) && fs.statSync(asPath).isDirectory()) {
-        return { kind: "package", packageDir: realDir(asPath) };
+    if (fs.directoryExists(asPath)) {
+        return { kind: "package", packageDir: realDir(host, asPath) };
     }
 
-    const nodeModules = findNodeModules(cwd);
+    const nodeModules = findNodeModules(host, host.cwd);
 
     if (nodeModules !== null) {
         // A package without declaration files (`ws`) is described by its `@types` package
         for (const candidate of [input, path.join("@types", input.replace(/^@/, "").replace("/", "__"))]) {
-            const packageDir = realDir(path.join(nodeModules, candidate));
+            const packageDir = realDir(host, path.join(nodeModules, candidate));
 
-            if (fs.existsSync(path.join(packageDir, "package.json")) && describePackage(packageDir) !== null) {
+            if (fs.fileExists(path.join(packageDir, "package.json")) && describePackage(host, packageDir) !== null) {
                 return { kind: "package", packageDir };
             }
         }
@@ -239,11 +239,12 @@ export function resolveInput(input, cwd = process.cwd()) {
 /**
  * Every package installed in the nearest `node_modules` that ships declaration files.
  *
- * @param {string} cwd
+ * @param {import("./host.js").Host} host
  * @returns {string[]} package directories
  */
-export function listInstalledPackages(cwd = process.cwd()) {
-    const nodeModules = findNodeModules(cwd);
+export function listInstalledPackages(host) {
+    const { path, fs } = host;
+    const nodeModules = findNodeModules(host, host.cwd);
 
     if (nodeModules === null) {
         return [];
@@ -251,7 +252,7 @@ export function listInstalledPackages(cwd = process.cwd()) {
 
     const result = [];
 
-    for (const entry of fs.readdirSync(nodeModules)) {
+    for (const entry of fs.readDirectory(nodeModules)) {
         if (entry.startsWith(".")) {
             continue;
         }
@@ -259,7 +260,7 @@ export function listInstalledPackages(cwd = process.cwd()) {
         const entryPath = path.join(nodeModules, entry);
 
         if (entry.startsWith("@")) {
-            for (const scoped of fs.readdirSync(entryPath)) {
+            for (const scoped of fs.readDirectory(entryPath)) {
                 result.push(path.join(entryPath, scoped));
             }
         } else {
@@ -268,7 +269,7 @@ export function listInstalledPackages(cwd = process.cwd()) {
     }
 
     return result
-        .filter((dir) => fs.existsSync(path.join(dir, "package.json")))
-        .map(realDir)
-        .filter((dir) => describePackage(dir) !== null);
+        .filter((dir) => fs.fileExists(path.join(dir, "package.json")))
+        .map((dir) => realDir(host, dir))
+        .filter((dir) => describePackage(host, dir) !== null);
 }

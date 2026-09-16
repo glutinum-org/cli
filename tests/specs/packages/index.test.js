@@ -37,3 +37,22 @@ for (const fixture of fixtures) {
         await expect(result).toMatchFileSnapshot(expectedFile)
     })
 }
+
+// The browser has no disk: the same package read from an in-memory file system gives the same binding
+import { generatePackagesWith } from '../../../src/Glutinum.Converter/Generate.fs.js'
+import { createInMemoryHost } from '../../../src/Glutinum.Converter/js/host.js'
+import fs from 'node:fs'
+
+test("packages/multiFile in memory", async () => {
+    const packageDir = path.join(__dirname, "fixtures", "multiFile")
+    const host = createInMemoryHost("/")
+    const fileSystem = host.createProject({}).fileSystem
+
+    for (const file of fs.readdirSync(packageDir)) {
+        fileSystem.writeFileSync("/node_modules/multi-file/" + file, fs.readFileSync(path.join(packageDir, file), "utf8"))
+    }
+
+    const result = generatePackagesWith(host, ofArray(["multi-file"])) + footer
+
+    await expect(result).toMatchFileSnapshot(path.join(__dirname, "fixtures", "multiFile.fsx"))
+})
