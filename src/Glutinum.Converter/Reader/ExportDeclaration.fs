@@ -40,8 +40,6 @@ let private readReExport
             if declarationFile = currentFile || packageContext.IsExternal declarationFile then
                 []
             else
-                let modulePath = packageContext.ModulePath declarationFile
-
                 declarations
                 |> Seq.toList
                 |> List.choose (fun declaration ->
@@ -62,7 +60,7 @@ let private readReExport
                         ({
                             Name = exportedName
                             Declaration = reader.ReadNode declaration
-                            ModulePath = modulePath
+                            ModulePath = modulePathForDeclaration packageContext declaration
                         }
                         : GlueReExport)
                         |> GlueType.ReExport

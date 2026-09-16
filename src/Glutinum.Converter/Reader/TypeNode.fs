@@ -74,7 +74,14 @@ let private readInstantiatedMember
             Ts.NodeBuilderFlags.NoTruncation
             ||| Ts.NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope
 
-        match checker.typeToTypeNode (instantiatedType, Some contextNode, Some flags) with
+        // A node synthesized by `typeToTypeNode` can't be given back to the checker
+        let enclosingDeclaration =
+            if contextNode.pos < 0 then
+                None
+            else
+                Some contextNode
+
+        match checker.typeToTypeNode (instantiatedType, enclosingDeclaration, Some flags) with
         | None -> declaredMember
         | Some typeNode ->
             match declaredMember, reader.ReadTypeNode typeNode with
@@ -587,12 +594,7 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                                 )
                             )
                             |> Option.defaultValue (writtenName ())
-                        | None ->
-                            // Synthesized node (e.g. produced by `typeToTypeNode` when
-                            // resolving `ReturnType<...>`). It has no symbol and no source
-                            // position, so we read the identifier name directly instead of
-                            // calling `getText()`.
-                            typeReferenceNode.typeName?text
+                        | None -> writtenName ()
 
                     if
                         isExternalToPackages checker reader.PackageContext symbolOpt

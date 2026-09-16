@@ -36,10 +36,30 @@ type Level =
 type DepConfig =
     DepLib.DepConfig
 
+type Kind =
+    compiler.compiler_.Kind
+
+type Node =
+    compiler.compiler_.Node
+
 [<AllowNullLiteral>]
 [<Interface>]
 type Sink =
     abstract member write: entry: string -> unit
+
+module compiler =
+
+    module compiler_ =
+
+        [<RequireQualifiedAccess>]
+        type Kind =
+            | A = 1
+            | B = 2
+
+        [<AllowNullLiteral>]
+        [<Interface>]
+        type Node =
+            abstract member kind: compiler.compiler_.Kind with get, set
 
 module formatter =
 

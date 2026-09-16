@@ -30,6 +30,21 @@ export function findNodeModules(cwd) {
 }
 
 /**
+ * Real path of a directory: pnpm links `node_modules/<pkg>` into its store, the
+ * dependencies of a package are only reachable from the real location.
+ *
+ * @param {string} dir
+ * @returns {string}
+ */
+function realDir(dir) {
+    try {
+        return fs.realpathSync(dir);
+    } catch {
+        return dir;
+    }
+}
+
+/**
  * Directory of the package that owns `file`: the closest parent directory containing a `package.json`.
  *
  * @param {string} file
@@ -43,7 +58,7 @@ export function findPackageDir(file) {
 
         // `dist/esm/package.json` files only holding `{ "type": "module" }` do not delimit a package
         if (fs.existsSync(packageJsonPath) && JSON.parse(fs.readFileSync(packageJsonPath, "utf8")).name !== undefined) {
-            return dir;
+            return realDir(dir);
         }
 
         const parent = path.dirname(dir);
@@ -200,7 +215,7 @@ export function resolveInput(input, cwd = process.cwd()) {
     }
 
     if (fs.existsSync(asPath) && fs.statSync(asPath).isDirectory()) {
-        return { kind: "package", packageDir: asPath };
+        return { kind: "package", packageDir: realDir(asPath) };
     }
 
     const nodeModules = findNodeModules(cwd);
@@ -210,7 +225,7 @@ export function resolveInput(input, cwd = process.cwd()) {
             const packageDir = path.join(nodeModules, candidate);
 
             if (fs.existsSync(path.join(packageDir, "package.json"))) {
-                return { kind: "package", packageDir };
+                return { kind: "package", packageDir: realDir(packageDir) };
             }
         }
     }
@@ -251,5 +266,8 @@ export function listInstalledPackages(cwd = process.cwd()) {
         }
     }
 
-    return result.filter((dir) => fs.existsSync(path.join(dir, "package.json")) && describePackage(dir) !== null);
+    return result
+        .filter((dir) => fs.existsSync(path.join(dir, "package.json")))
+        .map(realDir)
+        .filter((dir) => describePackage(dir) !== null);
 }

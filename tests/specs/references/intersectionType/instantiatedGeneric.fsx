@@ -35,6 +35,17 @@ type TextDocumentFeature =
     abstract member plain: float with get, set
     abstract member send: (string -> JS.Promise<unit>) with get, set
 
+[<AllowNullLiteral>]
+[<Interface>]
+type UnionFeature<'RO> =
+    abstract member register: options: 'RO option -> ResizeArray<'RO> option
+
+[<AllowNullLiteral>]
+[<Interface>]
+type UnionTextDocumentFeature =
+    abstract member register: options: Options option -> ResizeArray<Options> option
+    abstract member extra: string with get, set
+
 (***)
 #r "nuget: Fable.Core"
 #r "nuget: Glutinum.Types"

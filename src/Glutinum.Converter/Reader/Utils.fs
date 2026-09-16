@@ -290,6 +290,12 @@ let private namespaceChain (declaration: Ts.Node) =
 
     collect declaration.parent []
 
+/// The F# modules qualifying a declaration from another file: its file modules and its namespaces
+let modulePathForDeclaration (packageContext: PackageContext) (declaration: Ts.Node) : string list =
+    let fileName = declaration.getSourceFile().fileName |> String.normalizePath
+
+    packageContext.ModulePath fileName @ namespaceChain declaration
+
 /// <summary>
 /// The F# modules qualifying a reference to the symbol: the package and file modules
 /// in package mode, and the namespaces when the reference is written qualified.

@@ -92,7 +92,14 @@ let private attributeToText (fsharpAttribute: FSharpAttribute) =
     | FSharpAttribute.TypeScriptTaggedUnion(tagName, caseRules) ->
         $"[<TypeScriptTaggedUnion(\"{tagName}\", {caseRulesToText caseRules})>]"
     | FSharpAttribute.CompiledName name ->
-        let name = name.Replace("\\", "\\\\").Replace("\"", "\\\"")
+        let name =
+            name
+                .Replace("\\", "\\\\")
+                .Replace("\"", "\\\"")
+                .Replace("\r", "\\r")
+                .Replace("\n", "\\n")
+                .Replace("\t", "\\t")
+
         $"[<CompiledName(\"{name}\")>]"
     | FSharpAttribute.CompiledValue value ->
         let valueText =

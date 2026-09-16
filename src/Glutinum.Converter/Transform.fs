@@ -628,6 +628,12 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
             FSharpType.Option(transformType context others.Head)
         else if others.IsEmpty then
             transformType context optionalTypes.Head
+        // Fable.Core stops at U9
+        else if others.Length > 9 then
+            if isOptional then
+                FSharpType.Option FSharpType.Object
+            else
+                FSharpType.Object
         // Don't wrap in a U1 if there is only one case
         else if others.Length = 1 then
             transformType context others.Head
@@ -2228,11 +2234,25 @@ module private ParamObjectCandidate =
                 |> List.contains info.FullName
             )
 
+        // The declarations of a merged interface are generated as one interface
+        let isDeclaredOnce =
+            typeMemory
+            |> List.choose (
+                function
+                | GlueType.Interface candidate when candidate.FullName = info.FullName ->
+                    Some candidate
+                | _ -> None
+            )
+            |> List.distinct
+            |> List.length
+            |> fun count -> count <= 1
+
         hasOnlyProperties
         && info.TypeParameters.IsEmpty
         && isUsedAsArgument
         && not isUsedAsOutput
         && not isInherited
+        && isDeclaredOnce
 
 let private partialHeritageBeingExpanded = ResizeArray<string>()
 

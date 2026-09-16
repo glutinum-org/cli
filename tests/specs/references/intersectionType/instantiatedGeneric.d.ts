@@ -18,3 +18,9 @@ export interface SendFeature<T> {
 }
 
 export type TextDocumentFeature = DynamicFeature<Options> & SendFeature<(document: string) => Promise<void>>;
+
+export interface UnionFeature<RO> {
+    register(options: RO | undefined): RO[] | null;
+}
+
+export type UnionTextDocumentFeature = UnionFeature<Options> & { extra: string };

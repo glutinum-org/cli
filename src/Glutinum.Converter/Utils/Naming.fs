@@ -40,6 +40,12 @@ let private replaceDot (text: string) : string = text.Replace(".", "_")
 
 let private replaceAt (text: string) : string = text.Replace("@", "_AT_")
 
+let private replaceControlChars (text: string) : string =
+    text
+        .Replace("\r", "_CARRIAGE_RETURN_")
+        .Replace("\n", "_NEWLINE_")
+        .Replace("\t", "_TAB_")
+
 let private replaceEmpty (text: string) : string =
     if String.IsNullOrWhiteSpace text then
         "_EMPTY_"
@@ -61,6 +67,8 @@ let private replaceTypeNameInvalidChars (text: string) : string =
         .Replace("[", "_LBRACKET_")
         .Replace("]", "_RBRACKET_")
         .Replace("\"", "_QUOTE_")
+        .Replace("'", "_APOSTROPHE_")
+        .Replace("`", "_BACKTICK_")
 
 type SanitizeNameResult = { Name: string; IsDifferent: bool }
 
@@ -69,6 +77,7 @@ let private sanitizeWith (extraReplace: string -> string) (name: string) : Sanit
         name
         |> replaceDot
         |> replaceAt
+        |> replaceControlChars
         |> replaceEmpty
         |> replacePlus
         |> removeSurroundingQuotes

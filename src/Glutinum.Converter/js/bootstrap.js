@@ -8,7 +8,8 @@ import { createProjectSync } from "@ts-morph/bootstrap";
  */
 export default function createProgramForCLI(filePath, source) {
 
-    const project = createProjectSync({})
+    // `strict`, so that `T | undefined` is kept by the checker
+    const project = createProjectSync({ compilerOptions: { strict: true } })
 
     project.createSourceFile(filePath, source)
 
@@ -26,7 +27,7 @@ export function createProgramFromFiles(entryFiles) {
     // `types: []` stops TypeScript from loading every package under `node_modules/@types`.
     const project = createProjectSync({
         // ESNext module + Bundler resolution: follows `exports` maps and node_modules
-        compilerOptions: { target: 99, module: 99, moduleResolution: 100, types: [] },
+        compilerOptions: { target: 99, module: 99, moduleResolution: 100, types: [], strict: true },
         skipAddingFilesFromTsConfig: true,
     })
 

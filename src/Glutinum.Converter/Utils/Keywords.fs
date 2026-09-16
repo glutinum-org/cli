@@ -95,5 +95,13 @@ let fsharp =
         "trait"
         "virtual"
         "volatile"
+        // Infix operators
+        "mod"
+        "land"
+        "lor"
+        "lxor"
+        "lsl"
+        "lsr"
+        "asr"
     ]
     |> Set.ofList
