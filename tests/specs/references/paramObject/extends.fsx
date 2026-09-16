@@ -14,25 +14,25 @@ type Exports =
     [<Import("c", "REPLACE_ME_WITH_MODULE_NAME")>]
     static member c (options: OmitExtends) : unit = nativeOnly
     [<Import("d", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member d (options: Override) : unit = nativeOnly
+    static member d (options: Narrows) : unit = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
 type BaseOptions =
     abstract member debug: bool option with get, set
-    abstract member level: float with get, set
+    abstract member level: U2<string, float> with get, set
 
 [<Global>]
 [<AllowNullLiteral>]
 type PlainExtends
     [<ParamObject; Emit("$0")>]
     (
-        level: float,
+        level: U2<string, float>,
         name: string,
         ?debug: bool
     ) =
 
-    member val level : float = nativeOnly with get, set
+    member val level : U2<string, float> = nativeOnly with get, set
     member val name : string = nativeOnly with get, set
     member val debug : bool option = nativeOnly with get, set
 
@@ -43,28 +43,28 @@ type PartialExtends
     (
         name: string,
         ?debug: bool,
-        ?level: float
+        ?level: U2<string, float>
     ) =
 
     member val name : string = nativeOnly with get, set
     member val debug : bool option = nativeOnly with get, set
-    member val level : float option = nativeOnly with get, set
+    member val level : U2<string, float> option = nativeOnly with get, set
 
 [<Global>]
 [<AllowNullLiteral>]
 type OmitExtends
     [<ParamObject; Emit("$0")>]
     (
-        level: float,
+        level: U2<string, float>,
         name: string
     ) =
 
-    member val level : float = nativeOnly with get, set
+    member val level : U2<string, float> = nativeOnly with get, set
     member val name : string = nativeOnly with get, set
 
 [<Global>]
 [<AllowNullLiteral>]
-type Override
+type Narrows
     [<ParamObject; Emit("$0")>]
     (
         level: string,

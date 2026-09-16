@@ -2082,6 +2082,8 @@ module private ParamObjectCandidate =
         && not isUsedAsOutput
         && not isInherited
 
+let private partialHeritageBeingExpanded = ResizeArray<string>()
+
 let private transformInterface (context: TransformContext) (info: GlueInterface) : FSharpInterface =
     let name, context = sanitizeTypeNameAndPushScope info.Name context
 
@@ -2107,21 +2109,32 @@ let private transformInterface (context: TransformContext) (info: GlueInterface)
             | _ -> None
         )
         |> List.map (fun fullName ->
-            context.TypeMemory
-            |> List.choose (fun glueType ->
-                match glueType with
-                | GlueType.Interface glueInterface ->
-                    if glueInterface.FullName = fullName then
-                        transformInterface context glueInterface
-                        |> Interface.makePartial "FakeName"
-                        |> _.Members
-                        |> Some
+            if partialHeritageBeingExpanded.Contains fullName then
+                context.AddWarning
+                    $"Recursive Partial<%s{fullName}> in a heritage clause is not supported, the inherited members are not generated"
 
-                    else
-                        None
-                | _ -> None
-            )
-            |> List.concat
+                []
+            else
+                partialHeritageBeingExpanded.Add fullName
+
+                try
+                    context.TypeMemory
+                    |> List.choose (fun glueType ->
+                        match glueType with
+                        | GlueType.Interface glueInterface ->
+                            if glueInterface.FullName = fullName then
+                                transformInterface context glueInterface
+                                |> Interface.makePartial "FakeName"
+                                |> _.Members
+                                |> Some
+
+                            else
+                                None
+                        | _ -> None
+                    )
+                    |> List.concat
+                finally
+                    partialHeritageBeingExpanded.RemoveAt(partialHeritageBeingExpanded.Count - 1)
         )
         |> List.concat
 
@@ -2178,7 +2191,27 @@ let private transformInterface (context: TransformContext) (info: GlueInterface)
             ]
         Name = name
         OriginalName = info.Name
-        Members = standardMembers @ membersComingFromPartial @ membersComingFromOmit
+        Members =
+            let ownNames =
+                standardMembers
+                |> List.map (
+                    function
+                    | FSharpMember.Method info
+                    | FSharpMember.Property info -> info.Name
+                    | FSharpMember.StaticMember info -> info.Name
+                )
+                |> Set.ofList
+
+            let inheritedMembers =
+                membersComingFromPartial @ membersComingFromOmit
+                |> List.filter (
+                    function
+                    | FSharpMember.Method info
+                    | FSharpMember.Property info -> not (Set.contains info.Name ownNames)
+                    | FSharpMember.StaticMember info -> not (Set.contains info.Name ownNames)
+                )
+
+            standardMembers @ inheritedMembers
         TypeParameters = typeParametersResult.TypeParameters
         Inheritance = inheritance |> List.map (transformType context)
     }

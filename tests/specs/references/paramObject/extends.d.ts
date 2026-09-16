@@ -1,6 +1,6 @@
 export interface BaseOptions {
     debug?: boolean;
-    level: number;
+    level: string | number;
 }
 
 export interface PlainExtends extends BaseOptions {
@@ -15,11 +15,11 @@ export interface OmitExtends extends Omit<BaseOptions, "debug"> {
     name: string;
 }
 
-export interface Override extends BaseOptions {
+export interface Narrows extends Partial<BaseOptions> {
     level: string;
 }
 
 export declare function a(options: PlainExtends): void;
 export declare function b(options: PartialExtends): void;
 export declare function c(options: OmitExtends): void;
-export declare function d(options: Override): void;
+export declare function d(options: Narrows): void;
