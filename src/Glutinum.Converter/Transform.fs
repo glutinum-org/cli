@@ -829,7 +829,12 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
                 Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
                 Name = context.CurrentScopeName
                 OriginalName = "" // This is a Fake type so we don't have an original name
-                TypeParameters = []
+                TypeParameters =
+                    typeParameterNames
+                    |> List.map (fun name ->
+                        FSharpTypeParameterInfo.Create(name)
+                        |> FSharpTypeParameter.FSharpTypeParameter
+                    )
                 Members = TransformMembers.toFSharpMember context typeLiteralInfo.Members
                 Inheritance =
                     [
