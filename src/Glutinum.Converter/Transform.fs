@@ -1769,6 +1769,9 @@ module private TransformMembers =
                 : FSharpParameter
         )
 
+[<Literal>]
+let private MAX_GENERATED_CONSTRUCTORS = 12
+
 let private transformParamObjectClass
     (context: TransformContext)
     (name: string)
@@ -1839,6 +1842,83 @@ let private transformParamObjectClass
             : FSharpExplicitField
         )
 
+    let primaryConstructor, secondaryConstructors =
+        let paramObjectConstructor parameters =
+            {
+                Parameters = parameters
+                Attributes = [ FSharpAttribute.ParamObject; FSharpAttribute.EmitSelf ]
+                Accessibility = FSharpAccessibility.Public
+            }
+            : FSharpConstructor
+
+        let tryErasedUnionCases (parameter: FSharpParameter) =
+            match parameter.Type with
+            | FSharpType.Union unionInfo when unionInfo.Cases.Length > 1 ->
+                unionInfo.Cases
+                |> List.map (
+                    function
+                    | FSharpUnionCase.Typed typ -> Some typ
+                    | _ -> None
+                )
+                |> fun cases ->
+                    if List.forall Option.isSome cases then
+                        Some(List.choose id cases)
+                    else
+                        None
+            | _ -> None
+
+        let variants =
+            typeLiteralParameters
+            |> List.map (fun parameter ->
+                match tryErasedUnionCases parameter with
+                | Some cases ->
+                    [
+                        if parameter.IsOptional then
+                            None
+
+                        for case in cases do
+                            Some
+                                { parameter with
+                                    Type = case
+                                    IsOptional = false
+                                }
+                    ]
+                | None -> [ Some parameter ]
+            )
+
+        let combinationsCount =
+            (1, variants)
+            ||> List.fold (fun count parameterVariants ->
+                min (count * parameterVariants.Length) (MAX_GENERATED_CONSTRUCTORS + 1)
+            )
+
+        if combinationsCount = 1 || combinationsCount > MAX_GENERATED_CONSTRUCTORS then
+            paramObjectConstructor typeLiteralParameters, []
+        else
+            let combinations =
+                (variants, [ [] ])
+                ||> List.foldBack (fun parameterVariants acc ->
+                    parameterVariants
+                    |> List.collect (fun variant -> acc |> List.map (fun tail -> variant :: tail))
+                )
+                |> List.map (List.choose id >> List.sortBy _.IsOptional)
+
+            // The secondary constructors call the primary one, so it takes no parameter
+            let emptyCombination, secondaryCombinations =
+                combinations |> List.partition List.isEmpty
+
+            let primaryConstructor =
+                if emptyCombination.IsEmpty then
+                    {
+                        Parameters = []
+                        Attributes = []
+                        Accessibility = FSharpAccessibility.Private
+                    }
+                else
+                    paramObjectConstructor []
+
+            primaryConstructor, secondaryCombinations |> List.map paramObjectConstructor
+
     let typeParameters =
         typeParameterNames
         |> List.map (fun name ->
@@ -1861,13 +1941,8 @@ let private transformParamObjectClass
             ]
         XmlDoc = xmlDocInfo.XmlDoc
         Name = name
-        PrimaryConstructor =
-            {
-                Parameters = typeLiteralParameters
-                Attributes = [ FSharpAttribute.ParamObject; FSharpAttribute.EmitSelf ]
-                Accessibility = FSharpAccessibility.Public
-            }
-        SecondaryConstructors = []
+        PrimaryConstructor = primaryConstructor
+        SecondaryConstructors = secondaryConstructors
         ExplicitFields = explicitFields
         TypeParameters = typeParameters
     }

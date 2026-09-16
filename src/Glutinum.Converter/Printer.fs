@@ -781,31 +781,36 @@ let private printPrimaryConstructor (printer: Printer) (constructor: FSharpConst
 
     FSharpAccessibility.print printer constructor.Accessibility
 
-    printer.WriteInline($"(")
-    printer.Indent
-
-    constructor.Parameters
-    |> List.iteri (fun index p ->
-        if index <> 0 then
-            printer.WriteInline(",")
-
+    if constructor.Parameters.IsEmpty then
+        printer.WriteInline("() =")
         printer.NewLine
+    else
 
-        if p.IsOptional then
-            printer.Write("?")
-        else
-            printer.Write("") // Empty string to have the correct indentation
+        printer.WriteInline($"(")
+        printer.Indent
 
-        printer.WriteInline($"{p.Name}: {printType p.Type}")
+        constructor.Parameters
+        |> List.iteri (fun index p ->
+            if index <> 0 then
+                printer.WriteInline(",")
 
-        if hasParamArrayAttribute p.Attributes then
-            printer.WriteInline(" []")
-    )
+            printer.NewLine
 
-    printer.Unindent
-    printer.NewLine
-    printer.Write(") =")
-    printer.NewLine
+            if p.IsOptional then
+                printer.Write("?")
+            else
+                printer.Write("") // Empty string to have the correct indentation
+
+            printer.WriteInline($"{p.Name}: {printType p.Type}")
+
+            if hasParamArrayAttribute p.Attributes then
+                printer.WriteInline(" []")
+        )
+
+        printer.Unindent
+        printer.NewLine
+        printer.Write(") =")
+        printer.NewLine
 
 let private printClass (printer: Printer) (classInfo: FSharpClass) =
     printXmlDoc printer classInfo.XmlDoc

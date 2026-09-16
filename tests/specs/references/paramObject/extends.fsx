@@ -25,12 +25,15 @@ type BaseOptions =
 [<Global>]
 [<AllowNullLiteral>]
 type PlainExtends
+    private () =
+
     [<ParamObject; Emit("$0")>]
-    (
-        level: U2<string, float>,
-        name: string,
-        ?debug: bool
-    ) =
+    new (level: string, name: string, ?debug: bool) =
+        PlainExtends()
+
+    [<ParamObject; Emit("$0")>]
+    new (level: float, name: string, ?debug: bool) =
+        PlainExtends()
 
     member val level : U2<string, float> = nativeOnly with get, set
     member val name : string = nativeOnly with get, set
@@ -39,12 +42,19 @@ type PlainExtends
 [<Global>]
 [<AllowNullLiteral>]
 type PartialExtends
+    private () =
+
     [<ParamObject; Emit("$0")>]
-    (
-        name: string,
-        ?debug: bool,
-        ?level: U2<string, float>
-    ) =
+    new (name: string, ?debug: bool) =
+        PartialExtends()
+
+    [<ParamObject; Emit("$0")>]
+    new (name: string, level: string, ?debug: bool) =
+        PartialExtends()
+
+    [<ParamObject; Emit("$0")>]
+    new (name: string, level: float, ?debug: bool) =
+        PartialExtends()
 
     member val name : string = nativeOnly with get, set
     member val debug : bool option = nativeOnly with get, set
@@ -53,11 +63,15 @@ type PartialExtends
 [<Global>]
 [<AllowNullLiteral>]
 type OmitExtends
+    private () =
+
     [<ParamObject; Emit("$0")>]
-    (
-        level: U2<string, float>,
-        name: string
-    ) =
+    new (level: string, name: string) =
+        OmitExtends()
+
+    [<ParamObject; Emit("$0")>]
+    new (level: float, name: string) =
+        OmitExtends()
 
     member val level : U2<string, float> = nativeOnly with get, set
     member val name : string = nativeOnly with get, set
