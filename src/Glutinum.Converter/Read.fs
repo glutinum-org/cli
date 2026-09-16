@@ -4,12 +4,20 @@ open TypeScript
 open Glutinum.Converter.GlueAST
 open Glutinum.Converter.Reader.Types
 open Glutinum.Converter.Reader.TypeScriptReader
+open Glutinum.Converter.Reader.Utils
+open Fable.Core.JsInterop
 
 let readSourceFile (checker: Ts.TypeChecker) (sourceFile: option<Ts.SourceFile>) =
     let reader: ITypeScriptReader = TypeScriptReader(checker)
 
     {|
-        GlueAST = sourceFile.Value.statements |> List.ofSeq |> List.map reader.ReadNode
+        GlueAST = readStatements reader sourceFile.Value
+        // The module the file is made of, when it is one
+        ImportSpecifier =
+            promotedAmbientModule sourceFile.Value
+            |> Option.map (fun moduleDeclaration ->
+                Naming.removeSurroundingQuotes (moduleDeclaration.name?text)
+            )
         Warnings = reader.Warnings
         TypeMemory = reader.TypeMemory |> List.ofSeq
     |}
@@ -58,12 +66,23 @@ let private dropShadowedReExports (types: GlueType list) =
     |> snd
 
 let private readStatements (reader: ITypeScriptReader) (sourceFile: Ts.SourceFile) =
+    let promoted = promotedAmbientModule sourceFile
+
     sourceFile.statements
     |> List.ofSeq
     |> List.collect (fun statement ->
         match statement.kind with
         | Ts.SyntaxKind.ExportDeclaration ->
             reader.ReadExportDeclaration(statement :?> Ts.ExportDeclaration)
+        // `declare module "os" { ... }` is the file
+        | Ts.SyntaxKind.ModuleDeclaration when
+            (match promoted with
+             | Some promoted -> obj.ReferenceEquals(promoted, statement)
+             | None -> false)
+            ->
+            match reader.ReadNode statement with
+            | GlueType.ModuleDeclaration moduleDeclaration -> moduleDeclaration.Types
+            | glueType -> [ glueType ]
         | _ -> [ reader.ReadNode statement ]
     )
     |> dropShadowedReExports
@@ -95,12 +114,18 @@ let readPackages
                 let fileName = String.normalizePath sourceFile.fileName
                 let types = readStatements reader sourceFile
 
+                let importSpecifier =
+                    match promotedAmbientModule sourceFile with
+                    | Some moduleDeclaration ->
+                        Naming.removeSurroundingQuotes (moduleDeclaration.name?text)
+                    | None -> packageContext.ImportSpecifier fileName
+
                 if fileName = package.EntryFile then
                     Choice1Of2 types
                 else
                     ({
                         Name = packageContext.FileModuleName(package, fileName)
-                        ImportSpecifier = packageContext.ImportSpecifier fileName
+                        ImportSpecifier = importSpecifier
                         Types = types
                     }
                     : GlueFileModule)

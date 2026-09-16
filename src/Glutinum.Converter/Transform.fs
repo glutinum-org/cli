@@ -1233,8 +1233,26 @@ let private transformExports
     let context = context.PushScope "Exports"
 
     let members =
+        // The variable of `export = path` is the module, its named import doesn't exist
+        let exportEqualsNames =
+            exports
+            |> List.choose (
+                function
+                | GlueType.ExportDefault(GlueType.Variable { Name = name }) when
+                    name.StartsWith "export="
+                    ->
+                    Some(name.Substring "export=".Length)
+                | _ -> None
+            )
+            |> set
+
         let sortedExports =
             exports
+            |> List.filter (
+                function
+                | GlueType.Variable info -> not (exportEqualsNames.Contains info.Name)
+                | _ -> true
+            )
             // We want to have the module declaration at the end
             // This is because, we want to detect conflict between the module declaration
             // and the functions or variables that have the same name as the module
@@ -1429,10 +1447,10 @@ let private transformExports
                         moduleDeclaration.Types
                         |> List.tryPick (
                             function
-                            | GlueType.ExportDefault(GlueType.Variable {
-                                                                           Name = "export="
-                                                                           Type = typ
-                                                                       }) -> Some typ
+                            | GlueType.ExportDefault(GlueType.Variable { Name = name; Type = typ }) when
+                                name.StartsWith "export="
+                                ->
+                                Some typ
                             | _ -> None
                         )
 
@@ -1480,9 +1498,36 @@ let private transformExports
 
                     applyHelper newTypes (Set.singleton mangledName)
 
-                // Consumed by the module it belongs to
-                | GlueType.ExportDefault(GlueType.Variable { Name = "export=" }) ->
-                    applyHelper [] Set.empty
+                // `export = path` of a variable: the module is the variable. Inside a module
+                // declaration it is consumed by the module, at the top level the whole import is it
+                | GlueType.ExportDefault(GlueType.Variable { Name = name; Type = typ }) when
+                    name.StartsWith "export="
+                    ->
+                    if not isTopLevel then
+                        applyHelper [] Set.empty
+                    else
+                        let name, context =
+                            sanitizeNameAndPushScope (name.Substring "export=".Length) context
+
+                        let newTypes =
+                            {
+                                Attributes = [ FSharpAttribute.ImportAll context.ImportSpecifier ]
+                                Name = name
+                                OriginalName = name
+                                Parameters = []
+                                TypeParameters = []
+                                Type = transformType context typ
+                                IsOptional = false
+                                IsStatic = true
+                                Accessor = None
+                                Accessibility = FSharpAccessibility.Public
+                                XmlDoc = []
+                                Body = FSharpMemberInfoBody.NativeOnly
+                            }
+                            |> FSharpMember.Property
+                            |> List.singleton
+
+                        applyHelper newTypes (Set.singleton name)
 
                 | GlueType.ExportDefault glueType ->
                     let name, context = sanitizeNameAndPushScope glueType.Name context

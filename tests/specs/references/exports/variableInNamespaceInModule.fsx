@@ -8,25 +8,17 @@ open System
 [<Erase>]
 type Exports =
     [<ImportAll("vscode")>]
-    static member inline vscode
-        with get () : vscode_.Exports =
+    static member inline workspace
+        with get () : workspace_.Exports =
             nativeOnly
 
-module vscode_ =
+module workspace_ =
 
     [<AbstractClass>]
     [<Erase>]
     type Exports =
-        [<Emit("$0.workspace")>]
-        abstract member workspace: workspace.Exports with get
-
-    module workspace =
-
-        [<AbstractClass>]
-        [<Erase>]
-        type Exports =
-            [<Emit("$0.workspaceFolders")>]
-            abstract member workspaceFolders: ResizeArray<obj>
+        [<Emit("$0.workspaceFolders")>]
+        abstract member workspaceFolders: ResizeArray<obj>
 
 (***)
 #r "nuget: Fable.Core"

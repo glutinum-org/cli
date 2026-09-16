@@ -284,6 +284,63 @@ let isExternalToPackages
             | None -> true
     | _ -> false
 
+/// <summary>
+/// The ambient module (<c>declare module "os" { ... }</c>) a file is made of: its members are
+/// the members of the file and its types are not nested in a module named after it.
+/// A file also declaring other things keeps its ambient modules nested. When several ambient
+/// modules are declared, the one named like the file wins, then the first one.
+/// </summary>
+let promotedAmbientModule (sourceFile: Ts.SourceFile) : Ts.ModuleDeclaration option =
+    let isAmbientModule (statement: Ts.Node) =
+        statement.kind = Ts.SyntaxKind.ModuleDeclaration
+        && (statement :?> Ts.ModuleDeclaration).name?kind = Ts.SyntaxKind.StringLiteral
+
+    let statements = sourceFile.statements |> Seq.toList
+
+    let hasOtherDeclarations =
+        statements
+        |> List.exists (fun statement ->
+            match statement.kind with
+            | Ts.SyntaxKind.ImportDeclaration
+            | Ts.SyntaxKind.ImportEqualsDeclaration
+            | Ts.SyntaxKind.ExportDeclaration
+            | Ts.SyntaxKind.EmptyStatement -> false
+            | _ -> not (isAmbientModule statement)
+        )
+
+    if hasOtherDeclarations then
+        None
+    else
+        let ambientModules =
+            statements
+            |> List.filter isAmbientModule
+            |> List.map (fun statement -> statement :?> Ts.ModuleDeclaration)
+
+        let fileName =
+            System.Text.RegularExpressions.Regex.Replace(
+                (String.normalizePath sourceFile.fileName).Split('/') |> Seq.last,
+                "\\.d\\.[cm]?ts$",
+                ""
+            )
+
+        let moduleName (moduleDeclaration: Ts.ModuleDeclaration) =
+            Naming.removeSurroundingQuotes (moduleDeclaration.name?text)
+
+        ambientModules
+        |> List.tryFind (fun moduleDeclaration -> moduleName moduleDeclaration = fileName)
+        |> Option.orElse (List.tryHead ambientModules)
+
+let isPromotedAmbientModule (declaration: Ts.ModuleDeclaration) =
+    let parent: Ts.Node = !!declaration.parent
+
+    not (isNull (box parent))
+    && parent.kind = Ts.SyntaxKind.SourceFile
+    && (
+        match promotedAmbientModule (parent :?> Ts.SourceFile) with
+        | Some promoted -> obj.ReferenceEquals(promoted, declaration)
+        | None -> false
+    )
+
 /// The F# modules generated for the namespaces enclosing a declaration, outermost first
 let private namespaceChain (declaration: Ts.Node) =
     let rec collect (node: Ts.Node) (acc: string list) =
@@ -291,6 +348,12 @@ let private namespaceChain (declaration: Ts.Node) =
             acc
         else
             match node.kind with
+            // The file is the module
+            | Ts.SyntaxKind.ModuleDeclaration when
+                isPromotedAmbientModule (node :?> Ts.ModuleDeclaration)
+                ->
+                collect node.parent acc
+
             | Ts.SyntaxKind.ModuleDeclaration ->
                 let moduleDeclaration = node :?> Ts.ModuleDeclaration
 
@@ -299,7 +362,11 @@ let private namespaceChain (declaration: Ts.Node) =
                     |> Naming.removeSurroundingQuotes
 
                 let isTopLevel =
-                    not (isNull node.parent) && node.parent.kind = Ts.SyntaxKind.SourceFile
+                    not (isNull node.parent)
+                    && (node.parent.kind = Ts.SyntaxKind.SourceFile
+                        || (node.parent.kind = Ts.SyntaxKind.ModuleBlock
+                            && node.parent.parent.kind = Ts.SyntaxKind.ModuleDeclaration
+                            && isPromotedAmbientModule (node.parent.parent :?> Ts.ModuleDeclaration)))
 
                 // The suffix is part of the name to escape (`assert_`, not ``` ``assert``_ ```)
                 let name =

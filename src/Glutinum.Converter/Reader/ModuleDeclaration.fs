@@ -40,9 +40,15 @@ let readModuleDeclaration
         |> Seq.concat
         |> Seq.toList
 
+    // A namespace of the ambient module a file is made of is at the top level of the file
     let isTopLevel =
         match declaration.parent?kind with
         | Ts.SyntaxKind.SourceFile -> true
+        | Ts.SyntaxKind.ModuleBlock ->
+            let moduleBlock: Ts.Node = !!declaration.parent
+
+            moduleBlock.parent.kind = Ts.SyntaxKind.ModuleDeclaration
+            && Utils.isPromotedAmbientModule (moduleBlock.parent :?> Ts.ModuleDeclaration)
         | _ -> false
 
     {

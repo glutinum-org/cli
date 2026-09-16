@@ -73,9 +73,10 @@ let readExportAssignment (reader: ITypeScriptReader) (exportNode: Ts.ExportAssig
 
                 ({
                     Documentation = reader.ReadDocumentationFromNode exportNode
+                    // `export=` marks the export of the module itself, followed by the variable name
                     Name =
                         if isExportEqualsOfVariable then
-                            "export="
+                            "export=" + identiferNode.getText ()
                         else
                             identiferNode.getText ()
                     Type = typ

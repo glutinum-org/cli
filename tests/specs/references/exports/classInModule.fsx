@@ -7,23 +7,13 @@ open System
 [<AbstractClass>]
 [<Erase>]
 type Exports =
-    [<ImportAll("vscode")>]
-    static member inline vscode
-        with get () : vscode_.Exports =
-            nativeOnly
+    [<Import("LanguageModelError", "vscode"); EmitConstructor>]
+    static member LanguageModelError () : LanguageModelError = nativeOnly
 
-module vscode_ =
-
-    [<AbstractClass>]
-    [<Erase>]
-    type Exports =
-        [<Emit("new $0.LanguageModelError($1...)")>]
-        abstract member LanguageModelError: unit -> LanguageModelError
-
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type LanguageModelError =
-        interface end
+[<AllowNullLiteral>]
+[<Interface>]
+type LanguageModelError =
+    interface end
 
 (***)
 #r "nuget: Fable.Core"

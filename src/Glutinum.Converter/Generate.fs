@@ -69,7 +69,11 @@ let generateBindingFile (filePath: string) =
     for warning in readerResult.Warnings do
         Log.warn warning
 
-    let transformResult = Transform.apply readerResult.TypeMemory readerResult.GlueAST
+    let transformResult =
+        Transform.applyWith
+            (readerResult.ImportSpecifier |> Option.defaultValue Naming.MODULE_PLACEHOLDER)
+            readerResult.TypeMemory
+            readerResult.GlueAST
 
     // Log transform warnings and errors
     for reporter in transformResult.Warnings do
