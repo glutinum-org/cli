@@ -49,8 +49,8 @@ let readIndexedAccessType
 
     | Ts.SyntaxKind.LiteralType -> GlueType.Primitive GluePrimitive.Any
 
-    // `T[K]` has no equivalent in F#
-    | Ts.SyntaxKind.TypeReference -> GlueType.Primitive GluePrimitive.Any
+    // `T[K]`, only a mapped type can use it
+    | Ts.SyntaxKind.TypeReference -> reader.ReadTypeNode idxNodeType |> withIndexType
 
     | unsupported ->
         let warning =

@@ -7,7 +7,8 @@ open System
 [<AllowNullLiteral>]
 [<Interface>]
 type LooseRequired<'T> =
-    interface end
+    [<EmitIndexer>]
+    abstract member Item: key: string -> obj with get, set
 
 (***)
 #r "nuget: Fable.Core"

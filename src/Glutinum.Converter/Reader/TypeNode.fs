@@ -474,20 +474,11 @@ module UtilityType =
 
         let members =
             filteredProperties
-            |> List.choose (fun property ->
+            |> List.collect (fun property ->
                 match property.declarations with
+                // Overloads and merged declarations are several declarations
                 | Some declarations ->
-                    if declarations.Count = 1 then
-                        Some(reader.ReadDeclaration declarations.[0])
-                    else
-                        Report.readerError (
-                            "type node",
-                            "Expected exactly one declaration",
-                            typeReferenceNode
-                        )
-                        |> reader.Warnings.Add
-
-                        None
+                    declarations |> Seq.toList |> List.map reader.ReadDeclaration
                 | None ->
                     Report.readerError ("type node", "Missing declarations", typeReferenceNode)
                     |> failwith
@@ -705,6 +696,8 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
     | Ts.SyntaxKind.TypeQuery ->
         let typeQueryNode = typeNode :?> Ts.TypeQueryNode
         TypeQueryNode.readTypeQueryNode reader typeQueryNode
+
+    | Ts.SyntaxKind.MappedType -> reader.ReadMappedTypeNode(typeNode :?> Ts.MappedTypeNode)
 
     // `import("./file").Foo<T>`, produced by `typeToTypeNode` for a type not imported in the current file
     | Ts.SyntaxKind.ImportType ->

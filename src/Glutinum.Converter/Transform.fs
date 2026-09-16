@@ -1100,12 +1100,48 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
         : FSharpMapped)
         |> FSharpType.Mapped
 
-    | GlueType.MappedType _
+    | GlueType.MappedType mappedType ->
+        let members =
+            transformMappedTypeMembers context mappedType
+            |> TransformMembers.toFSharpMember context
+
+        if members.IsEmpty then
+            FSharpType.Object
+        else
+            {
+                XmlDoc = []
+                Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
+                Name =
+                    context.TypeLiteralsMemory.GetTypeName(
+                        context.FullName,
+                        context.CurrentScopeName
+                    )
+                OriginalName = context.CurrentScopeName
+                TypeParameters = []
+                Members = members
+                Inheritance = []
+            }
+            |> FSharpType.Interface
+            |> context.ExposeType
+
+            ({
+                Name =
+                    context.TypeLiteralsMemory.GetFullTypeNameReference(
+                        context.FullName,
+                        context.CurrentScopeName
+                    )
+                TypeParameters = []
+            }
+            : FSharpMapped)
+            |> FSharpType.Mapped
+
+    // `T[K]` outside of a mapped type has no equivalent in F#
+    | GlueType.IndexedAccessType _ -> FSharpType.Object
+
     | GlueType.Literal _
     | GlueType.ModuleDeclaration _
     | GlueType.FileModule _
     | GlueType.ReExport _
-    | GlueType.IndexedAccessType _
     | GlueType.Enum _
     | GlueType.TypeAliasDeclaration _ ->
         context.AddError $"Could not transform type: %A{glueType}"
@@ -3554,40 +3590,100 @@ let private tryOptimizeUnionType
             None
 
 let private transformMappedTypeMembers (context: TransformContext) (mappedType: GlueMappedType) =
-    match mappedType.TypeParameter.Constraint with
-    | Some(GlueType.IndexedAccessType idxTyp) ->
-        match idxTyp.ObjectType with
-        | GlueType.ReadOnly(GlueType.TupleType glueTypes)
-        | GlueType.TupleType glueTypes ->
-            glueTypes
+    let valueType = mappedType.Type |> Option.defaultValue GlueType.Unknown
+
+    // `T[K]` is the type of the member itself
+    let memberType (memberType: GlueType) =
+        match valueType with
+        | GlueType.IndexedAccessType _ -> memberType
+        | _ -> valueType
+
+    let property (name: string) (typ: GlueType) =
+        {
+            Name = name
+            Documentation = []
+            Type = typ
+            IsStatic = false
+            IsOptional = false
+            Accessor = GlueAccessor.ReadWrite
+            IsPrivate = false
+        }
+        |> GlueMember.Property
+
+    // The keys can't be listed, any key maps to the value
+    let indexer =
+        [
+            ({
+                Parameters =
+                    [
+                        {
+                            Name = "key"
+                            IsOptional = false
+                            IsSpread = false
+                            Type = GlueType.Primitive GluePrimitive.String
+                        }
+                    ]
+                Type =
+                    match valueType with
+                    | GlueType.IndexedAccessType _ -> GlueType.Primitive GluePrimitive.Any
+                    | _ -> valueType
+                IsReadOnly = false
+            }
+            : GlueIndexSignature)
+            |> GlueMember.IndexSignature
+        ]
+
+    let ofLiterals (cases: GlueType list) =
+        let literals =
+            cases
             |> List.choose (
                 function
-                | GlueType.Literal literalInfo ->
-                    {
-                        Name = literalInfo.ToText()
-                        Documentation = []
-                        Type = mappedType.Type |> Option.defaultValue GlueType.Unknown
-                        IsStatic = false
-                        IsOptional = false
-                        Accessor = GlueAccessor.ReadWrite
-                        IsPrivate = false
-                    }
-                    |> GlueMember.Property
-                    |> Some
-
-                | invalid ->
-                    context.AddError $"MappedType: Unexpected type for member %A{invalid}"
-
-                    None
+                | GlueType.Literal literalInfo -> Some literalInfo
+                | _ -> None
             )
-        | invalid ->
-            context.AddError $"MappedType: Unexpected type for members %A{invalid}"
 
-            []
-    | invalid ->
-        context.AddError $"MappedType: Unexpected type for members %A{invalid}"
+        if literals.Length = cases.Length && not literals.IsEmpty then
+            literals
+            |> List.map (fun literalInfo -> property (literalInfo.ToText()) valueType)
+        else
+            indexer
 
-        []
+    let ofMembers (members: GlueMember list) =
+        members
+        |> List.choose (
+            function
+            | GlueMember.Property info -> Some(property info.Name (memberType info.Type))
+            | GlueMember.Method info -> Some(property info.Name (memberType info.Type))
+            | GlueMember.MethodSignature info -> Some(property info.Name (memberType info.Type))
+            | GlueMember.GetAccessor info -> Some(property info.Name (memberType info.Type))
+            | _ -> None
+        )
+
+    match mappedType.TypeParameter.Constraint with
+    // `[K in (typeof keys)[number]]`
+    | Some(GlueType.IndexedAccessType {
+                                          ObjectType = GlueType.ReadOnly(GlueType.TupleType glueTypes)
+                                      })
+    | Some(GlueType.IndexedAccessType {
+                                          ObjectType = GlueType.TupleType glueTypes
+                                      }) -> ofLiterals glueTypes
+    | Some(GlueType.Union(GlueTypeUnion cases)) -> ofLiterals cases
+    // `[K in Signals]` where `Signals` is a union of literals
+    | Some(GlueType.TypeReference typeReference) ->
+        context.TypeMemory
+        |> List.tryPick (
+            function
+            | GlueType.TypeAliasDeclaration {
+                                                Name = name
+                                                Type = GlueType.Union(GlueTypeUnion cases)
+                                            } when name = typeReference.Name ->
+                Some(ofLiterals cases)
+            | _ -> None
+        )
+        |> Option.defaultValue indexer
+    | Some(GlueType.KeyOf(GlueType.Interface info)) -> ofMembers info.Members
+    | Some(GlueType.KeyOf(GlueType.TypeLiteral info)) -> ofMembers info.Members
+    | _ -> indexer
 
 let private transformReadOnly (context: TransformContext) (glueType: GlueType) =
 
