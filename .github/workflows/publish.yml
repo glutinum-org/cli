@@ -14,7 +14,7 @@ jobs:
       with:
         # We need more that the HEAD to find the last_released_commit
         # For now, we use a depth of 100 but if this is too limiting we can use the full history
-        fetch-depth: 100
+        fetch-depth: 300
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
