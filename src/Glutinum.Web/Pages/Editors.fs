@@ -12,6 +12,7 @@ open Fable.Core
 
 module GlueAST = GlueAST.Component
 module FSharpAST = FSharpAST.Component
+module Package = Package.Component
 
 let private classes: CssModules.Pages.Editors =
     importDefault "./Editors.module.scss"
@@ -32,11 +33,19 @@ type Tab =
     | GlueAST
     | FSharpAST
 
+[<RequireQualifiedAccess>]
+[<StringEnum>]
+type Mode =
+    | TypeScript
+    | Package
+
 type Model =
     {
         Debouncer: Debouncer.State
         TypeScriptCode: string
         CurrentTab: Tab
+        Mode: Mode
+        Package: Package.Model
         FSharpCode: FSharpCode.Model
         GlueAST: GlueAST.Model
         FSharpAST: FSharpAST.Model
@@ -57,8 +66,10 @@ type Msg =
     | FSharpCodeMsg of FSharpCode.Msg
     | GlueASTMsg of GlueAST.Msg
     | FSharpASTMsg of FSharpAST.Msg
+    | PackageMsg of Package.Msg
     | CompileCode
     | MoveTo of Tab
+    | MoveToMode of Mode
 
 let init (route: Router.EditorsRoute) =
     let currentTab, typeScriptCodeOpt =
@@ -81,6 +92,8 @@ let init (route: Router.EditorsRoute) =
         Debouncer = Debouncer.create ()
         TypeScriptCode = typescriptCode
         CurrentTab = currentTab
+        Mode = Mode.TypeScript
+        Package = Package.init ()
         FSharpCode = fsharpCodeModel
         GlueAST = glueASTModel
         FSharpAST = fsharpAstModel
@@ -90,6 +103,13 @@ let init (route: Router.EditorsRoute) =
         Cmd.map GlueASTMsg glueASTCmd
         Cmd.map FSharpASTMsg fsharpAstCmd
     ]
+
+let private showPackageResult (result: Glutinum.Converter.Packages.GenerationResult) model =
+    { model with
+        FSharpCode = FSharpCode.ofResult result.FSharpCode result.Warnings result.Errors
+        GlueAST = GlueAST.ofResult result.GlueAST result.Warnings
+        FSharpAST = FSharpAST.ofResult result.FSharpAST result.Warnings result.Errors
+    }
 
 let update msg model =
     match msg with
@@ -110,7 +130,45 @@ let update msg model =
 
         { model with FSharpAST = updatedModel }, Cmd.map FSharpASTMsg cmd
 
+    | PackageMsg packageMsg ->
+        let updatedModel, cmd = Package.update packageMsg model.Package
+
+        let model = { model with Package = updatedModel }
+
+        match packageMsg with
+        | Package.Installed _ ->
+            { model with
+                FSharpCode = FSharpCode.Compiling
+                GlueAST = GlueAST.Compiling
+                FSharpAST = FSharpAST.Compiling
+            },
+            Cmd.map PackageMsg cmd
+
+        | Package.GenerationResult(_, result) ->
+            showPackageResult result model, Cmd.map PackageMsg cmd
+
+        | Package.GenerationFailed error ->
+            { model with
+                FSharpCode = FSharpCode.Errored error.Message
+                GlueAST = GlueAST.Errored error.Message
+                FSharpAST = FSharpAST.Errored error.Message
+            },
+            Cmd.map PackageMsg cmd
+
+        | _ -> model, Cmd.map PackageMsg cmd
+
     | MoveTo tab -> { model with CurrentTab = tab }, Cmd.none
+
+    | MoveToMode mode ->
+        let model = { model with Mode = mode }
+
+        match mode with
+        | Mode.TypeScript -> model, Cmd.ofMsg CompileCode
+
+        | Mode.Package ->
+            match model.Package.Status with
+            | Package.Generated(_, result) -> showPackageResult result model, Cmd.none
+            | _ -> model, Cmd.none
 
     | DebouncerSelfMsg debouncerMsg ->
         let (debouncerModel, debouncerCmd) = Debouncer.update debouncerMsg model.Debouncer
@@ -176,29 +234,71 @@ let private rightPanel model dispatch =
         ]
     ]
 
+let private leftPanel model dispatch =
+    let modeItem (text: string) (destinationMode: Mode) =
+        Bulma.tab [
+            if model.Mode = destinationMode then
+                tab.isActive
+            prop.children [
+                Html.a [
+                    prop.onClick (dispatch, MoveToMode destinationMode)
+                    prop.children [ Html.span text ]
+                ]
+            ]
+        ]
+
+    Html.div [
+        prop.className classes.``left-panel``
+        prop.children [
+            Bulma.tabs [
+                tabs.isCentered
+                tabs.isToggle
+
+                prop.children [
+                    Html.ul [
+                        modeItem "TypeScript" Mode.TypeScript
+                        modeItem "Package" Mode.Package
+                    ]
+                ]
+            ]
+
+            Html.div [ prop.className classes.``horizontal-divider`` ]
+
+            Html.div [
+                prop.className classes.``left-panel__content``
+                prop.children [
+                    match model.Mode with
+                    | Mode.TypeScript ->
+                        Editor [
+                            editor.width "100%"
+                            editor.height "100%"
+                            editor.value model.TypeScriptCode
+                            editor.onChange (fun code _ ->
+                                match code with
+                                | Some code -> dispatch (UpdateTypeScriptCode code)
+                                | None -> ()
+                            )
+                            editor.language "typescript"
+                            editor.options
+                                {|
+                                    minimap = {| enabled = false |}
+                                    fontSize = 16
+                                    automaticLayout = true
+                                |}
+                        ]
+
+                    | Mode.Package -> Package.view model.Package (PackageMsg >> dispatch)
+                ]
+            ]
+        ]
+    ]
+
 let view model dispatch =
     Bulma.text.div [
         prop.className classes.``panel-container``
         spacing.mt1
         prop.children [
-            Editor [
-                editor.width "50%"
-                editor.height "100%"
-                editor.value model.TypeScriptCode
-                editor.onChange (fun code _ ->
-                    match code with
-                    | Some code -> dispatch (UpdateTypeScriptCode code)
-                    | None -> ()
-                )
-                editor.language "typescript"
-                editor.options
-                    {|
-                        minimap = {| enabled = false |}
-                        fontSize = 16
-                        automaticLayout = true
-                    |}
-            ]
-
+            leftPanel model dispatch
             rightPanel model dispatch
         ]
     ]

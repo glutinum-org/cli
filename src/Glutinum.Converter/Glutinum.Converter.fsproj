@@ -43,6 +43,7 @@
     <Compile Include="Merge.fs" />
     <Compile Include="Transform.fs" />
     <Compile Include="Printer.fs" />
+    <Compile Include="Packages.fs" />
     <Compile Include="Generate.fs" />
   </ItemGroup>
   <ItemGroup>

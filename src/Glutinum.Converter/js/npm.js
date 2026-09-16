@@ -69,7 +69,17 @@ export async function installPackage(fileSystem, spec, options = {}) {
             return installed.get(name) ?? null;
         }
 
-        const { version } = await getJson(`${REGISTRY}/resolve/npm/${name}@${encodeURIComponent(range)}`);
+        const resolveResponse = await fetchImpl(`${REGISTRY}/resolve/npm/${name}@${encodeURIComponent(range)}`);
+
+        if (resolveResponse.status === 404) {
+            throw new Error(`No package named '${name}' on npm`);
+        }
+
+        if (!resolveResponse.ok) {
+            throw new Error(`${resolveResponse.url}: ${resolveResponse.status}`);
+        }
+
+        const { version } = await resolveResponse.json();
 
         if (version === null || version === undefined) {
             throw new Error(`No version of '${name}' matches '${range}'`);

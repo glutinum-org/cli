@@ -93,6 +93,15 @@ let init () =
 
 let triggerCompileCode () = Compile
 
+let ofResult (fsharpAST: FSharpType list) (warnings: string list) (errors: string list) =
+    Success
+        {
+            FSharpAST = fsharpAST
+            Warnings = warnings
+            Errors = errors
+            CollapsedNodes = Set.empty
+        }
+
 let update (msg: Msg) (model: Model) (currentTsCode: string) =
     match msg with
     | Compile -> Compiling, Cmd.OfFunc.perform generateAST currentTsCode CompileResult

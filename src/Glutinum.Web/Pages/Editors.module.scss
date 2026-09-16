@@ -16,6 +16,7 @@
     }
 }
 
+.left-panel,
 .right-panel {
     --tabs-min-height: 3.5rem;
 
@@ -38,4 +39,9 @@
         border-top: 1px solid $border;
         margin: 0 0 .5rem;
     }
+}
+
+.left-panel__content {
+    flex: 1;
+    min-height: 0;
 }

@@ -112,6 +112,14 @@ let init () =
         |},
     Cmd.ofMsg (CompileCode CompilationSource.EditorChanged)
 
+let ofResult (fsharpCode: string) (warnings: string list) (errors: string list) =
+    Success
+        {|
+            FSharpCode = fsharpCode
+            Warnings = warnings
+            Errors = errors
+        |}
+
 let private openIssueUrl (issueUrl: string) =
     window.``open`` (issueUrl, "_blank", "noopener noreferrer") |> ignore
 

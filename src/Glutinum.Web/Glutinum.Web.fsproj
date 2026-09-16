@@ -21,6 +21,7 @@
     <Compile Include="Pages/Editors.FSharpAST.FSharpASTViewer.fs" />
     <Compile Include="Pages/Editors.FSharpAST.fs" />
     <Compile Include="Pages/Editors.FSharpCode.fs" />
+    <Compile Include="Pages/Editors.Package.fs" />
     <Compile Include="Pages/Editors.fs" />
     <Compile Include="App.fs" />
     <Compile Include="Main.fs" />

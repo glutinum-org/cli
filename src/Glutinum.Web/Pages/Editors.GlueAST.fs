@@ -71,6 +71,14 @@ let init () =
 
 let triggerCompileCode () = Compile
 
+let ofResult (glueAST: GlueType list) (warnings: string list) =
+    Success
+        {
+            GlueAST = glueAST
+            Warnings = warnings
+            CollapsedNodes = Set.empty
+        }
+
 let update (msg: Msg) (model: Model) (currentTsCode: string) =
     match msg with
     | Compile -> Compiling, Cmd.OfFunc.perform generateAST currentTsCode CompileResult
