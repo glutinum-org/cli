@@ -25,6 +25,9 @@ let readTypeOperatorNode (reader: ITypeScriptReader) (node: Ts.TypeOperatorNode)
             let symbolOpt = reader.checker.getSymbolAtLocation !!typeReferenceNode.typeName
 
             match symbolOpt with
+            // A node synthesized by `typeToTypeNode` doesn't always carry its symbol
+            | None when (unbox<Ts.Node> node).pos < 0 -> GlueType.KeyOf GlueType.Discard
+
             | None ->
                 Report.readerError ("type operator (keyof)", "Missing symbol", node) |> failwith
 

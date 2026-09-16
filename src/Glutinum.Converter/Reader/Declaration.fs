@@ -4,6 +4,7 @@ open Glutinum.Converter.GlueAST
 open Glutinum.Converter.Reader.Utils
 open Glutinum.Converter.Reader.Types
 open TypeScript
+open Fable.Core
 open Fable.Core.JsInterop
 
 let readDeclaration (reader: ITypeScriptReader) (declaration: Ts.Declaration) : GlueMember =
@@ -14,10 +15,15 @@ let readDeclaration (reader: ITypeScriptReader) (declaration: Ts.Declaration) : 
         let name = unbox<Ts.Node> propertySignature.name
 
         let getName (name: Ts.PropertyName) : string =
-            if isNull name?text then
-                name?getText ()
-            else
+            if not (isNull name?text) then
                 name?text
+            // A node synthesized by `typeToTypeNode` has no source text
+            elif (unbox<Ts.Node> name).pos < 0 then
+                match name?escapedText with
+                | null -> "computed"
+                | escapedText -> escapedText
+            else
+                name?getText ()
 
         ({
             Name = getName propertySignature.name
@@ -167,6 +173,45 @@ let readDeclaration (reader: ITypeScriptReader) (declaration: Ts.Declaration) : 
         }
         : GlueSetAccessor)
         |> GlueMember.SetAccessor
+
+    // `export { AtRule }` inside a namespace read as a member (`typeof ns`)
+    | Ts.SyntaxKind.ExportSpecifier ->
+        let exportSpecifier = declaration :?> Ts.ExportSpecifier
+
+        let target =
+            reader.checker.getExportSpecifierLocalTargetSymbol (U2.Case1 exportSpecifier)
+            |> Option.bind (resolveAlias reader.checker)
+            |> Option.bind (fun target ->
+                match target.declarations with
+                | Some declarations when declarations.Count > 0 -> Some declarations.[0]
+                | _ -> None
+            )
+
+        match target with
+        | Some target when
+            (match target.kind with
+             | Ts.SyntaxKind.FunctionDeclaration
+             | Ts.SyntaxKind.VariableDeclaration
+             | Ts.SyntaxKind.PropertySignature
+             | Ts.SyntaxKind.PropertyDeclaration
+             | Ts.SyntaxKind.MethodSignature
+             | Ts.SyntaxKind.MethodDeclaration -> true
+             | _ -> false)
+            ->
+            reader.ReadDeclaration target
+        // A re-exported type is a value only when it is a class, `obj` is enough
+        | _ ->
+            ({
+                Name = identifierText (unbox<Ts.Node> exportSpecifier.name)
+                Documentation = []
+                Type = GlueType.Primitive GluePrimitive.Any
+                IsOptional = false
+                IsStatic = false
+                Accessor = GlueAccessor.ReadOnly
+                IsPrivate = false
+            }
+            : GlueProperty)
+            |> GlueMember.Property
 
     // `function f(): void` inside a namespace read as a member (`typeof ns`)
     | Ts.SyntaxKind.FunctionDeclaration ->

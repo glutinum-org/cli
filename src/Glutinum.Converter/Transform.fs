@@ -644,7 +644,9 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
         if isOptional && others.Length = 1 then
             FSharpType.Option(transformType context others.Head)
         else if others.IsEmpty then
-            transformType context optionalTypes.Head
+            match optionalTypes with
+            | [] -> FSharpType.Object
+            | optionalType :: _ -> transformType context optionalType
         // Fable.Core stops at U9
         else if others.Length > 9 then
             if isOptional then
