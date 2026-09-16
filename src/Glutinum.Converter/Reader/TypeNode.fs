@@ -513,14 +513,17 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                     let name =
                         match symbolOpt with
                         | Some symbol ->
-                            symbol.valueDeclaration
-                            |> Option.map (fun valueDeclaration ->
-                                // If the type reference an enum member,
-                                // we need to find the name of the Enum type, not the name of the member
-                                match valueDeclaration.kind with
-                                | Ts.SyntaxKind.EnumMember ->
-                                    valueDeclaration?symbol?parent?getName ()
-                                | _ -> writtenName ()
+                            importedName checker symbol
+                            |> Option.orElse (
+                                symbol.valueDeclaration
+                                |> Option.map (fun valueDeclaration ->
+                                    // If the type reference an enum member,
+                                    // we need to find the name of the Enum type, not the name of the member
+                                    match valueDeclaration.kind with
+                                    | Ts.SyntaxKind.EnumMember ->
+                                        valueDeclaration?symbol?parent?getName ()
+                                    | _ -> writtenName ()
+                                )
                             )
                             |> Option.defaultValue (writtenName ())
                         | None ->

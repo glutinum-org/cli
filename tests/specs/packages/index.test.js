@@ -13,6 +13,7 @@ const fixtures = [
     "duplicateTypes",
     "externalDependency",
     "reExports",
+    "renamedImport",
 ]
 
 const footer = `

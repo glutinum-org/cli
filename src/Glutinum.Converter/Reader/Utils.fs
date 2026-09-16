@@ -208,6 +208,20 @@ let private resolveAlias (checker: Ts.TypeChecker) (symbol: Ts.Symbol) =
             None
     | _ -> Some symbol
 
+/// Name of the declaration behind an `import { X as Y }` alias, `None` for a non-renamed symbol
+let importedName (checker: Ts.TypeChecker) (symbol: Ts.Symbol) =
+    match symbol.flags with
+    | HasSymbolFlags Ts.SymbolFlags.Alias ->
+        match resolveAlias checker symbol with
+        | Some target when
+            target.name <> symbol.name
+            && target.name <> "default"
+            && target.name <> "export="
+            ->
+            Some target.name
+        | _ -> None
+    | _ -> None
+
 let private declarationFile (symbol: Ts.Symbol) =
     match symbol.declarations with
     | Some declarations when declarations.Count > 0 ->
