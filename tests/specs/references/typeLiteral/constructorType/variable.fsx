@@ -8,7 +8,7 @@ open System
 [<Erase>]
 type Exports =
     [<Import("Ctor", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member inline Ctor: Exports.Ctor = nativeOnly
+    static member inline Ctor: Exports.Ctor.Type = nativeOnly
 
 [<Global>]
 [<AllowNullLiteral>]
@@ -27,11 +27,13 @@ type Instance =
 
 module Exports =
 
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type Ctor =
-        [<EmitConstructor>]
-        abstract member Create: ?options: Options -> Instance
+    module Ctor =
+
+        [<AllowNullLiteral>]
+        [<Interface>]
+        type Type =
+            [<EmitConstructor>]
+            abstract member Create: ?options: Options -> Instance
 
 (***)
 #r "nuget: Fable.Core"

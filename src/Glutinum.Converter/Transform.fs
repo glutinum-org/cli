@@ -1070,6 +1070,8 @@ let private transformExports
                 match head with
                 | GlueType.Variable info ->
                     let name, context = sanitizeNameAndPushScope info.Name context
+                    // A type named like the property would shadow it when accessing `Exports.<name>`
+                    let context = context.PushScope "Type"
                     let xmlDocInfo = transformComment info.Documentation
 
                     let newTypes =
@@ -1261,6 +1263,11 @@ let private transformExports
 
                 | GlueType.ExportDefault glueType ->
                     let name, context = sanitizeNameAndPushScope glueType.Name context
+
+                    let context =
+                        match glueType with
+                        | GlueType.Variable _ -> context.PushScope "Type"
+                        | _ -> context
 
                     let newTypes =
                         {

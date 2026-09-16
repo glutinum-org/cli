@@ -8,17 +8,19 @@ open System
 [<Erase>]
 type Exports =
     [<Import("injectStore", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member inline injectStore: Exports.injectStore = nativeOnly
+    static member inline injectStore: Exports.injectStore.Type = nativeOnly
 
 module Exports =
 
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type injectStore =
-        [<Emit("$0($1...)")>]
-        abstract member Invoke: storeFactory: string -> float
-        [<Emit("$0($1...)")>]
-        abstract member Invoke: unit -> float
+    module injectStore =
+
+        [<AllowNullLiteral>]
+        [<Interface>]
+        type Type =
+            [<Emit("$0($1...)")>]
+            abstract member Invoke: storeFactory: string -> float
+            [<Emit("$0($1...)")>]
+            abstract member Invoke: unit -> float
 
 (***)
 #r "nuget: Fable.Core"

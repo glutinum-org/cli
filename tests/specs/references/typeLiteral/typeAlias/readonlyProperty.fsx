@@ -8,19 +8,21 @@ open System
 [<Erase>]
 type Exports =
     [<Import("settings", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member inline settings: Exports.settings = nativeOnly
+    static member inline settings: Exports.settings.Type = nativeOnly
 
 module Exports =
 
-    [<Global>]
-    [<AllowNullLiteral>]
-    type settings
-        [<ParamObject; Emit("$0")>]
-        (
-            enable: bool
-        ) =
+    module settings =
 
-        member val enable : bool = nativeOnly with get
+        [<Global>]
+        [<AllowNullLiteral>]
+        type Type
+            [<ParamObject; Emit("$0")>]
+            (
+                enable: bool
+            ) =
+
+            member val enable : bool = nativeOnly with get
 
 (***)
 #r "nuget: Fable.Core"

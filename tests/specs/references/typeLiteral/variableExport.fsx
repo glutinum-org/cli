@@ -8,7 +8,7 @@ open System
 [<Erase>]
 type Exports =
     [<ImportDefault("REPLACE_ME_WITH_MODULE_NAME")>]
-    static member inline supportsColor: Exports.supportsColor = nativeOnly
+    static member inline supportsColor: Exports.supportsColor.Type = nativeOnly
 
 
 type ColorInfo =
@@ -16,17 +16,19 @@ type ColorInfo =
 
 module Exports =
 
-    [<Global>]
-    [<AllowNullLiteral>]
-    type supportsColor
-        [<ParamObject; Emit("$0")>]
-        (
-            stdout: ColorInfo,
-            stderr: ColorInfo
-        ) =
+    module supportsColor =
 
-        member val stdout : ColorInfo = nativeOnly with get, set
-        member val stderr : ColorInfo = nativeOnly with get, set
+        [<Global>]
+        [<AllowNullLiteral>]
+        type Type
+            [<ParamObject; Emit("$0")>]
+            (
+                stdout: ColorInfo,
+                stderr: ColorInfo
+            ) =
+
+            member val stdout : ColorInfo = nativeOnly with get, set
+            member val stderr : ColorInfo = nativeOnly with get, set
 
 (***)
 #r "nuget: Fable.Core"
