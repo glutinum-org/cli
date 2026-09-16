@@ -2,6 +2,7 @@ module Glutinum.Converter.Reader.Parameters
 
 open Glutinum.Converter.GlueAST
 open Glutinum.Converter.Reader.Types
+open Glutinum.Converter.Reader.Utils
 open TypeScript
 
 let readParameters
@@ -16,9 +17,7 @@ let readParameters
 
         let name =
             match nameNode.kind with
-            | Ts.SyntaxKind.Identifier ->
-                let name = nameNode :?> Ts.Identifier
-                name.getText ()
+            | Ts.SyntaxKind.Identifier -> identifierText nameNode
             | Ts.SyntaxKind.ObjectBindingPattern -> $"arg%i{index}"
             | _ ->
                 Report.readerError ("name", $"Unsupported kind %s{nameNode.kind.Name}", nameNode)

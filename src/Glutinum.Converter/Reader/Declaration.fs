@@ -46,7 +46,7 @@ let readDeclaration (reader: ITypeScriptReader) (declaration: Ts.Declaration) : 
         let name = unbox<Ts.Identifier> methodDeclaration.name
 
         {
-            Name = name.getText ()
+            Name = identifierText name
             Documentation = reader.ReadDocumentationFromNode name
             Parameters = reader.ReadParameters methodDeclaration.parameters
             Type = reader.ReadTypeNode methodDeclaration.``type``
@@ -83,7 +83,7 @@ let readDeclaration (reader: ITypeScriptReader) (declaration: Ts.Declaration) : 
 
         ({
             Documentation = reader.ReadDocumentationFromNode name
-            Name = name.getText ()
+            Name = identifierText name
             Parameters = reader.ReadParameters methodSignature.parameters
             Type = reader.ReadTypeNode methodSignature.``type``
         }
@@ -110,7 +110,7 @@ let readDeclaration (reader: ITypeScriptReader) (declaration: Ts.Declaration) : 
         let isPrivateIdentifier = name.kind = Ts.SyntaxKind.PrivateIdentifier
 
         ({
-            Name = name.getText ()
+            Name = identifierText name
             Documentation = reader.ReadDocumentationFromNode name
             Type = reader.ReadTypeNode propertyDeclaration.``type``
             IsOptional = propertyDeclaration.questionToken.IsSome
@@ -132,7 +132,7 @@ let readDeclaration (reader: ITypeScriptReader) (declaration: Ts.Declaration) : 
         let isPrivateIdentifier = name.kind = Ts.SyntaxKind.PrivateIdentifier
 
         ({
-            Name = name.getText ()
+            Name = identifierText name
             Documentation = reader.ReadDocumentationFromNode name
             Type = reader.ReadTypeNode getAccessorDeclaration.``type``
             IsStatic =
@@ -155,7 +155,7 @@ let readDeclaration (reader: ITypeScriptReader) (declaration: Ts.Declaration) : 
         let isPrivateIdentifier = name.kind = Ts.SyntaxKind.PrivateIdentifier
 
         ({
-            Name = name.getText ()
+            Name = identifierText name
             Documentation = reader.ReadDocumentationFromNode name
             ArgumentType = reader.ReadTypeNode setAccessorDeclaration.parameters.[0].``type``
             IsStatic =

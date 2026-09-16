@@ -87,6 +87,25 @@ let tryReadLiteral (checker: Ts.TypeChecker) (expression: Ts.Node) =
             // Fallback to parsing the source text directly
             tryReadNumericLiteral text
 
+/// Nodes synthesized by <c>typeToTypeNode</c> have no source text
+let identifierText (node: Ts.Node) : string =
+    if isNull node?text then
+        node.getText ()
+    else
+        node?text
+
+/// Identifiers synthesized by <c>typeToTypeNode</c> carry their symbol, they can't be resolved by position
+let symbolAtLocation (checker: Ts.TypeChecker) (node: Ts.Node) : Ts.Symbol option =
+    if not (isNull node?symbol) then
+        Some node?symbol
+    elif
+        node.kind = Ts.SyntaxKind.QualifiedName
+        && not (isNull (node :?> Ts.QualifiedName).right?symbol)
+    then
+        Some (node :?> Ts.QualifiedName).right?symbol
+    else
+        checker.getSymbolAtLocation node
+
 let tryGetFullName (checker: Ts.TypeChecker) (node: Ts.Node) =
     // Naive way to check if the node has a symbol
     // The others solutions is to redo a pattern matching on the node.type

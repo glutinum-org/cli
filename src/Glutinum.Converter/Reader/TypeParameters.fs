@@ -2,6 +2,7 @@ module Glutinum.Converter.Reader.TypeParameters
 
 open Glutinum.Converter.GlueAST
 open Glutinum.Converter.Reader.Types
+open Glutinum.Converter.Reader.Utils
 open TypeScript
 
 let readTypeParameters
@@ -16,7 +17,7 @@ let readTypeParameters
         |> Seq.toList
         |> List.map (fun typeParameter ->
             {
-                Name = typeParameter.name.getText ()
+                Name = identifierText typeParameter.name
                 Constraint = typeParameter.``constraint`` |> Option.map reader.ReadTypeNode
                 Default = typeParameter.``default`` |> Option.map reader.ReadTypeNode
             }

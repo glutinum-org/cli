@@ -3,12 +3,13 @@ module Glutinum.Converter.Reader.TypeNode
 open Glutinum.Converter.GlueAST
 open Glutinum.Converter.Reader.Types
 open TypeScript
+open Fable.Core
 open Fable.Core.JsInterop
 open Fable.Core.JS
 open Glutinum.Converter.Reader.Utils
 
 type private IntersectionTypePropertyResult =
-    | Single of Ts.Declaration
+    | Single of Ts.Symbol * Ts.Declaration
     | WithoutDeclaration of Ts.Symbol
     | ForceAny
 
@@ -47,6 +48,50 @@ let private readPropertyWithoutDeclaration
         |> reader.Warnings.Add
 
         None
+
+// The declaration of a member of an instantiated generic type (e.g. `Foo<string>`)
+// only refers to the type parameters, the checker knows the instantiated type
+let private readInstantiatedMember
+    (reader: ITypeScriptReader)
+    (contextNode: Ts.Node)
+    (property: Ts.Symbol)
+    (declaration: Ts.Declaration)
+    : GlueMember
+    =
+    let checker = reader.checker
+    let instantiatedType = checker.getTypeOfSymbol property
+
+    let isInstantiated =
+        not (isNull declaration?symbol)
+        && not (obj.ReferenceEquals(instantiatedType, checker.getTypeOfSymbol declaration?symbol))
+
+    let declaredMember = reader.ReadDeclaration declaration
+
+    if not isInstantiated then
+        declaredMember
+    else
+        let flags =
+            Ts.NodeBuilderFlags.NoTruncation
+            ||| Ts.NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope
+
+        match checker.typeToTypeNode (instantiatedType, Some contextNode, Some flags) with
+        | None -> declaredMember
+        | Some typeNode ->
+            match declaredMember, reader.ReadTypeNode typeNode with
+            | GlueMember.Property info, typ -> GlueMember.Property { info with Type = typ }
+            | GlueMember.MethodSignature info, GlueType.FunctionType functionType ->
+                GlueMember.MethodSignature
+                    { info with
+                        Parameters = functionType.Parameters
+                        Type = functionType.Type
+                    }
+            | GlueMember.Method info, GlueType.FunctionType functionType ->
+                GlueMember.Method
+                    { info with
+                        Parameters = functionType.Parameters
+                        Type = functionType.Type
+                    }
+            | declaredMember, _ -> declaredMember
 
 let private readTypeUsingFlags (reader: ITypeScriptReader) (typ: Ts.Type) =
 
@@ -175,7 +220,10 @@ module UtilityType =
         |> Seq.toList
         |> List.choose (fun property ->
             match property.declarations with
-            | Some declarations -> declarations |> Seq.map reader.ReadDeclaration |> Some
+            | Some declarations ->
+                declarations
+                |> Seq.map (readInstantiatedMember reader contextNode property)
+                |> Some
             | None ->
                 readPropertyWithoutDeclaration reader contextNode property
                 |> Option.map Seq.singleton
@@ -192,6 +240,8 @@ module UtilityType =
     /// so it is generated as a concrete interface instead of an unusable
     /// reference to the (generic) utility.
     /// </summary>
+    let private expansionsInProgress = ResizeArray<Ts.Type>()
+
     let tryExpandAnonymousObjectApplication
         (reader: ITypeScriptReader)
         (typeReferenceNode: Ts.TypeReferenceNode)
@@ -230,9 +280,20 @@ module UtilityType =
                     | _ -> false
                 | None -> false
 
+            let isInProgress =
+                expansionsInProgress
+                |> Seq.exists (fun inProgress -> obj.ReferenceEquals(inProgress, typ))
+
             match typ.flags with
-            | HasTypeFlags Ts.TypeFlags.Object when not isNamedDeclaration ->
-                let members = readMembers reader typeReferenceNode typ
+            // A recursive application (e.g. `swap(): Pair<S, C>` inside `Pair<C, S>`) stays a reference
+            | HasTypeFlags Ts.TypeFlags.Object when not isNamedDeclaration && not isInProgress ->
+                expansionsInProgress.Add typ
+
+                let members =
+                    try
+                        readMembers reader typeReferenceNode typ
+                    finally
+                        expansionsInProgress.RemoveAt(expansionsInProgress.Count - 1)
 
                 if members.IsEmpty then
                     None
@@ -482,7 +543,7 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
     | Ts.SyntaxKind.TypeReference ->
         let typeReferenceNode = typeNode :?> Ts.TypeReferenceNode
 
-        let symbolOpt = checker.getSymbolAtLocation !!typeReferenceNode.typeName
+        let symbolOpt = symbolAtLocation checker !!typeReferenceNode.typeName
 
         let readTypeReference (isStandardLibrary: bool) =
 
@@ -508,7 +569,7 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                         if isQualified then
                             (unbox<Ts.QualifiedName> typeReferenceNode.typeName).right.text
                         else
-                            typeReferenceNode.typeName?getText ()
+                            identifierText !!typeReferenceNode.typeName
 
                     let name =
                         match symbolOpt with
@@ -587,6 +648,8 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                 let typParameters: option<ResizeArray<Ts.TypeParameterDeclaration>> =
                     if functionTypeNode.typeParameters.IsSome then
                         functionTypeNode.typeParameters
+                    elif isNull functionTypeNode.parent then
+                        None
                     else
                         functionTypeNode.parent.parent?typeParameters
 
@@ -615,6 +678,23 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
     | Ts.SyntaxKind.TypeQuery ->
         let typeQueryNode = typeNode :?> Ts.TypeQueryNode
         TypeQueryNode.readTypeQueryNode reader typeQueryNode
+
+    // `import("./file").Foo<T>`, produced by `typeToTypeNode` for a type not imported in the current file
+    | Ts.SyntaxKind.ImportType ->
+        let importTypeNode = typeNode :?> Ts.ImportTypeNode
+
+        match importTypeNode.qualifier with
+        | Some qualifier ->
+            ts.factory.createTypeReferenceNode (
+                U2.Case2 qualifier,
+                ?typeArguments = importTypeNode.typeArguments
+            )
+            |> reader.ReadTypeNode
+        | None ->
+            Report.readerError ("type node", "Unsupported import type without qualifier", typeNode)
+            |> reader.Warnings.Add
+
+            GlueType.Primitive GluePrimitive.Any
 
     | Ts.SyntaxKind.LiteralType ->
         let literalTypeNode = typeNode :?> Ts.LiteralTypeNode
@@ -702,7 +782,7 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                 match property.declarations with
                 | Some declarations ->
                     if declarations.Count = 1 then
-                        Some(Single declarations.[0])
+                        Some(Single(property, declarations.[0]))
                     else
                         Some ForceAny
                 | None -> Some(WithoutDeclaration property)
@@ -717,7 +797,7 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                 match property with
                 | ForceAny -> true // Force to generate obj
                 | WithoutDeclaration _ -> false
-                | Single declaration -> // Give a try to generate a real contract
+                | Single(_, declaration) -> // Give a try to generate a real contract
                     match declaration.kind with
                     | Ts.SyntaxKind.MethodDeclaration -> true
                     | _ -> false
@@ -729,7 +809,8 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
             properties
             |> List.choose (
                 function
-                | Single declaration -> Some(reader.ReadDeclaration declaration)
+                | Single(property, declaration) ->
+                    Some(readInstantiatedMember reader typeNode property declaration)
                 | WithoutDeclaration property ->
                     readPropertyWithoutDeclaration reader typeNode property
                 | ForceAny -> failwith "Sould not happen here"
