@@ -128,6 +128,7 @@ let view (model: Model) (dispatch: Dispatch<Msg>) =
                         prop.children [
                             Bulma.input.text [
                                 prop.placeholder "chalk, ws@8, @types/vscode"
+                                prop.autoFocus true
                                 // A controlled input loses keystrokes with the batched React rendering
                                 prop.defaultValue model.Spec
                                 prop.disabled busy
