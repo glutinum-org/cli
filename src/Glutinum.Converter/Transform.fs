@@ -70,6 +70,29 @@ type TypeLiteralsMemory() =
     member this.GetFullTypeNameReference(fullName: string, currentScopeName: string) =
         this.GetReference(fullName, fullName)
 
+/// Where the top-level declarations come from at runtime
+[<RequireQualifiedAccess>]
+type ImportSource =
+    /// Exports of a JavaScript module
+    | Module of specifier: string
+    /// Globals of a script
+    | Global
+
+let private importAttribute (name: string) (source: ImportSource) =
+    match source with
+    | ImportSource.Module specifier -> FSharpAttribute.Import(name, specifier)
+    | ImportSource.Global -> FSharpAttribute.Global(Some name)
+
+let private importAllAttribute (name: string) (source: ImportSource) =
+    match source with
+    | ImportSource.Module specifier -> FSharpAttribute.ImportAll specifier
+    | ImportSource.Global -> FSharpAttribute.Global(Some name)
+
+let private importDefaultAttribute (name: string) (source: ImportSource) =
+    match source with
+    | ImportSource.Module specifier -> FSharpAttribute.ImportDefault specifier
+    | ImportSource.Global -> FSharpAttribute.Global(Some name)
+
 // Not really proud of this implementation, but I was not able to make it in a
 // pure functional way, using a Tree structure or something similar
 // It seems like for now this implementation does the job which is the most important
@@ -80,7 +103,7 @@ type TransformContext
         currentScopeName: string,
         typeMemory: GlueType list,
         typeLiteralsMemory: TypeLiteralsMemory,
-        importSpecifier: string,
+        importSource: ImportSource,
         ?parent: TransformContext
     )
     =
@@ -99,7 +122,7 @@ type TransformContext
 
     member val TypeLiteralsMemory = typeLiteralsMemory
 
-    member val ImportSpecifier = importSpecifier
+    member val ImportSource = importSource
 
     /// We need to expose the types for the children to be able to access
     /// push to them.
@@ -149,7 +172,7 @@ type TransformContext
                 Naming.sanitizeName scopeName,
                 typeMemory,
                 typeLiteralsMemory,
-                importSpecifier,
+                importSource,
                 parent = this
             )
 
@@ -1285,7 +1308,7 @@ let private transformExports
                             Attributes =
                                 [
                                     if isTopLevel then
-                                        FSharpAttribute.Import(info.Name, context.ImportSpecifier)
+                                        importAttribute info.Name context.ImportSource
                                     else
                                         FSharpAttribute.EmitMacroProperty info.Name
                                     yield! xmlDocInfo.ObsoleteAttributes
@@ -1319,7 +1342,7 @@ let private transformExports
                             Attributes =
                                 [
                                     if isTopLevel then
-                                        FSharpAttribute.Import(info.Name, context.ImportSpecifier)
+                                        importAttribute info.Name context.ImportSource
                                     else
                                         FSharpAttribute.EmitMacroInvoke info.Name
                                     yield! xmlDocInfo.ObsoleteAttributes
@@ -1373,10 +1396,7 @@ let private transformExports
                                     Attributes =
                                         [
                                             if isTopLevel then
-                                                FSharpAttribute.Import(
-                                                    info.Name,
-                                                    context.ImportSpecifier
-                                                )
+                                                importAttribute info.Name context.ImportSource
 
                                                 FSharpAttribute.EmitConstructor
                                             else
@@ -1466,7 +1486,9 @@ let private transformExports
                                             Naming.removeSurroundingQuotes moduleDeclaration.Name
                                         )
                                     elif isTopLevel then
-                                        FSharpAttribute.ImportAll context.ImportSpecifier
+                                        importAllAttribute
+                                            (Naming.removeSurroundingQuotes moduleDeclaration.Name)
+                                            context.ImportSource
                                     else
                                         FSharpAttribute.EmitMacroProperty(
                                             Naming.removeSurroundingQuotes moduleDeclaration.Name
@@ -1511,7 +1533,7 @@ let private transformExports
 
                         let newTypes =
                             {
-                                Attributes = [ FSharpAttribute.ImportAll context.ImportSpecifier ]
+                                Attributes = [ importAllAttribute name context.ImportSource ]
                                 Name = name
                                 OriginalName = name
                                 Parameters = []
@@ -1609,7 +1631,8 @@ let private transformExports
 
                     let newTypes =
                         {
-                            Attributes = [ FSharpAttribute.ImportDefault context.ImportSpecifier ]
+                            Attributes =
+                                [ importDefaultAttribute glueType.Name context.ImportSource ]
                             Name = name
                             OriginalName = glueType.Name
                             Parameters = []
@@ -2334,7 +2357,7 @@ let private transformParamObjectClass
         Attributes =
             [
                 yield! xmlDocInfo.ObsoleteAttributes
-                FSharpAttribute.Global
+                FSharpAttribute.Global None
                 FSharpAttribute.AllowNullLiteral
             ]
         XmlDoc = xmlDocInfo.XmlDoc
@@ -3804,6 +3827,28 @@ let private transformReadOnly (context: TransformContext) (glueType: GlueType) =
     // Ignore readonly for other types
     | _ -> transformType context glueType
 
+/// `type Key = string | Key[]`: an F# abbreviation can't refer to itself
+let rec private replaceSelfReference (name: string) (glueType: GlueType) : GlueType =
+    let replace = replaceSelfReference name
+
+    match glueType with
+    | GlueType.TypeReference typeReference when
+        typeReference.Name = name && not typeReference.IsStandardLibrary
+        ->
+        GlueType.Primitive GluePrimitive.Any
+    | GlueType.TypeReference typeReference ->
+        GlueType.TypeReference
+            { typeReference with
+                TypeArguments = typeReference.TypeArguments |> List.map replace
+            }
+    | GlueType.Union(GlueTypeUnion cases) ->
+        GlueType.Union(GlueTypeUnion(cases |> List.map replace))
+    | GlueType.Array elementType -> GlueType.Array(replace elementType)
+    | GlueType.ReadOnly innerType -> GlueType.ReadOnly(replace innerType)
+    | GlueType.OptionalType innerType -> GlueType.OptionalType(replace innerType)
+    | GlueType.TupleType elements -> GlueType.TupleType(elements |> List.map replace)
+    | _ -> glueType
+
 let private transformTypeAliasDeclaration
     (context: TransformContext)
     (glueTypeAliasDeclaration: GlueTypeAliasDeclaration)
@@ -3831,7 +3876,7 @@ let private transformTypeAliasDeclaration
 
     let fsharpType =
         // TODO: Make the transformation more robust
-        match glueTypeAliasDeclaration.Type with
+        match replaceSelfReference glueTypeAliasDeclaration.Name glueTypeAliasDeclaration.Type with
         | GlueType.Union(GlueTypeUnion cases) as unionType ->
             match tryOptimizeUnionType context typeAliasName cases with
             | Some typ -> typ
@@ -4249,7 +4294,7 @@ let private transformModuleDeclaration
     (typeMemory: GlueType list)
     (reporter: Reporter)
     (typeLiteralsMemory: TypeLiteralsMemory)
-    (importSpecifier: string)
+    (importSource: ImportSource)
     (moduleDeclaration: GlueModuleDeclaration)
     : FSharpType
     =
@@ -4280,7 +4325,7 @@ let private transformModuleDeclaration
                     typeMemory
                     reporter
                     typeLiteralsMemory
-                    importSpecifier
+                    importSource
                     false
                     moduleDeclaration.Types
         }
@@ -4568,7 +4613,7 @@ let private transformToFsharp
                 context.TypeMemory
                 context._Reporter
                 context.TypeLiteralsMemory
-                context.ImportSpecifier
+                context.ImportSource
                 moduleInfo
             |> List.singleton
 
@@ -4578,7 +4623,10 @@ let private transformToFsharp
                     context.TypeMemory
                     context._Reporter
                     context.TypeLiteralsMemory
-                    fileModule.ImportSpecifier
+                    (if fileModule.IsGlobal then
+                         ImportSource.Global
+                     else
+                         ImportSource.Module fileModule.ImportSpecifier)
                     true
                     fileModule.Types
 
@@ -4631,7 +4679,7 @@ let private transform
     (typeMemory: GlueType list)
     (reporter: Reporter)
     (typeLiteralsMemory: TypeLiteralsMemory)
-    (importSpecifier: string)
+    (importSource: ImportSource)
     (isTopLevel: bool)
     (glueAst: GlueType list)
     : FSharpType list
@@ -4714,7 +4762,7 @@ let private transform
     let exports = exports @ classes @ reExportedClasses
 
     let rootTransformContext =
-        TransformContext(reporter, "", typeMemory, typeLiteralsMemory, importSpecifier)
+        TransformContext(reporter, "", typeMemory, typeLiteralsMemory, importSource)
 
     let rest = transformToFsharp rootTransformContext rest
 
@@ -4752,7 +4800,13 @@ let applyWith (importSpecifier: string) (typeMemory: GlueType list) (glueAst: Gl
 
     {
         FSharpAST =
-            transform typeMemory reporter typeLiteralsMemory importSpecifier true glueAst
+            transform
+                typeMemory
+                reporter
+                typeLiteralsMemory
+                (ImportSource.Module importSpecifier)
+                true
+                glueAst
             |> Merge.apply
         Warnings = reporter.Warnings
         Errors = reporter.Errors

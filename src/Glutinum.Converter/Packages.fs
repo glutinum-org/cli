@@ -73,7 +73,14 @@ let private findPackageDir (_host: Host, _file: string) : string = jsNative
 let private listInstalledPackages (_host: Host) : string[] = jsNative
 
 [<Import("createProgramFromFiles", "./js/bootstrap.js")>]
-let private createProgramFromFiles (_host: Host, _entryFiles: string[]) : Ts.Program = jsNative
+let private createProgramFromFiles
+    (_host: Host, _entryFiles: string[], _options: {| withoutDomLib: bool |})
+    : Ts.Program
+    =
+    jsNative
+
+/// The packages standing in for the DOM lib of TypeScript
+let private domLibReplacements = set [ "@types/web"; "@typescript/lib-dom" ]
 
 [<Import("reachableFiles", "./js/bootstrap.js")>]
 let private reachableFiles
@@ -138,7 +145,11 @@ let generate (host: Host) (inputs: string list) : GenerationResult =
         )
         |> List.toArray
 
-    let program = createProgramFromFiles (host, entryFiles)
+    let withoutDomLib =
+        targets |> List.exists (fun target -> domLibReplacements.Contains target.name)
+
+    let program =
+        createProgramFromFiles (host, entryFiles, {| withoutDomLib = withoutDomLib |})
 
     let checker = program.getTypeChecker ()
 

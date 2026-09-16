@@ -18,7 +18,12 @@ let readVariableStatement (reader: ITypeScriptReader) (statement: Ts.VariableSta
     // Declarations of an ambient namespace are exported without the keyword
     let isInsideNamespace = statement.parent?kind = Ts.SyntaxKind.ModuleBlock
 
-    let isExported = hasExportModifier || isInsideNamespace
+    // Top-level declarations of a script are globals
+    let isGlobal =
+        statement.parent?kind = Ts.SyntaxKind.SourceFile
+        && not (ts.isExternalModule (statement.getSourceFile ()))
+
+    let isExported = hasExportModifier || isInsideNamespace || isGlobal
 
     if isExported then
         match statement.declarationList.declarations |> Seq.toList with

@@ -16,6 +16,7 @@ const fixtures = [
     "renamedImport",
     "unionAlias",
     "ambientModules",
+    "globalScript",
 ]
 
 const footer = `

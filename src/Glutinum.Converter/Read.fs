@@ -22,6 +22,11 @@ let readSourceFile (checker: Ts.TypeChecker) (sourceFile: option<Ts.SourceFile>)
         TypeMemory = reader.TypeMemory |> List.ofSeq
     |}
 
+/// A file without import or export, and not made of an ambient module: its declarations are globals
+let private isScript (sourceFile: Ts.SourceFile) =
+    not (ts.isExternalModule sourceFile)
+    && (promotedAmbientModule sourceFile).IsNone
+
 let private declarationKey (glueType: GlueType) =
     match glueType with
     | GlueType.Interface info -> Some("type", info.Name)
@@ -121,11 +126,12 @@ let readPackages
                     | None -> packageContext.ImportSpecifier fileName
 
                 if fileName = package.EntryFile then
-                    Choice1Of2 types
+                    Choice1Of2(types, isScript sourceFile)
                 else
                     ({
                         Name = packageContext.FileModuleName(package, fileName)
                         ImportSpecifier = importSpecifier
+                        IsGlobal = isScript sourceFile
                         Types = types
                     }
                     : GlueFileModule)
@@ -138,11 +144,19 @@ let readPackages
                 | Choice2Of2 _ -> false
             )
 
+        let entryIsGlobal =
+            entryTypes
+            |> List.exists (
+                function
+                | Choice1Of2(_, isGlobal) -> isGlobal
+                | Choice2Of2 _ -> false
+            )
+
         let entryTypes =
             entryTypes
             |> List.collect (
                 function
-                | Choice1Of2 types -> types
+                | Choice1Of2(types, _) -> types
                 | Choice2Of2 _ -> []
             )
 
@@ -154,16 +168,19 @@ let readPackages
                 | Choice1Of2 _ -> None
             )
 
-        entryTypes @ fileModules
+        entryTypes @ fileModules, entryIsGlobal
 
     let glueAst =
         packageContext.Packages
         |> List.collect (fun package ->
+            let types, isGlobal = readPackage package
+
             [
                 ({
                     Name = package.ModuleName
                     ImportSpecifier = package.RuntimeName
-                    Types = readPackage package
+                    IsGlobal = isGlobal
+                    Types = types
                 }
                 : GlueFileModule)
                 |> GlueType.FileModule

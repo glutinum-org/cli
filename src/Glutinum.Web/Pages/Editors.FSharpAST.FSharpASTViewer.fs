@@ -87,7 +87,9 @@ type FSharpASTViewer =
 
         | FSharpAttribute.EmitIndexer -> ASTViewer.renderValueOnly "EmitIndexer"
 
-        | FSharpAttribute.Global -> ASTViewer.renderValueOnly "Global"
+        | FSharpAttribute.Global None -> ASTViewer.renderValueOnly "Global"
+
+        | FSharpAttribute.Global(Some name) -> ASTViewer.renderValueOnly $"Global(\"{name}\")"
 
         | FSharpAttribute.ParamObject -> ASTViewer.renderValueOnly "ParamObject"
 

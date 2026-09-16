@@ -22,13 +22,21 @@ export default function createProgramForCLI(filePath, source) {
  *
  * @param {import("./host.js").Host} host
  * @param {string[]} entryFiles
+ * @param {{ withoutDomLib?: boolean }} options
  * @returns
  */
-export function createProgramFromFiles(host, entryFiles) {
+export function createProgramFromFiles(host, entryFiles, options = {}) {
     // ESNext, so that lib types such as `AsyncIterable` resolve instead of being left undefined.
     // `types: []` stops TypeScript from loading every package under `node_modules/@types`.
     // ESNext module + Bundler resolution: follows `exports` maps and node_modules
-    const project = host.createProject({ target: 99, module: 99, moduleResolution: 100, types: [], strict: true })
+    const compilerOptions = { target: 99, module: 99, moduleResolution: 100, types: [], strict: true }
+
+    // A package replacing the DOM lib (`@types/web`) redeclares its globals
+    if (options.withoutDomLib) {
+        compilerOptions.lib = ["lib.esnext.d.ts", "lib.decorators.d.ts", "lib.decorators.legacy.d.ts"]
+    }
+
+    const project = host.createProject(compilerOptions)
 
     for (const entryFile of entryFiles) {
         project.addSourceFileAtPathSync(entryFile)

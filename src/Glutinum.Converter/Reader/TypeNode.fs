@@ -102,6 +102,10 @@ let private readInstantiatedMember
 
 let private intersectionsInProgress = ResizeArray<Ts.Type>()
 
+let private isGlobalThisQuery (typeNode: Ts.TypeNode) =
+    typeNode.kind = Ts.SyntaxKind.TypeQuery
+    && entityNameText !!(typeNode :?> Ts.TypeQueryNode).exprName = "globalThis"
+
 let private readTypeUsingFlags (reader: ITypeScriptReader) (typ: Ts.Type) =
 
     match typ.flags with
@@ -791,6 +795,18 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
         )
         ->
         GlueType.Primitive GluePrimitive.Any
+
+    // `Window & typeof globalThis`: the globals add nothing to the type
+    | Ts.SyntaxKind.IntersectionType when
+        (typeNode :?> Ts.IntersectionTypeNode).types |> Seq.exists isGlobalThisQuery
+        ->
+        match
+            (typeNode :?> Ts.IntersectionTypeNode).types
+            |> Seq.filter (not << isGlobalThisQuery)
+            |> Seq.toList
+        with
+        | [ single ] -> reader.ReadTypeNode single
+        | _ -> GlueType.Primitive GluePrimitive.Any
 
     | Ts.SyntaxKind.IntersectionType ->
         let intersectionTypeNode = typeNode :?> Ts.IntersectionTypeNode

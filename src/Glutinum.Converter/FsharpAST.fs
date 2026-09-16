@@ -200,7 +200,10 @@ type FSharpAttribute =
     /// </summary>
     | EmitMacroProperty of propertyName: string
     | EmitIndexer
-    | Global
+    /// <summary>
+    /// Generates <c>[&lt;Global&gt;]</c>, or <c>[&lt;Global("name")&gt;]</c> for a global of that name
+    /// </summary>
+    | Global of name: string option
     | ParamObject
     | ParamArray
     | Interface

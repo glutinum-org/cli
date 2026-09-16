@@ -496,6 +496,8 @@ and GlueFileModule =
         Name: string
         /// JavaScript module to import the file's exports from
         ImportSpecifier: string
+        /// The file is a script: its declarations are globals instead of exports
+        IsGlobal: bool
         Types: GlueType list
     }
 
