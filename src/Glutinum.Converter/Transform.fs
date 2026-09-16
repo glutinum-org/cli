@@ -4410,6 +4410,66 @@ let private transformClassDeclaration
 
     classDefinition :: specialiazedAlias
 
+// `Node.Exports.os.hostname ()`: the `Exports` of the files of a package gathered in one module,
+// as type abbreviations so that `open Node.Exports` gives `os.hostname ()`
+let private aggregatedExports (types: FSharpType list) : FSharpType list =
+    let isExportsType (typ: FSharpType) =
+        match typ with
+        | FSharpType.Interface { Name = "Exports" } -> true
+        | _ -> false
+
+    let isStatic (fsharpMember: FSharpMember) =
+        match fsharpMember with
+        | FSharpMember.Method info
+        | FSharpMember.Property info -> info.IsStatic
+        | FSharpMember.StaticMember _ -> true
+
+    let abbreviations =
+        types
+        |> List.choose (
+            function
+            | FSharpType.Module fileModule ->
+                fileModule.Types
+                |> List.tryPick (
+                    function
+                    | FSharpType.Interface { Name = "Exports"; Members = members } when
+                        not members.IsEmpty && members |> List.forall isStatic
+                        ->
+                        ({
+                            Attributes = []
+                            XmlDoc = []
+                            Name = fileModule.Name
+                            Type =
+                                ({
+                                    Name = $"{fileModule.Name}.Exports"
+                                    TypeParameters = []
+                                }
+                                : FSharpMapped)
+                                |> FSharpType.Mapped
+                            TypeParameters = []
+                        }
+                        : FSharpTypeAlias)
+                        |> FSharpType.TypeAlias
+                        |> Some
+                    | _ -> None
+                )
+            | _ -> None
+        )
+
+    if abbreviations.IsEmpty || types |> List.exists isExportsType then
+        []
+    else
+        [
+            ({
+                Name = "Exports"
+                IsRecursive = false
+                ImportSpecifier = None
+                Types = abbreviations
+            }
+            : FSharpModule)
+            |> FSharpType.Module
+        ]
+
 let private transformToFsharp
     (context: TransformContext)
     (glueTypes: GlueType list)
@@ -4450,18 +4510,20 @@ let private transformToFsharp
             |> List.singleton
 
         | GlueType.FileModule fileModule ->
+            let types =
+                transform
+                    context.TypeMemory
+                    context._Reporter
+                    context.TypeLiteralsMemory
+                    fileModule.ImportSpecifier
+                    true
+                    fileModule.Types
+
             ({
                 Name = Naming.sanitizeTypeName fileModule.Name
                 IsRecursive = false
                 ImportSpecifier = Some fileModule.ImportSpecifier
-                Types =
-                    transform
-                        context.TypeMemory
-                        context._Reporter
-                        context.TypeLiteralsMemory
-                        fileModule.ImportSpecifier
-                        true
-                        fileModule.Types
+                Types = types @ aggregatedExports types
             }
             : FSharpModule)
             |> FSharpType.Module

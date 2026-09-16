@@ -34,6 +34,14 @@ module NodeLike =
                 abstract member join: [<ParamArray>] paths: string [] -> string
                 abstract member sep: string with get, set
 
+    module Exports =
+
+        type os =
+            os.Exports
+
+        type path =
+            path.Exports
+
 (***)
 #r "nuget: Fable.Core"
 #r "nuget: Glutinum.Types"
