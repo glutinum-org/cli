@@ -283,6 +283,7 @@ type FSharpInterface =
 type FSharpExplicitField =
     {
         Name: string
+        XmlDoc: FSharpXmlDoc list
         Type: FSharpType
         Accessor: FSharpAccessor option
     }
@@ -311,6 +312,7 @@ type FSharpConstructor =
 type FSharpClass =
     {
         Attributes: FSharpAttribute list
+        XmlDoc: FSharpXmlDoc list
         Name: string
         TypeParameters: FSharpTypeParameter list
         PrimaryConstructor: FSharpConstructor

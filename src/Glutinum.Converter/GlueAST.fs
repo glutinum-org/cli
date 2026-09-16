@@ -141,6 +141,17 @@ type GlueMember =
         | MethodSignature _
         | ConstructSignature _ -> None
 
+    member this.Documentation =
+        match this with
+        | Method info -> info.Documentation
+        | Property info -> info.Documentation
+        | GetAccessor info -> info.Documentation
+        | SetAccessor info -> info.Documentation
+        | MethodSignature info -> info.Documentation
+        | CallSignature _
+        | IndexSignature _
+        | ConstructSignature _ -> []
+
     member this.TypeParameters =
         match this with
         | Method methodInfo -> methodInfo.Type.TypeParameters

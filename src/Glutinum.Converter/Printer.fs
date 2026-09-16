@@ -808,6 +808,7 @@ let private printPrimaryConstructor (printer: Printer) (constructor: FSharpConst
     printer.NewLine
 
 let private printClass (printer: Printer) (classInfo: FSharpClass) =
+    printXmlDoc printer classInfo.XmlDoc
     printAttributes printer classInfo.Attributes
 
     printer.Write($"type {classInfo.Name}")
@@ -854,6 +855,8 @@ let private printClass (printer: Printer) (classInfo: FSharpClass) =
     if not classInfo.ExplicitFields.IsEmpty then
         classInfo.ExplicitFields
         |> List.iter (fun explicitField ->
+            printXmlDoc printer explicitField.XmlDoc
+
             printer.Write($"member val {explicitField.Name} : ")
             printer.WriteInline(printType explicitField.Type)
             printer.WriteInline(" = nativeOnly")
