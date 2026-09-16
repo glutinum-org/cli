@@ -644,28 +644,28 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
         let functionTypeNode = typeNode :?> Ts.FunctionTypeNode
 
         let typeParameters =
-            try
-                let typParameters: option<ResizeArray<Ts.TypeParameterDeclaration>> =
-                    if functionTypeNode.typeParameters.IsSome then
-                        functionTypeNode.typeParameters
-                    elif isNull functionTypeNode.parent then
-                        None
-                    else
-                        functionTypeNode.parent.parent?typeParameters
+            // The delegate generated for the function needs the type parameters of the
+            // enclosing declarations too (e.g. the class of a method taking a callback)
+            let rec collectEnclosing (node: Ts.Node) (acc: Ts.TypeParameterDeclaration list) =
+                if isNull node then
+                    acc
+                // A function type used as a constraint is read while reading the type parameters
+                elif node.kind = Ts.SyntaxKind.TypeParameter then
+                    []
+                else
+                    let ownTypeParameters: ResizeArray<Ts.TypeParameterDeclaration> option =
+                        node?typeParameters
 
-                reader.ReadTypeParameters typParameters
+                    let acc =
+                        match ownTypeParameters with
+                        | Some ownTypeParameters -> acc @ Seq.toList ownTypeParameters
+                        | None -> acc
 
-            // Protect the direct access to the parent of parent
-            with _ ->
-                reader.Warnings.Add(
-                    Report.readerError (
-                        "FunctionType",
-                        $"Unable to find TypeParameters information",
-                        functionTypeNode
-                    )
-                )
+                    collectEnclosing node.parent acc
 
-                []
+            match collectEnclosing functionTypeNode [] with
+            | [] -> []
+            | typParameters -> reader.ReadTypeParameters(Some(ResizeArray typParameters))
 
         {
             Documentation = reader.ReadDocumentationFromNode typeNode

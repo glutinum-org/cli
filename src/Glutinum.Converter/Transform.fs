@@ -2705,10 +2705,16 @@ module private TypeParameter =
                     default_ = default_
                 )
 
+        // An anonymous type can't be expressed as an F# constraint
+        | Some(GlueType.TypeLiteral _)
+        | Some(GlueType.IntersectionType _) ->
+            TransformResult.Create(typeParameter.Name, default_ = default_)
+
         | Some constraintType ->
             // Manual optimization to remove constraints that are not supported by F#
             match transformType context constraintType with
-            | FSharpType.Function _ ->
+            | FSharpType.Function _
+            | FSharpType.TypeReference { Name = "Action" } ->
                 TransformResult.Create(typeParameter.Name, default_ = default_)
 
             // Try to resolve sealed constraints
@@ -2719,6 +2725,7 @@ module private TypeParameter =
             // The above is invalid in F#, so we manually resolve to `string` directly and notify the caller
             // to adap the code accordingly
             | FSharpType.Primitive _
+            | FSharpType.Option(FSharpType.Primitive _)
             | FSharpType.Union _ as fsharpType ->
                 TransformResult.Create(
                     typeParameter.Name,

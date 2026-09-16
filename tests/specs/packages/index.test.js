@@ -14,6 +14,7 @@ const fixtures = [
     "externalDependency",
     "reExports",
     "renamedImport",
+    "unionAlias",
 ]
 
 const footer = `

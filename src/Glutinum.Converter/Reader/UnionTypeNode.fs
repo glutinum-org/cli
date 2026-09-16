@@ -85,11 +85,20 @@ let rec private readUnionTypeCases
                     // But we should revisit how TypeReference is handled because of recursive types
                     match declaration.kind with
                     | Ts.SyntaxKind.TypeAliasDeclaration ->
-                        // Only the cases of a union alias are inlined, other aliases stay references
-                        match reader.ReadNode declaration with
-                        | GlueType.TypeAliasDeclaration { Type = GlueType.Union _ } as aliasType ->
-                            Some [ aliasType ]
-                        | _ -> reader.ReadTypeNode typeReferenceNode |> List.singleton |> Some
+                        let isInAnotherModule =
+                            modulePathForSymbol checker reader.PackageContext false symbolOpt
+                            |> List.isEmpty
+                            |> not
+
+                        // Only the cases of a union alias declared in the current module are inlined,
+                        // the other aliases stay references
+                        if isInAnotherModule then
+                            reader.ReadTypeNode typeReferenceNode |> List.singleton |> Some
+                        else
+                            match reader.ReadNode declaration with
+                            | GlueType.TypeAliasDeclaration { Type = GlueType.Union _ } as aliasType ->
+                                Some [ aliasType ]
+                            | _ -> reader.ReadTypeNode typeReferenceNode |> List.singleton |> Some
 
                     | _ -> reader.ReadTypeNode typeReferenceNode |> List.singleton |> Some
 
