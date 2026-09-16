@@ -739,20 +739,14 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
                 // so we need to filter them to only keep the ones that are used
                 // See file://./../../tests/specs/references/functionType/interface/generics/moreGenericsOnParentThanNeeded.d.ts
                 |> List.filter (fun typeParameter ->
-
                     let usedInParameters =
-                        List.exists
-                            (fun (parameter: GlueParameter) ->
-                                typeParameter.Name = parameter.Type.Name
-                            )
-                            paremeters
+                        paremeters
+                        |> List.exists (fun parameter ->
+                            mentionsTypeParameter typeParameter.Name parameter.Type
+                        )
 
                     let usedInReturnType =
-                        List.exists
-                            (fun (parameterType: GlueTypeParameter) ->
-                                typeParameter.Name = parameterType.Name
-                            )
-                            functionTypeInfo.Type.TypeParameters
+                        mentionsTypeParameter typeParameter.Name functionTypeInfo.Type
 
                     usedInParameters || usedInReturnType
                 )
@@ -922,6 +916,12 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
         | GlueLiteral.Bool _ -> FSharpType.Primitive FSharpPrimitive.Bool
         | GlueLiteral.Null -> FSharpType.Primitive FSharpPrimitive.Null
 
+    // `typeof f` where `f` is generic: F# has no generic function values
+    | GlueType.FunctionDeclaration functionDeclaration when
+        not functionDeclaration.TypeParameters.IsEmpty
+        ->
+        FSharpType.Object
+
     | GlueType.FunctionDeclaration functionDeclaration ->
         ({
             Parameters = functionDeclaration.Parameters |> List.map (transformParameter context)
@@ -1057,6 +1057,34 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
 /// <summary></summary>
 /// <param name="exports"></param>
 /// <returns></returns>
+let rec private mentionsTypeParameter (name: string) (glueType: GlueType) : bool =
+    let mentions = mentionsTypeParameter name
+
+    match glueType with
+    | GlueType.TypeParameter typeParameterName -> typeParameterName = name
+    | GlueType.TypeReference typeReference -> typeReference.TypeArguments |> List.exists mentions
+    | GlueType.Array glueType
+    | GlueType.ReadOnly glueType
+    | GlueType.OptionalType glueType -> mentions glueType
+    | GlueType.Union(GlueTypeUnion cases) -> cases |> List.exists mentions
+    | GlueType.TupleType glueTypes -> glueTypes |> List.exists mentions
+    | GlueType.FunctionType functionType ->
+        mentions functionType.Type
+        || functionType.Parameters
+           |> List.exists (fun parameter -> mentions parameter.Type)
+    | GlueType.TypeLiteral typeLiteral ->
+        typeLiteral.Members
+        |> List.exists (
+            function
+            | GlueMember.Property property -> mentions property.Type
+            | GlueMember.MethodSignature methodSignature ->
+                mentions methodSignature.Type
+                || methodSignature.Parameters
+                   |> List.exists (fun parameter -> mentions parameter.Type)
+            | _ -> false
+        )
+    | _ -> false
+
 let private parametersSignature (parameters: FSharpParameter list) =
     parameters |> List.map (fun parameter -> parameter.Type, parameter.IsOptional)
 
@@ -2184,6 +2212,12 @@ module private ParamObjectCandidate =
                                 not (Set.contains property.Name ownNames)
                             | _ -> true
                         )
+                        // A base interface reached through several heritage clauses
+                        |> List.distinctBy (
+                            function
+                            | GlueMember.Property property -> Choice1Of2 property.Name
+                            | glueMember -> Choice2Of2 glueMember
+                        )
 
                     inheritedMembers @ info.Members
                 )
@@ -2253,6 +2287,13 @@ module private ParamObjectCandidate =
         && not isUsedAsOutput
         && not isInherited
         && isDeclaredOnce
+
+// `Array<T>` is generated as `ResizeArray<T>`, a class, which an interface can't inherit
+let private isArrayHeritage (heritageClause: GlueType) =
+    match heritageClause with
+    | GlueType.TypeReference typeReference ->
+        typeReference.IsStandardLibrary && typeReference.Name = "Array"
+    | _ -> false
 
 let private partialHeritageBeingExpanded = ResizeArray<string>()
 
@@ -2338,6 +2379,7 @@ let private transformInterface (context: TransformContext) (info: GlueInterface)
             | GlueType.Discard -> false
             | _ -> true
         )
+        |> List.filter (not << isArrayHeritage)
 
     let typeParametersResult =
         transformDeclarationTypeParameters context info.TypeParameters
@@ -2789,7 +2831,7 @@ module private TypeParameter =
             // The above is invalid in F#, so we manually resolve to `string` directly and notify the caller
             // to adap the code accordingly
             | FSharpType.Primitive _
-            | FSharpType.Option(FSharpType.Primitive _)
+            | FSharpType.Option _
             | FSharpType.Union _ as fsharpType ->
                 TransformResult.Create(
                     typeParameter.Name,
@@ -2804,6 +2846,11 @@ module private TypeParameter =
                     sealedType = fsharpType,
                     default_ = default_
                 )
+
+            // TypeScript satisfies `T extends Foo` structurally, F# only nominally: the
+            // constraint would reject the unions and aliases TypeScript accepts
+            | FSharpType.TypeReference _ ->
+                TransformResult.Create(typeParameter.Name, default_ = default_)
 
             | forward ->
                 TransformResult.Create(
@@ -3916,6 +3963,25 @@ let rec private exposeSpecializedAlias
             | Some defaultType ->
                 let orderedTail = tail |> List.rev
 
+                // The default of a later type parameter can refer to this one (`TOut = TIn | undefined`)
+                let tailedTypeParameters =
+                    let substitute =
+                        TypeParameter.mapFSharpType
+                            [
+                                {
+                                    TypeParameterName = typeParameter.Name
+                                    FSharpType = defaultType
+                                }
+                            ]
+
+                    tailedTypeParameters
+                    |> List.map (
+                        function
+                        | FSharpTypeParameter.FSharpType typ ->
+                            FSharpTypeParameter.FSharpType(substitute typ)
+                        | other -> other
+                    )
+
                 let typeAlias =
                     ({
                         Attributes = []
@@ -3999,7 +4065,7 @@ let private transformClassDeclaration
         |> List.filter (
             function
             | GlueType.Discard -> false
-            | _ -> true
+            | heritageClause -> not (isArrayHeritage heritageClause)
         )
         |> List.map (context.ExposeTypeAlias >> transformType (context.PushScope "Extends"))
 

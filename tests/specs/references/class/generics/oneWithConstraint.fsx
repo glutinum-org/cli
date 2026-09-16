@@ -10,7 +10,7 @@ type Exports =
     [<Import("Options", "REPLACE_ME_WITH_MODULE_NAME"); EmitConstructor>]
     static member Options () : Options = nativeOnly
     [<Import("User", "REPLACE_ME_WITH_MODULE_NAME"); EmitConstructor>]
-    static member User<'T when 'T :> Options> () : User<'T> = nativeOnly
+    static member User<'T> () : User<'T> = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
@@ -19,7 +19,7 @@ type Options =
 
 [<AllowNullLiteral>]
 [<Interface>]
-type User<'T when 'T :> Options> =
+type User<'T> =
     interface end
 
 type User =

@@ -10,7 +10,7 @@ type Exports =
     [<Import("Type2", "REPLACE_ME_WITH_MODULE_NAME"); EmitConstructor>]
     static member Type2<'A> () : Type2<'A> = nativeOnly
     [<Import("Type1", "REPLACE_ME_WITH_MODULE_NAME"); EmitConstructor>]
-    static member Type1<'A when 'A :> Task> () : Type1<'A> = nativeOnly
+    static member Type1<'A> () : Type1<'A> = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
@@ -27,7 +27,7 @@ type Task =
 
 [<AllowNullLiteral>]
 [<Interface>]
-type Type1<'A when 'A :> Task> =
+type Type1<'A> =
     interface end
 
 type Type1 =

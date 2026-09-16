@@ -11,10 +11,10 @@ type Configuration =
 
 [<AllowNullLiteral>]
 [<Interface>]
-type Logger<'T, 'B when 'T :> Configuration> =
+type Logger<'T, 'B> =
     interface end
 
-type Logger<'T when 'T :> Configuration> =
+type Logger<'T> =
     Logger<'T, string>
 
 type Logger =

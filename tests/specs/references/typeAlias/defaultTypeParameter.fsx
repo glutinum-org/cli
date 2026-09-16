@@ -20,7 +20,7 @@ type Options =
 type Scale<'O> =
     abstract member options: 'O with get, set
 
-type CategoryScale<'O when 'O :> Options> =
+type CategoryScale<'O> =
     Scale<'O>
 
 [<AllowNullLiteral>]

@@ -15,7 +15,7 @@ type Exports =
 type Foo<'A> =
     interface end
 
-type ReturnType<'A, 'T, 'B when 'T :> Foo<'A> and 'B :> Foo<'A>> =
+type ReturnType<'A, 'T, 'B> =
     'A * 'T * 'B
 
 (***)

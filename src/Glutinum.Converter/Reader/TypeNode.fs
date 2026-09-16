@@ -596,9 +596,16 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                             |> Option.defaultValue (writtenName ())
                         | None -> writtenName ()
 
+                    // A name TypeScript itself can't resolve has no declaration to generate
+                    let isUnresolved =
+                        reader.PackageContext.IsSome
+                        && symbolOpt.IsNone
+                        && typeReferenceNode.pos >= 0
+
                     if
-                        isExternalToPackages checker reader.PackageContext symbolOpt
-                        && not (knownExternalTypeNames.Contains name)
+                        isUnresolved
+                        || (isExternalToPackages checker reader.PackageContext symbolOpt
+                            && not (knownExternalTypeNames.Contains name))
                     then
                         GlueType.Primitive GluePrimitive.Any
                     else

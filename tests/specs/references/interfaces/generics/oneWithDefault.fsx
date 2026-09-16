@@ -16,7 +16,7 @@ type Task =
 
 [<AllowNullLiteral>]
 [<Interface>]
-type Type1<'A when 'A :> Task> =
+type Type1<'A> =
     interface end
 
 type Type2 =

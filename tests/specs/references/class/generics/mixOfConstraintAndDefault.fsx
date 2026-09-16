@@ -10,7 +10,7 @@ type Exports =
     [<Import("Configuration", "REPLACE_ME_WITH_MODULE_NAME"); EmitConstructor>]
     static member Configuration () : Configuration = nativeOnly
     [<Import("Logger", "REPLACE_ME_WITH_MODULE_NAME"); EmitConstructor>]
-    static member Logger<'T, 'B when 'T :> Configuration> () : Logger<'T, 'B> = nativeOnly
+    static member Logger<'T, 'B> () : Logger<'T, 'B> = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
@@ -19,10 +19,10 @@ type Configuration =
 
 [<AllowNullLiteral>]
 [<Interface>]
-type Logger<'T, 'B when 'T :> Configuration> =
+type Logger<'T, 'B> =
     interface end
 
-type Logger<'T when 'T :> Configuration> =
+type Logger<'T> =
     Logger<'T, string>
 
 type Logger =

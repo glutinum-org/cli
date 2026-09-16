@@ -15,8 +15,10 @@ type Exports =
 type Foo<'A> =
     interface end
 
-type ReturnType<'A, 'T when 'T :> Foo<'A>> =
-    'T
+[<AllowNullLiteral>]
+[<Interface>]
+type ReturnType<'A, 'T> =
+    interface end
 
 (***)
 #r "nuget: Fable.Core"

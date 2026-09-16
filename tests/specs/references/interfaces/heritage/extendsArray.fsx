@@ -6,16 +6,8 @@ open System
 
 [<AllowNullLiteral>]
 [<Interface>]
-type Options =
-    interface end
-
-[<AllowNullLiteral>]
-[<Interface>]
-type User<'T> =
-    interface end
-
-type User =
-    User<Options>
+type SortedArray<'T> =
+    abstract member `` __sortedArrayBrand``: obj with get, set
 
 (***)
 #r "nuget: Fable.Core"
