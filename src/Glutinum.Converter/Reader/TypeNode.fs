@@ -781,7 +781,15 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
         let indexedAccessType = typeNode :?> Ts.IndexedAccessType
         reader.ReadIndexedAccessType indexedAccessType
 
-    | Ts.SyntaxKind.ConstructorType -> GlueType.ConstructorType
+    | Ts.SyntaxKind.ConstructorType ->
+        let constructorTypeNode = typeNode :?> Ts.ConstructorTypeNode
+
+        ({
+            Parameters = reader.ReadParameters constructorTypeNode.parameters
+            Type = reader.ReadTypeNode constructorTypeNode.``type``
+        }
+        : GlueConstructSignature)
+        |> GlueType.ConstructorType
 
     | Ts.SyntaxKind.NeverKeyword -> GlueType.Primitive GluePrimitive.Never
 

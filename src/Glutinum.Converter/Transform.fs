@@ -575,8 +575,15 @@ module private UtilityType =
 
 let rec private transformType (context: TransformContext) (glueType: GlueType) : FSharpType =
     match glueType with
-    | GlueType.ConstructorType
     | GlueType.Unknown -> FSharpType.Object
+
+    | GlueType.ConstructorType constructSignature ->
+        ({
+            Members = [ GlueMember.ConstructSignature constructSignature ]
+        }
+        : GlueTypeLiteral)
+        |> GlueType.TypeLiteral
+        |> transformType context
 
     | GlueType.Primitive primitiveInfo -> transformPrimitive primitiveInfo |> FSharpType.Primitive
 
@@ -1981,6 +1988,7 @@ module private ParamObjectCandidate =
         | GlueType.Interface info -> info.Members |> List.collect memberParameters
         | GlueType.TypeLiteral info -> info.Members |> List.collect memberParameters
         | GlueType.FunctionType info -> info.Parameters
+        | GlueType.ConstructorType info -> info.Parameters
         | GlueType.TypeAliasDeclaration info -> parameters info.Type
         | GlueType.Variable info -> parameters info.Type
         | GlueType.ExportDefault innerType -> parameters innerType
@@ -3537,9 +3545,27 @@ let private transformTypeAliasDeclaration
             }
             |> FSharpType.Interface
 
-        | GlueType.ConstructorType ->
+        | GlueType.ConstructorType constructSignature ->
             match glueTypeAliasDeclaration.TypeParameters with
-            | [] -> makeTypeAlias FSharpType.Object
+            | [] ->
+                {
+                    XmlDoc = xmlDoc.XmlDoc
+                    Attributes =
+                        [
+                            yield! xmlDoc.ObsoleteAttributes
+                            FSharpAttribute.AllowNullLiteral
+                            FSharpAttribute.Interface
+                        ]
+                    Name = typeAliasName
+                    OriginalName = glueTypeAliasDeclaration.Name
+                    TypeParameters = []
+                    Members =
+                        TransformMembers.toFSharpMember
+                            context
+                            [ GlueMember.ConstructSignature constructSignature ]
+                    Inheritance = []
+                }
+                |> FSharpType.Interface
 
             | typeParameter :: [] ->
                 ({
@@ -3803,7 +3829,7 @@ let private transformToFsharp
             | GlueType.ClassDeclaration classInfo -> transformClassDeclaration context classInfo
             | _ -> FSharpType.Discard |> List.singleton
 
-        | GlueType.ConstructorType
+        | GlueType.ConstructorType _
         | GlueType.MappedType _
         | GlueType.FunctionType _
         | GlueType.TypeParameter _

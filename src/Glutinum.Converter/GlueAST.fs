@@ -378,7 +378,7 @@ type GlueType =
     | TemplateLiteral
     | UtilityType of GlueUtilityType
     | MappedType of GlueMappedType
-    | ConstructorType
+    | ConstructorType of GlueConstructSignature
     | ReadOnly of GlueType
 
     member this.Name =
@@ -425,7 +425,7 @@ type GlueType =
         | OptionalType _ // TODO: Should we take the name of the underlying type and add option to it?
         | Discard
         | ExportDefault _
-        | ConstructorType
+        | ConstructorType _
         | Unknown -> "obj"
         | UtilityType utilityType ->
             match utilityType with
@@ -477,4 +477,4 @@ type GlueType =
         | ModuleDeclaration _
         | TypeParameter _
         | TypeLiteral _
-        | ConstructorType -> []
+        | ConstructorType _ -> []

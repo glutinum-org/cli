@@ -506,7 +506,14 @@ type GlueASTViewer =
                 ]
                 context
 
-        | GlueType.ConstructorType -> ASTViewer.renderNode "ConstructorType" [] context
+        | GlueType.ConstructorType constructSignature ->
+            ASTViewer.renderNode
+                "ConstructorType"
+                [
+                    GlueASTViewer.Parameters constructSignature.Parameters
+                    GlueASTViewer.Type constructSignature.Type
+                ]
+                context
 
     static member Render
         (types: GlueType list)

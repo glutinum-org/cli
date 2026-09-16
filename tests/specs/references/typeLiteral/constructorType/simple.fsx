@@ -10,8 +10,11 @@ type Exports =
     [<Import("Pool", "REPLACE_ME_WITH_MODULE_NAME"); EmitConstructor>]
     static member Pool () : Pool = nativeOnly
 
+[<AllowNullLiteral>]
+[<Interface>]
 type ClientLikeCtr =
-    obj
+    [<EmitConstructor>]
+    abstract member Create: ?config: string -> float
 
 [<AllowNullLiteral>]
 [<Interface>]
