@@ -1,4 +1,6 @@
-import { createProjectSync } from "@ts-morph/bootstrap";
+import { createProjectSync, ts } from "@ts-morph/bootstrap";
+import path from "node:path";
+import { describePackage, findPackageDir } from "./resolve.js";
 
 /**
  *
@@ -38,4 +40,73 @@ export function createProgramFromFiles(entryFiles) {
     project.resolveSourceFileDependencies()
 
     return project.createProgram()
+}
+
+/**
+ * The files reachable from the entry files through imports and references, without
+ * going through a package of `excludedRuntimeNames` (`node` for `@types/node`).
+ *
+ * @param {import("typescript").Program} program
+ * @param {string[]} entryFiles
+ * @param {string[]} excludedRuntimeNames
+ * @returns {string[]}
+ */
+export function reachableFiles(program, entryFiles, excludedRuntimeNames) {
+    const runtimeNames = new Map();
+
+    const isExcluded = (fileName) => {
+        const dir = findPackageDir(fileName);
+
+        if (dir === null) {
+            return false;
+        }
+
+        if (!runtimeNames.has(dir)) {
+            const description = describePackage(dir);
+            runtimeNames.set(dir, description === null ? null : description.runtimeName);
+        }
+
+        return excludedRuntimeNames.includes(runtimeNames.get(dir));
+    };
+
+    const seen = new Set();
+    const queue = [...entryFiles];
+
+    const visit = (fileName) => {
+        if (fileName !== undefined && !seen.has(fileName) && !isExcluded(fileName)) {
+            queue.push(fileName);
+        }
+    };
+
+    while (queue.length > 0) {
+        const fileName = queue.pop();
+
+        if (seen.has(fileName)) {
+            continue;
+        }
+
+        const sourceFile = program.getSourceFile(fileName);
+
+        if (sourceFile === undefined) {
+            continue;
+        }
+
+        seen.add(fileName);
+
+        for (const usage of sourceFile.imports ?? []) {
+            const mode = ts.getModeForUsageLocation(sourceFile, usage);
+            visit(program.getResolvedModule(sourceFile, usage.text, mode)?.resolvedModule?.resolvedFileName);
+        }
+
+        for (const reference of sourceFile.referencedFiles ?? []) {
+            visit(path.resolve(path.dirname(sourceFile.fileName), reference.fileName));
+        }
+
+        for (const reference of sourceFile.typeReferenceDirectives ?? []) {
+            const resolved = program.getResolvedTypeReferenceDirective(sourceFile, reference.fileName, reference.resolutionMode);
+            visit(resolved?.resolvedTypeReferenceDirective?.resolvedFileName);
+        }
+    }
+
+    return [...seen];
 }

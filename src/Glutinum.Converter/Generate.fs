@@ -41,6 +41,13 @@ let private listInstalledPackages () : string[] = jsNative
 [<Import("createProgramFromFiles", "./js/bootstrap.js")>]
 let private createProgramFromFiles (_entryFiles: string[]) : Ts.Program = jsNative
 
+[<Import("reachableFiles", "./js/bootstrap.js")>]
+let private reachableFiles
+    (_program: Ts.Program, _entryFiles: string[], _excludedRuntimeNames: string[])
+    : string[]
+    =
+    jsNative
+
 let generateBindingFile (filePath: string) =
 
     if fs.existsSync (U2.Case1 filePath) |> not then
@@ -129,25 +136,27 @@ let generatePackages (inputs: string list) =
             | description -> description
         )
 
-    let program =
+    let entryFiles =
         targets
         |> List.collect (fun target ->
             target.entryFile :: (target.subpathEntries |> Array.toList |> List.map _.file)
         )
         |> List.toArray
-        |> createProgramFromFiles
+
+    let program = createProgramFromFiles entryFiles
 
     let checker = program.getTypeChecker ()
 
     let targetDirs =
         targets |> List.map (fun target -> String.normalizePath target.dir) |> set
 
+    // `@types/node` describes the runtime like `lib.dom.d.ts`, it is generated on request only
     let dependencies =
-        program.getSourceFiles ()
-        |> Seq.toList
-        |> List.filter (fun sourceFile -> not (isTypeScriptLibFile sourceFile.fileName))
-        |> List.choose (fun sourceFile ->
-            match findPackageDir sourceFile.fileName with
+        reachableFiles (program, entryFiles, [| "node" |])
+        |> Array.toList
+        |> List.filter (fun fileName -> not (isTypeScriptLibFile fileName))
+        |> List.choose (fun fileName ->
+            match findPackageDir fileName with
             | null -> None
             | dir -> Some(String.normalizePath dir)
         )
@@ -158,6 +167,7 @@ let generatePackages (inputs: string list) =
             | null -> None
             | description -> Some description
         )
+        |> List.filter (fun description -> description.runtimeName <> "node")
         |> List.sortBy _.runtimeName
 
     let isSingleTarget = targets.Length = 1

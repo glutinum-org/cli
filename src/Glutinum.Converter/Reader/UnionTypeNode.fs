@@ -75,7 +75,11 @@ let rec private readUnionTypeCases
                 | Some declarations ->
                     if declarations.Count = 0 then
                         None // Should it be obj ?
-                    else if isFromEs5Lib symbolOpt then
+                    // An alias declared outside of the packages is generated as `obj`, not inlined
+                    else if
+                        isFromEs5Lib symbolOpt
+                        || isExternalToPackages checker reader.PackageContext symbolOpt
+                    then
                         reader.ReadTypeNode typeReferenceNode |> List.singleton |> Some
 
                     else

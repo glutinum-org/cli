@@ -100,6 +100,8 @@ let private readInstantiatedMember
                     }
             | declaredMember, _ -> declaredMember
 
+let private intersectionsInProgress = ResizeArray<Ts.Type>()
+
 let private readTypeUsingFlags (reader: ITypeScriptReader) (typ: Ts.Type) =
 
     match typ.flags with
@@ -766,11 +768,28 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
         )
         |> GlueType.TupleType
 
+    // `class ProgressEvent { __proto__: Event & ProgressEvent }` reads itself forever
+    | Ts.SyntaxKind.IntersectionType when
+        intersectionsInProgress
+        |> Seq.exists (fun inProgress ->
+            obj.ReferenceEquals(inProgress, checker.getTypeAtLocation typeNode)
+        )
+        ->
+        GlueType.Primitive GluePrimitive.Any
+
     | Ts.SyntaxKind.IntersectionType ->
         let intersectionTypeNode = typeNode :?> Ts.IntersectionTypeNode
         // Make TypeScript resolve the type for us
         let unionOrIntersectionType =
             checker.getTypeAtLocation intersectionTypeNode :?> Ts.UnionOrIntersectionType
+
+        intersectionsInProgress.Add unionOrIntersectionType
+
+        use _guard =
+            { new System.IDisposable with
+                member _.Dispose() =
+                    intersectionsInProgress.RemoveAt(intersectionsInProgress.Count - 1)
+            }
 
         let properties =
             let computedProperties =

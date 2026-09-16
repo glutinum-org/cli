@@ -168,6 +168,34 @@ let readDeclaration (reader: ITypeScriptReader) (declaration: Ts.Declaration) : 
         : GlueSetAccessor)
         |> GlueMember.SetAccessor
 
+    // `const X: number` inside a namespace read as a member (`typeof ns`)
+    | Ts.SyntaxKind.VariableDeclaration ->
+        let variableDeclaration = declaration :?> Ts.VariableDeclaration
+        let name = unbox<Ts.Node> variableDeclaration.name
+
+        let isConst =
+            let parent: Ts.Node = !!variableDeclaration.parent
+            not (isNull parent) && (int parent.flags &&& int Ts.NodeFlags.Const) <> 0
+
+        ({
+            Name = identifierText name
+            Documentation = reader.ReadDocumentationFromNode name
+            Type =
+                match variableDeclaration.``type`` with
+                | Some typeNode -> reader.ReadTypeNode typeNode
+                | None -> GlueType.Primitive GluePrimitive.Any
+            IsOptional = false
+            IsStatic = false
+            Accessor =
+                if isConst then
+                    GlueAccessor.ReadOnly
+                else
+                    GlueAccessor.ReadWrite
+            IsPrivate = false
+        }
+        : GlueProperty)
+        |> GlueMember.Property
+
     | _ ->
         Report.readerError (
             "declaration",

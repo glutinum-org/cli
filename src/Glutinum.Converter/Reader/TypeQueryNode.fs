@@ -114,7 +114,7 @@ let readTypeQueryNode (reader: ITypeScriptReader) (typeQueryNode: Ts.TypeQueryNo
 
             // Try to find the declaration of the type, to get more information about it
             match symbol.declarations with
-            | Some declarations ->
+            | Some declarations when declarations.Count > 0 ->
                 let declaration = declarations.[0]
 
                 match declaration.kind with
@@ -163,7 +163,7 @@ let readTypeQueryNode (reader: ITypeScriptReader) (typeQueryNode: Ts.TypeQueryNo
                         finally
                             declarationsInProgress.RemoveAt(declarationsInProgress.Count - 1)
 
-            | None -> GlueType.Primitive GluePrimitive.Any
+            | _ -> GlueType.Primitive GluePrimitive.Any
 
     | HasTypeFlags Ts.TypeFlags.String -> GlueType.Primitive GluePrimitive.String
 

@@ -221,11 +221,12 @@ export function resolveInput(input, cwd = process.cwd()) {
     const nodeModules = findNodeModules(cwd);
 
     if (nodeModules !== null) {
+        // A package without declaration files (`ws`) is described by its `@types` package
         for (const candidate of [input, path.join("@types", input.replace(/^@/, "").replace("/", "__"))]) {
-            const packageDir = path.join(nodeModules, candidate);
+            const packageDir = realDir(path.join(nodeModules, candidate));
 
-            if (fs.existsSync(path.join(packageDir, "package.json"))) {
-                return { kind: "package", packageDir: realDir(packageDir) };
+            if (fs.existsSync(path.join(packageDir, "package.json")) && describePackage(packageDir) !== null) {
+                return { kind: "package", packageDir };
             }
         }
     }

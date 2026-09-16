@@ -2288,6 +2288,12 @@ module private ParamObjectCandidate =
         && not isInherited
         && isDeclaredOnce
 
+let private isErrorHeritage (heritageClause: GlueType) =
+    match heritageClause with
+    | GlueType.TypeReference typeReference ->
+        typeReference.IsStandardLibrary && typeReference.Name = "Error"
+    | _ -> false
+
 // `Array<T>` is generated as `ResizeArray<T>`, a class, which an interface can't inherit
 let private isArrayHeritage (heritageClause: GlueType) =
     match heritageClause with
@@ -2380,6 +2386,8 @@ let private transformInterface (context: TransformContext) (info: GlueInterface)
             | _ -> true
         )
         |> List.filter (not << isArrayHeritage)
+        // An interface can't inherit the `Exception` class
+        |> List.filter (not << isErrorHeritage)
 
     let typeParametersResult =
         transformDeclarationTypeParameters context info.TypeParameters
