@@ -233,6 +233,13 @@ let private mapTypeNameToFableCoreAwareName
 
     mappedName
 
+let private tryUnwrapOption (typ: FSharpType) =
+    match typ with
+    | FSharpType.Option underlyingType -> Some underlyingType
+    | FSharpType.Union unionInfo when unionInfo.IsOptional ->
+        FSharpType.Union { unionInfo with IsOptional = false } |> Some
+    | _ -> None
+
 let private unwrapOptionIfAlreadyOptional
     (context: TransformContext)
     (typ: GlueType)
@@ -243,9 +250,7 @@ let private unwrapOptionIfAlreadyOptional
     let typ' = transformType context typ
 
     if isOptional then
-        match typ' with
-        | FSharpType.Option underlyingType -> underlyingType
-        | _ -> typ'
+        tryUnwrapOption typ' |> Option.defaultValue typ'
     else
         typ'
 
@@ -1805,13 +1810,13 @@ let private transformParamObjectClass
         // If the underlying type is an option, we want to make the field optional
         // remove the option type
         |> List.map (fun parameter ->
-            match parameter.Type with
-            | FSharpType.Option underlyingType ->
+            match tryUnwrapOption parameter.Type with
+            | Some underlyingType ->
                 { parameter with
                     Type = underlyingType
                     IsOptional = true
                 }
-            | _ -> parameter
+            | None -> parameter
         )
         // Sort to have the optional fields at the end
         |> List.sortBy _.IsOptional
@@ -2305,9 +2310,9 @@ module Interface =
                     | FSharpMember.Property property ->
                         // If the property inner type is already optional, we forward it as is
                         // otherwise we mark it as optional
-                        match property.Type with
-                        | FSharpType.Option _ -> m
-                        | _ -> { property with IsOptional = true } |> FSharpMember.Property
+                        match tryUnwrapOption property.Type with
+                        | Some _ -> m
+                        | None -> { property with IsOptional = true } |> FSharpMember.Property
                     | _ -> m
                 )
         }
