@@ -57,7 +57,8 @@ let private isWrittenAsFloat (text: string) =
 
 let tryReadLiteral (checker: Ts.TypeChecker) (expression: Ts.Node) =
     match expression.kind with
-    | Ts.SyntaxKind.StringLiteral ->
+    | Ts.SyntaxKind.StringLiteral
+    | Ts.SyntaxKind.NoSubstitutionTemplateLiteral ->
         let literal = (expression :?> Ts.StringLiteral)
 
         GlueLiteral.String literal.text |> Some
@@ -167,6 +168,122 @@ let isFromEs5Lib (symbolOpt: Ts.Symbol option) =
 
                 sourceFile.fileName.EndsWith("lib/lib.es5.d.ts")
             | _ -> false
+
+/// Library types the converter maps to an existing F# type, kept even when declared outside the packages
+let knownExternalTypeNames =
+    set
+        [
+            "Date"
+            "Promise"
+            "Array"
+            "ReadonlyArray"
+            "Boolean"
+            "Function"
+            "Error"
+            "RegExp"
+            "Iterable"
+            "Uint8Array"
+            "Int8Array"
+            "Uint8ClampedArray"
+            "Int16Array"
+            "Uint16Array"
+            "Int32Array"
+            "Uint32Array"
+            "Float32Array"
+            "Float64Array"
+        ]
+
+let private resolveAlias (checker: Ts.TypeChecker) (symbol: Ts.Symbol) =
+    match symbol.flags with
+    | HasSymbolFlags Ts.SymbolFlags.Alias ->
+        // `getAliasedSymbol` throws when the alias can't be resolved
+        try
+            let aliased = checker.getAliasedSymbol symbol
+
+            if isNull (box aliased) then
+                None
+            else
+                Some aliased
+        with _ ->
+            None
+    | _ -> Some symbol
+
+let private declarationFile (symbol: Ts.Symbol) =
+    match symbol.declarations with
+    | Some declarations when declarations.Count > 0 ->
+        declarations.[0].getSourceFile().fileName |> String.normalizePath |> Some
+    | _ -> None
+
+/// In package mode, whether the symbol is declared outside every package being generated
+let isExternalToPackages
+    (checker: Ts.TypeChecker)
+    (packageContext: PackageContext option)
+    (symbolOpt: Ts.Symbol option)
+    =
+    match packageContext, symbolOpt with
+    | Some packageContext, Some symbol ->
+        match resolveAlias checker symbol with
+        | None -> true
+        | Some symbol ->
+            match declarationFile symbol with
+            | Some fileName -> packageContext.IsExternal fileName
+            | None -> true
+    | _ -> false
+
+/// The F# modules generated for the namespaces enclosing a declaration, outermost first
+let private namespaceChain (declaration: Ts.Node) =
+    let rec collect (node: Ts.Node) (acc: string list) =
+        if isNull node then
+            acc
+        else
+            match node.kind with
+            | Ts.SyntaxKind.ModuleDeclaration ->
+                let moduleDeclaration = node :?> Ts.ModuleDeclaration
+
+                let name =
+                    Naming.sanitizeTypeName ((unbox<Ts.Node> moduleDeclaration.name).getText ())
+
+                let isTopLevel =
+                    not (isNull node.parent) && node.parent.kind = Ts.SyntaxKind.SourceFile
+
+                let name =
+                    if isTopLevel then
+                        name + "_"
+                    else
+                        name
+
+                collect node.parent (name :: acc)
+            | _ -> collect node.parent acc
+
+    collect declaration.parent []
+
+/// <summary>
+/// The F# modules qualifying a reference to the symbol: the package and file modules
+/// in package mode, and the namespaces when the reference is written qualified.
+/// </summary>
+let modulePathForSymbol
+    (checker: Ts.TypeChecker)
+    (packageContext: PackageContext option)
+    (isQualified: bool)
+    (symbolOpt: Ts.Symbol option)
+    : string list
+    =
+    match symbolOpt |> Option.bind (resolveAlias checker) with
+    | None -> []
+    | Some symbol ->
+        let filePath =
+            match packageContext, declarationFile symbol with
+            | Some packageContext, Some fileName -> packageContext.ModulePath fileName
+            | _ -> []
+
+        // A path to another file is absolute, so it includes the namespaces
+        let namespaces =
+            match symbol.declarations with
+            | Some declarations when (isQualified || not filePath.IsEmpty) && declarations.Count > 0 ->
+                namespaceChain declarations.[0]
+            | _ -> []
+
+        filePath @ namespaces
 
 module Type =
 

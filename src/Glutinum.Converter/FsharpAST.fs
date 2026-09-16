@@ -118,6 +118,8 @@ type FSharpModule =
     {
         Name: string
         IsRecursive: bool
+        /// JavaScript module the members of this F# module are imported from, in package mode
+        ImportSpecifier: string option
         Types: FSharpType list
     }
 
@@ -374,6 +376,8 @@ type FSharpTypeReference =
     {
         Name: string
         FullName: string
+        /// F# modules qualifying the reference in package mode, empty otherwise
+        ModulePath: string list
         TypeArguments: FSharpType list
         Type: FSharpType
     }

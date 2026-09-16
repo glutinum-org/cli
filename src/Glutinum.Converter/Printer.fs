@@ -39,6 +39,8 @@ type Printer() =
 
     member __.ToStringWithoutTrailNewLine() = buffer.ToString().Trim()
 
+    member val ImportSpecifier = Naming.MODULE_PLACEHOLDER with get, set
+
 module Naming =
     let (|Digit|_|) (digit: string) =
         if String.IsNullOrWhiteSpace digit then
@@ -319,13 +321,15 @@ and printType (fsharpType: FSharpType) =
         | FSharpPrimitive.Number -> "float"
         | FSharpPrimitive.Null -> "obj"
     | FSharpType.TypeReference typeReference ->
+        let name = (typeReference.ModulePath @ [ typeReference.Name ]) |> String.concat "."
+
         if typeReference.TypeArguments.Length > 0 then
             let typeArguments =
                 typeReference.TypeArguments |> List.map printType |> String.concat ", "
 
-            $"{typeReference.Name}<{typeArguments}>"
+            $"{name}<{typeArguments}>"
         else
-            typeReference.Name
+            name
 
     | FSharpType.TypeParameter name -> $"'{name}"
     | FSharpType.Option optionType -> printType optionType + " option"
@@ -615,7 +619,7 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
                     | FSharpMemberInfoBody.JavaScriptStaticProperty ->
                         printer.Write
                             $"emitJsExpr () $$\"\"\"
-import {{ %s{interfaceInfo.OriginalName} }} from \"{Naming.MODULE_PLACEHOLDER}\";
+import {{ %s{interfaceInfo.OriginalName} }} from \"{printer.ImportSpecifier}\";
 %s{interfaceInfo.OriginalName}.%s{propertyInfo.OriginalName}\"\"\""
 
                     printer.Unindent
@@ -639,7 +643,7 @@ import {{ %s{interfaceInfo.OriginalName} }} from \"{Naming.MODULE_PLACEHOLDER}\"
                     | FSharpMemberInfoBody.JavaScriptStaticProperty ->
                         printer.Write
                             $"emitJsExpr (value) $$\"\"\"
-import {{ %s{interfaceInfo.OriginalName} }} from \"{Naming.MODULE_PLACEHOLDER}\";
+import {{ %s{interfaceInfo.OriginalName} }} from \"{printer.ImportSpecifier}\";
 %s{interfaceInfo.OriginalName}.%s{propertyInfo.OriginalName} = $0\"\"\""
 
                     printer.Unindent
@@ -720,7 +724,7 @@ import {{ %s{interfaceInfo.OriginalName} }} from \"{Naming.MODULE_PLACEHOLDER}\"
 
                 printer.Write
                     $"emitJsExpr () $$\"\"\"
-import {{ %s{interfaceInfo.OriginalName} }} from \"{Naming.MODULE_PLACEHOLDER}\";
+import {{ %s{interfaceInfo.OriginalName} }} from \"{printer.ImportSpecifier}\";
 %s{interfaceInfo.OriginalName}.%s{staticMemberInfo.OriginalName}()\"\"\""
 
                 printer.NewLine
@@ -763,7 +767,7 @@ import {{ %s{interfaceInfo.OriginalName} }} from \"{Naming.MODULE_PLACEHOLDER}\"
 
                 printer.Write
                     $"emitJsExpr (%s{forwardedArgments}) $$\"\"\"
-import {{ %s{interfaceInfo.OriginalName} }} from \"{Naming.MODULE_PLACEHOLDER}\";
+import {{ %s{interfaceInfo.OriginalName} }} from \"{printer.ImportSpecifier}\";
 %s{interfaceInfo.OriginalName}.%s{staticMemberInfo.OriginalName}(%s{macroArguments})\"\"\""
 
                 printer.NewLine
@@ -1040,9 +1044,16 @@ let rec private print (printer: Printer) (fsharpTypes: FSharpType list) =
             printer.WriteInline($"{moduleInfo.Name} =")
             printer.NewLine
 
+            let parentImportSpecifier = printer.ImportSpecifier
+
+            moduleInfo.ImportSpecifier
+            |> Option.iter (fun importSpecifier -> printer.ImportSpecifier <- importSpecifier)
+
             printer.Indent
             print printer moduleInfo.Types
             printer.Unindent
+
+            printer.ImportSpecifier <- parentImportSpecifier
 
         // TODO: Make print return the tail
         // Allowing module to eat they content and be able to unindent?

@@ -92,4 +92,17 @@ let rec private mergeModules (types: FSharpType list) =
 
     result |> List.ofSeq
 
-let apply (types: FSharpType list) = types |> mergeTypes |> mergeModules
+let rec private dropEmptyModules (types: FSharpType list) =
+    types
+    |> List.choose (fun typ ->
+        match typ with
+        | FSharpType.Module moduleInfo ->
+            match dropEmptyModules moduleInfo.Types with
+            | [] -> None
+            | moduleTypes -> Some(FSharpType.Module { moduleInfo with Types = moduleTypes })
+        | FSharpType.Discard -> None
+        | _ -> Some typ
+    )
+
+let apply (types: FSharpType list) =
+    types |> mergeTypes |> mergeModules |> dropEmptyModules

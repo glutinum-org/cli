@@ -38,6 +38,7 @@ let readNode (reader: ITypeScriptReader) (node: Ts.Node) : GlueType =
 
         ({ Members = members }: GlueTypeLiteral) |> GlueType.TypeLiteral
 
+    // Re-exports are read by `Read.readPackages` in package mode
     | Ts.SyntaxKind.ExportDeclaration
     | Ts.SyntaxKind.EmptyStatement -> GlueType.Discard
 

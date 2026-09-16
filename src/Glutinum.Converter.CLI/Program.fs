@@ -14,7 +14,16 @@ Generate Fable bindings from TypeScript definitions - https://github.com/glutinu
 USAGE
 
     glutinum <input> [--out-file <output>]
+    glutinum --all [--out-file <output>]
     glue <input> [--out-file <output>]
+
+    <input> can be:
+      - an installed package name           (e.g. chalk, @types/vscode)
+      - a path to a package directory       (e.g. ./node_modules/chalk)
+      - a path to a .d.ts file              (e.g. ./node_modules/chalk/source/index.d.ts)
+
+    A package is generated with every package it depends on.
+    --all generates every package installed in the nearest node_modules.
 
 OPTIONS
 
@@ -24,7 +33,8 @@ OPTIONS
 
 EXAMPLES
 
-    glutinum ./node_modules/my-lib/index.d.ts --out-file ./Glutinum.MyLib.fs
+    glutinum chalk --out-file ./Glutinum.Chalk.fs
+    glutinum --all --out-file ./Glutinum.fs
     glutinum ./node_modules/my-lib/index.d.ts
         """
 
@@ -38,6 +48,14 @@ let private getVersion () =
 
     return pkg.version;
     """
+
+let private generate (input: string) =
+    if input = "--all" then
+        generatePackages []
+    elif input.EndsWith ".d.ts" then
+        generateBindingFile input
+    else
+        generatePackages [ input ]
 
 [<EntryPoint>]
 let main (argv: string array) =
@@ -62,7 +80,7 @@ let main (argv: string array) =
     | input :: "--out-file" :: outFile :: [] ->
 
         Log.info $"Generating binding file for %s{input}"
-        let res = generateBindingFile input
+        let res = generate input
 
         let outFileDir = path.dirname (outFile)
         fs?mkdirSync $ (outFileDir, {| recursive = true |})
@@ -77,7 +95,7 @@ let main (argv: string array) =
 
     | input :: [] ->
         Log.info $"Generating binding file for %s{input}"
-        let res = generateBindingFile input
+        let res = generate input
 
         ``process``.stdout.write res |> ignore
 

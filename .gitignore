@@ -347,3 +347,8 @@ src/Glutinum.Web/CssModules.fs
 .DS_Store
 
 tests/specs/generated/
+
+# The `**/[Pp]ackages/*` and `node_modules/` rules above would hide the package-mode fixtures
+!tests/specs/packages/
+!tests/specs/packages/**
+!tests/specs/packages/fixtures/*/node_modules/

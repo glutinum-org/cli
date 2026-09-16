@@ -34,6 +34,7 @@
     <Compile Include="Reader/MappedTypeNode.fs" />
     <Compile Include="Reader/VariableStatement.fs" />
     <Compile Include="Reader/ExportAssignment.fs" />
+    <Compile Include="Reader/ExportDeclaration.fs" />
     <Compile Include="Reader/Documentation.fs" />
     <Compile Include="Reader/NamedTupleMember.fs" />
     <Compile Include="Reader/TypeScriptReader.fs" />

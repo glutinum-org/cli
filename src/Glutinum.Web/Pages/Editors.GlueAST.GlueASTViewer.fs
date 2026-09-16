@@ -481,6 +481,9 @@ type GlueASTViewer =
                 [
                     GlueASTViewer.Name typeReference.Name
                     GlueASTViewer.FullName typeReference.FullName
+                    ASTViewer.renderKeyValue
+                        "ModulePath"
+                        (String.concat "." typeReference.ModulePath)
                     GlueASTViewer.IsStandardLibrary typeReference.IsStandardLibrary
 
                     typeReference.TypeArguments
@@ -503,6 +506,28 @@ type GlueASTViewer =
                     typeLiteral.Members
                     |> List.map GlueASTViewer.GlueMember
                     |> ASTViewer.renderNode "Members"
+                ]
+                context
+
+        | GlueType.FileModule fileModule ->
+            ASTViewer.renderNode
+                "FileModule"
+                [
+                    GlueASTViewer.Name fileModule.Name
+                    ASTViewer.renderKeyValue "ImportSpecifier" fileModule.ImportSpecifier
+                    fileModule.Types
+                    |> List.map GlueASTViewer.GlueType
+                    |> ASTViewer.renderNode "Types"
+                ]
+                context
+
+        | GlueType.ReExport reExport ->
+            ASTViewer.renderNode
+                "ReExport"
+                [
+                    GlueASTViewer.Name reExport.Name
+                    ASTViewer.renderKeyValue "ModulePath" (String.concat "." reExport.ModulePath)
+                    GlueASTViewer.GlueType reExport.Declaration
                 ]
                 context
 

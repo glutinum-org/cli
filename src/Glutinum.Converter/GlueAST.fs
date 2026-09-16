@@ -269,6 +269,8 @@ type GlueTypeReference =
     {
         Name: string
         FullName: string
+        /// F# modules qualifying the reference in package mode, empty otherwise
+        ModulePath: string list
         TypeArguments: GlueType list
         // Should we replace that with a real computation of the FullName
         // and use it to determine if it's from standard library?
@@ -380,6 +382,10 @@ type GlueType =
     | MappedType of GlueMappedType
     | ConstructorType of GlueConstructSignature
     | ReadOnly of GlueType
+    /// A `.d.ts` file (or a whole package) generated as an F# module in package mode
+    | FileModule of GlueFileModule
+    /// A declaration re-exported from another file (`export { X } from "./x"`)
+    | ReExport of GlueReExport
 
     member this.Name =
         match this with
@@ -426,7 +432,9 @@ type GlueType =
         | Discard
         | ExportDefault _
         | ConstructorType _
+        | FileModule _
         | Unknown -> "obj"
+        | ReExport info -> info.Name
         | UtilityType utilityType ->
             match utilityType with
             | GlueUtilityType.Partial _
@@ -477,4 +485,24 @@ type GlueType =
         | ModuleDeclaration _
         | TypeParameter _
         | TypeLiteral _
+        | FileModule _
+        | ReExport _
         | ConstructorType _ -> []
+
+and GlueFileModule =
+    {
+        Name: string
+        /// JavaScript module to import the file's exports from
+        ImportSpecifier: string
+        Types: GlueType list
+    }
+
+and GlueReExport =
+    {
+        /// Name under which the declaration is exported
+        Name: string
+        /// The declaration in its own file
+        Declaration: GlueType
+        /// F# modules qualifying the declaration, empty when it lives at the top level
+        ModulePath: string list
+    }

@@ -12,7 +12,8 @@ let private escapeName (name: string) : string =
     if name.Length > 4 && name.StartsWith("``") && name.EndsWith("``") then
         name
     elif
-        name.Contains("-")
+        name = "_"
+        || name.Contains("-")
         || name.Contains("$")
         || name.Contains("/")
         || name.Contains("#")

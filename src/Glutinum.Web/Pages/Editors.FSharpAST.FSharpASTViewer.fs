@@ -483,6 +483,9 @@ type FSharpASTViewer =
                 [
                     FSharpASTViewer.Name moduleInfo.Name
                     ASTViewer.renderKeyValue "IsRecursive" (string moduleInfo.IsRecursive)
+                    ASTViewer.renderKeyValue
+                        "ImportSpecifier"
+                        (moduleInfo.ImportSpecifier |> Option.defaultValue "")
 
                     FSharpASTViewer.Types moduleInfo.Types
                 ]
@@ -515,6 +518,9 @@ type FSharpASTViewer =
                 [
                     FSharpASTViewer.Name typeReference.Name
                     FSharpASTViewer.FullName typeReference.FullName
+                    ASTViewer.renderKeyValue
+                        "ModulePath"
+                        (String.concat "." typeReference.ModulePath)
                     FSharpASTViewer.TypeArguments typeReference.TypeArguments
                     FSharpASTViewer.Type typeReference.Type
                 ]

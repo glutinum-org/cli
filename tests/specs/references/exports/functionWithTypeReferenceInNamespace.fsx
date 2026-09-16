@@ -8,7 +8,7 @@ open System
 [<Erase>]
 type Exports =
     [<Import("dayjs", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member dayjs () : dayjs.Dayjs = nativeOnly
+    static member dayjs () : dayjs_.Dayjs = nativeOnly
     [<ImportAll("REPLACE_ME_WITH_MODULE_NAME")>]
     static member inline dayjs_
         with get () : dayjs_.Exports =

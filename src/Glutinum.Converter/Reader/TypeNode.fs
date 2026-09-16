@@ -501,6 +501,15 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                 match UtilityType.tryExpandAnonymousObjectApplication reader typeReferenceNode with
                 | Some glueType -> glueType
                 | None ->
+                    let isQualified = typeReferenceNode.typeName?kind = Ts.SyntaxKind.QualifiedName
+
+                    // The namespaces of a qualified name are part of the module path
+                    let writtenName () =
+                        if isQualified then
+                            (unbox<Ts.QualifiedName> typeReferenceNode.typeName).right.text
+                        else
+                            typeReferenceNode.typeName?getText ()
+
                     let name =
                         match symbolOpt with
                         | Some symbol ->
@@ -511,9 +520,9 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                                 match valueDeclaration.kind with
                                 | Ts.SyntaxKind.EnumMember ->
                                     valueDeclaration?symbol?parent?getName ()
-                                | _ -> typeReferenceNode.typeName?getText ()
+                                | _ -> writtenName ()
                             )
-                            |> Option.defaultValue (typeReferenceNode.typeName?getText ())
+                            |> Option.defaultValue (writtenName ())
                         | None ->
                             // Synthesized node (e.g. produced by `typeToTypeNode` when
                             // resolving `ReturnType<...>`). It has no symbol and no source
@@ -521,13 +530,29 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                             // calling `getText()`.
                             typeReferenceNode.typeName?text
 
-                    ({
-                        Name = name
-                        FullName = getFullNameOrEmpty checker (!!typeReferenceNode.typeName)
-                        TypeArguments = readTypeArguments reader typeReferenceNode
-                        IsStandardLibrary = isStandardLibrary
-                    })
-                    |> GlueType.TypeReference
+                    if
+                        isExternalToPackages checker reader.PackageContext symbolOpt
+                        && not (knownExternalTypeNames.Contains name)
+                    then
+                        GlueType.Primitive GluePrimitive.Any
+                    else
+                        ({
+                            Name =
+                                if name.Contains "." then
+                                    name
+                                else
+                                    Naming.sanitizeTypeName name
+                            FullName = getFullNameOrEmpty checker (!!typeReferenceNode.typeName)
+                            ModulePath =
+                                modulePathForSymbol
+                                    checker
+                                    reader.PackageContext
+                                    isQualified
+                                    symbolOpt
+                            TypeArguments = readTypeArguments reader typeReferenceNode
+                            IsStandardLibrary = isStandardLibrary
+                        })
+                        |> GlueType.TypeReference
 
         if isFromEs5Lib symbolOpt then
             match getFullNameOrEmpty checker (!!typeReferenceNode.typeName) with
@@ -762,13 +787,35 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
         match isFromEs5Lib symbolOpt, getFullNameOrEmpty checker expression.expression with
         | true, "Omit" -> UtilityType.readOmit reader (unbox<Ts.TypeReferenceNode> expression)
         | _ ->
-            ({
-                Name = expression.expression.getText () // Keep the double expression !!!
-                FullName = getFullNameOrEmpty checker expression.expression
-                TypeArguments = readTypeArguments reader expression
-                IsStandardLibrary = isFromEs5Lib symbolOpt
-            })
-            |> GlueType.TypeReference
+            let isQualified =
+                expression.expression.kind = Ts.SyntaxKind.PropertyAccessExpression
+
+            // The module path is computed from the resolved symbol, so the name must be its name too
+            let name =
+                match symbolOpt with
+                | Some symbol when not (isFromEs5Lib symbolOpt) -> symbol.name
+                | _ ->
+                    if isQualified then
+                        (unbox<Ts.PropertyAccessExpression> expression.expression).name?text
+                    else
+                        expression.expression.getText ()
+
+            // An external base type can't be inherited, `inherit obj` is invalid
+            if
+                isExternalToPackages checker reader.PackageContext symbolOpt
+                && not (knownExternalTypeNames.Contains name)
+            then
+                GlueType.Discard
+            else
+                ({
+                    Name = name
+                    FullName = getFullNameOrEmpty checker expression.expression
+                    ModulePath =
+                        modulePathForSymbol checker reader.PackageContext isQualified symbolOpt
+                    TypeArguments = readTypeArguments reader expression
+                    IsStandardLibrary = isFromEs5Lib symbolOpt
+                })
+                |> GlueType.TypeReference
 
     | Ts.SyntaxKind.ConditionalType ->
         let conditionalTypeNode = typeNode :?> Ts.ConditionalTypeNode

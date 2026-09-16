@@ -80,6 +80,7 @@ type TransformContext
         currentScopeName: string,
         typeMemory: GlueType list,
         typeLiteralsMemory: TypeLiteralsMemory,
+        importSpecifier: string,
         ?parent: TransformContext
     )
     =
@@ -97,6 +98,8 @@ type TransformContext
     member val TypeMemory = typeMemory
 
     member val TypeLiteralsMemory = typeLiteralsMemory
+
+    member val ImportSpecifier = importSpecifier
 
     /// We need to expose the types for the children to be able to access
     /// push to them.
@@ -146,6 +149,7 @@ type TransformContext
                 Naming.sanitizeName scopeName,
                 typeMemory,
                 typeLiteralsMemory,
+                importSpecifier,
                 parent = this
             )
 
@@ -177,6 +181,7 @@ type TransformContext
                     Name = currentScopeName
                     Types = types
                     IsRecursive = false
+                    ImportSpecifier = None
                 }
                 : FSharpModule)
                 |> FSharpType.Module
@@ -634,6 +639,7 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
                 ({
                     Name = context.FullName
                     FullName = context.FullName
+                    ModulePath = []
                     TypeArguments = []
                     Type = FSharpType.Discard
                 }
@@ -663,6 +669,7 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
         ({
             Name = mapTypeNameToFableCoreAwareName context typeReference
             FullName = typeReference.FullName
+            ModulePath = typeReference.ModulePath
             TypeArguments = typeReference.TypeArguments |> List.map (transformType context)
             Type = FSharpType.Discard
         // We don't want to transform the type here, because if the type use itself
@@ -687,6 +694,7 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
         ({
             Name = classDeclaration.Name
             FullName = classDeclaration.Name
+            ModulePath = []
             TypeArguments = []
             Type = FSharpType.Discard // TODO: Retrieve the type
         }
@@ -857,6 +865,7 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
         ({
             Name = name
             FullName = context.FullName
+            ModulePath = []
             TypeArguments =
                 typeParameterNames
                 |> List.map (fun name ->
@@ -884,6 +893,7 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
             ({
                 Name = context.FullName
                 FullName = context.FullName
+                ModulePath = []
                 TypeArguments = []
                 Type = FSharpType.Discard
             }
@@ -962,6 +972,7 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
                         context.CurrentScopeName
                     )
                 FullName = context.FullName
+                ModulePath = []
                 TypeArguments = []
                 Type = FSharpType.Discard
             }
@@ -1027,6 +1038,8 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
     | GlueType.MappedType _
     | GlueType.Literal _
     | GlueType.ModuleDeclaration _
+    | GlueType.FileModule _
+    | GlueType.ReExport _
     | GlueType.IndexedAccessType _
     | GlueType.Enum _
     | GlueType.TypeAliasDeclaration _ ->
@@ -1079,7 +1092,7 @@ let private transformExports
                             Attributes =
                                 [
                                     if isTopLevel then
-                                        FSharpAttribute.Import(info.Name, Naming.MODULE_PLACEHOLDER)
+                                        FSharpAttribute.Import(info.Name, context.ImportSpecifier)
                                     else
                                         FSharpAttribute.EmitMacroProperty info.Name
                                     yield! xmlDocInfo.ObsoleteAttributes
@@ -1113,7 +1126,7 @@ let private transformExports
                             Attributes =
                                 [
                                     if isTopLevel then
-                                        FSharpAttribute.Import(info.Name, Naming.MODULE_PLACEHOLDER)
+                                        FSharpAttribute.Import(info.Name, context.ImportSpecifier)
                                     else
                                         FSharpAttribute.EmitMacroInvoke info.Name
                                     yield! xmlDocInfo.ObsoleteAttributes
@@ -1168,7 +1181,7 @@ let private transformExports
                                             if isTopLevel then
                                                 FSharpAttribute.Import(
                                                     info.Name,
-                                                    Naming.MODULE_PLACEHOLDER
+                                                    context.ImportSpecifier
                                                 )
 
                                                 FSharpAttribute.EmitConstructor
@@ -1232,7 +1245,7 @@ let private transformExports
                                 [
                                     yield! xmlDocInfo.ObsoleteAttributes
                                     if isTopLevel then
-                                        FSharpAttribute.ImportAll Naming.MODULE_PLACEHOLDER
+                                        FSharpAttribute.ImportAll context.ImportSpecifier
                                     else
                                         FSharpAttribute.EmitMacroProperty(
                                             Naming.removeSurroundingQuotes moduleDeclaration.Name
@@ -1271,7 +1284,7 @@ let private transformExports
 
                     let newTypes =
                         {
-                            Attributes = [ FSharpAttribute.ImportDefault Naming.MODULE_PLACEHOLDER ]
+                            Attributes = [ FSharpAttribute.ImportDefault context.ImportSpecifier ]
                             Name = name
                             OriginalName = glueType.Name
                             Parameters = []
@@ -1346,6 +1359,21 @@ let private transformAccessor (accessor: GlueAccessor) : FSharpAccessor =
 
 module private TransformMembers =
 
+    // A computed property name such as `[Symbol.toStringTag]` has no F# equivalent
+    let private hasComputedName (glueMember: GlueMember) =
+        match glueMember with
+        | GlueMember.Property { Name = name }
+        | GlueMember.Method { Name = name }
+        | GlueMember.MethodSignature { Name = name }
+        | GlueMember.GetAccessor { Name = name }
+        | GlueMember.SetAccessor { Name = name } -> name.StartsWith "["
+        | GlueMember.CallSignature _
+        | GlueMember.ConstructSignature _
+        | GlueMember.IndexSignature _ -> false
+
+    let withoutComputedNames (members: GlueMember list) =
+        members |> List.filter (hasComputedName >> not)
+
     /// <summary>
     /// Detect methods whose first parameter is a string literal (the
     /// event-emitter pattern, e.g. <c>on(event: 'console', listener)</c>) and
@@ -1378,19 +1406,8 @@ module private TransformMembers =
 
     let toFSharpMember (context: TransformContext) (members: GlueMember list) : FSharpMember list =
         members
-        // Remove the Symbol.iterator method in F#, we don't have a direct equivalent
-        // the iterator information is stored in the Iterable<T> inheritance
-        |> List.filter (
-            function
-            | GlueMember.Method { Name = name }
-            | GlueMember.MethodSignature { Name = name } -> name <> "[Symbol.iterator]"
-            | GlueMember.GetAccessor _
-            | GlueMember.SetAccessor _
-            | GlueMember.Property _
-            | GlueMember.CallSignature _
-            | GlueMember.ConstructSignature _
-            | GlueMember.IndexSignature _ -> true
-        )
+        // The iterator information is stored in the Iterable<T> inheritance
+        |> withoutComputedNames
         // We want to transform GetAccessor / SetAccessor
         // into a single Property if they are related to the same property
         |> List.choose (
@@ -1694,6 +1711,7 @@ module private TransformMembers =
         : FSharpParameter list
         =
         members
+        |> withoutComputedNames
         |> List.map (fun glueMember ->
             match glueMember with
             | GlueMember.Method methodInfo ->
@@ -2262,6 +2280,8 @@ let private transformInterface (context: TransformContext) (info: GlueInterface)
                 not (typeReference.IsStandardLibrary && typeReference.Name = "Partial")
             // Omit members are inlined above, don't keep it as inheritance
             | GlueType.UtilityType(GlueUtilityType.Omit _) -> false
+            // External base types can't be inherited
+            | GlueType.Discard -> false
             | _ -> true
         )
 
@@ -2420,10 +2440,19 @@ Errored enum: {glueEnum.Name}
 module TypeAliasDeclaration =
 
     let tryTransformKeyOf (aliasName: string) (glueType: GlueType) : FSharpType option =
-        let cases =
+        let members =
             match glueType with
-            | GlueType.Interface interfaceInfo ->
-                interfaceInfo.Members
+            | GlueType.Interface interfaceInfo -> Some interfaceInfo.Members
+            | GlueType.TypeLiteral typeLiteral -> Some typeLiteral.Members
+            | GlueType.TypeAliasDeclaration {
+                                                Type = GlueType.TypeLiteral typeLiteral
+                                            } -> Some typeLiteral.Members
+            | _ -> None
+
+        let cases =
+            match members with
+            | Some members ->
+                members
                 |> List.choose (fun m ->
                     match m with
                     | GlueMember.Method { Name = caseName }
@@ -2455,16 +2484,18 @@ module TypeAliasDeclaration =
                     // shape of the object
                     | GlueMember.IndexSignature _ -> None
                 )
-            | GlueType.Enum enumInfo ->
-                enumInfo.Members
-                |> List.map (fun m ->
-                    {
-                        Attributes = []
-                        Name = Naming.sanitizeTypeName m.Name
-                    }
-                    |> FSharpUnionCase.Named
-                )
-            | _ -> []
+            | None ->
+                match glueType with
+                | GlueType.Enum enumInfo ->
+                    enumInfo.Members
+                    |> List.map (fun m ->
+                        {
+                            Attributes = []
+                            Name = Naming.sanitizeTypeName m.Name
+                        }
+                        |> FSharpUnionCase.Named
+                    )
+                | _ -> []
 
         if cases.IsEmpty then
             None
@@ -3414,6 +3445,7 @@ let private transformTypeAliasDeclaration
                             {
                                 Name = mappedName
                                 FullName = typeReference.FullName
+                                ModulePath = typeReference.ModulePath
                                 TypeArguments = [ FSharpType.Interface typeArgument ]
                                 Type = FSharpType.Discard
                             }
@@ -3603,6 +3635,8 @@ let private transformTypeAliasDeclaration
 
         // We don't know how to handle these types yet, so we default to obj
         | GlueType.ClassDeclaration _
+        | GlueType.FileModule _
+        | GlueType.ReExport _
         | GlueType.Enum _
         | GlueType.Interface _
         | GlueType.ModuleDeclaration _
@@ -3629,10 +3663,80 @@ let private transformTypeAliasDeclaration
 
     fsharpType
 
+module private ReExport =
+
+    let canForwardConstraints (typeParameters: GlueTypeParameter list) =
+        typeParameters
+        |> List.forall (fun typeParameter ->
+            match typeParameter.Constraint with
+            | None
+            | Some(GlueType.TypeReference _)
+            | Some(GlueType.Primitive _) -> true
+            | Some _ -> false
+        )
+
+let private transformReExport
+    (context: TransformContext)
+    (reExport: GlueReExport)
+    : FSharpType list
+    =
+    let declared =
+        match reExport.Declaration with
+        | GlueType.Interface info -> Some(info.Name, info.TypeParameters)
+        | GlueType.TypeAliasDeclaration info -> Some(info.Name, info.TypeParameters)
+        | GlueType.ClassDeclaration info -> Some(info.Name, info.TypeParameters)
+        | GlueType.Enum info -> Some(info.Name, [])
+        | _ -> None
+
+    // A constraint generated from a type literal would be a different type than the one of the declaration
+    let hasGeneratedConstraint =
+        match declared with
+        | Some(_, typeParameters) -> not (ReExport.canForwardConstraints typeParameters)
+        | None -> false
+
+    match declared with
+    | None -> []
+    | Some _ when hasGeneratedConstraint ->
+        context.AddWarning
+            $"%s{reExport.Name} is not re-exported because a type parameter constraint can't be forwarded, use the declaration in its module instead"
+
+        []
+    | Some(originalName, typeParameters) ->
+        let name, context = sanitizeTypeNameAndPushScope reExport.Name context
+        let typeParameters = transformDeclarationTypeParameters context typeParameters
+
+        ({
+            Attributes = []
+            XmlDoc = []
+            Name = name
+            Type =
+                ({
+                    Name = Naming.sanitizeTypeName originalName
+                    FullName = originalName
+                    ModulePath = reExport.ModulePath
+                    TypeArguments =
+                        typeParameters.TypeParameters
+                        |> List.map (
+                            function
+                            | FSharpTypeParameter.FSharpTypeParameter info ->
+                                FSharpType.TypeParameter info.Name
+                            | FSharpTypeParameter.FSharpType typ -> typ
+                        )
+                    Type = FSharpType.Discard
+                }
+                : FSharpTypeReference)
+                |> FSharpType.TypeReference
+            TypeParameters = typeParameters.TypeParameters
+        }
+        : FSharpTypeAlias)
+        |> FSharpType.TypeAlias
+        |> List.singleton
+
 let private transformModuleDeclaration
     (typeMemory: GlueType list)
     (reporter: Reporter)
     (typeLiteralsMemory: TypeLiteralsMemory)
+    (importSpecifier: string)
     (moduleDeclaration: GlueModuleDeclaration)
     : FSharpType
     =
@@ -3654,7 +3758,15 @@ let private transformModuleDeclaration
         ({
             Name = Naming.sanitizeTypeName moduleDeclaration.Name + moduleSuffix
             IsRecursive = moduleDeclaration.IsRecursive
-            Types = transform typeMemory reporter typeLiteralsMemory false moduleDeclaration.Types
+            ImportSpecifier = None
+            Types =
+                transform
+                    typeMemory
+                    reporter
+                    typeLiteralsMemory
+                    importSpecifier
+                    false
+                    moduleDeclaration.Types
         }
         : FSharpModule)
         |> FSharpType.Module
@@ -3751,12 +3863,18 @@ let private transformClassDeclaration
                 {
                     Name = "Exception"
                     FullName = "System.Exception"
+                    ModulePath = []
                     TypeArguments = []
                     IsStandardLibrary = true
                 }
                 |> GlueType.TypeReference
             yield! otherInheritance
         ]
+        |> List.filter (
+            function
+            | GlueType.Discard -> false
+            | _ -> true
+        )
         |> List.map (context.ExposeTypeAlias >> transformType context)
 
     let specialiazedAlias =
@@ -3836,8 +3954,29 @@ let private transformToFsharp
                 context.TypeMemory
                 context._Reporter
                 context.TypeLiteralsMemory
+                context.ImportSpecifier
                 moduleInfo
             |> List.singleton
+
+        | GlueType.FileModule fileModule ->
+            ({
+                Name = Naming.sanitizeTypeName fileModule.Name
+                IsRecursive = false
+                ImportSpecifier = Some fileModule.ImportSpecifier
+                Types =
+                    transform
+                        context.TypeMemory
+                        context._Reporter
+                        context.TypeLiteralsMemory
+                        fileModule.ImportSpecifier
+                        true
+                        fileModule.Types
+            }
+            : FSharpModule)
+            |> FSharpType.Module
+            |> List.singleton
+
+        | GlueType.ReExport reExport -> transformReExport context reExport
 
         | GlueType.ClassDeclaration classInfo -> transformClassDeclaration context classInfo
 
@@ -3876,10 +4015,41 @@ let private transform
     (typeMemory: GlueType list)
     (reporter: Reporter)
     (typeLiteralsMemory: TypeLiteralsMemory)
+    (importSpecifier: string)
     (isTopLevel: bool)
     (glueAst: GlueType list)
     : FSharpType list
     =
+    // A re-exported value is exported again under its new name
+    // A re-exported value is exported again under its new name
+    let glueAst =
+        glueAst
+        |> List.map (fun glueType ->
+            match glueType with
+            | GlueType.ReExport {
+                                    Name = name
+                                    Declaration = GlueType.FunctionDeclaration info
+                                } -> GlueType.FunctionDeclaration { info with Name = name }
+            | GlueType.ReExport {
+                                    Name = name
+                                    Declaration = GlueType.Variable info
+                                } -> GlueType.Variable { info with Name = name }
+            | _ -> glueType
+        )
+
+    // A re-exported class only gets its constructors, its type is an alias
+    let reExportedClasses =
+        glueAst
+        |> List.choose (fun glueType ->
+            match glueType with
+            | GlueType.ReExport {
+                                    Name = name
+                                    Declaration = GlueType.ClassDeclaration info
+                                } when ReExport.canForwardConstraints info.TypeParameters ->
+                Some(GlueType.ClassDeclaration { info with Name = name })
+            | _ -> None
+        )
+
     let exports, rest =
         glueAst
         |> List.partition (fun glueType ->
@@ -3925,10 +4095,10 @@ let private transform
             | _ -> false
         )
 
-    let exports = exports @ classes
+    let exports = exports @ classes @ reExportedClasses
 
     let rootTransformContext =
-        TransformContext(reporter, "", typeMemory, typeLiteralsMemory)
+        TransformContext(reporter, "", typeMemory, typeLiteralsMemory, importSpecifier)
 
     let rest = transformToFsharp rootTransformContext rest
 
@@ -3958,11 +4128,16 @@ type TransformResult =
     }
 
 let apply (typeMemory: GlueType list) (glueAst: GlueType list) =
+    applyWith Naming.MODULE_PLACEHOLDER typeMemory glueAst
+
+let applyWith (importSpecifier: string) (typeMemory: GlueType list) (glueAst: GlueType list) =
     let reporter = Reporter()
     let typeLiteralsMemory = TypeLiteralsMemory()
 
     {
-        FSharpAST = transform typeMemory reporter typeLiteralsMemory true glueAst |> Merge.apply
+        FSharpAST =
+            transform typeMemory reporter typeLiteralsMemory importSpecifier true glueAst
+            |> Merge.apply
         Warnings = reporter.Warnings
         Errors = reporter.Errors
         IncludeRegExpAlias = reporter.HasRegEpx

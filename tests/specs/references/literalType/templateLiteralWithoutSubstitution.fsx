@@ -8,22 +8,17 @@ open System
 [<Erase>]
 type Exports =
     [<ImportAll("REPLACE_ME_WITH_MODULE_NAME")>]
-    static member inline lib
-        with get () : lib_.Exports =
+    static member inline Refresh
+        with get () : Refresh_.Exports =
             nativeOnly
 
-module lib_ =
+module Refresh_ =
 
     [<AbstractClass>]
     [<Erase>]
     type Exports =
-        [<Emit("new $0.Logger($1...)")>]
-        abstract member Logger: unit -> Logger
-
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type Logger =
-        interface end
+        [<Emit("$0.method")>]
+        abstract member ``method``: string
 
 (***)
 #r "nuget: Fable.Core"

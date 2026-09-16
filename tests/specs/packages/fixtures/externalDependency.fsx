@@ -6,9 +6,8 @@ open System
 
 [<AllowNullLiteral>]
 [<Interface>]
-type Primitives =
-    abstract member a: bool with get, set
-    abstract member button: bool with get, set
+type Logger =
+    abstract member stream: obj with get, set
 
 (***)
 #r "nuget: Fable.Core"

@@ -10,7 +10,6 @@ type Exports =
     [<ImportDefault("REPLACE_ME_WITH_MODULE_NAME")>]
     static member inline supportsColor: Exports.supportsColor.Type = nativeOnly
 
-
 type ColorInfo =
     string
 

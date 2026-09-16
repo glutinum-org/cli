@@ -20,10 +20,11 @@ open Glutinum.Converter.Reader.TypeParameters
 open Glutinum.Converter.Reader.UnionTypeNode
 open Glutinum.Converter.Reader.VariableStatement
 open Glutinum.Converter.Reader.ExportAssignment
+open Glutinum.Converter.Reader.ExportDeclaration
 open Glutinum.Converter.Reader.Documentation
 open Glutinum.Converter.Reader.NamedTupleMember
 
-type TypeScriptReader(checker: Ts.TypeChecker) =
+type TypeScriptReader(checker: Ts.TypeChecker, ?packageContext: PackageContext) =
     let warnings = ResizeArray<string>()
 
     // Store all types in memory for later use
@@ -38,6 +39,11 @@ type TypeScriptReader(checker: Ts.TypeChecker) =
         member _.Warnings = warnings
 
         member _.TypeMemory = typeMemory
+
+        member _.PackageContext = packageContext
+
+        member this.ReadExportDeclaration(exportDeclaration: Ts.ExportDeclaration) : GlueType list =
+            readExportDeclaration this exportDeclaration
 
         member this.ReadClassDeclaration(classDeclaration: Ts.ClassDeclaration) : GlueType =
             readClassDeclaration this classDeclaration

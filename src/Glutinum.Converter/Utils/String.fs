@@ -6,6 +6,8 @@ open System
 let replace (oldValue: string) (newValue: string) (input: string) =
     input.Replace(oldValue, newValue)
 
+let normalizePath (path: string) = path.Replace("\\", "/")
+
 let removeSingleQuote (text: string) = text.Trim(''')
 
 let removeDoubleQuote (text: string) = text.Trim('"')
