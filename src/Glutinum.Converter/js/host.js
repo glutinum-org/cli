@@ -81,6 +81,7 @@ export const posixPath = {
 export function createFileSystemHost(fileSystem, cwd = "/") {
     return {
         cwd,
+        fileSystem,
         path: posixPath,
         fs: {
             fileExists: (p) => fileSystem.fileExistsSync(p),
