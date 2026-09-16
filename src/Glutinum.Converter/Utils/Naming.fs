@@ -9,7 +9,9 @@ let private startWithDigit (name: string) : bool =
     name.Length > 0 && Char.IsDigit name.[0]
 
 let private escapeName (name: string) : string =
-    if
+    if name.Length > 4 && name.StartsWith("``") && name.EndsWith("``") then
+        name
+    elif
         name.Contains("-")
         || name.Contains("$")
         || name.Contains("/")
