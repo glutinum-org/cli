@@ -3407,7 +3407,20 @@ let private transformTypeAliasDeclaration
         | GlueType.Union(GlueTypeUnion cases) as unionType ->
             match tryOptimizeUnionType context typeAliasName cases with
             | Some typ -> typ
-            | None -> transformType context unionType |> makeTypeAlias
+            | None ->
+                let isNullable =
+                    function
+                    | GlueType.Primitive GluePrimitive.Null
+                    | GlueType.Primitive GluePrimitive.Undefined -> true
+                    | _ -> false
+
+                match cases |> List.partition isNullable with
+                // `type Foo = { ... } | undefined`, the scope avoids naming the anonymous type after the alias
+                | _ :: _, [ single ] ->
+                    transformType (context.PushScope "Value") single
+                    |> FSharpType.Option
+                    |> makeTypeAlias
+                | _ -> transformType context unionType |> makeTypeAlias
 
         | GlueType.KeyOf glueType ->
             TypeAliasDeclaration.transformKeyOf context glueTypeAliasDeclaration.Name glueType
