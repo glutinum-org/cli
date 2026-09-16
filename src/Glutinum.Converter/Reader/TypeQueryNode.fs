@@ -109,6 +109,9 @@ let readTypeQueryNode (reader: ITypeScriptReader) (typeQueryNode: Ts.TypeQueryNo
             GlueType.Primitive GluePrimitive.Any
 
         | Some symbol, _ ->
+            // `typeof ns.X` resolves to the export alias of `X`, not to its declaration
+            let symbol = resolveAlias checker symbol |> Option.defaultValue symbol
+
             // Try to find the declaration of the type, to get more information about it
             match symbol.declarations with
             | Some declarations ->

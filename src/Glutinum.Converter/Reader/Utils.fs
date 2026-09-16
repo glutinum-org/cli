@@ -212,7 +212,7 @@ let knownExternalTypeNames =
             "Float64Array"
         ]
 
-let private resolveAlias (checker: Ts.TypeChecker) (symbol: Ts.Symbol) =
+let resolveAlias (checker: Ts.TypeChecker) (symbol: Ts.Symbol) =
     match symbol.flags with
     | HasSymbolFlags Ts.SymbolFlags.Alias ->
         // `getAliasedSymbol` throws when the alias can't be resolved

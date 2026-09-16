@@ -2,7 +2,9 @@ module Glutinum.Converter.Reader.Node
 
 open Glutinum.Converter.GlueAST
 open Glutinum.Converter.Reader.Types
+open Glutinum.Converter.Reader.Utils
 open TypeScript
+open Fable.Core
 
 let readNode (reader: ITypeScriptReader) (node: Ts.Node) : GlueType =
     match node.kind with
@@ -38,8 +40,23 @@ let readNode (reader: ITypeScriptReader) (node: Ts.Node) : GlueType =
 
         ({ Members = members }: GlueTypeLiteral) |> GlueType.TypeLiteral
 
+    // `export { X }` resolved from another module, the declaration of `X` is the node to read
+    | Ts.SyntaxKind.ExportSpecifier ->
+        let exportSpecifier = node :?> Ts.ExportSpecifier
+
+        reader.checker.getExportSpecifierLocalTargetSymbol (U2.Case1 exportSpecifier)
+        |> Option.bind (resolveAlias reader.checker)
+        |> Option.bind (fun target ->
+            match target.declarations with
+            | Some declarations when declarations.Count > 0 ->
+                Some(reader.ReadNode declarations.[0])
+            | _ -> None
+        )
+        |> Option.defaultValue GlueType.Discard
+
     // Re-exports are read by `Read.readPackages` in package mode
     | Ts.SyntaxKind.ExportDeclaration
+    | Ts.SyntaxKind.ImportEqualsDeclaration
     | Ts.SyntaxKind.EmptyStatement -> GlueType.Discard
 
     | Ts.SyntaxKind.BooleanKeyword -> reader.ReadTypeNode(node :?> Ts.TypeNode)

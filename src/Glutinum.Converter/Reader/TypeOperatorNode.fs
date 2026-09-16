@@ -40,6 +40,10 @@ let readTypeOperatorNode (reader: ITypeScriptReader) (node: Ts.TypeOperatorNode)
                         )
                         |> failwith
 
+                    // The keys of a type parameter are unknown
+                    elif declarations[0].kind = Ts.SyntaxKind.TypeParameter then
+                        GlueType.KeyOf GlueType.Discard
+
                     else
                         reader.ReadNode declarations[0] |> GlueType.KeyOf
 
