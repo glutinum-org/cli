@@ -25,6 +25,10 @@ module NodeLike =
         type Exports =
             [<ImportAll("path")>]
             static member inline path: NodeLike.path.path_.PlatformPath = nativeOnly
+            [<Import("join", "path")>]
+            static member join ([<ParamArray>] paths: string []) : string = nativeOnly
+            [<Import("sep", "path")>]
+            static member inline sep: string = nativeOnly
 
         module path_ =
 

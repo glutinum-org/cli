@@ -1527,7 +1527,70 @@ let private transformExports
                             |> FSharpMember.Property
                             |> List.singleton
 
-                        applyHelper newTypes (Set.singleton name)
+                        // `this` of a method is the object, which has its qualified reference
+                        let withoutThis (memberType: GlueType) =
+                            match memberType with
+                            | GlueType.ThisType _ -> typ
+                            | memberType -> memberType
+
+                        // The members of the object are the exports of the module
+                        // (`import { sep } from "path"`)
+                        let memberExports =
+                            match typ with
+                            | GlueType.TypeReference typeReference ->
+                                context.TypeMemory
+                                |> List.tryPick (
+                                    function
+                                    | GlueType.Interface info when
+                                        info.FullName = typeReference.FullName
+                                        ->
+                                        Some info.Members
+                                    | _ -> None
+                                )
+                                |> Option.defaultValue []
+                            | GlueType.TypeLiteral info -> info.Members
+                            | _ -> []
+                            |> List.choose (
+                                function
+                                | GlueMember.Property info when not info.IsStatic ->
+                                    ({
+                                        Documentation = info.Documentation
+                                        Name = info.Name
+                                        Type = info.Type
+                                    }
+                                    : GlueVariable)
+                                    |> GlueType.Variable
+                                    |> Some
+                                | GlueMember.MethodSignature info ->
+                                    ({
+                                        Documentation = info.Documentation
+                                        IsDeclared = true
+                                        Name = info.Name
+                                        Type = withoutThis info.Type
+                                        Parameters = info.Parameters
+                                        TypeParameters = []
+                                    }
+                                    : GlueFunctionDeclaration)
+                                    |> GlueType.FunctionDeclaration
+                                    |> Some
+                                | GlueMember.Method info when not info.IsStatic ->
+                                    ({
+                                        Documentation = info.Documentation
+                                        IsDeclared = true
+                                        Name = info.Name
+                                        Type = withoutThis info.Type
+                                        Parameters = info.Parameters
+                                        TypeParameters = []
+                                    }
+                                    : GlueFunctionDeclaration)
+                                    |> GlueType.FunctionDeclaration
+                                    |> Some
+                                | _ -> None
+                            )
+                            // A member named like the object itself is the object
+                            |> List.filter (fun glueType -> glueType.Name <> name)
+
+                        apply (acc @ newTypes) (Set.add name seenNames) (memberExports @ tail)
 
                 | GlueType.ExportDefault glueType ->
                     let name, context = sanitizeNameAndPushScope glueType.Name context
