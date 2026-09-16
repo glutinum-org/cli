@@ -13,30 +13,79 @@ type PackageInfo =
         RuntimeName: string
         /// Normalized absolute directory, with a trailing `/`
         Dir: string
+        /// Directory the file modules are named from: the `typesVersions` folder of the entry, else `Dir`
+        TypesRoot: string
         /// Normalized absolute path of the main declaration file
         EntryFile: string
         /// Other declaration entry points, with the subpath to import them from
         SubpathEntries: (string * string) list
     }
 
+/// A package published as its own binding: its types are referenced, never generated
+type ExternalPackage =
+    {
+        /// Module of the binding under `Glutinum` (`Web` for `Glutinum.Web`)
+        ModuleName: string
+        /// The package on disk, when installed
+        Package: PackageInfo option
+        /// TypeScript lib files standing for the package (`lib.dom` for `@types/web`)
+        LibFilePrefixes: string list
+    }
+
 type PackageContext =
     {
         Packages: PackageInfo list
+        Externals: ExternalPackage list
     }
 
     member this.TryFindPackage(fileName: string) =
         let fileName = String.normalizePath fileName
 
         this.Packages
-        |> List.filter (fun package -> fileName.StartsWith package.Dir)
-        // Nested `node_modules` must win over their parent
-        |> List.sortByDescending _.Dir.Length
+        |> List.filter (fun package ->
+            fileName.StartsWith package.Dir
+            // A package nested in `node_modules` of the package is another package
+            && not (fileName.Substring(package.Dir.Length).Contains "node_modules/")
+        )
         |> List.tryHead
 
-    member this.IsExternal(fileName: string) = (this.TryFindPackage fileName).IsNone
+    /// The F# modules of the external binding declaring `fileName`
+    member this.TryFindExternalModulePath(fileName: string) : string list option =
+        let fileName = String.normalizePath fileName
+
+        this.Externals
+        |> List.tryPick (fun external ->
+            let isLibFile =
+                external.LibFilePrefixes |> List.exists (fun prefix -> fileName.Contains prefix)
+
+            if isLibFile then
+                Some [ "Glutinum"; external.ModuleName ]
+            else
+                match external.Package with
+                | Some package when fileName.StartsWith package.Dir ->
+                    Some
+                        [
+                            yield "Glutinum"
+                            yield external.ModuleName
+
+                            if fileName <> package.EntryFile then
+                                yield this.FileModuleName(package, fileName)
+                        ]
+                | _ -> None
+        )
+
+    member this.IsExternal(fileName: string) =
+        (this.TryFindPackage fileName).IsNone
+        && (this.TryFindExternalModulePath fileName).IsNone
 
     member this.FileModuleName(package: PackageInfo, fileName: string) =
-        let relativePath = (String.normalizePath fileName).Substring(package.Dir.Length)
+        let fileName = String.normalizePath fileName
+
+        let relativePath =
+            if fileName.StartsWith package.TypesRoot then
+                fileName.Substring(package.TypesRoot.Length)
+            else
+                fileName.Substring(package.Dir.Length)
 
         let segments =
             relativePath.Split('/')
@@ -66,7 +115,7 @@ type PackageContext =
     /// F# modules qualifying a type declared in `fileName`, empty for the target entry file
     member this.ModulePath(fileName: string) : string list =
         match this.TryFindPackage fileName with
-        | None -> []
+        | None -> this.TryFindExternalModulePath fileName |> Option.defaultValue []
         | Some package ->
             let fileName = String.normalizePath fileName
 

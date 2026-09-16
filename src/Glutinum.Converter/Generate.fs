@@ -55,7 +55,14 @@ let generateBindingFile (filePath: string) =
 /// An empty list generates every package installed in the nearest <c>node_modules</c>.
 /// </summary>
 let generatePackagesWith (host: Packages.Host) (inputs: string list) =
-    let result = Packages.generate host inputs
+    generatePackagesWithOptions Packages.defaultOptions host inputs
+
+let generatePackagesWithOptions
+    (options: Packages.GenerateOptions)
+    (host: Packages.Host)
+    (inputs: string list)
+    =
+    let result = Packages.generateWith options host inputs
 
     for warning in result.Warnings do
         Log.warn warning
@@ -67,4 +74,7 @@ let generatePackagesWith (host: Packages.Host) (inputs: string list) =
 
 /// The packages installed on the disk, from the current directory
 let generatePackages (inputs: string list) =
-    generatePackagesWith (createNodeHost (fs, path, ``process``.cwd ())) inputs
+    generatePackagesFromDisk Packages.defaultOptions inputs
+
+let generatePackagesFromDisk (options: Packages.GenerateOptions) (inputs: string list) =
+    generatePackagesWithOptions options (createNodeHost (fs, path, ``process``.cwd ())) inputs

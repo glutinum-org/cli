@@ -18,6 +18,7 @@ type PackageDescription =
     abstract name: string
     abstract runtimeName: string
     abstract dir: string
+    abstract typesRoot: string
     abstract entryFile: string
     abstract subpathEntries: SubpathEntry[]
 
@@ -99,6 +100,7 @@ let private toPackageInfo (description: PackageDescription) : Reader.Types.Packa
         ModuleName = moduleNameForPackage description.runtimeName
         RuntimeName = description.runtimeName
         Dir = String.normalizePath description.dir + "/"
+        TypesRoot = String.normalizePath description.typesRoot + "/"
         EntryFile = String.normalizePath description.entryFile
         SubpathEntries =
             description.subpathEntries
@@ -109,11 +111,27 @@ let private toPackageInfo (description: PackageDescription) : Reader.Types.Packa
 let private isTypeScriptLibFile (fileName: string) =
     (String.normalizePath fileName).Contains "/typescript/lib/lib."
 
+type GenerateOptions =
+    {
+        /// Reference `@types/node` and `@types/web` as the Glutinum.Node and Glutinum.Web
+        /// bindings instead of generating them with the packages using them
+        ExternalPackages: bool
+    }
+
+let defaultOptions = { ExternalPackages = true }
+
+/// The packages published as their own bindings, with the TypeScript lib files standing for them
+let private externalPackageNames =
+    [
+        "@types/node", "Node", []
+        "@types/web", "Web", [ "/typescript/lib/lib.dom" ]
+    ]
+
 /// <summary>
 /// Generate a single binding file for the packages, and the packages they depend on.
 /// An empty list generates every package installed in the nearest <c>node_modules</c>.
 /// </summary>
-let generate (host: Host) (inputs: string list) : GenerationResult =
+let generateWith (options: GenerateOptions) (host: Host) (inputs: string list) : GenerationResult =
     let targetDirs =
         match inputs with
         | [] -> listInstalledPackages host |> Array.toList
@@ -156,9 +174,8 @@ let generate (host: Host) (inputs: string list) : GenerationResult =
     let targetDirs =
         targets |> List.map (fun target -> String.normalizePath target.dir) |> set
 
-    // `@types/node` describes the runtime like `lib.dom.d.ts`, it is generated on request only
-    let dependencies =
-        reachableFiles (host, program, entryFiles, [| "node" |])
+    let describeReachable (excludedRuntimeNames: string list) =
+        reachableFiles (host, program, entryFiles, List.toArray excludedRuntimeNames)
         |> Array.toList
         |> List.filter (fun fileName -> not (isTypeScriptLibFile fileName))
         |> List.choose (fun fileName ->
@@ -173,13 +190,46 @@ let generate (host: Host) (inputs: string list) : GenerationResult =
             | null -> None
             | description -> Some description
         )
-        |> List.filter (fun description -> description.runtimeName <> "node")
+
+    // A package asked for is generated, even when published as its own binding
+    let externals: Reader.Types.ExternalPackage list =
+        if options.ExternalPackages then
+            let reachable = describeReachable []
+
+            externalPackageNames
+            |> List.filter (fun (name, _, _) ->
+                targets |> List.exists (fun target -> target.name = name) |> not
+            )
+            |> List.map (fun (name, moduleName, libFilePrefixes) ->
+                {
+                    ModuleName = moduleName
+                    Package =
+                        reachable
+                        |> List.tryFind (fun description -> description.name = name)
+                        |> Option.map toPackageInfo
+                    LibFilePrefixes = libFilePrefixes
+                }
+            )
+        else
+            []
+
+    let externalRuntimeNames =
+        externals
+        |> List.choose (fun external -> external.Package |> Option.map _.RuntimeName)
+
+    // The packages only reachable through an external one are not needed either
+    let dependencies =
+        describeReachable externalRuntimeNames
+        |> List.filter (fun description ->
+            not (List.contains description.runtimeName externalRuntimeNames)
+        )
         |> List.sortBy _.runtimeName
 
     let packageContext: Reader.Types.PackageContext =
         {
             Packages =
                 (targets |> List.map toPackageInfo) @ (dependencies |> List.map toPackageInfo)
+            Externals = externals
         }
 
     let sourceFiles =
@@ -206,3 +256,6 @@ let generate (host: Host) (inputs: string list) : GenerationResult =
         Warnings = [ yield! readerResult.Warnings; yield! transformResult.Warnings ]
         Errors = transformResult.Errors |> Seq.toList
     }
+
+let generate (host: Host) (inputs: string list) : GenerationResult =
+    generateWith defaultOptions host inputs

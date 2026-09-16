@@ -30,7 +30,18 @@ let readModuleDeclaration
             | Ts.SyntaxKind.ModuleBlock ->
                 let moduleBlock = child :?> Ts.ModuleBlock
 
-                moduleBlock.statements |> List.ofSeq |> List.map reader.ReadNode |> Some
+                moduleBlock.statements
+                |> List.ofSeq
+                |> List.filter (fun statement ->
+                    not (
+                        Utils.isMergedInterfaceDeclaration
+                            reader.checker
+                            reader.PackageContext
+                            statement
+                    )
+                )
+                |> List.map reader.ReadNode
+                |> Some
 
             | Ts.SyntaxKind.ModuleDeclaration -> reader.ReadNode child |> List.singleton |> Some
 

@@ -17,6 +17,7 @@ const fixtures = [
     "unionAlias",
     "ambientModules",
     "globalScript",
+    "externalRuntime",
 ]
 
 const footer = `

@@ -10,7 +10,23 @@ let readInterfaceDeclaration
     : GlueInterface
     =
 
-    let members = declaration.members |> Seq.toList |> List.map reader.ReadDeclaration
+    let symbolOpt = reader.checker.getSymbolAtLocation declaration.name
+
+    // `interface NodeList` of `iterable.d.ts` completes the one of `index.d.ts`
+    let otherDeclarations =
+        match symbolOpt with
+        | Some symbol ->
+            match Utils.mainDeclaration reader.PackageContext symbol with
+            | Some main when obj.ReferenceEquals(main, declaration) ->
+                Utils.otherFileInterfaceDeclarations reader.PackageContext symbol declaration
+            | _ -> []
+        | None -> []
+
+    let members =
+        declaration :: otherDeclarations
+        |> List.collect (fun declaration ->
+            declaration.members |> Seq.toList |> List.map reader.ReadDeclaration
+        )
 
     let typeParameters =
         let own = reader.ReadTypeParameters declaration.typeParameters
@@ -56,5 +72,10 @@ let readInterfaceDeclaration
         Name = declaration.name.getText ()
         Members = members
         TypeParameters = typeParameters
-        HeritageClauses = Utils.readHeritageClauses reader declaration.heritageClauses
+        HeritageClauses =
+            declaration :: otherDeclarations
+            |> List.collect (fun declaration ->
+                Utils.readHeritageClauses reader declaration.heritageClauses
+            )
+            |> List.distinct
     }

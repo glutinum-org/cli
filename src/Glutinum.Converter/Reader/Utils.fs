@@ -222,6 +222,12 @@ let knownExternalTypeNames =
             "Error"
             "RegExp"
             "Iterable"
+            "IterableIterator"
+            "IteratorObject"
+            "ArrayIterator"
+            "MapIterator"
+            "SetIterator"
+            "StringIterator"
             "Uint8Array"
             "Int8Array"
             "Uint8ClampedArray"
@@ -262,11 +268,117 @@ let importedName (checker: Ts.TypeChecker) (symbol: Ts.Symbol) =
         | _ -> None
     | _ -> None
 
-let private declarationFile (symbol: Ts.Symbol) =
+let private fileOfDeclaration (declaration: Ts.Node) =
+    declaration.getSourceFile().fileName |> String.normalizePath
+
+let private isTypeDeclaration (declaration: Ts.Node) =
+    match declaration.kind with
+    | Ts.SyntaxKind.InterfaceDeclaration
+    | Ts.SyntaxKind.ClassDeclaration
+    | Ts.SyntaxKind.TypeAliasDeclaration
+    | Ts.SyntaxKind.EnumDeclaration
+    | Ts.SyntaxKind.ModuleDeclaration -> true
+    | _ -> false
+
+/// <summary>
+/// The declaration the symbol is read from and referenced by. The first one, unless it belongs
+/// to an external binding while another one belongs to a generated package (<c>AbortSignal</c>
+/// of the DOM lib redeclared by <c>@types/node</c>), or the entry file of its package declares
+/// it too (<c>NodeList</c> of <c>iterable.d.ts</c> and <c>index.d.ts</c>).
+/// </summary>
+let mainDeclaration (packageContext: PackageContext option) (symbol: Ts.Symbol) =
     match symbol.declarations with
     | Some declarations when declarations.Count > 0 ->
-        declarations.[0].getSourceFile().fileName |> String.normalizePath |> Some
+        let declarations = Seq.toList declarations
+        let first = declarations.Head
+
+        match packageContext with
+        | None -> Some first
+        | Some packageContext ->
+            // `var TextDecoder` of a package doesn't stand for the `interface TextDecoder` of the DOM lib
+            let generated =
+                declarations
+                |> List.filter (fun declaration ->
+                    (packageContext.TryFindPackage(fileOfDeclaration declaration)).IsSome
+                    && isTypeDeclaration declaration = isTypeDeclaration first
+                )
+
+            let candidates =
+                if
+                    (packageContext.TryFindExternalModulePath(fileOfDeclaration first)).IsSome
+                    && not generated.IsEmpty
+                then
+                    generated
+                else
+                    declarations
+
+            let first = candidates.Head
+
+            match packageContext.TryFindPackage(fileOfDeclaration first) with
+            | Some package ->
+                candidates
+                |> List.tryFind (fun declaration ->
+                    declaration.kind = first.kind
+                    && fileOfDeclaration declaration = package.EntryFile
+                )
+                |> Option.defaultValue first
+                |> Some
+            | None -> Some first
     | _ -> None
+
+/// <summary>
+/// In package mode, the interface declarations of the symbol in other files of the same package:
+/// they are merged into the main declaration
+/// </summary>
+let otherFileInterfaceDeclarations
+    (packageContext: PackageContext option)
+    (symbol: Ts.Symbol)
+    (declaration: Ts.Node)
+    : Ts.InterfaceDeclaration list
+    =
+    match packageContext, symbol.declarations with
+    | Some packageContext, Some declarations ->
+        match packageContext.TryFindPackage(fileOfDeclaration declaration) with
+        | Some package ->
+            declarations
+            |> Seq.toList
+            |> List.filter (fun other ->
+                other.kind = Ts.SyntaxKind.InterfaceDeclaration
+                && fileOfDeclaration other <> fileOfDeclaration declaration
+                && (
+                    match packageContext.TryFindPackage(fileOfDeclaration other) with
+                    | Some otherPackage -> otherPackage.Dir = package.Dir
+                    | None -> false
+                )
+            )
+            |> List.map (fun other -> other :?> Ts.InterfaceDeclaration)
+        | None -> []
+    | _ -> []
+
+/// An interface declaration merged into the main declaration of another file
+let isMergedInterfaceDeclaration
+    (checker: Ts.TypeChecker)
+    (packageContext: PackageContext option)
+    (statement: Ts.Node)
+    =
+    match packageContext, statement.kind with
+    | Some _, Ts.SyntaxKind.InterfaceDeclaration ->
+        let declaration = statement :?> Ts.InterfaceDeclaration
+
+        match checker.getSymbolAtLocation declaration.name with
+        | Some symbol ->
+            match mainDeclaration packageContext symbol with
+            | Some main ->
+                not (obj.ReferenceEquals(main, statement))
+                && not (otherFileInterfaceDeclarations packageContext symbol main).IsEmpty
+                && fileOfDeclaration main <> fileOfDeclaration statement
+            | None -> false
+        | None -> false
+    | _ -> false
+
+let private declarationFile (packageContext: PackageContext option) (symbol: Ts.Symbol) =
+    mainDeclaration packageContext symbol
+    |> Option.map (fun declaration -> declaration.getSourceFile().fileName |> String.normalizePath)
 
 /// In package mode, whether the symbol is declared outside every package being generated
 let isExternalToPackages
@@ -279,7 +391,7 @@ let isExternalToPackages
         match resolveAlias checker symbol with
         | None -> true
         | Some symbol ->
-            match declarationFile symbol with
+            match declarationFile (Some packageContext) symbol with
             | Some fileName -> packageContext.IsExternal fileName
             | None -> true
     | _ -> false
@@ -401,15 +513,15 @@ let modulePathForSymbol
     | None -> []
     | Some symbol ->
         let filePath =
-            match packageContext, declarationFile symbol with
+            match packageContext, declarationFile packageContext symbol with
             | Some packageContext, Some fileName -> packageContext.ModulePath fileName
             | _ -> []
 
         // A path to another file is absolute, so it includes the namespaces
         let namespaces =
-            match symbol.declarations with
-            | Some declarations when (isQualified || not filePath.IsEmpty) && declarations.Count > 0 ->
-                namespaceChain declarations.[0]
+            match mainDeclaration packageContext symbol with
+            | Some declaration when isQualified || not filePath.IsEmpty ->
+                namespaceChain declaration
             | _ -> []
 
         filePath @ namespaces

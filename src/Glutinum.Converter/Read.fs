@@ -79,6 +79,10 @@ let private readStatements (reader: ITypeScriptReader) (sourceFile: Ts.SourceFil
         match statement.kind with
         | Ts.SyntaxKind.ExportDeclaration ->
             reader.ReadExportDeclaration(statement :?> Ts.ExportDeclaration)
+        | Ts.SyntaxKind.InterfaceDeclaration when
+            isMergedInterfaceDeclaration reader.checker reader.PackageContext statement
+            ->
+            []
         // `declare module "os" { ... }` is the file
         | Ts.SyntaxKind.ModuleDeclaration when
             (match promoted with

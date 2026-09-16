@@ -1,5 +1,6 @@
 module Glutinum.Converter.Program
 
+open Glutinum.Converter
 open Glutinum.Converter.Generate
 open Node
 open Node.Api
@@ -26,10 +27,15 @@ USAGE
     package it depends on. A .d.ts file is generated alone.
     --all generates every package installed in the nearest node_modules.
 
+    The types of @types/node and @types/web (the DOM) are referenced from the
+    Glutinum.Node and Glutinum.Web bindings, unless asked for or --no-externals.
+
 OPTIONS
 
     --out-file <output>     Destination file to write in
                             If not specified, the result will be printed to stdout
+    --no-externals          Generate @types/node and @types/web with the packages
+                            using them instead of referencing their bindings
     -h, --help              Print this help message
 
 EXAMPLES
@@ -51,11 +57,11 @@ let private getVersion () =
     return pkg.version;
     """
 
-let private generate (inputs: string list) =
+let private generate (options: Packages.GenerateOptions) (inputs: string list) =
     match inputs with
-    | [ "--all" ] -> generatePackages []
+    | [ "--all" ] -> generatePackagesFromDisk options []
     | [ input ] when input.EndsWith ".d.ts" -> generateBindingFile input
-    | inputs -> generatePackages inputs
+    | inputs -> generatePackagesFromDisk options inputs
 
 [<EntryPoint>]
 let main (argv: string array) =
@@ -83,6 +89,13 @@ let main (argv: string array) =
             | outFile :: "--out-file" :: inputs -> List.rev inputs, Some outFile
             | _ -> argv, None
 
+        let options: Packages.GenerateOptions =
+            {
+                ExternalPackages = not (List.contains "--no-externals" inputs)
+            }
+
+        let inputs = inputs |> List.filter (fun input -> input <> "--no-externals")
+
         let hasUnknownOption =
             inputs |> List.exists (fun input -> input.StartsWith "-" && input <> "--all")
 
@@ -98,7 +111,7 @@ let main (argv: string array) =
             1
         else
             Log.info $"""Generating binding file for %s{String.concat ", " inputs}"""
-            let res = generate inputs
+            let res = generate options inputs
 
             match outFile with
             | Some outFile ->

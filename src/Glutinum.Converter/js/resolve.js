@@ -1,3 +1,5 @@
+import { ts } from "@ts-morph/bootstrap";
+
 const DECLARATION_FILE = /\.d\.[cm]?ts$/;
 
 /**
@@ -122,12 +124,130 @@ function collectExportsTypes(exportsField) {
     return [...bySubpath.entries()].map(([subpath, file]) => ({ subpath, file }));
 }
 
+
+/**
+ * `[major, minor, patch]` of a version, missing parts are 0
+ *
+ * @param {string} version
+ */
+function parseVersion(version) {
+    const parts = version.split(".").map((part) => parseInt(part, 10));
+
+    return [parts[0] || 0, parts[1] || 0, parts[2] || 0];
+}
+
+/**
+ * @param {number[]} a
+ * @param {number[]} b
+ */
+function compareVersions(a, b) {
+    for (let i = 0; i < 3; i++) {
+        if (a[i] !== b[i]) {
+            return a[i] - b[i];
+        }
+    }
+
+    return 0;
+}
+
+/**
+ * Whether `version` satisfies one comparator of a `typesVersions` range (`<=5.5`, `>=4.2`, `*`)
+ *
+ * @param {number[]} version
+ * @param {string} comparator
+ */
+function satisfiesComparator(version, comparator) {
+    const match = comparator.match(/^(>=|<=|>|<|=|\^|~)?\s*(.+)$/);
+
+    if (match === null) {
+        return false;
+    }
+
+    const operator = match[1] ?? "=";
+    const text = match[2];
+
+    if (text === "*" || text === "x") {
+        return true;
+    }
+
+    const parts = text.split(".").map((part) => parseInt(part, 10)).filter((part) => !isNaN(part));
+    const lower = [parts[0] ?? 0, parts[1] ?? 0, parts[2] ?? 0];
+
+    // `5.5` stands for every `5.5.x`, the bound after it is `5.6.0`
+    const upper =
+        parts.length === 1 ? [lower[0] + 1, 0, 0]
+        : parts.length === 2 ? [lower[0], lower[1] + 1, 0]
+        : [lower[0], lower[1], lower[2] + 1];
+
+    switch (operator) {
+        case ">=":
+            return compareVersions(version, lower) >= 0;
+        case ">":
+            return compareVersions(version, upper) >= 0;
+        case "<":
+            return compareVersions(version, lower) < 0;
+        case "<=":
+            return compareVersions(version, upper) < 0;
+        case "^":
+            return compareVersions(version, lower) >= 0 && compareVersions(version, [lower[0] + 1, 0, 0]) < 0;
+        case "~":
+            return compareVersions(version, lower) >= 0 && compareVersions(version, [lower[0], lower[1] + 1, 0]) < 0;
+        default:
+            return compareVersions(version, lower) >= 0 && compareVersions(version, upper) < 0;
+    }
+}
+
+/**
+ * @param {string} version
+ * @param {string} range
+ */
+function satisfiesRange(version, range) {
+    const parsed = parseVersion(version);
+
+    return range
+        .split("||")
+        .some((alternative) => alternative.trim().split(/\s+/).every((comparator) => satisfiesComparator(parsed, comparator)));
+}
+
+/**
+ * The declaration file to use for the bundled TypeScript, following the `typesVersions` of the
+ * package (`{ "<=5.5": { "*": ["ts5.5/*"] } }`).
+ *
+ * @param {Record<string, Record<string, string[]>> | undefined} typesVersions
+ * @param {string} file
+ */
+function applyTypesVersions(typesVersions, file) {
+    if (typesVersions === undefined || typesVersions === null) {
+        return file;
+    }
+
+    const paths = Object.entries(typesVersions).find(([range]) => satisfiesRange(ts.version, range))?.[1];
+
+    if (paths === undefined) {
+        return file;
+    }
+
+    const normalized = file.replace(/^\.\//, "");
+
+    for (const [pattern, targets] of Object.entries(paths)) {
+        const [prefix, suffix = ""] = pattern.split("*");
+
+        if (normalized.startsWith(prefix) && normalized.endsWith(suffix) && targets.length > 0) {
+            const captured = normalized.slice(prefix.length, normalized.length - suffix.length);
+
+            return targets[0].replace("*", captured);
+        }
+    }
+
+    return file;
+}
+
 /**
  * Describe an installed package: its runtime name and declaration entry points.
  *
  * @param {import("./host.js").Host} host
  * @param {string} packageDir
- * @returns {{ name: string, runtimeName: string, dir: string, entryFile: string, subpathEntries: { subpath: string, file: string }[] } | null}
+ * @returns {{ name: string, runtimeName: string, dir: string, typesRoot: string, entryFile: string, subpathEntries: { subpath: string, file: string }[] } | null}
  */
 export function describePackage(host, packageDir) {
     const { path, fs } = host;
@@ -166,7 +286,8 @@ export function describePackage(host, packageDir) {
     const entries = [];
 
     for (const candidate of candidates) {
-        let file = path.resolve(packageDir, candidate.file);
+        const mappedFile = applyTypesVersions(pkg.typesVersions, candidate.file);
+        let file = path.resolve(packageDir, mappedFile);
 
         // `"types": "./lib/umd/main"` is allowed without an extension
         if (!DECLARATION_FILE.test(file) && fs.fileExists(file + ".d.ts")) {
@@ -178,7 +299,7 @@ export function describePackage(host, packageDir) {
         }
 
         if (!entries.some((entry) => entry.subpath === candidate.subpath || entry.file === file)) {
-            entries.push({ subpath: candidate.subpath, file });
+            entries.push({ subpath: candidate.subpath, file, isMapped: mappedFile !== candidate.file });
         }
     }
 
@@ -192,6 +313,8 @@ export function describePackage(host, packageDir) {
         name,
         runtimeName,
         dir: packageDir,
+        // The files of a `typesVersions` folder are named as if they were at the root
+        typesRoot: main.isMapped ? path.dirname(main.file) : packageDir,
         entryFile: main.file,
         subpathEntries: entries
             .filter((entry) => entry !== main)
