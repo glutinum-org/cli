@@ -143,6 +143,7 @@ let readTypeQueryNode (reader: ITypeScriptReader) (typeQueryNode: Ts.TypeQueryNo
                             Documentation = info.Documentation
                             Type = info.Type
                             TypeParameters = info.TypeParameters
+                            OwnTypeParameterNames = []
                             Parameters = info.Parameters
                         }
                         : GlueFunctionType)

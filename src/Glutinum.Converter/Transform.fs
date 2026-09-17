@@ -38,6 +38,13 @@ type Reporter() =
 //
 // IMPORTANT: This memory works because it makes the assumption that
 // we will always generate the type literal before referencing it.
+/// `` ``use``_1 `` is not a name, the suffix goes inside the backticks
+let private withCountSuffix (name: string) (count: int) =
+    if name.EndsWith "``" then
+        name.Substring(0, name.Length - 2) + "_" + string count + "``"
+    else
+        name + "_" + string count
+
 type TypeLiteralsMemory() =
     let memory = Dictionary<string, int>()
 
@@ -45,7 +52,7 @@ type TypeLiteralsMemory() =
         let name =
             if memory.ContainsKey fullName then
                 memory.[fullName] <- memory.[fullName] + 1
-                currentScopeName + "_" + string memory.[fullName]
+                withCountSuffix currentScopeName memory.[fullName]
             else
                 memory.[fullName] <- 0
                 currentScopeName
@@ -59,7 +66,7 @@ type TypeLiteralsMemory() =
             if count = 0 then
                 prefixName
             else
-                prefixName + "_" + string count
+                withCountSuffix prefixName count
         // By safety, if we don't find a match in the memory, we return the name as is
         else
             prefixName
@@ -311,10 +318,10 @@ let private unwrapOptionIfAlreadyOptional
     else
         typ'
 
+// The scope names a module for the anonymous types of the member, `$` is invalid there
 let private sanitizeNameAndPushScope (name: string) (context: TransformContext) =
-    let name = Naming.sanitizeName name
-    let context = context.PushScope name
-    (name, context)
+    let context = context.PushScope(Naming.sanitizeTypeName name)
+    (Naming.sanitizeName name, context)
 
 // Same as `sanitizeNameAndPushScope` but for type-level names (interfaces,
 // classes, modules, type aliases) where `$` and `/` are invalid even when
@@ -853,6 +860,21 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
             |> FSharpType.Delegate
             |> context.ExposeType
 
+            // `mount: <Id>(id: Id) => ...`: a property or a type argument can't be generic,
+            // the function's own type parameters are their default, else `obj`
+            let ownDefaults =
+                functionTypeInfo.TypeParameters
+                |> List.filter (fun typeParameter ->
+                    List.contains typeParameter.Name functionTypeInfo.OwnTypeParameterNames
+                )
+                |> List.map (fun typeParameter ->
+                    typeParameter.Name,
+                    typeParameter.Default
+                    |> Option.map (transformType context)
+                    |> Option.defaultValue FSharpType.Object
+                )
+                |> Map.ofList
+
             ({
                 Attributes = []
                 Name =
@@ -860,7 +882,16 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
                         context.FullName,
                         context.CurrentScopeName
                     )
-                TypeParameters = typParameters.TypeParameters
+                TypeParameters =
+                    typParameters.TypeParameters
+                    |> List.map (fun typeParameter ->
+                        match typeParameter with
+                        | FSharpTypeParameter.FSharpTypeParameter info when
+                            ownDefaults.ContainsKey info.Name
+                            ->
+                            FSharpTypeParameter.FSharpType ownDefaults.[info.Name]
+                        | _ -> typeParameter
+                    )
                 XmlDoc = []
                 Type = FSharpType.Discard
             }
@@ -1206,10 +1237,12 @@ let rec private typeParameterNames (glueType: GlueType) : string list =
     | GlueType.OptionalType glueType -> typeParameterNames glueType
     | GlueType.Union(GlueTypeUnion cases) -> cases |> List.collect typeParameterNames
     | GlueType.TupleType glueTypes -> glueTypes |> List.collect typeParameterNames
+    // The function's own type parameters are bound by it
     | GlueType.FunctionType functionType ->
         typeParameterNames functionType.Type
         @ (functionType.Parameters
            |> List.collect (fun parameter -> typeParameterNames parameter.Type))
+        |> List.filter (fun name -> not (List.contains name functionType.OwnTypeParameterNames))
     | GlueType.TypeLiteral typeLiteral ->
         typeLiteral.Members |> List.collect memberTypeParameterNames
     | _ -> []
@@ -1238,9 +1271,10 @@ let rec private mentionsTypeParameter (name: string) (glueType: GlueType) : bool
     | GlueType.Union(GlueTypeUnion cases) -> cases |> List.exists mentions
     | GlueType.TupleType glueTypes -> glueTypes |> List.exists mentions
     | GlueType.FunctionType functionType ->
-        mentions functionType.Type
-        || functionType.Parameters
-           |> List.exists (fun parameter -> mentions parameter.Type)
+        not (List.contains name functionType.OwnTypeParameterNames)
+        && (mentions functionType.Type
+            || functionType.Parameters
+               |> List.exists (fun parameter -> mentions parameter.Type))
     | GlueType.TypeLiteral typeLiteral ->
         typeLiteral.Members
         |> List.exists (

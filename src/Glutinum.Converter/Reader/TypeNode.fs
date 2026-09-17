@@ -737,6 +737,13 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
             Documentation = reader.ReadDocumentationFromNode typeNode
             Type = reader.ReadTypeNode functionTypeNode.``type``
             TypeParameters = typeParameters
+            OwnTypeParameterNames =
+                match functionTypeNode.typeParameters with
+                | Some own ->
+                    own
+                    |> Seq.map (fun typeParameter -> identifierText typeParameter.name)
+                    |> Seq.toList
+                | None -> []
             Parameters = reader.ReadParameters functionTypeNode.parameters
         }
         |> GlueType.FunctionType

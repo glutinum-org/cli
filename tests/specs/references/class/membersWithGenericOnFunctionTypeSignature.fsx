@@ -13,7 +13,7 @@ type Exports =
 [<AllowNullLiteral>]
 [<Interface>]
 type Test =
-    abstract member parseArg: Test.parseArg<'T> option with get, set
+    abstract member parseArg: Test.parseArg<obj> option with get, set
 
 module Test =
 

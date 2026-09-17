@@ -3552,7 +3552,7 @@ AsyncLocalStorage.bind($0)"""
             /// <returns>
             /// A new function with the signature <c>(fn: (...args) : R, ...args) : R</c>.
             /// </returns>
-            static member inline snapshot () : AsyncLocalStorage.snapshot<'R, 'TArgs> =
+            static member inline snapshot () : AsyncLocalStorage.snapshot<obj, obj> =
                 emitJsExpr () $$"""
 import { AsyncLocalStorage } from "async_hooks";
 AsyncLocalStorage.snapshot()"""

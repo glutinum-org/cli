@@ -300,6 +300,8 @@ type GlueFunctionType =
         // To avoid passing it TypeParameters around in Transform, for now we add it here
         // even if it doesn't make sense for TypeScript
         TypeParameters: GlueTypeParameter list
+        /// The type parameters declared by the function itself, `<T>(x: T) => T`
+        OwnTypeParameterNames: string list
         Parameters: GlueParameter list
     }
 
