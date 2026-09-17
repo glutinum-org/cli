@@ -119,12 +119,21 @@ let readTypeQueryNode (reader: ITypeScriptReader) (typeQueryNode: Ts.TypeQueryNo
 
                 match declaration.kind with
                 | Ts.SyntaxKind.ClassDeclaration ->
+                    // `typeof Action` is the constructor, the instance type arguments are unknown
+                    let typeArguments =
+                        match (declaration :?> Ts.ClassDeclaration).typeParameters with
+                        | Some typeParameters ->
+                            typeParameters
+                            |> Seq.toList
+                            |> List.map (fun _ -> GlueType.Primitive GluePrimitive.Any)
+                        | None -> []
+
                     ({
                         Name = declaredName symbol |> Option.defaultValue symbol.name
                         FullName = checker.getFullyQualifiedName symbol
                         ModulePath =
                             modulePathForSymbol checker reader.PackageContext false (Some symbol)
-                        TypeArguments = []
+                        TypeArguments = typeArguments
                         IsStandardLibrary = false
                     }
                     : GlueTypeReference)
@@ -151,13 +160,53 @@ let readTypeQueryNode (reader: ITypeScriptReader) (typeQueryNode: Ts.TypeQueryNo
                     | glueType -> glueType
                 | Ts.SyntaxKind.MethodDeclaration
                 | Ts.SyntaxKind.MethodSignature ->
-                    let toFunctionDeclaration name documentation parameters returnType =
+                    // `typeof YAMLMap.prototype.add` leaves the type parameters of `YAMLMap<K, V>` free
+                    let inScope =
+                        let rec collect (node: Ts.Node) (acc: string list) =
+                            if isNull node then
+                                acc
+                            else
+                                let typeParameters: ResizeArray<Ts.TypeParameterDeclaration> option =
+                                    node?typeParameters
+
+                                let acc =
+                                    match typeParameters with
+                                    | Some typeParameters ->
+                                        acc
+                                        @ (typeParameters
+                                           |> Seq.toList
+                                           |> List.map (fun typeParameter ->
+                                               identifierText typeParameter.name
+                                           ))
+                                    | None -> acc
+
+                                collect node.parent acc
+
+                        collect (typeQueryNode :> Ts.Node) [] |> set
+
+                    let toFunctionDeclaration
+                        (name: string)
+                        (documentation: GlueComment list)
+                        (parameters: GlueParameter list)
+                        (returnType: GlueType)
+                        =
+                        let free =
+                            [
+                                yield! GlueSubstitution.mentionedTypeParameters returnType
+                                for parameter in parameters do
+                                    yield! GlueSubstitution.mentionedTypeParameters parameter.Type
+                            ]
+                            |> List.filter (fun name -> not (inScope.Contains name))
+                            |> List.map (fun name -> name, GlueType.Primitive GluePrimitive.Any)
+                            |> Map.ofList
+
                         ({
                             Documentation = documentation
                             IsDeclared = true
                             Name = name
-                            Type = returnType
-                            Parameters = parameters
+                            Type = GlueSubstitution.substitute free returnType
+                            Parameters =
+                                parameters |> List.map (GlueSubstitution.substituteParameter free)
                             TypeParameters = []
                         }
                         : GlueFunctionDeclaration)
@@ -169,6 +218,9 @@ let readTypeQueryNode (reader: ITypeScriptReader) (typeQueryNode: Ts.TypeQueryNo
                     | GlueMember.MethodSignature info ->
                         toFunctionDeclaration info.Name info.Documentation info.Parameters info.Type
                     | _ -> GlueType.Primitive GluePrimitive.Any
+                // `typeof Promise` is the `PromiseConstructor` interface of the library, it has no binding
+                | _ when isFromEs5Lib (Some symbol) || isFromEsLib (Some symbol) ->
+                    GlueType.Primitive GluePrimitive.Any
                 | _ ->
                     if declarationsInProgress.Contains declaration then
                         GlueType.Primitive GluePrimitive.Any

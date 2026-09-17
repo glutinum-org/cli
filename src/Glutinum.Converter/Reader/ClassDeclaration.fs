@@ -48,6 +48,7 @@ let readClassDeclaration
     let classDeclaration =
         {
             Documentation = reader.ReadDocumentationFromNode classDeclaration
+            FullName = Utils.getFullNameOrEmpty reader.checker classDeclaration
             Name = name.getText ()
             Constructors = constructors
             Members = members

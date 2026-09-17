@@ -265,6 +265,7 @@ type GlueConstructor =
 type GlueClassDeclaration =
     {
         Documentation: GlueComment list
+        FullName: string
         Name: string
         Constructors: GlueConstructor list
         Members: GlueMember list

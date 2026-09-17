@@ -67,6 +67,12 @@ let rec private signatureTypeAt (depth: int) (typ: FSharpType) : FSharpType =
         |> signatureType
     | FSharpType.TypeReference typeReference ->
         { typeReference with
+            // Both are `TypedArray<byte>` in Fable.Core
+            Name =
+                if typeReference.Name = "JS.Uint8ClampedArray" then
+                    "JS.Uint8Array"
+                else
+                    typeReference.Name
             FullName = ""
             TypeArguments = typeReference.TypeArguments |> List.map signatureType
             Type = FSharpType.Discard

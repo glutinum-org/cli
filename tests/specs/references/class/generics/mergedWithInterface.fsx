@@ -19,7 +19,7 @@ type EventMap =
 [<AllowNullLiteral>]
 [<Interface>]
 type EventEmitter<'T> =
-    abstract member on: event: string -> EventEmitter
+    abstract member on: event: string -> EventEmitter<'T>
     abstract member emit: event: string -> bool
 
 type EventEmitter =

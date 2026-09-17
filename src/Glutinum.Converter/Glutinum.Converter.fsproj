@@ -41,6 +41,7 @@
     <Compile Include="FsharpAST.fs" />
     <Compile Include="Read.fs" />
     <Compile Include="Merge.fs" />
+    <Compile Include="Abbreviations.fs" />
     <Compile Include="Transform.fs" />
     <Compile Include="Printer.fs" />
     <Compile Include="Packages.fs" />

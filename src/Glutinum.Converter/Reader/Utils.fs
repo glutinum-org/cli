@@ -180,9 +180,44 @@ let tryReadKeyOfConstraint
             typeOperator.operator = Ts.SyntaxKind.KeyOfKeyword
             && typeOperator.``type``.kind = Ts.SyntaxKind.TypeReference
         then
-            match reader.ReadTypeNode typeOperator.``type`` with
-            | GlueType.TypeReference _ as map -> Some(GlueType.KeyOf map)
-            | _ -> None
+            let typeReferenceNode = typeOperator.``type`` :?> Ts.TypeReferenceNode
+
+            // An external binding has a `Key` type for the interfaces of its maps only
+            let isExternalAlias =
+                symbolAtLocation reader.checker !!typeReferenceNode.typeName
+                |> Option.map (fun (symbol: Ts.Symbol) ->
+                    match symbol.flags with
+                    | HasSymbolFlags Ts.SymbolFlags.Alias -> reader.checker.getAliasedSymbol symbol
+                    | _ -> symbol
+                )
+                |> Option.bind (fun (symbol: Ts.Symbol) -> symbol.declarations)
+                |> Option.map (fun declarations ->
+                    let isExternal =
+                        match reader.PackageContext, Seq.tryHead declarations with
+                        | Some packageContext, Some(declaration: Ts.Declaration) ->
+                            (packageContext.TryFindPackage(declaration.getSourceFile().fileName))
+                                .IsNone
+                        | _ -> false
+
+                    isExternal
+                    && not (
+                        declarations
+                        |> Seq.exists (fun (declaration: Ts.Declaration) ->
+                            match declaration.kind with
+                            | Ts.SyntaxKind.InterfaceDeclaration
+                            | Ts.SyntaxKind.ClassDeclaration -> true
+                            | _ -> false
+                        )
+                    )
+                )
+                |> Option.defaultValue false
+
+            if isExternalAlias then
+                None
+            else
+                match reader.ReadTypeNode typeOperator.``type`` with
+                | GlueType.TypeReference _ as map -> Some(GlueType.KeyOf map)
+                | _ -> None
         else
             None
     | _ -> None
@@ -223,6 +258,59 @@ let readTypeArguments (reader: ITypeScriptReader) (node: Ts.NodeWithTypeArgument
     | None -> []
     | Some typeArguments -> typeArguments |> Seq.toList |> List.map (Some >> reader.ReadTypeNode)
 
+/// The type arguments the checker resolved for a type alias or an object type reference
+let resolvedTypeArguments (checker: Ts.TypeChecker) (typ: Ts.Type) : Ts.Type list =
+    let aliasTypeArguments: ResizeArray<Ts.Type> option = typ?aliasTypeArguments
+
+    match typ.aliasSymbol, aliasTypeArguments with
+    | Some _, Some aliasTypeArguments -> aliasTypeArguments |> Seq.toList
+    | _ ->
+        match typ.flags with
+        | HasTypeFlags Ts.TypeFlags.Object when
+            int (typ :?> Ts.ObjectType).objectFlags &&& int Ts.ObjectFlags.Reference <> 0
+            ->
+            checker.getTypeArguments (typ :?> Ts.TypeReference) |> Seq.toList
+        | _ -> []
+
+/// `class X extends TempNode` where `const TempNode: { new<T = unknown>(): TempNode<T> }`:
+/// the type arguments of the base type the checker instantiated
+let resolvedBaseTypeArguments
+    (checker: Ts.TypeChecker)
+    (expression: Ts.ExpressionWithTypeArguments)
+    : Ts.Type list
+    =
+    let heritageClause: Ts.Node = expression.parent
+
+    let isValue =
+        match checker.getSymbolAtLocation expression.expression with
+        | Some symbol ->
+            // `import TempNode from "./TempNode.js"` is an alias of the constant
+            let symbol =
+                match symbol.flags with
+                | HasSymbolFlags Ts.SymbolFlags.Alias -> checker.getAliasedSymbol symbol
+                | _ -> symbol
+
+            match symbol.flags with
+            | HasSymbolFlags Ts.SymbolFlags.Variable -> true
+            | _ -> false
+        | None -> false
+
+    if
+        isNull heritageClause
+        || heritageClause.kind <> Ts.SyntaxKind.HeritageClause
+        || heritageClause?token <> Ts.SyntaxKind.ExtendsKeyword
+        || heritageClause.parent.kind <> Ts.SyntaxKind.ClassDeclaration
+        || not isValue
+    then
+        []
+    else
+        let classType = checker.getTypeAtLocation heritageClause.parent :?> Ts.InterfaceType
+
+        checker.getBaseTypes classType
+        |> Seq.tryHead
+        |> Option.map (fun baseType -> resolvedTypeArguments checker (unbox<Ts.Type> baseType))
+        |> Option.defaultValue []
+
 let readHeritageClauses
     (reader: ITypeScriptReader)
     (heritageClauses: ResizeArray<Ts.HeritageClause> option)
@@ -253,12 +341,27 @@ let isFromEs5Lib (symbolOpt: Ts.Symbol option) =
             // So, we make a naive fallback checking the name of the symbol
             [ "Iterable"; "IterableIterator" ] |> List.contains symbol.name
         | Some declarations ->
-            match declarations[0].parent.kind with
-            | Ts.SyntaxKind.SourceFile ->
-                let sourceFile = declarations[0].parent :?> Ts.SourceFile
+            // A declaration synthesized by the checker has no parent
+            if declarations.Count = 0 || isNull declarations[0].parent then
+                false
+            else
+                match declarations[0].parent.kind with
+                | Ts.SyntaxKind.SourceFile ->
+                    let sourceFile = declarations[0].parent :?> Ts.SourceFile
 
-                sourceFile.fileName.EndsWith("lib/lib.es5.d.ts")
-            | _ -> false
+                    sourceFile.fileName.EndsWith("lib/lib.es5.d.ts")
+                | _ -> false
+
+/// `PromiseConstructor` of `lib.es2015.promise.d.ts`: a type of the ECMAScript libraries
+let isFromEsLib (symbolOpt: Ts.Symbol option) =
+    match symbolOpt with
+    | None -> false
+    | Some symbol ->
+        match symbol.declarations with
+        | Some declarations when declarations.Count > 0 ->
+            let fileName = String.normalizePath (declarations[0].getSourceFile().fileName)
+            fileName.Contains "/lib/lib.es"
+        | _ -> false
 
 /// Library types the converter maps to an existing F# type, kept even when declared outside the packages
 let knownExternalTypeNames =

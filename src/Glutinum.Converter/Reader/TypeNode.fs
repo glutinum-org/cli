@@ -173,6 +173,7 @@ let private readTypeUsingFlags (reader: ITypeScriptReader) (typ: Ts.Type) =
             | Ts.SyntaxKind.ClassDeclaration ->
                 {
                     Documentation = []
+                    FullName = reader.checker.getFullyQualifiedName typ.symbol
                     Name = typ.symbol.name
                     Constructors = []
                     Members = []
@@ -342,12 +343,16 @@ module UtilityType =
                     false
                 else
                     match typ.symbol.declarations with
-                    | Some declarations when declarations.Count > 0 ->
-                        match declarations.[0].kind with
-                        | Ts.SyntaxKind.InterfaceDeclaration
-                        | Ts.SyntaxKind.ClassDeclaration -> true
-                        | _ -> false
-                    | _ -> false
+                    // `namespace Selection {}` merged with `interface Selection {}` is declared first
+                    | Some declarations ->
+                        declarations
+                        |> Seq.exists (fun declaration ->
+                            match declaration.kind with
+                            | Ts.SyntaxKind.InterfaceDeclaration
+                            | Ts.SyntaxKind.ClassDeclaration -> true
+                            | _ -> false
+                        )
+                    | None -> false
 
             let isTypeAliasApplication =
                 match reader.checker.getSymbolAtLocation !!typeReferenceNode.typeName with
@@ -361,9 +366,28 @@ module UtilityType =
                 expansionsInProgress
                 |> Seq.exists (fun inProgress -> obj.ReferenceEquals(inProgress, typ))
 
+            // `ProxiedObject<P>` of `P extends Array<Node>`: the members of a mapped type applied
+            // to a type parameter are the ones of its constraint
+            let isGenericMapped =
+                match typ.flags with
+                | HasTypeFlags Ts.TypeFlags.Object ->
+                    int (typ :?> Ts.ObjectType).objectFlags &&& int Ts.ObjectFlags.Mapped <> 0
+                    && typeReferenceNode.typeArguments.Value
+                       |> Seq.exists (fun argument ->
+                           match (reader.checker.getTypeFromTypeNode argument).flags with
+                           | HasTypeFlags Ts.TypeFlags.TypeParameter -> true
+                           | _ -> false
+                       )
+                | _ -> false
+
+            // `readonly [...ObservableInputTuple<A>]` is an array too
+            let isArrayLike: bool = reader.checker?isArrayLikeType (typ)
+
             match typ.flags with
             // `Parameters<F>` is a tuple, not the object made of the array members
-            | HasTypeFlags Ts.TypeFlags.Object when isTupleType typ && not isInProgress ->
+            | HasTypeFlags Ts.TypeFlags.Object when
+                (isTupleType typ || (isArrayLike && not isNamedDeclaration)) && not isInProgress
+                ->
                 let flags =
                     Ts.NodeBuilderFlags.NoTruncation
                     ||| Ts.NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope
@@ -371,7 +395,9 @@ module UtilityType =
                 reader.checker.typeToTypeNode (typ, None, Some flags)
                 |> Option.map reader.ReadTypeNode
             // A recursive application (e.g. `swap(): Pair<S, C>` inside `Pair<C, S>`) stays a reference
-            | HasTypeFlags Ts.TypeFlags.Object when not isNamedDeclaration && not isInProgress ->
+            | HasTypeFlags Ts.TypeFlags.Object when
+                not isNamedDeclaration && not isInProgress && not isGenericMapped
+                ->
                 expansionsInProgress.Add typ
 
                 let members =
@@ -409,33 +435,53 @@ module UtilityType =
             partialsBeingRead.Add baseType
 
             try
-                let members =
+                // `Partial<[x: number, order?: Order]>` is the tuple with optional elements
+                let isArrayLike: bool =
                     match baseType.flags with
-                    | HasTypeFlags Ts.TypeFlags.Any ->
-                        Report.readerError (
-                            "partial inner type",
-                            "Was not able to resolve the inner type, and defaulting to any. If the base type is defined, in another file, please make sure to include it in the input files",
-                            typeReferenceNode
-                        )
-                        |> reader.Warnings.Add
+                    | HasTypeFlags Ts.TypeFlags.Object -> reader.checker?isArrayLikeType (baseType)
+                    | _ -> false
 
-                        []
+                if isTupleType baseType || isArrayLike then
+                    let flags =
+                        Ts.NodeBuilderFlags.NoTruncation
+                        ||| Ts.NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope
 
-                    | _ -> baseType |> readMembers reader typeReferenceNode
+                    reader.checker.typeToTypeNode (
+                        reader.checker.getTypeFromTypeNode typeReferenceNode,
+                        None,
+                        Some flags
+                    )
+                    |> reader.ReadTypeNode
+                else
 
-                let defaults = defaultTypeArguments reader typeReferenceNode.typeArguments.Value[0]
+                    let members =
+                        match baseType.flags with
+                        | HasTypeFlags Ts.TypeFlags.Any ->
+                            Report.readerError (
+                                "partial inner type",
+                                "Was not able to resolve the inner type, and defaulting to any. If the base type is defined, in another file, please make sure to include it in the input files",
+                                typeReferenceNode
+                            )
+                            |> reader.Warnings.Add
 
-                ({
-                    Documentation = []
-                    FullName = getFullNameOrEmpty reader.checker typeReferenceNode
-                    Name = entityNameText !!typeReferenceNode.typeName
-                    Members = members |> List.map (GlueSubstitution.substituteMember defaults)
-                    TypeParameters = []
-                    HeritageClauses = []
-                }
-                : GlueInterface)
-                |> GlueUtilityType.Partial
-                |> GlueType.UtilityType
+                            []
+
+                        | _ -> baseType |> readMembers reader typeReferenceNode
+
+                    let defaults =
+                        defaultTypeArguments reader typeReferenceNode.typeArguments.Value[0]
+
+                    ({
+                        Documentation = []
+                        FullName = getFullNameOrEmpty reader.checker typeReferenceNode
+                        Name = entityNameText !!typeReferenceNode.typeName
+                        Members = members |> List.map (GlueSubstitution.substituteMember defaults)
+                        TypeParameters = []
+                        HeritageClauses = []
+                    }
+                    : GlueInterface)
+                    |> GlueUtilityType.Partial
+                    |> GlueType.UtilityType
             finally
                 partialsBeingRead.RemoveAt(partialsBeingRead.Count - 1)
 
@@ -804,7 +850,7 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
             | "Readonly" -> UtilityType.readReadonly reader typeReferenceNode
             | _ -> readTypeReference true
         else
-            readTypeReference false
+            readTypeReference (isFromEsLib symbolOpt)
 
     | Ts.SyntaxKind.ArrayType ->
         let arrayTypeNode = typeNode :?> Ts.ArrayTypeNode
@@ -919,20 +965,22 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                      typ.symbol.declarations)
             with
             | Some declarations ->
-                // We don't know how to read the type parameters
-                if declarations.Count <> 1 then
-                    []
-                else
-                    let declaration = declarations.[0]
-
+                // The interface merged with a namespace, or augmented by another module,
+                // declares its type parameters on one of its declarations
+                declarations
+                |> Seq.choose (fun declaration ->
                     match declaration.kind with
                     | Ts.SyntaxKind.ClassDeclaration
                     | Ts.SyntaxKind.InterfaceDeclaration ->
-                        // We regroup the case to the same type because we just want to read the type parameters
                         let classDeclaration = declaration :?> Ts.InterfaceDeclaration
 
-                        reader.ReadTypeParameters classDeclaration.typeParameters
-                    | _ -> []
+                        classDeclaration.typeParameters
+                    | _ -> None
+                )
+                |> Seq.sortByDescending (fun typeParameters -> typeParameters.Count)
+                |> Seq.tryHead
+                |> Option.map (Some >> reader.ReadTypeParameters)
+                |> Option.defaultValue []
             | None -> []
 
         if isNull (box typ.symbol) then
@@ -940,7 +988,7 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
         else
 
             ({
-                Name = typ.symbol.name
+                Name = declaredName typ.symbol |> Option.defaultValue typ.symbol.name
                 TypeParameters = typParameters
             }
             : GlueThisType)
@@ -1127,8 +1175,14 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
 
             let isExternal = isExternalToPackages checker reader.PackageContext symbolOpt
 
+            // `extends ReturnType<...>` resolves to an anonymous type, it has no declaration to inherit
+            let isAnonymous =
+                match symbolOpt with
+                | Some symbol -> symbol.name = "__type" || symbol.name = "__object"
+                | None -> false
+
             // An external base type can't be inherited, `inherit obj` is invalid
-            if isExternal && not (knownExternalTypeNames.Contains name) then
+            if isAnonymous || (isExternal && not (knownExternalTypeNames.Contains name)) then
                 GlueType.Discard
             else
                 ({
@@ -1144,7 +1198,19 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                         | None -> getFullNameOrEmpty checker expression.expression
                     ModulePath =
                         modulePathForSymbol checker reader.PackageContext isQualified symbolOpt
-                    TypeArguments = readTypeArguments reader expression
+                    TypeArguments =
+                        match readTypeArguments reader expression with
+                        | [] ->
+                            resolvedBaseTypeArguments checker expression
+                            |> List.map (fun argument ->
+                                let flags =
+                                    Ts.NodeBuilderFlags.NoTruncation
+                                    ||| Ts.NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope
+
+                                checker.typeToTypeNode (argument, None, Some flags)
+                                |> reader.ReadTypeNode
+                            )
+                        | typeArguments -> typeArguments
                     IsStandardLibrary = isFromEs5Lib symbolOpt || isExternal
                 })
                 |> GlueType.TypeReference

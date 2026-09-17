@@ -48009,7 +48009,7 @@ EventEmitter.getMaxListeners($0)"""
             /// Zero or more {EventTarget} or {EventEmitter} instances. If none are specified, <c>n</c> is set as the default max for all newly created {EventTarget} and {EventEmitter}
             /// objects.
             /// </param>
-            static member inline setMaxListeners (n: float, [<ParamArray>] eventTargets: ResizeArray<U2<Node.EventTarget, Node.NodeJS.EventEmitter>> []): unit =
+            static member inline setMaxListeners (n: float, [<ParamArray>] eventTargets: U2<Node.EventTarget, Node.NodeJS.EventEmitter> []): unit =
                 emitJsExpr (n, eventTargets) $$"""
 import { EventEmitter } from "events";
 EventEmitter.setMaxListeners($0, $1)"""
@@ -53603,13 +53603,13 @@ EventEmitter.defaultMaxListeners = $0"""
             /// <c>position</c> defaults to <c>null</c>
             /// </summary>
             [<Import("read", "fs")>]
-            static member read<'TBuffer> (fd: float, options: Node.fs.ReadOptionsWithBuffer<'TBuffer>, callback: Exports.read.callback_1<'TBuffer>) : unit = nativeOnly
+            static member read<'TBuffer> (fd: float, options: Node.fs.ReadOptionsWithBuffer<'TBuffer>, callback: Exports.read.callback<'TBuffer>) : unit = nativeOnly
             [<Import("read", "fs")>]
             static member read<'TBuffer> (fd: float, buffer: 'TBuffer, options: Node.fs.ReadOptions, callback: Exports.read.callback<'TBuffer>) : unit = nativeOnly
             [<Import("read", "fs")>]
             static member read<'TBuffer> (fd: float, buffer: 'TBuffer, callback: Exports.read.callback<'TBuffer>) : unit = nativeOnly
             [<Import("read", "fs")>]
-            static member read (fd: float, callback: Exports.read.callback_2) : unit = nativeOnly
+            static member read (fd: float, callback: Exports.read.callback_1) : unit = nativeOnly
             /// <summary>
             /// Returns the number of <c>bytesRead</c>.
             ///
@@ -67756,10 +67756,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 type callback<'TBuffer> =
                     delegate of err: Node.NodeJS.ErrnoException option * bytesRead: float * buffer: 'TBuffer -> unit
 
-                type callback_1<'TBuffer> =
-                    delegate of err: Node.NodeJS.ErrnoException option * bytesRead: float * buffer: 'TBuffer -> unit
-
-                type callback_2 =
+                type callback_1 =
                     delegate of err: Node.NodeJS.ErrnoException option * bytesRead: float * buffer: Node.NonSharedBuffer -> unit
 
             module readFile =
@@ -77080,10 +77077,10 @@ EventEmitter.defaultMaxListeners = $0"""
             abstract member prependOnceListener_upgrade: listener: Server.prependOnceListener_upgrade.listener -> Server<'Request, 'Response>
 
         type Server<'Request> =
-            Server<'Request, Node.http.ServerResponse>
+            Server<'Request, Node.http.ServerResponse<obj>>
 
         type Server =
-            Server<Node.http.IncomingMessage, Node.http.ServerResponse>
+            Server<Node.http.IncomingMessage, Node.http.ServerResponse<obj>>
 
         /// <summary>
         /// This class serves as the parent class of <see href="ClientRequest">ClientRequest</see> and <see href="ServerResponse">ServerResponse</see>. It is an abstract outgoing message from
@@ -80466,16 +80463,16 @@ EventEmitter.defaultMaxListeners = $0"""
             inherit Node.http.ClientRequestArgs
 
         type ServerOptions<'Request> =
-            ServerOptions<'Request, Node.http.ServerResponse>
+            ServerOptions<'Request, Node.http.ServerResponse<obj>>
 
         type ServerOptions =
-            ServerOptions<Node.http.IncomingMessage, Node.http.ServerResponse>
+            ServerOptions<Node.http.IncomingMessage, Node.http.ServerResponse<obj>>
 
         type RequestListener<'Request> =
-            RequestListener<'Request, Node.http.ServerResponse>
+            RequestListener<'Request, Node.http.ServerResponse<obj>>
 
         type RequestListener =
-            RequestListener<Node.http.IncomingMessage, Node.http.ServerResponse>
+            RequestListener<Node.http.IncomingMessage, Node.http.ServerResponse<obj>>
 
         module ClientRequestArgs =
 
@@ -89774,7 +89771,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// <param name="origins">
             /// One or more URL Strings passed as separate arguments.
             /// </param>
-            abstract member origin: [<ParamArray>] origins: ResizeArray<U3<string, Node.url.URL, ServerHttp2Session.origin.origins.U3.Case3>> [] -> unit
+            abstract member origin: [<ParamArray>] origins: U3<string, Node.url.URL, ServerHttp2Session.origin.origins.U3.Case3> [] -> unit
             /// <summary>
             /// Alias for <c>emitter.on(eventName, listener)</c>.
             /// </summary>
@@ -99782,88 +99779,88 @@ EventEmitter.defaultMaxListeners = $0"""
                 abstract member HTTP_STATUS_NETWORK_AUTHENTICATION_REQUIRED: float
 
         type ServerHttp2Session<'Http1Request, 'Http1Response, 'Http2Request> =
-            ServerHttp2Session<'Http1Request, 'Http1Response, 'Http2Request, Node.http2.Http2ServerResponse>
+            ServerHttp2Session<'Http1Request, 'Http1Response, 'Http2Request, Node.http2.Http2ServerResponse<obj>>
 
         type ServerHttp2Session<'Http1Request, 'Http1Response> =
-            ServerHttp2Session<'Http1Request, 'Http1Response, Node.http2.Http2ServerRequest, Node.http2.Http2ServerResponse>
+            ServerHttp2Session<'Http1Request, 'Http1Response, Node.http2.Http2ServerRequest, Node.http2.Http2ServerResponse<obj>>
 
         type ServerHttp2Session<'Http1Request> =
-            ServerHttp2Session<'Http1Request, Node.http.ServerResponse, Node.http2.Http2ServerResponse, Node.http2.Http2ServerRequest>
+            ServerHttp2Session<'Http1Request, Node.http.ServerResponse<obj>, Node.http2.Http2ServerRequest, Node.http2.Http2ServerResponse<obj>>
 
         type ServerHttp2Session =
-            ServerHttp2Session<Node.http.IncomingMessage, Node.http2.Http2ServerResponse, Node.http2.Http2ServerRequest, Node.http.ServerResponse>
+            ServerHttp2Session<Node.http.IncomingMessage, Node.http.ServerResponse<obj>, Node.http2.Http2ServerRequest, Node.http2.Http2ServerResponse<obj>>
 
         type ServerSessionOptions<'Http1Request, 'Http1Response, 'Http2Request> =
-            ServerSessionOptions<'Http1Request, 'Http1Response, 'Http2Request, Node.http2.Http2ServerResponse>
+            ServerSessionOptions<'Http1Request, 'Http1Response, 'Http2Request, Node.http2.Http2ServerResponse<obj>>
 
         type ServerSessionOptions<'Http1Request, 'Http1Response> =
-            ServerSessionOptions<'Http1Request, 'Http1Response, Node.http2.Http2ServerRequest, Node.http2.Http2ServerResponse>
+            ServerSessionOptions<'Http1Request, 'Http1Response, Node.http2.Http2ServerRequest, Node.http2.Http2ServerResponse<obj>>
 
         type ServerSessionOptions<'Http1Request> =
-            ServerSessionOptions<'Http1Request, Node.http.ServerResponse, Node.http2.Http2ServerResponse, Node.http2.Http2ServerRequest>
+            ServerSessionOptions<'Http1Request, Node.http.ServerResponse<obj>, Node.http2.Http2ServerRequest, Node.http2.Http2ServerResponse<obj>>
 
         type ServerSessionOptions =
-            ServerSessionOptions<Node.http.IncomingMessage, Node.http2.Http2ServerResponse, Node.http2.Http2ServerRequest, Node.http.ServerResponse>
+            ServerSessionOptions<Node.http.IncomingMessage, Node.http.ServerResponse<obj>, Node.http2.Http2ServerRequest, Node.http2.Http2ServerResponse<obj>>
 
         type SecureServerSessionOptions<'Http1Request, 'Http1Response, 'Http2Request> =
-            SecureServerSessionOptions<'Http1Request, 'Http1Response, 'Http2Request, Node.http2.Http2ServerResponse>
+            SecureServerSessionOptions<'Http1Request, 'Http1Response, 'Http2Request, Node.http2.Http2ServerResponse<obj>>
 
         type SecureServerSessionOptions<'Http1Request, 'Http1Response> =
-            SecureServerSessionOptions<'Http1Request, 'Http1Response, Node.http2.Http2ServerRequest, Node.http2.Http2ServerResponse>
+            SecureServerSessionOptions<'Http1Request, 'Http1Response, Node.http2.Http2ServerRequest, Node.http2.Http2ServerResponse<obj>>
 
         type SecureServerSessionOptions<'Http1Request> =
-            SecureServerSessionOptions<'Http1Request, Node.http.ServerResponse, Node.http2.Http2ServerResponse, Node.http2.Http2ServerRequest>
+            SecureServerSessionOptions<'Http1Request, Node.http.ServerResponse<obj>, Node.http2.Http2ServerRequest, Node.http2.Http2ServerResponse<obj>>
 
         type SecureServerSessionOptions =
-            SecureServerSessionOptions<Node.http.IncomingMessage, Node.http2.Http2ServerResponse, Node.http2.Http2ServerRequest, Node.http.ServerResponse>
+            SecureServerSessionOptions<Node.http.IncomingMessage, Node.http.ServerResponse<obj>, Node.http2.Http2ServerRequest, Node.http2.Http2ServerResponse<obj>>
 
         type ServerOptions<'Http1Request, 'Http1Response, 'Http2Request> =
-            ServerOptions<'Http1Request, 'Http1Response, 'Http2Request, Node.http2.Http2ServerResponse>
+            ServerOptions<'Http1Request, 'Http1Response, 'Http2Request, Node.http2.Http2ServerResponse<obj>>
 
         type ServerOptions<'Http1Request, 'Http1Response> =
-            ServerOptions<'Http1Request, 'Http1Response, Node.http2.Http2ServerRequest, Node.http2.Http2ServerResponse>
+            ServerOptions<'Http1Request, 'Http1Response, Node.http2.Http2ServerRequest, Node.http2.Http2ServerResponse<obj>>
 
         type ServerOptions<'Http1Request> =
-            ServerOptions<'Http1Request, Node.http.ServerResponse, Node.http2.Http2ServerResponse, Node.http2.Http2ServerRequest>
+            ServerOptions<'Http1Request, Node.http.ServerResponse<obj>, Node.http2.Http2ServerRequest, Node.http2.Http2ServerResponse<obj>>
 
         type ServerOptions =
-            ServerOptions<Node.http.IncomingMessage, Node.http2.Http2ServerResponse, Node.http2.Http2ServerRequest, Node.http.ServerResponse>
+            ServerOptions<Node.http.IncomingMessage, Node.http.ServerResponse<obj>, Node.http2.Http2ServerRequest, Node.http2.Http2ServerResponse<obj>>
 
         type SecureServerOptions<'Http1Request, 'Http1Response, 'Http2Request> =
-            SecureServerOptions<'Http1Request, 'Http1Response, 'Http2Request, Node.http2.Http2ServerResponse>
+            SecureServerOptions<'Http1Request, 'Http1Response, 'Http2Request, Node.http2.Http2ServerResponse<obj>>
 
         type SecureServerOptions<'Http1Request, 'Http1Response> =
-            SecureServerOptions<'Http1Request, 'Http1Response, Node.http2.Http2ServerRequest, Node.http2.Http2ServerResponse>
+            SecureServerOptions<'Http1Request, 'Http1Response, Node.http2.Http2ServerRequest, Node.http2.Http2ServerResponse<obj>>
 
         type SecureServerOptions<'Http1Request> =
-            SecureServerOptions<'Http1Request, Node.http.ServerResponse, Node.http2.Http2ServerResponse, Node.http2.Http2ServerRequest>
+            SecureServerOptions<'Http1Request, Node.http.ServerResponse<obj>, Node.http2.Http2ServerRequest, Node.http2.Http2ServerResponse<obj>>
 
         type SecureServerOptions =
-            SecureServerOptions<Node.http.IncomingMessage, Node.http2.Http2ServerResponse, Node.http2.Http2ServerRequest, Node.http.ServerResponse>
+            SecureServerOptions<Node.http.IncomingMessage, Node.http.ServerResponse<obj>, Node.http2.Http2ServerRequest, Node.http2.Http2ServerResponse<obj>>
 
         type Http2Server<'Http1Request, 'Http1Response, 'Http2Request> =
-            Http2Server<'Http1Request, 'Http1Response, 'Http2Request, Node.http2.Http2ServerResponse>
+            Http2Server<'Http1Request, 'Http1Response, 'Http2Request, Node.http2.Http2ServerResponse<obj>>
 
         type Http2Server<'Http1Request, 'Http1Response> =
-            Http2Server<'Http1Request, 'Http1Response, Node.http2.Http2ServerRequest, Node.http2.Http2ServerResponse>
+            Http2Server<'Http1Request, 'Http1Response, Node.http2.Http2ServerRequest, Node.http2.Http2ServerResponse<obj>>
 
         type Http2Server<'Http1Request> =
-            Http2Server<'Http1Request, Node.http.ServerResponse, Node.http2.Http2ServerResponse, Node.http2.Http2ServerRequest>
+            Http2Server<'Http1Request, Node.http.ServerResponse<obj>, Node.http2.Http2ServerRequest, Node.http2.Http2ServerResponse<obj>>
 
         type Http2Server =
-            Http2Server<Node.http.IncomingMessage, Node.http2.Http2ServerResponse, Node.http2.Http2ServerRequest, Node.http.ServerResponse>
+            Http2Server<Node.http.IncomingMessage, Node.http.ServerResponse<obj>, Node.http2.Http2ServerRequest, Node.http2.Http2ServerResponse<obj>>
 
         type Http2SecureServer<'Http1Request, 'Http1Response, 'Http2Request> =
-            Http2SecureServer<'Http1Request, 'Http1Response, 'Http2Request, Node.http2.Http2ServerResponse>
+            Http2SecureServer<'Http1Request, 'Http1Response, 'Http2Request, Node.http2.Http2ServerResponse<obj>>
 
         type Http2SecureServer<'Http1Request, 'Http1Response> =
-            Http2SecureServer<'Http1Request, 'Http1Response, Node.http2.Http2ServerRequest, Node.http2.Http2ServerResponse>
+            Http2SecureServer<'Http1Request, 'Http1Response, Node.http2.Http2ServerRequest, Node.http2.Http2ServerResponse<obj>>
 
         type Http2SecureServer<'Http1Request> =
-            Http2SecureServer<'Http1Request, Node.http.ServerResponse, Node.http2.Http2ServerResponse, Node.http2.Http2ServerRequest>
+            Http2SecureServer<'Http1Request, Node.http.ServerResponse<obj>, Node.http2.Http2ServerRequest, Node.http2.Http2ServerResponse<obj>>
 
         type Http2SecureServer =
-            Http2SecureServer<Node.http.IncomingMessage, Node.http2.Http2ServerResponse, Node.http2.Http2ServerRequest, Node.http.ServerResponse>
+            Http2SecureServer<Node.http.IncomingMessage, Node.http.ServerResponse<obj>, Node.http2.Http2ServerRequest, Node.http2.Http2ServerResponse<obj>>
 
         module ServerStreamFileResponseOptions =
 
@@ -102757,7 +102754,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// 5. secureConnection
             /// 6. keylog
             /// </summary>
-            abstract member addListener<'A>: event: string * listener: ('A -> unit) -> Server
+            abstract member addListener<'A>: event: string * listener: ('A -> unit) -> Server<'Request, 'Response>
             /// <summary>
             /// events.EventEmitter
             /// 1. tlsClientError
@@ -102767,7 +102764,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// 5. secureConnection
             /// 6. keylog
             /// </summary>
-            abstract member addListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Server
+            abstract member addListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Server<'Request, 'Response>
             /// <summary>
             /// events.EventEmitter
             /// 1. tlsClientError
@@ -102777,7 +102774,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// 5. secureConnection
             /// 6. keylog
             /// </summary>
-            abstract member addListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Server
+            abstract member addListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Server<'Request, 'Response>
             /// <summary>
             /// events.EventEmitter
             /// 1. tlsClientError
@@ -102787,7 +102784,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// 5. secureConnection
             /// 6. keylog
             /// </summary>
-            abstract member addListener: event: string * listener: System.Delegate -> Server
+            abstract member addListener: event: string * listener: System.Delegate -> Server<'Request, 'Response>
             /// <summary>
             /// events.EventEmitter
             /// 1. tlsClientError
@@ -102798,7 +102795,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// 6. keylog
             /// </summary>
             [<Emit("$0.addListener('keylog',$1...)")>]
-            abstract member addListener_keylog: listener: Server.addListener_keylog.listener -> Server
+            abstract member addListener_keylog: listener: Server.addListener_keylog.listener -> Server<'Request, 'Response>
             /// <summary>
             /// events.EventEmitter
             /// 1. tlsClientError
@@ -102809,7 +102806,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// 6. keylog
             /// </summary>
             [<Emit("$0.addListener('newSession',$1...)")>]
-            abstract member addListener_newSession: listener: Server.addListener_newSession.listener -> Server
+            abstract member addListener_newSession: listener: Server.addListener_newSession.listener -> Server<'Request, 'Response>
             /// <summary>
             /// events.EventEmitter
             /// 1. tlsClientError
@@ -102820,7 +102817,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// 6. keylog
             /// </summary>
             [<Emit("$0.addListener('OCSPRequest',$1...)")>]
-            abstract member addListener_OCSPRequest: listener: Server.addListener_OCSPRequest.listener -> Server
+            abstract member addListener_OCSPRequest: listener: Server.addListener_OCSPRequest.listener -> Server<'Request, 'Response>
             /// <summary>
             /// events.EventEmitter
             /// 1. tlsClientError
@@ -102831,7 +102828,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// 6. keylog
             /// </summary>
             [<Emit("$0.addListener('resumeSession',$1...)")>]
-            abstract member addListener_resumeSession: listener: Server.addListener_resumeSession.listener -> Server
+            abstract member addListener_resumeSession: listener: Server.addListener_resumeSession.listener -> Server<'Request, 'Response>
             /// <summary>
             /// events.EventEmitter
             /// 1. tlsClientError
@@ -102842,7 +102839,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// 6. keylog
             /// </summary>
             [<Emit("$0.addListener('secureConnection',$1...)")>]
-            abstract member addListener_secureConnection: listener: (Node.tls.TLSSocket -> unit) -> Server
+            abstract member addListener_secureConnection: listener: (Node.tls.TLSSocket -> unit) -> Server<'Request, 'Response>
             /// <summary>
             /// events.EventEmitter
             /// 1. tlsClientError
@@ -102853,7 +102850,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// 6. keylog
             /// </summary>
             [<Emit("$0.addListener('tlsClientError',$1...)")>]
-            abstract member addListener_tlsClientError: listener: Server.addListener_tlsClientError.listener -> Server
+            abstract member addListener_tlsClientError: listener: Server.addListener_tlsClientError.listener -> Server<'Request, 'Response>
             /// <summary>
             /// events.EventEmitter
             /// 1. tlsClientError
@@ -102864,7 +102861,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// 6. keylog
             /// </summary>
             [<Emit("$0.addListener('close',$1...)")>]
-            abstract member addListener_close: listener: (unit -> unit) -> Server
+            abstract member addListener_close: listener: (unit -> unit) -> Server<'Request, 'Response>
             /// <summary>
             /// events.EventEmitter
             /// 1. tlsClientError
@@ -102875,7 +102872,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// 6. keylog
             /// </summary>
             [<Emit("$0.addListener('connection',$1...)")>]
-            abstract member addListener_connection: listener: (Node.stream.Stream_.Duplex -> unit) -> Server
+            abstract member addListener_connection: listener: (Node.stream.Stream_.Duplex -> unit) -> Server<'Request, 'Response>
             /// <summary>
             /// events.EventEmitter
             /// 1. tlsClientError
@@ -102886,7 +102883,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// 6. keylog
             /// </summary>
             [<Emit("$0.addListener('error',$1...)")>]
-            abstract member addListener_error: listener: (Exception -> unit) -> Server
+            abstract member addListener_error: listener: (Exception -> unit) -> Server<'Request, 'Response>
             /// <summary>
             /// events.EventEmitter
             /// 1. tlsClientError
@@ -102897,7 +102894,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// 6. keylog
             /// </summary>
             [<Emit("$0.addListener('listening',$1...)")>]
-            abstract member addListener_listening: listener: (unit -> unit) -> Server
+            abstract member addListener_listening: listener: (unit -> unit) -> Server<'Request, 'Response>
             /// <summary>
             /// events.EventEmitter
             /// 1. tlsClientError
@@ -102908,7 +102905,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// 6. keylog
             /// </summary>
             [<Emit("$0.addListener('checkContinue',$1...)")>]
-            abstract member addListener_checkContinue: listener: Node.http.RequestListener<'Request, 'Response> -> Server
+            abstract member addListener_checkContinue: listener: Node.http.RequestListener<'Request, 'Response> -> Server<'Request, 'Response>
             /// <summary>
             /// events.EventEmitter
             /// 1. tlsClientError
@@ -102919,7 +102916,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// 6. keylog
             /// </summary>
             [<Emit("$0.addListener('checkExpectation',$1...)")>]
-            abstract member addListener_checkExpectation: listener: Node.http.RequestListener<'Request, 'Response> -> Server
+            abstract member addListener_checkExpectation: listener: Node.http.RequestListener<'Request, 'Response> -> Server<'Request, 'Response>
             /// <summary>
             /// events.EventEmitter
             /// 1. tlsClientError
@@ -102930,7 +102927,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// 6. keylog
             /// </summary>
             [<Emit("$0.addListener('clientError',$1...)")>]
-            abstract member addListener_clientError: listener: Server.addListener_clientError.listener_1 -> Server
+            abstract member addListener_clientError: listener: Server.addListener_clientError.listener_1 -> Server<'Request, 'Response>
             /// <summary>
             /// events.EventEmitter
             /// 1. tlsClientError
@@ -102941,7 +102938,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// 6. keylog
             /// </summary>
             [<Emit("$0.addListener('connect',$1...)")>]
-            abstract member addListener_connect: listener: Server.addListener_connect.listener_1 -> Server
+            abstract member addListener_connect: listener: Server.addListener_connect.listener_1 -> Server<'Request, 'Response>
             /// <summary>
             /// events.EventEmitter
             /// 1. tlsClientError
@@ -102952,7 +102949,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// 6. keylog
             /// </summary>
             [<Emit("$0.addListener('request',$1...)")>]
-            abstract member addListener_request: listener: Node.http.RequestListener<'Request, 'Response> -> Server
+            abstract member addListener_request: listener: Node.http.RequestListener<'Request, 'Response> -> Server<'Request, 'Response>
             /// <summary>
             /// events.EventEmitter
             /// 1. tlsClientError
@@ -102963,7 +102960,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// 6. keylog
             /// </summary>
             [<Emit("$0.addListener('upgrade',$1...)")>]
-            abstract member addListener_upgrade: listener: Server.addListener_upgrade.listener_1 -> Server
+            abstract member addListener_upgrade: listener: Server.addListener_upgrade.listener_1 -> Server<'Request, 'Response>
             /// <summary>
             /// Synchronously calls each of the listeners registered for the event named <c>eventName</c>, in the order they were registered, passing the supplied arguments
             /// to each.
@@ -103688,7 +103685,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
-            abstract member on<'A>: event: string * listener: ('A -> unit) -> Server
+            abstract member on<'A>: event: string * listener: ('A -> unit) -> Server<'Request, 'Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
             /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
@@ -103717,7 +103714,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
-            abstract member on<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Server
+            abstract member on<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Server<'Request, 'Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
             /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
@@ -103746,7 +103743,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
-            abstract member on<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Server
+            abstract member on<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Server<'Request, 'Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
             /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
@@ -103775,7 +103772,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
-            abstract member on: event: string * listener: System.Delegate -> Server
+            abstract member on: event: string * listener: System.Delegate -> Server<'Request, 'Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
             /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
@@ -103805,7 +103802,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </code>
             /// </summary>
             [<Emit("$0.on('keylog',$1...)")>]
-            abstract member on_keylog: listener: Server.on_keylog.listener -> Server
+            abstract member on_keylog: listener: Server.on_keylog.listener -> Server<'Request, 'Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
             /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
@@ -103835,7 +103832,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </code>
             /// </summary>
             [<Emit("$0.on('newSession',$1...)")>]
-            abstract member on_newSession: listener: Server.on_newSession.listener -> Server
+            abstract member on_newSession: listener: Server.on_newSession.listener -> Server<'Request, 'Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
             /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
@@ -103865,7 +103862,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </code>
             /// </summary>
             [<Emit("$0.on('OCSPRequest',$1...)")>]
-            abstract member on_OCSPRequest: listener: Server.on_OCSPRequest.listener -> Server
+            abstract member on_OCSPRequest: listener: Server.on_OCSPRequest.listener -> Server<'Request, 'Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
             /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
@@ -103895,7 +103892,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </code>
             /// </summary>
             [<Emit("$0.on('resumeSession',$1...)")>]
-            abstract member on_resumeSession: listener: Server.on_resumeSession.listener -> Server
+            abstract member on_resumeSession: listener: Server.on_resumeSession.listener -> Server<'Request, 'Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
             /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
@@ -103925,7 +103922,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </code>
             /// </summary>
             [<Emit("$0.on('secureConnection',$1...)")>]
-            abstract member on_secureConnection: listener: (Node.tls.TLSSocket -> unit) -> Server
+            abstract member on_secureConnection: listener: (Node.tls.TLSSocket -> unit) -> Server<'Request, 'Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
             /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
@@ -103955,7 +103952,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </code>
             /// </summary>
             [<Emit("$0.on('tlsClientError',$1...)")>]
-            abstract member on_tlsClientError: listener: Server.on_tlsClientError.listener -> Server
+            abstract member on_tlsClientError: listener: Server.on_tlsClientError.listener -> Server<'Request, 'Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
             /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
@@ -103985,7 +103982,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </code>
             /// </summary>
             [<Emit("$0.on('close',$1...)")>]
-            abstract member on_close: listener: (unit -> unit) -> Server
+            abstract member on_close: listener: (unit -> unit) -> Server<'Request, 'Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
             /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
@@ -104015,7 +104012,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </code>
             /// </summary>
             [<Emit("$0.on('connection',$1...)")>]
-            abstract member on_connection: listener: (Node.stream.Stream_.Duplex -> unit) -> Server
+            abstract member on_connection: listener: (Node.stream.Stream_.Duplex -> unit) -> Server<'Request, 'Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
             /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
@@ -104045,7 +104042,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </code>
             /// </summary>
             [<Emit("$0.on('error',$1...)")>]
-            abstract member on_error: listener: (Exception -> unit) -> Server
+            abstract member on_error: listener: (Exception -> unit) -> Server<'Request, 'Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
             /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
@@ -104075,7 +104072,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </code>
             /// </summary>
             [<Emit("$0.on('listening',$1...)")>]
-            abstract member on_listening: listener: (unit -> unit) -> Server
+            abstract member on_listening: listener: (unit -> unit) -> Server<'Request, 'Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
             /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
@@ -104105,7 +104102,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </code>
             /// </summary>
             [<Emit("$0.on('checkContinue',$1...)")>]
-            abstract member on_checkContinue: listener: Node.http.RequestListener<'Request, 'Response> -> Server
+            abstract member on_checkContinue: listener: Node.http.RequestListener<'Request, 'Response> -> Server<'Request, 'Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
             /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
@@ -104135,7 +104132,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </code>
             /// </summary>
             [<Emit("$0.on('checkExpectation',$1...)")>]
-            abstract member on_checkExpectation: listener: Node.http.RequestListener<'Request, 'Response> -> Server
+            abstract member on_checkExpectation: listener: Node.http.RequestListener<'Request, 'Response> -> Server<'Request, 'Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
             /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
@@ -104165,7 +104162,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </code>
             /// </summary>
             [<Emit("$0.on('clientError',$1...)")>]
-            abstract member on_clientError: listener: Server.on_clientError.listener_1 -> Server
+            abstract member on_clientError: listener: Server.on_clientError.listener_1 -> Server<'Request, 'Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
             /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
@@ -104195,7 +104192,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </code>
             /// </summary>
             [<Emit("$0.on('connect',$1...)")>]
-            abstract member on_connect: listener: Server.on_connect.listener_1 -> Server
+            abstract member on_connect: listener: Server.on_connect.listener_1 -> Server<'Request, 'Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
             /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
@@ -104225,7 +104222,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </code>
             /// </summary>
             [<Emit("$0.on('request',$1...)")>]
-            abstract member on_request: listener: Node.http.RequestListener<'Request, 'Response> -> Server
+            abstract member on_request: listener: Node.http.RequestListener<'Request, 'Response> -> Server<'Request, 'Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
             /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
@@ -104255,7 +104252,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </code>
             /// </summary>
             [<Emit("$0.on('upgrade',$1...)")>]
-            abstract member on_upgrade: listener: Server.on_upgrade.listener_1 -> Server
+            abstract member on_upgrade: listener: Server.on_upgrade.listener_1 -> Server<'Request, 'Response>
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -104282,7 +104279,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
-            abstract member once<'A>: event: string * listener: ('A -> unit) -> Server
+            abstract member once<'A>: event: string * listener: ('A -> unit) -> Server<'Request, 'Response>
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -104309,7 +104306,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
-            abstract member once<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Server
+            abstract member once<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Server<'Request, 'Response>
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -104336,7 +104333,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
-            abstract member once<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Server
+            abstract member once<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Server<'Request, 'Response>
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -104363,7 +104360,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
-            abstract member once: event: string * listener: System.Delegate -> Server
+            abstract member once: event: string * listener: System.Delegate -> Server<'Request, 'Response>
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -104391,7 +104388,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </code>
             /// </summary>
             [<Emit("$0.once('keylog',$1...)")>]
-            abstract member once_keylog: listener: Server.once_keylog.listener -> Server
+            abstract member once_keylog: listener: Server.once_keylog.listener -> Server<'Request, 'Response>
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -104419,7 +104416,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </code>
             /// </summary>
             [<Emit("$0.once('newSession',$1...)")>]
-            abstract member once_newSession: listener: Server.once_newSession.listener -> Server
+            abstract member once_newSession: listener: Server.once_newSession.listener -> Server<'Request, 'Response>
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -104447,7 +104444,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </code>
             /// </summary>
             [<Emit("$0.once('OCSPRequest',$1...)")>]
-            abstract member once_OCSPRequest: listener: Server.once_OCSPRequest.listener -> Server
+            abstract member once_OCSPRequest: listener: Server.once_OCSPRequest.listener -> Server<'Request, 'Response>
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -104475,7 +104472,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </code>
             /// </summary>
             [<Emit("$0.once('resumeSession',$1...)")>]
-            abstract member once_resumeSession: listener: Server.once_resumeSession.listener -> Server
+            abstract member once_resumeSession: listener: Server.once_resumeSession.listener -> Server<'Request, 'Response>
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -104503,7 +104500,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </code>
             /// </summary>
             [<Emit("$0.once('secureConnection',$1...)")>]
-            abstract member once_secureConnection: listener: (Node.tls.TLSSocket -> unit) -> Server
+            abstract member once_secureConnection: listener: (Node.tls.TLSSocket -> unit) -> Server<'Request, 'Response>
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -104531,7 +104528,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </code>
             /// </summary>
             [<Emit("$0.once('tlsClientError',$1...)")>]
-            abstract member once_tlsClientError: listener: Server.once_tlsClientError.listener -> Server
+            abstract member once_tlsClientError: listener: Server.once_tlsClientError.listener -> Server<'Request, 'Response>
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -104559,7 +104556,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </code>
             /// </summary>
             [<Emit("$0.once('close',$1...)")>]
-            abstract member once_close: listener: (unit -> unit) -> Server
+            abstract member once_close: listener: (unit -> unit) -> Server<'Request, 'Response>
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -104587,7 +104584,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </code>
             /// </summary>
             [<Emit("$0.once('connection',$1...)")>]
-            abstract member once_connection: listener: (Node.stream.Stream_.Duplex -> unit) -> Server
+            abstract member once_connection: listener: (Node.stream.Stream_.Duplex -> unit) -> Server<'Request, 'Response>
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -104615,7 +104612,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </code>
             /// </summary>
             [<Emit("$0.once('error',$1...)")>]
-            abstract member once_error: listener: (Exception -> unit) -> Server
+            abstract member once_error: listener: (Exception -> unit) -> Server<'Request, 'Response>
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -104643,7 +104640,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </code>
             /// </summary>
             [<Emit("$0.once('listening',$1...)")>]
-            abstract member once_listening: listener: (unit -> unit) -> Server
+            abstract member once_listening: listener: (unit -> unit) -> Server<'Request, 'Response>
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -104671,7 +104668,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </code>
             /// </summary>
             [<Emit("$0.once('checkContinue',$1...)")>]
-            abstract member once_checkContinue: listener: Node.http.RequestListener<'Request, 'Response> -> Server
+            abstract member once_checkContinue: listener: Node.http.RequestListener<'Request, 'Response> -> Server<'Request, 'Response>
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -104699,7 +104696,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </code>
             /// </summary>
             [<Emit("$0.once('checkExpectation',$1...)")>]
-            abstract member once_checkExpectation: listener: Node.http.RequestListener<'Request, 'Response> -> Server
+            abstract member once_checkExpectation: listener: Node.http.RequestListener<'Request, 'Response> -> Server<'Request, 'Response>
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -104727,7 +104724,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </code>
             /// </summary>
             [<Emit("$0.once('clientError',$1...)")>]
-            abstract member once_clientError: listener: Server.once_clientError.listener_1 -> Server
+            abstract member once_clientError: listener: Server.once_clientError.listener_1 -> Server<'Request, 'Response>
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -104755,7 +104752,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </code>
             /// </summary>
             [<Emit("$0.once('connect',$1...)")>]
-            abstract member once_connect: listener: Server.once_connect.listener_1 -> Server
+            abstract member once_connect: listener: Server.once_connect.listener_1 -> Server<'Request, 'Response>
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -104783,7 +104780,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </code>
             /// </summary>
             [<Emit("$0.once('request',$1...)")>]
-            abstract member once_request: listener: Node.http.RequestListener<'Request, 'Response> -> Server
+            abstract member once_request: listener: Node.http.RequestListener<'Request, 'Response> -> Server<'Request, 'Response>
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -104811,7 +104808,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </code>
             /// </summary>
             [<Emit("$0.once('upgrade',$1...)")>]
-            abstract member once_upgrade: listener: Server.once_upgrade.listener_1 -> Server
+            abstract member once_upgrade: listener: Server.once_upgrade.listener_1 -> Server<'Request, 'Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
             /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
@@ -104826,7 +104823,7 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
-            abstract member prependListener<'A>: event: string * listener: ('A -> unit) -> Server
+            abstract member prependListener<'A>: event: string * listener: ('A -> unit) -> Server<'Request, 'Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
             /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
@@ -104841,7 +104838,7 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
-            abstract member prependListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Server
+            abstract member prependListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Server<'Request, 'Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
             /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
@@ -104856,7 +104853,7 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
-            abstract member prependListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Server
+            abstract member prependListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Server<'Request, 'Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
             /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
@@ -104871,7 +104868,7 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
-            abstract member prependListener: event: string * listener: System.Delegate -> Server
+            abstract member prependListener: event: string * listener: System.Delegate -> Server<'Request, 'Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
             /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
@@ -104887,7 +104884,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
             [<Emit("$0.prependListener('keylog',$1...)")>]
-            abstract member prependListener_keylog: listener: Server.prependListener_keylog.listener -> Server
+            abstract member prependListener_keylog: listener: Server.prependListener_keylog.listener -> Server<'Request, 'Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
             /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
@@ -104903,7 +104900,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
             [<Emit("$0.prependListener('newSession',$1...)")>]
-            abstract member prependListener_newSession: listener: Server.prependListener_newSession.listener -> Server
+            abstract member prependListener_newSession: listener: Server.prependListener_newSession.listener -> Server<'Request, 'Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
             /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
@@ -104919,7 +104916,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
             [<Emit("$0.prependListener('OCSPRequest',$1...)")>]
-            abstract member prependListener_OCSPRequest: listener: Server.prependListener_OCSPRequest.listener -> Server
+            abstract member prependListener_OCSPRequest: listener: Server.prependListener_OCSPRequest.listener -> Server<'Request, 'Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
             /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
@@ -104935,7 +104932,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
             [<Emit("$0.prependListener('resumeSession',$1...)")>]
-            abstract member prependListener_resumeSession: listener: Server.prependListener_resumeSession.listener -> Server
+            abstract member prependListener_resumeSession: listener: Server.prependListener_resumeSession.listener -> Server<'Request, 'Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
             /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
@@ -104951,7 +104948,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
             [<Emit("$0.prependListener('secureConnection',$1...)")>]
-            abstract member prependListener_secureConnection: listener: (Node.tls.TLSSocket -> unit) -> Server
+            abstract member prependListener_secureConnection: listener: (Node.tls.TLSSocket -> unit) -> Server<'Request, 'Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
             /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
@@ -104967,7 +104964,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
             [<Emit("$0.prependListener('tlsClientError',$1...)")>]
-            abstract member prependListener_tlsClientError: listener: Server.prependListener_tlsClientError.listener -> Server
+            abstract member prependListener_tlsClientError: listener: Server.prependListener_tlsClientError.listener -> Server<'Request, 'Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
             /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
@@ -104983,7 +104980,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
             [<Emit("$0.prependListener('close',$1...)")>]
-            abstract member prependListener_close: listener: (unit -> unit) -> Server
+            abstract member prependListener_close: listener: (unit -> unit) -> Server<'Request, 'Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
             /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
@@ -104999,7 +104996,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
             [<Emit("$0.prependListener('connection',$1...)")>]
-            abstract member prependListener_connection: listener: (Node.stream.Stream_.Duplex -> unit) -> Server
+            abstract member prependListener_connection: listener: (Node.stream.Stream_.Duplex -> unit) -> Server<'Request, 'Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
             /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
@@ -105015,7 +105012,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
             [<Emit("$0.prependListener('error',$1...)")>]
-            abstract member prependListener_error: listener: (Exception -> unit) -> Server
+            abstract member prependListener_error: listener: (Exception -> unit) -> Server<'Request, 'Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
             /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
@@ -105031,7 +105028,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
             [<Emit("$0.prependListener('listening',$1...)")>]
-            abstract member prependListener_listening: listener: (unit -> unit) -> Server
+            abstract member prependListener_listening: listener: (unit -> unit) -> Server<'Request, 'Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
             /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
@@ -105047,7 +105044,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
             [<Emit("$0.prependListener('checkContinue',$1...)")>]
-            abstract member prependListener_checkContinue: listener: Node.http.RequestListener<'Request, 'Response> -> Server
+            abstract member prependListener_checkContinue: listener: Node.http.RequestListener<'Request, 'Response> -> Server<'Request, 'Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
             /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
@@ -105063,7 +105060,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
             [<Emit("$0.prependListener('checkExpectation',$1...)")>]
-            abstract member prependListener_checkExpectation: listener: Node.http.RequestListener<'Request, 'Response> -> Server
+            abstract member prependListener_checkExpectation: listener: Node.http.RequestListener<'Request, 'Response> -> Server<'Request, 'Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
             /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
@@ -105079,7 +105076,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
             [<Emit("$0.prependListener('clientError',$1...)")>]
-            abstract member prependListener_clientError: listener: Server.prependListener_clientError.listener_1 -> Server
+            abstract member prependListener_clientError: listener: Server.prependListener_clientError.listener_1 -> Server<'Request, 'Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
             /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
@@ -105095,7 +105092,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
             [<Emit("$0.prependListener('connect',$1...)")>]
-            abstract member prependListener_connect: listener: Server.prependListener_connect.listener_1 -> Server
+            abstract member prependListener_connect: listener: Server.prependListener_connect.listener_1 -> Server<'Request, 'Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
             /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
@@ -105111,7 +105108,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
             [<Emit("$0.prependListener('request',$1...)")>]
-            abstract member prependListener_request: listener: Node.http.RequestListener<'Request, 'Response> -> Server
+            abstract member prependListener_request: listener: Node.http.RequestListener<'Request, 'Response> -> Server<'Request, 'Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
             /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
@@ -105127,7 +105124,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
             [<Emit("$0.prependListener('upgrade',$1...)")>]
-            abstract member prependListener_upgrade: listener: Server.prependListener_upgrade.listener_1 -> Server
+            abstract member prependListener_upgrade: listener: Server.prependListener_upgrade.listener_1 -> Server<'Request, 'Response>
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -105140,7 +105137,7 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
-            abstract member prependOnceListener<'A>: event: string * listener: ('A -> unit) -> Server
+            abstract member prependOnceListener<'A>: event: string * listener: ('A -> unit) -> Server<'Request, 'Response>
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -105153,7 +105150,7 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
-            abstract member prependOnceListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Server
+            abstract member prependOnceListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Server<'Request, 'Response>
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -105166,7 +105163,7 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
-            abstract member prependOnceListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Server
+            abstract member prependOnceListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Server<'Request, 'Response>
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -105179,7 +105176,7 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
-            abstract member prependOnceListener: event: string * listener: System.Delegate -> Server
+            abstract member prependOnceListener: event: string * listener: System.Delegate -> Server<'Request, 'Response>
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -105193,7 +105190,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
             [<Emit("$0.prependOnceListener('keylog',$1...)")>]
-            abstract member prependOnceListener_keylog: listener: Server.prependOnceListener_keylog.listener -> Server
+            abstract member prependOnceListener_keylog: listener: Server.prependOnceListener_keylog.listener -> Server<'Request, 'Response>
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -105207,7 +105204,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
             [<Emit("$0.prependOnceListener('newSession',$1...)")>]
-            abstract member prependOnceListener_newSession: listener: Server.prependOnceListener_newSession.listener -> Server
+            abstract member prependOnceListener_newSession: listener: Server.prependOnceListener_newSession.listener -> Server<'Request, 'Response>
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -105221,7 +105218,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
             [<Emit("$0.prependOnceListener('OCSPRequest',$1...)")>]
-            abstract member prependOnceListener_OCSPRequest: listener: Server.prependOnceListener_OCSPRequest.listener -> Server
+            abstract member prependOnceListener_OCSPRequest: listener: Server.prependOnceListener_OCSPRequest.listener -> Server<'Request, 'Response>
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -105235,7 +105232,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
             [<Emit("$0.prependOnceListener('resumeSession',$1...)")>]
-            abstract member prependOnceListener_resumeSession: listener: Server.prependOnceListener_resumeSession.listener -> Server
+            abstract member prependOnceListener_resumeSession: listener: Server.prependOnceListener_resumeSession.listener -> Server<'Request, 'Response>
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -105249,7 +105246,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
             [<Emit("$0.prependOnceListener('secureConnection',$1...)")>]
-            abstract member prependOnceListener_secureConnection: listener: (Node.tls.TLSSocket -> unit) -> Server
+            abstract member prependOnceListener_secureConnection: listener: (Node.tls.TLSSocket -> unit) -> Server<'Request, 'Response>
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -105263,7 +105260,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
             [<Emit("$0.prependOnceListener('tlsClientError',$1...)")>]
-            abstract member prependOnceListener_tlsClientError: listener: Server.prependOnceListener_tlsClientError.listener -> Server
+            abstract member prependOnceListener_tlsClientError: listener: Server.prependOnceListener_tlsClientError.listener -> Server<'Request, 'Response>
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -105277,7 +105274,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
             [<Emit("$0.prependOnceListener('close',$1...)")>]
-            abstract member prependOnceListener_close: listener: (unit -> unit) -> Server
+            abstract member prependOnceListener_close: listener: (unit -> unit) -> Server<'Request, 'Response>
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -105291,7 +105288,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
             [<Emit("$0.prependOnceListener('connection',$1...)")>]
-            abstract member prependOnceListener_connection: listener: (Node.stream.Stream_.Duplex -> unit) -> Server
+            abstract member prependOnceListener_connection: listener: (Node.stream.Stream_.Duplex -> unit) -> Server<'Request, 'Response>
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -105305,7 +105302,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
             [<Emit("$0.prependOnceListener('error',$1...)")>]
-            abstract member prependOnceListener_error: listener: (Exception -> unit) -> Server
+            abstract member prependOnceListener_error: listener: (Exception -> unit) -> Server<'Request, 'Response>
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -105319,7 +105316,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
             [<Emit("$0.prependOnceListener('listening',$1...)")>]
-            abstract member prependOnceListener_listening: listener: (unit -> unit) -> Server
+            abstract member prependOnceListener_listening: listener: (unit -> unit) -> Server<'Request, 'Response>
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -105333,7 +105330,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
             [<Emit("$0.prependOnceListener('checkContinue',$1...)")>]
-            abstract member prependOnceListener_checkContinue: listener: Node.http.RequestListener<'Request, 'Response> -> Server
+            abstract member prependOnceListener_checkContinue: listener: Node.http.RequestListener<'Request, 'Response> -> Server<'Request, 'Response>
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -105347,7 +105344,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
             [<Emit("$0.prependOnceListener('checkExpectation',$1...)")>]
-            abstract member prependOnceListener_checkExpectation: listener: Node.http.RequestListener<'Request, 'Response> -> Server
+            abstract member prependOnceListener_checkExpectation: listener: Node.http.RequestListener<'Request, 'Response> -> Server<'Request, 'Response>
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -105361,7 +105358,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
             [<Emit("$0.prependOnceListener('clientError',$1...)")>]
-            abstract member prependOnceListener_clientError: listener: Server.prependOnceListener_clientError.listener_1 -> Server
+            abstract member prependOnceListener_clientError: listener: Server.prependOnceListener_clientError.listener_1 -> Server<'Request, 'Response>
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -105375,7 +105372,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
             [<Emit("$0.prependOnceListener('connect',$1...)")>]
-            abstract member prependOnceListener_connect: listener: Server.prependOnceListener_connect.listener_1 -> Server
+            abstract member prependOnceListener_connect: listener: Server.prependOnceListener_connect.listener_1 -> Server<'Request, 'Response>
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -105389,7 +105386,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
             [<Emit("$0.prependOnceListener('request',$1...)")>]
-            abstract member prependOnceListener_request: listener: Node.http.RequestListener<'Request, 'Response> -> Server
+            abstract member prependOnceListener_request: listener: Node.http.RequestListener<'Request, 'Response> -> Server<'Request, 'Response>
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -105403,19 +105400,19 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
             [<Emit("$0.prependOnceListener('upgrade',$1...)")>]
-            abstract member prependOnceListener_upgrade: listener: Server.prependOnceListener_upgrade.listener_1 -> Server
+            abstract member prependOnceListener_upgrade: listener: Server.prependOnceListener_upgrade.listener_1 -> Server<'Request, 'Response>
 
         type Server<'Request> =
-            Server<'Request, Node.http.ServerResponse>
+            Server<'Request, Node.http.ServerResponse<obj>>
 
         type Server =
-            Server<Node.http.IncomingMessage, Node.http.ServerResponse>
+            Server<Node.http.IncomingMessage, Node.http.ServerResponse<obj>>
 
         type ServerOptions<'Request> =
-            ServerOptions<'Request, Node.http.ServerResponse>
+            ServerOptions<'Request, Node.http.ServerResponse<obj>>
 
         type ServerOptions =
-            ServerOptions<Node.http.IncomingMessage, Node.http.ServerResponse>
+            ServerOptions<Node.http.IncomingMessage, Node.http.ServerResponse<obj>>
 
         module RequestOptions =
 
@@ -126199,7 +126196,7 @@ the userland-provided Punycode.js module instead.""")>]
             /// returns an empty array. The prepared statement [parameters are bound](https://www.sqlite.org/c3ref/bind_blob.html) using
             /// the values in <c>namedParameters</c> and <c>anonymousParameters</c>.
             /// </summary>
-            abstract member all: namedParameters: StatementSync.all.namedParameters * [<ParamArray>] anonymousParameters: Node.sqlite.SQLInputValue [] -> ResizeArray<StatementSync.all_1>
+            abstract member all: namedParameters: StatementSync.all.namedParameters * [<ParamArray>] anonymousParameters: Node.sqlite.SQLInputValue [] -> ResizeArray<StatementSync.all>
             /// <summary>
             /// This method is used to retrieve information about the columns returned by the
             /// prepared statement.
@@ -126239,7 +126236,7 @@ the userland-provided Punycode.js module instead.""")>]
             /// returns <c>undefined</c>. The prepared statement [parameters are bound](https://www.sqlite.org/c3ref/bind_blob.html) using the
             /// values in <c>namedParameters</c> and <c>anonymousParameters</c>.
             /// </summary>
-            abstract member get: namedParameters: StatementSync.get.namedParameters * [<ParamArray>] anonymousParameters: Node.sqlite.SQLInputValue [] -> StatementSync.get_1 option
+            abstract member get: namedParameters: StatementSync.get.namedParameters * [<ParamArray>] anonymousParameters: Node.sqlite.SQLInputValue [] -> StatementSync.get option
             /// <summary>
             /// This method executes a prepared statement and returns an iterator of
             /// objects. If the prepared statement does not return any results, this method
@@ -126265,7 +126262,7 @@ the userland-provided Punycode.js module instead.""")>]
             /// returns an empty iterator. The prepared statement [parameters are bound](https://www.sqlite.org/c3ref/bind_blob.html) using
             /// the values in <c>namedParameters</c> and <c>anonymousParameters</c>.
             /// </summary>
-            abstract member iterate: namedParameters: StatementSync.iterate.namedParameters * [<ParamArray>] anonymousParameters: Node.sqlite.SQLInputValue [] -> Node.NodeJS.Iterator<StatementSync.iterate_1>
+            abstract member iterate: namedParameters: StatementSync.iterate.namedParameters * [<ParamArray>] anonymousParameters: Node.sqlite.SQLInputValue [] -> Node.NodeJS.Iterator<StatementSync.iterate>
             /// <summary>
             /// This method executes a prepared statement and returns an object summarizing the
             /// resulting changes. The prepared statement [parameters are bound](https://www.sqlite.org/c3ref/bind_blob.html) using the
@@ -126438,31 +126435,13 @@ the userland-provided Punycode.js module instead.""")>]
 
             [<AllowNullLiteral>]
             [<Interface>]
-            type all_1 =
-                [<EmitIndexer>]
-                abstract member Item: key: string -> Node.sqlite.SQLOutputValue with get, set
-
-            [<AllowNullLiteral>]
-            [<Interface>]
             type get =
                 [<EmitIndexer>]
                 abstract member Item: key: string -> Node.sqlite.SQLOutputValue with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
-            type get_1 =
-                [<EmitIndexer>]
-                abstract member Item: key: string -> Node.sqlite.SQLOutputValue with get, set
-
-            [<AllowNullLiteral>]
-            [<Interface>]
             type iterate =
-                [<EmitIndexer>]
-                abstract member Item: key: string -> Node.sqlite.SQLOutputValue with get, set
-
-            [<AllowNullLiteral>]
-            [<Interface>]
-            type iterate_1 =
                 [<EmitIndexer>]
                 abstract member Item: key: string -> Node.sqlite.SQLOutputValue with get, set
 
@@ -126888,9 +126867,9 @@ the userland-provided Punycode.js module instead.""")>]
                 [<Emit("$0.pipeline($1...)")>]
                 abstract member pipeline: streams: ReadonlyArray<U3<Node.NodeJS.ReadableStream, Node.NodeJS.WritableStream, Node.NodeJS.ReadWriteStream>> * callback: (Node.NodeJS.ErrnoException option -> unit) -> Node.NodeJS.WritableStream
                 [<Emit("$0.pipeline($1...)")>]
-                abstract member pipeline: stream1: Node.NodeJS.ReadableStream * stream2: Node.NodeJS.ReadWriteStream * [<ParamArray>] streams: ResizeArray<U3<Node.NodeJS.ReadWriteStream, Node.NodeJS.WritableStream, (Node.NodeJS.ErrnoException option -> unit)>> [] -> Node.NodeJS.WritableStream
+                abstract member pipeline: stream1: Node.NodeJS.ReadableStream * stream2: Node.NodeJS.ReadWriteStream * [<ParamArray>] streams: U3<Node.NodeJS.ReadWriteStream, Node.NodeJS.WritableStream, (Node.NodeJS.ErrnoException option -> unit)> [] -> Node.NodeJS.WritableStream
                 [<Emit("$0.pipeline($1...)")>]
-                abstract member pipeline: stream1: Node.NodeJS.ReadableStream * stream2: Node.NodeJS.WritableStream * [<ParamArray>] streams: ResizeArray<U3<Node.NodeJS.ReadWriteStream, Node.NodeJS.WritableStream, (Node.NodeJS.ErrnoException option -> unit)>> [] -> Node.NodeJS.WritableStream
+                abstract member pipeline: stream1: Node.NodeJS.ReadableStream * stream2: Node.NodeJS.WritableStream * [<ParamArray>] streams: U3<Node.NodeJS.ReadWriteStream, Node.NodeJS.WritableStream, (Node.NodeJS.ErrnoException option -> unit)> [] -> Node.NodeJS.WritableStream
                 /// <summary>
                 /// Returns whether the stream has encountered an error.
                 /// </summary>
@@ -138374,9 +138353,9 @@ Duplex.fromWeb($0, $1)"""
                     [<Emit("$0.__promisify__($1...)")>]
                     abstract member __promisify__: streams: ReadonlyArray<U3<Node.NodeJS.ReadableStream, Node.NodeJS.WritableStream, Node.NodeJS.ReadWriteStream>> * ?options: Node.stream.Stream_.PipelineOptions -> JS.Promise<unit>
                     [<Emit("$0.__promisify__($1...)")>]
-                    abstract member __promisify__: stream1: Node.NodeJS.ReadableStream * stream2: Node.NodeJS.ReadWriteStream * [<ParamArray>] streams: ResizeArray<U3<Node.NodeJS.ReadWriteStream, Node.NodeJS.WritableStream, Node.stream.Stream_.PipelineOptions>> [] -> JS.Promise<unit>
+                    abstract member __promisify__: stream1: Node.NodeJS.ReadableStream * stream2: Node.NodeJS.ReadWriteStream * [<ParamArray>] streams: U3<Node.NodeJS.ReadWriteStream, Node.NodeJS.WritableStream, Node.stream.Stream_.PipelineOptions> [] -> JS.Promise<unit>
                     [<Emit("$0.__promisify__($1...)")>]
-                    abstract member __promisify__: stream1: Node.NodeJS.ReadableStream * stream2: Node.NodeJS.WritableStream * [<ParamArray>] streams: ResizeArray<U3<Node.NodeJS.ReadWriteStream, Node.NodeJS.WritableStream, Node.stream.Stream_.PipelineOptions>> [] -> JS.Promise<unit>
+                    abstract member __promisify__: stream1: Node.NodeJS.ReadableStream * stream2: Node.NodeJS.WritableStream * [<ParamArray>] streams: U3<Node.NodeJS.ReadWriteStream, Node.NodeJS.WritableStream, Node.stream.Stream_.PipelineOptions> [] -> JS.Promise<unit>
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -138947,9 +138926,9 @@ Duplex.fromWeb($0, $1)"""
             [<Import("pipeline", "stream/promises")>]
             static member pipeline (streams: ReadonlyArray<U3<Node.NodeJS.ReadableStream, Node.NodeJS.WritableStream, Node.NodeJS.ReadWriteStream>>, ?options: Node.stream.Stream_.PipelineOptions) : JS.Promise<unit> = nativeOnly
             [<Import("pipeline", "stream/promises")>]
-            static member pipeline (stream1: Node.NodeJS.ReadableStream, stream2: Node.NodeJS.ReadWriteStream, [<ParamArray>] streams: ResizeArray<U3<Node.NodeJS.ReadWriteStream, Node.NodeJS.WritableStream, Node.stream.Stream_.PipelineOptions>> []) : JS.Promise<unit> = nativeOnly
+            static member pipeline (stream1: Node.NodeJS.ReadableStream, stream2: Node.NodeJS.ReadWriteStream, [<ParamArray>] streams: U3<Node.NodeJS.ReadWriteStream, Node.NodeJS.WritableStream, Node.stream.Stream_.PipelineOptions> []) : JS.Promise<unit> = nativeOnly
             [<Import("pipeline", "stream/promises")>]
-            static member pipeline (stream1: Node.NodeJS.ReadableStream, stream2: Node.NodeJS.WritableStream, [<ParamArray>] streams: ResizeArray<U3<Node.NodeJS.ReadWriteStream, Node.NodeJS.WritableStream, Node.stream.Stream_.PipelineOptions>> []) : JS.Promise<unit> = nativeOnly
+            static member pipeline (stream1: Node.NodeJS.ReadableStream, stream2: Node.NodeJS.WritableStream, [<ParamArray>] streams: U3<Node.NodeJS.ReadWriteStream, Node.NodeJS.WritableStream, Node.stream.Stream_.PipelineOptions> []) : JS.Promise<unit> = nativeOnly
 
         [<Global>]
         [<AllowNullLiteral>]
@@ -138994,34 +138973,34 @@ Duplex.fromWeb($0, $1)"""
                 /// This Streams API interface represents a readable stream of byte data.
                 /// </summary>
                 [<Emit("$0.ReadableStream")>]
-                abstract member ReadableStream: Exports.ReadableStream.Type
+                abstract member ReadableStream: Exports.ReadableStream.Type_1
                 [<Emit("$0.ReadableStreamDefaultReader")>]
-                abstract member ReadableStreamDefaultReader: Exports.ReadableStreamDefaultReader.Type
+                abstract member ReadableStreamDefaultReader: Exports.ReadableStreamDefaultReader.Type_1
                 /// <summary>
                 /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStreamBYOBReader)
                 /// </summary>
                 [<Emit("$0.ReadableStreamBYOBReader")>]
-                abstract member ReadableStreamBYOBReader: Exports.ReadableStreamBYOBReader.Type
+                abstract member ReadableStreamBYOBReader: Exports.ReadableStreamBYOBReader.Type_1
                 /// <summary>
                 /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStreamBYOBRequest)
                 /// </summary>
                 [<Emit("$0.ReadableStreamBYOBRequest")>]
-                abstract member ReadableStreamBYOBRequest: Exports.ReadableStreamBYOBRequest.Type
+                abstract member ReadableStreamBYOBRequest: Exports.ReadableStreamBYOBRequest.Type_1
                 [<Emit("$0.ReadableByteStreamController")>]
-                abstract member ReadableByteStreamController: Exports.ReadableByteStreamController.Type
+                abstract member ReadableByteStreamController: Exports.ReadableByteStreamController.Type_1
                 [<Emit("$0.ReadableStreamDefaultController")>]
-                abstract member ReadableStreamDefaultController: Exports.ReadableStreamDefaultController.Type
+                abstract member ReadableStreamDefaultController: Exports.ReadableStreamDefaultController.Type_1
                 [<Emit("$0.TransformStream")>]
-                abstract member TransformStream: Exports.TransformStream.Type
+                abstract member TransformStream: Exports.TransformStream.Type_1
                 [<Emit("$0.TransformStreamDefaultController")>]
-                abstract member TransformStreamDefaultController: Exports.TransformStreamDefaultController.Type
+                abstract member TransformStreamDefaultController: Exports.TransformStreamDefaultController.Type_1
                 /// <summary>
                 /// This Streams API interface provides a standard abstraction for writing
                 /// streaming data to a destination, known as a sink. This object comes with
                 /// built-in back pressure and queuing.
                 /// </summary>
                 [<Emit("$0.WritableStream")>]
-                abstract member WritableStream: Exports.WritableStream.Type
+                abstract member WritableStream: Exports.WritableStream.Type_1
                 /// <summary>
                 /// This Streams API interface is the object returned by
                 /// WritableStream.getWriter() and once created locks the < writer to the
@@ -139029,7 +139008,7 @@ Duplex.fromWeb($0, $1)"""
                 /// sink.
                 /// </summary>
                 [<Emit("$0.WritableStreamDefaultWriter")>]
-                abstract member WritableStreamDefaultWriter: Exports.WritableStreamDefaultWriter.Type
+                abstract member WritableStreamDefaultWriter: Exports.WritableStreamDefaultWriter.Type_1
                 /// <summary>
                 /// This Streams API interface represents a controller allowing control of a
                 /// WritableStream's state. When constructing a WritableStream, the
@@ -139037,23 +139016,23 @@ Duplex.fromWeb($0, $1)"""
                 /// instance to manipulate.
                 /// </summary>
                 [<Emit("$0.WritableStreamDefaultController")>]
-                abstract member WritableStreamDefaultController: Exports.WritableStreamDefaultController.Type
+                abstract member WritableStreamDefaultController: Exports.WritableStreamDefaultController.Type_1
                 /// <summary>
                 /// This Streams API interface provides a built-in byte length queuing
                 /// strategy that can be used when constructing streams.
                 /// </summary>
                 [<Emit("$0.ByteLengthQueuingStrategy")>]
-                abstract member ByteLengthQueuingStrategy: Exports.ByteLengthQueuingStrategy.Type
+                abstract member ByteLengthQueuingStrategy: Exports.ByteLengthQueuingStrategy.Type_1
                 /// <summary>
                 /// This Streams API interface provides a built-in byte length queuing
                 /// strategy that can be used when constructing streams.
                 /// </summary>
                 [<Emit("$0.CountQueuingStrategy")>]
-                abstract member CountQueuingStrategy: Exports.CountQueuingStrategy.Type
+                abstract member CountQueuingStrategy: Exports.CountQueuingStrategy.Type_1
                 [<Emit("$0.TextEncoderStream")>]
-                abstract member TextEncoderStream: Exports.TextEncoderStream.Type
+                abstract member TextEncoderStream: Exports.TextEncoderStream.Type_1
                 [<Emit("$0.TextDecoderStream")>]
-                abstract member TextDecoderStream: Exports.TextDecoderStream.Type
+                abstract member TextDecoderStream: Exports.TextDecoderStream.Type_1
                 [<Emit("new $0.CompressionStream($1...)")>]
                 abstract member CompressionStream: format: Node.stream_web.stream_SLASH_web_.CompressionFormat -> CompressionStream
                 [<Emit("new $0.DecompressionStream($1...)")>]
@@ -139604,7 +139583,7 @@ Duplex.fromWeb($0, $1)"""
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type Type =
+                    type Type_1 =
                         abstract member prototype: Node.stream_web.stream_SLASH_web_.ReadableStream with get, set
                         abstract member from: iterable: Iterable<'T> -> Node.stream_web.stream_SLASH_web_.ReadableStream<'T>
                         abstract member from: iterable: obj -> Node.stream_web.stream_SLASH_web_.ReadableStream<'T>
@@ -139617,7 +139596,7 @@ Duplex.fromWeb($0, $1)"""
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type Type =
+                    type Type_1 =
                         abstract member prototype: Node.stream_web.stream_SLASH_web_.ReadableStreamDefaultReader with get, set
                         [<EmitConstructor>]
                         abstract member Create: stream: Node.stream_web.stream_SLASH_web_.ReadableStream<'R> -> Node.stream_web.stream_SLASH_web_.ReadableStreamDefaultReader<'R>
@@ -139626,7 +139605,7 @@ Duplex.fromWeb($0, $1)"""
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type Type =
+                    type Type_1 =
                         abstract member prototype: Node.stream_web.stream_SLASH_web_.ReadableStreamBYOBReader with get, set
                         [<EmitConstructor>]
                         abstract member Create: stream: Node.stream_web.stream_SLASH_web_.ReadableStream -> Node.stream_web.stream_SLASH_web_.ReadableStreamBYOBReader
@@ -139635,7 +139614,7 @@ Duplex.fromWeb($0, $1)"""
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type Type =
+                    type Type_1 =
                         abstract member prototype: Node.stream_web.stream_SLASH_web_.ReadableStreamBYOBRequest with get, set
                         [<EmitConstructor>]
                         abstract member Create: unit -> Node.stream_web.stream_SLASH_web_.ReadableStreamBYOBRequest
@@ -139644,7 +139623,7 @@ Duplex.fromWeb($0, $1)"""
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type Type =
+                    type Type_1 =
                         abstract member prototype: Node.stream_web.stream_SLASH_web_.ReadableByteStreamController with get, set
                         [<EmitConstructor>]
                         abstract member Create: unit -> Node.stream_web.stream_SLASH_web_.ReadableByteStreamController
@@ -139653,7 +139632,7 @@ Duplex.fromWeb($0, $1)"""
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type Type =
+                    type Type_1 =
                         abstract member prototype: Node.stream_web.stream_SLASH_web_.ReadableStreamDefaultController with get, set
                         [<EmitConstructor>]
                         abstract member Create: unit -> Node.stream_web.stream_SLASH_web_.ReadableStreamDefaultController
@@ -139662,7 +139641,7 @@ Duplex.fromWeb($0, $1)"""
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type Type =
+                    type Type_1 =
                         abstract member prototype: Node.stream_web.stream_SLASH_web_.TransformStream with get, set
                         [<EmitConstructor>]
                         abstract member Create: ?transformer: Node.stream_web.stream_SLASH_web_.Transformer<'I, 'O> * ?writableStrategy: Node.stream_web.stream_SLASH_web_.QueuingStrategy<'I> * ?readableStrategy: Node.stream_web.stream_SLASH_web_.QueuingStrategy<'O> -> Node.stream_web.stream_SLASH_web_.TransformStream<'I, 'O>
@@ -139671,7 +139650,7 @@ Duplex.fromWeb($0, $1)"""
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type Type =
+                    type Type_1 =
                         abstract member prototype: Node.stream_web.stream_SLASH_web_.TransformStreamDefaultController with get, set
                         [<EmitConstructor>]
                         abstract member Create: unit -> Node.stream_web.stream_SLASH_web_.TransformStreamDefaultController
@@ -139680,7 +139659,7 @@ Duplex.fromWeb($0, $1)"""
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type Type =
+                    type Type_1 =
                         abstract member prototype: Node.stream_web.stream_SLASH_web_.WritableStream with get, set
                         [<EmitConstructor>]
                         abstract member Create: ?underlyingSink: Node.stream_web.stream_SLASH_web_.UnderlyingSink<'W> * ?strategy: Node.stream_web.stream_SLASH_web_.QueuingStrategy<'W> -> Node.stream_web.stream_SLASH_web_.WritableStream<'W>
@@ -139689,7 +139668,7 @@ Duplex.fromWeb($0, $1)"""
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type Type =
+                    type Type_1 =
                         abstract member prototype: Node.stream_web.stream_SLASH_web_.WritableStreamDefaultWriter with get, set
                         [<EmitConstructor>]
                         abstract member Create: stream: Node.stream_web.stream_SLASH_web_.WritableStream<'W> -> Node.stream_web.stream_SLASH_web_.WritableStreamDefaultWriter<'W>
@@ -139698,7 +139677,7 @@ Duplex.fromWeb($0, $1)"""
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type Type =
+                    type Type_1 =
                         abstract member prototype: Node.stream_web.stream_SLASH_web_.WritableStreamDefaultController with get, set
                         [<EmitConstructor>]
                         abstract member Create: unit -> Node.stream_web.stream_SLASH_web_.WritableStreamDefaultController
@@ -139707,7 +139686,7 @@ Duplex.fromWeb($0, $1)"""
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type Type =
+                    type Type_1 =
                         abstract member prototype: Node.stream_web.stream_SLASH_web_.ByteLengthQueuingStrategy with get, set
                         [<EmitConstructor>]
                         abstract member Create: init: Node.stream_web.stream_SLASH_web_.QueuingStrategyInit -> Node.stream_web.stream_SLASH_web_.ByteLengthQueuingStrategy
@@ -139716,7 +139695,7 @@ Duplex.fromWeb($0, $1)"""
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type Type =
+                    type Type_1 =
                         abstract member prototype: Node.stream_web.stream_SLASH_web_.CountQueuingStrategy with get, set
                         [<EmitConstructor>]
                         abstract member Create: init: Node.stream_web.stream_SLASH_web_.QueuingStrategyInit -> Node.stream_web.stream_SLASH_web_.CountQueuingStrategy
@@ -139725,7 +139704,7 @@ Duplex.fromWeb($0, $1)"""
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type Type =
+                    type Type_1 =
                         abstract member prototype: Node.stream_web.stream_SLASH_web_.TextEncoderStream with get, set
                         [<EmitConstructor>]
                         abstract member Create: unit -> Node.stream_web.stream_SLASH_web_.TextEncoderStream
@@ -139734,7 +139713,7 @@ Duplex.fromWeb($0, $1)"""
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type Type =
+                    type Type_1 =
                         abstract member prototype: Node.stream_web.stream_SLASH_web_.TextDecoderStream with get, set
                         [<EmitConstructor>]
                         abstract member Create: ?encoding: string * ?options: Node.stream_web.stream_SLASH_web_.TextDecoderOptions -> Node.stream_web.stream_SLASH_web_.TextDecoderStream
@@ -145092,6 +145071,14 @@ Duplex.fromWeb($0, $1)"""
             [<Interface>]
             type LcovReporter =
                 inherit Node.stream.Stream_.Transform
+
+            module ReporterConstructorWrapper =
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type T =
+                    [<EmitConstructor>]
+                    abstract member Create: [<ParamArray>] args: obj [] -> Node.stream.Stream_.Transform
 
             module Exports =
 
@@ -154838,12 +154825,6 @@ URL.parse($0, $1)"""
                 [<Emit("$0.isCryptoKey($1...)")>]
                 abstract member isCryptoKey: ``object``: obj -> bool
 
-        [<AllowNullLiteral>]
-        [<Interface>]
-        type ApplyOptionalModifiers =
-            [<EmitIndexer>]
-            abstract member Item: key: obj -> obj with get, set
-
         type PreciseTokenForOptions<'O> =
             PreciseTokenForOptions<string, 'O>
 
@@ -163183,7 +163164,7 @@ module UndiciTypes =
         [<Import("setCookie", "undici-types")>]
         static member setCookie (headers: UndiciTypes.fetch.Headers, cookie: UndiciTypes.cookies.Cookie) : unit = nativeOnly
         [<Import("EventSource", "undici-types")>]
-        static member inline EventSource: Exports.EventSource.Type = nativeOnly
+        static member inline EventSource: Exports.EventSource.Type_2 = nativeOnly
         [<Import("fetch", "undici-types")>]
         static member fetch (input: string, ?init: UndiciTypes.fetch.RequestInit) : JS.Promise<UndiciTypes.fetch.Response> = nativeOnly
         [<Import("fetch", "undici-types")>]
@@ -163191,13 +163172,13 @@ module UndiciTypes =
         [<Import("fetch", "undici-types")>]
         static member fetch (input: UndiciTypes.fetch.Request, ?init: UndiciTypes.fetch.RequestInit) : JS.Promise<UndiciTypes.fetch.Response> = nativeOnly
         [<Import("WebSocket", "undici-types")>]
-        static member inline WebSocket: Exports.WebSocket.Type = nativeOnly
+        static member inline WebSocket: Exports.WebSocket.Type_2 = nativeOnly
         [<Import("CloseEvent", "undici-types")>]
-        static member inline CloseEvent: Exports.CloseEvent.Type = nativeOnly
+        static member inline CloseEvent: Exports.CloseEvent.Type_1 = nativeOnly
         [<Import("MessageEvent", "undici-types")>]
-        static member inline MessageEvent: Exports.MessageEvent.Type = nativeOnly
+        static member inline MessageEvent: Exports.MessageEvent.Type_2 = nativeOnly
         [<Import("ErrorEvent", "undici-types")>]
-        static member inline ErrorEvent: Exports.ErrorEvent.Type = nativeOnly
+        static member inline ErrorEvent: Exports.ErrorEvent.Type_1 = nativeOnly
         /// <summary>
         /// Parse a string to a <see href="MIMEType">MIMEType</see> object. Returns <c>failure</c> if the string
         /// couldn't be parsed.
@@ -163217,47 +163198,47 @@ module UndiciTypes =
         /// Performs an HTTP request.
         /// </summary>
         [<Import("request", "undici-types")>]
-        static member request (url: string, ?options: Exports.request.options_3) : JS.Promise<UndiciTypes.dispatcher.Dispatcher_.ResponseData> = nativeOnly
+        static member request (url: string, ?options: Exports.request.options_1) : JS.Promise<UndiciTypes.dispatcher.Dispatcher_.ResponseData> = nativeOnly
         /// <summary>
         /// Performs an HTTP request.
         /// </summary>
         [<Import("request", "undici-types")>]
-        static member request (url: Node.url.URL, ?options: Exports.request.options_4) : JS.Promise<UndiciTypes.dispatcher.Dispatcher_.ResponseData> = nativeOnly
+        static member request (url: Node.url.URL, ?options: Exports.request.options_1) : JS.Promise<UndiciTypes.dispatcher.Dispatcher_.ResponseData> = nativeOnly
         /// <summary>
         /// Performs an HTTP request.
         /// </summary>
         [<Import("request", "undici-types")>]
-        static member request (url: Node.url.UrlObject, ?options: Exports.request.options_5) : JS.Promise<UndiciTypes.dispatcher.Dispatcher_.ResponseData> = nativeOnly
+        static member request (url: Node.url.UrlObject, ?options: Exports.request.options_1) : JS.Promise<UndiciTypes.dispatcher.Dispatcher_.ResponseData> = nativeOnly
         /// <summary>
         /// A faster version of <c>request</c>.
         /// </summary>
         [<Import("stream", "undici-types")>]
-        static member stream (url: string, options: Exports.stream.options_3, factory: UndiciTypes.dispatcher.Dispatcher_.StreamFactory) : JS.Promise<UndiciTypes.dispatcher.Dispatcher_.StreamData> = nativeOnly
+        static member stream (url: string, options: Exports.stream.options_1, factory: UndiciTypes.dispatcher.Dispatcher_.StreamFactory) : JS.Promise<UndiciTypes.dispatcher.Dispatcher_.StreamData> = nativeOnly
         /// <summary>
         /// A faster version of <c>request</c>.
         /// </summary>
         [<Import("stream", "undici-types")>]
-        static member stream (url: Node.url.URL, options: Exports.stream.options_4, factory: UndiciTypes.dispatcher.Dispatcher_.StreamFactory) : JS.Promise<UndiciTypes.dispatcher.Dispatcher_.StreamData> = nativeOnly
+        static member stream (url: Node.url.URL, options: Exports.stream.options_1, factory: UndiciTypes.dispatcher.Dispatcher_.StreamFactory) : JS.Promise<UndiciTypes.dispatcher.Dispatcher_.StreamData> = nativeOnly
         /// <summary>
         /// A faster version of <c>request</c>.
         /// </summary>
         [<Import("stream", "undici-types")>]
-        static member stream (url: Node.url.UrlObject, options: Exports.stream.options_5, factory: UndiciTypes.dispatcher.Dispatcher_.StreamFactory) : JS.Promise<UndiciTypes.dispatcher.Dispatcher_.StreamData> = nativeOnly
+        static member stream (url: Node.url.UrlObject, options: Exports.stream.options_1, factory: UndiciTypes.dispatcher.Dispatcher_.StreamFactory) : JS.Promise<UndiciTypes.dispatcher.Dispatcher_.StreamData> = nativeOnly
         /// <summary>
         /// For easy use with <c>stream.pipeline</c>.
         /// </summary>
         [<Import("pipeline", "undici-types")>]
-        static member pipeline (url: string, options: Exports.pipeline.options_3, handler: UndiciTypes.dispatcher.Dispatcher_.PipelineHandler) : Node.stream.Stream_.Duplex = nativeOnly
+        static member pipeline (url: string, options: Exports.pipeline.options_1, handler: UndiciTypes.dispatcher.Dispatcher_.PipelineHandler) : Node.stream.Stream_.Duplex = nativeOnly
         /// <summary>
         /// For easy use with <c>stream.pipeline</c>.
         /// </summary>
         [<Import("pipeline", "undici-types")>]
-        static member pipeline (url: Node.url.URL, options: Exports.pipeline.options_4, handler: UndiciTypes.dispatcher.Dispatcher_.PipelineHandler) : Node.stream.Stream_.Duplex = nativeOnly
+        static member pipeline (url: Node.url.URL, options: Exports.pipeline.options_1, handler: UndiciTypes.dispatcher.Dispatcher_.PipelineHandler) : Node.stream.Stream_.Duplex = nativeOnly
         /// <summary>
         /// For easy use with <c>stream.pipeline</c>.
         /// </summary>
         [<Import("pipeline", "undici-types")>]
-        static member pipeline (url: Node.url.UrlObject, options: Exports.pipeline.options_5, handler: UndiciTypes.dispatcher.Dispatcher_.PipelineHandler) : Node.stream.Stream_.Duplex = nativeOnly
+        static member pipeline (url: Node.url.UrlObject, options: Exports.pipeline.options_1, handler: UndiciTypes.dispatcher.Dispatcher_.PipelineHandler) : Node.stream.Stream_.Duplex = nativeOnly
         /// <summary>
         /// Starts two-way communications with the requested resource.
         /// </summary>
@@ -163421,6 +163402,12 @@ module UndiciTypes =
     type SpecIterator<'T, 'TReturn, 'TNext> =
         UndiciTypes.fetch.SpecIterator<'T, 'TReturn, 'TNext>
 
+    type SpecIterator<'T, 'TReturn> =
+        SpecIterator<'T, 'TReturn, obj>
+
+    type SpecIterator<'T> =
+        SpecIterator<'T, obj, obj>
+
     type SpecIterableIterator<'T> =
         UndiciTypes.fetch.SpecIterableIterator<'T>
 
@@ -163514,8 +163501,14 @@ module UndiciTypes =
     type MessageEventInit<'T> =
         UndiciTypes.websocket.MessageEventInit<'T>
 
+    type MessageEventInit =
+        MessageEventInit<obj>
+
     type MessageEvent<'T> =
         UndiciTypes.websocket.MessageEvent<'T>
+
+    type MessageEvent =
+        MessageEvent<obj>
 
     type ErrorEventInit =
         UndiciTypes.websocket.ErrorEventInit
@@ -163567,6 +163560,9 @@ module UndiciTypes =
 
     type MockAgent<'TMockAgentOptions> =
         UndiciTypes.mock_agent.MockAgent<'TMockAgentOptions>
+
+    type MockAgent =
+        MockAgent<UndiciTypes.mock_agent.MockAgent_.Options>
 
     type ProxyAgent =
         UndiciTypes.proxy_agent.ProxyAgent
@@ -163807,12 +163803,12 @@ module UndiciTypes =
             /// Performs an HTTP request.
             /// </summary>
             [<Import("request", "undici-types/api.js")>]
-            static member request (url: Node.url.URL, ?options: Exports.request.options_1) : JS.Promise<UndiciTypes.dispatcher.Dispatcher_.ResponseData> = nativeOnly
+            static member request (url: Node.url.URL, ?options: Exports.request.options) : JS.Promise<UndiciTypes.dispatcher.Dispatcher_.ResponseData> = nativeOnly
             /// <summary>
             /// Performs an HTTP request.
             /// </summary>
             [<Import("request", "undici-types/api.js")>]
-            static member request (url: Node.url.UrlObject, ?options: Exports.request.options_2) : JS.Promise<UndiciTypes.dispatcher.Dispatcher_.ResponseData> = nativeOnly
+            static member request (url: Node.url.UrlObject, ?options: Exports.request.options) : JS.Promise<UndiciTypes.dispatcher.Dispatcher_.ResponseData> = nativeOnly
             /// <summary>
             /// A faster version of <c>request</c>.
             /// </summary>
@@ -163822,12 +163818,12 @@ module UndiciTypes =
             /// A faster version of <c>request</c>.
             /// </summary>
             [<Import("stream", "undici-types/api.js")>]
-            static member stream (url: Node.url.URL, options: Exports.stream.options_1, factory: UndiciTypes.dispatcher.Dispatcher_.StreamFactory) : JS.Promise<UndiciTypes.dispatcher.Dispatcher_.StreamData> = nativeOnly
+            static member stream (url: Node.url.URL, options: Exports.stream.options, factory: UndiciTypes.dispatcher.Dispatcher_.StreamFactory) : JS.Promise<UndiciTypes.dispatcher.Dispatcher_.StreamData> = nativeOnly
             /// <summary>
             /// A faster version of <c>request</c>.
             /// </summary>
             [<Import("stream", "undici-types/api.js")>]
-            static member stream (url: Node.url.UrlObject, options: Exports.stream.options_2, factory: UndiciTypes.dispatcher.Dispatcher_.StreamFactory) : JS.Promise<UndiciTypes.dispatcher.Dispatcher_.StreamData> = nativeOnly
+            static member stream (url: Node.url.UrlObject, options: Exports.stream.options, factory: UndiciTypes.dispatcher.Dispatcher_.StreamFactory) : JS.Promise<UndiciTypes.dispatcher.Dispatcher_.StreamData> = nativeOnly
             /// <summary>
             /// For easy use with <c>stream.pipeline</c>.
             /// </summary>
@@ -163837,12 +163833,12 @@ module UndiciTypes =
             /// For easy use with <c>stream.pipeline</c>.
             /// </summary>
             [<Import("pipeline", "undici-types/api.js")>]
-            static member pipeline (url: Node.url.URL, options: Exports.pipeline.options_1, handler: UndiciTypes.dispatcher.Dispatcher_.PipelineHandler) : Node.stream.Stream_.Duplex = nativeOnly
+            static member pipeline (url: Node.url.URL, options: Exports.pipeline.options, handler: UndiciTypes.dispatcher.Dispatcher_.PipelineHandler) : Node.stream.Stream_.Duplex = nativeOnly
             /// <summary>
             /// For easy use with <c>stream.pipeline</c>.
             /// </summary>
             [<Import("pipeline", "undici-types/api.js")>]
-            static member pipeline (url: Node.url.UrlObject, options: Exports.pipeline.options_2, handler: UndiciTypes.dispatcher.Dispatcher_.PipelineHandler) : Node.stream.Stream_.Duplex = nativeOnly
+            static member pipeline (url: Node.url.UrlObject, options: Exports.pipeline.options, handler: UndiciTypes.dispatcher.Dispatcher_.PipelineHandler) : Node.stream.Stream_.Duplex = nativeOnly
             /// <summary>
             /// Starts two-way communications with the requested resource.
             /// </summary>
@@ -163986,210 +163982,6 @@ module UndiciTypes =
                                 [<EmitIndexer>]
                                 abstract member Item: key: string -> U2<string, ResizeArray<string>> with get, set
 
-                            [<AllowNullLiteral>]
-                            [<Interface>]
-                            type headers_1 =
-                                [<EmitIndexer>]
-                                abstract member Item: key: string -> U2<string, ResizeArray<string>> with get, set
-
-                            [<AllowNullLiteral>]
-                            [<Interface>]
-                            type headers_2 =
-                                [<EmitIndexer>]
-                                abstract member Item: key: string -> U2<string, ResizeArray<string>> with get, set
-
-                        [<Global>]
-                        [<AllowNullLiteral>]
-                        type info_1
-                            [<ParamObject; Emit("$0")>]
-                            (
-                                statusCode: float,
-                                headers: Exports.request.options.onInfo.info.headers_1
-                            ) =
-
-                            member val statusCode : float = nativeOnly with get, set
-                            member val headers : Exports.request.options.onInfo.info.headers_1 = nativeOnly with get, set
-
-                        [<Global>]
-                        [<AllowNullLiteral>]
-                        type info_2
-                            [<ParamObject; Emit("$0")>]
-                            (
-                                statusCode: float,
-                                headers: Exports.request.options.onInfo.info.headers_2
-                            ) =
-
-                            member val statusCode : float = nativeOnly with get, set
-                            member val headers : Exports.request.options.onInfo.info.headers_2 = nativeOnly with get, set
-
-                    [<AllowNullLiteral>]
-                    [<Interface>]
-                    type query_1 =
-                        [<EmitIndexer>]
-                        abstract member Item: key: string -> obj with get, set
-
-                    [<AllowNullLiteral>]
-                    [<Interface>]
-                    type query_2 =
-                        [<EmitIndexer>]
-                        abstract member Item: key: string -> obj with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_1 =
-                    abstract member dispatcher: UndiciTypes.dispatcher.Dispatcher option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member signal: U2<UndiciTypes.dispatcher.AbortSignal, Node.events.EventEmitter> option with get, set
-                    /// <summary>
-                    /// The amount of time, in milliseconds, the parser will wait to receive the complete HTTP headers. Defaults to 300 seconds.
-                    /// </summary>
-                    abstract member headersTimeout: float option with get, set
-                    /// <summary>
-                    /// Default: <c>64 KiB</c>
-                    /// </summary>
-                    abstract member highWaterMark: float option with get, set
-                    /// <summary>
-                    /// Whether the request should stablish a keep-alive or not. Default <c>false</c>
-                    /// </summary>
-                    abstract member reset: bool option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member opaque: obj option with get, set
-                    /// <summary>
-                    /// Default: 0
-                    /// </summary>
-                    abstract member maxRedirections: float option with get, set
-                    /// <summary>
-                    /// Default: false
-                    /// </summary>
-                    abstract member redirectionLimitReached: bool option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member onInfo: (Exports.request.options.onInfo.info_1 -> unit) option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member responseHeader: string option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member body: U5<string, Node.Buffer, JS.Uint8Array, Node.stream.Stream_.Readable, UndiciTypes.formdata.FormData> option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member headers: U3<UndiciTypes.header.IncomingHttpHeaders, ResizeArray<string>, Iterable<string * U2<string, ResizeArray<string>> option>> option with get, set
-                    /// <summary>
-                    /// Query string params to be embedded in the request URL. Default: <c>null</c>
-                    /// </summary>
-                    abstract member query: Exports.request.options.query_1 option with get, set
-                    /// <summary>
-                    /// Whether the requests can be safely retried or not. If <c>false</c> the request won't be sent until all preceding requests in the pipeline have completed. Default: <c>true</c> if <c>method</c> is <c>HEAD</c> or <c>GET</c>.
-                    /// </summary>
-                    abstract member idempotent: bool option with get, set
-                    /// <summary>
-                    /// Whether the response is expected to take a long time and would end up blocking the pipeline. When this is set to <c>true</c> further pipelining will be avoided on the same connection until headers have been received.
-                    /// </summary>
-                    abstract member blocking: bool option with get, set
-                    /// <summary>
-                    /// Upgrade the request. Should be used to specify the kind of upgrade i.e. <c>'Websocket'</c>. Default: <c>method === 'CONNECT' || null</c>.
-                    /// </summary>
-                    abstract member upgrade: U2<bool, string> option with get, set
-                    /// <summary>
-                    /// The timeout after which a request will time out, in milliseconds. Monitors time between receiving body data. Use 0 to disable it entirely. Defaults to 300 seconds.
-                    /// </summary>
-                    abstract member bodyTimeout: float option with get, set
-                    /// <summary>
-                    /// Whether Undici should throw an error upon receiving a 4xx or 5xx response from the server. Defaults to false
-                    /// </summary>
-                    abstract member throwOnError: bool option with get, set
-                    /// <summary>
-                    /// For H2, it appends the expect: 100-continue header, and halts the request body until a 100-continue is received from the remote server
-                    /// </summary>
-                    abstract member expectContinue: bool option with get, set
-                    abstract member ``method``: UndiciTypes.dispatcher.Dispatcher_.HttpMethod option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_2 =
-                    abstract member dispatcher: UndiciTypes.dispatcher.Dispatcher option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member signal: U2<UndiciTypes.dispatcher.AbortSignal, Node.events.EventEmitter> option with get, set
-                    /// <summary>
-                    /// The amount of time, in milliseconds, the parser will wait to receive the complete HTTP headers. Defaults to 300 seconds.
-                    /// </summary>
-                    abstract member headersTimeout: float option with get, set
-                    /// <summary>
-                    /// Default: <c>64 KiB</c>
-                    /// </summary>
-                    abstract member highWaterMark: float option with get, set
-                    /// <summary>
-                    /// Whether the request should stablish a keep-alive or not. Default <c>false</c>
-                    /// </summary>
-                    abstract member reset: bool option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member opaque: obj option with get, set
-                    /// <summary>
-                    /// Default: 0
-                    /// </summary>
-                    abstract member maxRedirections: float option with get, set
-                    /// <summary>
-                    /// Default: false
-                    /// </summary>
-                    abstract member redirectionLimitReached: bool option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member onInfo: (Exports.request.options.onInfo.info_2 -> unit) option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member responseHeader: string option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member body: U5<string, Node.Buffer, JS.Uint8Array, Node.stream.Stream_.Readable, UndiciTypes.formdata.FormData> option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member headers: U3<UndiciTypes.header.IncomingHttpHeaders, ResizeArray<string>, Iterable<string * U2<string, ResizeArray<string>> option>> option with get, set
-                    /// <summary>
-                    /// Query string params to be embedded in the request URL. Default: <c>null</c>
-                    /// </summary>
-                    abstract member query: Exports.request.options.query_2 option with get, set
-                    /// <summary>
-                    /// Whether the requests can be safely retried or not. If <c>false</c> the request won't be sent until all preceding requests in the pipeline have completed. Default: <c>true</c> if <c>method</c> is <c>HEAD</c> or <c>GET</c>.
-                    /// </summary>
-                    abstract member idempotent: bool option with get, set
-                    /// <summary>
-                    /// Whether the response is expected to take a long time and would end up blocking the pipeline. When this is set to <c>true</c> further pipelining will be avoided on the same connection until headers have been received.
-                    /// </summary>
-                    abstract member blocking: bool option with get, set
-                    /// <summary>
-                    /// Upgrade the request. Should be used to specify the kind of upgrade i.e. <c>'Websocket'</c>. Default: <c>method === 'CONNECT' || null</c>.
-                    /// </summary>
-                    abstract member upgrade: U2<bool, string> option with get, set
-                    /// <summary>
-                    /// The timeout after which a request will time out, in milliseconds. Monitors time between receiving body data. Use 0 to disable it entirely. Defaults to 300 seconds.
-                    /// </summary>
-                    abstract member bodyTimeout: float option with get, set
-                    /// <summary>
-                    /// Whether Undici should throw an error upon receiving a 4xx or 5xx response from the server. Defaults to false
-                    /// </summary>
-                    abstract member throwOnError: bool option with get, set
-                    /// <summary>
-                    /// For H2, it appends the expect: 100-continue header, and halts the request body until a 100-continue is received from the remote server
-                    /// </summary>
-                    abstract member expectContinue: bool option with get, set
-                    abstract member ``method``: UndiciTypes.dispatcher.Dispatcher_.HttpMethod option with get, set
-
             module stream =
 
                 [<AllowNullLiteral>]
@@ -164299,210 +164091,6 @@ module UndiciTypes =
                             type headers =
                                 [<EmitIndexer>]
                                 abstract member Item: key: string -> U2<string, ResizeArray<string>> with get, set
-
-                            [<AllowNullLiteral>]
-                            [<Interface>]
-                            type headers_1 =
-                                [<EmitIndexer>]
-                                abstract member Item: key: string -> U2<string, ResizeArray<string>> with get, set
-
-                            [<AllowNullLiteral>]
-                            [<Interface>]
-                            type headers_2 =
-                                [<EmitIndexer>]
-                                abstract member Item: key: string -> U2<string, ResizeArray<string>> with get, set
-
-                        [<Global>]
-                        [<AllowNullLiteral>]
-                        type info_1
-                            [<ParamObject; Emit("$0")>]
-                            (
-                                statusCode: float,
-                                headers: Exports.stream.options.onInfo.info.headers_1
-                            ) =
-
-                            member val statusCode : float = nativeOnly with get, set
-                            member val headers : Exports.stream.options.onInfo.info.headers_1 = nativeOnly with get, set
-
-                        [<Global>]
-                        [<AllowNullLiteral>]
-                        type info_2
-                            [<ParamObject; Emit("$0")>]
-                            (
-                                statusCode: float,
-                                headers: Exports.stream.options.onInfo.info.headers_2
-                            ) =
-
-                            member val statusCode : float = nativeOnly with get, set
-                            member val headers : Exports.stream.options.onInfo.info.headers_2 = nativeOnly with get, set
-
-                    [<AllowNullLiteral>]
-                    [<Interface>]
-                    type query_1 =
-                        [<EmitIndexer>]
-                        abstract member Item: key: string -> obj with get, set
-
-                    [<AllowNullLiteral>]
-                    [<Interface>]
-                    type query_2 =
-                        [<EmitIndexer>]
-                        abstract member Item: key: string -> obj with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_1 =
-                    abstract member dispatcher: UndiciTypes.dispatcher.Dispatcher option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member signal: U2<UndiciTypes.dispatcher.AbortSignal, Node.events.EventEmitter> option with get, set
-                    /// <summary>
-                    /// The amount of time, in milliseconds, the parser will wait to receive the complete HTTP headers. Defaults to 300 seconds.
-                    /// </summary>
-                    abstract member headersTimeout: float option with get, set
-                    /// <summary>
-                    /// Default: <c>64 KiB</c>
-                    /// </summary>
-                    abstract member highWaterMark: float option with get, set
-                    /// <summary>
-                    /// Whether the request should stablish a keep-alive or not. Default <c>false</c>
-                    /// </summary>
-                    abstract member reset: bool option with get, set
-                    abstract member ``method``: UndiciTypes.dispatcher.Dispatcher_.HttpMethod with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member opaque: obj option with get, set
-                    /// <summary>
-                    /// Default: 0
-                    /// </summary>
-                    abstract member maxRedirections: float option with get, set
-                    /// <summary>
-                    /// Default: false
-                    /// </summary>
-                    abstract member redirectionLimitReached: bool option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member onInfo: (Exports.stream.options.onInfo.info_1 -> unit) option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member responseHeader: string option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member body: U5<string, Node.Buffer, JS.Uint8Array, Node.stream.Stream_.Readable, UndiciTypes.formdata.FormData> option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member headers: U3<UndiciTypes.header.IncomingHttpHeaders, ResizeArray<string>, Iterable<string * U2<string, ResizeArray<string>> option>> option with get, set
-                    /// <summary>
-                    /// Query string params to be embedded in the request URL. Default: <c>null</c>
-                    /// </summary>
-                    abstract member query: Exports.stream.options.query_1 option with get, set
-                    /// <summary>
-                    /// Whether the requests can be safely retried or not. If <c>false</c> the request won't be sent until all preceding requests in the pipeline have completed. Default: <c>true</c> if <c>method</c> is <c>HEAD</c> or <c>GET</c>.
-                    /// </summary>
-                    abstract member idempotent: bool option with get, set
-                    /// <summary>
-                    /// Whether the response is expected to take a long time and would end up blocking the pipeline. When this is set to <c>true</c> further pipelining will be avoided on the same connection until headers have been received.
-                    /// </summary>
-                    abstract member blocking: bool option with get, set
-                    /// <summary>
-                    /// Upgrade the request. Should be used to specify the kind of upgrade i.e. <c>'Websocket'</c>. Default: <c>method === 'CONNECT' || null</c>.
-                    /// </summary>
-                    abstract member upgrade: U2<bool, string> option with get, set
-                    /// <summary>
-                    /// The timeout after which a request will time out, in milliseconds. Monitors time between receiving body data. Use 0 to disable it entirely. Defaults to 300 seconds.
-                    /// </summary>
-                    abstract member bodyTimeout: float option with get, set
-                    /// <summary>
-                    /// Whether Undici should throw an error upon receiving a 4xx or 5xx response from the server. Defaults to false
-                    /// </summary>
-                    abstract member throwOnError: bool option with get, set
-                    /// <summary>
-                    /// For H2, it appends the expect: 100-continue header, and halts the request body until a 100-continue is received from the remote server
-                    /// </summary>
-                    abstract member expectContinue: bool option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_2 =
-                    abstract member dispatcher: UndiciTypes.dispatcher.Dispatcher option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member signal: U2<UndiciTypes.dispatcher.AbortSignal, Node.events.EventEmitter> option with get, set
-                    /// <summary>
-                    /// The amount of time, in milliseconds, the parser will wait to receive the complete HTTP headers. Defaults to 300 seconds.
-                    /// </summary>
-                    abstract member headersTimeout: float option with get, set
-                    /// <summary>
-                    /// Default: <c>64 KiB</c>
-                    /// </summary>
-                    abstract member highWaterMark: float option with get, set
-                    /// <summary>
-                    /// Whether the request should stablish a keep-alive or not. Default <c>false</c>
-                    /// </summary>
-                    abstract member reset: bool option with get, set
-                    abstract member ``method``: UndiciTypes.dispatcher.Dispatcher_.HttpMethod with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member opaque: obj option with get, set
-                    /// <summary>
-                    /// Default: 0
-                    /// </summary>
-                    abstract member maxRedirections: float option with get, set
-                    /// <summary>
-                    /// Default: false
-                    /// </summary>
-                    abstract member redirectionLimitReached: bool option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member onInfo: (Exports.stream.options.onInfo.info_2 -> unit) option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member responseHeader: string option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member body: U5<string, Node.Buffer, JS.Uint8Array, Node.stream.Stream_.Readable, UndiciTypes.formdata.FormData> option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member headers: U3<UndiciTypes.header.IncomingHttpHeaders, ResizeArray<string>, Iterable<string * U2<string, ResizeArray<string>> option>> option with get, set
-                    /// <summary>
-                    /// Query string params to be embedded in the request URL. Default: <c>null</c>
-                    /// </summary>
-                    abstract member query: Exports.stream.options.query_2 option with get, set
-                    /// <summary>
-                    /// Whether the requests can be safely retried or not. If <c>false</c> the request won't be sent until all preceding requests in the pipeline have completed. Default: <c>true</c> if <c>method</c> is <c>HEAD</c> or <c>GET</c>.
-                    /// </summary>
-                    abstract member idempotent: bool option with get, set
-                    /// <summary>
-                    /// Whether the response is expected to take a long time and would end up blocking the pipeline. When this is set to <c>true</c> further pipelining will be avoided on the same connection until headers have been received.
-                    /// </summary>
-                    abstract member blocking: bool option with get, set
-                    /// <summary>
-                    /// Upgrade the request. Should be used to specify the kind of upgrade i.e. <c>'Websocket'</c>. Default: <c>method === 'CONNECT' || null</c>.
-                    /// </summary>
-                    abstract member upgrade: U2<bool, string> option with get, set
-                    /// <summary>
-                    /// The timeout after which a request will time out, in milliseconds. Monitors time between receiving body data. Use 0 to disable it entirely. Defaults to 300 seconds.
-                    /// </summary>
-                    abstract member bodyTimeout: float option with get, set
-                    /// <summary>
-                    /// Whether Undici should throw an error upon receiving a 4xx or 5xx response from the server. Defaults to false
-                    /// </summary>
-                    abstract member throwOnError: bool option with get, set
-                    /// <summary>
-                    /// For H2, it appends the expect: 100-continue header, and halts the request body until a 100-continue is received from the remote server
-                    /// </summary>
-                    abstract member expectContinue: bool option with get, set
 
             module pipeline =
 
@@ -164617,218 +164205,6 @@ module UndiciTypes =
                             type headers =
                                 [<EmitIndexer>]
                                 abstract member Item: key: string -> U2<string, ResizeArray<string>> with get, set
-
-                            [<AllowNullLiteral>]
-                            [<Interface>]
-                            type headers_1 =
-                                [<EmitIndexer>]
-                                abstract member Item: key: string -> U2<string, ResizeArray<string>> with get, set
-
-                            [<AllowNullLiteral>]
-                            [<Interface>]
-                            type headers_2 =
-                                [<EmitIndexer>]
-                                abstract member Item: key: string -> U2<string, ResizeArray<string>> with get, set
-
-                        [<Global>]
-                        [<AllowNullLiteral>]
-                        type info_1
-                            [<ParamObject; Emit("$0")>]
-                            (
-                                statusCode: float,
-                                headers: Exports.pipeline.options.onInfo.info.headers_1
-                            ) =
-
-                            member val statusCode : float = nativeOnly with get, set
-                            member val headers : Exports.pipeline.options.onInfo.info.headers_1 = nativeOnly with get, set
-
-                        [<Global>]
-                        [<AllowNullLiteral>]
-                        type info_2
-                            [<ParamObject; Emit("$0")>]
-                            (
-                                statusCode: float,
-                                headers: Exports.pipeline.options.onInfo.info.headers_2
-                            ) =
-
-                            member val statusCode : float = nativeOnly with get, set
-                            member val headers : Exports.pipeline.options.onInfo.info.headers_2 = nativeOnly with get, set
-
-                    [<AllowNullLiteral>]
-                    [<Interface>]
-                    type query_1 =
-                        [<EmitIndexer>]
-                        abstract member Item: key: string -> obj with get, set
-
-                    [<AllowNullLiteral>]
-                    [<Interface>]
-                    type query_2 =
-                        [<EmitIndexer>]
-                        abstract member Item: key: string -> obj with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_1 =
-                    abstract member dispatcher: UndiciTypes.dispatcher.Dispatcher option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member signal: U2<UndiciTypes.dispatcher.AbortSignal, Node.events.EventEmitter> option with get, set
-                    /// <summary>
-                    /// The amount of time, in milliseconds, the parser will wait to receive the complete HTTP headers. Defaults to 300 seconds.
-                    /// </summary>
-                    abstract member headersTimeout: float option with get, set
-                    /// <summary>
-                    /// Default: <c>64 KiB</c>
-                    /// </summary>
-                    abstract member highWaterMark: float option with get, set
-                    /// <summary>
-                    /// <c>true</c> if the <c>handler</c> will return an object stream. Default: <c>false</c>
-                    /// </summary>
-                    abstract member objectMode: bool option with get, set
-                    /// <summary>
-                    /// Whether the request should stablish a keep-alive or not. Default <c>false</c>
-                    /// </summary>
-                    abstract member reset: bool option with get, set
-                    abstract member ``method``: UndiciTypes.dispatcher.Dispatcher_.HttpMethod with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member opaque: obj option with get, set
-                    /// <summary>
-                    /// Default: 0
-                    /// </summary>
-                    abstract member maxRedirections: float option with get, set
-                    /// <summary>
-                    /// Default: false
-                    /// </summary>
-                    abstract member redirectionLimitReached: bool option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member onInfo: (Exports.pipeline.options.onInfo.info_1 -> unit) option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member responseHeader: string option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member body: U5<string, Node.Buffer, JS.Uint8Array, Node.stream.Stream_.Readable, UndiciTypes.formdata.FormData> option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member headers: U3<UndiciTypes.header.IncomingHttpHeaders, ResizeArray<string>, Iterable<string * U2<string, ResizeArray<string>> option>> option with get, set
-                    /// <summary>
-                    /// Query string params to be embedded in the request URL. Default: <c>null</c>
-                    /// </summary>
-                    abstract member query: Exports.pipeline.options.query_1 option with get, set
-                    /// <summary>
-                    /// Whether the requests can be safely retried or not. If <c>false</c> the request won't be sent until all preceding requests in the pipeline have completed. Default: <c>true</c> if <c>method</c> is <c>HEAD</c> or <c>GET</c>.
-                    /// </summary>
-                    abstract member idempotent: bool option with get, set
-                    /// <summary>
-                    /// Whether the response is expected to take a long time and would end up blocking the pipeline. When this is set to <c>true</c> further pipelining will be avoided on the same connection until headers have been received.
-                    /// </summary>
-                    abstract member blocking: bool option with get, set
-                    /// <summary>
-                    /// Upgrade the request. Should be used to specify the kind of upgrade i.e. <c>'Websocket'</c>. Default: <c>method === 'CONNECT' || null</c>.
-                    /// </summary>
-                    abstract member upgrade: U2<bool, string> option with get, set
-                    /// <summary>
-                    /// The timeout after which a request will time out, in milliseconds. Monitors time between receiving body data. Use 0 to disable it entirely. Defaults to 300 seconds.
-                    /// </summary>
-                    abstract member bodyTimeout: float option with get, set
-                    /// <summary>
-                    /// Whether Undici should throw an error upon receiving a 4xx or 5xx response from the server. Defaults to false
-                    /// </summary>
-                    abstract member throwOnError: bool option with get, set
-                    /// <summary>
-                    /// For H2, it appends the expect: 100-continue header, and halts the request body until a 100-continue is received from the remote server
-                    /// </summary>
-                    abstract member expectContinue: bool option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_2 =
-                    abstract member dispatcher: UndiciTypes.dispatcher.Dispatcher option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member signal: U2<UndiciTypes.dispatcher.AbortSignal, Node.events.EventEmitter> option with get, set
-                    /// <summary>
-                    /// The amount of time, in milliseconds, the parser will wait to receive the complete HTTP headers. Defaults to 300 seconds.
-                    /// </summary>
-                    abstract member headersTimeout: float option with get, set
-                    /// <summary>
-                    /// Default: <c>64 KiB</c>
-                    /// </summary>
-                    abstract member highWaterMark: float option with get, set
-                    /// <summary>
-                    /// <c>true</c> if the <c>handler</c> will return an object stream. Default: <c>false</c>
-                    /// </summary>
-                    abstract member objectMode: bool option with get, set
-                    /// <summary>
-                    /// Whether the request should stablish a keep-alive or not. Default <c>false</c>
-                    /// </summary>
-                    abstract member reset: bool option with get, set
-                    abstract member ``method``: UndiciTypes.dispatcher.Dispatcher_.HttpMethod with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member opaque: obj option with get, set
-                    /// <summary>
-                    /// Default: 0
-                    /// </summary>
-                    abstract member maxRedirections: float option with get, set
-                    /// <summary>
-                    /// Default: false
-                    /// </summary>
-                    abstract member redirectionLimitReached: bool option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member onInfo: (Exports.pipeline.options.onInfo.info_2 -> unit) option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member responseHeader: string option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member body: U5<string, Node.Buffer, JS.Uint8Array, Node.stream.Stream_.Readable, UndiciTypes.formdata.FormData> option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member headers: U3<UndiciTypes.header.IncomingHttpHeaders, ResizeArray<string>, Iterable<string * U2<string, ResizeArray<string>> option>> option with get, set
-                    /// <summary>
-                    /// Query string params to be embedded in the request URL. Default: <c>null</c>
-                    /// </summary>
-                    abstract member query: Exports.pipeline.options.query_2 option with get, set
-                    /// <summary>
-                    /// Whether the requests can be safely retried or not. If <c>false</c> the request won't be sent until all preceding requests in the pipeline have completed. Default: <c>true</c> if <c>method</c> is <c>HEAD</c> or <c>GET</c>.
-                    /// </summary>
-                    abstract member idempotent: bool option with get, set
-                    /// <summary>
-                    /// Whether the response is expected to take a long time and would end up blocking the pipeline. When this is set to <c>true</c> further pipelining will be avoided on the same connection until headers have been received.
-                    /// </summary>
-                    abstract member blocking: bool option with get, set
-                    /// <summary>
-                    /// Upgrade the request. Should be used to specify the kind of upgrade i.e. <c>'Websocket'</c>. Default: <c>method === 'CONNECT' || null</c>.
-                    /// </summary>
-                    abstract member upgrade: U2<bool, string> option with get, set
-                    /// <summary>
-                    /// The timeout after which a request will time out, in milliseconds. Monitors time between receiving body data. Use 0 to disable it entirely. Defaults to 300 seconds.
-                    /// </summary>
-                    abstract member bodyTimeout: float option with get, set
-                    /// <summary>
-                    /// Whether Undici should throw an error upon receiving a 4xx or 5xx response from the server. Defaults to false
-                    /// </summary>
-                    abstract member throwOnError: bool option with get, set
-                    /// <summary>
-                    /// For H2, it appends the expect: 100-continue header, and halts the request body until a 100-continue is received from the remote server
-                    /// </summary>
-                    abstract member expectContinue: bool option with get, set
 
             module connect =
 
@@ -167407,7 +166783,7 @@ module UndiciTypes =
                 [<Emit("new $0.RequestRetryError($1...)")>]
                 abstract member RequestRetryError: message: string * statusCode: float * headers: ResizeArray<string> -> RequestRetryError
                 [<Emit("new $0.RequestRetryError($1...)")>]
-                abstract member RequestRetryError: message: string * statusCode: float * headers: ResizeArray<string> * body: Exports.RequestRetryError.body_1 -> RequestRetryError
+                abstract member RequestRetryError: message: string * statusCode: float * headers: ResizeArray<string> * body: Exports.RequestRetryError.body -> RequestRetryError
                 [<Emit("new $0.RequestRetryError($1...)")>]
                 abstract member RequestRetryError: message: string * statusCode: float * headers: ResizeArray<string> * body: string -> RequestRetryError
                 [<Emit("new $0.SecureProxyConnectionError($1...)")>]
@@ -167628,19 +167004,13 @@ module UndiciTypes =
                         [<EmitIndexer>]
                         abstract member Item: key: string -> obj with get, set
 
-                    [<AllowNullLiteral>]
-                    [<Interface>]
-                    type body_1 =
-                        [<EmitIndexer>]
-                        abstract member Item: key: string -> obj with get, set
-
     module eventsource =
 
         [<AbstractClass>]
         [<Erase>]
         type Exports =
             [<Import("EventSource", "undici-types/eventsource.js")>]
-            static member inline EventSource: Exports.EventSource.Type = nativeOnly
+            static member inline EventSource: Exports.EventSource.Type_1 = nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -167923,7 +167293,7 @@ module UndiciTypes =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type Type =
+                type Type_1 =
                     abstract member prototype: UndiciTypes.eventsource.EventSource with get, set
                     [<EmitConstructor>]
                     abstract member Create: url: U2<string, Node.URL> * ?init: UndiciTypes.eventsource.EventSourceInit -> UndiciTypes.eventsource.EventSource
@@ -170123,11 +169493,11 @@ FileReader.DONE"""
         [<Erase>]
         type Exports =
             [<Import("WebSocket", "undici-types/websocket.js")>]
-            static member inline WebSocket: Exports.WebSocket.Type = nativeOnly
+            static member inline WebSocket: Exports.WebSocket.Type_1 = nativeOnly
             [<Import("CloseEvent", "undici-types/websocket.js")>]
             static member inline CloseEvent: Exports.CloseEvent.Type = nativeOnly
             [<Import("MessageEvent", "undici-types/websocket.js")>]
-            static member inline MessageEvent: Exports.MessageEvent.Type = nativeOnly
+            static member inline MessageEvent: Exports.MessageEvent.Type_1 = nativeOnly
             [<Import("ErrorEvent", "undici-types/websocket.js")>]
             static member inline ErrorEvent: Exports.ErrorEvent.Type = nativeOnly
 
@@ -170519,7 +169889,7 @@ FileReader.DONE"""
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type Type =
+                type Type_1 =
                     abstract member prototype: UndiciTypes.websocket.WebSocket with get, set
                     [<EmitConstructor>]
                     abstract member Create: url: U2<string, Node.URL> * ?protocols: U3<string, ResizeArray<string>, UndiciTypes.websocket.WebSocketInit> -> UndiciTypes.websocket.WebSocket
@@ -170541,7 +169911,7 @@ FileReader.DONE"""
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type Type =
+                type Type_1 =
                     abstract member prototype: UndiciTypes.websocket.MessageEvent with get, set
                     [<EmitConstructor>]
                     abstract member Create: ``type``: string * ?eventInitDict: UndiciTypes.websocket.MessageEventInit<'T> -> UndiciTypes.websocket.MessageEvent<'T>
@@ -170587,7 +169957,7 @@ FileReader.DONE"""
 
             [<AllowNullLiteral>]
             [<Interface>]
-            type Type =
+            type Type_2 =
                 abstract member prototype: UndiciTypes.eventsource.EventSource with get, set
                 [<EmitConstructor>]
                 abstract member Create: url: U2<string, Node.URL> * ?init: UndiciTypes.eventsource.EventSourceInit -> UndiciTypes.eventsource.EventSource
@@ -170599,7 +169969,7 @@ FileReader.DONE"""
 
             [<AllowNullLiteral>]
             [<Interface>]
-            type Type =
+            type Type_2 =
                 abstract member prototype: UndiciTypes.websocket.WebSocket with get, set
                 [<EmitConstructor>]
                 abstract member Create: url: U2<string, Node.URL> * ?protocols: U3<string, ResizeArray<string>, UndiciTypes.websocket.WebSocketInit> -> UndiciTypes.websocket.WebSocket
@@ -170612,7 +169982,7 @@ FileReader.DONE"""
 
             [<AllowNullLiteral>]
             [<Interface>]
-            type Type =
+            type Type_1 =
                 abstract member prototype: UndiciTypes.websocket.CloseEvent with get, set
                 [<EmitConstructor>]
                 abstract member Create: ``type``: string * ?eventInitDict: UndiciTypes.websocket.CloseEventInit -> UndiciTypes.websocket.CloseEvent
@@ -170621,7 +169991,7 @@ FileReader.DONE"""
 
             [<AllowNullLiteral>]
             [<Interface>]
-            type Type =
+            type Type_2 =
                 abstract member prototype: UndiciTypes.websocket.MessageEvent with get, set
                 [<EmitConstructor>]
                 abstract member Create: ``type``: string * ?eventInitDict: UndiciTypes.websocket.MessageEventInit<'T> -> UndiciTypes.websocket.MessageEvent<'T>
@@ -170630,7 +170000,7 @@ FileReader.DONE"""
 
             [<AllowNullLiteral>]
             [<Interface>]
-            type Type =
+            type Type_1 =
                 abstract member prototype: UndiciTypes.websocket.ErrorEvent with get, set
                 [<EmitConstructor>]
                 abstract member Create: ``type``: string * ?eventInitDict: UndiciTypes.websocket.ErrorEventInit -> UndiciTypes.websocket.ErrorEvent
@@ -170639,7 +170009,7 @@ FileReader.DONE"""
 
             [<AllowNullLiteral>]
             [<Interface>]
-            type options_3 =
+            type options_1 =
                 abstract member dispatcher: UndiciTypes.dispatcher.Dispatcher option with get, set
                 /// <summary>
                 /// Default: <c>null</c>
@@ -170672,7 +170042,7 @@ FileReader.DONE"""
                 /// <summary>
                 /// Default: <c>null</c>
                 /// </summary>
-                abstract member onInfo: (Exports.request.options.onInfo.info_3 -> unit) option with get, set
+                abstract member onInfo: (Exports.request.options.onInfo.info_1 -> unit) option with get, set
                 /// <summary>
                 /// Default: <c>null</c>
                 /// </summary>
@@ -170688,7 +170058,7 @@ FileReader.DONE"""
                 /// <summary>
                 /// Query string params to be embedded in the request URL. Default: <c>null</c>
                 /// </summary>
-                abstract member query: Exports.request.options.query_3 option with get, set
+                abstract member query: Exports.request.options.query_1 option with get, set
                 /// <summary>
                 /// Whether the requests can be safely retried or not. If <c>false</c> the request won't be sent until all preceding requests in the pipeline have completed. Default: <c>true</c> if <c>method</c> is <c>HEAD</c> or <c>GET</c>.
                 /// </summary>
@@ -170719,7 +170089,7 @@ FileReader.DONE"""
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type query_3 =
+                type query_1 =
                     [<EmitIndexer>]
                     abstract member Item: key: string -> obj with get, set
 
@@ -170727,233 +170097,29 @@ FileReader.DONE"""
 
                     [<Global>]
                     [<AllowNullLiteral>]
-                    type info_3
+                    type info_1
                         [<ParamObject; Emit("$0")>]
                         (
                             statusCode: float,
-                            headers: Exports.request.options.onInfo.info.headers_3
+                            headers: Exports.request.options.onInfo.info.headers_1
                         ) =
 
                         member val statusCode : float = nativeOnly with get, set
-                        member val headers : Exports.request.options.onInfo.info.headers_3 = nativeOnly with get, set
+                        member val headers : Exports.request.options.onInfo.info.headers_1 = nativeOnly with get, set
 
                     module info =
 
                         [<AllowNullLiteral>]
                         [<Interface>]
-                        type headers_3 =
+                        type headers_1 =
                             [<EmitIndexer>]
                             abstract member Item: key: string -> U2<string, ResizeArray<string>> with get, set
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type headers_4 =
-                            [<EmitIndexer>]
-                            abstract member Item: key: string -> U2<string, ResizeArray<string>> with get, set
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type headers_5 =
-                            [<EmitIndexer>]
-                            abstract member Item: key: string -> U2<string, ResizeArray<string>> with get, set
-
-                    [<Global>]
-                    [<AllowNullLiteral>]
-                    type info_4
-                        [<ParamObject; Emit("$0")>]
-                        (
-                            statusCode: float,
-                            headers: Exports.request.options.onInfo.info.headers_4
-                        ) =
-
-                        member val statusCode : float = nativeOnly with get, set
-                        member val headers : Exports.request.options.onInfo.info.headers_4 = nativeOnly with get, set
-
-                    [<Global>]
-                    [<AllowNullLiteral>]
-                    type info_5
-                        [<ParamObject; Emit("$0")>]
-                        (
-                            statusCode: float,
-                            headers: Exports.request.options.onInfo.info.headers_5
-                        ) =
-
-                        member val statusCode : float = nativeOnly with get, set
-                        member val headers : Exports.request.options.onInfo.info.headers_5 = nativeOnly with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type query_4 =
-                    [<EmitIndexer>]
-                    abstract member Item: key: string -> obj with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type query_5 =
-                    [<EmitIndexer>]
-                    abstract member Item: key: string -> obj with get, set
-
-            [<AllowNullLiteral>]
-            [<Interface>]
-            type options_4 =
-                abstract member dispatcher: UndiciTypes.dispatcher.Dispatcher option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member signal: U2<UndiciTypes.dispatcher.AbortSignal, Node.events.EventEmitter> option with get, set
-                /// <summary>
-                /// The amount of time, in milliseconds, the parser will wait to receive the complete HTTP headers. Defaults to 300 seconds.
-                /// </summary>
-                abstract member headersTimeout: float option with get, set
-                /// <summary>
-                /// Default: <c>64 KiB</c>
-                /// </summary>
-                abstract member highWaterMark: float option with get, set
-                /// <summary>
-                /// Whether the request should stablish a keep-alive or not. Default <c>false</c>
-                /// </summary>
-                abstract member reset: bool option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member opaque: obj option with get, set
-                /// <summary>
-                /// Default: 0
-                /// </summary>
-                abstract member maxRedirections: float option with get, set
-                /// <summary>
-                /// Default: false
-                /// </summary>
-                abstract member redirectionLimitReached: bool option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member onInfo: (Exports.request.options.onInfo.info_4 -> unit) option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member responseHeader: string option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member body: U5<string, Node.Buffer, JS.Uint8Array, Node.stream.Stream_.Readable, UndiciTypes.formdata.FormData> option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member headers: U3<UndiciTypes.header.IncomingHttpHeaders, ResizeArray<string>, Iterable<string * U2<string, ResizeArray<string>> option>> option with get, set
-                /// <summary>
-                /// Query string params to be embedded in the request URL. Default: <c>null</c>
-                /// </summary>
-                abstract member query: Exports.request.options.query_4 option with get, set
-                /// <summary>
-                /// Whether the requests can be safely retried or not. If <c>false</c> the request won't be sent until all preceding requests in the pipeline have completed. Default: <c>true</c> if <c>method</c> is <c>HEAD</c> or <c>GET</c>.
-                /// </summary>
-                abstract member idempotent: bool option with get, set
-                /// <summary>
-                /// Whether the response is expected to take a long time and would end up blocking the pipeline. When this is set to <c>true</c> further pipelining will be avoided on the same connection until headers have been received.
-                /// </summary>
-                abstract member blocking: bool option with get, set
-                /// <summary>
-                /// Upgrade the request. Should be used to specify the kind of upgrade i.e. <c>'Websocket'</c>. Default: <c>method === 'CONNECT' || null</c>.
-                /// </summary>
-                abstract member upgrade: U2<bool, string> option with get, set
-                /// <summary>
-                /// The timeout after which a request will time out, in milliseconds. Monitors time between receiving body data. Use 0 to disable it entirely. Defaults to 300 seconds.
-                /// </summary>
-                abstract member bodyTimeout: float option with get, set
-                /// <summary>
-                /// Whether Undici should throw an error upon receiving a 4xx or 5xx response from the server. Defaults to false
-                /// </summary>
-                abstract member throwOnError: bool option with get, set
-                /// <summary>
-                /// For H2, it appends the expect: 100-continue header, and halts the request body until a 100-continue is received from the remote server
-                /// </summary>
-                abstract member expectContinue: bool option with get, set
-                abstract member ``method``: UndiciTypes.dispatcher.Dispatcher_.HttpMethod option with get, set
-
-            [<AllowNullLiteral>]
-            [<Interface>]
-            type options_5 =
-                abstract member dispatcher: UndiciTypes.dispatcher.Dispatcher option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member signal: U2<UndiciTypes.dispatcher.AbortSignal, Node.events.EventEmitter> option with get, set
-                /// <summary>
-                /// The amount of time, in milliseconds, the parser will wait to receive the complete HTTP headers. Defaults to 300 seconds.
-                /// </summary>
-                abstract member headersTimeout: float option with get, set
-                /// <summary>
-                /// Default: <c>64 KiB</c>
-                /// </summary>
-                abstract member highWaterMark: float option with get, set
-                /// <summary>
-                /// Whether the request should stablish a keep-alive or not. Default <c>false</c>
-                /// </summary>
-                abstract member reset: bool option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member opaque: obj option with get, set
-                /// <summary>
-                /// Default: 0
-                /// </summary>
-                abstract member maxRedirections: float option with get, set
-                /// <summary>
-                /// Default: false
-                /// </summary>
-                abstract member redirectionLimitReached: bool option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member onInfo: (Exports.request.options.onInfo.info_5 -> unit) option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member responseHeader: string option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member body: U5<string, Node.Buffer, JS.Uint8Array, Node.stream.Stream_.Readable, UndiciTypes.formdata.FormData> option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member headers: U3<UndiciTypes.header.IncomingHttpHeaders, ResizeArray<string>, Iterable<string * U2<string, ResizeArray<string>> option>> option with get, set
-                /// <summary>
-                /// Query string params to be embedded in the request URL. Default: <c>null</c>
-                /// </summary>
-                abstract member query: Exports.request.options.query_5 option with get, set
-                /// <summary>
-                /// Whether the requests can be safely retried or not. If <c>false</c> the request won't be sent until all preceding requests in the pipeline have completed. Default: <c>true</c> if <c>method</c> is <c>HEAD</c> or <c>GET</c>.
-                /// </summary>
-                abstract member idempotent: bool option with get, set
-                /// <summary>
-                /// Whether the response is expected to take a long time and would end up blocking the pipeline. When this is set to <c>true</c> further pipelining will be avoided on the same connection until headers have been received.
-                /// </summary>
-                abstract member blocking: bool option with get, set
-                /// <summary>
-                /// Upgrade the request. Should be used to specify the kind of upgrade i.e. <c>'Websocket'</c>. Default: <c>method === 'CONNECT' || null</c>.
-                /// </summary>
-                abstract member upgrade: U2<bool, string> option with get, set
-                /// <summary>
-                /// The timeout after which a request will time out, in milliseconds. Monitors time between receiving body data. Use 0 to disable it entirely. Defaults to 300 seconds.
-                /// </summary>
-                abstract member bodyTimeout: float option with get, set
-                /// <summary>
-                /// Whether Undici should throw an error upon receiving a 4xx or 5xx response from the server. Defaults to false
-                /// </summary>
-                abstract member throwOnError: bool option with get, set
-                /// <summary>
-                /// For H2, it appends the expect: 100-continue header, and halts the request body until a 100-continue is received from the remote server
-                /// </summary>
-                abstract member expectContinue: bool option with get, set
-                abstract member ``method``: UndiciTypes.dispatcher.Dispatcher_.HttpMethod option with get, set
 
         module stream =
 
             [<AllowNullLiteral>]
             [<Interface>]
-            type options_3 =
+            type options_1 =
                 abstract member dispatcher: UndiciTypes.dispatcher.Dispatcher option with get, set
                 /// <summary>
                 /// Default: <c>null</c>
@@ -170987,7 +170153,7 @@ FileReader.DONE"""
                 /// <summary>
                 /// Default: <c>null</c>
                 /// </summary>
-                abstract member onInfo: (Exports.stream.options.onInfo.info_3 -> unit) option with get, set
+                abstract member onInfo: (Exports.stream.options.onInfo.info_1 -> unit) option with get, set
                 /// <summary>
                 /// Default: <c>null</c>
                 /// </summary>
@@ -171003,7 +170169,7 @@ FileReader.DONE"""
                 /// <summary>
                 /// Query string params to be embedded in the request URL. Default: <c>null</c>
                 /// </summary>
-                abstract member query: Exports.stream.options.query_3 option with get, set
+                abstract member query: Exports.stream.options.query_1 option with get, set
                 /// <summary>
                 /// Whether the requests can be safely retried or not. If <c>false</c> the request won't be sent until all preceding requests in the pipeline have completed. Default: <c>true</c> if <c>method</c> is <c>HEAD</c> or <c>GET</c>.
                 /// </summary>
@@ -171033,7 +170199,7 @@ FileReader.DONE"""
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type query_3 =
+                type query_1 =
                     [<EmitIndexer>]
                     abstract member Item: key: string -> obj with get, set
 
@@ -171041,233 +170207,29 @@ FileReader.DONE"""
 
                     [<Global>]
                     [<AllowNullLiteral>]
-                    type info_3
+                    type info_1
                         [<ParamObject; Emit("$0")>]
                         (
                             statusCode: float,
-                            headers: Exports.stream.options.onInfo.info.headers_3
+                            headers: Exports.stream.options.onInfo.info.headers_1
                         ) =
 
                         member val statusCode : float = nativeOnly with get, set
-                        member val headers : Exports.stream.options.onInfo.info.headers_3 = nativeOnly with get, set
+                        member val headers : Exports.stream.options.onInfo.info.headers_1 = nativeOnly with get, set
 
                     module info =
 
                         [<AllowNullLiteral>]
                         [<Interface>]
-                        type headers_3 =
+                        type headers_1 =
                             [<EmitIndexer>]
                             abstract member Item: key: string -> U2<string, ResizeArray<string>> with get, set
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type headers_4 =
-                            [<EmitIndexer>]
-                            abstract member Item: key: string -> U2<string, ResizeArray<string>> with get, set
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type headers_5 =
-                            [<EmitIndexer>]
-                            abstract member Item: key: string -> U2<string, ResizeArray<string>> with get, set
-
-                    [<Global>]
-                    [<AllowNullLiteral>]
-                    type info_4
-                        [<ParamObject; Emit("$0")>]
-                        (
-                            statusCode: float,
-                            headers: Exports.stream.options.onInfo.info.headers_4
-                        ) =
-
-                        member val statusCode : float = nativeOnly with get, set
-                        member val headers : Exports.stream.options.onInfo.info.headers_4 = nativeOnly with get, set
-
-                    [<Global>]
-                    [<AllowNullLiteral>]
-                    type info_5
-                        [<ParamObject; Emit("$0")>]
-                        (
-                            statusCode: float,
-                            headers: Exports.stream.options.onInfo.info.headers_5
-                        ) =
-
-                        member val statusCode : float = nativeOnly with get, set
-                        member val headers : Exports.stream.options.onInfo.info.headers_5 = nativeOnly with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type query_4 =
-                    [<EmitIndexer>]
-                    abstract member Item: key: string -> obj with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type query_5 =
-                    [<EmitIndexer>]
-                    abstract member Item: key: string -> obj with get, set
-
-            [<AllowNullLiteral>]
-            [<Interface>]
-            type options_4 =
-                abstract member dispatcher: UndiciTypes.dispatcher.Dispatcher option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member signal: U2<UndiciTypes.dispatcher.AbortSignal, Node.events.EventEmitter> option with get, set
-                /// <summary>
-                /// The amount of time, in milliseconds, the parser will wait to receive the complete HTTP headers. Defaults to 300 seconds.
-                /// </summary>
-                abstract member headersTimeout: float option with get, set
-                /// <summary>
-                /// Default: <c>64 KiB</c>
-                /// </summary>
-                abstract member highWaterMark: float option with get, set
-                /// <summary>
-                /// Whether the request should stablish a keep-alive or not. Default <c>false</c>
-                /// </summary>
-                abstract member reset: bool option with get, set
-                abstract member ``method``: UndiciTypes.dispatcher.Dispatcher_.HttpMethod with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member opaque: obj option with get, set
-                /// <summary>
-                /// Default: 0
-                /// </summary>
-                abstract member maxRedirections: float option with get, set
-                /// <summary>
-                /// Default: false
-                /// </summary>
-                abstract member redirectionLimitReached: bool option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member onInfo: (Exports.stream.options.onInfo.info_4 -> unit) option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member responseHeader: string option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member body: U5<string, Node.Buffer, JS.Uint8Array, Node.stream.Stream_.Readable, UndiciTypes.formdata.FormData> option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member headers: U3<UndiciTypes.header.IncomingHttpHeaders, ResizeArray<string>, Iterable<string * U2<string, ResizeArray<string>> option>> option with get, set
-                /// <summary>
-                /// Query string params to be embedded in the request URL. Default: <c>null</c>
-                /// </summary>
-                abstract member query: Exports.stream.options.query_4 option with get, set
-                /// <summary>
-                /// Whether the requests can be safely retried or not. If <c>false</c> the request won't be sent until all preceding requests in the pipeline have completed. Default: <c>true</c> if <c>method</c> is <c>HEAD</c> or <c>GET</c>.
-                /// </summary>
-                abstract member idempotent: bool option with get, set
-                /// <summary>
-                /// Whether the response is expected to take a long time and would end up blocking the pipeline. When this is set to <c>true</c> further pipelining will be avoided on the same connection until headers have been received.
-                /// </summary>
-                abstract member blocking: bool option with get, set
-                /// <summary>
-                /// Upgrade the request. Should be used to specify the kind of upgrade i.e. <c>'Websocket'</c>. Default: <c>method === 'CONNECT' || null</c>.
-                /// </summary>
-                abstract member upgrade: U2<bool, string> option with get, set
-                /// <summary>
-                /// The timeout after which a request will time out, in milliseconds. Monitors time between receiving body data. Use 0 to disable it entirely. Defaults to 300 seconds.
-                /// </summary>
-                abstract member bodyTimeout: float option with get, set
-                /// <summary>
-                /// Whether Undici should throw an error upon receiving a 4xx or 5xx response from the server. Defaults to false
-                /// </summary>
-                abstract member throwOnError: bool option with get, set
-                /// <summary>
-                /// For H2, it appends the expect: 100-continue header, and halts the request body until a 100-continue is received from the remote server
-                /// </summary>
-                abstract member expectContinue: bool option with get, set
-
-            [<AllowNullLiteral>]
-            [<Interface>]
-            type options_5 =
-                abstract member dispatcher: UndiciTypes.dispatcher.Dispatcher option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member signal: U2<UndiciTypes.dispatcher.AbortSignal, Node.events.EventEmitter> option with get, set
-                /// <summary>
-                /// The amount of time, in milliseconds, the parser will wait to receive the complete HTTP headers. Defaults to 300 seconds.
-                /// </summary>
-                abstract member headersTimeout: float option with get, set
-                /// <summary>
-                /// Default: <c>64 KiB</c>
-                /// </summary>
-                abstract member highWaterMark: float option with get, set
-                /// <summary>
-                /// Whether the request should stablish a keep-alive or not. Default <c>false</c>
-                /// </summary>
-                abstract member reset: bool option with get, set
-                abstract member ``method``: UndiciTypes.dispatcher.Dispatcher_.HttpMethod with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member opaque: obj option with get, set
-                /// <summary>
-                /// Default: 0
-                /// </summary>
-                abstract member maxRedirections: float option with get, set
-                /// <summary>
-                /// Default: false
-                /// </summary>
-                abstract member redirectionLimitReached: bool option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member onInfo: (Exports.stream.options.onInfo.info_5 -> unit) option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member responseHeader: string option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member body: U5<string, Node.Buffer, JS.Uint8Array, Node.stream.Stream_.Readable, UndiciTypes.formdata.FormData> option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member headers: U3<UndiciTypes.header.IncomingHttpHeaders, ResizeArray<string>, Iterable<string * U2<string, ResizeArray<string>> option>> option with get, set
-                /// <summary>
-                /// Query string params to be embedded in the request URL. Default: <c>null</c>
-                /// </summary>
-                abstract member query: Exports.stream.options.query_5 option with get, set
-                /// <summary>
-                /// Whether the requests can be safely retried or not. If <c>false</c> the request won't be sent until all preceding requests in the pipeline have completed. Default: <c>true</c> if <c>method</c> is <c>HEAD</c> or <c>GET</c>.
-                /// </summary>
-                abstract member idempotent: bool option with get, set
-                /// <summary>
-                /// Whether the response is expected to take a long time and would end up blocking the pipeline. When this is set to <c>true</c> further pipelining will be avoided on the same connection until headers have been received.
-                /// </summary>
-                abstract member blocking: bool option with get, set
-                /// <summary>
-                /// Upgrade the request. Should be used to specify the kind of upgrade i.e. <c>'Websocket'</c>. Default: <c>method === 'CONNECT' || null</c>.
-                /// </summary>
-                abstract member upgrade: U2<bool, string> option with get, set
-                /// <summary>
-                /// The timeout after which a request will time out, in milliseconds. Monitors time between receiving body data. Use 0 to disable it entirely. Defaults to 300 seconds.
-                /// </summary>
-                abstract member bodyTimeout: float option with get, set
-                /// <summary>
-                /// Whether Undici should throw an error upon receiving a 4xx or 5xx response from the server. Defaults to false
-                /// </summary>
-                abstract member throwOnError: bool option with get, set
-                /// <summary>
-                /// For H2, it appends the expect: 100-continue header, and halts the request body until a 100-continue is received from the remote server
-                /// </summary>
-                abstract member expectContinue: bool option with get, set
 
         module pipeline =
 
             [<AllowNullLiteral>]
             [<Interface>]
-            type options_3 =
+            type options_1 =
                 abstract member dispatcher: UndiciTypes.dispatcher.Dispatcher option with get, set
                 /// <summary>
                 /// Default: <c>null</c>
@@ -171305,7 +170267,7 @@ FileReader.DONE"""
                 /// <summary>
                 /// Default: <c>null</c>
                 /// </summary>
-                abstract member onInfo: (Exports.pipeline.options.onInfo.info_3 -> unit) option with get, set
+                abstract member onInfo: (Exports.pipeline.options.onInfo.info_1 -> unit) option with get, set
                 /// <summary>
                 /// Default: <c>null</c>
                 /// </summary>
@@ -171321,7 +170283,7 @@ FileReader.DONE"""
                 /// <summary>
                 /// Query string params to be embedded in the request URL. Default: <c>null</c>
                 /// </summary>
-                abstract member query: Exports.pipeline.options.query_3 option with get, set
+                abstract member query: Exports.pipeline.options.query_1 option with get, set
                 /// <summary>
                 /// Whether the requests can be safely retried or not. If <c>false</c> the request won't be sent until all preceding requests in the pipeline have completed. Default: <c>true</c> if <c>method</c> is <c>HEAD</c> or <c>GET</c>.
                 /// </summary>
@@ -171351,7 +170313,7 @@ FileReader.DONE"""
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type query_3 =
+                type query_1 =
                     [<EmitIndexer>]
                     abstract member Item: key: string -> obj with get, set
 
@@ -171359,235 +170321,23 @@ FileReader.DONE"""
 
                     [<Global>]
                     [<AllowNullLiteral>]
-                    type info_3
+                    type info_1
                         [<ParamObject; Emit("$0")>]
                         (
                             statusCode: float,
-                            headers: Exports.pipeline.options.onInfo.info.headers_3
+                            headers: Exports.pipeline.options.onInfo.info.headers_1
                         ) =
 
                         member val statusCode : float = nativeOnly with get, set
-                        member val headers : Exports.pipeline.options.onInfo.info.headers_3 = nativeOnly with get, set
+                        member val headers : Exports.pipeline.options.onInfo.info.headers_1 = nativeOnly with get, set
 
                     module info =
 
                         [<AllowNullLiteral>]
                         [<Interface>]
-                        type headers_3 =
+                        type headers_1 =
                             [<EmitIndexer>]
                             abstract member Item: key: string -> U2<string, ResizeArray<string>> with get, set
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type headers_4 =
-                            [<EmitIndexer>]
-                            abstract member Item: key: string -> U2<string, ResizeArray<string>> with get, set
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type headers_5 =
-                            [<EmitIndexer>]
-                            abstract member Item: key: string -> U2<string, ResizeArray<string>> with get, set
-
-                    [<Global>]
-                    [<AllowNullLiteral>]
-                    type info_4
-                        [<ParamObject; Emit("$0")>]
-                        (
-                            statusCode: float,
-                            headers: Exports.pipeline.options.onInfo.info.headers_4
-                        ) =
-
-                        member val statusCode : float = nativeOnly with get, set
-                        member val headers : Exports.pipeline.options.onInfo.info.headers_4 = nativeOnly with get, set
-
-                    [<Global>]
-                    [<AllowNullLiteral>]
-                    type info_5
-                        [<ParamObject; Emit("$0")>]
-                        (
-                            statusCode: float,
-                            headers: Exports.pipeline.options.onInfo.info.headers_5
-                        ) =
-
-                        member val statusCode : float = nativeOnly with get, set
-                        member val headers : Exports.pipeline.options.onInfo.info.headers_5 = nativeOnly with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type query_4 =
-                    [<EmitIndexer>]
-                    abstract member Item: key: string -> obj with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type query_5 =
-                    [<EmitIndexer>]
-                    abstract member Item: key: string -> obj with get, set
-
-            [<AllowNullLiteral>]
-            [<Interface>]
-            type options_4 =
-                abstract member dispatcher: UndiciTypes.dispatcher.Dispatcher option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member signal: U2<UndiciTypes.dispatcher.AbortSignal, Node.events.EventEmitter> option with get, set
-                /// <summary>
-                /// The amount of time, in milliseconds, the parser will wait to receive the complete HTTP headers. Defaults to 300 seconds.
-                /// </summary>
-                abstract member headersTimeout: float option with get, set
-                /// <summary>
-                /// Default: <c>64 KiB</c>
-                /// </summary>
-                abstract member highWaterMark: float option with get, set
-                /// <summary>
-                /// <c>true</c> if the <c>handler</c> will return an object stream. Default: <c>false</c>
-                /// </summary>
-                abstract member objectMode: bool option with get, set
-                /// <summary>
-                /// Whether the request should stablish a keep-alive or not. Default <c>false</c>
-                /// </summary>
-                abstract member reset: bool option with get, set
-                abstract member ``method``: UndiciTypes.dispatcher.Dispatcher_.HttpMethod with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member opaque: obj option with get, set
-                /// <summary>
-                /// Default: 0
-                /// </summary>
-                abstract member maxRedirections: float option with get, set
-                /// <summary>
-                /// Default: false
-                /// </summary>
-                abstract member redirectionLimitReached: bool option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member onInfo: (Exports.pipeline.options.onInfo.info_4 -> unit) option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member responseHeader: string option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member body: U5<string, Node.Buffer, JS.Uint8Array, Node.stream.Stream_.Readable, UndiciTypes.formdata.FormData> option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member headers: U3<UndiciTypes.header.IncomingHttpHeaders, ResizeArray<string>, Iterable<string * U2<string, ResizeArray<string>> option>> option with get, set
-                /// <summary>
-                /// Query string params to be embedded in the request URL. Default: <c>null</c>
-                /// </summary>
-                abstract member query: Exports.pipeline.options.query_4 option with get, set
-                /// <summary>
-                /// Whether the requests can be safely retried or not. If <c>false</c> the request won't be sent until all preceding requests in the pipeline have completed. Default: <c>true</c> if <c>method</c> is <c>HEAD</c> or <c>GET</c>.
-                /// </summary>
-                abstract member idempotent: bool option with get, set
-                /// <summary>
-                /// Whether the response is expected to take a long time and would end up blocking the pipeline. When this is set to <c>true</c> further pipelining will be avoided on the same connection until headers have been received.
-                /// </summary>
-                abstract member blocking: bool option with get, set
-                /// <summary>
-                /// Upgrade the request. Should be used to specify the kind of upgrade i.e. <c>'Websocket'</c>. Default: <c>method === 'CONNECT' || null</c>.
-                /// </summary>
-                abstract member upgrade: U2<bool, string> option with get, set
-                /// <summary>
-                /// The timeout after which a request will time out, in milliseconds. Monitors time between receiving body data. Use 0 to disable it entirely. Defaults to 300 seconds.
-                /// </summary>
-                abstract member bodyTimeout: float option with get, set
-                /// <summary>
-                /// Whether Undici should throw an error upon receiving a 4xx or 5xx response from the server. Defaults to false
-                /// </summary>
-                abstract member throwOnError: bool option with get, set
-                /// <summary>
-                /// For H2, it appends the expect: 100-continue header, and halts the request body until a 100-continue is received from the remote server
-                /// </summary>
-                abstract member expectContinue: bool option with get, set
-
-            [<AllowNullLiteral>]
-            [<Interface>]
-            type options_5 =
-                abstract member dispatcher: UndiciTypes.dispatcher.Dispatcher option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member signal: U2<UndiciTypes.dispatcher.AbortSignal, Node.events.EventEmitter> option with get, set
-                /// <summary>
-                /// The amount of time, in milliseconds, the parser will wait to receive the complete HTTP headers. Defaults to 300 seconds.
-                /// </summary>
-                abstract member headersTimeout: float option with get, set
-                /// <summary>
-                /// Default: <c>64 KiB</c>
-                /// </summary>
-                abstract member highWaterMark: float option with get, set
-                /// <summary>
-                /// <c>true</c> if the <c>handler</c> will return an object stream. Default: <c>false</c>
-                /// </summary>
-                abstract member objectMode: bool option with get, set
-                /// <summary>
-                /// Whether the request should stablish a keep-alive or not. Default <c>false</c>
-                /// </summary>
-                abstract member reset: bool option with get, set
-                abstract member ``method``: UndiciTypes.dispatcher.Dispatcher_.HttpMethod with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member opaque: obj option with get, set
-                /// <summary>
-                /// Default: 0
-                /// </summary>
-                abstract member maxRedirections: float option with get, set
-                /// <summary>
-                /// Default: false
-                /// </summary>
-                abstract member redirectionLimitReached: bool option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member onInfo: (Exports.pipeline.options.onInfo.info_5 -> unit) option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member responseHeader: string option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member body: U5<string, Node.Buffer, JS.Uint8Array, Node.stream.Stream_.Readable, UndiciTypes.formdata.FormData> option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member headers: U3<UndiciTypes.header.IncomingHttpHeaders, ResizeArray<string>, Iterable<string * U2<string, ResizeArray<string>> option>> option with get, set
-                /// <summary>
-                /// Query string params to be embedded in the request URL. Default: <c>null</c>
-                /// </summary>
-                abstract member query: Exports.pipeline.options.query_5 option with get, set
-                /// <summary>
-                /// Whether the requests can be safely retried or not. If <c>false</c> the request won't be sent until all preceding requests in the pipeline have completed. Default: <c>true</c> if <c>method</c> is <c>HEAD</c> or <c>GET</c>.
-                /// </summary>
-                abstract member idempotent: bool option with get, set
-                /// <summary>
-                /// Whether the response is expected to take a long time and would end up blocking the pipeline. When this is set to <c>true</c> further pipelining will be avoided on the same connection until headers have been received.
-                /// </summary>
-                abstract member blocking: bool option with get, set
-                /// <summary>
-                /// Upgrade the request. Should be used to specify the kind of upgrade i.e. <c>'Websocket'</c>. Default: <c>method === 'CONNECT' || null</c>.
-                /// </summary>
-                abstract member upgrade: U2<bool, string> option with get, set
-                /// <summary>
-                /// The timeout after which a request will time out, in milliseconds. Monitors time between receiving body data. Use 0 to disable it entirely. Defaults to 300 seconds.
-                /// </summary>
-                abstract member bodyTimeout: float option with get, set
-                /// <summary>
-                /// Whether Undici should throw an error upon receiving a 4xx or 5xx response from the server. Defaults to false
-                /// </summary>
-                abstract member throwOnError: bool option with get, set
-                /// <summary>
-                /// For H2, it appends the expect: 100-continue header, and halts the request body until a 100-continue is received from the remote server
-                /// </summary>
-                abstract member expectContinue: bool option with get, set
 
         module connect =
 
