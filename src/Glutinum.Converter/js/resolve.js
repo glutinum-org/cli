@@ -344,8 +344,12 @@ export function resolveInput(host, input) {
     const nodeModules = findNodeModules(host, host.cwd);
 
     if (nodeModules !== null) {
+        // `date-fns/locale` is a subpath of `date-fns`, generated with the package
+        const segments = input.split("/");
+        const packageName = input.startsWith("@") ? segments.slice(0, 2).join("/") : segments[0];
+
         // A package without declaration files (`ws`) is described by its `@types` package
-        for (const candidate of [input, path.join("@types", input.replace(/^@/, "").replace("/", "__"))]) {
+        for (const candidate of [packageName, path.join("@types", packageName.replace(/^@/, "").replace("/", "__"))]) {
             const packageDir = realDir(host, path.join(nodeModules, candidate));
 
             if (fs.fileExists(path.join(packageDir, "package.json")) && describePackage(host, packageDir) !== null) {

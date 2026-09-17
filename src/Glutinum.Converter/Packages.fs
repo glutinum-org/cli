@@ -147,6 +147,8 @@ let generateWith (options: GenerateOptions) (host: Host) (inputs: string list) :
                     | null -> failwith $"Could not find the package of {resolved.file}"
                     | packageDir -> packageDir
             )
+            // `date-fns date-fns/locale` is one package
+            |> List.distinct
 
     let targets =
         targetDirs
