@@ -1411,7 +1411,7 @@ let private transformExports
             |> List.collect (
                 function
                 | GlueType.FunctionDeclaration info ->
-                    let info = KeyOfMaps.expandFunction info
+                    let info = KeyOfMaps.expandFunction info |> Conditionals.resolveFunction
 
                     UnionOverloads.expandParameters context.TypeMemory info.Parameters
                     |> List.map (fun parameters ->
@@ -3536,12 +3536,15 @@ module Conditionals =
 
     let private allAliases = Dictionary<string, GlueTypeAliasDeclaration>()
 
+    let private interfaces = Dictionary<string, GlueInterface>()
+
     /// The aliases standing for a conditional type, `Listener1<K, T> = Listener<K, T, F>` included
     let private aliases = Dictionary<string, GlueTypeAliasDeclaration>()
 
     let rec private collect (glueType: GlueType) =
         match glueType with
         | GlueType.TypeAliasDeclaration info -> allAliases.[info.FullName] <- info
+        | GlueType.Interface info -> interfaces.[info.FullName] <- info
         | GlueType.ModuleDeclaration info -> info.Types |> List.iter collect
         | GlueType.FileModule info -> info.Types |> List.iter collect
         | _ -> ()
@@ -3558,10 +3561,15 @@ module Conditionals =
                 allAliases.[typeReference.FullName].Type
         | _ -> false
 
-    let reset (typeMemory: GlueType list) =
+    let private typeMemory = ResizeArray<GlueType>()
+
+    let reset (memory: GlueType list) =
+        typeMemory.Clear()
+        typeMemory.AddRange memory
         allAliases.Clear()
+        interfaces.Clear()
         aliases.Clear()
-        typeMemory |> List.iter collect
+        memory |> List.iter collect
 
         for KeyValue(fullName, alias) in allAliases do
             if isConditional Set.empty alias.Type then
@@ -3569,20 +3577,116 @@ module Conditionals =
 
     let isConditionalAlias (fullName: string) = aliases.ContainsKey fullName
 
-    let private evaluate (defaults: Map<string, GlueType>) (conditionalType: GlueConditionalType) =
-        let checkType =
-            match conditionalType.CheckType with
-            | GlueType.TypeParameter name ->
-                Map.tryFind name defaults |> Option.defaultValue conditionalType.CheckType
-            | checkType -> checkType
+    /// The members of an interface, `keyof T` and `T[K]` with `T` known
+    let private tryMembers (typeReference: GlueTypeReference) =
+        match interfaces.TryGetValue typeReference.FullName with
+        | true, info ->
+            ParamObjectCandidate.tryResolveMembers (List.ofSeq typeMemory) info
+            |> Option.defaultValue info.Members
+            |> Some
+        | false, _ -> None
 
-        match checkType, conditionalType.ExtendsType with
-        | GlueType.TypeReference check, GlueType.TypeReference extends ->
-            if check.FullName = extends.FullName then
+    let private memberName (glueMember: GlueMember) =
+        match glueMember with
+        | GlueMember.Property info -> Some(info.Name, info.Type)
+        | GlueMember.Method info -> Some(info.Name, GlueType.Unknown)
+        | GlueMember.MethodSignature info -> Some(info.Name, GlueType.Unknown)
+        | _ -> None
+
+    let private isLiteralOf (literal: GlueLiteral) (primitive: GluePrimitive) =
+        match literal, primitive with
+        | GlueLiteral.String _, GluePrimitive.String
+        | GlueLiteral.Int _, GluePrimitive.Number
+        | GlueLiteral.Float _, GluePrimitive.Number
+        | GlueLiteral.Bool _, GluePrimitive.Bool
+        | GlueLiteral.Null, GluePrimitive.Null -> true
+        | _ -> false
+
+    let rec private inherits (visited: Set<string>) (fullName: string) (parentFullName: string) =
+        match interfaces.TryGetValue fullName with
+        | true, info when not (visited.Contains fullName) ->
+            info.HeritageClauses
+            |> List.exists (
+                function
+                | GlueType.TypeReference parent ->
+                    parent.FullName = parentFullName
+                    || inherits (visited.Add fullName) parent.FullName parentFullName
+                | _ -> false
+            )
+        | _ -> false
+
+    /// `check extends extends_`, `None` when the answer depends on a type parameter
+    let rec private isAssignable (check: GlueType) (extends_: GlueType) : bool option =
+        match check, extends_ with
+        | GlueType.TypeParameter _, _
+        | _, GlueType.TypeParameter _ -> None
+        // `[T] extends [Node]` compares the types without the distribution over a union
+        | GlueType.TupleType [ check ], GlueType.TupleType [ extends_ ] ->
+            isAssignable check extends_
+        | _, GlueType.Primitive GluePrimitive.Any
+        | _, GlueType.Unknown -> Some true
+        | GlueType.Literal check, GlueType.Literal extends_ -> Some(check = extends_)
+        | GlueType.Literal literal, GlueType.Primitive primitive ->
+            Some(isLiteralOf literal primitive)
+        | GlueType.Primitive check, GlueType.Primitive extends_ -> Some(check = extends_)
+        | GlueType.Primitive _, GlueType.Literal _
+        | GlueType.Literal _, GlueType.TypeReference _
+        | GlueType.Primitive _, GlueType.TypeReference _
+        | GlueType.TypeReference _, GlueType.Literal _
+        | GlueType.TypeReference _, GlueType.Primitive _ -> Some false
+        | GlueType.Literal(GlueLiteral.String name), GlueType.KeyOf(GlueType.TypeReference map) ->
+            tryMembers map
+            |> Option.map (
+                List.exists (fun glueMember ->
+                    match memberName glueMember with
+                    | Some(memberName, _) -> memberName = name
+                    | None -> false
+                )
+            )
+        | GlueType.TypeReference check, GlueType.TypeReference extends_ ->
+            if check.FullName = extends_.FullName then
+                Some true
+            elif interfaces.ContainsKey check.FullName then
+                Some(inherits Set.empty check.FullName extends_.FullName)
+            else
+                Some false
+        | GlueType.Union(GlueTypeUnion cases), _ ->
+            let answers = cases |> List.map (fun case -> isAssignable case extends_)
+
+            if answers |> List.forall ((=) (Some true)) then
+                Some true
+            elif answers |> List.forall ((=) (Some false)) then
+                Some false
+            else
+                None
+        | _ -> None
+
+    let private evaluate (bindings: Map<string, GlueType>) (conditionalType: GlueConditionalType) =
+        let checkType = substituteTypeParameters bindings conditionalType.CheckType
+        let extendsType = substituteTypeParameters bindings conditionalType.ExtendsType
+
+        match checkType with
+        // `any extends X ? A : B` is both branches
+        | GlueType.Primitive GluePrimitive.Any ->
+            let branch (glueType: GlueType) =
+                match glueType with
+                | GlueType.Literal GlueLiteral.Null -> GlueType.Primitive GluePrimitive.Null
+                | _ -> glueType
+
+            if conditionalType.TrueType = conditionalType.FalseType then
                 Some conditionalType.TrueType
             else
-                Some conditionalType.FalseType
-        | _ -> None
+                Some(
+                    GlueType.Union(
+                        GlueTypeUnion
+                            [ branch conditionalType.TrueType; branch conditionalType.FalseType ]
+                    )
+                )
+        | _ ->
+            match isAssignable checkType extendsType with
+            | Some true -> Some conditionalType.TrueType
+            | Some false -> Some conditionalType.FalseType
+            | None -> None
 
     let rec private resolve (defaults: Map<string, GlueType>) (glueType: GlueType) : GlueType =
         let resolve = resolve defaults
@@ -3609,20 +3713,34 @@ module Conditionals =
                     glueType
                 | resolved -> resolved
             | _ -> glueType
-        // `...args: AnyRest` where `type AnyRest = [...args: any[]]` is a rest parameter
-        | GlueType.TypeReference typeReference when
-            allAliases.ContainsKey typeReference.FullName
-            && typeReference.TypeArguments.IsEmpty
-            ->
-            match allAliases.[typeReference.FullName].Type with
-            | GlueType.TupleType [ GlueType.NamedTupleType { Type = GlueType.Array elementType } ]
-            | GlueType.TupleType [ GlueType.Array elementType ]
-            | GlueType.Array elementType -> GlueType.Array elementType
-            | _ -> glueType
         | GlueType.ConditionalType conditionalType ->
             match evaluate defaults conditionalType with
             | Some resolved -> resolve resolved
             | None -> glueType
+        // `T["data"]` is the member of the default of `T`
+        | GlueType.IndexedAccessType({
+                                         ObjectType = GlueType.TypeParameter name
+                                         IndexType = GlueType.Literal _
+                                     } as indexedAccess) when defaults.ContainsKey name ->
+            GlueType.IndexedAccessType
+                { indexedAccess with
+                    ObjectType = defaults.[name]
+                }
+            |> resolve
+        | GlueType.IndexedAccessType {
+                                         ObjectType = GlueType.TypeReference object
+                                         IndexType = GlueType.Literal(GlueLiteral.String key)
+                                     } ->
+            tryMembers object
+            |> Option.bind (
+                List.tryPick (fun glueMember ->
+                    match memberName glueMember with
+                    | Some(name, GlueType.Unknown) when name = key -> None
+                    | Some(name, typ) when name = key -> Some(resolve typ)
+                    | _ -> None
+                )
+            )
+            |> Option.defaultValue glueType
         | GlueType.TypeReference typeReference ->
             GlueType.TypeReference
                 { typeReference with
@@ -3648,48 +3766,97 @@ module Conditionals =
                 }
         | _ -> glueType
 
+    /// A type parameter is its default, else its constraint, when a condition is checked
+    let private bindings (typeParameters: GlueTypeParameter list) =
+        typeParameters
+        |> List.choose (fun typeParameter ->
+            match typeParameter.Default, typeParameter.Constraint with
+            | Some default_, _ -> Some(typeParameter.Name, default_)
+            | None, Some(GlueType.KeyOf _) -> None
+            | None, Some constraint_ -> Some(typeParameter.Name, constraint_)
+            | None, None -> None
+        )
+        |> Map.ofList
+
+    /// `...args: AnyRest` where `type AnyRest = [...args: any[]]` is a rest parameter of `any`
+    let private restArray (glueType: GlueType) =
+        match glueType with
+        | GlueType.TypeReference typeReference when
+            allAliases.ContainsKey typeReference.FullName
+            && typeReference.TypeArguments.IsEmpty
+            ->
+            match allAliases.[typeReference.FullName].Type with
+            | GlueType.TupleType [ GlueType.NamedTupleType { Type = GlueType.Array elementType } ]
+            | GlueType.TupleType [ GlueType.Array elementType ]
+            | GlueType.Array elementType -> GlueType.Array elementType
+            | _ -> glueType
+        | _ -> glueType
+
+    let private resolveParameters
+        (bindings: Map<string, GlueType>)
+        (parameters: GlueParameter list)
+        =
+        parameters
+        |> List.map (fun parameter ->
+            let resolved = resolve bindings parameter.Type
+
+            { parameter with
+                Type =
+                    if parameter.IsSpread then
+                        restArray resolved
+                    else
+                        resolved
+            }
+        )
+
     /// The members of a declaration, its conditional types resolved with its default type arguments
     let resolveMembers (typeParameters: GlueTypeParameter list) (members: GlueMember list) =
-        let defaults =
-            typeParameters
-            |> List.choose (fun typeParameter ->
-                typeParameter.Default
-                |> Option.map (fun default_ -> typeParameter.Name, default_)
-            )
-            |> Map.ofList
-
-        if defaults.IsEmpty || aliases.Count = 0 then
+        if aliases.Count = 0 then
             members
         else
-            let resolve = resolve defaults
+            let declarationBindings = bindings typeParameters
 
-            let resolveParameters (parameters: GlueParameter list) =
-                parameters
-                |> List.map (fun parameter ->
-                    { parameter with
-                        Type = resolve parameter.Type
-                    }
-                )
+            let withOwn (ownTypeParameters: GlueTypeParameter list) =
+                (declarationBindings, bindings ownTypeParameters)
+                ||> Map.fold (fun acc name typ -> Map.add name typ acc)
 
             members
             |> List.map (fun glueMember ->
                 match glueMember with
                 | GlueMember.Method info ->
+                    let bindings = withOwn info.TypeParameters
+
                     GlueMember.Method
                         { info with
-                            Parameters = resolveParameters info.Parameters
-                            Type = resolve info.Type
+                            Parameters = resolveParameters bindings info.Parameters
+                            Type = resolve bindings info.Type
                         }
                 | GlueMember.MethodSignature info ->
+                    let bindings = withOwn info.TypeParameters
+
                     GlueMember.MethodSignature
                         { info with
-                            Parameters = resolveParameters info.Parameters
-                            Type = resolve info.Type
+                            Parameters = resolveParameters bindings info.Parameters
+                            Type = resolve bindings info.Type
                         }
                 | GlueMember.Property info ->
-                    GlueMember.Property { info with Type = resolve info.Type }
+                    GlueMember.Property
+                        { info with
+                            Type = resolve declarationBindings info.Type
+                        }
                 | _ -> glueMember
             )
+
+    let resolveFunction (info: GlueFunctionDeclaration) : GlueFunctionDeclaration =
+        if aliases.Count = 0 then
+            info
+        else
+            let bindings = bindings info.TypeParameters
+
+            { info with
+                Parameters = resolveParameters bindings info.Parameters
+                Type = resolve bindings info.Type
+            }
 
 /// `(ev: Event) => any`: the result of a callback is ignored by its caller, a lambda returns `unit`
 let private transformCallbackReturnType (context: TransformContext) (returnType: GlueType) =
@@ -5058,6 +5225,12 @@ let rec private substituteTypeParameters
                 FalseType = substitute conditionalType.FalseType
             }
     | GlueType.KeyOf innerType -> GlueType.KeyOf(substitute innerType)
+    | GlueType.IndexedAccessType indexedAccess ->
+        GlueType.IndexedAccessType
+            {
+                ObjectType = substitute indexedAccess.ObjectType
+                IndexType = substitute indexedAccess.IndexType
+            }
     | _ -> glueType
 
 let private substituteParameter

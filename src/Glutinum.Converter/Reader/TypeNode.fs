@@ -595,6 +595,41 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
 
         let symbolOpt = symbolAtLocation checker !!typeReferenceNode.typeName
 
+        // `IfDefaultsTrue<true, A, B>`: the checker resolves a conditional alias applied to concrete arguments
+        let tryReadResolvedConditional () =
+            let isConditionalAlias =
+                match symbolOpt |> Option.bind (resolveAlias checker) with
+                | Some symbol ->
+                    match symbol.declarations with
+                    | Some declarations when declarations.Count > 0 ->
+                        let declaration = declarations.[0]
+
+                        declaration.kind = Ts.SyntaxKind.TypeAliasDeclaration
+                        && (declaration :?> Ts.TypeAliasDeclaration).``type``.kind = Ts.SyntaxKind.ConditionalType
+                    | _ -> false
+                | None -> false
+
+            if typeReferenceNode.pos < 0 || not isConditionalAlias then
+                None
+            else
+                let typ = checker.getTypeFromTypeNode typeReferenceNode
+
+                let isUnknown =
+                    match typ.flags with
+                    | HasTypeFlags Ts.TypeFlags.Any
+                    | HasTypeFlags Ts.TypeFlags.Never -> true
+                    | _ -> false
+
+                if isDeferredConditional typ || isUnknown then
+                    None
+                else
+                    let flags =
+                        Ts.NodeBuilderFlags.NoTruncation
+                        ||| Ts.NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope
+
+                    checker.typeToTypeNode (typ, Some(typeReferenceNode :> Ts.Node), Some flags)
+                    |> Option.map reader.ReadTypeNode
+
         let readTypeReference (isStandardLibrary: bool) =
 
             let isTypeParameter =
@@ -609,7 +644,10 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                 symbolOpt.Value.name |> GlueType.TypeParameter
             else
 
-                match UtilityType.tryExpandAnonymousObjectApplication reader typeReferenceNode with
+                match
+                    UtilityType.tryExpandAnonymousObjectApplication reader typeReferenceNode
+                    |> Option.orElseWith tryReadResolvedConditional
+                with
                 | Some glueType -> glueType
                 | None ->
                     let isQualified = typeReferenceNode.typeName?kind = Ts.SyntaxKind.QualifiedName

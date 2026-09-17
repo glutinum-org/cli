@@ -126278,15 +126278,15 @@ the userland-provided Punycode.js module instead.""")>]
                 /// Called when the pipeline is fully done.
                 /// </param>
                 [<Emit("$0.pipeline($1...)")>]
-                abstract member pipeline<'A, 'B>: source: 'A * destination: 'B * callback: Node.stream.Stream_.PipelineCallback<'B> -> obj
+                abstract member pipeline<'A, 'B>: source: 'A * destination: 'B * callback: Node.stream.Stream_.PipelineCallback<'B> -> Node.NodeJS.WritableStream
                 [<Emit("$0.pipeline($1...)")>]
-                abstract member pipeline<'A, 'T1, 'B>: source: 'A * transform1: 'T1 * destination: 'B * callback: Node.stream.Stream_.PipelineCallback<'B> -> obj
+                abstract member pipeline<'A, 'T1, 'B>: source: 'A * transform1: 'T1 * destination: 'B * callback: Node.stream.Stream_.PipelineCallback<'B> -> Node.NodeJS.WritableStream
                 [<Emit("$0.pipeline($1...)")>]
-                abstract member pipeline<'A, 'T1, 'T2, 'B>: source: 'A * transform1: 'T1 * transform2: 'T2 * destination: 'B * callback: Node.stream.Stream_.PipelineCallback<'B> -> obj
+                abstract member pipeline<'A, 'T1, 'T2, 'B>: source: 'A * transform1: 'T1 * transform2: 'T2 * destination: 'B * callback: Node.stream.Stream_.PipelineCallback<'B> -> Node.NodeJS.WritableStream
                 [<Emit("$0.pipeline($1...)")>]
-                abstract member pipeline<'A, 'T1, 'T2, 'T3, 'B>: source: 'A * transform1: 'T1 * transform2: 'T2 * transform3: 'T3 * destination: 'B * callback: Node.stream.Stream_.PipelineCallback<'B> -> obj
+                abstract member pipeline<'A, 'T1, 'T2, 'T3, 'B>: source: 'A * transform1: 'T1 * transform2: 'T2 * transform3: 'T3 * destination: 'B * callback: Node.stream.Stream_.PipelineCallback<'B> -> Node.NodeJS.WritableStream
                 [<Emit("$0.pipeline($1...)")>]
-                abstract member pipeline<'A, 'T1, 'T2, 'T3, 'T4, 'B>: source: 'A * transform1: 'T1 * transform2: 'T2 * transform3: 'T3 * transform4: 'T4 * destination: 'B * callback: Node.stream.Stream_.PipelineCallback<'B> -> obj
+                abstract member pipeline<'A, 'T1, 'T2, 'T3, 'T4, 'B>: source: 'A * transform1: 'T1 * transform2: 'T2 * transform3: 'T3 * transform4: 'T4 * destination: 'B * callback: Node.stream.Stream_.PipelineCallback<'B> -> Node.NodeJS.WritableStream
                 [<Emit("$0.pipeline($1...)")>]
                 abstract member pipeline: streams: ReadonlyArray<U3<Node.NodeJS.ReadableStream, Node.NodeJS.WritableStream, Node.NodeJS.ReadWriteStream>> * callback: (Node.NodeJS.ErrnoException option -> unit) -> Node.NodeJS.WritableStream
                 [<Emit("$0.pipeline($1...)")>]
@@ -137799,6 +137799,12 @@ Duplex.fromWeb($0, $1)"""
 
             type TransformOptions =
                 TransformOptions<Node.stream.Stream_.Transform>
+
+            type PipelineCallback =
+                PipelineCallback<U3<Node.NodeJS.WritableStream, Node.stream.Stream_.PipelineDestinationIterableFunction<obj>, Node.stream.Stream_.PipelineDestinationPromiseFunction<obj, obj>>>
+
+            type PipelinePromise =
+                PipelinePromise<U3<Node.NodeJS.WritableStream, Node.stream.Stream_.PipelineDestinationIterableFunction<obj>, Node.stream.Stream_.PipelineDestinationPromiseFunction<obj, obj>>>
 
             module StreamOptions =
 
@@ -152591,7 +152597,7 @@ URL.parse($0, $1)"""
             /// The parsed command line arguments:
             /// </returns>
             [<Import("parseArgs", "util")>]
-            static member parseArgs<'T> (?config: 'T) : obj = nativeOnly
+            static member parseArgs<'T> (?config: 'T) : Exports.parseArgs = nativeOnly
             [<Import("TextDecoder", "util"); EmitConstructor>]
             static member TextDecoder (?encoding: string, ?options: Exports.TextDecoder.options) : TextDecoder = nativeOnly
             [<Import("TextEncoder", "util"); EmitConstructor>]
@@ -154348,6 +154354,20 @@ URL.parse($0, $1)"""
             type promisify_7<'T1, 'T2, 'T3, 'T4, 'T5> =
                 delegate of arg1: 'T1 * arg2: 'T2 * arg3: 'T3 * arg4: 'T4 * arg5: 'T5 -> JS.Promise<unit>
 
+            [<Global>]
+            [<AllowNullLiteral>]
+            type parseArgs
+                [<ParamObject; Emit("$0")>]
+                (
+                    values: Exports.parseArgs.values,
+                    positionals: ResizeArray<string>,
+                    ?tokens: ResizeArray<Node.util.Token>
+                ) =
+
+                member val values : Exports.parseArgs.values = nativeOnly with get, set
+                member val positionals : ResizeArray<string> = nativeOnly with get, set
+                member val tokens : ResizeArray<Node.util.Token> option = nativeOnly with get, set
+
             module callbackify =
 
                 type callback<'TResult> =
@@ -154422,6 +154442,14 @@ URL.parse($0, $1)"""
 
                 type fn_9<'T1, 'T2, 'T3, 'T4, 'T5> =
                     delegate of arg1: 'T1 * arg2: 'T2 * arg3: 'T3 * arg4: 'T4 * arg5: 'T5 * callback: (obj option -> unit) -> unit
+
+            module parseArgs =
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type values =
+                    [<EmitIndexer>]
+                    abstract member Item: longOption: string -> U3<string, bool, ResizeArray<U2<string, bool>>> option with get, set
 
             module TextDecoder =
 
@@ -167649,7 +167677,7 @@ import { FileReader } from "undici-types/filereader.js";
 FileReader.DONE"""
             abstract member readyState: float with get
             abstract member result: U2<string, obj> option with get
-            abstract member error: UndiciTypes.patch.DOMException option with get
+            abstract member error: FileReader.error option with get
             abstract member onloadstart: (UndiciTypes.filereader.ProgressEvent -> unit) option with get, set
             abstract member onprogress: (UndiciTypes.filereader.ProgressEvent -> unit) option with get, set
             abstract member onload: (UndiciTypes.filereader.ProgressEvent -> unit) option with get, set
@@ -167684,6 +167712,40 @@ FileReader.DONE"""
             abstract member lengthComputable: bool with get
             abstract member loaded: float with get
             abstract member total: float with get
+
+        module FileReader =
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type error =
+                [<EmitConstructor>]
+                abstract member Create: ?message: string * ?name: string -> Node.DOMException
+                abstract member prototype: Node.DOMException with get, set
+                abstract member INDEX_SIZE_ERR: int with get
+                abstract member DOMSTRING_SIZE_ERR: int with get
+                abstract member HIERARCHY_REQUEST_ERR: int with get
+                abstract member WRONG_DOCUMENT_ERR: int with get
+                abstract member INVALID_CHARACTER_ERR: int with get
+                abstract member NO_DATA_ALLOWED_ERR: int with get
+                abstract member NO_MODIFICATION_ALLOWED_ERR: int with get
+                abstract member NOT_FOUND_ERR: int with get
+                abstract member NOT_SUPPORTED_ERR: int with get
+                abstract member INUSE_ATTRIBUTE_ERR: int with get
+                abstract member INVALID_STATE_ERR: int with get
+                abstract member SYNTAX_ERR: int with get
+                abstract member INVALID_MODIFICATION_ERR: int with get
+                abstract member NAMESPACE_ERR: int with get
+                abstract member INVALID_ACCESS_ERR: int with get
+                abstract member VALIDATION_ERR: int with get
+                abstract member TYPE_MISMATCH_ERR: int with get
+                abstract member SECURITY_ERR: int with get
+                abstract member NETWORK_ERR: int with get
+                abstract member ABORT_ERR: int with get
+                abstract member URL_MISMATCH_ERR: int with get
+                abstract member QUOTA_EXCEEDED_ERR: int with get
+                abstract member TIMEOUT_ERR: int with get
+                abstract member INVALID_NODE_TYPE_ERR: int with get
+                abstract member DATA_CLONE_ERR: int with get
 
         module ProgressEvent =
 
