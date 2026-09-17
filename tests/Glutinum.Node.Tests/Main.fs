@@ -61,11 +61,21 @@ let main _ =
                     test (
                         "events: a listener receives the emitted arguments",
                         fun _ ->
-                            let emitter = Node.events.Exports.EventEmitter<obj>()
+                            let emitter = Node.events.Exports.EventEmitter()
                             let mutable received = ""
+                            let mutable pair = ""
                             emitter.on ("greet", (fun (name: string) -> received <- name)) |> ignore
+
+                            emitter.on (
+                                "pair",
+                                fun (name: string) (count: int) -> pair <- $"{name} {count}"
+                            )
+                            |> ignore
+
                             emitter.emit ("greet", "Fable") |> ignore
+                            emitter.emit ("pair", "Fable", 2) |> ignore
                             assertThat received (isEqualTo "Fable")
+                            assertThat pair (isEqualTo "Fable 2")
                     )
 
                     testAsync (

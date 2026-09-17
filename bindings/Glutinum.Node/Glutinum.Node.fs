@@ -581,7 +581,35 @@ module Node =
             /// <summary>
             /// Alias for <c>emitter.on(eventName, listener)</c>.
             /// </summary>
-            abstract member addListener: eventName: obj * listener: obj -> EventEmitter<'T>
+            abstract member addListener<'A>: eventName: string * listener: ('A -> unit) -> EventEmitter<'T>
+            /// <summary>
+            /// Alias for <c>emitter.on(eventName, listener)</c>.
+            /// </summary>
+            abstract member addListener<'A, 'B>: eventName: string * listener: ('A -> 'B -> unit) -> EventEmitter<'T>
+            /// <summary>
+            /// Alias for <c>emitter.on(eventName, listener)</c>.
+            /// </summary>
+            abstract member addListener<'A, 'B, 'C>: eventName: string * listener: ('A -> 'B -> 'C -> unit) -> EventEmitter<'T>
+            /// <summary>
+            /// Alias for <c>emitter.on(eventName, listener)</c>.
+            /// </summary>
+            abstract member addListener: eventName: string * listener: System.Delegate -> EventEmitter<'T>
+            /// <summary>
+            /// Alias for <c>emitter.on(eventName, listener)</c>.
+            /// </summary>
+            abstract member addListener<'A>: eventName: obj * listener: ('A -> unit) -> EventEmitter<'T>
+            /// <summary>
+            /// Alias for <c>emitter.on(eventName, listener)</c>.
+            /// </summary>
+            abstract member addListener<'A, 'B>: eventName: obj * listener: ('A -> 'B -> unit) -> EventEmitter<'T>
+            /// <summary>
+            /// Alias for <c>emitter.on(eventName, listener)</c>.
+            /// </summary>
+            abstract member addListener<'A, 'B, 'C>: eventName: obj * listener: ('A -> 'B -> 'C -> unit) -> EventEmitter<'T>
+            /// <summary>
+            /// Alias for <c>emitter.on(eventName, listener)</c>.
+            /// </summary>
+            abstract member addListener: eventName: obj * listener: System.Delegate -> EventEmitter<'T>
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
             /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
@@ -616,7 +644,252 @@ module Node =
             /// <param name="listener">
             /// The callback function
             /// </param>
-            abstract member on: eventName: obj * listener: obj -> EventEmitter<'T>
+            abstract member on<'A>: eventName: string * listener: ('A -> unit) -> EventEmitter<'T>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            /// <param name="eventName">
+            /// The name of the event.
+            /// </param>
+            /// <param name="listener">
+            /// The callback function
+            /// </param>
+            abstract member on<'A, 'B>: eventName: string * listener: ('A -> 'B -> unit) -> EventEmitter<'T>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            /// <param name="eventName">
+            /// The name of the event.
+            /// </param>
+            /// <param name="listener">
+            /// The callback function
+            /// </param>
+            abstract member on<'A, 'B, 'C>: eventName: string * listener: ('A -> 'B -> 'C -> unit) -> EventEmitter<'T>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            /// <param name="eventName">
+            /// The name of the event.
+            /// </param>
+            /// <param name="listener">
+            /// The callback function
+            /// </param>
+            abstract member on: eventName: string * listener: System.Delegate -> EventEmitter<'T>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            /// <param name="eventName">
+            /// The name of the event.
+            /// </param>
+            /// <param name="listener">
+            /// The callback function
+            /// </param>
+            abstract member on<'A>: eventName: obj * listener: ('A -> unit) -> EventEmitter<'T>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            /// <param name="eventName">
+            /// The name of the event.
+            /// </param>
+            /// <param name="listener">
+            /// The callback function
+            /// </param>
+            abstract member on<'A, 'B>: eventName: obj * listener: ('A -> 'B -> unit) -> EventEmitter<'T>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            /// <param name="eventName">
+            /// The name of the event.
+            /// </param>
+            /// <param name="listener">
+            /// The callback function
+            /// </param>
+            abstract member on<'A, 'B, 'C>: eventName: obj * listener: ('A -> 'B -> 'C -> unit) -> EventEmitter<'T>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            /// <param name="eventName">
+            /// The name of the event.
+            /// </param>
+            /// <param name="listener">
+            /// The callback function
+            /// </param>
+            abstract member on: eventName: obj * listener: System.Delegate -> EventEmitter<'T>
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -649,7 +922,238 @@ module Node =
             /// <param name="listener">
             /// The callback function
             /// </param>
-            abstract member once: eventName: obj * listener: obj -> EventEmitter<'T>
+            abstract member once<'A>: eventName: string * listener: ('A -> unit) -> EventEmitter<'T>
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            /// <param name="eventName">
+            /// The name of the event.
+            /// </param>
+            /// <param name="listener">
+            /// The callback function
+            /// </param>
+            abstract member once<'A, 'B>: eventName: string * listener: ('A -> 'B -> unit) -> EventEmitter<'T>
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            /// <param name="eventName">
+            /// The name of the event.
+            /// </param>
+            /// <param name="listener">
+            /// The callback function
+            /// </param>
+            abstract member once<'A, 'B, 'C>: eventName: string * listener: ('A -> 'B -> 'C -> unit) -> EventEmitter<'T>
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            /// <param name="eventName">
+            /// The name of the event.
+            /// </param>
+            /// <param name="listener">
+            /// The callback function
+            /// </param>
+            abstract member once: eventName: string * listener: System.Delegate -> EventEmitter<'T>
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            /// <param name="eventName">
+            /// The name of the event.
+            /// </param>
+            /// <param name="listener">
+            /// The callback function
+            /// </param>
+            abstract member once<'A>: eventName: obj * listener: ('A -> unit) -> EventEmitter<'T>
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            /// <param name="eventName">
+            /// The name of the event.
+            /// </param>
+            /// <param name="listener">
+            /// The callback function
+            /// </param>
+            abstract member once<'A, 'B>: eventName: obj * listener: ('A -> 'B -> unit) -> EventEmitter<'T>
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            /// <param name="eventName">
+            /// The name of the event.
+            /// </param>
+            /// <param name="listener">
+            /// The callback function
+            /// </param>
+            abstract member once<'A, 'B, 'C>: eventName: obj * listener: ('A -> 'B -> 'C -> unit) -> EventEmitter<'T>
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            /// <param name="eventName">
+            /// The name of the event.
+            /// </param>
+            /// <param name="listener">
+            /// The callback function
+            /// </param>
+            abstract member once: eventName: obj * listener: System.Delegate -> EventEmitter<'T>
             /// <summary>
             /// Removes the specified <c>listener</c> from the listener array for the event named <c>eventName</c>.
             ///
@@ -731,11 +1235,613 @@ module Node =
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
-            abstract member removeListener: eventName: obj * listener: obj -> EventEmitter<'T>
+            abstract member removeListener<'A>: eventName: string * listener: ('A -> unit) -> EventEmitter<'T>
+            /// <summary>
+            /// Removes the specified <c>listener</c> from the listener array for the event named <c>eventName</c>.
+            ///
+            /// <code lang="js">
+            /// const callback = (stream) => {
+            ///   console.log('someone connected!');
+            /// };
+            /// server.on('connection', callback);
+            /// // ...
+            /// server.removeListener('connection', callback);
+            /// </code>
+            ///
+            /// <c>removeListener()</c> will remove, at most, one instance of a listener from the
+            /// listener array. If any single listener has been added multiple times to the
+            /// listener array for the specified <c>eventName</c>, then <c>removeListener()</c> must be
+            /// called multiple times to remove each instance.
+            ///
+            /// Once an event is emitted, all listeners attached to it at the
+            /// time of emitting are called in order. This implies that any <c>removeListener()</c> or <c>removeAllListeners()</c> calls _after_ emitting and _before_ the last listener finishes execution
+            /// will not remove them from<c>emit()</c> in progress. Subsequent events behave as expected.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// class MyEmitter extends EventEmitter {}
+            /// const myEmitter = new MyEmitter();
+            ///
+            /// const callbackA = () => {
+            ///   console.log('A');
+            ///   myEmitter.removeListener('event', callbackB);
+            /// };
+            ///
+            /// const callbackB = () => {
+            ///   console.log('B');
+            /// };
+            ///
+            /// myEmitter.on('event', callbackA);
+            ///
+            /// myEmitter.on('event', callbackB);
+            ///
+            /// // callbackA removes listener callbackB but it will still be called.
+            /// // Internal listener array at time of emit [callbackA, callbackB]
+            /// myEmitter.emit('event');
+            /// // Prints:
+            /// //   A
+            /// //   B
+            ///
+            /// // callbackB is now removed.
+            /// // Internal listener array [callbackA]
+            /// myEmitter.emit('event');
+            /// // Prints:
+            /// //   A
+            /// </code>
+            ///
+            /// Because listeners are managed using an internal array, calling this will
+            /// change the position indices of any listener registered _after_ the listener
+            /// being removed. This will not impact the order in which listeners are called,
+            /// but it means that any copies of the listener array as returned by
+            /// the <c>emitter.listeners()</c> method will need to be recreated.
+            ///
+            /// When a single function has been added as a handler multiple times for a single
+            /// event (as in the example below), <c>removeListener()</c> will remove the most
+            /// recently added instance. In the example the <c>once('ping')</c> listener is removed:
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const ee = new EventEmitter();
+            ///
+            /// function pong() {
+            ///   console.log('pong');
+            /// }
+            ///
+            /// ee.on('ping', pong);
+            /// ee.once('ping', pong);
+            /// ee.removeListener('ping', pong);
+            ///
+            /// ee.emit('ping');
+            /// ee.emit('ping');
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member removeListener<'A, 'B>: eventName: string * listener: ('A -> 'B -> unit) -> EventEmitter<'T>
+            /// <summary>
+            /// Removes the specified <c>listener</c> from the listener array for the event named <c>eventName</c>.
+            ///
+            /// <code lang="js">
+            /// const callback = (stream) => {
+            ///   console.log('someone connected!');
+            /// };
+            /// server.on('connection', callback);
+            /// // ...
+            /// server.removeListener('connection', callback);
+            /// </code>
+            ///
+            /// <c>removeListener()</c> will remove, at most, one instance of a listener from the
+            /// listener array. If any single listener has been added multiple times to the
+            /// listener array for the specified <c>eventName</c>, then <c>removeListener()</c> must be
+            /// called multiple times to remove each instance.
+            ///
+            /// Once an event is emitted, all listeners attached to it at the
+            /// time of emitting are called in order. This implies that any <c>removeListener()</c> or <c>removeAllListeners()</c> calls _after_ emitting and _before_ the last listener finishes execution
+            /// will not remove them from<c>emit()</c> in progress. Subsequent events behave as expected.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// class MyEmitter extends EventEmitter {}
+            /// const myEmitter = new MyEmitter();
+            ///
+            /// const callbackA = () => {
+            ///   console.log('A');
+            ///   myEmitter.removeListener('event', callbackB);
+            /// };
+            ///
+            /// const callbackB = () => {
+            ///   console.log('B');
+            /// };
+            ///
+            /// myEmitter.on('event', callbackA);
+            ///
+            /// myEmitter.on('event', callbackB);
+            ///
+            /// // callbackA removes listener callbackB but it will still be called.
+            /// // Internal listener array at time of emit [callbackA, callbackB]
+            /// myEmitter.emit('event');
+            /// // Prints:
+            /// //   A
+            /// //   B
+            ///
+            /// // callbackB is now removed.
+            /// // Internal listener array [callbackA]
+            /// myEmitter.emit('event');
+            /// // Prints:
+            /// //   A
+            /// </code>
+            ///
+            /// Because listeners are managed using an internal array, calling this will
+            /// change the position indices of any listener registered _after_ the listener
+            /// being removed. This will not impact the order in which listeners are called,
+            /// but it means that any copies of the listener array as returned by
+            /// the <c>emitter.listeners()</c> method will need to be recreated.
+            ///
+            /// When a single function has been added as a handler multiple times for a single
+            /// event (as in the example below), <c>removeListener()</c> will remove the most
+            /// recently added instance. In the example the <c>once('ping')</c> listener is removed:
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const ee = new EventEmitter();
+            ///
+            /// function pong() {
+            ///   console.log('pong');
+            /// }
+            ///
+            /// ee.on('ping', pong);
+            /// ee.once('ping', pong);
+            /// ee.removeListener('ping', pong);
+            ///
+            /// ee.emit('ping');
+            /// ee.emit('ping');
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member removeListener<'A, 'B, 'C>: eventName: string * listener: ('A -> 'B -> 'C -> unit) -> EventEmitter<'T>
+            /// <summary>
+            /// Removes the specified <c>listener</c> from the listener array for the event named <c>eventName</c>.
+            ///
+            /// <code lang="js">
+            /// const callback = (stream) => {
+            ///   console.log('someone connected!');
+            /// };
+            /// server.on('connection', callback);
+            /// // ...
+            /// server.removeListener('connection', callback);
+            /// </code>
+            ///
+            /// <c>removeListener()</c> will remove, at most, one instance of a listener from the
+            /// listener array. If any single listener has been added multiple times to the
+            /// listener array for the specified <c>eventName</c>, then <c>removeListener()</c> must be
+            /// called multiple times to remove each instance.
+            ///
+            /// Once an event is emitted, all listeners attached to it at the
+            /// time of emitting are called in order. This implies that any <c>removeListener()</c> or <c>removeAllListeners()</c> calls _after_ emitting and _before_ the last listener finishes execution
+            /// will not remove them from<c>emit()</c> in progress. Subsequent events behave as expected.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// class MyEmitter extends EventEmitter {}
+            /// const myEmitter = new MyEmitter();
+            ///
+            /// const callbackA = () => {
+            ///   console.log('A');
+            ///   myEmitter.removeListener('event', callbackB);
+            /// };
+            ///
+            /// const callbackB = () => {
+            ///   console.log('B');
+            /// };
+            ///
+            /// myEmitter.on('event', callbackA);
+            ///
+            /// myEmitter.on('event', callbackB);
+            ///
+            /// // callbackA removes listener callbackB but it will still be called.
+            /// // Internal listener array at time of emit [callbackA, callbackB]
+            /// myEmitter.emit('event');
+            /// // Prints:
+            /// //   A
+            /// //   B
+            ///
+            /// // callbackB is now removed.
+            /// // Internal listener array [callbackA]
+            /// myEmitter.emit('event');
+            /// // Prints:
+            /// //   A
+            /// </code>
+            ///
+            /// Because listeners are managed using an internal array, calling this will
+            /// change the position indices of any listener registered _after_ the listener
+            /// being removed. This will not impact the order in which listeners are called,
+            /// but it means that any copies of the listener array as returned by
+            /// the <c>emitter.listeners()</c> method will need to be recreated.
+            ///
+            /// When a single function has been added as a handler multiple times for a single
+            /// event (as in the example below), <c>removeListener()</c> will remove the most
+            /// recently added instance. In the example the <c>once('ping')</c> listener is removed:
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const ee = new EventEmitter();
+            ///
+            /// function pong() {
+            ///   console.log('pong');
+            /// }
+            ///
+            /// ee.on('ping', pong);
+            /// ee.once('ping', pong);
+            /// ee.removeListener('ping', pong);
+            ///
+            /// ee.emit('ping');
+            /// ee.emit('ping');
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member removeListener: eventName: string * listener: System.Delegate -> EventEmitter<'T>
+            /// <summary>
+            /// Removes the specified <c>listener</c> from the listener array for the event named <c>eventName</c>.
+            ///
+            /// <code lang="js">
+            /// const callback = (stream) => {
+            ///   console.log('someone connected!');
+            /// };
+            /// server.on('connection', callback);
+            /// // ...
+            /// server.removeListener('connection', callback);
+            /// </code>
+            ///
+            /// <c>removeListener()</c> will remove, at most, one instance of a listener from the
+            /// listener array. If any single listener has been added multiple times to the
+            /// listener array for the specified <c>eventName</c>, then <c>removeListener()</c> must be
+            /// called multiple times to remove each instance.
+            ///
+            /// Once an event is emitted, all listeners attached to it at the
+            /// time of emitting are called in order. This implies that any <c>removeListener()</c> or <c>removeAllListeners()</c> calls _after_ emitting and _before_ the last listener finishes execution
+            /// will not remove them from<c>emit()</c> in progress. Subsequent events behave as expected.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// class MyEmitter extends EventEmitter {}
+            /// const myEmitter = new MyEmitter();
+            ///
+            /// const callbackA = () => {
+            ///   console.log('A');
+            ///   myEmitter.removeListener('event', callbackB);
+            /// };
+            ///
+            /// const callbackB = () => {
+            ///   console.log('B');
+            /// };
+            ///
+            /// myEmitter.on('event', callbackA);
+            ///
+            /// myEmitter.on('event', callbackB);
+            ///
+            /// // callbackA removes listener callbackB but it will still be called.
+            /// // Internal listener array at time of emit [callbackA, callbackB]
+            /// myEmitter.emit('event');
+            /// // Prints:
+            /// //   A
+            /// //   B
+            ///
+            /// // callbackB is now removed.
+            /// // Internal listener array [callbackA]
+            /// myEmitter.emit('event');
+            /// // Prints:
+            /// //   A
+            /// </code>
+            ///
+            /// Because listeners are managed using an internal array, calling this will
+            /// change the position indices of any listener registered _after_ the listener
+            /// being removed. This will not impact the order in which listeners are called,
+            /// but it means that any copies of the listener array as returned by
+            /// the <c>emitter.listeners()</c> method will need to be recreated.
+            ///
+            /// When a single function has been added as a handler multiple times for a single
+            /// event (as in the example below), <c>removeListener()</c> will remove the most
+            /// recently added instance. In the example the <c>once('ping')</c> listener is removed:
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const ee = new EventEmitter();
+            ///
+            /// function pong() {
+            ///   console.log('pong');
+            /// }
+            ///
+            /// ee.on('ping', pong);
+            /// ee.once('ping', pong);
+            /// ee.removeListener('ping', pong);
+            ///
+            /// ee.emit('ping');
+            /// ee.emit('ping');
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member removeListener<'A>: eventName: obj * listener: ('A -> unit) -> EventEmitter<'T>
+            /// <summary>
+            /// Removes the specified <c>listener</c> from the listener array for the event named <c>eventName</c>.
+            ///
+            /// <code lang="js">
+            /// const callback = (stream) => {
+            ///   console.log('someone connected!');
+            /// };
+            /// server.on('connection', callback);
+            /// // ...
+            /// server.removeListener('connection', callback);
+            /// </code>
+            ///
+            /// <c>removeListener()</c> will remove, at most, one instance of a listener from the
+            /// listener array. If any single listener has been added multiple times to the
+            /// listener array for the specified <c>eventName</c>, then <c>removeListener()</c> must be
+            /// called multiple times to remove each instance.
+            ///
+            /// Once an event is emitted, all listeners attached to it at the
+            /// time of emitting are called in order. This implies that any <c>removeListener()</c> or <c>removeAllListeners()</c> calls _after_ emitting and _before_ the last listener finishes execution
+            /// will not remove them from<c>emit()</c> in progress. Subsequent events behave as expected.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// class MyEmitter extends EventEmitter {}
+            /// const myEmitter = new MyEmitter();
+            ///
+            /// const callbackA = () => {
+            ///   console.log('A');
+            ///   myEmitter.removeListener('event', callbackB);
+            /// };
+            ///
+            /// const callbackB = () => {
+            ///   console.log('B');
+            /// };
+            ///
+            /// myEmitter.on('event', callbackA);
+            ///
+            /// myEmitter.on('event', callbackB);
+            ///
+            /// // callbackA removes listener callbackB but it will still be called.
+            /// // Internal listener array at time of emit [callbackA, callbackB]
+            /// myEmitter.emit('event');
+            /// // Prints:
+            /// //   A
+            /// //   B
+            ///
+            /// // callbackB is now removed.
+            /// // Internal listener array [callbackA]
+            /// myEmitter.emit('event');
+            /// // Prints:
+            /// //   A
+            /// </code>
+            ///
+            /// Because listeners are managed using an internal array, calling this will
+            /// change the position indices of any listener registered _after_ the listener
+            /// being removed. This will not impact the order in which listeners are called,
+            /// but it means that any copies of the listener array as returned by
+            /// the <c>emitter.listeners()</c> method will need to be recreated.
+            ///
+            /// When a single function has been added as a handler multiple times for a single
+            /// event (as in the example below), <c>removeListener()</c> will remove the most
+            /// recently added instance. In the example the <c>once('ping')</c> listener is removed:
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const ee = new EventEmitter();
+            ///
+            /// function pong() {
+            ///   console.log('pong');
+            /// }
+            ///
+            /// ee.on('ping', pong);
+            /// ee.once('ping', pong);
+            /// ee.removeListener('ping', pong);
+            ///
+            /// ee.emit('ping');
+            /// ee.emit('ping');
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member removeListener<'A, 'B>: eventName: obj * listener: ('A -> 'B -> unit) -> EventEmitter<'T>
+            /// <summary>
+            /// Removes the specified <c>listener</c> from the listener array for the event named <c>eventName</c>.
+            ///
+            /// <code lang="js">
+            /// const callback = (stream) => {
+            ///   console.log('someone connected!');
+            /// };
+            /// server.on('connection', callback);
+            /// // ...
+            /// server.removeListener('connection', callback);
+            /// </code>
+            ///
+            /// <c>removeListener()</c> will remove, at most, one instance of a listener from the
+            /// listener array. If any single listener has been added multiple times to the
+            /// listener array for the specified <c>eventName</c>, then <c>removeListener()</c> must be
+            /// called multiple times to remove each instance.
+            ///
+            /// Once an event is emitted, all listeners attached to it at the
+            /// time of emitting are called in order. This implies that any <c>removeListener()</c> or <c>removeAllListeners()</c> calls _after_ emitting and _before_ the last listener finishes execution
+            /// will not remove them from<c>emit()</c> in progress. Subsequent events behave as expected.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// class MyEmitter extends EventEmitter {}
+            /// const myEmitter = new MyEmitter();
+            ///
+            /// const callbackA = () => {
+            ///   console.log('A');
+            ///   myEmitter.removeListener('event', callbackB);
+            /// };
+            ///
+            /// const callbackB = () => {
+            ///   console.log('B');
+            /// };
+            ///
+            /// myEmitter.on('event', callbackA);
+            ///
+            /// myEmitter.on('event', callbackB);
+            ///
+            /// // callbackA removes listener callbackB but it will still be called.
+            /// // Internal listener array at time of emit [callbackA, callbackB]
+            /// myEmitter.emit('event');
+            /// // Prints:
+            /// //   A
+            /// //   B
+            ///
+            /// // callbackB is now removed.
+            /// // Internal listener array [callbackA]
+            /// myEmitter.emit('event');
+            /// // Prints:
+            /// //   A
+            /// </code>
+            ///
+            /// Because listeners are managed using an internal array, calling this will
+            /// change the position indices of any listener registered _after_ the listener
+            /// being removed. This will not impact the order in which listeners are called,
+            /// but it means that any copies of the listener array as returned by
+            /// the <c>emitter.listeners()</c> method will need to be recreated.
+            ///
+            /// When a single function has been added as a handler multiple times for a single
+            /// event (as in the example below), <c>removeListener()</c> will remove the most
+            /// recently added instance. In the example the <c>once('ping')</c> listener is removed:
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const ee = new EventEmitter();
+            ///
+            /// function pong() {
+            ///   console.log('pong');
+            /// }
+            ///
+            /// ee.on('ping', pong);
+            /// ee.once('ping', pong);
+            /// ee.removeListener('ping', pong);
+            ///
+            /// ee.emit('ping');
+            /// ee.emit('ping');
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member removeListener<'A, 'B, 'C>: eventName: obj * listener: ('A -> 'B -> 'C -> unit) -> EventEmitter<'T>
+            /// <summary>
+            /// Removes the specified <c>listener</c> from the listener array for the event named <c>eventName</c>.
+            ///
+            /// <code lang="js">
+            /// const callback = (stream) => {
+            ///   console.log('someone connected!');
+            /// };
+            /// server.on('connection', callback);
+            /// // ...
+            /// server.removeListener('connection', callback);
+            /// </code>
+            ///
+            /// <c>removeListener()</c> will remove, at most, one instance of a listener from the
+            /// listener array. If any single listener has been added multiple times to the
+            /// listener array for the specified <c>eventName</c>, then <c>removeListener()</c> must be
+            /// called multiple times to remove each instance.
+            ///
+            /// Once an event is emitted, all listeners attached to it at the
+            /// time of emitting are called in order. This implies that any <c>removeListener()</c> or <c>removeAllListeners()</c> calls _after_ emitting and _before_ the last listener finishes execution
+            /// will not remove them from<c>emit()</c> in progress. Subsequent events behave as expected.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// class MyEmitter extends EventEmitter {}
+            /// const myEmitter = new MyEmitter();
+            ///
+            /// const callbackA = () => {
+            ///   console.log('A');
+            ///   myEmitter.removeListener('event', callbackB);
+            /// };
+            ///
+            /// const callbackB = () => {
+            ///   console.log('B');
+            /// };
+            ///
+            /// myEmitter.on('event', callbackA);
+            ///
+            /// myEmitter.on('event', callbackB);
+            ///
+            /// // callbackA removes listener callbackB but it will still be called.
+            /// // Internal listener array at time of emit [callbackA, callbackB]
+            /// myEmitter.emit('event');
+            /// // Prints:
+            /// //   A
+            /// //   B
+            ///
+            /// // callbackB is now removed.
+            /// // Internal listener array [callbackA]
+            /// myEmitter.emit('event');
+            /// // Prints:
+            /// //   A
+            /// </code>
+            ///
+            /// Because listeners are managed using an internal array, calling this will
+            /// change the position indices of any listener registered _after_ the listener
+            /// being removed. This will not impact the order in which listeners are called,
+            /// but it means that any copies of the listener array as returned by
+            /// the <c>emitter.listeners()</c> method will need to be recreated.
+            ///
+            /// When a single function has been added as a handler multiple times for a single
+            /// event (as in the example below), <c>removeListener()</c> will remove the most
+            /// recently added instance. In the example the <c>once('ping')</c> listener is removed:
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const ee = new EventEmitter();
+            ///
+            /// function pong() {
+            ///   console.log('pong');
+            /// }
+            ///
+            /// ee.on('ping', pong);
+            /// ee.once('ping', pong);
+            /// ee.removeListener('ping', pong);
+            ///
+            /// ee.emit('ping');
+            /// ee.emit('ping');
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member removeListener: eventName: obj * listener: System.Delegate -> EventEmitter<'T>
             /// <summary>
             /// Alias for <c>emitter.removeListener()</c>.
             /// </summary>
-            abstract member off: eventName: obj * listener: obj -> EventEmitter<'T>
+            abstract member off<'A>: eventName: string * listener: ('A -> unit) -> EventEmitter<'T>
+            /// <summary>
+            /// Alias for <c>emitter.removeListener()</c>.
+            /// </summary>
+            abstract member off<'A, 'B>: eventName: string * listener: ('A -> 'B -> unit) -> EventEmitter<'T>
+            /// <summary>
+            /// Alias for <c>emitter.removeListener()</c>.
+            /// </summary>
+            abstract member off<'A, 'B, 'C>: eventName: string * listener: ('A -> 'B -> 'C -> unit) -> EventEmitter<'T>
+            /// <summary>
+            /// Alias for <c>emitter.removeListener()</c>.
+            /// </summary>
+            abstract member off: eventName: string * listener: System.Delegate -> EventEmitter<'T>
+            /// <summary>
+            /// Alias for <c>emitter.removeListener()</c>.
+            /// </summary>
+            abstract member off<'A>: eventName: obj * listener: ('A -> unit) -> EventEmitter<'T>
+            /// <summary>
+            /// Alias for <c>emitter.removeListener()</c>.
+            /// </summary>
+            abstract member off<'A, 'B>: eventName: obj * listener: ('A -> 'B -> unit) -> EventEmitter<'T>
+            /// <summary>
+            /// Alias for <c>emitter.removeListener()</c>.
+            /// </summary>
+            abstract member off<'A, 'B, 'C>: eventName: obj * listener: ('A -> 'B -> 'C -> unit) -> EventEmitter<'T>
+            /// <summary>
+            /// Alias for <c>emitter.removeListener()</c>.
+            /// </summary>
+            abstract member off: eventName: obj * listener: System.Delegate -> EventEmitter<'T>
             /// <summary>
             /// Removes all listeners, or those of the specified <c>eventName</c>.
             ///
@@ -745,7 +1851,27 @@ module Node =
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
-            abstract member removeAllListeners: ?eventName: obj -> EventEmitter<'T>
+            abstract member removeAllListeners: unit -> EventEmitter<'T>
+            /// <summary>
+            /// Removes all listeners, or those of the specified <c>eventName</c>.
+            ///
+            /// It is bad practice to remove listeners added elsewhere in the code,
+            /// particularly when the <c>EventEmitter</c> instance was created by some other
+            /// component or module (e.g. sockets or file streams).
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member removeAllListeners: eventName: string -> EventEmitter<'T>
+            /// <summary>
+            /// Removes all listeners, or those of the specified <c>eventName</c>.
+            ///
+            /// It is bad practice to remove listeners added elsewhere in the code,
+            /// particularly when the <c>EventEmitter</c> instance was created by some other
+            /// component or module (e.g. sockets or file streams).
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member removeAllListeners: eventName: obj -> EventEmitter<'T>
             /// <summary>
             /// By default <c>EventEmitter</c>s will print a warning if more than <c>10</c> listeners are
             /// added for a particular event. This is a useful default that helps finding
@@ -771,7 +1897,19 @@ module Node =
             /// // Prints: [ [Function] ]
             /// </code>
             /// </summary>
-            abstract member listeners: eventName: obj -> ResizeArray<obj>
+            abstract member listeners: eventName: string -> ResizeArray<Action>
+            /// <summary>
+            /// Returns a copy of the array of listeners for the event named <c>eventName</c>.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// console.log(util.inspect(server.listeners('connection')));
+            /// // Prints: [ [Function] ]
+            /// </code>
+            /// </summary>
+            abstract member listeners: eventName: obj -> ResizeArray<Action>
             /// <summary>
             /// Returns a copy of the array of listeners for the event named <c>eventName</c>,
             /// including any wrappers (such as those created by <c>.once()</c>).
@@ -801,7 +1939,77 @@ module Node =
             /// emitter.emit('log');
             /// </c><c></c>
             /// </summary>
-            abstract member rawListeners: eventName: obj -> ResizeArray<obj>
+            abstract member rawListeners: eventName: string -> ResizeArray<Action>
+            /// <summary>
+            /// Returns a copy of the array of listeners for the event named <c>eventName</c>,
+            /// including any wrappers (such as those created by <c>.once()</c>).
+            ///
+            /// <c></c><c>js
+            /// import { EventEmitter } from 'node:events';
+            /// const emitter = new EventEmitter();
+            /// emitter.once('log', () => console.log('log once'));
+            ///
+            /// // Returns a new Array with a function </c>onceWrapper<c> which has a property
+            /// // </c>listener<c> which contains the original listener bound above
+            /// const listeners = emitter.rawListeners('log');
+            /// const logFnWrapper = listeners[0];
+            ///
+            /// // Logs "log once" to the console and does not unbind the </c>once<c> event
+            /// logFnWrapper.listener();
+            ///
+            /// // Logs "log once" to the console and removes the listener
+            /// logFnWrapper();
+            ///
+            /// emitter.on('log', () => console.log('log persistently'));
+            /// // Will return a new Array with a single function bound by </c>.on()<c> above
+            /// const newListeners = emitter.rawListeners('log');
+            ///
+            /// // Logs "log persistently" twice
+            /// newListeners[0]();
+            /// emitter.emit('log');
+            /// </c><c></c>
+            /// </summary>
+            abstract member rawListeners: eventName: obj -> ResizeArray<Action>
+            /// <summary>
+            /// Synchronously calls each of the listeners registered for the event named <c>eventName</c>, in the order they were registered, passing the supplied arguments
+            /// to each.
+            ///
+            /// Returns <c>true</c> if the event had listeners, <c>false</c> otherwise.
+            ///
+            /// <c></c><c>js
+            /// import { EventEmitter } from 'node:events';
+            /// const myEmitter = new EventEmitter();
+            ///
+            /// // First listener
+            /// myEmitter.on('event', function firstListener() {
+            ///   console.log('Helloooo! first listener');
+            /// });
+            /// // Second listener
+            /// myEmitter.on('event', function secondListener(arg1, arg2) {
+            ///   console.log(</c>event with parameters ${arg1}, ${arg2} in second listener<c>);
+            /// });
+            /// // Third listener
+            /// myEmitter.on('event', function thirdListener(...args) {
+            ///   const parameters = args.join(', ');
+            ///   console.log(</c>event with parameters ${parameters} in third listener<c>);
+            /// });
+            ///
+            /// console.log(myEmitter.listeners('event'));
+            ///
+            /// myEmitter.emit('event', 1, 2, 3, 4, 5);
+            ///
+            /// // Prints:
+            /// // [
+            /// //   [Function: firstListener],
+            /// //   [Function: secondListener],
+            /// //   [Function: thirdListener]
+            /// // ]
+            /// // Helloooo! first listener
+            /// // event with parameters 1, 2 in second listener
+            /// // event with parameters 1, 2, 3, 4, 5 in third listener
+            /// </c><c></c>
+            /// </summary>
+            abstract member emit: eventName: string * [<ParamArray>] args: obj [] -> bool
             /// <summary>
             /// Synchronously calls each of the listeners registered for the event named <c>eventName</c>, in the order they were registered, passing the supplied arguments
             /// to each.
@@ -853,7 +2061,19 @@ module Node =
             /// <param name="listener">
             /// The event handler function
             /// </param>
-            abstract member listenerCount: eventName: obj * ?listener: obj -> float
+            abstract member listenerCount: eventName: string * ?listener: Action -> float
+            /// <summary>
+            /// Returns the number of listeners listening for the event named <c>eventName</c>.
+            /// If <c>listener</c> is provided, it will return how many times the listener is found
+            /// in the list of the listeners of the event.
+            /// </summary>
+            /// <param name="eventName">
+            /// The name of the event being listened for
+            /// </param>
+            /// <param name="listener">
+            /// The event handler function
+            /// </param>
+            abstract member listenerCount: eventName: obj * ?listener: Action -> float
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
             /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
@@ -874,7 +2094,154 @@ module Node =
             /// <param name="listener">
             /// The callback function
             /// </param>
-            abstract member prependListener: eventName: obj * listener: obj -> EventEmitter<'T>
+            abstract member prependListener<'A>: eventName: string * listener: ('A -> unit) -> EventEmitter<'T>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            /// <param name="eventName">
+            /// The name of the event.
+            /// </param>
+            /// <param name="listener">
+            /// The callback function
+            /// </param>
+            abstract member prependListener<'A, 'B>: eventName: string * listener: ('A -> 'B -> unit) -> EventEmitter<'T>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            /// <param name="eventName">
+            /// The name of the event.
+            /// </param>
+            /// <param name="listener">
+            /// The callback function
+            /// </param>
+            abstract member prependListener<'A, 'B, 'C>: eventName: string * listener: ('A -> 'B -> 'C -> unit) -> EventEmitter<'T>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            /// <param name="eventName">
+            /// The name of the event.
+            /// </param>
+            /// <param name="listener">
+            /// The callback function
+            /// </param>
+            abstract member prependListener: eventName: string * listener: System.Delegate -> EventEmitter<'T>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            /// <param name="eventName">
+            /// The name of the event.
+            /// </param>
+            /// <param name="listener">
+            /// The callback function
+            /// </param>
+            abstract member prependListener<'A>: eventName: obj * listener: ('A -> unit) -> EventEmitter<'T>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            /// <param name="eventName">
+            /// The name of the event.
+            /// </param>
+            /// <param name="listener">
+            /// The callback function
+            /// </param>
+            abstract member prependListener<'A, 'B>: eventName: obj * listener: ('A -> 'B -> unit) -> EventEmitter<'T>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            /// <param name="eventName">
+            /// The name of the event.
+            /// </param>
+            /// <param name="listener">
+            /// The callback function
+            /// </param>
+            abstract member prependListener<'A, 'B, 'C>: eventName: obj * listener: ('A -> 'B -> 'C -> unit) -> EventEmitter<'T>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            /// <param name="eventName">
+            /// The name of the event.
+            /// </param>
+            /// <param name="listener">
+            /// The callback function
+            /// </param>
+            abstract member prependListener: eventName: obj * listener: System.Delegate -> EventEmitter<'T>
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -893,7 +2260,140 @@ module Node =
             /// <param name="listener">
             /// The callback function
             /// </param>
-            abstract member prependOnceListener: eventName: obj * listener: obj -> EventEmitter<'T>
+            abstract member prependOnceListener<'A>: eventName: string * listener: ('A -> unit) -> EventEmitter<'T>
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            /// <param name="eventName">
+            /// The name of the event.
+            /// </param>
+            /// <param name="listener">
+            /// The callback function
+            /// </param>
+            abstract member prependOnceListener<'A, 'B>: eventName: string * listener: ('A -> 'B -> unit) -> EventEmitter<'T>
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            /// <param name="eventName">
+            /// The name of the event.
+            /// </param>
+            /// <param name="listener">
+            /// The callback function
+            /// </param>
+            abstract member prependOnceListener<'A, 'B, 'C>: eventName: string * listener: ('A -> 'B -> 'C -> unit) -> EventEmitter<'T>
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            /// <param name="eventName">
+            /// The name of the event.
+            /// </param>
+            /// <param name="listener">
+            /// The callback function
+            /// </param>
+            abstract member prependOnceListener: eventName: string * listener: System.Delegate -> EventEmitter<'T>
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            /// <param name="eventName">
+            /// The name of the event.
+            /// </param>
+            /// <param name="listener">
+            /// The callback function
+            /// </param>
+            abstract member prependOnceListener<'A>: eventName: obj * listener: ('A -> unit) -> EventEmitter<'T>
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            /// <param name="eventName">
+            /// The name of the event.
+            /// </param>
+            /// <param name="listener">
+            /// The callback function
+            /// </param>
+            abstract member prependOnceListener<'A, 'B>: eventName: obj * listener: ('A -> 'B -> unit) -> EventEmitter<'T>
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            /// <param name="eventName">
+            /// The name of the event.
+            /// </param>
+            /// <param name="listener">
+            /// The callback function
+            /// </param>
+            abstract member prependOnceListener<'A, 'B, 'C>: eventName: obj * listener: ('A -> 'B -> 'C -> unit) -> EventEmitter<'T>
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            /// <param name="eventName">
+            /// The name of the event.
+            /// </param>
+            /// <param name="listener">
+            /// The callback function
+            /// </param>
+            abstract member prependOnceListener: eventName: obj * listener: System.Delegate -> EventEmitter<'T>
             /// <summary>
             /// Returns an array listing the events for which the emitter has registered
             /// listeners. The values in the array are strings or <c>Symbol</c>s.
@@ -4915,7 +6415,181 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// //   a
             /// </code>
             /// </summary>
+            abstract member on<'A>: event: string * listener: ('A -> unit) -> Process
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Process
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Process
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member on: event: string * listener: System.Delegate -> Process
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A>: event: obj * listener: ('A -> unit) -> Process
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Process
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Process
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
             /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
@@ -5334,7 +7008,169 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// //   a
             /// </code>
             /// </summary>
+            abstract member once<'A>: event: string * listener: ('A -> unit) -> Process
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Process
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Process
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member once: event: string * listener: System.Delegate -> Process
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A>: event: obj * listener: ('A -> unit) -> Process
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Process
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Process
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -19731,6 +21567,36 @@ AsyncLocalStorage.snapshot()"""
             /// 5. message
             /// 6. spawn
             /// </summary>
+            abstract member addListener<'A>: event: string * listener: ('A -> unit) -> ChildProcess
+            /// <summary>
+            /// events.EventEmitter
+            /// 1. close
+            /// 2. disconnect
+            /// 3. error
+            /// 4. exit
+            /// 5. message
+            /// 6. spawn
+            /// </summary>
+            abstract member addListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> ChildProcess
+            /// <summary>
+            /// events.EventEmitter
+            /// 1. close
+            /// 2. disconnect
+            /// 3. error
+            /// 4. exit
+            /// 5. message
+            /// 6. spawn
+            /// </summary>
+            abstract member addListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> ChildProcess
+            /// <summary>
+            /// events.EventEmitter
+            /// 1. close
+            /// 2. disconnect
+            /// 3. error
+            /// 4. exit
+            /// 5. message
+            /// 6. spawn
+            /// </summary>
             abstract member addListener: event: string * listener: System.Delegate -> ChildProcess
             /// <summary>
             /// events.EventEmitter
@@ -20726,6 +22592,93 @@ AsyncLocalStorage.snapshot()"""
             /// //   a
             /// </code>
             /// </summary>
+            abstract member on<'A>: event: string * listener: ('A -> unit) -> ChildProcess
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> ChildProcess
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> ChildProcess
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member on: event: string * listener: System.Delegate -> ChildProcess
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
@@ -20907,6 +22860,87 @@ AsyncLocalStorage.snapshot()"""
             /// </summary>
             [<Emit("$0.on('spawn',$1...)")>]
             abstract member on_spawn: listener: (unit -> unit) -> ChildProcess
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A>: event: string * listener: ('A -> unit) -> ChildProcess
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> ChildProcess
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> ChildProcess
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -21116,6 +23150,51 @@ AsyncLocalStorage.snapshot()"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
+            abstract member prependListener<'A>: event: string * listener: ('A -> unit) -> ChildProcess
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> ChildProcess
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> ChildProcess
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
             abstract member prependListener: event: string * listener: System.Delegate -> ChildProcess
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
@@ -21213,6 +23292,45 @@ AsyncLocalStorage.snapshot()"""
             /// </summary>
             [<Emit("$0.prependListener('spawn',$1...)")>]
             abstract member prependListener_spawn: listener: (unit -> unit) -> ChildProcess
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A>: event: string * listener: ('A -> unit) -> ChildProcess
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> ChildProcess
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> ChildProcess
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -23709,6 +25827,36 @@ AsyncLocalStorage.snapshot()"""
             ///   5. message
             ///   6. online
             /// </summary>
+            abstract member addListener<'A>: event: string * listener: ('A -> unit) -> Worker
+            /// <summary>
+            /// events.EventEmitter
+            ///   1. disconnect
+            ///   2. error
+            ///   3. exit
+            ///   4. listening
+            ///   5. message
+            ///   6. online
+            /// </summary>
+            abstract member addListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Worker
+            /// <summary>
+            /// events.EventEmitter
+            ///   1. disconnect
+            ///   2. error
+            ///   3. exit
+            ///   4. listening
+            ///   5. message
+            ///   6. online
+            /// </summary>
+            abstract member addListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Worker
+            /// <summary>
+            /// events.EventEmitter
+            ///   1. disconnect
+            ///   2. error
+            ///   3. exit
+            ///   4. listening
+            ///   5. message
+            ///   6. online
+            /// </summary>
             abstract member addListener: event: string * listener: System.Delegate -> Worker
             /// <summary>
             /// events.EventEmitter
@@ -24171,6 +26319,93 @@ AsyncLocalStorage.snapshot()"""
             /// //   a
             /// </code>
             /// </summary>
+            abstract member on<'A>: event: string * listener: ('A -> unit) -> Worker
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Worker
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Worker
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member on: event: string * listener: System.Delegate -> Worker
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
@@ -24352,6 +26587,87 @@ AsyncLocalStorage.snapshot()"""
             /// </summary>
             [<Emit("$0.on('online',$1...)")>]
             abstract member on_online: listener: (unit -> unit) -> Worker
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A>: event: string * listener: ('A -> unit) -> Worker
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Worker
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Worker
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -24561,6 +26877,51 @@ AsyncLocalStorage.snapshot()"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
+            abstract member prependListener<'A>: event: string * listener: ('A -> unit) -> Worker
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Worker
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Worker
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
             abstract member prependListener: event: string * listener: System.Delegate -> Worker
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
@@ -24658,6 +27019,45 @@ AsyncLocalStorage.snapshot()"""
             /// </summary>
             [<Emit("$0.prependListener('online',$1...)")>]
             abstract member prependListener_online: listener: (unit -> unit) -> Worker
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A>: event: string * listener: ('A -> unit) -> Worker
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Worker
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Worker
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -24866,6 +27266,39 @@ AsyncLocalStorage.snapshot()"""
             abstract member workers: Node.NodeJS.Dict<Node.cluster.Worker> option with get
             abstract member SCHED_NONE: float with get
             abstract member SCHED_RR: float with get
+            /// <summary>
+            /// events.EventEmitter
+            ///   1. disconnect
+            ///   2. exit
+            ///   3. fork
+            ///   4. listening
+            ///   5. message
+            ///   6. online
+            ///   7. setup
+            /// </summary>
+            abstract member addListener<'A>: event: string * listener: ('A -> unit) -> Cluster
+            /// <summary>
+            /// events.EventEmitter
+            ///   1. disconnect
+            ///   2. exit
+            ///   3. fork
+            ///   4. listening
+            ///   5. message
+            ///   6. online
+            ///   7. setup
+            /// </summary>
+            abstract member addListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Cluster
+            /// <summary>
+            /// events.EventEmitter
+            ///   1. disconnect
+            ///   2. exit
+            ///   3. fork
+            ///   4. listening
+            ///   5. message
+            ///   6. online
+            ///   7. setup
+            /// </summary>
+            abstract member addListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Cluster
             /// <summary>
             /// events.EventEmitter
             ///   1. disconnect
@@ -25397,6 +27830,93 @@ AsyncLocalStorage.snapshot()"""
             /// //   a
             /// </code>
             /// </summary>
+            abstract member on<'A>: event: string * listener: ('A -> unit) -> Cluster
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Cluster
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Cluster
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member on: event: string * listener: System.Delegate -> Cluster
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
@@ -25634,6 +28154,87 @@ AsyncLocalStorage.snapshot()"""
             /// //   a
             /// </code>
             /// </summary>
+            abstract member once<'A>: event: string * listener: ('A -> unit) -> Cluster
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Cluster
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Cluster
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member once: event: string * listener: System.Delegate -> Cluster
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
@@ -25845,6 +28446,51 @@ AsyncLocalStorage.snapshot()"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
+            abstract member prependListener<'A>: event: string * listener: ('A -> unit) -> Cluster
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Cluster
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Cluster
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
             abstract member prependListener: event: string * listener: System.Delegate -> Cluster
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
@@ -25958,6 +28604,45 @@ AsyncLocalStorage.snapshot()"""
             /// </summary>
             [<Emit("$0.prependListener('setup',$1...)")>]
             abstract member prependListener_setup: listener: (Node.cluster.ClusterSettings -> unit) -> Cluster
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A>: event: string * listener: ('A -> unit) -> Cluster
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Cluster
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Cluster
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -39666,6 +42351,33 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// 4. listening
             /// 5. message
             /// </summary>
+            abstract member addListener<'A>: event: string * listener: ('A -> unit) -> Socket
+            /// <summary>
+            /// events.EventEmitter
+            /// 1. close
+            /// 2. connect
+            /// 3. error
+            /// 4. listening
+            /// 5. message
+            /// </summary>
+            abstract member addListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Socket
+            /// <summary>
+            /// events.EventEmitter
+            /// 1. close
+            /// 2. connect
+            /// 3. error
+            /// 4. listening
+            /// 5. message
+            /// </summary>
+            abstract member addListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Socket
+            /// <summary>
+            /// events.EventEmitter
+            /// 1. close
+            /// 2. connect
+            /// 3. error
+            /// 4. listening
+            /// 5. message
+            /// </summary>
             abstract member addListener: event: string * listener: System.Delegate -> Socket
             /// <summary>
             /// events.EventEmitter
@@ -40030,6 +42742,93 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// //   a
             /// </code>
             /// </summary>
+            abstract member on<'A>: event: string * listener: ('A -> unit) -> Socket
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Socket
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Socket
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member on: event: string * listener: System.Delegate -> Socket
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
@@ -40181,6 +42980,87 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// </summary>
             [<Emit("$0.on('message',$1...)")>]
             abstract member on_message: listener: Socket.on_message.listener -> Socket
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A>: event: string * listener: ('A -> unit) -> Socket
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Socket
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Socket
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -40362,6 +43242,51 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
+            abstract member prependListener<'A>: event: string * listener: ('A -> unit) -> Socket
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Socket
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Socket
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
             abstract member prependListener: event: string * listener: System.Delegate -> Socket
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
@@ -40443,6 +43368,45 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// </summary>
             [<Emit("$0.prependListener('message',$1...)")>]
             abstract member prependListener_message: listener: Socket.prependListener_message.listener -> Socket
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A>: event: string * listener: ('A -> unit) -> Socket
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Socket
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Socket
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -41105,6 +44069,138 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// <param name="args">
             /// Optional arguments to pass to the function.
             /// </param>
+            abstract member runStores<'A>: context: 'ContextType * fn: ('A -> unit) * thisArg: obj * [<ParamArray>] args: obj [] -> obj
+            /// <summary>
+            /// Applies the given data to any AsyncLocalStorage instances bound to the channel
+            /// for the duration of the given function, then publishes to the channel within
+            /// the scope of that data is applied to the stores.
+            ///
+            /// If a transform function was given to <c>channel.bindStore(store)</c> it will be
+            /// applied to transform the message data before it becomes the context value for
+            /// the store. The prior storage context is accessible from within the transform
+            /// function in cases where context linking is required.
+            ///
+            /// The context applied to the store should be accessible in any async code which
+            /// continues from execution which began during the given function, however
+            /// there are some situations in which <c>context loss</c> may occur.
+            ///
+            /// <code lang="js">
+            /// import diagnostics_channel from 'node:diagnostics_channel';
+            /// import { AsyncLocalStorage } from 'node:async_hooks';
+            ///
+            /// const store = new AsyncLocalStorage();
+            ///
+            /// const channel = diagnostics_channel.channel('my-channel');
+            ///
+            /// channel.bindStore(store, (message) => {
+            ///   const parent = store.getStore();
+            ///   return new Span(message, parent);
+            /// });
+            /// channel.runStores({ some: 'message' }, () => {
+            ///   store.getStore(); // Span({ some: 'message' })
+            /// });
+            /// </code>
+            /// </summary>
+            /// <param name="context">
+            /// Message to send to subscribers and bind to stores
+            /// </param>
+            /// <param name="fn">
+            /// Handler to run within the entered storage context
+            /// </param>
+            /// <param name="thisArg">
+            /// The receiver to be used for the function call.
+            /// </param>
+            /// <param name="args">
+            /// Optional arguments to pass to the function.
+            /// </param>
+            abstract member runStores<'A, 'B>: context: 'ContextType * fn: ('A -> 'B -> unit) * thisArg: obj * [<ParamArray>] args: obj [] -> obj
+            /// <summary>
+            /// Applies the given data to any AsyncLocalStorage instances bound to the channel
+            /// for the duration of the given function, then publishes to the channel within
+            /// the scope of that data is applied to the stores.
+            ///
+            /// If a transform function was given to <c>channel.bindStore(store)</c> it will be
+            /// applied to transform the message data before it becomes the context value for
+            /// the store. The prior storage context is accessible from within the transform
+            /// function in cases where context linking is required.
+            ///
+            /// The context applied to the store should be accessible in any async code which
+            /// continues from execution which began during the given function, however
+            /// there are some situations in which <c>context loss</c> may occur.
+            ///
+            /// <code lang="js">
+            /// import diagnostics_channel from 'node:diagnostics_channel';
+            /// import { AsyncLocalStorage } from 'node:async_hooks';
+            ///
+            /// const store = new AsyncLocalStorage();
+            ///
+            /// const channel = diagnostics_channel.channel('my-channel');
+            ///
+            /// channel.bindStore(store, (message) => {
+            ///   const parent = store.getStore();
+            ///   return new Span(message, parent);
+            /// });
+            /// channel.runStores({ some: 'message' }, () => {
+            ///   store.getStore(); // Span({ some: 'message' })
+            /// });
+            /// </code>
+            /// </summary>
+            /// <param name="context">
+            /// Message to send to subscribers and bind to stores
+            /// </param>
+            /// <param name="fn">
+            /// Handler to run within the entered storage context
+            /// </param>
+            /// <param name="thisArg">
+            /// The receiver to be used for the function call.
+            /// </param>
+            /// <param name="args">
+            /// Optional arguments to pass to the function.
+            /// </param>
+            abstract member runStores<'A, 'B, 'C>: context: 'ContextType * fn: ('A -> 'B -> 'C -> unit) * thisArg: obj * [<ParamArray>] args: obj [] -> obj
+            /// <summary>
+            /// Applies the given data to any AsyncLocalStorage instances bound to the channel
+            /// for the duration of the given function, then publishes to the channel within
+            /// the scope of that data is applied to the stores.
+            ///
+            /// If a transform function was given to <c>channel.bindStore(store)</c> it will be
+            /// applied to transform the message data before it becomes the context value for
+            /// the store. The prior storage context is accessible from within the transform
+            /// function in cases where context linking is required.
+            ///
+            /// The context applied to the store should be accessible in any async code which
+            /// continues from execution which began during the given function, however
+            /// there are some situations in which <c>context loss</c> may occur.
+            ///
+            /// <code lang="js">
+            /// import diagnostics_channel from 'node:diagnostics_channel';
+            /// import { AsyncLocalStorage } from 'node:async_hooks';
+            ///
+            /// const store = new AsyncLocalStorage();
+            ///
+            /// const channel = diagnostics_channel.channel('my-channel');
+            ///
+            /// channel.bindStore(store, (message) => {
+            ///   const parent = store.getStore();
+            ///   return new Span(message, parent);
+            /// });
+            /// channel.runStores({ some: 'message' }, () => {
+            ///   store.getStore(); // Span({ some: 'message' })
+            /// });
+            /// </code>
+            /// </summary>
+            /// <param name="context">
+            /// Message to send to subscribers and bind to stores
+            /// </param>
+            /// <param name="fn">
+            /// Handler to run within the entered storage context
+            /// </param>
+            /// <param name="thisArg">
+            /// The receiver to be used for the function call.
+            /// </param>
+            /// <param name="args">
+            /// Optional arguments to pass to the function.
+            /// </param>
             abstract member runStores: context: 'ContextType * fn: System.Delegate * thisArg: obj * [<ParamArray>] args: obj [] -> obj
 
         type Channel<'StoreType> =
@@ -41287,6 +44383,114 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// <returns>
             /// The return value of the given function
             /// </returns>
+            abstract member traceSync<'A>: fn: ('A -> unit) * context: 'ContextType * thisArg: obj * [<ParamArray>] args: obj [] -> obj
+            /// <summary>
+            /// Trace a synchronous function call. This will always produce a <c>start event</c> and <c>end event</c> around the execution and may produce an <c>error event</c> if the given function throws an error.
+            /// This will run the given function using <c>channel.runStores(context, ...)</c> on the <c>start</c> channel which ensures all
+            /// events should have any bound stores set to match this trace context.
+            ///
+            /// To ensure only correct trace graphs are formed, events will only be published if subscribers are present prior to starting the trace. Subscriptions
+            /// which are added after the trace begins will not receive future events from that trace, only future traces will be seen.
+            ///
+            /// <code lang="js">
+            /// import diagnostics_channel from 'node:diagnostics_channel';
+            ///
+            /// const channels = diagnostics_channel.tracingChannel('my-channel');
+            ///
+            /// channels.traceSync(() => {
+            ///   // Do something
+            /// }, {
+            ///   some: 'thing',
+            /// });
+            /// </code>
+            /// </summary>
+            /// <param name="fn">
+            /// Function to wrap a trace around
+            /// </param>
+            /// <param name="context">
+            /// Shared object to correlate events through
+            /// </param>
+            /// <param name="thisArg">
+            /// The receiver to be used for the function call
+            /// </param>
+            /// <param name="args">
+            /// Optional arguments to pass to the function
+            /// </param>
+            /// <returns>
+            /// The return value of the given function
+            /// </returns>
+            abstract member traceSync<'A, 'B>: fn: ('A -> 'B -> unit) * context: 'ContextType * thisArg: obj * [<ParamArray>] args: obj [] -> obj
+            /// <summary>
+            /// Trace a synchronous function call. This will always produce a <c>start event</c> and <c>end event</c> around the execution and may produce an <c>error event</c> if the given function throws an error.
+            /// This will run the given function using <c>channel.runStores(context, ...)</c> on the <c>start</c> channel which ensures all
+            /// events should have any bound stores set to match this trace context.
+            ///
+            /// To ensure only correct trace graphs are formed, events will only be published if subscribers are present prior to starting the trace. Subscriptions
+            /// which are added after the trace begins will not receive future events from that trace, only future traces will be seen.
+            ///
+            /// <code lang="js">
+            /// import diagnostics_channel from 'node:diagnostics_channel';
+            ///
+            /// const channels = diagnostics_channel.tracingChannel('my-channel');
+            ///
+            /// channels.traceSync(() => {
+            ///   // Do something
+            /// }, {
+            ///   some: 'thing',
+            /// });
+            /// </code>
+            /// </summary>
+            /// <param name="fn">
+            /// Function to wrap a trace around
+            /// </param>
+            /// <param name="context">
+            /// Shared object to correlate events through
+            /// </param>
+            /// <param name="thisArg">
+            /// The receiver to be used for the function call
+            /// </param>
+            /// <param name="args">
+            /// Optional arguments to pass to the function
+            /// </param>
+            /// <returns>
+            /// The return value of the given function
+            /// </returns>
+            abstract member traceSync<'A, 'B, 'C>: fn: ('A -> 'B -> 'C -> unit) * context: 'ContextType * thisArg: obj * [<ParamArray>] args: obj [] -> obj
+            /// <summary>
+            /// Trace a synchronous function call. This will always produce a <c>start event</c> and <c>end event</c> around the execution and may produce an <c>error event</c> if the given function throws an error.
+            /// This will run the given function using <c>channel.runStores(context, ...)</c> on the <c>start</c> channel which ensures all
+            /// events should have any bound stores set to match this trace context.
+            ///
+            /// To ensure only correct trace graphs are formed, events will only be published if subscribers are present prior to starting the trace. Subscriptions
+            /// which are added after the trace begins will not receive future events from that trace, only future traces will be seen.
+            ///
+            /// <code lang="js">
+            /// import diagnostics_channel from 'node:diagnostics_channel';
+            ///
+            /// const channels = diagnostics_channel.tracingChannel('my-channel');
+            ///
+            /// channels.traceSync(() => {
+            ///   // Do something
+            /// }, {
+            ///   some: 'thing',
+            /// });
+            /// </code>
+            /// </summary>
+            /// <param name="fn">
+            /// Function to wrap a trace around
+            /// </param>
+            /// <param name="context">
+            /// Shared object to correlate events through
+            /// </param>
+            /// <param name="thisArg">
+            /// The receiver to be used for the function call
+            /// </param>
+            /// <param name="args">
+            /// Optional arguments to pass to the function
+            /// </param>
+            /// <returns>
+            /// The return value of the given function
+            /// </returns>
             abstract member traceSync: fn: System.Delegate * context: 'ContextType * thisArg: obj * [<ParamArray>] args: obj [] -> obj
             /// <summary>
             /// Trace a promise-returning function call. This will always produce a <c>start event</c> and <c>end event</c> around the synchronous portion of the
@@ -41433,6 +44637,213 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// The return value of the given function
             /// </returns>
             abstract member traceCallback<'ThisArg, 'Args, 'Result>: fn: System.Delegate * position: float * context: 'ContextType * thisArg: 'ThisArg * [<ParamArray>] args: 'Args [] -> 'Result
+            /// <summary>
+            /// Trace a callback-receiving function call. This will always produce a <c>start event</c> and <c>end event</c> around the synchronous portion of the
+            /// function execution, and will produce a <c>asyncStart event</c> and <c>asyncEnd event</c> around the callback execution. It may also produce an <c>error event</c> if the given function throws an error or
+            /// the returned
+            /// promise rejects. This will run the given function using <c>channel.runStores(context, ...)</c> on the <c>start</c> channel which ensures all
+            /// events should have any bound stores set to match this trace context.
+            ///
+            /// The <c>position</c> will be -1 by default to indicate the final argument should
+            /// be used as the callback.
+            ///
+            /// <code lang="js">
+            /// import diagnostics_channel from 'node:diagnostics_channel';
+            ///
+            /// const channels = diagnostics_channel.tracingChannel('my-channel');
+            ///
+            /// channels.traceCallback((arg1, callback) => {
+            ///   // Do something
+            ///   callback(null, 'result');
+            /// }, 1, {
+            ///   some: 'thing',
+            /// }, thisArg, arg1, callback);
+            /// </code>
+            ///
+            /// The callback will also be run with <c>channel.runStores(context, ...)</c> which
+            /// enables context loss recovery in some cases.
+            ///
+            /// To ensure only correct trace graphs are formed, events will only be published if subscribers are present prior to starting the trace. Subscriptions
+            /// which are added after the trace begins will not receive future events from that trace, only future traces will be seen.
+            ///
+            /// <code lang="js">
+            /// import diagnostics_channel from 'node:diagnostics_channel';
+            /// import { AsyncLocalStorage } from 'node:async_hooks';
+            ///
+            /// const channels = diagnostics_channel.tracingChannel('my-channel');
+            /// const myStore = new AsyncLocalStorage();
+            ///
+            /// // The start channel sets the initial store data to something
+            /// // and stores that store data value on the trace context object
+            /// channels.start.bindStore(myStore, (data) => {
+            ///   const span = new Span(data);
+            ///   data.span = span;
+            ///   return span;
+            /// });
+            ///
+            /// // Then asyncStart can restore from that data it stored previously
+            /// channels.asyncStart.bindStore(myStore, (data) => {
+            ///   return data.span;
+            /// });
+            /// </code>
+            /// </summary>
+            /// <param name="fn">
+            /// callback using function to wrap a trace around
+            /// </param>
+            /// <param name="position">
+            /// Zero-indexed argument position of expected callback
+            /// </param>
+            /// <param name="context">
+            /// Shared object to correlate trace events through
+            /// </param>
+            /// <param name="thisArg">
+            /// The receiver to be used for the function call
+            /// </param>
+            /// <param name="args">
+            /// Optional arguments to pass to the function
+            /// </param>
+            /// <returns>
+            /// The return value of the given function
+            /// </returns>
+            abstract member traceCallback<'A>: fn: ('A -> unit) * position: float * context: 'ContextType * thisArg: obj * [<ParamArray>] args: obj [] -> obj
+            /// <summary>
+            /// Trace a callback-receiving function call. This will always produce a <c>start event</c> and <c>end event</c> around the synchronous portion of the
+            /// function execution, and will produce a <c>asyncStart event</c> and <c>asyncEnd event</c> around the callback execution. It may also produce an <c>error event</c> if the given function throws an error or
+            /// the returned
+            /// promise rejects. This will run the given function using <c>channel.runStores(context, ...)</c> on the <c>start</c> channel which ensures all
+            /// events should have any bound stores set to match this trace context.
+            ///
+            /// The <c>position</c> will be -1 by default to indicate the final argument should
+            /// be used as the callback.
+            ///
+            /// <code lang="js">
+            /// import diagnostics_channel from 'node:diagnostics_channel';
+            ///
+            /// const channels = diagnostics_channel.tracingChannel('my-channel');
+            ///
+            /// channels.traceCallback((arg1, callback) => {
+            ///   // Do something
+            ///   callback(null, 'result');
+            /// }, 1, {
+            ///   some: 'thing',
+            /// }, thisArg, arg1, callback);
+            /// </code>
+            ///
+            /// The callback will also be run with <c>channel.runStores(context, ...)</c> which
+            /// enables context loss recovery in some cases.
+            ///
+            /// To ensure only correct trace graphs are formed, events will only be published if subscribers are present prior to starting the trace. Subscriptions
+            /// which are added after the trace begins will not receive future events from that trace, only future traces will be seen.
+            ///
+            /// <code lang="js">
+            /// import diagnostics_channel from 'node:diagnostics_channel';
+            /// import { AsyncLocalStorage } from 'node:async_hooks';
+            ///
+            /// const channels = diagnostics_channel.tracingChannel('my-channel');
+            /// const myStore = new AsyncLocalStorage();
+            ///
+            /// // The start channel sets the initial store data to something
+            /// // and stores that store data value on the trace context object
+            /// channels.start.bindStore(myStore, (data) => {
+            ///   const span = new Span(data);
+            ///   data.span = span;
+            ///   return span;
+            /// });
+            ///
+            /// // Then asyncStart can restore from that data it stored previously
+            /// channels.asyncStart.bindStore(myStore, (data) => {
+            ///   return data.span;
+            /// });
+            /// </code>
+            /// </summary>
+            /// <param name="fn">
+            /// callback using function to wrap a trace around
+            /// </param>
+            /// <param name="position">
+            /// Zero-indexed argument position of expected callback
+            /// </param>
+            /// <param name="context">
+            /// Shared object to correlate trace events through
+            /// </param>
+            /// <param name="thisArg">
+            /// The receiver to be used for the function call
+            /// </param>
+            /// <param name="args">
+            /// Optional arguments to pass to the function
+            /// </param>
+            /// <returns>
+            /// The return value of the given function
+            /// </returns>
+            abstract member traceCallback<'A, 'B>: fn: ('A -> 'B -> unit) * position: float * context: 'ContextType * thisArg: obj * [<ParamArray>] args: obj [] -> obj
+            /// <summary>
+            /// Trace a callback-receiving function call. This will always produce a <c>start event</c> and <c>end event</c> around the synchronous portion of the
+            /// function execution, and will produce a <c>asyncStart event</c> and <c>asyncEnd event</c> around the callback execution. It may also produce an <c>error event</c> if the given function throws an error or
+            /// the returned
+            /// promise rejects. This will run the given function using <c>channel.runStores(context, ...)</c> on the <c>start</c> channel which ensures all
+            /// events should have any bound stores set to match this trace context.
+            ///
+            /// The <c>position</c> will be -1 by default to indicate the final argument should
+            /// be used as the callback.
+            ///
+            /// <code lang="js">
+            /// import diagnostics_channel from 'node:diagnostics_channel';
+            ///
+            /// const channels = diagnostics_channel.tracingChannel('my-channel');
+            ///
+            /// channels.traceCallback((arg1, callback) => {
+            ///   // Do something
+            ///   callback(null, 'result');
+            /// }, 1, {
+            ///   some: 'thing',
+            /// }, thisArg, arg1, callback);
+            /// </code>
+            ///
+            /// The callback will also be run with <c>channel.runStores(context, ...)</c> which
+            /// enables context loss recovery in some cases.
+            ///
+            /// To ensure only correct trace graphs are formed, events will only be published if subscribers are present prior to starting the trace. Subscriptions
+            /// which are added after the trace begins will not receive future events from that trace, only future traces will be seen.
+            ///
+            /// <code lang="js">
+            /// import diagnostics_channel from 'node:diagnostics_channel';
+            /// import { AsyncLocalStorage } from 'node:async_hooks';
+            ///
+            /// const channels = diagnostics_channel.tracingChannel('my-channel');
+            /// const myStore = new AsyncLocalStorage();
+            ///
+            /// // The start channel sets the initial store data to something
+            /// // and stores that store data value on the trace context object
+            /// channels.start.bindStore(myStore, (data) => {
+            ///   const span = new Span(data);
+            ///   data.span = span;
+            ///   return span;
+            /// });
+            ///
+            /// // Then asyncStart can restore from that data it stored previously
+            /// channels.asyncStart.bindStore(myStore, (data) => {
+            ///   return data.span;
+            /// });
+            /// </code>
+            /// </summary>
+            /// <param name="fn">
+            /// callback using function to wrap a trace around
+            /// </param>
+            /// <param name="position">
+            /// Zero-indexed argument position of expected callback
+            /// </param>
+            /// <param name="context">
+            /// Shared object to correlate trace events through
+            /// </param>
+            /// <param name="thisArg">
+            /// The receiver to be used for the function call
+            /// </param>
+            /// <param name="args">
+            /// Optional arguments to pass to the function
+            /// </param>
+            /// <returns>
+            /// The return value of the given function
+            /// </returns>
+            abstract member traceCallback<'A, 'B, 'C>: fn: ('A -> 'B -> 'C -> unit) * position: float * context: 'ContextType * thisArg: obj * [<ParamArray>] args: obj [] -> obj
             /// <summary>
             /// Trace a callback-receiving function call. This will always produce a <c>start event</c> and <c>end event</c> around the synchronous portion of the
             /// function execution, and will produce a <c>asyncStart event</c> and <c>asyncEnd event</c> around the callback execution. It may also produce an <c>error event</c> if the given function throws an error or
@@ -59067,6 +62478,27 @@ EventEmitter.defaultMaxListeners = $0"""
             ///   2. close
             ///   3. error
             /// </summary>
+            abstract member addListener<'A>: event: string * listener: ('A -> unit) -> FSWatcher
+            /// <summary>
+            /// events.EventEmitter
+            ///   1. change
+            ///   2. close
+            ///   3. error
+            /// </summary>
+            abstract member addListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> FSWatcher
+            /// <summary>
+            /// events.EventEmitter
+            ///   1. change
+            ///   2. close
+            ///   3. error
+            /// </summary>
+            abstract member addListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> FSWatcher
+            /// <summary>
+            /// events.EventEmitter
+            ///   1. change
+            ///   2. close
+            ///   3. error
+            /// </summary>
             abstract member addListener: event: string * listener: System.Delegate -> FSWatcher
             /// <summary>
             /// events.EventEmitter
@@ -59092,6 +62524,93 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </summary>
             [<Emit("$0.addListener('error',$1...)")>]
             abstract member addListener_error: listener: (Exception -> unit) -> FSWatcher
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A>: event: string * listener: ('A -> unit) -> FSWatcher
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> FSWatcher
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> FSWatcher
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
             /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
@@ -59237,6 +62756,87 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
+            abstract member once<'A>: event: string * listener: ('A -> unit) -> FSWatcher
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> FSWatcher
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> FSWatcher
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member once: event: string * listener: System.Delegate -> FSWatcher
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
@@ -59336,6 +62936,51 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
+            abstract member prependListener<'A>: event: string * listener: ('A -> unit) -> FSWatcher
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> FSWatcher
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> FSWatcher
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
             abstract member prependListener: event: string * listener: System.Delegate -> FSWatcher
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
@@ -59385,6 +63030,45 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </summary>
             [<Emit("$0.prependListener('error',$1...)")>]
             abstract member prependListener_error: listener: (Exception -> unit) -> FSWatcher
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A>: event: string * listener: ('A -> unit) -> FSWatcher
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> FSWatcher
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> FSWatcher
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -73941,6 +77625,33 @@ EventEmitter.defaultMaxListeners = $0"""
             ///   4. listening
             ///   5. drop
             /// </summary>
+            abstract member addListener<'A>: event: string * listener: ('A -> unit) -> Server<'Request, 'Response>
+            /// <summary>
+            /// events.EventEmitter
+            ///   1. close
+            ///   2. connection
+            ///   3. error
+            ///   4. listening
+            ///   5. drop
+            /// </summary>
+            abstract member addListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Server<'Request, 'Response>
+            /// <summary>
+            /// events.EventEmitter
+            ///   1. close
+            ///   2. connection
+            ///   3. error
+            ///   4. listening
+            ///   5. drop
+            /// </summary>
+            abstract member addListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Server<'Request, 'Response>
+            /// <summary>
+            /// events.EventEmitter
+            ///   1. close
+            ///   2. connection
+            ///   3. error
+            ///   4. listening
+            ///   5. drop
+            /// </summary>
             abstract member addListener: event: string * listener: System.Delegate -> Server<'Request, 'Response>
             /// <summary>
             /// events.EventEmitter
@@ -74571,6 +78282,93 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
+            abstract member on<'A>: event: string * listener: ('A -> unit) -> Server<'Request, 'Response>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Server<'Request, 'Response>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Server<'Request, 'Response>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member on: event: string * listener: System.Delegate -> Server<'Request, 'Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
@@ -74928,6 +78726,87 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
+            abstract member once<'A>: event: string * listener: ('A -> unit) -> Server<'Request, 'Response>
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Server<'Request, 'Response>
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Server<'Request, 'Response>
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member once: event: string * listener: System.Delegate -> Server<'Request, 'Response>
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
@@ -75251,6 +79130,51 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
+            abstract member prependListener<'A>: event: string * listener: ('A -> unit) -> Server<'Request, 'Response>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Server<'Request, 'Response>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Server<'Request, 'Response>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
             abstract member prependListener: event: string * listener: System.Delegate -> Server<'Request, 'Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
@@ -75428,6 +79352,45 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </summary>
             [<Emit("$0.prependListener('upgrade',$1...)")>]
             abstract member prependListener_upgrade: listener: Server.prependListener_upgrade.listener -> Server<'Request, 'Response>
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A>: event: string * listener: ('A -> unit) -> Server<'Request, 'Response>
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Server<'Request, 'Response>
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Server<'Request, 'Response>
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -76561,7 +80524,73 @@ EventEmitter.defaultMaxListeners = $0"""
             /// 5. pipe
             /// 6. unpipe
             /// </summary>
+            abstract member addListener<'A>: event: string * listener: ('A -> unit) -> ClientRequest
+            /// <summary>
+            /// Event emitter
+            /// The defined events on documents including:
+            /// 1. close
+            /// 2. drain
+            /// 3. error
+            /// 4. finish
+            /// 5. pipe
+            /// 6. unpipe
+            /// </summary>
+            abstract member addListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> ClientRequest
+            /// <summary>
+            /// Event emitter
+            /// The defined events on documents including:
+            /// 1. close
+            /// 2. drain
+            /// 3. error
+            /// 4. finish
+            /// 5. pipe
+            /// 6. unpipe
+            /// </summary>
+            abstract member addListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> ClientRequest
+            /// <summary>
+            /// Event emitter
+            /// The defined events on documents including:
+            /// 1. close
+            /// 2. drain
+            /// 3. error
+            /// 4. finish
+            /// 5. pipe
+            /// 6. unpipe
+            /// </summary>
             abstract member addListener: event: string * listener: System.Delegate -> ClientRequest
+            /// <summary>
+            /// Event emitter
+            /// The defined events on documents including:
+            /// 1. close
+            /// 2. drain
+            /// 3. error
+            /// 4. finish
+            /// 5. pipe
+            /// 6. unpipe
+            /// </summary>
+            abstract member addListener<'A>: event: obj * listener: ('A -> unit) -> ClientRequest
+            /// <summary>
+            /// Event emitter
+            /// The defined events on documents including:
+            /// 1. close
+            /// 2. drain
+            /// 3. error
+            /// 4. finish
+            /// 5. pipe
+            /// 6. unpipe
+            /// </summary>
+            abstract member addListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> ClientRequest
+            /// <summary>
+            /// Event emitter
+            /// The defined events on documents including:
+            /// 1. close
+            /// 2. drain
+            /// 3. error
+            /// 4. finish
+            /// 5. pipe
+            /// 6. unpipe
+            /// </summary>
+            abstract member addListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> ClientRequest
             /// <summary>
             /// Event emitter
             /// The defined events on documents including:
@@ -77021,7 +81050,181 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
+            abstract member on<'A>: event: string * listener: ('A -> unit) -> ClientRequest
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> ClientRequest
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> ClientRequest
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member on: event: string * listener: System.Delegate -> ClientRequest
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A>: event: obj * listener: ('A -> unit) -> ClientRequest
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> ClientRequest
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> ClientRequest
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
             /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
@@ -77469,7 +81672,169 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
+            abstract member once<'A>: event: string * listener: ('A -> unit) -> ClientRequest
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> ClientRequest
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> ClientRequest
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member once: event: string * listener: System.Delegate -> ClientRequest
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A>: event: obj * listener: ('A -> unit) -> ClientRequest
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> ClientRequest
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> ClientRequest
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -77735,7 +82100,97 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
+            abstract member prependListener<'A>: event: string * listener: ('A -> unit) -> ClientRequest
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> ClientRequest
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> ClientRequest
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
             abstract member prependListener: event: string * listener: System.Delegate -> ClientRequest
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A>: event: obj * listener: ('A -> unit) -> ClientRequest
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> ClientRequest
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> ClientRequest
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
             /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
@@ -77959,7 +82414,85 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
+            abstract member prependOnceListener<'A>: event: string * listener: ('A -> unit) -> ClientRequest
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> ClientRequest
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> ClientRequest
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
             abstract member prependOnceListener: event: string * listener: System.Delegate -> ClientRequest
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A>: event: obj * listener: ('A -> unit) -> ClientRequest
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> ClientRequest
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> ClientRequest
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -79265,7 +83798,103 @@ EventEmitter.defaultMaxListeners = $0"""
             /// 10. resume
             /// 11. unpipe
             /// </summary>
+            abstract member addListener<'A>: event: string * listener: ('A -> unit) -> Http2Stream
+            /// <summary>
+            /// Event emitter
+            /// The defined events on documents including:
+            /// 1.  close
+            /// 2.  data
+            /// 3.  drain
+            /// 4.  end
+            /// 5.  error
+            /// 6.  finish
+            /// 7.  pause
+            /// 8.  pipe
+            /// 9.  readable
+            /// 10. resume
+            /// 11. unpipe
+            /// </summary>
+            abstract member addListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Http2Stream
+            /// <summary>
+            /// Event emitter
+            /// The defined events on documents including:
+            /// 1.  close
+            /// 2.  data
+            /// 3.  drain
+            /// 4.  end
+            /// 5.  error
+            /// 6.  finish
+            /// 7.  pause
+            /// 8.  pipe
+            /// 9.  readable
+            /// 10. resume
+            /// 11. unpipe
+            /// </summary>
+            abstract member addListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Http2Stream
+            /// <summary>
+            /// Event emitter
+            /// The defined events on documents including:
+            /// 1.  close
+            /// 2.  data
+            /// 3.  drain
+            /// 4.  end
+            /// 5.  error
+            /// 6.  finish
+            /// 7.  pause
+            /// 8.  pipe
+            /// 9.  readable
+            /// 10. resume
+            /// 11. unpipe
+            /// </summary>
             abstract member addListener: event: string * listener: System.Delegate -> Http2Stream
+            /// <summary>
+            /// Event emitter
+            /// The defined events on documents including:
+            /// 1.  close
+            /// 2.  data
+            /// 3.  drain
+            /// 4.  end
+            /// 5.  error
+            /// 6.  finish
+            /// 7.  pause
+            /// 8.  pipe
+            /// 9.  readable
+            /// 10. resume
+            /// 11. unpipe
+            /// </summary>
+            abstract member addListener<'A>: event: obj * listener: ('A -> unit) -> Http2Stream
+            /// <summary>
+            /// Event emitter
+            /// The defined events on documents including:
+            /// 1.  close
+            /// 2.  data
+            /// 3.  drain
+            /// 4.  end
+            /// 5.  error
+            /// 6.  finish
+            /// 7.  pause
+            /// 8.  pipe
+            /// 9.  readable
+            /// 10. resume
+            /// 11. unpipe
+            /// </summary>
+            abstract member addListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Http2Stream
+            /// <summary>
+            /// Event emitter
+            /// The defined events on documents including:
+            /// 1.  close
+            /// 2.  data
+            /// 3.  drain
+            /// 4.  end
+            /// 5.  error
+            /// 6.  finish
+            /// 7.  pause
+            /// 8.  pipe
+            /// 9.  readable
+            /// 10. resume
+            /// 11. unpipe
+            /// </summary>
+            abstract member addListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Http2Stream
             /// <summary>
             /// Event emitter
             /// The defined events on documents including:
@@ -80425,7 +85054,181 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
+            abstract member on<'A>: event: string * listener: ('A -> unit) -> Http2Stream
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Http2Stream
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Http2Stream
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member on: event: string * listener: System.Delegate -> Http2Stream
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A>: event: obj * listener: ('A -> unit) -> Http2Stream
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Http2Stream
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Http2Stream
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
             /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
@@ -80873,7 +85676,169 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
+            abstract member once<'A>: event: string * listener: ('A -> unit) -> Http2Stream
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Http2Stream
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Http2Stream
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member once: event: string * listener: System.Delegate -> Http2Stream
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A>: event: obj * listener: ('A -> unit) -> Http2Stream
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Http2Stream
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Http2Stream
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -81139,7 +86104,97 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
+            abstract member prependListener<'A>: event: string * listener: ('A -> unit) -> Http2Stream
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Http2Stream
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Http2Stream
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
             abstract member prependListener: event: string * listener: System.Delegate -> Http2Stream
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A>: event: obj * listener: ('A -> unit) -> Http2Stream
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Http2Stream
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Http2Stream
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
             /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
@@ -81363,7 +86418,85 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
+            abstract member prependOnceListener<'A>: event: string * listener: ('A -> unit) -> Http2Stream
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Http2Stream
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Http2Stream
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
             abstract member prependOnceListener: event: string * listener: System.Delegate -> Http2Stream
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A>: event: obj * listener: ('A -> unit) -> Http2Stream
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Http2Stream
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Http2Stream
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -81465,7 +86598,103 @@ EventEmitter.defaultMaxListeners = $0"""
             /// 10. resume
             /// 11. unpipe
             /// </summary>
+            abstract member addListener<'A>: event: string * listener: ('A -> unit) -> ClientHttp2Stream
+            /// <summary>
+            /// Event emitter
+            /// The defined events on documents including:
+            /// 1.  close
+            /// 2.  data
+            /// 3.  drain
+            /// 4.  end
+            /// 5.  error
+            /// 6.  finish
+            /// 7.  pause
+            /// 8.  pipe
+            /// 9.  readable
+            /// 10. resume
+            /// 11. unpipe
+            /// </summary>
+            abstract member addListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> ClientHttp2Stream
+            /// <summary>
+            /// Event emitter
+            /// The defined events on documents including:
+            /// 1.  close
+            /// 2.  data
+            /// 3.  drain
+            /// 4.  end
+            /// 5.  error
+            /// 6.  finish
+            /// 7.  pause
+            /// 8.  pipe
+            /// 9.  readable
+            /// 10. resume
+            /// 11. unpipe
+            /// </summary>
+            abstract member addListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> ClientHttp2Stream
+            /// <summary>
+            /// Event emitter
+            /// The defined events on documents including:
+            /// 1.  close
+            /// 2.  data
+            /// 3.  drain
+            /// 4.  end
+            /// 5.  error
+            /// 6.  finish
+            /// 7.  pause
+            /// 8.  pipe
+            /// 9.  readable
+            /// 10. resume
+            /// 11. unpipe
+            /// </summary>
             abstract member addListener: event: string * listener: System.Delegate -> ClientHttp2Stream
+            /// <summary>
+            /// Event emitter
+            /// The defined events on documents including:
+            /// 1.  close
+            /// 2.  data
+            /// 3.  drain
+            /// 4.  end
+            /// 5.  error
+            /// 6.  finish
+            /// 7.  pause
+            /// 8.  pipe
+            /// 9.  readable
+            /// 10. resume
+            /// 11. unpipe
+            /// </summary>
+            abstract member addListener<'A>: event: obj * listener: ('A -> unit) -> ClientHttp2Stream
+            /// <summary>
+            /// Event emitter
+            /// The defined events on documents including:
+            /// 1.  close
+            /// 2.  data
+            /// 3.  drain
+            /// 4.  end
+            /// 5.  error
+            /// 6.  finish
+            /// 7.  pause
+            /// 8.  pipe
+            /// 9.  readable
+            /// 10. resume
+            /// 11. unpipe
+            /// </summary>
+            abstract member addListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> ClientHttp2Stream
+            /// <summary>
+            /// Event emitter
+            /// The defined events on documents including:
+            /// 1.  close
+            /// 2.  data
+            /// 3.  drain
+            /// 4.  end
+            /// 5.  error
+            /// 6.  finish
+            /// 7.  pause
+            /// 8.  pipe
+            /// 9.  readable
+            /// 10. resume
+            /// 11. unpipe
+            /// </summary>
+            abstract member addListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> ClientHttp2Stream
             /// <summary>
             /// Event emitter
             /// The defined events on documents including:
@@ -81874,7 +87103,181 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
+            abstract member on<'A>: event: string * listener: ('A -> unit) -> ClientHttp2Stream
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> ClientHttp2Stream
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> ClientHttp2Stream
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member on: event: string * listener: System.Delegate -> ClientHttp2Stream
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A>: event: obj * listener: ('A -> unit) -> ClientHttp2Stream
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> ClientHttp2Stream
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> ClientHttp2Stream
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
             /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
@@ -82042,7 +87445,169 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
+            abstract member once<'A>: event: string * listener: ('A -> unit) -> ClientHttp2Stream
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> ClientHttp2Stream
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> ClientHttp2Stream
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member once: event: string * listener: System.Delegate -> ClientHttp2Stream
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A>: event: obj * listener: ('A -> unit) -> ClientHttp2Stream
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> ClientHttp2Stream
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> ClientHttp2Stream
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -82148,7 +87713,97 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
+            abstract member prependListener<'A>: event: string * listener: ('A -> unit) -> ClientHttp2Stream
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> ClientHttp2Stream
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> ClientHttp2Stream
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
             abstract member prependListener: event: string * listener: System.Delegate -> ClientHttp2Stream
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A>: event: obj * listener: ('A -> unit) -> ClientHttp2Stream
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> ClientHttp2Stream
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> ClientHttp2Stream
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
             /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
@@ -82232,7 +87887,85 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
+            abstract member prependOnceListener<'A>: event: string * listener: ('A -> unit) -> ClientHttp2Stream
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> ClientHttp2Stream
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> ClientHttp2Stream
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
             abstract member prependOnceListener: event: string * listener: System.Delegate -> ClientHttp2Stream
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A>: event: obj * listener: ('A -> unit) -> ClientHttp2Stream
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> ClientHttp2Stream
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> ClientHttp2Stream
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -82969,7 +88702,31 @@ EventEmitter.defaultMaxListeners = $0"""
             /// <summary>
             /// Alias for <c>emitter.on(eventName, listener)</c>.
             /// </summary>
+            abstract member addListener<'A>: event: string * listener: ('A -> unit) -> Http2Session
+            /// <summary>
+            /// Alias for <c>emitter.on(eventName, listener)</c>.
+            /// </summary>
+            abstract member addListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Http2Session
+            /// <summary>
+            /// Alias for <c>emitter.on(eventName, listener)</c>.
+            /// </summary>
+            abstract member addListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Http2Session
+            /// <summary>
+            /// Alias for <c>emitter.on(eventName, listener)</c>.
+            /// </summary>
             abstract member addListener: event: string * listener: System.Delegate -> Http2Session
+            /// <summary>
+            /// Alias for <c>emitter.on(eventName, listener)</c>.
+            /// </summary>
+            abstract member addListener<'A>: event: obj * listener: ('A -> unit) -> Http2Session
+            /// <summary>
+            /// Alias for <c>emitter.on(eventName, listener)</c>.
+            /// </summary>
+            abstract member addListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Http2Session
+            /// <summary>
+            /// Alias for <c>emitter.on(eventName, listener)</c>.
+            /// </summary>
+            abstract member addListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Http2Session
             /// <summary>
             /// Alias for <c>emitter.on(eventName, listener)</c>.
             /// </summary>
@@ -83650,7 +89407,181 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
+            abstract member on<'A>: event: string * listener: ('A -> unit) -> Http2Session
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Http2Session
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Http2Session
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member on: event: string * listener: System.Delegate -> Http2Session
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A>: event: obj * listener: ('A -> unit) -> Http2Session
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Http2Session
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Http2Session
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
             /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
@@ -83930,7 +89861,169 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
+            abstract member once<'A>: event: string * listener: ('A -> unit) -> Http2Session
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Http2Session
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Http2Session
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member once: event: string * listener: System.Delegate -> Http2Session
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A>: event: obj * listener: ('A -> unit) -> Http2Session
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Http2Session
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Http2Session
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -84100,7 +90193,97 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
+            abstract member prependListener<'A>: event: string * listener: ('A -> unit) -> Http2Session
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Http2Session
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Http2Session
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
             abstract member prependListener: event: string * listener: System.Delegate -> Http2Session
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A>: event: obj * listener: ('A -> unit) -> Http2Session
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Http2Session
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Http2Session
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
             /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
@@ -84240,7 +90423,85 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
+            abstract member prependOnceListener<'A>: event: string * listener: ('A -> unit) -> Http2Session
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Http2Session
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Http2Session
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
             abstract member prependOnceListener: event: string * listener: System.Delegate -> Http2Session
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A>: event: obj * listener: ('A -> unit) -> Http2Session
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Http2Session
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Http2Session
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -84417,7 +90678,31 @@ EventEmitter.defaultMaxListeners = $0"""
             /// <summary>
             /// Alias for <c>emitter.on(eventName, listener)</c>.
             /// </summary>
+            abstract member addListener<'A>: event: string * listener: ('A -> unit) -> ClientHttp2Session
+            /// <summary>
+            /// Alias for <c>emitter.on(eventName, listener)</c>.
+            /// </summary>
+            abstract member addListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> ClientHttp2Session
+            /// <summary>
+            /// Alias for <c>emitter.on(eventName, listener)</c>.
+            /// </summary>
+            abstract member addListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> ClientHttp2Session
+            /// <summary>
+            /// Alias for <c>emitter.on(eventName, listener)</c>.
+            /// </summary>
             abstract member addListener: event: string * listener: System.Delegate -> ClientHttp2Session
+            /// <summary>
+            /// Alias for <c>emitter.on(eventName, listener)</c>.
+            /// </summary>
+            abstract member addListener<'A>: event: obj * listener: ('A -> unit) -> ClientHttp2Session
+            /// <summary>
+            /// Alias for <c>emitter.on(eventName, listener)</c>.
+            /// </summary>
+            abstract member addListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> ClientHttp2Session
+            /// <summary>
+            /// Alias for <c>emitter.on(eventName, listener)</c>.
+            /// </summary>
+            abstract member addListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> ClientHttp2Session
             /// <summary>
             /// Alias for <c>emitter.on(eventName, listener)</c>.
             /// </summary>
@@ -84855,7 +91140,181 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
+            abstract member on<'A>: event: string * listener: ('A -> unit) -> ClientHttp2Session
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> ClientHttp2Session
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> ClientHttp2Session
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member on: event: string * listener: System.Delegate -> ClientHttp2Session
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A>: event: obj * listener: ('A -> unit) -> ClientHttp2Session
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> ClientHttp2Session
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> ClientHttp2Session
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
             /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
@@ -85023,7 +91482,169 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
+            abstract member once<'A>: event: string * listener: ('A -> unit) -> ClientHttp2Session
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> ClientHttp2Session
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> ClientHttp2Session
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member once: event: string * listener: System.Delegate -> ClientHttp2Session
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A>: event: obj * listener: ('A -> unit) -> ClientHttp2Session
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> ClientHttp2Session
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> ClientHttp2Session
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -85129,7 +91750,97 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
+            abstract member prependListener<'A>: event: string * listener: ('A -> unit) -> ClientHttp2Session
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> ClientHttp2Session
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> ClientHttp2Session
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
             abstract member prependListener: event: string * listener: System.Delegate -> ClientHttp2Session
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A>: event: obj * listener: ('A -> unit) -> ClientHttp2Session
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> ClientHttp2Session
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> ClientHttp2Session
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
             /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
@@ -85213,7 +91924,85 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
+            abstract member prependOnceListener<'A>: event: string * listener: ('A -> unit) -> ClientHttp2Session
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> ClientHttp2Session
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> ClientHttp2Session
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
             abstract member prependOnceListener: event: string * listener: System.Delegate -> ClientHttp2Session
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A>: event: obj * listener: ('A -> unit) -> ClientHttp2Session
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> ClientHttp2Session
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> ClientHttp2Session
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -85479,7 +92268,31 @@ EventEmitter.defaultMaxListeners = $0"""
             /// <summary>
             /// Alias for <c>emitter.on(eventName, listener)</c>.
             /// </summary>
+            abstract member addListener<'A>: event: string * listener: ('A -> unit) -> ServerHttp2Session<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Alias for <c>emitter.on(eventName, listener)</c>.
+            /// </summary>
+            abstract member addListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> ServerHttp2Session<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Alias for <c>emitter.on(eventName, listener)</c>.
+            /// </summary>
+            abstract member addListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> ServerHttp2Session<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Alias for <c>emitter.on(eventName, listener)</c>.
+            /// </summary>
             abstract member addListener: event: string * listener: System.Delegate -> ServerHttp2Session<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Alias for <c>emitter.on(eventName, listener)</c>.
+            /// </summary>
+            abstract member addListener<'A>: event: obj * listener: ('A -> unit) -> ServerHttp2Session<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Alias for <c>emitter.on(eventName, listener)</c>.
+            /// </summary>
+            abstract member addListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> ServerHttp2Session<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Alias for <c>emitter.on(eventName, listener)</c>.
+            /// </summary>
+            abstract member addListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> ServerHttp2Session<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
             /// <summary>
             /// Alias for <c>emitter.on(eventName, listener)</c>.
             /// </summary>
@@ -85775,7 +92588,181 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
+            abstract member on<'A>: event: string * listener: ('A -> unit) -> ServerHttp2Session<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> ServerHttp2Session<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> ServerHttp2Session<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member on: event: string * listener: System.Delegate -> ServerHttp2Session<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A>: event: obj * listener: ('A -> unit) -> ServerHttp2Session<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> ServerHttp2Session<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> ServerHttp2Session<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
             /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
@@ -85887,7 +92874,169 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
+            abstract member once<'A>: event: string * listener: ('A -> unit) -> ServerHttp2Session<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> ServerHttp2Session<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> ServerHttp2Session<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member once: event: string * listener: System.Delegate -> ServerHttp2Session<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A>: event: obj * listener: ('A -> unit) -> ServerHttp2Session<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> ServerHttp2Session<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> ServerHttp2Session<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -85961,7 +93110,97 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
+            abstract member prependListener<'A>: event: string * listener: ('A -> unit) -> ServerHttp2Session<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> ServerHttp2Session<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> ServerHttp2Session<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
             abstract member prependListener: event: string * listener: System.Delegate -> ServerHttp2Session<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A>: event: obj * listener: ('A -> unit) -> ServerHttp2Session<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> ServerHttp2Session<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> ServerHttp2Session<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
             /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
@@ -86017,7 +93256,85 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
+            abstract member prependOnceListener<'A>: event: string * listener: ('A -> unit) -> ServerHttp2Session<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> ServerHttp2Session<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> ServerHttp2Session<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
             abstract member prependOnceListener: event: string * listener: System.Delegate -> ServerHttp2Session<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A>: event: obj * listener: ('A -> unit) -> ServerHttp2Session<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> ServerHttp2Session<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> ServerHttp2Session<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -86622,7 +93939,61 @@ EventEmitter.defaultMaxListeners = $0"""
             ///   4. listening
             ///   5. drop
             /// </summary>
+            abstract member addListener<'A>: event: string * listener: ('A -> unit) -> Http2Server<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// events.EventEmitter
+            ///   1. close
+            ///   2. connection
+            ///   3. error
+            ///   4. listening
+            ///   5. drop
+            /// </summary>
+            abstract member addListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Http2Server<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// events.EventEmitter
+            ///   1. close
+            ///   2. connection
+            ///   3. error
+            ///   4. listening
+            ///   5. drop
+            /// </summary>
+            abstract member addListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Http2Server<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// events.EventEmitter
+            ///   1. close
+            ///   2. connection
+            ///   3. error
+            ///   4. listening
+            ///   5. drop
+            /// </summary>
             abstract member addListener: event: string * listener: System.Delegate -> Http2Server<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// events.EventEmitter
+            ///   1. close
+            ///   2. connection
+            ///   3. error
+            ///   4. listening
+            ///   5. drop
+            /// </summary>
+            abstract member addListener<'A>: event: obj * listener: ('A -> unit) -> Http2Server<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// events.EventEmitter
+            ///   1. close
+            ///   2. connection
+            ///   3. error
+            ///   4. listening
+            ///   5. drop
+            /// </summary>
+            abstract member addListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Http2Server<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// events.EventEmitter
+            ///   1. close
+            ///   2. connection
+            ///   3. error
+            ///   4. listening
+            ///   5. drop
+            /// </summary>
+            abstract member addListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Http2Server<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
             /// <summary>
             /// events.EventEmitter
             ///   1. close
@@ -87166,7 +94537,181 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
+            abstract member on<'A>: event: string * listener: ('A -> unit) -> Http2Server<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Http2Server<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Http2Server<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member on: event: string * listener: System.Delegate -> Http2Server<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A>: event: obj * listener: ('A -> unit) -> Http2Server<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Http2Server<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Http2Server<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
             /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
@@ -87390,7 +94935,169 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
+            abstract member once<'A>: event: string * listener: ('A -> unit) -> Http2Server<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Http2Server<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Http2Server<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member once: event: string * listener: System.Delegate -> Http2Server<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A>: event: obj * listener: ('A -> unit) -> Http2Server<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Http2Server<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Http2Server<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -87528,7 +95235,97 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
+            abstract member prependListener<'A>: event: string * listener: ('A -> unit) -> Http2Server<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Http2Server<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Http2Server<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
             abstract member prependListener: event: string * listener: System.Delegate -> Http2Server<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A>: event: obj * listener: ('A -> unit) -> Http2Server<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Http2Server<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Http2Server<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
             /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
@@ -87640,7 +95437,85 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
+            abstract member prependOnceListener<'A>: event: string * listener: ('A -> unit) -> Http2Server<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Http2Server<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Http2Server<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
             abstract member prependOnceListener: event: string * listener: System.Delegate -> Http2Server<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A>: event: obj * listener: ('A -> unit) -> Http2Server<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Http2Server<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Http2Server<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -87746,7 +95621,67 @@ EventEmitter.defaultMaxListeners = $0"""
             /// 5. secureConnection
             /// 6. keylog
             /// </summary>
+            abstract member addListener<'A>: event: string * listener: ('A -> unit) -> Http2SecureServer<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// events.EventEmitter
+            /// 1. tlsClientError
+            /// 2. newSession
+            /// 3. OCSPRequest
+            /// 4. resumeSession
+            /// 5. secureConnection
+            /// 6. keylog
+            /// </summary>
+            abstract member addListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Http2SecureServer<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// events.EventEmitter
+            /// 1. tlsClientError
+            /// 2. newSession
+            /// 3. OCSPRequest
+            /// 4. resumeSession
+            /// 5. secureConnection
+            /// 6. keylog
+            /// </summary>
+            abstract member addListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Http2SecureServer<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// events.EventEmitter
+            /// 1. tlsClientError
+            /// 2. newSession
+            /// 3. OCSPRequest
+            /// 4. resumeSession
+            /// 5. secureConnection
+            /// 6. keylog
+            /// </summary>
             abstract member addListener: event: string * listener: System.Delegate -> Http2SecureServer<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// events.EventEmitter
+            /// 1. tlsClientError
+            /// 2. newSession
+            /// 3. OCSPRequest
+            /// 4. resumeSession
+            /// 5. secureConnection
+            /// 6. keylog
+            /// </summary>
+            abstract member addListener<'A>: event: obj * listener: ('A -> unit) -> Http2SecureServer<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// events.EventEmitter
+            /// 1. tlsClientError
+            /// 2. newSession
+            /// 3. OCSPRequest
+            /// 4. resumeSession
+            /// 5. secureConnection
+            /// 6. keylog
+            /// </summary>
+            abstract member addListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Http2SecureServer<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// events.EventEmitter
+            /// 1. tlsClientError
+            /// 2. newSession
+            /// 3. OCSPRequest
+            /// 4. resumeSession
+            /// 5. secureConnection
+            /// 6. keylog
+            /// </summary>
+            abstract member addListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Http2SecureServer<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
             /// <summary>
             /// events.EventEmitter
             /// 1. tlsClientError
@@ -88362,7 +96297,181 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
+            abstract member on<'A>: event: string * listener: ('A -> unit) -> Http2SecureServer<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Http2SecureServer<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Http2SecureServer<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member on: event: string * listener: System.Delegate -> Http2SecureServer<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A>: event: obj * listener: ('A -> unit) -> Http2SecureServer<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Http2SecureServer<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Http2SecureServer<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
             /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
@@ -88614,7 +96723,169 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
+            abstract member once<'A>: event: string * listener: ('A -> unit) -> Http2SecureServer<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Http2SecureServer<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Http2SecureServer<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member once: event: string * listener: System.Delegate -> Http2SecureServer<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A>: event: obj * listener: ('A -> unit) -> Http2SecureServer<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Http2SecureServer<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Http2SecureServer<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -88768,7 +97039,97 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
+            abstract member prependListener<'A>: event: string * listener: ('A -> unit) -> Http2SecureServer<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Http2SecureServer<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Http2SecureServer<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
             abstract member prependListener: event: string * listener: System.Delegate -> Http2SecureServer<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A>: event: obj * listener: ('A -> unit) -> Http2SecureServer<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Http2SecureServer<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Http2SecureServer<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
             /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
@@ -88894,7 +97255,85 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
+            abstract member prependOnceListener<'A>: event: string * listener: ('A -> unit) -> Http2SecureServer<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Http2SecureServer<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Http2SecureServer<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
             abstract member prependOnceListener: event: string * listener: System.Delegate -> Http2SecureServer<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A>: event: obj * listener: ('A -> unit) -> Http2SecureServer<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Http2SecureServer<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Http2SecureServer<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -89252,7 +97691,79 @@ EventEmitter.defaultMaxListeners = $0"""
             /// 6. readable
             /// 7. resume
             /// </summary>
+            abstract member addListener<'A>: event: string * listener: ('A -> unit) -> Http2ServerRequest
+            /// <summary>
+            /// Event emitter
+            /// The defined events on documents including:
+            /// 1. close
+            /// 2. data
+            /// 3. end
+            /// 4. error
+            /// 5. pause
+            /// 6. readable
+            /// 7. resume
+            /// </summary>
+            abstract member addListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Http2ServerRequest
+            /// <summary>
+            /// Event emitter
+            /// The defined events on documents including:
+            /// 1. close
+            /// 2. data
+            /// 3. end
+            /// 4. error
+            /// 5. pause
+            /// 6. readable
+            /// 7. resume
+            /// </summary>
+            abstract member addListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Http2ServerRequest
+            /// <summary>
+            /// Event emitter
+            /// The defined events on documents including:
+            /// 1. close
+            /// 2. data
+            /// 3. end
+            /// 4. error
+            /// 5. pause
+            /// 6. readable
+            /// 7. resume
+            /// </summary>
             abstract member addListener: event: string * listener: System.Delegate -> Http2ServerRequest
+            /// <summary>
+            /// Event emitter
+            /// The defined events on documents including:
+            /// 1. close
+            /// 2. data
+            /// 3. end
+            /// 4. error
+            /// 5. pause
+            /// 6. readable
+            /// 7. resume
+            /// </summary>
+            abstract member addListener<'A>: event: obj * listener: ('A -> unit) -> Http2ServerRequest
+            /// <summary>
+            /// Event emitter
+            /// The defined events on documents including:
+            /// 1. close
+            /// 2. data
+            /// 3. end
+            /// 4. error
+            /// 5. pause
+            /// 6. readable
+            /// 7. resume
+            /// </summary>
+            abstract member addListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Http2ServerRequest
+            /// <summary>
+            /// Event emitter
+            /// The defined events on documents including:
+            /// 1. close
+            /// 2. data
+            /// 3. end
+            /// 4. error
+            /// 5. pause
+            /// 6. readable
+            /// 7. resume
+            /// </summary>
+            abstract member addListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Http2ServerRequest
             /// <summary>
             /// Event emitter
             /// The defined events on documents including:
@@ -89840,7 +98351,181 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
+            abstract member on<'A>: event: string * listener: ('A -> unit) -> Http2ServerRequest
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Http2ServerRequest
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Http2ServerRequest
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member on: event: string * listener: System.Delegate -> Http2ServerRequest
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A>: event: obj * listener: ('A -> unit) -> Http2ServerRequest
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Http2ServerRequest
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Http2ServerRequest
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
             /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
@@ -90064,7 +98749,169 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
+            abstract member once<'A>: event: string * listener: ('A -> unit) -> Http2ServerRequest
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Http2ServerRequest
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Http2ServerRequest
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member once: event: string * listener: System.Delegate -> Http2ServerRequest
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A>: event: obj * listener: ('A -> unit) -> Http2ServerRequest
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Http2ServerRequest
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Http2ServerRequest
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -90202,7 +99049,97 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
+            abstract member prependListener<'A>: event: string * listener: ('A -> unit) -> Http2ServerRequest
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Http2ServerRequest
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Http2ServerRequest
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
             abstract member prependListener: event: string * listener: System.Delegate -> Http2ServerRequest
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A>: event: obj * listener: ('A -> unit) -> Http2ServerRequest
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Http2ServerRequest
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Http2ServerRequest
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
             /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
@@ -90314,7 +99251,85 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
+            abstract member prependOnceListener<'A>: event: string * listener: ('A -> unit) -> Http2ServerRequest
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Http2ServerRequest
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Http2ServerRequest
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
             abstract member prependOnceListener: event: string * listener: System.Delegate -> Http2ServerRequest
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A>: event: obj * listener: ('A -> unit) -> Http2ServerRequest
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Http2ServerRequest
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Http2ServerRequest
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -91204,7 +100219,73 @@ EventEmitter.defaultMaxListeners = $0"""
             /// 5. pipe
             /// 6. unpipe
             /// </summary>
+            abstract member addListener<'A>: event: string * listener: ('A -> unit) -> Http2ServerResponse<'Request>
+            /// <summary>
+            /// Event emitter
+            /// The defined events on documents including:
+            /// 1. close
+            /// 2. drain
+            /// 3. error
+            /// 4. finish
+            /// 5. pipe
+            /// 6. unpipe
+            /// </summary>
+            abstract member addListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Http2ServerResponse<'Request>
+            /// <summary>
+            /// Event emitter
+            /// The defined events on documents including:
+            /// 1. close
+            /// 2. drain
+            /// 3. error
+            /// 4. finish
+            /// 5. pipe
+            /// 6. unpipe
+            /// </summary>
+            abstract member addListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Http2ServerResponse<'Request>
+            /// <summary>
+            /// Event emitter
+            /// The defined events on documents including:
+            /// 1. close
+            /// 2. drain
+            /// 3. error
+            /// 4. finish
+            /// 5. pipe
+            /// 6. unpipe
+            /// </summary>
             abstract member addListener: event: string * listener: System.Delegate -> Http2ServerResponse<'Request>
+            /// <summary>
+            /// Event emitter
+            /// The defined events on documents including:
+            /// 1. close
+            /// 2. drain
+            /// 3. error
+            /// 4. finish
+            /// 5. pipe
+            /// 6. unpipe
+            /// </summary>
+            abstract member addListener<'A>: event: obj * listener: ('A -> unit) -> Http2ServerResponse<'Request>
+            /// <summary>
+            /// Event emitter
+            /// The defined events on documents including:
+            /// 1. close
+            /// 2. drain
+            /// 3. error
+            /// 4. finish
+            /// 5. pipe
+            /// 6. unpipe
+            /// </summary>
+            abstract member addListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Http2ServerResponse<'Request>
+            /// <summary>
+            /// Event emitter
+            /// The defined events on documents including:
+            /// 1. close
+            /// 2. drain
+            /// 3. error
+            /// 4. finish
+            /// 5. pipe
+            /// 6. unpipe
+            /// </summary>
+            abstract member addListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Http2ServerResponse<'Request>
             /// <summary>
             /// Event emitter
             /// The defined events on documents including:
@@ -91750,7 +100831,181 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
+            abstract member on<'A>: event: string * listener: ('A -> unit) -> Http2ServerResponse<'Request>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Http2ServerResponse<'Request>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Http2ServerResponse<'Request>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member on: event: string * listener: System.Delegate -> Http2ServerResponse<'Request>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A>: event: obj * listener: ('A -> unit) -> Http2ServerResponse<'Request>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Http2ServerResponse<'Request>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Http2ServerResponse<'Request>
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
             /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
@@ -91974,7 +101229,169 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
+            abstract member once<'A>: event: string * listener: ('A -> unit) -> Http2ServerResponse<'Request>
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Http2ServerResponse<'Request>
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Http2ServerResponse<'Request>
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member once: event: string * listener: System.Delegate -> Http2ServerResponse<'Request>
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A>: event: obj * listener: ('A -> unit) -> Http2ServerResponse<'Request>
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Http2ServerResponse<'Request>
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Http2ServerResponse<'Request>
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -92112,7 +101529,97 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
+            abstract member prependListener<'A>: event: string * listener: ('A -> unit) -> Http2ServerResponse<'Request>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Http2ServerResponse<'Request>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Http2ServerResponse<'Request>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
             abstract member prependListener: event: string * listener: System.Delegate -> Http2ServerResponse<'Request>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A>: event: obj * listener: ('A -> unit) -> Http2ServerResponse<'Request>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Http2ServerResponse<'Request>
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Http2ServerResponse<'Request>
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
             /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
@@ -92224,7 +101731,85 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
+            abstract member prependOnceListener<'A>: event: string * listener: ('A -> unit) -> Http2ServerResponse<'Request>
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Http2ServerResponse<'Request>
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Http2ServerResponse<'Request>
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
             abstract member prependOnceListener: event: string * listener: System.Delegate -> Http2ServerResponse<'Request>
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A>: event: obj * listener: ('A -> unit) -> Http2ServerResponse<'Request>
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Http2ServerResponse<'Request>
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Http2ServerResponse<'Request>
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -95673,6 +105258,36 @@ EventEmitter.defaultMaxListeners = $0"""
             /// 5. secureConnection
             /// 6. keylog
             /// </summary>
+            abstract member addListener<'A>: event: string * listener: ('A -> unit) -> Server
+            /// <summary>
+            /// events.EventEmitter
+            /// 1. tlsClientError
+            /// 2. newSession
+            /// 3. OCSPRequest
+            /// 4. resumeSession
+            /// 5. secureConnection
+            /// 6. keylog
+            /// </summary>
+            abstract member addListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Server
+            /// <summary>
+            /// events.EventEmitter
+            /// 1. tlsClientError
+            /// 2. newSession
+            /// 3. OCSPRequest
+            /// 4. resumeSession
+            /// 5. secureConnection
+            /// 6. keylog
+            /// </summary>
+            abstract member addListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Server
+            /// <summary>
+            /// events.EventEmitter
+            /// 1. tlsClientError
+            /// 2. newSession
+            /// 3. OCSPRequest
+            /// 4. resumeSession
+            /// 5. secureConnection
+            /// 6. keylog
+            /// </summary>
             abstract member addListener: event: string * listener: System.Delegate -> Server
             /// <summary>
             /// events.EventEmitter
@@ -96574,6 +106189,93 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
+            abstract member on<'A>: event: string * listener: ('A -> unit) -> Server
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Server
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Server
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member on: event: string * listener: System.Delegate -> Server
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
@@ -97081,6 +106783,87 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
+            abstract member once<'A>: event: string * listener: ('A -> unit) -> Server
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Server
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Server
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member once: event: string * listener: System.Delegate -> Server
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
@@ -97544,6 +107327,51 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
+            abstract member prependListener<'A>: event: string * listener: ('A -> unit) -> Server
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Server
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Server
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
             abstract member prependListener: event: string * listener: System.Delegate -> Server
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
@@ -97801,6 +107629,45 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </summary>
             [<Emit("$0.prependListener('upgrade',$1...)")>]
             abstract member prependListener_upgrade: listener: Server.prependListener_upgrade.listener_1 -> Server
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A>: event: string * listener: ('A -> unit) -> Server
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Server
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Server
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -102885,6 +112752,54 @@ EventEmitter.defaultMaxListeners = $0"""
             ///   11. ready
             ///   12. timeout
             /// </summary>
+            abstract member addListener<'A>: event: string * listener: ('A -> unit) -> Socket
+            /// <summary>
+            /// events.EventEmitter
+            ///   1. close
+            ///   2. connect
+            ///   3. connectionAttempt
+            ///   4. connectionAttemptFailed
+            ///   5. connectionAttemptTimeout
+            ///   6. data
+            ///   7. drain
+            ///   8. end
+            ///   9. error
+            ///   10. lookup
+            ///   11. ready
+            ///   12. timeout
+            /// </summary>
+            abstract member addListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Socket
+            /// <summary>
+            /// events.EventEmitter
+            ///   1. close
+            ///   2. connect
+            ///   3. connectionAttempt
+            ///   4. connectionAttemptFailed
+            ///   5. connectionAttemptTimeout
+            ///   6. data
+            ///   7. drain
+            ///   8. end
+            ///   9. error
+            ///   10. lookup
+            ///   11. ready
+            ///   12. timeout
+            /// </summary>
+            abstract member addListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Socket
+            /// <summary>
+            /// events.EventEmitter
+            ///   1. close
+            ///   2. connect
+            ///   3. connectionAttempt
+            ///   4. connectionAttemptFailed
+            ///   5. connectionAttemptTimeout
+            ///   6. data
+            ///   7. drain
+            ///   8. end
+            ///   9. error
+            ///   10. lookup
+            ///   11. ready
+            ///   12. timeout
+            /// </summary>
             abstract member addListener: event: string * listener: System.Delegate -> Socket
             /// <summary>
             /// events.EventEmitter
@@ -103731,6 +113646,93 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
+            abstract member on<'A>: event: string * listener: ('A -> unit) -> Socket
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Socket
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Socket
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member on: event: string * listener: System.Delegate -> Socket
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
@@ -104118,6 +114120,87 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
+            abstract member once<'A>: event: string * listener: ('A -> unit) -> Socket
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Socket
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Socket
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member once: event: string * listener: System.Delegate -> Socket
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
@@ -104469,6 +114552,51 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
+            abstract member prependListener<'A>: event: string * listener: ('A -> unit) -> Socket
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Socket
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Socket
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
             abstract member prependListener: event: string * listener: System.Delegate -> Socket
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
@@ -104662,6 +114790,45 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </summary>
             [<Emit("$0.prependListener('timeout',$1...)")>]
             abstract member prependListener_timeout: listener: (unit -> unit) -> Socket
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A>: event: string * listener: ('A -> unit) -> Socket
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Socket
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Socket
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -105393,6 +115560,33 @@ EventEmitter.defaultMaxListeners = $0"""
             ///   4. listening
             ///   5. drop
             /// </summary>
+            abstract member addListener<'A>: event: string * listener: ('A -> unit) -> Server
+            /// <summary>
+            /// events.EventEmitter
+            ///   1. close
+            ///   2. connection
+            ///   3. error
+            ///   4. listening
+            ///   5. drop
+            /// </summary>
+            abstract member addListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Server
+            /// <summary>
+            /// events.EventEmitter
+            ///   1. close
+            ///   2. connection
+            ///   3. error
+            ///   4. listening
+            ///   5. drop
+            /// </summary>
+            abstract member addListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Server
+            /// <summary>
+            /// events.EventEmitter
+            ///   1. close
+            ///   2. connection
+            ///   3. error
+            ///   4. listening
+            ///   5. drop
+            /// </summary>
             abstract member addListener: event: string * listener: System.Delegate -> Server
             /// <summary>
             /// events.EventEmitter
@@ -105757,6 +115951,93 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
+            abstract member on<'A>: event: string * listener: ('A -> unit) -> Server
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Server
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Server
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member on: event: string * listener: System.Delegate -> Server
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
@@ -105908,6 +116189,87 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </summary>
             [<Emit("$0.on('drop',$1...)")>]
             abstract member on_drop: listener: (Node.net.DropArgument option -> unit) -> Server
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A>: event: string * listener: ('A -> unit) -> Server
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Server
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Server
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -106089,6 +116451,51 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
+            abstract member prependListener<'A>: event: string * listener: ('A -> unit) -> Server
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Server
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Server
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
             abstract member prependListener: event: string * listener: System.Delegate -> Server
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
@@ -106170,6 +116577,45 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </summary>
             [<Emit("$0.prependListener('drop',$1...)")>]
             abstract member prependListener_drop: listener: (Node.net.DropArgument option -> unit) -> Server
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A>: event: string * listener: ('A -> unit) -> Server
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Server
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Server
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -113319,6 +123765,42 @@ the userland-provided Punycode.js module instead.""")>]
             /// 7. SIGTSTP
             /// 8. history
             /// </summary>
+            abstract member addListener<'A>: event: string * listener: ('A -> unit) -> Interface
+            /// <summary>
+            /// events.EventEmitter
+            /// 1. close
+            /// 2. line
+            /// 3. pause
+            /// 4. resume
+            /// 5. SIGCONT
+            /// 6. SIGINT
+            /// 7. SIGTSTP
+            /// 8. history
+            /// </summary>
+            abstract member addListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Interface
+            /// <summary>
+            /// events.EventEmitter
+            /// 1. close
+            /// 2. line
+            /// 3. pause
+            /// 4. resume
+            /// 5. SIGCONT
+            /// 6. SIGINT
+            /// 7. SIGTSTP
+            /// 8. history
+            /// </summary>
+            abstract member addListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Interface
+            /// <summary>
+            /// events.EventEmitter
+            /// 1. close
+            /// 2. line
+            /// 3. pause
+            /// 4. resume
+            /// 5. SIGCONT
+            /// 6. SIGINT
+            /// 7. SIGTSTP
+            /// 8. history
+            /// </summary>
             abstract member addListener: event: string * listener: System.Delegate -> Interface
             /// <summary>
             /// events.EventEmitter
@@ -113860,6 +124342,93 @@ the userland-provided Punycode.js module instead.""")>]
             /// //   a
             /// </code>
             /// </summary>
+            abstract member on<'A>: event: string * listener: ('A -> unit) -> Interface
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Interface
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Interface
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member on: event: string * listener: System.Delegate -> Interface
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
@@ -114127,6 +124696,87 @@ the userland-provided Punycode.js module instead.""")>]
             /// //   a
             /// </code>
             /// </summary>
+            abstract member once<'A>: event: string * listener: ('A -> unit) -> Interface
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Interface
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Interface
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member once: event: string * listener: System.Delegate -> Interface
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
@@ -114366,6 +125016,51 @@ the userland-provided Punycode.js module instead.""")>]
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
+            abstract member prependListener<'A>: event: string * listener: ('A -> unit) -> Interface
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Interface
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Interface
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
             abstract member prependListener: event: string * listener: System.Delegate -> Interface
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
@@ -114495,6 +125190,45 @@ the userland-provided Punycode.js module instead.""")>]
             /// </summary>
             [<Emit("$0.prependListener('history',$1...)")>]
             abstract member prependListener_history: listener: (ResizeArray<string> -> unit) -> Interface
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A>: event: string * listener: ('A -> unit) -> Interface
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Interface
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Interface
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -115434,6 +126168,45 @@ the userland-provided Punycode.js module instead.""")>]
             /// 8. exit
             /// 9. reset
             /// </summary>
+            abstract member addListener<'A>: event: string * listener: ('A -> unit) -> REPLServer
+            /// <summary>
+            /// events.EventEmitter
+            /// 1. close - inherited from <c>readline.Interface</c>
+            /// 2. line - inherited from <c>readline.Interface</c>
+            /// 3. pause - inherited from <c>readline.Interface</c>
+            /// 4. resume - inherited from <c>readline.Interface</c>
+            /// 5. SIGCONT - inherited from <c>readline.Interface</c>
+            /// 6. SIGINT - inherited from <c>readline.Interface</c>
+            /// 7. SIGTSTP - inherited from <c>readline.Interface</c>
+            /// 8. exit
+            /// 9. reset
+            /// </summary>
+            abstract member addListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> REPLServer
+            /// <summary>
+            /// events.EventEmitter
+            /// 1. close - inherited from <c>readline.Interface</c>
+            /// 2. line - inherited from <c>readline.Interface</c>
+            /// 3. pause - inherited from <c>readline.Interface</c>
+            /// 4. resume - inherited from <c>readline.Interface</c>
+            /// 5. SIGCONT - inherited from <c>readline.Interface</c>
+            /// 6. SIGINT - inherited from <c>readline.Interface</c>
+            /// 7. SIGTSTP - inherited from <c>readline.Interface</c>
+            /// 8. exit
+            /// 9. reset
+            /// </summary>
+            abstract member addListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> REPLServer
+            /// <summary>
+            /// events.EventEmitter
+            /// 1. close - inherited from <c>readline.Interface</c>
+            /// 2. line - inherited from <c>readline.Interface</c>
+            /// 3. pause - inherited from <c>readline.Interface</c>
+            /// 4. resume - inherited from <c>readline.Interface</c>
+            /// 5. SIGCONT - inherited from <c>readline.Interface</c>
+            /// 6. SIGINT - inherited from <c>readline.Interface</c>
+            /// 7. SIGTSTP - inherited from <c>readline.Interface</c>
+            /// 8. exit
+            /// 9. reset
+            /// </summary>
             abstract member addListener: event: string * listener: System.Delegate -> REPLServer
             /// <summary>
             /// events.EventEmitter
@@ -116038,6 +126811,93 @@ the userland-provided Punycode.js module instead.""")>]
             /// //   a
             /// </code>
             /// </summary>
+            abstract member on<'A>: event: string * listener: ('A -> unit) -> REPLServer
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> REPLServer
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> REPLServer
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member on: event: string * listener: System.Delegate -> REPLServer
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
@@ -116335,6 +127195,87 @@ the userland-provided Punycode.js module instead.""")>]
             /// //   a
             /// </code>
             /// </summary>
+            abstract member once<'A>: event: string * listener: ('A -> unit) -> REPLServer
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> REPLServer
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> REPLServer
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member once: event: string * listener: System.Delegate -> REPLServer
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
@@ -116602,6 +127543,51 @@ the userland-provided Punycode.js module instead.""")>]
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
+            abstract member prependListener<'A>: event: string * listener: ('A -> unit) -> REPLServer
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> REPLServer
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> REPLServer
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
             abstract member prependListener: event: string * listener: System.Delegate -> REPLServer
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
@@ -116747,6 +127733,45 @@ the userland-provided Punycode.js module instead.""")>]
             /// </summary>
             [<Emit("$0.prependListener('reset',$1...)")>]
             abstract member prependListener_reset: listener: (Node.vm.Context -> unit) -> REPLServer
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A>: event: string * listener: ('A -> unit) -> REPLServer
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> REPLServer
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> REPLServer
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -118349,15 +129374,15 @@ the userland-provided Punycode.js module instead.""")>]
                 /// Called when the pipeline is fully done.
                 /// </param>
                 [<Emit("$0.pipeline($1...)")>]
-                abstract member pipeline<'A>: source: 'A * destination: obj * callback: obj -> obj
+                abstract member pipeline<'A, 'B>: source: 'A * destination: 'B * callback: Node.stream.Stream_.PipelineCallback<'B> -> obj
                 [<Emit("$0.pipeline($1...)")>]
-                abstract member pipeline<'A, 'T1>: source: 'A * transform1: 'T1 * destination: obj * callback: obj -> obj
+                abstract member pipeline<'A, 'T1, 'B>: source: 'A * transform1: 'T1 * destination: 'B * callback: Node.stream.Stream_.PipelineCallback<'B> -> obj
                 [<Emit("$0.pipeline($1...)")>]
-                abstract member pipeline<'A, 'T1, 'T2>: source: 'A * transform1: 'T1 * transform2: 'T2 * destination: obj * callback: obj -> obj
+                abstract member pipeline<'A, 'T1, 'T2, 'B>: source: 'A * transform1: 'T1 * transform2: 'T2 * destination: 'B * callback: Node.stream.Stream_.PipelineCallback<'B> -> obj
                 [<Emit("$0.pipeline($1...)")>]
-                abstract member pipeline<'A, 'T1, 'T2, 'T3>: source: 'A * transform1: 'T1 * transform2: 'T2 * transform3: 'T3 * destination: obj * callback: obj -> obj
+                abstract member pipeline<'A, 'T1, 'T2, 'T3, 'B>: source: 'A * transform1: 'T1 * transform2: 'T2 * transform3: 'T3 * destination: 'B * callback: Node.stream.Stream_.PipelineCallback<'B> -> obj
                 [<Emit("$0.pipeline($1...)")>]
-                abstract member pipeline<'A, 'T1, 'T2, 'T3, 'T4>: source: 'A * transform1: 'T1 * transform2: 'T2 * transform3: 'T3 * transform4: 'T4 * destination: obj * callback: obj -> obj
+                abstract member pipeline<'A, 'T1, 'T2, 'T3, 'T4, 'B>: source: 'A * transform1: 'T1 * transform2: 'T2 * transform3: 'T3 * transform4: 'T4 * destination: 'B * callback: Node.stream.Stream_.PipelineCallback<'B> -> obj
                 [<Emit("$0.pipeline($1...)")>]
                 abstract member pipeline: streams: ReadonlyArray<U3<Node.NodeJS.ReadableStream, Node.NodeJS.WritableStream, Node.NodeJS.ReadWriteStream>> * callback: (Node.NodeJS.ErrnoException option -> unit) -> Node.NodeJS.WritableStream
                 [<Emit("$0.pipeline($1...)")>]
@@ -119299,7 +130324,79 @@ Readable.isDisturbed($0)"""
                 /// 6. readable
                 /// 7. resume
                 /// </summary>
+                abstract member addListener<'A>: event: string * listener: ('A -> unit) -> Readable
+                /// <summary>
+                /// Event emitter
+                /// The defined events on documents including:
+                /// 1. close
+                /// 2. data
+                /// 3. end
+                /// 4. error
+                /// 5. pause
+                /// 6. readable
+                /// 7. resume
+                /// </summary>
+                abstract member addListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Readable
+                /// <summary>
+                /// Event emitter
+                /// The defined events on documents including:
+                /// 1. close
+                /// 2. data
+                /// 3. end
+                /// 4. error
+                /// 5. pause
+                /// 6. readable
+                /// 7. resume
+                /// </summary>
+                abstract member addListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Readable
+                /// <summary>
+                /// Event emitter
+                /// The defined events on documents including:
+                /// 1. close
+                /// 2. data
+                /// 3. end
+                /// 4. error
+                /// 5. pause
+                /// 6. readable
+                /// 7. resume
+                /// </summary>
                 abstract member addListener: event: string * listener: System.Delegate -> Readable
+                /// <summary>
+                /// Event emitter
+                /// The defined events on documents including:
+                /// 1. close
+                /// 2. data
+                /// 3. end
+                /// 4. error
+                /// 5. pause
+                /// 6. readable
+                /// 7. resume
+                /// </summary>
+                abstract member addListener<'A>: event: obj * listener: ('A -> unit) -> Readable
+                /// <summary>
+                /// Event emitter
+                /// The defined events on documents including:
+                /// 1. close
+                /// 2. data
+                /// 3. end
+                /// 4. error
+                /// 5. pause
+                /// 6. readable
+                /// 7. resume
+                /// </summary>
+                abstract member addListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Readable
+                /// <summary>
+                /// Event emitter
+                /// The defined events on documents including:
+                /// 1. close
+                /// 2. data
+                /// 3. end
+                /// 4. error
+                /// 5. pause
+                /// 6. readable
+                /// 7. resume
+                /// </summary>
+                abstract member addListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Readable
                 /// <summary>
                 /// Event emitter
                 /// The defined events on documents including:
@@ -119917,7 +131014,181 @@ Readable.isDisturbed($0)"""
                 /// //   a
                 /// </code>
                 /// </summary>
+                abstract member on<'A>: event: string * listener: ('A -> unit) -> Readable
+                /// <summary>
+                /// Adds the <c>listener</c> function to the end of the listeners array for the event
+                /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+                /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+                /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+                ///
+                /// <code lang="js">
+                /// server.on('connection', (stream) => {
+                ///   console.log('someone connected!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                ///
+                /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+                /// event listener to the beginning of the listeners array.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const myEE = new EventEmitter();
+                /// myEE.on('foo', () => console.log('a'));
+                /// myEE.prependListener('foo', () => console.log('b'));
+                /// myEE.emit('foo');
+                /// // Prints:
+                /// //   b
+                /// //   a
+                /// </code>
+                /// </summary>
+                abstract member on<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Readable
+                /// <summary>
+                /// Adds the <c>listener</c> function to the end of the listeners array for the event
+                /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+                /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+                /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+                ///
+                /// <code lang="js">
+                /// server.on('connection', (stream) => {
+                ///   console.log('someone connected!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                ///
+                /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+                /// event listener to the beginning of the listeners array.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const myEE = new EventEmitter();
+                /// myEE.on('foo', () => console.log('a'));
+                /// myEE.prependListener('foo', () => console.log('b'));
+                /// myEE.emit('foo');
+                /// // Prints:
+                /// //   b
+                /// //   a
+                /// </code>
+                /// </summary>
+                abstract member on<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Readable
+                /// <summary>
+                /// Adds the <c>listener</c> function to the end of the listeners array for the event
+                /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+                /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+                /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+                ///
+                /// <code lang="js">
+                /// server.on('connection', (stream) => {
+                ///   console.log('someone connected!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                ///
+                /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+                /// event listener to the beginning of the listeners array.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const myEE = new EventEmitter();
+                /// myEE.on('foo', () => console.log('a'));
+                /// myEE.prependListener('foo', () => console.log('b'));
+                /// myEE.emit('foo');
+                /// // Prints:
+                /// //   b
+                /// //   a
+                /// </code>
+                /// </summary>
                 abstract member on: event: string * listener: System.Delegate -> Readable
+                /// <summary>
+                /// Adds the <c>listener</c> function to the end of the listeners array for the event
+                /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+                /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+                /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+                ///
+                /// <code lang="js">
+                /// server.on('connection', (stream) => {
+                ///   console.log('someone connected!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                ///
+                /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+                /// event listener to the beginning of the listeners array.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const myEE = new EventEmitter();
+                /// myEE.on('foo', () => console.log('a'));
+                /// myEE.prependListener('foo', () => console.log('b'));
+                /// myEE.emit('foo');
+                /// // Prints:
+                /// //   b
+                /// //   a
+                /// </code>
+                /// </summary>
+                abstract member on<'A>: event: obj * listener: ('A -> unit) -> Readable
+                /// <summary>
+                /// Adds the <c>listener</c> function to the end of the listeners array for the event
+                /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+                /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+                /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+                ///
+                /// <code lang="js">
+                /// server.on('connection', (stream) => {
+                ///   console.log('someone connected!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                ///
+                /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+                /// event listener to the beginning of the listeners array.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const myEE = new EventEmitter();
+                /// myEE.on('foo', () => console.log('a'));
+                /// myEE.prependListener('foo', () => console.log('b'));
+                /// myEE.emit('foo');
+                /// // Prints:
+                /// //   b
+                /// //   a
+                /// </code>
+                /// </summary>
+                abstract member on<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Readable
+                /// <summary>
+                /// Adds the <c>listener</c> function to the end of the listeners array for the event
+                /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+                /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+                /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+                ///
+                /// <code lang="js">
+                /// server.on('connection', (stream) => {
+                ///   console.log('someone connected!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                ///
+                /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+                /// event listener to the beginning of the listeners array.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const myEE = new EventEmitter();
+                /// myEE.on('foo', () => console.log('a'));
+                /// myEE.prependListener('foo', () => console.log('b'));
+                /// myEE.emit('foo');
+                /// // Prints:
+                /// //   b
+                /// //   a
+                /// </code>
+                /// </summary>
+                abstract member on<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Readable
                 /// <summary>
                 /// Adds the <c>listener</c> function to the end of the listeners array for the event
                 /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
@@ -120169,7 +131440,169 @@ Readable.isDisturbed($0)"""
                 /// //   a
                 /// </code>
                 /// </summary>
+                abstract member once<'A>: event: string * listener: ('A -> unit) -> Readable
+                /// <summary>
+                /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+                /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+                ///
+                /// <code lang="js">
+                /// server.once('connection', (stream) => {
+                ///   console.log('Ah, we have our first user!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                ///
+                /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+                /// event listener to the beginning of the listeners array.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const myEE = new EventEmitter();
+                /// myEE.once('foo', () => console.log('a'));
+                /// myEE.prependOnceListener('foo', () => console.log('b'));
+                /// myEE.emit('foo');
+                /// // Prints:
+                /// //   b
+                /// //   a
+                /// </code>
+                /// </summary>
+                abstract member once<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Readable
+                /// <summary>
+                /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+                /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+                ///
+                /// <code lang="js">
+                /// server.once('connection', (stream) => {
+                ///   console.log('Ah, we have our first user!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                ///
+                /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+                /// event listener to the beginning of the listeners array.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const myEE = new EventEmitter();
+                /// myEE.once('foo', () => console.log('a'));
+                /// myEE.prependOnceListener('foo', () => console.log('b'));
+                /// myEE.emit('foo');
+                /// // Prints:
+                /// //   b
+                /// //   a
+                /// </code>
+                /// </summary>
+                abstract member once<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Readable
+                /// <summary>
+                /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+                /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+                ///
+                /// <code lang="js">
+                /// server.once('connection', (stream) => {
+                ///   console.log('Ah, we have our first user!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                ///
+                /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+                /// event listener to the beginning of the listeners array.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const myEE = new EventEmitter();
+                /// myEE.once('foo', () => console.log('a'));
+                /// myEE.prependOnceListener('foo', () => console.log('b'));
+                /// myEE.emit('foo');
+                /// // Prints:
+                /// //   b
+                /// //   a
+                /// </code>
+                /// </summary>
                 abstract member once: event: string * listener: System.Delegate -> Readable
+                /// <summary>
+                /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+                /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+                ///
+                /// <code lang="js">
+                /// server.once('connection', (stream) => {
+                ///   console.log('Ah, we have our first user!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                ///
+                /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+                /// event listener to the beginning of the listeners array.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const myEE = new EventEmitter();
+                /// myEE.once('foo', () => console.log('a'));
+                /// myEE.prependOnceListener('foo', () => console.log('b'));
+                /// myEE.emit('foo');
+                /// // Prints:
+                /// //   b
+                /// //   a
+                /// </code>
+                /// </summary>
+                abstract member once<'A>: event: obj * listener: ('A -> unit) -> Readable
+                /// <summary>
+                /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+                /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+                ///
+                /// <code lang="js">
+                /// server.once('connection', (stream) => {
+                ///   console.log('Ah, we have our first user!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                ///
+                /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+                /// event listener to the beginning of the listeners array.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const myEE = new EventEmitter();
+                /// myEE.once('foo', () => console.log('a'));
+                /// myEE.prependOnceListener('foo', () => console.log('b'));
+                /// myEE.emit('foo');
+                /// // Prints:
+                /// //   b
+                /// //   a
+                /// </code>
+                /// </summary>
+                abstract member once<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Readable
+                /// <summary>
+                /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+                /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+                ///
+                /// <code lang="js">
+                /// server.once('connection', (stream) => {
+                ///   console.log('Ah, we have our first user!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                ///
+                /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+                /// event listener to the beginning of the listeners array.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const myEE = new EventEmitter();
+                /// myEE.once('foo', () => console.log('a'));
+                /// myEE.prependOnceListener('foo', () => console.log('b'));
+                /// myEE.emit('foo');
+                /// // Prints:
+                /// //   b
+                /// //   a
+                /// </code>
+                /// </summary>
+                abstract member once<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Readable
                 /// <summary>
                 /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
                 /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -120323,7 +131756,97 @@ Readable.isDisturbed($0)"""
                 ///
                 /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
                 /// </summary>
+                abstract member prependListener<'A>: event: string * listener: ('A -> unit) -> Readable
+                /// <summary>
+                /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+                /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+                /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+                /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+                ///
+                /// <code lang="js">
+                /// server.prependListener('connection', (stream) => {
+                ///   console.log('someone connected!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member prependListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Readable
+                /// <summary>
+                /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+                /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+                /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+                /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+                ///
+                /// <code lang="js">
+                /// server.prependListener('connection', (stream) => {
+                ///   console.log('someone connected!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member prependListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Readable
+                /// <summary>
+                /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+                /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+                /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+                /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+                ///
+                /// <code lang="js">
+                /// server.prependListener('connection', (stream) => {
+                ///   console.log('someone connected!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
                 abstract member prependListener: event: string * listener: System.Delegate -> Readable
+                /// <summary>
+                /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+                /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+                /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+                /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+                ///
+                /// <code lang="js">
+                /// server.prependListener('connection', (stream) => {
+                ///   console.log('someone connected!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member prependListener<'A>: event: obj * listener: ('A -> unit) -> Readable
+                /// <summary>
+                /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+                /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+                /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+                /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+                ///
+                /// <code lang="js">
+                /// server.prependListener('connection', (stream) => {
+                ///   console.log('someone connected!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member prependListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Readable
+                /// <summary>
+                /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+                /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+                /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+                /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+                ///
+                /// <code lang="js">
+                /// server.prependListener('connection', (stream) => {
+                ///   console.log('someone connected!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member prependListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Readable
                 /// <summary>
                 /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
                 /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
@@ -120449,7 +131972,85 @@ Readable.isDisturbed($0)"""
                 ///
                 /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
                 /// </summary>
+                abstract member prependOnceListener<'A>: event: string * listener: ('A -> unit) -> Readable
+                /// <summary>
+                /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+                /// listener is removed, and then invoked.
+                ///
+                /// <code lang="js">
+                /// server.prependOnceListener('connection', (stream) => {
+                ///   console.log('Ah, we have our first user!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member prependOnceListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Readable
+                /// <summary>
+                /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+                /// listener is removed, and then invoked.
+                ///
+                /// <code lang="js">
+                /// server.prependOnceListener('connection', (stream) => {
+                ///   console.log('Ah, we have our first user!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member prependOnceListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Readable
+                /// <summary>
+                /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+                /// listener is removed, and then invoked.
+                ///
+                /// <code lang="js">
+                /// server.prependOnceListener('connection', (stream) => {
+                ///   console.log('Ah, we have our first user!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
                 abstract member prependOnceListener: event: string * listener: System.Delegate -> Readable
+                /// <summary>
+                /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+                /// listener is removed, and then invoked.
+                ///
+                /// <code lang="js">
+                /// server.prependOnceListener('connection', (stream) => {
+                ///   console.log('Ah, we have our first user!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member prependOnceListener<'A>: event: obj * listener: ('A -> unit) -> Readable
+                /// <summary>
+                /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+                /// listener is removed, and then invoked.
+                ///
+                /// <code lang="js">
+                /// server.prependOnceListener('connection', (stream) => {
+                ///   console.log('Ah, we have our first user!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member prependOnceListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Readable
+                /// <summary>
+                /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+                /// listener is removed, and then invoked.
+                ///
+                /// <code lang="js">
+                /// server.prependOnceListener('connection', (stream) => {
+                ///   console.log('Ah, we have our first user!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member prependOnceListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Readable
                 /// <summary>
                 /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
                 /// listener is removed, and then invoked.
@@ -121125,7 +132726,499 @@ Readable.isDisturbed($0)"""
                 ///
                 /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
                 /// </summary>
+                abstract member removeListener<'A>: event: string * listener: ('A -> unit) -> Readable
+                /// <summary>
+                /// Removes the specified <c>listener</c> from the listener array for the event named <c>eventName</c>.
+                ///
+                /// <code lang="js">
+                /// const callback = (stream) => {
+                ///   console.log('someone connected!');
+                /// };
+                /// server.on('connection', callback);
+                /// // ...
+                /// server.removeListener('connection', callback);
+                /// </code>
+                ///
+                /// <c>removeListener()</c> will remove, at most, one instance of a listener from the
+                /// listener array. If any single listener has been added multiple times to the
+                /// listener array for the specified <c>eventName</c>, then <c>removeListener()</c> must be
+                /// called multiple times to remove each instance.
+                ///
+                /// Once an event is emitted, all listeners attached to it at the
+                /// time of emitting are called in order. This implies that any <c>removeListener()</c> or <c>removeAllListeners()</c> calls _after_ emitting and _before_ the last listener finishes execution
+                /// will not remove them from<c>emit()</c> in progress. Subsequent events behave as expected.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// class MyEmitter extends EventEmitter {}
+                /// const myEmitter = new MyEmitter();
+                ///
+                /// const callbackA = () => {
+                ///   console.log('A');
+                ///   myEmitter.removeListener('event', callbackB);
+                /// };
+                ///
+                /// const callbackB = () => {
+                ///   console.log('B');
+                /// };
+                ///
+                /// myEmitter.on('event', callbackA);
+                ///
+                /// myEmitter.on('event', callbackB);
+                ///
+                /// // callbackA removes listener callbackB but it will still be called.
+                /// // Internal listener array at time of emit [callbackA, callbackB]
+                /// myEmitter.emit('event');
+                /// // Prints:
+                /// //   A
+                /// //   B
+                ///
+                /// // callbackB is now removed.
+                /// // Internal listener array [callbackA]
+                /// myEmitter.emit('event');
+                /// // Prints:
+                /// //   A
+                /// </code>
+                ///
+                /// Because listeners are managed using an internal array, calling this will
+                /// change the position indices of any listener registered _after_ the listener
+                /// being removed. This will not impact the order in which listeners are called,
+                /// but it means that any copies of the listener array as returned by
+                /// the <c>emitter.listeners()</c> method will need to be recreated.
+                ///
+                /// When a single function has been added as a handler multiple times for a single
+                /// event (as in the example below), <c>removeListener()</c> will remove the most
+                /// recently added instance. In the example the <c>once('ping')</c> listener is removed:
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const ee = new EventEmitter();
+                ///
+                /// function pong() {
+                ///   console.log('pong');
+                /// }
+                ///
+                /// ee.on('ping', pong);
+                /// ee.once('ping', pong);
+                /// ee.removeListener('ping', pong);
+                ///
+                /// ee.emit('ping');
+                /// ee.emit('ping');
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member removeListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Readable
+                /// <summary>
+                /// Removes the specified <c>listener</c> from the listener array for the event named <c>eventName</c>.
+                ///
+                /// <code lang="js">
+                /// const callback = (stream) => {
+                ///   console.log('someone connected!');
+                /// };
+                /// server.on('connection', callback);
+                /// // ...
+                /// server.removeListener('connection', callback);
+                /// </code>
+                ///
+                /// <c>removeListener()</c> will remove, at most, one instance of a listener from the
+                /// listener array. If any single listener has been added multiple times to the
+                /// listener array for the specified <c>eventName</c>, then <c>removeListener()</c> must be
+                /// called multiple times to remove each instance.
+                ///
+                /// Once an event is emitted, all listeners attached to it at the
+                /// time of emitting are called in order. This implies that any <c>removeListener()</c> or <c>removeAllListeners()</c> calls _after_ emitting and _before_ the last listener finishes execution
+                /// will not remove them from<c>emit()</c> in progress. Subsequent events behave as expected.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// class MyEmitter extends EventEmitter {}
+                /// const myEmitter = new MyEmitter();
+                ///
+                /// const callbackA = () => {
+                ///   console.log('A');
+                ///   myEmitter.removeListener('event', callbackB);
+                /// };
+                ///
+                /// const callbackB = () => {
+                ///   console.log('B');
+                /// };
+                ///
+                /// myEmitter.on('event', callbackA);
+                ///
+                /// myEmitter.on('event', callbackB);
+                ///
+                /// // callbackA removes listener callbackB but it will still be called.
+                /// // Internal listener array at time of emit [callbackA, callbackB]
+                /// myEmitter.emit('event');
+                /// // Prints:
+                /// //   A
+                /// //   B
+                ///
+                /// // callbackB is now removed.
+                /// // Internal listener array [callbackA]
+                /// myEmitter.emit('event');
+                /// // Prints:
+                /// //   A
+                /// </code>
+                ///
+                /// Because listeners are managed using an internal array, calling this will
+                /// change the position indices of any listener registered _after_ the listener
+                /// being removed. This will not impact the order in which listeners are called,
+                /// but it means that any copies of the listener array as returned by
+                /// the <c>emitter.listeners()</c> method will need to be recreated.
+                ///
+                /// When a single function has been added as a handler multiple times for a single
+                /// event (as in the example below), <c>removeListener()</c> will remove the most
+                /// recently added instance. In the example the <c>once('ping')</c> listener is removed:
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const ee = new EventEmitter();
+                ///
+                /// function pong() {
+                ///   console.log('pong');
+                /// }
+                ///
+                /// ee.on('ping', pong);
+                /// ee.once('ping', pong);
+                /// ee.removeListener('ping', pong);
+                ///
+                /// ee.emit('ping');
+                /// ee.emit('ping');
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member removeListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Readable
+                /// <summary>
+                /// Removes the specified <c>listener</c> from the listener array for the event named <c>eventName</c>.
+                ///
+                /// <code lang="js">
+                /// const callback = (stream) => {
+                ///   console.log('someone connected!');
+                /// };
+                /// server.on('connection', callback);
+                /// // ...
+                /// server.removeListener('connection', callback);
+                /// </code>
+                ///
+                /// <c>removeListener()</c> will remove, at most, one instance of a listener from the
+                /// listener array. If any single listener has been added multiple times to the
+                /// listener array for the specified <c>eventName</c>, then <c>removeListener()</c> must be
+                /// called multiple times to remove each instance.
+                ///
+                /// Once an event is emitted, all listeners attached to it at the
+                /// time of emitting are called in order. This implies that any <c>removeListener()</c> or <c>removeAllListeners()</c> calls _after_ emitting and _before_ the last listener finishes execution
+                /// will not remove them from<c>emit()</c> in progress. Subsequent events behave as expected.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// class MyEmitter extends EventEmitter {}
+                /// const myEmitter = new MyEmitter();
+                ///
+                /// const callbackA = () => {
+                ///   console.log('A');
+                ///   myEmitter.removeListener('event', callbackB);
+                /// };
+                ///
+                /// const callbackB = () => {
+                ///   console.log('B');
+                /// };
+                ///
+                /// myEmitter.on('event', callbackA);
+                ///
+                /// myEmitter.on('event', callbackB);
+                ///
+                /// // callbackA removes listener callbackB but it will still be called.
+                /// // Internal listener array at time of emit [callbackA, callbackB]
+                /// myEmitter.emit('event');
+                /// // Prints:
+                /// //   A
+                /// //   B
+                ///
+                /// // callbackB is now removed.
+                /// // Internal listener array [callbackA]
+                /// myEmitter.emit('event');
+                /// // Prints:
+                /// //   A
+                /// </code>
+                ///
+                /// Because listeners are managed using an internal array, calling this will
+                /// change the position indices of any listener registered _after_ the listener
+                /// being removed. This will not impact the order in which listeners are called,
+                /// but it means that any copies of the listener array as returned by
+                /// the <c>emitter.listeners()</c> method will need to be recreated.
+                ///
+                /// When a single function has been added as a handler multiple times for a single
+                /// event (as in the example below), <c>removeListener()</c> will remove the most
+                /// recently added instance. In the example the <c>once('ping')</c> listener is removed:
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const ee = new EventEmitter();
+                ///
+                /// function pong() {
+                ///   console.log('pong');
+                /// }
+                ///
+                /// ee.on('ping', pong);
+                /// ee.once('ping', pong);
+                /// ee.removeListener('ping', pong);
+                ///
+                /// ee.emit('ping');
+                /// ee.emit('ping');
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
                 abstract member removeListener: event: string * listener: System.Delegate -> Readable
+                /// <summary>
+                /// Removes the specified <c>listener</c> from the listener array for the event named <c>eventName</c>.
+                ///
+                /// <code lang="js">
+                /// const callback = (stream) => {
+                ///   console.log('someone connected!');
+                /// };
+                /// server.on('connection', callback);
+                /// // ...
+                /// server.removeListener('connection', callback);
+                /// </code>
+                ///
+                /// <c>removeListener()</c> will remove, at most, one instance of a listener from the
+                /// listener array. If any single listener has been added multiple times to the
+                /// listener array for the specified <c>eventName</c>, then <c>removeListener()</c> must be
+                /// called multiple times to remove each instance.
+                ///
+                /// Once an event is emitted, all listeners attached to it at the
+                /// time of emitting are called in order. This implies that any <c>removeListener()</c> or <c>removeAllListeners()</c> calls _after_ emitting and _before_ the last listener finishes execution
+                /// will not remove them from<c>emit()</c> in progress. Subsequent events behave as expected.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// class MyEmitter extends EventEmitter {}
+                /// const myEmitter = new MyEmitter();
+                ///
+                /// const callbackA = () => {
+                ///   console.log('A');
+                ///   myEmitter.removeListener('event', callbackB);
+                /// };
+                ///
+                /// const callbackB = () => {
+                ///   console.log('B');
+                /// };
+                ///
+                /// myEmitter.on('event', callbackA);
+                ///
+                /// myEmitter.on('event', callbackB);
+                ///
+                /// // callbackA removes listener callbackB but it will still be called.
+                /// // Internal listener array at time of emit [callbackA, callbackB]
+                /// myEmitter.emit('event');
+                /// // Prints:
+                /// //   A
+                /// //   B
+                ///
+                /// // callbackB is now removed.
+                /// // Internal listener array [callbackA]
+                /// myEmitter.emit('event');
+                /// // Prints:
+                /// //   A
+                /// </code>
+                ///
+                /// Because listeners are managed using an internal array, calling this will
+                /// change the position indices of any listener registered _after_ the listener
+                /// being removed. This will not impact the order in which listeners are called,
+                /// but it means that any copies of the listener array as returned by
+                /// the <c>emitter.listeners()</c> method will need to be recreated.
+                ///
+                /// When a single function has been added as a handler multiple times for a single
+                /// event (as in the example below), <c>removeListener()</c> will remove the most
+                /// recently added instance. In the example the <c>once('ping')</c> listener is removed:
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const ee = new EventEmitter();
+                ///
+                /// function pong() {
+                ///   console.log('pong');
+                /// }
+                ///
+                /// ee.on('ping', pong);
+                /// ee.once('ping', pong);
+                /// ee.removeListener('ping', pong);
+                ///
+                /// ee.emit('ping');
+                /// ee.emit('ping');
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member removeListener<'A>: event: obj * listener: ('A -> unit) -> Readable
+                /// <summary>
+                /// Removes the specified <c>listener</c> from the listener array for the event named <c>eventName</c>.
+                ///
+                /// <code lang="js">
+                /// const callback = (stream) => {
+                ///   console.log('someone connected!');
+                /// };
+                /// server.on('connection', callback);
+                /// // ...
+                /// server.removeListener('connection', callback);
+                /// </code>
+                ///
+                /// <c>removeListener()</c> will remove, at most, one instance of a listener from the
+                /// listener array. If any single listener has been added multiple times to the
+                /// listener array for the specified <c>eventName</c>, then <c>removeListener()</c> must be
+                /// called multiple times to remove each instance.
+                ///
+                /// Once an event is emitted, all listeners attached to it at the
+                /// time of emitting are called in order. This implies that any <c>removeListener()</c> or <c>removeAllListeners()</c> calls _after_ emitting and _before_ the last listener finishes execution
+                /// will not remove them from<c>emit()</c> in progress. Subsequent events behave as expected.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// class MyEmitter extends EventEmitter {}
+                /// const myEmitter = new MyEmitter();
+                ///
+                /// const callbackA = () => {
+                ///   console.log('A');
+                ///   myEmitter.removeListener('event', callbackB);
+                /// };
+                ///
+                /// const callbackB = () => {
+                ///   console.log('B');
+                /// };
+                ///
+                /// myEmitter.on('event', callbackA);
+                ///
+                /// myEmitter.on('event', callbackB);
+                ///
+                /// // callbackA removes listener callbackB but it will still be called.
+                /// // Internal listener array at time of emit [callbackA, callbackB]
+                /// myEmitter.emit('event');
+                /// // Prints:
+                /// //   A
+                /// //   B
+                ///
+                /// // callbackB is now removed.
+                /// // Internal listener array [callbackA]
+                /// myEmitter.emit('event');
+                /// // Prints:
+                /// //   A
+                /// </code>
+                ///
+                /// Because listeners are managed using an internal array, calling this will
+                /// change the position indices of any listener registered _after_ the listener
+                /// being removed. This will not impact the order in which listeners are called,
+                /// but it means that any copies of the listener array as returned by
+                /// the <c>emitter.listeners()</c> method will need to be recreated.
+                ///
+                /// When a single function has been added as a handler multiple times for a single
+                /// event (as in the example below), <c>removeListener()</c> will remove the most
+                /// recently added instance. In the example the <c>once('ping')</c> listener is removed:
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const ee = new EventEmitter();
+                ///
+                /// function pong() {
+                ///   console.log('pong');
+                /// }
+                ///
+                /// ee.on('ping', pong);
+                /// ee.once('ping', pong);
+                /// ee.removeListener('ping', pong);
+                ///
+                /// ee.emit('ping');
+                /// ee.emit('ping');
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member removeListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Readable
+                /// <summary>
+                /// Removes the specified <c>listener</c> from the listener array for the event named <c>eventName</c>.
+                ///
+                /// <code lang="js">
+                /// const callback = (stream) => {
+                ///   console.log('someone connected!');
+                /// };
+                /// server.on('connection', callback);
+                /// // ...
+                /// server.removeListener('connection', callback);
+                /// </code>
+                ///
+                /// <c>removeListener()</c> will remove, at most, one instance of a listener from the
+                /// listener array. If any single listener has been added multiple times to the
+                /// listener array for the specified <c>eventName</c>, then <c>removeListener()</c> must be
+                /// called multiple times to remove each instance.
+                ///
+                /// Once an event is emitted, all listeners attached to it at the
+                /// time of emitting are called in order. This implies that any <c>removeListener()</c> or <c>removeAllListeners()</c> calls _after_ emitting and _before_ the last listener finishes execution
+                /// will not remove them from<c>emit()</c> in progress. Subsequent events behave as expected.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// class MyEmitter extends EventEmitter {}
+                /// const myEmitter = new MyEmitter();
+                ///
+                /// const callbackA = () => {
+                ///   console.log('A');
+                ///   myEmitter.removeListener('event', callbackB);
+                /// };
+                ///
+                /// const callbackB = () => {
+                ///   console.log('B');
+                /// };
+                ///
+                /// myEmitter.on('event', callbackA);
+                ///
+                /// myEmitter.on('event', callbackB);
+                ///
+                /// // callbackA removes listener callbackB but it will still be called.
+                /// // Internal listener array at time of emit [callbackA, callbackB]
+                /// myEmitter.emit('event');
+                /// // Prints:
+                /// //   A
+                /// //   B
+                ///
+                /// // callbackB is now removed.
+                /// // Internal listener array [callbackA]
+                /// myEmitter.emit('event');
+                /// // Prints:
+                /// //   A
+                /// </code>
+                ///
+                /// Because listeners are managed using an internal array, calling this will
+                /// change the position indices of any listener registered _after_ the listener
+                /// being removed. This will not impact the order in which listeners are called,
+                /// but it means that any copies of the listener array as returned by
+                /// the <c>emitter.listeners()</c> method will need to be recreated.
+                ///
+                /// When a single function has been added as a handler multiple times for a single
+                /// event (as in the example below), <c>removeListener()</c> will remove the most
+                /// recently added instance. In the example the <c>once('ping')</c> listener is removed:
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const ee = new EventEmitter();
+                ///
+                /// function pong() {
+                ///   console.log('pong');
+                /// }
+                ///
+                /// ee.on('ping', pong);
+                /// ee.once('ping', pong);
+                /// ee.removeListener('ping', pong);
+                ///
+                /// ee.emit('ping');
+                /// ee.emit('ping');
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member removeListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Readable
                 /// <summary>
                 /// Removes the specified <c>listener</c> from the listener array for the event named <c>eventName</c>.
                 ///
@@ -121654,7 +133747,73 @@ Writable.toWeb($0)"""
                 /// 5. pipe
                 /// 6. unpipe
                 /// </summary>
+                abstract member addListener<'A>: event: string * listener: ('A -> unit) -> Writable
+                /// <summary>
+                /// Event emitter
+                /// The defined events on documents including:
+                /// 1. close
+                /// 2. drain
+                /// 3. error
+                /// 4. finish
+                /// 5. pipe
+                /// 6. unpipe
+                /// </summary>
+                abstract member addListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Writable
+                /// <summary>
+                /// Event emitter
+                /// The defined events on documents including:
+                /// 1. close
+                /// 2. drain
+                /// 3. error
+                /// 4. finish
+                /// 5. pipe
+                /// 6. unpipe
+                /// </summary>
+                abstract member addListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Writable
+                /// <summary>
+                /// Event emitter
+                /// The defined events on documents including:
+                /// 1. close
+                /// 2. drain
+                /// 3. error
+                /// 4. finish
+                /// 5. pipe
+                /// 6. unpipe
+                /// </summary>
                 abstract member addListener: event: string * listener: System.Delegate -> Writable
+                /// <summary>
+                /// Event emitter
+                /// The defined events on documents including:
+                /// 1. close
+                /// 2. drain
+                /// 3. error
+                /// 4. finish
+                /// 5. pipe
+                /// 6. unpipe
+                /// </summary>
+                abstract member addListener<'A>: event: obj * listener: ('A -> unit) -> Writable
+                /// <summary>
+                /// Event emitter
+                /// The defined events on documents including:
+                /// 1. close
+                /// 2. drain
+                /// 3. error
+                /// 4. finish
+                /// 5. pipe
+                /// 6. unpipe
+                /// </summary>
+                abstract member addListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Writable
+                /// <summary>
+                /// Event emitter
+                /// The defined events on documents including:
+                /// 1. close
+                /// 2. drain
+                /// 3. error
+                /// 4. finish
+                /// 5. pipe
+                /// 6. unpipe
+                /// </summary>
+                abstract member addListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Writable
                 /// <summary>
                 /// Event emitter
                 /// The defined events on documents including:
@@ -122200,7 +134359,181 @@ Writable.toWeb($0)"""
                 /// //   a
                 /// </code>
                 /// </summary>
+                abstract member on<'A>: event: string * listener: ('A -> unit) -> Writable
+                /// <summary>
+                /// Adds the <c>listener</c> function to the end of the listeners array for the event
+                /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+                /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+                /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+                ///
+                /// <code lang="js">
+                /// server.on('connection', (stream) => {
+                ///   console.log('someone connected!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                ///
+                /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+                /// event listener to the beginning of the listeners array.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const myEE = new EventEmitter();
+                /// myEE.on('foo', () => console.log('a'));
+                /// myEE.prependListener('foo', () => console.log('b'));
+                /// myEE.emit('foo');
+                /// // Prints:
+                /// //   b
+                /// //   a
+                /// </code>
+                /// </summary>
+                abstract member on<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Writable
+                /// <summary>
+                /// Adds the <c>listener</c> function to the end of the listeners array for the event
+                /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+                /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+                /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+                ///
+                /// <code lang="js">
+                /// server.on('connection', (stream) => {
+                ///   console.log('someone connected!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                ///
+                /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+                /// event listener to the beginning of the listeners array.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const myEE = new EventEmitter();
+                /// myEE.on('foo', () => console.log('a'));
+                /// myEE.prependListener('foo', () => console.log('b'));
+                /// myEE.emit('foo');
+                /// // Prints:
+                /// //   b
+                /// //   a
+                /// </code>
+                /// </summary>
+                abstract member on<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Writable
+                /// <summary>
+                /// Adds the <c>listener</c> function to the end of the listeners array for the event
+                /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+                /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+                /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+                ///
+                /// <code lang="js">
+                /// server.on('connection', (stream) => {
+                ///   console.log('someone connected!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                ///
+                /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+                /// event listener to the beginning of the listeners array.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const myEE = new EventEmitter();
+                /// myEE.on('foo', () => console.log('a'));
+                /// myEE.prependListener('foo', () => console.log('b'));
+                /// myEE.emit('foo');
+                /// // Prints:
+                /// //   b
+                /// //   a
+                /// </code>
+                /// </summary>
                 abstract member on: event: string * listener: System.Delegate -> Writable
+                /// <summary>
+                /// Adds the <c>listener</c> function to the end of the listeners array for the event
+                /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+                /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+                /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+                ///
+                /// <code lang="js">
+                /// server.on('connection', (stream) => {
+                ///   console.log('someone connected!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                ///
+                /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+                /// event listener to the beginning of the listeners array.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const myEE = new EventEmitter();
+                /// myEE.on('foo', () => console.log('a'));
+                /// myEE.prependListener('foo', () => console.log('b'));
+                /// myEE.emit('foo');
+                /// // Prints:
+                /// //   b
+                /// //   a
+                /// </code>
+                /// </summary>
+                abstract member on<'A>: event: obj * listener: ('A -> unit) -> Writable
+                /// <summary>
+                /// Adds the <c>listener</c> function to the end of the listeners array for the event
+                /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+                /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+                /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+                ///
+                /// <code lang="js">
+                /// server.on('connection', (stream) => {
+                ///   console.log('someone connected!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                ///
+                /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+                /// event listener to the beginning of the listeners array.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const myEE = new EventEmitter();
+                /// myEE.on('foo', () => console.log('a'));
+                /// myEE.prependListener('foo', () => console.log('b'));
+                /// myEE.emit('foo');
+                /// // Prints:
+                /// //   b
+                /// //   a
+                /// </code>
+                /// </summary>
+                abstract member on<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Writable
+                /// <summary>
+                /// Adds the <c>listener</c> function to the end of the listeners array for the event
+                /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+                /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+                /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+                ///
+                /// <code lang="js">
+                /// server.on('connection', (stream) => {
+                ///   console.log('someone connected!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                ///
+                /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+                /// event listener to the beginning of the listeners array.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const myEE = new EventEmitter();
+                /// myEE.on('foo', () => console.log('a'));
+                /// myEE.prependListener('foo', () => console.log('b'));
+                /// myEE.emit('foo');
+                /// // Prints:
+                /// //   b
+                /// //   a
+                /// </code>
+                /// </summary>
+                abstract member on<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Writable
                 /// <summary>
                 /// Adds the <c>listener</c> function to the end of the listeners array for the event
                 /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
@@ -122424,7 +134757,169 @@ Writable.toWeb($0)"""
                 /// //   a
                 /// </code>
                 /// </summary>
+                abstract member once<'A>: event: string * listener: ('A -> unit) -> Writable
+                /// <summary>
+                /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+                /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+                ///
+                /// <code lang="js">
+                /// server.once('connection', (stream) => {
+                ///   console.log('Ah, we have our first user!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                ///
+                /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+                /// event listener to the beginning of the listeners array.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const myEE = new EventEmitter();
+                /// myEE.once('foo', () => console.log('a'));
+                /// myEE.prependOnceListener('foo', () => console.log('b'));
+                /// myEE.emit('foo');
+                /// // Prints:
+                /// //   b
+                /// //   a
+                /// </code>
+                /// </summary>
+                abstract member once<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Writable
+                /// <summary>
+                /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+                /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+                ///
+                /// <code lang="js">
+                /// server.once('connection', (stream) => {
+                ///   console.log('Ah, we have our first user!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                ///
+                /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+                /// event listener to the beginning of the listeners array.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const myEE = new EventEmitter();
+                /// myEE.once('foo', () => console.log('a'));
+                /// myEE.prependOnceListener('foo', () => console.log('b'));
+                /// myEE.emit('foo');
+                /// // Prints:
+                /// //   b
+                /// //   a
+                /// </code>
+                /// </summary>
+                abstract member once<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Writable
+                /// <summary>
+                /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+                /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+                ///
+                /// <code lang="js">
+                /// server.once('connection', (stream) => {
+                ///   console.log('Ah, we have our first user!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                ///
+                /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+                /// event listener to the beginning of the listeners array.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const myEE = new EventEmitter();
+                /// myEE.once('foo', () => console.log('a'));
+                /// myEE.prependOnceListener('foo', () => console.log('b'));
+                /// myEE.emit('foo');
+                /// // Prints:
+                /// //   b
+                /// //   a
+                /// </code>
+                /// </summary>
                 abstract member once: event: string * listener: System.Delegate -> Writable
+                /// <summary>
+                /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+                /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+                ///
+                /// <code lang="js">
+                /// server.once('connection', (stream) => {
+                ///   console.log('Ah, we have our first user!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                ///
+                /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+                /// event listener to the beginning of the listeners array.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const myEE = new EventEmitter();
+                /// myEE.once('foo', () => console.log('a'));
+                /// myEE.prependOnceListener('foo', () => console.log('b'));
+                /// myEE.emit('foo');
+                /// // Prints:
+                /// //   b
+                /// //   a
+                /// </code>
+                /// </summary>
+                abstract member once<'A>: event: obj * listener: ('A -> unit) -> Writable
+                /// <summary>
+                /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+                /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+                ///
+                /// <code lang="js">
+                /// server.once('connection', (stream) => {
+                ///   console.log('Ah, we have our first user!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                ///
+                /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+                /// event listener to the beginning of the listeners array.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const myEE = new EventEmitter();
+                /// myEE.once('foo', () => console.log('a'));
+                /// myEE.prependOnceListener('foo', () => console.log('b'));
+                /// myEE.emit('foo');
+                /// // Prints:
+                /// //   b
+                /// //   a
+                /// </code>
+                /// </summary>
+                abstract member once<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Writable
+                /// <summary>
+                /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+                /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+                ///
+                /// <code lang="js">
+                /// server.once('connection', (stream) => {
+                ///   console.log('Ah, we have our first user!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                ///
+                /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+                /// event listener to the beginning of the listeners array.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const myEE = new EventEmitter();
+                /// myEE.once('foo', () => console.log('a'));
+                /// myEE.prependOnceListener('foo', () => console.log('b'));
+                /// myEE.emit('foo');
+                /// // Prints:
+                /// //   b
+                /// //   a
+                /// </code>
+                /// </summary>
+                abstract member once<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Writable
                 /// <summary>
                 /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
                 /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -122562,7 +135057,97 @@ Writable.toWeb($0)"""
                 ///
                 /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
                 /// </summary>
+                abstract member prependListener<'A>: event: string * listener: ('A -> unit) -> Writable
+                /// <summary>
+                /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+                /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+                /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+                /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+                ///
+                /// <code lang="js">
+                /// server.prependListener('connection', (stream) => {
+                ///   console.log('someone connected!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member prependListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Writable
+                /// <summary>
+                /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+                /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+                /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+                /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+                ///
+                /// <code lang="js">
+                /// server.prependListener('connection', (stream) => {
+                ///   console.log('someone connected!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member prependListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Writable
+                /// <summary>
+                /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+                /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+                /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+                /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+                ///
+                /// <code lang="js">
+                /// server.prependListener('connection', (stream) => {
+                ///   console.log('someone connected!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
                 abstract member prependListener: event: string * listener: System.Delegate -> Writable
+                /// <summary>
+                /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+                /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+                /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+                /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+                ///
+                /// <code lang="js">
+                /// server.prependListener('connection', (stream) => {
+                ///   console.log('someone connected!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member prependListener<'A>: event: obj * listener: ('A -> unit) -> Writable
+                /// <summary>
+                /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+                /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+                /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+                /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+                ///
+                /// <code lang="js">
+                /// server.prependListener('connection', (stream) => {
+                ///   console.log('someone connected!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member prependListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Writable
+                /// <summary>
+                /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+                /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+                /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+                /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+                ///
+                /// <code lang="js">
+                /// server.prependListener('connection', (stream) => {
+                ///   console.log('someone connected!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member prependListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Writable
                 /// <summary>
                 /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
                 /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
@@ -122674,7 +135259,85 @@ Writable.toWeb($0)"""
                 ///
                 /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
                 /// </summary>
+                abstract member prependOnceListener<'A>: event: string * listener: ('A -> unit) -> Writable
+                /// <summary>
+                /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+                /// listener is removed, and then invoked.
+                ///
+                /// <code lang="js">
+                /// server.prependOnceListener('connection', (stream) => {
+                ///   console.log('Ah, we have our first user!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member prependOnceListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Writable
+                /// <summary>
+                /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+                /// listener is removed, and then invoked.
+                ///
+                /// <code lang="js">
+                /// server.prependOnceListener('connection', (stream) => {
+                ///   console.log('Ah, we have our first user!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member prependOnceListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Writable
+                /// <summary>
+                /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+                /// listener is removed, and then invoked.
+                ///
+                /// <code lang="js">
+                /// server.prependOnceListener('connection', (stream) => {
+                ///   console.log('Ah, we have our first user!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
                 abstract member prependOnceListener: event: string * listener: System.Delegate -> Writable
+                /// <summary>
+                /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+                /// listener is removed, and then invoked.
+                ///
+                /// <code lang="js">
+                /// server.prependOnceListener('connection', (stream) => {
+                ///   console.log('Ah, we have our first user!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member prependOnceListener<'A>: event: obj * listener: ('A -> unit) -> Writable
+                /// <summary>
+                /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+                /// listener is removed, and then invoked.
+                ///
+                /// <code lang="js">
+                /// server.prependOnceListener('connection', (stream) => {
+                ///   console.log('Ah, we have our first user!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member prependOnceListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Writable
+                /// <summary>
+                /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+                /// listener is removed, and then invoked.
+                ///
+                /// <code lang="js">
+                /// server.prependOnceListener('connection', (stream) => {
+                ///   console.log('Ah, we have our first user!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member prependOnceListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Writable
                 /// <summary>
                 /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
                 /// listener is removed, and then invoked.
@@ -123267,7 +135930,499 @@ Writable.toWeb($0)"""
                 ///
                 /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
                 /// </summary>
+                abstract member removeListener<'A>: event: string * listener: ('A -> unit) -> Writable
+                /// <summary>
+                /// Removes the specified <c>listener</c> from the listener array for the event named <c>eventName</c>.
+                ///
+                /// <code lang="js">
+                /// const callback = (stream) => {
+                ///   console.log('someone connected!');
+                /// };
+                /// server.on('connection', callback);
+                /// // ...
+                /// server.removeListener('connection', callback);
+                /// </code>
+                ///
+                /// <c>removeListener()</c> will remove, at most, one instance of a listener from the
+                /// listener array. If any single listener has been added multiple times to the
+                /// listener array for the specified <c>eventName</c>, then <c>removeListener()</c> must be
+                /// called multiple times to remove each instance.
+                ///
+                /// Once an event is emitted, all listeners attached to it at the
+                /// time of emitting are called in order. This implies that any <c>removeListener()</c> or <c>removeAllListeners()</c> calls _after_ emitting and _before_ the last listener finishes execution
+                /// will not remove them from<c>emit()</c> in progress. Subsequent events behave as expected.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// class MyEmitter extends EventEmitter {}
+                /// const myEmitter = new MyEmitter();
+                ///
+                /// const callbackA = () => {
+                ///   console.log('A');
+                ///   myEmitter.removeListener('event', callbackB);
+                /// };
+                ///
+                /// const callbackB = () => {
+                ///   console.log('B');
+                /// };
+                ///
+                /// myEmitter.on('event', callbackA);
+                ///
+                /// myEmitter.on('event', callbackB);
+                ///
+                /// // callbackA removes listener callbackB but it will still be called.
+                /// // Internal listener array at time of emit [callbackA, callbackB]
+                /// myEmitter.emit('event');
+                /// // Prints:
+                /// //   A
+                /// //   B
+                ///
+                /// // callbackB is now removed.
+                /// // Internal listener array [callbackA]
+                /// myEmitter.emit('event');
+                /// // Prints:
+                /// //   A
+                /// </code>
+                ///
+                /// Because listeners are managed using an internal array, calling this will
+                /// change the position indices of any listener registered _after_ the listener
+                /// being removed. This will not impact the order in which listeners are called,
+                /// but it means that any copies of the listener array as returned by
+                /// the <c>emitter.listeners()</c> method will need to be recreated.
+                ///
+                /// When a single function has been added as a handler multiple times for a single
+                /// event (as in the example below), <c>removeListener()</c> will remove the most
+                /// recently added instance. In the example the <c>once('ping')</c> listener is removed:
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const ee = new EventEmitter();
+                ///
+                /// function pong() {
+                ///   console.log('pong');
+                /// }
+                ///
+                /// ee.on('ping', pong);
+                /// ee.once('ping', pong);
+                /// ee.removeListener('ping', pong);
+                ///
+                /// ee.emit('ping');
+                /// ee.emit('ping');
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member removeListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Writable
+                /// <summary>
+                /// Removes the specified <c>listener</c> from the listener array for the event named <c>eventName</c>.
+                ///
+                /// <code lang="js">
+                /// const callback = (stream) => {
+                ///   console.log('someone connected!');
+                /// };
+                /// server.on('connection', callback);
+                /// // ...
+                /// server.removeListener('connection', callback);
+                /// </code>
+                ///
+                /// <c>removeListener()</c> will remove, at most, one instance of a listener from the
+                /// listener array. If any single listener has been added multiple times to the
+                /// listener array for the specified <c>eventName</c>, then <c>removeListener()</c> must be
+                /// called multiple times to remove each instance.
+                ///
+                /// Once an event is emitted, all listeners attached to it at the
+                /// time of emitting are called in order. This implies that any <c>removeListener()</c> or <c>removeAllListeners()</c> calls _after_ emitting and _before_ the last listener finishes execution
+                /// will not remove them from<c>emit()</c> in progress. Subsequent events behave as expected.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// class MyEmitter extends EventEmitter {}
+                /// const myEmitter = new MyEmitter();
+                ///
+                /// const callbackA = () => {
+                ///   console.log('A');
+                ///   myEmitter.removeListener('event', callbackB);
+                /// };
+                ///
+                /// const callbackB = () => {
+                ///   console.log('B');
+                /// };
+                ///
+                /// myEmitter.on('event', callbackA);
+                ///
+                /// myEmitter.on('event', callbackB);
+                ///
+                /// // callbackA removes listener callbackB but it will still be called.
+                /// // Internal listener array at time of emit [callbackA, callbackB]
+                /// myEmitter.emit('event');
+                /// // Prints:
+                /// //   A
+                /// //   B
+                ///
+                /// // callbackB is now removed.
+                /// // Internal listener array [callbackA]
+                /// myEmitter.emit('event');
+                /// // Prints:
+                /// //   A
+                /// </code>
+                ///
+                /// Because listeners are managed using an internal array, calling this will
+                /// change the position indices of any listener registered _after_ the listener
+                /// being removed. This will not impact the order in which listeners are called,
+                /// but it means that any copies of the listener array as returned by
+                /// the <c>emitter.listeners()</c> method will need to be recreated.
+                ///
+                /// When a single function has been added as a handler multiple times for a single
+                /// event (as in the example below), <c>removeListener()</c> will remove the most
+                /// recently added instance. In the example the <c>once('ping')</c> listener is removed:
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const ee = new EventEmitter();
+                ///
+                /// function pong() {
+                ///   console.log('pong');
+                /// }
+                ///
+                /// ee.on('ping', pong);
+                /// ee.once('ping', pong);
+                /// ee.removeListener('ping', pong);
+                ///
+                /// ee.emit('ping');
+                /// ee.emit('ping');
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member removeListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Writable
+                /// <summary>
+                /// Removes the specified <c>listener</c> from the listener array for the event named <c>eventName</c>.
+                ///
+                /// <code lang="js">
+                /// const callback = (stream) => {
+                ///   console.log('someone connected!');
+                /// };
+                /// server.on('connection', callback);
+                /// // ...
+                /// server.removeListener('connection', callback);
+                /// </code>
+                ///
+                /// <c>removeListener()</c> will remove, at most, one instance of a listener from the
+                /// listener array. If any single listener has been added multiple times to the
+                /// listener array for the specified <c>eventName</c>, then <c>removeListener()</c> must be
+                /// called multiple times to remove each instance.
+                ///
+                /// Once an event is emitted, all listeners attached to it at the
+                /// time of emitting are called in order. This implies that any <c>removeListener()</c> or <c>removeAllListeners()</c> calls _after_ emitting and _before_ the last listener finishes execution
+                /// will not remove them from<c>emit()</c> in progress. Subsequent events behave as expected.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// class MyEmitter extends EventEmitter {}
+                /// const myEmitter = new MyEmitter();
+                ///
+                /// const callbackA = () => {
+                ///   console.log('A');
+                ///   myEmitter.removeListener('event', callbackB);
+                /// };
+                ///
+                /// const callbackB = () => {
+                ///   console.log('B');
+                /// };
+                ///
+                /// myEmitter.on('event', callbackA);
+                ///
+                /// myEmitter.on('event', callbackB);
+                ///
+                /// // callbackA removes listener callbackB but it will still be called.
+                /// // Internal listener array at time of emit [callbackA, callbackB]
+                /// myEmitter.emit('event');
+                /// // Prints:
+                /// //   A
+                /// //   B
+                ///
+                /// // callbackB is now removed.
+                /// // Internal listener array [callbackA]
+                /// myEmitter.emit('event');
+                /// // Prints:
+                /// //   A
+                /// </code>
+                ///
+                /// Because listeners are managed using an internal array, calling this will
+                /// change the position indices of any listener registered _after_ the listener
+                /// being removed. This will not impact the order in which listeners are called,
+                /// but it means that any copies of the listener array as returned by
+                /// the <c>emitter.listeners()</c> method will need to be recreated.
+                ///
+                /// When a single function has been added as a handler multiple times for a single
+                /// event (as in the example below), <c>removeListener()</c> will remove the most
+                /// recently added instance. In the example the <c>once('ping')</c> listener is removed:
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const ee = new EventEmitter();
+                ///
+                /// function pong() {
+                ///   console.log('pong');
+                /// }
+                ///
+                /// ee.on('ping', pong);
+                /// ee.once('ping', pong);
+                /// ee.removeListener('ping', pong);
+                ///
+                /// ee.emit('ping');
+                /// ee.emit('ping');
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
                 abstract member removeListener: event: string * listener: System.Delegate -> Writable
+                /// <summary>
+                /// Removes the specified <c>listener</c> from the listener array for the event named <c>eventName</c>.
+                ///
+                /// <code lang="js">
+                /// const callback = (stream) => {
+                ///   console.log('someone connected!');
+                /// };
+                /// server.on('connection', callback);
+                /// // ...
+                /// server.removeListener('connection', callback);
+                /// </code>
+                ///
+                /// <c>removeListener()</c> will remove, at most, one instance of a listener from the
+                /// listener array. If any single listener has been added multiple times to the
+                /// listener array for the specified <c>eventName</c>, then <c>removeListener()</c> must be
+                /// called multiple times to remove each instance.
+                ///
+                /// Once an event is emitted, all listeners attached to it at the
+                /// time of emitting are called in order. This implies that any <c>removeListener()</c> or <c>removeAllListeners()</c> calls _after_ emitting and _before_ the last listener finishes execution
+                /// will not remove them from<c>emit()</c> in progress. Subsequent events behave as expected.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// class MyEmitter extends EventEmitter {}
+                /// const myEmitter = new MyEmitter();
+                ///
+                /// const callbackA = () => {
+                ///   console.log('A');
+                ///   myEmitter.removeListener('event', callbackB);
+                /// };
+                ///
+                /// const callbackB = () => {
+                ///   console.log('B');
+                /// };
+                ///
+                /// myEmitter.on('event', callbackA);
+                ///
+                /// myEmitter.on('event', callbackB);
+                ///
+                /// // callbackA removes listener callbackB but it will still be called.
+                /// // Internal listener array at time of emit [callbackA, callbackB]
+                /// myEmitter.emit('event');
+                /// // Prints:
+                /// //   A
+                /// //   B
+                ///
+                /// // callbackB is now removed.
+                /// // Internal listener array [callbackA]
+                /// myEmitter.emit('event');
+                /// // Prints:
+                /// //   A
+                /// </code>
+                ///
+                /// Because listeners are managed using an internal array, calling this will
+                /// change the position indices of any listener registered _after_ the listener
+                /// being removed. This will not impact the order in which listeners are called,
+                /// but it means that any copies of the listener array as returned by
+                /// the <c>emitter.listeners()</c> method will need to be recreated.
+                ///
+                /// When a single function has been added as a handler multiple times for a single
+                /// event (as in the example below), <c>removeListener()</c> will remove the most
+                /// recently added instance. In the example the <c>once('ping')</c> listener is removed:
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const ee = new EventEmitter();
+                ///
+                /// function pong() {
+                ///   console.log('pong');
+                /// }
+                ///
+                /// ee.on('ping', pong);
+                /// ee.once('ping', pong);
+                /// ee.removeListener('ping', pong);
+                ///
+                /// ee.emit('ping');
+                /// ee.emit('ping');
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member removeListener<'A>: event: obj * listener: ('A -> unit) -> Writable
+                /// <summary>
+                /// Removes the specified <c>listener</c> from the listener array for the event named <c>eventName</c>.
+                ///
+                /// <code lang="js">
+                /// const callback = (stream) => {
+                ///   console.log('someone connected!');
+                /// };
+                /// server.on('connection', callback);
+                /// // ...
+                /// server.removeListener('connection', callback);
+                /// </code>
+                ///
+                /// <c>removeListener()</c> will remove, at most, one instance of a listener from the
+                /// listener array. If any single listener has been added multiple times to the
+                /// listener array for the specified <c>eventName</c>, then <c>removeListener()</c> must be
+                /// called multiple times to remove each instance.
+                ///
+                /// Once an event is emitted, all listeners attached to it at the
+                /// time of emitting are called in order. This implies that any <c>removeListener()</c> or <c>removeAllListeners()</c> calls _after_ emitting and _before_ the last listener finishes execution
+                /// will not remove them from<c>emit()</c> in progress. Subsequent events behave as expected.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// class MyEmitter extends EventEmitter {}
+                /// const myEmitter = new MyEmitter();
+                ///
+                /// const callbackA = () => {
+                ///   console.log('A');
+                ///   myEmitter.removeListener('event', callbackB);
+                /// };
+                ///
+                /// const callbackB = () => {
+                ///   console.log('B');
+                /// };
+                ///
+                /// myEmitter.on('event', callbackA);
+                ///
+                /// myEmitter.on('event', callbackB);
+                ///
+                /// // callbackA removes listener callbackB but it will still be called.
+                /// // Internal listener array at time of emit [callbackA, callbackB]
+                /// myEmitter.emit('event');
+                /// // Prints:
+                /// //   A
+                /// //   B
+                ///
+                /// // callbackB is now removed.
+                /// // Internal listener array [callbackA]
+                /// myEmitter.emit('event');
+                /// // Prints:
+                /// //   A
+                /// </code>
+                ///
+                /// Because listeners are managed using an internal array, calling this will
+                /// change the position indices of any listener registered _after_ the listener
+                /// being removed. This will not impact the order in which listeners are called,
+                /// but it means that any copies of the listener array as returned by
+                /// the <c>emitter.listeners()</c> method will need to be recreated.
+                ///
+                /// When a single function has been added as a handler multiple times for a single
+                /// event (as in the example below), <c>removeListener()</c> will remove the most
+                /// recently added instance. In the example the <c>once('ping')</c> listener is removed:
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const ee = new EventEmitter();
+                ///
+                /// function pong() {
+                ///   console.log('pong');
+                /// }
+                ///
+                /// ee.on('ping', pong);
+                /// ee.once('ping', pong);
+                /// ee.removeListener('ping', pong);
+                ///
+                /// ee.emit('ping');
+                /// ee.emit('ping');
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member removeListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Writable
+                /// <summary>
+                /// Removes the specified <c>listener</c> from the listener array for the event named <c>eventName</c>.
+                ///
+                /// <code lang="js">
+                /// const callback = (stream) => {
+                ///   console.log('someone connected!');
+                /// };
+                /// server.on('connection', callback);
+                /// // ...
+                /// server.removeListener('connection', callback);
+                /// </code>
+                ///
+                /// <c>removeListener()</c> will remove, at most, one instance of a listener from the
+                /// listener array. If any single listener has been added multiple times to the
+                /// listener array for the specified <c>eventName</c>, then <c>removeListener()</c> must be
+                /// called multiple times to remove each instance.
+                ///
+                /// Once an event is emitted, all listeners attached to it at the
+                /// time of emitting are called in order. This implies that any <c>removeListener()</c> or <c>removeAllListeners()</c> calls _after_ emitting and _before_ the last listener finishes execution
+                /// will not remove them from<c>emit()</c> in progress. Subsequent events behave as expected.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// class MyEmitter extends EventEmitter {}
+                /// const myEmitter = new MyEmitter();
+                ///
+                /// const callbackA = () => {
+                ///   console.log('A');
+                ///   myEmitter.removeListener('event', callbackB);
+                /// };
+                ///
+                /// const callbackB = () => {
+                ///   console.log('B');
+                /// };
+                ///
+                /// myEmitter.on('event', callbackA);
+                ///
+                /// myEmitter.on('event', callbackB);
+                ///
+                /// // callbackA removes listener callbackB but it will still be called.
+                /// // Internal listener array at time of emit [callbackA, callbackB]
+                /// myEmitter.emit('event');
+                /// // Prints:
+                /// //   A
+                /// //   B
+                ///
+                /// // callbackB is now removed.
+                /// // Internal listener array [callbackA]
+                /// myEmitter.emit('event');
+                /// // Prints:
+                /// //   A
+                /// </code>
+                ///
+                /// Because listeners are managed using an internal array, calling this will
+                /// change the position indices of any listener registered _after_ the listener
+                /// being removed. This will not impact the order in which listeners are called,
+                /// but it means that any copies of the listener array as returned by
+                /// the <c>emitter.listeners()</c> method will need to be recreated.
+                ///
+                /// When a single function has been added as a handler multiple times for a single
+                /// event (as in the example below), <c>removeListener()</c> will remove the most
+                /// recently added instance. In the example the <c>once('ping')</c> listener is removed:
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const ee = new EventEmitter();
+                ///
+                /// function pong() {
+                ///   console.log('pong');
+                /// }
+                ///
+                /// ee.on('ping', pong);
+                /// ee.once('ping', pong);
+                /// ee.removeListener('ping', pong);
+                ///
+                /// ee.emit('ping');
+                /// ee.emit('ping');
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member removeListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Writable
                 /// <summary>
                 /// Removes the specified <c>listener</c> from the listener array for the event named <c>eventName</c>.
                 ///
@@ -123742,7 +136897,103 @@ Duplex.fromWeb($0, $1)"""
                 /// 10. resume
                 /// 11. unpipe
                 /// </summary>
+                abstract member addListener<'A>: event: string * listener: ('A -> unit) -> Duplex
+                /// <summary>
+                /// Event emitter
+                /// The defined events on documents including:
+                /// 1.  close
+                /// 2.  data
+                /// 3.  drain
+                /// 4.  end
+                /// 5.  error
+                /// 6.  finish
+                /// 7.  pause
+                /// 8.  pipe
+                /// 9.  readable
+                /// 10. resume
+                /// 11. unpipe
+                /// </summary>
+                abstract member addListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Duplex
+                /// <summary>
+                /// Event emitter
+                /// The defined events on documents including:
+                /// 1.  close
+                /// 2.  data
+                /// 3.  drain
+                /// 4.  end
+                /// 5.  error
+                /// 6.  finish
+                /// 7.  pause
+                /// 8.  pipe
+                /// 9.  readable
+                /// 10. resume
+                /// 11. unpipe
+                /// </summary>
+                abstract member addListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Duplex
+                /// <summary>
+                /// Event emitter
+                /// The defined events on documents including:
+                /// 1.  close
+                /// 2.  data
+                /// 3.  drain
+                /// 4.  end
+                /// 5.  error
+                /// 6.  finish
+                /// 7.  pause
+                /// 8.  pipe
+                /// 9.  readable
+                /// 10. resume
+                /// 11. unpipe
+                /// </summary>
                 abstract member addListener: event: string * listener: System.Delegate -> Duplex
+                /// <summary>
+                /// Event emitter
+                /// The defined events on documents including:
+                /// 1.  close
+                /// 2.  data
+                /// 3.  drain
+                /// 4.  end
+                /// 5.  error
+                /// 6.  finish
+                /// 7.  pause
+                /// 8.  pipe
+                /// 9.  readable
+                /// 10. resume
+                /// 11. unpipe
+                /// </summary>
+                abstract member addListener<'A>: event: obj * listener: ('A -> unit) -> Duplex
+                /// <summary>
+                /// Event emitter
+                /// The defined events on documents including:
+                /// 1.  close
+                /// 2.  data
+                /// 3.  drain
+                /// 4.  end
+                /// 5.  error
+                /// 6.  finish
+                /// 7.  pause
+                /// 8.  pipe
+                /// 9.  readable
+                /// 10. resume
+                /// 11. unpipe
+                /// </summary>
+                abstract member addListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Duplex
+                /// <summary>
+                /// Event emitter
+                /// The defined events on documents including:
+                /// 1.  close
+                /// 2.  data
+                /// 3.  drain
+                /// 4.  end
+                /// 5.  error
+                /// 6.  finish
+                /// 7.  pause
+                /// 8.  pipe
+                /// 9.  readable
+                /// 10. resume
+                /// 11. unpipe
+                /// </summary>
+                abstract member addListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Duplex
                 /// <summary>
                 /// Event emitter
                 /// The defined events on documents including:
@@ -124648,7 +137899,181 @@ Duplex.fromWeb($0, $1)"""
                 /// //   a
                 /// </code>
                 /// </summary>
+                abstract member on<'A>: event: string * listener: ('A -> unit) -> Duplex
+                /// <summary>
+                /// Adds the <c>listener</c> function to the end of the listeners array for the event
+                /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+                /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+                /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+                ///
+                /// <code lang="js">
+                /// server.on('connection', (stream) => {
+                ///   console.log('someone connected!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                ///
+                /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+                /// event listener to the beginning of the listeners array.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const myEE = new EventEmitter();
+                /// myEE.on('foo', () => console.log('a'));
+                /// myEE.prependListener('foo', () => console.log('b'));
+                /// myEE.emit('foo');
+                /// // Prints:
+                /// //   b
+                /// //   a
+                /// </code>
+                /// </summary>
+                abstract member on<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Duplex
+                /// <summary>
+                /// Adds the <c>listener</c> function to the end of the listeners array for the event
+                /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+                /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+                /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+                ///
+                /// <code lang="js">
+                /// server.on('connection', (stream) => {
+                ///   console.log('someone connected!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                ///
+                /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+                /// event listener to the beginning of the listeners array.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const myEE = new EventEmitter();
+                /// myEE.on('foo', () => console.log('a'));
+                /// myEE.prependListener('foo', () => console.log('b'));
+                /// myEE.emit('foo');
+                /// // Prints:
+                /// //   b
+                /// //   a
+                /// </code>
+                /// </summary>
+                abstract member on<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Duplex
+                /// <summary>
+                /// Adds the <c>listener</c> function to the end of the listeners array for the event
+                /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+                /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+                /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+                ///
+                /// <code lang="js">
+                /// server.on('connection', (stream) => {
+                ///   console.log('someone connected!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                ///
+                /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+                /// event listener to the beginning of the listeners array.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const myEE = new EventEmitter();
+                /// myEE.on('foo', () => console.log('a'));
+                /// myEE.prependListener('foo', () => console.log('b'));
+                /// myEE.emit('foo');
+                /// // Prints:
+                /// //   b
+                /// //   a
+                /// </code>
+                /// </summary>
                 abstract member on: event: string * listener: System.Delegate -> Duplex
+                /// <summary>
+                /// Adds the <c>listener</c> function to the end of the listeners array for the event
+                /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+                /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+                /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+                ///
+                /// <code lang="js">
+                /// server.on('connection', (stream) => {
+                ///   console.log('someone connected!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                ///
+                /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+                /// event listener to the beginning of the listeners array.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const myEE = new EventEmitter();
+                /// myEE.on('foo', () => console.log('a'));
+                /// myEE.prependListener('foo', () => console.log('b'));
+                /// myEE.emit('foo');
+                /// // Prints:
+                /// //   b
+                /// //   a
+                /// </code>
+                /// </summary>
+                abstract member on<'A>: event: obj * listener: ('A -> unit) -> Duplex
+                /// <summary>
+                /// Adds the <c>listener</c> function to the end of the listeners array for the event
+                /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+                /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+                /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+                ///
+                /// <code lang="js">
+                /// server.on('connection', (stream) => {
+                ///   console.log('someone connected!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                ///
+                /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+                /// event listener to the beginning of the listeners array.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const myEE = new EventEmitter();
+                /// myEE.on('foo', () => console.log('a'));
+                /// myEE.prependListener('foo', () => console.log('b'));
+                /// myEE.emit('foo');
+                /// // Prints:
+                /// //   b
+                /// //   a
+                /// </code>
+                /// </summary>
+                abstract member on<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Duplex
+                /// <summary>
+                /// Adds the <c>listener</c> function to the end of the listeners array for the event
+                /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+                /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+                /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+                ///
+                /// <code lang="js">
+                /// server.on('connection', (stream) => {
+                ///   console.log('someone connected!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                ///
+                /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+                /// event listener to the beginning of the listeners array.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const myEE = new EventEmitter();
+                /// myEE.on('foo', () => console.log('a'));
+                /// myEE.prependListener('foo', () => console.log('b'));
+                /// myEE.emit('foo');
+                /// // Prints:
+                /// //   b
+                /// //   a
+                /// </code>
+                /// </summary>
+                abstract member on<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Duplex
                 /// <summary>
                 /// Adds the <c>listener</c> function to the end of the listeners array for the event
                 /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
@@ -125012,7 +138437,169 @@ Duplex.fromWeb($0, $1)"""
                 /// //   a
                 /// </code>
                 /// </summary>
+                abstract member once<'A>: event: string * listener: ('A -> unit) -> Duplex
+                /// <summary>
+                /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+                /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+                ///
+                /// <code lang="js">
+                /// server.once('connection', (stream) => {
+                ///   console.log('Ah, we have our first user!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                ///
+                /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+                /// event listener to the beginning of the listeners array.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const myEE = new EventEmitter();
+                /// myEE.once('foo', () => console.log('a'));
+                /// myEE.prependOnceListener('foo', () => console.log('b'));
+                /// myEE.emit('foo');
+                /// // Prints:
+                /// //   b
+                /// //   a
+                /// </code>
+                /// </summary>
+                abstract member once<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Duplex
+                /// <summary>
+                /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+                /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+                ///
+                /// <code lang="js">
+                /// server.once('connection', (stream) => {
+                ///   console.log('Ah, we have our first user!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                ///
+                /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+                /// event listener to the beginning of the listeners array.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const myEE = new EventEmitter();
+                /// myEE.once('foo', () => console.log('a'));
+                /// myEE.prependOnceListener('foo', () => console.log('b'));
+                /// myEE.emit('foo');
+                /// // Prints:
+                /// //   b
+                /// //   a
+                /// </code>
+                /// </summary>
+                abstract member once<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Duplex
+                /// <summary>
+                /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+                /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+                ///
+                /// <code lang="js">
+                /// server.once('connection', (stream) => {
+                ///   console.log('Ah, we have our first user!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                ///
+                /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+                /// event listener to the beginning of the listeners array.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const myEE = new EventEmitter();
+                /// myEE.once('foo', () => console.log('a'));
+                /// myEE.prependOnceListener('foo', () => console.log('b'));
+                /// myEE.emit('foo');
+                /// // Prints:
+                /// //   b
+                /// //   a
+                /// </code>
+                /// </summary>
                 abstract member once: event: string * listener: System.Delegate -> Duplex
+                /// <summary>
+                /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+                /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+                ///
+                /// <code lang="js">
+                /// server.once('connection', (stream) => {
+                ///   console.log('Ah, we have our first user!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                ///
+                /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+                /// event listener to the beginning of the listeners array.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const myEE = new EventEmitter();
+                /// myEE.once('foo', () => console.log('a'));
+                /// myEE.prependOnceListener('foo', () => console.log('b'));
+                /// myEE.emit('foo');
+                /// // Prints:
+                /// //   b
+                /// //   a
+                /// </code>
+                /// </summary>
+                abstract member once<'A>: event: obj * listener: ('A -> unit) -> Duplex
+                /// <summary>
+                /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+                /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+                ///
+                /// <code lang="js">
+                /// server.once('connection', (stream) => {
+                ///   console.log('Ah, we have our first user!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                ///
+                /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+                /// event listener to the beginning of the listeners array.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const myEE = new EventEmitter();
+                /// myEE.once('foo', () => console.log('a'));
+                /// myEE.prependOnceListener('foo', () => console.log('b'));
+                /// myEE.emit('foo');
+                /// // Prints:
+                /// //   b
+                /// //   a
+                /// </code>
+                /// </summary>
+                abstract member once<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Duplex
+                /// <summary>
+                /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+                /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+                ///
+                /// <code lang="js">
+                /// server.once('connection', (stream) => {
+                ///   console.log('Ah, we have our first user!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                ///
+                /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+                /// event listener to the beginning of the listeners array.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const myEE = new EventEmitter();
+                /// myEE.once('foo', () => console.log('a'));
+                /// myEE.prependOnceListener('foo', () => console.log('b'));
+                /// myEE.emit('foo');
+                /// // Prints:
+                /// //   b
+                /// //   a
+                /// </code>
+                /// </summary>
+                abstract member once<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Duplex
                 /// <summary>
                 /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
                 /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -125230,7 +138817,97 @@ Duplex.fromWeb($0, $1)"""
                 ///
                 /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
                 /// </summary>
+                abstract member prependListener<'A>: event: string * listener: ('A -> unit) -> Duplex
+                /// <summary>
+                /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+                /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+                /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+                /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+                ///
+                /// <code lang="js">
+                /// server.prependListener('connection', (stream) => {
+                ///   console.log('someone connected!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member prependListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Duplex
+                /// <summary>
+                /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+                /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+                /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+                /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+                ///
+                /// <code lang="js">
+                /// server.prependListener('connection', (stream) => {
+                ///   console.log('someone connected!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member prependListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Duplex
+                /// <summary>
+                /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+                /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+                /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+                /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+                ///
+                /// <code lang="js">
+                /// server.prependListener('connection', (stream) => {
+                ///   console.log('someone connected!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
                 abstract member prependListener: event: string * listener: System.Delegate -> Duplex
+                /// <summary>
+                /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+                /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+                /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+                /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+                ///
+                /// <code lang="js">
+                /// server.prependListener('connection', (stream) => {
+                ///   console.log('someone connected!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member prependListener<'A>: event: obj * listener: ('A -> unit) -> Duplex
+                /// <summary>
+                /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+                /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+                /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+                /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+                ///
+                /// <code lang="js">
+                /// server.prependListener('connection', (stream) => {
+                ///   console.log('someone connected!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member prependListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Duplex
+                /// <summary>
+                /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+                /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+                /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+                /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+                ///
+                /// <code lang="js">
+                /// server.prependListener('connection', (stream) => {
+                ///   console.log('someone connected!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member prependListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Duplex
                 /// <summary>
                 /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
                 /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
@@ -125412,7 +139089,85 @@ Duplex.fromWeb($0, $1)"""
                 ///
                 /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
                 /// </summary>
+                abstract member prependOnceListener<'A>: event: string * listener: ('A -> unit) -> Duplex
+                /// <summary>
+                /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+                /// listener is removed, and then invoked.
+                ///
+                /// <code lang="js">
+                /// server.prependOnceListener('connection', (stream) => {
+                ///   console.log('Ah, we have our first user!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member prependOnceListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Duplex
+                /// <summary>
+                /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+                /// listener is removed, and then invoked.
+                ///
+                /// <code lang="js">
+                /// server.prependOnceListener('connection', (stream) => {
+                ///   console.log('Ah, we have our first user!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member prependOnceListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Duplex
+                /// <summary>
+                /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+                /// listener is removed, and then invoked.
+                ///
+                /// <code lang="js">
+                /// server.prependOnceListener('connection', (stream) => {
+                ///   console.log('Ah, we have our first user!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
                 abstract member prependOnceListener: event: string * listener: System.Delegate -> Duplex
+                /// <summary>
+                /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+                /// listener is removed, and then invoked.
+                ///
+                /// <code lang="js">
+                /// server.prependOnceListener('connection', (stream) => {
+                ///   console.log('Ah, we have our first user!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member prependOnceListener<'A>: event: obj * listener: ('A -> unit) -> Duplex
+                /// <summary>
+                /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+                /// listener is removed, and then invoked.
+                ///
+                /// <code lang="js">
+                /// server.prependOnceListener('connection', (stream) => {
+                ///   console.log('Ah, we have our first user!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member prependOnceListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Duplex
+                /// <summary>
+                /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+                /// listener is removed, and then invoked.
+                ///
+                /// <code lang="js">
+                /// server.prependOnceListener('connection', (stream) => {
+                ///   console.log('Ah, we have our first user!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member prependOnceListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Duplex
                 /// <summary>
                 /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
                 /// listener is removed, and then invoked.
@@ -126420,7 +140175,499 @@ Duplex.fromWeb($0, $1)"""
                 ///
                 /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
                 /// </summary>
+                abstract member removeListener<'A>: event: string * listener: ('A -> unit) -> Duplex
+                /// <summary>
+                /// Removes the specified <c>listener</c> from the listener array for the event named <c>eventName</c>.
+                ///
+                /// <code lang="js">
+                /// const callback = (stream) => {
+                ///   console.log('someone connected!');
+                /// };
+                /// server.on('connection', callback);
+                /// // ...
+                /// server.removeListener('connection', callback);
+                /// </code>
+                ///
+                /// <c>removeListener()</c> will remove, at most, one instance of a listener from the
+                /// listener array. If any single listener has been added multiple times to the
+                /// listener array for the specified <c>eventName</c>, then <c>removeListener()</c> must be
+                /// called multiple times to remove each instance.
+                ///
+                /// Once an event is emitted, all listeners attached to it at the
+                /// time of emitting are called in order. This implies that any <c>removeListener()</c> or <c>removeAllListeners()</c> calls _after_ emitting and _before_ the last listener finishes execution
+                /// will not remove them from<c>emit()</c> in progress. Subsequent events behave as expected.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// class MyEmitter extends EventEmitter {}
+                /// const myEmitter = new MyEmitter();
+                ///
+                /// const callbackA = () => {
+                ///   console.log('A');
+                ///   myEmitter.removeListener('event', callbackB);
+                /// };
+                ///
+                /// const callbackB = () => {
+                ///   console.log('B');
+                /// };
+                ///
+                /// myEmitter.on('event', callbackA);
+                ///
+                /// myEmitter.on('event', callbackB);
+                ///
+                /// // callbackA removes listener callbackB but it will still be called.
+                /// // Internal listener array at time of emit [callbackA, callbackB]
+                /// myEmitter.emit('event');
+                /// // Prints:
+                /// //   A
+                /// //   B
+                ///
+                /// // callbackB is now removed.
+                /// // Internal listener array [callbackA]
+                /// myEmitter.emit('event');
+                /// // Prints:
+                /// //   A
+                /// </code>
+                ///
+                /// Because listeners are managed using an internal array, calling this will
+                /// change the position indices of any listener registered _after_ the listener
+                /// being removed. This will not impact the order in which listeners are called,
+                /// but it means that any copies of the listener array as returned by
+                /// the <c>emitter.listeners()</c> method will need to be recreated.
+                ///
+                /// When a single function has been added as a handler multiple times for a single
+                /// event (as in the example below), <c>removeListener()</c> will remove the most
+                /// recently added instance. In the example the <c>once('ping')</c> listener is removed:
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const ee = new EventEmitter();
+                ///
+                /// function pong() {
+                ///   console.log('pong');
+                /// }
+                ///
+                /// ee.on('ping', pong);
+                /// ee.once('ping', pong);
+                /// ee.removeListener('ping', pong);
+                ///
+                /// ee.emit('ping');
+                /// ee.emit('ping');
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member removeListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Duplex
+                /// <summary>
+                /// Removes the specified <c>listener</c> from the listener array for the event named <c>eventName</c>.
+                ///
+                /// <code lang="js">
+                /// const callback = (stream) => {
+                ///   console.log('someone connected!');
+                /// };
+                /// server.on('connection', callback);
+                /// // ...
+                /// server.removeListener('connection', callback);
+                /// </code>
+                ///
+                /// <c>removeListener()</c> will remove, at most, one instance of a listener from the
+                /// listener array. If any single listener has been added multiple times to the
+                /// listener array for the specified <c>eventName</c>, then <c>removeListener()</c> must be
+                /// called multiple times to remove each instance.
+                ///
+                /// Once an event is emitted, all listeners attached to it at the
+                /// time of emitting are called in order. This implies that any <c>removeListener()</c> or <c>removeAllListeners()</c> calls _after_ emitting and _before_ the last listener finishes execution
+                /// will not remove them from<c>emit()</c> in progress. Subsequent events behave as expected.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// class MyEmitter extends EventEmitter {}
+                /// const myEmitter = new MyEmitter();
+                ///
+                /// const callbackA = () => {
+                ///   console.log('A');
+                ///   myEmitter.removeListener('event', callbackB);
+                /// };
+                ///
+                /// const callbackB = () => {
+                ///   console.log('B');
+                /// };
+                ///
+                /// myEmitter.on('event', callbackA);
+                ///
+                /// myEmitter.on('event', callbackB);
+                ///
+                /// // callbackA removes listener callbackB but it will still be called.
+                /// // Internal listener array at time of emit [callbackA, callbackB]
+                /// myEmitter.emit('event');
+                /// // Prints:
+                /// //   A
+                /// //   B
+                ///
+                /// // callbackB is now removed.
+                /// // Internal listener array [callbackA]
+                /// myEmitter.emit('event');
+                /// // Prints:
+                /// //   A
+                /// </code>
+                ///
+                /// Because listeners are managed using an internal array, calling this will
+                /// change the position indices of any listener registered _after_ the listener
+                /// being removed. This will not impact the order in which listeners are called,
+                /// but it means that any copies of the listener array as returned by
+                /// the <c>emitter.listeners()</c> method will need to be recreated.
+                ///
+                /// When a single function has been added as a handler multiple times for a single
+                /// event (as in the example below), <c>removeListener()</c> will remove the most
+                /// recently added instance. In the example the <c>once('ping')</c> listener is removed:
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const ee = new EventEmitter();
+                ///
+                /// function pong() {
+                ///   console.log('pong');
+                /// }
+                ///
+                /// ee.on('ping', pong);
+                /// ee.once('ping', pong);
+                /// ee.removeListener('ping', pong);
+                ///
+                /// ee.emit('ping');
+                /// ee.emit('ping');
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member removeListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Duplex
+                /// <summary>
+                /// Removes the specified <c>listener</c> from the listener array for the event named <c>eventName</c>.
+                ///
+                /// <code lang="js">
+                /// const callback = (stream) => {
+                ///   console.log('someone connected!');
+                /// };
+                /// server.on('connection', callback);
+                /// // ...
+                /// server.removeListener('connection', callback);
+                /// </code>
+                ///
+                /// <c>removeListener()</c> will remove, at most, one instance of a listener from the
+                /// listener array. If any single listener has been added multiple times to the
+                /// listener array for the specified <c>eventName</c>, then <c>removeListener()</c> must be
+                /// called multiple times to remove each instance.
+                ///
+                /// Once an event is emitted, all listeners attached to it at the
+                /// time of emitting are called in order. This implies that any <c>removeListener()</c> or <c>removeAllListeners()</c> calls _after_ emitting and _before_ the last listener finishes execution
+                /// will not remove them from<c>emit()</c> in progress. Subsequent events behave as expected.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// class MyEmitter extends EventEmitter {}
+                /// const myEmitter = new MyEmitter();
+                ///
+                /// const callbackA = () => {
+                ///   console.log('A');
+                ///   myEmitter.removeListener('event', callbackB);
+                /// };
+                ///
+                /// const callbackB = () => {
+                ///   console.log('B');
+                /// };
+                ///
+                /// myEmitter.on('event', callbackA);
+                ///
+                /// myEmitter.on('event', callbackB);
+                ///
+                /// // callbackA removes listener callbackB but it will still be called.
+                /// // Internal listener array at time of emit [callbackA, callbackB]
+                /// myEmitter.emit('event');
+                /// // Prints:
+                /// //   A
+                /// //   B
+                ///
+                /// // callbackB is now removed.
+                /// // Internal listener array [callbackA]
+                /// myEmitter.emit('event');
+                /// // Prints:
+                /// //   A
+                /// </code>
+                ///
+                /// Because listeners are managed using an internal array, calling this will
+                /// change the position indices of any listener registered _after_ the listener
+                /// being removed. This will not impact the order in which listeners are called,
+                /// but it means that any copies of the listener array as returned by
+                /// the <c>emitter.listeners()</c> method will need to be recreated.
+                ///
+                /// When a single function has been added as a handler multiple times for a single
+                /// event (as in the example below), <c>removeListener()</c> will remove the most
+                /// recently added instance. In the example the <c>once('ping')</c> listener is removed:
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const ee = new EventEmitter();
+                ///
+                /// function pong() {
+                ///   console.log('pong');
+                /// }
+                ///
+                /// ee.on('ping', pong);
+                /// ee.once('ping', pong);
+                /// ee.removeListener('ping', pong);
+                ///
+                /// ee.emit('ping');
+                /// ee.emit('ping');
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
                 abstract member removeListener: event: string * listener: System.Delegate -> Duplex
+                /// <summary>
+                /// Removes the specified <c>listener</c> from the listener array for the event named <c>eventName</c>.
+                ///
+                /// <code lang="js">
+                /// const callback = (stream) => {
+                ///   console.log('someone connected!');
+                /// };
+                /// server.on('connection', callback);
+                /// // ...
+                /// server.removeListener('connection', callback);
+                /// </code>
+                ///
+                /// <c>removeListener()</c> will remove, at most, one instance of a listener from the
+                /// listener array. If any single listener has been added multiple times to the
+                /// listener array for the specified <c>eventName</c>, then <c>removeListener()</c> must be
+                /// called multiple times to remove each instance.
+                ///
+                /// Once an event is emitted, all listeners attached to it at the
+                /// time of emitting are called in order. This implies that any <c>removeListener()</c> or <c>removeAllListeners()</c> calls _after_ emitting and _before_ the last listener finishes execution
+                /// will not remove them from<c>emit()</c> in progress. Subsequent events behave as expected.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// class MyEmitter extends EventEmitter {}
+                /// const myEmitter = new MyEmitter();
+                ///
+                /// const callbackA = () => {
+                ///   console.log('A');
+                ///   myEmitter.removeListener('event', callbackB);
+                /// };
+                ///
+                /// const callbackB = () => {
+                ///   console.log('B');
+                /// };
+                ///
+                /// myEmitter.on('event', callbackA);
+                ///
+                /// myEmitter.on('event', callbackB);
+                ///
+                /// // callbackA removes listener callbackB but it will still be called.
+                /// // Internal listener array at time of emit [callbackA, callbackB]
+                /// myEmitter.emit('event');
+                /// // Prints:
+                /// //   A
+                /// //   B
+                ///
+                /// // callbackB is now removed.
+                /// // Internal listener array [callbackA]
+                /// myEmitter.emit('event');
+                /// // Prints:
+                /// //   A
+                /// </code>
+                ///
+                /// Because listeners are managed using an internal array, calling this will
+                /// change the position indices of any listener registered _after_ the listener
+                /// being removed. This will not impact the order in which listeners are called,
+                /// but it means that any copies of the listener array as returned by
+                /// the <c>emitter.listeners()</c> method will need to be recreated.
+                ///
+                /// When a single function has been added as a handler multiple times for a single
+                /// event (as in the example below), <c>removeListener()</c> will remove the most
+                /// recently added instance. In the example the <c>once('ping')</c> listener is removed:
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const ee = new EventEmitter();
+                ///
+                /// function pong() {
+                ///   console.log('pong');
+                /// }
+                ///
+                /// ee.on('ping', pong);
+                /// ee.once('ping', pong);
+                /// ee.removeListener('ping', pong);
+                ///
+                /// ee.emit('ping');
+                /// ee.emit('ping');
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member removeListener<'A>: event: obj * listener: ('A -> unit) -> Duplex
+                /// <summary>
+                /// Removes the specified <c>listener</c> from the listener array for the event named <c>eventName</c>.
+                ///
+                /// <code lang="js">
+                /// const callback = (stream) => {
+                ///   console.log('someone connected!');
+                /// };
+                /// server.on('connection', callback);
+                /// // ...
+                /// server.removeListener('connection', callback);
+                /// </code>
+                ///
+                /// <c>removeListener()</c> will remove, at most, one instance of a listener from the
+                /// listener array. If any single listener has been added multiple times to the
+                /// listener array for the specified <c>eventName</c>, then <c>removeListener()</c> must be
+                /// called multiple times to remove each instance.
+                ///
+                /// Once an event is emitted, all listeners attached to it at the
+                /// time of emitting are called in order. This implies that any <c>removeListener()</c> or <c>removeAllListeners()</c> calls _after_ emitting and _before_ the last listener finishes execution
+                /// will not remove them from<c>emit()</c> in progress. Subsequent events behave as expected.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// class MyEmitter extends EventEmitter {}
+                /// const myEmitter = new MyEmitter();
+                ///
+                /// const callbackA = () => {
+                ///   console.log('A');
+                ///   myEmitter.removeListener('event', callbackB);
+                /// };
+                ///
+                /// const callbackB = () => {
+                ///   console.log('B');
+                /// };
+                ///
+                /// myEmitter.on('event', callbackA);
+                ///
+                /// myEmitter.on('event', callbackB);
+                ///
+                /// // callbackA removes listener callbackB but it will still be called.
+                /// // Internal listener array at time of emit [callbackA, callbackB]
+                /// myEmitter.emit('event');
+                /// // Prints:
+                /// //   A
+                /// //   B
+                ///
+                /// // callbackB is now removed.
+                /// // Internal listener array [callbackA]
+                /// myEmitter.emit('event');
+                /// // Prints:
+                /// //   A
+                /// </code>
+                ///
+                /// Because listeners are managed using an internal array, calling this will
+                /// change the position indices of any listener registered _after_ the listener
+                /// being removed. This will not impact the order in which listeners are called,
+                /// but it means that any copies of the listener array as returned by
+                /// the <c>emitter.listeners()</c> method will need to be recreated.
+                ///
+                /// When a single function has been added as a handler multiple times for a single
+                /// event (as in the example below), <c>removeListener()</c> will remove the most
+                /// recently added instance. In the example the <c>once('ping')</c> listener is removed:
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const ee = new EventEmitter();
+                ///
+                /// function pong() {
+                ///   console.log('pong');
+                /// }
+                ///
+                /// ee.on('ping', pong);
+                /// ee.once('ping', pong);
+                /// ee.removeListener('ping', pong);
+                ///
+                /// ee.emit('ping');
+                /// ee.emit('ping');
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member removeListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Duplex
+                /// <summary>
+                /// Removes the specified <c>listener</c> from the listener array for the event named <c>eventName</c>.
+                ///
+                /// <code lang="js">
+                /// const callback = (stream) => {
+                ///   console.log('someone connected!');
+                /// };
+                /// server.on('connection', callback);
+                /// // ...
+                /// server.removeListener('connection', callback);
+                /// </code>
+                ///
+                /// <c>removeListener()</c> will remove, at most, one instance of a listener from the
+                /// listener array. If any single listener has been added multiple times to the
+                /// listener array for the specified <c>eventName</c>, then <c>removeListener()</c> must be
+                /// called multiple times to remove each instance.
+                ///
+                /// Once an event is emitted, all listeners attached to it at the
+                /// time of emitting are called in order. This implies that any <c>removeListener()</c> or <c>removeAllListeners()</c> calls _after_ emitting and _before_ the last listener finishes execution
+                /// will not remove them from<c>emit()</c> in progress. Subsequent events behave as expected.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// class MyEmitter extends EventEmitter {}
+                /// const myEmitter = new MyEmitter();
+                ///
+                /// const callbackA = () => {
+                ///   console.log('A');
+                ///   myEmitter.removeListener('event', callbackB);
+                /// };
+                ///
+                /// const callbackB = () => {
+                ///   console.log('B');
+                /// };
+                ///
+                /// myEmitter.on('event', callbackA);
+                ///
+                /// myEmitter.on('event', callbackB);
+                ///
+                /// // callbackA removes listener callbackB but it will still be called.
+                /// // Internal listener array at time of emit [callbackA, callbackB]
+                /// myEmitter.emit('event');
+                /// // Prints:
+                /// //   A
+                /// //   B
+                ///
+                /// // callbackB is now removed.
+                /// // Internal listener array [callbackA]
+                /// myEmitter.emit('event');
+                /// // Prints:
+                /// //   A
+                /// </code>
+                ///
+                /// Because listeners are managed using an internal array, calling this will
+                /// change the position indices of any listener registered _after_ the listener
+                /// being removed. This will not impact the order in which listeners are called,
+                /// but it means that any copies of the listener array as returned by
+                /// the <c>emitter.listeners()</c> method will need to be recreated.
+                ///
+                /// When a single function has been added as a handler multiple times for a single
+                /// event (as in the example below), <c>removeListener()</c> will remove the most
+                /// recently added instance. In the example the <c>once('ping')</c> listener is removed:
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const ee = new EventEmitter();
+                ///
+                /// function pong() {
+                ///   console.log('pong');
+                /// }
+                ///
+                /// ee.on('ping', pong);
+                /// ee.once('ping', pong);
+                /// ee.removeListener('ping', pong);
+                ///
+                /// ee.emit('ping');
+                /// ee.emit('ping');
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member removeListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Duplex
                 /// <summary>
                 /// Removes the specified <c>listener</c> from the listener array for the event named <c>eventName</c>.
                 ///
@@ -126613,15 +140860,15 @@ Duplex.fromWeb($0, $1)"""
                 [<Erase>]
                 type Exports =
                     [<Emit("$0.__promisify__($1...)")>]
-                    abstract member __promisify__<'A>: source: 'A * destination: obj * ?options: Node.stream.Stream_.PipelineOptions -> obj
+                    abstract member __promisify__<'A, 'B>: source: 'A * destination: 'B * ?options: Node.stream.Stream_.PipelineOptions -> Node.stream.Stream_.PipelinePromise<'B>
                     [<Emit("$0.__promisify__($1...)")>]
-                    abstract member __promisify__<'A, 'T1>: source: 'A * transform1: 'T1 * destination: obj * ?options: Node.stream.Stream_.PipelineOptions -> obj
+                    abstract member __promisify__<'A, 'T1, 'B>: source: 'A * transform1: 'T1 * destination: 'B * ?options: Node.stream.Stream_.PipelineOptions -> Node.stream.Stream_.PipelinePromise<'B>
                     [<Emit("$0.__promisify__($1...)")>]
-                    abstract member __promisify__<'A, 'T1, 'T2>: source: 'A * transform1: 'T1 * transform2: 'T2 * destination: obj * ?options: Node.stream.Stream_.PipelineOptions -> obj
+                    abstract member __promisify__<'A, 'T1, 'T2, 'B>: source: 'A * transform1: 'T1 * transform2: 'T2 * destination: 'B * ?options: Node.stream.Stream_.PipelineOptions -> Node.stream.Stream_.PipelinePromise<'B>
                     [<Emit("$0.__promisify__($1...)")>]
-                    abstract member __promisify__<'A, 'T1, 'T2, 'T3>: source: 'A * transform1: 'T1 * transform2: 'T2 * transform3: 'T3 * destination: obj * ?options: Node.stream.Stream_.PipelineOptions -> obj
+                    abstract member __promisify__<'A, 'T1, 'T2, 'T3, 'B>: source: 'A * transform1: 'T1 * transform2: 'T2 * transform3: 'T3 * destination: 'B * ?options: Node.stream.Stream_.PipelineOptions -> Node.stream.Stream_.PipelinePromise<'B>
                     [<Emit("$0.__promisify__($1...)")>]
-                    abstract member __promisify__<'A, 'T1, 'T2, 'T3, 'T4>: source: 'A * transform1: 'T1 * transform2: 'T2 * transform3: 'T3 * transform4: 'T4 * destination: obj * ?options: Node.stream.Stream_.PipelineOptions -> obj
+                    abstract member __promisify__<'A, 'T1, 'T2, 'T3, 'T4, 'B>: source: 'A * transform1: 'T1 * transform2: 'T2 * transform3: 'T3 * transform4: 'T4 * destination: 'B * ?options: Node.stream.Stream_.PipelineOptions -> Node.stream.Stream_.PipelinePromise<'B>
                     [<Emit("$0.__promisify__($1...)")>]
                     abstract member __promisify__: streams: ReadonlyArray<U3<Node.NodeJS.ReadableStream, Node.NodeJS.WritableStream, Node.NodeJS.ReadWriteStream>> * ?options: Node.stream.Stream_.PipelineOptions -> JS.Promise<unit>
                     [<Emit("$0.__promisify__($1...)")>]
@@ -127274,15 +141521,15 @@ Duplex.fromWeb($0, $1)"""
             [<Import("finished", "stream/promises")>]
             static member finished (stream: Node.NodeJS.ReadWriteStream, ?options: Node.stream_promises.FinishedOptions) : JS.Promise<unit> = nativeOnly
             [<Import("pipeline", "stream/promises")>]
-            static member pipeline<'A> (source: 'A, destination: obj, ?options: Node.stream.Stream_.PipelineOptions) : obj = nativeOnly
+            static member pipeline<'A, 'B> (source: 'A, destination: 'B, ?options: Node.stream.Stream_.PipelineOptions) : Node.stream.Stream_.PipelinePromise<'B> = nativeOnly
             [<Import("pipeline", "stream/promises")>]
-            static member pipeline<'A, 'T1> (source: 'A, transform1: 'T1, destination: obj, ?options: Node.stream.Stream_.PipelineOptions) : obj = nativeOnly
+            static member pipeline<'A, 'T1, 'B> (source: 'A, transform1: 'T1, destination: 'B, ?options: Node.stream.Stream_.PipelineOptions) : Node.stream.Stream_.PipelinePromise<'B> = nativeOnly
             [<Import("pipeline", "stream/promises")>]
-            static member pipeline<'A, 'T1, 'T2> (source: 'A, transform1: 'T1, transform2: 'T2, destination: obj, ?options: Node.stream.Stream_.PipelineOptions) : obj = nativeOnly
+            static member pipeline<'A, 'T1, 'T2, 'B> (source: 'A, transform1: 'T1, transform2: 'T2, destination: 'B, ?options: Node.stream.Stream_.PipelineOptions) : Node.stream.Stream_.PipelinePromise<'B> = nativeOnly
             [<Import("pipeline", "stream/promises")>]
-            static member pipeline<'A, 'T1, 'T2, 'T3> (source: 'A, transform1: 'T1, transform2: 'T2, transform3: 'T3, destination: obj, ?options: Node.stream.Stream_.PipelineOptions) : obj = nativeOnly
+            static member pipeline<'A, 'T1, 'T2, 'T3, 'B> (source: 'A, transform1: 'T1, transform2: 'T2, transform3: 'T3, destination: 'B, ?options: Node.stream.Stream_.PipelineOptions) : Node.stream.Stream_.PipelinePromise<'B> = nativeOnly
             [<Import("pipeline", "stream/promises")>]
-            static member pipeline<'A, 'T1, 'T2, 'T3, 'T4> (source: 'A, transform1: 'T1, transform2: 'T2, transform3: 'T3, transform4: 'T4, destination: obj, ?options: Node.stream.Stream_.PipelineOptions) : obj = nativeOnly
+            static member pipeline<'A, 'T1, 'T2, 'T3, 'T4, 'B> (source: 'A, transform1: 'T1, transform2: 'T2, transform3: 'T3, transform4: 'T4, destination: 'B, ?options: Node.stream.Stream_.PipelineOptions) : Node.stream.Stream_.PipelinePromise<'B> = nativeOnly
             [<Import("pipeline", "stream/promises")>]
             static member pipeline (streams: ReadonlyArray<U3<Node.NodeJS.ReadableStream, Node.NodeJS.WritableStream, Node.NodeJS.ReadWriteStream>>, ?options: Node.stream.Stream_.PipelineOptions) : JS.Promise<unit> = nativeOnly
             [<Import("pipeline", "stream/promises")>]
@@ -128849,6 +143096,42 @@ Duplex.fromWeb($0, $1)"""
                 /// 6. readable
                 /// 7. resume
                 /// </summary>
+                abstract member addListener<'A>: event: string * listener: ('A -> unit) -> TestsStream
+                /// <summary>
+                /// Event emitter
+                /// The defined events on documents including:
+                /// 1. close
+                /// 2. data
+                /// 3. end
+                /// 4. error
+                /// 5. pause
+                /// 6. readable
+                /// 7. resume
+                /// </summary>
+                abstract member addListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> TestsStream
+                /// <summary>
+                /// Event emitter
+                /// The defined events on documents including:
+                /// 1. close
+                /// 2. data
+                /// 3. end
+                /// 4. error
+                /// 5. pause
+                /// 6. readable
+                /// 7. resume
+                /// </summary>
+                abstract member addListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> TestsStream
+                /// <summary>
+                /// Event emitter
+                /// The defined events on documents including:
+                /// 1. close
+                /// 2. data
+                /// 3. end
+                /// 4. error
+                /// 5. pause
+                /// 6. readable
+                /// 7. resume
+                /// </summary>
                 abstract member addListener: event: string * listener: System.Delegate -> TestsStream
                 /// <summary>
                 /// Synchronously calls each of the listeners registered for the event named <c>eventName</c>, in the order they were registered, passing the supplied arguments
@@ -129881,6 +144164,93 @@ Duplex.fromWeb($0, $1)"""
                 /// //   a
                 /// </code>
                 /// </summary>
+                abstract member on<'A>: event: string * listener: ('A -> unit) -> TestsStream
+                /// <summary>
+                /// Adds the <c>listener</c> function to the end of the listeners array for the event
+                /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+                /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+                /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+                ///
+                /// <code lang="js">
+                /// server.on('connection', (stream) => {
+                ///   console.log('someone connected!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                ///
+                /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+                /// event listener to the beginning of the listeners array.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const myEE = new EventEmitter();
+                /// myEE.on('foo', () => console.log('a'));
+                /// myEE.prependListener('foo', () => console.log('b'));
+                /// myEE.emit('foo');
+                /// // Prints:
+                /// //   b
+                /// //   a
+                /// </code>
+                /// </summary>
+                abstract member on<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> TestsStream
+                /// <summary>
+                /// Adds the <c>listener</c> function to the end of the listeners array for the event
+                /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+                /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+                /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+                ///
+                /// <code lang="js">
+                /// server.on('connection', (stream) => {
+                ///   console.log('someone connected!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                ///
+                /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+                /// event listener to the beginning of the listeners array.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const myEE = new EventEmitter();
+                /// myEE.on('foo', () => console.log('a'));
+                /// myEE.prependListener('foo', () => console.log('b'));
+                /// myEE.emit('foo');
+                /// // Prints:
+                /// //   b
+                /// //   a
+                /// </code>
+                /// </summary>
+                abstract member on<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> TestsStream
+                /// <summary>
+                /// Adds the <c>listener</c> function to the end of the listeners array for the event
+                /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+                /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+                /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+                ///
+                /// <code lang="js">
+                /// server.on('connection', (stream) => {
+                ///   console.log('someone connected!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                ///
+                /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+                /// event listener to the beginning of the listeners array.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const myEE = new EventEmitter();
+                /// myEE.on('foo', () => console.log('a'));
+                /// myEE.prependListener('foo', () => console.log('b'));
+                /// myEE.emit('foo');
+                /// // Prints:
+                /// //   b
+                /// //   a
+                /// </code>
+                /// </summary>
                 abstract member on: event: string * listener: System.Delegate -> TestsStream
                 /// <summary>
                 /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
@@ -130272,6 +144642,87 @@ Duplex.fromWeb($0, $1)"""
                 /// //   a
                 /// </code>
                 /// </summary>
+                abstract member once<'A>: event: string * listener: ('A -> unit) -> TestsStream
+                /// <summary>
+                /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+                /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+                ///
+                /// <code lang="js">
+                /// server.once('connection', (stream) => {
+                ///   console.log('Ah, we have our first user!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                ///
+                /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+                /// event listener to the beginning of the listeners array.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const myEE = new EventEmitter();
+                /// myEE.once('foo', () => console.log('a'));
+                /// myEE.prependOnceListener('foo', () => console.log('b'));
+                /// myEE.emit('foo');
+                /// // Prints:
+                /// //   b
+                /// //   a
+                /// </code>
+                /// </summary>
+                abstract member once<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> TestsStream
+                /// <summary>
+                /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+                /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+                ///
+                /// <code lang="js">
+                /// server.once('connection', (stream) => {
+                ///   console.log('Ah, we have our first user!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                ///
+                /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+                /// event listener to the beginning of the listeners array.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const myEE = new EventEmitter();
+                /// myEE.once('foo', () => console.log('a'));
+                /// myEE.prependOnceListener('foo', () => console.log('b'));
+                /// myEE.emit('foo');
+                /// // Prints:
+                /// //   b
+                /// //   a
+                /// </code>
+                /// </summary>
+                abstract member once<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> TestsStream
+                /// <summary>
+                /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+                /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+                ///
+                /// <code lang="js">
+                /// server.once('connection', (stream) => {
+                ///   console.log('Ah, we have our first user!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                ///
+                /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+                /// event listener to the beginning of the listeners array.
+                ///
+                /// <code lang="js">
+                /// import { EventEmitter } from 'node:events';
+                /// const myEE = new EventEmitter();
+                /// myEE.once('foo', () => console.log('a'));
+                /// myEE.prependOnceListener('foo', () => console.log('b'));
+                /// myEE.emit('foo');
+                /// // Prints:
+                /// //   b
+                /// //   a
+                /// </code>
+                /// </summary>
                 abstract member once: event: string * listener: System.Delegate -> TestsStream
                 /// <summary>
                 /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
@@ -130495,6 +144946,51 @@ Duplex.fromWeb($0, $1)"""
                 ///
                 /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
                 /// </summary>
+                abstract member prependListener<'A>: event: string * listener: ('A -> unit) -> TestsStream
+                /// <summary>
+                /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+                /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+                /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+                /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+                ///
+                /// <code lang="js">
+                /// server.prependListener('connection', (stream) => {
+                ///   console.log('someone connected!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member prependListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> TestsStream
+                /// <summary>
+                /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+                /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+                /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+                /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+                ///
+                /// <code lang="js">
+                /// server.prependListener('connection', (stream) => {
+                ///   console.log('someone connected!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member prependListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> TestsStream
+                /// <summary>
+                /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+                /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+                /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+                /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+                ///
+                /// <code lang="js">
+                /// server.prependListener('connection', (stream) => {
+                ///   console.log('someone connected!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
                 abstract member prependListener: event: string * listener: System.Delegate -> TestsStream
                 /// <summary>
                 /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
@@ -130678,6 +145174,45 @@ Duplex.fromWeb($0, $1)"""
                 /// </summary>
                 [<Emit("$0.prependOnceListener('test:watch:drained',$1...)")>]
                 abstract member ``prependOnceListener_test:watch:drained``: listener: (unit -> unit) -> TestsStream
+                /// <summary>
+                /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+                /// listener is removed, and then invoked.
+                ///
+                /// <code lang="js">
+                /// server.prependOnceListener('connection', (stream) => {
+                ///   console.log('Ah, we have our first user!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member prependOnceListener<'A>: event: string * listener: ('A -> unit) -> TestsStream
+                /// <summary>
+                /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+                /// listener is removed, and then invoked.
+                ///
+                /// <code lang="js">
+                /// server.prependOnceListener('connection', (stream) => {
+                ///   console.log('Ah, we have our first user!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member prependOnceListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> TestsStream
+                /// <summary>
+                /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+                /// listener is removed, and then invoked.
+                ///
+                /// <code lang="js">
+                /// server.prependOnceListener('connection', (stream) => {
+                ///   console.log('Ah, we have our first user!');
+                /// });
+                /// </code>
+                ///
+                /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+                /// </summary>
+                abstract member prependOnceListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> TestsStream
                 /// <summary>
                 /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
                 /// listener is removed, and then invoked.
@@ -134427,6 +148962,54 @@ Duplex.fromWeb($0, $1)"""
             ///   11. ready
             ///   12. timeout
             /// </summary>
+            abstract member addListener<'A>: event: string * listener: ('A -> unit) -> TLSSocket
+            /// <summary>
+            /// events.EventEmitter
+            ///   1. close
+            ///   2. connect
+            ///   3. connectionAttempt
+            ///   4. connectionAttemptFailed
+            ///   5. connectionAttemptTimeout
+            ///   6. data
+            ///   7. drain
+            ///   8. end
+            ///   9. error
+            ///   10. lookup
+            ///   11. ready
+            ///   12. timeout
+            /// </summary>
+            abstract member addListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> TLSSocket
+            /// <summary>
+            /// events.EventEmitter
+            ///   1. close
+            ///   2. connect
+            ///   3. connectionAttempt
+            ///   4. connectionAttemptFailed
+            ///   5. connectionAttemptTimeout
+            ///   6. data
+            ///   7. drain
+            ///   8. end
+            ///   9. error
+            ///   10. lookup
+            ///   11. ready
+            ///   12. timeout
+            /// </summary>
+            abstract member addListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> TLSSocket
+            /// <summary>
+            /// events.EventEmitter
+            ///   1. close
+            ///   2. connect
+            ///   3. connectionAttempt
+            ///   4. connectionAttemptFailed
+            ///   5. connectionAttemptTimeout
+            ///   6. data
+            ///   7. drain
+            ///   8. end
+            ///   9. error
+            ///   10. lookup
+            ///   11. ready
+            ///   12. timeout
+            /// </summary>
             abstract member addListener: event: string * listener: System.Delegate -> TLSSocket
             /// <summary>
             /// events.EventEmitter
@@ -134768,6 +149351,93 @@ Duplex.fromWeb($0, $1)"""
             /// //   a
             /// </code>
             /// </summary>
+            abstract member on<'A>: event: string * listener: ('A -> unit) -> TLSSocket
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> TLSSocket
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> TLSSocket
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member on: event: string * listener: System.Delegate -> TLSSocket
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
@@ -134889,6 +149559,87 @@ Duplex.fromWeb($0, $1)"""
             /// </summary>
             [<Emit("$0.on('keylog',$1...)")>]
             abstract member on_keylog: listener: (Node.NonSharedBuffer -> unit) -> TLSSocket
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A>: event: string * listener: ('A -> unit) -> TLSSocket
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> TLSSocket
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> TLSSocket
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -135042,6 +149793,51 @@ Duplex.fromWeb($0, $1)"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
+            abstract member prependListener<'A>: event: string * listener: ('A -> unit) -> TLSSocket
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> TLSSocket
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> TLSSocket
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
             abstract member prependListener: event: string * listener: System.Delegate -> TLSSocket
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
@@ -135107,6 +149903,45 @@ Duplex.fromWeb($0, $1)"""
             /// </summary>
             [<Emit("$0.prependListener('keylog',$1...)")>]
             abstract member prependListener_keylog: listener: (Node.NonSharedBuffer -> unit) -> TLSSocket
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A>: event: string * listener: ('A -> unit) -> TLSSocket
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> TLSSocket
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> TLSSocket
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -135380,6 +150215,36 @@ Duplex.fromWeb($0, $1)"""
             /// A 48-byte buffer containing the session ticket keys.
             /// </param>
             abstract member setTicketKeys: keys: Node.Buffer -> unit
+            /// <summary>
+            /// events.EventEmitter
+            /// 1. tlsClientError
+            /// 2. newSession
+            /// 3. OCSPRequest
+            /// 4. resumeSession
+            /// 5. secureConnection
+            /// 6. keylog
+            /// </summary>
+            abstract member addListener<'A>: event: string * listener: ('A -> unit) -> Server
+            /// <summary>
+            /// events.EventEmitter
+            /// 1. tlsClientError
+            /// 2. newSession
+            /// 3. OCSPRequest
+            /// 4. resumeSession
+            /// 5. secureConnection
+            /// 6. keylog
+            /// </summary>
+            abstract member addListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Server
+            /// <summary>
+            /// events.EventEmitter
+            /// 1. tlsClientError
+            /// 2. newSession
+            /// 3. OCSPRequest
+            /// 4. resumeSession
+            /// 5. secureConnection
+            /// 6. keylog
+            /// </summary>
+            abstract member addListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Server
             /// <summary>
             /// events.EventEmitter
             /// 1. tlsClientError
@@ -135810,6 +150675,93 @@ Duplex.fromWeb($0, $1)"""
             /// //   a
             /// </code>
             /// </summary>
+            abstract member on<'A>: event: string * listener: ('A -> unit) -> Server
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Server
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Server
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member on: event: string * listener: System.Delegate -> Server
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
@@ -135991,6 +150943,87 @@ Duplex.fromWeb($0, $1)"""
             /// </summary>
             [<Emit("$0.on('keylog',$1...)")>]
             abstract member on_keylog: listener: Server.on_keylog.listener_1 -> Server
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A>: event: string * listener: ('A -> unit) -> Server
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Server
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Server
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -136200,6 +151233,51 @@ Duplex.fromWeb($0, $1)"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
+            abstract member prependListener<'A>: event: string * listener: ('A -> unit) -> Server
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Server
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Server
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
             abstract member prependListener: event: string * listener: System.Delegate -> Server
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
@@ -136297,6 +151375,45 @@ Duplex.fromWeb($0, $1)"""
             /// </summary>
             [<Emit("$0.prependListener('keylog',$1...)")>]
             abstract member prependListener_keylog: listener: Server.prependListener_keylog.listener_1 -> Server
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A>: event: string * listener: ('A -> unit) -> Server
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Server
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Server
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -137082,6 +152199,54 @@ Duplex.fromWeb($0, $1)"""
             ///   11. ready
             ///   12. timeout
             /// </summary>
+            abstract member addListener<'A>: event: string * listener: ('A -> unit) -> WriteStream
+            /// <summary>
+            /// events.EventEmitter
+            ///   1. close
+            ///   2. connect
+            ///   3. connectionAttempt
+            ///   4. connectionAttemptFailed
+            ///   5. connectionAttemptTimeout
+            ///   6. data
+            ///   7. drain
+            ///   8. end
+            ///   9. error
+            ///   10. lookup
+            ///   11. ready
+            ///   12. timeout
+            /// </summary>
+            abstract member addListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> WriteStream
+            /// <summary>
+            /// events.EventEmitter
+            ///   1. close
+            ///   2. connect
+            ///   3. connectionAttempt
+            ///   4. connectionAttemptFailed
+            ///   5. connectionAttemptTimeout
+            ///   6. data
+            ///   7. drain
+            ///   8. end
+            ///   9. error
+            ///   10. lookup
+            ///   11. ready
+            ///   12. timeout
+            /// </summary>
+            abstract member addListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> WriteStream
+            /// <summary>
+            /// events.EventEmitter
+            ///   1. close
+            ///   2. connect
+            ///   3. connectionAttempt
+            ///   4. connectionAttemptFailed
+            ///   5. connectionAttemptTimeout
+            ///   6. data
+            ///   7. drain
+            ///   8. end
+            ///   9. error
+            ///   10. lookup
+            ///   11. ready
+            ///   12. timeout
+            /// </summary>
             abstract member addListener: event: string * listener: System.Delegate -> WriteStream
             /// <summary>
             /// events.EventEmitter
@@ -137249,6 +152414,93 @@ Duplex.fromWeb($0, $1)"""
             /// //   a
             /// </code>
             /// </summary>
+            abstract member on<'A>: event: string * listener: ('A -> unit) -> WriteStream
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> WriteStream
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> WriteStream
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member on: event: string * listener: System.Delegate -> WriteStream
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
@@ -137280,6 +152532,87 @@ Duplex.fromWeb($0, $1)"""
             /// </summary>
             [<Emit("$0.on('resize',$1...)")>]
             abstract member on_resize: listener: (unit -> unit) -> WriteStream
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A>: event: string * listener: ('A -> unit) -> WriteStream
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> WriteStream
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> WriteStream
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -137349,6 +152682,51 @@ Duplex.fromWeb($0, $1)"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
+            abstract member prependListener<'A>: event: string * listener: ('A -> unit) -> WriteStream
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> WriteStream
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> WriteStream
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
             abstract member prependListener: event: string * listener: System.Delegate -> WriteStream
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
@@ -137366,6 +152744,45 @@ Duplex.fromWeb($0, $1)"""
             /// </summary>
             [<Emit("$0.prependListener('resize',$1...)")>]
             abstract member prependListener_resize: listener: (unit -> unit) -> WriteStream
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A>: event: string * listener: ('A -> unit) -> WriteStream
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> WriteStream
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> WriteStream
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -146413,7 +161830,31 @@ URL.parse($0, $1)"""
             /// <summary>
             /// Alias for <c>emitter.on(eventName, listener)</c>.
             /// </summary>
+            abstract member addListener<'A>: event: string * listener: ('A -> unit) -> Worker
+            /// <summary>
+            /// Alias for <c>emitter.on(eventName, listener)</c>.
+            /// </summary>
+            abstract member addListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Worker
+            /// <summary>
+            /// Alias for <c>emitter.on(eventName, listener)</c>.
+            /// </summary>
+            abstract member addListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Worker
+            /// <summary>
+            /// Alias for <c>emitter.on(eventName, listener)</c>.
+            /// </summary>
             abstract member addListener: event: string * listener: System.Delegate -> Worker
+            /// <summary>
+            /// Alias for <c>emitter.on(eventName, listener)</c>.
+            /// </summary>
+            abstract member addListener<'A>: event: obj * listener: ('A -> unit) -> Worker
+            /// <summary>
+            /// Alias for <c>emitter.on(eventName, listener)</c>.
+            /// </summary>
+            abstract member addListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Worker
+            /// <summary>
+            /// Alias for <c>emitter.on(eventName, listener)</c>.
+            /// </summary>
+            abstract member addListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Worker
             /// <summary>
             /// Alias for <c>emitter.on(eventName, listener)</c>.
             /// </summary>
@@ -146881,7 +162322,181 @@ URL.parse($0, $1)"""
             /// //   a
             /// </code>
             /// </summary>
+            abstract member on<'A>: event: string * listener: ('A -> unit) -> Worker
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Worker
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Worker
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member on: event: string * listener: System.Delegate -> Worker
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A>: event: obj * listener: ('A -> unit) -> Worker
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Worker
+            /// <summary>
+            /// Adds the <c>listener</c> function to the end of the listeners array for the event
+            /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
+            /// been added. Multiple calls passing the same combination of <c>eventName</c> and
+            /// <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.on('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.on('foo', () => console.log('a'));
+            /// myEE.prependListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member on<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Worker
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
             /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
@@ -147077,7 +162692,169 @@ URL.parse($0, $1)"""
             /// //   a
             /// </code>
             /// </summary>
+            abstract member once<'A>: event: string * listener: ('A -> unit) -> Worker
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Worker
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Worker
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
             abstract member once: event: string * listener: System.Delegate -> Worker
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A>: event: obj * listener: ('A -> unit) -> Worker
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Worker
+            /// <summary>
+            /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
+            /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.once('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            ///
+            /// By default, event listeners are invoked in the order they are added. The <c>emitter.prependOnceListener()</c> method can be used as an alternative to add the
+            /// event listener to the beginning of the listeners array.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const myEE = new EventEmitter();
+            /// myEE.once('foo', () => console.log('a'));
+            /// myEE.prependOnceListener('foo', () => console.log('b'));
+            /// myEE.emit('foo');
+            /// // Prints:
+            /// //   b
+            /// //   a
+            /// </code>
+            /// </summary>
+            abstract member once<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Worker
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -147199,7 +162976,97 @@ URL.parse($0, $1)"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
+            abstract member prependListener<'A>: event: string * listener: ('A -> unit) -> Worker
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Worker
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Worker
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
             abstract member prependListener: event: string * listener: System.Delegate -> Worker
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A>: event: obj * listener: ('A -> unit) -> Worker
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Worker
+            /// <summary>
+            /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
+            /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
+            /// already been added. Multiple calls passing the same combination of <c>eventName</c>
+            /// and <c>listener</c> will result in the <c>listener</c> being added, and called, multiple times.
+            ///
+            /// <code lang="js">
+            /// server.prependListener('connection', (stream) => {
+            ///   console.log('someone connected!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Worker
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
             /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
@@ -147297,7 +163164,85 @@ URL.parse($0, $1)"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
+            abstract member prependOnceListener<'A>: event: string * listener: ('A -> unit) -> Worker
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Worker
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Worker
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
             abstract member prependOnceListener: event: string * listener: System.Delegate -> Worker
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A>: event: obj * listener: ('A -> unit) -> Worker
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Worker
+            /// <summary>
+            /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
+            /// listener is removed, and then invoked.
+            ///
+            /// <code lang="js">
+            /// server.prependOnceListener('connection', (stream) => {
+            ///   console.log('Ah, we have our first user!');
+            /// });
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member prependOnceListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Worker
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -147807,7 +163752,499 @@ URL.parse($0, $1)"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
+            abstract member removeListener<'A>: event: string * listener: ('A -> unit) -> Worker
+            /// <summary>
+            /// Removes the specified <c>listener</c> from the listener array for the event named <c>eventName</c>.
+            ///
+            /// <code lang="js">
+            /// const callback = (stream) => {
+            ///   console.log('someone connected!');
+            /// };
+            /// server.on('connection', callback);
+            /// // ...
+            /// server.removeListener('connection', callback);
+            /// </code>
+            ///
+            /// <c>removeListener()</c> will remove, at most, one instance of a listener from the
+            /// listener array. If any single listener has been added multiple times to the
+            /// listener array for the specified <c>eventName</c>, then <c>removeListener()</c> must be
+            /// called multiple times to remove each instance.
+            ///
+            /// Once an event is emitted, all listeners attached to it at the
+            /// time of emitting are called in order. This implies that any <c>removeListener()</c> or <c>removeAllListeners()</c> calls _after_ emitting and _before_ the last listener finishes execution
+            /// will not remove them from<c>emit()</c> in progress. Subsequent events behave as expected.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// class MyEmitter extends EventEmitter {}
+            /// const myEmitter = new MyEmitter();
+            ///
+            /// const callbackA = () => {
+            ///   console.log('A');
+            ///   myEmitter.removeListener('event', callbackB);
+            /// };
+            ///
+            /// const callbackB = () => {
+            ///   console.log('B');
+            /// };
+            ///
+            /// myEmitter.on('event', callbackA);
+            ///
+            /// myEmitter.on('event', callbackB);
+            ///
+            /// // callbackA removes listener callbackB but it will still be called.
+            /// // Internal listener array at time of emit [callbackA, callbackB]
+            /// myEmitter.emit('event');
+            /// // Prints:
+            /// //   A
+            /// //   B
+            ///
+            /// // callbackB is now removed.
+            /// // Internal listener array [callbackA]
+            /// myEmitter.emit('event');
+            /// // Prints:
+            /// //   A
+            /// </code>
+            ///
+            /// Because listeners are managed using an internal array, calling this will
+            /// change the position indices of any listener registered _after_ the listener
+            /// being removed. This will not impact the order in which listeners are called,
+            /// but it means that any copies of the listener array as returned by
+            /// the <c>emitter.listeners()</c> method will need to be recreated.
+            ///
+            /// When a single function has been added as a handler multiple times for a single
+            /// event (as in the example below), <c>removeListener()</c> will remove the most
+            /// recently added instance. In the example the <c>once('ping')</c> listener is removed:
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const ee = new EventEmitter();
+            ///
+            /// function pong() {
+            ///   console.log('pong');
+            /// }
+            ///
+            /// ee.on('ping', pong);
+            /// ee.once('ping', pong);
+            /// ee.removeListener('ping', pong);
+            ///
+            /// ee.emit('ping');
+            /// ee.emit('ping');
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member removeListener<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Worker
+            /// <summary>
+            /// Removes the specified <c>listener</c> from the listener array for the event named <c>eventName</c>.
+            ///
+            /// <code lang="js">
+            /// const callback = (stream) => {
+            ///   console.log('someone connected!');
+            /// };
+            /// server.on('connection', callback);
+            /// // ...
+            /// server.removeListener('connection', callback);
+            /// </code>
+            ///
+            /// <c>removeListener()</c> will remove, at most, one instance of a listener from the
+            /// listener array. If any single listener has been added multiple times to the
+            /// listener array for the specified <c>eventName</c>, then <c>removeListener()</c> must be
+            /// called multiple times to remove each instance.
+            ///
+            /// Once an event is emitted, all listeners attached to it at the
+            /// time of emitting are called in order. This implies that any <c>removeListener()</c> or <c>removeAllListeners()</c> calls _after_ emitting and _before_ the last listener finishes execution
+            /// will not remove them from<c>emit()</c> in progress. Subsequent events behave as expected.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// class MyEmitter extends EventEmitter {}
+            /// const myEmitter = new MyEmitter();
+            ///
+            /// const callbackA = () => {
+            ///   console.log('A');
+            ///   myEmitter.removeListener('event', callbackB);
+            /// };
+            ///
+            /// const callbackB = () => {
+            ///   console.log('B');
+            /// };
+            ///
+            /// myEmitter.on('event', callbackA);
+            ///
+            /// myEmitter.on('event', callbackB);
+            ///
+            /// // callbackA removes listener callbackB but it will still be called.
+            /// // Internal listener array at time of emit [callbackA, callbackB]
+            /// myEmitter.emit('event');
+            /// // Prints:
+            /// //   A
+            /// //   B
+            ///
+            /// // callbackB is now removed.
+            /// // Internal listener array [callbackA]
+            /// myEmitter.emit('event');
+            /// // Prints:
+            /// //   A
+            /// </code>
+            ///
+            /// Because listeners are managed using an internal array, calling this will
+            /// change the position indices of any listener registered _after_ the listener
+            /// being removed. This will not impact the order in which listeners are called,
+            /// but it means that any copies of the listener array as returned by
+            /// the <c>emitter.listeners()</c> method will need to be recreated.
+            ///
+            /// When a single function has been added as a handler multiple times for a single
+            /// event (as in the example below), <c>removeListener()</c> will remove the most
+            /// recently added instance. In the example the <c>once('ping')</c> listener is removed:
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const ee = new EventEmitter();
+            ///
+            /// function pong() {
+            ///   console.log('pong');
+            /// }
+            ///
+            /// ee.on('ping', pong);
+            /// ee.once('ping', pong);
+            /// ee.removeListener('ping', pong);
+            ///
+            /// ee.emit('ping');
+            /// ee.emit('ping');
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member removeListener<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Worker
+            /// <summary>
+            /// Removes the specified <c>listener</c> from the listener array for the event named <c>eventName</c>.
+            ///
+            /// <code lang="js">
+            /// const callback = (stream) => {
+            ///   console.log('someone connected!');
+            /// };
+            /// server.on('connection', callback);
+            /// // ...
+            /// server.removeListener('connection', callback);
+            /// </code>
+            ///
+            /// <c>removeListener()</c> will remove, at most, one instance of a listener from the
+            /// listener array. If any single listener has been added multiple times to the
+            /// listener array for the specified <c>eventName</c>, then <c>removeListener()</c> must be
+            /// called multiple times to remove each instance.
+            ///
+            /// Once an event is emitted, all listeners attached to it at the
+            /// time of emitting are called in order. This implies that any <c>removeListener()</c> or <c>removeAllListeners()</c> calls _after_ emitting and _before_ the last listener finishes execution
+            /// will not remove them from<c>emit()</c> in progress. Subsequent events behave as expected.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// class MyEmitter extends EventEmitter {}
+            /// const myEmitter = new MyEmitter();
+            ///
+            /// const callbackA = () => {
+            ///   console.log('A');
+            ///   myEmitter.removeListener('event', callbackB);
+            /// };
+            ///
+            /// const callbackB = () => {
+            ///   console.log('B');
+            /// };
+            ///
+            /// myEmitter.on('event', callbackA);
+            ///
+            /// myEmitter.on('event', callbackB);
+            ///
+            /// // callbackA removes listener callbackB but it will still be called.
+            /// // Internal listener array at time of emit [callbackA, callbackB]
+            /// myEmitter.emit('event');
+            /// // Prints:
+            /// //   A
+            /// //   B
+            ///
+            /// // callbackB is now removed.
+            /// // Internal listener array [callbackA]
+            /// myEmitter.emit('event');
+            /// // Prints:
+            /// //   A
+            /// </code>
+            ///
+            /// Because listeners are managed using an internal array, calling this will
+            /// change the position indices of any listener registered _after_ the listener
+            /// being removed. This will not impact the order in which listeners are called,
+            /// but it means that any copies of the listener array as returned by
+            /// the <c>emitter.listeners()</c> method will need to be recreated.
+            ///
+            /// When a single function has been added as a handler multiple times for a single
+            /// event (as in the example below), <c>removeListener()</c> will remove the most
+            /// recently added instance. In the example the <c>once('ping')</c> listener is removed:
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const ee = new EventEmitter();
+            ///
+            /// function pong() {
+            ///   console.log('pong');
+            /// }
+            ///
+            /// ee.on('ping', pong);
+            /// ee.once('ping', pong);
+            /// ee.removeListener('ping', pong);
+            ///
+            /// ee.emit('ping');
+            /// ee.emit('ping');
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
             abstract member removeListener: event: string * listener: System.Delegate -> Worker
+            /// <summary>
+            /// Removes the specified <c>listener</c> from the listener array for the event named <c>eventName</c>.
+            ///
+            /// <code lang="js">
+            /// const callback = (stream) => {
+            ///   console.log('someone connected!');
+            /// };
+            /// server.on('connection', callback);
+            /// // ...
+            /// server.removeListener('connection', callback);
+            /// </code>
+            ///
+            /// <c>removeListener()</c> will remove, at most, one instance of a listener from the
+            /// listener array. If any single listener has been added multiple times to the
+            /// listener array for the specified <c>eventName</c>, then <c>removeListener()</c> must be
+            /// called multiple times to remove each instance.
+            ///
+            /// Once an event is emitted, all listeners attached to it at the
+            /// time of emitting are called in order. This implies that any <c>removeListener()</c> or <c>removeAllListeners()</c> calls _after_ emitting and _before_ the last listener finishes execution
+            /// will not remove them from<c>emit()</c> in progress. Subsequent events behave as expected.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// class MyEmitter extends EventEmitter {}
+            /// const myEmitter = new MyEmitter();
+            ///
+            /// const callbackA = () => {
+            ///   console.log('A');
+            ///   myEmitter.removeListener('event', callbackB);
+            /// };
+            ///
+            /// const callbackB = () => {
+            ///   console.log('B');
+            /// };
+            ///
+            /// myEmitter.on('event', callbackA);
+            ///
+            /// myEmitter.on('event', callbackB);
+            ///
+            /// // callbackA removes listener callbackB but it will still be called.
+            /// // Internal listener array at time of emit [callbackA, callbackB]
+            /// myEmitter.emit('event');
+            /// // Prints:
+            /// //   A
+            /// //   B
+            ///
+            /// // callbackB is now removed.
+            /// // Internal listener array [callbackA]
+            /// myEmitter.emit('event');
+            /// // Prints:
+            /// //   A
+            /// </code>
+            ///
+            /// Because listeners are managed using an internal array, calling this will
+            /// change the position indices of any listener registered _after_ the listener
+            /// being removed. This will not impact the order in which listeners are called,
+            /// but it means that any copies of the listener array as returned by
+            /// the <c>emitter.listeners()</c> method will need to be recreated.
+            ///
+            /// When a single function has been added as a handler multiple times for a single
+            /// event (as in the example below), <c>removeListener()</c> will remove the most
+            /// recently added instance. In the example the <c>once('ping')</c> listener is removed:
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const ee = new EventEmitter();
+            ///
+            /// function pong() {
+            ///   console.log('pong');
+            /// }
+            ///
+            /// ee.on('ping', pong);
+            /// ee.once('ping', pong);
+            /// ee.removeListener('ping', pong);
+            ///
+            /// ee.emit('ping');
+            /// ee.emit('ping');
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member removeListener<'A>: event: obj * listener: ('A -> unit) -> Worker
+            /// <summary>
+            /// Removes the specified <c>listener</c> from the listener array for the event named <c>eventName</c>.
+            ///
+            /// <code lang="js">
+            /// const callback = (stream) => {
+            ///   console.log('someone connected!');
+            /// };
+            /// server.on('connection', callback);
+            /// // ...
+            /// server.removeListener('connection', callback);
+            /// </code>
+            ///
+            /// <c>removeListener()</c> will remove, at most, one instance of a listener from the
+            /// listener array. If any single listener has been added multiple times to the
+            /// listener array for the specified <c>eventName</c>, then <c>removeListener()</c> must be
+            /// called multiple times to remove each instance.
+            ///
+            /// Once an event is emitted, all listeners attached to it at the
+            /// time of emitting are called in order. This implies that any <c>removeListener()</c> or <c>removeAllListeners()</c> calls _after_ emitting and _before_ the last listener finishes execution
+            /// will not remove them from<c>emit()</c> in progress. Subsequent events behave as expected.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// class MyEmitter extends EventEmitter {}
+            /// const myEmitter = new MyEmitter();
+            ///
+            /// const callbackA = () => {
+            ///   console.log('A');
+            ///   myEmitter.removeListener('event', callbackB);
+            /// };
+            ///
+            /// const callbackB = () => {
+            ///   console.log('B');
+            /// };
+            ///
+            /// myEmitter.on('event', callbackA);
+            ///
+            /// myEmitter.on('event', callbackB);
+            ///
+            /// // callbackA removes listener callbackB but it will still be called.
+            /// // Internal listener array at time of emit [callbackA, callbackB]
+            /// myEmitter.emit('event');
+            /// // Prints:
+            /// //   A
+            /// //   B
+            ///
+            /// // callbackB is now removed.
+            /// // Internal listener array [callbackA]
+            /// myEmitter.emit('event');
+            /// // Prints:
+            /// //   A
+            /// </code>
+            ///
+            /// Because listeners are managed using an internal array, calling this will
+            /// change the position indices of any listener registered _after_ the listener
+            /// being removed. This will not impact the order in which listeners are called,
+            /// but it means that any copies of the listener array as returned by
+            /// the <c>emitter.listeners()</c> method will need to be recreated.
+            ///
+            /// When a single function has been added as a handler multiple times for a single
+            /// event (as in the example below), <c>removeListener()</c> will remove the most
+            /// recently added instance. In the example the <c>once('ping')</c> listener is removed:
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const ee = new EventEmitter();
+            ///
+            /// function pong() {
+            ///   console.log('pong');
+            /// }
+            ///
+            /// ee.on('ping', pong);
+            /// ee.once('ping', pong);
+            /// ee.removeListener('ping', pong);
+            ///
+            /// ee.emit('ping');
+            /// ee.emit('ping');
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member removeListener<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Worker
+            /// <summary>
+            /// Removes the specified <c>listener</c> from the listener array for the event named <c>eventName</c>.
+            ///
+            /// <code lang="js">
+            /// const callback = (stream) => {
+            ///   console.log('someone connected!');
+            /// };
+            /// server.on('connection', callback);
+            /// // ...
+            /// server.removeListener('connection', callback);
+            /// </code>
+            ///
+            /// <c>removeListener()</c> will remove, at most, one instance of a listener from the
+            /// listener array. If any single listener has been added multiple times to the
+            /// listener array for the specified <c>eventName</c>, then <c>removeListener()</c> must be
+            /// called multiple times to remove each instance.
+            ///
+            /// Once an event is emitted, all listeners attached to it at the
+            /// time of emitting are called in order. This implies that any <c>removeListener()</c> or <c>removeAllListeners()</c> calls _after_ emitting and _before_ the last listener finishes execution
+            /// will not remove them from<c>emit()</c> in progress. Subsequent events behave as expected.
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// class MyEmitter extends EventEmitter {}
+            /// const myEmitter = new MyEmitter();
+            ///
+            /// const callbackA = () => {
+            ///   console.log('A');
+            ///   myEmitter.removeListener('event', callbackB);
+            /// };
+            ///
+            /// const callbackB = () => {
+            ///   console.log('B');
+            /// };
+            ///
+            /// myEmitter.on('event', callbackA);
+            ///
+            /// myEmitter.on('event', callbackB);
+            ///
+            /// // callbackA removes listener callbackB but it will still be called.
+            /// // Internal listener array at time of emit [callbackA, callbackB]
+            /// myEmitter.emit('event');
+            /// // Prints:
+            /// //   A
+            /// //   B
+            ///
+            /// // callbackB is now removed.
+            /// // Internal listener array [callbackA]
+            /// myEmitter.emit('event');
+            /// // Prints:
+            /// //   A
+            /// </code>
+            ///
+            /// Because listeners are managed using an internal array, calling this will
+            /// change the position indices of any listener registered _after_ the listener
+            /// being removed. This will not impact the order in which listeners are called,
+            /// but it means that any copies of the listener array as returned by
+            /// the <c>emitter.listeners()</c> method will need to be recreated.
+            ///
+            /// When a single function has been added as a handler multiple times for a single
+            /// event (as in the example below), <c>removeListener()</c> will remove the most
+            /// recently added instance. In the example the <c>once('ping')</c> listener is removed:
+            ///
+            /// <code lang="js">
+            /// import { EventEmitter } from 'node:events';
+            /// const ee = new EventEmitter();
+            ///
+            /// function pong() {
+            ///   console.log('pong');
+            /// }
+            ///
+            /// ee.on('ping', pong);
+            /// ee.once('ping', pong);
+            /// ee.removeListener('ping', pong);
+            ///
+            /// ee.emit('ping');
+            /// ee.emit('ping');
+            /// </code>
+            ///
+            /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
+            /// </summary>
+            abstract member removeListener<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Worker
             /// <summary>
             /// Removes the specified <c>listener</c> from the listener array for the event named <c>eventName</c>.
             ///
@@ -147918,7 +164355,31 @@ URL.parse($0, $1)"""
             /// <summary>
             /// Alias for <c>emitter.removeListener()</c>.
             /// </summary>
+            abstract member off<'A>: event: string * listener: ('A -> unit) -> Worker
+            /// <summary>
+            /// Alias for <c>emitter.removeListener()</c>.
+            /// </summary>
+            abstract member off<'A, 'B>: event: string * listener: ('A -> 'B -> unit) -> Worker
+            /// <summary>
+            /// Alias for <c>emitter.removeListener()</c>.
+            /// </summary>
+            abstract member off<'A, 'B, 'C>: event: string * listener: ('A -> 'B -> 'C -> unit) -> Worker
+            /// <summary>
+            /// Alias for <c>emitter.removeListener()</c>.
+            /// </summary>
             abstract member off: event: string * listener: System.Delegate -> Worker
+            /// <summary>
+            /// Alias for <c>emitter.removeListener()</c>.
+            /// </summary>
+            abstract member off<'A>: event: obj * listener: ('A -> unit) -> Worker
+            /// <summary>
+            /// Alias for <c>emitter.removeListener()</c>.
+            /// </summary>
+            abstract member off<'A, 'B>: event: obj * listener: ('A -> 'B -> unit) -> Worker
+            /// <summary>
+            /// Alias for <c>emitter.removeListener()</c>.
+            /// </summary>
+            abstract member off<'A, 'B, 'C>: event: obj * listener: ('A -> 'B -> 'C -> unit) -> Worker
             /// <summary>
             /// Alias for <c>emitter.removeListener()</c>.
             /// </summary>
@@ -155356,7 +171817,7 @@ FileReader.DONE"""
                     MockResponseCallbackOptions()
 
                 [<ParamObject; Emit("$0")>]
-                new (path: string, ``method``: string, body: U5<string, JS.Uint8Array, Node.Buffer, Node.stream.Stream_.Readable, UndiciTypes.formdata.FormData> option, ?origin: string, ?maxRedirections: float) =
+                new (path: string, ``method``: string, body: U5<string, JS.Uint8Array, Node.stream.Stream_.Readable, Node.Buffer, UndiciTypes.formdata.FormData> option, ?origin: string, ?maxRedirections: float) =
                     MockResponseCallbackOptions()
 
                 [<ParamObject; Emit("$0")>]
@@ -155368,7 +171829,7 @@ FileReader.DONE"""
                     MockResponseCallbackOptions()
 
                 [<ParamObject; Emit("$0")>]
-                new (path: string, ``method``: string, headers: UndiciTypes.fetch.Headers, body: U5<string, JS.Uint8Array, Node.Buffer, Node.stream.Stream_.Readable, UndiciTypes.formdata.FormData> option, ?origin: string, ?maxRedirections: float) =
+                new (path: string, ``method``: string, headers: UndiciTypes.fetch.Headers, body: U5<string, JS.Uint8Array, Node.stream.Stream_.Readable, Node.Buffer, UndiciTypes.formdata.FormData> option, ?origin: string, ?maxRedirections: float) =
                     MockResponseCallbackOptions()
 
                 [<ParamObject; Emit("$0")>]
@@ -155380,14 +171841,14 @@ FileReader.DONE"""
                     MockResponseCallbackOptions()
 
                 [<ParamObject; Emit("$0")>]
-                new (path: string, ``method``: string, headers: MockResponseCallbackOptions.headers.U2.Case2, body: U5<string, JS.Uint8Array, Node.Buffer, Node.stream.Stream_.Readable, UndiciTypes.formdata.FormData> option, ?origin: string, ?maxRedirections: float) =
+                new (path: string, ``method``: string, headers: MockResponseCallbackOptions.headers.U2.Case2, body: U5<string, JS.Uint8Array, Node.stream.Stream_.Readable, Node.Buffer, UndiciTypes.formdata.FormData> option, ?origin: string, ?maxRedirections: float) =
                     MockResponseCallbackOptions()
 
                 member val path : string = nativeOnly with get, set
                 member val ``method`` : string = nativeOnly with get, set
                 member val headers : U2<UndiciTypes.fetch.Headers, MockResponseCallbackOptions.headers.U2.Case2> option = nativeOnly with get, set
                 member val origin : string option = nativeOnly with get, set
-                member val body : U2<UndiciTypes.fetch.BodyInit, U5<string, JS.Uint8Array, Node.Buffer, Node.stream.Stream_.Readable, UndiciTypes.formdata.FormData> option> option = nativeOnly with get, set
+                member val body : U2<UndiciTypes.fetch.BodyInit, U5<string, JS.Uint8Array, Node.stream.Stream_.Readable, Node.Buffer, UndiciTypes.formdata.FormData> option> option = nativeOnly with get, set
                 member val maxRedirections : float option = nativeOnly with get, set
 
             type MockResponseDataHandler<'TData> =

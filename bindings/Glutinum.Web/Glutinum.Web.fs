@@ -85357,10 +85357,6 @@ module Web =
         abstract member video: Web.HTMLVideoElement with get, set
         abstract member wbr: Web.HTMLElement with get, set
         abstract member symbol: Web.SVGSymbolElement with get, set
-        abstract member stop: Web.SVGStopElement with get, set
-        abstract member metadata: Web.SVGMetadataElement with get, set
-        abstract member image: Web.SVGImageElement with get, set
-        abstract member text: Web.SVGTextElement with get, set
         abstract member animate: Web.SVGAnimateElement with get, set
         abstract member animateMotion: Web.SVGAnimateMotionElement with get, set
         abstract member animateTransform: Web.SVGAnimateTransformElement with get, set
@@ -85397,10 +85393,12 @@ module Web =
         abstract member filter: Web.SVGFilterElement with get, set
         abstract member foreignObject: Web.SVGForeignObjectElement with get, set
         abstract member g: Web.SVGGElement with get, set
+        abstract member image: Web.SVGImageElement with get, set
         abstract member line: Web.SVGLineElement with get, set
         abstract member linearGradient: Web.SVGLinearGradientElement with get, set
         abstract member marker: Web.SVGMarkerElement with get, set
         abstract member mask: Web.SVGMaskElement with get, set
+        abstract member metadata: Web.SVGMetadataElement with get, set
         abstract member mpath: Web.SVGMPathElement with get, set
         abstract member path: Web.SVGPathElement with get, set
         abstract member pattern: Web.SVGPatternElement with get, set
@@ -85409,8 +85407,10 @@ module Web =
         abstract member radialGradient: Web.SVGRadialGradientElement with get, set
         abstract member rect: Web.SVGRectElement with get, set
         abstract member set: Web.SVGSetElement with get, set
+        abstract member stop: Web.SVGStopElement with get, set
         abstract member svg: Web.SVGSVGElement with get, set
         abstract member switch: Web.SVGSwitchElement with get, set
+        abstract member text: Web.SVGTextElement with get, set
         abstract member textPath: Web.SVGTextPathElement with get, set
         abstract member tspan: Web.SVGTSpanElement with get, set
         abstract member ``use``: Web.SVGUseElement with get, set
@@ -85569,150 +85569,6 @@ module Web =
         | ``work tel-local-prefix webauthn``
         | ``work tel-local-suffix webauthn``
         | ``work tel-national webauthn``
-        | ``shipping additional-name``
-        | ``shipping additional-name webauthn``
-        | ``shipping address-level1``
-        | ``shipping address-level1 webauthn``
-        | ``shipping address-level2``
-        | ``shipping address-level2 webauthn``
-        | ``shipping address-level3``
-        | ``shipping address-level3 webauthn``
-        | ``shipping address-level4``
-        | ``shipping address-level4 webauthn``
-        | ``shipping address-line1``
-        | ``shipping address-line1 webauthn``
-        | ``shipping address-line2``
-        | ``shipping address-line2 webauthn``
-        | ``shipping address-line3``
-        | ``shipping address-line3 webauthn``
-        | ``shipping bday-day``
-        | ``shipping bday-day webauthn``
-        | ``shipping bday-month``
-        | ``shipping bday-month webauthn``
-        | ``shipping bday-year``
-        | ``shipping bday-year webauthn``
-        | ``shipping cc-csc``
-        | ``shipping cc-csc webauthn``
-        | ``shipping cc-exp``
-        | ``shipping cc-exp webauthn``
-        | ``shipping cc-exp-month``
-        | ``shipping cc-exp-month webauthn``
-        | ``shipping cc-exp-year``
-        | ``shipping cc-exp-year webauthn``
-        | ``shipping cc-family-name``
-        | ``shipping cc-family-name webauthn``
-        | ``shipping cc-given-name``
-        | ``shipping cc-given-name webauthn``
-        | ``shipping cc-name``
-        | ``shipping cc-name webauthn``
-        | ``shipping cc-number``
-        | ``shipping cc-number webauthn``
-        | ``shipping cc-type``
-        | ``shipping cc-type webauthn``
-        | ``shipping country``
-        | ``shipping country webauthn``
-        | ``shipping country-name``
-        | ``shipping country-name webauthn``
-        | ``shipping current-password``
-        | ``shipping current-password webauthn``
-        | ``shipping family-name``
-        | ``shipping family-name webauthn``
-        | ``shipping given-name``
-        | ``shipping given-name webauthn``
-        | ``shipping honorific-prefix``
-        | ``shipping honorific-prefix webauthn``
-        | ``shipping honorific-suffix``
-        | ``shipping honorific-suffix webauthn``
-        | ``shipping name``
-        | ``shipping name webauthn``
-        | ``shipping new-password``
-        | ``shipping new-password webauthn``
-        | ``shipping one-time-code``
-        | ``shipping one-time-code webauthn``
-        | ``shipping organization``
-        | ``shipping organization webauthn``
-        | ``shipping postal-code``
-        | ``shipping postal-code webauthn``
-        | ``shipping street-address``
-        | ``shipping street-address webauthn``
-        | ``shipping transaction-amount``
-        | ``shipping transaction-amount webauthn``
-        | ``shipping transaction-currency``
-        | ``shipping transaction-currency webauthn``
-        | ``shipping username``
-        | ``shipping username webauthn``
-        | ``shipping email``
-        | ``shipping email webauthn``
-        | ``shipping tel``
-        | ``shipping tel webauthn``
-        | ``shipping tel-area-code``
-        | ``shipping tel-area-code webauthn``
-        | ``shipping tel-country-code``
-        | ``shipping tel-country-code webauthn``
-        | ``shipping tel-extension``
-        | ``shipping tel-extension webauthn``
-        | ``shipping tel-local``
-        | ``shipping tel-local webauthn``
-        | ``shipping tel-local-prefix``
-        | ``shipping tel-local-prefix webauthn``
-        | ``shipping tel-local-suffix``
-        | ``shipping tel-local-suffix webauthn``
-        | ``shipping tel-national``
-        | ``shipping tel-national webauthn``
-        | ``shipping home email``
-        | ``shipping home email webauthn``
-        | ``shipping home tel``
-        | ``shipping home tel webauthn``
-        | ``shipping home tel-area-code``
-        | ``shipping home tel-area-code webauthn``
-        | ``shipping home tel-country-code``
-        | ``shipping home tel-country-code webauthn``
-        | ``shipping home tel-extension``
-        | ``shipping home tel-extension webauthn``
-        | ``shipping home tel-local``
-        | ``shipping home tel-local webauthn``
-        | ``shipping home tel-local-prefix``
-        | ``shipping home tel-local-prefix webauthn``
-        | ``shipping home tel-local-suffix``
-        | ``shipping home tel-local-suffix webauthn``
-        | ``shipping home tel-national``
-        | ``shipping home tel-national webauthn``
-        | ``shipping mobile email``
-        | ``shipping mobile email webauthn``
-        | ``shipping mobile tel``
-        | ``shipping mobile tel webauthn``
-        | ``shipping mobile tel-area-code``
-        | ``shipping mobile tel-area-code webauthn``
-        | ``shipping mobile tel-country-code``
-        | ``shipping mobile tel-country-code webauthn``
-        | ``shipping mobile tel-extension``
-        | ``shipping mobile tel-extension webauthn``
-        | ``shipping mobile tel-local``
-        | ``shipping mobile tel-local webauthn``
-        | ``shipping mobile tel-local-prefix``
-        | ``shipping mobile tel-local-prefix webauthn``
-        | ``shipping mobile tel-local-suffix``
-        | ``shipping mobile tel-local-suffix webauthn``
-        | ``shipping mobile tel-national``
-        | ``shipping mobile tel-national webauthn``
-        | ``shipping work email``
-        | ``shipping work email webauthn``
-        | ``shipping work tel``
-        | ``shipping work tel webauthn``
-        | ``shipping work tel-area-code``
-        | ``shipping work tel-area-code webauthn``
-        | ``shipping work tel-country-code``
-        | ``shipping work tel-country-code webauthn``
-        | ``shipping work tel-extension``
-        | ``shipping work tel-extension webauthn``
-        | ``shipping work tel-local``
-        | ``shipping work tel-local webauthn``
-        | ``shipping work tel-local-prefix``
-        | ``shipping work tel-local-prefix webauthn``
-        | ``shipping work tel-local-suffix``
-        | ``shipping work tel-local-suffix webauthn``
-        | ``shipping work tel-national``
-        | ``shipping work tel-national webauthn``
         | ``billing additional-name``
         | ``billing additional-name webauthn``
         | ``billing address-level1``
@@ -85857,6 +85713,150 @@ module Web =
         | ``billing work tel-local-suffix webauthn``
         | ``billing work tel-national``
         | ``billing work tel-national webauthn``
+        | ``shipping additional-name``
+        | ``shipping additional-name webauthn``
+        | ``shipping address-level1``
+        | ``shipping address-level1 webauthn``
+        | ``shipping address-level2``
+        | ``shipping address-level2 webauthn``
+        | ``shipping address-level3``
+        | ``shipping address-level3 webauthn``
+        | ``shipping address-level4``
+        | ``shipping address-level4 webauthn``
+        | ``shipping address-line1``
+        | ``shipping address-line1 webauthn``
+        | ``shipping address-line2``
+        | ``shipping address-line2 webauthn``
+        | ``shipping address-line3``
+        | ``shipping address-line3 webauthn``
+        | ``shipping bday-day``
+        | ``shipping bday-day webauthn``
+        | ``shipping bday-month``
+        | ``shipping bday-month webauthn``
+        | ``shipping bday-year``
+        | ``shipping bday-year webauthn``
+        | ``shipping cc-csc``
+        | ``shipping cc-csc webauthn``
+        | ``shipping cc-exp``
+        | ``shipping cc-exp webauthn``
+        | ``shipping cc-exp-month``
+        | ``shipping cc-exp-month webauthn``
+        | ``shipping cc-exp-year``
+        | ``shipping cc-exp-year webauthn``
+        | ``shipping cc-family-name``
+        | ``shipping cc-family-name webauthn``
+        | ``shipping cc-given-name``
+        | ``shipping cc-given-name webauthn``
+        | ``shipping cc-name``
+        | ``shipping cc-name webauthn``
+        | ``shipping cc-number``
+        | ``shipping cc-number webauthn``
+        | ``shipping cc-type``
+        | ``shipping cc-type webauthn``
+        | ``shipping country``
+        | ``shipping country webauthn``
+        | ``shipping country-name``
+        | ``shipping country-name webauthn``
+        | ``shipping current-password``
+        | ``shipping current-password webauthn``
+        | ``shipping family-name``
+        | ``shipping family-name webauthn``
+        | ``shipping given-name``
+        | ``shipping given-name webauthn``
+        | ``shipping honorific-prefix``
+        | ``shipping honorific-prefix webauthn``
+        | ``shipping honorific-suffix``
+        | ``shipping honorific-suffix webauthn``
+        | ``shipping name``
+        | ``shipping name webauthn``
+        | ``shipping new-password``
+        | ``shipping new-password webauthn``
+        | ``shipping one-time-code``
+        | ``shipping one-time-code webauthn``
+        | ``shipping organization``
+        | ``shipping organization webauthn``
+        | ``shipping postal-code``
+        | ``shipping postal-code webauthn``
+        | ``shipping street-address``
+        | ``shipping street-address webauthn``
+        | ``shipping transaction-amount``
+        | ``shipping transaction-amount webauthn``
+        | ``shipping transaction-currency``
+        | ``shipping transaction-currency webauthn``
+        | ``shipping username``
+        | ``shipping username webauthn``
+        | ``shipping email``
+        | ``shipping email webauthn``
+        | ``shipping tel``
+        | ``shipping tel webauthn``
+        | ``shipping tel-area-code``
+        | ``shipping tel-area-code webauthn``
+        | ``shipping tel-country-code``
+        | ``shipping tel-country-code webauthn``
+        | ``shipping tel-extension``
+        | ``shipping tel-extension webauthn``
+        | ``shipping tel-local``
+        | ``shipping tel-local webauthn``
+        | ``shipping tel-local-prefix``
+        | ``shipping tel-local-prefix webauthn``
+        | ``shipping tel-local-suffix``
+        | ``shipping tel-local-suffix webauthn``
+        | ``shipping tel-national``
+        | ``shipping tel-national webauthn``
+        | ``shipping home email``
+        | ``shipping home email webauthn``
+        | ``shipping home tel``
+        | ``shipping home tel webauthn``
+        | ``shipping home tel-area-code``
+        | ``shipping home tel-area-code webauthn``
+        | ``shipping home tel-country-code``
+        | ``shipping home tel-country-code webauthn``
+        | ``shipping home tel-extension``
+        | ``shipping home tel-extension webauthn``
+        | ``shipping home tel-local``
+        | ``shipping home tel-local webauthn``
+        | ``shipping home tel-local-prefix``
+        | ``shipping home tel-local-prefix webauthn``
+        | ``shipping home tel-local-suffix``
+        | ``shipping home tel-local-suffix webauthn``
+        | ``shipping home tel-national``
+        | ``shipping home tel-national webauthn``
+        | ``shipping mobile email``
+        | ``shipping mobile email webauthn``
+        | ``shipping mobile tel``
+        | ``shipping mobile tel webauthn``
+        | ``shipping mobile tel-area-code``
+        | ``shipping mobile tel-area-code webauthn``
+        | ``shipping mobile tel-country-code``
+        | ``shipping mobile tel-country-code webauthn``
+        | ``shipping mobile tel-extension``
+        | ``shipping mobile tel-extension webauthn``
+        | ``shipping mobile tel-local``
+        | ``shipping mobile tel-local webauthn``
+        | ``shipping mobile tel-local-prefix``
+        | ``shipping mobile tel-local-prefix webauthn``
+        | ``shipping mobile tel-local-suffix``
+        | ``shipping mobile tel-local-suffix webauthn``
+        | ``shipping mobile tel-national``
+        | ``shipping mobile tel-national webauthn``
+        | ``shipping work email``
+        | ``shipping work email webauthn``
+        | ``shipping work tel``
+        | ``shipping work tel webauthn``
+        | ``shipping work tel-area-code``
+        | ``shipping work tel-area-code webauthn``
+        | ``shipping work tel-country-code``
+        | ``shipping work tel-country-code webauthn``
+        | ``shipping work tel-extension``
+        | ``shipping work tel-extension webauthn``
+        | ``shipping work tel-local``
+        | ``shipping work tel-local webauthn``
+        | ``shipping work tel-local-prefix``
+        | ``shipping work tel-local-prefix webauthn``
+        | ``shipping work tel-local-suffix``
+        | ``shipping work tel-local-suffix webauthn``
+        | ``shipping work tel-national``
+        | ``shipping work tel-national webauthn``
         | Case1 of Web.AutoFillBase
 
     [<RequireQualifiedAccess>]

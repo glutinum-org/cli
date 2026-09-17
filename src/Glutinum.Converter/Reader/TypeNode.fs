@@ -648,15 +648,8 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
 
                     let isExternal = isExternalToPackages checker reader.PackageContext symbolOpt
 
-                    // `Key<K, T>` standing for a conditional type is the unresolved type itself
-                    let isDeferredConditionalAlias =
-                        typeReferenceNode.pos >= 0
-                        && isDeferredConditional (checker.getTypeFromTypeNode typeReferenceNode)
-
                     if
-                        isUnresolved
-                        || isDeferredConditionalAlias
-                        || (isExternal && not (knownExternalTypeNames.Contains name))
+                        isUnresolved || (isExternal && not (knownExternalTypeNames.Contains name))
                     then
                         GlueType.Primitive GluePrimitive.Any
                     else
@@ -1031,9 +1024,25 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
 
         let typ = checker.getTypeAtLocation conditionalTypeNode
 
-        // The branch depends on the type arguments, F# has no equivalent
+        // The branch depends on the type arguments, the transform resolves it with the defaults
         if isDeferredConditional typ then
-            GlueType.Primitive GluePrimitive.Any
+            let warningsCount = reader.Warnings.Count
+
+            let conditionalType =
+                ({
+                    CheckType = reader.ReadTypeNode conditionalTypeNode.checkType
+                    ExtendsType = reader.ReadTypeNode conditionalTypeNode.extendsType
+                    TrueType = reader.ReadTypeNode conditionalTypeNode.trueType
+                    FalseType = reader.ReadTypeNode conditionalTypeNode.falseType
+                }
+                : GlueConditionalType)
+
+            // A branch with `infer` is not read, without a warning
+            if reader.Warnings.Count > warningsCount then
+                reader.Warnings.RemoveRange(warningsCount, reader.Warnings.Count - warningsCount)
+                GlueType.Primitive GluePrimitive.Any
+            else
+                GlueType.ConditionalType conditionalType
         else
 
             // If we resolved the type to Any, we fallback to the generic type

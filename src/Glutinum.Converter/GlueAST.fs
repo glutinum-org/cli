@@ -395,6 +395,8 @@ type GlueType =
     | FileModule of GlueFileModule
     /// A declaration re-exported from another file (`export { X } from "./x"`)
     | ReExport of GlueReExport
+    /// `T extends U ? A : B` the checker can't resolve without the type arguments
+    | ConditionalType of GlueConditionalType
 
     member this.Name =
         match this with
@@ -443,6 +445,7 @@ type GlueType =
         | ExportDefault _
         | ConstructorType _
         | FileModule _
+        | ConditionalType _
         | Unknown -> "obj"
         | ReExport info -> info.Name
         | UtilityType utilityType ->
@@ -497,6 +500,7 @@ type GlueType =
         | TypeLiteral _
         | FileModule _
         | ReExport _
+        | ConditionalType _
         | ConstructorType _ -> []
 
 and GlueFileModule =
@@ -507,6 +511,14 @@ and GlueFileModule =
         /// The file is a script: its declarations are globals instead of exports
         IsGlobal: bool
         Types: GlueType list
+    }
+
+and GlueConditionalType =
+    {
+        CheckType: GlueType
+        ExtendsType: GlueType
+        TrueType: GlueType
+        FalseType: GlueType
     }
 
 and GlueReExport =
