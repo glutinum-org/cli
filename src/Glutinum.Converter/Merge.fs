@@ -201,6 +201,16 @@ let rec private distinctMembers (types: FSharpType list) =
                 { interfaceInfo with
                     Members = distinctBySignature interfaceInfo.Members
                 }
+        // The constructors made of the cases of a union can be the same through a type alias
+        | FSharpType.Class classInfo ->
+            FSharpType.Class
+                { classInfo with
+                    SecondaryConstructors =
+                        classInfo.SecondaryConstructors
+                        |> List.distinctBy (fun constructorInfo ->
+                            parametersSignature constructorInfo.Parameters
+                        )
+                }
         | FSharpType.Module moduleInfo ->
             FSharpType.Module
                 { moduleInfo with

@@ -2148,6 +2148,10 @@ module private TransformMembers =
                                     propertyInfo.IsOptional
                             with
                             | FSharpType.Primitive FSharpPrimitive.Unit -> FSharpType.Object
+                            | FSharpType.TypeReference typeReference when
+                                isUnitAlias context.TypeMemory typeReference.FullName
+                                ->
+                                FSharpType.Object
                             | typ -> typ
                         TypeParameters = []
                         IsOptional = propertyInfo.IsOptional
@@ -3077,6 +3081,18 @@ module UnionOverloads =
                 )
             | _ -> [ glueMember ]
         )
+
+/// `type Payload = void`, a property of that type can't have a setter either
+let private isUnitAlias (typeMemory: GlueType list) (fullName: string) =
+    typeMemory
+    |> List.exists (
+        function
+        | GlueType.TypeAliasDeclaration {
+                                            FullName = aliasFullName
+                                            Type = GlueType.Primitive GluePrimitive.Unit
+                                        } -> aliasFullName = fullName
+        | _ -> false
+    )
 
 /// Whether one of the base interfaces declares `[Symbol.iterator]`, directly or through its bases
 let private inheritsIterable (typeMemory: GlueType list) (heritageClauses: GlueType list) =
