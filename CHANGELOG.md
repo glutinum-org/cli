@@ -3,6 +3,7 @@ name: Glutinum.Converter.CLI
 last_commit_released: 24210b74ed4fac16d7c232d822ede822c7a2c38b
 exclude:
   - src/Glutinum.Types/
+  - bindings/
 updaters:
   - package.json:
       file: package.json

@@ -1,45 +1,61 @@
+# Build and test your project on every pull request, and on every push to the main branch.
+#
+# The "easybuild-shipit.yml" workflow waits for this one to succeed before preparing a release,
+# so if you rename this workflow, remember to update the "workflows" filter over there as well.
 name: test
 
 on:
-  push:
-    branches: [ main ]
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
+  push:
+    branches:
+      - main
 
 jobs:
   test:
+    name: Test
     runs-on: ubuntu-latest
-    name: Run tests suite
-
     steps:
-    - uses: actions/checkout@v7
+      - uses: actions/checkout@v7
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: package.json
+      - uses: pnpm/action-setup@v6
+      # The Glutinum.Web tests drive a real browser
+      - run: pnpm install && npx playwright install --with-deps chromium
+      - name: Test
+        run: ./build.sh test
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v6
-      with:
-        global-json-file: global.json
-
-    - name: Setup Node.js environment
-      uses: actions/setup-node@v7
-      with:
-        node-version-file: package.json
-
-    - uses: pnpm/action-setup@v6
-
-    - name: Tests
-      run: ./build.sh test
+  bindings:
+    name: Bindings are up to date
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: package.json
+      - uses: pnpm/action-setup@v6
+      # A generator change must come with the bindings it produces
+      - run: ./build.sh bindings --check
 
   lint:
-    runs-on: ubuntu-latest
     name: Check formatting
-
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v7
-
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v6
-      with:
-        global-json-file: global.json
-
-    - name: Check formatting
-      run: ./build.sh lint
+      - uses: actions/checkout@v7
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+      - run: ./build.sh lint

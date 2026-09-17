@@ -23,6 +23,8 @@ jobs:
   shipit-pr:
     name: ShipIt - Pull Request
     runs-on: ubuntu-latest
+    # 'completed' fires whatever the conclusion is, so a failed test run has to be filtered out.
+    if: "github.event.workflow_run.conclusion == 'success'"
     steps:
       - uses: actions/checkout@v7
         with:
@@ -45,41 +47,34 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     # Only trigger this workflow when a commit starting with `chore: release ` is pushed.
-    if: "startsWith(github.event.workflow_run.head_commit.message, 'chore: release ')"
+    if: "github.event.workflow_run.conclusion == 'success' && startsWith(github.event.workflow_run.head_commit.message, 'chore: release ')"
     steps:
       - uses: actions/checkout@v7
-      # Configure how you want to publish your package, e.g. using the NuGet CLI, dotnet CLI, NPM, etc.
-      # It is recommanded to use Trusted Publishing to avoid having to manage API keys in your repository.
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
-
-      - name: Setup Node.js environment
+      - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
           node-version-file: package.json
-
+          registry-url: https://registry.npmjs.org
       - uses: pnpm/action-setup@v6
 
-      # Below is an example, for NuGet packages (to demonstrate that we are getting
-      # the API key from the OIDC token exchange and not from a secret in the repository).
+      # Trusted publishing: NuGet hands out a short-lived key in exchange for this run's OIDC
+      # token, so the repository holds no API key. Register this repository as a trusted
+      # publisher on nuget.org for the account below.
       #
       # Learn more at https://github.com/NuGet/login
-      - name: NuGet login (OIDC → temp API key)
+      - name: NuGet login (OIDC to temporary API key)
         uses: NuGet/login@v1
         id: login
         with:
-          # Secret is your NuGet username, e.g. andrewlock
-          # This is actually a public information, so using a secret is probably overkill
-          # if you want you can just hardcode your NuGet username here and not use a secret at all.
-          user: ${{ secrets.NUGET_USER }}
+          user: MangelMaxime
 
-      - name: Build, Test and Release
-        run: |
-            ./build.sh cli
-            dotnet pack -c Release -o ./nupkgs
-            dotnet nuget push ./nupkgs/*.nupkg --api-key $NUGET_KEY
-            pnpm publish --no-git-checks --access public
+      # Packs Glutinum.Types, Glutinum.Web and Glutinum.Node, pushes them and publishes the CLI to npm
+      - name: Release
+        run: ./build.sh release
         env:
           NUGET_KEY: ${{ steps.login.outputs.NUGET_API_KEY }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
