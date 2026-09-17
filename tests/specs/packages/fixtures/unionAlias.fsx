@@ -24,10 +24,11 @@ module UnionAlias =
         | b
 
     [<RequireQualifiedAccess>]
-    [<Erase(CaseRules.None)>]
+    [<StringEnum(CaseRules.None)>]
     type WithLocal =
+        | a
+        | b
         | c
-        | Case1 of UnionAlias.Local
 
     module ast =
 

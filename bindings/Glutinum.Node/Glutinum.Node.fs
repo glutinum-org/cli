@@ -3109,6 +3109,27 @@ module Node =
             /// If the value of filename is set to <c>'stdout'</c> or <c>'stderr'</c>, the report is written
             /// to the stdout or stderr of the process respectively.
             /// </summary>
+            /// <param name="fileName">
+            /// Name of the file where the report is written.
+            /// This should be a relative path, that will be appended to the directory specified in
+            /// <c>process.report.directory</c>, or the current working directory of the Node.js process,
+            /// if unspecified.
+            /// </param>
+            /// <param name="err">
+            /// A custom error used for reporting the JavaScript stack.
+            /// </param>
+            /// <returns>
+            /// Filename of the generated report.
+            /// </returns>
+            abstract member writeReport: unit -> string
+            /// <summary>
+            /// Writes a diagnostic report to a file. If filename is not provided, the default filename
+            /// includes the date, time, PID, and a sequence number.
+            /// The report's JavaScript stack trace is taken from <c>err</c>, if present.
+            ///
+            /// If the value of filename is set to <c>'stdout'</c> or <c>'stderr'</c>, the report is written
+            /// to the stdout or stderr of the process respectively.
+            /// </summary>
             abstract member writeReport: ?err: Exception -> string
 
         [<AllowNullLiteral>]
@@ -17450,6 +17471,34 @@ TypeScript versions earlier than 5.7.""")>]
                 /// const callsfunc = tracker.calls(func);
                 /// </code>
                 /// </summary>
+                /// <param name="fn">
+                ///
+                /// </param>
+                /// <param name="exact">
+                ///
+                /// </param>
+                /// <returns>
+                /// A function that wraps <c>fn</c>.
+                /// </returns>
+                abstract member calls: unit -> (unit -> unit)
+                /// <summary>
+                /// The wrapper function is expected to be called exactly <c>exact</c> times. If the
+                /// function has not been called exactly <c>exact</c> times when <c>tracker.verify()</c> is called, then <c>tracker.verify()</c> will throw an
+                /// error.
+                ///
+                /// <code lang="js">
+                /// import assert from 'node:assert';
+                ///
+                /// // Creates call tracker.
+                /// const tracker = new assert.CallTracker();
+                ///
+                /// function func() {}
+                ///
+                /// // Returns a function that wraps func() that must be called exact times
+                /// // before tracker.verify().
+                /// const callsfunc = tracker.calls(func);
+                /// </code>
+                /// </summary>
                 abstract member calls: ?fn: 'Func * ?exact: float -> 'Func
                 /// <summary>
                 /// Example:
@@ -24385,8 +24434,11 @@ AsyncLocalStorage.snapshot()"""
             | pipe
             | overlapped
 
+        [<RequireQualifiedAccess>]
+        [<StringEnum(CaseRules.None)>]
         type StdioPipe =
-            Node.child_process.StdioPipeNamed option
+            | pipe
+            | overlapped
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -25249,18 +25301,40 @@ AsyncLocalStorage.snapshot()"""
         module SpawnSyncOptions =
 
             [<RequireQualifiedAccess>]
-            [<Erase(CaseRules.None)>]
+            [<StringEnum(CaseRules.None)>]
             type encoding =
+                | ascii
+                | utf8
+                | ``utf-8``
+                | utf16le
+                | ``utf-16le``
+                | ucs2
+                | ``ucs-2``
+                | base64
+                | base64url
+                | latin1
+                | binary
+                | hex
                 | buffer
-                | Case1 of Node.BufferEncoding
 
         module CommonExecOptions =
 
             [<RequireQualifiedAccess>]
-            [<Erase(CaseRules.None)>]
+            [<StringEnum(CaseRules.None)>]
             type encoding =
+                | ascii
+                | utf8
+                | ``utf-8``
+                | utf16le
+                | ``utf-16le``
+                | ucs2
+                | ``ucs-2``
+                | base64
+                | base64url
+                | latin1
+                | binary
+                | hex
                 | buffer
-                | Case1 of Node.BufferEncoding
 
         module Exports =
 
@@ -34325,8 +34399,21 @@ Certificate.verifySpkac($0)"""
             | ucs2
             | ``ucs-2``
 
+        [<RequireQualifiedAccess>]
+        [<StringEnum(CaseRules.None)>]
         type Encoding =
-            U3<Node.crypto.BinaryToTextEncoding, Node.crypto.CharacterEncoding, Node.crypto.LegacyCharacterEncoding>
+            | base64
+            | base64url
+            | hex
+            | binary
+            | utf8
+            | ``utf-8``
+            | utf16le
+            | ``utf-16le``
+            | latin1
+            | ascii
+            | ucs2
+            | ``ucs-2``
 
         [<RequireQualifiedAccess>]
         [<StringEnum(CaseRules.None)>]
@@ -34843,6 +34930,29 @@ KeyObject.from($0)"""
             /// PKCS#1 and SEC1 encryption.
             /// </summary>
             abstract member export: ?options: Node.crypto.KeyExportOptions<string> -> Node.NonSharedBuffer
+            /// <summary>
+            /// For symmetric keys, the following encoding options can be used:
+            ///
+            /// For public keys, the following encoding options can be used:
+            ///
+            /// For private keys, the following encoding options can be used:
+            ///
+            /// The result type depends on the selected encoding format, when PEM the
+            /// result is a string, when DER it will be a buffer containing the data
+            /// encoded as DER, when [JWK](https://tools.ietf.org/html/rfc7517) it will be an object.
+            ///
+            /// When [JWK](https://tools.ietf.org/html/rfc7517) encoding format was selected, all other encoding options are
+            /// ignored.
+            ///
+            /// PKCS#1, SEC1, and PKCS#8 type keys can be encrypted by using a combination of
+            /// the <c>cipher</c> and <c>format</c> options. The PKCS#8 <c>type</c> can be used with any<c>format</c> to encrypt any key algorithm (RSA, EC, or DH) by specifying a<c>cipher</c>. PKCS#1 and SEC1 can only be
+            /// encrypted by specifying a <c>cipher</c>when the PEM <c>format</c> is used. For maximum compatibility, use PKCS#8 for
+            /// encrypted private keys. Since PKCS#8 defines its own
+            /// encryption mechanism, PEM-level encryption is not supported when encrypting
+            /// a PKCS#8 key. See [RFC 5208](https://www.rfc-editor.org/rfc/rfc5208.txt) for PKCS#8 encryption and [RFC 1421](https://www.rfc-editor.org/rfc/rfc1421.txt) for
+            /// PKCS#1 and SEC1 encryption.
+            /// </summary>
+            abstract member export: unit -> Node.NonSharedBuffer
             /// <summary>
             /// For symmetric keys, the following encoding options can be used:
             ///
@@ -40290,10 +40400,13 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             module hash =
 
                 [<RequireQualifiedAccess>]
-                [<Erase(CaseRules.None)>]
+                [<StringEnum(CaseRules.None)>]
                 type outputEncoding =
+                    | base64
+                    | base64url
+                    | hex
+                    | binary
                     | buffer
-                    | Case1 of Node.crypto.BinaryToTextEncoding
 
             module hkdf =
 
@@ -40513,6 +40626,52 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// with no parameters. Called when binding is complete.
             /// </param>
             abstract member bind: ?port: float * ?address: string * ?callback: (unit -> unit) -> Socket
+            /// <summary>
+            /// For UDP sockets, causes the <c>dgram.Socket</c> to listen for datagram
+            /// messages on a named <c>port</c> and optional <c>address</c>. If <c>port</c> is not
+            /// specified or is <c>0</c>, the operating system will attempt to bind to a
+            /// random port. If <c>address</c> is not specified, the operating system will
+            /// attempt to listen on all addresses. Once binding is complete, a <c>'listening'</c> event is emitted and the optional <c>callback</c> function is
+            /// called.
+            ///
+            /// Specifying both a <c>'listening'</c> event listener and passing a <c>callback</c> to the <c>socket.bind()</c> method is not harmful but not very
+            /// useful.
+            ///
+            /// A bound datagram socket keeps the Node.js process running to receive
+            /// datagram messages.
+            ///
+            /// If binding fails, an <c>'error'</c> event is generated. In rare case (e.g.
+            /// attempting to bind with a closed socket), an <c>Error</c> may be thrown.
+            ///
+            /// Example of a UDP server listening on port 41234:
+            ///
+            /// <c></c><c>js
+            /// import dgram from 'node:dgram';
+            ///
+            /// const server = dgram.createSocket('udp4');
+            ///
+            /// server.on('error', (err) => {
+            ///   console.error(</c>server error:\n${err.stack}<c>);
+            ///   server.close();
+            /// });
+            ///
+            /// server.on('message', (msg, rinfo) => {
+            ///   console.log(</c>server got: ${msg} from ${rinfo.address}:${rinfo.port}<c>);
+            /// });
+            ///
+            /// server.on('listening', () => {
+            ///   const address = server.address();
+            ///   console.log(</c>server listening ${address.address}:${address.port}<c>);
+            /// });
+            ///
+            /// server.bind(41234);
+            /// // Prints: server listening 0.0.0.0:41234
+            /// </c><c></c>
+            /// </summary>
+            /// <param name="callback">
+            /// with no parameters. Called when binding is complete.
+            /// </param>
+            abstract member bind: unit -> Socket
             /// <summary>
             /// For UDP sockets, causes the <c>dgram.Socket</c> to listen for datagram
             /// messages on a named <c>port</c> and optional <c>address</c>. If <c>port</c> is not
@@ -67524,10 +67683,21 @@ EventEmitter.defaultMaxListeners = $0"""
         module WatchOptions =
 
             [<RequireQualifiedAccess>]
-            [<Erase(CaseRules.None)>]
+            [<StringEnum(CaseRules.None)>]
             type encoding =
+                | ascii
+                | utf8
+                | ``utf-8``
+                | utf16le
+                | ``utf-16le``
+                | ucs2
+                | ``ucs-2``
+                | base64
+                | base64url
+                | latin1
+                | binary
+                | hex
                 | buffer
-                | Case1 of Node.BufferEncoding
 
         module CopyOptions =
 
@@ -73102,6 +73272,13 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If the file is not modified concurrently, the end-of-file is reached when the
             /// number of bytes read is zero.
             /// </summary>
+            abstract member read: unit -> JS.Promise<Node.fs_promises.FileReadResult<'T>>
+            /// <summary>
+            /// Reads data from the file and stores that in the given buffer.
+            ///
+            /// If the file is not modified concurrently, the end-of-file is reached when the
+            /// number of bytes read is zero.
+            /// </summary>
             abstract member read: ?options: Node.fs.ReadOptionsWithBuffer<Node.NonSharedBuffer> -> JS.Promise<Node.fs_promises.FileReadResult<Node.NonSharedBuffer>>
             /// <summary>
             /// Returns a byte-oriented <c>ReadableStream</c> that may be used to read the file's
@@ -73220,6 +73397,10 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with an {fs.Stats} for the file.
             /// </returns>
             abstract member stat: ?opts: obj -> JS.Promise<Node.fs.Stats>
+            /// <returns>
+            /// Fulfills with an {fs.Stats} for the file.
+            /// </returns>
+            abstract member stat: unit -> JS.Promise<Node.fs.Stats>
             abstract member stat: opts: obj -> JS.Promise<Node.fs.BigIntStats>
             abstract member stat: ?opts: Node.fs.StatOptions -> JS.Promise<U2<Node.fs.Stats, Node.fs.BigIntStats>>
             /// <summary>
@@ -109645,6 +109826,70 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("createServer", "net")>]
             static member createServer (?connectionListener: (Node.net.Socket -> unit)) : Node.net.Server = nativeOnly
+            /// <summary>
+            /// Creates a new TCP or <c>IPC</c> server.
+            ///
+            /// If <c>allowHalfOpen</c> is set to <c>true</c>, when the other end of the socket
+            /// signals the end of transmission, the server will only send back the end of
+            /// transmission when <c>socket.end()</c> is explicitly called. For example, in the
+            /// context of TCP, when a FIN packed is received, a FIN packed is sent
+            /// back only when <c>socket.end()</c> is explicitly called. Until then the
+            /// connection is half-closed (non-readable but still writable). See <c>'end'</c> event and [RFC 1122](https://tools.ietf.org/html/rfc1122) (section 4.2.2.13) for more information.
+            ///
+            /// If <c>pauseOnConnect</c> is set to <c>true</c>, then the socket associated with each
+            /// incoming connection will be paused, and no data will be read from its handle.
+            /// This allows connections to be passed between processes without any data being
+            /// read by the original process. To begin reading data from a paused socket, call <c>socket.resume()</c>.
+            ///
+            /// The server can be a TCP server or an <c>IPC</c> server, depending on what it <c>listen()</c> to.
+            ///
+            /// Here is an example of a TCP echo server which listens for connections
+            /// on port 8124:
+            ///
+            /// <code lang="js">
+            /// import net from 'node:net';
+            /// const server = net.createServer((c) => {
+            ///   // 'connection' listener.
+            ///   console.log('client connected');
+            ///   c.on('end', () => {
+            ///     console.log('client disconnected');
+            ///   });
+            ///   c.write('hello\r\n');
+            ///   c.pipe(c);
+            /// });
+            /// server.on('error', (err) => {
+            ///   throw err;
+            /// });
+            /// server.listen(8124, () => {
+            ///   console.log('server bound');
+            /// });
+            /// </code>
+            ///
+            /// Test this by using <c>telnet</c>:
+            ///
+            /// <code lang="bash">
+            /// telnet localhost 8124
+            /// </code>
+            ///
+            /// To listen on the socket <c>/tmp/echo.sock</c>:
+            ///
+            /// <code lang="js">
+            /// server.listen('/tmp/echo.sock', () => {
+            ///   console.log('server bound');
+            /// });
+            /// </code>
+            ///
+            /// Use <c>nc</c> to connect to a Unix domain socket server:
+            ///
+            /// <code lang="bash">
+            /// nc -U /tmp/echo.sock
+            /// </code>
+            /// </summary>
+            /// <param name="connectionListener">
+            /// Automatically set as a listener for the <see href="'connection'">'connection'</see> event.
+            /// </param>
+            [<Import("createServer", "net")>]
+            static member createServer () : Node.net.Server = nativeOnly
             [<Import("createServer", "net")>]
             static member createServer (?options: Node.net.ServerOpts, ?connectionListener: (Node.net.Socket -> unit)) : Node.net.Server = nativeOnly
             /// <summary>
@@ -109790,6 +110035,8 @@ EventEmitter.defaultMaxListeners = $0"""
             static member Socket (?options: Node.net.SocketConstructorOpts) : Socket = nativeOnly
             [<Import("Server", "net"); EmitConstructor>]
             static member Server (?connectionListener: (Node.net.Socket -> unit)) : Server = nativeOnly
+            [<Import("Server", "net"); EmitConstructor>]
+            static member Server () : Server = nativeOnly
             [<Import("Server", "net"); EmitConstructor>]
             static member Server (?options: Node.net.ServerOpts, ?connectionListener: (Node.net.Socket -> unit)) : Server = nativeOnly
             [<Import("BlockList", "net"); EmitConstructor>]
@@ -112793,6 +113040,48 @@ EventEmitter.defaultMaxListeners = $0"""
             /// });
             /// </code>
             /// </summary>
+            abstract member listen: unit -> Server
+            /// <summary>
+            /// Start a server listening for connections. A <c>net.Server</c> can be a TCP or
+            /// an <c>IPC</c> server depending on what it listens to.
+            ///
+            /// Possible signatures:
+            ///
+            /// * <c>server.listen(handle[, backlog][, callback])</c>
+            /// * <c>server.listen(options[, callback])</c>
+            /// * <c>server.listen(path[, backlog][, callback])</c> for <c>IPC</c> servers
+            /// * <c>server.listen([port[, host[, backlog]]][, callback])</c> for TCP servers
+            ///
+            /// This function is asynchronous. When the server starts listening, the <c>'listening'</c> event will be emitted. The last parameter <c>callback</c>will be added as a listener for the <c>'listening'</c>
+            /// event.
+            ///
+            /// All <c>listen()</c> methods can take a <c>backlog</c> parameter to specify the maximum
+            /// length of the queue of pending connections. The actual length will be determined
+            /// by the OS through sysctl settings such as <c>tcp_max_syn_backlog</c> and <c>somaxconn</c> on Linux. The default value of this parameter is 511 (not 512).
+            ///
+            /// All <see href="Socket">Socket</see> are set to <c>SO_REUSEADDR</c> (see [<c>socket(7)</c>](https://man7.org/linux/man-pages/man7/socket.7.html) for
+            /// details).
+            ///
+            /// The <c>server.listen()</c> method can be called again if and only if there was an
+            /// error during the first <c>server.listen()</c> call or <c>server.close()</c> has been
+            /// called. Otherwise, an <c>ERR_SERVER_ALREADY_LISTEN</c> error will be thrown.
+            ///
+            /// One of the most common errors raised when listening is <c>EADDRINUSE</c>.
+            /// This happens when another server is already listening on the requested<c>port</c>/<c>path</c>/<c>handle</c>. One way to handle this would be to retry
+            /// after a certain amount of time:
+            ///
+            /// <code lang="js">
+            /// server.on('error', (e) => {
+            ///   if (e.code === 'EADDRINUSE') {
+            ///     console.error('Address in use, retrying...');
+            ///     setTimeout(() => {
+            ///       server.close();
+            ///       server.listen(PORT, HOST);
+            ///     }, 1000);
+            ///   }
+            /// });
+            /// </code>
+            /// </summary>
             abstract member listen: ?port: float * ?hostname: string * ?listeningListener: (unit -> unit) -> Server
             /// <summary>
             /// Start a server listening for connections. A <c>net.Server</c> can be a TCP or
@@ -115414,10 +115703,21 @@ SocketAddress.parse($0)"""
         module UserInfoOptions =
 
             [<RequireQualifiedAccess>]
-            [<Erase(CaseRules.None)>]
+            [<StringEnum(CaseRules.None)>]
             type encoding =
+                | ascii
+                | utf8
+                | ``utf-8``
+                | utf16le
+                | ``utf-16le``
+                | ucs2
+                | ``ucs-2``
+                | base64
+                | base64url
+                | latin1
+                | binary
+                | hex
                 | buffer
-                | Case1 of Node.BufferEncoding
 
         module Exports =
 
@@ -140027,6 +140327,54 @@ Duplex.fromWeb($0, $1)"""
             /// </returns>
             [<ImportDefault("node:test")>]
             static member test (?name: string, ?fn: Node.test.test_.TestFn) : JS.Promise<unit> = nativeOnly
+            /// <summary>
+            /// The <c>test()</c> function is the value imported from the <c>test</c> module. Each
+            /// invocation of this function results in reporting the test to the <c>TestsStream</c>.
+            ///
+            /// The <c>TestContext</c> object passed to the <c>fn</c> argument can be used to perform
+            /// actions related to the current test. Examples include skipping the test, adding
+            /// additional diagnostic information, or creating subtests.
+            ///
+            /// <c>test()</c> returns a <c>Promise</c> that fulfills once the test completes.
+            /// if <c>test()</c> is called within a suite, it fulfills immediately.
+            /// The return value can usually be discarded for top level tests.
+            /// However, the return value from subtests should be used to prevent the parent
+            /// test from finishing first and cancelling the subtest
+            /// as shown in the following example.
+            ///
+            /// <code lang="js">
+            /// test('top level test', async (t) => {
+            ///   // The setTimeout() in the following subtest would cause it to outlive its
+            ///   // parent test if 'await' is removed on the next line. Once the parent test
+            ///   // completes, it will cancel any outstanding subtests.
+            ///   await t.test('longer running subtest', async (t) => {
+            ///     return new Promise((resolve, reject) => {
+            ///       setTimeout(resolve, 1000);
+            ///     });
+            ///   });
+            /// });
+            /// </code>
+            ///
+            /// The <c>timeout</c> option can be used to fail the test if it takes longer than <c>timeout</c> milliseconds to complete. However, it is not a reliable mechanism for
+            /// canceling tests because a running test might block the application thread and
+            /// thus prevent the scheduled cancellation.
+            /// </summary>
+            /// <param name="name">
+            /// The name of the test, which is displayed when reporting test results.
+            /// Defaults to the <c>name</c> property of <c>fn</c>, or <c>'<anonymous>'</c> if <c>fn</c> does not have a name.
+            /// </param>
+            /// <param name="options">
+            /// Configuration options for the test.
+            /// </param>
+            /// <param name="fn">
+            /// The function under test. The first argument to this function is a <see href="TestContext">TestContext</see> object.
+            /// If the test uses callbacks, the callback function is passed as the second argument.
+            /// </param>
+            /// <returns>
+            /// Fulfilled with <c>undefined</c> once the test completes, or immediately if the test runs within a suite.
+            /// </returns>
+            [<ImportDefault("node:test")>]
+            static member test () : JS.Promise<unit> = nativeOnly
             [<ImportDefault("node:test")>]
             static member test (?name: string, ?options: Node.test.test_.TestOptions, ?fn: Node.test.test_.TestFn) : JS.Promise<unit> = nativeOnly
             [<ImportDefault("node:test")>]
@@ -140134,6 +140482,24 @@ Duplex.fromWeb($0, $1)"""
                 /// </returns>
                 [<Emit("$0.suite($1...)")>]
                 abstract member suite: ?name: string * ?options: Node.test.test_.TestOptions * ?fn: Node.test.test_.SuiteFn -> JS.Promise<unit>
+                /// <summary>
+                /// The <c>suite()</c> function is imported from the <c>node:test</c> module.
+                /// </summary>
+                /// <param name="name">
+                /// The name of the suite, which is displayed when reporting test results.
+                /// Defaults to the <c>name</c> property of <c>fn</c>, or <c>'<anonymous>'</c> if <c>fn</c> does not have a name.
+                /// </param>
+                /// <param name="options">
+                /// Configuration options for the suite. This supports the same options as <see href="test">test</see>.
+                /// </param>
+                /// <param name="fn">
+                /// The suite function declaring nested tests and suites. The first argument to this function is a <see href="SuiteContext">SuiteContext</see> object.
+                /// </param>
+                /// <returns>
+                /// Immediately fulfilled with <c>undefined</c>.
+                /// </returns>
+                [<Emit("$0.suite($1...)")>]
+                abstract member suite: unit -> JS.Promise<unit>
                 [<Emit("$0.suite($1...)")>]
                 abstract member suite: ?name: string * ?fn: Node.test.test_.SuiteFn -> JS.Promise<unit>
                 [<Emit("$0.suite($1...)")>]
@@ -140145,6 +140511,11 @@ Duplex.fromWeb($0, $1)"""
                 /// </summary>
                 [<Emit("$0.skip($1...)")>]
                 abstract member skip: ?name: string * ?options: Node.test.test_.TestOptions * ?fn: Node.test.test_.TestFn -> JS.Promise<unit>
+                /// <summary>
+                /// Shorthand for skipping a test. This is the same as calling <see href="test">test</see> with <c>options.skip</c> set to <c>true</c>.
+                /// </summary>
+                [<Emit("$0.skip($1...)")>]
+                abstract member skip: unit -> JS.Promise<unit>
                 [<Emit("$0.skip($1...)")>]
                 abstract member skip: ?name: string * ?fn: Node.test.test_.TestFn -> JS.Promise<unit>
                 [<Emit("$0.skip($1...)")>]
@@ -140156,6 +140527,11 @@ Duplex.fromWeb($0, $1)"""
                 /// </summary>
                 [<Emit("$0.todo($1...)")>]
                 abstract member todo: ?name: string * ?options: Node.test.test_.TestOptions * ?fn: Node.test.test_.TestFn -> JS.Promise<unit>
+                /// <summary>
+                /// Shorthand for marking a test as <c>TODO</c>. This is the same as calling <see href="test">test</see> with <c>options.todo</c> set to <c>true</c>.
+                /// </summary>
+                [<Emit("$0.todo($1...)")>]
+                abstract member todo: unit -> JS.Promise<unit>
                 [<Emit("$0.todo($1...)")>]
                 abstract member todo: ?name: string * ?fn: Node.test.test_.TestFn -> JS.Promise<unit>
                 [<Emit("$0.todo($1...)")>]
@@ -140167,6 +140543,11 @@ Duplex.fromWeb($0, $1)"""
                 /// </summary>
                 [<Emit("$0.only($1...)")>]
                 abstract member only: ?name: string * ?options: Node.test.test_.TestOptions * ?fn: Node.test.test_.TestFn -> JS.Promise<unit>
+                /// <summary>
+                /// Shorthand for marking a test as <c>only</c>. This is the same as calling <see href="test">test</see> with <c>options.only</c> set to <c>true</c>.
+                /// </summary>
+                [<Emit("$0.only($1...)")>]
+                abstract member only: unit -> JS.Promise<unit>
                 [<Emit("$0.only($1...)")>]
                 abstract member only: ?name: string * ?fn: Node.test.test_.TestFn -> JS.Promise<unit>
                 [<Emit("$0.only($1...)")>]
@@ -140287,6 +140668,11 @@ Duplex.fromWeb($0, $1)"""
                     /// </summary>
                     [<Emit("$0.skip($1...)")>]
                     abstract member skip: ?name: string * ?options: Node.test.test_.TestOptions * ?fn: Node.test.test_.SuiteFn -> JS.Promise<unit>
+                    /// <summary>
+                    /// Shorthand for skipping a suite. This is the same as calling <see href="suite">suite</see> with <c>options.skip</c> set to <c>true</c>.
+                    /// </summary>
+                    [<Emit("$0.skip($1...)")>]
+                    abstract member skip: unit -> JS.Promise<unit>
                     [<Emit("$0.skip($1...)")>]
                     abstract member skip: ?name: string * ?fn: Node.test.test_.SuiteFn -> JS.Promise<unit>
                     [<Emit("$0.skip($1...)")>]
@@ -140298,6 +140684,11 @@ Duplex.fromWeb($0, $1)"""
                     /// </summary>
                     [<Emit("$0.todo($1...)")>]
                     abstract member todo: ?name: string * ?options: Node.test.test_.TestOptions * ?fn: Node.test.test_.SuiteFn -> JS.Promise<unit>
+                    /// <summary>
+                    /// Shorthand for marking a suite as <c>TODO</c>. This is the same as calling <see href="suite">suite</see> with <c>options.todo</c> set to <c>true</c>.
+                    /// </summary>
+                    [<Emit("$0.todo($1...)")>]
+                    abstract member todo: unit -> JS.Promise<unit>
                     [<Emit("$0.todo($1...)")>]
                     abstract member todo: ?name: string * ?fn: Node.test.test_.SuiteFn -> JS.Promise<unit>
                     [<Emit("$0.todo($1...)")>]
@@ -140309,6 +140700,11 @@ Duplex.fromWeb($0, $1)"""
                     /// </summary>
                     [<Emit("$0.only($1...)")>]
                     abstract member only: ?name: string * ?options: Node.test.test_.TestOptions * ?fn: Node.test.test_.SuiteFn -> JS.Promise<unit>
+                    /// <summary>
+                    /// Shorthand for marking a suite as <c>only</c>. This is the same as calling <see href="suite">suite</see> with <c>options.only</c> set to <c>true</c>.
+                    /// </summary>
+                    [<Emit("$0.only($1...)")>]
+                    abstract member only: unit -> JS.Promise<unit>
                     [<Emit("$0.only($1...)")>]
                     abstract member only: ?name: string * ?fn: Node.test.test_.SuiteFn -> JS.Promise<unit>
                     [<Emit("$0.only($1...)")>]
@@ -144339,6 +144735,51 @@ Duplex.fromWeb($0, $1)"""
                 /// The mocked function. The mocked function contains a special <c>mock</c> property, which is an instance of <see href="MockFunctionContext">MockFunctionContext</see>, and can be used for inspecting and changing the
                 /// behavior of the mocked function.
                 /// </returns>
+                abstract member fn: unit -> Node.test.test_.Mock<'F>
+                /// <summary>
+                /// This function is used to create a mock function.
+                ///
+                /// The following example creates a mock function that increments a counter by one
+                /// on each invocation. The <c>times</c> option is used to modify the mock behavior such
+                /// that the first two invocations add two to the counter instead of one.
+                ///
+                /// <code lang="js">
+                /// test('mocks a counting function', (t) => {
+                ///   let cnt = 0;
+                ///
+                ///   function addOne() {
+                ///     cnt++;
+                ///     return cnt;
+                ///   }
+                ///
+                ///   function addTwo() {
+                ///     cnt += 2;
+                ///     return cnt;
+                ///   }
+                ///
+                ///   const fn = t.mock.fn(addOne, addTwo, { times: 2 });
+                ///
+                ///   assert.strictEqual(fn(), 2);
+                ///   assert.strictEqual(fn(), 4);
+                ///   assert.strictEqual(fn(), 5);
+                ///   assert.strictEqual(fn(), 6);
+                /// });
+                /// </code>
+                /// </summary>
+                /// <param name="original">
+                /// An optional function to create a mock on.
+                /// </param>
+                /// <param name="implementation">
+                /// An optional function used as the mock implementation for <c>original</c>. This is useful for creating mocks that exhibit one behavior for a specified number of calls and
+                /// then restore the behavior of <c>original</c>.
+                /// </param>
+                /// <param name="options">
+                /// Optional configuration options for the mock function.
+                /// </param>
+                /// <returns>
+                /// The mocked function. The mocked function contains a special <c>mock</c> property, which is an instance of <see href="MockFunctionContext">MockFunctionContext</see>, and can be used for inspecting and changing the
+                /// behavior of the mocked function.
+                /// </returns>
                 abstract member fn: ?original: System.Delegate * ?options: Node.test.test_.MockFunctionOptions -> Node.test.test_.Mock<System.Delegate>
                 /// <summary>
                 /// This function is used to create a mock function.
@@ -146439,6 +146880,15 @@ Duplex.fromWeb($0, $1)"""
             /// certificate.
             /// </summary>
             abstract member getPeerCertificate: ?detailed: bool -> Node.tls.PeerCertificate
+            /// <summary>
+            /// Returns an object representing the peer's certificate. If the peer does not
+            /// provide a certificate, an empty object will be returned. If the socket has been
+            /// destroyed, <c>null</c> will be returned.
+            ///
+            /// If the full certificate chain was requested, each certificate will include an<c>issuerCertificate</c> property containing an object representing its issuer's
+            /// certificate.
+            /// </summary>
+            abstract member getPeerCertificate: unit -> Node.tls.PeerCertificate
             /// <summary>
             /// As the <c>Finished</c> messages are message digests of the complete handshake
             /// (with a total of 192 bits for TLS 1.0 and more for SSL 3.0), they can
@@ -150600,6 +151050,30 @@ Duplex.fromWeb($0, $1)"""
             /// // Returns false (the environment setting pretends to support 2 ** 8 colors).
             /// </c><c></c>
             /// </summary>
+            /// <param name="count">
+            /// The number of colors that are requested (minimum 2).
+            /// </param>
+            /// <param name="env">
+            /// An object containing the environment variables to check. This enables simulating the usage of a specific terminal.
+            /// </param>
+            abstract member hasColors: unit -> bool
+            /// <summary>
+            /// Returns <c>true</c> if the <c>writeStream</c> supports at least as many colors as provided
+            /// in <c>count</c>. Minimum support is 2 (black and white).
+            ///
+            /// This has the same false positives and negatives as described in <c>writeStream.getColorDepth()</c>.
+            ///
+            /// <c></c><c>js
+            /// process.stdout.hasColors();
+            /// // Returns true or false depending on if </c>stdout<c> supports at least 16 colors.
+            /// process.stdout.hasColors(256);
+            /// // Returns true or false depending on if </c>stdout<c> supports at least 256 colors.
+            /// process.stdout.hasColors({ TMUX: '1' });
+            /// // Returns true.
+            /// process.stdout.hasColors(2 ** 24, { TMUX: '1' });
+            /// // Returns false (the environment setting pretends to support 2 ** 8 colors).
+            /// </c><c></c>
+            /// </summary>
             abstract member hasColors: ?env: obj -> bool
             /// <summary>
             /// Returns <c>true</c> if the <c>writeStream</c> supports at least as many colors as provided
@@ -153492,7 +153966,7 @@ URL.parse($0, $1)"""
             /// The text to to be formatted.
             /// </param>
             [<Import("styleText", "util")>]
-            static member styleText (format: ResizeArray<U3<Node.util.ForegroundColors, Node.util.BackgroundColors, Node.util.Modifiers>>, text: string, ?options: Node.util.StyleTextOptions) : string = nativeOnly
+            static member styleText (format: ResizeArray<Exports.styleText.format>, text: string, ?options: Node.util.StyleTextOptions) : string = nativeOnly
             /// <summary>
             /// Provides a higher level API for command-line argument parsing than interacting
             /// with <c>process.argv</c> directly. Takes a specification for the expected arguments
@@ -155382,6 +155856,61 @@ URL.parse($0, $1)"""
 
                 type fn_9<'T1, 'T2, 'T3, 'T4, 'T5> =
                     delegate of arg1: 'T1 * arg2: 'T2 * arg3: 'T3 * arg4: 'T4 * arg5: 'T5 * callback: (obj option -> unit) -> unit
+
+            module styleText =
+
+                [<RequireQualifiedAccess>]
+                [<StringEnum(CaseRules.None)>]
+                type format =
+                    | black
+                    | blackBright
+                    | blue
+                    | blueBright
+                    | cyan
+                    | cyanBright
+                    | gray
+                    | green
+                    | greenBright
+                    | grey
+                    | magenta
+                    | magentaBright
+                    | red
+                    | redBright
+                    | white
+                    | whiteBright
+                    | yellow
+                    | yellowBright
+                    | bgBlack
+                    | bgBlackBright
+                    | bgBlue
+                    | bgBlueBright
+                    | bgCyan
+                    | bgCyanBright
+                    | bgGray
+                    | bgGreen
+                    | bgGreenBright
+                    | bgGrey
+                    | bgMagenta
+                    | bgMagentaBright
+                    | bgRed
+                    | bgRedBright
+                    | bgWhite
+                    | bgWhiteBright
+                    | bgYellow
+                    | bgYellowBright
+                    | blink
+                    | bold
+                    | dim
+                    | doubleunderline
+                    | framed
+                    | hidden
+                    | inverse
+                    | italic
+                    | none
+                    | overlined
+                    | reset
+                    | strikethrough
+                    | underline
 
             module parseArgs =
 
@@ -162837,6 +163366,7 @@ URL.parse($0, $1)"""
             abstract member shell: U2<bool, string> option with get, set
             abstract member close: ?callback: (unit -> unit) -> unit
             abstract member flush: ?kind: float * ?callback: (unit -> unit) -> unit
+            abstract member flush: unit -> unit
             abstract member flush: ?callback: (unit -> unit) -> unit
 
         [<AllowNullLiteral>]

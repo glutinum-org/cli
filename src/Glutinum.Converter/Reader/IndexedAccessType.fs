@@ -4,6 +4,7 @@ open Glutinum.Converter.GlueAST
 open Glutinum.Converter.Reader.Types
 open TypeScript
 open Fable.Core.JsInterop
+open Glutinum.Converter.Reader.Utils
 
 let readIndexedAccessType
     (reader: ITypeScriptReader)
@@ -19,17 +20,41 @@ let readIndexedAccessType
                 ObjectType = reader.ReadTypeNode(declaration.objectType :?> Ts.TypeNode)
             }
 
+    let node = unbox<Ts.Node> declaration
+
+    // `ConfigTypeMap[keyof ConfigTypeMap]` of a concrete map is the union of its members
+    let tryResolved () =
+        if node.pos < 0 then
+            None
+        else
+            let checker = reader.checker
+            let typ = checker.getTypeAtLocation node
+
+            match typ.flags with
+            | HasTypeFlags Ts.TypeFlags.Union ->
+                let flags =
+                    Ts.NodeBuilderFlags.NoTruncation
+                    ||| Ts.NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope
+
+                match checker.typeToTypeNode (typ, Some node, Some flags) with
+                | Some typeNode when typeNode.kind = Ts.SyntaxKind.UnionType ->
+                    Some(reader.ReadTypeNode typeNode)
+                | _ -> None
+            | _ -> None
+
     match idxNodeType.kind with
     | Ts.SyntaxKind.TypeOperator ->
-        let typeOperatorNode = declaration.indexType :?> Ts.TypeOperatorNode
-        reader.ReadTypeOperatorNode typeOperatorNode |> withIndexType
+        match tryResolved () with
+        | Some resolved -> resolved
+        | None ->
+            let typeOperatorNode = declaration.indexType :?> Ts.TypeOperatorNode
+            reader.ReadTypeOperatorNode typeOperatorNode |> withIndexType
 
     | Ts.SyntaxKind.NumberKeyword -> reader.ReadTypeNode idxNodeType |> withIndexType
 
     // `Foo["bar"]` is the type of the property, resolved by the checker
     // A node synthesized by `typeToTypeNode` can't be given to the checker
-    | Ts.SyntaxKind.LiteralType when (unbox<Ts.Node> declaration).pos >= 0 ->
-        let node = unbox<Ts.Node> declaration
+    | Ts.SyntaxKind.LiteralType when node.pos >= 0 ->
         let checker = reader.checker
         let objectType = checker.getTypeAtLocation (declaration.objectType :?> Ts.Node)
         let key: string = (idxNodeType :?> Ts.LiteralTypeNode).literal?text

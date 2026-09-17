@@ -1215,8 +1215,14 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                 | Some symbol -> symbol.name = "__type" || symbol.name = "__object"
                 | None -> false
 
-            // An external base type can't be inherited, `inherit obj` is invalid
-            if isAnonymous || (isExternal && not (knownExternalTypeNames.Contains name)) then
+            // An external base type can't be inherited, `inherit obj` is invalid, `Partial` is
+            // expanded by the transform
+            if
+                isAnonymous
+                || (isExternal
+                    && not (knownExternalTypeNames.Contains name)
+                    && not (isFromEs5Lib symbolOpt && name = "Partial"))
+            then
                 GlueType.Discard
             else
                 ({

@@ -1614,7 +1614,48 @@ let private transformExports
                         |> FSharpMember.Method
                         |> List.singleton
 
-                    applyHelper newTypes (Set.singleton name)
+                    // `declare function e(): Express; export = e` of the `express` package is
+                    // called `express` too
+                    let runtimeName =
+                        match context.ImportSource with
+                        | ImportSource.Module specifier when
+                            isTopLevel
+                            && defaultExportedDeclarations.Contains info.Name
+                            && specifier <> Naming.MODULE_PLACEHOLDER
+                            && not (specifier.Contains "/")
+                            && specifier
+                               |> Seq.forall (fun c -> System.Char.IsLetterOrDigit c || c = '_')
+                            && specifier <> name
+                            && not (seenNames.Contains specifier)
+                            && not (
+                                glueTypes
+                                |> List.exists (
+                                    function
+                                    | GlueType.FunctionDeclaration other
+                                    | GlueType.ExportDefault(GlueType.FunctionDeclaration other) ->
+                                        other.Name = specifier
+                                    | GlueType.Variable other -> other.Name = specifier
+                                    | _ -> false
+                                )
+                            )
+                            ->
+                            Some specifier
+                        | _ -> None
+
+                    let newTypes =
+                        match runtimeName with
+                        | Some runtimeName ->
+                            newTypes
+                            @ (newTypes
+                               |> List.map (
+                                   function
+                                   | FSharpMember.Method methodInfo ->
+                                       FSharpMember.Method { methodInfo with Name = runtimeName }
+                                   | other -> other
+                               ))
+                        | None -> newTypes
+
+                    applyHelper newTypes (Set.ofList [ name; yield! Option.toList runtimeName ])
 
                 | GlueType.ClassDeclaration info
                 | GlueType.ExportDefault(GlueType.ClassDeclaration info) ->
@@ -5060,29 +5101,74 @@ let private tryOptimizeUnionType
     // Unions can have nested unions, so we need to flatten them
     // TODO: Is there cases where we don't want to flatten?
     // U2<U2<int, string>, bool>
-    let rec flattenCases (cases: GlueType list) : GlueType list =
+    // `type OpUnitType = UnitType | "week"` where `UnitType` is made of literals: one string enum
+    let rec literalAlias (depth: int) (typeReference: GlueTypeReference) : GlueType list option =
+        if depth > 5 || not typeReference.TypeArguments.IsEmpty then
+            None
+        else
+            context.TypeMemory
+            |> List.tryPick (
+                function
+                | GlueType.TypeAliasDeclaration {
+                                                    FullName = fullName
+                                                    TypeParameters = []
+                                                    Type = GlueType.Union(GlueTypeUnion aliasCases)
+                                                } when
+                    fullName = typeReference.FullName && fullName <> ""
+                    ->
+                    let resolved =
+                        aliasCases
+                        |> List.map (
+                            function
+                            | GlueType.Literal _ as literal -> Some [ literal ]
+                            | GlueType.TypeReference inner -> literalAlias (depth + 1) inner
+                            | GlueType.Primitive GluePrimitive.Null
+                            | GlueType.Primitive GluePrimitive.Undefined -> Some []
+                            | _ -> None
+                        )
+
+                    if resolved |> List.forall Option.isSome then
+                        Some(resolved |> List.collect Option.get)
+                    else
+                        None
+                | _ -> None
+            )
+
+    let rec flattenCasesWith (aliases: bool) (cases: GlueType list) : GlueType list =
         cases
         |> List.collect (
             function
             // We are inside an union, and have access to the literal types
             | GlueType.Literal _ as literal -> [ literal ]
-            | GlueType.Union(GlueTypeUnion cases) -> flattenCases cases
+            | GlueType.Union(GlueTypeUnion cases) -> flattenCasesWith aliases cases
             | GlueType.TypeAliasDeclaration aliasCases as aliasType ->
                 match aliasCases.Type with
-                | GlueType.Union(GlueTypeUnion cases) -> flattenCases cases
+                | GlueType.Union(GlueTypeUnion cases) -> flattenCasesWith aliases cases
                 | _ -> [ aliasType ]
+            | GlueType.TypeReference typeReference as referenceType when aliases ->
+                match literalAlias 0 typeReference with
+                | Some literals -> literals
+                | None -> [ referenceType ]
             | GlueType.Primitive GluePrimitive.Null
             | GlueType.Primitive GluePrimitive.Undefined -> []
             | otherType -> [ otherType ]
         )
 
-    let flattenedCases, otherCases =
-        flattenCases cases
-        |> List.partition (
-            function
-            | GlueType.Literal _ -> true
-            | _ -> false
-        )
+    let isLiteral (glueType: GlueType) =
+        match glueType with
+        | GlueType.Literal _ -> true
+        | _ -> false
+
+    // `Signals | number` keeps `Signals` as a case, only a union made of literals is one enum
+    let flattenCases (cases: GlueType list) : GlueType list =
+        let withAliases = flattenCasesWith true cases
+
+        if withAliases |> List.forall isLiteral then
+            withAliases
+        else
+            flattenCasesWith false cases
+
+    let flattenedCases, otherCases = flattenCases cases |> List.partition isLiteral
 
     // A union made only of string, boolean and integer literals
     // (with at least one string) can be represented as a Fable StringEnum.

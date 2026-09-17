@@ -285,7 +285,72 @@ let private arityOfSignature
         typeParameters.Length
 
 /// Overloads only differing by their parameter names are the same member for F#
+/// `jsPDF(?options)` and `jsPDF(?orientation, ?unit)`: F# can't pick one for `jsPDF ()`,
+/// a parameterless overload is added
+let private withParameterlessOverloads (members: FSharpMember list) : FSharpMember list =
+    let isAllOptional (parameters: FSharpParameter list) =
+        not parameters.IsEmpty && parameters |> List.forall _.IsOptional
+
+    let name (fsharpMember: FSharpMember) =
+        match fsharpMember with
+        | FSharpMember.Method info ->
+            Some(info.Name, info.IsStatic, isAllOptional info.Parameters, info.Parameters.IsEmpty)
+        | FSharpMember.StaticMember info ->
+            Some(info.Name, true, isAllOptional info.Parameters, info.Parameters.IsEmpty)
+        | FSharpMember.Property _ -> None
+
+    let ambiguous =
+        members
+        |> List.choose name
+        |> List.groupBy (fun (name, isStatic, _, _) -> name, isStatic)
+        |> List.filter (fun (_, group) ->
+            (group |> List.filter (fun (_, _, allOptional, _) -> allOptional) |> List.length)
+            >= 2
+            && not (group |> List.exists (fun (_, _, _, isEmpty) -> isEmpty))
+        )
+        |> List.map fst
+        |> set
+
+    if ambiguous.IsEmpty then
+        members
+    else
+        let added = HashSet<string * bool>()
+
+        members
+        |> List.collect (fun fsharpMember ->
+            match fsharpMember with
+            | FSharpMember.Method info when
+                ambiguous.Contains(info.Name, info.IsStatic)
+                && isAllOptional info.Parameters
+                && added.Add(info.Name, info.IsStatic)
+                ->
+                [
+                    fsharpMember
+                    FSharpMember.Method
+                        { info with
+                            Parameters = []
+                            TypeParameters = []
+                        }
+                ]
+            | FSharpMember.StaticMember info when
+                ambiguous.Contains(info.Name, true)
+                && isAllOptional info.Parameters
+                && added.Add(info.Name, true)
+                ->
+                [
+                    fsharpMember
+                    FSharpMember.StaticMember
+                        { info with
+                            Parameters = []
+                            TypeParameters = []
+                        }
+                ]
+            | _ -> [ fsharpMember ]
+        )
+
 let distinctBySignature (members: FSharpMember list) : FSharpMember list =
+    let members = withParameterlessOverloads members
+
     let methodNames =
         members
         |> List.choose (
