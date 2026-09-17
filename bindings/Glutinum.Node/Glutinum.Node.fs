@@ -18419,9 +18419,9 @@ AsyncLocalStorage.snapshot()"""
             [<Import("exec", "child_process")>]
             static member exec (command: string, options: Node.child_process.ExecOptionsWithBufferEncoding, ?callback: Exports.exec.callback_1) : Node.child_process.ChildProcess = nativeOnly
             [<Import("exec", "child_process")>]
-            static member exec (command: string, options: Node.child_process.ExecOptionsWithStringEncoding, ?callback: Exports.exec.callback_2) : Node.child_process.ChildProcess = nativeOnly
+            static member exec (command: string, options: Node.child_process.ExecOptionsWithStringEncoding, ?callback: Exports.exec.callback) : Node.child_process.ChildProcess = nativeOnly
             [<Import("exec", "child_process")>]
-            static member exec (command: string, options: Node.child_process.ExecOptions option, ?callback: Exports.exec.callback_3) : Node.child_process.ChildProcess = nativeOnly
+            static member exec (command: string, options: Node.child_process.ExecOptions option, ?callback: Exports.exec.callback_2) : Node.child_process.ChildProcess = nativeOnly
             /// <summary>
             /// The <c>child_process.execFile()</c> function is similar to <see href="exec">exec</see> except that it does not spawn a shell by default. Rather, the specified
             /// executable <c>file</c> is spawned directly as a new process making it slightly more
@@ -18494,19 +18494,19 @@ AsyncLocalStorage.snapshot()"""
             [<Import("execFile", "child_process")>]
             static member execFile (file: string, ?callback: Exports.execFile.callback) : Node.child_process.ChildProcess = nativeOnly
             [<Import("execFile", "child_process")>]
-            static member execFile (file: string, args: ReadonlyArray<string> option, ?callback: Exports.execFile.callback_1) : Node.child_process.ChildProcess = nativeOnly
+            static member execFile (file: string, args: ReadonlyArray<string> option, ?callback: Exports.execFile.callback) : Node.child_process.ChildProcess = nativeOnly
             [<Import("execFile", "child_process")>]
-            static member execFile (file: string, options: Node.child_process.ExecFileOptionsWithBufferEncoding, ?callback: Exports.execFile.callback_2) : Node.child_process.ChildProcess = nativeOnly
+            static member execFile (file: string, options: Node.child_process.ExecFileOptionsWithBufferEncoding, ?callback: Exports.execFile.callback_1) : Node.child_process.ChildProcess = nativeOnly
             [<Import("execFile", "child_process")>]
-            static member execFile (file: string, args: ReadonlyArray<string> option, options: Node.child_process.ExecFileOptionsWithBufferEncoding, ?callback: Exports.execFile.callback_3) : Node.child_process.ChildProcess = nativeOnly
+            static member execFile (file: string, args: ReadonlyArray<string> option, options: Node.child_process.ExecFileOptionsWithBufferEncoding, ?callback: Exports.execFile.callback_1) : Node.child_process.ChildProcess = nativeOnly
             [<Import("execFile", "child_process")>]
-            static member execFile (file: string, options: Node.child_process.ExecFileOptionsWithStringEncoding, ?callback: Exports.execFile.callback_4) : Node.child_process.ChildProcess = nativeOnly
+            static member execFile (file: string, options: Node.child_process.ExecFileOptionsWithStringEncoding, ?callback: Exports.execFile.callback) : Node.child_process.ChildProcess = nativeOnly
             [<Import("execFile", "child_process")>]
-            static member execFile (file: string, args: ReadonlyArray<string> option, options: Node.child_process.ExecFileOptionsWithStringEncoding, ?callback: Exports.execFile.callback_5) : Node.child_process.ChildProcess = nativeOnly
+            static member execFile (file: string, args: ReadonlyArray<string> option, options: Node.child_process.ExecFileOptionsWithStringEncoding, ?callback: Exports.execFile.callback) : Node.child_process.ChildProcess = nativeOnly
             [<Import("execFile", "child_process")>]
-            static member execFile (file: string, options: Node.child_process.ExecFileOptions option, callback: Exports.execFile.callback_6 option) : Node.child_process.ChildProcess = nativeOnly
+            static member execFile (file: string, options: Node.child_process.ExecFileOptions option, callback: Exports.execFile.callback_2 option) : Node.child_process.ChildProcess = nativeOnly
             [<Import("execFile", "child_process")>]
-            static member execFile (file: string, args: ReadonlyArray<string> option, options: Node.child_process.ExecFileOptions option, callback: Exports.execFile.callback_7 option) : Node.child_process.ChildProcess = nativeOnly
+            static member execFile (file: string, args: ReadonlyArray<string> option, options: Node.child_process.ExecFileOptions option, callback: Exports.execFile.callback_2 option) : Node.child_process.ChildProcess = nativeOnly
             /// <summary>
             /// The <c>child_process.fork()</c> method is a special case of <see href="spawn">spawn</see> used specifically to spawn new Node.js processes.
             /// Like <see href="spawn">spawn</see>, a <c>ChildProcess</c> object is returned. The
@@ -23923,9 +23923,9 @@ AsyncLocalStorage.snapshot()"""
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__: command: string * options: Node.child_process.ExecOptionsWithBufferEncoding -> Node.child_process.PromiseWithChild<Exports.__promisify___1>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: command: string * options: Node.child_process.ExecOptionsWithStringEncoding -> Node.child_process.PromiseWithChild<Exports.__promisify___2>
+                abstract member __promisify__: command: string * options: Node.child_process.ExecOptionsWithStringEncoding -> Node.child_process.PromiseWithChild<Exports.__promisify__>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: command: string * options: Node.child_process.ExecOptions option -> Node.child_process.PromiseWithChild<Exports.__promisify___3>
+                abstract member __promisify__: command: string * options: Node.child_process.ExecOptions option -> Node.child_process.PromiseWithChild<Exports.__promisify___2>
 
             module Exports =
 
@@ -23956,35 +23956,23 @@ AsyncLocalStorage.snapshot()"""
                 [<Global>]
                 [<AllowNullLiteral>]
                 type __promisify___2
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        stdout: string,
-                        stderr: string
-                    ) =
-
-                    member val stdout : string = nativeOnly with get, set
-                    member val stderr : string = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type __promisify___3
                     private () =
 
                     [<ParamObject; Emit("$0")>]
                     new (stdout: string, stderr: string) =
-                        __promisify___3()
+                        __promisify___2()
 
                     [<ParamObject; Emit("$0")>]
                     new (stdout: string, stderr: Node.NonSharedBuffer) =
-                        __promisify___3()
+                        __promisify___2()
 
                     [<ParamObject; Emit("$0")>]
                     new (stdout: Node.NonSharedBuffer, stderr: string) =
-                        __promisify___3()
+                        __promisify___2()
 
                     [<ParamObject; Emit("$0")>]
                     new (stdout: Node.NonSharedBuffer, stderr: Node.NonSharedBuffer) =
-                        __promisify___3()
+                        __promisify___2()
 
                     member val stdout : U2<string, Node.NonSharedBuffer> = nativeOnly with get, set
                     member val stderr : U2<string, Node.NonSharedBuffer> = nativeOnly with get, set
@@ -24089,140 +24077,68 @@ AsyncLocalStorage.snapshot()"""
             [<Erase>]
             type Exports =
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: file: string -> Node.child_process.PromiseWithChild<Exports.__promisify___4>
+                abstract member __promisify__: file: string -> Node.child_process.PromiseWithChild<Exports.__promisify___3>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: file: string * args: ReadonlyArray<string> option -> Node.child_process.PromiseWithChild<Exports.__promisify___5>
+                abstract member __promisify__: file: string * args: ReadonlyArray<string> option -> Node.child_process.PromiseWithChild<Exports.__promisify___3>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: file: string * options: Node.child_process.ExecFileOptionsWithBufferEncoding -> Node.child_process.PromiseWithChild<Exports.__promisify___6>
+                abstract member __promisify__: file: string * options: Node.child_process.ExecFileOptionsWithBufferEncoding -> Node.child_process.PromiseWithChild<Exports.__promisify___4>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: file: string * args: ReadonlyArray<string> option * options: Node.child_process.ExecFileOptionsWithBufferEncoding -> Node.child_process.PromiseWithChild<Exports.__promisify___7>
+                abstract member __promisify__: file: string * args: ReadonlyArray<string> option * options: Node.child_process.ExecFileOptionsWithBufferEncoding -> Node.child_process.PromiseWithChild<Exports.__promisify___4>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: file: string * options: Node.child_process.ExecFileOptionsWithStringEncoding -> Node.child_process.PromiseWithChild<Exports.__promisify___8>
+                abstract member __promisify__: file: string * options: Node.child_process.ExecFileOptionsWithStringEncoding -> Node.child_process.PromiseWithChild<Exports.__promisify___3>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: file: string * args: ReadonlyArray<string> option * options: Node.child_process.ExecFileOptionsWithStringEncoding -> Node.child_process.PromiseWithChild<Exports.__promisify___9>
+                abstract member __promisify__: file: string * args: ReadonlyArray<string> option * options: Node.child_process.ExecFileOptionsWithStringEncoding -> Node.child_process.PromiseWithChild<Exports.__promisify___3>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: file: string * options: Node.child_process.ExecFileOptions option -> Node.child_process.PromiseWithChild<Exports.__promisify___10>
+                abstract member __promisify__: file: string * options: Node.child_process.ExecFileOptions option -> Node.child_process.PromiseWithChild<Exports.__promisify___5>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: file: string * args: ReadonlyArray<string> option * options: Node.child_process.ExecFileOptions option -> Node.child_process.PromiseWithChild<Exports.__promisify___11>
+                abstract member __promisify__: file: string * args: ReadonlyArray<string> option * options: Node.child_process.ExecFileOptions option -> Node.child_process.PromiseWithChild<Exports.__promisify___5>
 
             module Exports =
+
+                [<Global>]
+                [<AllowNullLiteral>]
+                type __promisify___3
+                    [<ParamObject; Emit("$0")>]
+                    (
+                        stdout: string,
+                        stderr: string
+                    ) =
+
+                    member val stdout : string = nativeOnly with get, set
+                    member val stderr : string = nativeOnly with get, set
 
                 [<Global>]
                 [<AllowNullLiteral>]
                 type __promisify___4
                     [<ParamObject; Emit("$0")>]
                     (
-                        stdout: string,
-                        stderr: string
+                        stdout: Node.NonSharedBuffer,
+                        stderr: Node.NonSharedBuffer
                     ) =
 
-                    member val stdout : string = nativeOnly with get, set
-                    member val stderr : string = nativeOnly with get, set
+                    member val stdout : Node.NonSharedBuffer = nativeOnly with get, set
+                    member val stderr : Node.NonSharedBuffer = nativeOnly with get, set
 
                 [<Global>]
                 [<AllowNullLiteral>]
                 type __promisify___5
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        stdout: string,
-                        stderr: string
-                    ) =
-
-                    member val stdout : string = nativeOnly with get, set
-                    member val stderr : string = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type __promisify___6
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        stdout: Node.NonSharedBuffer,
-                        stderr: Node.NonSharedBuffer
-                    ) =
-
-                    member val stdout : Node.NonSharedBuffer = nativeOnly with get, set
-                    member val stderr : Node.NonSharedBuffer = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type __promisify___7
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        stdout: Node.NonSharedBuffer,
-                        stderr: Node.NonSharedBuffer
-                    ) =
-
-                    member val stdout : Node.NonSharedBuffer = nativeOnly with get, set
-                    member val stderr : Node.NonSharedBuffer = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type __promisify___8
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        stdout: string,
-                        stderr: string
-                    ) =
-
-                    member val stdout : string = nativeOnly with get, set
-                    member val stderr : string = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type __promisify___9
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        stdout: string,
-                        stderr: string
-                    ) =
-
-                    member val stdout : string = nativeOnly with get, set
-                    member val stderr : string = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type __promisify___10
                     private () =
 
                     [<ParamObject; Emit("$0")>]
                     new (stdout: string, stderr: string) =
-                        __promisify___10()
+                        __promisify___5()
 
                     [<ParamObject; Emit("$0")>]
                     new (stdout: string, stderr: Node.NonSharedBuffer) =
-                        __promisify___10()
+                        __promisify___5()
 
                     [<ParamObject; Emit("$0")>]
                     new (stdout: Node.NonSharedBuffer, stderr: string) =
-                        __promisify___10()
+                        __promisify___5()
 
                     [<ParamObject; Emit("$0")>]
                     new (stdout: Node.NonSharedBuffer, stderr: Node.NonSharedBuffer) =
-                        __promisify___10()
-
-                    member val stdout : U2<string, Node.NonSharedBuffer> = nativeOnly with get, set
-                    member val stderr : U2<string, Node.NonSharedBuffer> = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type __promisify___11
-                    private () =
-
-                    [<ParamObject; Emit("$0")>]
-                    new (stdout: string, stderr: string) =
-                        __promisify___11()
-
-                    [<ParamObject; Emit("$0")>]
-                    new (stdout: string, stderr: Node.NonSharedBuffer) =
-                        __promisify___11()
-
-                    [<ParamObject; Emit("$0")>]
-                    new (stdout: Node.NonSharedBuffer, stderr: string) =
-                        __promisify___11()
-
-                    [<ParamObject; Emit("$0")>]
-                    new (stdout: Node.NonSharedBuffer, stderr: Node.NonSharedBuffer) =
-                        __promisify___11()
+                        __promisify___5()
 
                     member val stdout : U2<string, Node.NonSharedBuffer> = nativeOnly with get, set
                     member val stderr : U2<string, Node.NonSharedBuffer> = nativeOnly with get, set
@@ -24738,9 +24654,6 @@ AsyncLocalStorage.snapshot()"""
                     delegate of error: Node.child_process.ExecException option * stdout: Node.NonSharedBuffer * stderr: Node.NonSharedBuffer -> unit
 
                 type callback_2 =
-                    delegate of error: Node.child_process.ExecException option * stdout: string * stderr: string -> unit
-
-                type callback_3 =
                     delegate of error: Node.child_process.ExecException option * stdout: U2<string, Node.NonSharedBuffer> * stderr: U2<string, Node.NonSharedBuffer> -> unit
 
             module execFile =
@@ -24749,24 +24662,9 @@ AsyncLocalStorage.snapshot()"""
                     delegate of error: Node.child_process.ExecFileException option * stdout: string * stderr: string -> unit
 
                 type callback_1 =
-                    delegate of error: Node.child_process.ExecFileException option * stdout: string * stderr: string -> unit
+                    delegate of error: Node.child_process.ExecFileException option * stdout: Node.NonSharedBuffer * stderr: Node.NonSharedBuffer -> unit
 
                 type callback_2 =
-                    delegate of error: Node.child_process.ExecFileException option * stdout: Node.NonSharedBuffer * stderr: Node.NonSharedBuffer -> unit
-
-                type callback_3 =
-                    delegate of error: Node.child_process.ExecFileException option * stdout: Node.NonSharedBuffer * stderr: Node.NonSharedBuffer -> unit
-
-                type callback_4 =
-                    delegate of error: Node.child_process.ExecFileException option * stdout: string * stderr: string -> unit
-
-                type callback_5 =
-                    delegate of error: Node.child_process.ExecFileException option * stdout: string * stderr: string -> unit
-
-                type callback_6 =
-                    delegate of error: Node.child_process.ExecFileException option * stdout: U2<string, Node.NonSharedBuffer> * stderr: U2<string, Node.NonSharedBuffer> -> unit
-
-                type callback_7 =
                     delegate of error: Node.child_process.ExecFileException option * stdout: U2<string, Node.NonSharedBuffer> * stderr: U2<string, Node.NonSharedBuffer> -> unit
 
     module cluster =
@@ -30554,7 +30452,7 @@ AsyncLocalStorage.snapshot()"""
             /// negative performance implications for some applications; see the <c>UV_THREADPOOL_SIZE</c> documentation for more information.
             /// </summary>
             [<Import("pbkdf2", "crypto")>]
-            static member pbkdf2 (password: string, salt: Node.NodeJS.ArrayBufferView, iterations: float, keylen: float, digest: string, callback: Exports.pbkdf2.callback_1) : unit = nativeOnly
+            static member pbkdf2 (password: string, salt: Node.NodeJS.ArrayBufferView, iterations: float, keylen: float, digest: string, callback: Exports.pbkdf2.callback) : unit = nativeOnly
             /// <summary>
             /// Provides an asynchronous Password-Based Key Derivation Function 2 (PBKDF2)
             /// implementation. A selected HMAC digest algorithm specified by <c>digest</c> is
@@ -30590,7 +30488,7 @@ AsyncLocalStorage.snapshot()"""
             /// negative performance implications for some applications; see the <c>UV_THREADPOOL_SIZE</c> documentation for more information.
             /// </summary>
             [<Import("pbkdf2", "crypto")>]
-            static member pbkdf2 (password: Node.NodeJS.ArrayBufferView, salt: string, iterations: float, keylen: float, digest: string, callback: Exports.pbkdf2.callback_2) : unit = nativeOnly
+            static member pbkdf2 (password: Node.NodeJS.ArrayBufferView, salt: string, iterations: float, keylen: float, digest: string, callback: Exports.pbkdf2.callback) : unit = nativeOnly
             /// <summary>
             /// Provides an asynchronous Password-Based Key Derivation Function 2 (PBKDF2)
             /// implementation. A selected HMAC digest algorithm specified by <c>digest</c> is
@@ -30626,7 +30524,7 @@ AsyncLocalStorage.snapshot()"""
             /// negative performance implications for some applications; see the <c>UV_THREADPOOL_SIZE</c> documentation for more information.
             /// </summary>
             [<Import("pbkdf2", "crypto")>]
-            static member pbkdf2 (password: Node.NodeJS.ArrayBufferView, salt: Node.NodeJS.ArrayBufferView, iterations: float, keylen: float, digest: string, callback: Exports.pbkdf2.callback_3) : unit = nativeOnly
+            static member pbkdf2 (password: Node.NodeJS.ArrayBufferView, salt: Node.NodeJS.ArrayBufferView, iterations: float, keylen: float, digest: string, callback: Exports.pbkdf2.callback) : unit = nativeOnly
             /// <summary>
             /// Provides a synchronous Password-Based Key Derivation Function 2 (PBKDF2)
             /// implementation. A selected HMAC digest algorithm specified by <c>digest</c> is
@@ -30868,7 +30766,7 @@ AsyncLocalStorage.snapshot()"""
             [<Import("randomInt", "crypto")>]
             static member randomInt (max: float, callback: Exports.randomInt.callback) : unit = nativeOnly
             [<Import("randomInt", "crypto")>]
-            static member randomInt (min: float, max: float, callback: Exports.randomInt.callback_1) : unit = nativeOnly
+            static member randomInt (min: float, max: float, callback: Exports.randomInt.callback) : unit = nativeOnly
             /// <summary>
             /// Synchronous version of <see href="randomFill">randomFill</see>.
             ///
@@ -31004,9 +30902,9 @@ AsyncLocalStorage.snapshot()"""
             [<Import("randomFill", "crypto")>]
             static member randomFill<'T> (buffer: 'T, callback: Exports.randomFill.callback<'T>) : unit = nativeOnly
             [<Import("randomFill", "crypto")>]
-            static member randomFill<'T> (buffer: 'T, offset: float, callback: Exports.randomFill.callback_1<'T>) : unit = nativeOnly
+            static member randomFill<'T> (buffer: 'T, offset: float, callback: Exports.randomFill.callback<'T>) : unit = nativeOnly
             [<Import("randomFill", "crypto")>]
-            static member randomFill<'T> (buffer: 'T, offset: float, size: float, callback: Exports.randomFill.callback_2<'T>) : unit = nativeOnly
+            static member randomFill<'T> (buffer: 'T, offset: float, size: float, callback: Exports.randomFill.callback<'T>) : unit = nativeOnly
             /// <summary>
             /// Provides an asynchronous [scrypt](https://en.wikipedia.org/wiki/Scrypt) implementation. Scrypt is a password-based
             /// key derivation function that is designed to be expensive computationally and
@@ -31076,7 +30974,7 @@ AsyncLocalStorage.snapshot()"""
             /// </code>
             /// </summary>
             [<Import("scrypt", "crypto")>]
-            static member scrypt (password: string, salt: Node.NodeJS.ArrayBufferView, keylen: float, callback: Exports.scrypt.callback_1) : unit = nativeOnly
+            static member scrypt (password: string, salt: Node.NodeJS.ArrayBufferView, keylen: float, callback: Exports.scrypt.callback) : unit = nativeOnly
             /// <summary>
             /// Provides an asynchronous [scrypt](https://en.wikipedia.org/wiki/Scrypt) implementation. Scrypt is a password-based
             /// key derivation function that is designed to be expensive computationally and
@@ -31111,7 +31009,7 @@ AsyncLocalStorage.snapshot()"""
             /// </code>
             /// </summary>
             [<Import("scrypt", "crypto")>]
-            static member scrypt (password: Node.NodeJS.ArrayBufferView, salt: string, keylen: float, callback: Exports.scrypt.callback_2) : unit = nativeOnly
+            static member scrypt (password: Node.NodeJS.ArrayBufferView, salt: string, keylen: float, callback: Exports.scrypt.callback) : unit = nativeOnly
             /// <summary>
             /// Provides an asynchronous [scrypt](https://en.wikipedia.org/wiki/Scrypt) implementation. Scrypt is a password-based
             /// key derivation function that is designed to be expensive computationally and
@@ -31146,15 +31044,15 @@ AsyncLocalStorage.snapshot()"""
             /// </code>
             /// </summary>
             [<Import("scrypt", "crypto")>]
-            static member scrypt (password: Node.NodeJS.ArrayBufferView, salt: Node.NodeJS.ArrayBufferView, keylen: float, callback: Exports.scrypt.callback_3) : unit = nativeOnly
+            static member scrypt (password: Node.NodeJS.ArrayBufferView, salt: Node.NodeJS.ArrayBufferView, keylen: float, callback: Exports.scrypt.callback) : unit = nativeOnly
             [<Import("scrypt", "crypto")>]
-            static member scrypt (password: string, salt: string, keylen: float, options: Node.crypto.ScryptOptions, callback: Exports.scrypt.callback_4) : unit = nativeOnly
+            static member scrypt (password: string, salt: string, keylen: float, options: Node.crypto.ScryptOptions, callback: Exports.scrypt.callback) : unit = nativeOnly
             [<Import("scrypt", "crypto")>]
-            static member scrypt (password: string, salt: Node.NodeJS.ArrayBufferView, keylen: float, options: Node.crypto.ScryptOptions, callback: Exports.scrypt.callback_5) : unit = nativeOnly
+            static member scrypt (password: string, salt: Node.NodeJS.ArrayBufferView, keylen: float, options: Node.crypto.ScryptOptions, callback: Exports.scrypt.callback) : unit = nativeOnly
             [<Import("scrypt", "crypto")>]
-            static member scrypt (password: Node.NodeJS.ArrayBufferView, salt: string, keylen: float, options: Node.crypto.ScryptOptions, callback: Exports.scrypt.callback_6) : unit = nativeOnly
+            static member scrypt (password: Node.NodeJS.ArrayBufferView, salt: string, keylen: float, options: Node.crypto.ScryptOptions, callback: Exports.scrypt.callback) : unit = nativeOnly
             [<Import("scrypt", "crypto")>]
-            static member scrypt (password: Node.NodeJS.ArrayBufferView, salt: Node.NodeJS.ArrayBufferView, keylen: float, options: Node.crypto.ScryptOptions, callback: Exports.scrypt.callback_7) : unit = nativeOnly
+            static member scrypt (password: Node.NodeJS.ArrayBufferView, salt: Node.NodeJS.ArrayBufferView, keylen: float, options: Node.crypto.ScryptOptions, callback: Exports.scrypt.callback) : unit = nativeOnly
             /// <summary>
             /// Provides a synchronous [scrypt](https://en.wikipedia.org/wiki/Scrypt) implementation. Scrypt is a password-based
             /// key derivation function that is designed to be expensive computationally and
@@ -31878,75 +31776,75 @@ AsyncLocalStorage.snapshot()"""
             [<Import("generateKeyPair", "crypto")>]
             static member generateKeyPair (``type``: string, options: Node.crypto.RSAKeyPairKeyObjectOptions, callback: Exports.generateKeyPair.callback_4) : unit = nativeOnly
             [<Import("generateKeyPair", "crypto")>]
-            static member generateKeyPair (``type``: string, options: Node.crypto.RSAPSSKeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_5) : unit = nativeOnly
+            static member generateKeyPair (``type``: string, options: Node.crypto.RSAPSSKeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback) : unit = nativeOnly
             [<Import("generateKeyPair", "crypto")>]
-            static member generateKeyPair (``type``: string, options: Node.crypto.RSAPSSKeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_6) : unit = nativeOnly
+            static member generateKeyPair (``type``: string, options: Node.crypto.RSAPSSKeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_1) : unit = nativeOnly
             [<Import("generateKeyPair", "crypto")>]
-            static member generateKeyPair (``type``: string, options: Node.crypto.RSAPSSKeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_7) : unit = nativeOnly
+            static member generateKeyPair (``type``: string, options: Node.crypto.RSAPSSKeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_2) : unit = nativeOnly
             [<Import("generateKeyPair", "crypto")>]
-            static member generateKeyPair (``type``: string, options: Node.crypto.RSAPSSKeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_8) : unit = nativeOnly
+            static member generateKeyPair (``type``: string, options: Node.crypto.RSAPSSKeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_3) : unit = nativeOnly
             [<Import("generateKeyPair", "crypto")>]
-            static member generateKeyPair (``type``: string, options: Node.crypto.RSAPSSKeyPairKeyObjectOptions, callback: Exports.generateKeyPair.callback_9) : unit = nativeOnly
+            static member generateKeyPair (``type``: string, options: Node.crypto.RSAPSSKeyPairKeyObjectOptions, callback: Exports.generateKeyPair.callback_4) : unit = nativeOnly
             [<Import("generateKeyPair", "crypto")>]
-            static member generateKeyPair (``type``: string, options: Node.crypto.DSAKeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_10) : unit = nativeOnly
+            static member generateKeyPair (``type``: string, options: Node.crypto.DSAKeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback) : unit = nativeOnly
             [<Import("generateKeyPair", "crypto")>]
-            static member generateKeyPair (``type``: string, options: Node.crypto.DSAKeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_11) : unit = nativeOnly
+            static member generateKeyPair (``type``: string, options: Node.crypto.DSAKeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_1) : unit = nativeOnly
             [<Import("generateKeyPair", "crypto")>]
-            static member generateKeyPair (``type``: string, options: Node.crypto.DSAKeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_12) : unit = nativeOnly
+            static member generateKeyPair (``type``: string, options: Node.crypto.DSAKeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_2) : unit = nativeOnly
             [<Import("generateKeyPair", "crypto")>]
-            static member generateKeyPair (``type``: string, options: Node.crypto.DSAKeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_13) : unit = nativeOnly
+            static member generateKeyPair (``type``: string, options: Node.crypto.DSAKeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_3) : unit = nativeOnly
             [<Import("generateKeyPair", "crypto")>]
-            static member generateKeyPair (``type``: string, options: Node.crypto.DSAKeyPairKeyObjectOptions, callback: Exports.generateKeyPair.callback_14) : unit = nativeOnly
+            static member generateKeyPair (``type``: string, options: Node.crypto.DSAKeyPairKeyObjectOptions, callback: Exports.generateKeyPair.callback_4) : unit = nativeOnly
             [<Import("generateKeyPair", "crypto")>]
-            static member generateKeyPair (``type``: string, options: Node.crypto.ECKeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_15) : unit = nativeOnly
+            static member generateKeyPair (``type``: string, options: Node.crypto.ECKeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback) : unit = nativeOnly
             [<Import("generateKeyPair", "crypto")>]
-            static member generateKeyPair (``type``: string, options: Node.crypto.ECKeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_16) : unit = nativeOnly
+            static member generateKeyPair (``type``: string, options: Node.crypto.ECKeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_1) : unit = nativeOnly
             [<Import("generateKeyPair", "crypto")>]
-            static member generateKeyPair (``type``: string, options: Node.crypto.ECKeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_17) : unit = nativeOnly
+            static member generateKeyPair (``type``: string, options: Node.crypto.ECKeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_2) : unit = nativeOnly
             [<Import("generateKeyPair", "crypto")>]
-            static member generateKeyPair (``type``: string, options: Node.crypto.ECKeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_18) : unit = nativeOnly
+            static member generateKeyPair (``type``: string, options: Node.crypto.ECKeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_3) : unit = nativeOnly
             [<Import("generateKeyPair", "crypto")>]
-            static member generateKeyPair (``type``: string, options: Node.crypto.ECKeyPairKeyObjectOptions, callback: Exports.generateKeyPair.callback_19) : unit = nativeOnly
+            static member generateKeyPair (``type``: string, options: Node.crypto.ECKeyPairKeyObjectOptions, callback: Exports.generateKeyPair.callback_4) : unit = nativeOnly
             [<Import("generateKeyPair", "crypto")>]
-            static member generateKeyPair (``type``: string, options: Node.crypto.ED25519KeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_20) : unit = nativeOnly
+            static member generateKeyPair (``type``: string, options: Node.crypto.ED25519KeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback) : unit = nativeOnly
             [<Import("generateKeyPair", "crypto")>]
-            static member generateKeyPair (``type``: string, options: Node.crypto.ED25519KeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_21) : unit = nativeOnly
+            static member generateKeyPair (``type``: string, options: Node.crypto.ED25519KeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_1) : unit = nativeOnly
             [<Import("generateKeyPair", "crypto")>]
-            static member generateKeyPair (``type``: string, options: Node.crypto.ED25519KeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_22) : unit = nativeOnly
+            static member generateKeyPair (``type``: string, options: Node.crypto.ED25519KeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_2) : unit = nativeOnly
             [<Import("generateKeyPair", "crypto")>]
-            static member generateKeyPair (``type``: string, options: Node.crypto.ED25519KeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_23) : unit = nativeOnly
+            static member generateKeyPair (``type``: string, options: Node.crypto.ED25519KeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_3) : unit = nativeOnly
             [<Import("generateKeyPair", "crypto")>]
-            static member generateKeyPair (``type``: string, options: Node.crypto.ED25519KeyPairKeyObjectOptions option, callback: Exports.generateKeyPair.callback_24) : unit = nativeOnly
+            static member generateKeyPair (``type``: string, options: Node.crypto.ED25519KeyPairKeyObjectOptions option, callback: Exports.generateKeyPair.callback_4) : unit = nativeOnly
             [<Import("generateKeyPair", "crypto")>]
-            static member generateKeyPair (``type``: string, options: Node.crypto.ED448KeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_25) : unit = nativeOnly
+            static member generateKeyPair (``type``: string, options: Node.crypto.ED448KeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback) : unit = nativeOnly
             [<Import("generateKeyPair", "crypto")>]
-            static member generateKeyPair (``type``: string, options: Node.crypto.ED448KeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_26) : unit = nativeOnly
+            static member generateKeyPair (``type``: string, options: Node.crypto.ED448KeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_1) : unit = nativeOnly
             [<Import("generateKeyPair", "crypto")>]
-            static member generateKeyPair (``type``: string, options: Node.crypto.ED448KeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_27) : unit = nativeOnly
+            static member generateKeyPair (``type``: string, options: Node.crypto.ED448KeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_2) : unit = nativeOnly
             [<Import("generateKeyPair", "crypto")>]
-            static member generateKeyPair (``type``: string, options: Node.crypto.ED448KeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_28) : unit = nativeOnly
+            static member generateKeyPair (``type``: string, options: Node.crypto.ED448KeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_3) : unit = nativeOnly
             [<Import("generateKeyPair", "crypto")>]
-            static member generateKeyPair (``type``: string, options: Node.crypto.ED448KeyPairKeyObjectOptions option, callback: Exports.generateKeyPair.callback_29) : unit = nativeOnly
+            static member generateKeyPair (``type``: string, options: Node.crypto.ED448KeyPairKeyObjectOptions option, callback: Exports.generateKeyPair.callback_4) : unit = nativeOnly
             [<Import("generateKeyPair", "crypto")>]
-            static member generateKeyPair (``type``: string, options: Node.crypto.X25519KeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_30) : unit = nativeOnly
+            static member generateKeyPair (``type``: string, options: Node.crypto.X25519KeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback) : unit = nativeOnly
             [<Import("generateKeyPair", "crypto")>]
-            static member generateKeyPair (``type``: string, options: Node.crypto.X25519KeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_31) : unit = nativeOnly
+            static member generateKeyPair (``type``: string, options: Node.crypto.X25519KeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_1) : unit = nativeOnly
             [<Import("generateKeyPair", "crypto")>]
-            static member generateKeyPair (``type``: string, options: Node.crypto.X25519KeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_32) : unit = nativeOnly
+            static member generateKeyPair (``type``: string, options: Node.crypto.X25519KeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_2) : unit = nativeOnly
             [<Import("generateKeyPair", "crypto")>]
-            static member generateKeyPair (``type``: string, options: Node.crypto.X25519KeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_33) : unit = nativeOnly
+            static member generateKeyPair (``type``: string, options: Node.crypto.X25519KeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_3) : unit = nativeOnly
             [<Import("generateKeyPair", "crypto")>]
-            static member generateKeyPair (``type``: string, options: Node.crypto.X25519KeyPairKeyObjectOptions option, callback: Exports.generateKeyPair.callback_34) : unit = nativeOnly
+            static member generateKeyPair (``type``: string, options: Node.crypto.X25519KeyPairKeyObjectOptions option, callback: Exports.generateKeyPair.callback_4) : unit = nativeOnly
             [<Import("generateKeyPair", "crypto")>]
-            static member generateKeyPair (``type``: string, options: Node.crypto.X448KeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_35) : unit = nativeOnly
+            static member generateKeyPair (``type``: string, options: Node.crypto.X448KeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback) : unit = nativeOnly
             [<Import("generateKeyPair", "crypto")>]
-            static member generateKeyPair (``type``: string, options: Node.crypto.X448KeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_36) : unit = nativeOnly
+            static member generateKeyPair (``type``: string, options: Node.crypto.X448KeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_1) : unit = nativeOnly
             [<Import("generateKeyPair", "crypto")>]
-            static member generateKeyPair (``type``: string, options: Node.crypto.X448KeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_37) : unit = nativeOnly
+            static member generateKeyPair (``type``: string, options: Node.crypto.X448KeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_2) : unit = nativeOnly
             [<Import("generateKeyPair", "crypto")>]
-            static member generateKeyPair (``type``: string, options: Node.crypto.X448KeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_38) : unit = nativeOnly
+            static member generateKeyPair (``type``: string, options: Node.crypto.X448KeyPairOptions<string, string>, callback: Exports.generateKeyPair.callback_3) : unit = nativeOnly
             [<Import("generateKeyPair", "crypto")>]
-            static member generateKeyPair (``type``: string, options: Node.crypto.X448KeyPairKeyObjectOptions option, callback: Exports.generateKeyPair.callback_39) : unit = nativeOnly
+            static member generateKeyPair (``type``: string, options: Node.crypto.X448KeyPairKeyObjectOptions option, callback: Exports.generateKeyPair.callback_4) : unit = nativeOnly
             /// <summary>
             /// Calculates and returns the signature for <c>data</c> using the given private key and
             /// algorithm. If <c>algorithm</c> is <c>null</c> or <c>undefined</c>, then the algorithm is
@@ -32028,15 +31926,15 @@ AsyncLocalStorage.snapshot()"""
             [<Import("sign", "crypto")>]
             static member sign (algorithm: string option, data: Node.NodeJS.ArrayBufferView, key: string, callback: Exports.sign.callback) : unit = nativeOnly
             [<Import("sign", "crypto")>]
-            static member sign (algorithm: string option, data: Node.NodeJS.ArrayBufferView, key: Node.Buffer, callback: Exports.sign.callback_1) : unit = nativeOnly
+            static member sign (algorithm: string option, data: Node.NodeJS.ArrayBufferView, key: Node.Buffer, callback: Exports.sign.callback) : unit = nativeOnly
             [<Import("sign", "crypto")>]
-            static member sign (algorithm: string option, data: Node.NodeJS.ArrayBufferView, key: Node.crypto.KeyObject, callback: Exports.sign.callback_2) : unit = nativeOnly
+            static member sign (algorithm: string option, data: Node.NodeJS.ArrayBufferView, key: Node.crypto.KeyObject, callback: Exports.sign.callback) : unit = nativeOnly
             [<Import("sign", "crypto")>]
-            static member sign (algorithm: string option, data: Node.NodeJS.ArrayBufferView, key: Node.crypto.SignKeyObjectInput, callback: Exports.sign.callback_3) : unit = nativeOnly
+            static member sign (algorithm: string option, data: Node.NodeJS.ArrayBufferView, key: Node.crypto.SignKeyObjectInput, callback: Exports.sign.callback) : unit = nativeOnly
             [<Import("sign", "crypto")>]
-            static member sign (algorithm: string option, data: Node.NodeJS.ArrayBufferView, key: Node.crypto.SignPrivateKeyInput, callback: Exports.sign.callback_4) : unit = nativeOnly
+            static member sign (algorithm: string option, data: Node.NodeJS.ArrayBufferView, key: Node.crypto.SignPrivateKeyInput, callback: Exports.sign.callback) : unit = nativeOnly
             [<Import("sign", "crypto")>]
-            static member sign (algorithm: string option, data: Node.NodeJS.ArrayBufferView, key: Node.crypto.SignJsonWebKeyInput, callback: Exports.sign.callback_5) : unit = nativeOnly
+            static member sign (algorithm: string option, data: Node.NodeJS.ArrayBufferView, key: Node.crypto.SignJsonWebKeyInput, callback: Exports.sign.callback) : unit = nativeOnly
             /// <summary>
             /// Verifies the given signature for <c>data</c> using the given key and algorithm. If <c>algorithm</c> is <c>null</c> or <c>undefined</c>, then the algorithm is dependent upon the
             /// key type (especially Ed25519 and Ed448).
@@ -32142,15 +32040,15 @@ AsyncLocalStorage.snapshot()"""
             [<Import("verify", "crypto")>]
             static member verify (algorithm: string option, data: Node.NodeJS.ArrayBufferView, key: string, signature: Node.NodeJS.ArrayBufferView, callback: Exports.verify.callback) : unit = nativeOnly
             [<Import("verify", "crypto")>]
-            static member verify (algorithm: string option, data: Node.NodeJS.ArrayBufferView, key: Node.Buffer, signature: Node.NodeJS.ArrayBufferView, callback: Exports.verify.callback_1) : unit = nativeOnly
+            static member verify (algorithm: string option, data: Node.NodeJS.ArrayBufferView, key: Node.Buffer, signature: Node.NodeJS.ArrayBufferView, callback: Exports.verify.callback) : unit = nativeOnly
             [<Import("verify", "crypto")>]
-            static member verify (algorithm: string option, data: Node.NodeJS.ArrayBufferView, key: Node.crypto.KeyObject, signature: Node.NodeJS.ArrayBufferView, callback: Exports.verify.callback_2) : unit = nativeOnly
+            static member verify (algorithm: string option, data: Node.NodeJS.ArrayBufferView, key: Node.crypto.KeyObject, signature: Node.NodeJS.ArrayBufferView, callback: Exports.verify.callback) : unit = nativeOnly
             [<Import("verify", "crypto")>]
-            static member verify (algorithm: string option, data: Node.NodeJS.ArrayBufferView, key: Node.crypto.VerifyKeyObjectInput, signature: Node.NodeJS.ArrayBufferView, callback: Exports.verify.callback_3) : unit = nativeOnly
+            static member verify (algorithm: string option, data: Node.NodeJS.ArrayBufferView, key: Node.crypto.VerifyKeyObjectInput, signature: Node.NodeJS.ArrayBufferView, callback: Exports.verify.callback) : unit = nativeOnly
             [<Import("verify", "crypto")>]
-            static member verify (algorithm: string option, data: Node.NodeJS.ArrayBufferView, key: Node.crypto.VerifyPublicKeyInput, signature: Node.NodeJS.ArrayBufferView, callback: Exports.verify.callback_4) : unit = nativeOnly
+            static member verify (algorithm: string option, data: Node.NodeJS.ArrayBufferView, key: Node.crypto.VerifyPublicKeyInput, signature: Node.NodeJS.ArrayBufferView, callback: Exports.verify.callback) : unit = nativeOnly
             [<Import("verify", "crypto")>]
-            static member verify (algorithm: string option, data: Node.NodeJS.ArrayBufferView, key: Node.crypto.VerifyJsonWebKeyInput, signature: Node.NodeJS.ArrayBufferView, callback: Exports.verify.callback_5) : unit = nativeOnly
+            static member verify (algorithm: string option, data: Node.NodeJS.ArrayBufferView, key: Node.crypto.VerifyJsonWebKeyInput, signature: Node.NodeJS.ArrayBufferView, callback: Exports.verify.callback) : unit = nativeOnly
             /// <summary>
             /// Computes the Diffie-Hellman secret based on a <c>privateKey</c> and a <c>publicKey</c>.
             /// Both keys must have the same <c>asymmetricKeyType</c>, which must be one of <c>'dh'</c> (for Diffie-Hellman), <c>'ec'</c> (for ECDH), <c>'x448'</c>, or <c>'x25519'</c> (for ECDH-ES).
@@ -32230,7 +32128,7 @@ AsyncLocalStorage.snapshot()"""
             [<Import("hash", "crypto")>]
             static member hash (algorithm: string, data: string, ?outputEncoding: Exports.hash.outputEncoding) : U2<string, Node.NonSharedBuffer> = nativeOnly
             [<Import("hash", "crypto")>]
-            static member hash (algorithm: string, data: Node.NodeJS.ArrayBufferView, ?outputEncoding: Exports.hash.outputEncoding.outputEncoding_1) : U2<string, Node.NonSharedBuffer> = nativeOnly
+            static member hash (algorithm: string, data: Node.NodeJS.ArrayBufferView, ?outputEncoding: Exports.hash.outputEncoding) : U2<string, Node.NonSharedBuffer> = nativeOnly
             /// <summary>
             /// Returns information about a given cipher.
             ///
@@ -32334,7 +32232,7 @@ AsyncLocalStorage.snapshot()"""
             /// generates 64-byte hashes, making the maximum HKDF output 16320 bytes).
             /// </param>
             [<Import("hkdf", "crypto")>]
-            static member hkdf (digest: string, irm: string, salt: string, info: Node.NodeJS.ArrayBufferView, keylen: float, callback: Exports.hkdf.callback_1) : unit = nativeOnly
+            static member hkdf (digest: string, irm: string, salt: string, info: Node.NodeJS.ArrayBufferView, keylen: float, callback: Exports.hkdf.callback) : unit = nativeOnly
             /// <summary>
             /// HKDF is a simple key derivation function defined in RFC 5869\. The given <c>ikm</c>, <c>salt</c> and <c>info</c> are used with the <c>digest</c> to derive a key of <c>keylen</c> bytes.
             ///
@@ -32372,7 +32270,7 @@ AsyncLocalStorage.snapshot()"""
             /// generates 64-byte hashes, making the maximum HKDF output 16320 bytes).
             /// </param>
             [<Import("hkdf", "crypto")>]
-            static member hkdf (digest: string, irm: string, salt: Node.NodeJS.ArrayBufferView, info: string, keylen: float, callback: Exports.hkdf.callback_2) : unit = nativeOnly
+            static member hkdf (digest: string, irm: string, salt: Node.NodeJS.ArrayBufferView, info: string, keylen: float, callback: Exports.hkdf.callback) : unit = nativeOnly
             /// <summary>
             /// HKDF is a simple key derivation function defined in RFC 5869\. The given <c>ikm</c>, <c>salt</c> and <c>info</c> are used with the <c>digest</c> to derive a key of <c>keylen</c> bytes.
             ///
@@ -32410,7 +32308,7 @@ AsyncLocalStorage.snapshot()"""
             /// generates 64-byte hashes, making the maximum HKDF output 16320 bytes).
             /// </param>
             [<Import("hkdf", "crypto")>]
-            static member hkdf (digest: string, irm: string, salt: Node.NodeJS.ArrayBufferView, info: Node.NodeJS.ArrayBufferView, keylen: float, callback: Exports.hkdf.callback_3) : unit = nativeOnly
+            static member hkdf (digest: string, irm: string, salt: Node.NodeJS.ArrayBufferView, info: Node.NodeJS.ArrayBufferView, keylen: float, callback: Exports.hkdf.callback) : unit = nativeOnly
             /// <summary>
             /// HKDF is a simple key derivation function defined in RFC 5869\. The given <c>ikm</c>, <c>salt</c> and <c>info</c> are used with the <c>digest</c> to derive a key of <c>keylen</c> bytes.
             ///
@@ -32448,7 +32346,7 @@ AsyncLocalStorage.snapshot()"""
             /// generates 64-byte hashes, making the maximum HKDF output 16320 bytes).
             /// </param>
             [<Import("hkdf", "crypto")>]
-            static member hkdf (digest: string, irm: Node.NodeJS.ArrayBufferView, salt: string, info: string, keylen: float, callback: Exports.hkdf.callback_4) : unit = nativeOnly
+            static member hkdf (digest: string, irm: Node.NodeJS.ArrayBufferView, salt: string, info: string, keylen: float, callback: Exports.hkdf.callback) : unit = nativeOnly
             /// <summary>
             /// HKDF is a simple key derivation function defined in RFC 5869\. The given <c>ikm</c>, <c>salt</c> and <c>info</c> are used with the <c>digest</c> to derive a key of <c>keylen</c> bytes.
             ///
@@ -32486,7 +32384,7 @@ AsyncLocalStorage.snapshot()"""
             /// generates 64-byte hashes, making the maximum HKDF output 16320 bytes).
             /// </param>
             [<Import("hkdf", "crypto")>]
-            static member hkdf (digest: string, irm: Node.NodeJS.ArrayBufferView, salt: string, info: Node.NodeJS.ArrayBufferView, keylen: float, callback: Exports.hkdf.callback_5) : unit = nativeOnly
+            static member hkdf (digest: string, irm: Node.NodeJS.ArrayBufferView, salt: string, info: Node.NodeJS.ArrayBufferView, keylen: float, callback: Exports.hkdf.callback) : unit = nativeOnly
             /// <summary>
             /// HKDF is a simple key derivation function defined in RFC 5869\. The given <c>ikm</c>, <c>salt</c> and <c>info</c> are used with the <c>digest</c> to derive a key of <c>keylen</c> bytes.
             ///
@@ -32524,7 +32422,7 @@ AsyncLocalStorage.snapshot()"""
             /// generates 64-byte hashes, making the maximum HKDF output 16320 bytes).
             /// </param>
             [<Import("hkdf", "crypto")>]
-            static member hkdf (digest: string, irm: Node.NodeJS.ArrayBufferView, salt: Node.NodeJS.ArrayBufferView, info: string, keylen: float, callback: Exports.hkdf.callback_6) : unit = nativeOnly
+            static member hkdf (digest: string, irm: Node.NodeJS.ArrayBufferView, salt: Node.NodeJS.ArrayBufferView, info: string, keylen: float, callback: Exports.hkdf.callback) : unit = nativeOnly
             /// <summary>
             /// HKDF is a simple key derivation function defined in RFC 5869\. The given <c>ikm</c>, <c>salt</c> and <c>info</c> are used with the <c>digest</c> to derive a key of <c>keylen</c> bytes.
             ///
@@ -32562,7 +32460,7 @@ AsyncLocalStorage.snapshot()"""
             /// generates 64-byte hashes, making the maximum HKDF output 16320 bytes).
             /// </param>
             [<Import("hkdf", "crypto")>]
-            static member hkdf (digest: string, irm: Node.NodeJS.ArrayBufferView, salt: Node.NodeJS.ArrayBufferView, info: Node.NodeJS.ArrayBufferView, keylen: float, callback: Exports.hkdf.callback_7) : unit = nativeOnly
+            static member hkdf (digest: string, irm: Node.NodeJS.ArrayBufferView, salt: Node.NodeJS.ArrayBufferView, info: Node.NodeJS.ArrayBufferView, keylen: float, callback: Exports.hkdf.callback) : unit = nativeOnly
             /// <summary>
             /// HKDF is a simple key derivation function defined in RFC 5869\. The given <c>ikm</c>, <c>salt</c> and <c>info</c> are used with the <c>digest</c> to derive a key of <c>keylen</c> bytes.
             ///
@@ -32600,7 +32498,7 @@ AsyncLocalStorage.snapshot()"""
             /// generates 64-byte hashes, making the maximum HKDF output 16320 bytes).
             /// </param>
             [<Import("hkdf", "crypto")>]
-            static member hkdf (digest: string, irm: Node.crypto.KeyObject, salt: string, info: string, keylen: float, callback: Exports.hkdf.callback_8) : unit = nativeOnly
+            static member hkdf (digest: string, irm: Node.crypto.KeyObject, salt: string, info: string, keylen: float, callback: Exports.hkdf.callback) : unit = nativeOnly
             /// <summary>
             /// HKDF is a simple key derivation function defined in RFC 5869\. The given <c>ikm</c>, <c>salt</c> and <c>info</c> are used with the <c>digest</c> to derive a key of <c>keylen</c> bytes.
             ///
@@ -32638,7 +32536,7 @@ AsyncLocalStorage.snapshot()"""
             /// generates 64-byte hashes, making the maximum HKDF output 16320 bytes).
             /// </param>
             [<Import("hkdf", "crypto")>]
-            static member hkdf (digest: string, irm: Node.crypto.KeyObject, salt: string, info: Node.NodeJS.ArrayBufferView, keylen: float, callback: Exports.hkdf.callback_9) : unit = nativeOnly
+            static member hkdf (digest: string, irm: Node.crypto.KeyObject, salt: string, info: Node.NodeJS.ArrayBufferView, keylen: float, callback: Exports.hkdf.callback) : unit = nativeOnly
             /// <summary>
             /// HKDF is a simple key derivation function defined in RFC 5869\. The given <c>ikm</c>, <c>salt</c> and <c>info</c> are used with the <c>digest</c> to derive a key of <c>keylen</c> bytes.
             ///
@@ -32676,7 +32574,7 @@ AsyncLocalStorage.snapshot()"""
             /// generates 64-byte hashes, making the maximum HKDF output 16320 bytes).
             /// </param>
             [<Import("hkdf", "crypto")>]
-            static member hkdf (digest: string, irm: Node.crypto.KeyObject, salt: Node.NodeJS.ArrayBufferView, info: string, keylen: float, callback: Exports.hkdf.callback_10) : unit = nativeOnly
+            static member hkdf (digest: string, irm: Node.crypto.KeyObject, salt: Node.NodeJS.ArrayBufferView, info: string, keylen: float, callback: Exports.hkdf.callback) : unit = nativeOnly
             /// <summary>
             /// HKDF is a simple key derivation function defined in RFC 5869\. The given <c>ikm</c>, <c>salt</c> and <c>info</c> are used with the <c>digest</c> to derive a key of <c>keylen</c> bytes.
             ///
@@ -32714,7 +32612,7 @@ AsyncLocalStorage.snapshot()"""
             /// generates 64-byte hashes, making the maximum HKDF output 16320 bytes).
             /// </param>
             [<Import("hkdf", "crypto")>]
-            static member hkdf (digest: string, irm: Node.crypto.KeyObject, salt: Node.NodeJS.ArrayBufferView, info: Node.NodeJS.ArrayBufferView, keylen: float, callback: Exports.hkdf.callback_11) : unit = nativeOnly
+            static member hkdf (digest: string, irm: Node.crypto.KeyObject, salt: Node.NodeJS.ArrayBufferView, info: Node.NodeJS.ArrayBufferView, keylen: float, callback: Exports.hkdf.callback) : unit = nativeOnly
             /// <summary>
             /// Provides a synchronous HKDF key derivation function as defined in RFC 5869\. The
             /// given <c>ikm</c>, <c>salt</c> and <c>info</c> are used with the <c>digest</c> to derive a key of <c>keylen</c> bytes.
@@ -33200,9 +33098,9 @@ AsyncLocalStorage.snapshot()"""
             [<Import("generatePrime", "crypto")>]
             static member generatePrime (size: float, options: Node.crypto.GeneratePrimeOptionsBigInt, callback: Exports.generatePrime.callback_1) : unit = nativeOnly
             [<Import("generatePrime", "crypto")>]
-            static member generatePrime (size: float, options: Node.crypto.GeneratePrimeOptionsArrayBuffer, callback: Exports.generatePrime.callback_2) : unit = nativeOnly
+            static member generatePrime (size: float, options: Node.crypto.GeneratePrimeOptionsArrayBuffer, callback: Exports.generatePrime.callback) : unit = nativeOnly
             [<Import("generatePrime", "crypto")>]
-            static member generatePrime (size: float, options: Node.crypto.GeneratePrimeOptions, callback: Exports.generatePrime.callback_3) : unit = nativeOnly
+            static member generatePrime (size: float, options: Node.crypto.GeneratePrimeOptions, callback: Exports.generatePrime.callback_2) : unit = nativeOnly
             /// <summary>
             /// Generates a pseudorandom prime of <c>size</c> bits.
             ///
@@ -33254,7 +33152,7 @@ AsyncLocalStorage.snapshot()"""
             /// A possible prime encoded as a sequence of big endian octets of arbitrary length.
             /// </param>
             [<Import("checkPrime", "crypto")>]
-            static member checkPrime (value: obj, callback: Exports.checkPrime.callback_1) : unit = nativeOnly
+            static member checkPrime (value: obj, callback: Exports.checkPrime.callback) : unit = nativeOnly
             /// <summary>
             /// Checks the primality of the <c>candidate</c>.
             /// </summary>
@@ -33262,13 +33160,13 @@ AsyncLocalStorage.snapshot()"""
             /// A possible prime encoded as a sequence of big endian octets of arbitrary length.
             /// </param>
             [<Import("checkPrime", "crypto")>]
-            static member checkPrime (value: bigint, callback: Exports.checkPrime.callback_2) : unit = nativeOnly
+            static member checkPrime (value: bigint, callback: Exports.checkPrime.callback) : unit = nativeOnly
             [<Import("checkPrime", "crypto")>]
-            static member checkPrime (value: Node.NodeJS.ArrayBufferView, options: Node.crypto.CheckPrimeOptions, callback: Exports.checkPrime.callback_3) : unit = nativeOnly
+            static member checkPrime (value: Node.NodeJS.ArrayBufferView, options: Node.crypto.CheckPrimeOptions, callback: Exports.checkPrime.callback) : unit = nativeOnly
             [<Import("checkPrime", "crypto")>]
-            static member checkPrime (value: obj, options: Node.crypto.CheckPrimeOptions, callback: Exports.checkPrime.callback_4) : unit = nativeOnly
+            static member checkPrime (value: obj, options: Node.crypto.CheckPrimeOptions, callback: Exports.checkPrime.callback) : unit = nativeOnly
             [<Import("checkPrime", "crypto")>]
-            static member checkPrime (value: bigint, options: Node.crypto.CheckPrimeOptions, callback: Exports.checkPrime.callback_5) : unit = nativeOnly
+            static member checkPrime (value: bigint, options: Node.crypto.CheckPrimeOptions, callback: Exports.checkPrime.callback) : unit = nativeOnly
             /// <summary>
             /// Checks the primality of the <c>candidate</c>.
             /// </summary>
@@ -36507,7 +36405,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// <param name="format">
             ///
             /// </param>
-            static member inline convertKey (key: Node.NodeJS.ArrayBufferView, curve: string, ?inputEncoding: Node.crypto.BinaryToTextEncoding, ?outputEncoding: ECDH.convertKey.outputEncoding.outputEncoding_1, ?format: ECDH.convertKey.format.format_1): U2<Node.NonSharedBuffer, string> =
+            static member inline convertKey (key: Node.NodeJS.ArrayBufferView, curve: string, ?inputEncoding: Node.crypto.BinaryToTextEncoding, ?outputEncoding: ECDH.convertKey.outputEncoding, ?format: ECDH.convertKey.format): U2<Node.NonSharedBuffer, string> =
                 emitJsExpr (key, curve, inputEncoding, outputEncoding, format) $$"""
 import { ECDH } from "crypto";
 ECDH.convertKey($0, $1, $2, $3, $4)"""
@@ -36896,35 +36794,35 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             [<Erase>]
             type Exports =
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: ``type``: string * options: Node.crypto.RSAKeyPairOptions<string, string> -> JS.Promise<Exports.__promisify___12>
+                abstract member __promisify__: ``type``: string * options: Node.crypto.RSAKeyPairOptions<string, string> -> JS.Promise<Exports.__promisify___6>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__: ``type``: string * options: Node.crypto.RSAKeyPairKeyObjectOptions -> JS.Promise<Node.crypto.KeyPairKeyObjectResult>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: ``type``: string * options: Node.crypto.RSAPSSKeyPairOptions<string, string> -> JS.Promise<Exports.__promisify___16>
+                abstract member __promisify__: ``type``: string * options: Node.crypto.RSAPSSKeyPairOptions<string, string> -> JS.Promise<Exports.__promisify___6>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__: ``type``: string * options: Node.crypto.RSAPSSKeyPairKeyObjectOptions -> JS.Promise<Node.crypto.KeyPairKeyObjectResult>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: ``type``: string * options: Node.crypto.DSAKeyPairOptions<string, string> -> JS.Promise<Exports.__promisify___20>
+                abstract member __promisify__: ``type``: string * options: Node.crypto.DSAKeyPairOptions<string, string> -> JS.Promise<Exports.__promisify___6>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__: ``type``: string * options: Node.crypto.DSAKeyPairKeyObjectOptions -> JS.Promise<Node.crypto.KeyPairKeyObjectResult>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: ``type``: string * options: Node.crypto.ECKeyPairOptions<string, string> -> JS.Promise<Exports.__promisify___24>
+                abstract member __promisify__: ``type``: string * options: Node.crypto.ECKeyPairOptions<string, string> -> JS.Promise<Exports.__promisify___6>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__: ``type``: string * options: Node.crypto.ECKeyPairKeyObjectOptions -> JS.Promise<Node.crypto.KeyPairKeyObjectResult>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: ``type``: string * options: Node.crypto.ED25519KeyPairOptions<string, string> -> JS.Promise<Exports.__promisify___28>
+                abstract member __promisify__: ``type``: string * options: Node.crypto.ED25519KeyPairOptions<string, string> -> JS.Promise<Exports.__promisify___6>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__: ``type``: string * ?options: Node.crypto.ED25519KeyPairKeyObjectOptions -> JS.Promise<Node.crypto.KeyPairKeyObjectResult>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: ``type``: string * options: Node.crypto.ED448KeyPairOptions<string, string> -> JS.Promise<Exports.__promisify___32>
+                abstract member __promisify__: ``type``: string * options: Node.crypto.ED448KeyPairOptions<string, string> -> JS.Promise<Exports.__promisify___6>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__: ``type``: string * ?options: Node.crypto.ED448KeyPairKeyObjectOptions -> JS.Promise<Node.crypto.KeyPairKeyObjectResult>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: ``type``: string * options: Node.crypto.X25519KeyPairOptions<string, string> -> JS.Promise<Exports.__promisify___36>
+                abstract member __promisify__: ``type``: string * options: Node.crypto.X25519KeyPairOptions<string, string> -> JS.Promise<Exports.__promisify___6>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__: ``type``: string * ?options: Node.crypto.X25519KeyPairKeyObjectOptions -> JS.Promise<Node.crypto.KeyPairKeyObjectResult>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: ``type``: string * options: Node.crypto.X448KeyPairOptions<string, string> -> JS.Promise<Exports.__promisify___40>
+                abstract member __promisify__: ``type``: string * options: Node.crypto.X448KeyPairOptions<string, string> -> JS.Promise<Exports.__promisify___6>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__: ``type``: string * ?options: Node.crypto.X448KeyPairKeyObjectOptions -> JS.Promise<Node.crypto.KeyPairKeyObjectResult>
 
@@ -36932,7 +36830,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
 
                 [<Global>]
                 [<AllowNullLiteral>]
-                type __promisify___12
+                type __promisify___6
                     [<ParamObject; Emit("$0")>]
                     (
                         publicKey: string,
@@ -36944,55 +36842,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
 
                 [<Global>]
                 [<AllowNullLiteral>]
-                type __promisify___13
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        publicKey: string,
-                        privateKey: Node.NonSharedBuffer
-                    ) =
-
-                    member val publicKey : string = nativeOnly with get, set
-                    member val privateKey : Node.NonSharedBuffer = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type __promisify___14
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        publicKey: Node.NonSharedBuffer,
-                        privateKey: string
-                    ) =
-
-                    member val publicKey : Node.NonSharedBuffer = nativeOnly with get, set
-                    member val privateKey : string = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type __promisify___15
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        publicKey: Node.NonSharedBuffer,
-                        privateKey: Node.NonSharedBuffer
-                    ) =
-
-                    member val publicKey : Node.NonSharedBuffer = nativeOnly with get, set
-                    member val privateKey : Node.NonSharedBuffer = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type __promisify___16
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        publicKey: string,
-                        privateKey: string
-                    ) =
-
-                    member val publicKey : string = nativeOnly with get, set
-                    member val privateKey : string = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type __promisify___17
+                type __promisify___7
                     [<ParamObject; Emit("$0")>]
                     (
                         publicKey: string,
@@ -37004,7 +36854,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
 
                 [<Global>]
                 [<AllowNullLiteral>]
-                type __promisify___18
+                type __promisify___8
                     [<ParamObject; Emit("$0")>]
                     (
                         publicKey: Node.NonSharedBuffer,
@@ -37016,295 +36866,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
 
                 [<Global>]
                 [<AllowNullLiteral>]
-                type __promisify___19
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        publicKey: Node.NonSharedBuffer,
-                        privateKey: Node.NonSharedBuffer
-                    ) =
-
-                    member val publicKey : Node.NonSharedBuffer = nativeOnly with get, set
-                    member val privateKey : Node.NonSharedBuffer = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type __promisify___20
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        publicKey: string,
-                        privateKey: string
-                    ) =
-
-                    member val publicKey : string = nativeOnly with get, set
-                    member val privateKey : string = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type __promisify___21
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        publicKey: string,
-                        privateKey: Node.NonSharedBuffer
-                    ) =
-
-                    member val publicKey : string = nativeOnly with get, set
-                    member val privateKey : Node.NonSharedBuffer = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type __promisify___22
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        publicKey: Node.NonSharedBuffer,
-                        privateKey: string
-                    ) =
-
-                    member val publicKey : Node.NonSharedBuffer = nativeOnly with get, set
-                    member val privateKey : string = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type __promisify___23
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        publicKey: Node.NonSharedBuffer,
-                        privateKey: Node.NonSharedBuffer
-                    ) =
-
-                    member val publicKey : Node.NonSharedBuffer = nativeOnly with get, set
-                    member val privateKey : Node.NonSharedBuffer = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type __promisify___24
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        publicKey: string,
-                        privateKey: string
-                    ) =
-
-                    member val publicKey : string = nativeOnly with get, set
-                    member val privateKey : string = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type __promisify___25
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        publicKey: string,
-                        privateKey: Node.NonSharedBuffer
-                    ) =
-
-                    member val publicKey : string = nativeOnly with get, set
-                    member val privateKey : Node.NonSharedBuffer = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type __promisify___26
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        publicKey: Node.NonSharedBuffer,
-                        privateKey: string
-                    ) =
-
-                    member val publicKey : Node.NonSharedBuffer = nativeOnly with get, set
-                    member val privateKey : string = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type __promisify___27
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        publicKey: Node.NonSharedBuffer,
-                        privateKey: Node.NonSharedBuffer
-                    ) =
-
-                    member val publicKey : Node.NonSharedBuffer = nativeOnly with get, set
-                    member val privateKey : Node.NonSharedBuffer = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type __promisify___28
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        publicKey: string,
-                        privateKey: string
-                    ) =
-
-                    member val publicKey : string = nativeOnly with get, set
-                    member val privateKey : string = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type __promisify___29
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        publicKey: string,
-                        privateKey: Node.NonSharedBuffer
-                    ) =
-
-                    member val publicKey : string = nativeOnly with get, set
-                    member val privateKey : Node.NonSharedBuffer = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type __promisify___30
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        publicKey: Node.NonSharedBuffer,
-                        privateKey: string
-                    ) =
-
-                    member val publicKey : Node.NonSharedBuffer = nativeOnly with get, set
-                    member val privateKey : string = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type __promisify___31
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        publicKey: Node.NonSharedBuffer,
-                        privateKey: Node.NonSharedBuffer
-                    ) =
-
-                    member val publicKey : Node.NonSharedBuffer = nativeOnly with get, set
-                    member val privateKey : Node.NonSharedBuffer = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type __promisify___32
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        publicKey: string,
-                        privateKey: string
-                    ) =
-
-                    member val publicKey : string = nativeOnly with get, set
-                    member val privateKey : string = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type __promisify___33
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        publicKey: string,
-                        privateKey: Node.NonSharedBuffer
-                    ) =
-
-                    member val publicKey : string = nativeOnly with get, set
-                    member val privateKey : Node.NonSharedBuffer = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type __promisify___34
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        publicKey: Node.NonSharedBuffer,
-                        privateKey: string
-                    ) =
-
-                    member val publicKey : Node.NonSharedBuffer = nativeOnly with get, set
-                    member val privateKey : string = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type __promisify___35
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        publicKey: Node.NonSharedBuffer,
-                        privateKey: Node.NonSharedBuffer
-                    ) =
-
-                    member val publicKey : Node.NonSharedBuffer = nativeOnly with get, set
-                    member val privateKey : Node.NonSharedBuffer = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type __promisify___36
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        publicKey: string,
-                        privateKey: string
-                    ) =
-
-                    member val publicKey : string = nativeOnly with get, set
-                    member val privateKey : string = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type __promisify___37
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        publicKey: string,
-                        privateKey: Node.NonSharedBuffer
-                    ) =
-
-                    member val publicKey : string = nativeOnly with get, set
-                    member val privateKey : Node.NonSharedBuffer = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type __promisify___38
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        publicKey: Node.NonSharedBuffer,
-                        privateKey: string
-                    ) =
-
-                    member val publicKey : Node.NonSharedBuffer = nativeOnly with get, set
-                    member val privateKey : string = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type __promisify___39
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        publicKey: Node.NonSharedBuffer,
-                        privateKey: Node.NonSharedBuffer
-                    ) =
-
-                    member val publicKey : Node.NonSharedBuffer = nativeOnly with get, set
-                    member val privateKey : Node.NonSharedBuffer = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type __promisify___40
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        publicKey: string,
-                        privateKey: string
-                    ) =
-
-                    member val publicKey : string = nativeOnly with get, set
-                    member val privateKey : string = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type __promisify___41
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        publicKey: string,
-                        privateKey: Node.NonSharedBuffer
-                    ) =
-
-                    member val publicKey : string = nativeOnly with get, set
-                    member val privateKey : Node.NonSharedBuffer = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type __promisify___42
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        publicKey: Node.NonSharedBuffer,
-                        privateKey: string
-                    ) =
-
-                    member val publicKey : Node.NonSharedBuffer = nativeOnly with get, set
-                    member val privateKey : string = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type __promisify___43
+                type __promisify___9
                     [<ParamObject; Emit("$0")>]
                     (
                         publicKey: Node.NonSharedBuffer,
@@ -38991,7 +38553,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 ///
                 /// If importing a <c>'PBKDF2'</c> key, <c>extractable</c> must be <c>false</c>.
                 /// </summary>
-                abstract member importKey: format: SubtleCrypto.importKey.format.format_1 * keyData: Node.crypto.webcrypto_.BufferSource * algorithm: string * extractable: bool * keyUsages: ResizeArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
+                abstract member importKey: format: SubtleCrypto.importKey.format * keyData: Node.crypto.webcrypto_.BufferSource * algorithm: string * extractable: bool * keyUsages: ResizeArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
                 /// <summary>
                 /// The <c>subtle.importKey()</c> method attempts to interpret the provided <c>keyData</c> as the given <c>format</c>
                 /// to create a <c><CryptoKey></c> instance using the provided <c>algorithm</c>, <c>extractable</c>, and <c>keyUsages</c> arguments.
@@ -38999,7 +38561,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 ///
                 /// If importing a <c>'PBKDF2'</c> key, <c>extractable</c> must be <c>false</c>.
                 /// </summary>
-                abstract member importKey: format: SubtleCrypto.importKey.format.format_2 * keyData: Node.crypto.webcrypto_.BufferSource * algorithm: Node.crypto.webcrypto_.RsaHashedImportParams * extractable: bool * keyUsages: ResizeArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
+                abstract member importKey: format: SubtleCrypto.importKey.format * keyData: Node.crypto.webcrypto_.BufferSource * algorithm: Node.crypto.webcrypto_.RsaHashedImportParams * extractable: bool * keyUsages: ResizeArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
                 /// <summary>
                 /// The <c>subtle.importKey()</c> method attempts to interpret the provided <c>keyData</c> as the given <c>format</c>
                 /// to create a <c><CryptoKey></c> instance using the provided <c>algorithm</c>, <c>extractable</c>, and <c>keyUsages</c> arguments.
@@ -39007,7 +38569,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 ///
                 /// If importing a <c>'PBKDF2'</c> key, <c>extractable</c> must be <c>false</c>.
                 /// </summary>
-                abstract member importKey: format: SubtleCrypto.importKey.format.format_3 * keyData: Node.crypto.webcrypto_.BufferSource * algorithm: Node.crypto.webcrypto_.EcKeyImportParams * extractable: bool * keyUsages: ResizeArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
+                abstract member importKey: format: SubtleCrypto.importKey.format * keyData: Node.crypto.webcrypto_.BufferSource * algorithm: Node.crypto.webcrypto_.EcKeyImportParams * extractable: bool * keyUsages: ResizeArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
                 /// <summary>
                 /// The <c>subtle.importKey()</c> method attempts to interpret the provided <c>keyData</c> as the given <c>format</c>
                 /// to create a <c><CryptoKey></c> instance using the provided <c>algorithm</c>, <c>extractable</c>, and <c>keyUsages</c> arguments.
@@ -39015,7 +38577,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 ///
                 /// If importing a <c>'PBKDF2'</c> key, <c>extractable</c> must be <c>false</c>.
                 /// </summary>
-                abstract member importKey: format: SubtleCrypto.importKey.format.format_4 * keyData: Node.crypto.webcrypto_.BufferSource * algorithm: Node.crypto.webcrypto_.HmacImportParams * extractable: bool * keyUsages: ResizeArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
+                abstract member importKey: format: SubtleCrypto.importKey.format * keyData: Node.crypto.webcrypto_.BufferSource * algorithm: Node.crypto.webcrypto_.HmacImportParams * extractable: bool * keyUsages: ResizeArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
                 /// <summary>
                 /// The <c>subtle.importKey()</c> method attempts to interpret the provided <c>keyData</c> as the given <c>format</c>
                 /// to create a <c><CryptoKey></c> instance using the provided <c>algorithm</c>, <c>extractable</c>, and <c>keyUsages</c> arguments.
@@ -39023,7 +38585,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 ///
                 /// If importing a <c>'PBKDF2'</c> key, <c>extractable</c> must be <c>false</c>.
                 /// </summary>
-                abstract member importKey: format: SubtleCrypto.importKey.format.format_5 * keyData: Node.crypto.webcrypto_.BufferSource * algorithm: Node.crypto.webcrypto_.AesKeyAlgorithm * extractable: bool * keyUsages: ResizeArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
+                abstract member importKey: format: SubtleCrypto.importKey.format * keyData: Node.crypto.webcrypto_.BufferSource * algorithm: Node.crypto.webcrypto_.AesKeyAlgorithm * extractable: bool * keyUsages: ResizeArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
                 /// <summary>
                 /// Using the method and parameters given by <c>algorithm</c> and the keying material provided by <c>key</c>,
                 /// <c>subtle.sign()</c> attempts to generate a cryptographic signature of <c>data</c>. If successful,
@@ -39563,43 +39125,6 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                         | raw
                         | spki
 
-                    module format =
-
-                        [<RequireQualifiedAccess>]
-                        [<StringEnum(CaseRules.None)>]
-                        type format_1 =
-                            | pkcs8
-                            | raw
-                            | spki
-
-                        [<RequireQualifiedAccess>]
-                        [<StringEnum(CaseRules.None)>]
-                        type format_2 =
-                            | pkcs8
-                            | raw
-                            | spki
-
-                        [<RequireQualifiedAccess>]
-                        [<StringEnum(CaseRules.None)>]
-                        type format_3 =
-                            | pkcs8
-                            | raw
-                            | spki
-
-                        [<RequireQualifiedAccess>]
-                        [<StringEnum(CaseRules.None)>]
-                        type format_4 =
-                            | pkcs8
-                            | raw
-                            | spki
-
-                        [<RequireQualifiedAccess>]
-                        [<StringEnum(CaseRules.None)>]
-                        type format_5 =
-                            | pkcs8
-                            | raw
-                            | spki
-
         type KeyPairSyncResult =
             KeyPairSyncResult<U2<string, Node.Buffer>, U2<string, Node.Buffer>>
 
@@ -39777,25 +39302,6 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                     | uncompressed
                     | compressed
                     | hybrid
-
-                module outputEncoding =
-
-                    [<RequireQualifiedAccess>]
-                    [<StringEnum(CaseRules.None)>]
-                    type outputEncoding_1 =
-                        | latin1
-                        | hex
-                        | base64
-                        | base64url
-
-                module format =
-
-                    [<RequireQualifiedAccess>]
-                    [<StringEnum(CaseRules.None)>]
-                    type format_1 =
-                        | uncompressed
-                        | compressed
-                        | hybrid
 
         module ECKeyPairKeyObjectOptions =
 
@@ -40096,15 +39602,6 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 type callback =
                     delegate of err: Exception option * derivedKey: Node.NonSharedBuffer -> unit
 
-                type callback_1 =
-                    delegate of err: Exception option * derivedKey: Node.NonSharedBuffer -> unit
-
-                type callback_2 =
-                    delegate of err: Exception option * derivedKey: Node.NonSharedBuffer -> unit
-
-                type callback_3 =
-                    delegate of err: Exception option * derivedKey: Node.NonSharedBuffer -> unit
-
             module randomBytes =
 
                 type callback =
@@ -40120,44 +39617,14 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 type callback =
                     delegate of err: Exception option * value: float -> unit
 
-                type callback_1 =
-                    delegate of err: Exception option * value: float -> unit
-
             module randomFill =
 
                 type callback<'T> =
                     delegate of err: Exception option * buf: 'T -> unit
 
-                type callback_1<'T> =
-                    delegate of err: Exception option * buf: 'T -> unit
-
-                type callback_2<'T> =
-                    delegate of err: Exception option * buf: 'T -> unit
-
             module scrypt =
 
                 type callback =
-                    delegate of err: Exception option * derivedKey: Node.NonSharedBuffer -> unit
-
-                type callback_1 =
-                    delegate of err: Exception option * derivedKey: Node.NonSharedBuffer -> unit
-
-                type callback_2 =
-                    delegate of err: Exception option * derivedKey: Node.NonSharedBuffer -> unit
-
-                type callback_3 =
-                    delegate of err: Exception option * derivedKey: Node.NonSharedBuffer -> unit
-
-                type callback_4 =
-                    delegate of err: Exception option * derivedKey: Node.NonSharedBuffer -> unit
-
-                type callback_5 =
-                    delegate of err: Exception option * derivedKey: Node.NonSharedBuffer -> unit
-
-                type callback_6 =
-                    delegate of err: Exception option * derivedKey: Node.NonSharedBuffer -> unit
-
-                type callback_7 =
                     delegate of err: Exception option * derivedKey: Node.NonSharedBuffer -> unit
 
             module generateKeyPair =
@@ -40177,149 +39644,14 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 type callback_4 =
                     delegate of err: Exception option * publicKey: Node.crypto.KeyObject * privateKey: Node.crypto.KeyObject -> unit
 
-                type callback_5 =
-                    delegate of err: Exception option * publicKey: string * privateKey: string -> unit
-
-                type callback_6 =
-                    delegate of err: Exception option * publicKey: string * privateKey: Node.NonSharedBuffer -> unit
-
-                type callback_7 =
-                    delegate of err: Exception option * publicKey: Node.NonSharedBuffer * privateKey: string -> unit
-
-                type callback_8 =
-                    delegate of err: Exception option * publicKey: Node.NonSharedBuffer * privateKey: Node.NonSharedBuffer -> unit
-
-                type callback_9 =
-                    delegate of err: Exception option * publicKey: Node.crypto.KeyObject * privateKey: Node.crypto.KeyObject -> unit
-
-                type callback_10 =
-                    delegate of err: Exception option * publicKey: string * privateKey: string -> unit
-
-                type callback_11 =
-                    delegate of err: Exception option * publicKey: string * privateKey: Node.NonSharedBuffer -> unit
-
-                type callback_12 =
-                    delegate of err: Exception option * publicKey: Node.NonSharedBuffer * privateKey: string -> unit
-
-                type callback_13 =
-                    delegate of err: Exception option * publicKey: Node.NonSharedBuffer * privateKey: Node.NonSharedBuffer -> unit
-
-                type callback_14 =
-                    delegate of err: Exception option * publicKey: Node.crypto.KeyObject * privateKey: Node.crypto.KeyObject -> unit
-
-                type callback_15 =
-                    delegate of err: Exception option * publicKey: string * privateKey: string -> unit
-
-                type callback_16 =
-                    delegate of err: Exception option * publicKey: string * privateKey: Node.NonSharedBuffer -> unit
-
-                type callback_17 =
-                    delegate of err: Exception option * publicKey: Node.NonSharedBuffer * privateKey: string -> unit
-
-                type callback_18 =
-                    delegate of err: Exception option * publicKey: Node.NonSharedBuffer * privateKey: Node.NonSharedBuffer -> unit
-
-                type callback_19 =
-                    delegate of err: Exception option * publicKey: Node.crypto.KeyObject * privateKey: Node.crypto.KeyObject -> unit
-
-                type callback_20 =
-                    delegate of err: Exception option * publicKey: string * privateKey: string -> unit
-
-                type callback_21 =
-                    delegate of err: Exception option * publicKey: string * privateKey: Node.NonSharedBuffer -> unit
-
-                type callback_22 =
-                    delegate of err: Exception option * publicKey: Node.NonSharedBuffer * privateKey: string -> unit
-
-                type callback_23 =
-                    delegate of err: Exception option * publicKey: Node.NonSharedBuffer * privateKey: Node.NonSharedBuffer -> unit
-
-                type callback_24 =
-                    delegate of err: Exception option * publicKey: Node.crypto.KeyObject * privateKey: Node.crypto.KeyObject -> unit
-
-                type callback_25 =
-                    delegate of err: Exception option * publicKey: string * privateKey: string -> unit
-
-                type callback_26 =
-                    delegate of err: Exception option * publicKey: string * privateKey: Node.NonSharedBuffer -> unit
-
-                type callback_27 =
-                    delegate of err: Exception option * publicKey: Node.NonSharedBuffer * privateKey: string -> unit
-
-                type callback_28 =
-                    delegate of err: Exception option * publicKey: Node.NonSharedBuffer * privateKey: Node.NonSharedBuffer -> unit
-
-                type callback_29 =
-                    delegate of err: Exception option * publicKey: Node.crypto.KeyObject * privateKey: Node.crypto.KeyObject -> unit
-
-                type callback_30 =
-                    delegate of err: Exception option * publicKey: string * privateKey: string -> unit
-
-                type callback_31 =
-                    delegate of err: Exception option * publicKey: string * privateKey: Node.NonSharedBuffer -> unit
-
-                type callback_32 =
-                    delegate of err: Exception option * publicKey: Node.NonSharedBuffer * privateKey: string -> unit
-
-                type callback_33 =
-                    delegate of err: Exception option * publicKey: Node.NonSharedBuffer * privateKey: Node.NonSharedBuffer -> unit
-
-                type callback_34 =
-                    delegate of err: Exception option * publicKey: Node.crypto.KeyObject * privateKey: Node.crypto.KeyObject -> unit
-
-                type callback_35 =
-                    delegate of err: Exception option * publicKey: string * privateKey: string -> unit
-
-                type callback_36 =
-                    delegate of err: Exception option * publicKey: string * privateKey: Node.NonSharedBuffer -> unit
-
-                type callback_37 =
-                    delegate of err: Exception option * publicKey: Node.NonSharedBuffer * privateKey: string -> unit
-
-                type callback_38 =
-                    delegate of err: Exception option * publicKey: Node.NonSharedBuffer * privateKey: Node.NonSharedBuffer -> unit
-
-                type callback_39 =
-                    delegate of err: Exception option * publicKey: Node.crypto.KeyObject * privateKey: Node.crypto.KeyObject -> unit
-
             module sign =
 
                 type callback =
                     delegate of error: Exception option * data: Node.NonSharedBuffer -> unit
 
-                type callback_1 =
-                    delegate of error: Exception option * data: Node.NonSharedBuffer -> unit
-
-                type callback_2 =
-                    delegate of error: Exception option * data: Node.NonSharedBuffer -> unit
-
-                type callback_3 =
-                    delegate of error: Exception option * data: Node.NonSharedBuffer -> unit
-
-                type callback_4 =
-                    delegate of error: Exception option * data: Node.NonSharedBuffer -> unit
-
-                type callback_5 =
-                    delegate of error: Exception option * data: Node.NonSharedBuffer -> unit
-
             module verify =
 
                 type callback =
-                    delegate of error: Exception option * result: bool -> unit
-
-                type callback_1 =
-                    delegate of error: Exception option * result: bool -> unit
-
-                type callback_2 =
-                    delegate of error: Exception option * result: bool -> unit
-
-                type callback_3 =
-                    delegate of error: Exception option * result: bool -> unit
-
-                type callback_4 =
-                    delegate of error: Exception option * result: bool -> unit
-
-                type callback_5 =
                     delegate of error: Exception option * result: bool -> unit
 
             module diffieHellman =
@@ -40344,50 +39676,9 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                     | buffer
                     | Case1 of Node.crypto.BinaryToTextEncoding
 
-                module outputEncoding =
-
-                    [<RequireQualifiedAccess>]
-                    [<Erase(CaseRules.None)>]
-                    type outputEncoding_1 =
-                        | buffer
-                        | Case1 of Node.crypto.BinaryToTextEncoding
-
             module hkdf =
 
                 type callback =
-                    delegate of err: Exception option * derivedKey: obj -> unit
-
-                type callback_1 =
-                    delegate of err: Exception option * derivedKey: obj -> unit
-
-                type callback_2 =
-                    delegate of err: Exception option * derivedKey: obj -> unit
-
-                type callback_3 =
-                    delegate of err: Exception option * derivedKey: obj -> unit
-
-                type callback_4 =
-                    delegate of err: Exception option * derivedKey: obj -> unit
-
-                type callback_5 =
-                    delegate of err: Exception option * derivedKey: obj -> unit
-
-                type callback_6 =
-                    delegate of err: Exception option * derivedKey: obj -> unit
-
-                type callback_7 =
-                    delegate of err: Exception option * derivedKey: obj -> unit
-
-                type callback_8 =
-                    delegate of err: Exception option * derivedKey: obj -> unit
-
-                type callback_9 =
-                    delegate of err: Exception option * derivedKey: obj -> unit
-
-                type callback_10 =
-                    delegate of err: Exception option * derivedKey: obj -> unit
-
-                type callback_11 =
                     delegate of err: Exception option * derivedKey: obj -> unit
 
             module generatePrime =
@@ -40399,29 +39690,11 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                     delegate of err: Exception option * prime: bigint -> unit
 
                 type callback_2 =
-                    delegate of err: Exception option * prime: obj -> unit
-
-                type callback_3 =
                     delegate of err: Exception option * prime: U2<obj, bigint> -> unit
 
             module checkPrime =
 
                 type callback =
-                    delegate of err: Exception option * result: bool -> unit
-
-                type callback_1 =
-                    delegate of err: Exception option * result: bool -> unit
-
-                type callback_2 =
-                    delegate of err: Exception option * result: bool -> unit
-
-                type callback_3 =
-                    delegate of err: Exception option * result: bool -> unit
-
-                type callback_4 =
-                    delegate of err: Exception option * result: bool -> unit
-
-                type callback_5 =
                     delegate of err: Exception option * result: bool -> unit
 
     module dgram =
@@ -40458,7 +39731,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             [<Import("createSocket", "dgram")>]
             static member createSocket (``type``: Node.dgram.SocketType, ?callback: Exports.createSocket.callback) : Node.dgram.Socket = nativeOnly
             [<Import("createSocket", "dgram")>]
-            static member createSocket (options: Node.dgram.SocketOptions, ?callback: Exports.createSocket.callback_1) : Node.dgram.Socket = nativeOnly
+            static member createSocket (options: Node.dgram.SocketOptions, ?callback: Exports.createSocket.callback) : Node.dgram.Socket = nativeOnly
             [<Import("Socket", "dgram"); EmitConstructor>]
             static member Socket () : Socket = nativeOnly
 
@@ -41050,7 +40323,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// <param name="callback">
             /// Called when the message has been sent.
             /// </param>
-            abstract member send: msg: Node.NodeJS.ArrayBufferView * ?port: float * ?address: string * ?callback: Socket.send.callback_1 -> unit
+            abstract member send: msg: Node.NodeJS.ArrayBufferView * ?port: float * ?address: string * ?callback: Socket.send.callback -> unit
             /// <summary>
             /// Broadcasts a datagram on the socket.
             /// For connectionless sockets, the destination <c>port</c> and <c>address</c> must be
@@ -41155,7 +40428,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// <param name="callback">
             /// Called when the message has been sent.
             /// </param>
-            abstract member send: msg: ReadonlyArray<obj> * ?port: float * ?address: string * ?callback: Socket.send.callback_2 -> unit
+            abstract member send: msg: ReadonlyArray<obj> * ?port: float * ?address: string * ?callback: Socket.send.callback -> unit
             /// <summary>
             /// Broadcasts a datagram on the socket.
             /// For connectionless sockets, the destination <c>port</c> and <c>address</c> must be
@@ -41242,7 +40515,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// });
             /// </code>
             /// </summary>
-            abstract member send: msg: string * ?port: float * ?callback: Socket.send.callback_3 -> unit
+            abstract member send: msg: string * ?port: float * ?callback: Socket.send.callback -> unit
             /// <summary>
             /// Broadcasts a datagram on the socket.
             /// For connectionless sockets, the destination <c>port</c> and <c>address</c> must be
@@ -41329,7 +40602,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// });
             /// </code>
             /// </summary>
-            abstract member send: msg: Node.NodeJS.ArrayBufferView * ?port: float * ?callback: Socket.send.callback_4 -> unit
+            abstract member send: msg: Node.NodeJS.ArrayBufferView * ?port: float * ?callback: Socket.send.callback -> unit
             /// <summary>
             /// Broadcasts a datagram on the socket.
             /// For connectionless sockets, the destination <c>port</c> and <c>address</c> must be
@@ -41416,7 +40689,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// });
             /// </code>
             /// </summary>
-            abstract member send: msg: ReadonlyArray<obj> * ?port: float * ?callback: Socket.send.callback_5 -> unit
+            abstract member send: msg: ReadonlyArray<obj> * ?port: float * ?callback: Socket.send.callback -> unit
             /// <summary>
             /// Broadcasts a datagram on the socket.
             /// For connectionless sockets, the destination <c>port</c> and <c>address</c> must be
@@ -41503,7 +40776,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// });
             /// </code>
             /// </summary>
-            abstract member send: msg: string * ?callback: Socket.send.callback_6 -> unit
+            abstract member send: msg: string * ?callback: Socket.send.callback -> unit
             /// <summary>
             /// Broadcasts a datagram on the socket.
             /// For connectionless sockets, the destination <c>port</c> and <c>address</c> must be
@@ -41590,7 +40863,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// });
             /// </code>
             /// </summary>
-            abstract member send: msg: Node.NodeJS.ArrayBufferView * ?callback: Socket.send.callback_7 -> unit
+            abstract member send: msg: Node.NodeJS.ArrayBufferView * ?callback: Socket.send.callback -> unit
             /// <summary>
             /// Broadcasts a datagram on the socket.
             /// For connectionless sockets, the destination <c>port</c> and <c>address</c> must be
@@ -41677,7 +40950,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// });
             /// </code>
             /// </summary>
-            abstract member send: msg: ReadonlyArray<obj> * ?callback: Socket.send.callback_8 -> unit
+            abstract member send: msg: ReadonlyArray<obj> * ?callback: Socket.send.callback -> unit
             /// <summary>
             /// Broadcasts a datagram on the socket.
             /// For connectionless sockets, the destination <c>port</c> and <c>address</c> must be
@@ -41764,7 +41037,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// });
             /// </code>
             /// </summary>
-            abstract member send: msg: string * offset: float * length: float * ?port: float * ?address: string * ?callback: Socket.send.callback_9 -> unit
+            abstract member send: msg: string * offset: float * length: float * ?port: float * ?address: string * ?callback: Socket.send.callback -> unit
             /// <summary>
             /// Broadcasts a datagram on the socket.
             /// For connectionless sockets, the destination <c>port</c> and <c>address</c> must be
@@ -41851,7 +41124,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// });
             /// </code>
             /// </summary>
-            abstract member send: msg: Node.NodeJS.ArrayBufferView * offset: float * length: float * ?port: float * ?address: string * ?callback: Socket.send.callback_10 -> unit
+            abstract member send: msg: Node.NodeJS.ArrayBufferView * offset: float * length: float * ?port: float * ?address: string * ?callback: Socket.send.callback -> unit
             /// <summary>
             /// Broadcasts a datagram on the socket.
             /// For connectionless sockets, the destination <c>port</c> and <c>address</c> must be
@@ -41938,7 +41211,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// });
             /// </code>
             /// </summary>
-            abstract member send: msg: string * offset: float * length: float * ?port: float * ?callback: Socket.send.callback_11 -> unit
+            abstract member send: msg: string * offset: float * length: float * ?port: float * ?callback: Socket.send.callback -> unit
             /// <summary>
             /// Broadcasts a datagram on the socket.
             /// For connectionless sockets, the destination <c>port</c> and <c>address</c> must be
@@ -42025,7 +41298,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// });
             /// </code>
             /// </summary>
-            abstract member send: msg: Node.NodeJS.ArrayBufferView * offset: float * length: float * ?port: float * ?callback: Socket.send.callback_12 -> unit
+            abstract member send: msg: Node.NodeJS.ArrayBufferView * offset: float * length: float * ?port: float * ?callback: Socket.send.callback -> unit
             /// <summary>
             /// Broadcasts a datagram on the socket.
             /// For connectionless sockets, the destination <c>port</c> and <c>address</c> must be
@@ -42112,7 +41385,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// });
             /// </code>
             /// </summary>
-            abstract member send: msg: string * offset: float * length: float * ?callback: Socket.send.callback_13 -> unit
+            abstract member send: msg: string * offset: float * length: float * ?callback: Socket.send.callback -> unit
             /// <summary>
             /// Broadcasts a datagram on the socket.
             /// For connectionless sockets, the destination <c>port</c> and <c>address</c> must be
@@ -42199,7 +41472,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// });
             /// </code>
             /// </summary>
-            abstract member send: msg: Node.NodeJS.ArrayBufferView * offset: float * length: float * ?callback: Socket.send.callback_14 -> unit
+            abstract member send: msg: Node.NodeJS.ArrayBufferView * offset: float * length: float * ?callback: Socket.send.callback -> unit
             /// <summary>
             /// Sets or clears the <c>SO_BROADCAST</c> socket option. When set to <c>true</c>, UDP
             /// packets may be sent to a local interface's broadcast address.
@@ -43516,48 +42789,6 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 type callback =
                     delegate of error: Exception option * bytes: float -> unit
 
-                type callback_1 =
-                    delegate of error: Exception option * bytes: float -> unit
-
-                type callback_2 =
-                    delegate of error: Exception option * bytes: float -> unit
-
-                type callback_3 =
-                    delegate of error: Exception option * bytes: float -> unit
-
-                type callback_4 =
-                    delegate of error: Exception option * bytes: float -> unit
-
-                type callback_5 =
-                    delegate of error: Exception option * bytes: float -> unit
-
-                type callback_6 =
-                    delegate of error: Exception option * bytes: float -> unit
-
-                type callback_7 =
-                    delegate of error: Exception option * bytes: float -> unit
-
-                type callback_8 =
-                    delegate of error: Exception option * bytes: float -> unit
-
-                type callback_9 =
-                    delegate of error: Exception option * bytes: float -> unit
-
-                type callback_10 =
-                    delegate of error: Exception option * bytes: float -> unit
-
-                type callback_11 =
-                    delegate of error: Exception option * bytes: float -> unit
-
-                type callback_12 =
-                    delegate of error: Exception option * bytes: float -> unit
-
-                type callback_13 =
-                    delegate of error: Exception option * bytes: float -> unit
-
-                type callback_14 =
-                    delegate of error: Exception option * bytes: float -> unit
-
             module addListener_message =
 
                 type listener =
@@ -43588,9 +42819,6 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             module createSocket =
 
                 type callback =
-                    delegate of msg: Node.NonSharedBuffer * rinfo: Node.dgram.RemoteInfo -> unit
-
-                type callback_1 =
                     delegate of msg: Node.NonSharedBuffer * rinfo: Node.dgram.RemoteInfo -> unit
 
     module diagnostics_channel =
@@ -45049,13 +44277,13 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             [<Import("lookup", "dns")>]
             static member lookup (hostname: string, family: float, callback: Exports.lookup.callback) : unit = nativeOnly
             [<Import("lookup", "dns")>]
-            static member lookup (hostname: string, options: Node.dns.LookupOneOptions, callback: Exports.lookup.callback_1) : unit = nativeOnly
+            static member lookup (hostname: string, options: Node.dns.LookupOneOptions, callback: Exports.lookup.callback) : unit = nativeOnly
             [<Import("lookup", "dns")>]
-            static member lookup (hostname: string, options: Node.dns.LookupAllOptions, callback: Exports.lookup.callback_2) : unit = nativeOnly
+            static member lookup (hostname: string, options: Node.dns.LookupAllOptions, callback: Exports.lookup.callback_1) : unit = nativeOnly
             [<Import("lookup", "dns")>]
-            static member lookup (hostname: string, options: Node.dns.LookupOptions, callback: Exports.lookup.callback_3) : unit = nativeOnly
+            static member lookup (hostname: string, options: Node.dns.LookupOptions, callback: Exports.lookup.callback_2) : unit = nativeOnly
             [<Import("lookup", "dns")>]
-            static member lookup (hostname: string, callback: Exports.lookup.callback_4) : unit = nativeOnly
+            static member lookup (hostname: string, callback: Exports.lookup.callback) : unit = nativeOnly
             /// <summary>
             /// Resolves the given <c>address</c> and <c>port</c> into a host name and service using
             /// the operating system's underlying <c>getnameinfo</c> implementation.
@@ -45098,7 +44326,9 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             [<Import("resolve", "dns")>]
             static member resolve (hostname: string, callback: Exports.resolve.callback) : unit = nativeOnly
             [<Import("resolve", "dns")>]
-            static member resolve (hostname: string, rrtype: Exports.resolve.rrtype, callback: Exports.resolve.callback_1) : unit = nativeOnly
+            static member resolve (hostname: string, rrtype: Exports.resolve.rrtype, callback: Exports.resolve.callback) : unit = nativeOnly
+            [<Import("resolve", "dns")>]
+            static member resolve (hostname: string, rrtype: string, callback: Exports.resolve.callback_1) : unit = nativeOnly
             [<Import("resolve", "dns")>]
             static member resolve (hostname: string, rrtype: string, callback: Exports.resolve.callback_2) : unit = nativeOnly
             [<Import("resolve", "dns")>]
@@ -45115,8 +44345,6 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             static member resolve (hostname: string, rrtype: string, callback: Exports.resolve.callback_8) : unit = nativeOnly
             [<Import("resolve", "dns")>]
             static member resolve (hostname: string, rrtype: string, callback: Exports.resolve.callback_9) : unit = nativeOnly
-            [<Import("resolve", "dns")>]
-            static member resolve (hostname: string, rrtype: string, callback: Exports.resolve.callback_10) : unit = nativeOnly
             /// <summary>
             /// Uses the DNS protocol to resolve a IPv4 addresses (<c>A</c> records) for the <c>hostname</c>. The <c>addresses</c> argument passed to the <c>callback</c> function
             /// will contain an array of IPv4 addresses (e.g.<c>['74.125.79.104', '74.125.79.105', '74.125.79.106']</c>).
@@ -45878,13 +45106,13 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             [<Erase>]
             type Exports =
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: address: string * port: float -> JS.Promise<Exports.__promisify___44>
+                abstract member __promisify__: address: string * port: float -> JS.Promise<Exports.__promisify___10>
 
             module Exports =
 
                 [<Global>]
                 [<AllowNullLiteral>]
-                type __promisify___44
+                type __promisify___10
                     [<ParamObject; Emit("$0")>]
                     (
                         hostname: string,
@@ -46472,16 +45700,10 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                     delegate of err: Node.NodeJS.ErrnoException option * address: string * family: float -> unit
 
                 type callback_1 =
-                    delegate of err: Node.NodeJS.ErrnoException option * address: string * family: float -> unit
-
-                type callback_2 =
                     delegate of err: Node.NodeJS.ErrnoException option * addresses: ResizeArray<Node.dns.LookupAddress> -> unit
 
-                type callback_3 =
+                type callback_2 =
                     delegate of err: Node.NodeJS.ErrnoException option * address: U2<string, ResizeArray<Node.dns.LookupAddress>> * family: float -> unit
-
-                type callback_4 =
-                    delegate of err: Node.NodeJS.ErrnoException option * address: string * family: float -> unit
 
             module lookupService =
 
@@ -46503,33 +45725,30 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                     | PTR
 
                 type callback_1 =
-                    delegate of err: Node.NodeJS.ErrnoException option * addresses: ResizeArray<string> -> unit
-
-                type callback_2 =
                     delegate of err: Node.NodeJS.ErrnoException option * addresses: ResizeArray<Node.dns.AnyRecord> -> unit
 
-                type callback_3 =
+                type callback_2 =
                     delegate of err: Node.NodeJS.ErrnoException option * address: ResizeArray<Node.dns.CaaRecord> -> unit
 
-                type callback_4 =
+                type callback_3 =
                     delegate of err: Node.NodeJS.ErrnoException option * addresses: ResizeArray<Node.dns.MxRecord> -> unit
 
-                type callback_5 =
+                type callback_4 =
                     delegate of err: Node.NodeJS.ErrnoException option * addresses: ResizeArray<Node.dns.NaptrRecord> -> unit
 
-                type callback_6 =
+                type callback_5 =
                     delegate of err: Node.NodeJS.ErrnoException option * addresses: Node.dns.SoaRecord -> unit
 
-                type callback_7 =
+                type callback_6 =
                     delegate of err: Node.NodeJS.ErrnoException option * addresses: ResizeArray<Node.dns.SrvRecord> -> unit
 
-                type callback_8 =
+                type callback_7 =
                     delegate of err: Node.NodeJS.ErrnoException option * addresses: ResizeArray<Node.dns.TlsaRecord> -> unit
 
-                type callback_9 =
+                type callback_8 =
                     delegate of err: Node.NodeJS.ErrnoException option * addresses: ResizeArray<ResizeArray<string>> -> unit
 
-                type callback_10 =
+                type callback_9 =
                     delegate of err: Node.NodeJS.ErrnoException option * addresses: U9<ResizeArray<string>, ResizeArray<Node.dns.CaaRecord>, ResizeArray<Node.dns.MxRecord>, ResizeArray<Node.dns.NaptrRecord>, Node.dns.SoaRecord, ResizeArray<Node.dns.SrvRecord>, ResizeArray<Node.dns.TlsaRecord>, ResizeArray<ResizeArray<string>>, ResizeArray<Node.dns.AnyRecord>> -> unit
 
             module resolve4 =
@@ -46736,7 +45955,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             [<Import("resolve", "dns/promises")>]
             static member resolve (hostname: string) : JS.Promise<ResizeArray<string>> = nativeOnly
             [<Import("resolve", "dns/promises")>]
-            static member resolve (hostname: string, rrtype: Exports.resolve.rrtype.rrtype_1) : JS.Promise<ResizeArray<string>> = nativeOnly
+            static member resolve (hostname: string, rrtype: Exports.resolve.rrtype_1) : JS.Promise<ResizeArray<string>> = nativeOnly
             [<Import("resolve", "dns/promises")>]
             static member resolve (hostname: string, rrtype: string) : JS.Promise<ResizeArray<Node.dns.AnyRecord>> = nativeOnly
             /// <summary>
@@ -46943,7 +46162,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// * <c>verbatim</c>: for <c>verbatim</c> defaulting to <c>true</c>.
             /// </summary>
             [<Import("getDefaultResultOrder", "dns/promises")>]
-            static member getDefaultResultOrder () : Exports.getDefaultResultOrder.getDefaultResultOrder_1 = nativeOnly
+            static member getDefaultResultOrder () : Exports.getDefaultResultOrder_1 = nativeOnly
             /// <summary>
             /// Sets the IP address and port of servers to be used when performing DNS
             /// resolution. The <c>servers</c> argument is an array of [RFC 5952](https://tools.ietf.org/html/rfc5952#section-6) formatted
@@ -46989,7 +46208,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// must be <c>'ipv4first'</c>, <c>'ipv6first'</c> or <c>'verbatim'</c>.
             /// </param>
             [<Import("setDefaultResultOrder", "dns/promises")>]
-            static member setDefaultResultOrder (order: Exports.setDefaultResultOrder.order.order_1) : unit = nativeOnly
+            static member setDefaultResultOrder (order: Exports.setDefaultResultOrder.order_1) : unit = nativeOnly
             [<Import("NODATA", "dns/promises")>]
             static member inline NODATA: string = nativeOnly
             [<Import("FORMERR", "dns/promises")>]
@@ -47142,37 +46361,31 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 member val hostname : string = nativeOnly with get, set
                 member val service : string = nativeOnly with get, set
 
+            [<RequireQualifiedAccess>]
+            [<StringEnum(CaseRules.None)>]
+            type getDefaultResultOrder_1 =
+                | ipv4first
+                | verbatim
+
             module resolve =
-
-                module rrtype =
-
-                    [<RequireQualifiedAccess>]
-                    [<StringEnum(CaseRules.None)>]
-                    type rrtype_1 =
-                        | A
-                        | AAAA
-                        | CNAME
-                        | NS
-                        | PTR
-
-            module getDefaultResultOrder =
 
                 [<RequireQualifiedAccess>]
                 [<StringEnum(CaseRules.None)>]
-                type getDefaultResultOrder_1 =
-                    | ipv4first
-                    | verbatim
+                type rrtype_1 =
+                    | A
+                    | AAAA
+                    | CNAME
+                    | NS
+                    | PTR
 
             module setDefaultResultOrder =
 
-                module order =
-
-                    [<RequireQualifiedAccess>]
-                    [<StringEnum(CaseRules.None)>]
-                    type order_1 =
-                        | ipv4first
-                        | ipv6first
-                        | verbatim
+                [<RequireQualifiedAccess>]
+                [<StringEnum(CaseRules.None)>]
+                type order_1 =
+                    | ipv4first
+                    | ipv6first
+                    | verbatim
 
     module domain =
 
@@ -49765,7 +48978,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </code>
             /// </summary>
             [<Import("stat", "fs")>]
-            static member stat (path: Node.Buffer, callback: Exports.stat.callback_1) : unit = nativeOnly
+            static member stat (path: Node.Buffer, callback: Exports.stat.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous [<c>stat(2)</c>](http://man7.org/linux/man-pages/man2/stat.2.html). The callback gets two arguments <c>(err, stats)</c> where<c>stats</c> is an <c>fs.Stats</c> object.
             ///
@@ -49851,25 +49064,25 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </code>
             /// </summary>
             [<Import("stat", "fs")>]
-            static member stat (path: Node.url.URL, callback: Exports.stat.callback_2) : unit = nativeOnly
+            static member stat (path: Node.url.URL, callback: Exports.stat.callback) : unit = nativeOnly
             [<Import("stat", "fs")>]
-            static member stat (path: string, options: obj option, callback: Exports.stat.callback_3) : unit = nativeOnly
+            static member stat (path: string, options: obj option, callback: Exports.stat.callback) : unit = nativeOnly
             [<Import("stat", "fs")>]
-            static member stat (path: Node.Buffer, options: obj option, callback: Exports.stat.callback_4) : unit = nativeOnly
+            static member stat (path: Node.Buffer, options: obj option, callback: Exports.stat.callback) : unit = nativeOnly
             [<Import("stat", "fs")>]
-            static member stat (path: Node.url.URL, options: obj option, callback: Exports.stat.callback_5) : unit = nativeOnly
+            static member stat (path: Node.url.URL, options: obj option, callback: Exports.stat.callback) : unit = nativeOnly
             [<Import("stat", "fs")>]
-            static member stat (path: string, options: obj, callback: Exports.stat.callback_6) : unit = nativeOnly
+            static member stat (path: string, options: obj, callback: Exports.stat.callback_1) : unit = nativeOnly
             [<Import("stat", "fs")>]
-            static member stat (path: Node.Buffer, options: obj, callback: Exports.stat.callback_7) : unit = nativeOnly
+            static member stat (path: Node.Buffer, options: obj, callback: Exports.stat.callback_1) : unit = nativeOnly
             [<Import("stat", "fs")>]
-            static member stat (path: Node.url.URL, options: obj, callback: Exports.stat.callback_8) : unit = nativeOnly
+            static member stat (path: Node.url.URL, options: obj, callback: Exports.stat.callback_1) : unit = nativeOnly
             [<Import("stat", "fs")>]
-            static member stat (path: string, options: Node.fs.StatOptions option, callback: Exports.stat.callback_9) : unit = nativeOnly
+            static member stat (path: string, options: Node.fs.StatOptions option, callback: Exports.stat.callback_2) : unit = nativeOnly
             [<Import("stat", "fs")>]
-            static member stat (path: Node.Buffer, options: Node.fs.StatOptions option, callback: Exports.stat.callback_10) : unit = nativeOnly
+            static member stat (path: Node.Buffer, options: Node.fs.StatOptions option, callback: Exports.stat.callback_2) : unit = nativeOnly
             [<Import("stat", "fs")>]
-            static member stat (path: Node.url.URL, options: Node.fs.StatOptions option, callback: Exports.stat.callback_11) : unit = nativeOnly
+            static member stat (path: Node.url.URL, options: Node.fs.StatOptions option, callback: Exports.stat.callback_2) : unit = nativeOnly
             /// <summary>
             /// Synchronous stat(2) - Get file status.
             /// </summary>
@@ -49886,11 +49099,11 @@ EventEmitter.defaultMaxListeners = $0"""
             [<Import("fstat", "fs")>]
             static member fstat (fd: float, callback: Exports.fstat.callback) : unit = nativeOnly
             [<Import("fstat", "fs")>]
-            static member fstat (fd: float, options: obj option, callback: Exports.fstat.callback_1) : unit = nativeOnly
+            static member fstat (fd: float, options: obj option, callback: Exports.fstat.callback) : unit = nativeOnly
             [<Import("fstat", "fs")>]
-            static member fstat (fd: float, options: obj, callback: Exports.fstat.callback_2) : unit = nativeOnly
+            static member fstat (fd: float, options: obj, callback: Exports.fstat.callback_1) : unit = nativeOnly
             [<Import("fstat", "fs")>]
-            static member fstat (fd: float, options: Node.fs.StatOptions option, callback: Exports.fstat.callback_3) : unit = nativeOnly
+            static member fstat (fd: float, options: Node.fs.StatOptions option, callback: Exports.fstat.callback_2) : unit = nativeOnly
             /// <summary>
             /// Retrieves the <c>fs.Stats</c> for the file descriptor.
             ///
@@ -49919,7 +49132,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// See the POSIX [<c>lstat(2)</c>](http://man7.org/linux/man-pages/man2/lstat.2.html) documentation for more details.
             /// </summary>
             [<Import("lstat", "fs")>]
-            static member lstat (path: Node.Buffer, callback: Exports.lstat.callback_1) : unit = nativeOnly
+            static member lstat (path: Node.Buffer, callback: Exports.lstat.callback) : unit = nativeOnly
             /// <summary>
             /// Retrieves the <c>fs.Stats</c> for the symbolic link referred to by the path.
             /// The callback gets two arguments <c>(err, stats)</c> where <c>stats</c> is a <c>fs.Stats</c> object. <c>lstat()</c> is identical to <c>stat()</c>, except that if <c>path</c> is a symbolic
@@ -49928,25 +49141,25 @@ EventEmitter.defaultMaxListeners = $0"""
             /// See the POSIX [<c>lstat(2)</c>](http://man7.org/linux/man-pages/man2/lstat.2.html) documentation for more details.
             /// </summary>
             [<Import("lstat", "fs")>]
-            static member lstat (path: Node.url.URL, callback: Exports.lstat.callback_2) : unit = nativeOnly
+            static member lstat (path: Node.url.URL, callback: Exports.lstat.callback) : unit = nativeOnly
             [<Import("lstat", "fs")>]
-            static member lstat (path: string, options: obj option, callback: Exports.lstat.callback_3) : unit = nativeOnly
+            static member lstat (path: string, options: obj option, callback: Exports.lstat.callback) : unit = nativeOnly
             [<Import("lstat", "fs")>]
-            static member lstat (path: Node.Buffer, options: obj option, callback: Exports.lstat.callback_4) : unit = nativeOnly
+            static member lstat (path: Node.Buffer, options: obj option, callback: Exports.lstat.callback) : unit = nativeOnly
             [<Import("lstat", "fs")>]
-            static member lstat (path: Node.url.URL, options: obj option, callback: Exports.lstat.callback_5) : unit = nativeOnly
+            static member lstat (path: Node.url.URL, options: obj option, callback: Exports.lstat.callback) : unit = nativeOnly
             [<Import("lstat", "fs")>]
-            static member lstat (path: string, options: obj, callback: Exports.lstat.callback_6) : unit = nativeOnly
+            static member lstat (path: string, options: obj, callback: Exports.lstat.callback_1) : unit = nativeOnly
             [<Import("lstat", "fs")>]
-            static member lstat (path: Node.Buffer, options: obj, callback: Exports.lstat.callback_7) : unit = nativeOnly
+            static member lstat (path: Node.Buffer, options: obj, callback: Exports.lstat.callback_1) : unit = nativeOnly
             [<Import("lstat", "fs")>]
-            static member lstat (path: Node.url.URL, options: obj, callback: Exports.lstat.callback_8) : unit = nativeOnly
+            static member lstat (path: Node.url.URL, options: obj, callback: Exports.lstat.callback_1) : unit = nativeOnly
             [<Import("lstat", "fs")>]
-            static member lstat (path: string, options: Node.fs.StatOptions option, callback: Exports.lstat.callback_9) : unit = nativeOnly
+            static member lstat (path: string, options: Node.fs.StatOptions option, callback: Exports.lstat.callback_2) : unit = nativeOnly
             [<Import("lstat", "fs")>]
-            static member lstat (path: Node.Buffer, options: Node.fs.StatOptions option, callback: Exports.lstat.callback_10) : unit = nativeOnly
+            static member lstat (path: Node.Buffer, options: Node.fs.StatOptions option, callback: Exports.lstat.callback_2) : unit = nativeOnly
             [<Import("lstat", "fs")>]
-            static member lstat (path: Node.url.URL, options: Node.fs.StatOptions option, callback: Exports.lstat.callback_11) : unit = nativeOnly
+            static member lstat (path: Node.url.URL, options: Node.fs.StatOptions option, callback: Exports.lstat.callback_2) : unit = nativeOnly
             /// <summary>
             /// Asynchronous [<c>statfs(2)</c>](http://man7.org/linux/man-pages/man2/statfs.2.html). Returns information about the mounted file system which
             /// contains <c>path</c>. The callback gets two arguments <c>(err, stats)</c> where <c>stats</c>is an <c>fs.StatFs</c> object.
@@ -49968,7 +49181,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// A path to an existing file or directory on the file system to be queried.
             /// </param>
             [<Import("statfs", "fs")>]
-            static member statfs (path: Node.Buffer, callback: Exports.statfs.callback_1) : unit = nativeOnly
+            static member statfs (path: Node.Buffer, callback: Exports.statfs.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous [<c>statfs(2)</c>](http://man7.org/linux/man-pages/man2/statfs.2.html). Returns information about the mounted file system which
             /// contains <c>path</c>. The callback gets two arguments <c>(err, stats)</c> where <c>stats</c>is an <c>fs.StatFs</c> object.
@@ -49979,25 +49192,25 @@ EventEmitter.defaultMaxListeners = $0"""
             /// A path to an existing file or directory on the file system to be queried.
             /// </param>
             [<Import("statfs", "fs")>]
-            static member statfs (path: Node.url.URL, callback: Exports.statfs.callback_2) : unit = nativeOnly
+            static member statfs (path: Node.url.URL, callback: Exports.statfs.callback) : unit = nativeOnly
             [<Import("statfs", "fs")>]
-            static member statfs (path: string, options: obj option, callback: Exports.statfs.callback_3) : unit = nativeOnly
+            static member statfs (path: string, options: obj option, callback: Exports.statfs.callback) : unit = nativeOnly
             [<Import("statfs", "fs")>]
-            static member statfs (path: Node.Buffer, options: obj option, callback: Exports.statfs.callback_4) : unit = nativeOnly
+            static member statfs (path: Node.Buffer, options: obj option, callback: Exports.statfs.callback) : unit = nativeOnly
             [<Import("statfs", "fs")>]
-            static member statfs (path: Node.url.URL, options: obj option, callback: Exports.statfs.callback_5) : unit = nativeOnly
+            static member statfs (path: Node.url.URL, options: obj option, callback: Exports.statfs.callback) : unit = nativeOnly
             [<Import("statfs", "fs")>]
-            static member statfs (path: string, options: obj, callback: Exports.statfs.callback_6) : unit = nativeOnly
+            static member statfs (path: string, options: obj, callback: Exports.statfs.callback_1) : unit = nativeOnly
             [<Import("statfs", "fs")>]
-            static member statfs (path: Node.Buffer, options: obj, callback: Exports.statfs.callback_7) : unit = nativeOnly
+            static member statfs (path: Node.Buffer, options: obj, callback: Exports.statfs.callback_1) : unit = nativeOnly
             [<Import("statfs", "fs")>]
-            static member statfs (path: Node.url.URL, options: obj, callback: Exports.statfs.callback_8) : unit = nativeOnly
+            static member statfs (path: Node.url.URL, options: obj, callback: Exports.statfs.callback_1) : unit = nativeOnly
             [<Import("statfs", "fs")>]
-            static member statfs (path: string, options: Node.fs.StatFsOptions option, callback: Exports.statfs.callback_9) : unit = nativeOnly
+            static member statfs (path: string, options: Node.fs.StatFsOptions option, callback: Exports.statfs.callback_2) : unit = nativeOnly
             [<Import("statfs", "fs")>]
-            static member statfs (path: Node.Buffer, options: Node.fs.StatFsOptions option, callback: Exports.statfs.callback_10) : unit = nativeOnly
+            static member statfs (path: Node.Buffer, options: Node.fs.StatFsOptions option, callback: Exports.statfs.callback_2) : unit = nativeOnly
             [<Import("statfs", "fs")>]
-            static member statfs (path: Node.url.URL, options: Node.fs.StatFsOptions option, callback: Exports.statfs.callback_11) : unit = nativeOnly
+            static member statfs (path: Node.url.URL, options: Node.fs.StatFsOptions option, callback: Exports.statfs.callback_2) : unit = nativeOnly
             /// <summary>
             /// Synchronous [<c>statfs(2)</c>](http://man7.org/linux/man-pages/man2/statfs.2.html). Returns information about the mounted file system which
             /// contains <c>path</c>.
@@ -50706,7 +49919,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// the link path returned will be passed as a <c>Buffer</c> object.
             /// </summary>
             [<Import("readlink", "fs")>]
-            static member readlink (path: string, options: Node.BufferEncoding option, callback: Exports.readlink.callback_1) : unit = nativeOnly
+            static member readlink (path: string, options: Node.BufferEncoding option, callback: Exports.readlink.callback) : unit = nativeOnly
             /// <summary>
             /// Reads the contents of the symbolic link referred to by <c>path</c>. The callback gets
             /// two arguments <c>(err, linkString)</c>.
@@ -50718,47 +49931,124 @@ EventEmitter.defaultMaxListeners = $0"""
             /// the link path passed to the callback. If the <c>encoding</c> is set to <c>'buffer'</c>,
             /// the link path returned will be passed as a <c>Buffer</c> object.
             /// </summary>
+            [<Import("readlink", "fs")>]
+            static member readlink (path: Node.Buffer, options: Node.fs.ObjectEncodingOptions option, callback: Exports.readlink.callback) : unit = nativeOnly
+            /// <summary>
+            /// Reads the contents of the symbolic link referred to by <c>path</c>. The callback gets
+            /// two arguments <c>(err, linkString)</c>.
+            ///
+            /// See the POSIX [<c>readlink(2)</c>](http://man7.org/linux/man-pages/man2/readlink.2.html) documentation for more details.
+            ///
+            /// The optional <c>options</c> argument can be a string specifying an encoding, or an
+            /// object with an <c>encoding</c> property specifying the character encoding to use for
+            /// the link path passed to the callback. If the <c>encoding</c> is set to <c>'buffer'</c>,
+            /// the link path returned will be passed as a <c>Buffer</c> object.
+            /// </summary>
+            [<Import("readlink", "fs")>]
+            static member readlink (path: Node.Buffer, options: Node.BufferEncoding option, callback: Exports.readlink.callback) : unit = nativeOnly
+            /// <summary>
+            /// Reads the contents of the symbolic link referred to by <c>path</c>. The callback gets
+            /// two arguments <c>(err, linkString)</c>.
+            ///
+            /// See the POSIX [<c>readlink(2)</c>](http://man7.org/linux/man-pages/man2/readlink.2.html) documentation for more details.
+            ///
+            /// The optional <c>options</c> argument can be a string specifying an encoding, or an
+            /// object with an <c>encoding</c> property specifying the character encoding to use for
+            /// the link path passed to the callback. If the <c>encoding</c> is set to <c>'buffer'</c>,
+            /// the link path returned will be passed as a <c>Buffer</c> object.
+            /// </summary>
+            [<Import("readlink", "fs")>]
+            static member readlink (path: Node.url.URL, options: Node.fs.ObjectEncodingOptions option, callback: Exports.readlink.callback) : unit = nativeOnly
+            /// <summary>
+            /// Reads the contents of the symbolic link referred to by <c>path</c>. The callback gets
+            /// two arguments <c>(err, linkString)</c>.
+            ///
+            /// See the POSIX [<c>readlink(2)</c>](http://man7.org/linux/man-pages/man2/readlink.2.html) documentation for more details.
+            ///
+            /// The optional <c>options</c> argument can be a string specifying an encoding, or an
+            /// object with an <c>encoding</c> property specifying the character encoding to use for
+            /// the link path passed to the callback. If the <c>encoding</c> is set to <c>'buffer'</c>,
+            /// the link path returned will be passed as a <c>Buffer</c> object.
+            /// </summary>
+            [<Import("readlink", "fs")>]
+            static member readlink (path: Node.url.URL, options: Node.BufferEncoding option, callback: Exports.readlink.callback) : unit = nativeOnly
+            /// <summary>
+            /// Asynchronous readlink(2) - read value of a symbolic link.
+            /// </summary>
+            /// <param name="path">
+            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
+            /// </param>
+            /// <param name="options">
+            /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
+            /// </param>
+            [<Import("readlink", "fs")>]
+            static member readlink (path: string, options: Node.fs.BufferEncodingOption, callback: Exports.readlink.callback_1) : unit = nativeOnly
+            /// <summary>
+            /// Asynchronous readlink(2) - read value of a symbolic link.
+            /// </summary>
+            /// <param name="path">
+            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
+            /// </param>
+            /// <param name="options">
+            /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
+            /// </param>
+            [<Import("readlink", "fs")>]
+            static member readlink (path: Node.Buffer, options: Node.fs.BufferEncodingOption, callback: Exports.readlink.callback_1) : unit = nativeOnly
+            /// <summary>
+            /// Asynchronous readlink(2) - read value of a symbolic link.
+            /// </summary>
+            /// <param name="path">
+            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
+            /// </param>
+            /// <param name="options">
+            /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
+            /// </param>
+            [<Import("readlink", "fs")>]
+            static member readlink (path: Node.url.URL, options: Node.fs.BufferEncodingOption, callback: Exports.readlink.callback_1) : unit = nativeOnly
+            /// <summary>
+            /// Asynchronous readlink(2) - read value of a symbolic link.
+            /// </summary>
+            /// <param name="path">
+            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
+            /// </param>
+            /// <param name="options">
+            /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
+            /// </param>
+            [<Import("readlink", "fs")>]
+            static member readlink (path: string, options: Node.fs.ObjectEncodingOptions option, callback: Exports.readlink.callback_2) : unit = nativeOnly
+            /// <summary>
+            /// Asynchronous readlink(2) - read value of a symbolic link.
+            /// </summary>
+            /// <param name="path">
+            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
+            /// </param>
+            /// <param name="options">
+            /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
+            /// </param>
+            [<Import("readlink", "fs")>]
+            static member readlink (path: string, options: Node.BufferEncoding option, callback: Exports.readlink.callback_2) : unit = nativeOnly
+            /// <summary>
+            /// Asynchronous readlink(2) - read value of a symbolic link.
+            /// </summary>
+            /// <param name="path">
+            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
+            /// </param>
+            /// <param name="options">
+            /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
+            /// </param>
             [<Import("readlink", "fs")>]
             static member readlink (path: Node.Buffer, options: Node.fs.ObjectEncodingOptions option, callback: Exports.readlink.callback_2) : unit = nativeOnly
             /// <summary>
-            /// Reads the contents of the symbolic link referred to by <c>path</c>. The callback gets
-            /// two arguments <c>(err, linkString)</c>.
-            ///
-            /// See the POSIX [<c>readlink(2)</c>](http://man7.org/linux/man-pages/man2/readlink.2.html) documentation for more details.
-            ///
-            /// The optional <c>options</c> argument can be a string specifying an encoding, or an
-            /// object with an <c>encoding</c> property specifying the character encoding to use for
-            /// the link path passed to the callback. If the <c>encoding</c> is set to <c>'buffer'</c>,
-            /// the link path returned will be passed as a <c>Buffer</c> object.
+            /// Asynchronous readlink(2) - read value of a symbolic link.
             /// </summary>
+            /// <param name="path">
+            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
+            /// </param>
+            /// <param name="options">
+            /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
+            /// </param>
             [<Import("readlink", "fs")>]
-            static member readlink (path: Node.Buffer, options: Node.BufferEncoding option, callback: Exports.readlink.callback_3) : unit = nativeOnly
-            /// <summary>
-            /// Reads the contents of the symbolic link referred to by <c>path</c>. The callback gets
-            /// two arguments <c>(err, linkString)</c>.
-            ///
-            /// See the POSIX [<c>readlink(2)</c>](http://man7.org/linux/man-pages/man2/readlink.2.html) documentation for more details.
-            ///
-            /// The optional <c>options</c> argument can be a string specifying an encoding, or an
-            /// object with an <c>encoding</c> property specifying the character encoding to use for
-            /// the link path passed to the callback. If the <c>encoding</c> is set to <c>'buffer'</c>,
-            /// the link path returned will be passed as a <c>Buffer</c> object.
-            /// </summary>
-            [<Import("readlink", "fs")>]
-            static member readlink (path: Node.url.URL, options: Node.fs.ObjectEncodingOptions option, callback: Exports.readlink.callback_4) : unit = nativeOnly
-            /// <summary>
-            /// Reads the contents of the symbolic link referred to by <c>path</c>. The callback gets
-            /// two arguments <c>(err, linkString)</c>.
-            ///
-            /// See the POSIX [<c>readlink(2)</c>](http://man7.org/linux/man-pages/man2/readlink.2.html) documentation for more details.
-            ///
-            /// The optional <c>options</c> argument can be a string specifying an encoding, or an
-            /// object with an <c>encoding</c> property specifying the character encoding to use for
-            /// the link path passed to the callback. If the <c>encoding</c> is set to <c>'buffer'</c>,
-            /// the link path returned will be passed as a <c>Buffer</c> object.
-            /// </summary>
-            [<Import("readlink", "fs")>]
-            static member readlink (path: Node.url.URL, options: Node.BufferEncoding option, callback: Exports.readlink.callback_5) : unit = nativeOnly
+            static member readlink (path: Node.Buffer, options: Node.BufferEncoding option, callback: Exports.readlink.callback_2) : unit = nativeOnly
             /// <summary>
             /// Asynchronous readlink(2) - read value of a symbolic link.
             /// </summary>
@@ -50769,7 +50059,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
             /// </param>
             [<Import("readlink", "fs")>]
-            static member readlink (path: string, options: Node.fs.BufferEncodingOption, callback: Exports.readlink.callback_6) : unit = nativeOnly
+            static member readlink (path: Node.url.URL, options: Node.fs.ObjectEncodingOptions option, callback: Exports.readlink.callback_2) : unit = nativeOnly
             /// <summary>
             /// Asynchronous readlink(2) - read value of a symbolic link.
             /// </summary>
@@ -50780,84 +50070,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
             /// </param>
             [<Import("readlink", "fs")>]
-            static member readlink (path: Node.Buffer, options: Node.fs.BufferEncodingOption, callback: Exports.readlink.callback_7) : unit = nativeOnly
-            /// <summary>
-            /// Asynchronous readlink(2) - read value of a symbolic link.
-            /// </summary>
-            /// <param name="path">
-            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-            /// </param>
-            /// <param name="options">
-            /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
-            /// </param>
-            [<Import("readlink", "fs")>]
-            static member readlink (path: Node.url.URL, options: Node.fs.BufferEncodingOption, callback: Exports.readlink.callback_8) : unit = nativeOnly
-            /// <summary>
-            /// Asynchronous readlink(2) - read value of a symbolic link.
-            /// </summary>
-            /// <param name="path">
-            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-            /// </param>
-            /// <param name="options">
-            /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
-            /// </param>
-            [<Import("readlink", "fs")>]
-            static member readlink (path: string, options: Node.fs.ObjectEncodingOptions option, callback: Exports.readlink.callback_9) : unit = nativeOnly
-            /// <summary>
-            /// Asynchronous readlink(2) - read value of a symbolic link.
-            /// </summary>
-            /// <param name="path">
-            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-            /// </param>
-            /// <param name="options">
-            /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
-            /// </param>
-            [<Import("readlink", "fs")>]
-            static member readlink (path: string, options: Node.BufferEncoding option, callback: Exports.readlink.callback_10) : unit = nativeOnly
-            /// <summary>
-            /// Asynchronous readlink(2) - read value of a symbolic link.
-            /// </summary>
-            /// <param name="path">
-            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-            /// </param>
-            /// <param name="options">
-            /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
-            /// </param>
-            [<Import("readlink", "fs")>]
-            static member readlink (path: Node.Buffer, options: Node.fs.ObjectEncodingOptions option, callback: Exports.readlink.callback_11) : unit = nativeOnly
-            /// <summary>
-            /// Asynchronous readlink(2) - read value of a symbolic link.
-            /// </summary>
-            /// <param name="path">
-            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-            /// </param>
-            /// <param name="options">
-            /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
-            /// </param>
-            [<Import("readlink", "fs")>]
-            static member readlink (path: Node.Buffer, options: Node.BufferEncoding option, callback: Exports.readlink.callback_12) : unit = nativeOnly
-            /// <summary>
-            /// Asynchronous readlink(2) - read value of a symbolic link.
-            /// </summary>
-            /// <param name="path">
-            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-            /// </param>
-            /// <param name="options">
-            /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
-            /// </param>
-            [<Import("readlink", "fs")>]
-            static member readlink (path: Node.url.URL, options: Node.fs.ObjectEncodingOptions option, callback: Exports.readlink.callback_13) : unit = nativeOnly
-            /// <summary>
-            /// Asynchronous readlink(2) - read value of a symbolic link.
-            /// </summary>
-            /// <param name="path">
-            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-            /// </param>
-            /// <param name="options">
-            /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
-            /// </param>
-            [<Import("readlink", "fs")>]
-            static member readlink (path: Node.url.URL, options: Node.BufferEncoding option, callback: Exports.readlink.callback_14) : unit = nativeOnly
+            static member readlink (path: Node.url.URL, options: Node.BufferEncoding option, callback: Exports.readlink.callback_2) : unit = nativeOnly
             /// <summary>
             /// Asynchronous readlink(2) - read value of a symbolic link.
             /// </summary>
@@ -50865,7 +50078,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
             /// </param>
             [<Import("readlink", "fs")>]
-            static member readlink (path: string, callback: Exports.readlink.callback_15) : unit = nativeOnly
+            static member readlink (path: string, callback: Exports.readlink.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous readlink(2) - read value of a symbolic link.
             /// </summary>
@@ -50873,7 +50086,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
             /// </param>
             [<Import("readlink", "fs")>]
-            static member readlink (path: Node.Buffer, callback: Exports.readlink.callback_16) : unit = nativeOnly
+            static member readlink (path: Node.Buffer, callback: Exports.readlink.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous readlink(2) - read value of a symbolic link.
             /// </summary>
@@ -50881,7 +50094,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
             /// </param>
             [<Import("readlink", "fs")>]
-            static member readlink (path: Node.url.URL, callback: Exports.readlink.callback_17) : unit = nativeOnly
+            static member readlink (path: Node.url.URL, callback: Exports.readlink.callback) : unit = nativeOnly
             /// <summary>
             /// Returns the symbolic link's string value.
             ///
@@ -51076,7 +50289,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// dependent name for that object.
             /// </summary>
             [<Import("realpath", "fs")>]
-            static member realpath (path: string, options: Node.BufferEncoding option, callback: Exports.realpath.callback_1) : unit = nativeOnly
+            static member realpath (path: string, options: Node.BufferEncoding option, callback: Exports.realpath.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronously computes the canonical pathname by resolving <c>.</c>, <c>..</c>, and
             /// symbolic links.
@@ -51102,89 +50315,166 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If <c>path</c> resolves to a socket or a pipe, the function will return a system
             /// dependent name for that object.
             /// </summary>
+            [<Import("realpath", "fs")>]
+            static member realpath (path: Node.Buffer, options: Node.fs.ObjectEncodingOptions option, callback: Exports.realpath.callback) : unit = nativeOnly
+            /// <summary>
+            /// Asynchronously computes the canonical pathname by resolving <c>.</c>, <c>..</c>, and
+            /// symbolic links.
+            ///
+            /// A canonical pathname is not necessarily unique. Hard links and bind mounts can
+            /// expose a file system entity through many pathnames.
+            ///
+            /// This function behaves like [<c>realpath(3)</c>](http://man7.org/linux/man-pages/man3/realpath.3.html), with some exceptions:
+            ///
+            /// 1. No case conversion is performed on case-insensitive file systems.
+            /// 2. The maximum number of symbolic links is platform-independent and generally
+            /// (much) higher than what the native [<c>realpath(3)</c>](http://man7.org/linux/man-pages/man3/realpath.3.html) implementation supports.
+            ///
+            /// The <c>callback</c> gets two arguments <c>(err, resolvedPath)</c>. May use <c>process.cwd</c> to resolve relative paths.
+            ///
+            /// Only paths that can be converted to UTF8 strings are supported.
+            ///
+            /// The optional <c>options</c> argument can be a string specifying an encoding, or an
+            /// object with an <c>encoding</c> property specifying the character encoding to use for
+            /// the path passed to the callback. If the <c>encoding</c> is set to <c>'buffer'</c>,
+            /// the path returned will be passed as a <c>Buffer</c> object.
+            ///
+            /// If <c>path</c> resolves to a socket or a pipe, the function will return a system
+            /// dependent name for that object.
+            /// </summary>
+            [<Import("realpath", "fs")>]
+            static member realpath (path: Node.Buffer, options: Node.BufferEncoding option, callback: Exports.realpath.callback) : unit = nativeOnly
+            /// <summary>
+            /// Asynchronously computes the canonical pathname by resolving <c>.</c>, <c>..</c>, and
+            /// symbolic links.
+            ///
+            /// A canonical pathname is not necessarily unique. Hard links and bind mounts can
+            /// expose a file system entity through many pathnames.
+            ///
+            /// This function behaves like [<c>realpath(3)</c>](http://man7.org/linux/man-pages/man3/realpath.3.html), with some exceptions:
+            ///
+            /// 1. No case conversion is performed on case-insensitive file systems.
+            /// 2. The maximum number of symbolic links is platform-independent and generally
+            /// (much) higher than what the native [<c>realpath(3)</c>](http://man7.org/linux/man-pages/man3/realpath.3.html) implementation supports.
+            ///
+            /// The <c>callback</c> gets two arguments <c>(err, resolvedPath)</c>. May use <c>process.cwd</c> to resolve relative paths.
+            ///
+            /// Only paths that can be converted to UTF8 strings are supported.
+            ///
+            /// The optional <c>options</c> argument can be a string specifying an encoding, or an
+            /// object with an <c>encoding</c> property specifying the character encoding to use for
+            /// the path passed to the callback. If the <c>encoding</c> is set to <c>'buffer'</c>,
+            /// the path returned will be passed as a <c>Buffer</c> object.
+            ///
+            /// If <c>path</c> resolves to a socket or a pipe, the function will return a system
+            /// dependent name for that object.
+            /// </summary>
+            [<Import("realpath", "fs")>]
+            static member realpath (path: Node.url.URL, options: Node.fs.ObjectEncodingOptions option, callback: Exports.realpath.callback) : unit = nativeOnly
+            /// <summary>
+            /// Asynchronously computes the canonical pathname by resolving <c>.</c>, <c>..</c>, and
+            /// symbolic links.
+            ///
+            /// A canonical pathname is not necessarily unique. Hard links and bind mounts can
+            /// expose a file system entity through many pathnames.
+            ///
+            /// This function behaves like [<c>realpath(3)</c>](http://man7.org/linux/man-pages/man3/realpath.3.html), with some exceptions:
+            ///
+            /// 1. No case conversion is performed on case-insensitive file systems.
+            /// 2. The maximum number of symbolic links is platform-independent and generally
+            /// (much) higher than what the native [<c>realpath(3)</c>](http://man7.org/linux/man-pages/man3/realpath.3.html) implementation supports.
+            ///
+            /// The <c>callback</c> gets two arguments <c>(err, resolvedPath)</c>. May use <c>process.cwd</c> to resolve relative paths.
+            ///
+            /// Only paths that can be converted to UTF8 strings are supported.
+            ///
+            /// The optional <c>options</c> argument can be a string specifying an encoding, or an
+            /// object with an <c>encoding</c> property specifying the character encoding to use for
+            /// the path passed to the callback. If the <c>encoding</c> is set to <c>'buffer'</c>,
+            /// the path returned will be passed as a <c>Buffer</c> object.
+            ///
+            /// If <c>path</c> resolves to a socket or a pipe, the function will return a system
+            /// dependent name for that object.
+            /// </summary>
+            [<Import("realpath", "fs")>]
+            static member realpath (path: Node.url.URL, options: Node.BufferEncoding option, callback: Exports.realpath.callback) : unit = nativeOnly
+            /// <summary>
+            /// Asynchronous realpath(3) - return the canonicalized absolute pathname.
+            /// </summary>
+            /// <param name="path">
+            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
+            /// </param>
+            /// <param name="options">
+            /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
+            /// </param>
+            [<Import("realpath", "fs")>]
+            static member realpath (path: string, options: Node.fs.BufferEncodingOption, callback: Exports.realpath.callback_1) : unit = nativeOnly
+            /// <summary>
+            /// Asynchronous realpath(3) - return the canonicalized absolute pathname.
+            /// </summary>
+            /// <param name="path">
+            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
+            /// </param>
+            /// <param name="options">
+            /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
+            /// </param>
+            [<Import("realpath", "fs")>]
+            static member realpath (path: Node.Buffer, options: Node.fs.BufferEncodingOption, callback: Exports.realpath.callback_1) : unit = nativeOnly
+            /// <summary>
+            /// Asynchronous realpath(3) - return the canonicalized absolute pathname.
+            /// </summary>
+            /// <param name="path">
+            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
+            /// </param>
+            /// <param name="options">
+            /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
+            /// </param>
+            [<Import("realpath", "fs")>]
+            static member realpath (path: Node.url.URL, options: Node.fs.BufferEncodingOption, callback: Exports.realpath.callback_1) : unit = nativeOnly
+            /// <summary>
+            /// Asynchronous realpath(3) - return the canonicalized absolute pathname.
+            /// </summary>
+            /// <param name="path">
+            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
+            /// </param>
+            /// <param name="options">
+            /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
+            /// </param>
+            [<Import("realpath", "fs")>]
+            static member realpath (path: string, options: Node.fs.ObjectEncodingOptions option, callback: Exports.realpath.callback_2) : unit = nativeOnly
+            /// <summary>
+            /// Asynchronous realpath(3) - return the canonicalized absolute pathname.
+            /// </summary>
+            /// <param name="path">
+            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
+            /// </param>
+            /// <param name="options">
+            /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
+            /// </param>
+            [<Import("realpath", "fs")>]
+            static member realpath (path: string, options: Node.BufferEncoding option, callback: Exports.realpath.callback_2) : unit = nativeOnly
+            /// <summary>
+            /// Asynchronous realpath(3) - return the canonicalized absolute pathname.
+            /// </summary>
+            /// <param name="path">
+            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
+            /// </param>
+            /// <param name="options">
+            /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
+            /// </param>
             [<Import("realpath", "fs")>]
             static member realpath (path: Node.Buffer, options: Node.fs.ObjectEncodingOptions option, callback: Exports.realpath.callback_2) : unit = nativeOnly
             /// <summary>
-            /// Asynchronously computes the canonical pathname by resolving <c>.</c>, <c>..</c>, and
-            /// symbolic links.
-            ///
-            /// A canonical pathname is not necessarily unique. Hard links and bind mounts can
-            /// expose a file system entity through many pathnames.
-            ///
-            /// This function behaves like [<c>realpath(3)</c>](http://man7.org/linux/man-pages/man3/realpath.3.html), with some exceptions:
-            ///
-            /// 1. No case conversion is performed on case-insensitive file systems.
-            /// 2. The maximum number of symbolic links is platform-independent and generally
-            /// (much) higher than what the native [<c>realpath(3)</c>](http://man7.org/linux/man-pages/man3/realpath.3.html) implementation supports.
-            ///
-            /// The <c>callback</c> gets two arguments <c>(err, resolvedPath)</c>. May use <c>process.cwd</c> to resolve relative paths.
-            ///
-            /// Only paths that can be converted to UTF8 strings are supported.
-            ///
-            /// The optional <c>options</c> argument can be a string specifying an encoding, or an
-            /// object with an <c>encoding</c> property specifying the character encoding to use for
-            /// the path passed to the callback. If the <c>encoding</c> is set to <c>'buffer'</c>,
-            /// the path returned will be passed as a <c>Buffer</c> object.
-            ///
-            /// If <c>path</c> resolves to a socket or a pipe, the function will return a system
-            /// dependent name for that object.
+            /// Asynchronous realpath(3) - return the canonicalized absolute pathname.
             /// </summary>
+            /// <param name="path">
+            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
+            /// </param>
+            /// <param name="options">
+            /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
+            /// </param>
             [<Import("realpath", "fs")>]
-            static member realpath (path: Node.Buffer, options: Node.BufferEncoding option, callback: Exports.realpath.callback_3) : unit = nativeOnly
-            /// <summary>
-            /// Asynchronously computes the canonical pathname by resolving <c>.</c>, <c>..</c>, and
-            /// symbolic links.
-            ///
-            /// A canonical pathname is not necessarily unique. Hard links and bind mounts can
-            /// expose a file system entity through many pathnames.
-            ///
-            /// This function behaves like [<c>realpath(3)</c>](http://man7.org/linux/man-pages/man3/realpath.3.html), with some exceptions:
-            ///
-            /// 1. No case conversion is performed on case-insensitive file systems.
-            /// 2. The maximum number of symbolic links is platform-independent and generally
-            /// (much) higher than what the native [<c>realpath(3)</c>](http://man7.org/linux/man-pages/man3/realpath.3.html) implementation supports.
-            ///
-            /// The <c>callback</c> gets two arguments <c>(err, resolvedPath)</c>. May use <c>process.cwd</c> to resolve relative paths.
-            ///
-            /// Only paths that can be converted to UTF8 strings are supported.
-            ///
-            /// The optional <c>options</c> argument can be a string specifying an encoding, or an
-            /// object with an <c>encoding</c> property specifying the character encoding to use for
-            /// the path passed to the callback. If the <c>encoding</c> is set to <c>'buffer'</c>,
-            /// the path returned will be passed as a <c>Buffer</c> object.
-            ///
-            /// If <c>path</c> resolves to a socket or a pipe, the function will return a system
-            /// dependent name for that object.
-            /// </summary>
-            [<Import("realpath", "fs")>]
-            static member realpath (path: Node.url.URL, options: Node.fs.ObjectEncodingOptions option, callback: Exports.realpath.callback_4) : unit = nativeOnly
-            /// <summary>
-            /// Asynchronously computes the canonical pathname by resolving <c>.</c>, <c>..</c>, and
-            /// symbolic links.
-            ///
-            /// A canonical pathname is not necessarily unique. Hard links and bind mounts can
-            /// expose a file system entity through many pathnames.
-            ///
-            /// This function behaves like [<c>realpath(3)</c>](http://man7.org/linux/man-pages/man3/realpath.3.html), with some exceptions:
-            ///
-            /// 1. No case conversion is performed on case-insensitive file systems.
-            /// 2. The maximum number of symbolic links is platform-independent and generally
-            /// (much) higher than what the native [<c>realpath(3)</c>](http://man7.org/linux/man-pages/man3/realpath.3.html) implementation supports.
-            ///
-            /// The <c>callback</c> gets two arguments <c>(err, resolvedPath)</c>. May use <c>process.cwd</c> to resolve relative paths.
-            ///
-            /// Only paths that can be converted to UTF8 strings are supported.
-            ///
-            /// The optional <c>options</c> argument can be a string specifying an encoding, or an
-            /// object with an <c>encoding</c> property specifying the character encoding to use for
-            /// the path passed to the callback. If the <c>encoding</c> is set to <c>'buffer'</c>,
-            /// the path returned will be passed as a <c>Buffer</c> object.
-            ///
-            /// If <c>path</c> resolves to a socket or a pipe, the function will return a system
-            /// dependent name for that object.
-            /// </summary>
-            [<Import("realpath", "fs")>]
-            static member realpath (path: Node.url.URL, options: Node.BufferEncoding option, callback: Exports.realpath.callback_5) : unit = nativeOnly
+            static member realpath (path: Node.Buffer, options: Node.BufferEncoding option, callback: Exports.realpath.callback_2) : unit = nativeOnly
             /// <summary>
             /// Asynchronous realpath(3) - return the canonicalized absolute pathname.
             /// </summary>
@@ -51195,7 +50485,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
             /// </param>
             [<Import("realpath", "fs")>]
-            static member realpath (path: string, options: Node.fs.BufferEncodingOption, callback: Exports.realpath.callback_6) : unit = nativeOnly
+            static member realpath (path: Node.url.URL, options: Node.fs.ObjectEncodingOptions option, callback: Exports.realpath.callback_2) : unit = nativeOnly
             /// <summary>
             /// Asynchronous realpath(3) - return the canonicalized absolute pathname.
             /// </summary>
@@ -51206,84 +50496,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
             /// </param>
             [<Import("realpath", "fs")>]
-            static member realpath (path: Node.Buffer, options: Node.fs.BufferEncodingOption, callback: Exports.realpath.callback_7) : unit = nativeOnly
-            /// <summary>
-            /// Asynchronous realpath(3) - return the canonicalized absolute pathname.
-            /// </summary>
-            /// <param name="path">
-            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-            /// </param>
-            /// <param name="options">
-            /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
-            /// </param>
-            [<Import("realpath", "fs")>]
-            static member realpath (path: Node.url.URL, options: Node.fs.BufferEncodingOption, callback: Exports.realpath.callback_8) : unit = nativeOnly
-            /// <summary>
-            /// Asynchronous realpath(3) - return the canonicalized absolute pathname.
-            /// </summary>
-            /// <param name="path">
-            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-            /// </param>
-            /// <param name="options">
-            /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
-            /// </param>
-            [<Import("realpath", "fs")>]
-            static member realpath (path: string, options: Node.fs.ObjectEncodingOptions option, callback: Exports.realpath.callback_9) : unit = nativeOnly
-            /// <summary>
-            /// Asynchronous realpath(3) - return the canonicalized absolute pathname.
-            /// </summary>
-            /// <param name="path">
-            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-            /// </param>
-            /// <param name="options">
-            /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
-            /// </param>
-            [<Import("realpath", "fs")>]
-            static member realpath (path: string, options: Node.BufferEncoding option, callback: Exports.realpath.callback_10) : unit = nativeOnly
-            /// <summary>
-            /// Asynchronous realpath(3) - return the canonicalized absolute pathname.
-            /// </summary>
-            /// <param name="path">
-            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-            /// </param>
-            /// <param name="options">
-            /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
-            /// </param>
-            [<Import("realpath", "fs")>]
-            static member realpath (path: Node.Buffer, options: Node.fs.ObjectEncodingOptions option, callback: Exports.realpath.callback_11) : unit = nativeOnly
-            /// <summary>
-            /// Asynchronous realpath(3) - return the canonicalized absolute pathname.
-            /// </summary>
-            /// <param name="path">
-            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-            /// </param>
-            /// <param name="options">
-            /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
-            /// </param>
-            [<Import("realpath", "fs")>]
-            static member realpath (path: Node.Buffer, options: Node.BufferEncoding option, callback: Exports.realpath.callback_12) : unit = nativeOnly
-            /// <summary>
-            /// Asynchronous realpath(3) - return the canonicalized absolute pathname.
-            /// </summary>
-            /// <param name="path">
-            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-            /// </param>
-            /// <param name="options">
-            /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
-            /// </param>
-            [<Import("realpath", "fs")>]
-            static member realpath (path: Node.url.URL, options: Node.fs.ObjectEncodingOptions option, callback: Exports.realpath.callback_13) : unit = nativeOnly
-            /// <summary>
-            /// Asynchronous realpath(3) - return the canonicalized absolute pathname.
-            /// </summary>
-            /// <param name="path">
-            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-            /// </param>
-            /// <param name="options">
-            /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
-            /// </param>
-            [<Import("realpath", "fs")>]
-            static member realpath (path: Node.url.URL, options: Node.BufferEncoding option, callback: Exports.realpath.callback_14) : unit = nativeOnly
+            static member realpath (path: Node.url.URL, options: Node.BufferEncoding option, callback: Exports.realpath.callback_2) : unit = nativeOnly
             /// <summary>
             /// Asynchronous realpath(3) - return the canonicalized absolute pathname.
             /// </summary>
@@ -51291,7 +50504,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
             /// </param>
             [<Import("realpath", "fs")>]
-            static member realpath (path: string, callback: Exports.realpath.callback_15) : unit = nativeOnly
+            static member realpath (path: string, callback: Exports.realpath.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous realpath(3) - return the canonicalized absolute pathname.
             /// </summary>
@@ -51299,7 +50512,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
             /// </param>
             [<Import("realpath", "fs")>]
-            static member realpath (path: Node.Buffer, callback: Exports.realpath.callback_16) : unit = nativeOnly
+            static member realpath (path: Node.Buffer, callback: Exports.realpath.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous realpath(3) - return the canonicalized absolute pathname.
             /// </summary>
@@ -51307,7 +50520,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
             /// </param>
             [<Import("realpath", "fs")>]
-            static member realpath (path: Node.url.URL, callback: Exports.realpath.callback_17) : unit = nativeOnly
+            static member realpath (path: Node.url.URL, callback: Exports.realpath.callback) : unit = nativeOnly
             /// <summary>
             /// Returns the resolved pathname.
             ///
@@ -51669,7 +50882,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// See the POSIX [<c>mkdir(2)</c>](http://man7.org/linux/man-pages/man2/mkdir.2.html) documentation for more details.
             /// </summary>
             [<Import("mkdir", "fs")>]
-            static member mkdir (path: Node.Buffer, options: obj, callback: Exports.mkdir.callback_1) : unit = nativeOnly
+            static member mkdir (path: Node.Buffer, options: obj, callback: Exports.mkdir.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronously creates a directory.
             ///
@@ -51706,7 +50919,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// See the POSIX [<c>mkdir(2)</c>](http://man7.org/linux/man-pages/man2/mkdir.2.html) documentation for more details.
             /// </summary>
             [<Import("mkdir", "fs")>]
-            static member mkdir (path: Node.url.URL, options: obj, callback: Exports.mkdir.callback_2) : unit = nativeOnly
+            static member mkdir (path: Node.url.URL, options: obj, callback: Exports.mkdir.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous mkdir(2) - create a directory.
             /// </summary>
@@ -51826,7 +51039,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// should be created. If a string is passed, it is parsed as an octal integer. If not specified, defaults to <c>0o777</c>.
             /// </param>
             [<Import("mkdir", "fs")>]
-            static member mkdir (path: string, options: float option, callback: Exports.mkdir.callback_3) : unit = nativeOnly
+            static member mkdir (path: string, options: float option, callback: Exports.mkdir.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous mkdir(2) - create a directory.
             /// </summary>
@@ -51838,7 +51051,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// should be created. If a string is passed, it is parsed as an octal integer. If not specified, defaults to <c>0o777</c>.
             /// </param>
             [<Import("mkdir", "fs")>]
-            static member mkdir (path: string, options: string option, callback: Exports.mkdir.callback_4) : unit = nativeOnly
+            static member mkdir (path: string, options: string option, callback: Exports.mkdir.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous mkdir(2) - create a directory.
             /// </summary>
@@ -51850,7 +51063,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// should be created. If a string is passed, it is parsed as an octal integer. If not specified, defaults to <c>0o777</c>.
             /// </param>
             [<Import("mkdir", "fs")>]
-            static member mkdir (path: string, options: Node.fs.MakeDirectoryOptions option, callback: Exports.mkdir.callback_5) : unit = nativeOnly
+            static member mkdir (path: string, options: Node.fs.MakeDirectoryOptions option, callback: Exports.mkdir.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous mkdir(2) - create a directory.
             /// </summary>
@@ -51862,7 +51075,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// should be created. If a string is passed, it is parsed as an octal integer. If not specified, defaults to <c>0o777</c>.
             /// </param>
             [<Import("mkdir", "fs")>]
-            static member mkdir (path: Node.Buffer, options: float option, callback: Exports.mkdir.callback_6) : unit = nativeOnly
+            static member mkdir (path: Node.Buffer, options: float option, callback: Exports.mkdir.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous mkdir(2) - create a directory.
             /// </summary>
@@ -51874,7 +51087,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// should be created. If a string is passed, it is parsed as an octal integer. If not specified, defaults to <c>0o777</c>.
             /// </param>
             [<Import("mkdir", "fs")>]
-            static member mkdir (path: Node.Buffer, options: string option, callback: Exports.mkdir.callback_7) : unit = nativeOnly
+            static member mkdir (path: Node.Buffer, options: string option, callback: Exports.mkdir.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous mkdir(2) - create a directory.
             /// </summary>
@@ -51886,7 +51099,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// should be created. If a string is passed, it is parsed as an octal integer. If not specified, defaults to <c>0o777</c>.
             /// </param>
             [<Import("mkdir", "fs")>]
-            static member mkdir (path: Node.Buffer, options: Node.fs.MakeDirectoryOptions option, callback: Exports.mkdir.callback_8) : unit = nativeOnly
+            static member mkdir (path: Node.Buffer, options: Node.fs.MakeDirectoryOptions option, callback: Exports.mkdir.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous mkdir(2) - create a directory.
             /// </summary>
@@ -51898,7 +51111,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// should be created. If a string is passed, it is parsed as an octal integer. If not specified, defaults to <c>0o777</c>.
             /// </param>
             [<Import("mkdir", "fs")>]
-            static member mkdir (path: Node.url.URL, options: float option, callback: Exports.mkdir.callback_9) : unit = nativeOnly
+            static member mkdir (path: Node.url.URL, options: float option, callback: Exports.mkdir.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous mkdir(2) - create a directory.
             /// </summary>
@@ -51910,7 +51123,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// should be created. If a string is passed, it is parsed as an octal integer. If not specified, defaults to <c>0o777</c>.
             /// </param>
             [<Import("mkdir", "fs")>]
-            static member mkdir (path: Node.url.URL, options: string option, callback: Exports.mkdir.callback_10) : unit = nativeOnly
+            static member mkdir (path: Node.url.URL, options: string option, callback: Exports.mkdir.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous mkdir(2) - create a directory.
             /// </summary>
@@ -51922,7 +51135,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// should be created. If a string is passed, it is parsed as an octal integer. If not specified, defaults to <c>0o777</c>.
             /// </param>
             [<Import("mkdir", "fs")>]
-            static member mkdir (path: Node.url.URL, options: Node.fs.MakeDirectoryOptions option, callback: Exports.mkdir.callback_11) : unit = nativeOnly
+            static member mkdir (path: Node.url.URL, options: Node.fs.MakeDirectoryOptions option, callback: Exports.mkdir.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous mkdir(2) - create a directory with a mode of <c>0o777</c>.
             /// </summary>
@@ -52234,7 +51447,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </c><c></c>
             /// </summary>
             [<Import("mkdtemp", "fs")>]
-            static member mkdtemp (prefix: string, options: Node.BufferEncoding option, callback: Exports.mkdtemp.callback_1) : unit = nativeOnly
+            static member mkdtemp (prefix: string, options: Node.BufferEncoding option, callback: Exports.mkdtemp.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronously creates a unique temporary directory.
             /// Generates six random characters to be appended behind a required prefix to create a unique temporary directory.
@@ -52243,7 +51456,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
             /// </param>
             [<Import("mkdtemp", "fs")>]
-            static member mkdtemp (prefix: string, options: Node.fs.BufferEncodingOption, callback: Exports.mkdtemp.callback_2) : unit = nativeOnly
+            static member mkdtemp (prefix: string, options: Node.fs.BufferEncodingOption, callback: Exports.mkdtemp.callback_1) : unit = nativeOnly
             /// <summary>
             /// Asynchronously creates a unique temporary directory.
             /// Generates six random characters to be appended behind a required prefix to create a unique temporary directory.
@@ -52252,7 +51465,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
             /// </param>
             [<Import("mkdtemp", "fs")>]
-            static member mkdtemp (prefix: string, options: Node.fs.ObjectEncodingOptions option, callback: Exports.mkdtemp.callback_3) : unit = nativeOnly
+            static member mkdtemp (prefix: string, options: Node.fs.ObjectEncodingOptions option, callback: Exports.mkdtemp.callback_2) : unit = nativeOnly
             /// <summary>
             /// Asynchronously creates a unique temporary directory.
             /// Generates six random characters to be appended behind a required prefix to create a unique temporary directory.
@@ -52261,13 +51474,13 @@ EventEmitter.defaultMaxListeners = $0"""
             /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
             /// </param>
             [<Import("mkdtemp", "fs")>]
-            static member mkdtemp (prefix: string, options: Node.BufferEncoding option, callback: Exports.mkdtemp.callback_4) : unit = nativeOnly
+            static member mkdtemp (prefix: string, options: Node.BufferEncoding option, callback: Exports.mkdtemp.callback_2) : unit = nativeOnly
             /// <summary>
             /// Asynchronously creates a unique temporary directory.
             /// Generates six random characters to be appended behind a required prefix to create a unique temporary directory.
             /// </summary>
             [<Import("mkdtemp", "fs")>]
-            static member mkdtemp (prefix: string, callback: Exports.mkdtemp.callback_5) : unit = nativeOnly
+            static member mkdtemp (prefix: string, callback: Exports.mkdtemp.callback) : unit = nativeOnly
             /// <summary>
             /// Returns the created directory path.
             ///
@@ -52337,7 +51550,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If <c>options.withFileTypes</c> is set to <c>true</c>, the <c>files</c> array will contain <c>fs.Dirent</c> objects.
             /// </summary>
             [<Import("readdir", "fs")>]
-            static member readdir (path: string, options: Node.BufferEncoding option, callback: Exports.readdir.callback_1) : unit = nativeOnly
+            static member readdir (path: string, options: Node.BufferEncoding option, callback: Exports.readdir.callback) : unit = nativeOnly
             /// <summary>
             /// Reads the contents of a directory. The callback gets two arguments <c>(err, files)</c> where <c>files</c> is an array of the names of the files in the directory excluding <c>'.'</c> and <c>'..'</c>.
             ///
@@ -52351,7 +51564,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If <c>options.withFileTypes</c> is set to <c>true</c>, the <c>files</c> array will contain <c>fs.Dirent</c> objects.
             /// </summary>
             [<Import("readdir", "fs")>]
-            static member readdir (path: Node.Buffer, options: Exports.readdir.options_1 option, callback: Exports.readdir.callback_2) : unit = nativeOnly
+            static member readdir (path: Node.Buffer, options: Exports.readdir.options option, callback: Exports.readdir.callback) : unit = nativeOnly
             /// <summary>
             /// Reads the contents of a directory. The callback gets two arguments <c>(err, files)</c> where <c>files</c> is an array of the names of the files in the directory excluding <c>'.'</c> and <c>'..'</c>.
             ///
@@ -52365,7 +51578,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If <c>options.withFileTypes</c> is set to <c>true</c>, the <c>files</c> array will contain <c>fs.Dirent</c> objects.
             /// </summary>
             [<Import("readdir", "fs")>]
-            static member readdir (path: Node.Buffer, options: Node.BufferEncoding option, callback: Exports.readdir.callback_3) : unit = nativeOnly
+            static member readdir (path: Node.Buffer, options: Node.BufferEncoding option, callback: Exports.readdir.callback) : unit = nativeOnly
             /// <summary>
             /// Reads the contents of a directory. The callback gets two arguments <c>(err, files)</c> where <c>files</c> is an array of the names of the files in the directory excluding <c>'.'</c> and <c>'..'</c>.
             ///
@@ -52379,7 +51592,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If <c>options.withFileTypes</c> is set to <c>true</c>, the <c>files</c> array will contain <c>fs.Dirent</c> objects.
             /// </summary>
             [<Import("readdir", "fs")>]
-            static member readdir (path: Node.url.URL, options: Exports.readdir.options_2 option, callback: Exports.readdir.callback_4) : unit = nativeOnly
+            static member readdir (path: Node.url.URL, options: Exports.readdir.options option, callback: Exports.readdir.callback) : unit = nativeOnly
             /// <summary>
             /// Reads the contents of a directory. The callback gets two arguments <c>(err, files)</c> where <c>files</c> is an array of the names of the files in the directory excluding <c>'.'</c> and <c>'..'</c>.
             ///
@@ -52393,7 +51606,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If <c>options.withFileTypes</c> is set to <c>true</c>, the <c>files</c> array will contain <c>fs.Dirent</c> objects.
             /// </summary>
             [<Import("readdir", "fs")>]
-            static member readdir (path: Node.url.URL, options: Node.BufferEncoding option, callback: Exports.readdir.callback_5) : unit = nativeOnly
+            static member readdir (path: Node.url.URL, options: Node.BufferEncoding option, callback: Exports.readdir.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous readdir(3) - read a directory.
             /// </summary>
@@ -52404,7 +51617,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
             /// </param>
             [<Import("readdir", "fs")>]
-            static member readdir (path: string, options: Exports.readdir.options.options_3, callback: Exports.readdir.callback_6) : unit = nativeOnly
+            static member readdir (path: string, options: Exports.readdir.options_1, callback: Exports.readdir.callback_1) : unit = nativeOnly
             /// <summary>
             /// Asynchronous readdir(3) - read a directory.
             /// </summary>
@@ -52415,7 +51628,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
             /// </param>
             [<Import("readdir", "fs")>]
-            static member readdir (path: Node.Buffer, options: Exports.readdir.options.options_4, callback: Exports.readdir.callback_7) : unit = nativeOnly
+            static member readdir (path: Node.Buffer, options: Exports.readdir.options_1, callback: Exports.readdir.callback_1) : unit = nativeOnly
             /// <summary>
             /// Asynchronous readdir(3) - read a directory.
             /// </summary>
@@ -52426,7 +51639,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
             /// </param>
             [<Import("readdir", "fs")>]
-            static member readdir (path: Node.url.URL, options: Exports.readdir.options.options_5, callback: Exports.readdir.callback_8) : unit = nativeOnly
+            static member readdir (path: Node.url.URL, options: Exports.readdir.options_1, callback: Exports.readdir.callback_1) : unit = nativeOnly
             /// <summary>
             /// Asynchronous readdir(3) - read a directory.
             /// </summary>
@@ -52437,7 +51650,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
             /// </param>
             [<Import("readdir", "fs")>]
-            static member readdir (path: string, options: Exports.readdir.options_6 option, callback: Exports.readdir.callback_9) : unit = nativeOnly
+            static member readdir (path: string, options: Exports.readdir.options_2 option, callback: Exports.readdir.callback_2) : unit = nativeOnly
             /// <summary>
             /// Asynchronous readdir(3) - read a directory.
             /// </summary>
@@ -52448,7 +51661,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
             /// </param>
             [<Import("readdir", "fs")>]
-            static member readdir (path: string, options: Node.BufferEncoding option, callback: Exports.readdir.callback_10) : unit = nativeOnly
+            static member readdir (path: string, options: Node.BufferEncoding option, callback: Exports.readdir.callback_2) : unit = nativeOnly
             /// <summary>
             /// Asynchronous readdir(3) - read a directory.
             /// </summary>
@@ -52459,7 +51672,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
             /// </param>
             [<Import("readdir", "fs")>]
-            static member readdir (path: Node.Buffer, options: Exports.readdir.options_7 option, callback: Exports.readdir.callback_11) : unit = nativeOnly
+            static member readdir (path: Node.Buffer, options: Exports.readdir.options_2 option, callback: Exports.readdir.callback_2) : unit = nativeOnly
             /// <summary>
             /// Asynchronous readdir(3) - read a directory.
             /// </summary>
@@ -52470,7 +51683,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
             /// </param>
             [<Import("readdir", "fs")>]
-            static member readdir (path: Node.Buffer, options: Node.BufferEncoding option, callback: Exports.readdir.callback_12) : unit = nativeOnly
+            static member readdir (path: Node.Buffer, options: Node.BufferEncoding option, callback: Exports.readdir.callback_2) : unit = nativeOnly
             /// <summary>
             /// Asynchronous readdir(3) - read a directory.
             /// </summary>
@@ -52481,7 +51694,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
             /// </param>
             [<Import("readdir", "fs")>]
-            static member readdir (path: Node.url.URL, options: Exports.readdir.options_8 option, callback: Exports.readdir.callback_13) : unit = nativeOnly
+            static member readdir (path: Node.url.URL, options: Exports.readdir.options_2 option, callback: Exports.readdir.callback_2) : unit = nativeOnly
             /// <summary>
             /// Asynchronous readdir(3) - read a directory.
             /// </summary>
@@ -52492,7 +51705,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
             /// </param>
             [<Import("readdir", "fs")>]
-            static member readdir (path: Node.url.URL, options: Node.BufferEncoding option, callback: Exports.readdir.callback_14) : unit = nativeOnly
+            static member readdir (path: Node.url.URL, options: Node.BufferEncoding option, callback: Exports.readdir.callback_2) : unit = nativeOnly
             /// <summary>
             /// Asynchronous readdir(3) - read a directory.
             /// </summary>
@@ -52500,7 +51713,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
             /// </param>
             [<Import("readdir", "fs")>]
-            static member readdir (path: string, callback: Exports.readdir.callback_15) : unit = nativeOnly
+            static member readdir (path: string, callback: Exports.readdir.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous readdir(3) - read a directory.
             /// </summary>
@@ -52508,7 +51721,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
             /// </param>
             [<Import("readdir", "fs")>]
-            static member readdir (path: Node.Buffer, callback: Exports.readdir.callback_16) : unit = nativeOnly
+            static member readdir (path: Node.Buffer, callback: Exports.readdir.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous readdir(3) - read a directory.
             /// </summary>
@@ -52516,7 +51729,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
             /// </param>
             [<Import("readdir", "fs")>]
-            static member readdir (path: Node.url.URL, callback: Exports.readdir.callback_17) : unit = nativeOnly
+            static member readdir (path: Node.url.URL, callback: Exports.readdir.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous readdir(3) - read a directory.
             /// </summary>
@@ -52527,7 +51740,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If called with <c>withFileTypes: true</c> the result data will be an array of Dirent.
             /// </param>
             [<Import("readdir", "fs")>]
-            static member readdir (path: string, options: Exports.readdir.options_9, callback: Exports.readdir.callback_18) : unit = nativeOnly
+            static member readdir (path: string, options: Exports.readdir.options_3, callback: Exports.readdir.callback_3) : unit = nativeOnly
             /// <summary>
             /// Asynchronous readdir(3) - read a directory.
             /// </summary>
@@ -52538,7 +51751,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If called with <c>withFileTypes: true</c> the result data will be an array of Dirent.
             /// </param>
             [<Import("readdir", "fs")>]
-            static member readdir (path: Node.Buffer, options: Exports.readdir.options_10, callback: Exports.readdir.callback_19) : unit = nativeOnly
+            static member readdir (path: Node.Buffer, options: Exports.readdir.options_3, callback: Exports.readdir.callback_3) : unit = nativeOnly
             /// <summary>
             /// Asynchronous readdir(3) - read a directory.
             /// </summary>
@@ -52549,7 +51762,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If called with <c>withFileTypes: true</c> the result data will be an array of Dirent.
             /// </param>
             [<Import("readdir", "fs")>]
-            static member readdir (path: Node.url.URL, options: Exports.readdir.options_11, callback: Exports.readdir.callback_20) : unit = nativeOnly
+            static member readdir (path: Node.url.URL, options: Exports.readdir.options_3, callback: Exports.readdir.callback_3) : unit = nativeOnly
             /// <summary>
             /// Asynchronous readdir(3) - read a directory.
             /// </summary>
@@ -52560,7 +51773,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Must include <c>withFileTypes: true</c> and <c>encoding: 'buffer'</c>.
             /// </param>
             [<Import("readdir", "fs")>]
-            static member readdir (path: string, options: Exports.readdir.options_12, callback: Exports.readdir.callback_21) : unit = nativeOnly
+            static member readdir (path: string, options: Exports.readdir.options_4, callback: Exports.readdir.callback_4) : unit = nativeOnly
             /// <summary>
             /// Asynchronous readdir(3) - read a directory.
             /// </summary>
@@ -52571,7 +51784,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Must include <c>withFileTypes: true</c> and <c>encoding: 'buffer'</c>.
             /// </param>
             [<Import("readdir", "fs")>]
-            static member readdir (path: Node.Buffer, options: Exports.readdir.options_13, callback: Exports.readdir.callback_22) : unit = nativeOnly
+            static member readdir (path: Node.Buffer, options: Exports.readdir.options_4, callback: Exports.readdir.callback_4) : unit = nativeOnly
             /// <summary>
             /// Asynchronous readdir(3) - read a directory.
             /// </summary>
@@ -52582,7 +51795,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Must include <c>withFileTypes: true</c> and <c>encoding: 'buffer'</c>.
             /// </param>
             [<Import("readdir", "fs")>]
-            static member readdir (path: Node.url.URL, options: Exports.readdir.options_14, callback: Exports.readdir.callback_23) : unit = nativeOnly
+            static member readdir (path: Node.url.URL, options: Exports.readdir.options_4, callback: Exports.readdir.callback_4) : unit = nativeOnly
             /// <summary>
             /// Reads the contents of the directory.
             ///
@@ -52652,7 +51865,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If <c>options.withFileTypes</c> is set to <c>true</c>, the result will contain <c>fs.Dirent</c> objects.
             /// </summary>
             [<Import("readdirSync", "fs")>]
-            static member readdirSync (path: Node.Buffer, options: Exports.readdirSync.options_1) : ResizeArray<string> = nativeOnly
+            static member readdirSync (path: Node.Buffer, options: Exports.readdirSync.options) : ResizeArray<string> = nativeOnly
             /// <summary>
             /// Reads the contents of the directory.
             ///
@@ -52694,7 +51907,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If <c>options.withFileTypes</c> is set to <c>true</c>, the result will contain <c>fs.Dirent</c> objects.
             /// </summary>
             [<Import("readdirSync", "fs")>]
-            static member readdirSync (path: Node.url.URL, options: Exports.readdirSync.options_2) : ResizeArray<string> = nativeOnly
+            static member readdirSync (path: Node.url.URL, options: Exports.readdirSync.options) : ResizeArray<string> = nativeOnly
             /// <summary>
             /// Reads the contents of the directory.
             ///
@@ -52719,7 +51932,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
             /// </param>
             [<Import("readdirSync", "fs")>]
-            static member readdirSync (path: string, options: Exports.readdirSync.options.options_3) : ResizeArray<Node.NonSharedBuffer> = nativeOnly
+            static member readdirSync (path: string, options: Exports.readdirSync.options_1) : ResizeArray<Node.NonSharedBuffer> = nativeOnly
             /// <summary>
             /// Synchronous readdir(3) - read a directory.
             /// </summary>
@@ -52730,7 +51943,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
             /// </param>
             [<Import("readdirSync", "fs")>]
-            static member readdirSync (path: Node.Buffer, options: Exports.readdirSync.options.options_4) : ResizeArray<Node.NonSharedBuffer> = nativeOnly
+            static member readdirSync (path: Node.Buffer, options: Exports.readdirSync.options_1) : ResizeArray<Node.NonSharedBuffer> = nativeOnly
             /// <summary>
             /// Synchronous readdir(3) - read a directory.
             /// </summary>
@@ -52741,7 +51954,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
             /// </param>
             [<Import("readdirSync", "fs")>]
-            static member readdirSync (path: Node.url.URL, options: Exports.readdirSync.options.options_5) : ResizeArray<Node.NonSharedBuffer> = nativeOnly
+            static member readdirSync (path: Node.url.URL, options: Exports.readdirSync.options_1) : ResizeArray<Node.NonSharedBuffer> = nativeOnly
             /// <summary>
             /// Synchronous readdir(3) - read a directory.
             /// </summary>
@@ -52752,7 +51965,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
             /// </param>
             [<Import("readdirSync", "fs")>]
-            static member readdirSync (path: string, options: Exports.readdirSync.options_6) : U2<ResizeArray<string>, ResizeArray<Node.NonSharedBuffer>> = nativeOnly
+            static member readdirSync (path: string, options: Exports.readdirSync.options_2) : U2<ResizeArray<string>, ResizeArray<Node.NonSharedBuffer>> = nativeOnly
             /// <summary>
             /// Synchronous readdir(3) - read a directory.
             /// </summary>
@@ -52763,7 +51976,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
             /// </param>
             [<Import("readdirSync", "fs")>]
-            static member readdirSync (path: Node.Buffer, options: Exports.readdirSync.options_7) : U2<ResizeArray<string>, ResizeArray<Node.NonSharedBuffer>> = nativeOnly
+            static member readdirSync (path: Node.Buffer, options: Exports.readdirSync.options_2) : U2<ResizeArray<string>, ResizeArray<Node.NonSharedBuffer>> = nativeOnly
             /// <summary>
             /// Synchronous readdir(3) - read a directory.
             /// </summary>
@@ -52774,7 +51987,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
             /// </param>
             [<Import("readdirSync", "fs")>]
-            static member readdirSync (path: Node.url.URL, options: Exports.readdirSync.options_8) : U2<ResizeArray<string>, ResizeArray<Node.NonSharedBuffer>> = nativeOnly
+            static member readdirSync (path: Node.url.URL, options: Exports.readdirSync.options_2) : U2<ResizeArray<string>, ResizeArray<Node.NonSharedBuffer>> = nativeOnly
             /// <summary>
             /// Synchronous readdir(3) - read a directory.
             /// </summary>
@@ -52785,7 +51998,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If called with <c>withFileTypes: true</c> the result data will be an array of Dirent.
             /// </param>
             [<Import("readdirSync", "fs")>]
-            static member readdirSync (path: string, options: Exports.readdirSync.options_9) : ResizeArray<Node.fs.Dirent> = nativeOnly
+            static member readdirSync (path: string, options: Exports.readdirSync.options_3) : ResizeArray<Node.fs.Dirent> = nativeOnly
             /// <summary>
             /// Synchronous readdir(3) - read a directory.
             /// </summary>
@@ -52796,7 +52009,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If called with <c>withFileTypes: true</c> the result data will be an array of Dirent.
             /// </param>
             [<Import("readdirSync", "fs")>]
-            static member readdirSync (path: Node.Buffer, options: Exports.readdirSync.options_10) : ResizeArray<Node.fs.Dirent> = nativeOnly
+            static member readdirSync (path: Node.Buffer, options: Exports.readdirSync.options_3) : ResizeArray<Node.fs.Dirent> = nativeOnly
             /// <summary>
             /// Synchronous readdir(3) - read a directory.
             /// </summary>
@@ -52807,7 +52020,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If called with <c>withFileTypes: true</c> the result data will be an array of Dirent.
             /// </param>
             [<Import("readdirSync", "fs")>]
-            static member readdirSync (path: Node.url.URL, options: Exports.readdirSync.options_11) : ResizeArray<Node.fs.Dirent> = nativeOnly
+            static member readdirSync (path: Node.url.URL, options: Exports.readdirSync.options_3) : ResizeArray<Node.fs.Dirent> = nativeOnly
             /// <summary>
             /// Synchronous readdir(3) - read a directory.
             /// </summary>
@@ -52818,7 +52031,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Must include <c>withFileTypes: true</c> and <c>encoding: 'buffer'</c>.
             /// </param>
             [<Import("readdirSync", "fs")>]
-            static member readdirSync (path: string, options: Exports.readdirSync.options_12) : ResizeArray<Node.fs.Dirent<Node.NonSharedBuffer>> = nativeOnly
+            static member readdirSync (path: string, options: Exports.readdirSync.options_4) : ResizeArray<Node.fs.Dirent<Node.NonSharedBuffer>> = nativeOnly
             /// <summary>
             /// Synchronous readdir(3) - read a directory.
             /// </summary>
@@ -52829,7 +52042,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Must include <c>withFileTypes: true</c> and <c>encoding: 'buffer'</c>.
             /// </param>
             [<Import("readdirSync", "fs")>]
-            static member readdirSync (path: Node.Buffer, options: Exports.readdirSync.options_13) : ResizeArray<Node.fs.Dirent<Node.NonSharedBuffer>> = nativeOnly
+            static member readdirSync (path: Node.Buffer, options: Exports.readdirSync.options_4) : ResizeArray<Node.fs.Dirent<Node.NonSharedBuffer>> = nativeOnly
             /// <summary>
             /// Synchronous readdir(3) - read a directory.
             /// </summary>
@@ -52840,7 +52053,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Must include <c>withFileTypes: true</c> and <c>encoding: 'buffer'</c>.
             /// </param>
             [<Import("readdirSync", "fs")>]
-            static member readdirSync (path: Node.url.URL, options: Exports.readdirSync.options_14) : ResizeArray<Node.fs.Dirent<Node.NonSharedBuffer>> = nativeOnly
+            static member readdirSync (path: Node.url.URL, options: Exports.readdirSync.options_4) : ResizeArray<Node.fs.Dirent<Node.NonSharedBuffer>> = nativeOnly
             /// <summary>
             /// Closes the file descriptor. No arguments other than a possible exception are
             /// given to the completion callback.
@@ -52905,7 +52118,7 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// </param>
             [<Import("open", "fs")>]
-            static member ``open`` (path: string, flags: float option, mode: string option, callback: Exports.``open``.callback_1) : unit = nativeOnly
+            static member ``open`` (path: string, flags: float option, mode: string option, callback: Exports.``open``.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous file open. See the POSIX [<c>open(2)</c>](http://man7.org/linux/man-pages/man2/open.2.html) documentation for more details.
             ///
@@ -52927,7 +52140,7 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// </param>
             [<Import("open", "fs")>]
-            static member ``open`` (path: string, flags: string option, mode: float option, callback: Exports.``open``.callback_2) : unit = nativeOnly
+            static member ``open`` (path: string, flags: string option, mode: float option, callback: Exports.``open``.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous file open. See the POSIX [<c>open(2)</c>](http://man7.org/linux/man-pages/man2/open.2.html) documentation for more details.
             ///
@@ -52949,7 +52162,7 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// </param>
             [<Import("open", "fs")>]
-            static member ``open`` (path: string, flags: string option, mode: string option, callback: Exports.``open``.callback_3) : unit = nativeOnly
+            static member ``open`` (path: string, flags: string option, mode: string option, callback: Exports.``open``.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous file open. See the POSIX [<c>open(2)</c>](http://man7.org/linux/man-pages/man2/open.2.html) documentation for more details.
             ///
@@ -52971,7 +52184,7 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// </param>
             [<Import("open", "fs")>]
-            static member ``open`` (path: Node.Buffer, flags: float option, mode: float option, callback: Exports.``open``.callback_4) : unit = nativeOnly
+            static member ``open`` (path: Node.Buffer, flags: float option, mode: float option, callback: Exports.``open``.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous file open. See the POSIX [<c>open(2)</c>](http://man7.org/linux/man-pages/man2/open.2.html) documentation for more details.
             ///
@@ -52993,7 +52206,7 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// </param>
             [<Import("open", "fs")>]
-            static member ``open`` (path: Node.Buffer, flags: float option, mode: string option, callback: Exports.``open``.callback_5) : unit = nativeOnly
+            static member ``open`` (path: Node.Buffer, flags: float option, mode: string option, callback: Exports.``open``.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous file open. See the POSIX [<c>open(2)</c>](http://man7.org/linux/man-pages/man2/open.2.html) documentation for more details.
             ///
@@ -53015,7 +52228,7 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// </param>
             [<Import("open", "fs")>]
-            static member ``open`` (path: Node.Buffer, flags: string option, mode: float option, callback: Exports.``open``.callback_6) : unit = nativeOnly
+            static member ``open`` (path: Node.Buffer, flags: string option, mode: float option, callback: Exports.``open``.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous file open. See the POSIX [<c>open(2)</c>](http://man7.org/linux/man-pages/man2/open.2.html) documentation for more details.
             ///
@@ -53037,7 +52250,7 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// </param>
             [<Import("open", "fs")>]
-            static member ``open`` (path: Node.Buffer, flags: string option, mode: string option, callback: Exports.``open``.callback_7) : unit = nativeOnly
+            static member ``open`` (path: Node.Buffer, flags: string option, mode: string option, callback: Exports.``open``.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous file open. See the POSIX [<c>open(2)</c>](http://man7.org/linux/man-pages/man2/open.2.html) documentation for more details.
             ///
@@ -53059,7 +52272,7 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// </param>
             [<Import("open", "fs")>]
-            static member ``open`` (path: Node.url.URL, flags: float option, mode: float option, callback: Exports.``open``.callback_8) : unit = nativeOnly
+            static member ``open`` (path: Node.url.URL, flags: float option, mode: float option, callback: Exports.``open``.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous file open. See the POSIX [<c>open(2)</c>](http://man7.org/linux/man-pages/man2/open.2.html) documentation for more details.
             ///
@@ -53081,7 +52294,7 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// </param>
             [<Import("open", "fs")>]
-            static member ``open`` (path: Node.url.URL, flags: float option, mode: string option, callback: Exports.``open``.callback_9) : unit = nativeOnly
+            static member ``open`` (path: Node.url.URL, flags: float option, mode: string option, callback: Exports.``open``.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous file open. See the POSIX [<c>open(2)</c>](http://man7.org/linux/man-pages/man2/open.2.html) documentation for more details.
             ///
@@ -53103,7 +52316,7 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// </param>
             [<Import("open", "fs")>]
-            static member ``open`` (path: Node.url.URL, flags: string option, mode: float option, callback: Exports.``open``.callback_10) : unit = nativeOnly
+            static member ``open`` (path: Node.url.URL, flags: string option, mode: float option, callback: Exports.``open``.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous file open. See the POSIX [<c>open(2)</c>](http://man7.org/linux/man-pages/man2/open.2.html) documentation for more details.
             ///
@@ -53125,7 +52338,7 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// </param>
             [<Import("open", "fs")>]
-            static member ``open`` (path: Node.url.URL, flags: string option, mode: string option, callback: Exports.``open``.callback_11) : unit = nativeOnly
+            static member ``open`` (path: Node.url.URL, flags: string option, mode: string option, callback: Exports.``open``.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous open(2) - open and possibly create a file. If the file is created, its mode will be <c>0o666</c>.
             /// </summary>
@@ -53136,7 +52349,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// See <c>support of file system </c>flags<c></c>.
             /// </param>
             [<Import("open", "fs")>]
-            static member ``open`` (path: string, flags: float option, callback: Exports.``open``.callback_12) : unit = nativeOnly
+            static member ``open`` (path: string, flags: float option, callback: Exports.``open``.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous open(2) - open and possibly create a file. If the file is created, its mode will be <c>0o666</c>.
             /// </summary>
@@ -53147,7 +52360,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// See <c>support of file system </c>flags<c></c>.
             /// </param>
             [<Import("open", "fs")>]
-            static member ``open`` (path: string, flags: string option, callback: Exports.``open``.callback_13) : unit = nativeOnly
+            static member ``open`` (path: string, flags: string option, callback: Exports.``open``.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous open(2) - open and possibly create a file. If the file is created, its mode will be <c>0o666</c>.
             /// </summary>
@@ -53158,7 +52371,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// See <c>support of file system </c>flags<c></c>.
             /// </param>
             [<Import("open", "fs")>]
-            static member ``open`` (path: Node.Buffer, flags: float option, callback: Exports.``open``.callback_14) : unit = nativeOnly
+            static member ``open`` (path: Node.Buffer, flags: float option, callback: Exports.``open``.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous open(2) - open and possibly create a file. If the file is created, its mode will be <c>0o666</c>.
             /// </summary>
@@ -53169,7 +52382,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// See <c>support of file system </c>flags<c></c>.
             /// </param>
             [<Import("open", "fs")>]
-            static member ``open`` (path: Node.Buffer, flags: string option, callback: Exports.``open``.callback_15) : unit = nativeOnly
+            static member ``open`` (path: Node.Buffer, flags: string option, callback: Exports.``open``.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous open(2) - open and possibly create a file. If the file is created, its mode will be <c>0o666</c>.
             /// </summary>
@@ -53180,7 +52393,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// See <c>support of file system </c>flags<c></c>.
             /// </param>
             [<Import("open", "fs")>]
-            static member ``open`` (path: Node.url.URL, flags: float option, callback: Exports.``open``.callback_16) : unit = nativeOnly
+            static member ``open`` (path: Node.url.URL, flags: float option, callback: Exports.``open``.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous open(2) - open and possibly create a file. If the file is created, its mode will be <c>0o666</c>.
             /// </summary>
@@ -53191,7 +52404,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// See <c>support of file system </c>flags<c></c>.
             /// </param>
             [<Import("open", "fs")>]
-            static member ``open`` (path: Node.url.URL, flags: string option, callback: Exports.``open``.callback_17) : unit = nativeOnly
+            static member ``open`` (path: Node.url.URL, flags: string option, callback: Exports.``open``.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous open(2) - open and possibly create a file. If the file is created, its mode will be <c>0o666</c>.
             /// </summary>
@@ -53199,7 +52412,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
             /// </param>
             [<Import("open", "fs")>]
-            static member ``open`` (path: string, callback: Exports.``open``.callback_18) : unit = nativeOnly
+            static member ``open`` (path: string, callback: Exports.``open``.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous open(2) - open and possibly create a file. If the file is created, its mode will be <c>0o666</c>.
             /// </summary>
@@ -53207,7 +52420,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
             /// </param>
             [<Import("open", "fs")>]
-            static member ``open`` (path: Node.Buffer, callback: Exports.``open``.callback_19) : unit = nativeOnly
+            static member ``open`` (path: Node.Buffer, callback: Exports.``open``.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous open(2) - open and possibly create a file. If the file is created, its mode will be <c>0o666</c>.
             /// </summary>
@@ -53215,7 +52428,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
             /// </param>
             [<Import("open", "fs")>]
-            static member ``open`` (path: Node.url.URL, callback: Exports.``open``.callback_20) : unit = nativeOnly
+            static member ``open`` (path: Node.url.URL, callback: Exports.``open``.callback) : unit = nativeOnly
             /// <summary>
             /// Returns an integer representing the file descriptor.
             ///
@@ -53623,7 +52836,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// The number of bytes to write. If not supplied, defaults to <c>buffer.length - offset</c>.
             /// </param>
             [<Import("write", "fs")>]
-            static member write<'TBuffer> (fd: float, buffer: 'TBuffer, offset: float option, length: float option, callback: Exports.write.callback_1<'TBuffer>) : unit = nativeOnly
+            static member write<'TBuffer> (fd: float, buffer: 'TBuffer, offset: float option, length: float option, callback: Exports.write.callback<'TBuffer>) : unit = nativeOnly
             /// <summary>
             /// Asynchronously writes <c>buffer</c> to the file referenced by the supplied file descriptor.
             /// </summary>
@@ -53634,7 +52847,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// The part of the buffer to be written. If not supplied, defaults to <c>0</c>.
             /// </param>
             [<Import("write", "fs")>]
-            static member write<'TBuffer> (fd: float, buffer: 'TBuffer, offset: float option, callback: Exports.write.callback_2<'TBuffer>) : unit = nativeOnly
+            static member write<'TBuffer> (fd: float, buffer: 'TBuffer, offset: float option, callback: Exports.write.callback<'TBuffer>) : unit = nativeOnly
             /// <summary>
             /// Asynchronously writes <c>buffer</c> to the file referenced by the supplied file descriptor.
             /// </summary>
@@ -53642,7 +52855,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// A file descriptor.
             /// </param>
             [<Import("write", "fs")>]
-            static member write<'TBuffer> (fd: float, buffer: 'TBuffer, callback: Exports.write.callback_3<'TBuffer>) : unit = nativeOnly
+            static member write<'TBuffer> (fd: float, buffer: 'TBuffer, callback: Exports.write.callback<'TBuffer>) : unit = nativeOnly
             /// <summary>
             /// Asynchronously writes <c>buffer</c> to the file referenced by the supplied file descriptor.
             /// </summary>
@@ -53656,7 +52869,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// * <c>position</c> The offset from the beginning of the file where this data should be written. If not supplied, defaults to the current position.
             /// </param>
             [<Import("write", "fs")>]
-            static member write<'TBuffer> (fd: float, buffer: 'TBuffer, options: Node.fs.WriteOptions, callback: Exports.write.callback_4<'TBuffer>) : unit = nativeOnly
+            static member write<'TBuffer> (fd: float, buffer: 'TBuffer, options: Node.fs.WriteOptions, callback: Exports.write.callback<'TBuffer>) : unit = nativeOnly
             /// <summary>
             /// Asynchronously writes <c>string</c> to the file referenced by the supplied file descriptor.
             /// </summary>
@@ -53673,7 +52886,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// The expected string encoding.
             /// </param>
             [<Import("write", "fs")>]
-            static member write (fd: float, string: string, position: float option, encoding: Node.BufferEncoding option, callback: Exports.write.callback_5) : unit = nativeOnly
+            static member write (fd: float, string: string, position: float option, encoding: Node.BufferEncoding option, callback: Exports.write.callback_1) : unit = nativeOnly
             /// <summary>
             /// Asynchronously writes <c>string</c> to the file referenced by the supplied file descriptor.
             /// </summary>
@@ -53687,7 +52900,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// The offset from the beginning of the file where this data should be written. If not supplied, defaults to the current position.
             /// </param>
             [<Import("write", "fs")>]
-            static member write (fd: float, string: string, position: float option, callback: Exports.write.callback_6) : unit = nativeOnly
+            static member write (fd: float, string: string, position: float option, callback: Exports.write.callback_1) : unit = nativeOnly
             /// <summary>
             /// Asynchronously writes <c>string</c> to the file referenced by the supplied file descriptor.
             /// </summary>
@@ -53698,7 +52911,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// A string to write.
             /// </param>
             [<Import("write", "fs")>]
-            static member write (fd: float, string: string, callback: Exports.write.callback_7) : unit = nativeOnly
+            static member write (fd: float, string: string, callback: Exports.write.callback_1) : unit = nativeOnly
             /// <summary>
             /// For detailed information, see the documentation of the asynchronous version of
             /// this API: <see href="write">write</see>.
@@ -53785,7 +52998,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// <c>position</c> is an integer, the file position will be unchanged.
             /// </param>
             [<Import("read", "fs")>]
-            static member read<'TBuffer> (fd: float, buffer: 'TBuffer, offset: float, length: float, position: bigint option, callback: Exports.read.callback_1<'TBuffer>) : unit = nativeOnly
+            static member read<'TBuffer> (fd: float, buffer: 'TBuffer, offset: float, length: float, position: bigint option, callback: Exports.read.callback<'TBuffer>) : unit = nativeOnly
             /// <summary>
             /// Similar to the above <c>fs.read</c> function, this version takes an optional <c>options</c> object.
             /// If not otherwise specified in an <c>options</c> object,
@@ -53795,13 +53008,13 @@ EventEmitter.defaultMaxListeners = $0"""
             /// <c>position</c> defaults to <c>null</c>
             /// </summary>
             [<Import("read", "fs")>]
-            static member read<'TBuffer> (fd: float, options: Node.fs.ReadOptionsWithBuffer<'TBuffer>, callback: Exports.read.callback_2<'TBuffer>) : unit = nativeOnly
+            static member read<'TBuffer> (fd: float, options: Node.fs.ReadOptionsWithBuffer<'TBuffer>, callback: Exports.read.callback_1<'TBuffer>) : unit = nativeOnly
             [<Import("read", "fs")>]
-            static member read<'TBuffer> (fd: float, buffer: 'TBuffer, options: Node.fs.ReadOptions, callback: Exports.read.callback_3<'TBuffer>) : unit = nativeOnly
+            static member read<'TBuffer> (fd: float, buffer: 'TBuffer, options: Node.fs.ReadOptions, callback: Exports.read.callback<'TBuffer>) : unit = nativeOnly
             [<Import("read", "fs")>]
-            static member read<'TBuffer> (fd: float, buffer: 'TBuffer, callback: Exports.read.callback_4<'TBuffer>) : unit = nativeOnly
+            static member read<'TBuffer> (fd: float, buffer: 'TBuffer, callback: Exports.read.callback<'TBuffer>) : unit = nativeOnly
             [<Import("read", "fs")>]
-            static member read (fd: float, callback: Exports.read.callback_5) : unit = nativeOnly
+            static member read (fd: float, callback: Exports.read.callback_2) : unit = nativeOnly
             /// <summary>
             /// Returns the number of <c>bytesRead</c>.
             ///
@@ -53967,7 +53180,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// filename or file descriptor
             /// </param>
             [<Import("readFile", "fs")>]
-            static member readFile (path: Node.Buffer, options: Exports.readFile.options_1 option, callback: Exports.readFile.callback_1) : unit = nativeOnly
+            static member readFile (path: Node.Buffer, options: Exports.readFile.options option, callback: Exports.readFile.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronously reads the entire contents of a file.
             ///
@@ -54034,78 +53247,260 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </summary>
             /// <param name="path">
             /// filename or file descriptor
+            /// </param>
+            [<Import("readFile", "fs")>]
+            static member readFile (path: Node.url.URL, options: Exports.readFile.options option, callback: Exports.readFile.callback) : unit = nativeOnly
+            /// <summary>
+            /// Asynchronously reads the entire contents of a file.
+            ///
+            /// <code lang="js">
+            /// import { readFile } from 'node:fs';
+            ///
+            /// readFile('/etc/passwd', (err, data) => {
+            ///   if (err) throw err;
+            ///   console.log(data);
+            /// });
+            /// </code>
+            ///
+            /// The callback is passed two arguments <c>(err, data)</c>, where <c>data</c> is the
+            /// contents of the file.
+            ///
+            /// If no encoding is specified, then the raw buffer is returned.
+            ///
+            /// If <c>options</c> is a string, then it specifies the encoding:
+            ///
+            /// <code lang="js">
+            /// import { readFile } from 'node:fs';
+            ///
+            /// readFile('/etc/passwd', 'utf8', callback);
+            /// </code>
+            ///
+            /// When the path is a directory, the behavior of <c>fs.readFile()</c> and <see href="readFileSync">readFileSync</see> is platform-specific. On macOS, Linux, and Windows, an
+            /// error will be returned. On FreeBSD, a representation of the directory's contents
+            /// will be returned.
+            ///
+            /// <code lang="js">
+            /// import { readFile } from 'node:fs';
+            ///
+            /// // macOS, Linux, and Windows
+            /// readFile('<directory>', (err, data) => {
+            ///   // => [Error: EISDIR: illegal operation on a directory, read <directory>]
+            /// });
+            ///
+            /// //  FreeBSD
+            /// readFile('<directory>', (err, data) => {
+            ///   // => null, <data>
+            /// });
+            /// </code>
+            ///
+            /// It is possible to abort an ongoing request using an <c>AbortSignal</c>. If a
+            /// request is aborted the callback is called with an <c>AbortError</c>:
+            ///
+            /// <code lang="js">
+            /// import { readFile } from 'node:fs';
+            ///
+            /// const controller = new AbortController();
+            /// const signal = controller.signal;
+            /// readFile(fileInfo[0].name, { signal }, (err, buf) => {
+            ///   // ...
+            /// });
+            /// // When you want to abort the request
+            /// controller.abort();
+            /// </code>
+            ///
+            /// The <c>fs.readFile()</c> function buffers the entire file. To minimize memory costs,
+            /// when possible prefer streaming via <c>fs.createReadStream()</c>.
+            ///
+            /// Aborting an ongoing request does not abort individual operating
+            /// system requests but rather the internal buffering <c>fs.readFile</c> performs.
+            /// </summary>
+            /// <param name="path">
+            /// filename or file descriptor
+            /// </param>
+            [<Import("readFile", "fs")>]
+            static member readFile (path: float, options: Exports.readFile.options option, callback: Exports.readFile.callback) : unit = nativeOnly
+            /// <summary>
+            /// Asynchronously reads the entire contents of a file.
+            /// </summary>
+            /// <param name="path">
+            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
+            /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
+            /// </param>
+            /// <param name="options">
+            /// Either the encoding for the result, or an object that contains the encoding and an optional flag.
+            /// If a flag is not provided, it defaults to <c>'r'</c>.
+            /// </param>
+            [<Import("readFile", "fs")>]
+            static member readFile (path: string, options: Exports.readFile.options_1, callback: Exports.readFile.callback_1) : unit = nativeOnly
+            /// <summary>
+            /// Asynchronously reads the entire contents of a file.
+            /// </summary>
+            /// <param name="path">
+            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
+            /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
+            /// </param>
+            /// <param name="options">
+            /// Either the encoding for the result, or an object that contains the encoding and an optional flag.
+            /// If a flag is not provided, it defaults to <c>'r'</c>.
+            /// </param>
+            [<Import("readFile", "fs")>]
+            static member readFile (path: string, options: Node.BufferEncoding, callback: Exports.readFile.callback_1) : unit = nativeOnly
+            /// <summary>
+            /// Asynchronously reads the entire contents of a file.
+            /// </summary>
+            /// <param name="path">
+            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
+            /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
+            /// </param>
+            /// <param name="options">
+            /// Either the encoding for the result, or an object that contains the encoding and an optional flag.
+            /// If a flag is not provided, it defaults to <c>'r'</c>.
+            /// </param>
+            [<Import("readFile", "fs")>]
+            static member readFile (path: Node.Buffer, options: Exports.readFile.options_1, callback: Exports.readFile.callback_1) : unit = nativeOnly
+            /// <summary>
+            /// Asynchronously reads the entire contents of a file.
+            /// </summary>
+            /// <param name="path">
+            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
+            /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
+            /// </param>
+            /// <param name="options">
+            /// Either the encoding for the result, or an object that contains the encoding and an optional flag.
+            /// If a flag is not provided, it defaults to <c>'r'</c>.
+            /// </param>
+            [<Import("readFile", "fs")>]
+            static member readFile (path: Node.Buffer, options: Node.BufferEncoding, callback: Exports.readFile.callback_1) : unit = nativeOnly
+            /// <summary>
+            /// Asynchronously reads the entire contents of a file.
+            /// </summary>
+            /// <param name="path">
+            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
+            /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
+            /// </param>
+            /// <param name="options">
+            /// Either the encoding for the result, or an object that contains the encoding and an optional flag.
+            /// If a flag is not provided, it defaults to <c>'r'</c>.
+            /// </param>
+            [<Import("readFile", "fs")>]
+            static member readFile (path: Node.url.URL, options: Exports.readFile.options_1, callback: Exports.readFile.callback_1) : unit = nativeOnly
+            /// <summary>
+            /// Asynchronously reads the entire contents of a file.
+            /// </summary>
+            /// <param name="path">
+            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
+            /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
+            /// </param>
+            /// <param name="options">
+            /// Either the encoding for the result, or an object that contains the encoding and an optional flag.
+            /// If a flag is not provided, it defaults to <c>'r'</c>.
+            /// </param>
+            [<Import("readFile", "fs")>]
+            static member readFile (path: Node.url.URL, options: Node.BufferEncoding, callback: Exports.readFile.callback_1) : unit = nativeOnly
+            /// <summary>
+            /// Asynchronously reads the entire contents of a file.
+            /// </summary>
+            /// <param name="path">
+            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
+            /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
+            /// </param>
+            /// <param name="options">
+            /// Either the encoding for the result, or an object that contains the encoding and an optional flag.
+            /// If a flag is not provided, it defaults to <c>'r'</c>.
+            /// </param>
+            [<Import("readFile", "fs")>]
+            static member readFile (path: float, options: Exports.readFile.options_1, callback: Exports.readFile.callback_1) : unit = nativeOnly
+            /// <summary>
+            /// Asynchronously reads the entire contents of a file.
+            /// </summary>
+            /// <param name="path">
+            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
+            /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
+            /// </param>
+            /// <param name="options">
+            /// Either the encoding for the result, or an object that contains the encoding and an optional flag.
+            /// If a flag is not provided, it defaults to <c>'r'</c>.
+            /// </param>
+            [<Import("readFile", "fs")>]
+            static member readFile (path: float, options: Node.BufferEncoding, callback: Exports.readFile.callback_1) : unit = nativeOnly
+            /// <summary>
+            /// Asynchronously reads the entire contents of a file.
+            /// </summary>
+            /// <param name="path">
+            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
+            /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
+            /// </param>
+            /// <param name="options">
+            /// Either the encoding for the result, or an object that contains the encoding and an optional flag.
+            /// If a flag is not provided, it defaults to <c>'r'</c>.
+            /// </param>
+            [<Import("readFile", "fs")>]
+            static member readFile (path: string, options: Exports.readFile.options_2 option, callback: Exports.readFile.callback_2) : unit = nativeOnly
+            /// <summary>
+            /// Asynchronously reads the entire contents of a file.
+            /// </summary>
+            /// <param name="path">
+            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
+            /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
+            /// </param>
+            /// <param name="options">
+            /// Either the encoding for the result, or an object that contains the encoding and an optional flag.
+            /// If a flag is not provided, it defaults to <c>'r'</c>.
+            /// </param>
+            [<Import("readFile", "fs")>]
+            static member readFile (path: string, options: Node.BufferEncoding option, callback: Exports.readFile.callback_2) : unit = nativeOnly
+            /// <summary>
+            /// Asynchronously reads the entire contents of a file.
+            /// </summary>
+            /// <param name="path">
+            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
+            /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
+            /// </param>
+            /// <param name="options">
+            /// Either the encoding for the result, or an object that contains the encoding and an optional flag.
+            /// If a flag is not provided, it defaults to <c>'r'</c>.
+            /// </param>
+            [<Import("readFile", "fs")>]
+            static member readFile (path: Node.Buffer, options: Exports.readFile.options_2 option, callback: Exports.readFile.callback_2) : unit = nativeOnly
+            /// <summary>
+            /// Asynchronously reads the entire contents of a file.
+            /// </summary>
+            /// <param name="path">
+            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
+            /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
+            /// </param>
+            /// <param name="options">
+            /// Either the encoding for the result, or an object that contains the encoding and an optional flag.
+            /// If a flag is not provided, it defaults to <c>'r'</c>.
+            /// </param>
+            [<Import("readFile", "fs")>]
+            static member readFile (path: Node.Buffer, options: Node.BufferEncoding option, callback: Exports.readFile.callback_2) : unit = nativeOnly
+            /// <summary>
+            /// Asynchronously reads the entire contents of a file.
+            /// </summary>
+            /// <param name="path">
+            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
+            /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
+            /// </param>
+            /// <param name="options">
+            /// Either the encoding for the result, or an object that contains the encoding and an optional flag.
+            /// If a flag is not provided, it defaults to <c>'r'</c>.
             /// </param>
             [<Import("readFile", "fs")>]
             static member readFile (path: Node.url.URL, options: Exports.readFile.options_2 option, callback: Exports.readFile.callback_2) : unit = nativeOnly
             /// <summary>
             /// Asynchronously reads the entire contents of a file.
-            ///
-            /// <code lang="js">
-            /// import { readFile } from 'node:fs';
-            ///
-            /// readFile('/etc/passwd', (err, data) => {
-            ///   if (err) throw err;
-            ///   console.log(data);
-            /// });
-            /// </code>
-            ///
-            /// The callback is passed two arguments <c>(err, data)</c>, where <c>data</c> is the
-            /// contents of the file.
-            ///
-            /// If no encoding is specified, then the raw buffer is returned.
-            ///
-            /// If <c>options</c> is a string, then it specifies the encoding:
-            ///
-            /// <code lang="js">
-            /// import { readFile } from 'node:fs';
-            ///
-            /// readFile('/etc/passwd', 'utf8', callback);
-            /// </code>
-            ///
-            /// When the path is a directory, the behavior of <c>fs.readFile()</c> and <see href="readFileSync">readFileSync</see> is platform-specific. On macOS, Linux, and Windows, an
-            /// error will be returned. On FreeBSD, a representation of the directory's contents
-            /// will be returned.
-            ///
-            /// <code lang="js">
-            /// import { readFile } from 'node:fs';
-            ///
-            /// // macOS, Linux, and Windows
-            /// readFile('<directory>', (err, data) => {
-            ///   // => [Error: EISDIR: illegal operation on a directory, read <directory>]
-            /// });
-            ///
-            /// //  FreeBSD
-            /// readFile('<directory>', (err, data) => {
-            ///   // => null, <data>
-            /// });
-            /// </code>
-            ///
-            /// It is possible to abort an ongoing request using an <c>AbortSignal</c>. If a
-            /// request is aborted the callback is called with an <c>AbortError</c>:
-            ///
-            /// <code lang="js">
-            /// import { readFile } from 'node:fs';
-            ///
-            /// const controller = new AbortController();
-            /// const signal = controller.signal;
-            /// readFile(fileInfo[0].name, { signal }, (err, buf) => {
-            ///   // ...
-            /// });
-            /// // When you want to abort the request
-            /// controller.abort();
-            /// </code>
-            ///
-            /// The <c>fs.readFile()</c> function buffers the entire file. To minimize memory costs,
-            /// when possible prefer streaming via <c>fs.createReadStream()</c>.
-            ///
-            /// Aborting an ongoing request does not abort individual operating
-            /// system requests but rather the internal buffering <c>fs.readFile</c> performs.
             /// </summary>
             /// <param name="path">
-            /// filename or file descriptor
+            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
+            /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
+            /// </param>
+            /// <param name="options">
+            /// Either the encoding for the result, or an object that contains the encoding and an optional flag.
+            /// If a flag is not provided, it defaults to <c>'r'</c>.
             /// </param>
             [<Import("readFile", "fs")>]
-            static member readFile (path: float, options: Exports.readFile.options_3 option, callback: Exports.readFile.callback_3) : unit = nativeOnly
+            static member readFile (path: Node.url.URL, options: Node.BufferEncoding option, callback: Exports.readFile.callback_2) : unit = nativeOnly
             /// <summary>
             /// Asynchronously reads the entire contents of a file.
             /// </summary>
@@ -54118,7 +53513,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If a flag is not provided, it defaults to <c>'r'</c>.
             /// </param>
             [<Import("readFile", "fs")>]
-            static member readFile (path: string, options: Exports.readFile.options_4, callback: Exports.readFile.callback_4) : unit = nativeOnly
+            static member readFile (path: float, options: Exports.readFile.options_2 option, callback: Exports.readFile.callback_2) : unit = nativeOnly
             /// <summary>
             /// Asynchronously reads the entire contents of a file.
             /// </summary>
@@ -54131,189 +53526,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If a flag is not provided, it defaults to <c>'r'</c>.
             /// </param>
             [<Import("readFile", "fs")>]
-            static member readFile (path: string, options: Node.BufferEncoding, callback: Exports.readFile.callback_5) : unit = nativeOnly
-            /// <summary>
-            /// Asynchronously reads the entire contents of a file.
-            /// </summary>
-            /// <param name="path">
-            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-            /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
-            /// </param>
-            /// <param name="options">
-            /// Either the encoding for the result, or an object that contains the encoding and an optional flag.
-            /// If a flag is not provided, it defaults to <c>'r'</c>.
-            /// </param>
-            [<Import("readFile", "fs")>]
-            static member readFile (path: Node.Buffer, options: Exports.readFile.options_5, callback: Exports.readFile.callback_6) : unit = nativeOnly
-            /// <summary>
-            /// Asynchronously reads the entire contents of a file.
-            /// </summary>
-            /// <param name="path">
-            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-            /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
-            /// </param>
-            /// <param name="options">
-            /// Either the encoding for the result, or an object that contains the encoding and an optional flag.
-            /// If a flag is not provided, it defaults to <c>'r'</c>.
-            /// </param>
-            [<Import("readFile", "fs")>]
-            static member readFile (path: Node.Buffer, options: Node.BufferEncoding, callback: Exports.readFile.callback_7) : unit = nativeOnly
-            /// <summary>
-            /// Asynchronously reads the entire contents of a file.
-            /// </summary>
-            /// <param name="path">
-            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-            /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
-            /// </param>
-            /// <param name="options">
-            /// Either the encoding for the result, or an object that contains the encoding and an optional flag.
-            /// If a flag is not provided, it defaults to <c>'r'</c>.
-            /// </param>
-            [<Import("readFile", "fs")>]
-            static member readFile (path: Node.url.URL, options: Exports.readFile.options_6, callback: Exports.readFile.callback_8) : unit = nativeOnly
-            /// <summary>
-            /// Asynchronously reads the entire contents of a file.
-            /// </summary>
-            /// <param name="path">
-            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-            /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
-            /// </param>
-            /// <param name="options">
-            /// Either the encoding for the result, or an object that contains the encoding and an optional flag.
-            /// If a flag is not provided, it defaults to <c>'r'</c>.
-            /// </param>
-            [<Import("readFile", "fs")>]
-            static member readFile (path: Node.url.URL, options: Node.BufferEncoding, callback: Exports.readFile.callback_9) : unit = nativeOnly
-            /// <summary>
-            /// Asynchronously reads the entire contents of a file.
-            /// </summary>
-            /// <param name="path">
-            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-            /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
-            /// </param>
-            /// <param name="options">
-            /// Either the encoding for the result, or an object that contains the encoding and an optional flag.
-            /// If a flag is not provided, it defaults to <c>'r'</c>.
-            /// </param>
-            [<Import("readFile", "fs")>]
-            static member readFile (path: float, options: Exports.readFile.options_7, callback: Exports.readFile.callback_10) : unit = nativeOnly
-            /// <summary>
-            /// Asynchronously reads the entire contents of a file.
-            /// </summary>
-            /// <param name="path">
-            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-            /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
-            /// </param>
-            /// <param name="options">
-            /// Either the encoding for the result, or an object that contains the encoding and an optional flag.
-            /// If a flag is not provided, it defaults to <c>'r'</c>.
-            /// </param>
-            [<Import("readFile", "fs")>]
-            static member readFile (path: float, options: Node.BufferEncoding, callback: Exports.readFile.callback_11) : unit = nativeOnly
-            /// <summary>
-            /// Asynchronously reads the entire contents of a file.
-            /// </summary>
-            /// <param name="path">
-            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-            /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
-            /// </param>
-            /// <param name="options">
-            /// Either the encoding for the result, or an object that contains the encoding and an optional flag.
-            /// If a flag is not provided, it defaults to <c>'r'</c>.
-            /// </param>
-            [<Import("readFile", "fs")>]
-            static member readFile (path: string, options: Exports.readFile.options_8 option, callback: Exports.readFile.callback_12) : unit = nativeOnly
-            /// <summary>
-            /// Asynchronously reads the entire contents of a file.
-            /// </summary>
-            /// <param name="path">
-            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-            /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
-            /// </param>
-            /// <param name="options">
-            /// Either the encoding for the result, or an object that contains the encoding and an optional flag.
-            /// If a flag is not provided, it defaults to <c>'r'</c>.
-            /// </param>
-            [<Import("readFile", "fs")>]
-            static member readFile (path: string, options: Node.BufferEncoding option, callback: Exports.readFile.callback_13) : unit = nativeOnly
-            /// <summary>
-            /// Asynchronously reads the entire contents of a file.
-            /// </summary>
-            /// <param name="path">
-            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-            /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
-            /// </param>
-            /// <param name="options">
-            /// Either the encoding for the result, or an object that contains the encoding and an optional flag.
-            /// If a flag is not provided, it defaults to <c>'r'</c>.
-            /// </param>
-            [<Import("readFile", "fs")>]
-            static member readFile (path: Node.Buffer, options: Exports.readFile.options_9 option, callback: Exports.readFile.callback_14) : unit = nativeOnly
-            /// <summary>
-            /// Asynchronously reads the entire contents of a file.
-            /// </summary>
-            /// <param name="path">
-            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-            /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
-            /// </param>
-            /// <param name="options">
-            /// Either the encoding for the result, or an object that contains the encoding and an optional flag.
-            /// If a flag is not provided, it defaults to <c>'r'</c>.
-            /// </param>
-            [<Import("readFile", "fs")>]
-            static member readFile (path: Node.Buffer, options: Node.BufferEncoding option, callback: Exports.readFile.callback_15) : unit = nativeOnly
-            /// <summary>
-            /// Asynchronously reads the entire contents of a file.
-            /// </summary>
-            /// <param name="path">
-            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-            /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
-            /// </param>
-            /// <param name="options">
-            /// Either the encoding for the result, or an object that contains the encoding and an optional flag.
-            /// If a flag is not provided, it defaults to <c>'r'</c>.
-            /// </param>
-            [<Import("readFile", "fs")>]
-            static member readFile (path: Node.url.URL, options: Exports.readFile.options_10 option, callback: Exports.readFile.callback_16) : unit = nativeOnly
-            /// <summary>
-            /// Asynchronously reads the entire contents of a file.
-            /// </summary>
-            /// <param name="path">
-            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-            /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
-            /// </param>
-            /// <param name="options">
-            /// Either the encoding for the result, or an object that contains the encoding and an optional flag.
-            /// If a flag is not provided, it defaults to <c>'r'</c>.
-            /// </param>
-            [<Import("readFile", "fs")>]
-            static member readFile (path: Node.url.URL, options: Node.BufferEncoding option, callback: Exports.readFile.callback_17) : unit = nativeOnly
-            /// <summary>
-            /// Asynchronously reads the entire contents of a file.
-            /// </summary>
-            /// <param name="path">
-            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-            /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
-            /// </param>
-            /// <param name="options">
-            /// Either the encoding for the result, or an object that contains the encoding and an optional flag.
-            /// If a flag is not provided, it defaults to <c>'r'</c>.
-            /// </param>
-            [<Import("readFile", "fs")>]
-            static member readFile (path: float, options: Exports.readFile.options_11 option, callback: Exports.readFile.callback_18) : unit = nativeOnly
-            /// <summary>
-            /// Asynchronously reads the entire contents of a file.
-            /// </summary>
-            /// <param name="path">
-            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-            /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
-            /// </param>
-            /// <param name="options">
-            /// Either the encoding for the result, or an object that contains the encoding and an optional flag.
-            /// If a flag is not provided, it defaults to <c>'r'</c>.
-            /// </param>
-            [<Import("readFile", "fs")>]
-            static member readFile (path: float, options: Node.BufferEncoding option, callback: Exports.readFile.callback_19) : unit = nativeOnly
+            static member readFile (path: float, options: Node.BufferEncoding option, callback: Exports.readFile.callback_2) : unit = nativeOnly
             /// <summary>
             /// Asynchronously reads the entire contents of a file.
             /// </summary>
@@ -54322,7 +53535,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
             /// </param>
             [<Import("readFile", "fs")>]
-            static member readFile (path: string, callback: Exports.readFile.callback_20) : unit = nativeOnly
+            static member readFile (path: string, callback: Exports.readFile.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronously reads the entire contents of a file.
             /// </summary>
@@ -54331,7 +53544,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
             /// </param>
             [<Import("readFile", "fs")>]
-            static member readFile (path: Node.Buffer, callback: Exports.readFile.callback_21) : unit = nativeOnly
+            static member readFile (path: Node.Buffer, callback: Exports.readFile.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronously reads the entire contents of a file.
             /// </summary>
@@ -54340,7 +53553,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
             /// </param>
             [<Import("readFile", "fs")>]
-            static member readFile (path: Node.url.URL, callback: Exports.readFile.callback_22) : unit = nativeOnly
+            static member readFile (path: Node.url.URL, callback: Exports.readFile.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronously reads the entire contents of a file.
             /// </summary>
@@ -54349,7 +53562,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
             /// </param>
             [<Import("readFile", "fs")>]
-            static member readFile (path: float, callback: Exports.readFile.callback_23) : unit = nativeOnly
+            static member readFile (path: float, callback: Exports.readFile.callback) : unit = nativeOnly
             /// <summary>
             /// Returns the contents of the <c>path</c>.
             ///
@@ -54403,7 +53616,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// filename or file descriptor
             /// </param>
             [<Import("readFileSync", "fs")>]
-            static member readFileSync (path: Node.Buffer, ?options: Exports.readFileSync.options_1) : Node.NonSharedBuffer = nativeOnly
+            static member readFileSync (path: Node.Buffer, ?options: Exports.readFileSync.options) : Node.NonSharedBuffer = nativeOnly
             /// <summary>
             /// Returns the contents of the <c>path</c>.
             ///
@@ -54430,7 +53643,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// filename or file descriptor
             /// </param>
             [<Import("readFileSync", "fs")>]
-            static member readFileSync (path: Node.url.URL, ?options: Exports.readFileSync.options_2) : Node.NonSharedBuffer = nativeOnly
+            static member readFileSync (path: Node.url.URL, ?options: Exports.readFileSync.options) : Node.NonSharedBuffer = nativeOnly
             /// <summary>
             /// Returns the contents of the <c>path</c>.
             ///
@@ -54457,7 +53670,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// filename or file descriptor
             /// </param>
             [<Import("readFileSync", "fs")>]
-            static member readFileSync (path: float, ?options: Exports.readFileSync.options_3) : Node.NonSharedBuffer = nativeOnly
+            static member readFileSync (path: float, ?options: Exports.readFileSync.options) : Node.NonSharedBuffer = nativeOnly
             /// <summary>
             /// Synchronously reads the entire contents of a file.
             /// </summary>
@@ -54470,7 +53683,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If a flag is not provided, it defaults to <c>'r'</c>.
             /// </param>
             [<Import("readFileSync", "fs")>]
-            static member readFileSync (path: string, options: Exports.readFileSync.options_4) : string = nativeOnly
+            static member readFileSync (path: string, options: Exports.readFileSync.options_1) : string = nativeOnly
             /// <summary>
             /// Synchronously reads the entire contents of a file.
             /// </summary>
@@ -54496,7 +53709,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If a flag is not provided, it defaults to <c>'r'</c>.
             /// </param>
             [<Import("readFileSync", "fs")>]
-            static member readFileSync (path: Node.Buffer, options: Exports.readFileSync.options_5) : string = nativeOnly
+            static member readFileSync (path: Node.Buffer, options: Exports.readFileSync.options_1) : string = nativeOnly
             /// <summary>
             /// Synchronously reads the entire contents of a file.
             /// </summary>
@@ -54522,7 +53735,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If a flag is not provided, it defaults to <c>'r'</c>.
             /// </param>
             [<Import("readFileSync", "fs")>]
-            static member readFileSync (path: Node.url.URL, options: Exports.readFileSync.options_6) : string = nativeOnly
+            static member readFileSync (path: Node.url.URL, options: Exports.readFileSync.options_1) : string = nativeOnly
             /// <summary>
             /// Synchronously reads the entire contents of a file.
             /// </summary>
@@ -54548,7 +53761,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If a flag is not provided, it defaults to <c>'r'</c>.
             /// </param>
             [<Import("readFileSync", "fs")>]
-            static member readFileSync (path: float, options: Exports.readFileSync.options_7) : string = nativeOnly
+            static member readFileSync (path: float, options: Exports.readFileSync.options_1) : string = nativeOnly
             /// <summary>
             /// Synchronously reads the entire contents of a file.
             /// </summary>
@@ -54587,7 +53800,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If a flag is not provided, it defaults to <c>'r'</c>.
             /// </param>
             [<Import("readFileSync", "fs")>]
-            static member readFileSync (path: string, options: Exports.readFileSync.options_8) : U2<string, Node.NonSharedBuffer> = nativeOnly
+            static member readFileSync (path: string, options: Exports.readFileSync.options_2) : U2<string, Node.NonSharedBuffer> = nativeOnly
             /// <summary>
             /// Synchronously reads the entire contents of a file.
             /// </summary>
@@ -54613,7 +53826,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If a flag is not provided, it defaults to <c>'r'</c>.
             /// </param>
             [<Import("readFileSync", "fs")>]
-            static member readFileSync (path: Node.Buffer, options: Exports.readFileSync.options_9) : U2<string, Node.NonSharedBuffer> = nativeOnly
+            static member readFileSync (path: Node.Buffer, options: Exports.readFileSync.options_2) : U2<string, Node.NonSharedBuffer> = nativeOnly
             /// <summary>
             /// Synchronously reads the entire contents of a file.
             /// </summary>
@@ -54639,7 +53852,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If a flag is not provided, it defaults to <c>'r'</c>.
             /// </param>
             [<Import("readFileSync", "fs")>]
-            static member readFileSync (path: Node.url.URL, options: Exports.readFileSync.options_10) : U2<string, Node.NonSharedBuffer> = nativeOnly
+            static member readFileSync (path: Node.url.URL, options: Exports.readFileSync.options_2) : U2<string, Node.NonSharedBuffer> = nativeOnly
             /// <summary>
             /// Synchronously reads the entire contents of a file.
             /// </summary>
@@ -54665,7 +53878,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If a flag is not provided, it defaults to <c>'r'</c>.
             /// </param>
             [<Import("readFileSync", "fs")>]
-            static member readFileSync (path: float, options: Exports.readFileSync.options_11) : U2<string, Node.NonSharedBuffer> = nativeOnly
+            static member readFileSync (path: float, options: Exports.readFileSync.options_2) : U2<string, Node.NonSharedBuffer> = nativeOnly
             /// <summary>
             /// When <c>file</c> is a filename, asynchronously writes data to the file, replacing the
             /// file if it already exists. <c>data</c> can be a string or a buffer.
@@ -54857,7 +54070,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// filename or file descriptor
             /// </param>
             [<Import("writeFile", "fs")>]
-            static member writeFile (file: string, data: Node.NodeJS.ArrayBufferView, options: Exports.writeFile.options_1 option, callback: Node.fs.NoParamCallback) : unit = nativeOnly
+            static member writeFile (file: string, data: Node.NodeJS.ArrayBufferView, options: Exports.writeFile.options option, callback: Node.fs.NoParamCallback) : unit = nativeOnly
             /// <summary>
             /// When <c>file</c> is a filename, asynchronously writes data to the file, replacing the
             /// file if it already exists. <c>data</c> can be a string or a buffer.
@@ -54985,7 +54198,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// filename or file descriptor
             /// </param>
             [<Import("writeFile", "fs")>]
-            static member writeFile (file: Node.Buffer, data: string, options: Exports.writeFile.options_2 option, callback: Node.fs.NoParamCallback) : unit = nativeOnly
+            static member writeFile (file: Node.Buffer, data: string, options: Exports.writeFile.options option, callback: Node.fs.NoParamCallback) : unit = nativeOnly
             /// <summary>
             /// When <c>file</c> is a filename, asynchronously writes data to the file, replacing the
             /// file if it already exists. <c>data</c> can be a string or a buffer.
@@ -55113,7 +54326,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// filename or file descriptor
             /// </param>
             [<Import("writeFile", "fs")>]
-            static member writeFile (file: Node.Buffer, data: Node.NodeJS.ArrayBufferView, options: Exports.writeFile.options_3 option, callback: Node.fs.NoParamCallback) : unit = nativeOnly
+            static member writeFile (file: Node.Buffer, data: Node.NodeJS.ArrayBufferView, options: Exports.writeFile.options option, callback: Node.fs.NoParamCallback) : unit = nativeOnly
             /// <summary>
             /// When <c>file</c> is a filename, asynchronously writes data to the file, replacing the
             /// file if it already exists. <c>data</c> can be a string or a buffer.
@@ -55241,7 +54454,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// filename or file descriptor
             /// </param>
             [<Import("writeFile", "fs")>]
-            static member writeFile (file: Node.url.URL, data: string, options: Exports.writeFile.options_4 option, callback: Node.fs.NoParamCallback) : unit = nativeOnly
+            static member writeFile (file: Node.url.URL, data: string, options: Exports.writeFile.options option, callback: Node.fs.NoParamCallback) : unit = nativeOnly
             /// <summary>
             /// When <c>file</c> is a filename, asynchronously writes data to the file, replacing the
             /// file if it already exists. <c>data</c> can be a string or a buffer.
@@ -55369,7 +54582,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// filename or file descriptor
             /// </param>
             [<Import("writeFile", "fs")>]
-            static member writeFile (file: Node.url.URL, data: Node.NodeJS.ArrayBufferView, options: Exports.writeFile.options_5 option, callback: Node.fs.NoParamCallback) : unit = nativeOnly
+            static member writeFile (file: Node.url.URL, data: Node.NodeJS.ArrayBufferView, options: Exports.writeFile.options option, callback: Node.fs.NoParamCallback) : unit = nativeOnly
             /// <summary>
             /// When <c>file</c> is a filename, asynchronously writes data to the file, replacing the
             /// file if it already exists. <c>data</c> can be a string or a buffer.
@@ -55497,7 +54710,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// filename or file descriptor
             /// </param>
             [<Import("writeFile", "fs")>]
-            static member writeFile (file: float, data: string, options: Exports.writeFile.options_6 option, callback: Node.fs.NoParamCallback) : unit = nativeOnly
+            static member writeFile (file: float, data: string, options: Exports.writeFile.options option, callback: Node.fs.NoParamCallback) : unit = nativeOnly
             /// <summary>
             /// When <c>file</c> is a filename, asynchronously writes data to the file, replacing the
             /// file if it already exists. <c>data</c> can be a string or a buffer.
@@ -55625,7 +54838,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// filename or file descriptor
             /// </param>
             [<Import("writeFile", "fs")>]
-            static member writeFile (file: float, data: Node.NodeJS.ArrayBufferView, options: Exports.writeFile.options_7 option, callback: Node.fs.NoParamCallback) : unit = nativeOnly
+            static member writeFile (file: float, data: Node.NodeJS.ArrayBufferView, options: Exports.writeFile.options option, callback: Node.fs.NoParamCallback) : unit = nativeOnly
             /// <summary>
             /// When <c>file</c> is a filename, asynchronously writes data to the file, replacing the
             /// file if it already exists. <c>data</c> can be a string or a buffer.
@@ -56057,7 +55270,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// filename or file descriptor
             /// </param>
             [<Import("appendFile", "fs")>]
-            static member appendFile (path: string, data: JS.Uint8Array, options: Exports.appendFile.options_1 option, callback: Node.fs.NoParamCallback) : unit = nativeOnly
+            static member appendFile (path: string, data: JS.Uint8Array, options: Exports.appendFile.options option, callback: Node.fs.NoParamCallback) : unit = nativeOnly
             /// <summary>
             /// Asynchronously append data to a file, creating the file if it does not yet
             /// exist. <c>data</c> can be a string or a <c>Buffer</c>.
@@ -56169,7 +55382,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// filename or file descriptor
             /// </param>
             [<Import("appendFile", "fs")>]
-            static member appendFile (path: Node.Buffer, data: string, options: Exports.appendFile.options_2 option, callback: Node.fs.NoParamCallback) : unit = nativeOnly
+            static member appendFile (path: Node.Buffer, data: string, options: Exports.appendFile.options option, callback: Node.fs.NoParamCallback) : unit = nativeOnly
             /// <summary>
             /// Asynchronously append data to a file, creating the file if it does not yet
             /// exist. <c>data</c> can be a string or a <c>Buffer</c>.
@@ -56281,7 +55494,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// filename or file descriptor
             /// </param>
             [<Import("appendFile", "fs")>]
-            static member appendFile (path: Node.Buffer, data: JS.Uint8Array, options: Exports.appendFile.options_3 option, callback: Node.fs.NoParamCallback) : unit = nativeOnly
+            static member appendFile (path: Node.Buffer, data: JS.Uint8Array, options: Exports.appendFile.options option, callback: Node.fs.NoParamCallback) : unit = nativeOnly
             /// <summary>
             /// Asynchronously append data to a file, creating the file if it does not yet
             /// exist. <c>data</c> can be a string or a <c>Buffer</c>.
@@ -56393,7 +55606,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// filename or file descriptor
             /// </param>
             [<Import("appendFile", "fs")>]
-            static member appendFile (path: Node.url.URL, data: string, options: Exports.appendFile.options_4 option, callback: Node.fs.NoParamCallback) : unit = nativeOnly
+            static member appendFile (path: Node.url.URL, data: string, options: Exports.appendFile.options option, callback: Node.fs.NoParamCallback) : unit = nativeOnly
             /// <summary>
             /// Asynchronously append data to a file, creating the file if it does not yet
             /// exist. <c>data</c> can be a string or a <c>Buffer</c>.
@@ -56505,7 +55718,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// filename or file descriptor
             /// </param>
             [<Import("appendFile", "fs")>]
-            static member appendFile (path: Node.url.URL, data: JS.Uint8Array, options: Exports.appendFile.options_5 option, callback: Node.fs.NoParamCallback) : unit = nativeOnly
+            static member appendFile (path: Node.url.URL, data: JS.Uint8Array, options: Exports.appendFile.options option, callback: Node.fs.NoParamCallback) : unit = nativeOnly
             /// <summary>
             /// Asynchronously append data to a file, creating the file if it does not yet
             /// exist. <c>data</c> can be a string or a <c>Buffer</c>.
@@ -56617,7 +55830,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// filename or file descriptor
             /// </param>
             [<Import("appendFile", "fs")>]
-            static member appendFile (path: float, data: string, options: Exports.appendFile.options_6 option, callback: Node.fs.NoParamCallback) : unit = nativeOnly
+            static member appendFile (path: float, data: string, options: Exports.appendFile.options option, callback: Node.fs.NoParamCallback) : unit = nativeOnly
             /// <summary>
             /// Asynchronously append data to a file, creating the file if it does not yet
             /// exist. <c>data</c> can be a string or a <c>Buffer</c>.
@@ -56729,7 +55942,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// filename or file descriptor
             /// </param>
             [<Import("appendFile", "fs")>]
-            static member appendFile (path: float, data: JS.Uint8Array, options: Exports.appendFile.options_7 option, callback: Node.fs.NoParamCallback) : unit = nativeOnly
+            static member appendFile (path: float, data: JS.Uint8Array, options: Exports.appendFile.options option, callback: Node.fs.NoParamCallback) : unit = nativeOnly
             /// <summary>
             /// Asynchronously append data to a file, creating the file if it does not yet
             /// exist. <c>data</c> can be a string or a <c>Buffer</c>.
@@ -57714,15 +56927,15 @@ EventEmitter.defaultMaxListeners = $0"""
             [<Import("watch", "fs")>]
             static member watch (filename: string, options: Exports.watch.options, listener: Node.fs.WatchListener<Node.NonSharedBuffer>) : Node.fs.FSWatcher = nativeOnly
             [<Import("watch", "fs")>]
-            static member watch (filename: Node.Buffer, options: Exports.watch.options.options_1, listener: Node.fs.WatchListener<Node.NonSharedBuffer>) : Node.fs.FSWatcher = nativeOnly
+            static member watch (filename: Node.Buffer, options: Exports.watch.options, listener: Node.fs.WatchListener<Node.NonSharedBuffer>) : Node.fs.FSWatcher = nativeOnly
             [<Import("watch", "fs")>]
-            static member watch (filename: Node.url.URL, options: Exports.watch.options.options_2, listener: Node.fs.WatchListener<Node.NonSharedBuffer>) : Node.fs.FSWatcher = nativeOnly
+            static member watch (filename: Node.url.URL, options: Exports.watch.options, listener: Node.fs.WatchListener<Node.NonSharedBuffer>) : Node.fs.FSWatcher = nativeOnly
             [<Import("watch", "fs")>]
-            static member watch (filename: string, options: Exports.watch.options.options_3, listener: Node.fs.WatchListener<U2<string, Node.NonSharedBuffer>>) : Node.fs.FSWatcher = nativeOnly
+            static member watch (filename: string, options: Exports.watch.options_1, listener: Node.fs.WatchListener<U2<string, Node.NonSharedBuffer>>) : Node.fs.FSWatcher = nativeOnly
             [<Import("watch", "fs")>]
-            static member watch (filename: Node.Buffer, options: Exports.watch.options.options_4, listener: Node.fs.WatchListener<U2<string, Node.NonSharedBuffer>>) : Node.fs.FSWatcher = nativeOnly
+            static member watch (filename: Node.Buffer, options: Exports.watch.options_1, listener: Node.fs.WatchListener<U2<string, Node.NonSharedBuffer>>) : Node.fs.FSWatcher = nativeOnly
             [<Import("watch", "fs")>]
-            static member watch (filename: Node.url.URL, options: Exports.watch.options.options_5, listener: Node.fs.WatchListener<U2<string, Node.NonSharedBuffer>>) : Node.fs.FSWatcher = nativeOnly
+            static member watch (filename: Node.url.URL, options: Exports.watch.options_1, listener: Node.fs.WatchListener<U2<string, Node.NonSharedBuffer>>) : Node.fs.FSWatcher = nativeOnly
             [<Import("watch", "fs")>]
             static member watch (filename: string, listener: Node.fs.WatchListener<string>) : Node.fs.FSWatcher = nativeOnly
             [<Import("watch", "fs")>]
@@ -60410,7 +59623,7 @@ EventEmitter.defaultMaxListeners = $0"""
             [<Import("writev", "fs")>]
             static member writev<'TBuffers> (fd: float, buffers: 'TBuffers, cb: Exports.writev.cb<'TBuffers>) : unit = nativeOnly
             [<Import("writev", "fs")>]
-            static member writev<'TBuffers> (fd: float, buffers: 'TBuffers, position: float option, cb: Exports.writev.cb_1<'TBuffers>) : unit = nativeOnly
+            static member writev<'TBuffers> (fd: float, buffers: 'TBuffers, position: float option, cb: Exports.writev.cb<'TBuffers>) : unit = nativeOnly
             /// <summary>
             /// For detailed information, see the documentation of the asynchronous version of
             /// this API: <see href="writev">writev</see>.
@@ -60442,7 +59655,7 @@ EventEmitter.defaultMaxListeners = $0"""
             [<Import("readv", "fs")>]
             static member readv<'TBuffers> (fd: float, buffers: 'TBuffers, cb: Exports.readv.cb<'TBuffers>) : unit = nativeOnly
             [<Import("readv", "fs")>]
-            static member readv<'TBuffers> (fd: float, buffers: 'TBuffers, position: float option, cb: Exports.readv.cb_1<'TBuffers>) : unit = nativeOnly
+            static member readv<'TBuffers> (fd: float, buffers: 'TBuffers, position: float option, cb: Exports.readv.cb<'TBuffers>) : unit = nativeOnly
             /// <summary>
             /// For detailed information, see the documentation of the asynchronous version of
             /// this API: <see href="readv">readv</see>.
@@ -60565,7 +59778,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// directory and subsequent read operations.
             /// </summary>
             [<Import("opendir", "fs")>]
-            static member opendir (path: Node.Buffer, cb: Exports.opendir.cb_1) : unit = nativeOnly
+            static member opendir (path: Node.Buffer, cb: Exports.opendir.cb) : unit = nativeOnly
             /// <summary>
             /// Asynchronously open a directory. See the POSIX [<c>opendir(3)</c>](http://man7.org/linux/man-pages/man3/opendir.3.html) documentation for
             /// more details.
@@ -60577,13 +59790,13 @@ EventEmitter.defaultMaxListeners = $0"""
             /// directory and subsequent read operations.
             /// </summary>
             [<Import("opendir", "fs")>]
-            static member opendir (path: Node.url.URL, cb: Exports.opendir.cb_2) : unit = nativeOnly
+            static member opendir (path: Node.url.URL, cb: Exports.opendir.cb) : unit = nativeOnly
             [<Import("opendir", "fs")>]
-            static member opendir (path: string, options: Node.fs.OpenDirOptions, cb: Exports.opendir.cb_3) : unit = nativeOnly
+            static member opendir (path: string, options: Node.fs.OpenDirOptions, cb: Exports.opendir.cb) : unit = nativeOnly
             [<Import("opendir", "fs")>]
-            static member opendir (path: Node.Buffer, options: Node.fs.OpenDirOptions, cb: Exports.opendir.cb_4) : unit = nativeOnly
+            static member opendir (path: Node.Buffer, options: Node.fs.OpenDirOptions, cb: Exports.opendir.cb) : unit = nativeOnly
             [<Import("opendir", "fs")>]
-            static member opendir (path: Node.url.URL, options: Node.fs.OpenDirOptions, cb: Exports.opendir.cb_5) : unit = nativeOnly
+            static member opendir (path: Node.url.URL, options: Node.fs.OpenDirOptions, cb: Exports.opendir.cb) : unit = nativeOnly
             /// <summary>
             /// Asynchronously copies the entire directory structure from <c>src</c> to <c>dest</c>,
             /// including subdirectories and files.
@@ -60739,19 +59952,19 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </code>
             /// </summary>
             [<Import("glob", "fs")>]
-            static member glob (pattern: ReadonlyArray<string>, callback: Exports.glob.callback_1) : unit = nativeOnly
+            static member glob (pattern: ReadonlyArray<string>, callback: Exports.glob.callback) : unit = nativeOnly
             [<Import("glob", "fs")>]
-            static member glob (pattern: string, options: Node.fs.GlobOptionsWithFileTypes, callback: Exports.glob.callback_2) : unit = nativeOnly
+            static member glob (pattern: string, options: Node.fs.GlobOptionsWithFileTypes, callback: Exports.glob.callback_1) : unit = nativeOnly
             [<Import("glob", "fs")>]
-            static member glob (pattern: ReadonlyArray<string>, options: Node.fs.GlobOptionsWithFileTypes, callback: Exports.glob.callback_3) : unit = nativeOnly
+            static member glob (pattern: ReadonlyArray<string>, options: Node.fs.GlobOptionsWithFileTypes, callback: Exports.glob.callback_1) : unit = nativeOnly
             [<Import("glob", "fs")>]
-            static member glob (pattern: string, options: Node.fs.GlobOptionsWithoutFileTypes, callback: Exports.glob.callback_4) : unit = nativeOnly
+            static member glob (pattern: string, options: Node.fs.GlobOptionsWithoutFileTypes, callback: Exports.glob.callback) : unit = nativeOnly
             [<Import("glob", "fs")>]
-            static member glob (pattern: ReadonlyArray<string>, options: Node.fs.GlobOptionsWithoutFileTypes, callback: Exports.glob.callback_5) : unit = nativeOnly
+            static member glob (pattern: ReadonlyArray<string>, options: Node.fs.GlobOptionsWithoutFileTypes, callback: Exports.glob.callback) : unit = nativeOnly
             [<Import("glob", "fs")>]
-            static member glob (pattern: string, options: Node.fs.GlobOptions, callback: Exports.glob.callback_6) : unit = nativeOnly
+            static member glob (pattern: string, options: Node.fs.GlobOptions, callback: Exports.glob.callback_2) : unit = nativeOnly
             [<Import("glob", "fs")>]
-            static member glob (pattern: ReadonlyArray<string>, options: Node.fs.GlobOptions, callback: Exports.glob.callback_7) : unit = nativeOnly
+            static member glob (pattern: ReadonlyArray<string>, options: Node.fs.GlobOptions, callback: Exports.glob.callback_2) : unit = nativeOnly
             /// <summary>
             /// <code lang="js">
             /// import { globSync } from 'node:fs';
@@ -64741,7 +63954,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// this restriction.
                 /// </summary>
                 [<Emit("$0.native($1...)")>]
-                abstract member native: path: string * options: Node.BufferEncoding option * callback: Exports.native.callback_1 -> unit
+                abstract member native: path: string * options: Node.BufferEncoding option * callback: Exports.native.callback -> unit
                 /// <summary>
                 /// Asynchronous [<c>realpath(3)</c>](http://man7.org/linux/man-pages/man3/realpath.3.html).
                 ///
@@ -64758,86 +63971,86 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// be mounted on <c>/proc</c> in order for this function to work. Glibc does not have
                 /// this restriction.
                 /// </summary>
+                [<Emit("$0.native($1...)")>]
+                abstract member native: path: Node.Buffer * options: Node.fs.ObjectEncodingOptions option * callback: Exports.native.callback -> unit
+                /// <summary>
+                /// Asynchronous [<c>realpath(3)</c>](http://man7.org/linux/man-pages/man3/realpath.3.html).
+                ///
+                /// The <c>callback</c> gets two arguments <c>(err, resolvedPath)</c>.
+                ///
+                /// Only paths that can be converted to UTF8 strings are supported.
+                ///
+                /// The optional <c>options</c> argument can be a string specifying an encoding, or an
+                /// object with an <c>encoding</c> property specifying the character encoding to use for
+                /// the path passed to the callback. If the <c>encoding</c> is set to <c>'buffer'</c>,
+                /// the path returned will be passed as a <c>Buffer</c> object.
+                ///
+                /// On Linux, when Node.js is linked against musl libc, the procfs file system must
+                /// be mounted on <c>/proc</c> in order for this function to work. Glibc does not have
+                /// this restriction.
+                /// </summary>
+                [<Emit("$0.native($1...)")>]
+                abstract member native: path: Node.Buffer * options: Node.BufferEncoding option * callback: Exports.native.callback -> unit
+                /// <summary>
+                /// Asynchronous [<c>realpath(3)</c>](http://man7.org/linux/man-pages/man3/realpath.3.html).
+                ///
+                /// The <c>callback</c> gets two arguments <c>(err, resolvedPath)</c>.
+                ///
+                /// Only paths that can be converted to UTF8 strings are supported.
+                ///
+                /// The optional <c>options</c> argument can be a string specifying an encoding, or an
+                /// object with an <c>encoding</c> property specifying the character encoding to use for
+                /// the path passed to the callback. If the <c>encoding</c> is set to <c>'buffer'</c>,
+                /// the path returned will be passed as a <c>Buffer</c> object.
+                ///
+                /// On Linux, when Node.js is linked against musl libc, the procfs file system must
+                /// be mounted on <c>/proc</c> in order for this function to work. Glibc does not have
+                /// this restriction.
+                /// </summary>
+                [<Emit("$0.native($1...)")>]
+                abstract member native: path: Node.url.URL * options: Node.fs.ObjectEncodingOptions option * callback: Exports.native.callback -> unit
+                /// <summary>
+                /// Asynchronous [<c>realpath(3)</c>](http://man7.org/linux/man-pages/man3/realpath.3.html).
+                ///
+                /// The <c>callback</c> gets two arguments <c>(err, resolvedPath)</c>.
+                ///
+                /// Only paths that can be converted to UTF8 strings are supported.
+                ///
+                /// The optional <c>options</c> argument can be a string specifying an encoding, or an
+                /// object with an <c>encoding</c> property specifying the character encoding to use for
+                /// the path passed to the callback. If the <c>encoding</c> is set to <c>'buffer'</c>,
+                /// the path returned will be passed as a <c>Buffer</c> object.
+                ///
+                /// On Linux, when Node.js is linked against musl libc, the procfs file system must
+                /// be mounted on <c>/proc</c> in order for this function to work. Glibc does not have
+                /// this restriction.
+                /// </summary>
+                [<Emit("$0.native($1...)")>]
+                abstract member native: path: Node.url.URL * options: Node.BufferEncoding option * callback: Exports.native.callback -> unit
+                [<Emit("$0.native($1...)")>]
+                abstract member native: path: string * options: Node.fs.BufferEncodingOption * callback: Exports.native.callback_1 -> unit
+                [<Emit("$0.native($1...)")>]
+                abstract member native: path: Node.Buffer * options: Node.fs.BufferEncodingOption * callback: Exports.native.callback_1 -> unit
+                [<Emit("$0.native($1...)")>]
+                abstract member native: path: Node.url.URL * options: Node.fs.BufferEncodingOption * callback: Exports.native.callback_1 -> unit
+                [<Emit("$0.native($1...)")>]
+                abstract member native: path: string * options: Node.fs.ObjectEncodingOptions option * callback: Exports.native.callback_2 -> unit
+                [<Emit("$0.native($1...)")>]
+                abstract member native: path: string * options: Node.BufferEncoding option * callback: Exports.native.callback_2 -> unit
                 [<Emit("$0.native($1...)")>]
                 abstract member native: path: Node.Buffer * options: Node.fs.ObjectEncodingOptions option * callback: Exports.native.callback_2 -> unit
-                /// <summary>
-                /// Asynchronous [<c>realpath(3)</c>](http://man7.org/linux/man-pages/man3/realpath.3.html).
-                ///
-                /// The <c>callback</c> gets two arguments <c>(err, resolvedPath)</c>.
-                ///
-                /// Only paths that can be converted to UTF8 strings are supported.
-                ///
-                /// The optional <c>options</c> argument can be a string specifying an encoding, or an
-                /// object with an <c>encoding</c> property specifying the character encoding to use for
-                /// the path passed to the callback. If the <c>encoding</c> is set to <c>'buffer'</c>,
-                /// the path returned will be passed as a <c>Buffer</c> object.
-                ///
-                /// On Linux, when Node.js is linked against musl libc, the procfs file system must
-                /// be mounted on <c>/proc</c> in order for this function to work. Glibc does not have
-                /// this restriction.
-                /// </summary>
                 [<Emit("$0.native($1...)")>]
-                abstract member native: path: Node.Buffer * options: Node.BufferEncoding option * callback: Exports.native.callback_3 -> unit
-                /// <summary>
-                /// Asynchronous [<c>realpath(3)</c>](http://man7.org/linux/man-pages/man3/realpath.3.html).
-                ///
-                /// The <c>callback</c> gets two arguments <c>(err, resolvedPath)</c>.
-                ///
-                /// Only paths that can be converted to UTF8 strings are supported.
-                ///
-                /// The optional <c>options</c> argument can be a string specifying an encoding, or an
-                /// object with an <c>encoding</c> property specifying the character encoding to use for
-                /// the path passed to the callback. If the <c>encoding</c> is set to <c>'buffer'</c>,
-                /// the path returned will be passed as a <c>Buffer</c> object.
-                ///
-                /// On Linux, when Node.js is linked against musl libc, the procfs file system must
-                /// be mounted on <c>/proc</c> in order for this function to work. Glibc does not have
-                /// this restriction.
-                /// </summary>
+                abstract member native: path: Node.Buffer * options: Node.BufferEncoding option * callback: Exports.native.callback_2 -> unit
                 [<Emit("$0.native($1...)")>]
-                abstract member native: path: Node.url.URL * options: Node.fs.ObjectEncodingOptions option * callback: Exports.native.callback_4 -> unit
-                /// <summary>
-                /// Asynchronous [<c>realpath(3)</c>](http://man7.org/linux/man-pages/man3/realpath.3.html).
-                ///
-                /// The <c>callback</c> gets two arguments <c>(err, resolvedPath)</c>.
-                ///
-                /// Only paths that can be converted to UTF8 strings are supported.
-                ///
-                /// The optional <c>options</c> argument can be a string specifying an encoding, or an
-                /// object with an <c>encoding</c> property specifying the character encoding to use for
-                /// the path passed to the callback. If the <c>encoding</c> is set to <c>'buffer'</c>,
-                /// the path returned will be passed as a <c>Buffer</c> object.
-                ///
-                /// On Linux, when Node.js is linked against musl libc, the procfs file system must
-                /// be mounted on <c>/proc</c> in order for this function to work. Glibc does not have
-                /// this restriction.
-                /// </summary>
+                abstract member native: path: Node.url.URL * options: Node.fs.ObjectEncodingOptions option * callback: Exports.native.callback_2 -> unit
                 [<Emit("$0.native($1...)")>]
-                abstract member native: path: Node.url.URL * options: Node.BufferEncoding option * callback: Exports.native.callback_5 -> unit
+                abstract member native: path: Node.url.URL * options: Node.BufferEncoding option * callback: Exports.native.callback_2 -> unit
                 [<Emit("$0.native($1...)")>]
-                abstract member native: path: string * options: Node.fs.BufferEncodingOption * callback: Exports.native.callback_6 -> unit
+                abstract member native: path: string * callback: Exports.native.callback -> unit
                 [<Emit("$0.native($1...)")>]
-                abstract member native: path: Node.Buffer * options: Node.fs.BufferEncodingOption * callback: Exports.native.callback_7 -> unit
+                abstract member native: path: Node.Buffer * callback: Exports.native.callback -> unit
                 [<Emit("$0.native($1...)")>]
-                abstract member native: path: Node.url.URL * options: Node.fs.BufferEncodingOption * callback: Exports.native.callback_8 -> unit
-                [<Emit("$0.native($1...)")>]
-                abstract member native: path: string * options: Node.fs.ObjectEncodingOptions option * callback: Exports.native.callback_9 -> unit
-                [<Emit("$0.native($1...)")>]
-                abstract member native: path: string * options: Node.BufferEncoding option * callback: Exports.native.callback_10 -> unit
-                [<Emit("$0.native($1...)")>]
-                abstract member native: path: Node.Buffer * options: Node.fs.ObjectEncodingOptions option * callback: Exports.native.callback_11 -> unit
-                [<Emit("$0.native($1...)")>]
-                abstract member native: path: Node.Buffer * options: Node.BufferEncoding option * callback: Exports.native.callback_12 -> unit
-                [<Emit("$0.native($1...)")>]
-                abstract member native: path: Node.url.URL * options: Node.fs.ObjectEncodingOptions option * callback: Exports.native.callback_13 -> unit
-                [<Emit("$0.native($1...)")>]
-                abstract member native: path: Node.url.URL * options: Node.BufferEncoding option * callback: Exports.native.callback_14 -> unit
-                [<Emit("$0.native($1...)")>]
-                abstract member native: path: string * callback: Exports.native.callback_15 -> unit
-                [<Emit("$0.native($1...)")>]
-                abstract member native: path: Node.Buffer * callback: Exports.native.callback_16 -> unit
-                [<Emit("$0.native($1...)")>]
-                abstract member native: path: Node.url.URL * callback: Exports.native.callback_17 -> unit
+                abstract member native: path: Node.url.URL * callback: Exports.native.callback -> unit
 
             module Exports =
 
@@ -64847,55 +64060,10 @@ EventEmitter.defaultMaxListeners = $0"""
                         delegate of err: Node.NodeJS.ErrnoException option * resolvedPath: string -> unit
 
                     type callback_1 =
-                        delegate of err: Node.NodeJS.ErrnoException option * resolvedPath: string -> unit
+                        delegate of err: Node.NodeJS.ErrnoException option * resolvedPath: Node.NonSharedBuffer -> unit
 
                     type callback_2 =
-                        delegate of err: Node.NodeJS.ErrnoException option * resolvedPath: string -> unit
-
-                    type callback_3 =
-                        delegate of err: Node.NodeJS.ErrnoException option * resolvedPath: string -> unit
-
-                    type callback_4 =
-                        delegate of err: Node.NodeJS.ErrnoException option * resolvedPath: string -> unit
-
-                    type callback_5 =
-                        delegate of err: Node.NodeJS.ErrnoException option * resolvedPath: string -> unit
-
-                    type callback_6 =
-                        delegate of err: Node.NodeJS.ErrnoException option * resolvedPath: Node.NonSharedBuffer -> unit
-
-                    type callback_7 =
-                        delegate of err: Node.NodeJS.ErrnoException option * resolvedPath: Node.NonSharedBuffer -> unit
-
-                    type callback_8 =
-                        delegate of err: Node.NodeJS.ErrnoException option * resolvedPath: Node.NonSharedBuffer -> unit
-
-                    type callback_9 =
                         delegate of err: Node.NodeJS.ErrnoException option * resolvedPath: U2<string, Node.NonSharedBuffer> -> unit
-
-                    type callback_10 =
-                        delegate of err: Node.NodeJS.ErrnoException option * resolvedPath: U2<string, Node.NonSharedBuffer> -> unit
-
-                    type callback_11 =
-                        delegate of err: Node.NodeJS.ErrnoException option * resolvedPath: U2<string, Node.NonSharedBuffer> -> unit
-
-                    type callback_12 =
-                        delegate of err: Node.NodeJS.ErrnoException option * resolvedPath: U2<string, Node.NonSharedBuffer> -> unit
-
-                    type callback_13 =
-                        delegate of err: Node.NodeJS.ErrnoException option * resolvedPath: U2<string, Node.NonSharedBuffer> -> unit
-
-                    type callback_14 =
-                        delegate of err: Node.NodeJS.ErrnoException option * resolvedPath: U2<string, Node.NonSharedBuffer> -> unit
-
-                    type callback_15 =
-                        delegate of err: Node.NodeJS.ErrnoException option * resolvedPath: string -> unit
-
-                    type callback_16 =
-                        delegate of err: Node.NodeJS.ErrnoException option * resolvedPath: string -> unit
-
-                    type callback_17 =
-                        delegate of err: Node.NodeJS.ErrnoException option * resolvedPath: string -> unit
 
         module realpathSync_ =
 
@@ -65373,7 +64541,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.Buffer * options: Exports.__promisify__.options_1 -> JS.Promise<ResizeArray<string>>
+                abstract member __promisify__: path: Node.Buffer * options: Exports.__promisify__.options -> JS.Promise<ResizeArray<string>>
                 /// <summary>
                 /// Asynchronous readdir(3) - read a directory.
                 /// </summary>
@@ -65406,7 +64574,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.url.URL * options: Exports.__promisify__.options_2 -> JS.Promise<ResizeArray<string>>
+                abstract member __promisify__: path: Node.url.URL * options: Exports.__promisify__.options -> JS.Promise<ResizeArray<string>>
                 /// <summary>
                 /// Asynchronous readdir(3) - read a directory.
                 /// </summary>
@@ -65428,7 +64596,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: string * options: Exports.__promisify__.options.options_3 -> JS.Promise<ResizeArray<Node.NonSharedBuffer>>
+                abstract member __promisify__: path: string * options: Exports.__promisify__.options_1 -> JS.Promise<ResizeArray<Node.NonSharedBuffer>>
                 /// <summary>
                 /// Asynchronous readdir(3) - read a directory.
                 /// </summary>
@@ -65439,7 +64607,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.Buffer * options: Exports.__promisify__.options.options_4 -> JS.Promise<ResizeArray<Node.NonSharedBuffer>>
+                abstract member __promisify__: path: Node.Buffer * options: Exports.__promisify__.options_1 -> JS.Promise<ResizeArray<Node.NonSharedBuffer>>
                 /// <summary>
                 /// Asynchronous readdir(3) - read a directory.
                 /// </summary>
@@ -65450,7 +64618,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.url.URL * options: Exports.__promisify__.options.options_5 -> JS.Promise<ResizeArray<Node.NonSharedBuffer>>
+                abstract member __promisify__: path: Node.url.URL * options: Exports.__promisify__.options_1 -> JS.Promise<ResizeArray<Node.NonSharedBuffer>>
                 /// <summary>
                 /// Asynchronous readdir(3) - read a directory.
                 /// </summary>
@@ -65461,7 +64629,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: string * options: Exports.__promisify__.options_6 -> JS.Promise<U2<ResizeArray<string>, ResizeArray<Node.NonSharedBuffer>>>
+                abstract member __promisify__: path: string * options: Exports.__promisify__.options_2 -> JS.Promise<U2<ResizeArray<string>, ResizeArray<Node.NonSharedBuffer>>>
                 /// <summary>
                 /// Asynchronous readdir(3) - read a directory.
                 /// </summary>
@@ -65472,7 +64640,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.Buffer * options: Exports.__promisify__.options_7 -> JS.Promise<U2<ResizeArray<string>, ResizeArray<Node.NonSharedBuffer>>>
+                abstract member __promisify__: path: Node.Buffer * options: Exports.__promisify__.options_2 -> JS.Promise<U2<ResizeArray<string>, ResizeArray<Node.NonSharedBuffer>>>
                 /// <summary>
                 /// Asynchronous readdir(3) - read a directory.
                 /// </summary>
@@ -65483,7 +64651,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.url.URL * options: Exports.__promisify__.options_8 -> JS.Promise<U2<ResizeArray<string>, ResizeArray<Node.NonSharedBuffer>>>
+                abstract member __promisify__: path: Node.url.URL * options: Exports.__promisify__.options_2 -> JS.Promise<U2<ResizeArray<string>, ResizeArray<Node.NonSharedBuffer>>>
                 /// <summary>
                 /// Asynchronous readdir(3) - read a directory.
                 /// </summary>
@@ -65494,7 +64662,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// If called with <c>withFileTypes: true</c> the result data will be an array of Dirent
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: string * options: Exports.__promisify__.options_9 -> JS.Promise<ResizeArray<Node.fs.Dirent>>
+                abstract member __promisify__: path: string * options: Exports.__promisify__.options_3 -> JS.Promise<ResizeArray<Node.fs.Dirent>>
                 /// <summary>
                 /// Asynchronous readdir(3) - read a directory.
                 /// </summary>
@@ -65505,7 +64673,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// If called with <c>withFileTypes: true</c> the result data will be an array of Dirent
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.Buffer * options: Exports.__promisify__.options_10 -> JS.Promise<ResizeArray<Node.fs.Dirent>>
+                abstract member __promisify__: path: Node.Buffer * options: Exports.__promisify__.options_3 -> JS.Promise<ResizeArray<Node.fs.Dirent>>
                 /// <summary>
                 /// Asynchronous readdir(3) - read a directory.
                 /// </summary>
@@ -65516,7 +64684,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// If called with <c>withFileTypes: true</c> the result data will be an array of Dirent
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.url.URL * options: Exports.__promisify__.options_11 -> JS.Promise<ResizeArray<Node.fs.Dirent>>
+                abstract member __promisify__: path: Node.url.URL * options: Exports.__promisify__.options_3 -> JS.Promise<ResizeArray<Node.fs.Dirent>>
                 /// <summary>
                 /// Asynchronous readdir(3) - read a directory.
                 /// </summary>
@@ -65527,7 +64695,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// Must include <c>withFileTypes: true</c> and <c>encoding: 'buffer'</c>.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: string * options: Exports.__promisify__.options_12 -> JS.Promise<ResizeArray<Node.fs.Dirent<Node.NonSharedBuffer>>>
+                abstract member __promisify__: path: string * options: Exports.__promisify__.options_4 -> JS.Promise<ResizeArray<Node.fs.Dirent<Node.NonSharedBuffer>>>
                 /// <summary>
                 /// Asynchronous readdir(3) - read a directory.
                 /// </summary>
@@ -65538,7 +64706,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// Must include <c>withFileTypes: true</c> and <c>encoding: 'buffer'</c>.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.Buffer * options: Exports.__promisify__.options_13 -> JS.Promise<ResizeArray<Node.fs.Dirent<Node.NonSharedBuffer>>>
+                abstract member __promisify__: path: Node.Buffer * options: Exports.__promisify__.options_4 -> JS.Promise<ResizeArray<Node.fs.Dirent<Node.NonSharedBuffer>>>
                 /// <summary>
                 /// Asynchronous readdir(3) - read a directory.
                 /// </summary>
@@ -65549,7 +64717,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// Must include <c>withFileTypes: true</c> and <c>encoding: 'buffer'</c>.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.url.URL * options: Exports.__promisify__.options_14 -> JS.Promise<ResizeArray<Node.fs.Dirent<Node.NonSharedBuffer>>>
+                abstract member __promisify__: path: Node.url.URL * options: Exports.__promisify__.options_4 -> JS.Promise<ResizeArray<Node.fs.Dirent<Node.NonSharedBuffer>>>
 
             module Exports =
 
@@ -65569,41 +64737,13 @@ EventEmitter.defaultMaxListeners = $0"""
                         member val withFileTypes : bool option = nativeOnly with get, set
                         member val ``recursive`` : bool option = nativeOnly with get, set
 
-                    [<Global>]
-                    [<AllowNullLiteral>]
-                    type options_1
-                        [<ParamObject; Emit("$0")>]
-                        (
-                            ?encoding: Node.BufferEncoding,
-                            ?withFileTypes: bool,
-                            ?``recursive``: bool
-                        ) =
-
-                        member val encoding : Node.BufferEncoding option = nativeOnly with get, set
-                        member val withFileTypes : bool option = nativeOnly with get, set
-                        member val ``recursive`` : bool option = nativeOnly with get, set
-
-                    [<Global>]
-                    [<AllowNullLiteral>]
-                    type options_2
-                        [<ParamObject; Emit("$0")>]
-                        (
-                            ?encoding: Node.BufferEncoding,
-                            ?withFileTypes: bool,
-                            ?``recursive``: bool
-                        ) =
-
-                        member val encoding : Node.BufferEncoding option = nativeOnly with get, set
-                        member val withFileTypes : bool option = nativeOnly with get, set
-                        member val ``recursive`` : bool option = nativeOnly with get, set
+                    [<RequireQualifiedAccess>]
+                    [<Erase(CaseRules.None)>]
+                    type options_1 =
+                        | buffer
+                        | Case1 of Exports.__promisify__.options.Cases.Case1
 
                     module options =
-
-                        [<RequireQualifiedAccess>]
-                        [<Erase(CaseRules.None)>]
-                        type options_3 =
-                            | buffer
-                            | Case1 of Exports.__promisify__.options.options_3.Cases.Case1
 
                         module Cases =
 
@@ -65621,173 +64761,23 @@ EventEmitter.defaultMaxListeners = $0"""
                                 member val withFileTypes : bool option = nativeOnly with get, set
                                 member val ``recursive`` : bool option = nativeOnly with get, set
 
-                            [<Global>]
-                            [<AllowNullLiteral>]
-                            type Case1_1
-                                [<ParamObject; Emit("$0")>]
-                                (
-                                    encoding: string,
-                                    ?withFileTypes: bool,
-                                    ?``recursive``: bool
-                                ) =
-
-                                member val encoding : string = nativeOnly with get, set
-                                member val withFileTypes : bool option = nativeOnly with get, set
-                                member val ``recursive`` : bool option = nativeOnly with get, set
-
-                            [<Global>]
-                            [<AllowNullLiteral>]
-                            type Case1_2
-                                [<ParamObject; Emit("$0")>]
-                                (
-                                    encoding: string,
-                                    ?withFileTypes: bool,
-                                    ?``recursive``: bool
-                                ) =
-
-                                member val encoding : string = nativeOnly with get, set
-                                member val withFileTypes : bool option = nativeOnly with get, set
-                                member val ``recursive`` : bool option = nativeOnly with get, set
-
-                        module options_3 =
-
-                            module Cases =
-
-                                [<Global>]
-                                [<AllowNullLiteral>]
-                                type Case1
-                                    [<ParamObject; Emit("$0")>]
-                                    (
-                                        encoding: string,
-                                        ?withFileTypes: bool,
-                                        ?``recursive``: bool
-                                    ) =
-
-                                    member val encoding : string = nativeOnly with get, set
-                                    member val withFileTypes : bool option = nativeOnly with get, set
-                                    member val ``recursive`` : bool option = nativeOnly with get, set
-
-                        [<RequireQualifiedAccess>]
-                        [<Erase(CaseRules.None)>]
-                        type options_4 =
-                            | buffer
-                            | Case1 of Exports.__promisify__.options.options_4.Cases.Case1
-
-                        module options_4 =
-
-                            module Cases =
-
-                                [<Global>]
-                                [<AllowNullLiteral>]
-                                type Case1
-                                    [<ParamObject; Emit("$0")>]
-                                    (
-                                        encoding: string,
-                                        ?withFileTypes: bool,
-                                        ?``recursive``: bool
-                                    ) =
-
-                                    member val encoding : string = nativeOnly with get, set
-                                    member val withFileTypes : bool option = nativeOnly with get, set
-                                    member val ``recursive`` : bool option = nativeOnly with get, set
-
-                        [<RequireQualifiedAccess>]
-                        [<Erase(CaseRules.None)>]
-                        type options_5 =
-                            | buffer
-                            | Case1 of Exports.__promisify__.options.options_5.Cases.Case1
-
-                        module options_5 =
-
-                            module Cases =
-
-                                [<Global>]
-                                [<AllowNullLiteral>]
-                                type Case1
-                                    [<ParamObject; Emit("$0")>]
-                                    (
-                                        encoding: string,
-                                        ?withFileTypes: bool,
-                                        ?``recursive``: bool
-                                    ) =
-
-                                    member val encoding : string = nativeOnly with get, set
-                                    member val withFileTypes : bool option = nativeOnly with get, set
-                                    member val ``recursive`` : bool option = nativeOnly with get, set
-
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type options_6 =
+                    type options_2 =
                         abstract member encoding: Node.BufferEncoding option with get, set
                         abstract member withFileTypes: bool option with get, set
                         abstract member ``recursive``: bool option with get, set
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type options_7 =
-                        abstract member encoding: Node.BufferEncoding option with get, set
-                        abstract member withFileTypes: bool option with get, set
-                        abstract member ``recursive``: bool option with get, set
-
-                    [<AllowNullLiteral>]
-                    [<Interface>]
-                    type options_8 =
-                        abstract member encoding: Node.BufferEncoding option with get, set
-                        abstract member withFileTypes: bool option with get, set
-                        abstract member ``recursive``: bool option with get, set
-
-                    [<AllowNullLiteral>]
-                    [<Interface>]
-                    type options_9 =
-                        abstract member encoding: Node.BufferEncoding option with get, set
-                        abstract member withFileTypes: bool with get, set
-                        abstract member ``recursive``: bool option with get, set
-
-                    [<AllowNullLiteral>]
-                    [<Interface>]
-                    type options_10 =
-                        abstract member encoding: Node.BufferEncoding option with get, set
-                        abstract member withFileTypes: bool with get, set
-                        abstract member ``recursive``: bool option with get, set
-
-                    [<AllowNullLiteral>]
-                    [<Interface>]
-                    type options_11 =
+                    type options_3 =
                         abstract member encoding: Node.BufferEncoding option with get, set
                         abstract member withFileTypes: bool with get, set
                         abstract member ``recursive``: bool option with get, set
 
                     [<Global>]
                     [<AllowNullLiteral>]
-                    type options_12
-                        [<ParamObject; Emit("$0")>]
-                        (
-                            encoding: string,
-                            withFileTypes: bool,
-                            ?``recursive``: bool
-                        ) =
-
-                        member val encoding : string = nativeOnly with get, set
-                        member val withFileTypes : bool = nativeOnly with get, set
-                        member val ``recursive`` : bool option = nativeOnly with get, set
-
-                    [<Global>]
-                    [<AllowNullLiteral>]
-                    type options_13
-                        [<ParamObject; Emit("$0")>]
-                        (
-                            encoding: string,
-                            withFileTypes: bool,
-                            ?``recursive``: bool
-                        ) =
-
-                        member val encoding : string = nativeOnly with get, set
-                        member val withFileTypes : bool = nativeOnly with get, set
-                        member val ``recursive`` : bool option = nativeOnly with get, set
-
-                    [<Global>]
-                    [<AllowNullLiteral>]
-                    type options_14
+                    type options_4
                         [<ParamObject; Emit("$0")>]
                         (
                             encoding: string,
@@ -66198,7 +65188,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// The offset from the beginning of the file where this data should be written. If not supplied, defaults to the current position.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__<'TBuffer>: fd: float * ?buffer: 'TBuffer * ?offset: float * ?length: float * ?position: float -> JS.Promise<Exports.__promisify___45<'TBuffer>>
+                abstract member __promisify__<'TBuffer>: fd: float * ?buffer: 'TBuffer * ?offset: float * ?length: float * ?position: float -> JS.Promise<Exports.__promisify___11<'TBuffer>>
                 /// <summary>
                 /// Asynchronously writes <c>buffer</c> to the file referenced by the supplied file descriptor.
                 /// </summary>
@@ -66212,7 +65202,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// * <c>position</c> The offset from the beginning of the file where this data should be written. If not supplied, defaults to the current position.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__<'TBuffer>: fd: float * ?buffer: 'TBuffer * ?options: Node.fs.WriteOptions -> JS.Promise<Exports.__promisify___46<'TBuffer>>
+                abstract member __promisify__<'TBuffer>: fd: float * ?buffer: 'TBuffer * ?options: Node.fs.WriteOptions -> JS.Promise<Exports.__promisify___11<'TBuffer>>
                 /// <summary>
                 /// Asynchronously writes <c>string</c> to the file referenced by the supplied file descriptor.
                 /// </summary>
@@ -66229,13 +65219,13 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// The expected string encoding.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: fd: float * string: string * ?position: float * ?encoding: Node.BufferEncoding -> JS.Promise<Exports.__promisify___47>
+                abstract member __promisify__: fd: float * string: string * ?position: float * ?encoding: Node.BufferEncoding -> JS.Promise<Exports.__promisify___12>
 
             module Exports =
 
                 [<Global>]
                 [<AllowNullLiteral>]
-                type __promisify___45<'TBuffer>
+                type __promisify___11<'TBuffer>
                     [<ParamObject; Emit("$0")>]
                     (
                         bytesWritten: float,
@@ -66247,19 +65237,7 @@ EventEmitter.defaultMaxListeners = $0"""
 
                 [<Global>]
                 [<AllowNullLiteral>]
-                type __promisify___46<'TBuffer>
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        bytesWritten: float,
-                        buffer: 'TBuffer
-                    ) =
-
-                    member val bytesWritten : float = nativeOnly with get, set
-                    member val buffer : 'TBuffer = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type __promisify___47
+                type __promisify___12
                     [<ParamObject; Emit("$0")>]
                     (
                         bytesWritten: float,
@@ -66318,7 +65296,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// The offset from the beginning of the file from which data should be read. If <c>null</c>, data will be read from the current position.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__<'TBuffer>: fd: float * buffer: 'TBuffer * offset: float * length: float * position: float option -> JS.Promise<Exports.__promisify___48<'TBuffer>>
+                abstract member __promisify__<'TBuffer>: fd: float * buffer: 'TBuffer * offset: float * length: float * position: float option -> JS.Promise<Exports.__promisify___13<'TBuffer>>
                 /// <param name="fd">
                 /// A file descriptor.
                 /// </param>
@@ -66335,17 +65313,17 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// The offset from the beginning of the file from which data should be read. If <c>null</c>, data will be read from the current position.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__<'TBuffer>: fd: float * buffer: 'TBuffer * offset: float * length: float * position: bigint option -> JS.Promise<Exports.__promisify___49<'TBuffer>>
+                abstract member __promisify__<'TBuffer>: fd: float * buffer: 'TBuffer * offset: float * length: float * position: bigint option -> JS.Promise<Exports.__promisify___13<'TBuffer>>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__<'TBuffer>: fd: float * options: Node.fs.ReadOptionsWithBuffer<'TBuffer> -> JS.Promise<Exports.__promisify___50<'TBuffer>>
+                abstract member __promisify__<'TBuffer>: fd: float * options: Node.fs.ReadOptionsWithBuffer<'TBuffer> -> JS.Promise<Exports.__promisify___13<'TBuffer>>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: fd: float -> JS.Promise<Exports.__promisify___51>
+                abstract member __promisify__: fd: float -> JS.Promise<Exports.__promisify___14>
 
             module Exports =
 
                 [<Global>]
                 [<AllowNullLiteral>]
-                type __promisify___48<'TBuffer>
+                type __promisify___13<'TBuffer>
                     [<ParamObject; Emit("$0")>]
                     (
                         bytesRead: float,
@@ -66357,31 +65335,7 @@ EventEmitter.defaultMaxListeners = $0"""
 
                 [<Global>]
                 [<AllowNullLiteral>]
-                type __promisify___49<'TBuffer>
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        bytesRead: float,
-                        buffer: 'TBuffer
-                    ) =
-
-                    member val bytesRead : float = nativeOnly with get, set
-                    member val buffer : 'TBuffer = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type __promisify___50<'TBuffer>
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        bytesRead: float,
-                        buffer: 'TBuffer
-                    ) =
-
-                    member val bytesRead : float = nativeOnly with get, set
-                    member val buffer : 'TBuffer = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type __promisify___51
+                type __promisify___14
                     [<ParamObject; Emit("$0")>]
                     (
                         bytesRead: float,
@@ -66408,7 +65362,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// If a flag is not provided, it defaults to <c>'r'</c>.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: string * ?options: Exports.__promisify__.options_15 -> JS.Promise<Node.NonSharedBuffer>
+                abstract member __promisify__: path: string * ?options: Exports.__promisify__.options_5 -> JS.Promise<Node.NonSharedBuffer>
                 /// <summary>
                 /// Asynchronously reads the entire contents of a file.
                 /// </summary>
@@ -66421,7 +65375,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// If a flag is not provided, it defaults to <c>'r'</c>.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.Buffer * ?options: Exports.__promisify__.options_16 -> JS.Promise<Node.NonSharedBuffer>
+                abstract member __promisify__: path: Node.Buffer * ?options: Exports.__promisify__.options_5 -> JS.Promise<Node.NonSharedBuffer>
                 /// <summary>
                 /// Asynchronously reads the entire contents of a file.
                 /// </summary>
@@ -66434,7 +65388,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// If a flag is not provided, it defaults to <c>'r'</c>.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.url.URL * ?options: Exports.__promisify__.options_17 -> JS.Promise<Node.NonSharedBuffer>
+                abstract member __promisify__: path: Node.url.URL * ?options: Exports.__promisify__.options_5 -> JS.Promise<Node.NonSharedBuffer>
                 /// <summary>
                 /// Asynchronously reads the entire contents of a file.
                 /// </summary>
@@ -66447,7 +65401,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// If a flag is not provided, it defaults to <c>'r'</c>.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: float * ?options: Exports.__promisify__.options_18 -> JS.Promise<Node.NonSharedBuffer>
+                abstract member __promisify__: path: float * ?options: Exports.__promisify__.options_5 -> JS.Promise<Node.NonSharedBuffer>
                 /// <summary>
                 /// Asynchronously reads the entire contents of a file.
                 /// </summary>
@@ -66461,7 +65415,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// If a flag is not provided, it defaults to <c>'r'</c>.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: string * options: Exports.__promisify__.options_19 -> JS.Promise<string>
+                abstract member __promisify__: path: string * options: Exports.__promisify__.options_6 -> JS.Promise<string>
                 /// <summary>
                 /// Asynchronously reads the entire contents of a file.
                 /// </summary>
@@ -66489,7 +65443,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// If a flag is not provided, it defaults to <c>'r'</c>.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.Buffer * options: Exports.__promisify__.options_20 -> JS.Promise<string>
+                abstract member __promisify__: path: Node.Buffer * options: Exports.__promisify__.options_6 -> JS.Promise<string>
                 /// <summary>
                 /// Asynchronously reads the entire contents of a file.
                 /// </summary>
@@ -66517,7 +65471,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// If a flag is not provided, it defaults to <c>'r'</c>.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.url.URL * options: Exports.__promisify__.options_21 -> JS.Promise<string>
+                abstract member __promisify__: path: Node.url.URL * options: Exports.__promisify__.options_6 -> JS.Promise<string>
                 /// <summary>
                 /// Asynchronously reads the entire contents of a file.
                 /// </summary>
@@ -66545,7 +65499,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// If a flag is not provided, it defaults to <c>'r'</c>.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: float * options: Exports.__promisify__.options_22 -> JS.Promise<string>
+                abstract member __promisify__: path: float * options: Exports.__promisify__.options_6 -> JS.Promise<string>
                 /// <summary>
                 /// Asynchronously reads the entire contents of a file.
                 /// </summary>
@@ -66587,7 +65541,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// If a flag is not provided, it defaults to <c>'r'</c>.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: string * options: Exports.__promisify__.options_23 -> JS.Promise<U2<string, Node.NonSharedBuffer>>
+                abstract member __promisify__: path: string * options: Exports.__promisify__.options_7 -> JS.Promise<U2<string, Node.NonSharedBuffer>>
                 /// <summary>
                 /// Asynchronously reads the entire contents of a file.
                 /// </summary>
@@ -66615,7 +65569,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// If a flag is not provided, it defaults to <c>'r'</c>.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.Buffer * options: Exports.__promisify__.options_24 -> JS.Promise<U2<string, Node.NonSharedBuffer>>
+                abstract member __promisify__: path: Node.Buffer * options: Exports.__promisify__.options_7 -> JS.Promise<U2<string, Node.NonSharedBuffer>>
                 /// <summary>
                 /// Asynchronously reads the entire contents of a file.
                 /// </summary>
@@ -66643,7 +65597,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// If a flag is not provided, it defaults to <c>'r'</c>.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.url.URL * options: Exports.__promisify__.options_25 -> JS.Promise<U2<string, Node.NonSharedBuffer>>
+                abstract member __promisify__: path: Node.url.URL * options: Exports.__promisify__.options_7 -> JS.Promise<U2<string, Node.NonSharedBuffer>>
                 /// <summary>
                 /// Asynchronously reads the entire contents of a file.
                 /// </summary>
@@ -66671,7 +65625,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// If a flag is not provided, it defaults to <c>'r'</c>.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: float * options: Exports.__promisify__.options_26 -> JS.Promise<U2<string, Node.NonSharedBuffer>>
+                abstract member __promisify__: path: float * options: Exports.__promisify__.options_7 -> JS.Promise<U2<string, Node.NonSharedBuffer>>
 
             module Exports =
 
@@ -66679,7 +65633,7 @@ EventEmitter.defaultMaxListeners = $0"""
 
                     [<Global>]
                     [<AllowNullLiteral>]
-                    type options_15
+                    type options_5
                         [<ParamObject; Emit("$0")>]
                         (
                             ?encoding: obj,
@@ -66691,79 +65645,7 @@ EventEmitter.defaultMaxListeners = $0"""
 
                     [<Global>]
                     [<AllowNullLiteral>]
-                    type options_16
-                        [<ParamObject; Emit("$0")>]
-                        (
-                            ?encoding: obj,
-                            ?flag: string
-                        ) =
-
-                        member val encoding : obj option = nativeOnly with get, set
-                        member val flag : string option = nativeOnly with get, set
-
-                    [<Global>]
-                    [<AllowNullLiteral>]
-                    type options_17
-                        [<ParamObject; Emit("$0")>]
-                        (
-                            ?encoding: obj,
-                            ?flag: string
-                        ) =
-
-                        member val encoding : obj option = nativeOnly with get, set
-                        member val flag : string option = nativeOnly with get, set
-
-                    [<Global>]
-                    [<AllowNullLiteral>]
-                    type options_18
-                        [<ParamObject; Emit("$0")>]
-                        (
-                            ?encoding: obj,
-                            ?flag: string
-                        ) =
-
-                        member val encoding : obj option = nativeOnly with get, set
-                        member val flag : string option = nativeOnly with get, set
-
-                    [<Global>]
-                    [<AllowNullLiteral>]
-                    type options_19
-                        [<ParamObject; Emit("$0")>]
-                        (
-                            encoding: Node.BufferEncoding,
-                            ?flag: string
-                        ) =
-
-                        member val encoding : Node.BufferEncoding = nativeOnly with get, set
-                        member val flag : string option = nativeOnly with get, set
-
-                    [<Global>]
-                    [<AllowNullLiteral>]
-                    type options_20
-                        [<ParamObject; Emit("$0")>]
-                        (
-                            encoding: Node.BufferEncoding,
-                            ?flag: string
-                        ) =
-
-                        member val encoding : Node.BufferEncoding = nativeOnly with get, set
-                        member val flag : string option = nativeOnly with get, set
-
-                    [<Global>]
-                    [<AllowNullLiteral>]
-                    type options_21
-                        [<ParamObject; Emit("$0")>]
-                        (
-                            encoding: Node.BufferEncoding,
-                            ?flag: string
-                        ) =
-
-                        member val encoding : Node.BufferEncoding = nativeOnly with get, set
-                        member val flag : string option = nativeOnly with get, set
-
-                    [<Global>]
-                    [<AllowNullLiteral>]
-                    type options_22
+                    type options_6
                         [<ParamObject; Emit("$0")>]
                         (
                             encoding: Node.BufferEncoding,
@@ -66775,25 +65657,7 @@ EventEmitter.defaultMaxListeners = $0"""
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type options_23 =
-                        abstract member encoding: Node.BufferEncoding option with get, set
-                        abstract member flag: string option with get, set
-
-                    [<AllowNullLiteral>]
-                    [<Interface>]
-                    type options_24 =
-                        abstract member encoding: Node.BufferEncoding option with get, set
-                        abstract member flag: string option with get, set
-
-                    [<AllowNullLiteral>]
-                    [<Interface>]
-                    type options_25 =
-                        abstract member encoding: Node.BufferEncoding option with get, set
-                        abstract member flag: string option with get, set
-
-                    [<AllowNullLiteral>]
-                    [<Interface>]
-                    type options_26 =
+                    type options_7 =
                         abstract member encoding: Node.BufferEncoding option with get, set
                         abstract member flag: string option with get, set
 
@@ -68052,36 +66916,9 @@ EventEmitter.defaultMaxListeners = $0"""
                     delegate of err: Node.NodeJS.ErrnoException option * stats: Node.fs.Stats -> unit
 
                 type callback_1 =
-                    delegate of err: Node.NodeJS.ErrnoException option * stats: Node.fs.Stats -> unit
+                    delegate of err: Node.NodeJS.ErrnoException option * stats: Node.fs.BigIntStats -> unit
 
                 type callback_2 =
-                    delegate of err: Node.NodeJS.ErrnoException option * stats: Node.fs.Stats -> unit
-
-                type callback_3 =
-                    delegate of err: Node.NodeJS.ErrnoException option * stats: Node.fs.Stats -> unit
-
-                type callback_4 =
-                    delegate of err: Node.NodeJS.ErrnoException option * stats: Node.fs.Stats -> unit
-
-                type callback_5 =
-                    delegate of err: Node.NodeJS.ErrnoException option * stats: Node.fs.Stats -> unit
-
-                type callback_6 =
-                    delegate of err: Node.NodeJS.ErrnoException option * stats: Node.fs.BigIntStats -> unit
-
-                type callback_7 =
-                    delegate of err: Node.NodeJS.ErrnoException option * stats: Node.fs.BigIntStats -> unit
-
-                type callback_8 =
-                    delegate of err: Node.NodeJS.ErrnoException option * stats: Node.fs.BigIntStats -> unit
-
-                type callback_9 =
-                    delegate of err: Node.NodeJS.ErrnoException option * stats: U2<Node.fs.Stats, Node.fs.BigIntStats> -> unit
-
-                type callback_10 =
-                    delegate of err: Node.NodeJS.ErrnoException option * stats: U2<Node.fs.Stats, Node.fs.BigIntStats> -> unit
-
-                type callback_11 =
                     delegate of err: Node.NodeJS.ErrnoException option * stats: U2<Node.fs.Stats, Node.fs.BigIntStats> -> unit
 
             module fstat =
@@ -68090,12 +66927,9 @@ EventEmitter.defaultMaxListeners = $0"""
                     delegate of err: Node.NodeJS.ErrnoException option * stats: Node.fs.Stats -> unit
 
                 type callback_1 =
-                    delegate of err: Node.NodeJS.ErrnoException option * stats: Node.fs.Stats -> unit
-
-                type callback_2 =
                     delegate of err: Node.NodeJS.ErrnoException option * stats: Node.fs.BigIntStats -> unit
 
-                type callback_3 =
+                type callback_2 =
                     delegate of err: Node.NodeJS.ErrnoException option * stats: U2<Node.fs.Stats, Node.fs.BigIntStats> -> unit
 
             module lstat =
@@ -68104,36 +66938,9 @@ EventEmitter.defaultMaxListeners = $0"""
                     delegate of err: Node.NodeJS.ErrnoException option * stats: Node.fs.Stats -> unit
 
                 type callback_1 =
-                    delegate of err: Node.NodeJS.ErrnoException option * stats: Node.fs.Stats -> unit
+                    delegate of err: Node.NodeJS.ErrnoException option * stats: Node.fs.BigIntStats -> unit
 
                 type callback_2 =
-                    delegate of err: Node.NodeJS.ErrnoException option * stats: Node.fs.Stats -> unit
-
-                type callback_3 =
-                    delegate of err: Node.NodeJS.ErrnoException option * stats: Node.fs.Stats -> unit
-
-                type callback_4 =
-                    delegate of err: Node.NodeJS.ErrnoException option * stats: Node.fs.Stats -> unit
-
-                type callback_5 =
-                    delegate of err: Node.NodeJS.ErrnoException option * stats: Node.fs.Stats -> unit
-
-                type callback_6 =
-                    delegate of err: Node.NodeJS.ErrnoException option * stats: Node.fs.BigIntStats -> unit
-
-                type callback_7 =
-                    delegate of err: Node.NodeJS.ErrnoException option * stats: Node.fs.BigIntStats -> unit
-
-                type callback_8 =
-                    delegate of err: Node.NodeJS.ErrnoException option * stats: Node.fs.BigIntStats -> unit
-
-                type callback_9 =
-                    delegate of err: Node.NodeJS.ErrnoException option * stats: U2<Node.fs.Stats, Node.fs.BigIntStats> -> unit
-
-                type callback_10 =
-                    delegate of err: Node.NodeJS.ErrnoException option * stats: U2<Node.fs.Stats, Node.fs.BigIntStats> -> unit
-
-                type callback_11 =
                     delegate of err: Node.NodeJS.ErrnoException option * stats: U2<Node.fs.Stats, Node.fs.BigIntStats> -> unit
 
             module statfs =
@@ -68142,36 +66949,9 @@ EventEmitter.defaultMaxListeners = $0"""
                     delegate of err: Node.NodeJS.ErrnoException option * stats: Node.fs.StatsFs -> unit
 
                 type callback_1 =
-                    delegate of err: Node.NodeJS.ErrnoException option * stats: Node.fs.StatsFs -> unit
+                    delegate of err: Node.NodeJS.ErrnoException option * stats: Node.fs.BigIntStatsFs -> unit
 
                 type callback_2 =
-                    delegate of err: Node.NodeJS.ErrnoException option * stats: Node.fs.StatsFs -> unit
-
-                type callback_3 =
-                    delegate of err: Node.NodeJS.ErrnoException option * stats: Node.fs.StatsFs -> unit
-
-                type callback_4 =
-                    delegate of err: Node.NodeJS.ErrnoException option * stats: Node.fs.StatsFs -> unit
-
-                type callback_5 =
-                    delegate of err: Node.NodeJS.ErrnoException option * stats: Node.fs.StatsFs -> unit
-
-                type callback_6 =
-                    delegate of err: Node.NodeJS.ErrnoException option * stats: Node.fs.BigIntStatsFs -> unit
-
-                type callback_7 =
-                    delegate of err: Node.NodeJS.ErrnoException option * stats: Node.fs.BigIntStatsFs -> unit
-
-                type callback_8 =
-                    delegate of err: Node.NodeJS.ErrnoException option * stats: Node.fs.BigIntStatsFs -> unit
-
-                type callback_9 =
-                    delegate of err: Node.NodeJS.ErrnoException option * stats: U2<Node.fs.StatsFs, Node.fs.BigIntStatsFs> -> unit
-
-                type callback_10 =
-                    delegate of err: Node.NodeJS.ErrnoException option * stats: U2<Node.fs.StatsFs, Node.fs.BigIntStatsFs> -> unit
-
-                type callback_11 =
                     delegate of err: Node.NodeJS.ErrnoException option * stats: U2<Node.fs.StatsFs, Node.fs.BigIntStatsFs> -> unit
 
             module readlink =
@@ -68180,55 +66960,10 @@ EventEmitter.defaultMaxListeners = $0"""
                     delegate of err: Node.NodeJS.ErrnoException option * linkString: string -> unit
 
                 type callback_1 =
-                    delegate of err: Node.NodeJS.ErrnoException option * linkString: string -> unit
+                    delegate of err: Node.NodeJS.ErrnoException option * linkString: Node.NonSharedBuffer -> unit
 
                 type callback_2 =
-                    delegate of err: Node.NodeJS.ErrnoException option * linkString: string -> unit
-
-                type callback_3 =
-                    delegate of err: Node.NodeJS.ErrnoException option * linkString: string -> unit
-
-                type callback_4 =
-                    delegate of err: Node.NodeJS.ErrnoException option * linkString: string -> unit
-
-                type callback_5 =
-                    delegate of err: Node.NodeJS.ErrnoException option * linkString: string -> unit
-
-                type callback_6 =
-                    delegate of err: Node.NodeJS.ErrnoException option * linkString: Node.NonSharedBuffer -> unit
-
-                type callback_7 =
-                    delegate of err: Node.NodeJS.ErrnoException option * linkString: Node.NonSharedBuffer -> unit
-
-                type callback_8 =
-                    delegate of err: Node.NodeJS.ErrnoException option * linkString: Node.NonSharedBuffer -> unit
-
-                type callback_9 =
                     delegate of err: Node.NodeJS.ErrnoException option * linkString: U2<string, Node.NonSharedBuffer> -> unit
-
-                type callback_10 =
-                    delegate of err: Node.NodeJS.ErrnoException option * linkString: U2<string, Node.NonSharedBuffer> -> unit
-
-                type callback_11 =
-                    delegate of err: Node.NodeJS.ErrnoException option * linkString: U2<string, Node.NonSharedBuffer> -> unit
-
-                type callback_12 =
-                    delegate of err: Node.NodeJS.ErrnoException option * linkString: U2<string, Node.NonSharedBuffer> -> unit
-
-                type callback_13 =
-                    delegate of err: Node.NodeJS.ErrnoException option * linkString: U2<string, Node.NonSharedBuffer> -> unit
-
-                type callback_14 =
-                    delegate of err: Node.NodeJS.ErrnoException option * linkString: U2<string, Node.NonSharedBuffer> -> unit
-
-                type callback_15 =
-                    delegate of err: Node.NodeJS.ErrnoException option * linkString: string -> unit
-
-                type callback_16 =
-                    delegate of err: Node.NodeJS.ErrnoException option * linkString: string -> unit
-
-                type callback_17 =
-                    delegate of err: Node.NodeJS.ErrnoException option * linkString: string -> unit
 
             module realpath =
 
@@ -68236,92 +66971,14 @@ EventEmitter.defaultMaxListeners = $0"""
                     delegate of err: Node.NodeJS.ErrnoException option * resolvedPath: string -> unit
 
                 type callback_1 =
-                    delegate of err: Node.NodeJS.ErrnoException option * resolvedPath: string -> unit
+                    delegate of err: Node.NodeJS.ErrnoException option * resolvedPath: Node.NonSharedBuffer -> unit
 
                 type callback_2 =
-                    delegate of err: Node.NodeJS.ErrnoException option * resolvedPath: string -> unit
-
-                type callback_3 =
-                    delegate of err: Node.NodeJS.ErrnoException option * resolvedPath: string -> unit
-
-                type callback_4 =
-                    delegate of err: Node.NodeJS.ErrnoException option * resolvedPath: string -> unit
-
-                type callback_5 =
-                    delegate of err: Node.NodeJS.ErrnoException option * resolvedPath: string -> unit
-
-                type callback_6 =
-                    delegate of err: Node.NodeJS.ErrnoException option * resolvedPath: Node.NonSharedBuffer -> unit
-
-                type callback_7 =
-                    delegate of err: Node.NodeJS.ErrnoException option * resolvedPath: Node.NonSharedBuffer -> unit
-
-                type callback_8 =
-                    delegate of err: Node.NodeJS.ErrnoException option * resolvedPath: Node.NonSharedBuffer -> unit
-
-                type callback_9 =
                     delegate of err: Node.NodeJS.ErrnoException option * resolvedPath: U2<string, Node.NonSharedBuffer> -> unit
-
-                type callback_10 =
-                    delegate of err: Node.NodeJS.ErrnoException option * resolvedPath: U2<string, Node.NonSharedBuffer> -> unit
-
-                type callback_11 =
-                    delegate of err: Node.NodeJS.ErrnoException option * resolvedPath: U2<string, Node.NonSharedBuffer> -> unit
-
-                type callback_12 =
-                    delegate of err: Node.NodeJS.ErrnoException option * resolvedPath: U2<string, Node.NonSharedBuffer> -> unit
-
-                type callback_13 =
-                    delegate of err: Node.NodeJS.ErrnoException option * resolvedPath: U2<string, Node.NonSharedBuffer> -> unit
-
-                type callback_14 =
-                    delegate of err: Node.NodeJS.ErrnoException option * resolvedPath: U2<string, Node.NonSharedBuffer> -> unit
-
-                type callback_15 =
-                    delegate of err: Node.NodeJS.ErrnoException option * resolvedPath: string -> unit
-
-                type callback_16 =
-                    delegate of err: Node.NodeJS.ErrnoException option * resolvedPath: string -> unit
-
-                type callback_17 =
-                    delegate of err: Node.NodeJS.ErrnoException option * resolvedPath: string -> unit
 
             module mkdir =
 
                 type callback =
-                    delegate of err: Node.NodeJS.ErrnoException option * ?path: string -> unit
-
-                type callback_1 =
-                    delegate of err: Node.NodeJS.ErrnoException option * ?path: string -> unit
-
-                type callback_2 =
-                    delegate of err: Node.NodeJS.ErrnoException option * ?path: string -> unit
-
-                type callback_3 =
-                    delegate of err: Node.NodeJS.ErrnoException option * ?path: string -> unit
-
-                type callback_4 =
-                    delegate of err: Node.NodeJS.ErrnoException option * ?path: string -> unit
-
-                type callback_5 =
-                    delegate of err: Node.NodeJS.ErrnoException option * ?path: string -> unit
-
-                type callback_6 =
-                    delegate of err: Node.NodeJS.ErrnoException option * ?path: string -> unit
-
-                type callback_7 =
-                    delegate of err: Node.NodeJS.ErrnoException option * ?path: string -> unit
-
-                type callback_8 =
-                    delegate of err: Node.NodeJS.ErrnoException option * ?path: string -> unit
-
-                type callback_9 =
-                    delegate of err: Node.NodeJS.ErrnoException option * ?path: string -> unit
-
-                type callback_10 =
-                    delegate of err: Node.NodeJS.ErrnoException option * ?path: string -> unit
-
-                type callback_11 =
                     delegate of err: Node.NodeJS.ErrnoException option * ?path: string -> unit
 
             module mkdtemp =
@@ -68330,19 +66987,10 @@ EventEmitter.defaultMaxListeners = $0"""
                     delegate of err: Node.NodeJS.ErrnoException option * folder: string -> unit
 
                 type callback_1 =
-                    delegate of err: Node.NodeJS.ErrnoException option * folder: string -> unit
-
-                type callback_2 =
                     delegate of err: Node.NodeJS.ErrnoException option * folder: Node.NonSharedBuffer -> unit
 
-                type callback_3 =
+                type callback_2 =
                     delegate of err: Node.NodeJS.ErrnoException option * folder: U2<string, Node.NonSharedBuffer> -> unit
-
-                type callback_4 =
-                    delegate of err: Node.NodeJS.ErrnoException option * folder: U2<string, Node.NonSharedBuffer> -> unit
-
-                type callback_5 =
-                    delegate of err: Node.NodeJS.ErrnoException option * folder: string -> unit
 
             module readdir =
 
@@ -68363,59 +67011,16 @@ EventEmitter.defaultMaxListeners = $0"""
                 type callback =
                     delegate of err: Node.NodeJS.ErrnoException option * files: ResizeArray<string> -> unit
 
+                [<RequireQualifiedAccess>]
+                [<Erase(CaseRules.None)>]
+                type options_1 =
+                    | buffer
+                    | Case1 of Exports.readdir.options.Cases.Case1
+
                 type callback_1 =
-                    delegate of err: Node.NodeJS.ErrnoException option * files: ResizeArray<string> -> unit
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type options_1
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        ?encoding: Node.BufferEncoding,
-                        ?withFileTypes: bool,
-                        ?``recursive``: bool
-                    ) =
-
-                    member val encoding : Node.BufferEncoding option = nativeOnly with get, set
-                    member val withFileTypes : bool option = nativeOnly with get, set
-                    member val ``recursive`` : bool option = nativeOnly with get, set
-
-                type callback_2 =
-                    delegate of err: Node.NodeJS.ErrnoException option * files: ResizeArray<string> -> unit
-
-                type callback_3 =
-                    delegate of err: Node.NodeJS.ErrnoException option * files: ResizeArray<string> -> unit
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type options_2
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        ?encoding: Node.BufferEncoding,
-                        ?withFileTypes: bool,
-                        ?``recursive``: bool
-                    ) =
-
-                    member val encoding : Node.BufferEncoding option = nativeOnly with get, set
-                    member val withFileTypes : bool option = nativeOnly with get, set
-                    member val ``recursive`` : bool option = nativeOnly with get, set
-
-                type callback_4 =
-                    delegate of err: Node.NodeJS.ErrnoException option * files: ResizeArray<string> -> unit
-
-                type callback_5 =
-                    delegate of err: Node.NodeJS.ErrnoException option * files: ResizeArray<string> -> unit
-
-                type callback_6 =
                     delegate of err: Node.NodeJS.ErrnoException option * files: ResizeArray<Node.NonSharedBuffer> -> unit
 
                 module options =
-
-                    [<RequireQualifiedAccess>]
-                    [<Erase(CaseRules.None)>]
-                    type options_3 =
-                        | buffer
-                        | Case1 of Exports.readdir.options.options_3.Cases.Case1
 
                     module Cases =
 
@@ -68433,187 +67038,29 @@ EventEmitter.defaultMaxListeners = $0"""
                             member val withFileTypes : bool option = nativeOnly with get, set
                             member val ``recursive`` : bool option = nativeOnly with get, set
 
-                        [<Global>]
-                        [<AllowNullLiteral>]
-                        type Case1_1
-                            [<ParamObject; Emit("$0")>]
-                            (
-                                encoding: string,
-                                ?withFileTypes: bool,
-                                ?``recursive``: bool
-                            ) =
-
-                            member val encoding : string = nativeOnly with get, set
-                            member val withFileTypes : bool option = nativeOnly with get, set
-                            member val ``recursive`` : bool option = nativeOnly with get, set
-
-                        [<Global>]
-                        [<AllowNullLiteral>]
-                        type Case1_2
-                            [<ParamObject; Emit("$0")>]
-                            (
-                                encoding: string,
-                                ?withFileTypes: bool,
-                                ?``recursive``: bool
-                            ) =
-
-                            member val encoding : string = nativeOnly with get, set
-                            member val withFileTypes : bool option = nativeOnly with get, set
-                            member val ``recursive`` : bool option = nativeOnly with get, set
-
-                    module options_3 =
-
-                        module Cases =
-
-                            [<Global>]
-                            [<AllowNullLiteral>]
-                            type Case1
-                                [<ParamObject; Emit("$0")>]
-                                (
-                                    encoding: string,
-                                    ?withFileTypes: bool,
-                                    ?``recursive``: bool
-                                ) =
-
-                                member val encoding : string = nativeOnly with get, set
-                                member val withFileTypes : bool option = nativeOnly with get, set
-                                member val ``recursive`` : bool option = nativeOnly with get, set
-
-                    [<RequireQualifiedAccess>]
-                    [<Erase(CaseRules.None)>]
-                    type options_4 =
-                        | buffer
-                        | Case1 of Exports.readdir.options.options_4.Cases.Case1
-
-                    module options_4 =
-
-                        module Cases =
-
-                            [<Global>]
-                            [<AllowNullLiteral>]
-                            type Case1
-                                [<ParamObject; Emit("$0")>]
-                                (
-                                    encoding: string,
-                                    ?withFileTypes: bool,
-                                    ?``recursive``: bool
-                                ) =
-
-                                member val encoding : string = nativeOnly with get, set
-                                member val withFileTypes : bool option = nativeOnly with get, set
-                                member val ``recursive`` : bool option = nativeOnly with get, set
-
-                    [<RequireQualifiedAccess>]
-                    [<Erase(CaseRules.None)>]
-                    type options_5 =
-                        | buffer
-                        | Case1 of Exports.readdir.options.options_5.Cases.Case1
-
-                    module options_5 =
-
-                        module Cases =
-
-                            [<Global>]
-                            [<AllowNullLiteral>]
-                            type Case1
-                                [<ParamObject; Emit("$0")>]
-                                (
-                                    encoding: string,
-                                    ?withFileTypes: bool,
-                                    ?``recursive``: bool
-                                ) =
-
-                                member val encoding : string = nativeOnly with get, set
-                                member val withFileTypes : bool option = nativeOnly with get, set
-                                member val ``recursive`` : bool option = nativeOnly with get, set
-
-                type callback_7 =
-                    delegate of err: Node.NodeJS.ErrnoException option * files: ResizeArray<Node.NonSharedBuffer> -> unit
-
-                type callback_8 =
-                    delegate of err: Node.NodeJS.ErrnoException option * files: ResizeArray<Node.NonSharedBuffer> -> unit
-
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type options_6 =
+                type options_2 =
                     abstract member encoding: Node.BufferEncoding option with get, set
                     abstract member withFileTypes: bool option with get, set
                     abstract member ``recursive``: bool option with get, set
 
-                type callback_9 =
-                    delegate of err: Node.NodeJS.ErrnoException option * files: U2<ResizeArray<string>, ResizeArray<Node.NonSharedBuffer>> -> unit
-
-                type callback_10 =
+                type callback_2 =
                     delegate of err: Node.NodeJS.ErrnoException option * files: U2<ResizeArray<string>, ResizeArray<Node.NonSharedBuffer>> -> unit
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type options_7 =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    abstract member withFileTypes: bool option with get, set
-                    abstract member ``recursive``: bool option with get, set
-
-                type callback_11 =
-                    delegate of err: Node.NodeJS.ErrnoException option * files: U2<ResizeArray<string>, ResizeArray<Node.NonSharedBuffer>> -> unit
-
-                type callback_12 =
-                    delegate of err: Node.NodeJS.ErrnoException option * files: U2<ResizeArray<string>, ResizeArray<Node.NonSharedBuffer>> -> unit
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_8 =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    abstract member withFileTypes: bool option with get, set
-                    abstract member ``recursive``: bool option with get, set
-
-                type callback_13 =
-                    delegate of err: Node.NodeJS.ErrnoException option * files: U2<ResizeArray<string>, ResizeArray<Node.NonSharedBuffer>> -> unit
-
-                type callback_14 =
-                    delegate of err: Node.NodeJS.ErrnoException option * files: U2<ResizeArray<string>, ResizeArray<Node.NonSharedBuffer>> -> unit
-
-                type callback_15 =
-                    delegate of err: Node.NodeJS.ErrnoException option * files: ResizeArray<string> -> unit
-
-                type callback_16 =
-                    delegate of err: Node.NodeJS.ErrnoException option * files: ResizeArray<string> -> unit
-
-                type callback_17 =
-                    delegate of err: Node.NodeJS.ErrnoException option * files: ResizeArray<string> -> unit
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_9 =
+                type options_3 =
                     abstract member encoding: Node.BufferEncoding option with get, set
                     abstract member withFileTypes: bool with get, set
                     abstract member ``recursive``: bool option with get, set
 
-                type callback_18 =
-                    delegate of err: Node.NodeJS.ErrnoException option * files: ResizeArray<Node.fs.Dirent> -> unit
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_10 =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    abstract member withFileTypes: bool with get, set
-                    abstract member ``recursive``: bool option with get, set
-
-                type callback_19 =
-                    delegate of err: Node.NodeJS.ErrnoException option * files: ResizeArray<Node.fs.Dirent> -> unit
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_11 =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    abstract member withFileTypes: bool with get, set
-                    abstract member ``recursive``: bool option with get, set
-
-                type callback_20 =
+                type callback_3 =
                     delegate of err: Node.NodeJS.ErrnoException option * files: ResizeArray<Node.fs.Dirent> -> unit
 
                 [<Global>]
                 [<AllowNullLiteral>]
-                type options_12
+                type options_4
                     [<ParamObject; Emit("$0")>]
                     (
                         encoding: string,
@@ -68625,41 +67072,7 @@ EventEmitter.defaultMaxListeners = $0"""
                     member val withFileTypes : bool = nativeOnly with get, set
                     member val ``recursive`` : bool option = nativeOnly with get, set
 
-                type callback_21 =
-                    delegate of err: Node.NodeJS.ErrnoException option * files: ResizeArray<Node.fs.Dirent<Node.NonSharedBuffer>> -> unit
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type options_13
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        encoding: string,
-                        withFileTypes: bool,
-                        ?``recursive``: bool
-                    ) =
-
-                    member val encoding : string = nativeOnly with get, set
-                    member val withFileTypes : bool = nativeOnly with get, set
-                    member val ``recursive`` : bool option = nativeOnly with get, set
-
-                type callback_22 =
-                    delegate of err: Node.NodeJS.ErrnoException option * files: ResizeArray<Node.fs.Dirent<Node.NonSharedBuffer>> -> unit
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type options_14
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        encoding: string,
-                        withFileTypes: bool,
-                        ?``recursive``: bool
-                    ) =
-
-                    member val encoding : string = nativeOnly with get, set
-                    member val withFileTypes : bool = nativeOnly with get, set
-                    member val ``recursive`` : bool option = nativeOnly with get, set
-
-                type callback_23 =
+                type callback_4 =
                     delegate of err: Node.NodeJS.ErrnoException option * files: ResizeArray<Node.fs.Dirent<Node.NonSharedBuffer>> -> unit
 
             module readdirSync =
@@ -68678,41 +67091,13 @@ EventEmitter.defaultMaxListeners = $0"""
                     member val withFileTypes : bool option = nativeOnly with get, set
                     member val ``recursive`` : bool option = nativeOnly with get, set
 
-                [<Global>]
-                [<AllowNullLiteral>]
-                type options_1
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        ?encoding: Node.BufferEncoding,
-                        ?withFileTypes: bool,
-                        ?``recursive``: bool
-                    ) =
-
-                    member val encoding : Node.BufferEncoding option = nativeOnly with get, set
-                    member val withFileTypes : bool option = nativeOnly with get, set
-                    member val ``recursive`` : bool option = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type options_2
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        ?encoding: Node.BufferEncoding,
-                        ?withFileTypes: bool,
-                        ?``recursive``: bool
-                    ) =
-
-                    member val encoding : Node.BufferEncoding option = nativeOnly with get, set
-                    member val withFileTypes : bool option = nativeOnly with get, set
-                    member val ``recursive`` : bool option = nativeOnly with get, set
+                [<RequireQualifiedAccess>]
+                [<Erase(CaseRules.None)>]
+                type options_1 =
+                    | buffer
+                    | Case1 of Exports.readdirSync.options.Cases.Case1
 
                 module options =
-
-                    [<RequireQualifiedAccess>]
-                    [<Erase(CaseRules.None)>]
-                    type options_3 =
-                        | buffer
-                        | Case1 of Exports.readdirSync.options.options_3.Cases.Case1
 
                     module Cases =
 
@@ -68730,173 +67115,23 @@ EventEmitter.defaultMaxListeners = $0"""
                             member val withFileTypes : bool option = nativeOnly with get, set
                             member val ``recursive`` : bool option = nativeOnly with get, set
 
-                        [<Global>]
-                        [<AllowNullLiteral>]
-                        type Case1_1
-                            [<ParamObject; Emit("$0")>]
-                            (
-                                encoding: string,
-                                ?withFileTypes: bool,
-                                ?``recursive``: bool
-                            ) =
-
-                            member val encoding : string = nativeOnly with get, set
-                            member val withFileTypes : bool option = nativeOnly with get, set
-                            member val ``recursive`` : bool option = nativeOnly with get, set
-
-                        [<Global>]
-                        [<AllowNullLiteral>]
-                        type Case1_2
-                            [<ParamObject; Emit("$0")>]
-                            (
-                                encoding: string,
-                                ?withFileTypes: bool,
-                                ?``recursive``: bool
-                            ) =
-
-                            member val encoding : string = nativeOnly with get, set
-                            member val withFileTypes : bool option = nativeOnly with get, set
-                            member val ``recursive`` : bool option = nativeOnly with get, set
-
-                    module options_3 =
-
-                        module Cases =
-
-                            [<Global>]
-                            [<AllowNullLiteral>]
-                            type Case1
-                                [<ParamObject; Emit("$0")>]
-                                (
-                                    encoding: string,
-                                    ?withFileTypes: bool,
-                                    ?``recursive``: bool
-                                ) =
-
-                                member val encoding : string = nativeOnly with get, set
-                                member val withFileTypes : bool option = nativeOnly with get, set
-                                member val ``recursive`` : bool option = nativeOnly with get, set
-
-                    [<RequireQualifiedAccess>]
-                    [<Erase(CaseRules.None)>]
-                    type options_4 =
-                        | buffer
-                        | Case1 of Exports.readdirSync.options.options_4.Cases.Case1
-
-                    module options_4 =
-
-                        module Cases =
-
-                            [<Global>]
-                            [<AllowNullLiteral>]
-                            type Case1
-                                [<ParamObject; Emit("$0")>]
-                                (
-                                    encoding: string,
-                                    ?withFileTypes: bool,
-                                    ?``recursive``: bool
-                                ) =
-
-                                member val encoding : string = nativeOnly with get, set
-                                member val withFileTypes : bool option = nativeOnly with get, set
-                                member val ``recursive`` : bool option = nativeOnly with get, set
-
-                    [<RequireQualifiedAccess>]
-                    [<Erase(CaseRules.None)>]
-                    type options_5 =
-                        | buffer
-                        | Case1 of Exports.readdirSync.options.options_5.Cases.Case1
-
-                    module options_5 =
-
-                        module Cases =
-
-                            [<Global>]
-                            [<AllowNullLiteral>]
-                            type Case1
-                                [<ParamObject; Emit("$0")>]
-                                (
-                                    encoding: string,
-                                    ?withFileTypes: bool,
-                                    ?``recursive``: bool
-                                ) =
-
-                                member val encoding : string = nativeOnly with get, set
-                                member val withFileTypes : bool option = nativeOnly with get, set
-                                member val ``recursive`` : bool option = nativeOnly with get, set
-
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type options_6 =
+                type options_2 =
                     abstract member encoding: Node.BufferEncoding option with get, set
                     abstract member withFileTypes: bool option with get, set
                     abstract member ``recursive``: bool option with get, set
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type options_7 =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    abstract member withFileTypes: bool option with get, set
-                    abstract member ``recursive``: bool option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_8 =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    abstract member withFileTypes: bool option with get, set
-                    abstract member ``recursive``: bool option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_9 =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    abstract member withFileTypes: bool with get, set
-                    abstract member ``recursive``: bool option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_10 =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    abstract member withFileTypes: bool with get, set
-                    abstract member ``recursive``: bool option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_11 =
+                type options_3 =
                     abstract member encoding: Node.BufferEncoding option with get, set
                     abstract member withFileTypes: bool with get, set
                     abstract member ``recursive``: bool option with get, set
 
                 [<Global>]
                 [<AllowNullLiteral>]
-                type options_12
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        encoding: string,
-                        withFileTypes: bool,
-                        ?``recursive``: bool
-                    ) =
-
-                    member val encoding : string = nativeOnly with get, set
-                    member val withFileTypes : bool = nativeOnly with get, set
-                    member val ``recursive`` : bool option = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type options_13
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        encoding: string,
-                        withFileTypes: bool,
-                        ?``recursive``: bool
-                    ) =
-
-                    member val encoding : string = nativeOnly with get, set
-                    member val withFileTypes : bool = nativeOnly with get, set
-                    member val ``recursive`` : bool option = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type options_14
+                type options_4
                     [<ParamObject; Emit("$0")>]
                     (
                         encoding: string,
@@ -68913,90 +67148,12 @@ EventEmitter.defaultMaxListeners = $0"""
                 type callback =
                     delegate of err: Node.NodeJS.ErrnoException option * fd: float -> unit
 
-                type callback_1 =
-                    delegate of err: Node.NodeJS.ErrnoException option * fd: float -> unit
-
-                type callback_2 =
-                    delegate of err: Node.NodeJS.ErrnoException option * fd: float -> unit
-
-                type callback_3 =
-                    delegate of err: Node.NodeJS.ErrnoException option * fd: float -> unit
-
-                type callback_4 =
-                    delegate of err: Node.NodeJS.ErrnoException option * fd: float -> unit
-
-                type callback_5 =
-                    delegate of err: Node.NodeJS.ErrnoException option * fd: float -> unit
-
-                type callback_6 =
-                    delegate of err: Node.NodeJS.ErrnoException option * fd: float -> unit
-
-                type callback_7 =
-                    delegate of err: Node.NodeJS.ErrnoException option * fd: float -> unit
-
-                type callback_8 =
-                    delegate of err: Node.NodeJS.ErrnoException option * fd: float -> unit
-
-                type callback_9 =
-                    delegate of err: Node.NodeJS.ErrnoException option * fd: float -> unit
-
-                type callback_10 =
-                    delegate of err: Node.NodeJS.ErrnoException option * fd: float -> unit
-
-                type callback_11 =
-                    delegate of err: Node.NodeJS.ErrnoException option * fd: float -> unit
-
-                type callback_12 =
-                    delegate of err: Node.NodeJS.ErrnoException option * fd: float -> unit
-
-                type callback_13 =
-                    delegate of err: Node.NodeJS.ErrnoException option * fd: float -> unit
-
-                type callback_14 =
-                    delegate of err: Node.NodeJS.ErrnoException option * fd: float -> unit
-
-                type callback_15 =
-                    delegate of err: Node.NodeJS.ErrnoException option * fd: float -> unit
-
-                type callback_16 =
-                    delegate of err: Node.NodeJS.ErrnoException option * fd: float -> unit
-
-                type callback_17 =
-                    delegate of err: Node.NodeJS.ErrnoException option * fd: float -> unit
-
-                type callback_18 =
-                    delegate of err: Node.NodeJS.ErrnoException option * fd: float -> unit
-
-                type callback_19 =
-                    delegate of err: Node.NodeJS.ErrnoException option * fd: float -> unit
-
-                type callback_20 =
-                    delegate of err: Node.NodeJS.ErrnoException option * fd: float -> unit
-
             module write =
 
                 type callback<'TBuffer> =
                     delegate of err: Node.NodeJS.ErrnoException option * written: float * buffer: 'TBuffer -> unit
 
-                type callback_1<'TBuffer> =
-                    delegate of err: Node.NodeJS.ErrnoException option * written: float * buffer: 'TBuffer -> unit
-
-                type callback_2<'TBuffer> =
-                    delegate of err: Node.NodeJS.ErrnoException option * written: float * buffer: 'TBuffer -> unit
-
-                type callback_3<'TBuffer> =
-                    delegate of err: Node.NodeJS.ErrnoException option * written: float * buffer: 'TBuffer -> unit
-
-                type callback_4<'TBuffer> =
-                    delegate of err: Node.NodeJS.ErrnoException option * written: float * buffer: 'TBuffer -> unit
-
-                type callback_5 =
-                    delegate of err: Node.NodeJS.ErrnoException option * written: float * str: string -> unit
-
-                type callback_6 =
-                    delegate of err: Node.NodeJS.ErrnoException option * written: float * str: string -> unit
-
-                type callback_7 =
+                type callback_1 =
                     delegate of err: Node.NodeJS.ErrnoException option * written: float * str: string -> unit
 
             module read =
@@ -69007,16 +67164,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 type callback_1<'TBuffer> =
                     delegate of err: Node.NodeJS.ErrnoException option * bytesRead: float * buffer: 'TBuffer -> unit
 
-                type callback_2<'TBuffer> =
-                    delegate of err: Node.NodeJS.ErrnoException option * bytesRead: float * buffer: 'TBuffer -> unit
-
-                type callback_3<'TBuffer> =
-                    delegate of err: Node.NodeJS.ErrnoException option * bytesRead: float * buffer: 'TBuffer -> unit
-
-                type callback_4<'TBuffer> =
-                    delegate of err: Node.NodeJS.ErrnoException option * bytesRead: float * buffer: 'TBuffer -> unit
-
-                type callback_5 =
+                type callback_2 =
                     delegate of err: Node.NodeJS.ErrnoException option * bytesRead: float * buffer: Node.NonSharedBuffer -> unit
 
             module readFile =
@@ -69037,7 +67185,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 [<AllowNullLiteral>]
                 [<Interface>]
                 type options_1 =
-                    abstract member encoding: obj option with get, set
+                    abstract member encoding: Node.BufferEncoding with get, set
                     abstract member flag: string option with get, set
                     /// <summary>
                     /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
@@ -69045,12 +67193,12 @@ EventEmitter.defaultMaxListeners = $0"""
                     abstract member signal: Node.AbortSignal option with get, set
 
                 type callback_1 =
-                    delegate of err: Node.NodeJS.ErrnoException option * data: Node.NonSharedBuffer -> unit
+                    delegate of err: Node.NodeJS.ErrnoException option * data: string -> unit
 
                 [<AllowNullLiteral>]
                 [<Interface>]
                 type options_2 =
-                    abstract member encoding: obj option with get, set
+                    abstract member encoding: Node.BufferEncoding option with get, set
                     abstract member flag: string option with get, set
                     /// <summary>
                     /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
@@ -69058,160 +67206,7 @@ EventEmitter.defaultMaxListeners = $0"""
                     abstract member signal: Node.AbortSignal option with get, set
 
                 type callback_2 =
-                    delegate of err: Node.NodeJS.ErrnoException option * data: Node.NonSharedBuffer -> unit
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_3 =
-                    abstract member encoding: obj option with get, set
-                    abstract member flag: string option with get, set
-                    /// <summary>
-                    /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                    /// </summary>
-                    abstract member signal: Node.AbortSignal option with get, set
-
-                type callback_3 =
-                    delegate of err: Node.NodeJS.ErrnoException option * data: Node.NonSharedBuffer -> unit
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_4 =
-                    abstract member encoding: Node.BufferEncoding with get, set
-                    abstract member flag: string option with get, set
-                    /// <summary>
-                    /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                    /// </summary>
-                    abstract member signal: Node.AbortSignal option with get, set
-
-                type callback_4 =
-                    delegate of err: Node.NodeJS.ErrnoException option * data: string -> unit
-
-                type callback_5 =
-                    delegate of err: Node.NodeJS.ErrnoException option * data: string -> unit
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_5 =
-                    abstract member encoding: Node.BufferEncoding with get, set
-                    abstract member flag: string option with get, set
-                    /// <summary>
-                    /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                    /// </summary>
-                    abstract member signal: Node.AbortSignal option with get, set
-
-                type callback_6 =
-                    delegate of err: Node.NodeJS.ErrnoException option * data: string -> unit
-
-                type callback_7 =
-                    delegate of err: Node.NodeJS.ErrnoException option * data: string -> unit
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_6 =
-                    abstract member encoding: Node.BufferEncoding with get, set
-                    abstract member flag: string option with get, set
-                    /// <summary>
-                    /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                    /// </summary>
-                    abstract member signal: Node.AbortSignal option with get, set
-
-                type callback_8 =
-                    delegate of err: Node.NodeJS.ErrnoException option * data: string -> unit
-
-                type callback_9 =
-                    delegate of err: Node.NodeJS.ErrnoException option * data: string -> unit
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_7 =
-                    abstract member encoding: Node.BufferEncoding with get, set
-                    abstract member flag: string option with get, set
-                    /// <summary>
-                    /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                    /// </summary>
-                    abstract member signal: Node.AbortSignal option with get, set
-
-                type callback_10 =
-                    delegate of err: Node.NodeJS.ErrnoException option * data: string -> unit
-
-                type callback_11 =
-                    delegate of err: Node.NodeJS.ErrnoException option * data: string -> unit
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_8 =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    abstract member flag: string option with get, set
-                    /// <summary>
-                    /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                    /// </summary>
-                    abstract member signal: Node.AbortSignal option with get, set
-
-                type callback_12 =
                     delegate of err: Node.NodeJS.ErrnoException option * data: U2<string, Node.NonSharedBuffer> -> unit
-
-                type callback_13 =
-                    delegate of err: Node.NodeJS.ErrnoException option * data: U2<string, Node.NonSharedBuffer> -> unit
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_9 =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    abstract member flag: string option with get, set
-                    /// <summary>
-                    /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                    /// </summary>
-                    abstract member signal: Node.AbortSignal option with get, set
-
-                type callback_14 =
-                    delegate of err: Node.NodeJS.ErrnoException option * data: U2<string, Node.NonSharedBuffer> -> unit
-
-                type callback_15 =
-                    delegate of err: Node.NodeJS.ErrnoException option * data: U2<string, Node.NonSharedBuffer> -> unit
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_10 =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    abstract member flag: string option with get, set
-                    /// <summary>
-                    /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                    /// </summary>
-                    abstract member signal: Node.AbortSignal option with get, set
-
-                type callback_16 =
-                    delegate of err: Node.NodeJS.ErrnoException option * data: U2<string, Node.NonSharedBuffer> -> unit
-
-                type callback_17 =
-                    delegate of err: Node.NodeJS.ErrnoException option * data: U2<string, Node.NonSharedBuffer> -> unit
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_11 =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    abstract member flag: string option with get, set
-                    /// <summary>
-                    /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                    /// </summary>
-                    abstract member signal: Node.AbortSignal option with get, set
-
-                type callback_18 =
-                    delegate of err: Node.NodeJS.ErrnoException option * data: U2<string, Node.NonSharedBuffer> -> unit
-
-                type callback_19 =
-                    delegate of err: Node.NodeJS.ErrnoException option * data: U2<string, Node.NonSharedBuffer> -> unit
-
-                type callback_20 =
-                    delegate of err: Node.NodeJS.ErrnoException option * data: Node.NonSharedBuffer -> unit
-
-                type callback_21 =
-                    delegate of err: Node.NodeJS.ErrnoException option * data: Node.NonSharedBuffer -> unit
-
-                type callback_22 =
-                    delegate of err: Node.NodeJS.ErrnoException option * data: Node.NonSharedBuffer -> unit
-
-                type callback_23 =
-                    delegate of err: Node.NodeJS.ErrnoException option * data: Node.NonSharedBuffer -> unit
 
             module readFileSync =
 
@@ -69232,78 +67227,6 @@ EventEmitter.defaultMaxListeners = $0"""
                 type options_1
                     [<ParamObject; Emit("$0")>]
                     (
-                        ?encoding: obj,
-                        ?flag: string
-                    ) =
-
-                    member val encoding : obj option = nativeOnly with get, set
-                    member val flag : string option = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type options_2
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        ?encoding: obj,
-                        ?flag: string
-                    ) =
-
-                    member val encoding : obj option = nativeOnly with get, set
-                    member val flag : string option = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type options_3
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        ?encoding: obj,
-                        ?flag: string
-                    ) =
-
-                    member val encoding : obj option = nativeOnly with get, set
-                    member val flag : string option = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type options_4
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        encoding: Node.BufferEncoding,
-                        ?flag: string
-                    ) =
-
-                    member val encoding : Node.BufferEncoding = nativeOnly with get, set
-                    member val flag : string option = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type options_5
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        encoding: Node.BufferEncoding,
-                        ?flag: string
-                    ) =
-
-                    member val encoding : Node.BufferEncoding = nativeOnly with get, set
-                    member val flag : string option = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type options_6
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        encoding: Node.BufferEncoding,
-                        ?flag: string
-                    ) =
-
-                    member val encoding : Node.BufferEncoding = nativeOnly with get, set
-                    member val flag : string option = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type options_7
-                    [<ParamObject; Emit("$0")>]
-                    (
                         encoding: Node.BufferEncoding,
                         ?flag: string
                     ) =
@@ -69313,25 +67236,7 @@ EventEmitter.defaultMaxListeners = $0"""
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type options_8 =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    abstract member flag: string option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_9 =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    abstract member flag: string option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_10 =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    abstract member flag: string option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_11 =
+                type options_2 =
                     abstract member encoding: Node.BufferEncoding option with get, set
                     abstract member flag: string option with get, set
 
@@ -69340,90 +67245,6 @@ EventEmitter.defaultMaxListeners = $0"""
                 [<AllowNullLiteral>]
                 [<Interface>]
                 type options =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    /// <summary>
-                    /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                    /// </summary>
-                    abstract member signal: Node.AbortSignal option with get, set
-                    abstract member mode: Node.fs.Mode option with get, set
-                    abstract member flag: string option with get, set
-                    abstract member flush: bool option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_1 =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    /// <summary>
-                    /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                    /// </summary>
-                    abstract member signal: Node.AbortSignal option with get, set
-                    abstract member mode: Node.fs.Mode option with get, set
-                    abstract member flag: string option with get, set
-                    abstract member flush: bool option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_2 =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    /// <summary>
-                    /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                    /// </summary>
-                    abstract member signal: Node.AbortSignal option with get, set
-                    abstract member mode: Node.fs.Mode option with get, set
-                    abstract member flag: string option with get, set
-                    abstract member flush: bool option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_3 =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    /// <summary>
-                    /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                    /// </summary>
-                    abstract member signal: Node.AbortSignal option with get, set
-                    abstract member mode: Node.fs.Mode option with get, set
-                    abstract member flag: string option with get, set
-                    abstract member flush: bool option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_4 =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    /// <summary>
-                    /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                    /// </summary>
-                    abstract member signal: Node.AbortSignal option with get, set
-                    abstract member mode: Node.fs.Mode option with get, set
-                    abstract member flag: string option with get, set
-                    abstract member flush: bool option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_5 =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    /// <summary>
-                    /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                    /// </summary>
-                    abstract member signal: Node.AbortSignal option with get, set
-                    abstract member mode: Node.fs.Mode option with get, set
-                    abstract member flag: string option with get, set
-                    abstract member flush: bool option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_6 =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    /// <summary>
-                    /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                    /// </summary>
-                    abstract member signal: Node.AbortSignal option with get, set
-                    abstract member mode: Node.fs.Mode option with get, set
-                    abstract member flag: string option with get, set
-                    abstract member flush: bool option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_7 =
                     abstract member encoding: Node.BufferEncoding option with get, set
                     /// <summary>
                     /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
@@ -69447,90 +67268,6 @@ EventEmitter.defaultMaxListeners = $0"""
                     abstract member flag: string option with get, set
                     abstract member flush: bool option with get, set
 
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_1 =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    /// <summary>
-                    /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                    /// </summary>
-                    abstract member signal: Node.AbortSignal option with get, set
-                    abstract member mode: Node.fs.Mode option with get, set
-                    abstract member flag: string option with get, set
-                    abstract member flush: bool option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_2 =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    /// <summary>
-                    /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                    /// </summary>
-                    abstract member signal: Node.AbortSignal option with get, set
-                    abstract member mode: Node.fs.Mode option with get, set
-                    abstract member flag: string option with get, set
-                    abstract member flush: bool option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_3 =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    /// <summary>
-                    /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                    /// </summary>
-                    abstract member signal: Node.AbortSignal option with get, set
-                    abstract member mode: Node.fs.Mode option with get, set
-                    abstract member flag: string option with get, set
-                    abstract member flush: bool option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_4 =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    /// <summary>
-                    /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                    /// </summary>
-                    abstract member signal: Node.AbortSignal option with get, set
-                    abstract member mode: Node.fs.Mode option with get, set
-                    abstract member flag: string option with get, set
-                    abstract member flush: bool option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_5 =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    /// <summary>
-                    /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                    /// </summary>
-                    abstract member signal: Node.AbortSignal option with get, set
-                    abstract member mode: Node.fs.Mode option with get, set
-                    abstract member flag: string option with get, set
-                    abstract member flush: bool option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_6 =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    /// <summary>
-                    /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                    /// </summary>
-                    abstract member signal: Node.AbortSignal option with get, set
-                    abstract member mode: Node.fs.Mode option with get, set
-                    abstract member flag: string option with get, set
-                    abstract member flush: bool option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_7 =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    /// <summary>
-                    /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                    /// </summary>
-                    abstract member signal: Node.AbortSignal option with get, set
-                    abstract member mode: Node.fs.Mode option with get, set
-                    abstract member flag: string option with get, set
-                    abstract member flush: bool option with get, set
-
             module watch =
 
                 [<RequireQualifiedAccess>]
@@ -69539,47 +67276,16 @@ EventEmitter.defaultMaxListeners = $0"""
                     | buffer
                     | Case1 of Node.fs.WatchOptionsWithBufferEncoding
 
-                module options =
-
-                    [<RequireQualifiedAccess>]
-                    [<Erase(CaseRules.None)>]
-                    type options_1 =
-                        | buffer
-                        | Case1 of Node.fs.WatchOptionsWithBufferEncoding
-
-                    [<RequireQualifiedAccess>]
-                    [<Erase(CaseRules.None)>]
-                    type options_2 =
-                        | buffer
-                        | Case1 of Node.fs.WatchOptionsWithBufferEncoding
-
-                    [<RequireQualifiedAccess>]
-                    [<Erase(CaseRules.None)>]
-                    type options_3 =
-                        | buffer
-                        | Case1 of Node.fs.WatchOptions
-                        | Case2 of Node.BufferEncoding
-
-                    [<RequireQualifiedAccess>]
-                    [<Erase(CaseRules.None)>]
-                    type options_4 =
-                        | buffer
-                        | Case1 of Node.fs.WatchOptions
-                        | Case2 of Node.BufferEncoding
-
-                    [<RequireQualifiedAccess>]
-                    [<Erase(CaseRules.None)>]
-                    type options_5 =
-                        | buffer
-                        | Case1 of Node.fs.WatchOptions
-                        | Case2 of Node.BufferEncoding
+                [<RequireQualifiedAccess>]
+                [<Erase(CaseRules.None)>]
+                type options_1 =
+                    | buffer
+                    | Case1 of Node.fs.WatchOptions
+                    | Case2 of Node.BufferEncoding
 
             module writev =
 
                 type cb<'TBuffers> =
-                    delegate of err: Node.NodeJS.ErrnoException option * bytesWritten: float * buffers: 'TBuffers -> unit
-
-                type cb_1<'TBuffers> =
                     delegate of err: Node.NodeJS.ErrnoException option * bytesWritten: float * buffers: 'TBuffers -> unit
 
             module readv =
@@ -69587,27 +67293,9 @@ EventEmitter.defaultMaxListeners = $0"""
                 type cb<'TBuffers> =
                     delegate of err: Node.NodeJS.ErrnoException option * bytesRead: float * buffers: 'TBuffers -> unit
 
-                type cb_1<'TBuffers> =
-                    delegate of err: Node.NodeJS.ErrnoException option * bytesRead: float * buffers: 'TBuffers -> unit
-
             module opendir =
 
                 type cb =
-                    delegate of err: Node.NodeJS.ErrnoException option * dir: Node.fs.Dir -> unit
-
-                type cb_1 =
-                    delegate of err: Node.NodeJS.ErrnoException option * dir: Node.fs.Dir -> unit
-
-                type cb_2 =
-                    delegate of err: Node.NodeJS.ErrnoException option * dir: Node.fs.Dir -> unit
-
-                type cb_3 =
-                    delegate of err: Node.NodeJS.ErrnoException option * dir: Node.fs.Dir -> unit
-
-                type cb_4 =
-                    delegate of err: Node.NodeJS.ErrnoException option * dir: Node.fs.Dir -> unit
-
-                type cb_5 =
                     delegate of err: Node.NodeJS.ErrnoException option * dir: Node.fs.Dir -> unit
 
             module glob =
@@ -69616,24 +67304,9 @@ EventEmitter.defaultMaxListeners = $0"""
                     delegate of err: Node.NodeJS.ErrnoException option * matches: ResizeArray<string> -> unit
 
                 type callback_1 =
-                    delegate of err: Node.NodeJS.ErrnoException option * matches: ResizeArray<string> -> unit
+                    delegate of err: Node.NodeJS.ErrnoException option * matches: ResizeArray<Node.fs.Dirent> -> unit
 
                 type callback_2 =
-                    delegate of err: Node.NodeJS.ErrnoException option * matches: ResizeArray<Node.fs.Dirent> -> unit
-
-                type callback_3 =
-                    delegate of err: Node.NodeJS.ErrnoException option * matches: ResizeArray<Node.fs.Dirent> -> unit
-
-                type callback_4 =
-                    delegate of err: Node.NodeJS.ErrnoException option * matches: ResizeArray<string> -> unit
-
-                type callback_5 =
-                    delegate of err: Node.NodeJS.ErrnoException option * matches: ResizeArray<string> -> unit
-
-                type callback_6 =
-                    delegate of err: Node.NodeJS.ErrnoException option * matches: U2<ResizeArray<Node.fs.Dirent>, ResizeArray<string>> -> unit
-
-                type callback_7 =
                     delegate of err: Node.NodeJS.ErrnoException option * matches: U2<ResizeArray<Node.fs.Dirent>, ResizeArray<string>> -> unit
 
     module fs_promises =
@@ -70755,7 +68428,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with an array of the names of the files in the directory excluding <c>'.'</c> and <c>'..'</c>.
             /// </returns>
             [<Import("readdir", "fs/promises")>]
-            static member readdir (path: string, options: Exports.readdir.options_15) : JS.Promise<ResizeArray<string>> = nativeOnly
+            static member readdir (path: string, options: Exports.readdir.options_5) : JS.Promise<ResizeArray<string>> = nativeOnly
             /// <summary>
             /// Reads the contents of a directory.
             ///
@@ -70836,7 +68509,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with an array of the names of the files in the directory excluding <c>'.'</c> and <c>'..'</c>.
             /// </returns>
             [<Import("readdir", "fs/promises")>]
-            static member readdir (path: Node.Buffer, options: Exports.readdir.options_16) : JS.Promise<ResizeArray<string>> = nativeOnly
+            static member readdir (path: Node.Buffer, options: Exports.readdir.options_5) : JS.Promise<ResizeArray<string>> = nativeOnly
             /// <summary>
             /// Reads the contents of a directory.
             ///
@@ -70917,7 +68590,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with an array of the names of the files in the directory excluding <c>'.'</c> and <c>'..'</c>.
             /// </returns>
             [<Import("readdir", "fs/promises")>]
-            static member readdir (path: Node.url.URL, options: Exports.readdir.options_17) : JS.Promise<ResizeArray<string>> = nativeOnly
+            static member readdir (path: Node.url.URL, options: Exports.readdir.options_5) : JS.Promise<ResizeArray<string>> = nativeOnly
             /// <summary>
             /// Reads the contents of a directory.
             ///
@@ -70955,7 +68628,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
             /// </param>
             [<Import("readdir", "fs/promises")>]
-            static member readdir (path: string, options: Exports.readdir.options.options_18) : JS.Promise<ResizeArray<Node.NonSharedBuffer>> = nativeOnly
+            static member readdir (path: string, options: Exports.readdir.options_6) : JS.Promise<ResizeArray<Node.NonSharedBuffer>> = nativeOnly
             /// <summary>
             /// Asynchronous readdir(3) - read a directory.
             /// </summary>
@@ -70966,7 +68639,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
             /// </param>
             [<Import("readdir", "fs/promises")>]
-            static member readdir (path: Node.Buffer, options: Exports.readdir.options.options_19) : JS.Promise<ResizeArray<Node.NonSharedBuffer>> = nativeOnly
+            static member readdir (path: Node.Buffer, options: Exports.readdir.options_6) : JS.Promise<ResizeArray<Node.NonSharedBuffer>> = nativeOnly
             /// <summary>
             /// Asynchronous readdir(3) - read a directory.
             /// </summary>
@@ -70977,40 +68650,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
             /// </param>
             [<Import("readdir", "fs/promises")>]
-            static member readdir (path: Node.url.URL, options: Exports.readdir.options.options_20) : JS.Promise<ResizeArray<Node.NonSharedBuffer>> = nativeOnly
-            /// <summary>
-            /// Asynchronous readdir(3) - read a directory.
-            /// </summary>
-            /// <param name="path">
-            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-            /// </param>
-            /// <param name="options">
-            /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
-            /// </param>
-            [<Import("readdir", "fs/promises")>]
-            static member readdir (path: string, options: Exports.readdir.options_21) : JS.Promise<U2<ResizeArray<string>, ResizeArray<Node.NonSharedBuffer>>> = nativeOnly
-            /// <summary>
-            /// Asynchronous readdir(3) - read a directory.
-            /// </summary>
-            /// <param name="path">
-            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-            /// </param>
-            /// <param name="options">
-            /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
-            /// </param>
-            [<Import("readdir", "fs/promises")>]
-            static member readdir (path: Node.Buffer, options: Exports.readdir.options_22) : JS.Promise<U2<ResizeArray<string>, ResizeArray<Node.NonSharedBuffer>>> = nativeOnly
-            /// <summary>
-            /// Asynchronous readdir(3) - read a directory.
-            /// </summary>
-            /// <param name="path">
-            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-            /// </param>
-            /// <param name="options">
-            /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
-            /// </param>
-            [<Import("readdir", "fs/promises")>]
-            static member readdir (path: Node.url.URL, options: Exports.readdir.options_23) : JS.Promise<U2<ResizeArray<string>, ResizeArray<Node.NonSharedBuffer>>> = nativeOnly
+            static member readdir (path: Node.url.URL, options: Exports.readdir.options_6) : JS.Promise<ResizeArray<Node.NonSharedBuffer>> = nativeOnly
             /// <summary>
             /// Asynchronous readdir(3) - read a directory.
             /// </summary>
@@ -71021,7 +68661,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If called with <c>withFileTypes: true</c> the result data will be an array of Dirent.
             /// </param>
             [<Import("readdir", "fs/promises")>]
-            static member readdir (path: string, options: Exports.readdir.options_24) : JS.Promise<ResizeArray<Node.fs.Dirent>> = nativeOnly
+            static member readdir (path: string, options: Exports.readdir.options_7) : JS.Promise<ResizeArray<Node.fs.Dirent>> = nativeOnly
             /// <summary>
             /// Asynchronous readdir(3) - read a directory.
             /// </summary>
@@ -71032,7 +68672,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If called with <c>withFileTypes: true</c> the result data will be an array of Dirent.
             /// </param>
             [<Import("readdir", "fs/promises")>]
-            static member readdir (path: Node.Buffer, options: Exports.readdir.options_25) : JS.Promise<ResizeArray<Node.fs.Dirent>> = nativeOnly
+            static member readdir (path: Node.Buffer, options: Exports.readdir.options_7) : JS.Promise<ResizeArray<Node.fs.Dirent>> = nativeOnly
             /// <summary>
             /// Asynchronous readdir(3) - read a directory.
             /// </summary>
@@ -71043,7 +68683,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If called with <c>withFileTypes: true</c> the result data will be an array of Dirent.
             /// </param>
             [<Import("readdir", "fs/promises")>]
-            static member readdir (path: Node.url.URL, options: Exports.readdir.options_26) : JS.Promise<ResizeArray<Node.fs.Dirent>> = nativeOnly
+            static member readdir (path: Node.url.URL, options: Exports.readdir.options_7) : JS.Promise<ResizeArray<Node.fs.Dirent>> = nativeOnly
             /// <summary>
             /// Asynchronous readdir(3) - read a directory.
             /// </summary>
@@ -71054,7 +68694,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Must include <c>withFileTypes: true</c> and <c>encoding: 'buffer'</c>.
             /// </param>
             [<Import("readdir", "fs/promises")>]
-            static member readdir (path: string, options: Exports.readdir.options_27) : JS.Promise<ResizeArray<Node.fs.Dirent<Node.NonSharedBuffer>>> = nativeOnly
+            static member readdir (path: string, options: Exports.readdir.options_8) : JS.Promise<ResizeArray<Node.fs.Dirent<Node.NonSharedBuffer>>> = nativeOnly
             /// <summary>
             /// Asynchronous readdir(3) - read a directory.
             /// </summary>
@@ -71065,7 +68705,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Must include <c>withFileTypes: true</c> and <c>encoding: 'buffer'</c>.
             /// </param>
             [<Import("readdir", "fs/promises")>]
-            static member readdir (path: Node.Buffer, options: Exports.readdir.options_28) : JS.Promise<ResizeArray<Node.fs.Dirent<Node.NonSharedBuffer>>> = nativeOnly
+            static member readdir (path: Node.Buffer, options: Exports.readdir.options_8) : JS.Promise<ResizeArray<Node.fs.Dirent<Node.NonSharedBuffer>>> = nativeOnly
             /// <summary>
             /// Asynchronous readdir(3) - read a directory.
             /// </summary>
@@ -71076,7 +68716,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Must include <c>withFileTypes: true</c> and <c>encoding: 'buffer'</c>.
             /// </param>
             [<Import("readdir", "fs/promises")>]
-            static member readdir (path: Node.url.URL, options: Exports.readdir.options_29) : JS.Promise<ResizeArray<Node.fs.Dirent<Node.NonSharedBuffer>>> = nativeOnly
+            static member readdir (path: Node.url.URL, options: Exports.readdir.options_8) : JS.Promise<ResizeArray<Node.fs.Dirent<Node.NonSharedBuffer>>> = nativeOnly
             /// <summary>
             /// Reads the contents of the symbolic link referred to by <c>path</c>. See the POSIX [<c>readlink(2)</c>](http://man7.org/linux/man-pages/man2/readlink.2.html) documentation for more detail. The promise is
             /// fulfilled with the<c>linkString</c> upon success.
@@ -72419,7 +70059,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with <c>undefined</c> upon success.
             /// </returns>
             [<Import("writeFile", "fs/promises")>]
-            static member writeFile (file: string, data: Node.NodeJS.ArrayBufferView, ?options: U2<Exports.writeFile.options.U2.Case1_1, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
+            static member writeFile (file: string, data: Node.NodeJS.ArrayBufferView, ?options: U2<Exports.writeFile.options.U2.Case1, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
             /// <summary>
             /// Asynchronously writes data to a file, replacing the file if it already exists. <c>data</c> can be a string, a buffer, an
             /// [AsyncIterable](https://tc39.github.io/ecma262/#sec-asynciterable-interface), or an
@@ -72474,7 +70114,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with <c>undefined</c> upon success.
             /// </returns>
             [<Import("writeFile", "fs/promises")>]
-            static member writeFile (file: string, data: Iterable<U2<string, Node.NodeJS.ArrayBufferView>>, ?options: U2<Exports.writeFile.options.U2.Case1_2, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
+            static member writeFile (file: string, data: Iterable<U2<string, Node.NodeJS.ArrayBufferView>>, ?options: U2<Exports.writeFile.options.U2.Case1, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
             /// <summary>
             /// Asynchronously writes data to a file, replacing the file if it already exists. <c>data</c> can be a string, a buffer, an
             /// [AsyncIterable](https://tc39.github.io/ecma262/#sec-asynciterable-interface), or an
@@ -72529,7 +70169,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with <c>undefined</c> upon success.
             /// </returns>
             [<Import("writeFile", "fs/promises")>]
-            static member writeFile (file: string, data: obj, ?options: U2<Exports.writeFile.options.U2.Case1_3, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
+            static member writeFile (file: string, data: obj, ?options: U2<Exports.writeFile.options.U2.Case1, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
             /// <summary>
             /// Asynchronously writes data to a file, replacing the file if it already exists. <c>data</c> can be a string, a buffer, an
             /// [AsyncIterable](https://tc39.github.io/ecma262/#sec-asynciterable-interface), or an
@@ -72584,7 +70224,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with <c>undefined</c> upon success.
             /// </returns>
             [<Import("writeFile", "fs/promises")>]
-            static member writeFile (file: Node.Buffer, data: string, ?options: U2<Exports.writeFile.options.U2.Case1_4, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
+            static member writeFile (file: Node.Buffer, data: string, ?options: U2<Exports.writeFile.options.U2.Case1, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
             /// <summary>
             /// Asynchronously writes data to a file, replacing the file if it already exists. <c>data</c> can be a string, a buffer, an
             /// [AsyncIterable](https://tc39.github.io/ecma262/#sec-asynciterable-interface), or an
@@ -72639,7 +70279,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with <c>undefined</c> upon success.
             /// </returns>
             [<Import("writeFile", "fs/promises")>]
-            static member writeFile (file: Node.Buffer, data: Node.NodeJS.ArrayBufferView, ?options: U2<Exports.writeFile.options.U2.Case1_5, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
+            static member writeFile (file: Node.Buffer, data: Node.NodeJS.ArrayBufferView, ?options: U2<Exports.writeFile.options.U2.Case1, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
             /// <summary>
             /// Asynchronously writes data to a file, replacing the file if it already exists. <c>data</c> can be a string, a buffer, an
             /// [AsyncIterable](https://tc39.github.io/ecma262/#sec-asynciterable-interface), or an
@@ -72694,7 +70334,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with <c>undefined</c> upon success.
             /// </returns>
             [<Import("writeFile", "fs/promises")>]
-            static member writeFile (file: Node.Buffer, data: Iterable<U2<string, Node.NodeJS.ArrayBufferView>>, ?options: U2<Exports.writeFile.options.U2.Case1_6, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
+            static member writeFile (file: Node.Buffer, data: Iterable<U2<string, Node.NodeJS.ArrayBufferView>>, ?options: U2<Exports.writeFile.options.U2.Case1, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
             /// <summary>
             /// Asynchronously writes data to a file, replacing the file if it already exists. <c>data</c> can be a string, a buffer, an
             /// [AsyncIterable](https://tc39.github.io/ecma262/#sec-asynciterable-interface), or an
@@ -72749,7 +70389,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with <c>undefined</c> upon success.
             /// </returns>
             [<Import("writeFile", "fs/promises")>]
-            static member writeFile (file: Node.Buffer, data: obj, ?options: U2<Exports.writeFile.options.U2.Case1_7, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
+            static member writeFile (file: Node.Buffer, data: obj, ?options: U2<Exports.writeFile.options.U2.Case1, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
             /// <summary>
             /// Asynchronously writes data to a file, replacing the file if it already exists. <c>data</c> can be a string, a buffer, an
             /// [AsyncIterable](https://tc39.github.io/ecma262/#sec-asynciterable-interface), or an
@@ -72804,7 +70444,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with <c>undefined</c> upon success.
             /// </returns>
             [<Import("writeFile", "fs/promises")>]
-            static member writeFile (file: Node.url.URL, data: string, ?options: U2<Exports.writeFile.options.U2.Case1_8, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
+            static member writeFile (file: Node.url.URL, data: string, ?options: U2<Exports.writeFile.options.U2.Case1, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
             /// <summary>
             /// Asynchronously writes data to a file, replacing the file if it already exists. <c>data</c> can be a string, a buffer, an
             /// [AsyncIterable](https://tc39.github.io/ecma262/#sec-asynciterable-interface), or an
@@ -72859,7 +70499,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with <c>undefined</c> upon success.
             /// </returns>
             [<Import("writeFile", "fs/promises")>]
-            static member writeFile (file: Node.url.URL, data: Node.NodeJS.ArrayBufferView, ?options: U2<Exports.writeFile.options.U2.Case1_9, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
+            static member writeFile (file: Node.url.URL, data: Node.NodeJS.ArrayBufferView, ?options: U2<Exports.writeFile.options.U2.Case1, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
             /// <summary>
             /// Asynchronously writes data to a file, replacing the file if it already exists. <c>data</c> can be a string, a buffer, an
             /// [AsyncIterable](https://tc39.github.io/ecma262/#sec-asynciterable-interface), or an
@@ -72914,7 +70554,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with <c>undefined</c> upon success.
             /// </returns>
             [<Import("writeFile", "fs/promises")>]
-            static member writeFile (file: Node.url.URL, data: Iterable<U2<string, Node.NodeJS.ArrayBufferView>>, ?options: U2<Exports.writeFile.options.U2.Case1_10, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
+            static member writeFile (file: Node.url.URL, data: Iterable<U2<string, Node.NodeJS.ArrayBufferView>>, ?options: U2<Exports.writeFile.options.U2.Case1, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
             /// <summary>
             /// Asynchronously writes data to a file, replacing the file if it already exists. <c>data</c> can be a string, a buffer, an
             /// [AsyncIterable](https://tc39.github.io/ecma262/#sec-asynciterable-interface), or an
@@ -72969,7 +70609,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with <c>undefined</c> upon success.
             /// </returns>
             [<Import("writeFile", "fs/promises")>]
-            static member writeFile (file: Node.url.URL, data: obj, ?options: U2<Exports.writeFile.options.U2.Case1_11, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
+            static member writeFile (file: Node.url.URL, data: obj, ?options: U2<Exports.writeFile.options.U2.Case1, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
             /// <summary>
             /// Asynchronously writes data to a file, replacing the file if it already exists. <c>data</c> can be a string, a buffer, an
             /// [AsyncIterable](https://tc39.github.io/ecma262/#sec-asynciterable-interface), or an
@@ -73024,7 +70664,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with <c>undefined</c> upon success.
             /// </returns>
             [<Import("writeFile", "fs/promises")>]
-            static member writeFile (file: Node.fs_promises.FileHandle, data: string, ?options: U2<Exports.writeFile.options.U2.Case1_12, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
+            static member writeFile (file: Node.fs_promises.FileHandle, data: string, ?options: U2<Exports.writeFile.options.U2.Case1, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
             /// <summary>
             /// Asynchronously writes data to a file, replacing the file if it already exists. <c>data</c> can be a string, a buffer, an
             /// [AsyncIterable](https://tc39.github.io/ecma262/#sec-asynciterable-interface), or an
@@ -73079,7 +70719,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with <c>undefined</c> upon success.
             /// </returns>
             [<Import("writeFile", "fs/promises")>]
-            static member writeFile (file: Node.fs_promises.FileHandle, data: Node.NodeJS.ArrayBufferView, ?options: U2<Exports.writeFile.options.U2.Case1_13, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
+            static member writeFile (file: Node.fs_promises.FileHandle, data: Node.NodeJS.ArrayBufferView, ?options: U2<Exports.writeFile.options.U2.Case1, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
             /// <summary>
             /// Asynchronously writes data to a file, replacing the file if it already exists. <c>data</c> can be a string, a buffer, an
             /// [AsyncIterable](https://tc39.github.io/ecma262/#sec-asynciterable-interface), or an
@@ -73134,7 +70774,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with <c>undefined</c> upon success.
             /// </returns>
             [<Import("writeFile", "fs/promises")>]
-            static member writeFile (file: Node.fs_promises.FileHandle, data: Iterable<U2<string, Node.NodeJS.ArrayBufferView>>, ?options: U2<Exports.writeFile.options.U2.Case1_14, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
+            static member writeFile (file: Node.fs_promises.FileHandle, data: Iterable<U2<string, Node.NodeJS.ArrayBufferView>>, ?options: U2<Exports.writeFile.options.U2.Case1, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
             /// <summary>
             /// Asynchronously writes data to a file, replacing the file if it already exists. <c>data</c> can be a string, a buffer, an
             /// [AsyncIterable](https://tc39.github.io/ecma262/#sec-asynciterable-interface), or an
@@ -73189,7 +70829,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with <c>undefined</c> upon success.
             /// </returns>
             [<Import("writeFile", "fs/promises")>]
-            static member writeFile (file: Node.fs_promises.FileHandle, data: obj, ?options: U2<Exports.writeFile.options.U2.Case1_15, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
+            static member writeFile (file: Node.fs_promises.FileHandle, data: obj, ?options: U2<Exports.writeFile.options.U2.Case1, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
             /// <summary>
             /// Asynchronously append data to a file, creating the file if it does not yet
             /// exist. <c>data</c> can be a string or a <c>Buffer</c>.
@@ -73227,7 +70867,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with <c>undefined</c> upon success.
             /// </returns>
             [<Import("appendFile", "fs/promises")>]
-            static member appendFile (path: string, data: Node.NodeJS.ArrayBufferView, ?options: U2<Exports.appendFile.options.U2.Case1_1, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
+            static member appendFile (path: string, data: Node.NodeJS.ArrayBufferView, ?options: U2<Exports.appendFile.options.U2.Case1, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
             /// <summary>
             /// Asynchronously append data to a file, creating the file if it does not yet
             /// exist. <c>data</c> can be a string or a <c>Buffer</c>.
@@ -73246,7 +70886,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with <c>undefined</c> upon success.
             /// </returns>
             [<Import("appendFile", "fs/promises")>]
-            static member appendFile (path: string, data: Iterable<U2<string, Node.NodeJS.ArrayBufferView>>, ?options: U2<Exports.appendFile.options.U2.Case1_2, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
+            static member appendFile (path: string, data: Iterable<U2<string, Node.NodeJS.ArrayBufferView>>, ?options: U2<Exports.appendFile.options.U2.Case1, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
             /// <summary>
             /// Asynchronously append data to a file, creating the file if it does not yet
             /// exist. <c>data</c> can be a string or a <c>Buffer</c>.
@@ -73265,7 +70905,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with <c>undefined</c> upon success.
             /// </returns>
             [<Import("appendFile", "fs/promises")>]
-            static member appendFile (path: string, data: obj, ?options: U2<Exports.appendFile.options.U2.Case1_3, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
+            static member appendFile (path: string, data: obj, ?options: U2<Exports.appendFile.options.U2.Case1, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
             /// <summary>
             /// Asynchronously append data to a file, creating the file if it does not yet
             /// exist. <c>data</c> can be a string or a <c>Buffer</c>.
@@ -73284,7 +70924,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with <c>undefined</c> upon success.
             /// </returns>
             [<Import("appendFile", "fs/promises")>]
-            static member appendFile (path: Node.Buffer, data: string, ?options: U2<Exports.appendFile.options.U2.Case1_4, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
+            static member appendFile (path: Node.Buffer, data: string, ?options: U2<Exports.appendFile.options.U2.Case1, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
             /// <summary>
             /// Asynchronously append data to a file, creating the file if it does not yet
             /// exist. <c>data</c> can be a string or a <c>Buffer</c>.
@@ -73303,7 +70943,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with <c>undefined</c> upon success.
             /// </returns>
             [<Import("appendFile", "fs/promises")>]
-            static member appendFile (path: Node.Buffer, data: Node.NodeJS.ArrayBufferView, ?options: U2<Exports.appendFile.options.U2.Case1_5, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
+            static member appendFile (path: Node.Buffer, data: Node.NodeJS.ArrayBufferView, ?options: U2<Exports.appendFile.options.U2.Case1, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
             /// <summary>
             /// Asynchronously append data to a file, creating the file if it does not yet
             /// exist. <c>data</c> can be a string or a <c>Buffer</c>.
@@ -73322,7 +70962,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with <c>undefined</c> upon success.
             /// </returns>
             [<Import("appendFile", "fs/promises")>]
-            static member appendFile (path: Node.Buffer, data: Iterable<U2<string, Node.NodeJS.ArrayBufferView>>, ?options: U2<Exports.appendFile.options.U2.Case1_6, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
+            static member appendFile (path: Node.Buffer, data: Iterable<U2<string, Node.NodeJS.ArrayBufferView>>, ?options: U2<Exports.appendFile.options.U2.Case1, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
             /// <summary>
             /// Asynchronously append data to a file, creating the file if it does not yet
             /// exist. <c>data</c> can be a string or a <c>Buffer</c>.
@@ -73341,7 +70981,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with <c>undefined</c> upon success.
             /// </returns>
             [<Import("appendFile", "fs/promises")>]
-            static member appendFile (path: Node.Buffer, data: obj, ?options: U2<Exports.appendFile.options.U2.Case1_7, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
+            static member appendFile (path: Node.Buffer, data: obj, ?options: U2<Exports.appendFile.options.U2.Case1, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
             /// <summary>
             /// Asynchronously append data to a file, creating the file if it does not yet
             /// exist. <c>data</c> can be a string or a <c>Buffer</c>.
@@ -73360,7 +71000,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with <c>undefined</c> upon success.
             /// </returns>
             [<Import("appendFile", "fs/promises")>]
-            static member appendFile (path: Node.url.URL, data: string, ?options: U2<Exports.appendFile.options.U2.Case1_8, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
+            static member appendFile (path: Node.url.URL, data: string, ?options: U2<Exports.appendFile.options.U2.Case1, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
             /// <summary>
             /// Asynchronously append data to a file, creating the file if it does not yet
             /// exist. <c>data</c> can be a string or a <c>Buffer</c>.
@@ -73379,7 +71019,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with <c>undefined</c> upon success.
             /// </returns>
             [<Import("appendFile", "fs/promises")>]
-            static member appendFile (path: Node.url.URL, data: Node.NodeJS.ArrayBufferView, ?options: U2<Exports.appendFile.options.U2.Case1_9, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
+            static member appendFile (path: Node.url.URL, data: Node.NodeJS.ArrayBufferView, ?options: U2<Exports.appendFile.options.U2.Case1, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
             /// <summary>
             /// Asynchronously append data to a file, creating the file if it does not yet
             /// exist. <c>data</c> can be a string or a <c>Buffer</c>.
@@ -73398,7 +71038,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with <c>undefined</c> upon success.
             /// </returns>
             [<Import("appendFile", "fs/promises")>]
-            static member appendFile (path: Node.url.URL, data: Iterable<U2<string, Node.NodeJS.ArrayBufferView>>, ?options: U2<Exports.appendFile.options.U2.Case1_10, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
+            static member appendFile (path: Node.url.URL, data: Iterable<U2<string, Node.NodeJS.ArrayBufferView>>, ?options: U2<Exports.appendFile.options.U2.Case1, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
             /// <summary>
             /// Asynchronously append data to a file, creating the file if it does not yet
             /// exist. <c>data</c> can be a string or a <c>Buffer</c>.
@@ -73417,7 +71057,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with <c>undefined</c> upon success.
             /// </returns>
             [<Import("appendFile", "fs/promises")>]
-            static member appendFile (path: Node.url.URL, data: obj, ?options: U2<Exports.appendFile.options.U2.Case1_11, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
+            static member appendFile (path: Node.url.URL, data: obj, ?options: U2<Exports.appendFile.options.U2.Case1, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
             /// <summary>
             /// Asynchronously append data to a file, creating the file if it does not yet
             /// exist. <c>data</c> can be a string or a <c>Buffer</c>.
@@ -73436,7 +71076,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with <c>undefined</c> upon success.
             /// </returns>
             [<Import("appendFile", "fs/promises")>]
-            static member appendFile (path: Node.fs_promises.FileHandle, data: string, ?options: U2<Exports.appendFile.options.U2.Case1_12, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
+            static member appendFile (path: Node.fs_promises.FileHandle, data: string, ?options: U2<Exports.appendFile.options.U2.Case1, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
             /// <summary>
             /// Asynchronously append data to a file, creating the file if it does not yet
             /// exist. <c>data</c> can be a string or a <c>Buffer</c>.
@@ -73455,7 +71095,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with <c>undefined</c> upon success.
             /// </returns>
             [<Import("appendFile", "fs/promises")>]
-            static member appendFile (path: Node.fs_promises.FileHandle, data: Node.NodeJS.ArrayBufferView, ?options: U2<Exports.appendFile.options.U2.Case1_13, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
+            static member appendFile (path: Node.fs_promises.FileHandle, data: Node.NodeJS.ArrayBufferView, ?options: U2<Exports.appendFile.options.U2.Case1, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
             /// <summary>
             /// Asynchronously append data to a file, creating the file if it does not yet
             /// exist. <c>data</c> can be a string or a <c>Buffer</c>.
@@ -73474,7 +71114,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with <c>undefined</c> upon success.
             /// </returns>
             [<Import("appendFile", "fs/promises")>]
-            static member appendFile (path: Node.fs_promises.FileHandle, data: Iterable<U2<string, Node.NodeJS.ArrayBufferView>>, ?options: U2<Exports.appendFile.options.U2.Case1_14, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
+            static member appendFile (path: Node.fs_promises.FileHandle, data: Iterable<U2<string, Node.NodeJS.ArrayBufferView>>, ?options: U2<Exports.appendFile.options.U2.Case1, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
             /// <summary>
             /// Asynchronously append data to a file, creating the file if it does not yet
             /// exist. <c>data</c> can be a string or a <c>Buffer</c>.
@@ -73493,7 +71133,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with <c>undefined</c> upon success.
             /// </returns>
             [<Import("appendFile", "fs/promises")>]
-            static member appendFile (path: Node.fs_promises.FileHandle, data: obj, ?options: U2<Exports.appendFile.options.U2.Case1_15, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
+            static member appendFile (path: Node.fs_promises.FileHandle, data: obj, ?options: U2<Exports.appendFile.options.U2.Case1, Node.BufferEncoding>) : JS.Promise<unit> = nativeOnly
             /// <summary>
             /// Asynchronously reads the entire contents of a file.
             ///
@@ -73554,7 +71194,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with the contents of the file.
             /// </returns>
             [<Import("readFile", "fs/promises")>]
-            static member readFile (path: string, ?options: Exports.readFile.options_12) : JS.Promise<Node.NonSharedBuffer> = nativeOnly
+            static member readFile (path: string, ?options: Exports.readFile.options_3) : JS.Promise<Node.NonSharedBuffer> = nativeOnly
             /// <summary>
             /// Asynchronously reads the entire contents of a file.
             ///
@@ -73615,7 +71255,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with the contents of the file.
             /// </returns>
             [<Import("readFile", "fs/promises")>]
-            static member readFile (path: Node.Buffer, ?options: Exports.readFile.options_13) : JS.Promise<Node.NonSharedBuffer> = nativeOnly
+            static member readFile (path: Node.Buffer, ?options: Exports.readFile.options_3) : JS.Promise<Node.NonSharedBuffer> = nativeOnly
             /// <summary>
             /// Asynchronously reads the entire contents of a file.
             ///
@@ -73676,7 +71316,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with the contents of the file.
             /// </returns>
             [<Import("readFile", "fs/promises")>]
-            static member readFile (path: Node.url.URL, ?options: Exports.readFile.options_14) : JS.Promise<Node.NonSharedBuffer> = nativeOnly
+            static member readFile (path: Node.url.URL, ?options: Exports.readFile.options_3) : JS.Promise<Node.NonSharedBuffer> = nativeOnly
             /// <summary>
             /// Asynchronously reads the entire contents of a file.
             ///
@@ -73737,7 +71377,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with the contents of the file.
             /// </returns>
             [<Import("readFile", "fs/promises")>]
-            static member readFile (path: Node.fs_promises.FileHandle, ?options: Exports.readFile.options_15) : JS.Promise<Node.NonSharedBuffer> = nativeOnly
+            static member readFile (path: Node.fs_promises.FileHandle, ?options: Exports.readFile.options_3) : JS.Promise<Node.NonSharedBuffer> = nativeOnly
             /// <summary>
             /// Asynchronously reads the entire contents of a file.
             /// </summary>
@@ -73750,7 +71390,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If a flag is not provided, it defaults to <c>'r'</c>.
             /// </param>
             [<Import("readFile", "fs/promises")>]
-            static member readFile (path: string, options: Exports.readFile.options_16) : JS.Promise<string> = nativeOnly
+            static member readFile (path: string, options: Exports.readFile.options_4) : JS.Promise<string> = nativeOnly
             /// <summary>
             /// Asynchronously reads the entire contents of a file.
             /// </summary>
@@ -73776,7 +71416,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If a flag is not provided, it defaults to <c>'r'</c>.
             /// </param>
             [<Import("readFile", "fs/promises")>]
-            static member readFile (path: Node.Buffer, options: Exports.readFile.options_17) : JS.Promise<string> = nativeOnly
+            static member readFile (path: Node.Buffer, options: Exports.readFile.options_4) : JS.Promise<string> = nativeOnly
             /// <summary>
             /// Asynchronously reads the entire contents of a file.
             /// </summary>
@@ -73802,7 +71442,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If a flag is not provided, it defaults to <c>'r'</c>.
             /// </param>
             [<Import("readFile", "fs/promises")>]
-            static member readFile (path: Node.url.URL, options: Exports.readFile.options_18) : JS.Promise<string> = nativeOnly
+            static member readFile (path: Node.url.URL, options: Exports.readFile.options_4) : JS.Promise<string> = nativeOnly
             /// <summary>
             /// Asynchronously reads the entire contents of a file.
             /// </summary>
@@ -73828,7 +71468,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If a flag is not provided, it defaults to <c>'r'</c>.
             /// </param>
             [<Import("readFile", "fs/promises")>]
-            static member readFile (path: Node.fs_promises.FileHandle, options: Exports.readFile.options_19) : JS.Promise<string> = nativeOnly
+            static member readFile (path: Node.fs_promises.FileHandle, options: Exports.readFile.options_4) : JS.Promise<string> = nativeOnly
             /// <summary>
             /// Asynchronously reads the entire contents of a file.
             /// </summary>
@@ -73867,7 +71507,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If a flag is not provided, it defaults to <c>'r'</c>.
             /// </param>
             [<Import("readFile", "fs/promises")>]
-            static member readFile (path: string, options: Exports.readFile.options_20) : JS.Promise<U2<string, Node.NonSharedBuffer>> = nativeOnly
+            static member readFile (path: string, options: Exports.readFile.options_5) : JS.Promise<U2<string, Node.NonSharedBuffer>> = nativeOnly
             /// <summary>
             /// Asynchronously reads the entire contents of a file.
             /// </summary>
@@ -73893,7 +71533,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If a flag is not provided, it defaults to <c>'r'</c>.
             /// </param>
             [<Import("readFile", "fs/promises")>]
-            static member readFile (path: Node.Buffer, options: Exports.readFile.options_21) : JS.Promise<U2<string, Node.NonSharedBuffer>> = nativeOnly
+            static member readFile (path: Node.Buffer, options: Exports.readFile.options_5) : JS.Promise<U2<string, Node.NonSharedBuffer>> = nativeOnly
             /// <summary>
             /// Asynchronously reads the entire contents of a file.
             /// </summary>
@@ -73919,7 +71559,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If a flag is not provided, it defaults to <c>'r'</c>.
             /// </param>
             [<Import("readFile", "fs/promises")>]
-            static member readFile (path: Node.url.URL, options: Exports.readFile.options_22) : JS.Promise<U2<string, Node.NonSharedBuffer>> = nativeOnly
+            static member readFile (path: Node.url.URL, options: Exports.readFile.options_5) : JS.Promise<U2<string, Node.NonSharedBuffer>> = nativeOnly
             /// <summary>
             /// Asynchronously reads the entire contents of a file.
             /// </summary>
@@ -73945,7 +71585,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If a flag is not provided, it defaults to <c>'r'</c>.
             /// </param>
             [<Import("readFile", "fs/promises")>]
-            static member readFile (path: Node.fs_promises.FileHandle, options: Exports.readFile.options_23) : JS.Promise<U2<string, Node.NonSharedBuffer>> = nativeOnly
+            static member readFile (path: Node.fs_promises.FileHandle, options: Exports.readFile.options_5) : JS.Promise<U2<string, Node.NonSharedBuffer>> = nativeOnly
             /// <summary>
             /// Asynchronously open a directory for iterative scanning. See the POSIX [<c>opendir(3)</c>](http://man7.org/linux/man-pages/man3/opendir.3.html) documentation for more detail.
             ///
@@ -74337,17 +71977,17 @@ EventEmitter.defaultMaxListeners = $0"""
             [<Import("watch", "fs/promises")>]
             static member watch (filename: Node.url.URL, options: Node.BufferEncoding) : Node.NodeJS.AsyncIterator<Node.fs_promises.FileChangeInfo<string>> = nativeOnly
             [<Import("watch", "fs/promises")>]
-            static member watch (filename: string, options: Exports.watch.options.options_6) : Node.NodeJS.AsyncIterator<Node.fs_promises.FileChangeInfo<Node.NonSharedBuffer>> = nativeOnly
+            static member watch (filename: string, options: Exports.watch.options_2) : Node.NodeJS.AsyncIterator<Node.fs_promises.FileChangeInfo<Node.NonSharedBuffer>> = nativeOnly
             [<Import("watch", "fs/promises")>]
-            static member watch (filename: Node.Buffer, options: Exports.watch.options.options_7) : Node.NodeJS.AsyncIterator<Node.fs_promises.FileChangeInfo<Node.NonSharedBuffer>> = nativeOnly
+            static member watch (filename: Node.Buffer, options: Exports.watch.options_2) : Node.NodeJS.AsyncIterator<Node.fs_promises.FileChangeInfo<Node.NonSharedBuffer>> = nativeOnly
             [<Import("watch", "fs/promises")>]
-            static member watch (filename: Node.url.URL, options: Exports.watch.options.options_8) : Node.NodeJS.AsyncIterator<Node.fs_promises.FileChangeInfo<Node.NonSharedBuffer>> = nativeOnly
+            static member watch (filename: Node.url.URL, options: Exports.watch.options_2) : Node.NodeJS.AsyncIterator<Node.fs_promises.FileChangeInfo<Node.NonSharedBuffer>> = nativeOnly
             [<Import("watch", "fs/promises")>]
-            static member watch (filename: string, options: Exports.watch.options.options_9) : Node.NodeJS.AsyncIterator<Node.fs_promises.FileChangeInfo<U2<string, Node.NonSharedBuffer>>> = nativeOnly
+            static member watch (filename: string, options: Exports.watch.options_3) : Node.NodeJS.AsyncIterator<Node.fs_promises.FileChangeInfo<U2<string, Node.NonSharedBuffer>>> = nativeOnly
             [<Import("watch", "fs/promises")>]
-            static member watch (filename: Node.Buffer, options: Exports.watch.options.options_10) : Node.NodeJS.AsyncIterator<Node.fs_promises.FileChangeInfo<U2<string, Node.NonSharedBuffer>>> = nativeOnly
+            static member watch (filename: Node.Buffer, options: Exports.watch.options_3) : Node.NodeJS.AsyncIterator<Node.fs_promises.FileChangeInfo<U2<string, Node.NonSharedBuffer>>> = nativeOnly
             [<Import("watch", "fs/promises")>]
-            static member watch (filename: Node.url.URL, options: Exports.watch.options.options_11) : Node.NodeJS.AsyncIterator<Node.fs_promises.FileChangeInfo<U2<string, Node.NonSharedBuffer>>> = nativeOnly
+            static member watch (filename: Node.url.URL, options: Exports.watch.options_3) : Node.NodeJS.AsyncIterator<Node.fs_promises.FileChangeInfo<U2<string, Node.NonSharedBuffer>>> = nativeOnly
             /// <summary>
             /// Asynchronously copies the entire directory structure from <c>src</c> to <c>dest</c>,
             /// including subdirectories and files.
@@ -74599,7 +72239,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// <returns>
             /// Fulfills with <c>undefined</c> upon success.
             /// </returns>
-            abstract member appendFile: data: Node.NodeJS.ArrayBufferView * options: FileHandle.appendFile.options_1 -> JS.Promise<unit>
+            abstract member appendFile: data: Node.NodeJS.ArrayBufferView * options: FileHandle.appendFile.options -> JS.Promise<unit>
             /// <summary>
             /// Alias of <c>filehandle.writeFile()</c>.
             ///
@@ -74629,7 +72269,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// <returns>
             /// Fulfills with <c>undefined</c> upon success.
             /// </returns>
-            abstract member appendFile: data: Iterable<U2<string, Node.NodeJS.ArrayBufferView>> * options: FileHandle.appendFile.options_2 -> JS.Promise<unit>
+            abstract member appendFile: data: Iterable<U2<string, Node.NodeJS.ArrayBufferView>> * options: FileHandle.appendFile.options -> JS.Promise<unit>
             /// <summary>
             /// Alias of <c>filehandle.writeFile()</c>.
             ///
@@ -74659,7 +72299,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// <returns>
             /// Fulfills with <c>undefined</c> upon success.
             /// </returns>
-            abstract member appendFile: data: obj * options: FileHandle.appendFile.options_3 -> JS.Promise<unit>
+            abstract member appendFile: data: obj * options: FileHandle.appendFile.options -> JS.Promise<unit>
             /// <summary>
             /// Alias of <c>filehandle.writeFile()</c>.
             ///
@@ -75111,7 +72751,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// current position till the end of the file. It doesn't always write from the
             /// beginning of the file.
             /// </summary>
-            abstract member writeFile: data: Node.NodeJS.ArrayBufferView * options: FileHandle.writeFile.options_1 -> JS.Promise<unit>
+            abstract member writeFile: data: Node.NodeJS.ArrayBufferView * options: FileHandle.writeFile.options -> JS.Promise<unit>
             /// <summary>
             /// Asynchronously writes data to a file, replacing the file if it already exists. <c>data</c> can be a string, a buffer, an
             /// [AsyncIterable](https://tc39.github.io/ecma262/#sec-asynciterable-interface), or an
@@ -75165,7 +72805,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// current position till the end of the file. It doesn't always write from the
             /// beginning of the file.
             /// </summary>
-            abstract member writeFile: data: Iterable<U2<string, Node.NodeJS.ArrayBufferView>> * options: FileHandle.writeFile.options_2 -> JS.Promise<unit>
+            abstract member writeFile: data: Iterable<U2<string, Node.NodeJS.ArrayBufferView>> * options: FileHandle.writeFile.options -> JS.Promise<unit>
             /// <summary>
             /// Asynchronously writes data to a file, replacing the file if it already exists. <c>data</c> can be a string, a buffer, an
             /// [AsyncIterable](https://tc39.github.io/ecma262/#sec-asynciterable-interface), or an
@@ -75219,7 +72859,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// current position till the end of the file. It doesn't always write from the
             /// beginning of the file.
             /// </summary>
-            abstract member writeFile: data: obj * options: FileHandle.writeFile.options_3 -> JS.Promise<unit>
+            abstract member writeFile: data: obj * options: FileHandle.writeFile.options -> JS.Promise<unit>
             /// <summary>
             /// Asynchronously writes data to a file, replacing the file if it already exists. <c>data</c> can be a string, a buffer, an
             /// [AsyncIterable](https://tc39.github.io/ecma262/#sec-asynciterable-interface), or an
@@ -75275,7 +72915,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// The kernel ignores the position argument and always appends the data to
             /// the end of the file.
             /// </summary>
-            abstract member write: buffer: 'TBuffer * ?options: FileHandle.write.options -> JS.Promise<FileHandle.write_1<'TBuffer>>
+            abstract member write: buffer: 'TBuffer * ?options: FileHandle.write.options -> JS.Promise<FileHandle.write<'TBuffer>>
             /// <summary>
             /// Write <c>buffer</c> to the file.
             ///
@@ -75289,7 +72929,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// The kernel ignores the position argument and always appends the data to
             /// the end of the file.
             /// </summary>
-            abstract member write: data: string * ?position: float * ?encoding: Node.BufferEncoding -> JS.Promise<FileHandle.write_2>
+            abstract member write: data: string * ?position: float * ?encoding: Node.BufferEncoding -> JS.Promise<FileHandle.write_1>
             /// <summary>
             /// Write an array of [ArrayBufferView](https://developer.mozilla.org/en-US/docs/Web/API/ArrayBufferView) s to the file.
             ///
@@ -75412,19 +73052,7 @@ EventEmitter.defaultMaxListeners = $0"""
 
             [<Global>]
             [<AllowNullLiteral>]
-            type write_1<'TBuffer>
-                [<ParamObject; Emit("$0")>]
-                (
-                    bytesWritten: float,
-                    buffer: 'TBuffer
-                ) =
-
-                member val bytesWritten : float = nativeOnly with get, set
-                member val buffer : 'TBuffer = nativeOnly with get, set
-
-            [<Global>]
-            [<AllowNullLiteral>]
-            type write_2
+            type write_1
                 [<ParamObject; Emit("$0")>]
                 (
                     bytesWritten: float,
@@ -75439,33 +73067,6 @@ EventEmitter.defaultMaxListeners = $0"""
                 [<AllowNullLiteral>]
                 [<Interface>]
                 type options =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    /// <summary>
-                    /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                    /// </summary>
-                    abstract member signal: Node.AbortSignal option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_1 =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    /// <summary>
-                    /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                    /// </summary>
-                    abstract member signal: Node.AbortSignal option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_2 =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    /// <summary>
-                    /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                    /// </summary>
-                    abstract member signal: Node.AbortSignal option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_3 =
                     abstract member encoding: Node.BufferEncoding option with get, set
                     /// <summary>
                     /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
@@ -75506,33 +73107,6 @@ EventEmitter.defaultMaxListeners = $0"""
                 [<AllowNullLiteral>]
                 [<Interface>]
                 type options =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    /// <summary>
-                    /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                    /// </summary>
-                    abstract member signal: Node.AbortSignal option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_1 =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    /// <summary>
-                    /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                    /// </summary>
-                    abstract member signal: Node.AbortSignal option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_2 =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    /// <summary>
-                    /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                    /// </summary>
-                    abstract member signal: Node.AbortSignal option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_3 =
                     abstract member encoding: Node.BufferEncoding option with get, set
                     /// <summary>
                     /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
@@ -75585,38 +73159,24 @@ EventEmitter.defaultMaxListeners = $0"""
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type options_15 =
+                type options_5 =
                     abstract member encoding: Node.BufferEncoding option with get, set
                     abstract member withFileTypes: bool option with get, set
                     abstract member ``recursive``: bool option with get, set
 
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_16 =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    abstract member withFileTypes: bool option with get, set
-                    abstract member ``recursive``: bool option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_17 =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    abstract member withFileTypes: bool option with get, set
-                    abstract member ``recursive``: bool option with get, set
+                [<RequireQualifiedAccess>]
+                [<Erase(CaseRules.None)>]
+                type options_6 =
+                    | buffer
+                    | Case1 of Exports.readdir.options.Cases.Case1_1
 
                 module options =
-
-                    [<RequireQualifiedAccess>]
-                    [<Erase(CaseRules.None)>]
-                    type options_18 =
-                        | buffer
-                        | Case1 of Exports.readdir.options.options_18.Cases.Case1
 
                     module Cases =
 
                         [<Global>]
                         [<AllowNullLiteral>]
-                        type Case1_3
+                        type Case1_1
                             [<ParamObject; Emit("$0")>]
                             (
                                 encoding: string,
@@ -75628,173 +73188,16 @@ EventEmitter.defaultMaxListeners = $0"""
                             member val withFileTypes : bool option = nativeOnly with get, set
                             member val ``recursive`` : bool option = nativeOnly with get, set
 
-                        [<Global>]
-                        [<AllowNullLiteral>]
-                        type Case1_4
-                            [<ParamObject; Emit("$0")>]
-                            (
-                                encoding: string,
-                                ?withFileTypes: bool,
-                                ?``recursive``: bool
-                            ) =
-
-                            member val encoding : string = nativeOnly with get, set
-                            member val withFileTypes : bool option = nativeOnly with get, set
-                            member val ``recursive`` : bool option = nativeOnly with get, set
-
-                        [<Global>]
-                        [<AllowNullLiteral>]
-                        type Case1_5
-                            [<ParamObject; Emit("$0")>]
-                            (
-                                encoding: string,
-                                ?withFileTypes: bool,
-                                ?``recursive``: bool
-                            ) =
-
-                            member val encoding : string = nativeOnly with get, set
-                            member val withFileTypes : bool option = nativeOnly with get, set
-                            member val ``recursive`` : bool option = nativeOnly with get, set
-
-                    module options_18 =
-
-                        module Cases =
-
-                            [<Global>]
-                            [<AllowNullLiteral>]
-                            type Case1
-                                [<ParamObject; Emit("$0")>]
-                                (
-                                    encoding: string,
-                                    ?withFileTypes: bool,
-                                    ?``recursive``: bool
-                                ) =
-
-                                member val encoding : string = nativeOnly with get, set
-                                member val withFileTypes : bool option = nativeOnly with get, set
-                                member val ``recursive`` : bool option = nativeOnly with get, set
-
-                    [<RequireQualifiedAccess>]
-                    [<Erase(CaseRules.None)>]
-                    type options_19 =
-                        | buffer
-                        | Case1 of Exports.readdir.options.options_19.Cases.Case1
-
-                    module options_19 =
-
-                        module Cases =
-
-                            [<Global>]
-                            [<AllowNullLiteral>]
-                            type Case1
-                                [<ParamObject; Emit("$0")>]
-                                (
-                                    encoding: string,
-                                    ?withFileTypes: bool,
-                                    ?``recursive``: bool
-                                ) =
-
-                                member val encoding : string = nativeOnly with get, set
-                                member val withFileTypes : bool option = nativeOnly with get, set
-                                member val ``recursive`` : bool option = nativeOnly with get, set
-
-                    [<RequireQualifiedAccess>]
-                    [<Erase(CaseRules.None)>]
-                    type options_20 =
-                        | buffer
-                        | Case1 of Exports.readdir.options.options_20.Cases.Case1
-
-                    module options_20 =
-
-                        module Cases =
-
-                            [<Global>]
-                            [<AllowNullLiteral>]
-                            type Case1
-                                [<ParamObject; Emit("$0")>]
-                                (
-                                    encoding: string,
-                                    ?withFileTypes: bool,
-                                    ?``recursive``: bool
-                                ) =
-
-                                member val encoding : string = nativeOnly with get, set
-                                member val withFileTypes : bool option = nativeOnly with get, set
-                                member val ``recursive`` : bool option = nativeOnly with get, set
-
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type options_21 =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    abstract member withFileTypes: bool option with get, set
-                    abstract member ``recursive``: bool option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_22 =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    abstract member withFileTypes: bool option with get, set
-                    abstract member ``recursive``: bool option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_23 =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    abstract member withFileTypes: bool option with get, set
-                    abstract member ``recursive``: bool option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_24 =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    abstract member withFileTypes: bool with get, set
-                    abstract member ``recursive``: bool option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_25 =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    abstract member withFileTypes: bool with get, set
-                    abstract member ``recursive``: bool option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_26 =
+                type options_7 =
                     abstract member encoding: Node.BufferEncoding option with get, set
                     abstract member withFileTypes: bool with get, set
                     abstract member ``recursive``: bool option with get, set
 
                 [<Global>]
                 [<AllowNullLiteral>]
-                type options_27
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        encoding: string,
-                        withFileTypes: bool,
-                        ?``recursive``: bool
-                    ) =
-
-                    member val encoding : string = nativeOnly with get, set
-                    member val withFileTypes : bool = nativeOnly with get, set
-                    member val ``recursive`` : bool option = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type options_28
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        encoding: string,
-                        withFileTypes: bool,
-                        ?``recursive``: bool
-                    ) =
-
-                    member val encoding : string = nativeOnly with get, set
-                    member val withFileTypes : bool = nativeOnly with get, set
-                    member val ``recursive`` : bool option = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type options_29
+                type options_8
                     [<ParamObject; Emit("$0")>]
                     (
                         encoding: string,
@@ -75828,246 +73231,6 @@ EventEmitter.defaultMaxListeners = $0"""
                             /// </summary>
                             abstract member signal: Node.AbortSignal option with get, set
 
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Case1_1 =
-                            abstract member encoding: Node.BufferEncoding option with get, set
-                            abstract member mode: Node.fs.Mode option with get, set
-                            abstract member flag: Node.fs.OpenMode option with get, set
-                            /// <summary>
-                            /// If all data is successfully written to the file, and <c>flush</c>
-                            /// is <c>true</c>, <c>filehandle.sync()</c> is used to flush the data.
-                            /// </summary>
-                            abstract member flush: bool option with get, set
-                            /// <summary>
-                            /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                            /// </summary>
-                            abstract member signal: Node.AbortSignal option with get, set
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Case1_2 =
-                            abstract member encoding: Node.BufferEncoding option with get, set
-                            abstract member mode: Node.fs.Mode option with get, set
-                            abstract member flag: Node.fs.OpenMode option with get, set
-                            /// <summary>
-                            /// If all data is successfully written to the file, and <c>flush</c>
-                            /// is <c>true</c>, <c>filehandle.sync()</c> is used to flush the data.
-                            /// </summary>
-                            abstract member flush: bool option with get, set
-                            /// <summary>
-                            /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                            /// </summary>
-                            abstract member signal: Node.AbortSignal option with get, set
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Case1_3 =
-                            abstract member encoding: Node.BufferEncoding option with get, set
-                            abstract member mode: Node.fs.Mode option with get, set
-                            abstract member flag: Node.fs.OpenMode option with get, set
-                            /// <summary>
-                            /// If all data is successfully written to the file, and <c>flush</c>
-                            /// is <c>true</c>, <c>filehandle.sync()</c> is used to flush the data.
-                            /// </summary>
-                            abstract member flush: bool option with get, set
-                            /// <summary>
-                            /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                            /// </summary>
-                            abstract member signal: Node.AbortSignal option with get, set
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Case1_4 =
-                            abstract member encoding: Node.BufferEncoding option with get, set
-                            abstract member mode: Node.fs.Mode option with get, set
-                            abstract member flag: Node.fs.OpenMode option with get, set
-                            /// <summary>
-                            /// If all data is successfully written to the file, and <c>flush</c>
-                            /// is <c>true</c>, <c>filehandle.sync()</c> is used to flush the data.
-                            /// </summary>
-                            abstract member flush: bool option with get, set
-                            /// <summary>
-                            /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                            /// </summary>
-                            abstract member signal: Node.AbortSignal option with get, set
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Case1_5 =
-                            abstract member encoding: Node.BufferEncoding option with get, set
-                            abstract member mode: Node.fs.Mode option with get, set
-                            abstract member flag: Node.fs.OpenMode option with get, set
-                            /// <summary>
-                            /// If all data is successfully written to the file, and <c>flush</c>
-                            /// is <c>true</c>, <c>filehandle.sync()</c> is used to flush the data.
-                            /// </summary>
-                            abstract member flush: bool option with get, set
-                            /// <summary>
-                            /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                            /// </summary>
-                            abstract member signal: Node.AbortSignal option with get, set
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Case1_6 =
-                            abstract member encoding: Node.BufferEncoding option with get, set
-                            abstract member mode: Node.fs.Mode option with get, set
-                            abstract member flag: Node.fs.OpenMode option with get, set
-                            /// <summary>
-                            /// If all data is successfully written to the file, and <c>flush</c>
-                            /// is <c>true</c>, <c>filehandle.sync()</c> is used to flush the data.
-                            /// </summary>
-                            abstract member flush: bool option with get, set
-                            /// <summary>
-                            /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                            /// </summary>
-                            abstract member signal: Node.AbortSignal option with get, set
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Case1_7 =
-                            abstract member encoding: Node.BufferEncoding option with get, set
-                            abstract member mode: Node.fs.Mode option with get, set
-                            abstract member flag: Node.fs.OpenMode option with get, set
-                            /// <summary>
-                            /// If all data is successfully written to the file, and <c>flush</c>
-                            /// is <c>true</c>, <c>filehandle.sync()</c> is used to flush the data.
-                            /// </summary>
-                            abstract member flush: bool option with get, set
-                            /// <summary>
-                            /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                            /// </summary>
-                            abstract member signal: Node.AbortSignal option with get, set
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Case1_8 =
-                            abstract member encoding: Node.BufferEncoding option with get, set
-                            abstract member mode: Node.fs.Mode option with get, set
-                            abstract member flag: Node.fs.OpenMode option with get, set
-                            /// <summary>
-                            /// If all data is successfully written to the file, and <c>flush</c>
-                            /// is <c>true</c>, <c>filehandle.sync()</c> is used to flush the data.
-                            /// </summary>
-                            abstract member flush: bool option with get, set
-                            /// <summary>
-                            /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                            /// </summary>
-                            abstract member signal: Node.AbortSignal option with get, set
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Case1_9 =
-                            abstract member encoding: Node.BufferEncoding option with get, set
-                            abstract member mode: Node.fs.Mode option with get, set
-                            abstract member flag: Node.fs.OpenMode option with get, set
-                            /// <summary>
-                            /// If all data is successfully written to the file, and <c>flush</c>
-                            /// is <c>true</c>, <c>filehandle.sync()</c> is used to flush the data.
-                            /// </summary>
-                            abstract member flush: bool option with get, set
-                            /// <summary>
-                            /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                            /// </summary>
-                            abstract member signal: Node.AbortSignal option with get, set
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Case1_10 =
-                            abstract member encoding: Node.BufferEncoding option with get, set
-                            abstract member mode: Node.fs.Mode option with get, set
-                            abstract member flag: Node.fs.OpenMode option with get, set
-                            /// <summary>
-                            /// If all data is successfully written to the file, and <c>flush</c>
-                            /// is <c>true</c>, <c>filehandle.sync()</c> is used to flush the data.
-                            /// </summary>
-                            abstract member flush: bool option with get, set
-                            /// <summary>
-                            /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                            /// </summary>
-                            abstract member signal: Node.AbortSignal option with get, set
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Case1_11 =
-                            abstract member encoding: Node.BufferEncoding option with get, set
-                            abstract member mode: Node.fs.Mode option with get, set
-                            abstract member flag: Node.fs.OpenMode option with get, set
-                            /// <summary>
-                            /// If all data is successfully written to the file, and <c>flush</c>
-                            /// is <c>true</c>, <c>filehandle.sync()</c> is used to flush the data.
-                            /// </summary>
-                            abstract member flush: bool option with get, set
-                            /// <summary>
-                            /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                            /// </summary>
-                            abstract member signal: Node.AbortSignal option with get, set
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Case1_12 =
-                            abstract member encoding: Node.BufferEncoding option with get, set
-                            abstract member mode: Node.fs.Mode option with get, set
-                            abstract member flag: Node.fs.OpenMode option with get, set
-                            /// <summary>
-                            /// If all data is successfully written to the file, and <c>flush</c>
-                            /// is <c>true</c>, <c>filehandle.sync()</c> is used to flush the data.
-                            /// </summary>
-                            abstract member flush: bool option with get, set
-                            /// <summary>
-                            /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                            /// </summary>
-                            abstract member signal: Node.AbortSignal option with get, set
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Case1_13 =
-                            abstract member encoding: Node.BufferEncoding option with get, set
-                            abstract member mode: Node.fs.Mode option with get, set
-                            abstract member flag: Node.fs.OpenMode option with get, set
-                            /// <summary>
-                            /// If all data is successfully written to the file, and <c>flush</c>
-                            /// is <c>true</c>, <c>filehandle.sync()</c> is used to flush the data.
-                            /// </summary>
-                            abstract member flush: bool option with get, set
-                            /// <summary>
-                            /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                            /// </summary>
-                            abstract member signal: Node.AbortSignal option with get, set
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Case1_14 =
-                            abstract member encoding: Node.BufferEncoding option with get, set
-                            abstract member mode: Node.fs.Mode option with get, set
-                            abstract member flag: Node.fs.OpenMode option with get, set
-                            /// <summary>
-                            /// If all data is successfully written to the file, and <c>flush</c>
-                            /// is <c>true</c>, <c>filehandle.sync()</c> is used to flush the data.
-                            /// </summary>
-                            abstract member flush: bool option with get, set
-                            /// <summary>
-                            /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                            /// </summary>
-                            abstract member signal: Node.AbortSignal option with get, set
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Case1_15 =
-                            abstract member encoding: Node.BufferEncoding option with get, set
-                            abstract member mode: Node.fs.Mode option with get, set
-                            abstract member flag: Node.fs.OpenMode option with get, set
-                            /// <summary>
-                            /// If all data is successfully written to the file, and <c>flush</c>
-                            /// is <c>true</c>, <c>filehandle.sync()</c> is used to flush the data.
-                            /// </summary>
-                            abstract member flush: bool option with get, set
-                            /// <summary>
-                            /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                            /// </summary>
-                            abstract member signal: Node.AbortSignal option with get, set
-
             module appendFile =
 
                 module options =
@@ -76082,131 +73245,11 @@ EventEmitter.defaultMaxListeners = $0"""
                             abstract member flag: Node.fs.OpenMode option with get, set
                             abstract member flush: bool option with get, set
 
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Case1_1 =
-                            abstract member encoding: Node.BufferEncoding option with get, set
-                            abstract member mode: Node.fs.Mode option with get, set
-                            abstract member flag: Node.fs.OpenMode option with get, set
-                            abstract member flush: bool option with get, set
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Case1_2 =
-                            abstract member encoding: Node.BufferEncoding option with get, set
-                            abstract member mode: Node.fs.Mode option with get, set
-                            abstract member flag: Node.fs.OpenMode option with get, set
-                            abstract member flush: bool option with get, set
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Case1_3 =
-                            abstract member encoding: Node.BufferEncoding option with get, set
-                            abstract member mode: Node.fs.Mode option with get, set
-                            abstract member flag: Node.fs.OpenMode option with get, set
-                            abstract member flush: bool option with get, set
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Case1_4 =
-                            abstract member encoding: Node.BufferEncoding option with get, set
-                            abstract member mode: Node.fs.Mode option with get, set
-                            abstract member flag: Node.fs.OpenMode option with get, set
-                            abstract member flush: bool option with get, set
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Case1_5 =
-                            abstract member encoding: Node.BufferEncoding option with get, set
-                            abstract member mode: Node.fs.Mode option with get, set
-                            abstract member flag: Node.fs.OpenMode option with get, set
-                            abstract member flush: bool option with get, set
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Case1_6 =
-                            abstract member encoding: Node.BufferEncoding option with get, set
-                            abstract member mode: Node.fs.Mode option with get, set
-                            abstract member flag: Node.fs.OpenMode option with get, set
-                            abstract member flush: bool option with get, set
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Case1_7 =
-                            abstract member encoding: Node.BufferEncoding option with get, set
-                            abstract member mode: Node.fs.Mode option with get, set
-                            abstract member flag: Node.fs.OpenMode option with get, set
-                            abstract member flush: bool option with get, set
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Case1_8 =
-                            abstract member encoding: Node.BufferEncoding option with get, set
-                            abstract member mode: Node.fs.Mode option with get, set
-                            abstract member flag: Node.fs.OpenMode option with get, set
-                            abstract member flush: bool option with get, set
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Case1_9 =
-                            abstract member encoding: Node.BufferEncoding option with get, set
-                            abstract member mode: Node.fs.Mode option with get, set
-                            abstract member flag: Node.fs.OpenMode option with get, set
-                            abstract member flush: bool option with get, set
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Case1_10 =
-                            abstract member encoding: Node.BufferEncoding option with get, set
-                            abstract member mode: Node.fs.Mode option with get, set
-                            abstract member flag: Node.fs.OpenMode option with get, set
-                            abstract member flush: bool option with get, set
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Case1_11 =
-                            abstract member encoding: Node.BufferEncoding option with get, set
-                            abstract member mode: Node.fs.Mode option with get, set
-                            abstract member flag: Node.fs.OpenMode option with get, set
-                            abstract member flush: bool option with get, set
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Case1_12 =
-                            abstract member encoding: Node.BufferEncoding option with get, set
-                            abstract member mode: Node.fs.Mode option with get, set
-                            abstract member flag: Node.fs.OpenMode option with get, set
-                            abstract member flush: bool option with get, set
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Case1_13 =
-                            abstract member encoding: Node.BufferEncoding option with get, set
-                            abstract member mode: Node.fs.Mode option with get, set
-                            abstract member flag: Node.fs.OpenMode option with get, set
-                            abstract member flush: bool option with get, set
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Case1_14 =
-                            abstract member encoding: Node.BufferEncoding option with get, set
-                            abstract member mode: Node.fs.Mode option with get, set
-                            abstract member flag: Node.fs.OpenMode option with get, set
-                            abstract member flush: bool option with get, set
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Case1_15 =
-                            abstract member encoding: Node.BufferEncoding option with get, set
-                            abstract member mode: Node.fs.Mode option with get, set
-                            abstract member flag: Node.fs.OpenMode option with get, set
-                            abstract member flush: bool option with get, set
-
             module readFile =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type options_12 =
+                type options_3 =
                     abstract member encoding: obj option with get, set
                     abstract member flag: Node.fs.OpenMode option with get, set
                     /// <summary>
@@ -76216,37 +73259,7 @@ EventEmitter.defaultMaxListeners = $0"""
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type options_13 =
-                    abstract member encoding: obj option with get, set
-                    abstract member flag: Node.fs.OpenMode option with get, set
-                    /// <summary>
-                    /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                    /// </summary>
-                    abstract member signal: Node.AbortSignal option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_14 =
-                    abstract member encoding: obj option with get, set
-                    abstract member flag: Node.fs.OpenMode option with get, set
-                    /// <summary>
-                    /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                    /// </summary>
-                    abstract member signal: Node.AbortSignal option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_15 =
-                    abstract member encoding: obj option with get, set
-                    abstract member flag: Node.fs.OpenMode option with get, set
-                    /// <summary>
-                    /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                    /// </summary>
-                    abstract member signal: Node.AbortSignal option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_16 =
+                type options_4 =
                     abstract member encoding: Node.BufferEncoding with get, set
                     abstract member flag: Node.fs.OpenMode option with get, set
                     /// <summary>
@@ -76256,67 +73269,7 @@ EventEmitter.defaultMaxListeners = $0"""
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type options_17 =
-                    abstract member encoding: Node.BufferEncoding with get, set
-                    abstract member flag: Node.fs.OpenMode option with get, set
-                    /// <summary>
-                    /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                    /// </summary>
-                    abstract member signal: Node.AbortSignal option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_18 =
-                    abstract member encoding: Node.BufferEncoding with get, set
-                    abstract member flag: Node.fs.OpenMode option with get, set
-                    /// <summary>
-                    /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                    /// </summary>
-                    abstract member signal: Node.AbortSignal option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_19 =
-                    abstract member encoding: Node.BufferEncoding with get, set
-                    abstract member flag: Node.fs.OpenMode option with get, set
-                    /// <summary>
-                    /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                    /// </summary>
-                    abstract member signal: Node.AbortSignal option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_20 =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    /// <summary>
-                    /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                    /// </summary>
-                    abstract member signal: Node.AbortSignal option with get, set
-                    abstract member flag: Node.fs.OpenMode option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_21 =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    /// <summary>
-                    /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                    /// </summary>
-                    abstract member signal: Node.AbortSignal option with get, set
-                    abstract member flag: Node.fs.OpenMode option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_22 =
-                    abstract member encoding: Node.BufferEncoding option with get, set
-                    /// <summary>
-                    /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                    /// </summary>
-                    abstract member signal: Node.AbortSignal option with get, set
-                    abstract member flag: Node.fs.OpenMode option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_23 =
+                type options_5 =
                     abstract member encoding: Node.BufferEncoding option with get, set
                     /// <summary>
                     /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
@@ -76326,46 +73279,18 @@ EventEmitter.defaultMaxListeners = $0"""
 
             module watch =
 
-                module options =
+                [<RequireQualifiedAccess>]
+                [<Erase(CaseRules.None)>]
+                type options_2 =
+                    | buffer
+                    | Case1 of Node.fs_promises.WatchOptionsWithBufferEncoding
 
-                    [<RequireQualifiedAccess>]
-                    [<Erase(CaseRules.None)>]
-                    type options_6 =
-                        | buffer
-                        | Case1 of Node.fs_promises.WatchOptionsWithBufferEncoding
-
-                    [<RequireQualifiedAccess>]
-                    [<Erase(CaseRules.None)>]
-                    type options_7 =
-                        | buffer
-                        | Case1 of Node.fs_promises.WatchOptionsWithBufferEncoding
-
-                    [<RequireQualifiedAccess>]
-                    [<Erase(CaseRules.None)>]
-                    type options_8 =
-                        | buffer
-                        | Case1 of Node.fs_promises.WatchOptionsWithBufferEncoding
-
-                    [<RequireQualifiedAccess>]
-                    [<Erase(CaseRules.None)>]
-                    type options_9 =
-                        | buffer
-                        | Case1 of Node.fs_promises.WatchOptions
-                        | Case2 of Node.BufferEncoding
-
-                    [<RequireQualifiedAccess>]
-                    [<Erase(CaseRules.None)>]
-                    type options_10 =
-                        | buffer
-                        | Case1 of Node.fs_promises.WatchOptions
-                        | Case2 of Node.BufferEncoding
-
-                    [<RequireQualifiedAccess>]
-                    [<Erase(CaseRules.None)>]
-                    type options_11 =
-                        | buffer
-                        | Case1 of Node.fs_promises.WatchOptions
-                        | Case2 of Node.BufferEncoding
+                [<RequireQualifiedAccess>]
+                [<Erase(CaseRules.None)>]
+                type options_3 =
+                    | buffer
+                    | Case1 of Node.fs_promises.WatchOptions
+                    | Case2 of Node.BufferEncoding
 
     module http =
 
@@ -83308,19 +80233,19 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Will be registered as a one-time listener of the <see href="'connect'">'connect'</see> event.
             /// </param>
             [<Import("connect", "http2")>]
-            static member connect (authority: Node.url.URL, listener: Exports.connect.listener_1) : Node.http2.ClientHttp2Session = nativeOnly
+            static member connect (authority: Node.url.URL, listener: Exports.connect.listener) : Node.http2.ClientHttp2Session = nativeOnly
             [<Import("connect", "http2")>]
             static member connect (authority: string) : Node.http2.ClientHttp2Session = nativeOnly
             [<Import("connect", "http2")>]
-            static member connect (authority: string, options: Node.http2.ClientSessionOptions, ?listener: Exports.connect.listener_2) : Node.http2.ClientHttp2Session = nativeOnly
+            static member connect (authority: string, options: Node.http2.ClientSessionOptions, ?listener: Exports.connect.listener) : Node.http2.ClientHttp2Session = nativeOnly
             [<Import("connect", "http2")>]
-            static member connect (authority: string, options: Node.http2.SecureClientSessionOptions, ?listener: Exports.connect.listener_3) : Node.http2.ClientHttp2Session = nativeOnly
+            static member connect (authority: string, options: Node.http2.SecureClientSessionOptions, ?listener: Exports.connect.listener) : Node.http2.ClientHttp2Session = nativeOnly
             [<Import("connect", "http2")>]
             static member connect (authority: Node.url.URL) : Node.http2.ClientHttp2Session = nativeOnly
             [<Import("connect", "http2")>]
-            static member connect (authority: Node.url.URL, options: Node.http2.ClientSessionOptions, ?listener: Exports.connect.listener_4) : Node.http2.ClientHttp2Session = nativeOnly
+            static member connect (authority: Node.url.URL, options: Node.http2.ClientSessionOptions, ?listener: Exports.connect.listener) : Node.http2.ClientHttp2Session = nativeOnly
             [<Import("connect", "http2")>]
-            static member connect (authority: Node.url.URL, options: Node.http2.SecureClientSessionOptions, ?listener: Exports.connect.listener_5) : Node.http2.ClientHttp2Session = nativeOnly
+            static member connect (authority: Node.url.URL, options: Node.http2.SecureClientSessionOptions, ?listener: Exports.connect.listener) : Node.http2.ClientHttp2Session = nativeOnly
             /// <summary>
             /// Create an HTTP/2 server session from an existing socket.
             /// </summary>
@@ -88048,7 +84973,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Calling <c>http2stream.pushStream()</c> from within a pushed stream is not permitted
             /// and will throw an error.
             /// </summary>
-            abstract member pushStream: headers: Node.http.OutgoingHttpHeaders * ?options: Node.http2.StreamPriorityOptions * ?callback: ServerHttp2Stream.pushStream.callback_1 -> unit
+            abstract member pushStream: headers: Node.http.OutgoingHttpHeaders * ?options: Node.http2.StreamPriorityOptions * ?callback: ServerHttp2Stream.pushStream.callback -> unit
             /// <summary>
             /// <code lang="js">
             /// import http2 from 'node:http2';
@@ -88612,7 +85537,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If the <c>payload</c> argument is not specified, the default payload will be the
             /// 64-bit timestamp (little endian) marking the start of the <c>PING</c> duration.
             /// </summary>
-            abstract member ping: payload: Node.NodeJS.ArrayBufferView * callback: Http2Session.ping.callback_1 -> bool
+            abstract member ping: payload: Node.NodeJS.ArrayBufferView * callback: Http2Session.ping.callback -> bool
             /// <summary>
             /// Calls <c>ref()</c> on this <c>Http2Session</c> instance's underlying <c>net.Socket</c>.
             /// </summary>
@@ -103451,9 +100376,6 @@ EventEmitter.defaultMaxListeners = $0"""
                 type callback =
                     delegate of err: Exception option * pushStream: Node.http2.ServerHttp2Stream * headers: Node.http.OutgoingHttpHeaders -> unit
 
-                type callback_1 =
-                    delegate of err: Exception option * pushStream: Node.http2.ServerHttp2Stream * headers: Node.http.OutgoingHttpHeaders -> unit
-
         module Settings =
 
             [<AllowNullLiteral>]
@@ -103467,9 +100389,6 @@ EventEmitter.defaultMaxListeners = $0"""
             module ping =
 
                 type callback =
-                    delegate of err: Exception option * duration: float * payload: Node.NonSharedBuffer -> unit
-
-                type callback_1 =
                     delegate of err: Exception option * duration: float * payload: Node.NonSharedBuffer -> unit
 
             module settings =
@@ -104466,21 +101385,6 @@ EventEmitter.defaultMaxListeners = $0"""
             module connect =
 
                 type listener =
-                    delegate of session: Node.http2.ClientHttp2Session * socket: U2<Node.net.Socket, Node.tls.TLSSocket> -> unit
-
-                type listener_1 =
-                    delegate of session: Node.http2.ClientHttp2Session * socket: U2<Node.net.Socket, Node.tls.TLSSocket> -> unit
-
-                type listener_2 =
-                    delegate of session: Node.http2.ClientHttp2Session * socket: U2<Node.net.Socket, Node.tls.TLSSocket> -> unit
-
-                type listener_3 =
-                    delegate of session: Node.http2.ClientHttp2Session * socket: U2<Node.net.Socket, Node.tls.TLSSocket> -> unit
-
-                type listener_4 =
-                    delegate of session: Node.http2.ClientHttp2Session * socket: U2<Node.net.Socket, Node.tls.TLSSocket> -> unit
-
-                type listener_5 =
                     delegate of session: Node.http2.ClientHttp2Session * socket: U2<Node.net.Socket, Node.tls.TLSSocket> -> unit
 
     module https =
@@ -130185,7 +127089,7 @@ Readable.isDisturbed($0)"""
                 /// <returns>
                 /// a promise for the final value of the reduction.
                 /// </returns>
-                abstract member reduce: fn: Readable.reduce.fn_1 * ?initial: obj * ?options: Readable.reduce.options_1 -> JS.Promise<obj>
+                abstract member reduce: fn: Readable.reduce.fn_1 * ?initial: obj * ?options: Readable.reduce.options -> JS.Promise<obj>
                 /// <summary>
                 /// This method calls *fn* on each chunk of the stream in order, passing it the result from the calculation
                 /// on the previous element. It returns a promise for the final value of the reduction.
@@ -130196,7 +127100,7 @@ Readable.isDisturbed($0)"""
                 /// The reducer function iterates the stream element-by-element which means that there is no *concurrency* parameter
                 /// or parallelism. To perform a reduce concurrently, you can extract the async function to <c>readable.map</c> method.
                 /// </summary>
-                abstract member reduce<'T>: fn: Readable.reduce.fn_2<'T> * initial: 'T * ?options: Readable.reduce.options_2 -> JS.Promise<'T>
+                abstract member reduce<'T>: fn: Readable.reduce.fn_2<'T> * initial: 'T * ?options: Readable.reduce.options -> JS.Promise<'T>
                 /// <summary>
                 /// This method calls *fn* on each chunk of the stream in order, passing it the result from the calculation
                 /// on the previous element. It returns a promise for the final value of the reduction.
@@ -130207,7 +127111,7 @@ Readable.isDisturbed($0)"""
                 /// The reducer function iterates the stream element-by-element which means that there is no *concurrency* parameter
                 /// or parallelism. To perform a reduce concurrently, you can extract the async function to <c>readable.map</c> method.
                 /// </summary>
-                abstract member reduce: fn: Readable.reduce.fn_3 * initial: obj * ?options: Readable.reduce.options_3 -> JS.Promise<obj>
+                abstract member reduce: fn: Readable.reduce.fn_1 * initial: obj * ?options: Readable.reduce.options -> JS.Promise<obj>
                 abstract member _destroy: error: Exception option * callback: (Exception option -> unit) -> unit
                 /// <summary>
                 /// Destroy the stream. Optionally emit an <c>'error'</c> event, and emit a <c>'close'</c> event (unless <c>emitClose</c> is set to <c>false</c>). After this call, the readable
@@ -141063,21 +137967,8 @@ Duplex.fromWeb($0, $1)"""
                             /// </summary>
                             member val signal : Node.AbortSignal option = nativeOnly with get, set
 
-                        [<Global>]
-                        [<AllowNullLiteral>]
-                        type options_1
-                            [<ParamObject; Emit("$0")>]
-                            (
-                                ?signal: Node.AbortSignal
-                            ) =
-
-                            /// <summary>
-                            /// Allows destroying the stream if the signal is aborted.
-                            /// </summary>
-                            member val signal : Node.AbortSignal option = nativeOnly with get, set
-
                     type fn_1 =
-                        delegate of data: obj * ?options: Readable.find.fn.options_1 -> U2<bool, JS.Promise<bool>>
+                        delegate of data: obj * ?options: Readable.find.fn.options -> U2<bool, JS.Promise<bool>>
 
                 module every =
 
@@ -141197,92 +138088,11 @@ Duplex.fromWeb($0, $1)"""
                             /// </summary>
                             member val signal : Node.AbortSignal option = nativeOnly with get, set
 
-                        [<Global>]
-                        [<AllowNullLiteral>]
-                        type options_1
-                            [<ParamObject; Emit("$0")>]
-                            (
-                                ?signal: Node.AbortSignal
-                            ) =
-
-                            /// <summary>
-                            /// Allows destroying the stream if the signal is aborted.
-                            /// </summary>
-                            member val signal : Node.AbortSignal option = nativeOnly with get, set
-
-                        [<Global>]
-                        [<AllowNullLiteral>]
-                        type options_2
-                            [<ParamObject; Emit("$0")>]
-                            (
-                                ?signal: Node.AbortSignal
-                            ) =
-
-                            /// <summary>
-                            /// Allows destroying the stream if the signal is aborted.
-                            /// </summary>
-                            member val signal : Node.AbortSignal option = nativeOnly with get, set
-
-                        [<Global>]
-                        [<AllowNullLiteral>]
-                        type options_3
-                            [<ParamObject; Emit("$0")>]
-                            (
-                                ?signal: Node.AbortSignal
-                            ) =
-
-                            /// <summary>
-                            /// Allows destroying the stream if the signal is aborted.
-                            /// </summary>
-                            member val signal : Node.AbortSignal option = nativeOnly with get, set
-
                     type fn_1 =
-                        delegate of previous: obj * data: obj * ?options: Readable.reduce.fn.options_1 -> unit
-
-                    [<Global>]
-                    [<AllowNullLiteral>]
-                    type options_1
-                        [<ParamObject; Emit("$0")>]
-                        (
-                            ?signal: Node.AbortSignal
-                        ) =
-
-                        /// <summary>
-                        /// Allows destroying the stream if the signal is aborted.
-                        /// </summary>
-                        member val signal : Node.AbortSignal option = nativeOnly with get, set
+                        delegate of previous: obj * data: obj * ?options: Readable.reduce.fn.options -> unit
 
                     type fn_2<'T> =
-                        delegate of previous: 'T * data: obj * ?options: Readable.reduce.fn.options_2 -> 'T
-
-                    [<Global>]
-                    [<AllowNullLiteral>]
-                    type options_2
-                        [<ParamObject; Emit("$0")>]
-                        (
-                            ?signal: Node.AbortSignal
-                        ) =
-
-                        /// <summary>
-                        /// Allows destroying the stream if the signal is aborted.
-                        /// </summary>
-                        member val signal : Node.AbortSignal option = nativeOnly with get, set
-
-                    type fn_3 =
-                        delegate of previous: obj * data: obj * ?options: Readable.reduce.fn.options_3 -> unit
-
-                    [<Global>]
-                    [<AllowNullLiteral>]
-                    type options_3
-                        [<ParamObject; Emit("$0")>]
-                        (
-                            ?signal: Node.AbortSignal
-                        ) =
-
-                        /// <summary>
-                        /// Allows destroying the stream if the signal is aborted.
-                        /// </summary>
-                        member val signal : Node.AbortSignal option = nativeOnly with get, set
+                        delegate of previous: 'T * data: obj * ?options: Readable.reduce.fn.options -> 'T
 
             module WritableOptions =
 
@@ -153424,9 +150234,9 @@ Duplex.fromWeb($0, $1)"""
             [<Import("URL", "url"); EmitConstructor>]
             static member URL (input: Exports.URL.input) : URL = nativeOnly
             [<Import("URL", "url"); EmitConstructor>]
-            static member URL (input: Exports.URL.input_1, ``base``: string) : URL = nativeOnly
+            static member URL (input: Exports.URL.input, ``base``: string) : URL = nativeOnly
             [<Import("URL", "url"); EmitConstructor>]
-            static member URL (input: Exports.URL.input_2, ``base``: Node.url.URL) : URL = nativeOnly
+            static member URL (input: Exports.URL.input, ``base``: Node.url.URL) : URL = nativeOnly
             [<Import("URLSearchParams", "url"); EmitConstructor>]
             static member URLSearchParams () : URLSearchParams = nativeOnly
             [<Import("URLSearchParams", "url"); EmitConstructor>]
@@ -154055,7 +150865,7 @@ URL.parse($0, $1)"""
             /// <param name="thisArg">
             /// To be used as <c>this</c> value for when <c>fn</c> is called
             /// </param>
-            abstract member forEach: fn: URLSearchParams.forEach.fn_1 * ?thisArg: URLSearchParams -> unit
+            abstract member forEach: fn: URLSearchParams.forEach.fn * ?thisArg: URLSearchParams -> unit
             /// <summary>
             /// Returns the value of the first name-value pair whose name is <c>name</c>. If there
             /// are no such pairs, <c>null</c> is returned.
@@ -154149,9 +150959,6 @@ URL.parse($0, $1)"""
                 type fn =
                     delegate of value: string * name: string * searchParams: Node.url.URLSearchParams -> unit
 
-                type fn_1 =
-                    delegate of value: string * name: string * searchParams: Node.url.URLSearchParams -> unit
-
         module Exports =
 
             module URL =
@@ -154159,26 +150966,6 @@ URL.parse($0, $1)"""
                 [<Global>]
                 [<AllowNullLiteral>]
                 type input
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        toString: (unit -> string)
-                    ) =
-
-                    member val toString : (unit -> string) = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type input_1
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        toString: (unit -> string)
-                    ) =
-
-                    member val toString : (unit -> string) = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type input_2
                     [<ParamObject; Emit("$0")>]
                     (
                         toString: (unit -> string)
@@ -156463,7 +153250,7 @@ URL.parse($0, $1)"""
             /// <param name="input">
             /// An <c>ArrayBuffer</c>, <c>DataView</c>, or <c>TypedArray</c> instance containing the encoded data.
             /// </param>
-            abstract member decode: input: obj * ?options: TextDecoder.decode.options_1 -> string
+            abstract member decode: input: obj * ?options: TextDecoder.decode.options -> string
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -157407,16 +154194,6 @@ URL.parse($0, $1)"""
 
                     member val stream : bool option = nativeOnly with get, set
 
-                [<Global>]
-                [<AllowNullLiteral>]
-                type options_1
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        ?stream: bool
-                    ) =
-
-                    member val stream : bool option = nativeOnly with get, set
-
         module ParsedTokens =
 
             module ResizeArray =
@@ -157515,37 +154292,37 @@ URL.parse($0, $1)"""
                 delegate of arg1: 'T1 * callback: (Node.NodeJS.ErrnoException -> unit) -> unit
 
             type callbackify_1<'T1, 'TResult> =
-                delegate of arg1: 'T1 * callback: Exports.callbackify.callback_1<'TResult> -> unit
+                delegate of arg1: 'T1 * callback: Exports.callbackify.callback<'TResult> -> unit
 
             type callbackify_2<'T1, 'T2> =
                 delegate of arg1: 'T1 * arg2: 'T2 * callback: (Node.NodeJS.ErrnoException -> unit) -> unit
 
             type callbackify_3<'T1, 'T2, 'TResult> =
-                delegate of arg1: 'T1 * arg2: 'T2 * callback: Exports.callbackify.callback_2<'TResult> -> unit
+                delegate of arg1: 'T1 * arg2: 'T2 * callback: Exports.callbackify.callback_1<'TResult> -> unit
 
             type callbackify_4<'T1, 'T2, 'T3> =
                 delegate of arg1: 'T1 * arg2: 'T2 * arg3: 'T3 * callback: (Node.NodeJS.ErrnoException -> unit) -> unit
 
             type callbackify_5<'T1, 'T2, 'T3, 'TResult> =
-                delegate of arg1: 'T1 * arg2: 'T2 * arg3: 'T3 * callback: Exports.callbackify.callback_3<'TResult> -> unit
+                delegate of arg1: 'T1 * arg2: 'T2 * arg3: 'T3 * callback: Exports.callbackify.callback_1<'TResult> -> unit
 
             type callbackify_6<'T1, 'T2, 'T3, 'T4> =
                 delegate of arg1: 'T1 * arg2: 'T2 * arg3: 'T3 * arg4: 'T4 * callback: (Node.NodeJS.ErrnoException -> unit) -> unit
 
             type callbackify_7<'T1, 'T2, 'T3, 'T4, 'TResult> =
-                delegate of arg1: 'T1 * arg2: 'T2 * arg3: 'T3 * arg4: 'T4 * callback: Exports.callbackify.callback_4<'TResult> -> unit
+                delegate of arg1: 'T1 * arg2: 'T2 * arg3: 'T3 * arg4: 'T4 * callback: Exports.callbackify.callback_1<'TResult> -> unit
 
             type callbackify_8<'T1, 'T2, 'T3, 'T4, 'T5> =
                 delegate of arg1: 'T1 * arg2: 'T2 * arg3: 'T3 * arg4: 'T4 * arg5: 'T5 * callback: (Node.NodeJS.ErrnoException -> unit) -> unit
 
             type callbackify_9<'T1, 'T2, 'T3, 'T4, 'T5, 'TResult> =
-                delegate of arg1: 'T1 * arg2: 'T2 * arg3: 'T3 * arg4: 'T4 * arg5: 'T5 * callback: Exports.callbackify.callback_5<'TResult> -> unit
+                delegate of arg1: 'T1 * arg2: 'T2 * arg3: 'T3 * arg4: 'T4 * arg5: 'T5 * callback: Exports.callbackify.callback_1<'TResult> -> unit
 
             type callbackify_10<'T1, 'T2, 'T3, 'T4, 'T5, 'T6> =
                 delegate of arg1: 'T1 * arg2: 'T2 * arg3: 'T3 * arg4: 'T4 * arg5: 'T5 * arg6: 'T6 * callback: (Node.NodeJS.ErrnoException -> unit) -> unit
 
             type callbackify_11<'T1, 'T2, 'T3, 'T4, 'T5, 'T6, 'TResult> =
-                delegate of arg1: 'T1 * arg2: 'T2 * arg3: 'T3 * arg4: 'T4 * arg5: 'T5 * arg6: 'T6 * callback: Exports.callbackify.callback_6<'TResult> -> unit
+                delegate of arg1: 'T1 * arg2: 'T2 * arg3: 'T3 * arg4: 'T4 * arg5: 'T5 * arg6: 'T6 * callback: Exports.callbackify.callback_1<'TResult> -> unit
 
             type promisify<'T1, 'T2, 'TResult> =
                 delegate of arg1: 'T1 * arg2: 'T2 -> JS.Promise<'TResult>
@@ -157576,16 +154353,13 @@ URL.parse($0, $1)"""
                 type callback<'TResult> =
                     delegate of err: Node.NodeJS.ErrnoException * result: 'TResult -> unit
 
-                type callback_1<'TResult> =
-                    delegate of err: Node.NodeJS.ErrnoException * result: 'TResult -> unit
-
                 type fn<'T1, 'T2> =
                     delegate of arg1: 'T1 * arg2: 'T2 -> JS.Promise<unit>
 
                 type fn_1<'T1, 'T2, 'TResult> =
                     delegate of arg1: 'T1 * arg2: 'T2 -> JS.Promise<'TResult>
 
-                type callback_2<'TResult> =
+                type callback_1<'TResult> =
                     delegate of err: Node.NodeJS.ErrnoException option * result: 'TResult -> unit
 
                 type fn_2<'T1, 'T2, 'T3> =
@@ -157594,17 +154368,11 @@ URL.parse($0, $1)"""
                 type fn_3<'T1, 'T2, 'T3, 'TResult> =
                     delegate of arg1: 'T1 * arg2: 'T2 * arg3: 'T3 -> JS.Promise<'TResult>
 
-                type callback_3<'TResult> =
-                    delegate of err: Node.NodeJS.ErrnoException option * result: 'TResult -> unit
-
                 type fn_4<'T1, 'T2, 'T3, 'T4> =
                     delegate of arg1: 'T1 * arg2: 'T2 * arg3: 'T3 * arg4: 'T4 -> JS.Promise<unit>
 
                 type fn_5<'T1, 'T2, 'T3, 'T4, 'TResult> =
                     delegate of arg1: 'T1 * arg2: 'T2 * arg3: 'T3 * arg4: 'T4 -> JS.Promise<'TResult>
-
-                type callback_4<'TResult> =
-                    delegate of err: Node.NodeJS.ErrnoException option * result: 'TResult -> unit
 
                 type fn_6<'T1, 'T2, 'T3, 'T4, 'T5> =
                     delegate of arg1: 'T1 * arg2: 'T2 * arg3: 'T3 * arg4: 'T4 * arg5: 'T5 -> JS.Promise<unit>
@@ -157612,17 +154380,11 @@ URL.parse($0, $1)"""
                 type fn_7<'T1, 'T2, 'T3, 'T4, 'T5, 'TResult> =
                     delegate of arg1: 'T1 * arg2: 'T2 * arg3: 'T3 * arg4: 'T4 * arg5: 'T5 -> JS.Promise<'TResult>
 
-                type callback_5<'TResult> =
-                    delegate of err: Node.NodeJS.ErrnoException option * result: 'TResult -> unit
-
                 type fn_8<'T1, 'T2, 'T3, 'T4, 'T5, 'T6> =
                     delegate of arg1: 'T1 * arg2: 'T2 * arg3: 'T3 * arg4: 'T4 * arg5: 'T5 * arg6: 'T6 -> JS.Promise<unit>
 
                 type fn_9<'T1, 'T2, 'T3, 'T4, 'T5, 'T6, 'TResult> =
                     delegate of arg1: 'T1 * arg2: 'T2 * arg3: 'T3 * arg4: 'T4 * arg5: 'T5 * arg6: 'T6 -> JS.Promise<'TResult>
-
-                type callback_6<'TResult> =
-                    delegate of err: Node.NodeJS.ErrnoException option * result: 'TResult -> unit
 
             module promisify =
 
@@ -157631,47 +154393,32 @@ URL.parse($0, $1)"""
                     type callback<'TResult> =
                         delegate of err: obj * result: 'TResult -> unit
 
-                    type callback_1<'TResult> =
-                        delegate of err: obj * result: 'TResult -> unit
-
-                    type callback_2<'TResult> =
-                        delegate of err: obj * result: 'TResult -> unit
-
-                    type callback_3<'TResult> =
-                        delegate of err: obj * result: 'TResult -> unit
-
-                    type callback_4<'TResult> =
-                        delegate of err: obj * result: 'TResult -> unit
-
-                    type callback_5<'TResult> =
-                        delegate of err: obj * result: 'TResult -> unit
-
                 type fn<'T1, 'TResult> =
-                    delegate of arg1: 'T1 * callback: Exports.promisify.fn.callback_1<'TResult> -> unit
+                    delegate of arg1: 'T1 * callback: Exports.promisify.fn.callback<'TResult> -> unit
 
                 type fn_1<'T1> =
                     delegate of arg1: 'T1 * callback: (obj option -> unit) -> unit
 
                 type fn_2<'T1, 'T2, 'TResult> =
-                    delegate of arg1: 'T1 * arg2: 'T2 * callback: Exports.promisify.fn.callback_2<'TResult> -> unit
+                    delegate of arg1: 'T1 * arg2: 'T2 * callback: Exports.promisify.fn.callback<'TResult> -> unit
 
                 type fn_3<'T1, 'T2> =
                     delegate of arg1: 'T1 * arg2: 'T2 * callback: (obj option -> unit) -> unit
 
                 type fn_4<'T1, 'T2, 'T3, 'TResult> =
-                    delegate of arg1: 'T1 * arg2: 'T2 * arg3: 'T3 * callback: Exports.promisify.fn.callback_3<'TResult> -> unit
+                    delegate of arg1: 'T1 * arg2: 'T2 * arg3: 'T3 * callback: Exports.promisify.fn.callback<'TResult> -> unit
 
                 type fn_5<'T1, 'T2, 'T3> =
                     delegate of arg1: 'T1 * arg2: 'T2 * arg3: 'T3 * callback: (obj option -> unit) -> unit
 
                 type fn_6<'T1, 'T2, 'T3, 'T4, 'TResult> =
-                    delegate of arg1: 'T1 * arg2: 'T2 * arg3: 'T3 * arg4: 'T4 * callback: Exports.promisify.fn.callback_4<'TResult> -> unit
+                    delegate of arg1: 'T1 * arg2: 'T2 * arg3: 'T3 * arg4: 'T4 * callback: Exports.promisify.fn.callback<'TResult> -> unit
 
                 type fn_7<'T1, 'T2, 'T3, 'T4> =
                     delegate of arg1: 'T1 * arg2: 'T2 * arg3: 'T3 * arg4: 'T4 * callback: (obj option -> unit) -> unit
 
                 type fn_8<'T1, 'T2, 'T3, 'T4, 'T5, 'TResult> =
-                    delegate of arg1: 'T1 * arg2: 'T2 * arg3: 'T3 * arg4: 'T4 * arg5: 'T5 * callback: Exports.promisify.fn.callback_5<'TResult> -> unit
+                    delegate of arg1: 'T1 * arg2: 'T2 * arg3: 'T3 * arg4: 'T4 * arg5: 'T5 * callback: Exports.promisify.fn.callback<'TResult> -> unit
 
                 type fn_9<'T1, 'T2, 'T3, 'T4, 'T5> =
                     delegate of arg1: 'T1 * arg2: 'T2 * arg3: 'T3 * arg4: 'T4 * arg5: 'T5 * callback: (obj option -> unit) -> unit
@@ -165740,7 +162487,7 @@ module UndiciTypes =
         /// couldn't be parsed.
         /// </summary>
         [<Import("parseMIMEType", "undici-types")>]
-        static member parseMIMEType (input: string) : Exports.parseMIMEType.parseMIMEType_1 = nativeOnly
+        static member parseMIMEType (input: string) : Exports.parseMIMEType_1 = nativeOnly
         /// <summary>
         /// Convert a MIMEType object to a string.
         /// </summary>
@@ -165799,32 +162546,32 @@ module UndiciTypes =
         /// Starts two-way communications with the requested resource.
         /// </summary>
         [<Import("connect", "undici-types")>]
-        static member connect (url: string, ?options: Exports.connect.options_3) : JS.Promise<UndiciTypes.dispatcher.Dispatcher_.ConnectData> = nativeOnly
+        static member connect (url: string, ?options: Exports.connect.options_1) : JS.Promise<UndiciTypes.dispatcher.Dispatcher_.ConnectData> = nativeOnly
         /// <summary>
         /// Starts two-way communications with the requested resource.
         /// </summary>
         [<Import("connect", "undici-types")>]
-        static member connect (url: Node.url.URL, ?options: Exports.connect.options_4) : JS.Promise<UndiciTypes.dispatcher.Dispatcher_.ConnectData> = nativeOnly
+        static member connect (url: Node.url.URL, ?options: Exports.connect.options_1) : JS.Promise<UndiciTypes.dispatcher.Dispatcher_.ConnectData> = nativeOnly
         /// <summary>
         /// Starts two-way communications with the requested resource.
         /// </summary>
         [<Import("connect", "undici-types")>]
-        static member connect (url: Node.url.UrlObject, ?options: Exports.connect.options_5) : JS.Promise<UndiciTypes.dispatcher.Dispatcher_.ConnectData> = nativeOnly
+        static member connect (url: Node.url.UrlObject, ?options: Exports.connect.options_1) : JS.Promise<UndiciTypes.dispatcher.Dispatcher_.ConnectData> = nativeOnly
         /// <summary>
         /// Upgrade to a different protocol.
         /// </summary>
         [<Import("upgrade", "undici-types")>]
-        static member upgrade (url: string, ?options: Exports.upgrade.options_3) : JS.Promise<UndiciTypes.dispatcher.Dispatcher_.UpgradeData> = nativeOnly
+        static member upgrade (url: string, ?options: Exports.upgrade.options_1) : JS.Promise<UndiciTypes.dispatcher.Dispatcher_.UpgradeData> = nativeOnly
         /// <summary>
         /// Upgrade to a different protocol.
         /// </summary>
         [<Import("upgrade", "undici-types")>]
-        static member upgrade (url: Node.url.URL, ?options: Exports.upgrade.options_4) : JS.Promise<UndiciTypes.dispatcher.Dispatcher_.UpgradeData> = nativeOnly
+        static member upgrade (url: Node.url.URL, ?options: Exports.upgrade.options_1) : JS.Promise<UndiciTypes.dispatcher.Dispatcher_.UpgradeData> = nativeOnly
         /// <summary>
         /// Upgrade to a different protocol.
         /// </summary>
         [<Import("upgrade", "undici-types")>]
-        static member upgrade (url: Node.url.UrlObject, ?options: Exports.upgrade.options_5) : JS.Promise<UndiciTypes.dispatcher.Dispatcher_.UpgradeData> = nativeOnly
+        static member upgrade (url: Node.url.UrlObject, ?options: Exports.upgrade.options_1) : JS.Promise<UndiciTypes.dispatcher.Dispatcher_.UpgradeData> = nativeOnly
         [<Import("setGlobalDispatcher", "undici-types")>]
         static member setGlobalDispatcher<'DispatcherImplementation> (dispatcher: 'DispatcherImplementation) : unit = nativeOnly
         [<Import("getGlobalDispatcher", "undici-types")>]
@@ -166389,12 +163136,12 @@ module UndiciTypes =
             /// Starts two-way communications with the requested resource.
             /// </summary>
             [<Import("connect", "undici-types/api.js")>]
-            static member connect (url: Node.url.URL, ?options: Exports.connect.options_1) : JS.Promise<UndiciTypes.dispatcher.Dispatcher_.ConnectData> = nativeOnly
+            static member connect (url: Node.url.URL, ?options: Exports.connect.options) : JS.Promise<UndiciTypes.dispatcher.Dispatcher_.ConnectData> = nativeOnly
             /// <summary>
             /// Starts two-way communications with the requested resource.
             /// </summary>
             [<Import("connect", "undici-types/api.js")>]
-            static member connect (url: Node.url.UrlObject, ?options: Exports.connect.options_2) : JS.Promise<UndiciTypes.dispatcher.Dispatcher_.ConnectData> = nativeOnly
+            static member connect (url: Node.url.UrlObject, ?options: Exports.connect.options) : JS.Promise<UndiciTypes.dispatcher.Dispatcher_.ConnectData> = nativeOnly
             /// <summary>
             /// Upgrade to a different protocol.
             /// </summary>
@@ -166404,12 +163151,12 @@ module UndiciTypes =
             /// Upgrade to a different protocol.
             /// </summary>
             [<Import("upgrade", "undici-types/api.js")>]
-            static member upgrade (url: Node.url.URL, ?options: Exports.upgrade.options_1) : JS.Promise<UndiciTypes.dispatcher.Dispatcher_.UpgradeData> = nativeOnly
+            static member upgrade (url: Node.url.URL, ?options: Exports.upgrade.options) : JS.Promise<UndiciTypes.dispatcher.Dispatcher_.UpgradeData> = nativeOnly
             /// <summary>
             /// Upgrade to a different protocol.
             /// </summary>
             [<Import("upgrade", "undici-types/api.js")>]
-            static member upgrade (url: Node.url.UrlObject, ?options: Exports.upgrade.options_2) : JS.Promise<UndiciTypes.dispatcher.Dispatcher_.UpgradeData> = nativeOnly
+            static member upgrade (url: Node.url.UrlObject, ?options: Exports.upgrade.options) : JS.Promise<UndiciTypes.dispatcher.Dispatcher_.UpgradeData> = nativeOnly
 
         module Exports =
 
@@ -167398,135 +164145,11 @@ module UndiciTypes =
                     /// </summary>
                     abstract member headers: U2<UndiciTypes.header.IncomingHttpHeaders, ResizeArray<string>> option with get, set
 
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_1 =
-                    abstract member dispatcher: UndiciTypes.dispatcher.Dispatcher option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member signal: U2<UndiciTypes.dispatcher.AbortSignal, Node.events.EventEmitter> option with get, set
-                    /// <summary>
-                    /// This argument parameter is passed through to <c>ConnectData</c>
-                    /// </summary>
-                    abstract member opaque: obj option with get, set
-                    /// <summary>
-                    /// Default: 0
-                    /// </summary>
-                    abstract member maxRedirections: float option with get, set
-                    /// <summary>
-                    /// Default: false
-                    /// </summary>
-                    abstract member redirectionLimitReached: bool option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member responseHeader: string option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member headers: U2<UndiciTypes.header.IncomingHttpHeaders, ResizeArray<string>> option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_2 =
-                    abstract member dispatcher: UndiciTypes.dispatcher.Dispatcher option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member signal: U2<UndiciTypes.dispatcher.AbortSignal, Node.events.EventEmitter> option with get, set
-                    /// <summary>
-                    /// This argument parameter is passed through to <c>ConnectData</c>
-                    /// </summary>
-                    abstract member opaque: obj option with get, set
-                    /// <summary>
-                    /// Default: 0
-                    /// </summary>
-                    abstract member maxRedirections: float option with get, set
-                    /// <summary>
-                    /// Default: false
-                    /// </summary>
-                    abstract member redirectionLimitReached: bool option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member responseHeader: string option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member headers: U2<UndiciTypes.header.IncomingHttpHeaders, ResizeArray<string>> option with get, set
-
             module upgrade =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
                 type options =
-                    abstract member dispatcher: UndiciTypes.dispatcher.Dispatcher option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member signal: U2<UndiciTypes.dispatcher.AbortSignal, Node.events.EventEmitter> option with get, set
-                    /// <summary>
-                    /// Default: <c>'GET'</c>
-                    /// </summary>
-                    abstract member ``method``: string option with get, set
-                    /// <summary>
-                    /// Default: 0
-                    /// </summary>
-                    abstract member maxRedirections: float option with get, set
-                    /// <summary>
-                    /// Default: false
-                    /// </summary>
-                    abstract member redirectionLimitReached: bool option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member responseHeader: string option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member headers: U2<UndiciTypes.header.IncomingHttpHeaders, ResizeArray<string>> option with get, set
-                    /// <summary>
-                    /// A string of comma separated protocols, in descending preference order. Default: <c>'Websocket'</c>
-                    /// </summary>
-                    abstract member protocol: string option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_1 =
-                    abstract member dispatcher: UndiciTypes.dispatcher.Dispatcher option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member signal: U2<UndiciTypes.dispatcher.AbortSignal, Node.events.EventEmitter> option with get, set
-                    /// <summary>
-                    /// Default: <c>'GET'</c>
-                    /// </summary>
-                    abstract member ``method``: string option with get, set
-                    /// <summary>
-                    /// Default: 0
-                    /// </summary>
-                    abstract member maxRedirections: float option with get, set
-                    /// <summary>
-                    /// Default: false
-                    /// </summary>
-                    abstract member redirectionLimitReached: bool option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member responseHeader: string option with get, set
-                    /// <summary>
-                    /// Default: <c>null</c>
-                    /// </summary>
-                    abstract member headers: U2<UndiciTypes.header.IncomingHttpHeaders, ResizeArray<string>> option with get, set
-                    /// <summary>
-                    /// A string of comma separated protocols, in descending preference order. Default: <c>'Websocket'</c>
-                    /// </summary>
-                    abstract member protocol: string option with get, set
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type options_2 =
                     abstract member dispatcher: UndiciTypes.dispatcher.Dispatcher option with get, set
                     /// <summary>
                     /// Default: <c>null</c>
@@ -173158,6 +169781,12 @@ FileReader.DONE"""
             [<EmitIndexer>]
             abstract member Item: key: string -> string with get, set
 
+        [<RequireQualifiedAccess>]
+        [<Erase(CaseRules.None)>]
+        type parseMIMEType_1 =
+            | failure
+            | Case1 of UndiciTypes.content_type.MIMEType
+
         module deleteCookie =
 
             [<Global>]
@@ -173223,14 +169852,6 @@ FileReader.DONE"""
                 abstract member prototype: UndiciTypes.websocket.ErrorEvent with get, set
                 [<EmitConstructor>]
                 abstract member Create: ``type``: string * ?eventInitDict: UndiciTypes.websocket.ErrorEventInit -> UndiciTypes.websocket.ErrorEvent
-
-        module parseMIMEType =
-
-            [<RequireQualifiedAccess>]
-            [<Erase(CaseRules.None)>]
-            type parseMIMEType_1 =
-                | failure
-                | Case1 of UndiciTypes.content_type.MIMEType
 
         module request =
 
@@ -174190,65 +170811,7 @@ FileReader.DONE"""
 
             [<AllowNullLiteral>]
             [<Interface>]
-            type options_3 =
-                abstract member dispatcher: UndiciTypes.dispatcher.Dispatcher option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member signal: U2<UndiciTypes.dispatcher.AbortSignal, Node.events.EventEmitter> option with get, set
-                /// <summary>
-                /// This argument parameter is passed through to <c>ConnectData</c>
-                /// </summary>
-                abstract member opaque: obj option with get, set
-                /// <summary>
-                /// Default: 0
-                /// </summary>
-                abstract member maxRedirections: float option with get, set
-                /// <summary>
-                /// Default: false
-                /// </summary>
-                abstract member redirectionLimitReached: bool option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member responseHeader: string option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member headers: U2<UndiciTypes.header.IncomingHttpHeaders, ResizeArray<string>> option with get, set
-
-            [<AllowNullLiteral>]
-            [<Interface>]
-            type options_4 =
-                abstract member dispatcher: UndiciTypes.dispatcher.Dispatcher option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member signal: U2<UndiciTypes.dispatcher.AbortSignal, Node.events.EventEmitter> option with get, set
-                /// <summary>
-                /// This argument parameter is passed through to <c>ConnectData</c>
-                /// </summary>
-                abstract member opaque: obj option with get, set
-                /// <summary>
-                /// Default: 0
-                /// </summary>
-                abstract member maxRedirections: float option with get, set
-                /// <summary>
-                /// Default: false
-                /// </summary>
-                abstract member redirectionLimitReached: bool option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member responseHeader: string option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member headers: U2<UndiciTypes.header.IncomingHttpHeaders, ResizeArray<string>> option with get, set
-
-            [<AllowNullLiteral>]
-            [<Interface>]
-            type options_5 =
+            type options_1 =
                 abstract member dispatcher: UndiciTypes.dispatcher.Dispatcher option with get, set
                 /// <summary>
                 /// Default: <c>null</c>
@@ -174279,73 +170842,7 @@ FileReader.DONE"""
 
             [<AllowNullLiteral>]
             [<Interface>]
-            type options_3 =
-                abstract member dispatcher: UndiciTypes.dispatcher.Dispatcher option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member signal: U2<UndiciTypes.dispatcher.AbortSignal, Node.events.EventEmitter> option with get, set
-                /// <summary>
-                /// Default: <c>'GET'</c>
-                /// </summary>
-                abstract member ``method``: string option with get, set
-                /// <summary>
-                /// Default: 0
-                /// </summary>
-                abstract member maxRedirections: float option with get, set
-                /// <summary>
-                /// Default: false
-                /// </summary>
-                abstract member redirectionLimitReached: bool option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member responseHeader: string option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member headers: U2<UndiciTypes.header.IncomingHttpHeaders, ResizeArray<string>> option with get, set
-                /// <summary>
-                /// A string of comma separated protocols, in descending preference order. Default: <c>'Websocket'</c>
-                /// </summary>
-                abstract member protocol: string option with get, set
-
-            [<AllowNullLiteral>]
-            [<Interface>]
-            type options_4 =
-                abstract member dispatcher: UndiciTypes.dispatcher.Dispatcher option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member signal: U2<UndiciTypes.dispatcher.AbortSignal, Node.events.EventEmitter> option with get, set
-                /// <summary>
-                /// Default: <c>'GET'</c>
-                /// </summary>
-                abstract member ``method``: string option with get, set
-                /// <summary>
-                /// Default: 0
-                /// </summary>
-                abstract member maxRedirections: float option with get, set
-                /// <summary>
-                /// Default: false
-                /// </summary>
-                abstract member redirectionLimitReached: bool option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member responseHeader: string option with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                abstract member headers: U2<UndiciTypes.header.IncomingHttpHeaders, ResizeArray<string>> option with get, set
-                /// <summary>
-                /// A string of comma separated protocols, in descending preference order. Default: <c>'Websocket'</c>
-                /// </summary>
-                abstract member protocol: string option with get, set
-
-            [<AllowNullLiteral>]
-            [<Interface>]
-            type options_5 =
+            type options_1 =
                 abstract member dispatcher: UndiciTypes.dispatcher.Dispatcher option with get, set
                 /// <summary>
                 /// Default: <c>null</c>

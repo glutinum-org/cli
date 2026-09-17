@@ -20,7 +20,7 @@ module Exports =
         [<Erase(CaseRules.None)>]
         type options =
             | buffer
-            | Case1 of Exports.readdir.options.Cases.Case1_1
+            | Case1 of Exports.readdir.options.Cases.Case1
 
         module options =
 
@@ -29,18 +29,6 @@ module Exports =
                 [<Global>]
                 [<AllowNullLiteral>]
                 type Case1
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        encoding: string,
-                        ?withFileTypes: bool
-                    ) =
-
-                    member val encoding : string = nativeOnly with get, set
-                    member val withFileTypes : bool option = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type Case1_1
                     [<ParamObject; Emit("$0")>]
                     (
                         encoding: string,

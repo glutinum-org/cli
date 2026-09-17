@@ -73786,7 +73786,7 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/generateKey)
         /// </summary>
-        abstract member generateKey: algorithm: SubtleCrypto.generateKey.algorithm.algorithm_1 * extractable: bool * keyUsages: ReadonlyArray<SubtleCrypto.generateKey.keyUsages.keyUsages_1> -> JS.Promise<Web.CryptoKeyPair>
+        abstract member generateKey: algorithm: SubtleCrypto.generateKey.algorithm_1 * extractable: bool * keyUsages: ReadonlyArray<SubtleCrypto.generateKey.keyUsages_1> -> JS.Promise<Web.CryptoKeyPair>
         /// <summary>
         /// The **<c>generateKey()</c>** method of the SubtleCrypto interface is used to generate a new key (for symmetric algorithms) or key pair (for public-key algorithms).
         ///
@@ -73882,31 +73882,31 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/importKey)
         /// </summary>
-        abstract member importKey: format: SubtleCrypto.importKey.format.format_1 * keyData: Web.BufferSource * algorithm: string * extractable: bool * keyUsages: ResizeArray<Web.KeyUsage> -> JS.Promise<Web.CryptoKey>
+        abstract member importKey: format: SubtleCrypto.importKey.format * keyData: Web.BufferSource * algorithm: string * extractable: bool * keyUsages: ResizeArray<Web.KeyUsage> -> JS.Promise<Web.CryptoKey>
         /// <summary>
         /// The **<c>importKey()</c>** method of the SubtleCrypto interface imports a key: that is, it takes as input a key in an external, portable format and gives you a CryptoKey object that you can use in the Web Crypto API.
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/importKey)
         /// </summary>
-        abstract member importKey: format: SubtleCrypto.importKey.format.format_2 * keyData: Web.BufferSource * algorithm: Web.RsaHashedImportParams * extractable: bool * keyUsages: ResizeArray<Web.KeyUsage> -> JS.Promise<Web.CryptoKey>
+        abstract member importKey: format: SubtleCrypto.importKey.format * keyData: Web.BufferSource * algorithm: Web.RsaHashedImportParams * extractable: bool * keyUsages: ResizeArray<Web.KeyUsage> -> JS.Promise<Web.CryptoKey>
         /// <summary>
         /// The **<c>importKey()</c>** method of the SubtleCrypto interface imports a key: that is, it takes as input a key in an external, portable format and gives you a CryptoKey object that you can use in the Web Crypto API.
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/importKey)
         /// </summary>
-        abstract member importKey: format: SubtleCrypto.importKey.format.format_3 * keyData: Web.BufferSource * algorithm: Web.EcKeyImportParams * extractable: bool * keyUsages: ResizeArray<Web.KeyUsage> -> JS.Promise<Web.CryptoKey>
+        abstract member importKey: format: SubtleCrypto.importKey.format * keyData: Web.BufferSource * algorithm: Web.EcKeyImportParams * extractable: bool * keyUsages: ResizeArray<Web.KeyUsage> -> JS.Promise<Web.CryptoKey>
         /// <summary>
         /// The **<c>importKey()</c>** method of the SubtleCrypto interface imports a key: that is, it takes as input a key in an external, portable format and gives you a CryptoKey object that you can use in the Web Crypto API.
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/importKey)
         /// </summary>
-        abstract member importKey: format: SubtleCrypto.importKey.format.format_4 * keyData: Web.BufferSource * algorithm: Web.HmacImportParams * extractable: bool * keyUsages: ResizeArray<Web.KeyUsage> -> JS.Promise<Web.CryptoKey>
+        abstract member importKey: format: SubtleCrypto.importKey.format * keyData: Web.BufferSource * algorithm: Web.HmacImportParams * extractable: bool * keyUsages: ResizeArray<Web.KeyUsage> -> JS.Promise<Web.CryptoKey>
         /// <summary>
         /// The **<c>importKey()</c>** method of the SubtleCrypto interface imports a key: that is, it takes as input a key in an external, portable format and gives you a CryptoKey object that you can use in the Web Crypto API.
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/importKey)
         /// </summary>
-        abstract member importKey: format: SubtleCrypto.importKey.format.format_5 * keyData: Web.BufferSource * algorithm: Web.AesKeyAlgorithm * extractable: bool * keyUsages: ResizeArray<Web.KeyUsage> -> JS.Promise<Web.CryptoKey>
+        abstract member importKey: format: SubtleCrypto.importKey.format * keyData: Web.BufferSource * algorithm: Web.AesKeyAlgorithm * extractable: bool * keyUsages: ResizeArray<Web.KeyUsage> -> JS.Promise<Web.CryptoKey>
         /// <summary>
         /// The **<c>sign()</c>** method of the SubtleCrypto interface generates a digital signature.
         ///
@@ -74062,18 +74062,6 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/generateKey)
         /// </summary>
-        abstract member generateKey: algorithm: SubtleCrypto.generateKey.algorithm.algorithm_2 * extractable: bool * keyUsages: ReadonlyArray<SubtleCrypto.generateKey.keyUsages.keyUsages_2> -> JS.Promise<Web.CryptoKeyPair>
-        /// <summary>
-        /// The **<c>generateKey()</c>** method of the SubtleCrypto interface is used to generate a new key (for symmetric algorithms) or key pair (for public-key algorithms).
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/generateKey)
-        /// </summary>
-        abstract member generateKey: algorithm: SubtleCrypto.generateKey.algorithm.algorithm_3 * extractable: bool * keyUsages: ReadonlyArray<SubtleCrypto.generateKey.keyUsages.keyUsages_3> -> JS.Promise<Web.CryptoKeyPair>
-        /// <summary>
-        /// The **<c>generateKey()</c>** method of the SubtleCrypto interface is used to generate a new key (for symmetric algorithms) or key pair (for public-key algorithms).
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/generateKey)
-        /// </summary>
         abstract member generateKey: algorithm: Web.Algorithm * extractable: bool * keyUsages: Iterable<Web.KeyUsage> -> JS.Promise<U2<Web.CryptoKeyPair, Web.CryptoKey>>
         /// <summary>
         /// The **<c>generateKey()</c>** method of the SubtleCrypto interface is used to generate a new key (for symmetric algorithms) or key pair (for public-key algorithms).
@@ -74086,37 +74074,37 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/importKey)
         /// </summary>
-        abstract member importKey: format: SubtleCrypto.importKey.format.format_6 * keyData: Web.BufferSource * algorithm: Web.Algorithm * extractable: bool * keyUsages: Iterable<Web.KeyUsage> -> JS.Promise<Web.CryptoKey>
+        abstract member importKey: format: SubtleCrypto.importKey.format * keyData: Web.BufferSource * algorithm: Web.Algorithm * extractable: bool * keyUsages: Iterable<Web.KeyUsage> -> JS.Promise<Web.CryptoKey>
         /// <summary>
         /// The **<c>importKey()</c>** method of the SubtleCrypto interface imports a key: that is, it takes as input a key in an external, portable format and gives you a CryptoKey object that you can use in the Web Crypto API.
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/importKey)
         /// </summary>
-        abstract member importKey: format: SubtleCrypto.importKey.format.format_7 * keyData: Web.BufferSource * algorithm: string * extractable: bool * keyUsages: Iterable<Web.KeyUsage> -> JS.Promise<Web.CryptoKey>
+        abstract member importKey: format: SubtleCrypto.importKey.format * keyData: Web.BufferSource * algorithm: string * extractable: bool * keyUsages: Iterable<Web.KeyUsage> -> JS.Promise<Web.CryptoKey>
         /// <summary>
         /// The **<c>importKey()</c>** method of the SubtleCrypto interface imports a key: that is, it takes as input a key in an external, portable format and gives you a CryptoKey object that you can use in the Web Crypto API.
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/importKey)
         /// </summary>
-        abstract member importKey: format: SubtleCrypto.importKey.format.format_8 * keyData: Web.BufferSource * algorithm: Web.RsaHashedImportParams * extractable: bool * keyUsages: Iterable<Web.KeyUsage> -> JS.Promise<Web.CryptoKey>
+        abstract member importKey: format: SubtleCrypto.importKey.format * keyData: Web.BufferSource * algorithm: Web.RsaHashedImportParams * extractable: bool * keyUsages: Iterable<Web.KeyUsage> -> JS.Promise<Web.CryptoKey>
         /// <summary>
         /// The **<c>importKey()</c>** method of the SubtleCrypto interface imports a key: that is, it takes as input a key in an external, portable format and gives you a CryptoKey object that you can use in the Web Crypto API.
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/importKey)
         /// </summary>
-        abstract member importKey: format: SubtleCrypto.importKey.format.format_9 * keyData: Web.BufferSource * algorithm: Web.EcKeyImportParams * extractable: bool * keyUsages: Iterable<Web.KeyUsage> -> JS.Promise<Web.CryptoKey>
+        abstract member importKey: format: SubtleCrypto.importKey.format * keyData: Web.BufferSource * algorithm: Web.EcKeyImportParams * extractable: bool * keyUsages: Iterable<Web.KeyUsage> -> JS.Promise<Web.CryptoKey>
         /// <summary>
         /// The **<c>importKey()</c>** method of the SubtleCrypto interface imports a key: that is, it takes as input a key in an external, portable format and gives you a CryptoKey object that you can use in the Web Crypto API.
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/importKey)
         /// </summary>
-        abstract member importKey: format: SubtleCrypto.importKey.format.format_10 * keyData: Web.BufferSource * algorithm: Web.HmacImportParams * extractable: bool * keyUsages: Iterable<Web.KeyUsage> -> JS.Promise<Web.CryptoKey>
+        abstract member importKey: format: SubtleCrypto.importKey.format * keyData: Web.BufferSource * algorithm: Web.HmacImportParams * extractable: bool * keyUsages: Iterable<Web.KeyUsage> -> JS.Promise<Web.CryptoKey>
         /// <summary>
         /// The **<c>importKey()</c>** method of the SubtleCrypto interface imports a key: that is, it takes as input a key in an external, portable format and gives you a CryptoKey object that you can use in the Web Crypto API.
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/importKey)
         /// </summary>
-        abstract member importKey: format: SubtleCrypto.importKey.format.format_11 * keyData: Web.BufferSource * algorithm: Web.AesKeyAlgorithm * extractable: bool * keyUsages: Iterable<Web.KeyUsage> -> JS.Promise<Web.CryptoKey>
+        abstract member importKey: format: SubtleCrypto.importKey.format * keyData: Web.BufferSource * algorithm: Web.AesKeyAlgorithm * extractable: bool * keyUsages: Iterable<Web.KeyUsage> -> JS.Promise<Web.CryptoKey>
         /// <summary>
         /// The **<c>unwrapKey()</c>** method of the SubtleCrypto interface "unwraps" a key. This means that it takes as its input a key that has been exported and then encrypted (also called "wrapped"). It decrypts the key and then imports it, returning a CryptoKey object that can be used in the Web Crypto API.
         ///
@@ -88734,7 +88722,7 @@ module Web =
             [<Erase(CaseRules.None)>]
             type algorithm =
                 | Ed25519
-                | Case1 of SubtleCrypto.generateKey.algorithm.Cases.Case1_1
+                | Case1 of SubtleCrypto.generateKey.algorithm.Cases.Case1
 
             [<RequireQualifiedAccess>]
             [<StringEnum(CaseRules.None)>]
@@ -88766,115 +88754,17 @@ module Web =
 
                         member val name : string = nativeOnly with get, set
 
-                    [<Global>]
-                    [<AllowNullLiteral>]
-                    type Case1_2
-                        [<ParamObject; Emit("$0")>]
-                        (
-                            name: string
-                        ) =
+            [<RequireQualifiedAccess>]
+            [<Erase(CaseRules.None)>]
+            type algorithm_1 =
+                | X25519
+                | Case1 of SubtleCrypto.generateKey.algorithm.Cases.Case1_1
 
-                        member val name : string = nativeOnly with get, set
-
-                    [<Global>]
-                    [<AllowNullLiteral>]
-                    type Case1_3
-                        [<ParamObject; Emit("$0")>]
-                        (
-                            name: string
-                        ) =
-
-                        member val name : string = nativeOnly with get, set
-
-                    [<Global>]
-                    [<AllowNullLiteral>]
-                    type Case1_4
-                        [<ParamObject; Emit("$0")>]
-                        (
-                            name: string
-                        ) =
-
-                        member val name : string = nativeOnly with get, set
-
-                [<RequireQualifiedAccess>]
-                [<Erase(CaseRules.None)>]
-                type algorithm_1 =
-                    | X25519
-                    | Case1 of SubtleCrypto.generateKey.algorithm.algorithm_1.Cases.Case1
-
-                module algorithm_1 =
-
-                    module Cases =
-
-                        [<Global>]
-                        [<AllowNullLiteral>]
-                        type Case1
-                            [<ParamObject; Emit("$0")>]
-                            (
-                                name: string
-                            ) =
-
-                            member val name : string = nativeOnly with get, set
-
-                [<RequireQualifiedAccess>]
-                [<Erase(CaseRules.None)>]
-                type algorithm_2 =
-                    | Ed25519
-                    | Case1 of SubtleCrypto.generateKey.algorithm.algorithm_2.Cases.Case1
-
-                module algorithm_2 =
-
-                    module Cases =
-
-                        [<Global>]
-                        [<AllowNullLiteral>]
-                        type Case1
-                            [<ParamObject; Emit("$0")>]
-                            (
-                                name: string
-                            ) =
-
-                            member val name : string = nativeOnly with get, set
-
-                [<RequireQualifiedAccess>]
-                [<Erase(CaseRules.None)>]
-                type algorithm_3 =
-                    | X25519
-                    | Case1 of SubtleCrypto.generateKey.algorithm.algorithm_3.Cases.Case1
-
-                module algorithm_3 =
-
-                    module Cases =
-
-                        [<Global>]
-                        [<AllowNullLiteral>]
-                        type Case1
-                            [<ParamObject; Emit("$0")>]
-                            (
-                                name: string
-                            ) =
-
-                            member val name : string = nativeOnly with get, set
-
-            module keyUsages =
-
-                [<RequireQualifiedAccess>]
-                [<StringEnum(CaseRules.None)>]
-                type keyUsages_1 =
-                    | deriveBits
-                    | deriveKey
-
-                [<RequireQualifiedAccess>]
-                [<StringEnum(CaseRules.None)>]
-                type keyUsages_2 =
-                    | sign
-                    | verify
-
-                [<RequireQualifiedAccess>]
-                [<StringEnum(CaseRules.None)>]
-                type keyUsages_3 =
-                    | deriveBits
-                    | deriveKey
+            [<RequireQualifiedAccess>]
+            [<StringEnum(CaseRules.None)>]
+            type keyUsages_1 =
+                | deriveBits
+                | deriveKey
 
         module importKey =
 
@@ -88884,85 +88774,6 @@ module Web =
                 | pkcs8
                 | raw
                 | spki
-
-            module format =
-
-                [<RequireQualifiedAccess>]
-                [<StringEnum(CaseRules.None)>]
-                type format_1 =
-                    | pkcs8
-                    | raw
-                    | spki
-
-                [<RequireQualifiedAccess>]
-                [<StringEnum(CaseRules.None)>]
-                type format_2 =
-                    | pkcs8
-                    | raw
-                    | spki
-
-                [<RequireQualifiedAccess>]
-                [<StringEnum(CaseRules.None)>]
-                type format_3 =
-                    | pkcs8
-                    | raw
-                    | spki
-
-                [<RequireQualifiedAccess>]
-                [<StringEnum(CaseRules.None)>]
-                type format_4 =
-                    | pkcs8
-                    | raw
-                    | spki
-
-                [<RequireQualifiedAccess>]
-                [<StringEnum(CaseRules.None)>]
-                type format_5 =
-                    | pkcs8
-                    | raw
-                    | spki
-
-                [<RequireQualifiedAccess>]
-                [<StringEnum(CaseRules.None)>]
-                type format_6 =
-                    | pkcs8
-                    | raw
-                    | spki
-
-                [<RequireQualifiedAccess>]
-                [<StringEnum(CaseRules.None)>]
-                type format_7 =
-                    | pkcs8
-                    | raw
-                    | spki
-
-                [<RequireQualifiedAccess>]
-                [<StringEnum(CaseRules.None)>]
-                type format_8 =
-                    | pkcs8
-                    | raw
-                    | spki
-
-                [<RequireQualifiedAccess>]
-                [<StringEnum(CaseRules.None)>]
-                type format_9 =
-                    | pkcs8
-                    | raw
-                    | spki
-
-                [<RequireQualifiedAccess>]
-                [<StringEnum(CaseRules.None)>]
-                type format_10 =
-                    | pkcs8
-                    | raw
-                    | spki
-
-                [<RequireQualifiedAccess>]
-                [<StringEnum(CaseRules.None)>]
-                type format_11 =
-                    | pkcs8
-                    | raw
-                    | spki
 
     module URLSearchParams =
 

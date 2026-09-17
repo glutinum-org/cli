@@ -45,31 +45,99 @@ let private withCountSuffix (name: string) (count: int) =
     else
         name + "_" + string count
 
+/// The anonymous type as it is compared to the ones already exposed under the same name
+let private withoutName (typ: FSharpType) : FSharpType =
+    match typ with
+    | FSharpType.Interface info -> FSharpType.Interface { info with Name = "" }
+    | FSharpType.Class info -> FSharpType.Class { info with Name = "" }
+    | FSharpType.Delegate info -> FSharpType.Delegate { info with Name = "" }
+    | FSharpType.Union info -> FSharpType.Union { info with Name = "" }
+    | FSharpType.Enum info -> FSharpType.Enum { info with Name = "" }
+    | FSharpType.TypeAlias info -> FSharpType.TypeAlias { info with Name = "" }
+    | _ -> typ
+
+let private typeName (typ: FSharpType) : string option =
+    match typ with
+    | FSharpType.Interface info -> Some info.Name
+    | FSharpType.Class info -> Some info.Name
+    | FSharpType.Delegate info -> Some info.Name
+    | FSharpType.Union info -> Some info.Name
+    | FSharpType.Enum info -> Some info.Name
+    | FSharpType.TypeAlias info -> Some info.Name
+    | _ -> None
+
+/// The names of the anonymous types of a scope (`Exports.exec.callback`): a type identical to
+/// an already exposed one takes its name instead of the next count suffix
 type TypeLiteralsMemory() =
-    let memory = Dictionary<string, int>()
+    // The same scope name is used by the members of several modules, a type is only
+    // the duplicate of one exposed to the same module of the same transform
+    let exposed =
+        Dictionary<string, ResizeArray<(FSharpType * ResizeArray<FSharpType> * string) option>>()
+
+    let lastIndex = Dictionary<string, int>()
+    let pending = Dictionary<string, string>()
 
     member _.GetTypeName(fullName: string, currentScopeName: string) =
-        let name =
-            if memory.ContainsKey fullName then
-                memory.[fullName] <- memory.[fullName] + 1
-                withCountSuffix currentScopeName memory.[fullName]
-            else
-                memory.[fullName] <- 0
-                currentScopeName
+        let types =
+            match exposed.TryGetValue fullName with
+            | true, types -> types
+            | false, _ ->
+                let types = ResizeArray()
+                exposed.[fullName] <- types
+                types
 
+        let index = types.Count
+        types.Add None
+        lastIndex.[fullName] <- index
+
+        let name =
+            if index = 0 then
+                currentScopeName
+            else
+                withCountSuffix currentScopeName index
+
+        pending.[name] <- fullName
         name
 
-    member private _.GetReference(fullName: string, prefixName: string) =
-        if memory.ContainsKey fullName then
-            let count = memory.[fullName]
+    /// `true` when an identical type is already exposed to the module, the references use its name
+    member _.IsDuplicate(typ: FSharpType, root: ResizeArray<FSharpType>, modulePath: string) =
+        match typeName typ with
+        | None -> false
+        | Some name ->
+            match pending.TryGetValue name with
+            | false, _ -> false
+            | true, fullName ->
+                pending.Remove name |> ignore
+                let types = exposed.[fullName]
+                let signature = withoutName typ
+                let last = types.Count - 1
 
-            if count = 0 then
-                prefixName
-            else
-                withCountSuffix prefixName count
+                let existing =
+                    types
+                    |> Seq.tryFindIndex (
+                        function
+                        | Some(candidate, candidateRoot, candidateModulePath) ->
+                            obj.ReferenceEquals(candidateRoot, root)
+                            && candidateModulePath = modulePath
+                            && candidate = signature
+                        | None -> false
+                    )
+
+                match existing with
+                | Some index when index < last ->
+                    types.RemoveAt last
+                    lastIndex.[fullName] <- index
+                    true
+                | _ ->
+                    types.[last] <- Some(signature, root, modulePath)
+                    false
+
+    member private _.GetReference(fullName: string, prefixName: string) =
+        match lastIndex.TryGetValue fullName with
+        | true, 0 -> prefixName
+        | true, index -> withCountSuffix prefixName index
         // By safety, if we don't find a match in the memory, we return the name as is
-        else
-            prefixName
+        | false, _ -> prefixName
 
     member this.GetReferenceTypeName(fullName: string, currentScopeName: string) =
         this.GetReference(fullName, currentScopeName)
@@ -155,22 +223,20 @@ type TransformContext
 
     member _.ExposeIterable() = reporter.HasIterable <- true
 
-    member _.ExposeType(typ: FSharpType) =
+    // A type is exposed to the parent: at Locale.Hello.Config, `type Config` is in `module Hello`
+    member this.ExposeType(typ: FSharpType) =
+        let target, modulePath =
+            match parent with
+            | None -> types, ""
+            | Some parent -> parent._types, parent.FullName
+
+        if not (typeLiteralsMemory.IsDuplicate(typ, this.Root._types, modulePath)) then
+            target.Add(typ)
+
+    member this.Root: TransformContext =
         match parent with
-        | None -> types.Add(typ)
-        // The default case is to expose the type to the parent
-        // For example, when we are at Locale.Hello.Config
-        // we want to expose the type to Locale.Hello
-        // because this will generate
-        // module Locale =
-        //     module Hello =
-        //         type Config = ...
-        // and not
-        // module Locale =
-        //     module Hello =
-        //         module Config = ...
-        //              type Config = ...
-        | Some parent -> parent._types.Add(typ)
+        | None -> this
+        | Some parent -> parent.Root
 
     member this.PushScope(scopeName: string) =
         let childContext =
@@ -708,17 +774,17 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
                         context.CurrentScopeName
                     )
 
-                let context =
-                    if name = context.CurrentScopeName then
-                        context
-                    else
-                        context.PushScope name
-
                 tryOptimizeUnionType context name others |> Option.iter context.ExposeType
 
+                let fullName =
+                    context.TypeLiteralsMemory.GetFullTypeNameReference(
+                        context.FullName,
+                        context.CurrentScopeName
+                    )
+
                 ({
-                    Name = context.FullName
-                    FullName = context.FullName
+                    Name = fullName
+                    FullName = fullName
                     ModulePath = []
                     TypeArguments = []
                     Type = FSharpType.Discard
