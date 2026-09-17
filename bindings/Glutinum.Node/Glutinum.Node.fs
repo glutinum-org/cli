@@ -14626,7 +14626,7 @@ TypeScript versions earlier than 5.7.""")>]
             /// <param name="value">
             /// The input that is checked for being truthy.
             /// </param>
-            [<Import("assert", "assert")>]
+            [<ImportDefault("assert")>]
             static member ``assert`` (value: obj) : bool = nativeOnly
             /// <summary>
             /// An alias of <see href="assert.ok">assert.ok</see>.
@@ -14634,7 +14634,7 @@ TypeScript versions earlier than 5.7.""")>]
             /// <param name="value">
             /// The input that is checked for being truthy.
             /// </param>
-            [<Import("assert", "assert")>]
+            [<ImportDefault("assert")>]
             static member ``assert`` (value: obj, message: string) : bool = nativeOnly
             /// <summary>
             /// An alias of <see href="assert.ok">assert.ok</see>.
@@ -14642,7 +14642,7 @@ TypeScript versions earlier than 5.7.""")>]
             /// <param name="value">
             /// The input that is checked for being truthy.
             /// </param>
-            [<Import("assert", "assert")>]
+            [<ImportDefault("assert")>]
             static member ``assert`` (value: obj, message: Exception) : bool = nativeOnly
             [<Import("kOptions", "assert")>]
             static member inline kOptions: obj = nativeOnly
@@ -17658,11 +17658,11 @@ TypeScript versions earlier than 5.7.""")>]
         [<AbstractClass>]
         [<Erase>]
         type Exports =
-            [<Import("strict", "assert/strict")>]
+            [<ImportDefault("assert/strict")>]
             static member strict (value: obj) : bool = nativeOnly
-            [<Import("strict", "assert/strict")>]
+            [<ImportDefault("assert/strict")>]
             static member strict (value: obj, message: string) : bool = nativeOnly
-            [<Import("strict", "assert/strict")>]
+            [<ImportDefault("assert/strict")>]
             static member strict (value: obj, message: Exception) : bool = nativeOnly
 
     module async_hooks =
@@ -47183,7 +47183,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
         [<AbstractClass>]
         [<Erase>]
         type Exports =
-            [<Import("EventEmitter", "events"); EmitConstructor>]
+            [<ImportDefault("events"); EmitConstructor>]
             static member EventEmitter<'T> (?options: Node.events.EventEmitterOptions) : EventEmitter<'T> = nativeOnly
             /// <summary>
             /// The <c>EventEmitter</c> class is defined and exposed by the <c>node:events</c> module:
@@ -108279,7 +108279,7 @@ EventEmitter.defaultMaxListeners = $0"""
         [<AbstractClass>]
         [<Erase>]
         type Exports =
-            [<Import("Module", "module"); EmitConstructor>]
+            [<ImportDefault("module"); EmitConstructor>]
             static member Module (id: string, ?parent: Node.``module``.Module) : Module = nativeOnly
             [<ImportAll("module")>]
             static member inline Module_
@@ -126482,7 +126482,7 @@ the userland-provided Punycode.js module instead.""")>]
         [<AbstractClass>]
         [<Erase>]
         type Exports =
-            [<Import("Stream", "stream"); EmitConstructor>]
+            [<ImportDefault("stream"); EmitConstructor>]
             static member Stream () : Stream = nativeOnly
             [<ImportAll("stream")>]
             static member inline Stream_
@@ -139835,13 +139835,13 @@ Duplex.fromWeb($0, $1)"""
             /// <returns>
             /// Fulfilled with <c>undefined</c> once the test completes, or immediately if the test runs within a suite.
             /// </returns>
-            [<Import("test", "node:test")>]
+            [<ImportDefault("node:test")>]
             static member test (?name: string, ?fn: Node.test.test_.TestFn) : JS.Promise<unit> = nativeOnly
-            [<Import("test", "node:test")>]
+            [<ImportDefault("node:test")>]
             static member test (?name: string, ?options: Node.test.test_.TestOptions, ?fn: Node.test.test_.TestFn) : JS.Promise<unit> = nativeOnly
-            [<Import("test", "node:test")>]
+            [<ImportDefault("node:test")>]
             static member test (?options: Node.test.test_.TestOptions, ?fn: Node.test.test_.TestFn) : JS.Promise<unit> = nativeOnly
-            [<Import("test", "node:test")>]
+            [<ImportDefault("node:test")>]
             static member test (?fn: Node.test.test_.TestFn) : JS.Promise<unit> = nativeOnly
             /// <summary>
             /// The <c>test()</c> function is the value imported from the <c>test</c> module. Each
