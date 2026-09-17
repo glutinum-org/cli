@@ -36,12 +36,17 @@ OPTIONS
                             If not specified, the result will be printed to stdout
     --no-externals          Generate @types/node and @types/web with the packages
                             using them instead of referencing their bindings
+    --external <package>    Reference <package> from its own binding instead of
+                            generating it, `Glutinum.<Module>` is derived from its
+                            name unless given as <package>=<Module>
+                            Can be repeated
     -h, --help              Print this help message
 
 EXAMPLES
 
     glutinum chalk --out-file ./Glutinum.Chalk.fs
     glutinum vscode vscode-languageclient --out-file ./Glutinum.Vscode.fs
+    glutinum leaflet --external @types/geojson --out-file ./Glutinum.Leaflet.fs
     glutinum --all --out-file ./Glutinum.fs
     glutinum ./node_modules/my-lib/index.d.ts
         """
@@ -89,9 +94,28 @@ let main (argv: string array) =
             | outFile :: "--out-file" :: inputs -> List.rev inputs, Some outFile
             | _ -> argv, None
 
+        let rec takeExternals
+            (args: string list)
+            (externals: (string * string option) list)
+            (rest: string list)
+            =
+            match args with
+            | "--external" :: value :: tail ->
+                let external =
+                    match value.Split('=') with
+                    | [| name; moduleName |] -> name, Some moduleName
+                    | _ -> value, None
+
+                takeExternals tail (external :: externals) rest
+            | arg :: tail -> takeExternals tail externals (arg :: rest)
+            | [] -> List.rev externals, List.rev rest
+
+        let externals, inputs = takeExternals inputs [] []
+
         let options: Packages.GenerateOptions =
             {
                 ExternalPackages = not (List.contains "--no-externals" inputs)
+                Externals = externals
             }
 
         let inputs = inputs |> List.filter (fun input -> input <> "--no-externals")

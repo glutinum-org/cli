@@ -116,15 +116,22 @@ type GenerateOptions =
         /// Reference `@types/node` and `@types/web` as the Glutinum.Node and Glutinum.Web
         /// bindings instead of generating them with the packages using them
         ExternalPackages: bool
+        /// Other packages published as their own bindings: the package name and the module
+        /// under `Glutinum`, derived from the package name when not given
+        Externals: (string * string option) list
     }
 
-let defaultOptions = { ExternalPackages = true }
+let defaultOptions =
+    {
+        ExternalPackages = true
+        Externals = []
+    }
 
 /// The packages published as their own bindings, with the TypeScript lib files standing for them
-let private externalPackageNames =
+let private builtInExternalPackageNames =
     [
-        "@types/node", "Node", []
-        "@types/web", "Web", [ "/typescript/lib/lib.dom" ]
+        "@types/node", Some "Node", []
+        "@types/web", Some "Web", [ "/typescript/lib/lib.dom" ]
     ]
 
 /// <summary>
@@ -193,9 +200,20 @@ let generateWith (options: GenerateOptions) (host: Host) (inputs: string list) :
             | description -> Some description
         )
 
+    let externalPackageNames =
+        [
+            if options.ExternalPackages then
+                yield! builtInExternalPackageNames
+
+            for (name, moduleName) in options.Externals do
+                yield name, moduleName, []
+        ]
+
     // A package asked for is generated, even when published as its own binding
     let externals: Reader.Types.ExternalPackage list =
-        if options.ExternalPackages then
+        if externalPackageNames.IsEmpty then
+            []
+        else
             let reachable = describeReachable []
 
             externalPackageNames
@@ -203,17 +221,19 @@ let generateWith (options: GenerateOptions) (host: Host) (inputs: string list) :
                 targets |> List.exists (fun target -> target.name = name) |> not
             )
             |> List.map (fun (name, moduleName, libFilePrefixes) ->
+                let package =
+                    reachable |> List.tryFind (fun description -> description.name = name)
+
                 {
-                    ModuleName = moduleName
-                    Package =
-                        reachable
-                        |> List.tryFind (fun description -> description.name = name)
-                        |> Option.map toPackageInfo
+                    ModuleName =
+                        match moduleName, package with
+                        | Some moduleName, _ -> moduleName
+                        | None, Some package -> moduleNameForPackage package.runtimeName
+                        | None, None -> moduleNameForPackage (name.Replace("@types/", ""))
+                    Package = package |> Option.map toPackageInfo
                     LibFilePrefixes = libFilePrefixes
                 }
             )
-        else
-            []
 
     let externalRuntimeNames =
         externals
