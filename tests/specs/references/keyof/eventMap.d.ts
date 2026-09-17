@@ -60,3 +60,7 @@ export type SocketEvents = {
 export interface Socket {
     on<K extends keyof SocketEvents>(event: K, listener: SocketEvents[K]): this;
 }
+
+// A global function
+export declare function addEventListener<K extends keyof GlobalEventMap>(type: K, listener: (ev: GlobalEventMap[K]) => any): void;
+export declare function addEventListener(type: string, listener: (ev: object) => any): void;

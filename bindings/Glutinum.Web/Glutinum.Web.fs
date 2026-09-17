@@ -6298,11 +6298,11 @@ module Web =
         [<Global("sessionStorage")>]
         static member inline sessionStorage: Web.Storage = nativeOnly
         [<Global("addEventListener")>]
-        static member addEventListener (``type``: Exports.addEventListener.K, listener: (obj -> unit)) : unit = nativeOnly
+        static member addEventListener<'K> (``type``: Web.WindowEventMap.Key<'K>, listener: ('K -> unit)) : unit = nativeOnly
         [<Global("addEventListener")>]
-        static member addEventListener (``type``: Exports.addEventListener.K, listener: (obj -> unit), options: bool) : unit = nativeOnly
+        static member addEventListener<'K> (``type``: Web.WindowEventMap.Key<'K>, listener: ('K -> unit), options: bool) : unit = nativeOnly
         [<Global("addEventListener")>]
-        static member addEventListener (``type``: Exports.addEventListener.K, listener: (obj -> unit), options: Web.AddEventListenerOptions) : unit = nativeOnly
+        static member addEventListener<'K> (``type``: Web.WindowEventMap.Key<'K>, listener: ('K -> unit), options: Web.AddEventListenerOptions) : unit = nativeOnly
         [<Global("addEventListener")>]
         static member addEventListener (``type``: string, listener: Web.EventListener) : unit = nativeOnly
         [<Global("addEventListener")>]
@@ -6316,11 +6316,11 @@ module Web =
         [<Global("addEventListener")>]
         static member addEventListener (``type``: string, listener: Web.EventListenerObject, options: Web.AddEventListenerOptions) : unit = nativeOnly
         [<Global("removeEventListener")>]
-        static member removeEventListener (``type``: Exports.removeEventListener.K, listener: (obj -> unit)) : unit = nativeOnly
+        static member removeEventListener<'K> (``type``: Web.WindowEventMap.Key<'K>, listener: ('K -> unit)) : unit = nativeOnly
         [<Global("removeEventListener")>]
-        static member removeEventListener (``type``: Exports.removeEventListener.K, listener: (obj -> unit), options: bool) : unit = nativeOnly
+        static member removeEventListener<'K> (``type``: Web.WindowEventMap.Key<'K>, listener: ('K -> unit), options: bool) : unit = nativeOnly
         [<Global("removeEventListener")>]
-        static member removeEventListener (``type``: Exports.removeEventListener.K, listener: (obj -> unit), options: Web.EventListenerOptions) : unit = nativeOnly
+        static member removeEventListener<'K> (``type``: Web.WindowEventMap.Key<'K>, listener: ('K -> unit), options: Web.EventListenerOptions) : unit = nativeOnly
         [<Global("removeEventListener")>]
         static member removeEventListener (``type``: string, listener: Web.EventListener) : unit = nativeOnly
         [<Global("removeEventListener")>]
@@ -97203,29 +97203,3 @@ module Web =
             type Type =
                 [<EmitConstructor>]
                 abstract member Create: ?text: string * ?value: string * ?defaultSelected: bool * ?selected: bool -> Web.HTMLOptionElement
-
-        module addEventListener =
-
-            [<RequireQualifiedAccess>]
-            [<StringEnum(CaseRules.None)>]
-            type K =
-                | DOMContentLoaded
-                | devicemotion
-                | deviceorientation
-                | deviceorientationabsolute
-                | gamepadconnected
-                | gamepaddisconnected
-                | orientationchange
-
-        module removeEventListener =
-
-            [<RequireQualifiedAccess>]
-            [<StringEnum(CaseRules.None)>]
-            type K =
-                | DOMContentLoaded
-                | devicemotion
-                | deviceorientation
-                | deviceorientationabsolute
-                | gamepadconnected
-                | gamepaddisconnected
-                | orientationchange

@@ -18,6 +18,7 @@ const fixtures = [
     "ambientModules",
     "globalScript",
     "externalRuntime",
+    "globalAugmentation",
 ]
 
 const footer = `

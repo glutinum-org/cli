@@ -70,6 +70,20 @@ let private dropShadowedReExports (types: GlueType list) =
     )
     |> snd
 
+/// The declarations of the `global { }` blocks, taken out of their modules
+let rec private extractGlobals (types: GlueType list) : GlueType list * GlueType list =
+    (([], []), types)
+    ||> List.fold (fun (remaining, globals) glueType ->
+        match glueType with
+        | GlueType.ModuleDeclaration info when info.IsGlobal -> remaining, globals @ info.Types
+        | GlueType.ModuleDeclaration info ->
+            let innerRemaining, innerGlobals = extractGlobals info.Types
+
+            remaining @ [ GlueType.ModuleDeclaration { info with Types = innerRemaining } ],
+            globals @ innerGlobals
+        | _ -> remaining @ [ glueType ], globals
+    )
+
 let private readStatements (reader: ITypeScriptReader) (sourceFile: Ts.SourceFile) =
     let promoted = promotedAmbientModule sourceFile
 
@@ -117,11 +131,14 @@ let readPackages
         |> List.sortBy (fun sourceFile -> String.normalizePath sourceFile.fileName)
 
     let readPackage (package: PackageInfo) =
+        let globals = ResizeArray<GlueType>()
+
         let entryTypes, fileModules =
             filesOfPackage package
-            |> List.map (fun sourceFile ->
+            |> List.choose (fun sourceFile ->
                 let fileName = String.normalizePath sourceFile.fileName
-                let types = readStatements reader sourceFile
+                let types, fileGlobals = readStatements reader sourceFile |> extractGlobals
+                globals.AddRange fileGlobals
 
                 let importSpecifier =
                     match promotedAmbientModule sourceFile with
@@ -129,18 +146,38 @@ let readPackages
                         Naming.removeSurroundingQuotes (moduleDeclaration.name?text)
                     | None -> packageContext.ImportSpecifier fileName
 
-                if fileName = package.EntryFile then
-                    Choice1Of2(types, isScript sourceFile)
-                else
+                let fileModule (types: GlueType list) =
                     ({
                         Name = packageContext.FileModuleName(package, fileName)
                         ImportSpecifier = importSpecifier
-                        IsGlobal = isScript sourceFile
+                        IsGlobal = false
                         Types = types
                     }
                     : GlueFileModule)
                     |> GlueType.FileModule
                     |> Choice2Of2
+                    |> Some
+
+                if fileName = package.EntryFile then
+                    Some(Choice1Of2(types, isScript sourceFile))
+                elif isScript sourceFile then
+                    let ambientModules, scriptGlobals =
+                        types
+                        |> List.partition (
+                            function
+                            | GlueType.ModuleDeclaration info ->
+                                info.Name.StartsWith "\"" || info.Name.StartsWith "'"
+                            | _ -> false
+                        )
+
+                    globals.AddRange scriptGlobals
+
+                    if ambientModules.IsEmpty then
+                        None
+                    else
+                        fileModule ambientModules
+                else
+                    fileModule types
             )
             |> List.partition (
                 function
@@ -172,7 +209,25 @@ let readPackages
                 | Choice1Of2 _ -> None
             )
 
-        entryTypes @ fileModules, entryIsGlobal
+        let globalsModule =
+            if globals.Count = 0 then
+                []
+            else
+                [
+                    ({
+                        Documentation = []
+                        Name = "global"
+                        IsTopLevel = false
+                        IsNamespace = false
+                        IsGlobal = true
+                        IsRecursive = false
+                        Types = List.ofSeq globals
+                    }
+                    : GlueModuleDeclaration)
+                    |> GlueType.ModuleDeclaration
+                ]
+
+        entryTypes @ globalsModule @ fileModules, entryIsGlobal
 
     let glueAst =
         packageContext.Packages

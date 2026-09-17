@@ -1336,6 +1336,8 @@ let private transformExports
             |> List.collect (
                 function
                 | GlueType.FunctionDeclaration info ->
+                    let info = KeyOfMaps.expandFunction info
+
                     UnionOverloads.expandParameters context.TypeMemory info.Parameters
                     |> List.map (fun parameters ->
                         GlueType.FunctionDeclaration { info with Parameters = parameters }
@@ -3105,30 +3107,45 @@ module KeyOfMaps =
     /// Full names of the interfaces used as `keyof` constraint by a method
     let private maps = HashSet<string>()
 
-    let rec private collectFromMembers (members: GlueMember list) =
-        for glueMember in members do
-            let typeParameters =
-                match glueMember with
-                | GlueMember.Method info -> info.TypeParameters
-                | GlueMember.MethodSignature info -> info.TypeParameters
-                | _ -> []
+    /// `type Value<K extends keyof Map> = Map[K]` by its full name, gives the map
+    let private indexedAliases = Dictionary<string, string>()
 
-            for typeParameter in typeParameters do
-                match typeParameter.Constraint with
-                | Some(GlueType.KeyOf(GlueType.TypeReference map)) ->
-                    maps.Add map.FullName |> ignore
-                | _ -> ()
+    let private collectFromTypeParameters (typeParameters: GlueTypeParameter list) =
+        for typeParameter in typeParameters do
+            match typeParameter.Constraint with
+            | Some(GlueType.KeyOf(GlueType.TypeReference map)) -> maps.Add map.FullName |> ignore
+            | _ -> ()
+
+    let private collectFromMembers (members: GlueMember list) =
+        for glueMember in members do
+            match glueMember with
+            | GlueMember.Method info -> collectFromTypeParameters info.TypeParameters
+            | GlueMember.MethodSignature info -> collectFromTypeParameters info.TypeParameters
+            | _ -> ()
 
     let rec private collect (glueType: GlueType) =
         match glueType with
         | GlueType.Interface info -> collectFromMembers info.Members
         | GlueType.ClassDeclaration info -> collectFromMembers info.Members
+        | GlueType.FunctionDeclaration info -> collectFromTypeParameters info.TypeParameters
+        | GlueType.ExportDefault(GlueType.FunctionDeclaration info) ->
+            collectFromTypeParameters info.TypeParameters
+        | GlueType.TypeAliasDeclaration {
+                                            FullName = fullName
+                                            TypeParameters = [ { Name = name } ]
+                                            Type = GlueType.IndexedAccessType {
+                                                                                  ObjectType = GlueType.TypeReference map
+                                                                                  IndexType = GlueType.TypeParameter indexName
+                                                                              }
+                                        } when name = indexName ->
+            indexedAliases.[fullName] <- map.FullName
         | GlueType.ModuleDeclaration info -> info.Types |> List.iter collect
         | GlueType.FileModule info -> info.Types |> List.iter collect
         | _ -> ()
 
     let reset (typeMemory: GlueType list) =
         maps.Clear()
+        indexedAliases.Clear()
         typeMemory |> List.iter collect
 
     let isMap (fullName: string) = maps.Contains fullName
@@ -3159,6 +3176,15 @@ module KeyOfMaps =
                                          ObjectType = GlueType.TypeReference object
                                          IndexType = GlueType.TypeParameter parameterName
                                      } when parameterName = name && object.FullName = map.FullName ->
+            GlueType.TypeParameter name
+        | GlueType.TypeReference {
+                                     FullName = aliasName
+                                     TypeArguments = [ GlueType.TypeParameter parameterName ]
+                                 } when
+            parameterName = name
+            && indexedAliases.ContainsKey aliasName
+            && indexedAliases.[aliasName] = map.FullName
+            ->
             GlueType.TypeParameter name
         | GlueType.TypeReference typeReference ->
             GlueType.TypeReference
@@ -3212,6 +3238,16 @@ module KeyOfMaps =
                 substitute returnType
             | _ -> typeParameters, parameters, returnType
         )
+
+    let expandFunction (info: GlueFunctionDeclaration) : GlueFunctionDeclaration =
+        let typeParameters, parameters, returnType =
+            expand info.TypeParameters info.Parameters info.Type
+
+        { info with
+            TypeParameters = typeParameters
+            Parameters = parameters
+            Type = returnType
+        }
 
     let expandMembers (members: GlueMember list) : GlueMember list =
         members
@@ -5156,11 +5192,19 @@ let private transformModuleDeclaration
     (typeLiteralsMemory: TypeLiteralsMemory)
     (importSource: ImportSource)
     (moduleDeclaration: GlueModuleDeclaration)
-    : FSharpType
+    : FSharpType list
     =
     if moduleDeclaration.Types.IsEmpty then
         // We don't want to generate empty modules
-        FSharpType.Discard
+        []
+    elif moduleDeclaration.IsGlobal then
+        transform
+            typeMemory
+            reporter
+            typeLiteralsMemory
+            ImportSource.Global
+            true
+            moduleDeclaration.Types
     else
         // If the module is a top level module we add a suffix to avoid conflicts when
         // trying to access a type from the F# module directly.
@@ -5191,6 +5235,7 @@ let private transformModuleDeclaration
         }
         : FSharpModule)
         |> FSharpType.Module
+        |> List.singleton
 
 // When a class or interface is declared with a generic and a default type, we need to expose an alias
 // for all the version with the default type set instead of a generic parameter.
@@ -5431,16 +5476,35 @@ let private transformClassDeclaration
 // `Node.Exports.os.hostname ()`: the `Exports` of the files of a package gathered in one module,
 // as type abbreviations so that `open Node.Exports` gives `os.hostname ()`
 let private aggregatedExports (types: FSharpType list) : FSharpType list =
-    let isExportsType (typ: FSharpType) =
-        match typ with
-        | FSharpType.Interface { Name = "Exports" } -> true
-        | _ -> false
-
     let isStatic (fsharpMember: FSharpMember) =
         match fsharpMember with
         | FSharpMember.Method info
         | FSharpMember.Property info -> info.IsStatic
         | FSharpMember.StaticMember _ -> true
+
+    // The entry file exporting the package itself, the globals of the package are not exports
+    let hasEntryExports =
+        types
+        |> List.exists (
+            function
+            | FSharpType.Interface { Name = "Exports"; Members = members } ->
+                let isGlobal (attributes: FSharpAttribute list) =
+                    attributes
+                    |> List.exists (
+                        function
+                        | FSharpAttribute.Global _ -> true
+                        | _ -> false
+                    )
+
+                members
+                |> List.exists (
+                    function
+                    | FSharpMember.Method info
+                    | FSharpMember.Property info -> not (isGlobal info.Attributes)
+                    | FSharpMember.StaticMember info -> not (isGlobal info.Attributes)
+                )
+            | _ -> false
+        )
 
     let abbreviations =
         types
@@ -5474,7 +5538,7 @@ let private aggregatedExports (types: FSharpType list) : FSharpType list =
             | _ -> None
         )
 
-    if abbreviations.IsEmpty || types |> List.exists isExportsType then
+    if abbreviations.IsEmpty || hasEntryExports then
         []
     else
         [
@@ -5558,7 +5622,6 @@ let private transformToFsharp
                 context.TypeLiteralsMemory
                 context.ImportSource
                 moduleInfo
-            |> List.singleton
 
         | GlueType.FileModule fileModule ->
             let types =
@@ -5597,7 +5660,6 @@ let private transformToFsharp
                     context.TypeLiteralsMemory
                     context.ImportSource
                     moduleInfo
-                |> List.singleton
             | _ -> FSharpType.Discard |> List.singleton
 
         | GlueType.ConstructorType _
@@ -5700,7 +5762,7 @@ let private transform
             match glueType with
             | GlueType.ClassDeclaration _ -> true
             | GlueType.Variable _ -> true
-            | GlueType.ModuleDeclaration info -> applyModuleDeclaration info
+            | GlueType.ModuleDeclaration info -> not info.IsGlobal && applyModuleDeclaration info
             | GlueType.ExportDefault exportedType ->
                 // Capture default export of classes here so we can keep
                 // generate their actual bindings

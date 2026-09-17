@@ -11,13 +11,13 @@ open Glutinum.Node.Exports
 let file = path.join ("demo-output", "hello.txt")
 
 fs.writeFileSync (file, "Hello from Fable")
-let content = fs.readFileSync (file, Node.buffer.buffer_.``global``.BufferEncoding.utf8)
+let content = fs.readFileSync (file, Node.BufferEncoding.utf8)
 
 let server =
     Node.http.Exports.createServer<obj, obj> (
         Node.http.RequestListener<obj, obj>(fun _ res ->
             let res = unbox<Node.http.ServerResponse> res
-            res.``end`` ("pong", Node.buffer.buffer_.``global``.BufferEncoding.utf8) |> ignore
+            res.``end`` ("pong", Node.BufferEncoding.utf8) |> ignore
         )
     )
 ```

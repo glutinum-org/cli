@@ -51,6 +51,12 @@ type PackageContext =
 
     /// The F# modules of the external binding declaring `fileName`
     member this.TryFindExternalModulePath(fileName: string) : string list option =
+        this.TryFindExternalModulePath(fileName, true)
+
+    member this.TryFindExternalModulePath
+        (fileName: string, includeFile: bool)
+        : string list option
+        =
         let fileName = String.normalizePath fileName
 
         this.Externals
@@ -68,7 +74,7 @@ type PackageContext =
                             yield "Glutinum"
                             yield external.ModuleName
 
-                            if fileName <> package.EntryFile then
+                            if includeFile && fileName <> package.EntryFile then
                                 yield this.FileModuleName(package, fileName)
                         ]
                 | _ -> None
@@ -113,18 +119,26 @@ type PackageContext =
         |> Naming.sanitizeTypeName
 
     /// F# modules qualifying a type declared in `fileName`, empty for the target entry file
-    member this.ModulePath(fileName: string) : string list =
+    member this.ModulePath(fileName: string) : string list = this.ModulePath(fileName, true)
+
+    /// `includeFile = false` gives the package module only, where its globals are
+    member this.ModulePath(fileName: string, includeFile: bool) : string list =
         match this.TryFindPackage fileName with
-        | None -> this.TryFindExternalModulePath fileName |> Option.defaultValue []
+        | None -> this.TryFindExternalModulePath(fileName, includeFile) |> Option.defaultValue []
         | Some package ->
             let fileName = String.normalizePath fileName
 
             [
                 package.ModuleName
 
-                if fileName <> package.EntryFile then
+                if includeFile && fileName <> package.EntryFile then
                     this.FileModuleName(package, fileName)
             ]
+
+    member this.IsEntryFile(fileName: string) =
+        match this.TryFindPackage fileName with
+        | Some package -> String.normalizePath fileName = package.EntryFile
+        | None -> false
 
     member this.ImportSpecifier(fileName: string) =
         match this.TryFindPackage fileName with

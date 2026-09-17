@@ -167,6 +167,45 @@ type ModifierUtil =
         =
         ModifierUtil.HasModifier(unbox<ResizeArray<Ts.Modifier> option> modifiers, modifier)
 
+/// `K extends keyof Map` where `Map` is a reference, the map gives the typed keys of `K`
+let tryReadKeyOfConstraint
+    (reader: ITypeScriptReader)
+    (typeParameter: Ts.TypeParameterDeclaration)
+    =
+    match typeParameter.``constraint`` with
+    | Some constraintNode when constraintNode.kind = Ts.SyntaxKind.TypeOperator ->
+        let typeOperator = constraintNode :?> Ts.TypeOperatorNode
+
+        if
+            typeOperator.operator = Ts.SyntaxKind.KeyOfKeyword
+            && typeOperator.``type``.kind = Ts.SyntaxKind.TypeReference
+        then
+            match reader.ReadTypeNode typeOperator.``type`` with
+            | GlueType.TypeReference _ as map -> Some(GlueType.KeyOf map)
+            | _ -> None
+        else
+            None
+    | _ -> None
+
+/// The type parameters of a member: only a `keyof` constraint is kept
+let readMemberTypeParameters
+    (reader: ITypeScriptReader)
+    (typeParameters: ResizeArray<Ts.TypeParameterDeclaration> option)
+    : GlueTypeParameter list
+    =
+    match typeParameters with
+    | None -> []
+    | Some typeParameters ->
+        typeParameters
+        |> Seq.toList
+        |> List.map (fun typeParameter ->
+            {
+                Name = identifierText typeParameter.name
+                Constraint = tryReadKeyOfConstraint reader typeParameter
+                Default = typeParameter.``default`` |> Option.map reader.ReadTypeNode
+            }
+        )
+
 let readTypeArguments (reader: ITypeScriptReader) (node: Ts.NodeWithTypeArguments) =
     match node.typeArguments with
     | None -> []
@@ -453,8 +492,51 @@ let isPromotedAmbientModule (declaration: Ts.ModuleDeclaration) =
         | None -> false
     )
 
+let isGlobalAugmentation (declaration: Ts.ModuleDeclaration) =
+    int declaration.flags &&& int Ts.NodeFlags.GlobalAugmentation <> 0
+
+/// A script file of a package which is not its entry: its declarations are globals of the package
+let isGlobalScriptOfPackage (packageContext: PackageContext option) (sourceFile: Ts.SourceFile) =
+    match packageContext with
+    | Some packageContext ->
+        not (ts.isExternalModule sourceFile)
+        && (promotedAmbientModule sourceFile).IsNone
+        && not (packageContext.IsEntryFile sourceFile.fileName)
+    | None -> false
+
+let private isAmbientModuleDeclaration (node: Ts.Node) =
+    node.kind = Ts.SyntaxKind.ModuleDeclaration
+    && (node :?> Ts.ModuleDeclaration).name?kind = Ts.SyntaxKind.StringLiteral
+
+/// In package mode, a declaration of a `global { }` block or of a script file is a global of the package,
+/// the `declare module "x"` of a script file are modules
+let isPackageGlobal (packageContext: PackageContext option) (declaration: Ts.Node) =
+    let rec inGlobalBlock (node: Ts.Node) =
+        not (isNull node)
+        && ((node.kind = Ts.SyntaxKind.ModuleDeclaration
+             && isGlobalAugmentation (node :?> Ts.ModuleDeclaration))
+            || inGlobalBlock node.parent)
+
+    let rec inAmbientModule (node: Ts.Node) =
+        not (isNull node)
+        && (isAmbientModuleDeclaration node || inAmbientModule node.parent)
+
+    packageContext.IsSome
+    && (inGlobalBlock declaration.parent
+        || (isGlobalScriptOfPackage packageContext (declaration.getSourceFile ())
+            && not (inAmbientModule declaration)))
+
+/// A module declaration at the top of a file or of the ambient module the file is made of
+let isTopLevelModuleDeclaration (packageContext: PackageContext option) (node: Ts.Node) =
+    not (isNull node.parent)
+    && (node.parent.kind = Ts.SyntaxKind.SourceFile
+        || (node.parent.kind = Ts.SyntaxKind.ModuleBlock
+            && node.parent.parent.kind = Ts.SyntaxKind.ModuleDeclaration
+            && isPromotedAmbientModule (node.parent.parent :?> Ts.ModuleDeclaration)))
+    && not (isPackageGlobal packageContext node)
+
 /// The F# modules generated for the namespaces enclosing a declaration, outermost first
-let private namespaceChain (declaration: Ts.Node) =
+let private namespaceChain (packageContext: PackageContext option) (declaration: Ts.Node) =
     let rec collect (node: Ts.Node) (acc: string list) =
         if isNull node then
             acc
@@ -466,6 +548,11 @@ let private namespaceChain (declaration: Ts.Node) =
                 ->
                 collect node.parent acc
 
+            | Ts.SyntaxKind.ModuleDeclaration when
+                packageContext.IsSome && isGlobalAugmentation (node :?> Ts.ModuleDeclaration)
+                ->
+                acc
+
             | Ts.SyntaxKind.ModuleDeclaration ->
                 let moduleDeclaration = node :?> Ts.ModuleDeclaration
 
@@ -473,16 +560,9 @@ let private namespaceChain (declaration: Ts.Node) =
                     (unbox<Ts.Node> moduleDeclaration.name).getText ()
                     |> Naming.removeSurroundingQuotes
 
-                let isTopLevel =
-                    not (isNull node.parent)
-                    && (node.parent.kind = Ts.SyntaxKind.SourceFile
-                        || (node.parent.kind = Ts.SyntaxKind.ModuleBlock
-                            && node.parent.parent.kind = Ts.SyntaxKind.ModuleDeclaration
-                            && isPromotedAmbientModule (node.parent.parent :?> Ts.ModuleDeclaration)))
-
                 // The suffix is part of the name to escape (`assert_`, not ``` ``assert``_ ```)
                 let name =
-                    if isTopLevel then
+                    if isTopLevelModuleDeclaration packageContext node then
                         Naming.sanitizeTypeName (rawName + "_")
                     else
                         Naming.sanitizeTypeName rawName
@@ -496,7 +576,8 @@ let private namespaceChain (declaration: Ts.Node) =
 let modulePathForDeclaration (packageContext: PackageContext) (declaration: Ts.Node) : string list =
     let fileName = declaration.getSourceFile().fileName |> String.normalizePath
 
-    packageContext.ModulePath fileName @ namespaceChain declaration
+    packageContext.ModulePath(fileName, not (isPackageGlobal (Some packageContext) declaration))
+    @ namespaceChain (Some packageContext) declaration
 
 /// <summary>
 /// The F# modules qualifying a reference to the symbol: the package and file modules
@@ -512,16 +593,24 @@ let modulePathForSymbol
     match symbolOpt |> Option.bind (resolveAlias checker) with
     | None -> []
     | Some symbol ->
+        let declaration = mainDeclaration packageContext symbol
+
         let filePath =
             match packageContext, declarationFile packageContext symbol with
-            | Some packageContext, Some fileName -> packageContext.ModulePath fileName
+            | Some packageContext, Some fileName ->
+                let includeFile =
+                    match declaration with
+                    | Some declaration -> not (isPackageGlobal (Some packageContext) declaration)
+                    | None -> true
+
+                packageContext.ModulePath(fileName, includeFile)
             | _ -> []
 
         // A path to another file is absolute, so it includes the namespaces
         let namespaces =
-            match mainDeclaration packageContext symbol with
+            match declaration with
             | Some declaration when isQualified || not filePath.IsEmpty ->
-                namespaceChain declaration
+                namespaceChain packageContext declaration
             | _ -> []
 
         filePath @ namespaces

@@ -4,6 +4,14 @@ open Fable.Core
 open Fable.Core.JsInterop
 open System
 
+[<AbstractClass>]
+[<Erase>]
+type Exports =
+    [<Import("addEventListener", "REPLACE_ME_WITH_MODULE_NAME")>]
+    static member addEventListener<'K> (``type``: GlobalEventMap.Key<'K>, listener: ('K -> unit)) : unit = nativeOnly
+    [<Import("addEventListener", "REPLACE_ME_WITH_MODULE_NAME")>]
+    static member addEventListener (``type``: string, listener: (obj -> unit)) : unit = nativeOnly
+
 [<AllowNullLiteral>]
 [<Interface>]
 type MouseEvent =
@@ -69,6 +77,19 @@ type Document =
 [<Interface>]
 type GlobalEventMap =
     abstract member focus: KeyboardEvent with get, set
+
+module GlobalEventMap =
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type Key<'V> =
+        interface end
+
+    [<AbstractClass>]
+    [<Erase>]
+    type Keys =
+        [<Emit("\"focus\"")>]
+        static member inline focus: Key<KeyboardEvent> = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

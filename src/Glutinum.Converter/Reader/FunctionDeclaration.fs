@@ -31,5 +31,16 @@ let readFunctionDeclaration
         Name = name
         Type = reader.ReadTypeNode declaration.``type``
         Parameters = reader.ReadParameters declaration.parameters
-        TypeParameters = reader.ReadTypeParameters declaration.typeParameters
+        TypeParameters =
+            reader.ReadTypeParameters declaration.typeParameters
+            |> List.mapi (fun index typeParameter ->
+                match
+                    Utils.tryReadKeyOfConstraint reader declaration.typeParameters.Value.[index]
+                with
+                | Some keyOf ->
+                    { typeParameter with
+                        Constraint = Some keyOf
+                    }
+                | None -> typeParameter
+            )
     }

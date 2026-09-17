@@ -250,6 +250,8 @@ type GlueModuleDeclaration =
         Name: string
         IsTopLevel: bool
         IsNamespace: bool
+        /// `global { }`: the declarations are globals of the package
+        IsGlobal: bool
         IsRecursive: bool
         Types: GlueType list
     }

@@ -8,7 +8,7 @@ open Glutinum.Node.Exports
 open type Scriptorium.Quill.Runner
 open type Scriptorium.Quill.Test
 
-let private utf8 = Node.buffer.buffer_.``global``.BufferEncoding.utf8
+let private utf8 = Node.BufferEncoding.utf8
 
 let private tempDir =
     fs.mkdtempSync (path.join (Node.Exports.os.tmpdir (), "glutinum-node-tests-"))
@@ -53,7 +53,7 @@ let main _ =
                     test (
                         "process: the current directory and the environment",
                         fun _ ->
-                            let proc = Node.globals.Exports.``process``
+                            let proc = Node.Exports.``process``
                             assertThat (proc.cwd ()) (isNotEqualTo "")
                             assertThat proc.argv.Count (isGreaterOrEqual 1)
                     )
