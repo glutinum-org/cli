@@ -1,8 +1,12 @@
-module rec Glutinum
+namespace rec Glutinum
 
 open Fable.Core
 open Fable.Core.JsInterop
 open System
+
+// You need to add Glutinum.Node NuGet package to your project
+
+// You need to add Glutinum.Web NuGet package to your project
 
 module DomLibUser =
 

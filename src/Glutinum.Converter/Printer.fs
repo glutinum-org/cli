@@ -1131,7 +1131,22 @@ let rec private print (printer: Printer) (fsharpTypes: FSharpType list) =
 
     | [] -> ()
 
-let printFile (printer: Printer) (transformResult: Transform.TransformResult) =
+/// <summary>
+/// Print the binding, telling which of the <c>externalBindings</c> (<c>Web</c>, <c>Node</c>)
+/// it references so the user knows the NuGet packages to add.
+/// The packages are modules of the <c>Glutinum</c> namespace, so several bindings and
+/// <c>Glutinum.Types</c> live together in a project.
+/// </summary>
+let printFileWith
+    (isPackage: bool)
+    (externalBindings: string list)
+    (printer: Printer)
+    (transformResult: Transform.TransformResult)
+    =
+    let body =
+        let bodyPrinter = Printer()
+        print bodyPrinter transformResult.FSharpAST
+        bodyPrinter.ToString()
 
     let outFile =
         {
@@ -1139,7 +1154,11 @@ let printFile (printer: Printer) (transformResult: Transform.TransformResult) =
             Opens = [ "Fable.Core"; "Fable.Core.JsInterop"; "System" ]
         }
 
-    printer.Write($"module rec {outFile.Name}")
+    if isPackage then
+        printer.Write($"namespace rec {outFile.Name}")
+    else
+        printer.Write($"module rec {outFile.Name}")
+
     printer.NewLine
     printer.NewLine
 
@@ -1158,6 +1177,15 @@ let printFile (printer: Printer) (transformResult: Transform.TransformResult) =
         printer.Write "open Glutinum.Types.TypeScript"
         printer.NewLine
 
+    for externalBinding in externalBindings do
+        if body.Contains $"Glutinum.{externalBinding}." then
+            printer.NewLine
+
+            printer.Write
+                $"// You need to add Glutinum.{externalBinding} NuGet package to your project"
+
+            printer.NewLine
+
     if transformResult.IncludeRegExpAlias then
         printer.NewLine
         printer.Write "type RegExp = Text.RegularExpressions.Regex"
@@ -1168,4 +1196,7 @@ let printFile (printer: Printer) (transformResult: Transform.TransformResult) =
         printer.Write "type Iterable<'T> = Collections.Generic.IEnumerable<'T>"
         printer.NewLine
 
-    print printer transformResult.FSharpAST
+    printer.WriteInline("\n" + body.TrimStart('\n'))
+
+let printFile (printer: Printer) (transformResult: Transform.TransformResult) =
+    printFileWith false [] printer transformResult

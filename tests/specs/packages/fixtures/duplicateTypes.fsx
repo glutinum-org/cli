@@ -1,4 +1,4 @@
-module rec Glutinum
+namespace rec Glutinum
 
 open Fable.Core
 open Fable.Core.JsInterop

@@ -247,7 +247,7 @@ let generateWith (options: GenerateOptions) (host: Host) (inputs: string list) :
 
     let printer = new Printer.Printer()
 
-    Printer.printFile printer transformResult
+    Printer.printFileWith true (externals |> List.map _.ModuleName) printer transformResult
 
     {
         GlueAST = readerResult.GlueAST
