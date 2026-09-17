@@ -1615,6 +1615,12 @@ let private transformExports
                     // TODO: Handle constructor overloads
                     let name, context = sanitizeNameAndPushScope info.Name context
 
+                    // `export default class X` or `declare class X; export default X`
+                    let isDefaultExport =
+                        match head with
+                        | GlueType.ExportDefault _ -> true
+                        | _ -> defaultExportedDeclarations.Contains info.Name
+
                     // If the class has no constructor explicitly defined, we need to generate one
                     let constructors =
                         if info.Constructors.IsEmpty then
@@ -1644,9 +1650,7 @@ let private transformExports
                                     Attributes =
                                         [
                                             if isTopLevel then
-                                                if
-                                                    defaultExportedDeclarations.Contains info.Name
-                                                then
+                                                if isDefaultExport then
                                                     importDefaultAttribute
                                                         info.Name
                                                         context.ImportSource

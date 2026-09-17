@@ -654,11 +654,29 @@ let promotedAmbientModule (sourceFile: Ts.SourceFile) : Ts.ModuleDeclaration opt
                 ""
             )
 
+        // `declare module "node:http"` holds the declarations, `declare module "http"` re-exports them
         let moduleName (moduleDeclaration: Ts.ModuleDeclaration) =
-            Naming.removeSurroundingQuotes (moduleDeclaration.name?text)
+            let name: string = Naming.removeSurroundingQuotes (moduleDeclaration.name?text)
 
-        ambientModules
-        |> List.tryFind (fun moduleDeclaration -> moduleName moduleDeclaration = fileName)
+            if name.StartsWith "node:" then
+                name.Substring "node:".Length
+            else
+                name
+
+        let hasDeclarations (moduleDeclaration: Ts.ModuleDeclaration) =
+            match moduleDeclaration.body with
+            | Some body when body?kind = Ts.SyntaxKind.ModuleBlock ->
+                (unbox<Ts.ModuleBlock> body).statements
+                |> Seq.exists (fun statement -> statement.kind <> Ts.SyntaxKind.ExportDeclaration)
+            | _ -> false
+
+        let namedLikeTheFile =
+            ambientModules
+            |> List.filter (fun moduleDeclaration -> moduleName moduleDeclaration = fileName)
+
+        namedLikeTheFile
+        |> List.tryFind hasDeclarations
+        |> Option.orElse (List.tryHead namedLikeTheFile)
         |> Option.orElse (List.tryHead ambientModules)
 
 let isPromotedAmbientModule (declaration: Ts.ModuleDeclaration) =

@@ -11,22 +11,33 @@ let readExportAssignment (reader: ITypeScriptReader) (exportNode: Ts.ExportAssig
     // Not sure why we don't have symbol property in the type definition
     let symbolOpt: Ts.Symbol option = exportNode?symbol
 
+    let exportEqualsDeclarationKind =
+        if
+            exportNode.isExportEquals = Some true
+            && exportNode.expression.kind = Ts.SyntaxKind.Identifier
+        then
+            reader.checker.getSymbolAtLocation exportNode.expression
+            |> Option.bind (fun symbol -> symbol.valueDeclaration)
+            |> Option.map (fun declaration -> declaration.kind)
+        else
+            None
+
     // `export = path` of a variable: the module is the variable
     let isExportEqualsOfVariable =
-        exportNode.isExportEquals = Some true
-        && exportNode.expression.kind = Ts.SyntaxKind.Identifier
-        && (
-            match reader.checker.getSymbolAtLocation exportNode.expression with
-            | Some symbol ->
-                match symbol.valueDeclaration with
-                | Some declaration -> declaration.kind = Ts.SyntaxKind.VariableDeclaration
-                | None -> false
-            | None -> false
-        )
+        exportEqualsDeclarationKind = Some Ts.SyntaxKind.VariableDeclaration
+
+    // `export = dayjs` of a function or a class: `module.exports` is the default import
+    let isExportEqualsOfDeclaration =
+        exportEqualsDeclarationKind = Some Ts.SyntaxKind.FunctionDeclaration
+        || exportEqualsDeclarationKind = Some Ts.SyntaxKind.ClassDeclaration
 
     match symbolOpt with
     | Some symbol ->
-        if symbol.name = "default" || isExportEqualsOfVariable then
+        if
+            symbol.name = "default"
+            || isExportEqualsOfVariable
+            || isExportEqualsOfDeclaration
+        then
             match exportNode.expression.kind with
             | Ts.SyntaxKind.Identifier ->
                 // Get the identifier node, so we know what name to use
