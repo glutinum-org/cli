@@ -11,7 +11,7 @@ type Exports =
     static member EventEmitter<'T> () : EventEmitter<'T> = nativeOnly
 
 type DefaultEventMap =
-    obj
+    ResizeArray<obj>
 
 [<AllowNullLiteral>]
 [<Interface>]

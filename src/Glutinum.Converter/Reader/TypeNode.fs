@@ -24,10 +24,19 @@ let private readPropertyWithoutDeclaration
 
     match reader.checker.typeToTypeNode (typ, None, None) with
     | Some typeNode ->
+        let previousContext = reader.SyntheticContext
+        reader.SyntheticContext <- Some contextNode
+
+        let propertyType =
+            try
+                reader.ReadTypeNode typeNode
+            finally
+                reader.SyntheticContext <- previousContext
+
         ({
             Name = property.name
             Documentation = []
-            Type = reader.ReadTypeNode typeNode
+            Type = propertyType
             IsOptional =
                 match property.flags with
                 | HasSymbolFlags Ts.SymbolFlags.Optional -> true
@@ -84,7 +93,16 @@ let private readInstantiatedMember
         match checker.typeToTypeNode (instantiatedType, enclosingDeclaration, Some flags) with
         | None -> declaredMember
         | Some typeNode ->
-            match declaredMember, reader.ReadTypeNode typeNode with
+            let previousContext = reader.SyntheticContext
+            reader.SyntheticContext <- Some contextNode
+
+            let instantiatedMember =
+                try
+                    reader.ReadTypeNode typeNode
+                finally
+                    reader.SyntheticContext <- previousContext
+
+            match declaredMember, instantiatedMember with
             | GlueMember.Property info, typ -> GlueMember.Property { info with Type = typ }
             | GlueMember.MethodSignature info, GlueType.FunctionType functionType ->
                 GlueMember.MethodSignature
@@ -405,11 +423,13 @@ module UtilityType =
 
                     | _ -> baseType |> readMembers reader typeReferenceNode
 
+                let defaults = defaultTypeArguments reader typeReferenceNode.typeArguments.Value[0]
+
                 ({
                     Documentation = []
                     FullName = getFullNameOrEmpty reader.checker typeReferenceNode
                     Name = entityNameText !!typeReferenceNode.typeName
-                    Members = members
+                    Members = members |> List.map (GlueSubstitution.substituteMember defaults)
                     TypeParameters = []
                     HeritageClauses = []
                 }
@@ -522,13 +542,20 @@ module UtilityType =
                 match property.declarations with
                 // Overloads and merged declarations are several declarations
                 | Some declarations ->
-                    declarations |> Seq.toList |> List.map reader.ReadDeclaration
+                    declarations
+                    |> Seq.toList
+                    |> List.map (readInstantiatedMember reader typeReferenceNode property)
                 | None ->
                     Report.readerError ("type node", "Missing declarations", typeReferenceNode)
                     |> failwith
             )
 
-        members |> GlueUtilityType.Omit |> GlueType.UtilityType
+        let defaults = defaultTypeArguments reader typeReferenceNode.typeArguments.Value[0]
+
+        members
+        |> List.map (GlueSubstitution.substituteMember defaults)
+        |> GlueUtilityType.Omit
+        |> GlueType.UtilityType
 
     let readReadonly (reader: ITypeScriptReader) (typeReferenceNode: Ts.TypeReferenceNode) =
 
@@ -797,6 +824,9 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
             let rec collectEnclosing (node: Ts.Node) (acc: Ts.TypeParameterDeclaration list) =
                 if isNull node then
                     acc
+                // `FacetConfig<Input, Output>` expanded by the checker: the members have no parent
+                elif isNull node.parent && node.pos < 0 && reader.SyntheticContext.IsSome then
+                    collectEnclosing reader.SyntheticContext.Value acc
                 // A function type used as a constraint is read while reading the type parameters
                 elif node.kind = Ts.SyntaxKind.TypeParameter then
                     []
@@ -811,7 +841,11 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
 
                     collectEnclosing node.parent acc
 
-            match collectEnclosing functionTypeNode [] with
+            // `static define<Input, Output>` of `class Facet<Input, Output>`: the innermost wins
+            match
+                collectEnclosing functionTypeNode []
+                |> List.distinctBy (fun typeParameter -> identifierText typeParameter.name)
+            with
             | [] -> []
             | typParameters -> reader.ReadTypeParameters(Some(ResizeArray typParameters))
 
@@ -1081,6 +1115,9 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
             // The module path is computed from the resolved symbol, so the name must be its name too
             let name =
                 match symbolOpt with
+                // `export default class DatasetController` is the `default` symbol
+                | Some symbol when symbol.name = "default" ->
+                    declaredName symbol |> Option.defaultValue symbol.name
                 | Some symbol when not (isFromEs5Lib symbolOpt) -> symbol.name
                 | _ ->
                     if isQualified then
@@ -1095,7 +1132,11 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                 GlueType.Discard
             else
                 ({
-                    Name = name
+                    Name =
+                        if name.Contains "." then
+                            name
+                        else
+                            Naming.sanitizeTypeName name
                     // The name of the declaration, not of an import alias
                     FullName =
                         match symbolOpt |> Option.bind (resolveAlias checker) with

@@ -120,7 +120,7 @@ let readTypeQueryNode (reader: ITypeScriptReader) (typeQueryNode: Ts.TypeQueryNo
                 match declaration.kind with
                 | Ts.SyntaxKind.ClassDeclaration ->
                     ({
-                        Name = symbol.name
+                        Name = declaredName symbol |> Option.defaultValue symbol.name
                         FullName = checker.getFullyQualifiedName symbol
                         ModulePath =
                             modulePathForSymbol checker reader.PackageContext false (Some symbol)

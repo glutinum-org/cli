@@ -4,6 +4,7 @@ open Glutinum.Converter.GlueAST
 open Glutinum.Converter.Reader.Types
 open TypeScript
 open Fable.Core.JsInterop
+open Glutinum.Converter.Reader.Utils
 
 let readVariableStatement (reader: ITypeScriptReader) (statement: Ts.VariableStatement) : GlueType =
 
@@ -23,7 +24,47 @@ let readVariableStatement (reader: ITypeScriptReader) (statement: Ts.VariableSta
         statement.parent?kind = Ts.SyntaxKind.SourceFile
         && not (ts.isExternalModule (statement.getSourceFile ()))
 
-    let isExported = hasExportModifier || isInsideNamespace || isGlobal
+    // `declare const basicSetup: Extension;` then `export { basicSetup };`
+    let isInExportList =
+        let names =
+            statement.declarationList.declarations
+            |> Seq.choose (fun declaration ->
+                let name: Ts.Node = !!declaration.name
+
+                if name.kind = Ts.SyntaxKind.Identifier then
+                    Some(identifierText name)
+                else
+                    None
+            )
+            |> Set.ofSeq
+
+        statement.parent?kind = Ts.SyntaxKind.SourceFile
+        && (statement.getSourceFile ()).statements
+           |> Seq.exists (fun other ->
+               other.kind = Ts.SyntaxKind.ExportDeclaration
+               && (let exportDeclaration = other :?> Ts.ExportDeclaration
+
+                   exportDeclaration.moduleSpecifier.IsNone
+                   && (
+                       match exportDeclaration.exportClause with
+                       | Some exportClause when exportClause?kind = Ts.SyntaxKind.NamedExports ->
+                           let namedExports: Ts.NamedExports = !!exportClause
+
+                           namedExports.elements
+                           |> Seq.exists (fun specifier ->
+                               let local: Ts.Node =
+                                   match specifier.propertyName with
+                                   | Some propertyName -> !!propertyName
+                                   | None -> !!specifier.name
+
+                               names.Contains(identifierText local)
+                           )
+                       | _ -> false
+                   ))
+           )
+
+    let isExported =
+        hasExportModifier || isInsideNamespace || isGlobal || isInExportList
 
     if isExported then
         match statement.declarationList.declarations |> Seq.toList with

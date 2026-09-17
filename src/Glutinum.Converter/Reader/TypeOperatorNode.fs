@@ -11,6 +11,9 @@ let rec private removeParenthesizedType (node: Ts.TypeNode) =
         removeParenthesizedType (node :?> Ts.ParenthesizedTypeNode).``type``
     | _ -> node
 
+// `class ChartView { call(name: keyof ChartView) }`: the keys of a declaration being read
+let private declarationsInProgress = ResizeArray<Ts.Node>()
+
 let readTypeOperatorNode (reader: ITypeScriptReader) (node: Ts.TypeOperatorNode) =
 
     match node.operator with
@@ -33,22 +36,30 @@ let readTypeOperatorNode (reader: ITypeScriptReader) (node: Ts.TypeOperatorNode)
 
             | Some symbol ->
                 match symbol.declarations with
-                | Some declarations ->
-
-                    if declarations.Count <> 1 then
-                        Report.readerError (
-                            "type operator (keyof)",
-                            "Expected exactly one declaration",
-                            node
+                | Some declarations when declarations.Count > 0 ->
+                    // `interface ChartView` merged with `class ChartView`: the class has the members
+                    let declaration =
+                        declarations
+                        |> Seq.tryFind (fun declaration ->
+                            declaration.kind = Ts.SyntaxKind.ClassDeclaration
                         )
-                        |> failwith
+                        |> Option.defaultValue declarations[0]
 
                     // The keys of a type parameter are known once it is substituted
-                    elif declarations[0].kind = Ts.SyntaxKind.TypeParameter then
+                    if declaration.kind = Ts.SyntaxKind.TypeParameter then
                         GlueType.KeyOf(GlueType.TypeParameter symbol.name)
-
+                    elif declarationsInProgress.Contains declaration then
+                        GlueType.KeyOf GlueType.Discard
                     else
-                        reader.ReadNode declarations[0] |> GlueType.KeyOf
+                        declarationsInProgress.Add declaration
+
+                        try
+                            reader.ReadNode declaration |> GlueType.KeyOf
+                        finally
+                            declarationsInProgress.RemoveAt(declarationsInProgress.Count - 1)
+                | Some _ ->
+                    Report.readerError ("type operator (keyof)", "Missing declarations", node)
+                    |> failwith
 
                 | None ->
                     Report.readerError ("type operator (keyof)", "Missing declarations", node)

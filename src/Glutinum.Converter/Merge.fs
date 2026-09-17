@@ -36,7 +36,11 @@ let rec private collectAliases (path: string list) (types: FSharpType list) =
                                    Name = name
                                    TypeParameters = []
                                    Type = target
-                               } -> aliasTargets.[String.concat "." (path @ [ name ])] <- target
+                               } ->
+            aliasTargets.[String.concat "." (path @ [ name ])] <- target
+            // A reference from the alias' own module has no module path
+            if not (aliasTargets.ContainsKey name) then
+                aliasTargets.[name] <- target
         | FSharpType.Module moduleInfo ->
             collectAliases (path @ [ moduleInfo.Name ]) moduleInfo.Types
         | _ -> ()
@@ -49,11 +53,17 @@ let rec private signatureTypeAt (depth: int) (typ: FSharpType) : FSharpType =
     | FSharpType.TypeReference typeReference when
         depth < 8
         && typeReference.TypeArguments.IsEmpty
-        && aliasTargets.ContainsKey(
-            String.concat "." (typeReference.ModulePath @ [ typeReference.Name ])
-        )
+        && (aliasTargets.ContainsKey(
+                String.concat "." (typeReference.ModulePath @ [ typeReference.Name ])
+            )
+            || (typeReference.ModulePath.IsEmpty && aliasTargets.ContainsKey typeReference.Name))
         ->
-        aliasTargets.[String.concat "." (typeReference.ModulePath @ [ typeReference.Name ])]
+        let fullPath = String.concat "." (typeReference.ModulePath @ [ typeReference.Name ])
+
+        (if aliasTargets.ContainsKey fullPath then
+             aliasTargets.[fullPath]
+         else
+             aliasTargets.[typeReference.Name])
         |> signatureType
     | FSharpType.TypeReference typeReference ->
         { typeReference with
@@ -82,20 +92,100 @@ let rec private signatureTypeAt (depth: int) (typ: FSharpType) : FSharpType =
 
 let signatureType (typ: FSharpType) : FSharpType = signatureTypeAt 0 typ
 
+// `path: 'R * 'S` and `path: 'Rb * 'S` are the same overload for F#
+let rec private canonicalTypeParameters (names: Dictionary<string, string>) (typ: FSharpType) =
+    let canonical = canonicalTypeParameters names
+
+    match typ with
+    | FSharpType.TypeParameter name ->
+        match names.TryGetValue name with
+        | true, canonicalName -> FSharpType.TypeParameter canonicalName
+        | false, _ ->
+            let canonicalName = $"T{names.Count}"
+            names.[name] <- canonicalName
+            FSharpType.TypeParameter canonicalName
+    | FSharpType.TypeReference typeReference ->
+        { typeReference with
+            TypeArguments = typeReference.TypeArguments |> List.map canonical
+        }
+        |> FSharpType.TypeReference
+    | FSharpType.Option typ -> FSharpType.Option(canonical typ)
+    | FSharpType.ResizeArray typ -> FSharpType.ResizeArray(canonical typ)
+    | FSharpType.Tuple types -> FSharpType.Tuple(types |> List.map canonical)
+    | FSharpType.Function functionType ->
+        { functionType with
+            Parameters =
+                functionType.Parameters
+                |> List.map (fun parameter ->
+                    { parameter with
+                        Type = canonical parameter.Type
+                    }
+                )
+            ReturnType = canonical functionType.ReturnType
+        }
+        |> FSharpType.Function
+    | typ -> typ
+
 let parametersSignature (parameters: FSharpParameter list) =
+    let names = Dictionary<string, string>()
+
     parameters
-    |> List.map (fun parameter -> signatureType parameter.Type, parameter.IsOptional)
+    |> List.map (fun parameter ->
+        signatureType parameter.Type |> canonicalTypeParameters names, parameter.IsOptional
+    )
+
+// `querySelector<'E>(string)` and `querySelector(string)` are two overloads, `get<'R>(path: 'R)`
+// and `get(path: 'R)` are the same one
+let private arityOfSignature
+    (typeParameters: FSharpTypeParameter list)
+    (signature: (FSharpType * bool) list)
+    =
+    let rec mentionsTypeParameter (typ: FSharpType) =
+        match typ with
+        | FSharpType.TypeParameter _ -> true
+        | FSharpType.TypeReference typeReference ->
+            typeReference.TypeArguments |> List.exists mentionsTypeParameter
+        | FSharpType.Option typ
+        | FSharpType.ResizeArray typ -> mentionsTypeParameter typ
+        | FSharpType.Tuple types -> types |> List.exists mentionsTypeParameter
+        | FSharpType.Function functionType ->
+            mentionsTypeParameter functionType.ReturnType
+            || functionType.Parameters
+               |> List.exists (fun parameter -> mentionsTypeParameter parameter.Type)
+        | _ -> false
+
+    if signature |> List.exists (fun (typ, _) -> mentionsTypeParameter typ) then
+        -1
+    else
+        typeParameters.Length
 
 /// Overloads only differing by their parameter names are the same member for F#
 let distinctBySignature (members: FSharpMember list) : FSharpMember list =
+    let methodNames =
+        members
+        |> List.choose (
+            function
+            | FSharpMember.Method info -> Some info.Name
+            | _ -> None
+        )
+        |> set
+
     members
+    // `export declare const TimeSeriesScale` next to the class `TimeSeriesScale`
+    |> List.filter (
+        function
+        | FSharpMember.Property info -> not (methodNames.Contains info.Name)
+        | _ -> true
+    )
     |> List.distinctBy (
         function
         | FSharpMember.Method info ->
-            Choice1Of3(info.Name, info.TypeParameters.Length, parametersSignature info.Parameters)
+            let signature = parametersSignature info.Parameters
+            Choice1Of3(info.Name, arityOfSignature info.TypeParameters signature, signature)
         | FSharpMember.Property info -> Choice2Of3(info.Name, parametersSignature info.Parameters)
         | FSharpMember.StaticMember info ->
-            Choice3Of3(info.Name, info.TypeParameters.Length, parametersSignature info.Parameters)
+            let signature = parametersSignature info.Parameters
+            Choice3Of3(info.Name, arityOfSignature info.TypeParameters signature, signature)
     )
 
 let private mergeTypes (types: FSharpType list) =
@@ -125,6 +215,14 @@ let private mergeTypes (types: FSharpType list) =
                             Inheritance =
                                 existingInterfaceInfo.Inheritance @ interfaceInfo.Inheritance
                                 |> List.distinct
+                            // `interface SeriesModel {}` merged with `class SeriesModel<Opt>`
+                            TypeParameters =
+                                if
+                                    interfaceInfo.TypeParameters.Length > existingInterfaceInfo.TypeParameters.Length
+                                then
+                                    interfaceInfo.TypeParameters
+                                else
+                                    existingInterfaceInfo.TypeParameters
                         }
 
                     result.[index] <- FSharpType.Interface merged
@@ -137,6 +235,11 @@ let private mergeTypes (types: FSharpType list) =
         | FSharpType.Union _
         | FSharpType.Delegate _ ->
             if not (result.Contains typ) then
+                result.Add(typ)
+
+        // The interface re-exported as a class is the same class
+        | FSharpType.Class classInfo ->
+            if aliases.Add($"class/{classInfo.Name}") then
                 result.Add(typ)
 
         | _ -> result.Add(typ)

@@ -47544,10 +47544,10 @@ EventEmitter.defaultMaxListeners = $0"""
             interface end
 
         type DefaultEventMap =
-            obj
+            ResizeArray<obj>
 
         type AnyRest =
-            ResizeArray<obj>
+            ResizeArray<ResizeArray<obj>>
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -157633,7 +157633,7 @@ URL.parse($0, $1)"""
             abstract member target: Node.web_globals_events.EventTarget option with get
             abstract member timeStamp: float with get
             abstract member ``type``: string with get
-            abstract member composedPath: unit -> Node.web_globals_events.EventTarget option
+            abstract member composedPath: unit -> ResizeArray<Node.web_globals_events.EventTarget option>
             abstract member initEvent: ``type``: string * ?bubbles: bool * ?cancelable: bool -> unit
             abstract member preventDefault: unit -> unit
             abstract member stopImmediatePropagation: unit -> unit
@@ -168540,7 +168540,7 @@ FileReader.DONE"""
                 delegate of opts: UndiciTypes.mock_interceptor.MockInterceptor_.MockResponseCallbackOptions -> U3<'TData, Node.Buffer, string>
 
             type MockReplyOptionsCallback<'TData> =
-                delegate of opts: UndiciTypes.mock_interceptor.MockInterceptor_.MockResponseCallbackOptions -> MockReplyOptionsCallback.ReturnType
+                delegate of opts: UndiciTypes.mock_interceptor.MockInterceptor_.MockResponseCallbackOptions -> MockReplyOptionsCallback.ReturnType<'TData>
 
             type MockDispatch<'TData> =
                 MockDispatch<'TData, Exception>
@@ -168610,7 +168610,7 @@ FileReader.DONE"""
 
                 [<Global>]
                 [<AllowNullLiteral>]
-                type ReturnType
+                type ReturnType<'TData>
                     private () =
 
                     [<ParamObject; Emit("$0")>]

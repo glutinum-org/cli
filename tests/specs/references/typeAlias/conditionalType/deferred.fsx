@@ -5,7 +5,7 @@ open Fable.Core.JsInterop
 open System
 
 type DefaultEventMap =
-    obj
+    ResizeArray<obj>
 
 [<AllowNullLiteral>]
 [<Interface>]

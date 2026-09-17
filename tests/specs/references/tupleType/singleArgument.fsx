@@ -8,7 +8,7 @@ open System
 [<Erase>]
 type Exports =
     [<Import("transformation", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member transformation (coefficients: float) : unit = nativeOnly
+    static member transformation (coefficients: ResizeArray<float>) : unit = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

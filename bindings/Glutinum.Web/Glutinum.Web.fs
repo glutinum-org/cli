@@ -86137,13 +86137,13 @@ module Web =
 
     [<RequireQualifiedAccess>]
     [<Erase(CaseRules.None)>]
-    type OptionalPostfixToken =
+    type OptionalPostfixToken<'T> =
         | [<CompiledName("")>] _EMPTY_
         | Case1 of string
 
     [<RequireQualifiedAccess>]
     [<Erase(CaseRules.None)>]
-    type OptionalPrefixToken =
+    type OptionalPrefixToken<'T> =
         | [<CompiledName("")>] _EMPTY_
         | Case1 of string
 
@@ -88344,6 +88344,12 @@ module Web =
 
     type QueuingStrategySize =
         QueuingStrategySize<obj>
+
+    type OptionalPostfixToken =
+        OptionalPostfixToken<string>
+
+    type OptionalPrefixToken =
+        OptionalPrefixToken<string>
 
     module AudioWorkletNodeOptions =
 

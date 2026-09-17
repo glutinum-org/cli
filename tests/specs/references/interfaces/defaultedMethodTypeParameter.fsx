@@ -23,7 +23,6 @@ type ParentNode =
     abstract member querySelectorAll<'E>: selectors: string -> ResizeArray<'E>
     abstract member querySelectorAll: selectors: string -> ResizeArray<Element>
     abstract member closest<'K>: unit -> 'K
-    abstract member closest: unit -> string
 
 [<AllowNullLiteral>]
 [<Interface>]

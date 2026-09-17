@@ -74,7 +74,7 @@ type TypeLiteralsMemory() =
     let exposed =
         Dictionary<string, ResizeArray<(FSharpType * ResizeArray<FSharpType> * string) option>>()
 
-    let lastIndex = Dictionary<string, int>()
+    let assigned = Dictionary<string, string * int>()
     let pending = Dictionary<string, string>()
 
     member _.GetTypeName(fullName: string, currentScopeName: string) =
@@ -88,7 +88,6 @@ type TypeLiteralsMemory() =
 
         let index = types.Count
         types.Add None
-        lastIndex.[fullName] <- index
 
         let name =
             if index = 0 then
@@ -96,6 +95,7 @@ type TypeLiteralsMemory() =
             else
                 withCountSuffix currentScopeName index
 
+        assigned.[$"{fullName}/{name}"] <- (fullName, index)
         pending.[name] <- fullName
         name
 
@@ -126,24 +126,18 @@ type TypeLiteralsMemory() =
                 match existing with
                 | Some index when index < last ->
                     types.RemoveAt last
-                    lastIndex.[fullName] <- index
+                    assigned.[$"{fullName}/{name}"] <- (fullName, index)
                     true
                 | _ ->
                     types.[last] <- Some(signature, root, modulePath)
                     false
 
-    member private _.GetReference(fullName: string, prefixName: string) =
-        match lastIndex.TryGetValue fullName with
-        | true, 0 -> prefixName
-        | true, index -> withCountSuffix prefixName index
-        // By safety, if we don't find a match in the memory, we return the name as is
-        | false, _ -> prefixName
-
-    member this.GetReferenceTypeName(fullName: string, currentScopeName: string) =
-        this.GetReference(fullName, currentScopeName)
-
-    member this.GetFullTypeNameReference(fullName: string, currentScopeName: string) =
-        this.GetReference(fullName, fullName)
+    /// The qualified name to reference the type named `name` by `GetTypeName` in `fullName`
+    member _.ReferenceName(fullName: string, name: string) =
+        match assigned.TryGetValue $"{fullName}/{name}" with
+        | true, (fullName, 0) -> fullName
+        | true, (fullName, index) -> withCountSuffix fullName index
+        | false, _ -> fullName
 
 /// Where the top-level declarations come from at runtime
 [<RequireQualifiedAccess>]
@@ -555,6 +549,8 @@ let private transformPrimitive (gluePrimitive: GluePrimitive) : FSharpPrimitive 
 let private transformTupleType (context: TransformContext) (glueTypes: GlueType list) : FSharpType =
     match glueTypes with
     | [] -> FSharpType.Object
+    // `[S1]` is an array of one element, F# has no tuple of one
+    | [ single ] -> transformType context single |> FSharpType.ResizeArray
     | _ -> glueTypes |> List.map (transformType context) |> FSharpType.Tuple
 
 module TypeLiteral =
@@ -694,6 +690,7 @@ module private UtilityType =
                     Name = name
                     Cases = cases
                     IsOptional = false
+                    TypeParameters = []
                 }
                 : FSharpUnion)
                 |> FSharpType.Union
@@ -776,11 +773,7 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
 
                 tryOptimizeUnionType context name others |> Option.iter context.ExposeType
 
-                let fullName =
-                    context.TypeLiteralsMemory.GetFullTypeNameReference(
-                        context.FullName,
-                        context.CurrentScopeName
-                    )
+                let fullName = context.TypeLiteralsMemory.ReferenceName(context.FullName, name)
 
                 ({
                     Name = fullName
@@ -808,6 +801,7 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
                     Name = name
                     Cases = cases
                     IsOptional = isOptional
+                    TypeParameters = []
                 }
                 |> FSharpType.Union
 
@@ -816,6 +810,22 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
         Conditionals.isConditionalAlias typeReference.FullName
         ->
         FSharpType.Object
+
+    // `formatRelative: FormatRelativeFn` where `type FormatRelativeFn = <T>(...) => ...` is a
+    // generic delegate, a property can't be generic
+    | GlueType.TypeReference typeReference when
+        typeReference.TypeArguments.IsEmpty
+        && not (Conditionals.genericDelegateTypeParameters typeReference.FullName).IsEmpty
+        ->
+        let ownNames = Conditionals.genericDelegateTypeParameters typeReference.FullName
+
+        transformType
+            context
+            (GlueType.TypeReference
+                { typeReference with
+                    TypeArguments =
+                        ownNames |> List.map (fun _ -> GlueType.Primitive GluePrimitive.Any)
+                })
 
     | GlueType.TypeReference typeReference ->
         ({
@@ -911,13 +921,12 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
                 )
                 |> transformTypeParameters context
 
+            let name =
+                context.TypeLiteralsMemory.GetTypeName(context.FullName, context.CurrentScopeName)
+
             ({
                 XmlDoc = []
-                Name =
-                    context.TypeLiteralsMemory.GetTypeName(
-                        context.FullName,
-                        context.CurrentScopeName
-                    )
+                Name = name
                 TypeParameters = typParameters.TypeParameters
                 Parameters =
                     paremeters
@@ -926,7 +935,11 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
                         >> TypeParameter.mapFsharpParameter typParameters.SealedTypes
                     )
                     |> requiredBeforeParamArray
-                ReturnType = transformCallbackReturnType context functionTypeInfo.Type
+                // The anonymous type a delegate returns is named after the delegate otherwise
+                ReturnType =
+                    transformCallbackReturnType
+                        (context.PushScope "ReturnType")
+                        functionTypeInfo.Type
             }
             : FSharpDelegate)
             |> FSharpType.Delegate
@@ -949,11 +962,7 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
 
             ({
                 Attributes = []
-                Name =
-                    context.TypeLiteralsMemory.GetFullTypeNameReference(
-                        context.FullName,
-                        context.CurrentScopeName
-                    )
+                Name = context.TypeLiteralsMemory.ReferenceName(context.FullName, name)
                 TypeParameters =
                     typParameters.TypeParameters
                     |> List.map (fun typeParameter ->
@@ -999,26 +1008,29 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
 
         let typeParameterNames =
             typeLiteralInfo.Members
-            |> List.choose (fun m ->
+            |> List.collect (fun m ->
                 match m with
                 | GlueMember.MethodSignature { Type = typ }
                 | GlueMember.Method { Type = typ }
-                | GlueMember.Property { Type = typ }
-                | GlueMember.GetAccessor { Type = typ }
-                | GlueMember.SetAccessor { ArgumentType = typ }
                 | GlueMember.CallSignature { Type = typ }
-                | GlueMember.IndexSignature { Type = typ }
                 | GlueMember.ConstructSignature { Type = typ } ->
                     match typ with
-                    | GlueType.TypeParameter name -> Some name
-                    | _ -> None
+                    | GlueType.TypeParameter name -> [ name ]
+                    | _ -> []
+                | GlueMember.Property _
+                | GlueMember.GetAccessor _
+                | GlueMember.SetAccessor _
+                | GlueMember.IndexSignature _ -> memberTypeParameterNames m
             )
             |> List.distinct
 
-        if isParamObjectCandidate then
-            let name =
+        let name =
+            if isParamObjectCandidate then
                 context.TypeLiteralsMemory.GetTypeName(context.FullName, context.CurrentScopeName)
+            else
+                context.CurrentScopeName
 
+        if isParamObjectCandidate then
             transformParamObjectClass context name [] typeLiteralInfo.Members
             |> FSharpType.Class
             |> context.ExposeType
@@ -1027,7 +1039,7 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
             {
                 XmlDoc = []
                 Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
-                Name = context.CurrentScopeName
+                Name = name
                 OriginalName = "" // This is a Fake type so we don't have an original name
                 TypeParameters =
                     typeParameterNames
@@ -1046,11 +1058,7 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
             |> FSharpType.Interface
             |> context.ExposeType
 
-        let name =
-            context.TypeLiteralsMemory.GetFullTypeNameReference(
-                context.FullName,
-                context.CurrentScopeName
-            )
+        let name = context.TypeLiteralsMemory.ReferenceName(context.FullName, name)
 
         // Get fullname
         // Store type in the exposed types memory
@@ -1131,14 +1139,13 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
             let typeParameterNames =
                 members |> List.collect memberTypeParameterNames |> List.distinct
 
+            let name =
+                context.TypeLiteralsMemory.GetTypeName(context.FullName, context.CurrentScopeName)
+
             {
                 XmlDoc = []
                 Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
-                Name =
-                    context.TypeLiteralsMemory.GetTypeName(
-                        context.FullName,
-                        context.CurrentScopeName
-                    )
+                Name = name
                 OriginalName = context.CurrentScopeName
                 TypeParameters =
                     typeParameterNames
@@ -1153,11 +1160,7 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
             |> context.ExposeType
 
             ({
-                Name =
-                    context.TypeLiteralsMemory.GetFullTypeNameReference(
-                        context.FullName,
-                        context.CurrentScopeName
-                    )
+                Name = context.TypeLiteralsMemory.ReferenceName(context.FullName, name)
                 TypeParameters =
                     typeParameterNames
                     |> List.map (FSharpType.TypeParameter >> FSharpTypeParameter.FSharpType)
@@ -1168,24 +1171,41 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
     | GlueType.UtilityType utilityType ->
         match utilityType with
         | GlueUtilityType.Partial interfaceInfo ->
-            transformInterface context interfaceInfo
-            |> Interface.makePartial (
+            let name =
                 context.TypeLiteralsMemory.GetTypeName(context.FullName, context.CurrentScopeName)
-            )
+
+            let freeTypeParameterNames =
+                if interfaceInfo.TypeParameters.IsEmpty then
+                    interfaceInfo.Members |> List.collect memberTypeParameterNames |> List.distinct
+                else
+                    []
+
+            let interfaceInfo =
+                { interfaceInfo with
+                    TypeParameters =
+                        interfaceInfo.TypeParameters
+                        @ (freeTypeParameterNames
+                           |> List.map (fun name ->
+                               {
+                                   Name = name
+                                   Constraint = None
+                                   Default = None
+                               }
+                           ))
+                }
+
+            transformInterface context interfaceInfo
+            |> Interface.makePartial name
             |> FSharpType.Interface
             |> context.ExposeType
 
             // Get fullname
             // Store type in the exposed types memory
             ({
-                Name =
-                    context.TypeLiteralsMemory.GetFullTypeNameReference(
-                        context.FullName,
-                        context.CurrentScopeName
-                    )
+                Name = context.TypeLiteralsMemory.ReferenceName(context.FullName, name)
                 FullName = context.FullName
                 ModulePath = []
-                TypeArguments = []
+                TypeArguments = freeTypeParameterNames |> List.map FSharpType.TypeParameter
                 Type = FSharpType.Discard
             }
             : FSharpTypeReference)
@@ -1195,28 +1215,44 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
             let name =
                 context.TypeLiteralsMemory.GetTypeName(context.FullName, context.CurrentScopeName)
 
-            transformRecord context name [] recordInfo |> context.ExposeType
+            let freeTypeParameterNames =
+                typeParameterNames recordInfo.KeyType @ typeParameterNames recordInfo.ValueType
+                |> List.distinct
 
-            let n =
-                context.TypeLiteralsMemory.GetFullTypeNameReference(
-                    context.FullName,
-                    context.CurrentScopeName
+            let typeParameters =
+                freeTypeParameterNames
+                |> List.map (fun name ->
+                    {
+                        Name = name
+                        Constraint = None
+                        Default = None
+                    }
                 )
 
-            ({ Name = n; TypeParameters = [] }: FSharpMapped) |> FSharpType.Mapped
+            transformRecord context name typeParameters recordInfo |> context.ExposeType
+
+            let n = context.TypeLiteralsMemory.ReferenceName(context.FullName, name)
+
+            ({
+                Name = n
+                TypeParameters =
+                    freeTypeParameterNames
+                    |> List.map (FSharpType.TypeParameter >> FSharpTypeParameter.FSharpType)
+            }
+            : FSharpMapped)
+            |> FSharpType.Mapped
 
         | GlueUtilityType.ReturnType innerType
         | GlueUtilityType.ThisParameterType innerType -> transformType context innerType
 
         | GlueUtilityType.Omit members ->
+            let name =
+                context.TypeLiteralsMemory.GetTypeName(context.FullName, context.CurrentScopeName)
+
             {
                 XmlDoc = []
                 Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
-                Name =
-                    context.TypeLiteralsMemory.GetTypeName(
-                        context.FullName,
-                        context.CurrentScopeName
-                    )
+                Name = name
                 OriginalName = context.CurrentScopeName
                 TypeParameters = []
                 Members = TransformMembers.toFSharpMember context members
@@ -1226,11 +1262,7 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
             |> context.ExposeType
 
             ({
-                Name =
-                    context.TypeLiteralsMemory.GetFullTypeNameReference(
-                        context.FullName,
-                        context.CurrentScopeName
-                    )
+                Name = context.TypeLiteralsMemory.ReferenceName(context.FullName, name)
                 TypeParameters = []
             }
             : FSharpMapped)
@@ -1255,16 +1287,30 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
         if members.IsEmpty then
             FSharpType.Object
         else
+            let name =
+                context.TypeLiteralsMemory.GetTypeName(context.FullName, context.CurrentScopeName)
+
+            // `{ [key in KEY]?: T }` inside `createHashMap<T, KEY>` is generic
+            let freeTypeParameterNames =
+                mappedType.Type
+                |> Option.map typeParameterNames
+                |> Option.defaultValue []
+                |> List.filter (fun typeParameterName ->
+                    typeParameterName <> mappedType.TypeParameter.Name
+                )
+                |> List.distinct
+
             {
                 XmlDoc = []
                 Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
-                Name =
-                    context.TypeLiteralsMemory.GetTypeName(
-                        context.FullName,
-                        context.CurrentScopeName
-                    )
+                Name = name
                 OriginalName = context.CurrentScopeName
-                TypeParameters = []
+                TypeParameters =
+                    freeTypeParameterNames
+                    |> List.map (fun name ->
+                        FSharpTypeParameterInfo.Create(name)
+                        |> FSharpTypeParameter.FSharpTypeParameter
+                    )
                 Members = members
                 Inheritance = []
             }
@@ -1272,12 +1318,10 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
             |> context.ExposeType
 
             ({
-                Name =
-                    context.TypeLiteralsMemory.GetFullTypeNameReference(
-                        context.FullName,
-                        context.CurrentScopeName
-                    )
-                TypeParameters = []
+                Name = context.TypeLiteralsMemory.ReferenceName(context.FullName, name)
+                TypeParameters =
+                    freeTypeParameterNames
+                    |> List.map (FSharpType.TypeParameter >> FSharpTypeParameter.FSharpType)
             }
             : FSharpMapped)
             |> FSharpType.Mapped
@@ -1981,10 +2025,12 @@ module private TransformMembers =
             )
             |> Map.ofList
 
+        // `getModel<T = unknown>(): Model<T>`: F# rejects two parameterless methods differing
+        // by their generic arity only
         let isUsed (substitutions: Map<string, GlueType>) (parameters: GlueParameter list) typ =
             substitutions
             |> Map.exists (fun name _ ->
-                mentionsTypeParameter name typ
+                (not parameters.IsEmpty && mentionsTypeParameter name typ)
                 || parameters
                    |> List.exists (fun parameter -> mentionsTypeParameter name parameter.Type)
             )
@@ -2512,19 +2558,19 @@ let private transformParamObjectClass
 
     let typeParameterNames =
         members
-        |> List.choose (fun m ->
+        |> List.collect (fun m ->
             match m with
             | GlueMember.MethodSignature { Type = typ }
             | GlueMember.Method { Type = typ }
-            | GlueMember.Property { Type = typ }
-            | GlueMember.GetAccessor { Type = typ }
-            | GlueMember.SetAccessor { ArgumentType = typ }
             | GlueMember.CallSignature { Type = typ }
-            | GlueMember.IndexSignature { Type = typ }
             | GlueMember.ConstructSignature { Type = typ } ->
                 match typ with
-                | GlueType.TypeParameter name -> Some name
-                | _ -> None
+                | GlueType.TypeParameter name -> [ name ]
+                | _ -> []
+            | GlueMember.Property _
+            | GlueMember.GetAccessor _
+            | GlueMember.SetAccessor _
+            | GlueMember.IndexSignature _ -> memberTypeParameterNames m
         )
         |> List.distinct
 
@@ -3579,6 +3625,27 @@ module Conditionals =
 
     let isConditionalAlias (fullName: string) = aliases.ContainsKey fullName
 
+    /// The type parameters of the function type `type Fn = <T>(value: T) => T` aliases
+    let genericDelegateTypeParameters (fullName: string) : string list =
+        match allAliases.TryGetValue fullName with
+        | true, alias when alias.TypeParameters.IsEmpty ->
+            match alias.Type with
+            | GlueType.FunctionType functionType ->
+                functionType.TypeParameters
+                |> List.filter (fun typeParameter ->
+                    List.contains typeParameter.Name functionType.OwnTypeParameterNames
+                    // `<T extends object>` is sealed to `obj`, the delegate is not generic
+                    && (
+                        match typeParameter.Constraint with
+                        | None
+                        | Some(GlueType.TypeReference _) -> true
+                        | Some _ -> false
+                    )
+                )
+                |> List.map _.Name
+            | _ -> []
+        | _ -> []
+
     /// The members of an interface, `keyof T` and `T[K]` with `T` known
     let private tryMembers (typeReference: GlueTypeReference) =
         match interfaces.TryGetValue typeReference.FullName with
@@ -4217,6 +4284,7 @@ let private transformEnum (glueEnum: GlueEnum) : FSharpType =
             Name = Naming.sanitizeTypeName glueEnum.Name
             Cases = stringValues |> List.map transformMembers |> List.distinct
             IsOptional = false
+            TypeParameters = []
         }
         |> FSharpType.Union
     | _ ->
@@ -4298,6 +4366,7 @@ module TypeAliasDeclaration =
                 Name = Naming.sanitizeTypeName aliasName
                 Cases = cases
                 IsOptional = false
+                TypeParameters = []
             }
             : FSharpUnion)
             |> FSharpType.Union
@@ -4309,6 +4378,15 @@ module TypeAliasDeclaration =
         (glueType: GlueType)
         : FSharpType
         =
+        // `keyof ScaleTypeRegistry` where the interface only inherits its members
+        let glueType =
+            match glueType with
+            | GlueType.Interface info ->
+                ParamObjectCandidate.tryResolveMembers context.TypeMemory info
+                |> Option.map (fun members -> GlueType.Interface { info with Members = members })
+                |> Option.defaultValue glueType
+            | _ -> glueType
+
         match tryTransformKeyOf aliasName glueType with
         | Some typ -> typ
         | None ->
@@ -4358,6 +4436,7 @@ module TypeAliasDeclaration =
                 Name = typeAliasName
                 Cases = [ case ]
                 IsOptional = false
+                TypeParameters = []
             }
             : FSharpUnion)
             |> FSharpType.Union
@@ -4990,6 +5069,7 @@ let private tryOptimizeUnionType
             Name = typeName
             Cases = cases
             IsOptional = false
+            TypeParameters = []
         }
         : FSharpUnion)
         |> FSharpType.Union
@@ -5022,6 +5102,7 @@ let private tryOptimizeUnionType
                 Name = typeName
                 Cases = literalCases @ fieldCases
                 IsOptional = false
+                TypeParameters = []
             }
             : FSharpUnion)
             |> FSharpType.Union
@@ -5050,6 +5131,7 @@ let private tryOptimizeUnionType
                 Name = typeName
                 Cases = literalCases @ transformFieldCases literalCases
                 IsOptional = false
+                TypeParameters = []
             }
             : FSharpUnion)
             |> FSharpType.Union
@@ -5119,7 +5201,14 @@ let private transformMappedTypeMembers (context: TransformContext) (mappedType: 
                 Type =
                     match valueType with
                     | GlueType.IndexedAccessType _ -> GlueType.Primitive GluePrimitive.Any
-                    | _ -> valueType
+                    | _ ->
+                        substituteTypeParameters
+                            (Map.ofList
+                                [
+                                    mappedType.TypeParameter.Name,
+                                    GlueType.Primitive GluePrimitive.String
+                                ])
+                            valueType
                 IsReadOnly = false
             }
             : GlueIndexSignature)
@@ -5189,60 +5278,11 @@ let private transformReadOnly (context: TransformContext) (glueType: GlueType) =
     // Ignore readonly for other types
     | _ -> transformType context glueType
 
-let rec private substituteTypeParameters
-    (substitutions: Map<string, GlueType>)
-    (glueType: GlueType)
-    : GlueType
-    =
-    let substitute = substituteTypeParameters substitutions
+let private substituteTypeParameters (substitutions: Map<string, GlueType>) (glueType: GlueType) =
+    GlueSubstitution.substitute substitutions glueType
 
-    match glueType with
-    | GlueType.TypeParameter name ->
-        match Map.tryFind name substitutions with
-        | Some replacement -> replacement
-        | None -> glueType
-    | GlueType.TypeReference typeReference ->
-        GlueType.TypeReference
-            { typeReference with
-                TypeArguments = typeReference.TypeArguments |> List.map substitute
-            }
-    | GlueType.Union(GlueTypeUnion cases) ->
-        GlueType.Union(GlueTypeUnion(cases |> List.map substitute))
-    | GlueType.Array elementType -> GlueType.Array(substitute elementType)
-    | GlueType.ReadOnly innerType -> GlueType.ReadOnly(substitute innerType)
-    | GlueType.OptionalType innerType -> GlueType.OptionalType(substitute innerType)
-    | GlueType.TupleType elements -> GlueType.TupleType(elements |> List.map substitute)
-    | GlueType.FunctionType functionType ->
-        GlueType.FunctionType
-            { functionType with
-                Parameters = functionType.Parameters |> List.map (substituteParameter substitutions)
-                Type = substitute functionType.Type
-            }
-    | GlueType.ConditionalType conditionalType ->
-        GlueType.ConditionalType
-            {
-                CheckType = substitute conditionalType.CheckType
-                ExtendsType = substitute conditionalType.ExtendsType
-                TrueType = substitute conditionalType.TrueType
-                FalseType = substitute conditionalType.FalseType
-            }
-    | GlueType.KeyOf innerType -> GlueType.KeyOf(substitute innerType)
-    | GlueType.IndexedAccessType indexedAccess ->
-        GlueType.IndexedAccessType
-            {
-                ObjectType = substitute indexedAccess.ObjectType
-                IndexType = substitute indexedAccess.IndexType
-            }
-    | _ -> glueType
-
-let private substituteParameter
-    (substitutions: Map<string, GlueType>)
-    (parameter: GlueParameter)
-    : GlueParameter
-    =
-    { parameter with
-        Type = substituteTypeParameters substitutions parameter.Type
-    }
+let private substituteParameter (substitutions: Map<string, GlueType>) (parameter: GlueParameter) =
+    GlueSubstitution.substituteParameter substitutions parameter
 
 /// `type Key = string | Key[]`: an F# abbreviation can't refer to itself
 let rec private replaceSelfReference (name: string) (glueType: GlueType) : GlueType =
@@ -5296,6 +5336,12 @@ let private transformTypeAliasDeclaration
         match replaceSelfReference glueTypeAliasDeclaration.Name glueTypeAliasDeclaration.Type with
         | GlueType.Union(GlueTypeUnion cases) as unionType ->
             match tryOptimizeUnionType context typeAliasName cases with
+            // `type Slot<T> = FacetReader<T> | StateField<T> | "doc"` is generic
+            | Some(FSharpType.Union unionInfo) ->
+                FSharpType.Union
+                    { unionInfo with
+                        TypeParameters = declarationTypeParameters.Value.TypeParameters
+                    }
             | Some typ -> typ
             | None ->
                 let isNullable =
@@ -5658,6 +5704,18 @@ let private transformReExport
     let declared =
         match reExport.Declaration with
         | GlueType.Interface info -> Some(info.Name, info.TypeParameters)
+        // `type Fn = <T>(value: T) => T` is a generic delegate
+        | GlueType.TypeAliasDeclaration({
+                                            Type = GlueType.FunctionType {
+                                                                             OwnTypeParameterNames = ownNames
+                                                                             TypeParameters = functionTypeParameters
+                                                                         }
+                                        } as info) when not ownNames.IsEmpty ->
+            let own =
+                functionTypeParameters
+                |> List.filter (fun typeParameter -> List.contains typeParameter.Name ownNames)
+
+            Some(info.Name, info.TypeParameters @ own)
         | GlueType.TypeAliasDeclaration info -> Some(info.Name, info.TypeParameters)
         | GlueType.ClassDeclaration info -> Some(info.Name, info.TypeParameters)
         | GlueType.Enum info -> Some(info.Name, [])

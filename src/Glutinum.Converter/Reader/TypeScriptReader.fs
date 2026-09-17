@@ -42,6 +42,8 @@ type TypeScriptReader(checker: Ts.TypeChecker, ?packageContext: PackageContext) 
 
         member _.PackageContext = packageContext
 
+        member val SyntheticContext: Ts.Node option = None with get, set
+
         member this.ReadExportDeclaration(exportDeclaration: Ts.ExportDeclaration) : GlueType list =
             readExportDeclaration this exportDeclaration
 

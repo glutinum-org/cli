@@ -306,17 +306,82 @@ let resolveAlias (checker: Ts.TypeChecker) (symbol: Ts.Symbol) =
     | _ -> Some symbol
 
 /// Name of the declaration behind an `import { X as Y }` alias, `None` for a non-renamed symbol
+/// `Omit<LabelOption, "rotate">` where `interface LabelOption<T = Params>`: `T` is `Params`
+let defaultTypeArguments
+    (reader: ITypeScriptReader)
+    (typeNode: Ts.TypeNode)
+    : Collections.Map<string, GlueType>
+    =
+    if typeNode.kind <> Ts.SyntaxKind.TypeReference then
+        Collections.Map.empty
+    else
+        let typeReferenceNode = typeNode :?> Ts.TypeReferenceNode
+
+        let typeArguments =
+            match typeReferenceNode.typeArguments with
+            | Some typeArguments -> typeArguments |> Seq.toList
+            | None -> []
+
+        symbolAtLocation reader.checker !!typeReferenceNode.typeName
+        |> Option.bind (resolveAlias reader.checker)
+        |> Option.bind (fun symbol -> symbol.declarations)
+        |> Option.bind Seq.tryHead
+        |> Option.bind (fun declaration ->
+            let typeParameters: ResizeArray<Ts.TypeParameterDeclaration> option =
+                declaration?typeParameters
+
+            typeParameters
+        )
+        |> Option.map (fun typeParameters ->
+            typeParameters
+            |> Seq.toList
+            |> List.mapi (fun index typeParameter ->
+                let argument =
+                    typeArguments
+                    |> List.tryItem index
+                    |> Option.map (Some >> reader.ReadTypeNode)
+                    |> Option.orElse (typeParameter.``default`` |> Option.map reader.ReadTypeNode)
+
+                identifierText typeParameter.name, argument
+            )
+            |> List.choose (fun (name, argument) ->
+                argument |> Option.map (fun argument -> name, argument)
+            )
+            |> Collections.Map.ofList
+        )
+        |> Option.defaultValue Collections.Map.empty
+
+/// `export default class DatasetController`: the name of the declaration behind the `default` symbol
+let declaredName (symbol: Ts.Symbol) =
+    symbol.declarations
+    |> Option.bind Seq.tryHead
+    |> Option.bind (fun declaration ->
+        match declaration.kind with
+        | Ts.SyntaxKind.ExportAssignment ->
+            let expression: Ts.Node = (declaration :?> Ts.ExportAssignment).expression
+
+            if expression.kind = Ts.SyntaxKind.Identifier then
+                Some(identifierText expression)
+            else
+                None
+        | _ ->
+            let name: Ts.Node = declaration?name
+
+            if isNull name then
+                None
+            else
+                Some(identifierText name)
+    )
+
 let importedName (checker: Ts.TypeChecker) (symbol: Ts.Symbol) =
     match symbol.flags with
     | HasSymbolFlags Ts.SymbolFlags.Alias ->
         match resolveAlias checker symbol with
-        | Some target when
-            target.name <> symbol.name
-            && target.name <> "default"
-            && target.name <> "export="
-            ->
+        | Some target when target.name = "default" -> declaredName target
+        | Some target when target.name <> symbol.name && target.name <> "export=" ->
             Some target.name
         | _ -> None
+    | _ when symbol.name = "default" -> declaredName symbol
     | _ -> None
 
 let private fileOfDeclaration (declaration: Ts.Node) =

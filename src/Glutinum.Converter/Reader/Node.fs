@@ -57,7 +57,12 @@ let readNode (reader: ITypeScriptReader) (node: Ts.Node) : GlueType =
     // Re-exports are read by `Read.readPackages` in package mode
     | Ts.SyntaxKind.ExportDeclaration
     | Ts.SyntaxKind.ImportEqualsDeclaration
-    | Ts.SyntaxKind.EmptyStatement -> GlueType.Discard
+    | Ts.SyntaxKind.EmptyStatement
+    // The module object of `export * from "./file"`
+    | Ts.SyntaxKind.SourceFile -> GlueType.Discard
+
+    // `import type { Locale } from "./locale"` reached through an alias
+    | Ts.SyntaxKind.ImportSpecifier -> GlueType.Discard
 
     | Ts.SyntaxKind.BooleanKeyword -> reader.ReadTypeNode(node :?> Ts.TypeNode)
 

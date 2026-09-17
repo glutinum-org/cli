@@ -112,6 +112,7 @@ type FSharpUnion =
         Name: string
         Cases: FSharpUnionCase list
         IsOptional: bool
+        TypeParameters: FSharpTypeParameter list
     }
 
 type FSharpModule =

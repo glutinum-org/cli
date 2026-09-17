@@ -1007,7 +1007,10 @@ let rec private print (printer: Printer) (fsharpTypes: FSharpType list) =
         | FSharpType.Union unionInfo ->
             printAttributes printer unionInfo.Attributes
 
-            printer.Write($"type {unionInfo.Name} =")
+            printer.Write(
+                $"type {printTypeNameWithTypeParameters unionInfo.Name unionInfo.TypeParameters} ="
+            )
+
             printer.NewLine
             printer.Indent
 

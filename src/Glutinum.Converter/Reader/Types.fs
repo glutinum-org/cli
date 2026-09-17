@@ -174,6 +174,9 @@ type ITypeScriptReader =
 
     abstract TypeMemory: ResizeArray<GlueType> with get
 
+    /// The source node a type synthesized by `typeToTypeNode` is read for, it has no parent itself
+    abstract SyntheticContext: Ts.Node option with get, set
+
     abstract ReadNode: node: Ts.Node -> GlueType
 
     abstract ReadTypeNode: typNode: Ts.TypeNode -> GlueType

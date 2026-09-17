@@ -530,3 +530,121 @@ and GlueReExport =
         /// F# modules qualifying the declaration, empty when it lives at the top level
         ModulePath: string list
     }
+
+/// Replace the type parameters of a declaration by type arguments
+module GlueSubstitution =
+
+    let rec substitute (substitutions: Map<string, GlueType>) (glueType: GlueType) : GlueType =
+        let substitute = substitute substitutions
+
+        match glueType with
+        | GlueType.TypeParameter name ->
+            match Map.tryFind name substitutions with
+            | Some replacement -> replacement
+            | None -> glueType
+        | GlueType.TypeReference typeReference ->
+            GlueType.TypeReference
+                { typeReference with
+                    TypeArguments = typeReference.TypeArguments |> List.map substitute
+                }
+        | GlueType.Union(GlueTypeUnion cases) ->
+            GlueType.Union(GlueTypeUnion(cases |> List.map substitute))
+        | GlueType.Array elementType -> GlueType.Array(substitute elementType)
+        | GlueType.ReadOnly innerType -> GlueType.ReadOnly(substitute innerType)
+        | GlueType.OptionalType innerType -> GlueType.OptionalType(substitute innerType)
+        | GlueType.TupleType elements -> GlueType.TupleType(elements |> List.map substitute)
+        | GlueType.NamedTupleType namedTuple ->
+            GlueType.NamedTupleType
+                { namedTuple with
+                    Type = substitute namedTuple.Type
+                }
+        | GlueType.FunctionType functionType ->
+            GlueType.FunctionType
+                { functionType with
+                    Parameters =
+                        functionType.Parameters |> List.map (substituteParameter substitutions)
+                    Type = substitute functionType.Type
+                }
+        | GlueType.ConditionalType conditionalType ->
+            GlueType.ConditionalType
+                {
+                    CheckType = substitute conditionalType.CheckType
+                    ExtendsType = substitute conditionalType.ExtendsType
+                    TrueType = substitute conditionalType.TrueType
+                    FalseType = substitute conditionalType.FalseType
+                }
+        | GlueType.KeyOf innerType -> GlueType.KeyOf(substitute innerType)
+        | GlueType.IndexedAccessType indexedAccess ->
+            GlueType.IndexedAccessType
+                {
+                    ObjectType = substitute indexedAccess.ObjectType
+                    IndexType = substitute indexedAccess.IndexType
+                }
+        | GlueType.IntersectionType members ->
+            GlueType.IntersectionType(members |> List.map (substituteMember substitutions))
+        | GlueType.TypeLiteral typeLiteral ->
+            GlueType.TypeLiteral
+                { typeLiteral with
+                    Members = typeLiteral.Members |> List.map (substituteMember substitutions)
+                }
+        | _ -> glueType
+
+    and substituteParameter (substitutions: Map<string, GlueType>) (parameter: GlueParameter) =
+        { parameter with
+            Type = substitute substitutions parameter.Type
+        }
+
+    and substituteMember
+        (substitutions: Map<string, GlueType>)
+        (glueMember: GlueMember)
+        : GlueMember
+        =
+        let substitute = substitute substitutions
+        let parameters = List.map (substituteParameter substitutions)
+
+        match glueMember with
+        | GlueMember.Property info ->
+            GlueMember.Property
+                { info with
+                    Type = substitute info.Type
+                }
+        | GlueMember.Method info ->
+            GlueMember.Method
+                { info with
+                    Parameters = parameters info.Parameters
+                    Type = substitute info.Type
+                }
+        | GlueMember.MethodSignature info ->
+            GlueMember.MethodSignature
+                { info with
+                    Parameters = parameters info.Parameters
+                    Type = substitute info.Type
+                }
+        | GlueMember.GetAccessor info ->
+            GlueMember.GetAccessor
+                { info with
+                    Type = substitute info.Type
+                }
+        | GlueMember.SetAccessor info ->
+            GlueMember.SetAccessor
+                { info with
+                    ArgumentType = substitute info.ArgumentType
+                }
+        | GlueMember.CallSignature info ->
+            GlueMember.CallSignature
+                { info with
+                    Parameters = parameters info.Parameters
+                    Type = substitute info.Type
+                }
+        | GlueMember.IndexSignature info ->
+            GlueMember.IndexSignature
+                { info with
+                    Parameters = parameters info.Parameters
+                    Type = substitute info.Type
+                }
+        | GlueMember.ConstructSignature info ->
+            GlueMember.ConstructSignature
+                { info with
+                    Parameters = parameters info.Parameters
+                    Type = substitute info.Type
+                }
