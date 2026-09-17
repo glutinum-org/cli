@@ -813,7 +813,7 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
             ({
                 Parameters =
                     paremeters |> List.map (transformParameter context) |> requiredBeforeParamArray
-                ReturnType = transformType context functionTypeInfo.Type
+                ReturnType = transformCallbackReturnType context functionTypeInfo.Type
             }
             : FSharpFunctionType)
             |> FSharpType.Function
@@ -854,7 +854,7 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
                         >> TypeParameter.mapFsharpParameter typParameters.SealedTypes
                     )
                     |> requiredBeforeParamArray
-                ReturnType = transformType context functionTypeInfo.Type
+                ReturnType = transformCallbackReturnType context functionTypeInfo.Type
             }
             : FSharpDelegate)
             |> FSharpType.Delegate
@@ -1986,6 +1986,7 @@ module private TransformMembers =
         members
         // The iterator information is stored in the Iterable<T> inheritance
         |> withoutComputedNames
+        |> KeyOfMaps.expandMembers
         |> withDefaultedTypeParameterOverloads
         |> UnionOverloads.expandMembers context.TypeMemory
         // We want to transform GetAccessor / SetAccessor
@@ -3093,6 +3094,241 @@ let private isUnitAlias (typeMemory: GlueType list) (fullName: string) =
                                         } -> aliasFullName = fullName
         | _ -> false
     )
+
+/// <summary>
+/// <c>addEventListener&lt;K extends keyof HTMLElementEventMap&gt;(type: K, listener: (ev: HTMLElementEventMap[K]) =&gt; any)</c>
+/// is generic in the event: the key is a <c>HTMLElementEventMap.Key&lt;'K&gt;</c> and <c>HTMLElementEventMap[K]</c>
+/// is <c>'K</c>. The map declares <c>Key&lt;'V&gt;</c> and one typed key per member in <c>Keys</c>.
+/// </summary>
+module KeyOfMaps =
+
+    /// Full names of the interfaces used as `keyof` constraint by a method
+    let private maps = HashSet<string>()
+
+    let rec private collectFromMembers (members: GlueMember list) =
+        for glueMember in members do
+            let typeParameters =
+                match glueMember with
+                | GlueMember.Method info -> info.TypeParameters
+                | GlueMember.MethodSignature info -> info.TypeParameters
+                | _ -> []
+
+            for typeParameter in typeParameters do
+                match typeParameter.Constraint with
+                | Some(GlueType.KeyOf(GlueType.TypeReference map)) ->
+                    maps.Add map.FullName |> ignore
+                | _ -> ()
+
+    let rec private collect (glueType: GlueType) =
+        match glueType with
+        | GlueType.Interface info -> collectFromMembers info.Members
+        | GlueType.ClassDeclaration info -> collectFromMembers info.Members
+        | GlueType.ModuleDeclaration info -> info.Types |> List.iter collect
+        | GlueType.FileModule info -> info.Types |> List.iter collect
+        | _ -> ()
+
+    let reset (typeMemory: GlueType list) =
+        maps.Clear()
+        typeMemory |> List.iter collect
+
+    let isMap (fullName: string) = maps.Contains fullName
+
+    let private keyReference (map: GlueTypeReference) (typeArgument: GlueType) =
+        ({
+            Name = "Key"
+            FullName = ""
+            ModulePath = map.ModulePath @ [ Naming.sanitizeTypeName map.Name ]
+            TypeArguments = [ typeArgument ]
+            IsStandardLibrary = false
+        }
+        : GlueTypeReference)
+        |> GlueType.TypeReference
+
+    let rec private substitute
+        (name: string)
+        (map: GlueTypeReference)
+        (glueType: GlueType)
+        : GlueType
+        =
+        let substitute = substitute name map
+
+        match glueType with
+        | GlueType.TypeParameter parameterName when parameterName = name ->
+            keyReference map (GlueType.TypeParameter name)
+        | GlueType.IndexedAccessType {
+                                         ObjectType = GlueType.TypeReference object
+                                         IndexType = GlueType.TypeParameter parameterName
+                                     } when parameterName = name && object.FullName = map.FullName ->
+            GlueType.TypeParameter name
+        | GlueType.TypeReference typeReference ->
+            GlueType.TypeReference
+                { typeReference with
+                    TypeArguments = typeReference.TypeArguments |> List.map substitute
+                }
+        | GlueType.Union(GlueTypeUnion cases) ->
+            GlueType.Union(GlueTypeUnion(cases |> List.map substitute))
+        | GlueType.Array elementType -> GlueType.Array(substitute elementType)
+        | GlueType.ReadOnly innerType -> GlueType.ReadOnly(substitute innerType)
+        | GlueType.OptionalType innerType -> GlueType.OptionalType(substitute innerType)
+        | GlueType.TupleType elements -> GlueType.TupleType(elements |> List.map substitute)
+        | GlueType.FunctionType functionType ->
+            GlueType.FunctionType
+                { functionType with
+                    Parameters =
+                        functionType.Parameters
+                        |> List.map (fun parameter ->
+                            { parameter with
+                                Type = substitute parameter.Type
+                            }
+                        )
+                    Type = substitute functionType.Type
+                }
+        | _ -> glueType
+
+    let private expand
+        (typeParameters: GlueTypeParameter list)
+        (parameters: GlueParameter list)
+        (returnType: GlueType)
+        =
+        ((typeParameters, parameters, returnType), typeParameters)
+        ||> List.fold (fun (typeParameters, parameters, returnType) typeParameter ->
+            match typeParameter.Constraint with
+            | Some(GlueType.KeyOf(GlueType.TypeReference map)) ->
+                let substitute = substitute typeParameter.Name map
+
+                typeParameters
+                |> List.map (fun candidate ->
+                    if candidate.Name = typeParameter.Name then
+                        { candidate with Constraint = None }
+                    else
+                        candidate
+                ),
+                parameters
+                |> List.map (fun parameter ->
+                    { parameter with
+                        Type = substitute parameter.Type
+                    }
+                ),
+                substitute returnType
+            | _ -> typeParameters, parameters, returnType
+        )
+
+    let expandMembers (members: GlueMember list) : GlueMember list =
+        members
+        |> List.map (fun glueMember ->
+            match glueMember with
+            | GlueMember.MethodSignature info ->
+                let typeParameters, parameters, returnType =
+                    expand info.TypeParameters info.Parameters info.Type
+
+                GlueMember.MethodSignature
+                    { info with
+                        TypeParameters = typeParameters
+                        Parameters = parameters
+                        Type = returnType
+                    }
+            | GlueMember.Method info ->
+                let typeParameters, parameters, returnType =
+                    expand info.TypeParameters info.Parameters info.Type
+
+                GlueMember.Method
+                    { info with
+                        TypeParameters = typeParameters
+                        Parameters = parameters
+                        Type = returnType
+                    }
+            | _ -> glueMember
+        )
+
+    /// The module of a map: `Key<'V>` and the typed keys
+    let keysModule
+        (context: TransformContext)
+        (name: string)
+        (members: GlueMember list)
+        : FSharpType
+        =
+        let keyType (valueType: FSharpType) =
+            ({
+                Name = "Key"
+                FullName = ""
+                ModulePath = []
+                TypeArguments = [ valueType ]
+                Type = FSharpType.Discard
+            }
+            : FSharpTypeReference)
+            |> FSharpType.TypeReference
+
+        let keys =
+            members
+            |> List.choose (
+                function
+                | GlueMember.Property property ->
+                    {
+                        Attributes = [ FSharpAttribute.Text $"Emit(\"\\\"%s{property.Name}\\\"\")" ]
+                        Name = Naming.sanitizeName property.Name
+                        OriginalName = property.Name
+                        Parameters = []
+                        TypeParameters = []
+                        Type = keyType (transformType context property.Type)
+                        IsOptional = false
+                        IsStatic = true
+                        Accessor = None
+                        Accessibility = FSharpAccessibility.Public
+                        XmlDoc = []
+                        Body = FSharpMemberInfoBody.NativeOnly
+                    }
+                    |> FSharpMember.Property
+                    |> Some
+                | _ -> None
+            )
+
+        ({
+            Name = name
+            IsRecursive = false
+            ImportSpecifier = None
+            Types =
+                [
+                    ({
+                        Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
+                        Name = "Key"
+                        XmlDoc = []
+                        OriginalName = "Key"
+                        TypeParameters =
+                            [
+                                FSharpTypeParameter.FSharpTypeParameter
+                                    {
+                                        Name = "V"
+                                        Constraint = None
+                                        Default = None
+                                    }
+                            ]
+                        Members = []
+                        Inheritance = []
+                    }
+                    : FSharpInterface)
+                    |> FSharpType.Interface
+
+                    ({
+                        Attributes = [ FSharpAttribute.AbstractClass; FSharpAttribute.Erase ]
+                        Name = "Keys"
+                        XmlDoc = []
+                        OriginalName = "Keys"
+                        TypeParameters = []
+                        Members = keys
+                        Inheritance = []
+                    }
+                    : FSharpInterface)
+                    |> FSharpType.Interface
+                ]
+        }
+        : FSharpModule)
+        |> FSharpType.Module
+
+/// `(ev: Event) => any`: the result of a callback is ignored by its caller, a lambda returns `unit`
+let private transformCallbackReturnType (context: TransformContext) (returnType: GlueType) =
+    match returnType with
+    | GlueType.Primitive GluePrimitive.Any -> FSharpType.Primitive FSharpPrimitive.Unit
+    | _ -> transformType context returnType
 
 /// Whether one of the base interfaces declares `[Symbol.iterator]`, directly or through its bases
 let private inheritsIterable (typeMemory: GlueType list) (heritageClauses: GlueType list) =
@@ -4694,7 +4930,8 @@ let private transformTypeAliasDeclaration
                     )
                     |> requiredBeforeParamArray
                 // The scope keeps an anonymous return type from taking the name of the delegate
-                ReturnType = transformType (context.PushScope "ReturnType") functionType.Type
+                ReturnType =
+                    transformCallbackReturnType (context.PushScope "ReturnType") functionType.Type
             }
             : FSharpDelegate)
             |> FSharpType.Delegate
@@ -5277,12 +5514,42 @@ let private transformToFsharp
             match tryTransformCallableInterface context interfaceInfo with
             | Some delegateType -> delegateType |> List.singleton
             | None ->
-                FSharpType.Interface(transformInterface context interfaceInfo) |> List.singleton
+                let fsharpInterface = transformInterface context interfaceInfo
+
+                [
+                    FSharpType.Interface fsharpInterface
+
+                    if KeyOfMaps.isMap interfaceInfo.FullName then
+                        // `HTMLElementEventMap` inherits most of its keys
+                        let members =
+                            ParamObjectCandidate.tryResolveMembers context.TypeMemory interfaceInfo
+                            |> Option.defaultValue interfaceInfo.Members
+
+                        KeyOfMaps.keysModule
+                            (context.PushScope fsharpInterface.Name)
+                            fsharpInterface.Name
+                            members
+                ]
 
         | GlueType.Enum enumInfo -> transformEnum enumInfo |> List.singleton
 
         | GlueType.TypeAliasDeclaration typeAliasInfo ->
-            transformTypeAliasDeclaration context typeAliasInfo |> List.singleton
+            let fsharpType = transformTypeAliasDeclaration context typeAliasInfo
+
+            [
+                fsharpType
+
+                match fsharpType, typeAliasInfo.Type with
+                | FSharpType.Interface fsharpInterface, GlueType.TypeLiteral { Members = members }
+                | FSharpType.Interface fsharpInterface, GlueType.IntersectionType members when
+                    KeyOfMaps.isMap typeAliasInfo.FullName
+                    ->
+                    KeyOfMaps.keysModule
+                        (context.PushScope fsharpInterface.Name)
+                        fsharpInterface.Name
+                        members
+                | _ -> ()
+            ]
 
         | GlueType.ModuleDeclaration moduleInfo ->
             transformModuleDeclaration
@@ -5481,6 +5748,7 @@ let apply (typeMemory: GlueType list) (glueAst: GlueType list) =
 let applyWith (importSpecifier: string) (typeMemory: GlueType list) (glueAst: GlueType list) =
     let reporter = Reporter()
     let typeLiteralsMemory = TypeLiteralsMemory()
+    KeyOfMaps.reset typeMemory
 
     {
         FSharpAST =

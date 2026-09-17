@@ -36,7 +36,18 @@ button.addEventListener (
         report "clicked" $"clicks: {clicks} type: {event.``type``}"
 )
 
+// Typed events: the key carries the event type, `ev` is a `PointerEvent`
+button.addEventListener (
+    Web.HTMLElementEventMap.Keys.click,
+    fun ev -> report "typed" $"pointer: {ev.clientX >= 0.0} {ev.pointerType}"
+)
+
 document.body.appendChild button |> ignore
+
+// Typed elements: the key carries the element type, `input` is an `HTMLInputElement`
+let input = document.createElement Web.HTMLElementTagNameMap.Keys.input
+input.value <- "typed"
+report "created" input.value
 
 // Querying: without a type argument the result is an `Element`
 match document.querySelector "#title" with

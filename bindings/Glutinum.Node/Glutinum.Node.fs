@@ -48352,7 +48352,7 @@ EventEmitter.defaultMaxListeners = $0"""
             ///   2. close
             ///   3. ready
             /// </summary>
-            abstract member addListener: event: 'K * listener: obj -> ReadStream
+            abstract member addListener: event: Node.fs.ReadStreamEvents.Key<'K> * listener: 'K -> ReadStream
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
             /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
@@ -48381,7 +48381,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
-            abstract member on: event: 'K * listener: obj -> ReadStream
+            abstract member on: event: Node.fs.ReadStreamEvents.Key<'K> * listener: 'K -> ReadStream
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -48408,7 +48408,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
-            abstract member once: event: 'K * listener: obj -> ReadStream
+            abstract member once: event: Node.fs.ReadStreamEvents.Key<'K> * listener: 'K -> ReadStream
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
             /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
@@ -48423,7 +48423,7 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
-            abstract member prependListener: event: 'K * listener: obj -> ReadStream
+            abstract member prependListener: event: Node.fs.ReadStreamEvents.Key<'K> * listener: 'K -> ReadStream
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -48436,7 +48436,7 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
-            abstract member prependOnceListener: event: 'K * listener: obj -> ReadStream
+            abstract member prependOnceListener: event: Node.fs.ReadStreamEvents.Key<'K> * listener: 'K -> ReadStream
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -48450,6 +48450,35 @@ EventEmitter.defaultMaxListeners = $0"""
             abstract member readable: (unit -> unit) with get, set
             abstract member ready: (unit -> unit) with get, set
             abstract member resume: (unit -> unit) with get, set
+
+        module ReadStreamEvents =
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type Key<'V> =
+                interface end
+
+            [<AbstractClass>]
+            [<Erase>]
+            type Keys =
+                [<Emit("\"close\"")>]
+                static member inline close: Key<(unit -> unit)> = nativeOnly
+                [<Emit("\"data\"")>]
+                static member inline data: Key<(U2<Node.buffer_buffer.global_.Buffer, string> -> unit)> = nativeOnly
+                [<Emit("\"end\"")>]
+                static member inline ``end``: Key<(unit -> unit)> = nativeOnly
+                [<Emit("\"error\"")>]
+                static member inline error: Key<(Exception -> unit)> = nativeOnly
+                [<Emit("\"open\"")>]
+                static member inline ``open``: Key<(float -> unit)> = nativeOnly
+                [<Emit("\"pause\"")>]
+                static member inline pause: Key<(unit -> unit)> = nativeOnly
+                [<Emit("\"readable\"")>]
+                static member inline readable: Key<(unit -> unit)> = nativeOnly
+                [<Emit("\"ready\"")>]
+                static member inline ready: Key<(unit -> unit)> = nativeOnly
+                [<Emit("\"resume\"")>]
+                static member inline resume: Key<(unit -> unit)> = nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -48468,6 +48497,33 @@ EventEmitter.defaultMaxListeners = $0"""
             abstract member pipe: (Node.stream.Stream_.Readable -> unit) with get, set
             abstract member ready: (unit -> unit) with get, set
             abstract member unpipe: (Node.stream.Stream_.Readable -> unit) with get, set
+
+        module WriteStreamEvents =
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type Key<'V> =
+                interface end
+
+            [<AbstractClass>]
+            [<Erase>]
+            type Keys =
+                [<Emit("\"close\"")>]
+                static member inline close: Key<(unit -> unit)> = nativeOnly
+                [<Emit("\"drain\"")>]
+                static member inline drain: Key<(unit -> unit)> = nativeOnly
+                [<Emit("\"error\"")>]
+                static member inline error: Key<(Exception -> unit)> = nativeOnly
+                [<Emit("\"finish\"")>]
+                static member inline finish: Key<(unit -> unit)> = nativeOnly
+                [<Emit("\"open\"")>]
+                static member inline ``open``: Key<(float -> unit)> = nativeOnly
+                [<Emit("\"pipe\"")>]
+                static member inline pipe: Key<(Node.stream.Stream_.Readable -> unit)> = nativeOnly
+                [<Emit("\"ready\"")>]
+                static member inline ready: Key<(unit -> unit)> = nativeOnly
+                [<Emit("\"unpipe\"")>]
+                static member inline unpipe: Key<(Node.stream.Stream_.Readable -> unit)> = nativeOnly
 
         /// <summary>
         /// * Extends <c>stream.Writable</c>
@@ -48505,7 +48561,7 @@ EventEmitter.defaultMaxListeners = $0"""
             ///   2. close
             ///   3. ready
             /// </summary>
-            abstract member addListener: event: 'K * listener: obj -> WriteStream
+            abstract member addListener: event: Node.fs.WriteStreamEvents.Key<'K> * listener: 'K -> WriteStream
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
             /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
@@ -48534,7 +48590,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
-            abstract member on: event: 'K * listener: obj -> WriteStream
+            abstract member on: event: Node.fs.WriteStreamEvents.Key<'K> * listener: 'K -> WriteStream
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -48561,7 +48617,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
-            abstract member once: event: 'K * listener: obj -> WriteStream
+            abstract member once: event: Node.fs.WriteStreamEvents.Key<'K> * listener: 'K -> WriteStream
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
             /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
@@ -48576,7 +48632,7 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
-            abstract member prependListener: event: 'K * listener: obj -> WriteStream
+            abstract member prependListener: event: Node.fs.WriteStreamEvents.Key<'K> * listener: 'K -> WriteStream
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -48589,7 +48645,7 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
-            abstract member prependOnceListener: event: 'K * listener: obj -> WriteStream
+            abstract member prependOnceListener: event: Node.fs.WriteStreamEvents.Key<'K> * listener: 'K -> WriteStream
 
         module rename_ =
 
@@ -91490,16 +91546,16 @@ EventEmitter.defaultMaxListeners = $0"""
                 module RequireExtensions =
 
                     type _js =
-                        delegate of ``module``: Node.``module``.global_.NodeJS.Module * filename: string -> obj
+                        delegate of ``module``: Node.``module``.global_.NodeJS.Module * filename: string -> unit
 
                     type _json =
-                        delegate of ``module``: Node.``module``.global_.NodeJS.Module * filename: string -> obj
+                        delegate of ``module``: Node.``module``.global_.NodeJS.Module * filename: string -> unit
 
                     type _node =
-                        delegate of ``module``: Node.``module``.global_.NodeJS.Module * filename: string -> obj
+                        delegate of ``module``: Node.``module``.global_.NodeJS.Module * filename: string -> unit
 
                     type Extends =
-                        delegate of ``module``: Node.``module``.global_.NodeJS.Module * filename: string -> obj
+                        delegate of ``module``: Node.``module``.global_.NodeJS.Module * filename: string -> unit
 
             [<Obsolete("Use `NodeJS.Module` instead.")>]
             [<AllowNullLiteral>]
@@ -101735,6 +101791,241 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             abstract member zlib: obj with get, set
             abstract member ``node:zlib``: obj with get, set
 
+        module BuiltInModule =
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type Key<'V> =
+                interface end
+
+            [<AbstractClass>]
+            [<Erase>]
+            type Keys =
+                [<Emit("\"assert\"")>]
+                static member inline ``assert``: Key<obj> = nativeOnly
+                [<Emit("\"node:assert\"")>]
+                static member inline ``node:assert``: Key<obj> = nativeOnly
+                [<Emit("\"assert/strict\"")>]
+                static member inline ``assert/strict``: Key<obj> = nativeOnly
+                [<Emit("\"node:assert/strict\"")>]
+                static member inline ``node:assert/strict``: Key<obj> = nativeOnly
+                [<Emit("\"async_hooks\"")>]
+                static member inline async_hooks: Key<obj> = nativeOnly
+                [<Emit("\"node:async_hooks\"")>]
+                static member inline ``node:async_hooks``: Key<obj> = nativeOnly
+                [<Emit("\"buffer\"")>]
+                static member inline buffer: Key<obj> = nativeOnly
+                [<Emit("\"node:buffer\"")>]
+                static member inline ``node:buffer``: Key<obj> = nativeOnly
+                [<Emit("\"child_process\"")>]
+                static member inline child_process: Key<obj> = nativeOnly
+                [<Emit("\"node:child_process\"")>]
+                static member inline ``node:child_process``: Key<obj> = nativeOnly
+                [<Emit("\"cluster\"")>]
+                static member inline cluster: Key<obj> = nativeOnly
+                [<Emit("\"node:cluster\"")>]
+                static member inline ``node:cluster``: Key<obj> = nativeOnly
+                [<Emit("\"console\"")>]
+                static member inline console: Key<obj> = nativeOnly
+                [<Emit("\"node:console\"")>]
+                static member inline ``node:console``: Key<obj> = nativeOnly
+                [<Emit("\"constants\"")>]
+                static member inline constants: Key<obj> = nativeOnly
+                [<Emit("\"node:constants\"")>]
+                static member inline ``node:constants``: Key<obj> = nativeOnly
+                [<Emit("\"crypto\"")>]
+                static member inline crypto: Key<obj> = nativeOnly
+                [<Emit("\"node:crypto\"")>]
+                static member inline ``node:crypto``: Key<obj> = nativeOnly
+                [<Emit("\"dgram\"")>]
+                static member inline dgram: Key<obj> = nativeOnly
+                [<Emit("\"node:dgram\"")>]
+                static member inline ``node:dgram``: Key<obj> = nativeOnly
+                [<Emit("\"diagnostics_channel\"")>]
+                static member inline diagnostics_channel: Key<obj> = nativeOnly
+                [<Emit("\"node:diagnostics_channel\"")>]
+                static member inline ``node:diagnostics_channel``: Key<obj> = nativeOnly
+                [<Emit("\"dns\"")>]
+                static member inline dns: Key<obj> = nativeOnly
+                [<Emit("\"node:dns\"")>]
+                static member inline ``node:dns``: Key<obj> = nativeOnly
+                [<Emit("\"dns/promises\"")>]
+                static member inline ``dns/promises``: Key<obj> = nativeOnly
+                [<Emit("\"node:dns/promises\"")>]
+                static member inline ``node:dns/promises``: Key<obj> = nativeOnly
+                [<Emit("\"domain\"")>]
+                static member inline domain: Key<obj> = nativeOnly
+                [<Emit("\"node:domain\"")>]
+                static member inline ``node:domain``: Key<obj> = nativeOnly
+                [<Emit("\"events\"")>]
+                static member inline events: Key<obj> = nativeOnly
+                [<Emit("\"node:events\"")>]
+                static member inline ``node:events``: Key<obj> = nativeOnly
+                [<Emit("\"fs\"")>]
+                static member inline fs: Key<obj> = nativeOnly
+                [<Emit("\"node:fs\"")>]
+                static member inline ``node:fs``: Key<obj> = nativeOnly
+                [<Emit("\"fs/promises\"")>]
+                static member inline ``fs/promises``: Key<obj> = nativeOnly
+                [<Emit("\"node:fs/promises\"")>]
+                static member inline ``node:fs/promises``: Key<obj> = nativeOnly
+                [<Emit("\"http\"")>]
+                static member inline http: Key<obj> = nativeOnly
+                [<Emit("\"node:http\"")>]
+                static member inline ``node:http``: Key<obj> = nativeOnly
+                [<Emit("\"http2\"")>]
+                static member inline http2: Key<obj> = nativeOnly
+                [<Emit("\"node:http2\"")>]
+                static member inline ``node:http2``: Key<obj> = nativeOnly
+                [<Emit("\"https\"")>]
+                static member inline https: Key<obj> = nativeOnly
+                [<Emit("\"node:https\"")>]
+                static member inline ``node:https``: Key<obj> = nativeOnly
+                [<Emit("\"inspector\"")>]
+                static member inline inspector: Key<obj> = nativeOnly
+                [<Emit("\"node:inspector\"")>]
+                static member inline ``node:inspector``: Key<obj> = nativeOnly
+                [<Emit("\"inspector/promises\"")>]
+                static member inline ``inspector/promises``: Key<obj> = nativeOnly
+                [<Emit("\"node:inspector/promises\"")>]
+                static member inline ``node:inspector/promises``: Key<obj> = nativeOnly
+                [<Emit("\"module\"")>]
+                static member inline ``module``: Key<obj> = nativeOnly
+                [<Emit("\"node:module\"")>]
+                static member inline ``node:module``: Key<obj> = nativeOnly
+                [<Emit("\"net\"")>]
+                static member inline net: Key<obj> = nativeOnly
+                [<Emit("\"node:net\"")>]
+                static member inline ``node:net``: Key<obj> = nativeOnly
+                [<Emit("\"os\"")>]
+                static member inline os: Key<obj> = nativeOnly
+                [<Emit("\"node:os\"")>]
+                static member inline ``node:os``: Key<obj> = nativeOnly
+                [<Emit("\"path\"")>]
+                static member inline path: Key<obj> = nativeOnly
+                [<Emit("\"node:path\"")>]
+                static member inline ``node:path``: Key<obj> = nativeOnly
+                [<Emit("\"path/posix\"")>]
+                static member inline ``path/posix``: Key<obj> = nativeOnly
+                [<Emit("\"node:path/posix\"")>]
+                static member inline ``node:path/posix``: Key<obj> = nativeOnly
+                [<Emit("\"path/win32\"")>]
+                static member inline ``path/win32``: Key<obj> = nativeOnly
+                [<Emit("\"node:path/win32\"")>]
+                static member inline ``node:path/win32``: Key<obj> = nativeOnly
+                [<Emit("\"perf_hooks\"")>]
+                static member inline perf_hooks: Key<obj> = nativeOnly
+                [<Emit("\"node:perf_hooks\"")>]
+                static member inline ``node:perf_hooks``: Key<obj> = nativeOnly
+                [<Emit("\"process\"")>]
+                static member inline ``process``: Key<obj> = nativeOnly
+                [<Emit("\"node:process\"")>]
+                static member inline ``node:process``: Key<obj> = nativeOnly
+                [<Emit("\"punycode\"")>]
+                static member inline punycode: Key<obj> = nativeOnly
+                [<Emit("\"node:punycode\"")>]
+                static member inline ``node:punycode``: Key<obj> = nativeOnly
+                [<Emit("\"querystring\"")>]
+                static member inline querystring: Key<obj> = nativeOnly
+                [<Emit("\"node:querystring\"")>]
+                static member inline ``node:querystring``: Key<obj> = nativeOnly
+                [<Emit("\"readline\"")>]
+                static member inline readline: Key<obj> = nativeOnly
+                [<Emit("\"node:readline\"")>]
+                static member inline ``node:readline``: Key<obj> = nativeOnly
+                [<Emit("\"readline/promises\"")>]
+                static member inline ``readline/promises``: Key<obj> = nativeOnly
+                [<Emit("\"node:readline/promises\"")>]
+                static member inline ``node:readline/promises``: Key<obj> = nativeOnly
+                [<Emit("\"repl\"")>]
+                static member inline repl: Key<obj> = nativeOnly
+                [<Emit("\"node:repl\"")>]
+                static member inline ``node:repl``: Key<obj> = nativeOnly
+                [<Emit("\"node:sea\"")>]
+                static member inline ``node:sea``: Key<obj> = nativeOnly
+                [<Emit("\"node:sqlite\"")>]
+                static member inline ``node:sqlite``: Key<obj> = nativeOnly
+                [<Emit("\"stream\"")>]
+                static member inline stream: Key<obj> = nativeOnly
+                [<Emit("\"node:stream\"")>]
+                static member inline ``node:stream``: Key<obj> = nativeOnly
+                [<Emit("\"stream/consumers\"")>]
+                static member inline ``stream/consumers``: Key<obj> = nativeOnly
+                [<Emit("\"node:stream/consumers\"")>]
+                static member inline ``node:stream/consumers``: Key<obj> = nativeOnly
+                [<Emit("\"stream/promises\"")>]
+                static member inline ``stream/promises``: Key<obj> = nativeOnly
+                [<Emit("\"node:stream/promises\"")>]
+                static member inline ``node:stream/promises``: Key<obj> = nativeOnly
+                [<Emit("\"stream/web\"")>]
+                static member inline ``stream/web``: Key<obj> = nativeOnly
+                [<Emit("\"node:stream/web\"")>]
+                static member inline ``node:stream/web``: Key<obj> = nativeOnly
+                [<Emit("\"string_decoder\"")>]
+                static member inline string_decoder: Key<obj> = nativeOnly
+                [<Emit("\"node:string_decoder\"")>]
+                static member inline ``node:string_decoder``: Key<obj> = nativeOnly
+                [<Emit("\"node:test\"")>]
+                static member inline ``node:test``: Key<obj> = nativeOnly
+                [<Emit("\"node:test/reporters\"")>]
+                static member inline ``node:test/reporters``: Key<obj> = nativeOnly
+                [<Emit("\"timers\"")>]
+                static member inline timers: Key<obj> = nativeOnly
+                [<Emit("\"node:timers\"")>]
+                static member inline ``node:timers``: Key<obj> = nativeOnly
+                [<Emit("\"timers/promises\"")>]
+                static member inline ``timers/promises``: Key<obj> = nativeOnly
+                [<Emit("\"node:timers/promises\"")>]
+                static member inline ``node:timers/promises``: Key<obj> = nativeOnly
+                [<Emit("\"tls\"")>]
+                static member inline tls: Key<obj> = nativeOnly
+                [<Emit("\"node:tls\"")>]
+                static member inline ``node:tls``: Key<obj> = nativeOnly
+                [<Emit("\"trace_events\"")>]
+                static member inline trace_events: Key<obj> = nativeOnly
+                [<Emit("\"node:trace_events\"")>]
+                static member inline ``node:trace_events``: Key<obj> = nativeOnly
+                [<Emit("\"tty\"")>]
+                static member inline tty: Key<obj> = nativeOnly
+                [<Emit("\"node:tty\"")>]
+                static member inline ``node:tty``: Key<obj> = nativeOnly
+                [<Emit("\"url\"")>]
+                static member inline url: Key<obj> = nativeOnly
+                [<Emit("\"node:url\"")>]
+                static member inline ``node:url``: Key<obj> = nativeOnly
+                [<Emit("\"util\"")>]
+                static member inline util: Key<obj> = nativeOnly
+                [<Emit("\"node:util\"")>]
+                static member inline ``node:util``: Key<obj> = nativeOnly
+                [<Emit("\"sys\"")>]
+                static member inline sys: Key<obj> = nativeOnly
+                [<Emit("\"node:sys\"")>]
+                static member inline ``node:sys``: Key<obj> = nativeOnly
+                [<Emit("\"util/types\"")>]
+                static member inline ``util/types``: Key<obj> = nativeOnly
+                [<Emit("\"node:util/types\"")>]
+                static member inline ``node:util/types``: Key<obj> = nativeOnly
+                [<Emit("\"v8\"")>]
+                static member inline v8: Key<obj> = nativeOnly
+                [<Emit("\"node:v8\"")>]
+                static member inline ``node:v8``: Key<obj> = nativeOnly
+                [<Emit("\"vm\"")>]
+                static member inline vm: Key<obj> = nativeOnly
+                [<Emit("\"node:vm\"")>]
+                static member inline ``node:vm``: Key<obj> = nativeOnly
+                [<Emit("\"wasi\"")>]
+                static member inline wasi: Key<obj> = nativeOnly
+                [<Emit("\"node:wasi\"")>]
+                static member inline ``node:wasi``: Key<obj> = nativeOnly
+                [<Emit("\"worker_threads\"")>]
+                static member inline worker_threads: Key<obj> = nativeOnly
+                [<Emit("\"node:worker_threads\"")>]
+                static member inline ``node:worker_threads``: Key<obj> = nativeOnly
+                [<Emit("\"zlib\"")>]
+                static member inline zlib: Key<obj> = nativeOnly
+                [<Emit("\"node:zlib\"")>]
+                static member inline ``node:zlib``: Key<obj> = nativeOnly
+
         module global_ =
 
             [<AbstractClass>]
@@ -103261,7 +103552,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
                     /// <param name="id">
                     /// ID of the built-in module being requested.
                     /// </param>
-                    abstract member getBuiltinModule: id: 'ID -> obj
+                    abstract member getBuiltinModule: id: Node.``process``.BuiltInModule.Key<'ID> -> 'ID
                     /// <summary>
                     /// Provides a way to load built-in modules in a globally available function.
                     /// </summary>
@@ -120728,7 +121019,7 @@ Duplex.fromWeb($0, $1)"""
                 U2<Node.stream.Stream_.PipelineSource<'T>, Node.stream.Stream_.PipelineTransform<obj, 'T>>
 
             type PipelineDestinationIterableFunction<'T> =
-                delegate of source: obj -> obj
+                delegate of source: obj -> unit
 
             type PipelineDestinationPromiseFunction<'T, 'P> =
                 delegate of source: obj -> JS.Promise<'P>
@@ -120857,7 +121148,7 @@ Duplex.fromWeb($0, $1)"""
                 module map =
 
                     type fn =
-                        delegate of data: obj * ?options: Readable.map.fn.options -> obj
+                        delegate of data: obj * ?options: Readable.map.fn.options -> unit
 
                     module fn =
 
@@ -121008,7 +121299,7 @@ Duplex.fromWeb($0, $1)"""
                 module flatMap =
 
                     type fn =
-                        delegate of data: obj * ?options: Readable.flatMap.fn.options -> obj
+                        delegate of data: obj * ?options: Readable.flatMap.fn.options -> unit
 
                     module fn =
 
@@ -121143,7 +121434,7 @@ Duplex.fromWeb($0, $1)"""
                             member val signal : Node.web_globals_abortcontroller.global_.AbortSignal option = nativeOnly with get, set
 
                     type fn_1 =
-                        delegate of previous: obj * data: obj * ?options: Readable.reduce.fn.options_1 -> obj
+                        delegate of previous: obj * data: obj * ?options: Readable.reduce.fn.options_1 -> unit
 
                     [<Global>]
                     [<AllowNullLiteral>]
@@ -121175,7 +121466,7 @@ Duplex.fromWeb($0, $1)"""
                         member val signal : Node.web_globals_abortcontroller.global_.AbortSignal option = nativeOnly with get, set
 
                     type fn_3 =
-                        delegate of previous: obj * data: obj * ?options: Readable.reduce.fn.options_3 -> obj
+                        delegate of previous: obj * data: obj * ?options: Readable.reduce.fn.options_3 -> unit
 
                     [<Global>]
                     [<AllowNullLiteral>]
@@ -126557,7 +126848,7 @@ Duplex.fromWeb($0, $1)"""
             type AssertSnapshotOptions
                 [<ParamObject; Emit("$0")>]
                 (
-                    ?serializers: ReadonlyArray<(obj -> obj)>
+                    ?serializers: ReadonlyArray<(obj -> unit)>
                 ) =
 
                 /// <summary>
@@ -126568,7 +126859,7 @@ Duplex.fromWeb($0, $1)"""
                 ///
                 /// If no serializers are provided, the test runner's default serializers are used.
                 /// </summary>
-                member val serializers : ReadonlyArray<(obj -> obj)> option = nativeOnly with get, set
+                member val serializers : ReadonlyArray<(obj -> unit)> option = nativeOnly with get, set
 
             [<Global>]
             [<AllowNullLiteral>]
@@ -126703,14 +126994,14 @@ Duplex.fromWeb($0, $1)"""
             /// If the hook uses callbacks, the callback function is passed as the second argument.
             /// </summary>
             type HookFn =
-                delegate of c: U2<Node.test.test_.TestContext, Node.test.test_.SuiteContext> * ``done``: (obj option -> unit) -> obj
+                delegate of c: U2<Node.test.test_.TestContext, Node.test.test_.SuiteContext> * ``done``: (obj option -> unit) -> unit
 
             /// <summary>
             /// The hook function. The first argument is a <c>TestContext</c> object.
             /// If the hook uses callbacks, the callback function is passed as the second argument.
             /// </summary>
             type TestContextHookFn =
-                delegate of t: Node.test.test_.TestContext * ``done``: (obj option -> unit) -> obj
+                delegate of t: Node.test.test_.TestContext * ``done``: (obj option -> unit) -> unit
 
             /// <summary>
             /// Configuration options for hooks.
@@ -127675,7 +127966,7 @@ Duplex.fromWeb($0, $1)"""
                     /// An array of synchronous functions used as the default serializers for snapshot tests.
                     /// </param>
                     [<Emit("$0.setDefaultSnapshotSerializers($1...)")>]
-                    abstract member setDefaultSnapshotSerializers: serializers: ReadonlyArray<(obj -> obj)> -> unit
+                    abstract member setDefaultSnapshotSerializers: serializers: ReadonlyArray<(obj -> unit)> -> unit
                     /// <summary>
                     /// This function is used to set a custom resolver for the location of the snapshot file used for snapshot testing.
                     /// By default, the snapshot filename is the same as the entry point filename with <c>.snapshot</c> appended.
@@ -140003,7 +140294,7 @@ URL.parse($0, $1)"""
             | ``module``
 
         type CustomInspectFunction =
-            delegate of depth: float * options: Node.util.InspectOptionsStylized -> obj
+            delegate of depth: float * options: Node.util.InspectOptionsStylized -> unit
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -142512,7 +142803,7 @@ URL.parse($0, $1)"""
             abstract member createHook: (Node.v8.HookCallbacks -> Action) with get, set
 
         type StartupSnapshotCallbackFn =
-            delegate of args: obj -> obj
+            delegate of args: obj -> unit
 
         module startupSnapshot_ =
 
@@ -144634,7 +144925,7 @@ URL.parse($0, $1)"""
         type AbortSignal =
             inherit Node.web_globals_events.global_.EventTarget
             abstract member aborted: bool with get
-            abstract member onabort: (Node.web_globals_events.global_.Event -> obj) option with get, set
+            abstract member onabort: (Node.web_globals_events.global_.Event -> unit) option with get, set
             abstract member reason: obj with get
             abstract member throwIfAborted: unit -> unit
 
@@ -153852,6 +154143,23 @@ module UndiciTypes =
             abstract member message: UndiciTypes.websocket.MessageEvent with get, set
             abstract member ``open``: Node.web_globals_events.global_.Event with get, set
 
+        module EventSourceEventMap =
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type Key<'V> =
+                interface end
+
+            [<AbstractClass>]
+            [<Erase>]
+            type Keys =
+                [<Emit("\"error\"")>]
+                static member inline error: Key<UndiciTypes.websocket.ErrorEvent> = nativeOnly
+                [<Emit("\"message\"")>]
+                static member inline message: Key<UndiciTypes.websocket.MessageEvent> = nativeOnly
+                [<Emit("\"open\"")>]
+                static member inline ``open``: Key<Node.web_globals_events.global_.Event> = nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type EventSource =
@@ -153860,9 +154168,9 @@ module UndiciTypes =
             abstract member CLOSED: int with get
             abstract member CONNECTING: int with get
             abstract member OPEN: int with get
-            abstract member onerror: (UndiciTypes.websocket.ErrorEvent -> obj) with get, set
-            abstract member onmessage: (UndiciTypes.websocket.MessageEvent -> obj) with get, set
-            abstract member onopen: (Node.web_globals_events.global_.Event -> obj) with get, set
+            abstract member onerror: (UndiciTypes.websocket.ErrorEvent -> unit) with get, set
+            abstract member onmessage: (UndiciTypes.websocket.MessageEvent -> unit) with get, set
+            abstract member onopen: (Node.web_globals_events.global_.Event -> unit) with get, set
             abstract member readyState: EventSource.readyState with get
             abstract member url: string with get
             abstract member withCredentials: bool with get
@@ -153883,7 +154191,7 @@ module UndiciTypes =
             ///
             /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/EventTarget/addEventListener)
             /// </summary>
-            abstract member addEventListener: ``type``: 'K * listener: (obj -> obj) -> unit
+            abstract member addEventListener: ``type``: UndiciTypes.eventsource.EventSourceEventMap.Key<'K> * listener: ('K -> unit) -> unit
             /// <summary>
             /// Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
             ///
@@ -153901,7 +154209,7 @@ module UndiciTypes =
             ///
             /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/EventTarget/addEventListener)
             /// </summary>
-            abstract member addEventListener: ``type``: 'K * listener: (obj -> obj) * options: bool -> unit
+            abstract member addEventListener: ``type``: UndiciTypes.eventsource.EventSourceEventMap.Key<'K> * listener: ('K -> unit) * options: bool -> unit
             /// <summary>
             /// Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
             ///
@@ -153919,7 +154227,7 @@ module UndiciTypes =
             ///
             /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/EventTarget/addEventListener)
             /// </summary>
-            abstract member addEventListener: ``type``: 'K * listener: (obj -> obj) * options: UndiciTypes.patch.AddEventListenerOptions -> unit
+            abstract member addEventListener: ``type``: UndiciTypes.eventsource.EventSourceEventMap.Key<'K> * listener: ('K -> unit) * options: UndiciTypes.patch.AddEventListenerOptions -> unit
             /// <summary>
             /// Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
             ///
@@ -154033,19 +154341,19 @@ module UndiciTypes =
             ///
             /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/EventTarget/removeEventListener)
             /// </summary>
-            abstract member removeEventListener: ``type``: 'K * listener: (obj -> obj) -> unit
+            abstract member removeEventListener: ``type``: UndiciTypes.eventsource.EventSourceEventMap.Key<'K> * listener: ('K -> unit) -> unit
             /// <summary>
             /// Removes the event listener in target's event listener list with the same type, callback, and options.
             ///
             /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/EventTarget/removeEventListener)
             /// </summary>
-            abstract member removeEventListener: ``type``: 'K * listener: (obj -> obj) * options: bool -> unit
+            abstract member removeEventListener: ``type``: UndiciTypes.eventsource.EventSourceEventMap.Key<'K> * listener: ('K -> unit) * options: bool -> unit
             /// <summary>
             /// Removes the event listener in target's event listener list with the same type, callback, and options.
             ///
             /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/EventTarget/removeEventListener)
             /// </summary>
-            abstract member removeEventListener: ``type``: 'K * listener: (obj -> obj) * options: UndiciTypes.patch.EventListenerOptions -> unit
+            abstract member removeEventListener: ``type``: UndiciTypes.eventsource.EventSourceEventMap.Key<'K> * listener: ('K -> unit) * options: UndiciTypes.patch.EventListenerOptions -> unit
             /// <summary>
             /// Removes the event listener in target's event listener list with the same type, callback, and options.
             ///
@@ -156281,6 +156589,25 @@ FileReader.DONE"""
             abstract member message: UndiciTypes.websocket.MessageEvent with get, set
             abstract member ``open``: Node.web_globals_events.global_.Event with get, set
 
+        module WebSocketEventMap =
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type Key<'V> =
+                interface end
+
+            [<AbstractClass>]
+            [<Erase>]
+            type Keys =
+                [<Emit("\"close\"")>]
+                static member inline close: Key<UndiciTypes.websocket.CloseEvent> = nativeOnly
+                [<Emit("\"error\"")>]
+                static member inline error: Key<UndiciTypes.websocket.ErrorEvent> = nativeOnly
+                [<Emit("\"message\"")>]
+                static member inline message: Key<UndiciTypes.websocket.MessageEvent> = nativeOnly
+                [<Emit("\"open\"")>]
+                static member inline ``open``: Key<Node.web_globals_events.global_.Event> = nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type WebSocket =
@@ -156288,10 +156615,10 @@ FileReader.DONE"""
             abstract member binaryType: UndiciTypes.websocket.BinaryType with get, set
             abstract member bufferedAmount: float with get
             abstract member extensions: string with get
-            abstract member onclose: (UndiciTypes.websocket.CloseEvent -> obj) option with get, set
-            abstract member onerror: (UndiciTypes.websocket.ErrorEvent -> obj) option with get, set
-            abstract member onmessage: (UndiciTypes.websocket.MessageEvent<obj> -> obj) option with get, set
-            abstract member onopen: (Node.web_globals_events.global_.Event -> obj) option with get, set
+            abstract member onclose: (UndiciTypes.websocket.CloseEvent -> unit) option with get, set
+            abstract member onerror: (UndiciTypes.websocket.ErrorEvent -> unit) option with get, set
+            abstract member onmessage: (UndiciTypes.websocket.MessageEvent<obj> -> unit) option with get, set
+            abstract member onopen: (Node.web_globals_events.global_.Event -> unit) option with get, set
             abstract member protocol: string with get
             abstract member readyState: float with get
             abstract member url: string with get
@@ -156320,7 +156647,7 @@ FileReader.DONE"""
             ///
             /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/EventTarget/addEventListener)
             /// </summary>
-            abstract member addEventListener: ``type``: 'K * listener: (obj -> obj) -> unit
+            abstract member addEventListener: ``type``: UndiciTypes.websocket.WebSocketEventMap.Key<'K> * listener: ('K -> unit) -> unit
             /// <summary>
             /// Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
             ///
@@ -156338,7 +156665,7 @@ FileReader.DONE"""
             ///
             /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/EventTarget/addEventListener)
             /// </summary>
-            abstract member addEventListener: ``type``: 'K * listener: (obj -> obj) * options: bool -> unit
+            abstract member addEventListener: ``type``: UndiciTypes.websocket.WebSocketEventMap.Key<'K> * listener: ('K -> unit) * options: bool -> unit
             /// <summary>
             /// Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
             ///
@@ -156356,7 +156683,7 @@ FileReader.DONE"""
             ///
             /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/EventTarget/addEventListener)
             /// </summary>
-            abstract member addEventListener: ``type``: 'K * listener: (obj -> obj) * options: UndiciTypes.patch.AddEventListenerOptions -> unit
+            abstract member addEventListener: ``type``: UndiciTypes.websocket.WebSocketEventMap.Key<'K> * listener: ('K -> unit) * options: UndiciTypes.patch.AddEventListenerOptions -> unit
             /// <summary>
             /// Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
             ///
@@ -156470,19 +156797,19 @@ FileReader.DONE"""
             ///
             /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/EventTarget/removeEventListener)
             /// </summary>
-            abstract member removeEventListener: ``type``: 'K * listener: (obj -> obj) -> unit
+            abstract member removeEventListener: ``type``: UndiciTypes.websocket.WebSocketEventMap.Key<'K> * listener: ('K -> unit) -> unit
             /// <summary>
             /// Removes the event listener in target's event listener list with the same type, callback, and options.
             ///
             /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/EventTarget/removeEventListener)
             /// </summary>
-            abstract member removeEventListener: ``type``: 'K * listener: (obj -> obj) * options: bool -> unit
+            abstract member removeEventListener: ``type``: UndiciTypes.websocket.WebSocketEventMap.Key<'K> * listener: ('K -> unit) * options: bool -> unit
             /// <summary>
             /// Removes the event listener in target's event listener list with the same type, callback, and options.
             ///
             /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/EventTarget/removeEventListener)
             /// </summary>
-            abstract member removeEventListener: ``type``: 'K * listener: (obj -> obj) * options: UndiciTypes.patch.EventListenerOptions -> unit
+            abstract member removeEventListener: ``type``: UndiciTypes.websocket.WebSocketEventMap.Key<'K> * listener: ('K -> unit) * options: UndiciTypes.patch.EventListenerOptions -> unit
             /// <summary>
             /// Removes the event listener in target's event listener list with the same type, callback, and options.
             ///

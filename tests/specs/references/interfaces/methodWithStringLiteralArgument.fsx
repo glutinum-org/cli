@@ -8,7 +8,7 @@ open System
 [<Interface>]
 type Page =
     [<Emit("$0.on('console',$1...)")>]
-    abstract member on_console: listener: (unit -> obj) -> Page
+    abstract member on_console: listener: (unit -> unit) -> Page
     [<Emit("$0.on('ready')")>]
     abstract member on_ready: unit -> Page
 

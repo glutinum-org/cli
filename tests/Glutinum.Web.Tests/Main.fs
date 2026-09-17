@@ -50,6 +50,24 @@ let main _ =
                     testPageText "a NodeList is enumerable" "#nodelist" "H1,BUTTON"
                     testPageText "setTimeout takes a lambda" "#timeout" "fired"
                     testPageText "fetch resolves a response" "#fetch" "200 {\"answer\":42}"
+                    testPageText
+                        "createElement with a typed key gives the element type"
+                        "#created"
+                        "typed"
+
+                    testPage (
+                        "addEventListener with a typed key gives the event type",
+                        fun page ->
+                            promise {
+                                do! page.setContent pageContent
+                                do! click (page.locator "#button")
+
+                                do!
+                                    assertLocator
+                                        (page.locator "#typed")
+                                        (haveText "pointer: true mouse")
+                            }
+                    )
 
                     testPage (
                         "an event listener is a delegate",

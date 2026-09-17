@@ -7,7 +7,7 @@ open System
 [<AllowNullLiteral>]
 [<Interface>]
 type DiagnosticCollection =
-    abstract member forEach: callback: (DiagnosticCollection -> obj) -> unit
+    abstract member forEach: callback: (DiagnosticCollection -> unit) -> unit
 
 (***)
 #r "nuget: Fable.Core"

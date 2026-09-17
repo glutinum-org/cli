@@ -5,7 +5,7 @@ open Fable.Core.JsInterop
 open System
 
 type Log =
-    delegate of prefix: string * [<ParamArray>] args: obj [] -> obj
+    delegate of prefix: string * [<ParamArray>] args: obj [] -> unit
 
 (***)
 #r "nuget: Fable.Core"

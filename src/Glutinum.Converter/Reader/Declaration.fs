@@ -7,7 +7,8 @@ open TypeScript
 open Fable.Core
 open Fable.Core.JsInterop
 
-/// The constraints of a method stay implicit in F#, only the defaults make an overload
+/// The constraints of a method stay implicit in F#, only the defaults make an overload and
+/// `K extends keyof Map` keeps the map, `Map[K]` is resolved through it
 let private readMethodTypeParameters
     (reader: ITypeScriptReader)
     (typeParameters: ResizeArray<Ts.TypeParameterDeclaration> option)
@@ -19,9 +20,25 @@ let private readMethodTypeParameters
         typeParameters
         |> Seq.toList
         |> List.map (fun typeParameter ->
+            let keyOfMap =
+                match typeParameter.``constraint`` with
+                | Some constraintNode when constraintNode.kind = Ts.SyntaxKind.TypeOperator ->
+                    let typeOperator = constraintNode :?> Ts.TypeOperatorNode
+
+                    if
+                        typeOperator.operator = Ts.SyntaxKind.KeyOfKeyword
+                        && typeOperator.``type``.kind = Ts.SyntaxKind.TypeReference
+                    then
+                        match reader.ReadTypeNode typeOperator.``type`` with
+                        | GlueType.TypeReference _ as map -> Some(GlueType.KeyOf map)
+                        | _ -> None
+                    else
+                        None
+                | _ -> None
+
             {
                 Name = identifierText typeParameter.name
-                Constraint = None
+                Constraint = keyOfMap
                 Default = typeParameter.``default`` |> Option.map reader.ReadTypeNode
             }
         )

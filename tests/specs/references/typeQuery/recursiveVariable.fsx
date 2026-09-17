@@ -38,7 +38,7 @@ module Exports =
             type defaults =
                 [<Emit("$0($1...)")>]
                 abstract member Invoke: p: string * pattern: string * ?options: Options -> bool
-                abstract member defaults: (Options -> obj) with get, set
+                abstract member defaults: (Options -> unit) with get, set
 
 (***)
 #r "nuget: Fable.Core"
