@@ -2,6 +2,7 @@
 name: Glutinum.Node
 # Learn more about configuration at
 # https://github.com/easybuild-org/EasyBuild.ShipIt#configuration
+last_commit_released: 12ad780b6050dc54eeb288859c2f7aec30551aaa
 ---
 
 # Changelog
