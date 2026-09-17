@@ -106,6 +106,9 @@ type PackageContext =
 
                 if withoutExtension = "index" && not rest.IsEmpty then
                     List.rev rest
+                // `chart.js/auto` is `auto/auto.d.ts`
+                elif List.tryHead rest = Some withoutExtension then
+                    List.rev rest
                 else
                     List.rev (withoutExtension :: rest)
             | [] -> []

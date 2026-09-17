@@ -8,7 +8,9 @@ open System
 [<Erase>]
 type Exports =
     [<Import("log", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member log (data: U2<string, float>) : unit = nativeOnly
+    static member log (data: string) : unit = nativeOnly
+    [<Import("log", "REPLACE_ME_WITH_MODULE_NAME")>]
+    static member log (data: float) : unit = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

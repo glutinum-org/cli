@@ -88,6 +88,8 @@ let rec private signatureTypeAt (depth: int) (typ: FSharpType) : FSharpType =
             ReturnType = signatureType functionType.ReturnType
         }
         |> FSharpType.Function
+    // `any` and `object` are both `obj`
+    | FSharpType.Primitive FSharpPrimitive.Null -> FSharpType.Object
     | typ -> typ
 
 let signatureType (typ: FSharpType) : FSharpType = signatureTypeAt 0 typ

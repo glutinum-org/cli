@@ -534,6 +534,27 @@ and GlueReExport =
 /// Replace the type parameters of a declaration by type arguments
 module GlueSubstitution =
 
+    let rec mentionedTypeParameters (glueType: GlueType) : string list =
+        match glueType with
+        | GlueType.TypeParameter name -> [ name ]
+        | GlueType.TypeReference typeReference ->
+            typeReference.TypeArguments |> List.collect mentionedTypeParameters
+        | GlueType.Array glueType
+        | GlueType.ReadOnly glueType
+        | GlueType.OptionalType glueType
+        | GlueType.KeyOf glueType -> mentionedTypeParameters glueType
+        | GlueType.Union(GlueTypeUnion cases) -> cases |> List.collect mentionedTypeParameters
+        | GlueType.TupleType glueTypes -> glueTypes |> List.collect mentionedTypeParameters
+        | GlueType.NamedTupleType namedTuple -> mentionedTypeParameters namedTuple.Type
+        | GlueType.IndexedAccessType indexedAccess ->
+            mentionedTypeParameters indexedAccess.ObjectType
+            @ mentionedTypeParameters indexedAccess.IndexType
+        | GlueType.FunctionType functionType ->
+            mentionedTypeParameters functionType.Type
+            @ (functionType.Parameters
+               |> List.collect (fun parameter -> mentionedTypeParameters parameter.Type))
+        | _ -> []
+
     let rec substitute (substitutions: Map<string, GlueType>) (glueType: GlueType) : GlueType =
         let substitute = substitute substitutions
 
@@ -564,6 +585,24 @@ module GlueSubstitution =
                     Parameters =
                         functionType.Parameters |> List.map (substituteParameter substitutions)
                     Type = substitute functionType.Type
+                    // The enclosing type parameters of the delegate follow the substitution,
+                    // `On -> HTMLElementTagNameMap[K][]` brings `K`
+                    TypeParameters =
+                        functionType.TypeParameters
+                        |> List.collect (fun typeParameter ->
+                            match Map.tryFind typeParameter.Name substitutions with
+                            | None -> [ typeParameter ]
+                            | Some replacement ->
+                                mentionedTypeParameters replacement
+                                |> List.map (fun name ->
+                                    {
+                                        Name = name
+                                        Constraint = None
+                                        Default = None
+                                    }
+                                )
+                        )
+                        |> List.distinctBy _.Name
                 }
         | GlueType.ConditionalType conditionalType ->
             GlueType.ConditionalType

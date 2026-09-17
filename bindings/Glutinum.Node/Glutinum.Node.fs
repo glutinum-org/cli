@@ -9125,7 +9125,112 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
         /// <c>Buffer.from(string)</c> may also use the internal <c>Buffer</c> pool like
         /// <c>Buffer.allocUnsafe()</c> does.
         /// </summary>
-        abstract member from: array: Node.buffer.buffer_.WithImplicitCoercion<obj> -> Node.Buffer
+        abstract member from: array: obj -> Node.Buffer
+        /// <summary>
+        /// Allocates a new <c>Buffer</c> using an <c>array</c> of bytes in the range <c>0</c> – <c>255</c>.
+        /// Array entries outside that range will be truncated to fit into it.
+        ///
+        /// <code lang="js">
+        /// import { Buffer } from 'node:buffer';
+        ///
+        /// // Creates a new Buffer containing the UTF-8 bytes of the string 'buffer'.
+        /// const buf = Buffer.from([0x62, 0x75, 0x66, 0x66, 0x65, 0x72]);
+        /// </code>
+        ///
+        /// If <c>array</c> is an <c>Array</c>-like object (that is, one with a <c>length</c> property of
+        /// type <c>number</c>), it is treated as if it is an array, unless it is a <c>Buffer</c> or
+        /// a <c>Uint8Array</c>. This means all other <c>TypedArray</c> variants get treated as an
+        /// <c>Array</c>. To create a <c>Buffer</c> from the bytes backing a <c>TypedArray</c>, use
+        /// <c>Buffer.copyBytesFrom()</c>.
+        ///
+        /// A <c>TypeError</c> will be thrown if <c>array</c> is not an <c>Array</c> or another type
+        /// appropriate for <c>Buffer.from()</c> variants.
+        ///
+        /// <c>Buffer.from(array)</c> and <c>Buffer.from(string)</c> may also use the internal
+        /// <c>Buffer</c> pool like <c>Buffer.allocUnsafe()</c> does.
+        /// This creates a view of the <c>ArrayBuffer</c> without copying the underlying
+        /// memory. For example, when passed a reference to the <c>.buffer</c> property of a
+        /// <c>TypedArray</c> instance, the newly created <c>Buffer</c> will share the same
+        /// allocated memory as the <c>TypedArray</c>'s underlying <c>ArrayBuffer</c>.
+        ///
+        /// <c></c><c>js
+        /// import { Buffer } from 'node:buffer';
+        ///
+        /// const arr = new Uint16Array(2);
+        ///
+        /// arr[0] = 5000;
+        /// arr[1] = 4000;
+        ///
+        /// // Shares memory with </c>arr<c>.
+        /// const buf = Buffer.from(arr.buffer);
+        ///
+        /// console.log(buf);
+        /// // Prints: <Buffer 88 13 a0 0f>
+        ///
+        /// // Changing the original Uint16Array changes the Buffer also.
+        /// arr[1] = 6000;
+        ///
+        /// console.log(buf);
+        /// // Prints: <Buffer 88 13 70 17>
+        /// </c><c></c>
+        ///
+        /// The optional <c>byteOffset</c> and <c>length</c> arguments specify a memory range within
+        /// the <c>arrayBuffer</c> that will be shared by the <c>Buffer</c>.
+        ///
+        /// <code lang="js">
+        /// import { Buffer } from 'node:buffer';
+        ///
+        /// const ab = new ArrayBuffer(10);
+        /// const buf = Buffer.from(ab, 0, 2);
+        ///
+        /// console.log(buf.length);
+        /// // Prints: 2
+        /// </code>
+        ///
+        /// A <c>TypeError</c> will be thrown if <c>arrayBuffer</c> is not an <c>ArrayBuffer</c> or a
+        /// <c>SharedArrayBuffer</c> or another type appropriate for <c>Buffer.from()</c>
+        /// variants.
+        ///
+        /// It is important to remember that a backing <c>ArrayBuffer</c> can cover a range
+        /// of memory that extends beyond the bounds of a <c>TypedArray</c> view. A new
+        /// <c>Buffer</c> created using the <c>buffer</c> property of a <c>TypedArray</c> may extend
+        /// beyond the range of the <c>TypedArray</c>:
+        ///
+        /// <code lang="js">
+        /// import { Buffer } from 'node:buffer';
+        ///
+        /// const arrA = Uint8Array.from([0x63, 0x64, 0x65, 0x66]); // 4 elements
+        /// const arrB = new Uint8Array(arrA.buffer, 1, 2); // 2 elements
+        /// console.log(arrA.buffer === arrB.buffer); // true
+        ///
+        /// const buf = Buffer.from(arrB.buffer);
+        /// console.log(buf);
+        /// // Prints: <Buffer 63 64 65 66>
+        /// </code>
+        /// Creates a new <c>Buffer</c> containing <c>string</c>. The <c>encoding</c> parameter identifies
+        /// the character encoding to be used when converting <c>string</c> into bytes.
+        ///
+        /// <code lang="js">
+        /// import { Buffer } from 'node:buffer';
+        ///
+        /// const buf1 = Buffer.from('this is a tést');
+        /// const buf2 = Buffer.from('7468697320697320612074c3a97374', 'hex');
+        ///
+        /// console.log(buf1.toString());
+        /// // Prints: this is a tést
+        /// console.log(buf2.toString());
+        /// // Prints: this is a tést
+        /// console.log(buf1.toString('latin1'));
+        /// // Prints: this is a tÃ©st
+        /// </code>
+        ///
+        /// A <c>TypeError</c> will be thrown if <c>string</c> is not a string or another type
+        /// appropriate for <c>Buffer.from()</c> variants.
+        ///
+        /// <c>Buffer.from(string)</c> may also use the internal <c>Buffer</c> pool like
+        /// <c>Buffer.allocUnsafe()</c> does.
+        /// </summary>
+        abstract member from: array: BufferConstructor.from.array -> Node.Buffer
         /// <summary>
         /// Allocates a new <c>Buffer</c> using an <c>array</c> of bytes in the range <c>0</c> – <c>255</c>.
         /// Array entries outside that range will be truncated to fit into it.
@@ -9241,7 +9346,123 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
         /// Number of bytes to expose. **Default:**
         /// <c>arrayBuffer.byteLength - byteOffset</c>.
         /// </param>
-        abstract member from: arrayBuffer: Node.buffer.buffer_.WithImplicitCoercion<obj> * ?byteOffset: float * ?length: float -> Node.Buffer
+        abstract member from: arrayBuffer: obj * ?byteOffset: float * ?length: float -> Node.Buffer
+        /// <summary>
+        /// Allocates a new <c>Buffer</c> using an <c>array</c> of bytes in the range <c>0</c> – <c>255</c>.
+        /// Array entries outside that range will be truncated to fit into it.
+        ///
+        /// <code lang="js">
+        /// import { Buffer } from 'node:buffer';
+        ///
+        /// // Creates a new Buffer containing the UTF-8 bytes of the string 'buffer'.
+        /// const buf = Buffer.from([0x62, 0x75, 0x66, 0x66, 0x65, 0x72]);
+        /// </code>
+        ///
+        /// If <c>array</c> is an <c>Array</c>-like object (that is, one with a <c>length</c> property of
+        /// type <c>number</c>), it is treated as if it is an array, unless it is a <c>Buffer</c> or
+        /// a <c>Uint8Array</c>. This means all other <c>TypedArray</c> variants get treated as an
+        /// <c>Array</c>. To create a <c>Buffer</c> from the bytes backing a <c>TypedArray</c>, use
+        /// <c>Buffer.copyBytesFrom()</c>.
+        ///
+        /// A <c>TypeError</c> will be thrown if <c>array</c> is not an <c>Array</c> or another type
+        /// appropriate for <c>Buffer.from()</c> variants.
+        ///
+        /// <c>Buffer.from(array)</c> and <c>Buffer.from(string)</c> may also use the internal
+        /// <c>Buffer</c> pool like <c>Buffer.allocUnsafe()</c> does.
+        /// This creates a view of the <c>ArrayBuffer</c> without copying the underlying
+        /// memory. For example, when passed a reference to the <c>.buffer</c> property of a
+        /// <c>TypedArray</c> instance, the newly created <c>Buffer</c> will share the same
+        /// allocated memory as the <c>TypedArray</c>'s underlying <c>ArrayBuffer</c>.
+        ///
+        /// <c></c><c>js
+        /// import { Buffer } from 'node:buffer';
+        ///
+        /// const arr = new Uint16Array(2);
+        ///
+        /// arr[0] = 5000;
+        /// arr[1] = 4000;
+        ///
+        /// // Shares memory with </c>arr<c>.
+        /// const buf = Buffer.from(arr.buffer);
+        ///
+        /// console.log(buf);
+        /// // Prints: <Buffer 88 13 a0 0f>
+        ///
+        /// // Changing the original Uint16Array changes the Buffer also.
+        /// arr[1] = 6000;
+        ///
+        /// console.log(buf);
+        /// // Prints: <Buffer 88 13 70 17>
+        /// </c><c></c>
+        ///
+        /// The optional <c>byteOffset</c> and <c>length</c> arguments specify a memory range within
+        /// the <c>arrayBuffer</c> that will be shared by the <c>Buffer</c>.
+        ///
+        /// <code lang="js">
+        /// import { Buffer } from 'node:buffer';
+        ///
+        /// const ab = new ArrayBuffer(10);
+        /// const buf = Buffer.from(ab, 0, 2);
+        ///
+        /// console.log(buf.length);
+        /// // Prints: 2
+        /// </code>
+        ///
+        /// A <c>TypeError</c> will be thrown if <c>arrayBuffer</c> is not an <c>ArrayBuffer</c> or a
+        /// <c>SharedArrayBuffer</c> or another type appropriate for <c>Buffer.from()</c>
+        /// variants.
+        ///
+        /// It is important to remember that a backing <c>ArrayBuffer</c> can cover a range
+        /// of memory that extends beyond the bounds of a <c>TypedArray</c> view. A new
+        /// <c>Buffer</c> created using the <c>buffer</c> property of a <c>TypedArray</c> may extend
+        /// beyond the range of the <c>TypedArray</c>:
+        ///
+        /// <code lang="js">
+        /// import { Buffer } from 'node:buffer';
+        ///
+        /// const arrA = Uint8Array.from([0x63, 0x64, 0x65, 0x66]); // 4 elements
+        /// const arrB = new Uint8Array(arrA.buffer, 1, 2); // 2 elements
+        /// console.log(arrA.buffer === arrB.buffer); // true
+        ///
+        /// const buf = Buffer.from(arrB.buffer);
+        /// console.log(buf);
+        /// // Prints: <Buffer 63 64 65 66>
+        /// </code>
+        /// Creates a new <c>Buffer</c> containing <c>string</c>. The <c>encoding</c> parameter identifies
+        /// the character encoding to be used when converting <c>string</c> into bytes.
+        ///
+        /// <code lang="js">
+        /// import { Buffer } from 'node:buffer';
+        ///
+        /// const buf1 = Buffer.from('this is a tést');
+        /// const buf2 = Buffer.from('7468697320697320612074c3a97374', 'hex');
+        ///
+        /// console.log(buf1.toString());
+        /// // Prints: this is a tést
+        /// console.log(buf2.toString());
+        /// // Prints: this is a tést
+        /// console.log(buf1.toString('latin1'));
+        /// // Prints: this is a tÃ©st
+        /// </code>
+        ///
+        /// A <c>TypeError</c> will be thrown if <c>string</c> is not a string or another type
+        /// appropriate for <c>Buffer.from()</c> variants.
+        ///
+        /// <c>Buffer.from(string)</c> may also use the internal <c>Buffer</c> pool like
+        /// <c>Buffer.allocUnsafe()</c> does.
+        /// </summary>
+        /// <param name="arrayBuffer">
+        /// An <c>ArrayBuffer</c>, <c>SharedArrayBuffer</c>, for example the
+        /// <c>.buffer</c> property of a <c>TypedArray</c>.
+        /// </param>
+        /// <param name="byteOffset">
+        /// Index of first byte to expose. **Default:** <c>0</c>.
+        /// </param>
+        /// <param name="length">
+        /// Number of bytes to expose. **Default:**
+        /// <c>arrayBuffer.byteLength - byteOffset</c>.
+        /// </param>
+        abstract member from: arrayBuffer: BufferConstructor.from.arrayBuffer * ?byteOffset: float * ?length: float -> Node.Buffer
         /// <summary>
         /// Allocates a new <c>Buffer</c> using an <c>array</c> of bytes in the range <c>0</c> – <c>255</c>.
         /// Array entries outside that range will be truncated to fit into it.
@@ -9352,7 +9573,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
         /// <param name="encoding">
         /// The encoding of <c>string</c>. **Default:** <c>'utf8'</c>.
         /// </param>
-        abstract member from: string: Node.buffer.buffer_.WithImplicitCoercion<string> * ?encoding: Node.BufferEncoding -> Node.Buffer
+        abstract member from: string: string * ?encoding: Node.BufferEncoding -> Node.Buffer
         /// <summary>
         /// Allocates a new <c>Buffer</c> using an <c>array</c> of bytes in the range <c>0</c> – <c>255</c>.
         /// Array entries outside that range will be truncated to fit into it.
@@ -9457,7 +9678,334 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
         /// <c>Buffer.from(string)</c> may also use the internal <c>Buffer</c> pool like
         /// <c>Buffer.allocUnsafe()</c> does.
         /// </summary>
-        abstract member from: arrayOrString: Node.buffer.buffer_.WithImplicitCoercion<U2<obj, string>> -> Node.Buffer
+        /// <param name="string">
+        /// A string to encode.
+        /// </param>
+        /// <param name="encoding">
+        /// The encoding of <c>string</c>. **Default:** <c>'utf8'</c>.
+        /// </param>
+        abstract member from: string: BufferConstructor.from.string * ?encoding: Node.BufferEncoding -> Node.Buffer
+        /// <summary>
+        /// Allocates a new <c>Buffer</c> using an <c>array</c> of bytes in the range <c>0</c> – <c>255</c>.
+        /// Array entries outside that range will be truncated to fit into it.
+        ///
+        /// <code lang="js">
+        /// import { Buffer } from 'node:buffer';
+        ///
+        /// // Creates a new Buffer containing the UTF-8 bytes of the string 'buffer'.
+        /// const buf = Buffer.from([0x62, 0x75, 0x66, 0x66, 0x65, 0x72]);
+        /// </code>
+        ///
+        /// If <c>array</c> is an <c>Array</c>-like object (that is, one with a <c>length</c> property of
+        /// type <c>number</c>), it is treated as if it is an array, unless it is a <c>Buffer</c> or
+        /// a <c>Uint8Array</c>. This means all other <c>TypedArray</c> variants get treated as an
+        /// <c>Array</c>. To create a <c>Buffer</c> from the bytes backing a <c>TypedArray</c>, use
+        /// <c>Buffer.copyBytesFrom()</c>.
+        ///
+        /// A <c>TypeError</c> will be thrown if <c>array</c> is not an <c>Array</c> or another type
+        /// appropriate for <c>Buffer.from()</c> variants.
+        ///
+        /// <c>Buffer.from(array)</c> and <c>Buffer.from(string)</c> may also use the internal
+        /// <c>Buffer</c> pool like <c>Buffer.allocUnsafe()</c> does.
+        /// This creates a view of the <c>ArrayBuffer</c> without copying the underlying
+        /// memory. For example, when passed a reference to the <c>.buffer</c> property of a
+        /// <c>TypedArray</c> instance, the newly created <c>Buffer</c> will share the same
+        /// allocated memory as the <c>TypedArray</c>'s underlying <c>ArrayBuffer</c>.
+        ///
+        /// <c></c><c>js
+        /// import { Buffer } from 'node:buffer';
+        ///
+        /// const arr = new Uint16Array(2);
+        ///
+        /// arr[0] = 5000;
+        /// arr[1] = 4000;
+        ///
+        /// // Shares memory with </c>arr<c>.
+        /// const buf = Buffer.from(arr.buffer);
+        ///
+        /// console.log(buf);
+        /// // Prints: <Buffer 88 13 a0 0f>
+        ///
+        /// // Changing the original Uint16Array changes the Buffer also.
+        /// arr[1] = 6000;
+        ///
+        /// console.log(buf);
+        /// // Prints: <Buffer 88 13 70 17>
+        /// </c><c></c>
+        ///
+        /// The optional <c>byteOffset</c> and <c>length</c> arguments specify a memory range within
+        /// the <c>arrayBuffer</c> that will be shared by the <c>Buffer</c>.
+        ///
+        /// <code lang="js">
+        /// import { Buffer } from 'node:buffer';
+        ///
+        /// const ab = new ArrayBuffer(10);
+        /// const buf = Buffer.from(ab, 0, 2);
+        ///
+        /// console.log(buf.length);
+        /// // Prints: 2
+        /// </code>
+        ///
+        /// A <c>TypeError</c> will be thrown if <c>arrayBuffer</c> is not an <c>ArrayBuffer</c> or a
+        /// <c>SharedArrayBuffer</c> or another type appropriate for <c>Buffer.from()</c>
+        /// variants.
+        ///
+        /// It is important to remember that a backing <c>ArrayBuffer</c> can cover a range
+        /// of memory that extends beyond the bounds of a <c>TypedArray</c> view. A new
+        /// <c>Buffer</c> created using the <c>buffer</c> property of a <c>TypedArray</c> may extend
+        /// beyond the range of the <c>TypedArray</c>:
+        ///
+        /// <code lang="js">
+        /// import { Buffer } from 'node:buffer';
+        ///
+        /// const arrA = Uint8Array.from([0x63, 0x64, 0x65, 0x66]); // 4 elements
+        /// const arrB = new Uint8Array(arrA.buffer, 1, 2); // 2 elements
+        /// console.log(arrA.buffer === arrB.buffer); // true
+        ///
+        /// const buf = Buffer.from(arrB.buffer);
+        /// console.log(buf);
+        /// // Prints: <Buffer 63 64 65 66>
+        /// </code>
+        /// Creates a new <c>Buffer</c> containing <c>string</c>. The <c>encoding</c> parameter identifies
+        /// the character encoding to be used when converting <c>string</c> into bytes.
+        ///
+        /// <code lang="js">
+        /// import { Buffer } from 'node:buffer';
+        ///
+        /// const buf1 = Buffer.from('this is a tést');
+        /// const buf2 = Buffer.from('7468697320697320612074c3a97374', 'hex');
+        ///
+        /// console.log(buf1.toString());
+        /// // Prints: this is a tést
+        /// console.log(buf2.toString());
+        /// // Prints: this is a tést
+        /// console.log(buf1.toString('latin1'));
+        /// // Prints: this is a tÃ©st
+        /// </code>
+        ///
+        /// A <c>TypeError</c> will be thrown if <c>string</c> is not a string or another type
+        /// appropriate for <c>Buffer.from()</c> variants.
+        ///
+        /// <c>Buffer.from(string)</c> may also use the internal <c>Buffer</c> pool like
+        /// <c>Buffer.allocUnsafe()</c> does.
+        /// </summary>
+        /// <param name="string">
+        /// A string to encode.
+        /// </param>
+        /// <param name="encoding">
+        /// The encoding of <c>string</c>. **Default:** <c>'utf8'</c>.
+        /// </param>
+        abstract member from: string: obj * ?encoding: Node.BufferEncoding -> Node.Buffer
+        /// <summary>
+        /// Allocates a new <c>Buffer</c> using an <c>array</c> of bytes in the range <c>0</c> – <c>255</c>.
+        /// Array entries outside that range will be truncated to fit into it.
+        ///
+        /// <code lang="js">
+        /// import { Buffer } from 'node:buffer';
+        ///
+        /// // Creates a new Buffer containing the UTF-8 bytes of the string 'buffer'.
+        /// const buf = Buffer.from([0x62, 0x75, 0x66, 0x66, 0x65, 0x72]);
+        /// </code>
+        ///
+        /// If <c>array</c> is an <c>Array</c>-like object (that is, one with a <c>length</c> property of
+        /// type <c>number</c>), it is treated as if it is an array, unless it is a <c>Buffer</c> or
+        /// a <c>Uint8Array</c>. This means all other <c>TypedArray</c> variants get treated as an
+        /// <c>Array</c>. To create a <c>Buffer</c> from the bytes backing a <c>TypedArray</c>, use
+        /// <c>Buffer.copyBytesFrom()</c>.
+        ///
+        /// A <c>TypeError</c> will be thrown if <c>array</c> is not an <c>Array</c> or another type
+        /// appropriate for <c>Buffer.from()</c> variants.
+        ///
+        /// <c>Buffer.from(array)</c> and <c>Buffer.from(string)</c> may also use the internal
+        /// <c>Buffer</c> pool like <c>Buffer.allocUnsafe()</c> does.
+        /// This creates a view of the <c>ArrayBuffer</c> without copying the underlying
+        /// memory. For example, when passed a reference to the <c>.buffer</c> property of a
+        /// <c>TypedArray</c> instance, the newly created <c>Buffer</c> will share the same
+        /// allocated memory as the <c>TypedArray</c>'s underlying <c>ArrayBuffer</c>.
+        ///
+        /// <c></c><c>js
+        /// import { Buffer } from 'node:buffer';
+        ///
+        /// const arr = new Uint16Array(2);
+        ///
+        /// arr[0] = 5000;
+        /// arr[1] = 4000;
+        ///
+        /// // Shares memory with </c>arr<c>.
+        /// const buf = Buffer.from(arr.buffer);
+        ///
+        /// console.log(buf);
+        /// // Prints: <Buffer 88 13 a0 0f>
+        ///
+        /// // Changing the original Uint16Array changes the Buffer also.
+        /// arr[1] = 6000;
+        ///
+        /// console.log(buf);
+        /// // Prints: <Buffer 88 13 70 17>
+        /// </c><c></c>
+        ///
+        /// The optional <c>byteOffset</c> and <c>length</c> arguments specify a memory range within
+        /// the <c>arrayBuffer</c> that will be shared by the <c>Buffer</c>.
+        ///
+        /// <code lang="js">
+        /// import { Buffer } from 'node:buffer';
+        ///
+        /// const ab = new ArrayBuffer(10);
+        /// const buf = Buffer.from(ab, 0, 2);
+        ///
+        /// console.log(buf.length);
+        /// // Prints: 2
+        /// </code>
+        ///
+        /// A <c>TypeError</c> will be thrown if <c>arrayBuffer</c> is not an <c>ArrayBuffer</c> or a
+        /// <c>SharedArrayBuffer</c> or another type appropriate for <c>Buffer.from()</c>
+        /// variants.
+        ///
+        /// It is important to remember that a backing <c>ArrayBuffer</c> can cover a range
+        /// of memory that extends beyond the bounds of a <c>TypedArray</c> view. A new
+        /// <c>Buffer</c> created using the <c>buffer</c> property of a <c>TypedArray</c> may extend
+        /// beyond the range of the <c>TypedArray</c>:
+        ///
+        /// <code lang="js">
+        /// import { Buffer } from 'node:buffer';
+        ///
+        /// const arrA = Uint8Array.from([0x63, 0x64, 0x65, 0x66]); // 4 elements
+        /// const arrB = new Uint8Array(arrA.buffer, 1, 2); // 2 elements
+        /// console.log(arrA.buffer === arrB.buffer); // true
+        ///
+        /// const buf = Buffer.from(arrB.buffer);
+        /// console.log(buf);
+        /// // Prints: <Buffer 63 64 65 66>
+        /// </code>
+        /// Creates a new <c>Buffer</c> containing <c>string</c>. The <c>encoding</c> parameter identifies
+        /// the character encoding to be used when converting <c>string</c> into bytes.
+        ///
+        /// <code lang="js">
+        /// import { Buffer } from 'node:buffer';
+        ///
+        /// const buf1 = Buffer.from('this is a tést');
+        /// const buf2 = Buffer.from('7468697320697320612074c3a97374', 'hex');
+        ///
+        /// console.log(buf1.toString());
+        /// // Prints: this is a tést
+        /// console.log(buf2.toString());
+        /// // Prints: this is a tést
+        /// console.log(buf1.toString('latin1'));
+        /// // Prints: this is a tÃ©st
+        /// </code>
+        ///
+        /// A <c>TypeError</c> will be thrown if <c>string</c> is not a string or another type
+        /// appropriate for <c>Buffer.from()</c> variants.
+        ///
+        /// <c>Buffer.from(string)</c> may also use the internal <c>Buffer</c> pool like
+        /// <c>Buffer.allocUnsafe()</c> does.
+        /// </summary>
+        abstract member from: arrayOrString: U2<obj, string> -> Node.Buffer
+        /// <summary>
+        /// Allocates a new <c>Buffer</c> using an <c>array</c> of bytes in the range <c>0</c> – <c>255</c>.
+        /// Array entries outside that range will be truncated to fit into it.
+        ///
+        /// <code lang="js">
+        /// import { Buffer } from 'node:buffer';
+        ///
+        /// // Creates a new Buffer containing the UTF-8 bytes of the string 'buffer'.
+        /// const buf = Buffer.from([0x62, 0x75, 0x66, 0x66, 0x65, 0x72]);
+        /// </code>
+        ///
+        /// If <c>array</c> is an <c>Array</c>-like object (that is, one with a <c>length</c> property of
+        /// type <c>number</c>), it is treated as if it is an array, unless it is a <c>Buffer</c> or
+        /// a <c>Uint8Array</c>. This means all other <c>TypedArray</c> variants get treated as an
+        /// <c>Array</c>. To create a <c>Buffer</c> from the bytes backing a <c>TypedArray</c>, use
+        /// <c>Buffer.copyBytesFrom()</c>.
+        ///
+        /// A <c>TypeError</c> will be thrown if <c>array</c> is not an <c>Array</c> or another type
+        /// appropriate for <c>Buffer.from()</c> variants.
+        ///
+        /// <c>Buffer.from(array)</c> and <c>Buffer.from(string)</c> may also use the internal
+        /// <c>Buffer</c> pool like <c>Buffer.allocUnsafe()</c> does.
+        /// This creates a view of the <c>ArrayBuffer</c> without copying the underlying
+        /// memory. For example, when passed a reference to the <c>.buffer</c> property of a
+        /// <c>TypedArray</c> instance, the newly created <c>Buffer</c> will share the same
+        /// allocated memory as the <c>TypedArray</c>'s underlying <c>ArrayBuffer</c>.
+        ///
+        /// <c></c><c>js
+        /// import { Buffer } from 'node:buffer';
+        ///
+        /// const arr = new Uint16Array(2);
+        ///
+        /// arr[0] = 5000;
+        /// arr[1] = 4000;
+        ///
+        /// // Shares memory with </c>arr<c>.
+        /// const buf = Buffer.from(arr.buffer);
+        ///
+        /// console.log(buf);
+        /// // Prints: <Buffer 88 13 a0 0f>
+        ///
+        /// // Changing the original Uint16Array changes the Buffer also.
+        /// arr[1] = 6000;
+        ///
+        /// console.log(buf);
+        /// // Prints: <Buffer 88 13 70 17>
+        /// </c><c></c>
+        ///
+        /// The optional <c>byteOffset</c> and <c>length</c> arguments specify a memory range within
+        /// the <c>arrayBuffer</c> that will be shared by the <c>Buffer</c>.
+        ///
+        /// <code lang="js">
+        /// import { Buffer } from 'node:buffer';
+        ///
+        /// const ab = new ArrayBuffer(10);
+        /// const buf = Buffer.from(ab, 0, 2);
+        ///
+        /// console.log(buf.length);
+        /// // Prints: 2
+        /// </code>
+        ///
+        /// A <c>TypeError</c> will be thrown if <c>arrayBuffer</c> is not an <c>ArrayBuffer</c> or a
+        /// <c>SharedArrayBuffer</c> or another type appropriate for <c>Buffer.from()</c>
+        /// variants.
+        ///
+        /// It is important to remember that a backing <c>ArrayBuffer</c> can cover a range
+        /// of memory that extends beyond the bounds of a <c>TypedArray</c> view. A new
+        /// <c>Buffer</c> created using the <c>buffer</c> property of a <c>TypedArray</c> may extend
+        /// beyond the range of the <c>TypedArray</c>:
+        ///
+        /// <code lang="js">
+        /// import { Buffer } from 'node:buffer';
+        ///
+        /// const arrA = Uint8Array.from([0x63, 0x64, 0x65, 0x66]); // 4 elements
+        /// const arrB = new Uint8Array(arrA.buffer, 1, 2); // 2 elements
+        /// console.log(arrA.buffer === arrB.buffer); // true
+        ///
+        /// const buf = Buffer.from(arrB.buffer);
+        /// console.log(buf);
+        /// // Prints: <Buffer 63 64 65 66>
+        /// </code>
+        /// Creates a new <c>Buffer</c> containing <c>string</c>. The <c>encoding</c> parameter identifies
+        /// the character encoding to be used when converting <c>string</c> into bytes.
+        ///
+        /// <code lang="js">
+        /// import { Buffer } from 'node:buffer';
+        ///
+        /// const buf1 = Buffer.from('this is a tést');
+        /// const buf2 = Buffer.from('7468697320697320612074c3a97374', 'hex');
+        ///
+        /// console.log(buf1.toString());
+        /// // Prints: this is a tést
+        /// console.log(buf2.toString());
+        /// // Prints: this is a tést
+        /// console.log(buf1.toString('latin1'));
+        /// // Prints: this is a tÃ©st
+        /// </code>
+        ///
+        /// A <c>TypeError</c> will be thrown if <c>string</c> is not a string or another type
+        /// appropriate for <c>Buffer.from()</c> variants.
+        ///
+        /// <c>Buffer.from(string)</c> may also use the internal <c>Buffer</c> pool like
+        /// <c>Buffer.allocUnsafe()</c> does.
+        /// </summary>
+        abstract member from: arrayOrString: BufferConstructor.from.arrayOrString -> Node.Buffer
         /// <summary>
         /// Creates a new Buffer using the passed {data}
         /// </summary>
@@ -13299,6 +13847,53 @@ TypeScript versions earlier than 5.7.""")>]
             | _MINUS_1 = -1
             | ``0`` = 0
             | ``1`` = 1
+
+        module from =
+
+            [<Global>]
+            [<AllowNullLiteral>]
+            type array
+                [<ParamObject; Emit("$0")>]
+                (
+                    valueOf: obj
+                ) =
+
+                member val valueOf : obj = nativeOnly
+
+            [<Global>]
+            [<AllowNullLiteral>]
+            type arrayBuffer
+                [<ParamObject; Emit("$0")>]
+                (
+                    valueOf: obj
+                ) =
+
+                member val valueOf : obj = nativeOnly
+
+            [<Global>]
+            [<AllowNullLiteral>]
+            type string
+                [<ParamObject; Emit("$0")>]
+                (
+                    valueOf: string
+                ) =
+
+                member val valueOf : string = nativeOnly
+
+            [<Global>]
+            [<AllowNullLiteral>]
+            type arrayOrString
+                private () =
+
+                [<ParamObject; Emit("$0")>]
+                new (valueOf: obj) =
+                    arrayOrString()
+
+                [<ParamObject; Emit("$0")>]
+                new (valueOf: string) =
+                    arrayOrString()
+
+                member val valueOf : U2<obj, string> = nativeOnly
 
     module Buffer =
 
@@ -125923,7 +126518,10 @@ the userland-provided Punycode.js module instead.""")>]
         type Stream =
             inherit Node.events.EventEmitter
             abstract member pipe: destination: 'T * ?options: Stream.pipe.options -> 'T
-            abstract member compose: stream: U4<'T, Node.stream.ComposeFnParam, Iterable<'T>, obj> * ?options: Stream.compose.options -> 'T
+            abstract member compose: stream: 'T * ?options: Stream.compose.options -> 'T
+            abstract member compose: stream: Node.stream.ComposeFnParam * ?options: Stream.compose.options -> 'T
+            abstract member compose: stream: Iterable<'T> * ?options: Stream.compose.options -> 'T
+            abstract member compose: stream: obj * ?options: Stream.compose.options -> 'T
 
         module Stream_ =
 
@@ -152314,7 +152912,79 @@ URL.parse($0, $1)"""
             /// </code>
             /// </summary>
             [<Import("promisify", "util")>]
-            static member promisify<'TCustom> (fn: Node.util.CustomPromisify<'TCustom>) : 'TCustom = nativeOnly
+            static member promisify<'TCustom> (fn: Node.util.CustomPromisifySymbol<'TCustom>) : 'TCustom = nativeOnly
+            /// <summary>
+            /// Takes a function following the common error-first callback style, i.e. taking
+            /// an <c>(err, value) => ...</c> callback as the last argument, and returns a version
+            /// that returns promises.
+            ///
+            /// <c></c><c>js
+            /// import { promisify } from 'node:util';
+            /// import { stat } from 'node:fs';
+            ///
+            /// const promisifiedStat = promisify(stat);
+            /// promisifiedStat('.').then((stats) => {
+            ///   // Do something with </c>stats<c>
+            /// }).catch((error) => {
+            ///   // Handle the error.
+            /// });
+            /// </c><c></c>
+            ///
+            /// Or, equivalently using <c>async function</c>s:
+            ///
+            /// <c></c><c>js
+            /// import { promisify } from 'node:util';
+            /// import { stat } from 'node:fs';
+            ///
+            /// const promisifiedStat = promisify(stat);
+            ///
+            /// async function callStat() {
+            ///   const stats = await promisifiedStat('.');
+            ///   console.log(</c>This directory is owned by ${stats.uid}<c>);
+            /// }
+            ///
+            /// callStat();
+            /// </c><c></c>
+            ///
+            /// If there is an <c>original[util.promisify.custom]</c> property present, <c>promisify</c>
+            /// will return its value, see [Custom promisified functions](https://nodejs.org/docs/latest-v22.x/api/util.html#custom-promisified-functions).
+            ///
+            /// <c>promisify()</c> assumes that <c>original</c> is a function taking a callback as its
+            /// final argument in all cases. If <c>original</c> is not a function, <c>promisify()</c>
+            /// will throw an error. If <c>original</c> is a function but its last argument is not
+            /// an error-first callback, it will still be passed an error-first
+            /// callback as its last argument.
+            ///
+            /// Using <c>promisify()</c> on class methods or other methods that use <c>this</c> may not
+            /// work as expected unless handled specially:
+            ///
+            /// <code lang="js">
+            /// import { promisify } from 'node:util';
+            ///
+            /// class Foo {
+            ///   constructor() {
+            ///     this.a = 42;
+            ///   }
+            ///
+            ///   bar(callback) {
+            ///     callback(null, this.a);
+            ///   }
+            /// }
+            ///
+            /// const foo = new Foo();
+            ///
+            /// const naiveBar = promisify(foo.bar);
+            /// // TypeError: Cannot read properties of undefined (reading 'a')
+            /// // naiveBar().then(a => console.log(a));
+            ///
+            /// naiveBar.call(foo).then((a) => console.log(a)); // '42'
+            ///
+            /// const bindBar = naiveBar.bind(foo);
+            /// bindBar().then((a) => console.log(a)); // '42'
+            /// </code>
+            /// </summary>
+            [<Import("promisify", "util")>]
+            static member promisify<'TCustom> (fn: Node.util.CustomPromisifyLegacy<'TCustom>) : 'TCustom = nativeOnly
             [<Import("promisify", "util")>]
             static member promisify<'TResult> (fn: (Exports.promisify.fn.callback<'TResult> -> unit)) : (unit -> JS.Promise<'TResult>) = nativeOnly
             [<Import("promisify", "util")>]
@@ -153896,7 +154566,16 @@ URL.parse($0, $1)"""
                 /// </code>
                 /// </summary>
                 [<Emit("$0.isMap($1...)")>]
-                abstract member isMap<'T>: ``object``: U2<'T, obj> -> bool
+                abstract member isMap<'T>: ``object``: 'T -> bool
+                /// <summary>
+                /// Returns <c>true</c> if the value is a built-in [<c>Map</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) instance.
+                ///
+                /// <code lang="js">
+                /// util.types.isMap(new Map());  // Returns true
+                /// </code>
+                /// </summary>
+                [<Emit("$0.isMap($1...)")>]
+                abstract member isMap<'T>: ``object``: obj -> bool
                 /// <summary>
                 /// Returns <c>true</c> if the value is an iterator returned for a built-in [<c>Map</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) instance.
                 ///
@@ -154015,7 +154694,16 @@ URL.parse($0, $1)"""
                 /// </code>
                 /// </summary>
                 [<Emit("$0.isSet($1...)")>]
-                abstract member isSet<'T>: ``object``: U2<'T, obj> -> bool
+                abstract member isSet<'T>: ``object``: 'T -> bool
+                /// <summary>
+                /// Returns <c>true</c> if the value is a built-in [<c>Set</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set) instance.
+                ///
+                /// <code lang="js">
+                /// util.types.isSet(new Set());  // Returns true
+                /// </code>
+                /// </summary>
+                [<Emit("$0.isSet($1...)")>]
+                abstract member isSet<'T>: ``object``: obj -> bool
                 /// <summary>
                 /// Returns <c>true</c> if the value is an iterator returned for a built-in [<c>Set</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set) instance.
                 ///
@@ -164295,7 +164983,9 @@ module UndiciTypes =
         [<AllowNullLiteral>]
         [<Interface>]
         type CacheStorage =
-            abstract member ``match``: request: UndiciTypes.fetch.RequestInfo * ?options: UndiciTypes.cache.MultiCacheQueryOptions -> JS.Promise<UndiciTypes.fetch.Response option>
+            abstract member ``match``: request: string * ?options: UndiciTypes.cache.MultiCacheQueryOptions -> JS.Promise<UndiciTypes.fetch.Response option>
+            abstract member ``match``: request: Node.url.URL * ?options: UndiciTypes.cache.MultiCacheQueryOptions -> JS.Promise<UndiciTypes.fetch.Response option>
+            abstract member ``match``: request: UndiciTypes.fetch.Request * ?options: UndiciTypes.cache.MultiCacheQueryOptions -> JS.Promise<UndiciTypes.fetch.Response option>
             abstract member has: cacheName: string -> JS.Promise<bool>
             abstract member ``open``: cacheName: string -> JS.Promise<UndiciTypes.cache.Cache>
             abstract member delete: cacheName: string -> JS.Promise<bool>
@@ -164304,13 +164994,27 @@ module UndiciTypes =
         [<AllowNullLiteral>]
         [<Interface>]
         type Cache =
-            abstract member ``match``: request: UndiciTypes.fetch.RequestInfo * ?options: UndiciTypes.cache.CacheQueryOptions -> JS.Promise<UndiciTypes.fetch.Response option>
-            abstract member matchAll: ?request: UndiciTypes.fetch.RequestInfo * ?options: UndiciTypes.cache.CacheQueryOptions -> JS.Promise<ReadonlyArray<UndiciTypes.fetch.Response>>
-            abstract member add: request: UndiciTypes.fetch.RequestInfo -> JS.Promise<obj>
+            abstract member ``match``: request: string * ?options: UndiciTypes.cache.CacheQueryOptions -> JS.Promise<UndiciTypes.fetch.Response option>
+            abstract member ``match``: request: Node.url.URL * ?options: UndiciTypes.cache.CacheQueryOptions -> JS.Promise<UndiciTypes.fetch.Response option>
+            abstract member ``match``: request: UndiciTypes.fetch.Request * ?options: UndiciTypes.cache.CacheQueryOptions -> JS.Promise<UndiciTypes.fetch.Response option>
+            abstract member matchAll: unit -> JS.Promise<ReadonlyArray<UndiciTypes.fetch.Response>>
+            abstract member matchAll: request: string * ?options: UndiciTypes.cache.CacheQueryOptions -> JS.Promise<ReadonlyArray<UndiciTypes.fetch.Response>>
+            abstract member matchAll: request: Node.url.URL * ?options: UndiciTypes.cache.CacheQueryOptions -> JS.Promise<ReadonlyArray<UndiciTypes.fetch.Response>>
+            abstract member matchAll: request: UndiciTypes.fetch.Request * ?options: UndiciTypes.cache.CacheQueryOptions -> JS.Promise<ReadonlyArray<UndiciTypes.fetch.Response>>
+            abstract member add: request: string -> JS.Promise<obj>
+            abstract member add: request: Node.url.URL -> JS.Promise<obj>
+            abstract member add: request: UndiciTypes.fetch.Request -> JS.Promise<obj>
             abstract member addAll: requests: ResizeArray<UndiciTypes.fetch.RequestInfo> -> JS.Promise<obj>
-            abstract member put: request: UndiciTypes.fetch.RequestInfo * response: UndiciTypes.fetch.Response -> JS.Promise<obj>
-            abstract member delete: request: UndiciTypes.fetch.RequestInfo * ?options: UndiciTypes.cache.CacheQueryOptions -> JS.Promise<bool>
-            abstract member keys: ?request: UndiciTypes.fetch.RequestInfo * ?options: UndiciTypes.cache.CacheQueryOptions -> JS.Promise<ReadonlyArray<UndiciTypes.fetch.Request>>
+            abstract member put: request: string * response: UndiciTypes.fetch.Response -> JS.Promise<obj>
+            abstract member put: request: Node.url.URL * response: UndiciTypes.fetch.Response -> JS.Promise<obj>
+            abstract member put: request: UndiciTypes.fetch.Request * response: UndiciTypes.fetch.Response -> JS.Promise<obj>
+            abstract member delete: request: string * ?options: UndiciTypes.cache.CacheQueryOptions -> JS.Promise<bool>
+            abstract member delete: request: Node.url.URL * ?options: UndiciTypes.cache.CacheQueryOptions -> JS.Promise<bool>
+            abstract member delete: request: UndiciTypes.fetch.Request * ?options: UndiciTypes.cache.CacheQueryOptions -> JS.Promise<bool>
+            abstract member keys: unit -> JS.Promise<ReadonlyArray<UndiciTypes.fetch.Request>>
+            abstract member keys: request: string * ?options: UndiciTypes.cache.CacheQueryOptions -> JS.Promise<ReadonlyArray<UndiciTypes.fetch.Request>>
+            abstract member keys: request: Node.url.URL * ?options: UndiciTypes.cache.CacheQueryOptions -> JS.Promise<ReadonlyArray<UndiciTypes.fetch.Request>>
+            abstract member keys: request: UndiciTypes.fetch.Request * ?options: UndiciTypes.cache.CacheQueryOptions -> JS.Promise<ReadonlyArray<UndiciTypes.fetch.Request>>
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -168394,7 +169098,23 @@ FileReader.DONE"""
             /// <summary>
             /// Mock an undici request with the defined reply.
             /// </summary>
-            abstract member reply<'TData>: statusCode: float * ?data: U4<'TData, Node.Buffer, string, UndiciTypes.mock_interceptor.MockInterceptor_.MockResponseDataHandler<'TData>> * ?responseOptions: UndiciTypes.mock_interceptor.MockInterceptor_.MockResponseOptions -> UndiciTypes.mock_interceptor.MockScope<'TData>
+            abstract member reply<'TData>: statusCode: float -> UndiciTypes.mock_interceptor.MockScope<'TData>
+            /// <summary>
+            /// Mock an undici request with the defined reply.
+            /// </summary>
+            abstract member reply<'TData>: statusCode: float * data: 'TData * ?responseOptions: UndiciTypes.mock_interceptor.MockInterceptor_.MockResponseOptions -> UndiciTypes.mock_interceptor.MockScope<'TData>
+            /// <summary>
+            /// Mock an undici request with the defined reply.
+            /// </summary>
+            abstract member reply<'TData>: statusCode: float * data: Node.Buffer * ?responseOptions: UndiciTypes.mock_interceptor.MockInterceptor_.MockResponseOptions -> UndiciTypes.mock_interceptor.MockScope<'TData>
+            /// <summary>
+            /// Mock an undici request with the defined reply.
+            /// </summary>
+            abstract member reply<'TData>: statusCode: float * data: string * ?responseOptions: UndiciTypes.mock_interceptor.MockInterceptor_.MockResponseOptions -> UndiciTypes.mock_interceptor.MockScope<'TData>
+            /// <summary>
+            /// Mock an undici request with the defined reply.
+            /// </summary>
+            abstract member reply<'TData>: statusCode: float * data: UndiciTypes.mock_interceptor.MockInterceptor_.MockResponseDataHandler<'TData> * ?responseOptions: UndiciTypes.mock_interceptor.MockInterceptor_.MockResponseOptions -> UndiciTypes.mock_interceptor.MockScope<'TData>
             /// <summary>
             /// Mock an undici request with the defined reply.
             /// </summary>

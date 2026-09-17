@@ -3057,14 +3057,15 @@ module UnionOverloads =
                 )
                 |> List.distinct
 
+            // `DateType | number | string`: F# prefers the overloads taking `float` or `string`
+            // to the one taking `'DateType`
             let isErased =
                 cases.Length >= 2
                 && cases.Length <= 9
                 && cases
                    |> List.forall (
                        function
-                       | GlueType.Literal _
-                       | GlueType.TypeParameter _ -> false
+                       | GlueType.Literal _ -> false
                        | _ -> true
                    )
 
@@ -3079,15 +3080,18 @@ module UnionOverloads =
                                             Type = GlueType.Union _ as union
                                         } -> tryCases typeMemory union
 
-        | GlueType.TypeReference typeReference when typeReference.TypeArguments.IsEmpty ->
+        // `DateArg<DateType>` where `type DateArg<T> = T | number | string` is a union too
+        | GlueType.TypeReference typeReference ->
+            let arity = typeReference.TypeArguments.Length
+
             let unionAliases =
                 typeMemory
                 |> List.choose (
                     function
-                    | GlueType.TypeAliasDeclaration({
-                                                        TypeParameters = []
-                                                        Type = GlueType.Union _
-                                                    } as alias) -> Some alias
+                    | GlueType.TypeAliasDeclaration({ Type = GlueType.Union _ } as alias) when
+                        alias.TypeParameters.Length = arity
+                        ->
+                        Some alias
                     | _ -> None
                 )
 
@@ -3096,16 +3100,24 @@ module UnionOverloads =
                 unionAliases
                 |> List.tryFind (fun alias -> alias.FullName = typeReference.FullName)
 
+            // The alias re-exported by several files is read several times
             let byName () =
                 match
                     unionAliases |> List.filter (fun alias -> alias.Name = typeReference.Name)
                 with
-                | [ alias ] -> Some alias
+                | alias :: others when others |> List.forall (fun other -> other.Type = alias.Type) ->
+                    Some alias
                 | _ -> None
 
             byFullName
             |> Option.orElseWith byName
-            |> Option.bind (fun alias -> tryCases typeMemory alias.Type)
+            |> Option.bind (fun alias ->
+                let substitutions =
+                    List.zip (alias.TypeParameters |> List.map _.Name) typeReference.TypeArguments
+                    |> Map.ofList
+
+                tryCases typeMemory (GlueSubstitution.substitute substitutions alias.Type)
+            )
 
         | _ -> None
 
