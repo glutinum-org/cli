@@ -1410,7 +1410,8 @@ let private transformExports
             )
             |> List.collect (
                 function
-                | GlueType.FunctionDeclaration info ->
+                | GlueType.FunctionDeclaration info
+                | GlueType.ExportDefault(GlueType.FunctionDeclaration info) ->
                     let info = KeyOfMaps.expandFunction info |> Conditionals.resolveFunction
 
                     UnionOverloads.expandParameters context.TypeMemory info.Parameters
@@ -1433,9 +1434,10 @@ let private transformExports
 
         // `declare class Agent {}; export default Agent`: the declaration is the default import
         let defaultExportedDeclarations =
-            sortedExports
+            exports
             |> List.choose (
                 function
+                | GlueType.ExportDefault(GlueType.FunctionDeclaration info) -> Some info.Name
                 | GlueType.ExportDefault(GlueType.Variable { Name = name }) when
                     sortedExports
                     |> List.exists (
@@ -6257,7 +6259,8 @@ let private transform
                 // We don't want to capture class definition here for example
                 // Because we need to generate both the class bindings and the exports
                 match exportedType with
-                | GlueType.Variable _ -> true
+                | GlueType.Variable _
+                | GlueType.FunctionDeclaration _ -> true
                 | _ -> false
             | _ -> false
         )

@@ -55,7 +55,7 @@ type TypeScriptReader(checker: Ts.TypeChecker, ?packageContext: PackageContext) 
             (functionDeclaration: Ts.FunctionDeclaration)
             : GlueType
             =
-            readFunctionDeclaration this functionDeclaration |> GlueType.FunctionDeclaration
+            readFunctionDeclaration this functionDeclaration
 
         member this.ReadInterfaceDeclaration
             (interfaceDeclaration: Ts.InterfaceDeclaration)

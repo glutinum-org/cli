@@ -206,6 +206,18 @@ let readMemberTypeParameters
             }
         )
 
+/// `[string, number]` and the tuple `Parameters<F>` resolves to
+let isTupleType (typ: Ts.Type) =
+    match typ.flags with
+    | HasTypeFlags Ts.TypeFlags.Object ->
+        let objectFlags: Ts.ObjectFlags = (typ :?> Ts.ObjectType).objectFlags
+        let target: Ts.ObjectType = typ?target
+
+        int objectFlags &&& int Ts.ObjectFlags.Tuple <> 0
+        || (not (isNull (box target))
+            && int target.objectFlags &&& int Ts.ObjectFlags.Tuple <> 0)
+    | _ -> false
+
 let readTypeArguments (reader: ITypeScriptReader) (node: Ts.NodeWithTypeArguments) =
     match node.typeArguments with
     | None -> []

@@ -344,6 +344,14 @@ module UtilityType =
                 |> Seq.exists (fun inProgress -> obj.ReferenceEquals(inProgress, typ))
 
             match typ.flags with
+            // `Parameters<F>` is a tuple, not the object made of the array members
+            | HasTypeFlags Ts.TypeFlags.Object when isTupleType typ && not isInProgress ->
+                let flags =
+                    Ts.NodeBuilderFlags.NoTruncation
+                    ||| Ts.NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope
+
+                reader.checker.typeToTypeNode (typ, None, Some flags)
+                |> Option.map reader.ReadTypeNode
             // A recursive application (e.g. `swap(): Pair<S, C>` inside `Pair<C, S>`) stays a reference
             | HasTypeFlags Ts.TypeFlags.Object when not isNamedDeclaration && not isInProgress ->
                 expansionsInProgress.Add typ
@@ -715,9 +723,52 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                         })
                         |> GlueType.TypeReference
 
-        if isFromEs5Lib symbolOpt then
+        // `Uppercase<"abc">`: the literals the checker resolves an intrinsic type to, else `string`
+        let readIntrinsicString () =
+            let rec literals (typ: Ts.Type) : GlueType list option =
+                match typ.flags with
+                | HasTypeFlags Ts.TypeFlags.StringLiteral ->
+                    match typ with
+                    | Type.StringLiteral.String value ->
+                        Some [ GlueLiteral.String value |> GlueType.Literal ]
+                    | Type.StringLiteral.Other -> None
+                | HasTypeFlags Ts.TypeFlags.Union ->
+                    (typ :?> Ts.UnionType).types
+                    |> Seq.toList
+                    |> List.map literals
+                    |> List.fold
+                        (fun acc cases ->
+                            match acc, cases with
+                            | Some acc, Some cases -> Some(acc @ cases)
+                            | _ -> None
+                        )
+                        (Some [])
+                | _ -> None
+
+            if typeReferenceNode.pos < 0 then
+                GlueType.Primitive GluePrimitive.String
+            else
+                match literals (checker.getTypeFromTypeNode typeReferenceNode) with
+                | Some [ single ] -> single
+                | Some(_ :: _ as cases) -> cases |> GlueTypeUnion |> GlueType.Union
+                | _ -> GlueType.Primitive GluePrimitive.String
+
+        // `NoInfer<T>` only changes the inference of `T`, its intrinsic symbol has no declaration
+        let isNoInfer =
+            entityNameText !!typeReferenceNode.typeName = "NoInfer"
+            && typeReferenceNode.typeArguments.IsSome
+            && (symbolOpt |> Option.bind (fun symbol -> symbol.declarations) |> Option.isNone
+                || isFromEs5Lib symbolOpt)
+
+        if isNoInfer then
+            reader.ReadTypeNode typeReferenceNode.typeArguments.Value.[0]
+        elif isFromEs5Lib symbolOpt then
             match getFullNameOrEmpty checker (!!typeReferenceNode.typeName) with
             | "Exclude" -> UtilityType.readExclude reader typeReferenceNode
+            | "Uppercase"
+            | "Lowercase"
+            | "Capitalize"
+            | "Uncapitalize" -> readIntrinsicString ()
             | "Partial" -> UtilityType.readPartial reader typeReferenceNode
             | "Record" -> UtilityType.readRecord reader typeReferenceNode
             | "ReturnType" -> UtilityType.readReturnType reader typeReferenceNode
