@@ -8,7 +8,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageVersion>
     <PackageVersion Include="Fable.Browser.Navigator" Version="2.5.0" />
-    <PackageVersion Include="Fable.Core" Version="5.1.0" />
+    <PackageVersion Include="Fable.Core" Version="5.2.0" />
     <PackageVersion Include="Fable.Elmish" Version="5.0.2" />
     <PackageVersion Include="Fable.Elmish.Browser" Version="4.1.0" />
     <PackageVersion Include="Fable.Elmish.HMR" Version="9.0.0" />
@@ -25,6 +25,9 @@
     <PackageVersion Include="FSharp.Core" Version="10.1.301" />
     <PackageVersion Include="FsToolkit.ErrorHandling" Version="5.2.0" />
     <PackageVersion Include="Glutinum.Chalk" Version="1.0.0" />
+    <PackageVersion Include="Scriptorium.Nib" Version="0.4.1" />
+    <PackageVersion Include="Scriptorium.Nib.Browser" Version="0.3.1" />
+    <PackageVersion Include="Scriptorium.Quill" Version="0.7.1" />
     <PackageVersion Include="Glutinum.Feliz.Iconify" Version="3.0.0" />
     <PackageVersion Include="Glutinum.IconifyIcons.Lucide" Version="1.0.0" />
     <PackageVersion Include="Glutinum.IconifyIcons.SimpleIcons" Version="1.0.0" />

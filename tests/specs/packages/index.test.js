@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest'
 import { generatePackages } from '../../../src/Glutinum.Converter/Generate.fs.js'
-import { ofArray } from '../../../src/Glutinum.Converter/fable_modules/fable-library-js.5.2.0/List.js'
+import { ofArray } from '../../../src/Glutinum.Converter/fable_modules/fable-library-js.5.17.2/List.js'
 import { dirname } from "dirname-filename-esm";
 import path from 'node:path';
 
