@@ -10,8 +10,8 @@ open type Scriptorium.Quill.Test
 
 let private utf8 = Node.BufferEncoding.utf8
 
-let private tempDir =
-    fs.mkdtempSync (path.join (Node.Exports.os.tmpdir (), "glutinum-node-tests-"))
+let private tempDir (prefix: string) =
+    fs.mkdtempSync (path.join (Node.Exports.os.tmpdir (), $"glutinum-node-tests-{prefix}-"))
 
 let private awaitPromise (p: JS.Promise<'T>) : Async<'T> = Async.AwaitPromise p
 
@@ -40,13 +40,14 @@ let main _ =
                     test (
                         "fs: write, read and list files",
                         fun _ ->
-                            let file = path.join (tempDir, "hello.txt")
+                            let dir = tempDir "fs"
+                            let file = path.join (dir, "hello.txt")
                             fs.writeFileSync (file, "Hello from Fable")
                             assertThat (fs.existsSync file) (isTrue)
                             assertThat (fs.readFileSync (file, utf8)) (isEqualTo "Hello from Fable")
 
                             assertThat
-                                (fs.readdirSync (tempDir, utf8) |> List.ofSeq)
+                                (fs.readdirSync (dir, utf8) |> List.ofSeq)
                                 (isEqualTo [ "hello.txt" ])
                     )
 
@@ -82,7 +83,7 @@ let main _ =
                         "fs/promises: readFile with an encoding gives a string",
                         fun _ ->
                             async {
-                                let file = path.join (tempDir, "async.txt")
+                                let file = path.join (tempDir "promises", "async.txt")
                                 fs.writeFileSync (file, "async content")
 
                                 let! content =
