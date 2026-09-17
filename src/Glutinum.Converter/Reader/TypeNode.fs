@@ -1080,18 +1080,52 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                     | _ -> false
             )
 
+        // `IRouterHandler<T> & ((...handlers: Handler[]) => T)`: the intersection is callable
+        let callSignatures =
+            if unionOrIntersectionType.isUnion () then
+                []
+            else
+                checker.getSignaturesOfType (unionOrIntersectionType, Ts.SignatureKind.Call)
+                |> Seq.toList
+                |> List.choose (fun signature ->
+                    // The signature of `IRouterHandler<this>` is the declared one with `T` substituted
+                    let flags =
+                        Ts.NodeBuilderFlags.NoTruncation
+                        ||| Ts.NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope
+
+                    let synthesized: Ts.Node option =
+                        checker?signatureToSignatureDeclaration (
+                            signature,
+                            Ts.SyntaxKind.CallSignature,
+                            typeNode,
+                            flags
+                        )
+
+                    match synthesized with
+                    | Some declaration ->
+                        let previousContext = reader.SyntheticContext
+                        reader.SyntheticContext <- Some(typeNode :> Ts.Node)
+
+                        try
+                            Some(reader.ReadDeclaration(declaration :?> Ts.Declaration))
+                        finally
+                            reader.SyntheticContext <- previousContext
+                    | None -> None
+                )
+
         if hasUnsupportedProperties then
             GlueType.Primitive GluePrimitive.Any
         else
-            properties
-            |> List.choose (
-                function
-                | Single(property, declaration) ->
-                    Some(readInstantiatedMember reader typeNode property declaration)
-                | WithoutDeclaration property ->
-                    readPropertyWithoutDeclaration reader typeNode property
-                | ForceAny -> failwith "Sould not happen here"
-            )
+            (properties
+             |> List.choose (
+                 function
+                 | Single(property, declaration) ->
+                     Some(readInstantiatedMember reader typeNode property declaration)
+                 | WithoutDeclaration property ->
+                     readPropertyWithoutDeclaration reader typeNode property
+                 | ForceAny -> failwith "Sould not happen here"
+             ))
+            @ callSignatures
             |> GlueType.IntersectionType
 
     | Ts.SyntaxKind.TypeLiteral ->

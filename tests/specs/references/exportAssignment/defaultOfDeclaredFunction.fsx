@@ -17,6 +17,9 @@ module RAL_ =
     type TextEncoder =
         abstract member encode: value: string -> JS.Uint8Array
 
+type TextEncoder =
+    RAL_.TextEncoder
+
 (***)
 #r "nuget: Fable.Core"
 #r "nuget: Glutinum.Types"

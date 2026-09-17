@@ -15764,7 +15764,7 @@ TypeScript versions earlier than 5.7.""")>]
                 /// argument.
                 /// </summary>
                 [<Emit("$0.throws($1...)")>]
-                abstract member throws: block: (unit -> obj) -> unit
+                abstract member throws: block: (unit -> unit) -> unit
                 /// <summary>
                 /// Expects the function <c>fn</c> to throw an error.
                 ///
@@ -15950,7 +15950,7 @@ TypeScript versions earlier than 5.7.""")>]
                 /// argument.
                 /// </summary>
                 [<Emit("$0.throws($1...)")>]
-                abstract member throws: block: (unit -> obj) * message: string -> unit
+                abstract member throws: block: (unit -> unit) * message: string -> unit
                 /// <summary>
                 /// Expects the function <c>fn</c> to throw an error.
                 ///
@@ -16136,35 +16136,35 @@ TypeScript versions earlier than 5.7.""")>]
                 /// argument.
                 /// </summary>
                 [<Emit("$0.throws($1...)")>]
-                abstract member throws: block: (unit -> obj) * message: Exception -> unit
+                abstract member throws: block: (unit -> unit) * message: Exception -> unit
                 [<Emit("$0.throws($1...)")>]
-                abstract member throws: block: (unit -> obj) * error: RegExp -> unit
+                abstract member throws: block: (unit -> unit) * error: RegExp -> unit
                 [<Emit("$0.throws($1...)")>]
-                abstract member throws: block: (unit -> obj) * error: RegExp * message: string -> unit
+                abstract member throws: block: (unit -> unit) * error: RegExp * message: string -> unit
                 [<Emit("$0.throws($1...)")>]
-                abstract member throws: block: (unit -> obj) * error: RegExp * message: Exception -> unit
+                abstract member throws: block: (unit -> unit) * error: RegExp * message: Exception -> unit
                 [<Emit("$0.throws($1...)")>]
-                abstract member throws: block: (unit -> obj) * error: Exports.throws.error -> unit
+                abstract member throws: block: (unit -> unit) * error: Exports.throws.error -> unit
                 [<Emit("$0.throws($1...)")>]
-                abstract member throws: block: (unit -> obj) * error: Exports.throws.error * message: string -> unit
+                abstract member throws: block: (unit -> unit) * error: Exports.throws.error * message: string -> unit
                 [<Emit("$0.throws($1...)")>]
-                abstract member throws: block: (unit -> obj) * error: Exports.throws.error * message: Exception -> unit
+                abstract member throws: block: (unit -> unit) * error: Exports.throws.error * message: Exception -> unit
                 [<Emit("$0.throws($1...)")>]
-                abstract member throws: block: (unit -> obj) * error: (obj -> bool) -> unit
+                abstract member throws: block: (unit -> unit) * error: (obj -> bool) -> unit
                 [<Emit("$0.throws($1...)")>]
-                abstract member throws: block: (unit -> obj) * error: (obj -> bool) * message: string -> unit
+                abstract member throws: block: (unit -> unit) * error: (obj -> bool) * message: string -> unit
                 [<Emit("$0.throws($1...)")>]
-                abstract member throws: block: (unit -> obj) * error: (obj -> bool) * message: Exception -> unit
+                abstract member throws: block: (unit -> unit) * error: (obj -> bool) * message: Exception -> unit
                 [<Emit("$0.throws($1...)")>]
-                abstract member throws: block: (unit -> obj) * error: obj -> unit
+                abstract member throws: block: (unit -> unit) * error: obj -> unit
                 [<Emit("$0.throws($1...)")>]
-                abstract member throws: block: (unit -> obj) * error: obj * message: string -> unit
+                abstract member throws: block: (unit -> unit) * error: obj * message: string -> unit
                 [<Emit("$0.throws($1...)")>]
-                abstract member throws: block: (unit -> obj) * error: obj * message: Exception -> unit
+                abstract member throws: block: (unit -> unit) * error: obj * message: Exception -> unit
                 [<Emit("$0.throws($1...)")>]
-                abstract member throws: block: (unit -> obj) * error: Exception * message: string -> unit
+                abstract member throws: block: (unit -> unit) * error: Exception * message: string -> unit
                 [<Emit("$0.throws($1...)")>]
-                abstract member throws: block: (unit -> obj) * error: Exception * message: Exception -> unit
+                abstract member throws: block: (unit -> unit) * error: Exception * message: Exception -> unit
                 /// <summary>
                 /// Asserts that the function <c>fn</c> does not throw an error.
                 ///
@@ -16227,7 +16227,7 @@ TypeScript versions earlier than 5.7.""")>]
                 /// </code>
                 /// </summary>
                 [<Emit("$0.doesNotThrow($1...)")>]
-                abstract member doesNotThrow: block: (unit -> obj) -> unit
+                abstract member doesNotThrow: block: (unit -> unit) -> unit
                 /// <summary>
                 /// Asserts that the function <c>fn</c> does not throw an error.
                 ///
@@ -16290,7 +16290,7 @@ TypeScript versions earlier than 5.7.""")>]
                 /// </code>
                 /// </summary>
                 [<Emit("$0.doesNotThrow($1...)")>]
-                abstract member doesNotThrow: block: (unit -> obj) * message: string -> unit
+                abstract member doesNotThrow: block: (unit -> unit) * message: string -> unit
                 /// <summary>
                 /// Asserts that the function <c>fn</c> does not throw an error.
                 ///
@@ -16353,35 +16353,35 @@ TypeScript versions earlier than 5.7.""")>]
                 /// </code>
                 /// </summary>
                 [<Emit("$0.doesNotThrow($1...)")>]
-                abstract member doesNotThrow: block: (unit -> obj) * message: Exception -> unit
+                abstract member doesNotThrow: block: (unit -> unit) * message: Exception -> unit
                 [<Emit("$0.doesNotThrow($1...)")>]
-                abstract member doesNotThrow: block: (unit -> obj) * error: RegExp -> unit
+                abstract member doesNotThrow: block: (unit -> unit) * error: RegExp -> unit
                 [<Emit("$0.doesNotThrow($1...)")>]
-                abstract member doesNotThrow: block: (unit -> obj) * error: RegExp * message: string -> unit
+                abstract member doesNotThrow: block: (unit -> unit) * error: RegExp * message: string -> unit
                 [<Emit("$0.doesNotThrow($1...)")>]
-                abstract member doesNotThrow: block: (unit -> obj) * error: RegExp * message: Exception -> unit
+                abstract member doesNotThrow: block: (unit -> unit) * error: RegExp * message: Exception -> unit
                 [<Emit("$0.doesNotThrow($1...)")>]
-                abstract member doesNotThrow: block: (unit -> obj) * error: Exports.doesNotThrow.error -> unit
+                abstract member doesNotThrow: block: (unit -> unit) * error: Exports.doesNotThrow.error -> unit
                 [<Emit("$0.doesNotThrow($1...)")>]
-                abstract member doesNotThrow: block: (unit -> obj) * error: Exports.doesNotThrow.error * message: string -> unit
+                abstract member doesNotThrow: block: (unit -> unit) * error: Exports.doesNotThrow.error * message: string -> unit
                 [<Emit("$0.doesNotThrow($1...)")>]
-                abstract member doesNotThrow: block: (unit -> obj) * error: Exports.doesNotThrow.error * message: Exception -> unit
+                abstract member doesNotThrow: block: (unit -> unit) * error: Exports.doesNotThrow.error * message: Exception -> unit
                 [<Emit("$0.doesNotThrow($1...)")>]
-                abstract member doesNotThrow: block: (unit -> obj) * error: (obj -> bool) -> unit
+                abstract member doesNotThrow: block: (unit -> unit) * error: (obj -> bool) -> unit
                 [<Emit("$0.doesNotThrow($1...)")>]
-                abstract member doesNotThrow: block: (unit -> obj) * error: (obj -> bool) * message: string -> unit
+                abstract member doesNotThrow: block: (unit -> unit) * error: (obj -> bool) * message: string -> unit
                 [<Emit("$0.doesNotThrow($1...)")>]
-                abstract member doesNotThrow: block: (unit -> obj) * error: (obj -> bool) * message: Exception -> unit
+                abstract member doesNotThrow: block: (unit -> unit) * error: (obj -> bool) * message: Exception -> unit
                 [<Emit("$0.doesNotThrow($1...)")>]
-                abstract member doesNotThrow: block: (unit -> obj) * error: obj -> unit
+                abstract member doesNotThrow: block: (unit -> unit) * error: obj -> unit
                 [<Emit("$0.doesNotThrow($1...)")>]
-                abstract member doesNotThrow: block: (unit -> obj) * error: obj * message: string -> unit
+                abstract member doesNotThrow: block: (unit -> unit) * error: obj * message: string -> unit
                 [<Emit("$0.doesNotThrow($1...)")>]
-                abstract member doesNotThrow: block: (unit -> obj) * error: obj * message: Exception -> unit
+                abstract member doesNotThrow: block: (unit -> unit) * error: obj * message: Exception -> unit
                 [<Emit("$0.doesNotThrow($1...)")>]
-                abstract member doesNotThrow: block: (unit -> obj) * error: Exception * message: string -> unit
+                abstract member doesNotThrow: block: (unit -> unit) * error: Exception * message: string -> unit
                 [<Emit("$0.doesNotThrow($1...)")>]
-                abstract member doesNotThrow: block: (unit -> obj) * error: Exception * message: Exception -> unit
+                abstract member doesNotThrow: block: (unit -> unit) * error: Exception * message: Exception -> unit
                 /// <summary>
                 /// Throws <c>value</c> if <c>value</c> is not <c>undefined</c> or <c>null</c>. This is useful when
                 /// testing the <c>error</c> argument in callbacks. The stack trace contains all frames
@@ -17652,6 +17652,30 @@ TypeScript versions earlier than 5.7.""")>]
                     type error =
                         [<EmitConstructor>]
                         abstract member Create: unit -> obj
+
+        type AssertMethodNames =
+            assert_.AssertMethodNames
+
+        type AssertOptions =
+            assert_.AssertOptions
+
+        type Assert =
+            assert_.Assert
+
+        type AssertStrict =
+            assert_.AssertStrict
+
+        type AssertionErrorOptions =
+            assert_.AssertionErrorOptions
+
+        type CallTrackerCall =
+            assert_.CallTrackerCall
+
+        type CallTrackerReportInformation =
+            assert_.CallTrackerReportInformation
+
+        type AssertPredicate =
+            assert_.AssertPredicate
 
     module assert_strict =
 
@@ -48367,6 +48391,18 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// to the <c>EventTarget</c>.
                 /// </summary>
                 abstract member removeListener: ``type``: string * listener: (obj -> unit) * ?options: Node.EventListenerOptions -> NodeEventTarget
+
+        type Abortable =
+            EventEmitter_.Abortable
+
+        type EventEmitterReferencingAsyncResource =
+            EventEmitter_.EventEmitterReferencingAsyncResource
+
+        type EventEmitterAsyncResourceOptions =
+            EventEmitter_.EventEmitterAsyncResourceOptions
+
+        type NodeEventTarget =
+            EventEmitter_.NodeEventTarget
 
         module EventMap =
 
@@ -109468,6 +109504,78 @@ EventEmitter.defaultMaxListeners = $0"""
                         /// </summary>
                         abstract member importAttributes: Node.``module``.Module_.ImportAttributes option with get, set
 
+        type EnableCompileCacheResult =
+            Module_.EnableCompileCacheResult
+
+        type RegisterOptions<'Data> =
+            Module_.RegisterOptions<'Data>
+
+        type RegisterHooksOptions =
+            Module_.RegisterHooksOptions
+
+        type ModuleHooks =
+            Module_.ModuleHooks
+
+        type StripTypeScriptTypesOptions =
+            Module_.StripTypeScriptTypesOptions
+
+        type ImportAttributes =
+            Module_.ImportAttributes
+
+        type ModuleFormat =
+            Module_.ModuleFormat
+
+        type ModuleSource =
+            Module_.ModuleSource
+
+        type InitializeHook<'Data> =
+            Module_.InitializeHook<'Data>
+
+        type InitializeHook =
+            InitializeHook<obj>
+
+        type ResolveHookContext =
+            Module_.ResolveHookContext
+
+        type ResolveFnOutput =
+            Module_.ResolveFnOutput
+
+        type ResolveHook =
+            Module_.ResolveHook
+
+        type ResolveHookSync =
+            Module_.ResolveHookSync
+
+        type LoadHookContext =
+            Module_.LoadHookContext
+
+        type LoadFnOutput =
+            Module_.LoadFnOutput
+
+        type LoadHook =
+            Module_.LoadHook
+
+        type LoadHookSync =
+            Module_.LoadHookSync
+
+        type SourceMapsSupport =
+            Module_.SourceMapsSupport
+
+        type SetSourceMapsSupportOptions =
+            Module_.SetSourceMapsSupportOptions
+
+        type SourceMapConstructorOptions =
+            Module_.SourceMapConstructorOptions
+
+        type SourceMapPayload =
+            Module_.SourceMapPayload
+
+        type SourceMapping =
+            Module_.SourceMapping
+
+        type SourceOrigin =
+            Module_.SourceOrigin
+
     module net =
 
         [<AbstractClass>]
@@ -115785,6 +115893,15 @@ SocketAddress.parse($0)"""
                     | ``;``
                     | ``:``
 
+        type ParsedPath =
+            path_.ParsedPath
+
+        type FormatInputPathObject =
+            path_.FormatInputPathObject
+
+        type PlatformPath =
+            path_.PlatformPath
+
         module Exports =
 
             module sep =
@@ -116129,7 +116246,7 @@ SocketAddress.parse($0)"""
             /// It represents the percentage of time the event loop has spent outside the event loop's event provider (e.g. epoll_wait).
             /// No other CPU idle time is taken into consideration.
             /// </summary>
-            abstract member eventLoopUtilization: Node.perf_hooks.EventLoopUtilityFunction with get, set
+            abstract member eventLoopUtilization: ?utilization1: Node.perf_hooks.EventLoopUtilization * ?utilization2: Node.perf_hooks.EventLoopUtilization -> Node.perf_hooks.EventLoopUtilization
             /// <summary>
             /// Returns a list of <c>PerformanceEntry</c> objects in chronological order with respect to <c>performanceEntry.startTime</c>.
             /// If you are only interested in performance entries of certain types or that have certain names, see
@@ -123501,7 +123618,7 @@ the userland-provided Punycode.js module instead.""")>]
             /// given line of input. If not specified in the REPL options, this is an async wrapper
             /// for the JavaScript <c>eval()</c> function.
             /// </summary>
-            abstract member eval: Node.repl.REPLEval with get
+            abstract member eval: this: Node.repl.REPLServer * evalCmd: string * context: Node.vm.Context * file: string * cb: REPLServer.eval.cb -> unit
             /// <summary>
             /// Specified in the REPL options, this is a value indicating whether the default
             /// <c>writer</c> function should include ANSI color styling to REPL output.
@@ -123523,7 +123640,7 @@ the userland-provided Punycode.js module instead.""")>]
             /// each command before writing to <c>outputStream</c>. If not specified in the REPL options,
             /// this will be a wrapper for <c>util.inspect</c>.
             /// </summary>
-            abstract member writer: Node.repl.REPLWriter with get
+            abstract member writer: this: Node.repl.REPLServer * obj: obj -> string
             /// <summary>
             /// Specified in the REPL options, this is the function to use for custom Tab auto-completion.
             /// </summary>
@@ -125423,6 +125540,11 @@ the userland-provided Punycode.js module instead.""")>]
 
         module REPLServer =
 
+            module eval =
+
+                type cb =
+                    delegate of err: Exception option * result: obj -> unit
+
             module setupHistory =
 
                 type callback =
@@ -125436,6 +125558,8 @@ the userland-provided Punycode.js module instead.""")>]
                 [<Interface>]
                 type Type =
                     abstract member options: Node.util.InspectOptions with get, set
+                    [<Emit("$0($1...)")>]
+                    abstract member Invoke: this: Node.repl.REPLServer * obj: obj -> string
 
     module sea =
 
@@ -138792,6 +138916,72 @@ Duplex.fromWeb($0, $1)"""
                 type transform =
                     delegate of chunk: obj * encoding: Node.BufferEncoding * callback: Node.stream.Stream_.TransformCallback -> unit
 
+        type StreamOptions<'T> =
+            Stream_.StreamOptions<'T>
+
+        type ReadableOptions<'T> =
+            Stream_.ReadableOptions<'T>
+
+        type ReadableOptions =
+            ReadableOptions<Node.stream.Stream_.Readable>
+
+        type ArrayOptions =
+            Stream_.ArrayOptions
+
+        type WritableOptions<'T> =
+            Stream_.WritableOptions<'T>
+
+        type WritableOptions =
+            WritableOptions<Node.stream.Stream_.Writable>
+
+        type DuplexOptions<'T> =
+            Stream_.DuplexOptions<'T>
+
+        type DuplexOptions =
+            DuplexOptions<Node.stream.Stream_.Duplex>
+
+        type Duplex =
+            Stream_.Duplex
+
+        type TransformCallback =
+            Stream_.TransformCallback
+
+        type TransformOptions<'T> =
+            Stream_.TransformOptions<'T>
+
+        type TransformOptions =
+            TransformOptions<Node.stream.Stream_.Transform>
+
+        type FinishedOptions =
+            Stream_.FinishedOptions
+
+        type PipelineSourceFunction<'T> =
+            Stream_.PipelineSourceFunction<'T>
+
+        type PipelineSource<'T> =
+            Stream_.PipelineSource<'T>
+
+        type PipelineTransform<'S, 'U> =
+            Stream_.PipelineTransform<'S, 'U>
+
+        type PipelineTransformSource<'T> =
+            Stream_.PipelineTransformSource<'T>
+
+        type PipelineDestinationIterableFunction<'T> =
+            Stream_.PipelineDestinationIterableFunction<'T>
+
+        type PipelineDestinationPromiseFunction<'T, 'P> =
+            Stream_.PipelineDestinationPromiseFunction<'T, 'P>
+
+        type PipelineDestination<'S, 'P> =
+            Stream_.PipelineDestination<'S, 'P>
+
+        type PipelineOptions =
+            Stream_.PipelineOptions
+
+        type Pipe =
+            Stream_.Pipe
+
         module Stream =
 
             module pipe =
@@ -139144,7 +139334,7 @@ Duplex.fromWeb($0, $1)"""
                 delegate of unit -> U2<unit, obj>
 
             type UnderlyingSinkStartCallback =
-                delegate of controller: Node.stream_web.stream_SLASH_web_.WritableStreamDefaultController -> obj
+                delegate of controller: Node.stream_web.stream_SLASH_web_.WritableStreamDefaultController -> unit
 
             type UnderlyingSinkWriteCallback<'W> =
                 delegate of chunk: 'W * controller: Node.stream_web.stream_SLASH_web_.WritableStreamDefaultController -> U2<unit, obj>
@@ -139156,13 +139346,13 @@ Duplex.fromWeb($0, $1)"""
                 delegate of controller: Node.stream_web.stream_SLASH_web_.ReadableStreamController<'R> -> U2<unit, obj>
 
             type UnderlyingSourceStartCallback<'R> =
-                delegate of controller: Node.stream_web.stream_SLASH_web_.ReadableStreamController<'R> -> obj
+                delegate of controller: Node.stream_web.stream_SLASH_web_.ReadableStreamController<'R> -> unit
 
             type TransformerFlushCallback<'O> =
                 delegate of controller: Node.stream_web.stream_SLASH_web_.TransformStreamDefaultController<'O> -> U2<unit, obj>
 
             type TransformerStartCallback<'O> =
-                delegate of controller: Node.stream_web.stream_SLASH_web_.TransformStreamDefaultController<'O> -> obj
+                delegate of controller: Node.stream_web.stream_SLASH_web_.TransformStreamDefaultController<'O> -> unit
 
             type TransformerTransformCallback<'I, 'O> =
                 delegate of chunk: 'I * controller: Node.stream_web.stream_SLASH_web_.TransformStreamDefaultController<'O> -> U2<unit, obj>
@@ -139413,7 +139603,7 @@ Duplex.fromWeb($0, $1)"""
             type ByteLengthQueuingStrategy =
                 inherit Node.stream_web.stream_SLASH_web_.QueuingStrategy<obj>
                 abstract member highWaterMark: float with get
-                abstract member size: Node.stream_web.stream_SLASH_web_.QueuingStrategySize<obj> with get
+                abstract member size: chunk: obj -> float
 
             /// <summary>
             /// This Streams API interface provides a built-in byte length queuing
@@ -139424,7 +139614,7 @@ Duplex.fromWeb($0, $1)"""
             type CountQueuingStrategy =
                 inherit Node.stream_web.stream_SLASH_web_.QueuingStrategy
                 abstract member highWaterMark: float with get
-                abstract member size: Node.stream_web.stream_SLASH_web_.QueuingStrategySize with get
+                abstract member size: chunk: obj -> float
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -145139,6 +145329,87 @@ Duplex.fromWeb($0, $1)"""
 
                                 member val chunk : obj = nativeOnly with get, set
                                 member val encoding : Node.BufferEncoding = nativeOnly with get, set
+
+        type TestFn =
+            test_.TestFn
+
+        type SuiteFn =
+            test_.SuiteFn
+
+        type TestShard =
+            test_.TestShard
+
+        type RunOptions =
+            test_.RunOptions
+
+        type TestsStream =
+            test_.TestsStream
+
+        type TestContext =
+            test_.TestContext
+
+        type TestContextAssert =
+            test_.TestContextAssert
+
+        type AssertSnapshotOptions =
+            test_.AssertSnapshotOptions
+
+        type TestContextPlanOptions =
+            test_.TestContextPlanOptions
+
+        type TestContextWaitForOptions =
+            test_.TestContextWaitForOptions
+
+        type SuiteContext =
+            test_.SuiteContext
+
+        type TestOptions =
+            test_.TestOptions
+
+        type HookFn =
+            test_.HookFn
+
+        type TestContextHookFn =
+            test_.TestContextHookFn
+
+        type HookOptions =
+            test_.HookOptions
+
+        type MockFunctionOptions =
+            test_.MockFunctionOptions
+
+        type MockMethodOptions =
+            test_.MockMethodOptions
+
+        type Mock<'F> =
+            test_.Mock<'F>
+
+        type MockModuleOptions =
+            test_.MockModuleOptions
+
+        type MockTracker =
+            test_.MockTracker
+
+        type MockFunctionCall<'F, 'ReturnType, 'Args> =
+            test_.MockFunctionCall<'F, 'ReturnType, 'Args>
+
+        type MockFunctionCall<'F, 'ReturnType> =
+            MockFunctionCall<'F, 'ReturnType, obj>
+
+        type MockFunctionCall<'F> =
+            MockFunctionCall<'F, obj, obj>
+
+        type MockFunctionContext<'F> =
+            test_.MockFunctionContext<'F>
+
+        type MockModuleContext =
+            test_.MockModuleContext
+
+        type MockTimersOptions =
+            test_.MockTimersOptions
+
+        type MockTimers =
+            test_.MockTimers
 
     module timers =
 
@@ -163708,7 +163979,7 @@ module UndiciTypes =
                     ?origin: U2<string, Node.url.URL>,
                     ?body: U5<string, Node.Buffer, JS.Uint8Array, Node.stream.Stream_.Readable, UndiciTypes.formdata.FormData>,
                     ?headers: U3<UndiciTypes.header.IncomingHttpHeaders, ResizeArray<string>, Iterable<string * U2<string, ResizeArray<string>> option>>,
-                    ?query: DispatchOptions.query,
+                    ?query: obj,
                     ?idempotent: bool,
                     ?blocking: bool,
                     ?upgrade: U2<bool, string>,
@@ -163734,7 +164005,7 @@ module UndiciTypes =
                 /// <summary>
                 /// Query string params to be embedded in the request URL. Default: <c>null</c>
                 /// </summary>
-                member val query : DispatchOptions.query option = nativeOnly with get, set
+                member val query : obj option = nativeOnly with get, set
                 /// <summary>
                 /// Whether the requests can be safely retried or not. If <c>false</c> the request won't be sent until all preceding requests in the pipeline have completed. Default: <c>true</c> if <c>method</c> is <c>HEAD</c> or <c>GET</c>.
                 /// </summary>
@@ -163781,13 +164052,11 @@ module UndiciTypes =
                     abstract member Pool: ReadonlyArray<UndiciTypes.dispatcher.Dispatcher_.DispatchInterceptor> option with get, set
                     abstract member Client: ReadonlyArray<UndiciTypes.dispatcher.Dispatcher_.DispatchInterceptor> with get, set
 
-            module DispatchOptions =
+        type Options =
+            Agent_.Options
 
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type query =
-                    [<EmitIndexer>]
-                    abstract member Item: key: string -> obj with get, set
+        type DispatchOptions =
+            Agent_.DispatchOptions
 
     module api =
 
@@ -163925,7 +164194,7 @@ module UndiciTypes =
                     /// <summary>
                     /// Query string params to be embedded in the request URL. Default: <c>null</c>
                     /// </summary>
-                    abstract member query: Exports.request.options.query option with get, set
+                    abstract member query: obj option with get, set
                     /// <summary>
                     /// Whether the requests can be safely retried or not. If <c>false</c> the request won't be sent until all preceding requests in the pipeline have completed. Default: <c>true</c> if <c>method</c> is <c>HEAD</c> or <c>GET</c>.
                     /// </summary>
@@ -163953,12 +164222,6 @@ module UndiciTypes =
                     abstract member ``method``: UndiciTypes.dispatcher.Dispatcher_.HttpMethod option with get, set
 
                 module options =
-
-                    [<AllowNullLiteral>]
-                    [<Interface>]
-                    type query =
-                        [<EmitIndexer>]
-                        abstract member Item: key: string -> obj with get, set
 
                     module onInfo =
 
@@ -164036,7 +164299,7 @@ module UndiciTypes =
                     /// <summary>
                     /// Query string params to be embedded in the request URL. Default: <c>null</c>
                     /// </summary>
-                    abstract member query: Exports.stream.options.query option with get, set
+                    abstract member query: obj option with get, set
                     /// <summary>
                     /// Whether the requests can be safely retried or not. If <c>false</c> the request won't be sent until all preceding requests in the pipeline have completed. Default: <c>true</c> if <c>method</c> is <c>HEAD</c> or <c>GET</c>.
                     /// </summary>
@@ -164063,12 +164326,6 @@ module UndiciTypes =
                     abstract member expectContinue: bool option with get, set
 
                 module options =
-
-                    [<AllowNullLiteral>]
-                    [<Interface>]
-                    type query =
-                        [<EmitIndexer>]
-                        abstract member Item: key: string -> obj with get, set
 
                     module onInfo =
 
@@ -164150,7 +164407,7 @@ module UndiciTypes =
                     /// <summary>
                     /// Query string params to be embedded in the request URL. Default: <c>null</c>
                     /// </summary>
-                    abstract member query: Exports.pipeline.options.query option with get, set
+                    abstract member query: obj option with get, set
                     /// <summary>
                     /// Whether the requests can be safely retried or not. If <c>false</c> the request won't be sent until all preceding requests in the pipeline have completed. Default: <c>true</c> if <c>method</c> is <c>HEAD</c> or <c>GET</c>.
                     /// </summary>
@@ -164177,12 +164434,6 @@ module UndiciTypes =
                     abstract member expectContinue: bool option with get, set
 
                 module options =
-
-                    [<AllowNullLiteral>]
-                    [<Interface>]
-                    type query =
-                        [<EmitIndexer>]
-                        abstract member Item: key: string -> obj with get, set
 
                     module onInfo =
 
@@ -164595,6 +164846,15 @@ module UndiciTypes =
                 abstract member bytesWritten: float option with get, set
                 abstract member bytesRead: float option with get, set
 
+        type OptionsInterceptors =
+            Client_.OptionsInterceptors
+
+        type Options =
+            Client_.Options
+
+        type SocketInfo =
+            Client_.SocketInfo
+
         module Client =
 
             module connect =
@@ -164645,6 +164905,21 @@ module UndiciTypes =
 
             type connector =
                 delegate of options: UndiciTypes.connector.buildConnector_.Options * callback: UndiciTypes.connector.buildConnector_.Callback -> unit
+
+        type BuildOptions =
+            buildConnector_.BuildOptions
+
+        type Options =
+            buildConnector_.Options
+
+        type Callback =
+            buildConnector_.Callback
+
+        type CallbackArgs =
+            buildConnector_.CallbackArgs
+
+        type connector =
+            buildConnector_.connector
 
     module content_type =
 
@@ -164812,14 +165087,14 @@ module UndiciTypes =
             [<Interface>]
             type ClientBeforeConnectMessage =
                 abstract member connectParams: UndiciTypes.diagnostics_channel.DiagnosticsChannel_.ConnectParams with get, set
-                abstract member connector: UndiciTypes.diagnostics_channel.DiagnosticsChannel_.Connector with get, set
+                abstract member connector: options: UndiciTypes.connector.buildConnector_.Options * callback: UndiciTypes.connector.buildConnector_.Callback -> unit
 
             [<AllowNullLiteral>]
             [<Interface>]
             type ClientConnectedMessage =
                 abstract member socket: Node.net.Socket with get, set
                 abstract member connectParams: UndiciTypes.diagnostics_channel.DiagnosticsChannel_.ConnectParams with get, set
-                abstract member connector: UndiciTypes.diagnostics_channel.DiagnosticsChannel_.Connector with get, set
+                abstract member connector: options: UndiciTypes.connector.buildConnector_.Options * callback: UndiciTypes.connector.buildConnector_.Callback -> unit
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -164827,7 +165102,7 @@ module UndiciTypes =
                 abstract member error: UndiciTypes.diagnostics_channel.DiagnosticsChannel_.Error with get, set
                 abstract member socket: Node.net.Socket with get, set
                 abstract member connectParams: UndiciTypes.diagnostics_channel.DiagnosticsChannel_.ConnectParams with get, set
-                abstract member connector: UndiciTypes.diagnostics_channel.DiagnosticsChannel_.Connector with get, set
+                abstract member connector: options: UndiciTypes.connector.buildConnector_.Options * callback: UndiciTypes.connector.buildConnector_.Callback -> unit
 
     module dispatcher =
 
@@ -166011,7 +166286,7 @@ module UndiciTypes =
                 /// <summary>
                 /// Query string params to be embedded in the request URL. Default: <c>null</c>
                 /// </summary>
-                abstract member query: DispatchOptions.query_1 option with get, set
+                abstract member query: obj option with get, set
                 /// <summary>
                 /// Whether the requests can be safely retried or not. If <c>false</c> the request won't be sent until all preceding requests in the pipeline have completed. Default: <c>true</c> if <c>method</c> is <c>HEAD</c> or <c>GET</c>.
                 /// </summary>
@@ -166130,7 +166405,7 @@ module UndiciTypes =
                     ?origin: U2<string, Node.url.URL>,
                     ?body: U5<string, Node.Buffer, JS.Uint8Array, Node.stream.Stream_.Readable, UndiciTypes.formdata.FormData>,
                     ?headers: U3<UndiciTypes.header.IncomingHttpHeaders, ResizeArray<string>, Iterable<string * U2<string, ResizeArray<string>> option>>,
-                    ?query: PipelineOptions.query,
+                    ?query: obj,
                     ?idempotent: bool,
                     ?blocking: bool,
                     ?upgrade: U2<bool, string>,
@@ -166163,7 +166438,7 @@ module UndiciTypes =
                 /// <summary>
                 /// Query string params to be embedded in the request URL. Default: <c>null</c>
                 /// </summary>
-                member val query : PipelineOptions.query option = nativeOnly with get, set
+                member val query : obj option = nativeOnly with get, set
                 /// <summary>
                 /// Whether the requests can be safely retried or not. If <c>false</c> the request won't be sent until all preceding requests in the pipeline have completed. Default: <c>true</c> if <c>method</c> is <c>HEAD</c> or <c>GET</c>.
                 /// </summary>
@@ -166450,14 +166725,6 @@ module UndiciTypes =
                 type ReturnType =
                     delegate of options: UndiciTypes.dispatcher.Dispatcher_.DispatchOptions * handler: UndiciTypes.dispatcher.Dispatcher_.DispatchHandlers -> bool
 
-            module DispatchOptions =
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type query_1 =
-                    [<EmitIndexer>]
-                    abstract member Item: key: string -> obj with get, set
-
             module RequestOptions =
 
                 module onInfo =
@@ -166483,12 +166750,6 @@ module UndiciTypes =
                             abstract member Item: key: string -> U2<string, ResizeArray<string>> with get, set
 
             module PipelineOptions =
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type query =
-                    [<EmitIndexer>]
-                    abstract member Item: key: string -> obj with get, set
 
                 module onInfo =
 
@@ -166535,6 +166796,63 @@ module UndiciTypes =
 
                 type ReturnType =
                     delegate of options: UndiciTypes.dispatcher.Dispatcher_.DispatchOptions * handler: UndiciTypes.dispatcher.Dispatcher_.DispatchHandlers -> bool
+
+        type ComposedDispatcher =
+            Dispatcher_.ComposedDispatcher
+
+        type DispatcherComposeInterceptor =
+            Dispatcher_.DispatcherComposeInterceptor
+
+        type DispatchOptions =
+            Dispatcher_.DispatchOptions
+
+        type ConnectOptions =
+            Dispatcher_.ConnectOptions
+
+        type RequestOptions =
+            Dispatcher_.RequestOptions
+
+        type PipelineOptions =
+            Dispatcher_.PipelineOptions
+
+        type UpgradeOptions =
+            Dispatcher_.UpgradeOptions
+
+        type ConnectData =
+            Dispatcher_.ConnectData
+
+        type ResponseData =
+            Dispatcher_.ResponseData
+
+        type PipelineHandlerData =
+            Dispatcher_.PipelineHandlerData
+
+        type StreamData =
+            Dispatcher_.StreamData
+
+        type UpgradeData =
+            Dispatcher_.UpgradeData
+
+        type StreamFactoryData =
+            Dispatcher_.StreamFactoryData
+
+        type StreamFactory =
+            Dispatcher_.StreamFactory
+
+        type DispatchHandlers =
+            Dispatcher_.DispatchHandlers
+
+        type PipelineHandler =
+            Dispatcher_.PipelineHandler
+
+        type HttpMethod =
+            Dispatcher_.HttpMethod
+
+        type BodyMixin =
+            Dispatcher_.BodyMixin
+
+        type DispatchInterceptor =
+            Dispatcher_.DispatchInterceptor
 
         module Dispatcher =
 
@@ -166717,6 +167035,9 @@ module UndiciTypes =
                 /// </summary>
                 abstract member noProxy: string option with get, set
 
+        type Options =
+            EnvHttpProxyAgent_.Options
+
     module errors =
 
         [<AbstractClass>]
@@ -166745,7 +167066,7 @@ module UndiciTypes =
                 [<Emit("new $0.BodyTimeoutError($1...)")>]
                 abstract member BodyTimeoutError: unit -> BodyTimeoutError
                 [<Emit("new $0.ResponseStatusCodeError($1...)")>]
-                abstract member ResponseStatusCodeError: ?message: string * ?statusCode: float * ?headers: U2<UndiciTypes.header.IncomingHttpHeaders, ResizeArray<string>> * ?body: U2<Exports.ResponseStatusCodeError.body.U2.Case1, string> -> ResponseStatusCodeError
+                abstract member ResponseStatusCodeError: ?message: string * ?statusCode: float * ?headers: U2<UndiciTypes.header.IncomingHttpHeaders, ResizeArray<string>> * ?body: U2<obj, string> -> ResponseStatusCodeError
                 [<Emit("new $0.InvalidArgumentError($1...)")>]
                 abstract member InvalidArgumentError: unit -> InvalidArgumentError
                 [<Emit("new $0.InvalidReturnValueError($1...)")>]
@@ -166777,13 +167098,13 @@ module UndiciTypes =
                 [<Emit("new $0.RequestRetryError($1...)")>]
                 abstract member RequestRetryError: message: string * statusCode: float * headers: UndiciTypes.header.IncomingHttpHeaders -> RequestRetryError
                 [<Emit("new $0.RequestRetryError($1...)")>]
-                abstract member RequestRetryError: message: string * statusCode: float * headers: UndiciTypes.header.IncomingHttpHeaders * body: Exports.RequestRetryError.body -> RequestRetryError
+                abstract member RequestRetryError: message: string * statusCode: float * headers: UndiciTypes.header.IncomingHttpHeaders * body: obj -> RequestRetryError
                 [<Emit("new $0.RequestRetryError($1...)")>]
                 abstract member RequestRetryError: message: string * statusCode: float * headers: UndiciTypes.header.IncomingHttpHeaders * body: string -> RequestRetryError
                 [<Emit("new $0.RequestRetryError($1...)")>]
                 abstract member RequestRetryError: message: string * statusCode: float * headers: ResizeArray<string> -> RequestRetryError
                 [<Emit("new $0.RequestRetryError($1...)")>]
-                abstract member RequestRetryError: message: string * statusCode: float * headers: ResizeArray<string> * body: Exports.RequestRetryError.body -> RequestRetryError
+                abstract member RequestRetryError: message: string * statusCode: float * headers: ResizeArray<string> * body: obj -> RequestRetryError
                 [<Emit("new $0.RequestRetryError($1...)")>]
                 abstract member RequestRetryError: message: string * statusCode: float * headers: ResizeArray<string> * body: string -> RequestRetryError
                 [<Emit("new $0.SecureProxyConnectionError($1...)")>]
@@ -166832,7 +167153,7 @@ module UndiciTypes =
             [<AbstractClass>]
             type ResponseStatusCodeError =
                 inherit UndiciTypes.errors.Errors_.UndiciError
-                abstract member body: U2<ResponseStatusCodeError.body.U2.Case1, string> option with get, set
+                abstract member body: U2<obj, string> option with get, set
                 abstract member status: float with get, set
                 abstract member statusCode: float with get, set
                 abstract member headers: U2<UndiciTypes.header.IncomingHttpHeaders, ResizeArray<string>> option with get, set
@@ -166952,18 +167273,6 @@ module UndiciTypes =
             type SecureProxyConnectionError =
                 inherit UndiciTypes.errors.Errors_.UndiciError
 
-            module ResponseStatusCodeError =
-
-                module body =
-
-                    module U2 =
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type Case1 =
-                            [<EmitIndexer>]
-                            abstract member Item: key: string -> obj with get, set
-
             module RequestRetryError =
 
                 [<Global>]
@@ -166981,28 +167290,6 @@ module UndiciTypes =
                 type headers =
                     [<EmitIndexer>]
                     abstract member Item: key: string -> U2<string, ResizeArray<string>> with get, set
-
-            module Exports =
-
-                module ResponseStatusCodeError =
-
-                    module body =
-
-                        module U2 =
-
-                            [<AllowNullLiteral>]
-                            [<Interface>]
-                            type Case1 =
-                                [<EmitIndexer>]
-                                abstract member Item: key: string -> obj with get, set
-
-                module RequestRetryError =
-
-                    [<AllowNullLiteral>]
-                    [<Interface>]
-                    type body =
-                        [<EmitIndexer>]
-                        abstract member Item: key: string -> obj with get, set
 
     module eventsource =
 
@@ -168143,6 +168430,18 @@ FileReader.DONE"""
             type ResponseErrorInterceptorOpts =
                 abstract member throwOnError: bool with get, set
 
+        type DumpInterceptorOpts =
+            Interceptors_.DumpInterceptorOpts
+
+        type RetryInterceptorOpts =
+            Interceptors_.RetryInterceptorOpts
+
+        type RedirectInterceptorOpts =
+            Interceptors_.RedirectInterceptorOpts
+
+        type ResponseErrorInterceptorOpts =
+            Interceptors_.ResponseErrorInterceptorOpts
+
     module mock_agent =
 
         [<AbstractClass>]
@@ -168236,6 +168535,9 @@ FileReader.DONE"""
                 /// A custom agent to be encapsulated by the MockAgent.
                 /// </summary>
                 abstract member agent: UndiciTypes.agent.Agent option with get, set
+
+        type Options =
+            MockAgent_.Options
 
         module MockAgent =
 
@@ -168390,6 +168692,9 @@ FileReader.DONE"""
                 member val autoSelectFamilyAttemptTimeout : float option = nativeOnly with get, set
                 member val allowH2 : bool option = nativeOnly with get, set
                 member val maxConcurrentStreams : float option = nativeOnly with get, set
+
+        type Options =
+            MockClient_.Options
 
     module mock_errors =
 
@@ -168553,7 +168858,7 @@ FileReader.DONE"""
                 /// <summary>
                 /// Query params to intercept on
                 /// </summary>
-                abstract member query: Options.query option with get, set
+                abstract member query: obj option with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -168651,12 +168956,6 @@ FileReader.DONE"""
                 MockReplyOptionsCallback<obj>
 
             module Options =
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type query =
-                    [<EmitIndexer>]
-                    abstract member Item: key: string -> obj with get, set
 
                 module headers =
 
@@ -168784,6 +169083,9 @@ FileReader.DONE"""
                 /// The agent to associate this MockPool with.
                 /// </summary>
                 abstract member agent: UndiciTypes.mock_agent.MockAgent with get, set
+
+        type Options =
+            MockPool_.Options
 
     module patch =
 
@@ -168980,6 +169282,12 @@ FileReader.DONE"""
                     abstract member Pool: ReadonlyArray<UndiciTypes.dispatcher.Dispatcher_.DispatchInterceptor> option with get, set
                     abstract member Client: ReadonlyArray<UndiciTypes.dispatcher.Dispatcher_.DispatchInterceptor> with get, set
 
+        type PoolStats =
+            Pool_.PoolStats
+
+        type Options =
+            Pool_.Options
+
         module Pool =
 
             module connect =
@@ -169024,6 +169332,9 @@ FileReader.DONE"""
                 abstract member requestTls: UndiciTypes.connector.buildConnector_.BuildOptions option with get, set
                 abstract member proxyTls: UndiciTypes.connector.buildConnector_.BuildOptions option with get, set
                 abstract member clientFactory: origin: Node.URL * opts: obj -> UndiciTypes.dispatcher.Dispatcher
+
+        type Options =
+            ProxyAgent_.Options
 
     module readable =
 
@@ -169237,7 +169548,7 @@ FileReader.DONE"""
                     /// <summary>
                     /// Query string params to be embedded in the request URL. Default: <c>null</c>
                     /// </summary>
-                    abstract member query: RetryContext.opts.query option with get, set
+                    abstract member query: obj option with get, set
                     /// <summary>
                     /// Whether the requests can be safely retried or not. If <c>false</c> the request won't be sent until all preceding requests in the pipeline have completed. Default: <c>true</c> if <c>method</c> is <c>HEAD</c> or <c>GET</c>.
                     /// </summary>
@@ -169271,14 +169582,6 @@ FileReader.DONE"""
                     /// </summary>
                     abstract member expectContinue: bool option with get, set
                     abstract member retryOptions: UndiciTypes.retry_handler.RetryHandler_.RetryOptions option with get, set
-
-                module opts =
-
-                    [<AllowNullLiteral>]
-                    [<Interface>]
-                    type query =
-                        [<EmitIndexer>]
-                        abstract member Item: key: string -> obj with get, set
 
             module RetryCallback =
 
@@ -169313,7 +169616,7 @@ FileReader.DONE"""
                         /// <summary>
                         /// Query string params to be embedded in the request URL. Default: <c>null</c>
                         /// </summary>
-                        abstract member query: RetryCallback.context.opts.query option with get, set
+                        abstract member query: obj option with get, set
                         /// <summary>
                         /// Whether the requests can be safely retried or not. If <c>false</c> the request won't be sent until all preceding requests in the pipeline have completed. Default: <c>true</c> if <c>method</c> is <c>HEAD</c> or <c>GET</c>.
                         /// </summary>
@@ -169348,18 +169651,28 @@ FileReader.DONE"""
                         abstract member expectContinue: bool option with get, set
                         abstract member retryOptions: UndiciTypes.retry_handler.RetryHandler_.RetryOptions option with get, set
 
-                    module opts =
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type query =
-                            [<EmitIndexer>]
-                            abstract member Item: key: string -> obj with get, set
-
             module RetryHandlers =
 
                 type dispatch =
                     delegate of options: UndiciTypes.dispatcher.Dispatcher_.DispatchOptions * handler: UndiciTypes.dispatcher.Dispatcher_.DispatchHandlers -> bool
+
+        type RetryState =
+            RetryHandler_.RetryState
+
+        type RetryContext =
+            RetryHandler_.RetryContext
+
+        type OnRetryCallback =
+            RetryHandler_.OnRetryCallback
+
+        type RetryCallback =
+            RetryHandler_.RetryCallback
+
+        type RetryOptions =
+            RetryHandler_.RetryOptions
+
+        type RetryHandlers =
+            RetryHandler_.RetryHandlers
 
         module Exports =
 
@@ -169382,7 +169695,7 @@ FileReader.DONE"""
                     /// <summary>
                     /// Query string params to be embedded in the request URL. Default: <c>null</c>
                     /// </summary>
-                    abstract member query: Exports.RetryHandler.options.query option with get, set
+                    abstract member query: obj option with get, set
                     /// <summary>
                     /// Whether the requests can be safely retried or not. If <c>false</c> the request won't be sent until all preceding requests in the pipeline have completed. Default: <c>true</c> if <c>method</c> is <c>HEAD</c> or <c>GET</c>.
                     /// </summary>
@@ -169416,14 +169729,6 @@ FileReader.DONE"""
                     /// </summary>
                     abstract member expectContinue: bool option with get, set
                     abstract member retryOptions: UndiciTypes.retry_handler.RetryHandler_.RetryOptions option with get, set
-
-                module options =
-
-                    [<AllowNullLiteral>]
-                    [<Interface>]
-                    type query =
-                        [<EmitIndexer>]
-                        abstract member Item: key: string -> obj with get, set
 
     module util =
 
@@ -170058,7 +170363,7 @@ FileReader.DONE"""
                 /// <summary>
                 /// Query string params to be embedded in the request URL. Default: <c>null</c>
                 /// </summary>
-                abstract member query: Exports.request.options.query_1 option with get, set
+                abstract member query: obj option with get, set
                 /// <summary>
                 /// Whether the requests can be safely retried or not. If <c>false</c> the request won't be sent until all preceding requests in the pipeline have completed. Default: <c>true</c> if <c>method</c> is <c>HEAD</c> or <c>GET</c>.
                 /// </summary>
@@ -170086,12 +170391,6 @@ FileReader.DONE"""
                 abstract member ``method``: UndiciTypes.dispatcher.Dispatcher_.HttpMethod option with get, set
 
             module options =
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type query_1 =
-                    [<EmitIndexer>]
-                    abstract member Item: key: string -> obj with get, set
 
                 module onInfo =
 
@@ -170169,7 +170468,7 @@ FileReader.DONE"""
                 /// <summary>
                 /// Query string params to be embedded in the request URL. Default: <c>null</c>
                 /// </summary>
-                abstract member query: Exports.stream.options.query_1 option with get, set
+                abstract member query: obj option with get, set
                 /// <summary>
                 /// Whether the requests can be safely retried or not. If <c>false</c> the request won't be sent until all preceding requests in the pipeline have completed. Default: <c>true</c> if <c>method</c> is <c>HEAD</c> or <c>GET</c>.
                 /// </summary>
@@ -170196,12 +170495,6 @@ FileReader.DONE"""
                 abstract member expectContinue: bool option with get, set
 
             module options =
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type query_1 =
-                    [<EmitIndexer>]
-                    abstract member Item: key: string -> obj with get, set
 
                 module onInfo =
 
@@ -170283,7 +170576,7 @@ FileReader.DONE"""
                 /// <summary>
                 /// Query string params to be embedded in the request URL. Default: <c>null</c>
                 /// </summary>
-                abstract member query: Exports.pipeline.options.query_1 option with get, set
+                abstract member query: obj option with get, set
                 /// <summary>
                 /// Whether the requests can be safely retried or not. If <c>false</c> the request won't be sent until all preceding requests in the pipeline have completed. Default: <c>true</c> if <c>method</c> is <c>HEAD</c> or <c>GET</c>.
                 /// </summary>
@@ -170310,12 +170603,6 @@ FileReader.DONE"""
                 abstract member expectContinue: bool option with get, set
 
             module options =
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type query_1 =
-                    [<EmitIndexer>]
-                    abstract member Item: key: string -> obj with get, set
 
                 module onInfo =
 
@@ -170432,7 +170719,7 @@ FileReader.DONE"""
                 /// <summary>
                 /// Query string params to be embedded in the request URL. Default: <c>null</c>
                 /// </summary>
-                abstract member query: Exports.RetryHandler.options.query_1 option with get, set
+                abstract member query: obj option with get, set
                 /// <summary>
                 /// Whether the requests can be safely retried or not. If <c>false</c> the request won't be sent until all preceding requests in the pipeline have completed. Default: <c>true</c> if <c>method</c> is <c>HEAD</c> or <c>GET</c>.
                 /// </summary>
@@ -170466,11 +170753,3 @@ FileReader.DONE"""
                 /// </summary>
                 abstract member expectContinue: bool option with get, set
                 abstract member retryOptions: UndiciTypes.retry_handler.RetryHandler_.RetryOptions option with get, set
-
-            module options =
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type query_1 =
-                    [<EmitIndexer>]
-                    abstract member Item: key: string -> obj with get, set

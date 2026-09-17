@@ -38,6 +38,9 @@ module NodeLike =
                 abstract member join: [<ParamArray>] paths: string [] -> string
                 abstract member sep: string with get, set
 
+        type PlatformPath =
+            path_.PlatformPath
+
     module Exports =
 
         type os =

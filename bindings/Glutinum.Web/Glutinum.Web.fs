@@ -16631,7 +16631,7 @@ module Web =
         /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ByteLengthQueuingStrategy/size)
         /// </summary>
-        abstract member size: Web.QueuingStrategySize<obj> with get
+        abstract member size: chunk: obj -> float
 
     /// <summary>
     /// The **<c>CDATASection</c>** interface represents a CDATA section that can be used within XML to include extended portions of unescaped text. When inside a CDATA section, the symbols < and & don't need escaping as they normally do.
@@ -23390,7 +23390,7 @@ module Web =
         /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CountQueuingStrategy/size)
         /// </summary>
-        abstract member size: Web.QueuingStrategySize with get
+        abstract member size: chunk: obj -> float
 
     /// <summary>
     /// The **<c>Credential</c>** interface of the Credential Management API provides information about an entity (usually a user) normally as a prerequisite to a trust decision.
@@ -84387,7 +84387,7 @@ module Web =
         delegate of event: Web.Event -> string option
 
     type OnErrorEventHandlerNonNull =
-        delegate of event: U2<Web.Event, string> * ?source: string * ?lineno: float * ?colno: float * ?error: Exception -> obj
+        delegate of event: U2<Web.Event, string> * ?source: string * ?lineno: float * ?colno: float * ?error: Exception -> unit
 
     type PerformanceObserverCallback =
         delegate of entries: Web.PerformanceObserverEntryList * observer: Web.PerformanceObserver -> unit
@@ -84417,13 +84417,13 @@ module Web =
         delegate of entries: ResizeArray<Web.ResizeObserverEntry> * observer: Web.ResizeObserver -> unit
 
     type SchedulerPostTaskCallback =
-        delegate of unit -> obj
+        delegate of unit -> unit
 
     type TransformerFlushCallback<'O> =
         delegate of controller: Web.TransformStreamDefaultController<'O> -> U2<unit, obj>
 
     type TransformerStartCallback<'O> =
-        delegate of controller: Web.TransformStreamDefaultController<'O> -> obj
+        delegate of controller: Web.TransformStreamDefaultController<'O> -> unit
 
     type TransformerTransformCallback<'I, 'O> =
         delegate of chunk: 'I * controller: Web.TransformStreamDefaultController<'O> -> U2<unit, obj>
@@ -84435,7 +84435,7 @@ module Web =
         delegate of unit -> U2<unit, obj>
 
     type UnderlyingSinkStartCallback =
-        delegate of controller: Web.WritableStreamDefaultController -> obj
+        delegate of controller: Web.WritableStreamDefaultController -> unit
 
     type UnderlyingSinkWriteCallback<'W> =
         delegate of chunk: 'W * controller: Web.WritableStreamDefaultController -> U2<unit, obj>
@@ -84447,7 +84447,7 @@ module Web =
         delegate of controller: Web.ReadableStreamController<'R> -> U2<unit, obj>
 
     type UnderlyingSourceStartCallback<'R> =
-        delegate of controller: Web.ReadableStreamController<'R> -> obj
+        delegate of controller: Web.ReadableStreamController<'R> -> unit
 
     type VideoFrameOutputCallback =
         delegate of output: Web.VideoFrame -> unit
@@ -84456,7 +84456,7 @@ module Web =
         delegate of now: Web.DOMHighResTimeStamp * metadata: Web.VideoFrameCallbackMetadata -> unit
 
     type ViewTransitionUpdateCallback =
-        delegate of unit -> obj
+        delegate of unit -> unit
 
     type VoidFunction =
         delegate of unit -> unit

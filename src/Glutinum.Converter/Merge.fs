@@ -29,6 +29,10 @@ open System.Collections.Generic
 /// `PlusToken` is the one taking `MinusToken` when both alias the same type
 let private aliasTargets = Dictionary<string, FSharpType>()
 
+/// The generic aliases by their full path and arity: `RequestHandler<obj>` is
+/// `RequestHandler<obj, obj, obj, ParsedQs, obj>` once its defaults are applied
+let private genericAliasTargets = Dictionary<string, string list * FSharpType>()
+
 let rec private collectAliases (path: string list) (types: FSharpType list) =
     for typ in types do
         match typ with
@@ -41,9 +45,116 @@ let rec private collectAliases (path: string list) (types: FSharpType list) =
             // A reference from the alias' own module has no module path
             if not (aliasTargets.ContainsKey name) then
                 aliasTargets.[name] <- target
+        | FSharpType.TypeAlias {
+                                   Name = name
+                                   TypeParameters = typeParameters
+                                   Type = target
+                               } ->
+            let names =
+                typeParameters
+                |> List.choose (
+                    function
+                    | FSharpTypeParameter.FSharpTypeParameter info -> Some info.Name
+                    | FSharpTypeParameter.FSharpType _ -> None
+                )
+
+            // `type Handler<'P> = Handler<'P, obj>` names its own module, the target gets the path
+            let target =
+                match target with
+                | FSharpType.Mapped mappedInfo ->
+                    {
+                        Name = mappedInfo.Name
+                        FullName = ""
+                        ModulePath = path
+                        TypeArguments =
+                            mappedInfo.TypeParameters
+                            |> List.map (
+                                function
+                                | FSharpTypeParameter.FSharpType typ -> typ
+                                | FSharpTypeParameter.FSharpTypeParameter info ->
+                                    FSharpType.TypeParameter info.Name
+                            )
+                        Type = FSharpType.Discard
+                    }
+                    |> FSharpType.TypeReference
+                | target -> target
+
+            let arity = string names.Length
+
+            genericAliasTargets.[String.concat "." (path @ [ name ]) + "`" + arity] <-
+                (names, target)
+
+            if not (genericAliasTargets.ContainsKey(name + "`" + arity)) then
+                genericAliasTargets.[name + "`" + arity] <- (names, target)
         | FSharpType.Module moduleInfo ->
             collectAliases (path @ [ moduleInfo.Name ]) moduleInfo.Types
         | _ -> ()
+
+let rec private substitute (substitutions: Map<string, FSharpType>) (typ: FSharpType) : FSharpType =
+    let substitute = substitute substitutions
+
+    match typ with
+    | FSharpType.TypeParameter name ->
+        match Map.tryFind name substitutions with
+        | Some typ -> typ
+        | None -> typ
+    | FSharpType.TypeReference typeReference ->
+        { typeReference with
+            TypeArguments = typeReference.TypeArguments |> List.map substitute
+        }
+        |> FSharpType.TypeReference
+    | FSharpType.Option typ -> FSharpType.Option(substitute typ)
+    | FSharpType.ResizeArray typ -> FSharpType.ResizeArray(substitute typ)
+    | FSharpType.Tuple types -> FSharpType.Tuple(types |> List.map substitute)
+    | FSharpType.Function functionType ->
+        { functionType with
+            Parameters =
+                functionType.Parameters
+                |> List.map (fun parameter ->
+                    { parameter with
+                        Type = substitute parameter.Type
+                    }
+                )
+            ReturnType = substitute functionType.ReturnType
+        }
+        |> FSharpType.Function
+    | FSharpType.Union unionInfo ->
+        { unionInfo with
+            Cases =
+                unionInfo.Cases
+                |> List.map (
+                    function
+                    | FSharpUnionCase.Typed typ -> FSharpUnionCase.Typed(substitute typ)
+                    | FSharpUnionCase.Field(name, typ) ->
+                        FSharpUnionCase.Field(name, substitute typ)
+                    | case -> case
+                )
+        }
+        |> FSharpType.Union
+    | typ -> typ
+
+let private tryGenericAliasTarget (typeReference: FSharpTypeReference) : FSharpType option =
+    let arity = "`" + string typeReference.TypeArguments.Length
+
+    let key =
+        String.concat "." (typeReference.ModulePath @ [ typeReference.Name ]) + arity
+
+    let found =
+        if genericAliasTargets.ContainsKey key then
+            Some genericAliasTargets.[key]
+        elif
+            typeReference.ModulePath.IsEmpty
+            && genericAliasTargets.ContainsKey(typeReference.Name + arity)
+        then
+            Some genericAliasTargets.[typeReference.Name + arity]
+        else
+            None
+
+    found
+    |> Option.map (fun (names, target) ->
+        let substitutions = List.zip names typeReference.TypeArguments |> Map.ofList
+        substitute substitutions target
+    )
 
 // Two references to the same type differ by their `FullName` (`SyntaxKind.A` vs `SyntaxKind.B`)
 let rec private signatureTypeAt (depth: int) (typ: FSharpType) : FSharpType =
@@ -65,6 +176,12 @@ let rec private signatureTypeAt (depth: int) (typ: FSharpType) : FSharpType =
          else
              aliasTargets.[typeReference.Name])
         |> signatureType
+    | FSharpType.TypeReference typeReference when
+        depth < 8
+        && not typeReference.TypeArguments.IsEmpty
+        && (tryGenericAliasTarget typeReference).IsSome
+        ->
+        (tryGenericAliasTarget typeReference).Value |> signatureType
     | FSharpType.TypeReference typeReference ->
         { typeReference with
             // Both are `TypedArray<byte>` in Fable.Core
@@ -332,6 +449,7 @@ let rec private distinctMembers (types: FSharpType list) =
 
 let apply (types: FSharpType list) =
     aliasTargets.Clear()
+    genericAliasTargets.Clear()
     collectAliases [] types
 
     types |> mergeTypes |> mergeModules |> dropEmptyModules |> distinctMembers

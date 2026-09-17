@@ -1222,6 +1222,12 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
             : FSharpTypeReference)
             |> FSharpType.TypeReference
 
+        // `Record<string, any>` is any object, a nominal type per use site would keep them apart
+        | GlueUtilityType.Record {
+                                     KeyType = GlueType.Primitive GluePrimitive.String
+                                     ValueType = GlueType.Primitive GluePrimitive.Any
+                                 } -> FSharpType.Object
+
         | GlueUtilityType.Record recordInfo ->
             let name =
                 context.TypeLiteralsMemory.GetTypeName(context.FullName, context.CurrentScopeName)
@@ -3977,9 +3983,11 @@ module Conditionals =
             }
 
 /// `(ev: Event) => any`: the result of a callback is ignored by its caller, a lambda returns `unit`
+// The caller of a callback returning `any` or `unknown` ignores the value
 let private transformCallbackReturnType (context: TransformContext) (returnType: GlueType) =
     match returnType with
-    | GlueType.Primitive GluePrimitive.Any -> FSharpType.Primitive FSharpPrimitive.Unit
+    | GlueType.Primitive GluePrimitive.Any
+    | GlueType.Unknown -> FSharpType.Primitive FSharpPrimitive.Unit
     | _ -> transformType context returnType
 
 /// Whether one of the base interfaces declares `[Symbol.iterator]`, directly or through its bases
@@ -4012,13 +4020,14 @@ let private inheritsIterable (typeMemory: GlueType list) (heritageClauses: GlueT
     check Set.empty heritageClauses
 
 /// The call signature of a base type generated as a delegate, F# can't inherit it
-let private tryCallableHeritage
+let rec private tryCallableHeritageAt
+    (depth: int)
     (typeMemory: GlueType list)
     (heritageClause: GlueType)
     : GlueCallSignature option
     =
     match heritageClause with
-    | GlueType.TypeReference typeReference ->
+    | GlueType.TypeReference typeReference when depth < 5 ->
         typeMemory
         |> List.tryPick (fun glueType ->
             match glueType with
@@ -4037,9 +4046,164 @@ let private tryCallableHeritage
                                      Members = [ GlueMember.CallSignature callSignature ]
                                      HeritageClauses = []
                                  } when fullName = typeReference.FullName -> Some callSignature
+            // `interface Handler extends RequestHandler {}` is callable through its base
+            | GlueType.Interface {
+                                     FullName = fullName
+                                     Members = []
+                                     HeritageClauses = [ baseHeritage ]
+                                 } when fullName = typeReference.FullName ->
+                tryCallableHeritageAt (depth + 1) typeMemory baseHeritage
             | _ -> None
         )
     | _ -> None
+
+let private tryCallableHeritage (typeMemory: GlueType list) (heritageClause: GlueType) =
+    tryCallableHeritageAt 0 typeMemory heritageClause
+
+/// `get: IRouterMatcher<this>` of express: a property typed by an interface made of call
+/// signatures, or by an alias of a function type, is called like a method
+module private CallableProperties =
+
+    let private substitutions
+        (typeParameters: GlueTypeParameter list)
+        (typeArguments: GlueType list)
+        : Map<string, GlueType>
+        =
+        let substitutions =
+            typeParameters
+            |> List.mapi (fun index typeParameter ->
+                let argument =
+                    typeArguments
+                    |> List.tryItem index
+                    |> Option.orElse typeParameter.Default
+                    |> Option.defaultValue (GlueType.Primitive GluePrimitive.Any)
+
+                typeParameter.Name, argument
+            )
+            |> Map.ofList
+
+        // `T = Response<ResBody>`: a default mentions the earlier type parameters
+        substitutions
+        |> Map.map (fun _ argument -> GlueSubstitution.substitute substitutions argument)
+
+    let private isCallSignature (glueMember: GlueMember) =
+        match glueMember with
+        | GlueMember.CallSignature _ -> true
+        | _ -> false
+
+    let private callSignatures (members: GlueMember list) =
+        members
+        |> List.choose (
+            function
+            | GlueMember.CallSignature callSignature -> Some callSignature
+            | _ -> None
+        )
+
+    /// The call signatures the type resolves to, instantiated with the type arguments
+    let rec private signaturesOf
+        (typeMemory: GlueType list)
+        (depth: int)
+        (glueType: GlueType)
+        : GlueCallSignature list option
+        =
+        match glueType with
+        // `get: ((name: string) => any) & IRouterMatcher<this>`
+        | GlueType.IntersectionType members when
+            not members.IsEmpty && members |> List.forall isCallSignature
+            ->
+            Some(callSignatures members)
+        | GlueType.TypeReference typeReference when depth < 5 ->
+            typeMemory
+            |> List.tryPick (fun candidate ->
+                match candidate with
+                | GlueType.Interface info when
+                    info.FullName = typeReference.FullName
+                    && info.FullName <> ""
+                    && not info.Members.IsEmpty
+                    && info.Members |> List.forall isCallSignature
+                    && info.HeritageClauses.IsEmpty
+                    ->
+                    let substitutions =
+                        substitutions info.TypeParameters typeReference.TypeArguments
+
+                    callSignatures info.Members
+                    |> List.map (fun callSignature ->
+                        match
+                            GlueSubstitution.substituteMember
+                                substitutions
+                                (GlueMember.CallSignature callSignature)
+                        with
+                        | GlueMember.CallSignature callSignature -> callSignature
+                        | _ -> callSignature
+                    )
+                    |> Some
+                | GlueType.TypeAliasDeclaration info when
+                    info.FullName = typeReference.FullName && info.FullName <> ""
+                    ->
+                    let substitutions =
+                        substitutions info.TypeParameters typeReference.TypeArguments
+
+                    match info.Type with
+                    | GlueType.FunctionType functionType ->
+                        let own =
+                            functionType.TypeParameters
+                            |> List.filter (fun typeParameter ->
+                                List.contains
+                                    typeParameter.Name
+                                    functionType.OwnTypeParameterNames
+                            )
+
+                        match
+                            GlueSubstitution.substituteMember
+                                substitutions
+                                (GlueMember.CallSignature
+                                    {
+                                        TypeParameters = own
+                                        Parameters = functionType.Parameters
+                                        Type = functionType.Type
+                                    })
+                        with
+                        | GlueMember.CallSignature callSignature -> Some [ callSignature ]
+                        | _ -> None
+                    | GlueType.IntersectionType members when
+                        not members.IsEmpty && members |> List.forall isCallSignature
+                        ->
+                        members
+                        |> List.map (GlueSubstitution.substituteMember substitutions)
+                        |> callSignatures
+                        |> Some
+                    | GlueType.TypeReference _ as target ->
+                        signaturesOf
+                            typeMemory
+                            (depth + 1)
+                            (GlueSubstitution.substitute substitutions target)
+                    | _ -> None
+                | _ -> None
+            )
+        | _ -> None
+
+    let asMethods (typeMemory: GlueType list) (members: GlueMember list) : GlueMember list =
+        members
+        |> List.collect (fun glueMember ->
+            match glueMember with
+            | GlueMember.Property property when not property.IsOptional && not property.IsStatic ->
+                match signaturesOf typeMemory 0 property.Type with
+                | Some(_ :: _ as callSignatures) ->
+                    callSignatures
+                    |> List.map (fun callSignature ->
+                        ({
+                            Name = property.Name
+                            Documentation = property.Documentation
+                            TypeParameters = callSignature.TypeParameters
+                            Parameters = callSignature.Parameters
+                            Type = callSignature.Type
+                        }
+                        : GlueMethodSignature)
+                        |> GlueMember.MethodSignature
+                    )
+                | _ -> [ glueMember ]
+            | _ -> [ glueMember ]
+        )
 
 /// `interface Listener { (event: Event): void }` is a function, an F# delegate takes a lambda
 let private tryTransformCallableInterface
@@ -4070,17 +4234,45 @@ let private tryTransformCallableInterface
                 callSignature.Parameters
                 |> List.map (transformParameter context)
                 |> requiredBeforeParamArray
-            ReturnType = transformType (context.PushScope "ReturnType") callSignature.Type
+            ReturnType =
+                transformCallbackReturnType (context.PushScope "ReturnType") callSignature.Type
         }
         : FSharpDelegate)
         |> FSharpType.Delegate
+        |> Some
+
+    // `interface RequestHandler<P> extends core.RequestHandler<P> {}` is the delegate it extends
+    | [], [ GlueType.TypeReference typeReference as heritage ] when
+        (tryCallableHeritage context.TypeMemory heritage).IsSome
+        ->
+        let name, context = sanitizeTypeNameAndPushScope info.Name context
+        let xmlDocInfo = transformComment info.Documentation
+        let typeParameters = transformDeclarationTypeParameters context info.TypeParameters
+
+        typeParameters.TypeParameters
+        |> List.rev
+        |> exposeSpecializedAlias name [] []
+        |> List.iter context.ExposeType
+
+        ({
+            Attributes = []
+            XmlDoc = xmlDocInfo.XmlDoc
+            Name = name
+            TypeParameters = typeParameters.TypeParameters
+            Type = transformType context (GlueType.TypeReference typeReference)
+        }
+        : FSharpTypeAlias)
+        |> FSharpType.TypeAlias
         |> Some
     | _ -> None
 
 let private transformInterface (context: TransformContext) (info: GlueInterface) : FSharpInterface =
     let info =
         { info with
-            Members = Conditionals.resolveMembers info.TypeParameters info.Members
+            Members =
+                info.Members
+                |> CallableProperties.asMethods context.TypeMemory
+                |> Conditionals.resolveMembers info.TypeParameters
         }
 
     let name, context = sanitizeTypeNameAndPushScope info.Name context
@@ -5746,7 +5938,9 @@ module private ReExport =
             | Some(GlueType.Primitive _)
             // Dropped by the transform
             | Some(GlueType.TypeLiteral _)
-            | Some(GlueType.IntersectionType _) -> true
+            | Some(GlueType.IntersectionType _)
+            | Some(GlueType.UtilityType _)
+            | Some(GlueType.MappedType _) -> true
             // Sealed to the same type by the transform
             | Some(GlueType.Union(GlueTypeUnion cases)) ->
                 cases
@@ -6109,6 +6303,7 @@ let private transformClassDeclaration
             Members =
                 classDeclaration.Members
                 |> withoutBaseClassProperties context.TypeMemory classDeclaration.HeritageClauses
+                |> CallableProperties.asMethods context.TypeMemory
                 |> Conditionals.resolveMembers classDeclaration.TypeParameters
                 |> TransformMembers.toFSharpMember context
             TypeParameters = typeParametersResult.TypeParameters
@@ -6343,7 +6538,73 @@ let private transform
     (glueAst: GlueType list)
     : FSharpType list
     =
-    // A re-exported value is exported again under its new name
+    // `export = e` with `declare namespace e { interface Request {} }`: the namespace is the
+    // module, its types are reachable at the top level too
+    let glueAst =
+        let exportEqualsNames =
+            glueAst
+            |> List.choose (
+                function
+                | GlueType.ExportDefault(GlueType.Variable { Name = name }) ->
+                    Some(name.Replace("export=", ""))
+                | _ -> None
+            )
+            |> set
+
+        let typeName (glueType: GlueType) =
+            match glueType with
+            | GlueType.Interface info -> Some info.Name
+            | GlueType.TypeAliasDeclaration info -> Some info.Name
+            | GlueType.Enum info -> Some info.Name
+            | _ -> None
+
+        let declaredNames =
+            glueAst
+            |> List.choose (
+                function
+                | GlueType.ClassDeclaration info -> Some info.Name
+                | GlueType.ExportDefault(GlueType.ClassDeclaration info) -> Some info.Name
+                | glueType -> typeName glueType
+            )
+            |> set
+
+        let hoisted =
+            glueAst
+            |> List.collect (
+                function
+                | GlueType.ModuleDeclaration moduleInfo when
+                    exportEqualsNames.Contains moduleInfo.Name
+                    ->
+                    let modulePath =
+                        [
+                            Naming.sanitizeTypeName (
+                                Naming.removeSurroundingQuotes moduleInfo.Name
+                                + (if moduleInfo.IsTopLevel then
+                                       "_"
+                                   else
+                                       "")
+                            )
+                        ]
+
+                    moduleInfo.Types
+                    |> List.choose (fun glueType ->
+                        match typeName glueType with
+                        | Some name when not (declaredNames.Contains name) ->
+                            Some(
+                                GlueType.ReExport
+                                    {
+                                        Name = name
+                                        Declaration = glueType
+                                        ModulePath = modulePath
+                                    }
+                            )
+                        | _ -> None
+                    )
+                | _ -> []
+            )
+
+        glueAst @ hoisted
+
     // A re-exported value is exported again under its new name
     let glueAst =
         glueAst
