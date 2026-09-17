@@ -2,8 +2,12 @@ module Build.Main
 
 open SimpleExec
 open Build.Commands.Cli
+open Build.Commands.Bindings
 open Build.Commands.Web
 open Build.Commands.Test.Specs
+open Build.Commands.Test.Bindings
+open Build.Commands.Test.All
+open Build.Commands.Release
 open Build.Commands.Lint
 open Build.Commands.Format
 open Spectre.Console.Cli
@@ -28,9 +32,18 @@ You can then invoke the local version of Glutinum by running `node cli.js <args>
             )
         |> ignore
 
+        config
+            .AddCommand<BindingsCommand>("bindings")
+            .WithDescription(
+                """Generate the Glutinum.Web and Glutinum.Node bindings from the packages pinned in package.json
+
+`--check` fails when the committed files are out of date"""
+            )
+        |> ignore
+
         config.AddBranch(
             "test",
-            fun (test: IConfigurator<SpecSettings>) ->
+            fun (test: IConfigurator<CommandSettings>) ->
                 test.SetDescription(
                     "Run the specs and integration tests if no subcommand is provided"
                 )
@@ -40,9 +53,22 @@ You can then invoke the local version of Glutinum by running `node cli.js <args>
                     .WithDescription("""Run tests testing isolated TypeScript syntax.""")
                 |> ignore
 
-                // TODO: Create a separate command to run all the tests when we have more than one type of tests
-                test.SetDefaultCommand<SpecCommand>()
+                test
+                    .AddCommand<BindingsTestCommand>("bindings")
+                    .WithDescription(
+                        "Run the Glutinum.Node and Glutinum.Web bindings in Node and Chromium"
+                    )
+                |> ignore
+
+                test.SetDefaultCommand<AllTestCommand>()
         )
+        |> ignore
+
+        config
+            .AddCommand<ReleaseCommand>("release")
+            .WithDescription(
+                "Pack Glutinum.Types, Glutinum.Web and Glutinum.Node, push them to nuget.org and publish the CLI to npm"
+            )
         |> ignore
 
         config

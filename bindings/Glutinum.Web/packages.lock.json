@@ -1,0 +1,41 @@
+{
+  "version": 2,
+  "dependencies": {
+    ".NETStandard,Version=v2.1": {
+      "EasyBuild.PackageReleaseNotes.Tasks": {
+        "type": "Direct",
+        "requested": "[2.1.0, )",
+        "resolved": "2.1.0",
+        "contentHash": "1hMVtdIKNfHZA2Zw7L33Y1ZL/3DTK4NSy5gDaNfy2Emp753QxZoqNAPGNxv9MViqfpM62HwEIFZkUW4dCToHVg=="
+      },
+      "Fable.Core": {
+        "type": "Direct",
+        "requested": "[5.1.0, )",
+        "resolved": "5.1.0",
+        "contentHash": "YtU/i2SlymwzBhYl0rvhQ9uHJAsMpNRT4LVPDHz47WiiAlqreiGXMBNVk84f9NP7Pl9af/XhCkI0t2Ss1lYfKQ==",
+        "dependencies": {
+          "FSharp.Core": "4.7.2"
+        }
+      },
+      "Fable.Package.SDK": {
+        "type": "Direct",
+        "requested": "[1.3.2, )",
+        "resolved": "1.3.2",
+        "contentHash": "vQB5IvCyy86LP9ilSpZGjLUT/7HI0Bp4Ht1Oyl+w68h734ySaq9xLjttErYoHx+nmnMjcv2EBjxrA24mZ/U/jQ=="
+      },
+      "FSharp.Core": {
+        "type": "Direct",
+        "requested": "[10.1.301, )",
+        "resolved": "10.1.301",
+        "contentHash": "excLf2zM/qUB3WhRUfI0xvOOaPwcRAEdYT/BXe9eiTKySnWVuIKMQTf5+6ETy5nsb1dpLp1s2j2yAM/XcRgFMg=="
+      },
+      "glutinum.types": {
+        "type": "Project",
+        "dependencies": {
+          "FSharp.Core": "[10.1.301, )",
+          "Fable.Core": "[5.1.0, )"
+        }
+      }
+    }
+  }
+}

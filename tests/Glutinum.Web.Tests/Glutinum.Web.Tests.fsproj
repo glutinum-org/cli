@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+    <ItemGroup>
+        <Compile Include="Main.fs" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Fable.Core" />
+        <PackageReference Include="Fable.Promise" />
+        <PackageReference Include="Scriptorium.Nib" />
+        <PackageReference Include="Scriptorium.Nib.Browser" />
+        <PackageReference Include="Scriptorium.Quill" />
+    </ItemGroup>
+</Project>

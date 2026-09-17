@@ -137,7 +137,7 @@ you need to re-run this command. (Will be improved in the future)")>]
 
 type SpecCommand() =
     inherit Command<SpecSettings>()
-    interface ICommandLimiter<SpecSettings>
+    interface ICommandLimiter<CommandSettings>
 
     override _.Execute(context, settings) =
 

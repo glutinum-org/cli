@@ -1,0 +1,9 @@
+{
+    "name": "glutinum-bindings",
+    "private": true,
+    "description": "The declaration packages the Glutinum.Web and Glutinum.Node bindings are generated from",
+    "devDependencies": {
+        "@types/node": "22.20.3",
+        "@types/web": "0.0.356"
+    }
+}

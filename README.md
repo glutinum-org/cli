@@ -48,6 +48,19 @@ npx @glutinum/cli ./node_modules/my-lib/index.d.ts > ./Glutinum.MyLib.fs
 npx glue ./node_modules/my-lib/index.d.ts > ./Glutinum.MyLib.fs
 ```
 
+## Published bindings
+
+The bindings of the runtimes are generated from this repository and published on NuGet:
+
+| Package | Generated from | Usage |
+| --- | --- | --- |
+| [Glutinum.Web](bindings/Glutinum.Web/README.md) | `@types/web` | `open type Glutinum.Web.Exports` |
+| [Glutinum.Node](bindings/Glutinum.Node/README.md) | `@types/node` | `open Glutinum.Node.Exports` |
+
+A binding generated for a package using the DOM or the Node types references them instead of generating them again, the header of the file tells which one to add. `--no-externals` generates them inline.
+
+`./build.sh bindings` regenerates them from the versions pinned in `bindings/package.json`, `./build.sh test bindings` runs them in Node and Chromium.
+
 ## Contributing
 
 Glutinum.CLI use `./build.sh` or `./build.bat` as a build script.

@@ -14,7 +14,11 @@
     <Compile Include="Commands/Lint.fs" />
     <Compile Include="Commands/Format.fs" />
     <Compile Include="Commands/Cli.fs" />
+    <Compile Include="Commands/Bindings.fs" />
     <Compile Include="Commands/Test/Specs.fs" />
+    <Compile Include="Commands/Test/Bindings.fs" />
+    <Compile Include="Commands/Test/All.fs" />
+    <Compile Include="Commands/Release.fs" />
     <Compile Include="Commands/Web.fs" />
     <Compile Include="Main.fs" />
   </ItemGroup>
