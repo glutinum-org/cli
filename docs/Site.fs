@@ -14,9 +14,11 @@ let apiOptions =
             [
                 FSharpApiSource.create
                     "../src/Glutinum.Types/bin/Release/netstandard2.1/Glutinum.Types.dll"
-            // The runtime bindings are not published as a reference yet: `Glutinum.Node` has 72
-            // pairs of declarations whose routes collide (`Blob` and the `blob` module), and
-            // reading `Glutinum.Web` takes the plugin more than twenty minutes
+                FSharpApiSource.create
+                    "../bindings/Glutinum.Web/bin/Release/netstandard2.1/Glutinum.Web.dll"
+            // `Glutinum.Node` waits for the plugin: `crypto.webcrypto_.CryptoKeyConstructor.Invoke._`
+            // is named after a TypeScript parameter called `_`, and its slug is empty, so its page
+            // takes the route of the module holding it
             ]
     }
 

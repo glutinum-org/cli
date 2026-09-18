@@ -80,7 +80,11 @@ let private watchWebApp () =
 
 /// The API reference reads the Release assemblies of the packages published from here
 let private buildPackages () =
-    for project in [ "src/Glutinum.Types/Glutinum.Types.fsproj" ] do
+    for project in
+        [
+            "src/Glutinum.Types/Glutinum.Types.fsproj"
+            "bindings/Glutinum.Web/Glutinum.Web.fsproj"
+        ] do
         Command.Run(
             "dotnet",
             CmdLine.empty
