@@ -4,6 +4,8 @@ open Fable.Core
 open Scriptorium.Nib.Assertion
 open Glutinum
 open Glutinum.Node.Exports
+open Glutinum.Types.TypeScript
+open type Glutinum.Types.TypeScript.Exports
 
 open type Scriptorium.Quill.Runner
 open type Scriptorium.Quill.Test
@@ -152,6 +154,40 @@ let main _ =
                                 server.close () |> ignore
                                 assertThat body (isEqualTo "pong")
                             }
+                    )
+                ]
+            )
+            testList (
+                "Glutinum.Types",
+                [
+                    test (
+                        "Date: constructed from parts, a timestamp or a string",
+                        fun _ ->
+                            let date = Date.Create(2026, 8, 17, 12, 30)
+                            assertThat (date.getFullYear ()) (isEqualTo 2026.0)
+                            assertThat (date.getMonth ()) (isEqualTo 8.0)
+                            assertThat (date.getMinutes ()) (isEqualTo 30.0)
+
+                            let nextDay = Date.Create(date.getTime () + 86_400_000.0)
+                            assertThat (nextDay.getDate ()) (isEqualTo 18.0)
+
+                            let parsed = Date.Create "2026-01-01T00:00:00Z"
+                            assertThat (parsed.getTime ()) (isEqualTo (Date.UTC(2026, 0, 1)))
+                            assertThat (parsed.toISOString ()) (isEqualTo "2026-01-01T00:00:00.000Z")
+                    )
+                    test (
+                        "Date: the static members of the constructor",
+                        fun _ ->
+                            assertThat (Date.now () > 0.0) isTrue
+                            assertThat (Date.parse "2026-01-01T00:00:00Z") (isEqualTo (Date.UTC(2026, 0, 1)))
+                    )
+                    test (
+                        "ReadonlyArray: a sequence with an index",
+                        fun _ ->
+                            let names: ReadonlyArray<string> = unbox [| "a"; "b"; "c" |]
+                            assertThat names.[1] (isEqualTo "b")
+                            assertThat (names |> Seq.map (fun name -> name.ToUpper()) |> String.concat "") (isEqualTo "ABC")
+                            assertThat (names.length) (isEqualTo 3.0)
                     )
                 ]
             )

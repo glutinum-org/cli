@@ -411,15 +411,39 @@ let distinctBySignature (members: FSharpMember list) : FSharpMember list =
         | FSharpMember.Property info -> not (methodNames.Contains info.Name)
         | _ -> true
     )
-    |> List.distinctBy (
+    // `UTC(year, monthIndex)` merged with `UTC(year, monthIndex?)`: the parameters differ by their
+    // optionality only, F# can't choose between them and the more permissive one takes both calls
+    |> List.groupBy (
         function
         | FSharpMember.Method info ->
-            let signature = parametersSignature info.Parameters
-            Choice1Of3(info.Name, arityOfSignature info.TypeParameters signature, signature)
-        | FSharpMember.Property info -> Choice2Of3(info.Name, parametersSignature info.Parameters)
+            let signature = parametersSignature info.Parameters |> List.map fst
+
+            Choice1Of3(
+                info.Name,
+                arityOfSignature info.TypeParameters (parametersSignature info.Parameters),
+                signature
+            )
+        | FSharpMember.Property info ->
+            Choice2Of3(info.Name, parametersSignature info.Parameters |> List.map fst)
         | FSharpMember.StaticMember info ->
-            let signature = parametersSignature info.Parameters
-            Choice3Of3(info.Name, arityOfSignature info.TypeParameters signature, signature)
+            let signature = parametersSignature info.Parameters |> List.map fst
+
+            Choice3Of3(
+                info.Name,
+                arityOfSignature info.TypeParameters (parametersSignature info.Parameters),
+                signature
+            )
+    )
+    |> List.map (fun (_, group) ->
+        let optionalCount (fsharpMember: FSharpMember) =
+            match fsharpMember with
+            | FSharpMember.Method info
+            | FSharpMember.Property info ->
+                info.Parameters |> List.filter _.IsOptional |> List.length
+            | FSharpMember.StaticMember info ->
+                info.Parameters |> List.filter _.IsOptional |> List.length
+
+        group |> List.maxBy optionalCount
     )
 
 let private mergeTypes (types: FSharpType list) =

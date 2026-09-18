@@ -11,6 +11,15 @@ The ES library types the generator refers to that `Fable.Core` does not define: 
 
 A `ReadonlyArray<'T>` is a sequence, `Seq.map` and `for` read it, and `.[i]` indexes it.
 
+`Date` is here too, with its constructor on `Exports`:
+
+```fsharp
+open type Glutinum.Types.TypeScript.Exports
+
+let today = Date.Create(2026, 8, 17)
+let stamp = Date.now ()
+```
+
 ```bash frame="terminal"
 dotnet add package Glutinum.Types
 ```

@@ -334,7 +334,10 @@ let private mapTypeNameToFableCoreAwareName
         if typeReference.IsStandardLibrary then
             match typeReference.Name with
             | name when iteratorNames.Contains name -> "Iterable"
-            | "Date" -> "JS.Date"
+            // `Date` and its constructor are the ones of `Glutinum.Types`
+            | "Date" ->
+                context.ExposeReadonlyArray()
+                "Date"
             | "Promise" -> "JS.Promise"
             | "Uint8Array" -> "JS.Uint8Array"
             | "Int8Array" -> "JS.Int8Array"
@@ -356,6 +359,8 @@ let private mapTypeNameToFableCoreAwareName
             | "WeakSet" -> "JS.WeakSet"
             | "FlatArray"
             | "Symbol" -> "obj"
+            // The `Intl` namespace is not generated yet
+            | _ when typeReference.FullName.StartsWith "Intl." -> "obj"
             | "Boolean" -> "bool"
             | "Function" -> "Action"
             | "Error"
@@ -810,25 +815,33 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
                 |> FSharpType.TypeReference
 
             | None ->
-                let name, context = sanitizeNameAndPushScope $"U{others.Length}" context
+                // The anonymous types of the cases are named under the union as written
+                let _, context = sanitizeNameAndPushScope $"U{others.Length}" context
 
-                let cases =
+                // `Intl.Locale | string` with both cases mapped to `obj` is one `obj`
+                let caseTypes =
                     others
                     |> List.mapi (fun index caseType ->
                         let context = context.PushScope $"Case%i{index + 1}"
 
-                        transformType context caseType |> FSharpUnionCase.Typed
+                        transformType context caseType
                     )
+                    |> List.distinct
 
-                {
-                    Attributes = []
-                    Name = name
-                    Cases = cases
-                    IsOptional = isOptional
-                    TypeParameters = []
-                    Constants = []
-                }
-                |> FSharpType.Union
+                match caseTypes with
+                | [ single ] -> single
+                | _ ->
+                    let cases = caseTypes |> List.map FSharpUnionCase.Typed
+
+                    {
+                        Attributes = []
+                        Name = $"U{caseTypes.Length}"
+                        Cases = cases
+                        IsOptional = isOptional
+                        TypeParameters = []
+                        Constants = []
+                    }
+                    |> FSharpType.Union
 
     // `Key<K, T>` standing for a conditional type is the unresolved type itself
     | GlueType.TypeReference typeReference when
@@ -3565,6 +3578,11 @@ module UnionOverloads =
                 expandParameters typeMemory info.Parameters
                 |> List.map (fun parameters ->
                     GlueMember.Method { info with Parameters = parameters }
+                )
+            | GlueMember.ConstructSignature info ->
+                expandParameters typeMemory info.Parameters
+                |> List.map (fun parameters ->
+                    GlueMember.ConstructSignature { info with Parameters = parameters }
                 )
             | _ -> [ glueMember ]
         )

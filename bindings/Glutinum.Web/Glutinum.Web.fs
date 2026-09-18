@@ -25454,12 +25454,6 @@ module Web =
         /// </summary>
         abstract member createElementNS: ``namespace``: string option * qualifiedName: string * options: string -> Web.Element
         /// <summary>
-        /// The **<c>createElementNS()</c>** method of the Document interface creates a new element with the specified namespace URI and qualified name.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/createElementNS)
-        /// </summary>
-        abstract member createElementNS: ``namespace``: string option * qualifiedName: string * options: Web.ElementCreationOptions -> Web.Element
-        /// <summary>
         /// Creates an event of the type specified. The returned object should be first initialized and can then be passed to EventTarget.dispatchEvent.
         /// </summary>
         [<Obsolete("[MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/createEvent)"); Emit("$0.createEvent('AnimationEvent')")>]
@@ -37182,7 +37176,7 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/valueAsDate)
         /// </summary>
-        abstract member valueAsDate: JS.Date option with get, set
+        abstract member valueAsDate: Date option with get, set
         /// <summary>
         /// The **<c>valueAsNumber</c>** property of the HTMLInputElement interface represents the current value of the <input> element as a number or NaN if converting to a numeric value is not possible.
         ///
@@ -45354,7 +45348,7 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBCursor/continue)
         /// </summary>
-        abstract member ``continue``: key: JS.Date -> unit
+        abstract member ``continue``: key: Date -> unit
         /// <summary>
         /// The **<c>continue()</c>** method of the IDBCursor interface advances the cursor to the next position along its direction, to the item whose key matches the optional key parameter. If no key is specified, the cursor advances to the immediate next position, based on its direction.
         ///
@@ -45384,7 +45378,7 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBCursor/continuePrimaryKey)
         /// </summary>
-        abstract member continuePrimaryKey: key: JS.Date * primaryKey: Web.IDBValidKey -> unit
+        abstract member continuePrimaryKey: key: Date * primaryKey: Web.IDBValidKey -> unit
         /// <summary>
         /// The **<c>continuePrimaryKey()</c>** method of the IDBCursor interface advances the cursor to the item whose key matches the key parameter as well as whose primary key matches the primary key parameter.
         ///
@@ -45732,7 +45726,7 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBIndex/count)
         /// </summary>
-        abstract member count: query: JS.Date -> Web.IDBRequest<float>
+        abstract member count: query: Date -> Web.IDBRequest<float>
         /// <summary>
         /// The **<c>count()</c>** method of the IDBIndex interface returns an IDBRequest object, and in a separate thread, returns the number of records within a key range.
         ///
@@ -45768,7 +45762,7 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBIndex/get)
         /// </summary>
-        abstract member get: query: JS.Date -> Web.IDBRequest<obj>
+        abstract member get: query: Date -> Web.IDBRequest<obj>
         /// <summary>
         /// The **<c>get()</c>** method of the IDBIndex interface returns an IDBRequest object, and, in a separate thread, finds either the value in the referenced object store that corresponds to the given key or the first corresponding value, if key is set to an IDBKeyRange.
         ///
@@ -45810,7 +45804,7 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBIndex/getAll)
         /// </summary>
-        abstract member getAll: queryOrOptions: JS.Date * ?count: float -> Web.IDBRequest<ResizeArray<obj>>
+        abstract member getAll: queryOrOptions: Date * ?count: float -> Web.IDBRequest<ResizeArray<obj>>
         /// <summary>
         /// The **<c>getAll()</c>** method of the IDBIndex interface retrieves all objects that are inside the index.
         ///
@@ -45852,7 +45846,7 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBIndex/getAllKeys)
         /// </summary>
-        abstract member getAllKeys: queryOrOptions: JS.Date * ?count: float -> Web.IDBRequest<ResizeArray<Web.IDBValidKey>>
+        abstract member getAllKeys: queryOrOptions: Date * ?count: float -> Web.IDBRequest<ResizeArray<Web.IDBValidKey>>
         /// <summary>
         /// The **<c>getAllKeys()</c>** method of the IDBIndex interface asynchronously retrieves the primary keys of all objects inside the index, setting them as the result of the request object.
         ///
@@ -45888,7 +45882,7 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBIndex/getKey)
         /// </summary>
-        abstract member getKey: query: JS.Date -> Web.IDBRequest<Web.IDBValidKey option>
+        abstract member getKey: query: Date -> Web.IDBRequest<Web.IDBValidKey option>
         /// <summary>
         /// The **<c>getKey()</c>** method of the IDBIndex interface returns an IDBRequest object, and, in a separate thread, finds either the primary key that corresponds to the given key in this index or the first corresponding primary key, if key is set to an IDBKeyRange.
         ///
@@ -45930,7 +45924,7 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBIndex/openCursor)
         /// </summary>
-        abstract member openCursor: query: JS.Date * ?direction: Web.IDBCursorDirection -> Web.IDBRequest<Web.IDBCursorWithValue option>
+        abstract member openCursor: query: Date * ?direction: Web.IDBCursorDirection -> Web.IDBRequest<Web.IDBCursorWithValue option>
         /// <summary>
         /// The **<c>openCursor()</c>** method of the IDBIndex interface returns an IDBRequest object, and, in a separate thread, creates a cursor over the specified key range.
         ///
@@ -45972,7 +45966,7 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBIndex/openKeyCursor)
         /// </summary>
-        abstract member openKeyCursor: query: JS.Date * ?direction: Web.IDBCursorDirection -> Web.IDBRequest<Web.IDBCursor option>
+        abstract member openKeyCursor: query: Date * ?direction: Web.IDBCursorDirection -> Web.IDBRequest<Web.IDBCursor option>
         /// <summary>
         /// The **<c>openKeyCursor()</c>** method of the IDBIndex interface returns an IDBRequest object, and, in a separate thread, creates a cursor over the specified key range, as arranged by this index.
         ///
@@ -46092,7 +46086,7 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBObjectStore/add)
         /// </summary>
-        abstract member add: value: obj * key: JS.Date -> Web.IDBRequest<Web.IDBValidKey>
+        abstract member add: value: obj * key: Date -> Web.IDBRequest<Web.IDBValidKey>
         /// <summary>
         /// The **<c>add()</c>** method of the IDBObjectStore interface returns an IDBRequest object, and, in a separate thread, creates a structured clone of the value, and stores the cloned value in the object store. This is for adding new records to an object store.
         ///
@@ -46134,7 +46128,7 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBObjectStore/count)
         /// </summary>
-        abstract member count: query: JS.Date -> Web.IDBRequest<float>
+        abstract member count: query: Date -> Web.IDBRequest<float>
         /// <summary>
         /// The **<c>count()</c>** method of the IDBObjectStore interface returns an IDBRequest object, and, in a separate thread, returns the total number of records that match the provided key or IDBKeyRange. If no arguments are provided, it returns the total number of records in the store.
         ///
@@ -46182,7 +46176,7 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBObjectStore/delete)
         /// </summary>
-        abstract member delete: query: JS.Date -> Web.IDBRequest<obj>
+        abstract member delete: query: Date -> Web.IDBRequest<obj>
         /// <summary>
         /// The **<c>delete()</c>** method of the IDBObjectStore interface returns an IDBRequest object, and, in a separate thread, deletes the specified record or records.
         ///
@@ -46224,7 +46218,7 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBObjectStore/get)
         /// </summary>
-        abstract member get: query: JS.Date -> Web.IDBRequest<obj>
+        abstract member get: query: Date -> Web.IDBRequest<obj>
         /// <summary>
         /// The **<c>get()</c>** method of the IDBObjectStore interface returns an IDBRequest object, and, in a separate thread, returns the object selected by the specified key. This is for retrieving specific records from an object store.
         ///
@@ -46266,7 +46260,7 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBObjectStore/getAll)
         /// </summary>
-        abstract member getAll: queryOrOptions: JS.Date * ?count: float -> Web.IDBRequest<ResizeArray<obj>>
+        abstract member getAll: queryOrOptions: Date * ?count: float -> Web.IDBRequest<ResizeArray<obj>>
         /// <summary>
         /// The **<c>getAll()</c>** method of the IDBObjectStore interface returns an IDBRequest object containing all objects in the object store matching the specified parameter or all objects in the store if no parameters are given.
         ///
@@ -46308,7 +46302,7 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBObjectStore/getAllKeys)
         /// </summary>
-        abstract member getAllKeys: queryOrOptions: JS.Date * ?count: float -> Web.IDBRequest<ResizeArray<Web.IDBValidKey>>
+        abstract member getAllKeys: queryOrOptions: Date * ?count: float -> Web.IDBRequest<ResizeArray<Web.IDBValidKey>>
         /// <summary>
         /// The **<c>getAllKeys()</c>** method of the IDBObjectStore interface returns an IDBRequest object retrieves record keys for all objects in the object store matching the specified parameter or all objects in the store if no parameters are given.
         ///
@@ -46344,7 +46338,7 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBObjectStore/getKey)
         /// </summary>
-        abstract member getKey: query: JS.Date -> Web.IDBRequest<Web.IDBValidKey option>
+        abstract member getKey: query: Date -> Web.IDBRequest<Web.IDBValidKey option>
         /// <summary>
         /// The **<c>getKey()</c>** method of the IDBObjectStore interface returns an IDBRequest object, and, in a separate thread, returns the key selected by the specified query. This is for retrieving specific records from an object store.
         ///
@@ -46392,7 +46386,7 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBObjectStore/openCursor)
         /// </summary>
-        abstract member openCursor: query: JS.Date * ?direction: Web.IDBCursorDirection -> Web.IDBRequest<Web.IDBCursorWithValue option>
+        abstract member openCursor: query: Date * ?direction: Web.IDBCursorDirection -> Web.IDBRequest<Web.IDBCursorWithValue option>
         /// <summary>
         /// The **<c>openCursor()</c>** method of the IDBObjectStore interface returns an IDBRequest object, and, in a separate thread, returns a new IDBCursorWithValue object. Used for iterating through an object store with a cursor.
         ///
@@ -46434,7 +46428,7 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBObjectStore/openKeyCursor)
         /// </summary>
-        abstract member openKeyCursor: query: JS.Date * ?direction: Web.IDBCursorDirection -> Web.IDBRequest<Web.IDBCursor option>
+        abstract member openKeyCursor: query: Date * ?direction: Web.IDBCursorDirection -> Web.IDBRequest<Web.IDBCursor option>
         /// <summary>
         /// The **<c>openKeyCursor()</c>** method of the IDBObjectStore interface returns an IDBRequest object whose result will be set to an IDBCursor that can be used to iterate through matching results. Used for iterating through the keys of an object store with a cursor.
         ///
@@ -46476,7 +46470,7 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBObjectStore/put)
         /// </summary>
-        abstract member put: value: obj * key: JS.Date -> Web.IDBRequest<Web.IDBValidKey>
+        abstract member put: value: obj * key: Date -> Web.IDBRequest<Web.IDBValidKey>
         /// <summary>
         /// The **<c>put()</c>** method of the IDBObjectStore interface updates a given record in a database, or inserts a new record if the given item does not already exist.
         ///
@@ -85413,7 +85407,7 @@ module Web =
         U2<Web.Algorithm, string>
 
     type AllowSharedBufferSource =
-        U2<obj, obj>
+        obj
 
     [<RequireQualifiedAccess>]
     [<StringEnum(CaseRules.None)>]
@@ -85949,7 +85943,7 @@ module Web =
         U2<Web.ReadableStream, Web.XMLHttpRequestBodyInit>
 
     type BufferSource =
-        U2<obj, obj>
+        obj
 
     type COSEAlgorithmIdentifier =
         float
@@ -86135,7 +86129,7 @@ module Web =
         U3<ResizeArray<string * string>, HeadersInit.U3.Case2, Web.Headers>
 
     type IDBValidKey =
-        U5<float, string, JS.Date, Web.BufferSource, ResizeArray<obj>>
+        U5<float, string, Date, Web.BufferSource, ResizeArray<obj>>
 
     type ImageBitmapSource =
         U3<Web.CanvasImageSource, Web.Blob, Web.ImageData>
@@ -89447,7 +89441,21 @@ module Web =
             type Type =
                 abstract member prototype: Web.CSSMathClamp with get, set
                 [<EmitConstructor>]
-                abstract member Create: lower: Web.CSSNumberish * value: Web.CSSNumberish * upper: Web.CSSNumberish -> Web.CSSMathClamp
+                abstract member Create: lower: float * value: float * upper: float -> Web.CSSMathClamp
+                [<EmitConstructor>]
+                abstract member Create: lower: float * value: float * upper: Web.CSSNumericValue -> Web.CSSMathClamp
+                [<EmitConstructor>]
+                abstract member Create: lower: float * value: Web.CSSNumericValue * upper: float -> Web.CSSMathClamp
+                [<EmitConstructor>]
+                abstract member Create: lower: float * value: Web.CSSNumericValue * upper: Web.CSSNumericValue -> Web.CSSMathClamp
+                [<EmitConstructor>]
+                abstract member Create: lower: Web.CSSNumericValue * value: float * upper: float -> Web.CSSMathClamp
+                [<EmitConstructor>]
+                abstract member Create: lower: Web.CSSNumericValue * value: float * upper: Web.CSSNumericValue -> Web.CSSMathClamp
+                [<EmitConstructor>]
+                abstract member Create: lower: Web.CSSNumericValue * value: Web.CSSNumericValue * upper: float -> Web.CSSMathClamp
+                [<EmitConstructor>]
+                abstract member Create: lower: Web.CSSNumericValue * value: Web.CSSNumericValue * upper: Web.CSSNumericValue -> Web.CSSMathClamp
 
         module CSSMathInvert =
 
@@ -89456,7 +89464,9 @@ module Web =
             type Type =
                 abstract member prototype: Web.CSSMathInvert with get, set
                 [<EmitConstructor>]
-                abstract member Create: arg: Web.CSSNumberish -> Web.CSSMathInvert
+                abstract member Create: arg: float -> Web.CSSMathInvert
+                [<EmitConstructor>]
+                abstract member Create: arg: Web.CSSNumericValue -> Web.CSSMathInvert
 
         module CSSMathMax =
 
@@ -89483,7 +89493,9 @@ module Web =
             type Type =
                 abstract member prototype: Web.CSSMathNegate with get, set
                 [<EmitConstructor>]
-                abstract member Create: arg: Web.CSSNumberish -> Web.CSSMathNegate
+                abstract member Create: arg: float -> Web.CSSMathNegate
+                [<EmitConstructor>]
+                abstract member Create: arg: Web.CSSNumericValue -> Web.CSSMathNegate
 
         module CSSMathProduct =
 
@@ -89597,7 +89609,11 @@ module Web =
             type Type =
                 abstract member prototype: Web.CSSPerspective with get, set
                 [<EmitConstructor>]
-                abstract member Create: length: Web.CSSPerspectiveValue -> Web.CSSPerspective
+                abstract member Create: length: Web.CSSNumericValue -> Web.CSSPerspective
+                [<EmitConstructor>]
+                abstract member Create: length: string -> Web.CSSPerspective
+                [<EmitConstructor>]
+                abstract member Create: length: Web.CSSKeywordValue -> Web.CSSPerspective
 
         module CSSPositionTryDescriptors =
 
@@ -89635,7 +89651,21 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: angle: Web.CSSNumericValue -> Web.CSSRotate
                 [<EmitConstructor>]
-                abstract member Create: x: Web.CSSNumberish * y: Web.CSSNumberish * z: Web.CSSNumberish * angle: Web.CSSNumericValue -> Web.CSSRotate
+                abstract member Create: x: float * y: float * z: float * angle: Web.CSSNumericValue -> Web.CSSRotate
+                [<EmitConstructor>]
+                abstract member Create: x: float * y: float * z: Web.CSSNumericValue * angle: Web.CSSNumericValue -> Web.CSSRotate
+                [<EmitConstructor>]
+                abstract member Create: x: float * y: Web.CSSNumericValue * z: float * angle: Web.CSSNumericValue -> Web.CSSRotate
+                [<EmitConstructor>]
+                abstract member Create: x: float * y: Web.CSSNumericValue * z: Web.CSSNumericValue * angle: Web.CSSNumericValue -> Web.CSSRotate
+                [<EmitConstructor>]
+                abstract member Create: x: Web.CSSNumericValue * y: float * z: float * angle: Web.CSSNumericValue -> Web.CSSRotate
+                [<EmitConstructor>]
+                abstract member Create: x: Web.CSSNumericValue * y: float * z: Web.CSSNumericValue * angle: Web.CSSNumericValue -> Web.CSSRotate
+                [<EmitConstructor>]
+                abstract member Create: x: Web.CSSNumericValue * y: Web.CSSNumericValue * z: float * angle: Web.CSSNumericValue -> Web.CSSRotate
+                [<EmitConstructor>]
+                abstract member Create: x: Web.CSSNumericValue * y: Web.CSSNumericValue * z: Web.CSSNumericValue * angle: Web.CSSNumericValue -> Web.CSSRotate
 
         module CSSRule =
 
@@ -89675,7 +89705,29 @@ module Web =
             type Type =
                 abstract member prototype: Web.CSSScale with get, set
                 [<EmitConstructor>]
-                abstract member Create: x: Web.CSSNumberish * y: Web.CSSNumberish * ?z: Web.CSSNumberish -> Web.CSSScale
+                abstract member Create: x: float * y: float -> Web.CSSScale
+                [<EmitConstructor>]
+                abstract member Create: x: float * y: float * z: float -> Web.CSSScale
+                [<EmitConstructor>]
+                abstract member Create: x: float * y: float * z: Web.CSSNumericValue -> Web.CSSScale
+                [<EmitConstructor>]
+                abstract member Create: x: float * y: Web.CSSNumericValue -> Web.CSSScale
+                [<EmitConstructor>]
+                abstract member Create: x: float * y: Web.CSSNumericValue * z: float -> Web.CSSScale
+                [<EmitConstructor>]
+                abstract member Create: x: float * y: Web.CSSNumericValue * z: Web.CSSNumericValue -> Web.CSSScale
+                [<EmitConstructor>]
+                abstract member Create: x: Web.CSSNumericValue * y: float -> Web.CSSScale
+                [<EmitConstructor>]
+                abstract member Create: x: Web.CSSNumericValue * y: float * z: float -> Web.CSSScale
+                [<EmitConstructor>]
+                abstract member Create: x: Web.CSSNumericValue * y: float * z: Web.CSSNumericValue -> Web.CSSScale
+                [<EmitConstructor>]
+                abstract member Create: x: Web.CSSNumericValue * y: Web.CSSNumericValue -> Web.CSSScale
+                [<EmitConstructor>]
+                abstract member Create: x: Web.CSSNumericValue * y: Web.CSSNumericValue * z: float -> Web.CSSScale
+                [<EmitConstructor>]
+                abstract member Create: x: Web.CSSNumericValue * y: Web.CSSNumericValue * z: Web.CSSNumericValue -> Web.CSSScale
 
         module CSSScopeRule =
 
@@ -90229,7 +90281,11 @@ module Web =
             type Type =
                 abstract member prototype: Web.DOMMatrix with get, set
                 [<EmitConstructor>]
-                abstract member Create: ?init: U2<string, ResizeArray<float>> -> Web.DOMMatrix
+                abstract member Create: unit -> Web.DOMMatrix
+                [<EmitConstructor>]
+                abstract member Create: init: string -> Web.DOMMatrix
+                [<EmitConstructor>]
+                abstract member Create: init: ResizeArray<float> -> Web.DOMMatrix
                 /// <summary>
                 /// The **<c>fromFloat32Array()</c>** static method of the DOMMatrix interface creates a new DOMMatrix object given an array of single-precision (32-bit) floating-point values.
                 ///
@@ -90256,7 +90312,11 @@ module Web =
             type Type =
                 abstract member prototype: Web.DOMMatrix with get, set
                 [<EmitConstructor>]
-                abstract member Create: ?init: U2<string, ResizeArray<float>> -> Web.DOMMatrix
+                abstract member Create: unit -> Web.DOMMatrix
+                [<EmitConstructor>]
+                abstract member Create: init: string -> Web.DOMMatrix
+                [<EmitConstructor>]
+                abstract member Create: init: ResizeArray<float> -> Web.DOMMatrix
                 /// <summary>
                 /// The **<c>fromFloat32Array()</c>** static method of the DOMMatrix interface creates a new DOMMatrix object given an array of single-precision (32-bit) floating-point values.
                 ///
@@ -90283,7 +90343,11 @@ module Web =
             type Type =
                 abstract member prototype: Web.DOMMatrix with get, set
                 [<EmitConstructor>]
-                abstract member Create: ?init: U2<string, ResizeArray<float>> -> Web.DOMMatrix
+                abstract member Create: unit -> Web.DOMMatrix
+                [<EmitConstructor>]
+                abstract member Create: init: string -> Web.DOMMatrix
+                [<EmitConstructor>]
+                abstract member Create: init: ResizeArray<float> -> Web.DOMMatrix
                 /// <summary>
                 /// The **<c>fromFloat32Array()</c>** static method of the DOMMatrix interface creates a new DOMMatrix object given an array of single-precision (32-bit) floating-point values.
                 ///
@@ -90310,7 +90374,11 @@ module Web =
             type Type =
                 abstract member prototype: Web.DOMMatrixReadOnly with get, set
                 [<EmitConstructor>]
-                abstract member Create: ?init: U2<string, ResizeArray<float>> -> Web.DOMMatrixReadOnly
+                abstract member Create: unit -> Web.DOMMatrixReadOnly
+                [<EmitConstructor>]
+                abstract member Create: init: string -> Web.DOMMatrixReadOnly
+                [<EmitConstructor>]
+                abstract member Create: init: ResizeArray<float> -> Web.DOMMatrixReadOnly
                 /// <summary>
                 /// The **<c>fromFloat32Array()</c>** static method of the DOMMatrixReadOnly interface creates a new DOMMatrixReadOnly object given an array of single-precision (32-bit) floating-point values.
                 ///
@@ -90711,7 +90779,9 @@ module Web =
             type Type =
                 abstract member prototype: Web.EventSource with get, set
                 [<EmitConstructor>]
-                abstract member Create: url: U2<string, Web.URL> * ?eventSourceInitDict: Web.EventSourceInit -> Web.EventSource
+                abstract member Create: url: string * ?eventSourceInitDict: Web.EventSourceInit -> Web.EventSource
+                [<EmitConstructor>]
+                abstract member Create: url: Web.URL * ?eventSourceInitDict: Web.EventSourceInit -> Web.EventSource
                 abstract member CONNECTING: int with get
                 abstract member OPEN: int with get
                 abstract member CLOSED: int with get
@@ -90861,7 +90931,9 @@ module Web =
             type Type =
                 abstract member prototype: Web.FontFace with get, set
                 [<EmitConstructor>]
-                abstract member Create: family: string * source: U2<string, Web.BufferSource> * ?descriptors: Web.FontFaceDescriptors -> Web.FontFace
+                abstract member Create: family: string * source: string * ?descriptors: Web.FontFaceDescriptors -> Web.FontFace
+                [<EmitConstructor>]
+                abstract member Create: family: string * source: Web.BufferSource * ?descriptors: Web.FontFaceDescriptors -> Web.FontFace
 
         module FontFaceSet =
 
@@ -92026,7 +92098,23 @@ module Web =
             type Type =
                 abstract member prototype: Web.Headers with get, set
                 [<EmitConstructor>]
-                abstract member Create: ?init: Web.HeadersInit -> Web.Headers
+                abstract member Create: unit -> Web.Headers
+                [<EmitConstructor>]
+                abstract member Create: init: ResizeArray<string * string> -> Web.Headers
+                [<EmitConstructor>]
+                abstract member Create: init: Exports.Headers.Type.Create.init -> Web.Headers
+                [<EmitConstructor>]
+                abstract member Create: init: Web.Headers -> Web.Headers
+
+            module Type =
+
+                module Create =
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type init =
+                        [<EmitIndexer>]
+                        abstract member Item: key: string -> string with get, set
 
         module Highlight =
 
@@ -92323,7 +92411,17 @@ module Web =
             type Type =
                 abstract member prototype: Web.KeyframeEffect with get, set
                 [<EmitConstructor>]
-                abstract member Create: target: Web.Element option * keyframes: U2<ResizeArray<Web.Keyframe>, Web.PropertyIndexedKeyframes> option * ?options: U2<float, Web.KeyframeEffectOptions> -> Web.KeyframeEffect
+                abstract member Create: target: Web.Element option * keyframes: ResizeArray<Web.Keyframe> option -> Web.KeyframeEffect
+                [<EmitConstructor>]
+                abstract member Create: target: Web.Element option * keyframes: ResizeArray<Web.Keyframe> option * options: float -> Web.KeyframeEffect
+                [<EmitConstructor>]
+                abstract member Create: target: Web.Element option * keyframes: ResizeArray<Web.Keyframe> option * options: Web.KeyframeEffectOptions -> Web.KeyframeEffect
+                [<EmitConstructor>]
+                abstract member Create: target: Web.Element option * keyframes: Web.PropertyIndexedKeyframes option -> Web.KeyframeEffect
+                [<EmitConstructor>]
+                abstract member Create: target: Web.Element option * keyframes: Web.PropertyIndexedKeyframes option * options: float -> Web.KeyframeEffect
+                [<EmitConstructor>]
+                abstract member Create: target: Web.Element option * keyframes: Web.PropertyIndexedKeyframes option * options: Web.KeyframeEffectOptions -> Web.KeyframeEffect
                 [<EmitConstructor>]
                 abstract member Create: source: Web.KeyframeEffect -> Web.KeyframeEffect
 
@@ -93086,7 +93184,11 @@ module Web =
             type Type =
                 abstract member prototype: Web.Path2D with get, set
                 [<EmitConstructor>]
-                abstract member Create: ?path: U2<Web.Path2D, string> -> Web.Path2D
+                abstract member Create: unit -> Web.Path2D
+                [<EmitConstructor>]
+                abstract member Create: path: Web.Path2D -> Web.Path2D
+                [<EmitConstructor>]
+                abstract member Create: path: string -> Web.Path2D
 
         module PaymentAddress =
 
@@ -93808,7 +93910,11 @@ module Web =
             type Type =
                 abstract member prototype: Web.Request with get, set
                 [<EmitConstructor>]
-                abstract member Create: input: U2<Web.RequestInfo, Web.URL> * ?init: Web.RequestInit -> Web.Request
+                abstract member Create: input: Web.Request * ?init: Web.RequestInit -> Web.Request
+                [<EmitConstructor>]
+                abstract member Create: input: string * ?init: Web.RequestInit -> Web.Request
+                [<EmitConstructor>]
+                abstract member Create: input: Web.URL * ?init: Web.RequestInit -> Web.Request
 
         module ResizeObserver =
 
@@ -93844,7 +93950,19 @@ module Web =
             type Type =
                 abstract member prototype: Web.Response with get, set
                 [<EmitConstructor>]
-                abstract member Create: ?body: Web.BodyInit * ?init: Web.ResponseInit -> Web.Response
+                abstract member Create: unit -> Web.Response
+                [<EmitConstructor>]
+                abstract member Create: body: Web.ReadableStream * ?init: Web.ResponseInit -> Web.Response
+                [<EmitConstructor>]
+                abstract member Create: body: Web.Blob * ?init: Web.ResponseInit -> Web.Response
+                [<EmitConstructor>]
+                abstract member Create: body: Web.BufferSource * ?init: Web.ResponseInit -> Web.Response
+                [<EmitConstructor>]
+                abstract member Create: body: Web.FormData * ?init: Web.ResponseInit -> Web.Response
+                [<EmitConstructor>]
+                abstract member Create: body: Web.URLSearchParams * ?init: Web.ResponseInit -> Web.Response
+                [<EmitConstructor>]
+                abstract member Create: body: string * ?init: Web.ResponseInit -> Web.Response
                 /// <summary>
                 /// The **<c>error()</c>** static method of the Response interface returns a new Response object associated with a network error.
                 ///
@@ -94836,7 +94954,11 @@ module Web =
             type Type =
                 abstract member prototype: Web.Sanitizer with get, set
                 [<EmitConstructor>]
-                abstract member Create: ?configuration: U2<Web.SanitizerConfig, Web.SanitizerPresets> -> Web.Sanitizer
+                abstract member Create: unit -> Web.Sanitizer
+                [<EmitConstructor>]
+                abstract member Create: configuration: Web.SanitizerConfig -> Web.Sanitizer
+                [<EmitConstructor>]
+                abstract member Create: configuration: Web.SanitizerPresets -> Web.Sanitizer
 
         module Scheduler =
 
@@ -94962,7 +95084,17 @@ module Web =
             type Type =
                 abstract member prototype: Web.SharedWorker with get, set
                 [<EmitConstructor>]
-                abstract member Create: scriptURL: U2<string, Web.URL> * ?options: U2<string, Web.WorkerOptions> -> Web.SharedWorker
+                abstract member Create: scriptURL: string -> Web.SharedWorker
+                [<EmitConstructor>]
+                abstract member Create: scriptURL: string * options: string -> Web.SharedWorker
+                [<EmitConstructor>]
+                abstract member Create: scriptURL: string * options: Web.WorkerOptions -> Web.SharedWorker
+                [<EmitConstructor>]
+                abstract member Create: scriptURL: Web.URL -> Web.SharedWorker
+                [<EmitConstructor>]
+                abstract member Create: scriptURL: Web.URL * options: string -> Web.SharedWorker
+                [<EmitConstructor>]
+                abstract member Create: scriptURL: Web.URL * options: Web.WorkerOptions -> Web.SharedWorker
 
         module SourceBuffer =
 
@@ -95409,7 +95541,17 @@ module Web =
             type Type =
                 abstract member prototype: Web.URL with get, set
                 [<EmitConstructor>]
-                abstract member Create: url: U2<string, Web.URL> * ?``base``: U2<string, Web.URL> -> Web.URL
+                abstract member Create: url: string -> Web.URL
+                [<EmitConstructor>]
+                abstract member Create: url: string * ``base``: string -> Web.URL
+                [<EmitConstructor>]
+                abstract member Create: url: string * ``base``: Web.URL -> Web.URL
+                [<EmitConstructor>]
+                abstract member Create: url: Web.URL -> Web.URL
+                [<EmitConstructor>]
+                abstract member Create: url: Web.URL * ``base``: string -> Web.URL
+                [<EmitConstructor>]
+                abstract member Create: url: Web.URL * ``base``: Web.URL -> Web.URL
                 /// <summary>
                 /// The **<c>URL.canParse()</c>** static method of the URL interface returns a boolean indicating whether or not an absolute URL, or a relative URL combined with a base URL, are parsable and valid.
                 ///
@@ -95508,7 +95650,17 @@ module Web =
             type Type =
                 abstract member prototype: Web.URL with get, set
                 [<EmitConstructor>]
-                abstract member Create: url: U2<string, Web.URL> * ?``base``: U2<string, Web.URL> -> Web.URL
+                abstract member Create: url: string -> Web.URL
+                [<EmitConstructor>]
+                abstract member Create: url: string * ``base``: string -> Web.URL
+                [<EmitConstructor>]
+                abstract member Create: url: string * ``base``: Web.URL -> Web.URL
+                [<EmitConstructor>]
+                abstract member Create: url: Web.URL -> Web.URL
+                [<EmitConstructor>]
+                abstract member Create: url: Web.URL * ``base``: string -> Web.URL
+                [<EmitConstructor>]
+                abstract member Create: url: Web.URL * ``base``: Web.URL -> Web.URL
                 /// <summary>
                 /// The **<c>URL.canParse()</c>** static method of the URL interface returns a boolean indicating whether or not an absolute URL, or a relative URL combined with a base URL, are parsable and valid.
                 ///
@@ -95607,9 +95759,19 @@ module Web =
             type Type =
                 abstract member prototype: Web.URLPattern with get, set
                 [<EmitConstructor>]
-                abstract member Create: input: Web.URLPatternInput * baseURL: U2<string, Web.URL> * ?options: Web.URLPatternOptions -> Web.URLPattern
+                abstract member Create: input: string * baseURL: string * ?options: Web.URLPatternOptions -> Web.URLPattern
                 [<EmitConstructor>]
-                abstract member Create: ?input: Web.URLPatternInput * ?options: Web.URLPatternOptions -> Web.URLPattern
+                abstract member Create: input: string * baseURL: Web.URL * ?options: Web.URLPatternOptions -> Web.URLPattern
+                [<EmitConstructor>]
+                abstract member Create: input: Web.URLPatternInit * baseURL: string * ?options: Web.URLPatternOptions -> Web.URLPattern
+                [<EmitConstructor>]
+                abstract member Create: input: Web.URLPatternInit * baseURL: Web.URL * ?options: Web.URLPatternOptions -> Web.URLPattern
+                [<EmitConstructor>]
+                abstract member Create: unit -> Web.URLPattern
+                [<EmitConstructor>]
+                abstract member Create: input: string * ?options: Web.URLPatternOptions -> Web.URLPattern
+                [<EmitConstructor>]
+                abstract member Create: input: Web.URLPatternInit * ?options: Web.URLPatternOptions -> Web.URLPattern
 
         module URLSearchParams =
 
@@ -95618,21 +95780,25 @@ module Web =
             type Type =
                 abstract member prototype: Web.URLSearchParams with get, set
                 [<EmitConstructor>]
-                abstract member Create: ?init: U4<ResizeArray<ResizeArray<string>>, Exports.URLSearchParams.Type.Create.init.U4.Case2, string, Web.URLSearchParams> -> Web.URLSearchParams
+                abstract member Create: unit -> Web.URLSearchParams
+                [<EmitConstructor>]
+                abstract member Create: init: ResizeArray<ResizeArray<string>> -> Web.URLSearchParams
+                [<EmitConstructor>]
+                abstract member Create: init: Exports.URLSearchParams.Type.Create.init -> Web.URLSearchParams
+                [<EmitConstructor>]
+                abstract member Create: init: string -> Web.URLSearchParams
+                [<EmitConstructor>]
+                abstract member Create: init: Web.URLSearchParams -> Web.URLSearchParams
 
             module Type =
 
                 module Create =
 
-                    module init =
-
-                        module U4 =
-
-                            [<AllowNullLiteral>]
-                            [<Interface>]
-                            type Case2 =
-                                [<EmitIndexer>]
-                                abstract member Item: key: string -> string with get, set
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type init =
+                        [<EmitIndexer>]
+                        abstract member Item: key: string -> string with get, set
 
         module UserActivation =
 
@@ -95716,7 +95882,19 @@ module Web =
             type Type =
                 abstract member prototype: Web.VideoFrame with get, set
                 [<EmitConstructor>]
-                abstract member Create: image: Web.CanvasImageSource * ?init: Web.VideoFrameInit -> Web.VideoFrame
+                abstract member Create: image: Web.HTMLImageElement * ?init: Web.VideoFrameInit -> Web.VideoFrame
+                [<EmitConstructor>]
+                abstract member Create: image: Web.SVGImageElement * ?init: Web.VideoFrameInit -> Web.VideoFrame
+                [<EmitConstructor>]
+                abstract member Create: image: Web.HTMLVideoElement * ?init: Web.VideoFrameInit -> Web.VideoFrame
+                [<EmitConstructor>]
+                abstract member Create: image: Web.HTMLCanvasElement * ?init: Web.VideoFrameInit -> Web.VideoFrame
+                [<EmitConstructor>]
+                abstract member Create: image: Web.ImageBitmap * ?init: Web.VideoFrameInit -> Web.VideoFrame
+                [<EmitConstructor>]
+                abstract member Create: image: Web.OffscreenCanvas * ?init: Web.VideoFrameInit -> Web.VideoFrame
+                [<EmitConstructor>]
+                abstract member Create: image: Web.VideoFrame * ?init: Web.VideoFrameInit -> Web.VideoFrame
                 [<EmitConstructor>]
                 abstract member Create: data: Web.AllowSharedBufferSource * init: Web.VideoFrameBufferInit -> Web.VideoFrame
 
@@ -96817,7 +96995,17 @@ module Web =
             type Type =
                 abstract member prototype: Web.WebSocket with get, set
                 [<EmitConstructor>]
-                abstract member Create: url: U2<string, Web.URL> * ?protocols: U2<string, ResizeArray<string>> -> Web.WebSocket
+                abstract member Create: url: string -> Web.WebSocket
+                [<EmitConstructor>]
+                abstract member Create: url: string * protocols: string -> Web.WebSocket
+                [<EmitConstructor>]
+                abstract member Create: url: string * protocols: ResizeArray<string> -> Web.WebSocket
+                [<EmitConstructor>]
+                abstract member Create: url: Web.URL -> Web.WebSocket
+                [<EmitConstructor>]
+                abstract member Create: url: Web.URL * protocols: string -> Web.WebSocket
+                [<EmitConstructor>]
+                abstract member Create: url: Web.URL * protocols: ResizeArray<string> -> Web.WebSocket
                 abstract member CONNECTING: int with get
                 abstract member OPEN: int with get
                 abstract member CLOSING: int with get
@@ -96830,7 +97018,9 @@ module Web =
             type Type =
                 abstract member prototype: Web.WebTransport with get, set
                 [<EmitConstructor>]
-                abstract member Create: url: U2<string, Web.URL> * ?options: Web.WebTransportOptions -> Web.WebTransport
+                abstract member Create: url: string * ?options: Web.WebTransportOptions -> Web.WebTransport
+                [<EmitConstructor>]
+                abstract member Create: url: Web.URL * ?options: Web.WebTransportOptions -> Web.WebTransport
 
         module WebTransportBidirectionalStream =
 
@@ -96905,7 +97095,9 @@ module Web =
             type Type =
                 abstract member prototype: Web.Worker with get, set
                 [<EmitConstructor>]
-                abstract member Create: scriptURL: U2<string, Web.URL> * ?options: Web.WorkerOptions -> Web.Worker
+                abstract member Create: scriptURL: string * ?options: Web.WorkerOptions -> Web.Worker
+                [<EmitConstructor>]
+                abstract member Create: scriptURL: Web.URL * ?options: Web.WorkerOptions -> Web.Worker
 
         module Worklet =
 

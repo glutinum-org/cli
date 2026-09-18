@@ -22,6 +22,8 @@ let bindings =
 /// Fable.Core does not define. `Array`, `Date`, `Promise`, `Map` and the typed arrays are Fable.Core's.
 let esLibraryTypes =
     [
+        "Date"
+        "DateConstructor"
         "ArrayLike"
         "ConcatArray"
         "ReadonlyArray"

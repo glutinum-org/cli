@@ -14,6 +14,12 @@ module TypeScript =
         [<Global("SharedArrayBuffer")>]
         static member inline SharedArrayBuffer: TypeScript.SharedArrayBufferConstructor = nativeOnly
 
+        /// <summary>
+        /// Enables basic storage and retrieval of dates and times.
+        /// </summary>
+        [<Global("Date")>]
+        static member inline Date: TypeScript.DateConstructor = nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type ReadonlyMap<'K, 'V> =
@@ -60,6 +66,82 @@ module TypeScript =
         /// Returns an iterable of values in the set.
         /// </summary>
         abstract member values: unit -> TypeScript.IterableIterator<'T>
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type DateConstructor =
+        [<EmitConstructor>]
+        abstract member Create: value: float -> TypeScript.Date
+
+        [<EmitConstructor>]
+        abstract member Create: value: string -> TypeScript.Date
+
+        [<EmitConstructor>]
+        abstract member Create: value: TypeScript.Date -> TypeScript.Date
+
+        /// <summary>
+        /// Returns the number of milliseconds between midnight, January 1, 1970 Universal Coordinated Time (UTC) (or GMT) and the specified date.
+        /// </summary>
+        /// <param name="year">
+        /// The full year designation is required for cross-century date accuracy. If year is between 0 and 99 is used, then year is assumed to be 1900 + year.
+        /// </param>
+        /// <param name="monthIndex">
+        /// The month as a number between 0 and 11 (January to December).
+        /// </param>
+        /// <param name="date">
+        /// The date as a number between 1 and 31.
+        /// </param>
+        /// <param name="hours">
+        /// Must be supplied if minutes is supplied. A number from 0 to 23 (midnight to 11pm) that specifies the hour.
+        /// </param>
+        /// <param name="minutes">
+        /// Must be supplied if seconds is supplied. A number from 0 to 59 that specifies the minutes.
+        /// </param>
+        /// <param name="seconds">
+        /// Must be supplied if milliseconds is supplied. A number from 0 to 59 that specifies the seconds.
+        /// </param>
+        /// <param name="ms">
+        /// A number from 0 to 999 that specifies the milliseconds.
+        /// </param>
+        abstract member UTC:
+            year: float *
+            ?monthIndex: float *
+            ?date: float *
+            ?hours: float *
+            ?minutes: float *
+            ?seconds: float *
+            ?ms: float ->
+                float
+
+        [<EmitConstructor>]
+        abstract member Create: unit -> TypeScript.Date
+
+        [<EmitConstructor>]
+        abstract member Create:
+            year: float *
+            monthIndex: float *
+            ?date: float *
+            ?hours: float *
+            ?minutes: float *
+            ?seconds: float *
+            ?ms: float ->
+                TypeScript.Date
+
+        [<Emit("$0($1...)")>]
+        abstract member Invoke: unit -> string
+
+        abstract member prototype: TypeScript.Date with get
+        /// <summary>
+        /// Parses a string containing a date, and returns the number of milliseconds between that date and midnight, January 1, 1970.
+        /// </summary>
+        /// <param name="s">
+        /// A date string
+        /// </param>
+        abstract member parse: s: string -> float
+        /// <summary>
+        /// Returns the number of milliseconds elapsed since midnight, January 1, 1970 Universal Coordinated Time (UTC).
+        /// </summary>
+        abstract member now: unit -> float
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -764,6 +846,434 @@ module TypeScript =
 
         [<EmitConstructor>]
         abstract member Create: target: 'T * handler: TypeScript.ProxyHandler<'T> -> 'T
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type Date =
+        /// <summary>
+        /// Converts a date and time to a string by using the current or specified locale.
+        /// Returns a value as a string value appropriate to the host environment's current locale.
+        /// </summary>
+        /// <param name="locales">
+        /// A locale string, array of locale strings, Intl.Locale object, or array of Intl.Locale objects that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
+        /// </param>
+        /// <param name="options">
+        /// An object that contains one or more properties that specify comparison options.
+        /// </param>
+        abstract member toLocaleString: unit -> string
+        /// <summary>
+        /// Converts a date and time to a string by using the current or specified locale.
+        /// Returns a value as a string value appropriate to the host environment's current locale.
+        /// </summary>
+        /// <param name="locales">
+        /// A locale string, array of locale strings, Intl.Locale object, or array of Intl.Locale objects that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
+        /// </param>
+        /// <param name="options">
+        /// An object that contains one or more properties that specify comparison options.
+        /// </param>
+        abstract member toLocaleString: locales: obj * ?options: obj -> string
+        /// <summary>
+        /// Converts a date and time to a string by using the current or specified locale.
+        /// Returns a value as a string value appropriate to the host environment's current locale.
+        /// </summary>
+        /// <param name="locales">
+        /// A locale string, array of locale strings, Intl.Locale object, or array of Intl.Locale objects that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
+        /// </param>
+        /// <param name="options">
+        /// An object that contains one or more properties that specify comparison options.
+        /// </param>
+        abstract member toLocaleString: locales: ResizeArray<obj> * ?options: obj -> string
+        /// <summary>
+        /// Converts a date to a string by using the current or specified locale.
+        /// Returns a date as a string value appropriate to the host environment's current locale.
+        /// </summary>
+        /// <param name="locales">
+        /// A locale string, array of locale strings, Intl.Locale object, or array of Intl.Locale objects that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
+        /// </param>
+        /// <param name="options">
+        /// An object that contains one or more properties that specify comparison options.
+        /// </param>
+        abstract member toLocaleDateString: unit -> string
+        /// <summary>
+        /// Converts a date to a string by using the current or specified locale.
+        /// Returns a date as a string value appropriate to the host environment's current locale.
+        /// </summary>
+        /// <param name="locales">
+        /// A locale string, array of locale strings, Intl.Locale object, or array of Intl.Locale objects that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
+        /// </param>
+        /// <param name="options">
+        /// An object that contains one or more properties that specify comparison options.
+        /// </param>
+        abstract member toLocaleDateString: locales: obj * ?options: obj -> string
+        /// <summary>
+        /// Converts a date to a string by using the current or specified locale.
+        /// Returns a date as a string value appropriate to the host environment's current locale.
+        /// </summary>
+        /// <param name="locales">
+        /// A locale string, array of locale strings, Intl.Locale object, or array of Intl.Locale objects that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
+        /// </param>
+        /// <param name="options">
+        /// An object that contains one or more properties that specify comparison options.
+        /// </param>
+        abstract member toLocaleDateString: locales: ResizeArray<obj> * ?options: obj -> string
+        /// <summary>
+        /// Converts a time to a string by using the current or specified locale.
+        /// Returns a time as a string value appropriate to the host environment's current locale.
+        /// </summary>
+        /// <param name="locales">
+        /// A locale string, array of locale strings, Intl.Locale object, or array of Intl.Locale objects that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
+        /// </param>
+        /// <param name="options">
+        /// An object that contains one or more properties that specify comparison options.
+        /// </param>
+        abstract member toLocaleTimeString: unit -> string
+        /// <summary>
+        /// Converts a time to a string by using the current or specified locale.
+        /// Returns a time as a string value appropriate to the host environment's current locale.
+        /// </summary>
+        /// <param name="locales">
+        /// A locale string, array of locale strings, Intl.Locale object, or array of Intl.Locale objects that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
+        /// </param>
+        /// <param name="options">
+        /// An object that contains one or more properties that specify comparison options.
+        /// </param>
+        abstract member toLocaleTimeString: locales: obj * ?options: obj -> string
+        /// <summary>
+        /// Converts a time to a string by using the current or specified locale.
+        /// Returns a time as a string value appropriate to the host environment's current locale.
+        /// </summary>
+        /// <param name="locales">
+        /// A locale string, array of locale strings, Intl.Locale object, or array of Intl.Locale objects that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
+        /// </param>
+        /// <param name="options">
+        /// An object that contains one or more properties that specify comparison options.
+        /// </param>
+        abstract member toLocaleTimeString: locales: ResizeArray<obj> * ?options: obj -> string
+        /// <summary>
+        /// Returns a string representation of a date. The format of the string depends on the locale.
+        /// </summary>
+        abstract member toString: unit -> string
+        /// <summary>
+        /// Returns a date as a string value.
+        /// </summary>
+        abstract member toDateString: unit -> string
+        /// <summary>
+        /// Returns a time as a string value.
+        /// </summary>
+        abstract member toTimeString: unit -> string
+        /// <summary>
+        /// Returns the stored time value in milliseconds since midnight, January 1, 1970 UTC.
+        /// </summary>
+        abstract member valueOf: unit -> float
+        /// <summary>
+        /// Returns the stored time value in milliseconds since midnight, January 1, 1970 UTC.
+        /// </summary>
+        abstract member getTime: unit -> float
+        /// <summary>
+        /// Gets the year, using local time.
+        /// </summary>
+        abstract member getFullYear: unit -> float
+        /// <summary>
+        /// Gets the year using Universal Coordinated Time (UTC).
+        /// </summary>
+        abstract member getUTCFullYear: unit -> float
+        /// <summary>
+        /// Gets the month, using local time.
+        /// </summary>
+        abstract member getMonth: unit -> float
+        /// <summary>
+        /// Gets the month of a Date object using Universal Coordinated Time (UTC).
+        /// </summary>
+        abstract member getUTCMonth: unit -> float
+        /// <summary>
+        /// Gets the day-of-the-month, using local time.
+        /// </summary>
+        abstract member getDate: unit -> float
+        /// <summary>
+        /// Gets the day-of-the-month, using Universal Coordinated Time (UTC).
+        /// </summary>
+        abstract member getUTCDate: unit -> float
+        /// <summary>
+        /// Gets the day of the week, using local time.
+        /// </summary>
+        abstract member getDay: unit -> float
+        /// <summary>
+        /// Gets the day of the week using Universal Coordinated Time (UTC).
+        /// </summary>
+        abstract member getUTCDay: unit -> float
+        /// <summary>
+        /// Gets the hours in a date, using local time.
+        /// </summary>
+        abstract member getHours: unit -> float
+        /// <summary>
+        /// Gets the hours value in a Date object using Universal Coordinated Time (UTC).
+        /// </summary>
+        abstract member getUTCHours: unit -> float
+        /// <summary>
+        /// Gets the minutes of a Date object, using local time.
+        /// </summary>
+        abstract member getMinutes: unit -> float
+        /// <summary>
+        /// Gets the minutes of a Date object using Universal Coordinated Time (UTC).
+        /// </summary>
+        abstract member getUTCMinutes: unit -> float
+        /// <summary>
+        /// Gets the seconds of a Date object, using local time.
+        /// </summary>
+        abstract member getSeconds: unit -> float
+        /// <summary>
+        /// Gets the seconds of a Date object using Universal Coordinated Time (UTC).
+        /// </summary>
+        abstract member getUTCSeconds: unit -> float
+        /// <summary>
+        /// Gets the milliseconds of a Date, using local time.
+        /// </summary>
+        abstract member getMilliseconds: unit -> float
+        /// <summary>
+        /// Gets the milliseconds of a Date object using Universal Coordinated Time (UTC).
+        /// </summary>
+        abstract member getUTCMilliseconds: unit -> float
+        /// <summary>
+        /// Gets the difference in minutes between the time on the local computer and Universal Coordinated Time (UTC).
+        /// </summary>
+        abstract member getTimezoneOffset: unit -> float
+        /// <summary>
+        /// Sets the date and time value in the Date object.
+        /// </summary>
+        /// <param name="time">
+        /// A numeric value representing the number of elapsed milliseconds since midnight, January 1, 1970 GMT.
+        /// </param>
+        abstract member setTime: time: float -> float
+        /// <summary>
+        /// Sets the milliseconds value in the Date object using local time.
+        /// </summary>
+        /// <param name="ms">
+        /// A numeric value equal to the millisecond value.
+        /// </param>
+        abstract member setMilliseconds: ms: float -> float
+        /// <summary>
+        /// Sets the milliseconds value in the Date object using Universal Coordinated Time (UTC).
+        /// </summary>
+        /// <param name="ms">
+        /// A numeric value equal to the millisecond value.
+        /// </param>
+        abstract member setUTCMilliseconds: ms: float -> float
+        /// <summary>
+        /// Sets the seconds value in the Date object using local time.
+        /// </summary>
+        /// <param name="sec">
+        /// A numeric value equal to the seconds value.
+        /// </param>
+        /// <param name="ms">
+        /// A numeric value equal to the milliseconds value.
+        /// </param>
+        abstract member setSeconds: sec: float * ?ms: float -> float
+        /// <summary>
+        /// Sets the seconds value in the Date object using Universal Coordinated Time (UTC).
+        /// </summary>
+        /// <param name="sec">
+        /// A numeric value equal to the seconds value.
+        /// </param>
+        /// <param name="ms">
+        /// A numeric value equal to the milliseconds value.
+        /// </param>
+        abstract member setUTCSeconds: sec: float * ?ms: float -> float
+        /// <summary>
+        /// Sets the minutes value in the Date object using local time.
+        /// </summary>
+        /// <param name="min">
+        /// A numeric value equal to the minutes value.
+        /// </param>
+        /// <param name="sec">
+        /// A numeric value equal to the seconds value.
+        /// </param>
+        /// <param name="ms">
+        /// A numeric value equal to the milliseconds value.
+        /// </param>
+        abstract member setMinutes: min: float * ?sec: float * ?ms: float -> float
+        /// <summary>
+        /// Sets the minutes value in the Date object using Universal Coordinated Time (UTC).
+        /// </summary>
+        /// <param name="min">
+        /// A numeric value equal to the minutes value.
+        /// </param>
+        /// <param name="sec">
+        /// A numeric value equal to the seconds value.
+        /// </param>
+        /// <param name="ms">
+        /// A numeric value equal to the milliseconds value.
+        /// </param>
+        abstract member setUTCMinutes: min: float * ?sec: float * ?ms: float -> float
+        /// <summary>
+        /// Sets the hour value in the Date object using local time.
+        /// </summary>
+        /// <param name="hours">
+        /// A numeric value equal to the hours value.
+        /// </param>
+        /// <param name="min">
+        /// A numeric value equal to the minutes value.
+        /// </param>
+        /// <param name="sec">
+        /// A numeric value equal to the seconds value.
+        /// </param>
+        /// <param name="ms">
+        /// A numeric value equal to the milliseconds value.
+        /// </param>
+        abstract member setHours: hours: float * ?min: float * ?sec: float * ?ms: float -> float
+        /// <summary>
+        /// Sets the hours value in the Date object using Universal Coordinated Time (UTC).
+        /// </summary>
+        /// <param name="hours">
+        /// A numeric value equal to the hours value.
+        /// </param>
+        /// <param name="min">
+        /// A numeric value equal to the minutes value.
+        /// </param>
+        /// <param name="sec">
+        /// A numeric value equal to the seconds value.
+        /// </param>
+        /// <param name="ms">
+        /// A numeric value equal to the milliseconds value.
+        /// </param>
+        abstract member setUTCHours: hours: float * ?min: float * ?sec: float * ?ms: float -> float
+        /// <summary>
+        /// Sets the numeric day-of-the-month value of the Date object using local time.
+        /// </summary>
+        /// <param name="date">
+        /// A numeric value equal to the day of the month.
+        /// </param>
+        abstract member setDate: date: float -> float
+        /// <summary>
+        /// Sets the numeric day of the month in the Date object using Universal Coordinated Time (UTC).
+        /// </summary>
+        /// <param name="date">
+        /// A numeric value equal to the day of the month.
+        /// </param>
+        abstract member setUTCDate: date: float -> float
+        /// <summary>
+        /// Sets the month value in the Date object using local time.
+        /// </summary>
+        /// <param name="month">
+        /// A numeric value equal to the month. The value for January is 0, and other month values follow consecutively.
+        /// </param>
+        /// <param name="date">
+        /// A numeric value representing the day of the month. If this value is not supplied, the value from a call to the getDate method is used.
+        /// </param>
+        abstract member setMonth: month: float * ?date: float -> float
+        /// <summary>
+        /// Sets the month value in the Date object using Universal Coordinated Time (UTC).
+        /// </summary>
+        /// <param name="month">
+        /// A numeric value equal to the month. The value for January is 0, and other month values follow consecutively.
+        /// </param>
+        /// <param name="date">
+        /// A numeric value representing the day of the month. If it is not supplied, the value from a call to the getUTCDate method is used.
+        /// </param>
+        abstract member setUTCMonth: month: float * ?date: float -> float
+        /// <summary>
+        /// Sets the year of the Date object using local time.
+        /// </summary>
+        /// <param name="year">
+        /// A numeric value for the year.
+        /// </param>
+        /// <param name="month">
+        /// A zero-based numeric value for the month (0 for January, 11 for December). Must be specified if numDate is specified.
+        /// </param>
+        /// <param name="date">
+        /// A numeric value equal for the day of the month.
+        /// </param>
+        abstract member setFullYear: year: float * ?month: float * ?date: float -> float
+        /// <summary>
+        /// Sets the year value in the Date object using Universal Coordinated Time (UTC).
+        /// </summary>
+        /// <param name="year">
+        /// A numeric value equal to the year.
+        /// </param>
+        /// <param name="month">
+        /// A numeric value equal to the month. The value for January is 0, and other month values follow consecutively. Must be supplied if numDate is supplied.
+        /// </param>
+        /// <param name="date">
+        /// A numeric value equal to the day of the month.
+        /// </param>
+        abstract member setUTCFullYear: year: float * ?month: float * ?date: float -> float
+        /// <summary>
+        /// Returns a date converted to a string using Universal Coordinated Time (UTC).
+        /// </summary>
+        abstract member toUTCString: unit -> string
+        /// <summary>
+        /// Returns a date as a string value in ISO format.
+        /// </summary>
+        abstract member toISOString: unit -> string
+        /// <summary>
+        /// Used by the JSON.stringify method to enable the transformation of an object's data for JavaScript Object Notation (JSON) serialization.
+        /// </summary>
+        abstract member toJSON: ?key: obj -> string
+        /// <summary>
+        /// Converts a date and time to a string by using the current or specified locale.
+        /// Returns a value as a string value appropriate to the host environment's current locale.
+        /// </summary>
+        /// <param name="locales">
+        /// A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
+        /// </param>
+        /// <param name="options">
+        /// An object that contains one or more properties that specify comparison options.
+        /// </param>
+        abstract member toLocaleString: locales: string * ?options: obj -> string
+        /// <summary>
+        /// Converts a date and time to a string by using the current or specified locale.
+        /// Returns a value as a string value appropriate to the host environment's current locale.
+        /// </summary>
+        /// <param name="locales">
+        /// A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
+        /// </param>
+        /// <param name="options">
+        /// An object that contains one or more properties that specify comparison options.
+        /// </param>
+        abstract member toLocaleString: locales: ResizeArray<string> * ?options: obj -> string
+        /// <summary>
+        /// Converts a date to a string by using the current or specified locale.
+        /// Returns a date as a string value appropriate to the host environment's current locale.
+        /// </summary>
+        /// <param name="locales">
+        /// A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
+        /// </param>
+        /// <param name="options">
+        /// An object that contains one or more properties that specify comparison options.
+        /// </param>
+        abstract member toLocaleDateString: locales: string * ?options: obj -> string
+        /// <summary>
+        /// Converts a date to a string by using the current or specified locale.
+        /// Returns a date as a string value appropriate to the host environment's current locale.
+        /// </summary>
+        /// <param name="locales">
+        /// A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
+        /// </param>
+        /// <param name="options">
+        /// An object that contains one or more properties that specify comparison options.
+        /// </param>
+        abstract member toLocaleDateString: locales: ResizeArray<string> * ?options: obj -> string
+        /// <summary>
+        /// Converts a time to a string by using the current or specified locale.
+        /// Returns a time as a string value appropriate to the host environment's current locale.
+        /// </summary>
+        /// <param name="locales">
+        /// A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
+        /// </param>
+        /// <param name="options">
+        /// An object that contains one or more properties that specify comparison options.
+        /// </param>
+        abstract member toLocaleTimeString: locales: string * ?options: obj -> string
+        /// <summary>
+        /// Converts a time to a string by using the current or specified locale.
+        /// Returns a time as a string value appropriate to the host environment's current locale.
+        /// </summary>
+        /// <param name="locales">
+        /// A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
+        /// </param>
+        /// <param name="options">
+        /// An object that contains one or more properties that specify comparison options.
+        /// </param>
+        abstract member toLocaleTimeString: locales: ResizeArray<string> * ?options: obj -> string
 
     [<AllowNullLiteral>]
     [<Interface>]

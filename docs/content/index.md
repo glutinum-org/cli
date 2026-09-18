@@ -33,10 +33,10 @@ npx @glutinum/cli date-fns --out-file Glutinum.DateFns.fs
 </div>
 
 ```fsharp title="Program.fs"
-open Fable.Core
 open Glutinum.DateFns
+open type Glutinum.Types.TypeScript.Exports
 
-let today = JS.Constructors.Date.Create(2026, 8, 17)
+let today = Date.Create(2026, 8, 17)
 let later = DateFns.addDays (today, 7)
 
 printfn "%s" (DateFns.format (later, "yyyy-MM-dd"))

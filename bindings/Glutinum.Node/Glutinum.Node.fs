@@ -14201,7 +14201,17 @@ TypeScript versions earlier than 5.7.""")>]
             type Type =
                 abstract member prototype: Node.URL with get, set
                 [<EmitConstructor>]
-                abstract member Create: url: U2<string, Node.URL> * ?``base``: U2<string, Node.URL> -> Node.URL
+                abstract member Create: url: string -> Node.URL
+                [<EmitConstructor>]
+                abstract member Create: url: string * ``base``: string -> Node.URL
+                [<EmitConstructor>]
+                abstract member Create: url: string * ``base``: Node.URL -> Node.URL
+                [<EmitConstructor>]
+                abstract member Create: url: Node.URL -> Node.URL
+                [<EmitConstructor>]
+                abstract member Create: url: Node.URL * ``base``: string -> Node.URL
+                [<EmitConstructor>]
+                abstract member Create: url: Node.URL * ``base``: Node.URL -> Node.URL
                 /// <summary>
                 /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/URL/canParse_static)
                 /// </summary>
@@ -14230,21 +14240,25 @@ TypeScript versions earlier than 5.7.""")>]
             type Type =
                 abstract member prototype: Node.URLSearchParams with get, set
                 [<EmitConstructor>]
-                abstract member Create: ?init: U4<ResizeArray<ResizeArray<string>>, Exports.URLSearchParams.Type.Create.init.U4.Case2, string, Node.URLSearchParams> -> Node.URLSearchParams
+                abstract member Create: unit -> Node.URLSearchParams
+                [<EmitConstructor>]
+                abstract member Create: init: ResizeArray<ResizeArray<string>> -> Node.URLSearchParams
+                [<EmitConstructor>]
+                abstract member Create: init: Exports.URLSearchParams.Type.Create.init -> Node.URLSearchParams
+                [<EmitConstructor>]
+                abstract member Create: init: string -> Node.URLSearchParams
+                [<EmitConstructor>]
+                abstract member Create: init: Node.URLSearchParams -> Node.URLSearchParams
 
             module Type =
 
                 module Create =
 
-                    module init =
-
-                        module U4 =
-
-                            [<AllowNullLiteral>]
-                            [<Interface>]
-                            type Case2 =
-                                [<EmitIndexer>]
-                                abstract member Item: key: string -> string with get, set
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type init =
+                        [<EmitIndexer>]
+                        abstract member Item: key: string -> string with get, set
 
         module TextDecoder =
 
@@ -14356,7 +14370,9 @@ TypeScript versions earlier than 5.7.""")>]
             type Type =
                 abstract member prototype: Node.EventSource with get, set
                 [<EmitConstructor>]
-                abstract member Create: url: U2<string, Node.URL> * ?eventSourceInitDict: Node.EventSourceInit -> Node.EventSource
+                abstract member Create: url: string * ?eventSourceInitDict: Node.EventSourceInit -> Node.EventSource
+                [<EmitConstructor>]
+                abstract member Create: url: Node.URL * ?eventSourceInitDict: Node.EventSourceInit -> Node.EventSource
                 abstract member CONNECTING: int with get
                 abstract member OPEN: int with get
                 abstract member CLOSED: int with get
@@ -14377,7 +14393,23 @@ TypeScript versions earlier than 5.7.""")>]
             type Type =
                 abstract member prototype: Node.Headers with get, set
                 [<EmitConstructor>]
-                abstract member Create: ?init: Glutinum.Web.HeadersInit -> Node.Headers
+                abstract member Create: unit -> Node.Headers
+                [<EmitConstructor>]
+                abstract member Create: init: ResizeArray<ResizeArray<string>> -> Node.Headers
+                [<EmitConstructor>]
+                abstract member Create: init: Exports.Headers.Type.Create.init -> Node.Headers
+                [<EmitConstructor>]
+                abstract member Create: init: UndiciTypes.fetch.Headers -> Node.Headers
+
+            module Type =
+
+                module Create =
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type init =
+                        [<EmitIndexer>]
+                        abstract member Item: key: string -> U2<string, ReadonlyArray<string>> with get, set
 
         module MessageEvent =
 
@@ -14395,7 +14427,13 @@ TypeScript versions earlier than 5.7.""")>]
             type Type =
                 abstract member prototype: Node.Request with get, set
                 [<EmitConstructor>]
-                abstract member Create: input: U2<Glutinum.Web.RequestInfo, Node.URL> * ?init: Node.RequestInit -> Node.Request
+                abstract member Create: input: string * ?init: Node.RequestInit -> Node.Request
+                [<EmitConstructor>]
+                abstract member Create: input: Node.url.URL * ?init: Node.RequestInit -> Node.Request
+                [<EmitConstructor>]
+                abstract member Create: input: UndiciTypes.fetch.Request * ?init: Node.RequestInit -> Node.Request
+                [<EmitConstructor>]
+                abstract member Create: input: Node.URL * ?init: Node.RequestInit -> Node.Request
 
         module Response =
 
@@ -14404,7 +14442,21 @@ TypeScript versions earlier than 5.7.""")>]
             type Type =
                 abstract member prototype: Node.Response with get, set
                 [<EmitConstructor>]
-                abstract member Create: ?body: Glutinum.Web.BodyInit * ?init: Node.ResponseInit -> Node.Response
+                abstract member Create: unit -> Node.Response
+                [<EmitConstructor>]
+                abstract member Create: body: obj * ?init: Node.ResponseInit -> Node.Response
+                [<EmitConstructor>]
+                abstract member Create: body: Node.buffer.buffer_.Blob * ?init: Node.ResponseInit -> Node.Response
+                [<EmitConstructor>]
+                abstract member Create: body: UndiciTypes.formdata.FormData * ?init: Node.ResponseInit -> Node.Response
+                [<EmitConstructor>]
+                abstract member Create: body: Iterable<JS.Uint8Array> * ?init: Node.ResponseInit -> Node.Response
+                [<EmitConstructor>]
+                abstract member Create: body: Node.NodeJS.ArrayBufferView * ?init: Node.ResponseInit -> Node.Response
+                [<EmitConstructor>]
+                abstract member Create: body: Node.url.URLSearchParams * ?init: Node.ResponseInit -> Node.Response
+                [<EmitConstructor>]
+                abstract member Create: body: string * ?init: Node.ResponseInit -> Node.Response
                 /// <summary>
                 /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Response/error_static)
                 /// </summary>
@@ -14429,7 +14481,17 @@ TypeScript versions earlier than 5.7.""")>]
             type Type =
                 abstract member prototype: Node.WebSocket with get, set
                 [<EmitConstructor>]
-                abstract member Create: url: U2<string, Node.URL> * ?protocols: U2<string, ResizeArray<string>> -> Node.WebSocket
+                abstract member Create: url: string -> Node.WebSocket
+                [<EmitConstructor>]
+                abstract member Create: url: string * protocols: string -> Node.WebSocket
+                [<EmitConstructor>]
+                abstract member Create: url: string * protocols: ResizeArray<string> -> Node.WebSocket
+                [<EmitConstructor>]
+                abstract member Create: url: Node.URL -> Node.WebSocket
+                [<EmitConstructor>]
+                abstract member Create: url: Node.URL * protocols: string -> Node.WebSocket
+                [<EmitConstructor>]
+                abstract member Create: url: Node.URL * protocols: ResizeArray<string> -> Node.WebSocket
                 abstract member CONNECTING: int with get
                 abstract member OPEN: int with get
                 abstract member CLOSING: int with get
@@ -35767,29 +35829,6 @@ KeyObject.from($0)"""
             /// a PKCS#8 key. See [RFC 5208](https://www.rfc-editor.org/rfc/rfc5208.txt) for PKCS#8 encryption and [RFC 1421](https://www.rfc-editor.org/rfc/rfc1421.txt) for
             /// PKCS#1 and SEC1 encryption.
             /// </summary>
-            abstract member export: options: Node.crypto.KeyExportOptions<string> -> U2<string, Node.NonSharedBuffer>
-            /// <summary>
-            /// For symmetric keys, the following encoding options can be used:
-            ///
-            /// For public keys, the following encoding options can be used:
-            ///
-            /// For private keys, the following encoding options can be used:
-            ///
-            /// The result type depends on the selected encoding format, when PEM the
-            /// result is a string, when DER it will be a buffer containing the data
-            /// encoded as DER, when [JWK](https://tools.ietf.org/html/rfc7517) it will be an object.
-            ///
-            /// When [JWK](https://tools.ietf.org/html/rfc7517) encoding format was selected, all other encoding options are
-            /// ignored.
-            ///
-            /// PKCS#1, SEC1, and PKCS#8 type keys can be encrypted by using a combination of
-            /// the <c>cipher</c> and <c>format</c> options. The PKCS#8 <c>type</c> can be used with any<c>format</c> to encrypt any key algorithm (RSA, EC, or DH) by specifying a<c>cipher</c>. PKCS#1 and SEC1 can only be
-            /// encrypted by specifying a <c>cipher</c>when the PEM <c>format</c> is used. For maximum compatibility, use PKCS#8 for
-            /// encrypted private keys. Since PKCS#8 defines its own
-            /// encryption mechanism, PEM-level encryption is not supported when encrypting
-            /// a PKCS#8 key. See [RFC 5208](https://www.rfc-editor.org/rfc/rfc5208.txt) for PKCS#8 encryption and [RFC 1421](https://www.rfc-editor.org/rfc/rfc1421.txt) for
-            /// PKCS#1 and SEC1 encryption.
-            /// </summary>
             abstract member export: ?options: Node.crypto.KeyExportOptions<string> -> Node.NonSharedBuffer
             /// <summary>
             /// For symmetric keys, the following encoding options can be used:
@@ -38701,7 +38740,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// <summary>
             /// The date/time from which this certificate is valid, encapsulated in a <c>Date</c> object.
             /// </summary>
-            abstract member validFromDate: JS.Date with get
+            abstract member validFromDate: Date with get
             /// <summary>
             /// The date/time until which this certificate is considered valid.
             /// </summary>
@@ -38709,7 +38748,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// <summary>
             /// The date/time until which this certificate is valid, encapsulated in a <c>Date</c> object.
             /// </summary>
-            abstract member validToDate: JS.Date with get
+            abstract member validToDate: Date with get
             /// <summary>
             /// Checks whether the certificate matches the given email address.
             ///
@@ -38814,7 +38853,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             abstract member verify: publicKey: Node.crypto.KeyObject -> bool
 
         type LargeNumberLike =
-            U4<Node.NodeJS.ArrayBufferView, obj, obj, bigint>
+            U3<Node.NodeJS.ArrayBufferView, obj, bigint>
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -38875,7 +38914,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
         module webcrypto_ =
 
             type BufferSource =
-                U2<obj, obj>
+                obj
 
             [<RequireQualifiedAccess>]
             [<StringEnum(CaseRules.None)>]
@@ -39441,23 +39480,6 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 /// - <c>'PBKDF2'</c>
                 /// </summary>
                 abstract member deriveBits: algorithm: Node.crypto.webcrypto_.EcdhKeyDeriveParams * baseKey: Node.crypto.webcrypto_.CryptoKey * ?length: float -> JS.Promise<obj>
-                /// <summary>
-                /// Using the method and parameters specified in <c>algorithm</c> and the keying material provided by <c>baseKey</c>,
-                /// <c>subtle.deriveBits()</c> attempts to generate <c>length</c> bits.
-                /// The Node.js implementation requires that when <c>length</c> is a number it must be multiple of <c>8</c>.
-                /// When <c>length</c> is <c>null</c> the maximum number of bits for a given algorithm is generated. This is allowed
-                /// for the <c>'ECDH'</c>, <c>'X25519'</c>, and <c>'X448'</c> algorithms.
-                /// If successful, the returned promise will be resolved with an <c><ArrayBuffer></c> containing the generated data.
-                ///
-                /// The algorithms currently supported include:
-                ///
-                /// - <c>'ECDH'</c>
-                /// - <c>'X25519'</c>
-                /// - <c>'X448'</c>
-                /// - <c>'HKDF'</c>
-                /// - <c>'PBKDF2'</c>
-                /// </summary>
-                abstract member deriveBits: algorithm: Node.crypto.webcrypto_.EcdhKeyDeriveParams * baseKey: Node.crypto.webcrypto_.CryptoKey * length: float -> JS.Promise<obj>
                 /// <summary>
                 /// Using the method and parameters specified in <c>algorithm</c> and the keying material provided by <c>baseKey</c>,
                 /// <c>subtle.deriveBits()</c> attempts to generate <c>length</c> bits.
@@ -50096,7 +50118,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// callback.
             /// </summary>
             [<Import("lutimes", "fs")>]
-            static member lutimes (path: string, atime: JS.Date, mtime: Node.fs.TimeLike, callback: Node.fs.NoParamCallback) : unit = nativeOnly
+            static member lutimes (path: string, atime: Date, mtime: Node.fs.TimeLike, callback: Node.fs.NoParamCallback) : unit = nativeOnly
             /// <summary>
             /// Changes the access and modification times of a file in the same way as <see href="utimes">utimes</see>, with the difference that if the path refers to a symbolic
             /// link, then the link is not dereferenced: instead, the timestamps of the
@@ -50126,7 +50148,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// callback.
             /// </summary>
             [<Import("lutimes", "fs")>]
-            static member lutimes (path: Node.Buffer, atime: JS.Date, mtime: Node.fs.TimeLike, callback: Node.fs.NoParamCallback) : unit = nativeOnly
+            static member lutimes (path: Node.Buffer, atime: Date, mtime: Node.fs.TimeLike, callback: Node.fs.NoParamCallback) : unit = nativeOnly
             /// <summary>
             /// Changes the access and modification times of a file in the same way as <see href="utimes">utimes</see>, with the difference that if the path refers to a symbolic
             /// link, then the link is not dereferenced: instead, the timestamps of the
@@ -50156,7 +50178,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// callback.
             /// </summary>
             [<Import("lutimes", "fs")>]
-            static member lutimes (path: Node.url.URL, atime: JS.Date, mtime: Node.fs.TimeLike, callback: Node.fs.NoParamCallback) : unit = nativeOnly
+            static member lutimes (path: Node.url.URL, atime: Date, mtime: Node.fs.TimeLike, callback: Node.fs.NoParamCallback) : unit = nativeOnly
             /// <summary>
             /// Change the file system timestamps of the symbolic link referenced by <c>path</c>.
             /// Returns <c>undefined</c>, or throws an exception when parameters are incorrect or
@@ -50177,7 +50199,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// the operation fails. This is the synchronous version of <see href="lutimes">lutimes</see>.
             /// </summary>
             [<Import("lutimesSync", "fs")>]
-            static member lutimesSync (path: string, atime: JS.Date, mtime: Node.fs.TimeLike) : unit = nativeOnly
+            static member lutimesSync (path: string, atime: Date, mtime: Node.fs.TimeLike) : unit = nativeOnly
             /// <summary>
             /// Change the file system timestamps of the symbolic link referenced by <c>path</c>.
             /// Returns <c>undefined</c>, or throws an exception when parameters are incorrect or
@@ -50198,7 +50220,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// the operation fails. This is the synchronous version of <see href="lutimes">lutimes</see>.
             /// </summary>
             [<Import("lutimesSync", "fs")>]
-            static member lutimesSync (path: Node.Buffer, atime: JS.Date, mtime: Node.fs.TimeLike) : unit = nativeOnly
+            static member lutimesSync (path: Node.Buffer, atime: Date, mtime: Node.fs.TimeLike) : unit = nativeOnly
             /// <summary>
             /// Change the file system timestamps of the symbolic link referenced by <c>path</c>.
             /// Returns <c>undefined</c>, or throws an exception when parameters are incorrect or
@@ -50219,7 +50241,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// the operation fails. This is the synchronous version of <see href="lutimes">lutimes</see>.
             /// </summary>
             [<Import("lutimesSync", "fs")>]
-            static member lutimesSync (path: Node.url.URL, atime: JS.Date, mtime: Node.fs.TimeLike) : unit = nativeOnly
+            static member lutimesSync (path: Node.url.URL, atime: Date, mtime: Node.fs.TimeLike) : unit = nativeOnly
             /// <summary>
             /// Asynchronously changes the permissions of a file. No arguments other than a
             /// possible exception are given to the completion callback.
@@ -54285,7 +54307,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// * If the value can not be converted to a number, or is <c>NaN</c>, <c>Infinity</c>, or <c>-Infinity</c>, an <c>Error</c> will be thrown.
             /// </summary>
             [<Import("utimes", "fs")>]
-            static member utimes (path: string, atime: JS.Date, mtime: Node.fs.TimeLike, callback: Node.fs.NoParamCallback) : unit = nativeOnly
+            static member utimes (path: string, atime: Date, mtime: Node.fs.TimeLike, callback: Node.fs.NoParamCallback) : unit = nativeOnly
             /// <summary>
             /// Change the file system timestamps of the object referenced by <c>path</c>.
             ///
@@ -54315,7 +54337,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// * If the value can not be converted to a number, or is <c>NaN</c>, <c>Infinity</c>, or <c>-Infinity</c>, an <c>Error</c> will be thrown.
             /// </summary>
             [<Import("utimes", "fs")>]
-            static member utimes (path: Node.Buffer, atime: JS.Date, mtime: Node.fs.TimeLike, callback: Node.fs.NoParamCallback) : unit = nativeOnly
+            static member utimes (path: Node.Buffer, atime: Date, mtime: Node.fs.TimeLike, callback: Node.fs.NoParamCallback) : unit = nativeOnly
             /// <summary>
             /// Change the file system timestamps of the object referenced by <c>path</c>.
             ///
@@ -54345,7 +54367,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// * If the value can not be converted to a number, or is <c>NaN</c>, <c>Infinity</c>, or <c>-Infinity</c>, an <c>Error</c> will be thrown.
             /// </summary>
             [<Import("utimes", "fs")>]
-            static member utimes (path: Node.url.URL, atime: JS.Date, mtime: Node.fs.TimeLike, callback: Node.fs.NoParamCallback) : unit = nativeOnly
+            static member utimes (path: Node.url.URL, atime: Date, mtime: Node.fs.TimeLike, callback: Node.fs.NoParamCallback) : unit = nativeOnly
             /// <summary>
             /// Returns <c>undefined</c>.
             ///
@@ -54369,7 +54391,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// this API: <see href="utimes">utimes</see>.
             /// </summary>
             [<Import("utimesSync", "fs")>]
-            static member utimesSync (path: string, atime: JS.Date, mtime: Node.fs.TimeLike) : unit = nativeOnly
+            static member utimesSync (path: string, atime: Date, mtime: Node.fs.TimeLike) : unit = nativeOnly
             /// <summary>
             /// Returns <c>undefined</c>.
             ///
@@ -54393,7 +54415,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// this API: <see href="utimes">utimes</see>.
             /// </summary>
             [<Import("utimesSync", "fs")>]
-            static member utimesSync (path: Node.Buffer, atime: JS.Date, mtime: Node.fs.TimeLike) : unit = nativeOnly
+            static member utimesSync (path: Node.Buffer, atime: Date, mtime: Node.fs.TimeLike) : unit = nativeOnly
             /// <summary>
             /// Returns <c>undefined</c>.
             ///
@@ -54417,7 +54439,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// this API: <see href="utimes">utimes</see>.
             /// </summary>
             [<Import("utimesSync", "fs")>]
-            static member utimesSync (path: Node.url.URL, atime: JS.Date, mtime: Node.fs.TimeLike) : unit = nativeOnly
+            static member utimesSync (path: Node.url.URL, atime: Date, mtime: Node.fs.TimeLike) : unit = nativeOnly
             /// <summary>
             /// Change the file system timestamps of the object referenced by the supplied file
             /// descriptor. See <see href="utimes">utimes</see>.
@@ -54435,7 +54457,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// descriptor. See <see href="utimes">utimes</see>.
             /// </summary>
             [<Import("futimes", "fs")>]
-            static member futimes (fd: float, atime: string, mtime: JS.Date, callback: Node.fs.NoParamCallback) : unit = nativeOnly
+            static member futimes (fd: float, atime: string, mtime: Date, callback: Node.fs.NoParamCallback) : unit = nativeOnly
             /// <summary>
             /// Change the file system timestamps of the object referenced by the supplied file
             /// descriptor. See <see href="utimes">utimes</see>.
@@ -54453,25 +54475,25 @@ EventEmitter.defaultMaxListeners = $0"""
             /// descriptor. See <see href="utimes">utimes</see>.
             /// </summary>
             [<Import("futimes", "fs")>]
-            static member futimes (fd: float, atime: float, mtime: JS.Date, callback: Node.fs.NoParamCallback) : unit = nativeOnly
+            static member futimes (fd: float, atime: float, mtime: Date, callback: Node.fs.NoParamCallback) : unit = nativeOnly
             /// <summary>
             /// Change the file system timestamps of the object referenced by the supplied file
             /// descriptor. See <see href="utimes">utimes</see>.
             /// </summary>
             [<Import("futimes", "fs")>]
-            static member futimes (fd: float, atime: JS.Date, mtime: string, callback: Node.fs.NoParamCallback) : unit = nativeOnly
+            static member futimes (fd: float, atime: Date, mtime: string, callback: Node.fs.NoParamCallback) : unit = nativeOnly
             /// <summary>
             /// Change the file system timestamps of the object referenced by the supplied file
             /// descriptor. See <see href="utimes">utimes</see>.
             /// </summary>
             [<Import("futimes", "fs")>]
-            static member futimes (fd: float, atime: JS.Date, mtime: float, callback: Node.fs.NoParamCallback) : unit = nativeOnly
+            static member futimes (fd: float, atime: Date, mtime: float, callback: Node.fs.NoParamCallback) : unit = nativeOnly
             /// <summary>
             /// Change the file system timestamps of the object referenced by the supplied file
             /// descriptor. See <see href="utimes">utimes</see>.
             /// </summary>
             [<Import("futimes", "fs")>]
-            static member futimes (fd: float, atime: JS.Date, mtime: JS.Date, callback: Node.fs.NoParamCallback) : unit = nativeOnly
+            static member futimes (fd: float, atime: Date, mtime: Date, callback: Node.fs.NoParamCallback) : unit = nativeOnly
             /// <summary>
             /// Synchronous version of <see href="futimes">futimes</see>. Returns <c>undefined</c>.
             /// </summary>
@@ -54486,7 +54508,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Synchronous version of <see href="futimes">futimes</see>. Returns <c>undefined</c>.
             /// </summary>
             [<Import("futimesSync", "fs")>]
-            static member futimesSync (fd: float, atime: string, mtime: JS.Date) : unit = nativeOnly
+            static member futimesSync (fd: float, atime: string, mtime: Date) : unit = nativeOnly
             /// <summary>
             /// Synchronous version of <see href="futimes">futimes</see>. Returns <c>undefined</c>.
             /// </summary>
@@ -54501,22 +54523,22 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Synchronous version of <see href="futimes">futimes</see>. Returns <c>undefined</c>.
             /// </summary>
             [<Import("futimesSync", "fs")>]
-            static member futimesSync (fd: float, atime: float, mtime: JS.Date) : unit = nativeOnly
+            static member futimesSync (fd: float, atime: float, mtime: Date) : unit = nativeOnly
             /// <summary>
             /// Synchronous version of <see href="futimes">futimes</see>. Returns <c>undefined</c>.
             /// </summary>
             [<Import("futimesSync", "fs")>]
-            static member futimesSync (fd: float, atime: JS.Date, mtime: string) : unit = nativeOnly
+            static member futimesSync (fd: float, atime: Date, mtime: string) : unit = nativeOnly
             /// <summary>
             /// Synchronous version of <see href="futimes">futimes</see>. Returns <c>undefined</c>.
             /// </summary>
             [<Import("futimesSync", "fs")>]
-            static member futimesSync (fd: float, atime: JS.Date, mtime: float) : unit = nativeOnly
+            static member futimesSync (fd: float, atime: Date, mtime: float) : unit = nativeOnly
             /// <summary>
             /// Synchronous version of <see href="futimes">futimes</see>. Returns <c>undefined</c>.
             /// </summary>
             [<Import("futimesSync", "fs")>]
-            static member futimesSync (fd: float, atime: JS.Date, mtime: JS.Date) : unit = nativeOnly
+            static member futimesSync (fd: float, atime: Date, mtime: Date) : unit = nativeOnly
             /// <summary>
             /// Request that all data for the open file descriptor is flushed to the storage
             /// device. The specific implementation is operating system and device specific.
@@ -63040,7 +63062,7 @@ EventEmitter.defaultMaxListeners = $0"""
             U2<Node.fs.PathLike, float>
 
         type TimeLike =
-            U3<string, float, JS.Date>
+            U3<string, float, Date>
 
         type NoParamCallback =
             delegate of err: Node.NodeJS.ErrnoException option -> unit
@@ -63089,10 +63111,10 @@ EventEmitter.defaultMaxListeners = $0"""
             abstract member mtimeMs: 'T with get, set
             abstract member ctimeMs: 'T with get, set
             abstract member birthtimeMs: 'T with get, set
-            abstract member atime: JS.Date with get, set
-            abstract member mtime: JS.Date with get, set
-            abstract member ctime: JS.Date with get, set
-            abstract member birthtime: JS.Date with get, set
+            abstract member atime: Date with get, set
+            abstract member mtime: Date with get, set
+            abstract member ctime: Date with get, set
+            abstract member birthtime: Date with get, set
 
         /// <summary>
         /// A <c>fs.Stats</c> object provides information about a file.
@@ -64720,7 +64742,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// The last modified time. If a string is provided, it will be coerced to number.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: string * atime: JS.Date * mtime: Node.fs.TimeLike -> JS.Promise<unit>
+                abstract member __promisify__: path: string * atime: Date * mtime: Node.fs.TimeLike -> JS.Promise<unit>
                 /// <summary>
                 /// Changes the access and modification times of a file in the same way as <c>fsPromises.utimes()</c>,
                 /// with the difference that if the path refers to a symbolic link, then the link is not
@@ -64768,7 +64790,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// The last modified time. If a string is provided, it will be coerced to number.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.Buffer * atime: JS.Date * mtime: Node.fs.TimeLike -> JS.Promise<unit>
+                abstract member __promisify__: path: Node.Buffer * atime: Date * mtime: Node.fs.TimeLike -> JS.Promise<unit>
                 /// <summary>
                 /// Changes the access and modification times of a file in the same way as <c>fsPromises.utimes()</c>,
                 /// with the difference that if the path refers to a symbolic link, then the link is not
@@ -64816,7 +64838,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// The last modified time. If a string is provided, it will be coerced to number.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.url.URL * atime: JS.Date * mtime: Node.fs.TimeLike -> JS.Promise<unit>
+                abstract member __promisify__: path: Node.url.URL * atime: Date * mtime: Node.fs.TimeLike -> JS.Promise<unit>
 
         module chmod_ =
 
@@ -66794,7 +66816,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// The last modified time. If a string is provided, it will be coerced to number.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: string * atime: JS.Date * mtime: Node.fs.TimeLike -> JS.Promise<unit>
+                abstract member __promisify__: path: string * atime: Date * mtime: Node.fs.TimeLike -> JS.Promise<unit>
                 /// <summary>
                 /// Asynchronously change file timestamps of the file referenced by the supplied path.
                 /// </summary>
@@ -66836,7 +66858,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// The last modified time. If a string is provided, it will be coerced to number.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.Buffer * atime: JS.Date * mtime: Node.fs.TimeLike -> JS.Promise<unit>
+                abstract member __promisify__: path: Node.Buffer * atime: Date * mtime: Node.fs.TimeLike -> JS.Promise<unit>
                 /// <summary>
                 /// Asynchronously change file timestamps of the file referenced by the supplied path.
                 /// </summary>
@@ -66878,7 +66900,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// The last modified time. If a string is provided, it will be coerced to number.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.url.URL * atime: JS.Date * mtime: Node.fs.TimeLike -> JS.Promise<unit>
+                abstract member __promisify__: path: Node.url.URL * atime: Date * mtime: Node.fs.TimeLike -> JS.Promise<unit>
 
         module futimes_ =
 
@@ -66926,7 +66948,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// The last modified time. If a string is provided, it will be coerced to number.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: fd: float * atime: string * mtime: JS.Date -> JS.Promise<unit>
+                abstract member __promisify__: fd: float * atime: string * mtime: Date -> JS.Promise<unit>
                 /// <summary>
                 /// Asynchronously change file timestamps of the file referenced by the supplied file descriptor.
                 /// </summary>
@@ -66968,7 +66990,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// The last modified time. If a string is provided, it will be coerced to number.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: fd: float * atime: float * mtime: JS.Date -> JS.Promise<unit>
+                abstract member __promisify__: fd: float * atime: float * mtime: Date -> JS.Promise<unit>
                 /// <summary>
                 /// Asynchronously change file timestamps of the file referenced by the supplied file descriptor.
                 /// </summary>
@@ -66982,7 +67004,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// The last modified time. If a string is provided, it will be coerced to number.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: fd: float * atime: JS.Date * mtime: string -> JS.Promise<unit>
+                abstract member __promisify__: fd: float * atime: Date * mtime: string -> JS.Promise<unit>
                 /// <summary>
                 /// Asynchronously change file timestamps of the file referenced by the supplied file descriptor.
                 /// </summary>
@@ -66996,7 +67018,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// The last modified time. If a string is provided, it will be coerced to number.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: fd: float * atime: JS.Date * mtime: float -> JS.Promise<unit>
+                abstract member __promisify__: fd: float * atime: Date * mtime: float -> JS.Promise<unit>
                 /// <summary>
                 /// Asynchronously change file timestamps of the file referenced by the supplied file descriptor.
                 /// </summary>
@@ -67010,7 +67032,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// The last modified time. If a string is provided, it will be coerced to number.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: fd: float * atime: JS.Date * mtime: JS.Date -> JS.Promise<unit>
+                abstract member __promisify__: fd: float * atime: Date * mtime: Date -> JS.Promise<unit>
 
         module fsync_ =
 
@@ -71495,7 +71517,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with <c>undefined</c> upon success.
             /// </returns>
             [<Import("lutimes", "fs/promises")>]
-            static member lutimes (path: string, atime: JS.Date, mtime: Node.fs.TimeLike) : JS.Promise<unit> = nativeOnly
+            static member lutimes (path: string, atime: Date, mtime: Node.fs.TimeLike) : JS.Promise<unit> = nativeOnly
             /// <summary>
             /// Changes the access and modification times of a file in the same way as <c>fsPromises.utimes()</c>, with the difference that if the path refers to a
             /// symbolic link, then the link is not dereferenced: instead, the timestamps of
@@ -71525,7 +71547,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with <c>undefined</c> upon success.
             /// </returns>
             [<Import("lutimes", "fs/promises")>]
-            static member lutimes (path: Node.Buffer, atime: JS.Date, mtime: Node.fs.TimeLike) : JS.Promise<unit> = nativeOnly
+            static member lutimes (path: Node.Buffer, atime: Date, mtime: Node.fs.TimeLike) : JS.Promise<unit> = nativeOnly
             /// <summary>
             /// Changes the access and modification times of a file in the same way as <c>fsPromises.utimes()</c>, with the difference that if the path refers to a
             /// symbolic link, then the link is not dereferenced: instead, the timestamps of
@@ -71555,7 +71577,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with <c>undefined</c> upon success.
             /// </returns>
             [<Import("lutimes", "fs/promises")>]
-            static member lutimes (path: Node.url.URL, atime: JS.Date, mtime: Node.fs.TimeLike) : JS.Promise<unit> = nativeOnly
+            static member lutimes (path: Node.url.URL, atime: Date, mtime: Node.fs.TimeLike) : JS.Promise<unit> = nativeOnly
             /// <summary>
             /// Changes the ownership of a file.
             /// </summary>
@@ -71621,7 +71643,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with <c>undefined</c> upon success.
             /// </returns>
             [<Import("utimes", "fs/promises")>]
-            static member utimes (path: string, atime: JS.Date, mtime: Node.fs.TimeLike) : JS.Promise<unit> = nativeOnly
+            static member utimes (path: string, atime: Date, mtime: Node.fs.TimeLike) : JS.Promise<unit> = nativeOnly
             /// <summary>
             /// Change the file system timestamps of the object referenced by <c>path</c>.
             ///
@@ -71663,7 +71685,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with <c>undefined</c> upon success.
             /// </returns>
             [<Import("utimes", "fs/promises")>]
-            static member utimes (path: Node.Buffer, atime: JS.Date, mtime: Node.fs.TimeLike) : JS.Promise<unit> = nativeOnly
+            static member utimes (path: Node.Buffer, atime: Date, mtime: Node.fs.TimeLike) : JS.Promise<unit> = nativeOnly
             /// <summary>
             /// Change the file system timestamps of the object referenced by <c>path</c>.
             ///
@@ -71705,7 +71727,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with <c>undefined</c> upon success.
             /// </returns>
             [<Import("utimes", "fs/promises")>]
-            static member utimes (path: Node.url.URL, atime: JS.Date, mtime: Node.fs.TimeLike) : JS.Promise<unit> = nativeOnly
+            static member utimes (path: Node.url.URL, atime: Date, mtime: Node.fs.TimeLike) : JS.Promise<unit> = nativeOnly
             /// <summary>
             /// Determines the actual location of <c>path</c> using the same semantics as the <c>fs.realpath.native()</c> function.
             ///
@@ -74713,7 +74735,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// <summary>
             /// Change the file system timestamps of the object referenced by the <c>FileHandle</c> then fulfills the promise with no arguments upon success.
             /// </summary>
-            abstract member utimes: atime: string * mtime: JS.Date -> JS.Promise<unit>
+            abstract member utimes: atime: string * mtime: Date -> JS.Promise<unit>
             /// <summary>
             /// Change the file system timestamps of the object referenced by the <c>FileHandle</c> then fulfills the promise with no arguments upon success.
             /// </summary>
@@ -74725,19 +74747,19 @@ EventEmitter.defaultMaxListeners = $0"""
             /// <summary>
             /// Change the file system timestamps of the object referenced by the <c>FileHandle</c> then fulfills the promise with no arguments upon success.
             /// </summary>
-            abstract member utimes: atime: float * mtime: JS.Date -> JS.Promise<unit>
+            abstract member utimes: atime: float * mtime: Date -> JS.Promise<unit>
             /// <summary>
             /// Change the file system timestamps of the object referenced by the <c>FileHandle</c> then fulfills the promise with no arguments upon success.
             /// </summary>
-            abstract member utimes: atime: JS.Date * mtime: string -> JS.Promise<unit>
+            abstract member utimes: atime: Date * mtime: string -> JS.Promise<unit>
             /// <summary>
             /// Change the file system timestamps of the object referenced by the <c>FileHandle</c> then fulfills the promise with no arguments upon success.
             /// </summary>
-            abstract member utimes: atime: JS.Date * mtime: float -> JS.Promise<unit>
+            abstract member utimes: atime: Date * mtime: float -> JS.Promise<unit>
             /// <summary>
             /// Change the file system timestamps of the object referenced by the <c>FileHandle</c> then fulfills the promise with no arguments upon success.
             /// </summary>
-            abstract member utimes: atime: JS.Date * mtime: JS.Date -> JS.Promise<unit>
+            abstract member utimes: atime: Date * mtime: Date -> JS.Promise<unit>
             /// <summary>
             /// Asynchronously writes data to a file, replacing the file if it already exists. <c>data</c> can be a string, a buffer, an
             /// [AsyncIterable](https://tc39.github.io/ecma262/#sec-asynciterable-interface), or an
@@ -125699,22 +125721,19 @@ the userland-provided Punycode.js module instead.""")>]
         [<Global>]
         [<AllowNullLiteral>]
         type ReplOptions
+            private () =
+
             [<ParamObject; Emit("$0")>]
-            (
-                ?prompt: string,
-                ?input: Node.NodeJS.ReadableStream,
-                ?output: Node.NodeJS.WritableStream,
-                ?terminal: bool,
-                ?eval: Node.repl.REPLEval,
-                ?preview: bool,
-                ?useColors: bool,
-                ?useGlobal: bool,
-                ?ignoreUndefined: bool,
-                ?writer: Node.repl.REPLWriter,
-                ?completer: U2<Node.readline.Completer, Node.readline.AsyncCompleter>,
-                ?replMode: U2<obj, obj>,
-                ?breakEvalOnSigint: bool
-            ) =
+            new (?prompt: string, ?input: Node.NodeJS.ReadableStream, ?output: Node.NodeJS.WritableStream, ?terminal: bool, ?eval: Node.repl.REPLEval, ?preview: bool, ?useColors: bool, ?useGlobal: bool, ?ignoreUndefined: bool, ?writer: Node.repl.REPLWriter, ?replMode: obj, ?breakEvalOnSigint: bool) =
+                ReplOptions()
+
+            [<ParamObject; Emit("$0")>]
+            new (completer: Node.readline.Completer, ?prompt: string, ?input: Node.NodeJS.ReadableStream, ?output: Node.NodeJS.WritableStream, ?terminal: bool, ?eval: Node.repl.REPLEval, ?preview: bool, ?useColors: bool, ?useGlobal: bool, ?ignoreUndefined: bool, ?writer: Node.repl.REPLWriter, ?replMode: obj, ?breakEvalOnSigint: bool) =
+                ReplOptions()
+
+            [<ParamObject; Emit("$0")>]
+            new (completer: Node.readline.AsyncCompleter, ?prompt: string, ?input: Node.NodeJS.ReadableStream, ?output: Node.NodeJS.WritableStream, ?terminal: bool, ?eval: Node.repl.REPLEval, ?preview: bool, ?useColors: bool, ?useGlobal: bool, ?ignoreUndefined: bool, ?writer: Node.repl.REPLWriter, ?replMode: obj, ?breakEvalOnSigint: bool) =
+                ReplOptions()
 
             /// <summary>
             /// The input prompt to display.
@@ -125780,7 +125799,7 @@ the userland-provided Punycode.js module instead.""")>]
             /// - <c>repl.REPL_MODE_STRICT</c> - evaluates expressions in strict mode. This is equivalent to
             ///   prefacing every repl statement with <c>'use strict'</c>.
             /// </summary>
-            member val replMode : U2<obj, obj> option = nativeOnly with get, set
+            member val replMode : obj option = nativeOnly with get, set
             /// <summary>
             /// Stop evaluating the current piece of code when <c>SIGINT</c> is received, i.e. <c>Ctrl+C</c> is
             /// pressed. This cannot be used together with a custom <c>eval</c> function.
@@ -125912,7 +125931,7 @@ the userland-provided Punycode.js module instead.""")>]
             /// - <c>repl.REPL_MODE_STRICT</c> - evaluates expressions in strict mode. This is equivalent to
             ///    prefacing every repl statement with <c>'use strict'</c>.
             /// </summary>
-            abstract member replMode: U2<obj, obj> with get
+            abstract member replMode: obj with get
             /// <summary>
             /// The <c>replServer.defineCommand()</c> method is used to add new <c>.</c>\-prefixed commands
             /// to the REPL instance. Such commands are invoked by typing a <c>.</c> followed by the <c>keyword</c>. The <c>cmd</c> is either a <c>Function</c> or an <c>Object</c> with the following
@@ -130335,17 +130354,6 @@ Readable.isDisturbed($0)"""
                 /// or parallelism. To perform a reduce concurrently, you can extract the async function to <c>readable.map</c> method.
                 /// </summary>
                 abstract member reduce<'T>: fn: Readable.reduce.fn_2<'T> * initial: 'T * ?options: Readable.reduce.options -> JS.Promise<'T>
-                /// <summary>
-                /// This method calls *fn* on each chunk of the stream in order, passing it the result from the calculation
-                /// on the previous element. It returns a promise for the final value of the reduction.
-                ///
-                /// If no *initial* value is supplied the first chunk of the stream is used as the initial value.
-                /// If the stream is empty, the promise is rejected with a <c>TypeError</c> with the <c>ERR_INVALID_ARGS</c> code property.
-                ///
-                /// The reducer function iterates the stream element-by-element which means that there is no *concurrency* parameter
-                /// or parallelism. To perform a reduce concurrently, you can extract the async function to <c>readable.map</c> method.
-                /// </summary>
-                abstract member reduce: fn: Readable.reduce.fn_1 * initial: obj * ?options: Readable.reduce.options -> JS.Promise<obj>
                 abstract member _destroy: error: Exception option * callback: (Exception option -> unit) -> unit
                 /// <summary>
                 /// Destroy the stream. Optionally emit an <c>'error'</c> event, and emit a <c>'close'</c> event (unless <c>emitClose</c> is set to <c>false</c>). After this call, the readable
@@ -142172,7 +142180,7 @@ Duplex.fromWeb($0, $1)"""
                 member val ignoreBOM : bool option = nativeOnly with get, set
 
             type BufferSource =
-                U2<obj, obj>
+                obj
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -147271,7 +147279,7 @@ Duplex.fromWeb($0, $1)"""
                 /// });
                 /// </code>
                 /// </summary>
-                abstract member fn: ?original: System.Delegate * ?implementation: System.Delegate * ?options: Node.test.test_.MockFunctionOptions -> Node.test.test_.Mock<U2<System.Delegate, System.Delegate>>
+                abstract member fn: ?original: System.Delegate * ?implementation: System.Delegate * ?options: Node.test.test_.MockFunctionOptions -> Node.test.test_.Mock<System.Delegate>
                 /// <summary>
                 /// This function is used to create a mock on an existing object method. The
                 /// following example demonstrates how a mock is created on an existing object
@@ -147732,11 +147740,11 @@ Duplex.fromWeb($0, $1)"""
                     MockTimersOptions()
 
                 [<ParamObject; Emit("$0")>]
-                new (apis: ReadonlyArray<MockTimersOptions.apis>, now: JS.Date) =
+                new (apis: ReadonlyArray<MockTimersOptions.apis>, now: Date) =
                     MockTimersOptions()
 
                 member val apis : ReadonlyArray<MockTimersOptions.apis> = nativeOnly with get, set
-                member val now : U2<float, JS.Date> option = nativeOnly with get, set
+                member val now : U2<float, Date> option = nativeOnly with get, set
 
             /// <summary>
             /// Mocking timers is a technique commonly used in software testing to simulate and
@@ -149415,21 +149423,6 @@ Duplex.fromWeb($0, $1)"""
             /// The latest <c>Finished</c> message that has been sent to the socket as part of a SSL/TLS handshake, or <c>undefined</c> if no <c>Finished</c> message has been sent yet.
             /// </returns>
             abstract member getFinished: unit -> Node.NonSharedBuffer option
-            /// <summary>
-            /// Returns an object representing the peer's certificate. If the peer does not
-            /// provide a certificate, an empty object will be returned. If the socket has been
-            /// destroyed, <c>null</c> will be returned.
-            ///
-            /// If the full certificate chain was requested, each certificate will include an<c>issuerCertificate</c> property containing an object representing its issuer's
-            /// certificate.
-            /// </summary>
-            /// <param name="detailed">
-            /// Include the full certificate chain if <c>true</c>, otherwise include just the peer's certificate.
-            /// </param>
-            /// <returns>
-            /// A certificate object.
-            /// </returns>
-            abstract member getPeerCertificate: detailed: bool -> Node.tls.DetailedPeerCertificate
             /// <summary>
             /// Returns an object representing the peer's certificate. If the peer does not
             /// provide a certificate, an empty object will be returned. If the socket has been
@@ -168348,7 +168341,7 @@ module UndiciTypes =
         type Cookie =
             abstract member name: string with get, set
             abstract member value: string with get, set
-            abstract member expires: U2<JS.Date, float> option with get, set
+            abstract member expires: U2<Date, float> option with get, set
             abstract member maxAge: float option with get, set
             abstract member domain: string option with get, set
             abstract member path: string option with get, set
@@ -170958,7 +170951,9 @@ module UndiciTypes =
                 type Type_1 =
                     abstract member prototype: UndiciTypes.eventsource.EventSource with get, set
                     [<EmitConstructor>]
-                    abstract member Create: url: U2<string, Node.URL> * ?init: UndiciTypes.eventsource.EventSourceInit -> UndiciTypes.eventsource.EventSource
+                    abstract member Create: url: string * ?init: UndiciTypes.eventsource.EventSourceInit -> UndiciTypes.eventsource.EventSource
+                    [<EmitConstructor>]
+                    abstract member Create: url: Node.URL * ?init: UndiciTypes.eventsource.EventSourceInit -> UndiciTypes.eventsource.EventSource
                     abstract member CLOSED: int with get
                     abstract member CONNECTING: int with get
                     abstract member OPEN: int with get
@@ -171011,7 +171006,7 @@ module UndiciTypes =
             U3<string, Node.url.URL, UndiciTypes.fetch.Request>
 
         type BodyInit =
-            U8<obj, obj, Node.buffer.buffer_.Blob, UndiciTypes.formdata.FormData, Iterable<JS.Uint8Array>, Node.NodeJS.ArrayBufferView, Node.url.URLSearchParams, string> option
+            U7<obj, Node.buffer.buffer_.Blob, UndiciTypes.formdata.FormData, Iterable<JS.Uint8Array>, Node.NodeJS.ArrayBufferView, Node.url.URLSearchParams, string> option
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -173572,7 +173567,21 @@ FileReader.DONE"""
                 type Type_1 =
                     abstract member prototype: UndiciTypes.websocket.WebSocket with get, set
                     [<EmitConstructor>]
-                    abstract member Create: url: U2<string, Node.URL> * ?protocols: U3<string, ResizeArray<string>, UndiciTypes.websocket.WebSocketInit> -> UndiciTypes.websocket.WebSocket
+                    abstract member Create: url: string -> UndiciTypes.websocket.WebSocket
+                    [<EmitConstructor>]
+                    abstract member Create: url: string * protocols: string -> UndiciTypes.websocket.WebSocket
+                    [<EmitConstructor>]
+                    abstract member Create: url: string * protocols: ResizeArray<string> -> UndiciTypes.websocket.WebSocket
+                    [<EmitConstructor>]
+                    abstract member Create: url: string * protocols: UndiciTypes.websocket.WebSocketInit -> UndiciTypes.websocket.WebSocket
+                    [<EmitConstructor>]
+                    abstract member Create: url: Node.URL -> UndiciTypes.websocket.WebSocket
+                    [<EmitConstructor>]
+                    abstract member Create: url: Node.URL * protocols: string -> UndiciTypes.websocket.WebSocket
+                    [<EmitConstructor>]
+                    abstract member Create: url: Node.URL * protocols: ResizeArray<string> -> UndiciTypes.websocket.WebSocket
+                    [<EmitConstructor>]
+                    abstract member Create: url: Node.URL * protocols: UndiciTypes.websocket.WebSocketInit -> UndiciTypes.websocket.WebSocket
                     abstract member CLOSED: float with get
                     abstract member CLOSING: float with get
                     abstract member CONNECTING: float with get
@@ -173640,7 +173649,9 @@ FileReader.DONE"""
             type Type_2 =
                 abstract member prototype: UndiciTypes.eventsource.EventSource with get, set
                 [<EmitConstructor>]
-                abstract member Create: url: U2<string, Node.URL> * ?init: UndiciTypes.eventsource.EventSourceInit -> UndiciTypes.eventsource.EventSource
+                abstract member Create: url: string * ?init: UndiciTypes.eventsource.EventSourceInit -> UndiciTypes.eventsource.EventSource
+                [<EmitConstructor>]
+                abstract member Create: url: Node.URL * ?init: UndiciTypes.eventsource.EventSourceInit -> UndiciTypes.eventsource.EventSource
                 abstract member CLOSED: int with get
                 abstract member CONNECTING: int with get
                 abstract member OPEN: int with get
@@ -173652,7 +173663,21 @@ FileReader.DONE"""
             type Type_2 =
                 abstract member prototype: UndiciTypes.websocket.WebSocket with get, set
                 [<EmitConstructor>]
-                abstract member Create: url: U2<string, Node.URL> * ?protocols: U3<string, ResizeArray<string>, UndiciTypes.websocket.WebSocketInit> -> UndiciTypes.websocket.WebSocket
+                abstract member Create: url: string -> UndiciTypes.websocket.WebSocket
+                [<EmitConstructor>]
+                abstract member Create: url: string * protocols: string -> UndiciTypes.websocket.WebSocket
+                [<EmitConstructor>]
+                abstract member Create: url: string * protocols: ResizeArray<string> -> UndiciTypes.websocket.WebSocket
+                [<EmitConstructor>]
+                abstract member Create: url: string * protocols: UndiciTypes.websocket.WebSocketInit -> UndiciTypes.websocket.WebSocket
+                [<EmitConstructor>]
+                abstract member Create: url: Node.URL -> UndiciTypes.websocket.WebSocket
+                [<EmitConstructor>]
+                abstract member Create: url: Node.URL * protocols: string -> UndiciTypes.websocket.WebSocket
+                [<EmitConstructor>]
+                abstract member Create: url: Node.URL * protocols: ResizeArray<string> -> UndiciTypes.websocket.WebSocket
+                [<EmitConstructor>]
+                abstract member Create: url: Node.URL * protocols: UndiciTypes.websocket.WebSocketInit -> UndiciTypes.websocket.WebSocket
                 abstract member CLOSED: float with get
                 abstract member CLOSING: float with get
                 abstract member CONNECTING: float with get

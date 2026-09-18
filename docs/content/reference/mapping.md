@@ -64,7 +64,8 @@ What each TypeScript construct is generated as.
 | `(a: A, b: B) => R` | a `delegate of a: A * b: B -> R` |
 | `{ x: T }` in a parameter | a class with a `ParamObject` constructor |
 | `{ x: T }` elsewhere | an interface in the module of the parent |
-| `Date`, `Promise<T>`, `RegExp` | `JS.Date`, `JS.Promise<T>`, `RegExp` |
+| `Date` | `Date` of `Glutinum.Types`, built with `Date.Create` |
+| `Promise<T>`, `RegExp` | `JS.Promise<T>`, `RegExp` |
 | `Map<K, V>`, `Set<T>` | `Map<K, V>`, `Set<T>` from `Fable.Core.JS` |
 | `HTMLElement` and the DOM | `Glutinum.Web.HTMLElement` |
 | `Buffer` and the Node API | `Glutinum.Node.Buffer` |

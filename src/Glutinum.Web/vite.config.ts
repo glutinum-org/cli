@@ -11,8 +11,10 @@ export default defineConfig((env) => {
         },
         plugins: [react()],
         build: {
-            // The documentation site links `app.js` and `app.css` from its own page
+            // The documentation site links `app.js` and `app.css` from its own page, it has no
+            // use for an `index.html`
             rollupOptions: {
+                input: "Main.fs.js",
                 output: {
                     entryFileNames: "app.js",
                     chunkFileNames: "[name].js",

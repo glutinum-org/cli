@@ -14,7 +14,7 @@ The values a package exports are static members of its `Exports` type. A functio
 [<Erase>]
 type Exports =
     [<Import("format", "date-fns")>]
-    static member format (date: JS.Date, formatStr: string) : string = nativeOnly
+    static member format (date: Date, formatStr: string) : string = nativeOnly
 
     [<Import("Map", "leaflet"); EmitConstructor>]
     static member Map (element: string, ?options: MapOptions) : Map = nativeOnly

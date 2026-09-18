@@ -42,7 +42,7 @@ A method with a defaulted type parameter, `get<T = Element>(selector: string): T
 `unbox` gives a value the type you know it has:
 
 ```fsharp
-let days: ResizeArray<JS.Date> = unbox (DateFns.eachDayOfInterval interval)
+let days: ResizeArray<Date> = unbox (DateFns.eachDayOfInterval interval)
 ```
 
 `!!` does the same in an expression, and `createObj` builds an object a `ParamObject` class cannot:
