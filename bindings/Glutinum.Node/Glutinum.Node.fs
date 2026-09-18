@@ -2460,7 +2460,7 @@ module Node =
             abstract member pause: unit -> ReadableStream
             abstract member resume: unit -> ReadableStream
             abstract member isPaused: unit -> bool
-            abstract member pipe: destination: 'T * ?options: ReadableStream.pipe.options -> 'T
+            abstract member pipe<'T>: destination: 'T * ?options: ReadableStream.pipe.options -> 'T
             abstract member unpipe: ?destination: Node.NodeJS.WritableStream -> ReadableStream
             abstract member unshift: chunk: string * ?encoding: Node.BufferEncoding -> unit
             abstract member unshift: chunk: JS.Uint8Array * ?encoding: Node.BufferEncoding -> unit
@@ -4272,7 +4272,7 @@ module Node =
             /// <param name="id">
             /// ID of the built-in module being requested.
             /// </param>
-            abstract member getBuiltinModule: id: Node.``process``.BuiltInModule.Key<'ID> -> 'ID
+            abstract member getBuiltinModule<'ID>: id: Node.``process``.BuiltInModule.Key<'ID> -> 'ID
             /// <summary>
             /// Provides a way to load built-in modules in a globally available function.
             /// </summary>
@@ -18354,7 +18354,7 @@ TypeScript versions earlier than 5.7.""")>]
                 /// const callsfunc = tracker.calls(func);
                 /// </code>
                 /// </summary>
-                abstract member calls: ?fn: 'Func * ?exact: float -> 'Func
+                abstract member calls<'Func>: ?fn: 'Func * ?exact: float -> 'Func
                 /// <summary>
                 /// Example:
                 ///
@@ -19006,7 +19006,7 @@ AsyncResource.bind($0, $1, $2)"""
             /// <param name="fn">
             /// The function to bind to the current <c>AsyncResource</c>.
             /// </param>
-            abstract member bind: fn: 'Func -> 'Func
+            abstract member bind<'Func>: fn: 'Func -> 'Func
             /// <summary>
             /// Call the provided function with the provided arguments in the execution context
             /// of the async resource. This will establish the context, trigger the AsyncHooks
@@ -19022,7 +19022,7 @@ AsyncResource.bind($0, $1, $2)"""
             /// <param name="args">
             /// Optional arguments to pass to the function.
             /// </param>
-            abstract member runInAsyncScope: fn: System.Delegate * thisArg: 'This * [<ParamArray>] args: obj [] -> 'Result
+            abstract member runInAsyncScope<'This, 'Result>: fn: System.Delegate * thisArg: 'This * [<ParamArray>] args: obj [] -> 'Result
             /// <summary>
             /// Call all <c>destroy</c> hooks. This should only ever be called once. An error will
             /// be thrown if it is called more than once. This **must** be manually called. If
@@ -19189,7 +19189,7 @@ AsyncLocalStorage.snapshot()"""
             /// }
             /// </code>
             /// </summary>
-            abstract member run: store: 'T * callback: (unit -> 'R) -> 'R
+            abstract member run<'R>: store: 'T * callback: (unit -> 'R) -> 'R
             /// <summary>
             /// Runs a function synchronously within a context and returns its
             /// return value. The store is not accessible outside of the callback function.
@@ -19219,7 +19219,7 @@ AsyncLocalStorage.snapshot()"""
             /// }
             /// </code>
             /// </summary>
-            abstract member run: store: 'T * callback: System.Delegate * [<ParamArray>] args: 'TArgs [] -> 'R
+            abstract member run<'R, 'TArgs>: store: 'T * callback: System.Delegate * [<ParamArray>] args: 'TArgs [] -> 'R
             /// <summary>
             /// Runs a function synchronously outside of a context and returns its
             /// return value. The store is not accessible within the callback function or
@@ -19246,7 +19246,7 @@ AsyncLocalStorage.snapshot()"""
             /// }
             /// </code>
             /// </summary>
-            abstract member exit: callback: System.Delegate * [<ParamArray>] args: 'TArgs [] -> 'R
+            abstract member exit<'R, 'TArgs>: callback: System.Delegate * [<ParamArray>] args: 'TArgs [] -> 'R
             /// <summary>
             /// Transitions into the context for the remainder of the current
             /// synchronous execution and then persists the store through any following
@@ -39318,7 +39318,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 ///
                 /// An error will be thrown if the given <c>typedArray</c> is larger than 65,536 bytes.
                 /// </summary>
-                abstract member getRandomValues: typedArray: 'T -> 'T
+                abstract member getRandomValues<'T>: typedArray: 'T -> 'T
                 /// <summary>
                 /// Generates a random <see href="https://www.rfc-editor.org/rfc/rfc4122.txt">RFC 4122</see> version 4 UUID.
                 /// The UUID is generated using a cryptographic pseudorandom number generator.
@@ -48185,7 +48185,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// In this example, the <c>d.on('error')</c> handler will be triggered, rather
             /// than crashing the program.
             /// </summary>
-            abstract member run: fn: System.Delegate * [<ParamArray>] args: obj [] -> 'T
+            abstract member run<'T>: fn: System.Delegate * [<ParamArray>] args: obj [] -> 'T
             /// <summary>
             /// Explicitly adds an emitter to the domain. If any event handlers called by
             /// the emitter throw an error, or if the emitter emits an <c>'error'</c> event, it
@@ -48261,7 +48261,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// <returns>
             /// The bound function
             /// </returns>
-            abstract member bind: callback: 'T -> 'T
+            abstract member bind<'T>: callback: 'T -> 'T
             /// <summary>
             /// This method is almost identical to <see href="bind">bind</see>. However, in
             /// addition to catching thrown errors, it will also intercept <c>Error</c> objects sent as the first argument to the function.
@@ -48298,7 +48298,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// <returns>
             /// The intercepted function
             /// </returns>
-            abstract member intercept: callback: 'T -> 'T
+            abstract member intercept<'T>: callback: 'T -> 'T
 
     module events =
 
@@ -64142,7 +64142,7 @@ EventEmitter.defaultMaxListeners = $0"""
             ///   2. close
             ///   3. ready
             /// </summary>
-            abstract member addListener: event: Node.fs.ReadStreamEvents.Key<'K> * listener: 'K -> ReadStream
+            abstract member addListener<'K>: event: Node.fs.ReadStreamEvents.Key<'K> * listener: 'K -> ReadStream
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
             /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
@@ -64171,7 +64171,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
-            abstract member on: event: Node.fs.ReadStreamEvents.Key<'K> * listener: 'K -> ReadStream
+            abstract member on<'K>: event: Node.fs.ReadStreamEvents.Key<'K> * listener: 'K -> ReadStream
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -64198,7 +64198,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
-            abstract member once: event: Node.fs.ReadStreamEvents.Key<'K> * listener: 'K -> ReadStream
+            abstract member once<'K>: event: Node.fs.ReadStreamEvents.Key<'K> * listener: 'K -> ReadStream
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
             /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
@@ -64213,7 +64213,7 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
-            abstract member prependListener: event: Node.fs.ReadStreamEvents.Key<'K> * listener: 'K -> ReadStream
+            abstract member prependListener<'K>: event: Node.fs.ReadStreamEvents.Key<'K> * listener: 'K -> ReadStream
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -64226,7 +64226,7 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
-            abstract member prependOnceListener: event: Node.fs.ReadStreamEvents.Key<'K> * listener: 'K -> ReadStream
+            abstract member prependOnceListener<'K>: event: Node.fs.ReadStreamEvents.Key<'K> * listener: 'K -> ReadStream
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -64351,7 +64351,7 @@ EventEmitter.defaultMaxListeners = $0"""
             ///   2. close
             ///   3. ready
             /// </summary>
-            abstract member addListener: event: Node.fs.WriteStreamEvents.Key<'K> * listener: 'K -> WriteStream
+            abstract member addListener<'K>: event: Node.fs.WriteStreamEvents.Key<'K> * listener: 'K -> WriteStream
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
             /// named <c>eventName</c>. No checks are made to see if the <c>listener</c> has already
@@ -64380,7 +64380,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
-            abstract member on: event: Node.fs.WriteStreamEvents.Key<'K> * listener: 'K -> WriteStream
+            abstract member on<'K>: event: Node.fs.WriteStreamEvents.Key<'K> * listener: 'K -> WriteStream
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
             /// next time <c>eventName</c> is triggered, this listener is removed and then invoked.
@@ -64407,7 +64407,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// //   a
             /// </code>
             /// </summary>
-            abstract member once: event: Node.fs.WriteStreamEvents.Key<'K> * listener: 'K -> WriteStream
+            abstract member once<'K>: event: Node.fs.WriteStreamEvents.Key<'K> * listener: 'K -> WriteStream
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
             /// event named <c>eventName</c>. No checks are made to see if the <c>listener</c> has
@@ -64422,7 +64422,7 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
-            abstract member prependListener: event: Node.fs.WriteStreamEvents.Key<'K> * listener: 'K -> WriteStream
+            abstract member prependListener<'K>: event: Node.fs.WriteStreamEvents.Key<'K> * listener: 'K -> WriteStream
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
             /// listener is removed, and then invoked.
@@ -64435,7 +64435,7 @@ EventEmitter.defaultMaxListeners = $0"""
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
-            abstract member prependOnceListener: event: Node.fs.WriteStreamEvents.Key<'K> * listener: 'K -> WriteStream
+            abstract member prependOnceListener<'K>: event: Node.fs.WriteStreamEvents.Key<'K> * listener: 'K -> WriteStream
 
         module rename_ =
 
@@ -74540,14 +74540,14 @@ EventEmitter.defaultMaxListeners = $0"""
             /// <returns>
             /// Fulfills upon success with an object with two properties:
             /// </returns>
-            abstract member read: buffer: 'T * ?offset: float * ?length: float * ?position: Node.fs.ReadPosition -> JS.Promise<Node.fs_promises.FileReadResult<'T>>
+            abstract member read<'T>: buffer: 'T * ?offset: float * ?length: float * ?position: Node.fs.ReadPosition -> JS.Promise<Node.fs_promises.FileReadResult<'T>>
             /// <summary>
             /// Reads data from the file and stores that in the given buffer.
             ///
             /// If the file is not modified concurrently, the end-of-file is reached when the
             /// number of bytes read is zero.
             /// </summary>
-            abstract member read: buffer: 'T * ?options: Node.fs.ReadOptions -> JS.Promise<Node.fs_promises.FileReadResult<'T>>
+            abstract member read<'T>: buffer: 'T * ?options: Node.fs.ReadOptions -> JS.Promise<Node.fs_promises.FileReadResult<'T>>
             /// <summary>
             /// Reads data from the file and stores that in the given buffer.
             ///
@@ -74999,7 +74999,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// The offset from the beginning of the file where the data from <c>buffer</c> should be written. If <c>position</c> is not a <c>number</c>, the data will be written at the current
             /// position. See the POSIX pwrite(2) documentation for more detail.
             /// </param>
-            abstract member write: buffer: 'TBuffer * ?offset: float * ?length: float * ?position: float -> JS.Promise<FileHandle.write<'TBuffer>>
+            abstract member write<'TBuffer>: buffer: 'TBuffer * ?offset: float * ?length: float * ?position: float -> JS.Promise<FileHandle.write<'TBuffer>>
             /// <summary>
             /// Write <c>buffer</c> to the file.
             ///
@@ -75013,7 +75013,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// The kernel ignores the position argument and always appends the data to
             /// the end of the file.
             /// </summary>
-            abstract member write: buffer: 'TBuffer * ?options: FileHandle.write.options -> JS.Promise<FileHandle.write<'TBuffer>>
+            abstract member write<'TBuffer>: buffer: 'TBuffer * ?options: FileHandle.write.options -> JS.Promise<FileHandle.write<'TBuffer>>
             /// <summary>
             /// Write <c>buffer</c> to the file.
             ///
@@ -75044,7 +75044,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// The offset from the beginning of the file where the data from <c>buffers</c> should be written. If <c>position</c> is not a <c>number</c>, the data will be written at the current
             /// position.
             /// </param>
-            abstract member writev: buffers: 'TBuffers * ?position: float -> JS.Promise<Node.fs.WriteVResult<'TBuffers>>
+            abstract member writev<'TBuffers>: buffers: 'TBuffers * ?position: float -> JS.Promise<Node.fs.WriteVResult<'TBuffers>>
             /// <summary>
             /// Read from a file and write to an array of [ArrayBufferView](https://developer.mozilla.org/en-US/docs/Web/API/ArrayBufferView) s
             /// </summary>
@@ -75054,7 +75054,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// <returns>
             /// Fulfills upon success an object containing two properties:
             /// </returns>
-            abstract member readv: buffers: 'TBuffers * ?position: float -> JS.Promise<Node.fs.ReadVResult<'TBuffers>>
+            abstract member readv<'TBuffers>: buffers: 'TBuffers * ?position: float -> JS.Promise<Node.fs.ReadVResult<'TBuffers>>
             /// <summary>
             /// Closes the file handle after waiting for any pending operation on the handle to
             /// complete.
@@ -118650,7 +118650,7 @@ SocketAddress.parse($0)"""
             /// <param name="fn">
             ///
             /// </param>
-            abstract member timerify: fn: 'T * ?options: Node.perf_hooks.TimerifyOptions -> 'T
+            abstract member timerify<'T>: fn: 'T * ?options: Node.perf_hooks.TimerifyOptions -> 'T
             /// <summary>
             /// An object which is JSON representation of the performance object. It is similar to
             /// [<c>window.performance.toJSON</c>](https://developer.mozilla.org/en-US/docs/Web/API/Performance/toJSON) in browsers.
@@ -128342,7 +128342,7 @@ the userland-provided Punycode.js module instead.""")>]
             /// db.prepare('SELECT sumint(y) as total FROM t3').get(); // { total: 21 }
             /// </c><c></c>
             /// </summary>
-            abstract member aggregate: name: string * options: Node.sqlite.AggregateOptions<'T> -> unit
+            abstract member aggregate<'T>: name: string * options: Node.sqlite.AggregateOptions<'T> -> unit
             /// <summary>
             /// Closes the database connection. An exception is thrown if the database is not
             /// open. This method is a wrapper around [<c>sqlite3_close_v2()</c>](https://www.sqlite.org/c3ref/close.html).
@@ -129172,11 +129172,11 @@ the userland-provided Punycode.js module instead.""")>]
         [<Interface>]
         type Stream =
             inherit Node.events.EventEmitter
-            abstract member pipe: destination: 'T * ?options: Stream.pipe.options -> 'T
-            abstract member compose: stream: 'T * ?options: Stream.compose.options -> 'T
-            abstract member compose: stream: Node.stream.ComposeFnParam * ?options: Stream.compose.options -> 'T
-            abstract member compose: stream: Iterable<'T> * ?options: Stream.compose.options -> 'T
-            abstract member compose: stream: obj * ?options: Stream.compose.options -> 'T
+            abstract member pipe<'T>: destination: 'T * ?options: Stream.pipe.options -> 'T
+            abstract member compose<'T>: stream: 'T * ?options: Stream.compose.options -> 'T
+            abstract member compose<'T>: stream: Node.stream.ComposeFnParam * ?options: Stream.compose.options -> 'T
+            abstract member compose<'T>: stream: Iterable<'T> * ?options: Stream.compose.options -> 'T
+            abstract member compose<'T>: stream: obj * ?options: Stream.compose.options -> 'T
 
         module Stream_ =
 
@@ -130240,7 +130240,7 @@ Readable.isDisturbed($0)"""
                 /// a promise evaluating to the first chunk for which *fn* evaluated with a truthy value,
                 /// or <c>undefined</c> if no element was found.
                 /// </returns>
-                abstract member find: fn: Readable.find.fn * ?options: Node.stream.Stream_.ArrayOptions -> JS.Promise<'T option>
+                abstract member find<'T>: fn: Readable.find.fn * ?options: Node.stream.Stream_.ArrayOptions -> JS.Promise<'T option>
                 /// <summary>
                 /// This method is similar to <c>Array.prototype.find</c> and calls *fn* on each chunk in the stream
                 /// to find a chunk with a truthy value for *fn*. Once an *fn* call's awaited return value is truthy,
@@ -141955,7 +141955,7 @@ Duplex.fromWeb($0, $1)"""
                 abstract member getReader: options: ReadableStream.getReader.options -> Node.stream_web.stream_SLASH_web_.ReadableStreamBYOBReader
                 abstract member getReader: unit -> Node.stream_web.stream_SLASH_web_.ReadableStreamDefaultReader<'R>
                 abstract member getReader: ?options: Node.stream_web.stream_SLASH_web_.ReadableStreamGetReaderOptions -> Node.stream_web.stream_SLASH_web_.ReadableStreamReader<'R>
-                abstract member pipeThrough: transform: Node.stream_web.stream_SLASH_web_.ReadableWritablePair<'T, 'R> * ?options: Node.stream_web.stream_SLASH_web_.StreamPipeOptions -> Node.stream_web.stream_SLASH_web_.ReadableStream<'T>
+                abstract member pipeThrough<'T>: transform: Node.stream_web.stream_SLASH_web_.ReadableWritablePair<'T, 'R> * ?options: Node.stream_web.stream_SLASH_web_.StreamPipeOptions -> Node.stream_web.stream_SLASH_web_.ReadableStream<'T>
                 abstract member pipeTo: destination: Node.stream_web.stream_SLASH_web_.WritableStream<'R> * ?options: Node.stream_web.stream_SLASH_web_.StreamPipeOptions -> JS.Promise<unit>
                 abstract member tee: unit -> Node.stream_web.stream_SLASH_web_.ReadableStream<'R> * Node.stream_web.stream_SLASH_web_.ReadableStream<'R>
                 abstract member values: ?options: ReadableStream.values.options -> Node.stream_web.stream_SLASH_web_.ReadableStreamAsyncIterator<'R>
@@ -142000,7 +142000,7 @@ Duplex.fromWeb($0, $1)"""
                 /// <summary>
                 /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStreamBYOBReader/read)
                 /// </summary>
-                abstract member read: view: 'T * ?options: ReadableStreamBYOBReader.read.options -> JS.Promise<Node.stream_web.stream_SLASH_web_.ReadableStreamReadResult<'T>>
+                abstract member read<'T>: view: 'T * ?options: ReadableStreamBYOBReader.read.options -> JS.Promise<Node.stream_web.stream_SLASH_web_.ReadableStreamReadResult<'T>>
                 /// <summary>
                 /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStreamBYOBReader/releaseLock)
                 /// </summary>
@@ -142316,8 +142316,8 @@ Duplex.fromWeb($0, $1)"""
                     [<Interface>]
                     type Type_1 =
                         abstract member prototype: Node.stream_web.stream_SLASH_web_.ReadableStream with get, set
-                        abstract member from: iterable: Iterable<'T> -> Node.stream_web.stream_SLASH_web_.ReadableStream<'T>
-                        abstract member from: iterable: obj -> Node.stream_web.stream_SLASH_web_.ReadableStream<'T>
+                        abstract member from<'T>: iterable: Iterable<'T> -> Node.stream_web.stream_SLASH_web_.ReadableStream<'T>
+                        abstract member from<'T>: iterable: obj -> Node.stream_web.stream_SLASH_web_.ReadableStream<'T>
                         [<EmitConstructor>]
                         abstract member Create: underlyingSource: Node.stream_web.stream_SLASH_web_.UnderlyingByteSource * ?strategy: Node.stream_web.stream_SLASH_web_.QueuingStrategy<JS.Uint8Array> -> Node.stream_web.stream_SLASH_web_.ReadableStream<JS.Uint8Array>
                         [<EmitConstructor>]
@@ -146751,7 +146751,7 @@ Duplex.fromWeb($0, $1)"""
                 /// <returns>
                 /// Fulfilled with the value returned by <c>condition</c>.
                 /// </returns>
-                abstract member waitFor: condition: (unit -> 'T) * ?options: Node.test.test_.TestContextWaitForOptions -> JS.Promise<obj>
+                abstract member waitFor<'T>: condition: (unit -> 'T) * ?options: Node.test.test_.TestContextWaitForOptions -> JS.Promise<obj>
                 /// <summary>
                 /// Each test provides its own MockTracker instance.
                 /// </summary>
@@ -147325,7 +147325,7 @@ Duplex.fromWeb($0, $1)"""
                 /// The mocked method. The mocked method contains a special <c>mock</c> property, which is an instance of <see href="MockFunctionContext">MockFunctionContext</see>, and can be used for inspecting and changing the
                 /// behavior of the mocked method.
                 /// </returns>
-                abstract member ``method``: ``object``: 'MockedObject * methodName: 'MethodName * ?options: Node.test.test_.MockFunctionOptions -> obj
+                abstract member ``method``<'MockedObject, 'MethodName>: ``object``: 'MockedObject * methodName: 'MethodName * ?options: Node.test.test_.MockFunctionOptions -> obj
                 /// <summary>
                 /// This function is used to create a mock on an existing object method. The
                 /// following example demonstrates how a mock is created on an existing object
@@ -147355,7 +147355,7 @@ Duplex.fromWeb($0, $1)"""
                 /// });
                 /// </code>
                 /// </summary>
-                abstract member ``method``: ``object``: 'MockedObject * methodName: 'MethodName * implementation: 'Implementation * ?options: Node.test.test_.MockFunctionOptions -> obj
+                abstract member ``method``<'MockedObject, 'MethodName, 'Implementation>: ``object``: 'MockedObject * methodName: 'MethodName * implementation: 'Implementation * ?options: Node.test.test_.MockFunctionOptions -> obj
                 /// <summary>
                 /// This function is used to create a mock on an existing object method. The
                 /// following example demonstrates how a mock is created on an existing object
@@ -147385,7 +147385,7 @@ Duplex.fromWeb($0, $1)"""
                 /// });
                 /// </code>
                 /// </summary>
-                abstract member ``method``: ``object``: 'MockedObject * methodName: obj * options: Node.test.test_.MockMethodOptions -> Node.test.test_.Mock<Action>
+                abstract member ``method``<'MockedObject>: ``object``: 'MockedObject * methodName: obj * options: Node.test.test_.MockMethodOptions -> Node.test.test_.Mock<Action>
                 /// <summary>
                 /// This function is used to create a mock on an existing object method. The
                 /// following example demonstrates how a mock is created on an existing object
@@ -147415,23 +147415,23 @@ Duplex.fromWeb($0, $1)"""
                 /// });
                 /// </code>
                 /// </summary>
-                abstract member ``method``: ``object``: 'MockedObject * methodName: obj * implementation: Action * options: Node.test.test_.MockMethodOptions -> Node.test.test_.Mock<Action>
+                abstract member ``method``<'MockedObject>: ``object``: 'MockedObject * methodName: obj * implementation: Action * options: Node.test.test_.MockMethodOptions -> Node.test.test_.Mock<Action>
                 /// <summary>
                 /// This function is syntax sugar for <c>MockTracker.method</c> with <c>options.getter</c> set to <c>true</c>.
                 /// </summary>
-                abstract member getter: ``object``: 'MockedObject * methodName: 'MethodName * ?options: Node.test.test_.MockFunctionOptions -> Node.test.test_.Mock<(unit -> obj)>
+                abstract member getter<'MockedObject, 'MethodName>: ``object``: 'MockedObject * methodName: 'MethodName * ?options: Node.test.test_.MockFunctionOptions -> Node.test.test_.Mock<(unit -> obj)>
                 /// <summary>
                 /// This function is syntax sugar for <c>MockTracker.method</c> with <c>options.getter</c> set to <c>true</c>.
                 /// </summary>
-                abstract member getter: ``object``: 'MockedObject * methodName: 'MethodName * ?implementation: 'Implementation * ?options: Node.test.test_.MockFunctionOptions -> Node.test.test_.Mock<U2<(unit -> obj), 'Implementation>>
+                abstract member getter<'MockedObject, 'MethodName, 'Implementation>: ``object``: 'MockedObject * methodName: 'MethodName * ?implementation: 'Implementation * ?options: Node.test.test_.MockFunctionOptions -> Node.test.test_.Mock<U2<(unit -> obj), 'Implementation>>
                 /// <summary>
                 /// This function is syntax sugar for <c>MockTracker.method</c> with <c>options.setter</c> set to <c>true</c>.
                 /// </summary>
-                abstract member setter: ``object``: 'MockedObject * methodName: 'MethodName * ?options: Node.test.test_.MockFunctionOptions -> Node.test.test_.Mock<(obj -> unit)>
+                abstract member setter<'MockedObject, 'MethodName>: ``object``: 'MockedObject * methodName: 'MethodName * ?options: Node.test.test_.MockFunctionOptions -> Node.test.test_.Mock<(obj -> unit)>
                 /// <summary>
                 /// This function is syntax sugar for <c>MockTracker.method</c> with <c>options.setter</c> set to <c>true</c>.
                 /// </summary>
-                abstract member setter: ``object``: 'MockedObject * methodName: 'MethodName * ?implementation: 'Implementation * ?options: Node.test.test_.MockFunctionOptions -> Node.test.test_.Mock<U2<(obj -> unit), 'Implementation>>
+                abstract member setter<'MockedObject, 'MethodName, 'Implementation>: ``object``: 'MockedObject * methodName: 'MethodName * ?implementation: 'Implementation * ?options: Node.test.test_.MockFunctionOptions -> Node.test.test_.Mock<U2<(obj -> unit), 'Implementation>>
                 /// <summary>
                 /// This function is used to mock the exports of ECMAScript modules, CommonJS modules, and Node.js builtin modules.
                 /// Any references to the original module prior to mocking are not impacted.
@@ -147497,7 +147497,7 @@ Duplex.fromWeb($0, $1)"""
                 /// special <c>mock</c> property, which is an instance of [<c>MockPropertyContext</c>](https://nodejs.org/docs/latest-v22.x/api/test.html#class-mockpropertycontext),
                 /// and can be used for inspecting and changing the behavior of the mocked property.
                 /// </returns>
-                abstract member property: ``object``: 'MockedObject * property: 'PropertyName * ?value: obj -> MockTracker.property
+                abstract member property<'MockedObject, 'PropertyName>: ``object``: 'MockedObject * property: 'PropertyName * ?value: obj -> MockTracker.property
                 /// <summary>
                 /// This function restores the default behavior of all mocks that were previously
                 /// created by this <c>MockTracker</c> and disassociates the mocks from the <c>MockTracker</c> instance. Once disassociated, the mocks can still be used, but the <c>MockTracker</c> instance can no longer be
@@ -170722,7 +170722,7 @@ module UndiciTypes =
             ///
             /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/EventTarget/addEventListener)
             /// </summary>
-            abstract member addEventListener: ``type``: UndiciTypes.eventsource.EventSourceEventMap.Key<'K> * listener: ('K -> unit) -> unit
+            abstract member addEventListener<'K>: ``type``: UndiciTypes.eventsource.EventSourceEventMap.Key<'K> * listener: ('K -> unit) -> unit
             /// <summary>
             /// Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
             ///
@@ -170740,7 +170740,7 @@ module UndiciTypes =
             ///
             /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/EventTarget/addEventListener)
             /// </summary>
-            abstract member addEventListener: ``type``: UndiciTypes.eventsource.EventSourceEventMap.Key<'K> * listener: ('K -> unit) * options: bool -> unit
+            abstract member addEventListener<'K>: ``type``: UndiciTypes.eventsource.EventSourceEventMap.Key<'K> * listener: ('K -> unit) * options: bool -> unit
             /// <summary>
             /// Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
             ///
@@ -170758,7 +170758,7 @@ module UndiciTypes =
             ///
             /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/EventTarget/addEventListener)
             /// </summary>
-            abstract member addEventListener: ``type``: UndiciTypes.eventsource.EventSourceEventMap.Key<'K> * listener: ('K -> unit) * options: UndiciTypes.patch.AddEventListenerOptions -> unit
+            abstract member addEventListener<'K>: ``type``: UndiciTypes.eventsource.EventSourceEventMap.Key<'K> * listener: ('K -> unit) * options: UndiciTypes.patch.AddEventListenerOptions -> unit
             /// <summary>
             /// Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
             ///
@@ -170872,19 +170872,19 @@ module UndiciTypes =
             ///
             /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/EventTarget/removeEventListener)
             /// </summary>
-            abstract member removeEventListener: ``type``: UndiciTypes.eventsource.EventSourceEventMap.Key<'K> * listener: ('K -> unit) -> unit
+            abstract member removeEventListener<'K>: ``type``: UndiciTypes.eventsource.EventSourceEventMap.Key<'K> * listener: ('K -> unit) -> unit
             /// <summary>
             /// Removes the event listener in target's event listener list with the same type, callback, and options.
             ///
             /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/EventTarget/removeEventListener)
             /// </summary>
-            abstract member removeEventListener: ``type``: UndiciTypes.eventsource.EventSourceEventMap.Key<'K> * listener: ('K -> unit) * options: bool -> unit
+            abstract member removeEventListener<'K>: ``type``: UndiciTypes.eventsource.EventSourceEventMap.Key<'K> * listener: ('K -> unit) * options: bool -> unit
             /// <summary>
             /// Removes the event listener in target's event listener list with the same type, callback, and options.
             ///
             /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/EventTarget/removeEventListener)
             /// </summary>
-            abstract member removeEventListener: ``type``: UndiciTypes.eventsource.EventSourceEventMap.Key<'K> * listener: ('K -> unit) * options: UndiciTypes.patch.EventListenerOptions -> unit
+            abstract member removeEventListener<'K>: ``type``: UndiciTypes.eventsource.EventSourceEventMap.Key<'K> * listener: ('K -> unit) * options: UndiciTypes.patch.EventListenerOptions -> unit
             /// <summary>
             /// Removes the event listener in target's event listener list with the same type, callback, and options.
             ///
@@ -171836,15 +171836,15 @@ FileReader.DONE"""
             /// <summary>
             /// Creates and retrieves mock Dispatcher instances which can then be used to intercept HTTP requests. If the number of connections on the mock agent is set to 1, a MockClient instance is returned. Otherwise a MockPool instance is returned.
             /// </summary>
-            abstract member get: origin: string -> 'TInterceptable
+            abstract member get<'TInterceptable>: origin: string -> 'TInterceptable
             /// <summary>
             /// Creates and retrieves mock Dispatcher instances which can then be used to intercept HTTP requests. If the number of connections on the mock agent is set to 1, a MockClient instance is returned. Otherwise a MockPool instance is returned.
             /// </summary>
-            abstract member get: origin: RegExp -> 'TInterceptable
+            abstract member get<'TInterceptable>: origin: RegExp -> 'TInterceptable
             /// <summary>
             /// Creates and retrieves mock Dispatcher instances which can then be used to intercept HTTP requests. If the number of connections on the mock agent is set to 1, a MockClient instance is returned. Otherwise a MockPool instance is returned.
             /// </summary>
-            abstract member get: origin: (string -> bool) -> 'TInterceptable
+            abstract member get<'TInterceptable>: origin: (string -> bool) -> 'TInterceptable
             /// <summary>
             /// Dispatches a mocked request.
             /// </summary>
@@ -173248,7 +173248,7 @@ FileReader.DONE"""
             ///
             /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/EventTarget/addEventListener)
             /// </summary>
-            abstract member addEventListener: ``type``: UndiciTypes.websocket.WebSocketEventMap.Key<'K> * listener: ('K -> unit) -> unit
+            abstract member addEventListener<'K>: ``type``: UndiciTypes.websocket.WebSocketEventMap.Key<'K> * listener: ('K -> unit) -> unit
             /// <summary>
             /// Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
             ///
@@ -173266,7 +173266,7 @@ FileReader.DONE"""
             ///
             /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/EventTarget/addEventListener)
             /// </summary>
-            abstract member addEventListener: ``type``: UndiciTypes.websocket.WebSocketEventMap.Key<'K> * listener: ('K -> unit) * options: bool -> unit
+            abstract member addEventListener<'K>: ``type``: UndiciTypes.websocket.WebSocketEventMap.Key<'K> * listener: ('K -> unit) * options: bool -> unit
             /// <summary>
             /// Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
             ///
@@ -173284,7 +173284,7 @@ FileReader.DONE"""
             ///
             /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/EventTarget/addEventListener)
             /// </summary>
-            abstract member addEventListener: ``type``: UndiciTypes.websocket.WebSocketEventMap.Key<'K> * listener: ('K -> unit) * options: UndiciTypes.patch.AddEventListenerOptions -> unit
+            abstract member addEventListener<'K>: ``type``: UndiciTypes.websocket.WebSocketEventMap.Key<'K> * listener: ('K -> unit) * options: UndiciTypes.patch.AddEventListenerOptions -> unit
             /// <summary>
             /// Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
             ///
@@ -173398,19 +173398,19 @@ FileReader.DONE"""
             ///
             /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/EventTarget/removeEventListener)
             /// </summary>
-            abstract member removeEventListener: ``type``: UndiciTypes.websocket.WebSocketEventMap.Key<'K> * listener: ('K -> unit) -> unit
+            abstract member removeEventListener<'K>: ``type``: UndiciTypes.websocket.WebSocketEventMap.Key<'K> * listener: ('K -> unit) -> unit
             /// <summary>
             /// Removes the event listener in target's event listener list with the same type, callback, and options.
             ///
             /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/EventTarget/removeEventListener)
             /// </summary>
-            abstract member removeEventListener: ``type``: UndiciTypes.websocket.WebSocketEventMap.Key<'K> * listener: ('K -> unit) * options: bool -> unit
+            abstract member removeEventListener<'K>: ``type``: UndiciTypes.websocket.WebSocketEventMap.Key<'K> * listener: ('K -> unit) * options: bool -> unit
             /// <summary>
             /// Removes the event listener in target's event listener list with the same type, callback, and options.
             ///
             /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/EventTarget/removeEventListener)
             /// </summary>
-            abstract member removeEventListener: ``type``: UndiciTypes.websocket.WebSocketEventMap.Key<'K> * listener: ('K -> unit) * options: UndiciTypes.patch.EventListenerOptions -> unit
+            abstract member removeEventListener<'K>: ``type``: UndiciTypes.websocket.WebSocketEventMap.Key<'K> * listener: ('K -> unit) * options: UndiciTypes.patch.EventListenerOptions -> unit
             /// <summary>
             /// Removes the event listener in target's event listener list with the same type, callback, and options.
             ///

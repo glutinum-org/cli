@@ -46,7 +46,7 @@ module ElementEventMap =
 [<AllowNullLiteral>]
 [<Interface>]
 type Element =
-    abstract member addEventListener: ``type``: ElementEventMap.Key<'K> * listener: ('K -> unit) -> unit
+    abstract member addEventListener<'K>: ``type``: ElementEventMap.Key<'K> * listener: ('K -> unit) -> unit
     abstract member addEventListener: ``type``: string * listener: (obj -> unit) -> unit
 
 [<AllowNullLiteral>]
@@ -70,7 +70,7 @@ module TagNameMap =
 [<AllowNullLiteral>]
 [<Interface>]
 type Document =
-    abstract member createElement: tagName: TagNameMap.Key<'K> -> 'K
+    abstract member createElement<'K>: tagName: TagNameMap.Key<'K> -> 'K
     abstract member createElement: tagName: string -> Element
 
 [<AllowNullLiteral>]
@@ -115,7 +115,7 @@ module InputEventMap =
 [<AllowNullLiteral>]
 [<Interface>]
 type Input =
-    abstract member addEventListener: ``type``: InputEventMap.Key<'K> * listener: ('K -> unit) -> unit
+    abstract member addEventListener<'K>: ``type``: InputEventMap.Key<'K> * listener: ('K -> unit) -> unit
 
 [<AllowNullLiteral>]
 [<Interface>]
@@ -141,7 +141,7 @@ module StreamEvents =
 [<AllowNullLiteral>]
 [<Interface>]
 type Stream =
-    abstract member on: event: StreamEvents.Key<'K> * listener: 'K -> Stream
+    abstract member on<'K>: event: StreamEvents.Key<'K> * listener: 'K -> Stream
 
 [<AllowNullLiteral>]
 [<Interface>]
@@ -172,7 +172,7 @@ module SocketEvents =
 [<AllowNullLiteral>]
 [<Interface>]
 type Socket =
-    abstract member on: event: SocketEvents.Key<'K> * listener: 'K -> Socket
+    abstract member on<'K>: event: SocketEvents.Key<'K> * listener: 'K -> Socket
 
 (***)
 #r "nuget: Fable.Core"

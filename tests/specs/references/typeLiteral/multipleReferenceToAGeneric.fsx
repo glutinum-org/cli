@@ -7,7 +7,7 @@ open System
 [<AllowNullLiteral>]
 [<Interface>]
 type WorkspaceConfiguration =
-    abstract member inspect: section: string -> WorkspaceConfiguration.inspect<'T>
+    abstract member inspect<'T>: section: string -> WorkspaceConfiguration.inspect<'T>
 
 module WorkspaceConfiguration =
 

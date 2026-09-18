@@ -161,7 +161,7 @@ module TypeScript =
         /// If provided, it will be used as the this value for each invocation of
         /// predicate. If it is not provided, undefined is used instead.
         /// </param>
-        abstract member find:
+        abstract member find<'S> :
             predicate: ReadonlyArray.find.predicate<'T> * ?thisArg: obj -> 'S option
 
         /// <summary>
@@ -233,7 +233,7 @@ module TypeScript =
         /// <param name="depth">
         /// The maximum recursion depth
         /// </param>
-        abstract member flat<'A, 'D> : ?depth: 'D -> ResizeArray<obj>
+        abstract member flat<'D> : ?depth: 'D -> ResizeArray<obj>
         /// <summary>
         /// Returns the item located at the specified index.
         /// </summary>
@@ -255,7 +255,7 @@ module TypeScript =
         /// If provided, it will be used as the this value for each invocation of
         /// predicate. If it is not provided, undefined is used instead.
         /// </param>
-        abstract member findLast:
+        abstract member findLast<'S> :
             predicate: ReadonlyArray.findLast.predicate<'T> * ?thisArg: obj -> 'S option
 
         /// <summary>
@@ -481,7 +481,7 @@ module TypeScript =
         /// <param name="thisArg">
         /// An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
         /// </param>
-        abstract member map:
+        abstract member map<'U> :
             callbackfn: ReadonlyArray.map.callbackfn<'U, 'T> * ?thisArg: obj -> ResizeArray<'U>
 
         /// <summary>
@@ -493,7 +493,7 @@ module TypeScript =
         /// <param name="thisArg">
         /// An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.
         /// </param>
-        abstract member filter:
+        abstract member filter<'S> :
             predicate: ReadonlyArray.filter.predicate<'T> * ?thisArg: obj -> ResizeArray<'S>
 
         /// <summary>
@@ -534,7 +534,7 @@ module TypeScript =
         /// <param name="initialValue">
         /// If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
         /// </param>
-        abstract member reduce:
+        abstract member reduce<'U> :
             callbackfn: ReadonlyArray.reduce.callbackfn_1<'U, 'T> * initialValue: 'U -> 'U
 
         /// <summary>
@@ -563,7 +563,7 @@ module TypeScript =
         /// <param name="initialValue">
         /// If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
         /// </param>
-        abstract member reduceRight:
+        abstract member reduceRight<'U> :
             callbackfn: ReadonlyArray.reduceRight.callbackfn_1<'U, 'T> * initialValue: 'U -> 'U
 
         [<EmitIndexer>]
@@ -841,7 +841,7 @@ module TypeScript =
         /// <param name="handler">
         /// An object whose properties define the behavior of Proxy when an operation is attempted on it.
         /// </param>
-        abstract member revocable:
+        abstract member revocable<'T> :
             target: 'T * handler: TypeScript.ProxyHandler<'T> -> ProxyConstructor.revocable<'T>
 
         [<EmitConstructor>]

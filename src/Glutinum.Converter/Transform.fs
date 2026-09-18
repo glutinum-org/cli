@@ -2289,16 +2289,6 @@ module private TransformMembers =
         members |> List.filter (hasComputedName >> not)
 
     /// Declared next to the overload made of the defaults, so F# tells the two apart
-    let private explicitTypeParameters
-        (context: TransformContext)
-        (typeParameters: GlueTypeParameter list)
-        : FSharpTypeParameter list
-        =
-        if typeParameters |> List.exists _.Default.IsSome then
-            (transformTypeParameters context typeParameters).TypeParameters
-        else
-            []
-
     let private defaultsOf
         (parameters: GlueParameter list)
         (typeParameters: GlueTypeParameter list)
@@ -2450,6 +2440,81 @@ module private TransformMembers =
             | _ -> None
         | [] -> None
 
+    /// Whether the F# type names the type parameter
+    let rec private fsharpTypeMentions (name: string) (typ: FSharpType) : bool =
+        let mentions = fsharpTypeMentions name
+
+        let typeParameterMentions (typeParameter: FSharpTypeParameter) =
+            match typeParameter with
+            | FSharpTypeParameter.FSharpType typ -> mentions typ
+            | FSharpTypeParameter.FSharpTypeParameter info -> info.Name = name
+
+        match typ with
+        | FSharpType.TypeParameter typeParameter -> typeParameter = name
+        | FSharpType.TypeReference typeReference ->
+            typeReference.TypeArguments |> List.exists mentions
+        | FSharpType.Option inner
+        | FSharpType.ResizeArray inner -> mentions inner
+        | FSharpType.JSApi jsApi ->
+            match jsApi with
+            | FSharpJSApi.ReadonlyArray inner -> mentions inner
+            | _ -> false
+        | FSharpType.Union unionInfo ->
+            unionInfo.Cases
+            |> List.exists (
+                function
+                | FSharpUnionCase.Typed typ
+                | FSharpUnionCase.Field(_, typ) -> mentions typ
+                | FSharpUnionCase.NamedFields(_, fields) -> fields |> List.exists (snd >> mentions)
+                | FSharpUnionCase.Named _ -> false
+            )
+        | FSharpType.Tuple elements -> elements |> List.exists mentions
+        | FSharpType.Function functionType ->
+            mentions functionType.ReturnType
+            || functionType.Parameters
+               |> List.exists (fun parameter -> mentions parameter.Type)
+        // A type argument that is a type parameter is a `Mapped` named `'T`
+        | FSharpType.Mapped mapped ->
+            mapped.Name = "'" + name
+            || mapped.TypeParameters |> List.exists typeParameterMentions
+        // A delegate is referred to through its alias, with the type parameters it takes
+        | FSharpType.TypeAlias alias -> alias.TypeParameters |> List.exists typeParameterMentions
+        | _ -> false
+
+    /// `on<K>(event: Key<K, T>, listener: Listener<K, T>)` resolved to `on(event: obj, listener)`
+    /// has nothing left for `'K`, a caller could never give it
+    let private withoutUnmentionedTypeParameters (members: FSharpMember list) =
+        let keep
+            (typeParameters: FSharpTypeParameter list)
+            (parameters: FSharpParameter list)
+            (returnType: FSharpType)
+            =
+            typeParameters
+            |> List.filter (
+                function
+                | FSharpTypeParameter.FSharpTypeParameter info ->
+                    fsharpTypeMentions info.Name returnType
+                    || parameters
+                       |> List.exists (fun parameter -> fsharpTypeMentions info.Name parameter.Type)
+                | FSharpTypeParameter.FSharpType _ -> true
+            )
+
+        members
+        |> List.map (
+            function
+            | FSharpMember.Method info ->
+                FSharpMember.Method
+                    { info with
+                        TypeParameters = keep info.TypeParameters info.Parameters info.Type
+                    }
+            | FSharpMember.StaticMember info ->
+                FSharpMember.StaticMember
+                    { info with
+                        TypeParameters = keep info.TypeParameters info.Parameters info.Type
+                    }
+            | fsharpMember -> fsharpMember
+        )
+
     let toFSharpMember (context: TransformContext) (members: GlueMember list) : FSharpMember list =
         members
         // The iterator information is stored in the Iterable<T> inheritance
@@ -2552,16 +2617,24 @@ module private TransformMembers =
                     |> FSharpMember.StaticMember
                     |> Some
                 else
+                    // `<E extends SVGElement | HTMLElement>` is sealed, `'E` is the union in the signature
+                    let typeParameters = transformTypeParameters context methodInfo.TypeParameters
+
                     {
                         Attributes = [ yield! xmlDocInfo.ObsoleteAttributes; yield! emitAttributes ]
                         Name = name
                         OriginalName = methodInfo.Name
                         Parameters =
                             parameters
-                            |> List.map (transformParameter context)
+                            |> List.map (
+                                transformParameter context
+                                >> TypeParameter.mapFsharpParameter typeParameters.SealedTypes
+                            )
                             |> requiredBeforeParamArray
-                        Type = transformType context methodInfo.Type
-                        TypeParameters = explicitTypeParameters context methodInfo.TypeParameters
+                        Type =
+                            transformType context methodInfo.Type
+                            |> TypeParameter.mapFSharpType typeParameters.SealedTypes
+                        TypeParameters = typeParameters.TypeParameters
                         IsOptional = methodInfo.IsOptional
                         IsStatic = methodInfo.IsStatic
                         Accessor = None
@@ -2735,16 +2808,23 @@ module private TransformMembers =
 
                 let name, context = sanitizeNameAndPushScope methodName context
 
+                let typeParameters = transformTypeParameters context methodSignature.TypeParameters
+
                 {
                     Attributes = [ yield! xmlDocInfo.ObsoleteAttributes; yield! emitAttributes ]
                     Name = name
                     OriginalName = methodSignature.Name
                     Parameters =
                         parameters
-                        |> List.map (transformParameter context)
+                        |> List.map (
+                            transformParameter context
+                            >> TypeParameter.mapFsharpParameter typeParameters.SealedTypes
+                        )
                         |> requiredBeforeParamArray
-                    Type = transformType context methodSignature.Type
-                    TypeParameters = explicitTypeParameters context methodSignature.TypeParameters
+                    Type =
+                        transformType context methodSignature.Type
+                        |> TypeParameter.mapFSharpType typeParameters.SealedTypes
+                    TypeParameters = typeParameters.TypeParameters
                     IsOptional = false
                     IsStatic = false
                     Accessor = None
@@ -2780,6 +2860,7 @@ module private TransformMembers =
         )
         |> AnyFunctionOverloads.expandMembers
         |> Merge.distinctBySignature
+        |> withoutUnmentionedTypeParameters
 
     let forceReadonly (members: FSharpMember list) =
         members
@@ -5467,14 +5548,55 @@ module private TypeParameter =
             }
             |> FSharpType.Function
 
+        // A delegate is referred to through its alias, with the type parameters it takes
+        | FSharpType.TypeAlias alias ->
+            { alias with
+                TypeParameters =
+                    alias.TypeParameters
+                    |> List.map (
+                        function
+                        | FSharpTypeParameter.FSharpTypeParameter info as typeParameter ->
+                            match
+                                seadledTypes
+                                |> List.tryFind (fun mapperInfo ->
+                                    mapperInfo.TypeParameterName = info.Name
+                                )
+                            with
+                            | Some mapperInfo ->
+                                FSharpTypeParameter.FSharpType mapperInfo.FSharpType
+                            | None -> typeParameter
+                        | FSharpTypeParameter.FSharpType typ ->
+                            FSharpTypeParameter.FSharpType(mapFSharpType seadledTypes typ)
+                    )
+            }
+            |> FSharpType.TypeAlias
+
+        // A type argument that is a type parameter is a `Mapped` named `'E`
+        | FSharpType.Mapped mapped ->
+            match
+                seadledTypes
+                |> List.tryFind (fun mapperInfo -> "'" + mapperInfo.TypeParameterName = mapped.Name)
+            with
+            | Some mapperInfo when mapped.TypeParameters.IsEmpty -> mapperInfo.FSharpType
+            | _ ->
+                { mapped with
+                    TypeParameters =
+                        mapped.TypeParameters
+                        |> List.map (
+                            function
+                            | FSharpTypeParameter.FSharpType typ ->
+                                FSharpTypeParameter.FSharpType(mapFSharpType seadledTypes typ)
+                            | typeParameter -> typeParameter
+                        )
+                }
+                |> FSharpType.Mapped
+
         | FSharpType.Enum _
         | FSharpType.SingleErasedCaseUnion _
         | FSharpType.Module _
         | FSharpType.Interface _
         | FSharpType.Unsupported _
-        | FSharpType.Mapped _
         | FSharpType.Primitive _
-        | FSharpType.TypeAlias _
         | FSharpType.Discard
         | FSharpType.ThisType _
         | FSharpType.Class _
