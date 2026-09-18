@@ -5,12 +5,27 @@ open Nacara.Core
 open Nacara.Plugins
 open Nacara.Theme
 
+/// The packages published from this repository, read from their Release builds
+let apiOptions =
+    { FSharpApi.defaults with
+        Root = "reference"
+        Title = "API reference"
+        Sources =
+            [
+                FSharpApiSource.create
+                    "../src/Glutinum.Types/bin/Release/netstandard2.1/Glutinum.Types.dll"
+            // The runtime bindings are not published as a reference yet: `Glutinum.Node` has 72
+            // pairs of declarations whose routes collide (`Blob` and the `blob` module), and
+            // reading `Glutinum.Web` takes the plugin more than twenty minutes
+            ]
+    }
+
 let theme =
     Theme.defaults
     |> Theme.navbar
         [
             NavbarSection("Guide", "guide", "guide/getting-started.md")
-            NavbarSection("Reference", "reference", "reference/command-line.md")
+            NavbarSection("Reference", "reference", "/reference/")
             NavbarSection("Bindings", "bindings", "bindings/index.md")
             NavbarSection("Try it", "app", "app.md")
         ]
@@ -37,16 +52,12 @@ let theme =
                     Menu.page "guide/limitations.md"
                     Menu.page "guide/extending.md"
                 ]
-        ]
-    |> Theme.menu
-        "reference"
-        [
             Menu.section
                 "Reference"
                 [
-                    Menu.page "reference/command-line.md"
-                    Menu.page "reference/mapping.md"
-                    Menu.page "reference/packages.md"
+                    Menu.page "guide/command-line.md"
+                    Menu.page "guide/mapping.md"
+                    Menu.page "guide/nuget-packages.md"
                 ]
         ]
     |> Theme.menu
@@ -75,6 +86,11 @@ let content =
             Collection.defaultRoute page
     )
 
+let reference =
+    FSharpApi.collection "reference" DocFrontMatter.decoder apiOptions
+    |> Collection.title _.Title
+    |> Collection.layout (Theme.layout theme)
+
 let site =
     Site.create "Glutinum"
     |> Site.description
@@ -92,8 +108,10 @@ let site =
     |> Nuglify.minifyHtml
     |> Nuglify.minifyJs
     |> GitHubPages.register
+    |> FSharpApi.register apiOptions
     |> Theme.register theme
     |> Site.collection content
+    |> Site.collection reference
 
 [<EntryPoint>]
 let main argv = Nacara.run site argv

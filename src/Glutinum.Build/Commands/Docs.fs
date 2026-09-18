@@ -78,6 +78,18 @@ let private watchWebApp () =
         |> Async.AwaitTask
     ]
 
+/// The API reference reads the Release assemblies of the packages published from here
+let private buildPackages () =
+    for project in [ "src/Glutinum.Types/Glutinum.Types.fsproj" ] do
+        Command.Run(
+            "dotnet",
+            CmdLine.empty
+            |> CmdLine.appendRaw "build"
+            |> CmdLine.appendRaw project
+            |> CmdLine.appendPrefix "-c" "Release"
+            |> CmdLine.toString
+        )
+
 let private site (command: string) =
     Command.RunAsync(
         "dotnet",
@@ -94,6 +106,8 @@ type DocsCommand() =
     inherit Command<DocsSettings>()
 
     override _.Execute(context, settings) =
+        buildPackages ()
+
         if settings.IsWatch then
             watchWebApp () @ [ site "watch" ]
             |> Async.Parallel

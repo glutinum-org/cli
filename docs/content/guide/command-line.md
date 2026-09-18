@@ -1,6 +1,6 @@
 ---
 title: Command line
-order: 1
+order: 8
 ---
 
 The generator is the npm package `@glutinum/cli`. Run it with `npx`, or install it and run `glue`.

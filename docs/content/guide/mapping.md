@@ -1,6 +1,6 @@
 ---
 title: TypeScript to F#
-order: 2
+order: 9
 toc:
   to: 3
 ---

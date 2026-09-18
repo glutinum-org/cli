@@ -2,11 +2,20 @@
   "version": 2,
   "dependencies": {
     "net10.0": {
+      "Fable.Core": {
+        "type": "Direct",
+        "requested": "[5.2.0, )",
+        "resolved": "5.2.0",
+        "contentHash": "3+HVoyYMjPGeKJEhMzRti0coDS6AkLVOWXmGwSvqokeTuwdZLyiKMoNgQrE6ZeJ0cSy9qHBB4VBpw5RAfb6zmQ==",
+        "dependencies": {
+          "FSharp.Core": "4.7.2"
+        }
+      },
       "FSharp.Core": {
         "type": "Direct",
-        "requested": "[10.1.301, )",
-        "resolved": "10.1.301",
-        "contentHash": "excLf2zM/qUB3WhRUfI0xvOOaPwcRAEdYT/BXe9eiTKySnWVuIKMQTf5+6ETy5nsb1dpLp1s2j2yAM/XcRgFMg=="
+        "requested": "[10.1.400, )",
+        "resolved": "10.1.400",
+        "contentHash": "H9wlZ/tWgNp+Q4WQ5aUSi3XOBXrL6z+UkR0PNeyDFyoZR3c3PbtA21B9FqlthrhEwQ6f5AtQV0JLhBBDqjjscw=="
       },
       "Nacara.Core": {
         "type": "Direct",
@@ -50,6 +59,17 @@
           "FSharp.Core": "10.1.300",
           "FsToolkit.ErrorHandling": "5.2.0",
           "Nacara.Core": "2.0.0-beta.2"
+        }
+      },
+      "Nacara.Plugin.FSharpApi": {
+        "type": "Direct",
+        "requested": "[1.0.0-beta.3, )",
+        "resolved": "1.0.0-beta.3",
+        "contentHash": "lOaYfP65mAARjWNwgD1oUcJm2H77XF7aLlYawev3fyjLmweAS+UHVfpPBjg9bJ6QkZ/lyWYkSrK5gBEJ6RusZg==",
+        "dependencies": {
+          "FSharp.Compiler.Service": "43.12.400",
+          "FSharp.Core": "10.1.400",
+          "Nacara.Core": "2.0.0-beta.5"
         }
       },
       "Nacara.Plugin.Highlight.TreeSitter": {
@@ -109,6 +129,14 @@
         "contentHash": "962ikmdW9oKmB4p6BJLM75D5SQJHFB+DmIUeKmHwoP1uZaXbvsXbQKQFi5slzGGUvOP8L3TYhRex6QVJri0Zjw==",
         "dependencies": {
           "Fsharp.Core": "4.7.0"
+        }
+      },
+      "FSharp.Compiler.Service": {
+        "type": "Transitive",
+        "resolved": "43.12.400",
+        "contentHash": "Ydo8HRHMewaGL6N1jFwFunI6aqyrv0Ndy1en3tT2jq3rGEDX53H2xqihD6mvbuIODB9TtLZi5hB2BZa2nVDnXg==",
+        "dependencies": {
+          "FSharp.Core": "[10.1.400]"
         }
       },
       "Markdig": {

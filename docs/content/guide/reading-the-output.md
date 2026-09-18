@@ -3,7 +3,7 @@ title: Reading the output
 order: 5
 ---
 
-A generated file is a `module rec` holding one type per TypeScript declaration. This page shows the shapes you will meet. The [mapping reference](../reference/mapping.md) lists every construct.
+A generated file is a `module rec` holding one type per TypeScript declaration. This page shows the shapes you will meet. The [mapping reference](mapping.md) lists every construct.
 
 ## Functions and constructors
 

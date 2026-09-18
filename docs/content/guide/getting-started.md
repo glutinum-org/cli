@@ -54,4 +54,4 @@ The [web application](try-it-online.md) runs the same generator in the browser. 
 
 - [Generate a whole package](packages.md), with the packages it depends on
 - [Generate a single file](single-file.md), for a declaration you wrote yourself
-- [Command line reference](../reference/command-line.md)
+- [Command line reference](command-line.md)

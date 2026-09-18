@@ -17,6 +17,11 @@
         <PackageReference Include="Nacara.Plugin.Assets.LightningCss" />
         <PackageReference Include="Nacara.Plugin.Assets.Nuglify" />
         <PackageReference Include="Nacara.Plugin.Deploy.GitHubPages" />
+        <PackageReference Include="Nacara.Plugin.FSharpApi" />
+        <!-- The API reference reads bindings built against Fable.Core, the plugin finds it beside the site -->
+        <PackageReference Include="Fable.Core" />
+        <!-- The API plugin reads assemblies with the F# compiler, which pins FSharp.Core -->
+        <PackageReference Update="FSharp.Core" VersionOverride="10.1.400" />
         <PackageReference Include="Nacara.Theme.Default" />
     </ItemGroup>
 </Project>
