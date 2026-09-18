@@ -54,6 +54,10 @@ let readClassDeclaration
             Members = members
             TypeParameters = reader.ReadTypeParameters classDeclaration.typeParameters
             HeritageClauses = readHeritageClauses reader classDeclaration.heritageClauses
+            IsExported =
+                isDefaultExport
+                || Utils.isExportedDeclaration classDeclaration (Set.singleton (name.getText ()))
+                || Utils.isExportAssignmentTarget classDeclaration (Set.singleton (name.getText ()))
         }
         |> GlueType.ClassDeclaration
 

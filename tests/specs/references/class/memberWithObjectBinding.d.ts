@@ -6,6 +6,6 @@ export interface Context {
     indentationLevel: number;
 }
 
-declare class Signature {
+export declare class Signature {
     toText({ indentationLevel }: Context, data : string, {prefix }?: LogOptions): string;
 }

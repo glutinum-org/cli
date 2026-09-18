@@ -244,6 +244,7 @@ let private readTypeUsingFlags (reader: ITypeScriptReader) (typ: Ts.Type) =
                     Members = []
                     TypeParameters = []
                     HeritageClauses = []
+                    IsExported = true
                 }
                 |> GlueType.ClassDeclaration
 

@@ -271,6 +271,8 @@ type GlueClassDeclaration =
         Members: GlueMember list
         TypeParameters: GlueTypeParameter list
         HeritageClauses: GlueType list
+        /// `declare class X` without `export` in a module file is a type only
+        IsExported: bool
     }
 
 type GlueTypeReference =

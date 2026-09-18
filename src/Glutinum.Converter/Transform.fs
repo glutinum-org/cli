@@ -1726,6 +1726,11 @@ let private transformExports
 
                     applyHelper newTypes (Set.ofList [ name; yield! Option.toList runtimeName ])
 
+                | GlueType.ClassDeclaration info when
+                    not info.IsExported && not (defaultExportedDeclarations.Contains info.Name)
+                    ->
+                    applyHelper [] Set.empty
+
                 | GlueType.ClassDeclaration info
                 | GlueType.ExportDefault(GlueType.ClassDeclaration info) ->
                     // TODO: Handle constructor overloads

@@ -49,7 +49,20 @@ let readNode (reader: ITypeScriptReader) (node: Ts.Node) : GlueType =
         |> Option.bind (fun target ->
             match target.declarations with
             | Some declarations when declarations.Count > 0 ->
-                Some(reader.ReadNode declarations.[0])
+                let declaration = reader.ReadNode declarations.[0]
+
+                // `export { wm as WebMidi }` is imported as `WebMidi`
+                match exportSpecifier.propertyName with
+                | Some _ ->
+                    ({
+                        Name = exportSpecifier.name.text
+                        Declaration = declaration
+                        ModulePath = []
+                    }
+                    : GlueReExport)
+                    |> GlueType.ReExport
+                    |> Some
+                | None -> Some declaration
             | _ -> None
         )
         |> Option.defaultValue GlueType.Discard

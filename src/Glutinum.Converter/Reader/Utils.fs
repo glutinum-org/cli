@@ -690,6 +690,98 @@ let isPromotedAmbientModule (declaration: Ts.ModuleDeclaration) =
         | None -> false
     )
 
+/// Whether a top-level declaration of a module file is reachable from the outside: through
+/// `export` or an `export { x }` list. Declarations of a script and of an ambient namespace
+/// always are, `export default x` and `export = x` are read by their own statement.
+let isExportedDeclaration (statement: Ts.Node) (names: Collections.Set<string>) =
+    let hasExportModifier =
+        let modifiers: ResizeArray<Ts.Node> option = statement?modifiers
+
+        match modifiers with
+        | Some modifiers ->
+            modifiers
+            |> Seq.exists (fun modifier -> modifier.kind = Ts.SyntaxKind.ExportKeyword)
+        | None -> false
+
+    let isInsideNamespace = statement.parent?kind = Ts.SyntaxKind.ModuleBlock
+
+    let isGlobal =
+        statement.parent?kind = Ts.SyntaxKind.SourceFile
+        && not (ts.isExternalModule (statement.getSourceFile ()))
+
+    let isInExportList =
+        statement.parent?kind = Ts.SyntaxKind.SourceFile
+        && (statement.getSourceFile ()).statements
+           |> Seq.exists (fun other ->
+               match other.kind with
+               | Ts.SyntaxKind.ExportDeclaration ->
+                   let exportDeclaration = other :?> Ts.ExportDeclaration
+
+                   exportDeclaration.moduleSpecifier.IsNone
+                   && (
+                       match exportDeclaration.exportClause with
+                       | Some exportClause when exportClause?kind = Ts.SyntaxKind.NamedExports ->
+                           let namedExports: Ts.NamedExports = !!exportClause
+
+                           namedExports.elements
+                           |> Seq.exists (fun specifier ->
+                               let local: Ts.Node =
+                                   match specifier.propertyName with
+                                   | Some propertyName -> !!propertyName
+                                   | None -> !!specifier.name
+
+                               Microsoft.FSharp.Collections.Set.contains
+                                   (identifierText local)
+                                   names
+                           )
+                       | _ -> false
+                   )
+               | _ -> false
+           )
+
+    hasExportModifier || isInsideNamespace || isGlobal || isInExportList
+
+/// `declare class Dispatcher {}; export default Dispatcher` or `export = Dispatcher`
+let isExportAssignmentTarget (statement: Ts.Node) (names: Collections.Set<string>) =
+    statement.parent?kind = Ts.SyntaxKind.SourceFile
+    && (statement.getSourceFile ()).statements
+       |> Seq.exists (fun other ->
+           other.kind = Ts.SyntaxKind.ExportAssignment
+           && (let expression: Ts.Node = (other :?> Ts.ExportAssignment).expression
+
+               expression.kind = Ts.SyntaxKind.Identifier
+               && Microsoft.FSharp.Collections.Set.contains (identifierText expression) names)
+       )
+
+/// `declare const wm: WebMidi; export { wm as WebMidi }`: the name the declaration is exported under
+let exportedAlias (statement: Ts.Node) (localName: string) : string option =
+    if statement.parent?kind <> Ts.SyntaxKind.SourceFile then
+        None
+    else
+        (statement.getSourceFile ()).statements
+        |> Seq.tryPick (fun other ->
+            if other.kind <> Ts.SyntaxKind.ExportDeclaration then
+                None
+            else
+                let exportDeclaration = other :?> Ts.ExportDeclaration
+
+                match exportDeclaration.exportClause with
+                | Some exportClause when
+                    exportDeclaration.moduleSpecifier.IsNone
+                    && exportClause?kind = Ts.SyntaxKind.NamedExports
+                    ->
+                    let namedExports: Ts.NamedExports = !!exportClause
+
+                    namedExports.elements
+                    |> Seq.tryPick (fun specifier ->
+                        match specifier.propertyName with
+                        | Some propertyName when identifierText !!propertyName = localName ->
+                            Some specifier.name.text
+                        | _ -> None
+                    )
+                | _ -> None
+        )
+
 let isGlobalAugmentation (declaration: Ts.ModuleDeclaration) =
     int declaration.flags &&& int Ts.NodeFlags.GlobalAugmentation <> 0
 

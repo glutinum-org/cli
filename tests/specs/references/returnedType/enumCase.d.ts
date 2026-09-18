@@ -1,4 +1,4 @@
-declare class test {
+export declare class test {
     constructor(scope: TaskScope.Global)
 }
 

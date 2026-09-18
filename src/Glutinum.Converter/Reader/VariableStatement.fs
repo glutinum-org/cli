@@ -8,63 +8,19 @@ open Glutinum.Converter.Reader.Utils
 
 let readVariableStatement (reader: ITypeScriptReader) (statement: Ts.VariableStatement) : GlueType =
 
-    let hasExportModifier =
-        statement.modifiers
-        |> Option.map (fun modifiers ->
-            modifiers
-            |> Seq.exists (fun modifier -> modifier?kind = Ts.SyntaxKind.ExportKeyword)
+    let names =
+        statement.declarationList.declarations
+        |> Seq.choose (fun declaration ->
+            let name: Ts.Node = !!declaration.name
+
+            if name.kind = Ts.SyntaxKind.Identifier then
+                Some(identifierText name)
+            else
+                None
         )
-        |> Option.defaultValue false
+        |> Set.ofSeq
 
-    // Declarations of an ambient namespace are exported without the keyword
-    let isInsideNamespace = statement.parent?kind = Ts.SyntaxKind.ModuleBlock
-
-    // Top-level declarations of a script are globals
-    let isGlobal =
-        statement.parent?kind = Ts.SyntaxKind.SourceFile
-        && not (ts.isExternalModule (statement.getSourceFile ()))
-
-    // `declare const basicSetup: Extension;` then `export { basicSetup };`
-    let isInExportList =
-        let names =
-            statement.declarationList.declarations
-            |> Seq.choose (fun declaration ->
-                let name: Ts.Node = !!declaration.name
-
-                if name.kind = Ts.SyntaxKind.Identifier then
-                    Some(identifierText name)
-                else
-                    None
-            )
-            |> Set.ofSeq
-
-        statement.parent?kind = Ts.SyntaxKind.SourceFile
-        && (statement.getSourceFile ()).statements
-           |> Seq.exists (fun other ->
-               other.kind = Ts.SyntaxKind.ExportDeclaration
-               && (let exportDeclaration = other :?> Ts.ExportDeclaration
-
-                   exportDeclaration.moduleSpecifier.IsNone
-                   && (
-                       match exportDeclaration.exportClause with
-                       | Some exportClause when exportClause?kind = Ts.SyntaxKind.NamedExports ->
-                           let namedExports: Ts.NamedExports = !!exportClause
-
-                           namedExports.elements
-                           |> Seq.exists (fun specifier ->
-                               let local: Ts.Node =
-                                   match specifier.propertyName with
-                                   | Some propertyName -> !!propertyName
-                                   | None -> !!specifier.name
-
-                               names.Contains(identifierText local)
-                           )
-                       | _ -> false
-                   ))
-           )
-
-    let isExported =
-        hasExportModifier || isInsideNamespace || isGlobal || isInExportList
+    let isExported = isExportedDeclaration statement names
 
     if isExported then
         match statement.declarationList.declarations |> Seq.toList with
@@ -100,7 +56,7 @@ let readVariableStatement (reader: ITypeScriptReader) (statement: Ts.VariableSta
 
             ({
                 Documentation = reader.ReadDocumentationFromNode declaration
-                Name = name
+                Name = exportedAlias statement name |> Option.defaultValue name
                 Type = typ
             }
             : GlueVariable)
