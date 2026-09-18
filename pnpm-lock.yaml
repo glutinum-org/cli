@@ -87,6 +87,9 @@ importers:
       '@types/web':
         specifier: 0.0.356
         version: 0.0.356
+      typescript:
+        specifier: 5.3.2
+        version: 5.3.2
 
 packages:
 
@@ -1251,6 +1254,11 @@ packages:
   type-detect@4.0.8:
     resolution: {integrity: sha512-0fr/mIH1dlO+x7TlcMy+bIDqKPsw/70tVyeHW787goQjhmqaZe10uwLujubK9q9Lg6Fiho1KUKDYz0Z7k7g5/g==}
     engines: {node: '>=4'}
+
+  typescript@5.3.2:
+    resolution: {integrity: sha512-6l+RyNy7oAHDfxC4FzSJcz9vnjTKxrLpDG5M2Vu4SHRVNg6xzqZp6LYSR9zjqQTu8DU/f5xwxUdADOkbrIX2gQ==}
+    engines: {node: '>=14.17'}
+    hasBin: true
 
   ufo@1.4.0:
     resolution: {integrity: sha512-Hhy+BhRBleFjpJ2vchUNN40qgkh0366FWJGqVLYBHev0vpHTrXSA0ryT+74UiW6KWsldNurQMKGqCm1M2zBciQ==}
@@ -2468,6 +2476,8 @@ snapshots:
       escape-string-regexp: 1.0.5
 
   type-detect@4.0.8: {}
+
+  typescript@5.3.2: {}
 
   ufo@1.4.0: {}
 
