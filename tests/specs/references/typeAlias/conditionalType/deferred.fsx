@@ -25,7 +25,10 @@ type Listener1<'K, 'T> =
 [<AllowNullLiteral>]
 [<Interface>]
 type EventEmitter<'T> =
-    abstract member on: eventName: obj * listener: obj -> EventEmitter<'T>
+    abstract member on<'A>: eventName: obj * listener: ('A -> unit) -> EventEmitter<'T>
+    abstract member on<'A, 'B>: eventName: obj * listener: ('A -> 'B -> unit) -> EventEmitter<'T>
+    abstract member on<'A, 'B, 'C>: eventName: obj * listener: ('A -> 'B -> 'C -> unit) -> EventEmitter<'T>
+    abstract member on: eventName: obj * listener: System.Delegate -> EventEmitter<'T>
 
 (***)
 #r "nuget: Fable.Core"

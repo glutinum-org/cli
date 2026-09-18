@@ -341,16 +341,37 @@ let private withParameterlessOverloads (members: FSharpMember list) : FSharpMemb
     if ambiguous.IsEmpty then
         members
     else
-        let added = HashSet<string * bool>()
+        // `f<'P>(?x): T<'P>` and `f(?x): T<obj>`: `f ()` copies the non-generic one
+        let preferred =
+            members
+            |> List.indexed
+            |> List.choose (fun (index, fsharpMember) ->
+                match fsharpMember with
+                | FSharpMember.Method info when
+                    ambiguous.Contains(info.Name, info.IsStatic) && isAllOptional info.Parameters
+                    ->
+                    Some((info.Name, info.IsStatic), (info.TypeParameters.IsEmpty, index))
+                | FSharpMember.StaticMember info when
+                    ambiguous.Contains(info.Name, true) && isAllOptional info.Parameters
+                    ->
+                    Some((info.Name, true), (info.TypeParameters.IsEmpty, index))
+                | _ -> None
+            )
+            |> List.groupBy fst
+            |> List.map (fun (_, group) ->
+                group
+                |> List.map snd
+                |> List.sortBy (fun (isNonGeneric, index) -> not isNonGeneric, index)
+                |> List.head
+                |> snd
+            )
+            |> set
 
         members
-        |> List.collect (fun fsharpMember ->
+        |> List.indexed
+        |> List.collect (fun (index, fsharpMember) ->
             match fsharpMember with
-            | FSharpMember.Method info when
-                ambiguous.Contains(info.Name, info.IsStatic)
-                && isAllOptional info.Parameters
-                && added.Add(info.Name, info.IsStatic)
-                ->
+            | FSharpMember.Method info when preferred.Contains index ->
                 [
                     fsharpMember
                     FSharpMember.Method
@@ -359,11 +380,7 @@ let private withParameterlessOverloads (members: FSharpMember list) : FSharpMemb
                             TypeParameters = []
                         }
                 ]
-            | FSharpMember.StaticMember info when
-                ambiguous.Contains(info.Name, true)
-                && isAllOptional info.Parameters
-                && added.Add(info.Name, true)
-                ->
+            | FSharpMember.StaticMember info when preferred.Contains index ->
                 [
                     fsharpMember
                     FSharpMember.StaticMember

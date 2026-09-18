@@ -6293,6 +6293,11 @@ module Web =
         [<Global("structuredClone")>]
         static member structuredClone<'T> (value: 'T, ?options: Web.StructuredSerializeOptions) : 'T = nativeOnly
         /// <summary>
+        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/structuredClone)
+        /// </summary>
+        [<Global("structuredClone")>]
+        static member structuredClone (value: obj, ?options: Web.StructuredSerializeOptions) : obj = nativeOnly
+        /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/sessionStorage)
         /// </summary>
         [<Global("sessionStorage")>]

@@ -44699,6 +44699,62 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// </returns>
             [<Import("tracingChannel", "diagnostics_channel")>]
             static member tracingChannel<'StoreType> (nameOrChannels: Node.diagnostics_channel.TracingChannelCollection<'StoreType, obj>) : Node.diagnostics_channel.TracingChannel<'StoreType, obj> = nativeOnly
+            /// <summary>
+            /// Creates a <c>TracingChannel</c> wrapper for the given <c>TracingChannel Channels</c>. If a name is given, the corresponding tracing
+            /// channels will be created in the form of <c>tracing:${name}:${eventType}</c> where <c>eventType</c> corresponds to the types of <c>TracingChannel Channels</c>.
+            ///
+            /// <code lang="js">
+            /// import diagnostics_channel from 'node:diagnostics_channel';
+            ///
+            /// const channelsByName = diagnostics_channel.tracingChannel('my-channel');
+            ///
+            /// // or...
+            ///
+            /// const channelsByCollection = diagnostics_channel.tracingChannel({
+            ///   start: diagnostics_channel.channel('tracing:my-channel:start'),
+            ///   end: diagnostics_channel.channel('tracing:my-channel:end'),
+            ///   asyncStart: diagnostics_channel.channel('tracing:my-channel:asyncStart'),
+            ///   asyncEnd: diagnostics_channel.channel('tracing:my-channel:asyncEnd'),
+            ///   error: diagnostics_channel.channel('tracing:my-channel:error'),
+            /// });
+            /// </code>
+            /// </summary>
+            /// <param name="nameOrChannels">
+            /// Channel name or object containing all the <c>TracingChannel Channels</c>
+            /// </param>
+            /// <returns>
+            /// Collection of channels to trace with
+            /// </returns>
+            [<Import("tracingChannel", "diagnostics_channel")>]
+            static member tracingChannel (nameOrChannels: string) : Node.diagnostics_channel.TracingChannel<obj, obj> = nativeOnly
+            /// <summary>
+            /// Creates a <c>TracingChannel</c> wrapper for the given <c>TracingChannel Channels</c>. If a name is given, the corresponding tracing
+            /// channels will be created in the form of <c>tracing:${name}:${eventType}</c> where <c>eventType</c> corresponds to the types of <c>TracingChannel Channels</c>.
+            ///
+            /// <code lang="js">
+            /// import diagnostics_channel from 'node:diagnostics_channel';
+            ///
+            /// const channelsByName = diagnostics_channel.tracingChannel('my-channel');
+            ///
+            /// // or...
+            ///
+            /// const channelsByCollection = diagnostics_channel.tracingChannel({
+            ///   start: diagnostics_channel.channel('tracing:my-channel:start'),
+            ///   end: diagnostics_channel.channel('tracing:my-channel:end'),
+            ///   asyncStart: diagnostics_channel.channel('tracing:my-channel:asyncStart'),
+            ///   asyncEnd: diagnostics_channel.channel('tracing:my-channel:asyncEnd'),
+            ///   error: diagnostics_channel.channel('tracing:my-channel:error'),
+            /// });
+            /// </code>
+            /// </summary>
+            /// <param name="nameOrChannels">
+            /// Channel name or object containing all the <c>TracingChannel Channels</c>
+            /// </param>
+            /// <returns>
+            /// Collection of channels to trace with
+            /// </returns>
+            [<Import("tracingChannel", "diagnostics_channel")>]
+            static member tracingChannel (nameOrChannels: Node.diagnostics_channel.TracingChannelCollection<obj, obj>) : Node.diagnostics_channel.TracingChannel<obj, obj> = nativeOnly
             [<Import("Channel", "diagnostics_channel"); EmitConstructor>]
             static member Channel<'StoreType, 'ContextType> (name: string) : Channel<'StoreType, 'ContextType> = nativeOnly
             [<Import("Channel", "diagnostics_channel"); EmitConstructor>]
@@ -54696,6 +54752,16 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </summary>
             [<Import("read", "fs")>]
             static member read<'TBuffer> (fd: float, options: Node.fs.ReadOptionsWithBuffer<'TBuffer>, callback: Exports.read.callback<'TBuffer>) : unit = nativeOnly
+            /// <summary>
+            /// Similar to the above <c>fs.read</c> function, this version takes an optional <c>options</c> object.
+            /// If not otherwise specified in an <c>options</c> object,
+            /// <c>buffer</c> defaults to <c>Buffer.alloc(16384)</c>,
+            /// <c>offset</c> defaults to <c>0</c>,
+            /// <c>length</c> defaults to <c>buffer.byteLength</c>, <c>- offset</c> as of Node 17.6.0
+            /// <c>position</c> defaults to <c>null</c>
+            /// </summary>
+            [<Import("read", "fs")>]
+            static member read (fd: float, options: Node.fs.ReadOptionsWithBuffer<Node.NonSharedBuffer>, callback: Exports.read.callback_1) : unit = nativeOnly
             [<Import("read", "fs")>]
             static member read<'TBuffer> (fd: float, buffer: 'TBuffer, options: Node.fs.ReadOptions, callback: Exports.read.callback<'TBuffer>) : unit = nativeOnly
             [<Import("read", "fs")>]
@@ -67124,6 +67190,8 @@ EventEmitter.defaultMaxListeners = $0"""
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__<'TBuffer>: fd: float * options: Node.fs.ReadOptionsWithBuffer<'TBuffer> -> JS.Promise<Exports.__promisify___13<'TBuffer>>
                 [<Emit("$0.__promisify__($1...)")>]
+                abstract member __promisify__: fd: float * options: Node.fs.ReadOptionsWithBuffer<Node.NonSharedBuffer> -> JS.Promise<Exports.__promisify___14>
+                [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__: fd: float -> JS.Promise<Exports.__promisify___14>
 
             module Exports =
@@ -74471,14 +74539,14 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If the file is not modified concurrently, the end-of-file is reached when the
             /// number of bytes read is zero.
             /// </summary>
-            abstract member read: unit -> JS.Promise<Node.fs_promises.FileReadResult<'T>>
+            abstract member read: ?options: Node.fs.ReadOptionsWithBuffer<Node.NonSharedBuffer> -> JS.Promise<Node.fs_promises.FileReadResult<Node.NonSharedBuffer>>
             /// <summary>
             /// Reads data from the file and stores that in the given buffer.
             ///
             /// If the file is not modified concurrently, the end-of-file is reached when the
             /// number of bytes read is zero.
             /// </summary>
-            abstract member read: ?options: Node.fs.ReadOptionsWithBuffer<Node.NonSharedBuffer> -> JS.Promise<Node.fs_promises.FileReadResult<Node.NonSharedBuffer>>
+            abstract member read: unit -> JS.Promise<Node.fs_promises.FileReadResult<Node.NonSharedBuffer>>
             /// <summary>
             /// Returns a byte-oriented <c>ReadableStream</c> that may be used to read the file's
             /// contents.
@@ -75416,8 +75484,88 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </summary>
             [<Import("createServer", "http")>]
             static member createServer<'Request, 'Response> (?requestListener: Node.http.RequestListener<'Request, 'Response>) : Node.http.Server<'Request, 'Response> = nativeOnly
+            /// <summary>
+            /// Returns a new instance of <see href="Server">Server</see>.
+            ///
+            /// The <c>requestListener</c> is a function which is automatically
+            /// added to the <c>'request'</c> event.
+            ///
+            /// <code lang="js">
+            /// import http from 'node:http';
+            ///
+            /// // Create a local server to receive data from
+            /// const server = http.createServer((req, res) => {
+            ///   res.writeHead(200, { 'Content-Type': 'application/json' });
+            ///   res.end(JSON.stringify({
+            ///     data: 'Hello World!',
+            ///   }));
+            /// });
+            ///
+            /// server.listen(8000);
+            /// </code>
+            ///
+            /// <code lang="js">
+            /// import http from 'node:http';
+            ///
+            /// // Create a local server to receive data from
+            /// const server = http.createServer();
+            ///
+            /// // Listen to the request event
+            /// server.on('request', (request, res) => {
+            ///   res.writeHead(200, { 'Content-Type': 'application/json' });
+            ///   res.end(JSON.stringify({
+            ///     data: 'Hello World!',
+            ///   }));
+            /// });
+            ///
+            /// server.listen(8000);
+            /// </code>
+            /// </summary>
+            [<Import("createServer", "http")>]
+            static member createServer (?requestListener: Node.http.RequestListener<Node.http.IncomingMessage, Node.http.ServerResponse<obj>>) : Node.http.Server<Node.http.IncomingMessage, Node.http.ServerResponse<obj>> = nativeOnly
+            /// <summary>
+            /// Returns a new instance of <see href="Server">Server</see>.
+            ///
+            /// The <c>requestListener</c> is a function which is automatically
+            /// added to the <c>'request'</c> event.
+            ///
+            /// <code lang="js">
+            /// import http from 'node:http';
+            ///
+            /// // Create a local server to receive data from
+            /// const server = http.createServer((req, res) => {
+            ///   res.writeHead(200, { 'Content-Type': 'application/json' });
+            ///   res.end(JSON.stringify({
+            ///     data: 'Hello World!',
+            ///   }));
+            /// });
+            ///
+            /// server.listen(8000);
+            /// </code>
+            ///
+            /// <code lang="js">
+            /// import http from 'node:http';
+            ///
+            /// // Create a local server to receive data from
+            /// const server = http.createServer();
+            ///
+            /// // Listen to the request event
+            /// server.on('request', (request, res) => {
+            ///   res.writeHead(200, { 'Content-Type': 'application/json' });
+            ///   res.end(JSON.stringify({
+            ///     data: 'Hello World!',
+            ///   }));
+            /// });
+            ///
+            /// server.listen(8000);
+            /// </code>
+            /// </summary>
+            [<Import("createServer", "http")>]
+            static member createServer () : Node.http.Server<Node.http.IncomingMessage, Node.http.ServerResponse<obj>> = nativeOnly
             [<Import("createServer", "http")>]
             static member createServer<'Request, 'Response> (options: Node.http.ServerOptions<'Request, 'Response>, ?requestListener: Node.http.RequestListener<'Request, 'Response>) : Node.http.Server<'Request, 'Response> = nativeOnly
+            [<Import("createServer", "http")>]
+            static member createServer (options: Node.http.ServerOptions<Node.http.IncomingMessage, Node.http.ServerResponse<obj>>, ?requestListener: Node.http.RequestListener<Node.http.IncomingMessage, Node.http.ServerResponse<obj>>) : Node.http.Server<Node.http.IncomingMessage, Node.http.ServerResponse<obj>> = nativeOnly
             /// <summary>
             /// <c>options</c> in <c>socket.connect()</c> are also supported.
             ///
@@ -82235,6 +82383,8 @@ EventEmitter.defaultMaxListeners = $0"""
             static member createServer (?onRequestHandler: Exports.createServer.onRequestHandler) : Node.http2.Http2Server = nativeOnly
             [<Import("createServer", "http2")>]
             static member createServer<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response> (options: Node.http2.ServerOptions<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>, ?onRequestHandler: Exports.createServer.onRequestHandler_1) : Node.http2.Http2Server<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response> = nativeOnly
+            [<Import("createServer", "http2")>]
+            static member createServer (options: Node.http2.ServerOptions<Node.http.IncomingMessage, Node.http.ServerResponse<obj>, Node.http2.Http2ServerRequest, Node.http2.Http2ServerResponse<obj>>, ?onRequestHandler: Exports.createServer.onRequestHandler_1) : Node.http2.Http2Server<Node.http.IncomingMessage, Node.http.ServerResponse<obj>, Node.http2.Http2ServerRequest, Node.http2.Http2ServerResponse<obj>> = nativeOnly
             /// <summary>
             /// Returns a <c>tls.Server</c> instance that creates and manages <c>Http2Session</c> instances.
             ///
@@ -82268,6 +82418,8 @@ EventEmitter.defaultMaxListeners = $0"""
             static member createSecureServer (?onRequestHandler: Exports.createSecureServer.onRequestHandler) : Node.http2.Http2SecureServer = nativeOnly
             [<Import("createSecureServer", "http2")>]
             static member createSecureServer<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response> (options: Node.http2.SecureServerOptions<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>, ?onRequestHandler: Exports.createSecureServer.onRequestHandler_1) : Node.http2.Http2SecureServer<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response> = nativeOnly
+            [<Import("createSecureServer", "http2")>]
+            static member createSecureServer (options: Node.http2.SecureServerOptions<Node.http.IncomingMessage, Node.http.ServerResponse<obj>, Node.http2.Http2ServerRequest, Node.http2.Http2ServerResponse<obj>>, ?onRequestHandler: Exports.createSecureServer.onRequestHandler_1) : Node.http2.Http2SecureServer<Node.http.IncomingMessage, Node.http.ServerResponse<obj>, Node.http2.Http2ServerRequest, Node.http2.Http2ServerResponse<obj>> = nativeOnly
             /// <summary>
             /// Returns a <c>ClientHttp2Session</c> instance.
             ///
@@ -82333,6 +82485,17 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("performServerHandshake", "http2")>]
             static member performServerHandshake<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response> (socket: Node.stream.Stream_.Duplex, ?options: Node.http2.ServerOptions<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>) : Node.http2.ServerHttp2Session<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response> = nativeOnly
+            /// <summary>
+            /// Create an HTTP/2 server session from an existing socket.
+            /// </summary>
+            /// <param name="socket">
+            /// A Duplex Stream
+            /// </param>
+            /// <param name="options">
+            /// Any <c><see href="createServer">createServer</see></c> options can be provided.
+            /// </param>
+            [<Import("performServerHandshake", "http2")>]
+            static member performServerHandshake (socket: Node.stream.Stream_.Duplex, ?options: Node.http2.ServerOptions<Node.http.IncomingMessage, Node.http.ServerResponse<obj>, Node.http2.Http2ServerRequest, Node.http2.Http2ServerResponse<obj>>) : Node.http2.ServerHttp2Session<Node.http.IncomingMessage, Node.http.ServerResponse<obj>, Node.http2.Http2ServerRequest, Node.http2.Http2ServerResponse<obj>> = nativeOnly
             [<Import("Http2ServerRequest", "http2"); EmitConstructor>]
             static member Http2ServerRequest (stream: Node.http2.ServerHttp2Stream, headers: Node.http2.IncomingHttpHeaders, options: Node.stream.Stream_.ReadableOptions, rawHeaders: ResizeArray<string>) : Http2ServerRequest = nativeOnly
             [<Import("Http2ServerResponse", "http2"); EmitConstructor>]
@@ -103510,8 +103673,94 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("createServer", "https")>]
             static member createServer<'Request, 'Response> (?requestListener: Node.http.RequestListener<'Request, 'Response>) : Node.https.Server<'Request, 'Response> = nativeOnly
+            /// <summary>
+            /// <code lang="js">
+            /// // curl -k https://localhost:8000/
+            /// import https from 'node:https';
+            /// import fs from 'node:fs';
+            ///
+            /// const options = {
+            ///   key: fs.readFileSync('test/fixtures/keys/agent2-key.pem'),
+            ///   cert: fs.readFileSync('test/fixtures/keys/agent2-cert.pem'),
+            /// };
+            ///
+            /// https.createServer(options, (req, res) => {
+            ///   res.writeHead(200);
+            ///   res.end('hello world\n');
+            /// }).listen(8000);
+            /// </code>
+            ///
+            /// Or
+            ///
+            /// <code lang="js">
+            /// import https from 'node:https';
+            /// import fs from 'node:fs';
+            ///
+            /// const options = {
+            ///   pfx: fs.readFileSync('test/fixtures/test_cert.pfx'),
+            ///   passphrase: 'sample',
+            /// };
+            ///
+            /// https.createServer(options, (req, res) => {
+            ///   res.writeHead(200);
+            ///   res.end('hello world\n');
+            /// }).listen(8000);
+            /// </code>
+            /// </summary>
+            /// <param name="options">
+            /// Accepts <c>options</c> from <c>createServer</c>, <c>createSecureContext</c> and <c>createServer</c>.
+            /// </param>
+            /// <param name="requestListener">
+            /// A listener to be added to the <c>'request'</c> event.
+            /// </param>
+            [<Import("createServer", "https")>]
+            static member createServer (?requestListener: Node.http.RequestListener<Node.http.IncomingMessage, Node.http.ServerResponse<obj>>) : Node.https.Server<Node.http.IncomingMessage, Node.http.ServerResponse<obj>> = nativeOnly
+            /// <summary>
+            /// <code lang="js">
+            /// // curl -k https://localhost:8000/
+            /// import https from 'node:https';
+            /// import fs from 'node:fs';
+            ///
+            /// const options = {
+            ///   key: fs.readFileSync('test/fixtures/keys/agent2-key.pem'),
+            ///   cert: fs.readFileSync('test/fixtures/keys/agent2-cert.pem'),
+            /// };
+            ///
+            /// https.createServer(options, (req, res) => {
+            ///   res.writeHead(200);
+            ///   res.end('hello world\n');
+            /// }).listen(8000);
+            /// </code>
+            ///
+            /// Or
+            ///
+            /// <code lang="js">
+            /// import https from 'node:https';
+            /// import fs from 'node:fs';
+            ///
+            /// const options = {
+            ///   pfx: fs.readFileSync('test/fixtures/test_cert.pfx'),
+            ///   passphrase: 'sample',
+            /// };
+            ///
+            /// https.createServer(options, (req, res) => {
+            ///   res.writeHead(200);
+            ///   res.end('hello world\n');
+            /// }).listen(8000);
+            /// </code>
+            /// </summary>
+            /// <param name="options">
+            /// Accepts <c>options</c> from <c>createServer</c>, <c>createSecureContext</c> and <c>createServer</c>.
+            /// </param>
+            /// <param name="requestListener">
+            /// A listener to be added to the <c>'request'</c> event.
+            /// </param>
+            [<Import("createServer", "https")>]
+            static member createServer () : Node.https.Server<Node.http.IncomingMessage, Node.http.ServerResponse<obj>> = nativeOnly
             [<Import("createServer", "https")>]
             static member createServer<'Request, 'Response> (options: Node.https.ServerOptions<'Request, 'Response>, ?requestListener: Node.http.RequestListener<'Request, 'Response>) : Node.https.Server<'Request, 'Response> = nativeOnly
+            [<Import("createServer", "https")>]
+            static member createServer (options: Node.https.ServerOptions<Node.http.IncomingMessage, Node.http.ServerResponse<obj>>, ?requestListener: Node.http.RequestListener<Node.http.IncomingMessage, Node.http.ServerResponse<obj>>) : Node.https.Server<Node.http.IncomingMessage, Node.http.ServerResponse<obj>> = nativeOnly
             /// <summary>
             /// Makes a request to a secure web server.
             ///
@@ -110575,10 +110824,128 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// </param>
                 [<Emit("$0.register($1...)")>]
                 abstract member register<'Data>: specifier: Node.url.URL * parentURL: Node.url.URL * ?options: Node.``module``.Module_.RegisterOptions<'Data> -> unit
+                /// <summary>
+                /// Register a module that exports hooks that customize Node.js module
+                /// resolution and loading behavior. See
+                /// [Customization hooks](https://nodejs.org/docs/latest-v22.x/api/module.html#customization-hooks).
+                ///
+                /// This feature requires <c>--allow-worker</c> if used with the
+                /// [Permission Model](https://nodejs.org/docs/latest-v22.x/api/permissions.html#permission-model).
+                /// </summary>
+                /// <param name="specifier">
+                /// Customization hooks to be registered; this should be
+                /// the same string that would be passed to <c>import()</c>, except that if it is
+                /// relative, it is resolved relative to <c>parentURL</c>.
+                /// </param>
+                /// <param name="parentURL">
+                /// f you want to resolve <c>specifier</c> relative to a base
+                /// URL, such as <c>import.meta.url</c>, you can pass that URL here.
+                /// </param>
+                [<Emit("$0.register($1...)")>]
+                abstract member register: specifier: string -> unit
+                /// <summary>
+                /// Register a module that exports hooks that customize Node.js module
+                /// resolution and loading behavior. See
+                /// [Customization hooks](https://nodejs.org/docs/latest-v22.x/api/module.html#customization-hooks).
+                ///
+                /// This feature requires <c>--allow-worker</c> if used with the
+                /// [Permission Model](https://nodejs.org/docs/latest-v22.x/api/permissions.html#permission-model).
+                /// </summary>
+                /// <param name="specifier">
+                /// Customization hooks to be registered; this should be
+                /// the same string that would be passed to <c>import()</c>, except that if it is
+                /// relative, it is resolved relative to <c>parentURL</c>.
+                /// </param>
+                /// <param name="parentURL">
+                /// f you want to resolve <c>specifier</c> relative to a base
+                /// URL, such as <c>import.meta.url</c>, you can pass that URL here.
+                /// </param>
+                [<Emit("$0.register($1...)")>]
+                abstract member register: specifier: string * parentURL: string * ?options: Node.``module``.Module_.RegisterOptions<obj> -> unit
+                /// <summary>
+                /// Register a module that exports hooks that customize Node.js module
+                /// resolution and loading behavior. See
+                /// [Customization hooks](https://nodejs.org/docs/latest-v22.x/api/module.html#customization-hooks).
+                ///
+                /// This feature requires <c>--allow-worker</c> if used with the
+                /// [Permission Model](https://nodejs.org/docs/latest-v22.x/api/permissions.html#permission-model).
+                /// </summary>
+                /// <param name="specifier">
+                /// Customization hooks to be registered; this should be
+                /// the same string that would be passed to <c>import()</c>, except that if it is
+                /// relative, it is resolved relative to <c>parentURL</c>.
+                /// </param>
+                /// <param name="parentURL">
+                /// f you want to resolve <c>specifier</c> relative to a base
+                /// URL, such as <c>import.meta.url</c>, you can pass that URL here.
+                /// </param>
+                [<Emit("$0.register($1...)")>]
+                abstract member register: specifier: string * parentURL: Node.url.URL * ?options: Node.``module``.Module_.RegisterOptions<obj> -> unit
+                /// <summary>
+                /// Register a module that exports hooks that customize Node.js module
+                /// resolution and loading behavior. See
+                /// [Customization hooks](https://nodejs.org/docs/latest-v22.x/api/module.html#customization-hooks).
+                ///
+                /// This feature requires <c>--allow-worker</c> if used with the
+                /// [Permission Model](https://nodejs.org/docs/latest-v22.x/api/permissions.html#permission-model).
+                /// </summary>
+                /// <param name="specifier">
+                /// Customization hooks to be registered; this should be
+                /// the same string that would be passed to <c>import()</c>, except that if it is
+                /// relative, it is resolved relative to <c>parentURL</c>.
+                /// </param>
+                /// <param name="parentURL">
+                /// f you want to resolve <c>specifier</c> relative to a base
+                /// URL, such as <c>import.meta.url</c>, you can pass that URL here.
+                /// </param>
+                [<Emit("$0.register($1...)")>]
+                abstract member register: specifier: Node.url.URL -> unit
+                /// <summary>
+                /// Register a module that exports hooks that customize Node.js module
+                /// resolution and loading behavior. See
+                /// [Customization hooks](https://nodejs.org/docs/latest-v22.x/api/module.html#customization-hooks).
+                ///
+                /// This feature requires <c>--allow-worker</c> if used with the
+                /// [Permission Model](https://nodejs.org/docs/latest-v22.x/api/permissions.html#permission-model).
+                /// </summary>
+                /// <param name="specifier">
+                /// Customization hooks to be registered; this should be
+                /// the same string that would be passed to <c>import()</c>, except that if it is
+                /// relative, it is resolved relative to <c>parentURL</c>.
+                /// </param>
+                /// <param name="parentURL">
+                /// f you want to resolve <c>specifier</c> relative to a base
+                /// URL, such as <c>import.meta.url</c>, you can pass that URL here.
+                /// </param>
+                [<Emit("$0.register($1...)")>]
+                abstract member register: specifier: Node.url.URL * parentURL: string * ?options: Node.``module``.Module_.RegisterOptions<obj> -> unit
+                /// <summary>
+                /// Register a module that exports hooks that customize Node.js module
+                /// resolution and loading behavior. See
+                /// [Customization hooks](https://nodejs.org/docs/latest-v22.x/api/module.html#customization-hooks).
+                ///
+                /// This feature requires <c>--allow-worker</c> if used with the
+                /// [Permission Model](https://nodejs.org/docs/latest-v22.x/api/permissions.html#permission-model).
+                /// </summary>
+                /// <param name="specifier">
+                /// Customization hooks to be registered; this should be
+                /// the same string that would be passed to <c>import()</c>, except that if it is
+                /// relative, it is resolved relative to <c>parentURL</c>.
+                /// </param>
+                /// <param name="parentURL">
+                /// f you want to resolve <c>specifier</c> relative to a base
+                /// URL, such as <c>import.meta.url</c>, you can pass that URL here.
+                /// </param>
+                [<Emit("$0.register($1...)")>]
+                abstract member register: specifier: Node.url.URL * parentURL: Node.url.URL * ?options: Node.``module``.Module_.RegisterOptions<obj> -> unit
                 [<Emit("$0.register($1...)")>]
                 abstract member register<'Data>: specifier: string * ?options: Node.``module``.Module_.RegisterOptions<'Data> -> unit
                 [<Emit("$0.register($1...)")>]
                 abstract member register<'Data>: specifier: Node.url.URL * ?options: Node.``module``.Module_.RegisterOptions<'Data> -> unit
+                [<Emit("$0.register($1...)")>]
+                abstract member register: specifier: string * ?options: Node.``module``.Module_.RegisterOptions<obj> -> unit
+                [<Emit("$0.register($1...)")>]
+                abstract member register: specifier: Node.url.URL * ?options: Node.``module``.Module_.RegisterOptions<obj> -> unit
                 /// <summary>
                 /// Register [hooks](https://nodejs.org/docs/latest-v22.x/api/module.html#customization-hooks)
                 /// that customize Node.js module resolution and loading behavior.
@@ -128744,15 +129111,15 @@ the userland-provided Punycode.js module instead.""")>]
             /// Called when the pipeline is fully done.
             /// </param>
             [<ImportDefault("stream"); Emit("$0.pipeline($1...)")>]
-            static member pipeline<'A, 'B> (source: 'A, destination: 'B, callback: Node.stream.Stream_.PipelineCallback<'B>) : obj = nativeOnly
+            static member pipeline<'A, 'B> (source: 'A, destination: 'B, callback: obj) : obj = nativeOnly
             [<ImportDefault("stream"); Emit("$0.pipeline($1...)")>]
-            static member pipeline<'A, 'T1, 'B> (source: 'A, transform1: 'T1, destination: 'B, callback: Node.stream.Stream_.PipelineCallback<'B>) : obj = nativeOnly
+            static member pipeline<'A, 'T1, 'B> (source: 'A, transform1: 'T1, destination: 'B, callback: obj) : obj = nativeOnly
             [<ImportDefault("stream"); Emit("$0.pipeline($1...)")>]
-            static member pipeline<'A, 'T1, 'T2, 'B> (source: 'A, transform1: 'T1, transform2: 'T2, destination: 'B, callback: Node.stream.Stream_.PipelineCallback<'B>) : obj = nativeOnly
+            static member pipeline<'A, 'T1, 'T2, 'B> (source: 'A, transform1: 'T1, transform2: 'T2, destination: 'B, callback: obj) : obj = nativeOnly
             [<ImportDefault("stream"); Emit("$0.pipeline($1...)")>]
-            static member pipeline<'A, 'T1, 'T2, 'T3, 'B> (source: 'A, transform1: 'T1, transform2: 'T2, transform3: 'T3, destination: 'B, callback: Node.stream.Stream_.PipelineCallback<'B>) : obj = nativeOnly
+            static member pipeline<'A, 'T1, 'T2, 'T3, 'B> (source: 'A, transform1: 'T1, transform2: 'T2, transform3: 'T3, destination: 'B, callback: obj) : obj = nativeOnly
             [<ImportDefault("stream"); Emit("$0.pipeline($1...)")>]
-            static member pipeline<'A, 'T1, 'T2, 'T3, 'T4, 'B> (source: 'A, transform1: 'T1, transform2: 'T2, transform3: 'T3, transform4: 'T4, destination: 'B, callback: Node.stream.Stream_.PipelineCallback<'B>) : obj = nativeOnly
+            static member pipeline<'A, 'T1, 'T2, 'T3, 'T4, 'B> (source: 'A, transform1: 'T1, transform2: 'T2, transform3: 'T3, transform4: 'T4, destination: 'B, callback: obj) : obj = nativeOnly
             [<ImportDefault("stream"); Emit("$0.pipeline($1...)")>]
             static member pipeline (streams: ResizeArray<U3<Node.NodeJS.ReadableStream, Node.NodeJS.WritableStream, Node.NodeJS.ReadWriteStream>>, callback: (Node.NodeJS.ErrnoException option -> unit)) : Node.NodeJS.WritableStream = nativeOnly
             [<ImportDefault("stream"); Emit("$0.pipeline($1...)")>]
@@ -129145,15 +129512,15 @@ the userland-provided Punycode.js module instead.""")>]
                 /// Called when the pipeline is fully done.
                 /// </param>
                 [<Emit("$0.pipeline($1...)")>]
-                abstract member pipeline<'A, 'B>: source: 'A * destination: 'B * callback: Node.stream.Stream_.PipelineCallback<'B> -> Node.NodeJS.WritableStream
+                abstract member pipeline<'A, 'B>: source: 'A * destination: 'B * callback: obj -> Node.NodeJS.WritableStream
                 [<Emit("$0.pipeline($1...)")>]
-                abstract member pipeline<'A, 'T1, 'B>: source: 'A * transform1: 'T1 * destination: 'B * callback: Node.stream.Stream_.PipelineCallback<'B> -> Node.NodeJS.WritableStream
+                abstract member pipeline<'A, 'T1, 'B>: source: 'A * transform1: 'T1 * destination: 'B * callback: obj -> Node.NodeJS.WritableStream
                 [<Emit("$0.pipeline($1...)")>]
-                abstract member pipeline<'A, 'T1, 'T2, 'B>: source: 'A * transform1: 'T1 * transform2: 'T2 * destination: 'B * callback: Node.stream.Stream_.PipelineCallback<'B> -> Node.NodeJS.WritableStream
+                abstract member pipeline<'A, 'T1, 'T2, 'B>: source: 'A * transform1: 'T1 * transform2: 'T2 * destination: 'B * callback: obj -> Node.NodeJS.WritableStream
                 [<Emit("$0.pipeline($1...)")>]
-                abstract member pipeline<'A, 'T1, 'T2, 'T3, 'B>: source: 'A * transform1: 'T1 * transform2: 'T2 * transform3: 'T3 * destination: 'B * callback: Node.stream.Stream_.PipelineCallback<'B> -> Node.NodeJS.WritableStream
+                abstract member pipeline<'A, 'T1, 'T2, 'T3, 'B>: source: 'A * transform1: 'T1 * transform2: 'T2 * transform3: 'T3 * destination: 'B * callback: obj -> Node.NodeJS.WritableStream
                 [<Emit("$0.pipeline($1...)")>]
-                abstract member pipeline<'A, 'T1, 'T2, 'T3, 'T4, 'B>: source: 'A * transform1: 'T1 * transform2: 'T2 * transform3: 'T3 * transform4: 'T4 * destination: 'B * callback: Node.stream.Stream_.PipelineCallback<'B> -> Node.NodeJS.WritableStream
+                abstract member pipeline<'A, 'T1, 'T2, 'T3, 'T4, 'B>: source: 'A * transform1: 'T1 * transform2: 'T2 * transform3: 'T3 * transform4: 'T4 * destination: 'B * callback: obj -> Node.NodeJS.WritableStream
                 [<Emit("$0.pipeline($1...)")>]
                 abstract member pipeline: streams: ResizeArray<U3<Node.NodeJS.ReadableStream, Node.NodeJS.WritableStream, Node.NodeJS.ReadWriteStream>> * callback: (Node.NodeJS.ErrnoException option -> unit) -> Node.NodeJS.WritableStream
                 [<Emit("$0.pipeline($1...)")>]
@@ -140631,15 +140998,15 @@ Duplex.fromWeb($0, $1)"""
                 [<Erase>]
                 type Exports =
                     [<Emit("$0.__promisify__($1...)")>]
-                    abstract member __promisify__<'A, 'B>: source: 'A * destination: 'B * ?options: Node.stream.Stream_.PipelineOptions -> Node.stream.Stream_.PipelinePromise<'B>
+                    abstract member __promisify__<'A, 'B>: source: 'A * destination: 'B * ?options: Node.stream.Stream_.PipelineOptions -> obj
                     [<Emit("$0.__promisify__($1...)")>]
-                    abstract member __promisify__<'A, 'T1, 'B>: source: 'A * transform1: 'T1 * destination: 'B * ?options: Node.stream.Stream_.PipelineOptions -> Node.stream.Stream_.PipelinePromise<'B>
+                    abstract member __promisify__<'A, 'T1, 'B>: source: 'A * transform1: 'T1 * destination: 'B * ?options: Node.stream.Stream_.PipelineOptions -> obj
                     [<Emit("$0.__promisify__($1...)")>]
-                    abstract member __promisify__<'A, 'T1, 'T2, 'B>: source: 'A * transform1: 'T1 * transform2: 'T2 * destination: 'B * ?options: Node.stream.Stream_.PipelineOptions -> Node.stream.Stream_.PipelinePromise<'B>
+                    abstract member __promisify__<'A, 'T1, 'T2, 'B>: source: 'A * transform1: 'T1 * transform2: 'T2 * destination: 'B * ?options: Node.stream.Stream_.PipelineOptions -> obj
                     [<Emit("$0.__promisify__($1...)")>]
-                    abstract member __promisify__<'A, 'T1, 'T2, 'T3, 'B>: source: 'A * transform1: 'T1 * transform2: 'T2 * transform3: 'T3 * destination: 'B * ?options: Node.stream.Stream_.PipelineOptions -> Node.stream.Stream_.PipelinePromise<'B>
+                    abstract member __promisify__<'A, 'T1, 'T2, 'T3, 'B>: source: 'A * transform1: 'T1 * transform2: 'T2 * transform3: 'T3 * destination: 'B * ?options: Node.stream.Stream_.PipelineOptions -> obj
                     [<Emit("$0.__promisify__($1...)")>]
-                    abstract member __promisify__<'A, 'T1, 'T2, 'T3, 'T4, 'B>: source: 'A * transform1: 'T1 * transform2: 'T2 * transform3: 'T3 * transform4: 'T4 * destination: 'B * ?options: Node.stream.Stream_.PipelineOptions -> Node.stream.Stream_.PipelinePromise<'B>
+                    abstract member __promisify__<'A, 'T1, 'T2, 'T3, 'T4, 'B>: source: 'A * transform1: 'T1 * transform2: 'T2 * transform3: 'T3 * transform4: 'T4 * destination: 'B * ?options: Node.stream.Stream_.PipelineOptions -> obj
                     [<Emit("$0.__promisify__($1...)")>]
                     abstract member __promisify__: streams: ResizeArray<U3<Node.NodeJS.ReadableStream, Node.NodeJS.WritableStream, Node.NodeJS.ReadWriteStream>> * ?options: Node.stream.Stream_.PipelineOptions -> JS.Promise<unit>
                     [<Emit("$0.__promisify__($1...)")>]
@@ -146797,7 +147164,7 @@ Duplex.fromWeb($0, $1)"""
                 /// The mocked function. The mocked function contains a special <c>mock</c> property, which is an instance of <see href="MockFunctionContext">MockFunctionContext</see>, and can be used for inspecting and changing the
                 /// behavior of the mocked function.
                 /// </returns>
-                abstract member fn: unit -> Node.test.test_.Mock<'F>
+                abstract member fn: ?original: System.Delegate * ?options: Node.test.test_.MockFunctionOptions -> Node.test.test_.Mock<System.Delegate>
                 /// <summary>
                 /// This function is used to create a mock function.
                 ///
@@ -146842,7 +147209,7 @@ Duplex.fromWeb($0, $1)"""
                 /// The mocked function. The mocked function contains a special <c>mock</c> property, which is an instance of <see href="MockFunctionContext">MockFunctionContext</see>, and can be used for inspecting and changing the
                 /// behavior of the mocked function.
                 /// </returns>
-                abstract member fn: ?original: System.Delegate * ?options: Node.test.test_.MockFunctionOptions -> Node.test.test_.Mock<System.Delegate>
+                abstract member fn: unit -> Node.test.test_.Mock<System.Delegate>
                 /// <summary>
                 /// This function is used to create a mock function.
                 ///
@@ -146904,7 +147271,7 @@ Duplex.fromWeb($0, $1)"""
                 /// });
                 /// </code>
                 /// </summary>
-                abstract member fn: ?original: System.Delegate * ?implementation: 'F * ?options: Node.test.test_.MockFunctionOptions -> Node.test.test_.Mock<U2<System.Delegate, 'F>>
+                abstract member fn: ?original: System.Delegate * ?implementation: System.Delegate * ?options: Node.test.test_.MockFunctionOptions -> Node.test.test_.Mock<U2<System.Delegate, System.Delegate>>
                 /// <summary>
                 /// This function is used to create a mock on an existing object method. The
                 /// following example demonstrates how a mock is created on an existing object
@@ -147954,6 +148321,46 @@ Duplex.fromWeb($0, $1)"""
             /// <summary>
             /// <code lang="js">
             /// import {
+            ///   setTimeout,
+            /// } from 'node:timers/promises';
+            ///
+            /// const res = await setTimeout(100, 'result');
+            ///
+            /// console.log(res);  // Prints 'result'
+            /// </code>
+            /// </summary>
+            /// <param name="delay">
+            /// The number of milliseconds to wait before fulfilling the
+            /// promise. **Default:** <c>1</c>.
+            /// </param>
+            /// <param name="value">
+            /// A value with which the promise is fulfilled.
+            /// </param>
+            [<Import("setTimeout", "timers/promises")>]
+            static member setTimeout (?delay: float, ?value: unit, ?options: Node.timers.TimerOptions) : JS.Promise<unit> = nativeOnly
+            /// <summary>
+            /// <code lang="js">
+            /// import {
+            ///   setTimeout,
+            /// } from 'node:timers/promises';
+            ///
+            /// const res = await setTimeout(100, 'result');
+            ///
+            /// console.log(res);  // Prints 'result'
+            /// </code>
+            /// </summary>
+            /// <param name="delay">
+            /// The number of milliseconds to wait before fulfilling the
+            /// promise. **Default:** <c>1</c>.
+            /// </param>
+            /// <param name="value">
+            /// A value with which the promise is fulfilled.
+            /// </param>
+            [<Import("setTimeout", "timers/promises")>]
+            static member setTimeout () : JS.Promise<unit> = nativeOnly
+            /// <summary>
+            /// <code lang="js">
+            /// import {
             ///   setImmediate,
             /// } from 'node:timers/promises';
             ///
@@ -147967,6 +148374,38 @@ Duplex.fromWeb($0, $1)"""
             /// </param>
             [<Import("setImmediate", "timers/promises")>]
             static member setImmediate<'T> (?value: 'T, ?options: Node.timers.TimerOptions) : JS.Promise<'T> = nativeOnly
+            /// <summary>
+            /// <code lang="js">
+            /// import {
+            ///   setImmediate,
+            /// } from 'node:timers/promises';
+            ///
+            /// const res = await setImmediate('result');
+            ///
+            /// console.log(res);  // Prints 'result'
+            /// </code>
+            /// </summary>
+            /// <param name="value">
+            /// A value with which the promise is fulfilled.
+            /// </param>
+            [<Import("setImmediate", "timers/promises")>]
+            static member setImmediate (?value: unit, ?options: Node.timers.TimerOptions) : JS.Promise<unit> = nativeOnly
+            /// <summary>
+            /// <code lang="js">
+            /// import {
+            ///   setImmediate,
+            /// } from 'node:timers/promises';
+            ///
+            /// const res = await setImmediate('result');
+            ///
+            /// console.log(res);  // Prints 'result'
+            /// </code>
+            /// </summary>
+            /// <param name="value">
+            /// A value with which the promise is fulfilled.
+            /// </param>
+            [<Import("setImmediate", "timers/promises")>]
+            static member setImmediate () : JS.Promise<unit> = nativeOnly
             /// <summary>
             /// Returns an async iterator that generates values in an interval of <c>delay</c> ms.
             /// If <c>ref</c> is <c>true</c>, you need to call <c>next()</c> of async iterator explicitly
@@ -147996,6 +148435,64 @@ Duplex.fromWeb($0, $1)"""
             /// </param>
             [<Import("setInterval", "timers/promises")>]
             static member setInterval<'T> (?delay: float, ?value: 'T, ?options: Node.timers.TimerOptions) : Node.NodeJS.AsyncIterator<'T> = nativeOnly
+            /// <summary>
+            /// Returns an async iterator that generates values in an interval of <c>delay</c> ms.
+            /// If <c>ref</c> is <c>true</c>, you need to call <c>next()</c> of async iterator explicitly
+            /// or implicitly to keep the event loop alive.
+            ///
+            /// <code lang="js">
+            /// import {
+            ///   setInterval,
+            /// } from 'node:timers/promises';
+            ///
+            /// const interval = 100;
+            /// for await (const startTime of setInterval(interval, Date.now())) {
+            ///   const now = Date.now();
+            ///   console.log(now);
+            ///   if ((now - startTime) > 1000)
+            ///     break;
+            /// }
+            /// console.log(Date.now());
+            /// </code>
+            /// </summary>
+            /// <param name="delay">
+            /// The number of milliseconds to wait between iterations.
+            /// **Default:** <c>1</c>.
+            /// </param>
+            /// <param name="value">
+            /// A value with which the iterator returns.
+            /// </param>
+            [<Import("setInterval", "timers/promises")>]
+            static member setInterval (?delay: float, ?value: unit, ?options: Node.timers.TimerOptions) : Node.NodeJS.AsyncIterator<unit> = nativeOnly
+            /// <summary>
+            /// Returns an async iterator that generates values in an interval of <c>delay</c> ms.
+            /// If <c>ref</c> is <c>true</c>, you need to call <c>next()</c> of async iterator explicitly
+            /// or implicitly to keep the event loop alive.
+            ///
+            /// <code lang="js">
+            /// import {
+            ///   setInterval,
+            /// } from 'node:timers/promises';
+            ///
+            /// const interval = 100;
+            /// for await (const startTime of setInterval(interval, Date.now())) {
+            ///   const now = Date.now();
+            ///   console.log(now);
+            ///   if ((now - startTime) > 1000)
+            ///     break;
+            /// }
+            /// console.log(Date.now());
+            /// </code>
+            /// </summary>
+            /// <param name="delay">
+            /// The number of milliseconds to wait between iterations.
+            /// **Default:** <c>1</c>.
+            /// </param>
+            /// <param name="value">
+            /// A value with which the iterator returns.
+            /// </param>
+            [<Import("setInterval", "timers/promises")>]
+            static member setInterval () : Node.NodeJS.AsyncIterator<unit> = nativeOnly
             [<Import("scheduler", "timers/promises")>]
             static member inline scheduler: Node.timers_promises.Scheduler = nativeOnly
 

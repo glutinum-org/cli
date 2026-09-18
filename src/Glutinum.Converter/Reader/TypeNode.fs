@@ -130,6 +130,67 @@ let private isDeferredConditional (typ: Ts.Type) =
     | HasTypeFlags Ts.TypeFlags.Conditional -> true
     | _ -> false
 
+let rec private inferTypeNodes (node: Ts.Node) : Ts.InferTypeNode list =
+    [
+        if node.kind = Ts.SyntaxKind.InferType then
+            node :?> Ts.InferTypeNode
+
+        for child in node.getChildren () do
+            yield! inferTypeNodes child
+    ]
+
+/// `Options<infer DateType>` stands for the constraint declared at its position, `Date` for
+/// `interface Options<DateType extends Date>`
+let private inferredConstraint
+    (reader: ITypeScriptReader)
+    (inferTypeNode: Ts.InferTypeNode)
+    : GlueType
+    =
+    let declaredTypeParameters (declaration: Ts.Declaration) =
+        match declaration.kind with
+        | Ts.SyntaxKind.InterfaceDeclaration ->
+            (declaration :?> Ts.InterfaceDeclaration).typeParameters
+        | Ts.SyntaxKind.ClassDeclaration -> (declaration :?> Ts.ClassDeclaration).typeParameters
+        | Ts.SyntaxKind.TypeAliasDeclaration ->
+            (declaration :?> Ts.TypeAliasDeclaration).typeParameters
+        | _ -> None
+
+    match inferTypeNode.typeParameter.``constraint`` with
+    | Some constraintNode -> reader.ReadTypeNode constraintNode
+    | None ->
+        let atPosition =
+            match inferTypeNode.parent.kind with
+            | Ts.SyntaxKind.TypeReference ->
+                let typeReferenceNode = inferTypeNode.parent :?> Ts.TypeReferenceNode
+
+                let position =
+                    typeReferenceNode.typeArguments
+                    |> Option.bind (
+                        Seq.tryFindIndex (fun typeArgument ->
+                            obj.ReferenceEquals(typeArgument, inferTypeNode)
+                        )
+                    )
+
+                reader.checker.getSymbolAtLocation !!typeReferenceNode.typeName
+                |> Option.bind (resolveAlias reader.checker)
+                |> Option.bind (fun symbol -> symbol.declarations)
+                |> Option.bind Seq.tryHead
+                |> Option.bind declaredTypeParameters
+                |> Option.bind (fun typeParameters ->
+                    position
+                    |> Option.bind (fun position ->
+                        if position < typeParameters.Count then
+                            typeParameters.[position].``constraint``
+                        else
+                            None
+                    )
+                )
+            | _ -> None
+
+        match atPosition with
+        | Some constraintNode -> reader.ReadTypeNode constraintNode
+        | None -> GlueType.Unknown
+
 let private truncateToDeclaredArity
     (reader: ITypeScriptReader)
     (symbolOpt: Ts.Symbol option)
@@ -1284,6 +1345,8 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                 })
                 |> GlueType.TypeReference
 
+    | Ts.SyntaxKind.InferType -> inferredConstraint reader (typeNode :?> Ts.InferTypeNode)
+
     | Ts.SyntaxKind.ConditionalType ->
         let conditionalTypeNode = typeNode :?> Ts.ConditionalTypeNode
 
@@ -1293,11 +1356,21 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
         if isDeferredConditional typ then
             let warningsCount = reader.Warnings.Count
 
+            let inferred =
+                inferTypeNodes conditionalTypeNode.extendsType
+                |> List.map (fun inferTypeNode ->
+                    inferTypeNode.typeParameter.name.getText (),
+                    inferredConstraint reader inferTypeNode
+                )
+                |> Microsoft.FSharp.Collections.Map.ofList
+
             let conditionalType =
                 ({
                     CheckType = reader.ReadTypeNode conditionalTypeNode.checkType
                     ExtendsType = reader.ReadTypeNode conditionalTypeNode.extendsType
-                    TrueType = reader.ReadTypeNode conditionalTypeNode.trueType
+                    TrueType =
+                        reader.ReadTypeNode conditionalTypeNode.trueType
+                        |> GlueSubstitution.substitute inferred
                     FalseType = reader.ReadTypeNode conditionalTypeNode.falseType
                 }
                 : GlueConditionalType)

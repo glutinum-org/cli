@@ -1505,11 +1505,14 @@ let private transformExports
                 function
                 | GlueType.FunctionDeclaration info
                 | GlueType.ExportDefault(GlueType.FunctionDeclaration info) ->
-                    let info = KeyOfMaps.expandFunction info |> Conditionals.resolveFunction
-
-                    UnionOverloads.expandParameters context.TypeMemory info.Parameters
-                    |> List.map (fun parameters ->
-                        GlueType.FunctionDeclaration { info with Parameters = parameters }
+                    KeyOfMaps.expandFunction info
+                    |> Conditionals.resolveFunction
+                    |> TransformMembers.withDefaultedTypeParameterOverloadsOfFunction
+                    |> List.collect (fun (info: GlueFunctionDeclaration) ->
+                        UnionOverloads.expandParameters context.TypeMemory info.Parameters
+                        |> List.map (fun parameters ->
+                            GlueType.FunctionDeclaration { info with Parameters = parameters }
+                        )
                     )
                 | glueType -> [ glueType ]
             )
@@ -2253,32 +2256,90 @@ module private TransformMembers =
         else
             []
 
-    /// `querySelector<E = Element>(s: string): E` also gets `querySelector(s: string): Element`,
-    /// the F# call without a type argument resolves to it
-    let private withDefaultedTypeParameterOverloads (members: GlueMember list) =
-        let defaults (typeParameters: GlueTypeParameter list) =
+    let private defaultsOf
+        (parameters: GlueParameter list)
+        (typeParameters: GlueTypeParameter list)
+        =
+        // `eachDay<Options = undefined>(options?: Options)`: `options?: obj` is no overload
+        let isParameterType (name: string) =
+            parameters
+            |> List.exists (fun parameter ->
+                match parameter.Type with
+                | GlueType.TypeParameter parameterName
+                | GlueType.OptionalType(GlueType.TypeParameter parameterName) ->
+                    parameterName = name
+                | _ -> false
+            )
+
+        let defaults =
             typeParameters
             |> List.choose (fun typeParameter ->
-                typeParameter.Default
-                |> Option.map (fun default_ -> typeParameter.Name, default_)
+                match typeParameter.Default with
+                | Some(GlueType.Primitive GluePrimitive.Undefined) when
+                    isParameterType typeParameter.Name
+                    ->
+                    None
+                | Some(GlueType.KeyOf _)
+                | Some(GlueType.IndexedAccessType _)
+                | None -> None
+                | Some default_ -> Some(typeParameter.Name, default_)
             )
             |> Map.ofList
 
-        // `getModel<T = unknown>(): Model<T>`: F# rejects two parameterless methods differing
-        // by their generic arity only
-        let isUsed (substitutions: Map<string, GlueType>) (parameters: GlueParameter list) typ =
-            substitutions
-            |> Map.exists (fun name _ ->
-                (not parameters.IsEmpty && mentionsTypeParameter name typ)
-                || parameters
-                   |> List.exists (fun parameter -> mentionsTypeParameter name parameter.Type)
-            )
+        // `add<DateType, ResultDate = DateType>`: F# can't choose between two generic overloads
+        if
+            typeParameters
+            |> List.forall (fun typeParameter -> defaults.ContainsKey typeParameter.Name)
+        then
+            // `<T = any[], R = T>`: `R` is `any[]`
+            defaults
+            |> Map.map (fun _ default_ -> substituteTypeParameters defaults default_)
+        else
+            Map.empty
+
+    // `getModel<T = unknown>(): Model<T>`: F# rejects two parameterless methods differing
+    // by their generic arity only
+    let private usesDefaulted
+        (substitutions: Map<string, GlueType>)
+        (parameters: GlueParameter list)
+        (typ: GlueType)
+        =
+        substitutions
+        |> Map.exists (fun name _ ->
+            (not parameters.IsEmpty && mentionsTypeParameter name typ)
+            || parameters
+               |> List.exists (fun parameter -> mentionsTypeParameter name parameter.Type)
+        )
+
+    /// `layerGroup<P = any>(layers: Layer[]): LayerGroup<P>` also gets
+    /// `layerGroup(layers: Layer[]): LayerGroup<any>`
+    let withDefaultedTypeParameterOverloadsOfFunction (info: GlueFunctionDeclaration) =
+        let substitutions = defaultsOf info.Parameters info.TypeParameters
+
+        if usesDefaulted substitutions info.Parameters info.Type then
+            [
+                info
+                ({ info with
+                    TypeParameters = info.TypeParameters |> List.filter _.Default.IsNone
+                    Parameters = info.Parameters |> List.map (substituteParameter substitutions)
+                    Type = substituteTypeParameters substitutions info.Type
+                }
+                : GlueFunctionDeclaration)
+            ]
+        else
+            [ info ]
+
+    /// `querySelector<E = Element>(s: string): E` also gets `querySelector(s: string): Element`,
+    /// the F# call without a type argument resolves to it
+    let private withDefaultedTypeParameterOverloads (members: GlueMember list) =
+        let defaults = defaultsOf
+        let isUsed = usesDefaulted
 
         members
         |> List.collect (fun glueMember ->
             match glueMember with
             | GlueMember.MethodSignature info ->
-                let substitutions = defaults info.TypeParameters
+                let substitutions = defaults info.Parameters info.TypeParameters
 
                 if isUsed substitutions info.Parameters info.Type then
                     [
@@ -2296,7 +2357,7 @@ module private TransformMembers =
                     [ glueMember ]
 
             | GlueMember.Method info ->
-                let substitutions = defaults info.TypeParameters
+                let substitutions = defaults info.Parameters info.TypeParameters
 
                 if isUsed substitutions info.Parameters info.Type then
                     [
@@ -3864,6 +3925,13 @@ module Conditionals =
             isConditional
                 (visited.Add typeReference.FullName)
                 allAliases.[typeReference.FullName].Type
+            || typeReference.TypeArguments |> List.exists (isConditional visited)
+        | GlueType.TypeReference typeReference ->
+            typeReference.TypeArguments |> List.exists (isConditional visited)
+        | GlueType.Array innerType
+        | GlueType.ReadOnly innerType
+        | GlueType.OptionalType innerType -> isConditional visited innerType
+        | GlueType.TupleType elements -> elements |> List.exists (isConditional visited)
         | _ -> false
 
     let private typeMemory = ResizeArray<GlueType>()
@@ -3941,8 +4009,32 @@ module Conditionals =
             )
         | _ -> false
 
+    /// `PipelineTransformSource<T>` is its `PipelineSource<T> | PipelineTransform<any, T>`
+    let private tryExpandAlias (typeReference: GlueTypeReference) =
+        match allAliases.TryGetValue typeReference.FullName with
+        | true, alias when
+            not (aliases.ContainsKey typeReference.FullName)
+            && alias.TypeParameters.Length = typeReference.TypeArguments.Length
+            ->
+            let substitutions =
+                List.zip (alias.TypeParameters |> List.map _.Name) typeReference.TypeArguments
+                |> Map.ofList
+
+            Some(substituteTypeParameters substitutions alias.Type)
+        | _ -> None
+
     /// `check extends extends_`, `None` when the answer depends on a type parameter
     let rec private isAssignable (check: GlueType) (extends_: GlueType) : bool option =
+        isAssignableWithin Set.empty check extends_
+
+    let rec private isAssignableWithin
+        (visited: Set<string>)
+        (check: GlueType)
+        (extends_: GlueType)
+        : bool option
+        =
+        let isAssignable = isAssignableWithin visited
+
         match check, extends_ with
         | GlueType.TypeParameter _, _
         | _, GlueType.TypeParameter _ -> None
@@ -3969,17 +4061,51 @@ module Conditionals =
                     | None -> false
                 )
             )
-        | GlueType.TypeReference check, GlueType.TypeReference extends_ ->
-            if check.FullName = extends_.FullName then
-                Some true
-            elif interfaces.ContainsKey check.FullName then
-                Some(inherits Set.empty check.FullName extends_.FullName)
+        | GlueType.TypeReference check, GlueType.TypeReference extends_ when
+            check.FullName = extends_.FullName
+            ->
+            Some true
+        | GlueType.TypeReference check, GlueType.TypeReference extends_ when
+            interfaces.ContainsKey check.FullName
+            && not (allAliases.ContainsKey extends_.FullName)
+            ->
+            Some(inherits Set.empty check.FullName extends_.FullName)
+        | GlueType.TypeReference typeReference, _ when
+            not (visited.Contains typeReference.FullName)
+            && (tryExpandAlias typeReference).IsSome
+            ->
+            isAssignableWithin
+                (visited.Add typeReference.FullName)
+                (tryExpandAlias typeReference).Value
+                extends_
+        | _, GlueType.TypeReference typeReference when
+            not (visited.Contains typeReference.FullName)
+            && (tryExpandAlias typeReference).IsSome
+            ->
+            isAssignableWithin
+                (visited.Add typeReference.FullName)
+                check
+                (tryExpandAlias typeReference).Value
+        | GlueType.TypeReference check, GlueType.TypeReference _ ->
+            if interfaces.ContainsKey check.FullName then
+                Some false
+            elif allAliases.ContainsKey check.FullName then
+                None
             else
                 Some false
         | GlueType.Union(GlueTypeUnion cases), _ ->
             let answers = cases |> List.map (fun case -> isAssignable case extends_)
 
             if answers |> List.forall ((=) (Some true)) then
+                Some true
+            elif answers |> List.forall ((=) (Some false)) then
+                Some false
+            else
+                None
+        | _, GlueType.Union(GlueTypeUnion cases) ->
+            let answers = cases |> List.map (fun case -> isAssignable check case)
+
+            if answers |> List.exists ((=) (Some true)) then
                 Some true
             elif answers |> List.forall ((=) (Some false)) then
                 Some false
@@ -4014,6 +4140,49 @@ module Conditionals =
             | Some false -> Some conditionalType.FalseType
             | None -> None
 
+    /// `T["start"] extends Date ? T["start"] : Date` is `Date` whatever `T` is
+    let private tryCollapse
+        (resolve: GlueType -> GlueType)
+        (bindings: Map<string, GlueType>)
+        (conditionalType: GlueConditionalType)
+        =
+        let trueType =
+            if conditionalType.TrueType = conditionalType.CheckType then
+                substituteTypeParameters bindings conditionalType.ExtendsType
+            else
+                conditionalType.TrueType
+
+        let checked = GlueSubstitution.mentionedTypeParameters conditionalType.CheckType
+
+        match
+            [ trueType; conditionalType.FalseType ]
+            |> List.map resolve
+            |> List.filter ((<>) (GlueType.Primitive GluePrimitive.Never))
+            |> List.distinct
+        with
+        | [ single ] when
+            GlueSubstitution.mentionedTypeParameters single
+            |> List.forall (fun name -> not (List.contains name checked))
+            ->
+            Some single
+        | _ -> None
+
+    let rec private mentionsConditional (glueType: GlueType) =
+        match glueType with
+        | GlueType.ConditionalType _ -> true
+        | GlueType.TypeReference typeReference ->
+            aliases.ContainsKey typeReference.FullName
+            || typeReference.TypeArguments |> List.exists mentionsConditional
+        | GlueType.Union(GlueTypeUnion cases) -> cases |> List.exists mentionsConditional
+        | GlueType.Array innerType
+        | GlueType.ReadOnly innerType
+        | GlueType.OptionalType innerType -> mentionsConditional innerType
+        | GlueType.TupleType elements -> elements |> List.exists mentionsConditional
+        | GlueType.IndexedAccessType indexedAccess ->
+            mentionsConditional indexedAccess.ObjectType
+            || mentionsConditional indexedAccess.IndexType
+        | _ -> false
+
     let rec private resolve (defaults: Map<string, GlueType>) (glueType: GlueType) : GlueType =
         let resolve = resolve defaults
 
@@ -4032,17 +4201,25 @@ module Conditionals =
             | GlueType.ConditionalType conditionalType ->
                 match evaluate defaults conditionalType with
                 | Some resolved -> resolve resolved
-                | None -> glueType
+                | None ->
+                    tryCollapse resolve defaults conditionalType |> Option.defaultValue glueType
             | GlueType.TypeReference _ as body ->
                 match resolve body with
                 | GlueType.TypeReference resolved when aliases.ContainsKey resolved.FullName ->
                     glueType
                 | resolved -> resolved
-            | _ -> glueType
+            // `Array<Options extends Options<infer D> ? D : Date>`
+            | body ->
+                let resolved = resolve body
+
+                if mentionsConditional resolved then
+                    glueType
+                else
+                    resolved
         | GlueType.ConditionalType conditionalType ->
             match evaluate defaults conditionalType with
             | Some resolved -> resolve resolved
-            | None -> glueType
+            | None -> tryCollapse resolve defaults conditionalType |> Option.defaultValue glueType
         // `T["data"]` is the member of the default of `T`
         | GlueType.IndexedAccessType({
                                          ObjectType = GlueType.TypeParameter name
