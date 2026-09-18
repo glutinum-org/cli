@@ -1545,6 +1545,20 @@ let private transformExports
             )
             |> set
 
+        // The members of the object of `export = yargs` are reached through the default import,
+        // `import { alias } from "yargs"` may not exist at runtime
+        let exportEqualsMembers = Dictionary<string, string>()
+
+        let throughDefault (memberName: string) (emit: string) =
+            match exportEqualsMembers.TryGetValue memberName with
+            | true, objectName when isTopLevel ->
+                Some
+                    [
+                        importDefaultAttribute objectName context.ImportSource
+                        FSharpAttribute.Text $"Emit(\"%s{emit}\")"
+                    ]
+            | _ -> None
+
         let rec apply (acc: FSharpMember list) (seenNames: Set<string>) (glueTypes: GlueType list) =
             match glueTypes with
             | [] -> acc
@@ -1568,10 +1582,13 @@ let private transformExports
                         {
                             Attributes =
                                 [
-                                    if isTopLevel then
-                                        importAttribute info.Name context.ImportSource
-                                    else
-                                        FSharpAttribute.EmitMacroProperty info.Name
+                                    match throughDefault info.Name $"$0.{info.Name}" with
+                                    | Some attributes -> yield! attributes
+                                    | None ->
+                                        if isTopLevel then
+                                            importAttribute info.Name context.ImportSource
+                                        else
+                                            FSharpAttribute.EmitMacroProperty info.Name
                                     yield! xmlDocInfo.ObsoleteAttributes
                                 ]
                             Name = name
@@ -1602,13 +1619,18 @@ let private transformExports
                         {
                             Attributes =
                                 [
-                                    if isTopLevel then
-                                        if defaultExportedDeclarations.Contains info.Name then
-                                            importDefaultAttribute info.Name context.ImportSource
+                                    match throughDefault info.Name $"$0.{info.Name}($1...)" with
+                                    | Some attributes -> yield! attributes
+                                    | None ->
+                                        if isTopLevel then
+                                            if defaultExportedDeclarations.Contains info.Name then
+                                                importDefaultAttribute
+                                                    info.Name
+                                                    context.ImportSource
+                                            else
+                                                importAttribute info.Name context.ImportSource
                                         else
-                                            importAttribute info.Name context.ImportSource
-                                    else
-                                        FSharpAttribute.EmitMacroInvoke info.Name
+                                            FSharpAttribute.EmitMacroInvoke info.Name
                                     yield! xmlDocInfo.ObsoleteAttributes
                                 ]
                             Name = name
@@ -1859,7 +1881,7 @@ let private transformExports
 
                         let newTypes =
                             {
-                                Attributes = [ importAllAttribute name context.ImportSource ]
+                                Attributes = [ importDefaultAttribute name context.ImportSource ]
                                 Name = name
                                 OriginalName = name
                                 Parameters = []
@@ -1937,6 +1959,9 @@ let private transformExports
                             )
                             // A member named like the object itself is the object
                             |> List.filter (fun glueType -> glueType.Name <> name)
+
+                        for memberExport in memberExports do
+                            exportEqualsMembers.[memberExport.Name] <- name
 
                         apply (acc @ newTypes) (Set.add name seenNames) (memberExports @ tail)
 

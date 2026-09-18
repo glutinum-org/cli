@@ -105,6 +105,8 @@ let rec private substitute (substitutions: Map<string, FSharpType>) (typ: FSharp
         |> FSharpType.TypeReference
     | FSharpType.Option typ -> FSharpType.Option(substitute typ)
     | FSharpType.ResizeArray typ -> FSharpType.ResizeArray(substitute typ)
+    | FSharpType.JSApi(FSharpJSApi.ReadonlyArray typ) ->
+        FSharpType.JSApi(FSharpJSApi.ReadonlyArray(substitute typ))
     | FSharpType.Tuple types -> FSharpType.Tuple(types |> List.map substitute)
     | FSharpType.Function functionType ->
         { functionType with
@@ -197,6 +199,8 @@ let rec private signatureTypeAt (depth: int) (typ: FSharpType) : FSharpType =
         |> FSharpType.TypeReference
     | FSharpType.Option typ -> FSharpType.Option(signatureType typ)
     | FSharpType.ResizeArray typ -> FSharpType.ResizeArray(signatureType typ)
+    | FSharpType.JSApi(FSharpJSApi.ReadonlyArray typ) ->
+        FSharpType.JSApi(FSharpJSApi.ReadonlyArray(signatureType typ))
     | FSharpType.Tuple types -> FSharpType.Tuple(types |> List.map signatureType)
     | FSharpType.Function functionType ->
         { functionType with
@@ -236,6 +240,20 @@ let rec private canonicalTypeParameters (names: Dictionary<string, string>) (typ
         |> FSharpType.TypeReference
     | FSharpType.Option typ -> FSharpType.Option(canonical typ)
     | FSharpType.ResizeArray typ -> FSharpType.ResizeArray(canonical typ)
+    | FSharpType.JSApi(FSharpJSApi.ReadonlyArray typ) ->
+        FSharpType.JSApi(FSharpJSApi.ReadonlyArray(canonical typ))
+    | FSharpType.Union unionInfo ->
+        { unionInfo with
+            Cases =
+                unionInfo.Cases
+                |> List.map (
+                    function
+                    | FSharpUnionCase.Typed typ -> FSharpUnionCase.Typed(canonical typ)
+                    | FSharpUnionCase.Field(name, typ) -> FSharpUnionCase.Field(name, canonical typ)
+                    | case -> case
+                )
+        }
+        |> FSharpType.Union
     | FSharpType.Tuple types -> FSharpType.Tuple(types |> List.map canonical)
     | FSharpType.Function functionType ->
         { functionType with
@@ -271,7 +289,16 @@ let private arityOfSignature
         | FSharpType.TypeReference typeReference ->
             typeReference.TypeArguments |> List.exists mentionsTypeParameter
         | FSharpType.Option typ
-        | FSharpType.ResizeArray typ -> mentionsTypeParameter typ
+        | FSharpType.ResizeArray typ
+        | FSharpType.JSApi(FSharpJSApi.ReadonlyArray typ) -> mentionsTypeParameter typ
+        | FSharpType.Union unionInfo ->
+            unionInfo.Cases
+            |> List.exists (
+                function
+                | FSharpUnionCase.Typed typ
+                | FSharpUnionCase.Field(_, typ) -> mentionsTypeParameter typ
+                | _ -> false
+            )
         | FSharpType.Tuple types -> types |> List.exists mentionsTypeParameter
         | FSharpType.Function functionType ->
             mentionsTypeParameter functionType.ReturnType

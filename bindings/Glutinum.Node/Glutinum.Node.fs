@@ -29636,7 +29636,7 @@ AsyncLocalStorage.snapshot()"""
         [<AbstractClass>]
         [<Erase>]
         type Exports =
-            [<ImportAll("constants")>]
+            [<ImportDefault("constants")>]
             static member inline constants: Exports.constants = nativeOnly
 
         module Exports =
@@ -116200,7 +116200,7 @@ SocketAddress.parse($0)"""
         [<AbstractClass>]
         [<Erase>]
         type Exports =
-            [<ImportAll("path")>]
+            [<ImportDefault("path")>]
             static member inline path: Node.path.path_.PlatformPath = nativeOnly
             /// <summary>
             /// Normalize a string path, reducing '..' and '.' parts.
@@ -116215,7 +116215,7 @@ SocketAddress.parse($0)"""
             /// <param name="path">
             /// string path to normalize.
             /// </param>
-            [<Import("normalize", "path")>]
+            [<ImportDefault("path"); Emit("$0.normalize($1...)")>]
             static member normalize (path: string) : string = nativeOnly
             /// <summary>
             /// Join all arguments together and normalize the resulting path.
@@ -116229,7 +116229,7 @@ SocketAddress.parse($0)"""
             /// <param name="paths">
             /// paths to join.
             /// </param>
-            [<Import("join", "path")>]
+            [<ImportDefault("path"); Emit("$0.join($1...)")>]
             static member join ([<ParamArray>] paths: string []) : string = nativeOnly
             /// <summary>
             /// The right-most parameter is considered {to}. Other parameters are considered an array of {from}.
@@ -116250,7 +116250,7 @@ SocketAddress.parse($0)"""
             /// <param name="paths">
             /// A sequence of paths or path segments.
             /// </param>
-            [<Import("resolve", "path")>]
+            [<ImportDefault("path"); Emit("$0.resolve($1...)")>]
             static member resolve ([<ParamArray>] paths: string []) : string = nativeOnly
             /// <summary>
             /// The <c>path.matchesGlob()</c> method determines if <c>path</c> matches the <c>pattern</c>.
@@ -116270,7 +116270,7 @@ SocketAddress.parse($0)"""
             /// <returns>
             /// Whether or not the <c>path</c> matched the <c>pattern</c>.
             /// </returns>
-            [<Import("matchesGlob", "path")>]
+            [<ImportDefault("path"); Emit("$0.matchesGlob($1...)")>]
             static member matchesGlob (path: string, pattern: string) : bool = nativeOnly
             /// <summary>
             /// Determines whether {path} is an absolute path. An absolute path will always resolve to the same location, regardless of the working directory.
@@ -116286,7 +116286,7 @@ SocketAddress.parse($0)"""
             /// <param name="path">
             /// path to test.
             /// </param>
-            [<Import("isAbsolute", "path")>]
+            [<ImportDefault("path"); Emit("$0.isAbsolute($1...)")>]
             static member isAbsolute (path: string) : bool = nativeOnly
             /// <summary>
             /// Solve the relative path from {from} to {to} based on the current working directory.
@@ -116298,7 +116298,7 @@ SocketAddress.parse($0)"""
             ///
             /// if either <c>from</c> or <c>to</c> is not a string.
             /// </remarks>
-            [<Import("relative", "path")>]
+            [<ImportDefault("path"); Emit("$0.relative($1...)")>]
             static member relative (from: string, ``to``: string) : string = nativeOnly
             /// <summary>
             /// Return the directory name of a path. Similar to the Unix dirname command.
@@ -116312,7 +116312,7 @@ SocketAddress.parse($0)"""
             /// <param name="path">
             /// the path to evaluate.
             /// </param>
-            [<Import("dirname", "path")>]
+            [<ImportDefault("path"); Emit("$0.dirname($1...)")>]
             static member dirname (path: string) : string = nativeOnly
             /// <summary>
             /// Return the last portion of a path. Similar to the Unix basename command.
@@ -116330,7 +116330,7 @@ SocketAddress.parse($0)"""
             /// <param name="suffix">
             /// optionally, an extension to remove from the result.
             /// </param>
-            [<Import("basename", "path")>]
+            [<ImportDefault("path"); Emit("$0.basename($1...)")>]
             static member basename (path: string, ?suffix: string) : string = nativeOnly
             /// <summary>
             /// Return the extension of the path, from the last '.' to end of string in the last portion of the path.
@@ -116345,17 +116345,19 @@ SocketAddress.parse($0)"""
             /// <param name="path">
             /// the path to evaluate.
             /// </param>
-            [<Import("extname", "path")>]
+            [<ImportDefault("path"); Emit("$0.extname($1...)")>]
             static member extname (path: string) : string = nativeOnly
             /// <summary>
             /// The platform-specific file separator. '\\' or '/'.
             /// </summary>
-            [<Import("sep", "path")>]
+            [<ImportDefault("path")>]
+            [<Emit("$0.sep")>]
             static member inline sep: Exports.sep.Type = nativeOnly
             /// <summary>
             /// The platform-specific file delimiter. ';' or ':'.
             /// </summary>
-            [<Import("delimiter", "path")>]
+            [<ImportDefault("path")>]
+            [<Emit("$0.delimiter")>]
             static member inline delimiter: Exports.delimiter.Type = nativeOnly
             /// <summary>
             /// Returns an object from a path string - the opposite of format().
@@ -116369,7 +116371,7 @@ SocketAddress.parse($0)"""
             /// <param name="path">
             /// path to evaluate.
             /// </param>
-            [<Import("parse", "path")>]
+            [<ImportDefault("path"); Emit("$0.parse($1...)")>]
             static member parse (path: string) : Node.path.path_.ParsedPath = nativeOnly
             /// <summary>
             /// Returns a path string from an object - the opposite of parse().
@@ -116377,7 +116379,7 @@ SocketAddress.parse($0)"""
             /// <param name="pathObject">
             /// path to evaluate.
             /// </param>
-            [<Import("format", "path")>]
+            [<ImportDefault("path"); Emit("$0.format($1...)")>]
             static member format (pathObject: Node.path.path_.FormatInputPathObject) : string = nativeOnly
             /// <summary>
             /// On Windows systems only, returns an equivalent namespace-prefixed path for the given path.
@@ -116385,19 +116387,21 @@ SocketAddress.parse($0)"""
             /// This method is meaningful only on Windows system.
             /// On POSIX systems, the method is non-operational and always returns path without modifications.
             /// </summary>
-            [<Import("toNamespacedPath", "path")>]
+            [<ImportDefault("path"); Emit("$0.toNamespacedPath($1...)")>]
             static member toNamespacedPath (path: string) : string = nativeOnly
             /// <summary>
             /// Posix specific pathing.
             /// Same as parent object on posix.
             /// </summary>
-            [<Import("posix", "path")>]
+            [<ImportDefault("path")>]
+            [<Emit("$0.posix")>]
             static member inline posix: Node.path.path_.PlatformPath = nativeOnly
             /// <summary>
             /// Windows specific pathing.
             /// Same as parent object on windows
             /// </summary>
-            [<Import("win32", "path")>]
+            [<ImportDefault("path")>]
+            [<Emit("$0.win32")>]
             static member inline win32: Node.path.path_.PlatformPath = nativeOnly
 
         module path_ =
@@ -117680,7 +117684,7 @@ SocketAddress.parse($0)"""
         [<AbstractClass>]
         [<Erase>]
         type Exports =
-            [<ImportAll("process")>]
+            [<ImportDefault("process")>]
             static member inline ``process``: Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// The <c>process.stdout</c> property returns a stream connected to<c>stdout</c> (fd <c>1</c>). It is a <c>net.Socket</c> (which is a <c>Duplex</c> stream) unless fd <c>1</c> refers to a file, in which case it is
@@ -117696,7 +117700,8 @@ SocketAddress.parse($0)"""
             ///
             /// <c>process.stdout</c> differs from other Node.js streams in important ways. See <c>note on process I/O</c> for more information.
             /// </summary>
-            [<Import("stdout", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.stdout")>]
             static member inline stdout: obj = nativeOnly
             /// <summary>
             /// The <c>process.stderr</c> property returns a stream connected to<c>stderr</c> (fd <c>2</c>). It is a <c>net.Socket</c> (which is a <c>Duplex</c> stream) unless fd <c>2</c> refers to a file, in which case it is
@@ -117704,7 +117709,8 @@ SocketAddress.parse($0)"""
             ///
             /// <c>process.stderr</c> differs from other Node.js streams in important ways. See <c>note on process I/O</c> for more information.
             /// </summary>
-            [<Import("stderr", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.stderr")>]
             static member inline stderr: obj = nativeOnly
             /// <summary>
             /// The <c>process.stdin</c> property returns a stream connected to<c>stdin</c> (fd <c>0</c>). It is a <c>net.Socket</c> (which is a <c>Duplex</c> stream) unless fd <c>0</c> refers to a file, in which case it is
@@ -117719,7 +117725,8 @@ SocketAddress.parse($0)"""
             /// In "old" streams mode the <c>stdin</c> stream is paused by default, so one
             /// must call <c>process.stdin.resume()</c> to read from it. Note also that calling <c>process.stdin.resume()</c> itself would switch stream to "old" mode.
             /// </summary>
-            [<Import("stdin", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.stdin")>]
             static member inline stdin: obj = nativeOnly
             /// <summary>
             /// The <c>process.argv</c> property returns an array containing the command-line
@@ -117756,7 +117763,8 @@ SocketAddress.parse($0)"""
             /// 4: four
             /// </c><c></c>
             /// </summary>
-            [<Import("argv", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.argv")>]
             static member inline argv: ResizeArray<string> = nativeOnly
             /// <summary>
             /// The <c>process.argv0</c> property stores a read-only copy of the original value of<c>argv[0]</c> passed when Node.js starts.
@@ -117769,7 +117777,8 @@ SocketAddress.parse($0)"""
             /// 'customArgv0'
             /// </code>
             /// </summary>
-            [<Import("argv0", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.argv0")>]
             static member inline argv0: string = nativeOnly
             /// <summary>
             /// The <c>process.execArgv</c> property returns the set of Node.js-specific command-line
@@ -117798,7 +117807,8 @@ SocketAddress.parse($0)"""
             /// Refer to <c>Worker constructor</c> for the detailed behavior of worker
             /// threads with this property.
             /// </summary>
-            [<Import("execArgv", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.execArgv")>]
             static member inline execArgv: ResizeArray<string> = nativeOnly
             /// <summary>
             /// The <c>process.execPath</c> property returns the absolute pathname of the executable
@@ -117808,7 +117818,8 @@ SocketAddress.parse($0)"""
             /// '/usr/local/bin/node'
             /// </code>
             /// </summary>
-            [<Import("execPath", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.execPath")>]
             static member inline execPath: string = nativeOnly
             /// <summary>
             /// The <c>process.abort()</c> method causes the Node.js process to exit immediately and
@@ -117816,7 +117827,7 @@ SocketAddress.parse($0)"""
             ///
             /// This feature is not available in <c>Worker</c> threads.
             /// </summary>
-            [<Import("abort", "process")>]
+            [<ImportDefault("process"); Emit("$0.abort($1...)")>]
             static member abort () : obj = nativeOnly
             /// <summary>
             /// The <c>process.chdir()</c> method changes the current working directory of the
@@ -117837,7 +117848,7 @@ SocketAddress.parse($0)"""
             ///
             /// This feature is not available in <c>Worker</c> threads.
             /// </summary>
-            [<Import("chdir", "process")>]
+            [<ImportDefault("process"); Emit("$0.chdir($1...)")>]
             static member chdir (directory: string) : unit = nativeOnly
             /// <summary>
             /// The <c>process.cwd()</c> method returns the current working directory of the Node.js
@@ -117849,7 +117860,7 @@ SocketAddress.parse($0)"""
             /// console.log(</c>Current directory: ${cwd()}<c>);
             /// </c><c></c>
             /// </summary>
-            [<Import("cwd", "process")>]
+            [<ImportDefault("process"); Emit("$0.cwd($1...)")>]
             static member cwd () : string = nativeOnly
             /// <summary>
             /// The port used by the Node.js debugger when enabled.
@@ -117860,7 +117871,8 @@ SocketAddress.parse($0)"""
             /// process.debugPort = 5858;
             /// </code>
             /// </summary>
-            [<Import("debugPort", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.debugPort")>]
             static member inline debugPort: float = nativeOnly
             /// <summary>
             /// The <c>process.dlopen()</c> method allows dynamically loading shared objects. It is primarily used by <c>require()</c> to load C++ Addons, and
@@ -117887,7 +117899,7 @@ SocketAddress.parse($0)"""
             /// module.exports.foo();
             /// </code>
             /// </summary>
-            [<Import("dlopen", "process")>]
+            [<ImportDefault("process"); Emit("$0.dlopen($1...)")>]
             static member dlopen (``module``: obj, filename: string, ?flags: float) : unit = nativeOnly
             /// <summary>
             /// The <c>process.emitWarning()</c> method can be used to emit custom or application
@@ -117958,7 +117970,7 @@ SocketAddress.parse($0)"""
             /// <param name="warning">
             /// The warning to emit.
             /// </param>
-            [<Import("emitWarning", "process")>]
+            [<ImportDefault("process"); Emit("$0.emitWarning($1...)")>]
             static member emitWarning (warning: U2<string, Exception>, ?ctor: Action) : unit = nativeOnly
             /// <summary>
             /// The <c>process.emitWarning()</c> method can be used to emit custom or application
@@ -118026,7 +118038,7 @@ SocketAddress.parse($0)"""
             /// * If the <c>--no-deprecation</c> command-line flag is used, the deprecation warning is suppressed.
             /// * If the <c>--trace-deprecation</c> command-line flag is used, the deprecation warning is printed to <c>stderr</c> along with the full stack trace.
             /// </summary>
-            [<Import("emitWarning", "process")>]
+            [<ImportDefault("process"); Emit("$0.emitWarning($1...)")>]
             static member emitWarning (warning: U2<string, Exception>, ?``type``: string, ?ctor: Action) : unit = nativeOnly
             /// <summary>
             /// The <c>process.emitWarning()</c> method can be used to emit custom or application
@@ -118094,7 +118106,7 @@ SocketAddress.parse($0)"""
             /// * If the <c>--no-deprecation</c> command-line flag is used, the deprecation warning is suppressed.
             /// * If the <c>--trace-deprecation</c> command-line flag is used, the deprecation warning is printed to <c>stderr</c> along with the full stack trace.
             /// </summary>
-            [<Import("emitWarning", "process")>]
+            [<ImportDefault("process"); Emit("$0.emitWarning($1...)")>]
             static member emitWarning (warning: U2<string, Exception>, ?``type``: string, ?code: string, ?ctor: Action) : unit = nativeOnly
             /// <summary>
             /// The <c>process.emitWarning()</c> method can be used to emit custom or application
@@ -118162,7 +118174,7 @@ SocketAddress.parse($0)"""
             /// * If the <c>--no-deprecation</c> command-line flag is used, the deprecation warning is suppressed.
             /// * If the <c>--trace-deprecation</c> command-line flag is used, the deprecation warning is printed to <c>stderr</c> along with the full stack trace.
             /// </summary>
-            [<Import("emitWarning", "process")>]
+            [<ImportDefault("process"); Emit("$0.emitWarning($1...)")>]
             static member emitWarning (warning: U2<string, Exception>, ?options: Node.NodeJS.EmitWarningOptions) : unit = nativeOnly
             /// <summary>
             /// The <c>process.env</c> property returns an object containing the user environment.
@@ -118247,7 +118259,8 @@ SocketAddress.parse($0)"""
             /// are visible to the operating system or to native add-ons. On Windows, a copy of <c>process.env</c> on a <c>Worker</c> instance operates in a case-sensitive manner
             /// unlike the main thread.
             /// </summary>
-            [<Import("env", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.env")>]
             static member inline env: Node.NodeJS.ProcessEnv = nativeOnly
             /// <summary>
             /// The <c>process.exit()</c> method instructs Node.js to terminate the process
@@ -118315,7 +118328,7 @@ SocketAddress.parse($0)"""
             /// <param name="code">
             /// The exit code. For string type, only integer strings (e.g.,'1') are allowed.
             /// </param>
-            [<Import("exit", "process")>]
+            [<ImportDefault("process"); Emit("$0.exit($1...)")>]
             static member exit (?code: U2<float, string>) : obj = nativeOnly
             /// <summary>
             /// A number which will be the process exit code, when the process either
@@ -118325,9 +118338,11 @@ SocketAddress.parse($0)"""
             /// Specifying a code to <see href="exit">exit</see> will override any
             /// previous setting of <c>process.exitCode</c>.
             /// </summary>
-            [<Import("exitCode", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.exitCode")>]
             static member inline exitCode: U2<float, string> option = nativeOnly
-            [<Import("finalization", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.finalization")>]
             static member inline finalization: Exports.finalization.Type = nativeOnly
             /// <summary>
             /// The <c>process.getActiveResourcesInfo()</c> method returns an array of strings containing
@@ -118345,7 +118360,7 @@ SocketAddress.parse($0)"""
             /// //   After: [ 'TTYWrap', 'TTYWrap', 'TTYWrap', 'Timeout' ]
             /// </code>
             /// </summary>
-            [<Import("getActiveResourcesInfo", "process")>]
+            [<ImportDefault("process"); Emit("$0.getActiveResourcesInfo($1...)")>]
             static member getActiveResourcesInfo () : ResizeArray<string> = nativeOnly
             /// <summary>
             /// Provides a way to load built-in modules in a globally available function.
@@ -118353,12 +118368,12 @@ SocketAddress.parse($0)"""
             /// <param name="id">
             /// ID of the built-in module being requested.
             /// </param>
-            [<Import("getBuiltinModule", "process")>]
+            [<ImportDefault("process"); Emit("$0.getBuiltinModule($1...)")>]
             static member getBuiltinModule (id: 'ID) : obj = nativeOnly
             /// <summary>
             /// Provides a way to load built-in modules in a globally available function.
             /// </summary>
-            [<Import("getBuiltinModule", "process")>]
+            [<ImportDefault("process"); Emit("$0.getBuiltinModule($1...)")>]
             static member getBuiltinModule (id: string) : obj option = nativeOnly
             /// <summary>
             /// The <c>process.getgid()</c> method returns the numerical group identity of the
@@ -118375,7 +118390,8 @@ SocketAddress.parse($0)"""
             /// This function is only available on POSIX platforms (i.e. not Windows or
             /// Android).
             /// </summary>
-            [<Import("getgid", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.getgid")>]
             static member inline getgid: (unit -> float) = nativeOnly
             /// <summary>
             /// The <c>process.setgid()</c> method sets the group identity of the process. (See [<c>setgid(2)</c>](http://man7.org/linux/man-pages/man2/setgid.2.html).) The <c>id</c> can be passed as either a
@@ -118404,7 +118420,8 @@ SocketAddress.parse($0)"""
             /// <param name="id">
             /// The group name or ID
             /// </param>
-            [<Import("setgid", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.setgid")>]
             static member inline setgid: (U2<float, string> -> unit) = nativeOnly
             /// <summary>
             /// The <c>process.getuid()</c> method returns the numeric user identity of the process.
@@ -118421,7 +118438,8 @@ SocketAddress.parse($0)"""
             /// This function is only available on POSIX platforms (i.e. not Windows or
             /// Android).
             /// </summary>
-            [<Import("getuid", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.getuid")>]
             static member inline getuid: (unit -> float) = nativeOnly
             /// <summary>
             /// The <c>process.setuid(id)</c> method sets the user identity of the process. (See [<c>setuid(2)</c>](http://man7.org/linux/man-pages/man2/setuid.2.html).) The <c>id</c> can be passed as either a
@@ -118447,7 +118465,8 @@ SocketAddress.parse($0)"""
             /// Android).
             /// This feature is not available in <c>Worker</c> threads.
             /// </summary>
-            [<Import("setuid", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.setuid")>]
             static member inline setuid: (U2<float, string> -> unit) = nativeOnly
             /// <summary>
             /// The <c>process.geteuid()</c> method returns the numerical effective user identity of
@@ -118464,7 +118483,8 @@ SocketAddress.parse($0)"""
             /// This function is only available on POSIX platforms (i.e. not Windows or
             /// Android).
             /// </summary>
-            [<Import("geteuid", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.geteuid")>]
             static member inline geteuid: (unit -> float) = nativeOnly
             /// <summary>
             /// The <c>process.seteuid()</c> method sets the effective user identity of the process.
@@ -118493,7 +118513,8 @@ SocketAddress.parse($0)"""
             /// <param name="id">
             /// A user name or ID
             /// </param>
-            [<Import("seteuid", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.seteuid")>]
             static member inline seteuid: (U2<float, string> -> unit) = nativeOnly
             /// <summary>
             /// The <c>process.getegid()</c> method returns the numerical effective group identity
@@ -118510,7 +118531,8 @@ SocketAddress.parse($0)"""
             /// This function is only available on POSIX platforms (i.e. not Windows or
             /// Android).
             /// </summary>
-            [<Import("getegid", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.getegid")>]
             static member inline getegid: (unit -> float) = nativeOnly
             /// <summary>
             /// The <c>process.setegid()</c> method sets the effective group identity of the process.
@@ -118539,7 +118561,8 @@ SocketAddress.parse($0)"""
             /// <param name="id">
             /// A group name or ID
             /// </param>
-            [<Import("setegid", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.setegid")>]
             static member inline setegid: (U2<float, string> -> unit) = nativeOnly
             /// <summary>
             /// The <c>process.getgroups()</c> method returns an array with the supplementary group
@@ -118557,7 +118580,8 @@ SocketAddress.parse($0)"""
             /// This function is only available on POSIX platforms (i.e. not Windows or
             /// Android).
             /// </summary>
-            [<Import("getgroups", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.getgroups")>]
             static member inline getgroups: (unit -> ResizeArray<float>) = nativeOnly
             /// <summary>
             /// The <c>process.setgroups()</c> method sets the supplementary group IDs for the
@@ -118583,7 +118607,8 @@ SocketAddress.parse($0)"""
             /// Android).
             /// This feature is not available in <c>Worker</c> threads.
             /// </summary>
-            [<Import("setgroups", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.setgroups")>]
             static member inline setgroups: (ReadonlyArray<U2<string, float>> -> unit) = nativeOnly
             /// <summary>
             /// The <c>process.setUncaughtExceptionCaptureCallback()</c> function sets a function
@@ -118602,17 +118627,18 @@ SocketAddress.parse($0)"""
             ///
             /// Using this function is mutually exclusive with using the deprecated <c>domain</c> built-in module.
             /// </summary>
-            [<Import("setUncaughtExceptionCaptureCallback", "process")>]
+            [<ImportDefault("process"); Emit("$0.setUncaughtExceptionCaptureCallback($1...)")>]
             static member setUncaughtExceptionCaptureCallback (cb: (Exception -> unit) option) : unit = nativeOnly
             /// <summary>
             /// Indicates whether a callback has been set using <see href="setUncaughtExceptionCaptureCallback">setUncaughtExceptionCaptureCallback</see>.
             /// </summary>
-            [<Import("hasUncaughtExceptionCaptureCallback", "process")>]
+            [<ImportDefault("process"); Emit("$0.hasUncaughtExceptionCaptureCallback($1...)")>]
             static member hasUncaughtExceptionCaptureCallback () : bool = nativeOnly
             /// <summary>
             /// The <c>process.sourceMapsEnabled</c> property returns whether the [Source Map v3](https://sourcemaps.info/spec.html) support for stack traces is enabled.
             /// </summary>
-            [<Import("sourceMapsEnabled", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.sourceMapsEnabled")>]
             static member inline sourceMapsEnabled: bool = nativeOnly
             /// <summary>
             /// This function enables or disables the [Source Map v3](https://sourcemaps.info/spec.html) support for
@@ -118623,7 +118649,7 @@ SocketAddress.parse($0)"""
             /// Only source maps in JavaScript files that are loaded after source maps has been
             /// enabled will be parsed and loaded.
             /// </summary>
-            [<Import("setSourceMapsEnabled", "process")>]
+            [<ImportDefault("process"); Emit("$0.setSourceMapsEnabled($1...)")>]
             static member setSourceMapsEnabled (value: bool) : unit = nativeOnly
             /// <summary>
             /// The <c>process.version</c> property contains the Node.js version string.
@@ -118637,7 +118663,8 @@ SocketAddress.parse($0)"""
             ///
             /// To get the version string without the prepended _v_, use<c>process.versions.node</c>.
             /// </summary>
-            [<Import("version", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.version")>]
             static member inline version: string = nativeOnly
             /// <summary>
             /// The <c>process.versions</c> property returns an object listing the version strings of
@@ -118680,7 +118707,8 @@ SocketAddress.parse($0)"""
             ///   zlib: '1.2.13' }
             /// </code>
             /// </summary>
-            [<Import("versions", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.versions")>]
             static member inline versions: Node.NodeJS.ProcessVersions = nativeOnly
             /// <summary>
             /// The <c>process.config</c> property returns a frozen <c>Object</c> containing the
@@ -118717,7 +118745,8 @@ SocketAddress.parse($0)"""
             /// }
             /// </code>
             /// </summary>
-            [<Import("config", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.config")>]
             static member inline config: Node.NodeJS.ProcessConfig = nativeOnly
             /// <summary>
             /// The <c>process.kill()</c> method sends the <c>signal</c> to the process identified by<c>pid</c>.
@@ -118757,7 +118786,7 @@ SocketAddress.parse($0)"""
             /// <param name="signal">
             /// The signal to send, either as a string or number.
             /// </param>
-            [<Import("kill", "process")>]
+            [<ImportDefault("process"); Emit("$0.kill($1...)")>]
             static member kill (pid: float, ?signal: U2<string, float>) : bool = nativeOnly
             /// <summary>
             /// Loads the environment configuration from a <c>.env</c> file into <c>process.env</c>. If
@@ -118774,7 +118803,7 @@ SocketAddress.parse($0)"""
             /// <param name="path">
             /// The path to the .env file
             /// </param>
-            [<Import("loadEnvFile", "process")>]
+            [<ImportDefault("process"); Emit("$0.loadEnvFile($1...)")>]
             static member loadEnvFile (?path: Node.fs.PathLike) : unit = nativeOnly
             /// <summary>
             /// The <c>process.pid</c> property returns the PID of the process.
@@ -118785,7 +118814,8 @@ SocketAddress.parse($0)"""
             /// console.log(</c>This process is pid ${pid}<c>);
             /// </c><c></c>
             /// </summary>
-            [<Import("pid", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.pid")>]
             static member inline pid: float = nativeOnly
             /// <summary>
             /// The <c>process.ppid</c> property returns the PID of the parent of the
@@ -118797,7 +118827,8 @@ SocketAddress.parse($0)"""
             /// console.log(</c>The parent process is pid ${ppid}<c>);
             /// </c><c></c>
             /// </summary>
-            [<Import("ppid", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.ppid")>]
             static member inline ppid: float = nativeOnly
             /// <summary>
             /// The <c>process.threadCpuUsage()</c> method returns the user and system CPU time usage of
@@ -118811,7 +118842,7 @@ SocketAddress.parse($0)"""
             /// A previous return value from calling
             /// <c>process.threadCpuUsage()</c>
             /// </param>
-            [<Import("threadCpuUsage", "process")>]
+            [<ImportDefault("process"); Emit("$0.threadCpuUsage($1...)")>]
             static member threadCpuUsage (?previousValue: Node.NodeJS.CpuUsage) : Node.NodeJS.CpuUsage = nativeOnly
             /// <summary>
             /// The <c>process.title</c> property returns the current process title (i.e. returns
@@ -118829,7 +118860,8 @@ SocketAddress.parse($0)"""
             /// within process manager applications such as macOS Activity Monitor or Windows
             /// Services Manager.
             /// </summary>
-            [<Import("title", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.title")>]
             static member inline title: string = nativeOnly
             /// <summary>
             /// The operating system CPU architecture for which the Node.js binary was compiled.
@@ -118841,7 +118873,8 @@ SocketAddress.parse($0)"""
             /// console.log(</c>This processor architecture is ${arch}<c>);
             /// </c><c></c>
             /// </summary>
-            [<Import("arch", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.arch")>]
             static member inline arch: Node.NodeJS.Architecture = nativeOnly
             /// <summary>
             /// The <c>process.platform</c> property returns a string identifying the operating
@@ -118866,7 +118899,8 @@ SocketAddress.parse($0)"""
             /// The value <c>'android'</c> may also be returned if the Node.js is built on the
             /// Android operating system. However, Android support in Node.js [is experimental](https://github.com/nodejs/node/blob/HEAD/BUILDING.md#androidandroid-based-devices-eg-firefox-os).
             /// </summary>
-            [<Import("platform", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.platform")>]
             static member inline platform: Node.NodeJS.Platform = nativeOnly
             /// <summary>
             /// The <c>process.mainModule</c> property provides an alternative way of retrieving <c>require.main</c>. The difference is that if the main module changes at
@@ -118877,10 +118911,12 @@ SocketAddress.parse($0)"""
             /// As with <c>require.main</c>, <c>process.mainModule</c> will be <c>undefined</c> if there
             /// is no entry script.
             /// </summary>
-            [<Import("mainModule", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.mainModule")>]
             [<Obsolete("Since v14.0.0 - Use `main` instead.")>]
             static member inline mainModule: Node.NodeJS.Module = nativeOnly
-            [<Import("memoryUsage", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.memoryUsage")>]
             static member inline memoryUsage: Node.NodeJS.MemoryUsageFn = nativeOnly
             /// <summary>
             /// Gets the amount of memory available to the process (in bytes) based on
@@ -118890,13 +118926,13 @@ SocketAddress.parse($0)"""
             /// See [<c>uv_get_constrained_memory</c>](https://docs.libuv.org/en/v1.x/misc.html#c.uv_get_constrained_memory) for more
             /// information.
             /// </summary>
-            [<Import("constrainedMemory", "process")>]
+            [<ImportDefault("process"); Emit("$0.constrainedMemory($1...)")>]
             static member constrainedMemory () : float = nativeOnly
             /// <summary>
             /// Gets the amount of free memory that is still available to the process (in bytes).
             /// See [<c>uv_get_available_memory</c>](https://nodejs.org/docs/latest-v22.x/api/process.html#processavailablememory) for more information.
             /// </summary>
-            [<Import("availableMemory", "process")>]
+            [<ImportDefault("process"); Emit("$0.availableMemory($1...)")>]
             static member availableMemory () : float = nativeOnly
             /// <summary>
             /// The <c>process.cpuUsage()</c> method returns the user and system CPU time usage of
@@ -118925,7 +118961,7 @@ SocketAddress.parse($0)"""
             /// <param name="previousValue">
             /// A previous return value from calling <c>process.cpuUsage()</c>
             /// </param>
-            [<Import("cpuUsage", "process")>]
+            [<ImportDefault("process"); Emit("$0.cpuUsage($1...)")>]
             static member cpuUsage (?previousValue: Node.NodeJS.CpuUsage) : Node.NodeJS.CpuUsage = nativeOnly
             /// <summary>
             /// <c>process.nextTick()</c> adds <c>callback</c> to the "next tick queue". This queue is
@@ -119016,13 +119052,14 @@ SocketAddress.parse($0)"""
             /// <param name="args">
             /// Additional arguments to pass when invoking the <c>callback</c>
             /// </param>
-            [<Import("nextTick", "process")>]
+            [<ImportDefault("process"); Emit("$0.nextTick($1...)")>]
             static member nextTick (callback: Action, [<ParamArray>] args: obj []) : unit = nativeOnly
             /// <summary>
             /// The process.noDeprecation property indicates whether the --no-deprecation flag is set on the current Node.js process.
             /// See the documentation for the ['warning' event](https://nodejs.org/docs/latest/api/process.html#event-warning) and the [emitWarning()](https://nodejs.org/docs/latest/api/process.html#processemitwarningwarning-type-code-ctor) method for more information about this flag's behavior.
             /// </summary>
-            [<Import("noDeprecation", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.noDeprecation")>]
             static member inline noDeprecation: bool = nativeOnly
             /// <summary>
             /// This API is available through the [--permission](https://nodejs.org/api/cli.html#--permission) flag.
@@ -119030,7 +119067,8 @@ SocketAddress.parse($0)"""
             /// <c>process.permission</c> is an object whose methods are used to manage permissions for the current process.
             /// Additional documentation is available in the [Permission Model](https://nodejs.org/api/permissions.html#permission-model).
             /// </summary>
-            [<Import("permission", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.permission")>]
             static member inline permission: Node.NodeJS.ProcessPermission = nativeOnly
             /// <summary>
             /// The <c>process.release</c> property returns an <c>Object</c> containing metadata related
@@ -119052,16 +119090,18 @@ SocketAddress.parse($0)"""
             /// In custom builds from non-release versions of the source tree, only the <c>name</c> property may be present. The additional properties should not be
             /// relied upon to exist.
             /// </summary>
-            [<Import("release", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.release")>]
             static member inline release: Node.NodeJS.ProcessRelease = nativeOnly
-            [<Import("features", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.features")>]
             static member inline features: Node.NodeJS.ProcessFeatures = nativeOnly
             /// <summary>
             /// <c>process.umask()</c> returns the Node.js process's file mode creation mask. Child
             /// processes inherit the mask from the parent process.
             /// Can only be set if not in worker thread.
             /// </summary>
-            [<Import("umask", "process"); Obsolete("""Calling `process.umask()` with no argument causes the process-wide umask to be written twice. This introduces a race condition between threads, and is a potential
+            [<ImportDefault("process"); Emit("$0.umask($1...)"); Obsolete("""Calling `process.umask()` with no argument causes the process-wide umask to be written twice. This introduces a race condition between threads, and is a potential
 security vulnerability. There is no safe, cross-platform alternative API.""")>]
             static member umask () : float = nativeOnly
             /// <summary>
@@ -119069,7 +119109,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// processes inherit the mask from the parent process.
             /// Can only be set if not in worker thread.
             /// </summary>
-            [<Import("umask", "process")>]
+            [<ImportDefault("process"); Emit("$0.umask($1...)")>]
             static member umask (mask: U2<string, float>) : float = nativeOnly
             /// <summary>
             /// The <c>process.uptime()</c> method returns the number of seconds the current Node.js
@@ -119078,15 +119118,17 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// The return value includes fractions of a second. Use <c>Math.floor()</c> to get whole
             /// seconds.
             /// </summary>
-            [<Import("uptime", "process")>]
+            [<ImportDefault("process"); Emit("$0.uptime($1...)")>]
             static member uptime () : float = nativeOnly
-            [<Import("hrtime", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.hrtime")>]
             static member inline hrtime: Node.NodeJS.HRTime = nativeOnly
             /// <summary>
             /// If the Node.js process was spawned with an IPC channel, the process.channel property is a reference to the IPC channel.
             /// If no IPC channel exists, this property is undefined.
             /// </summary>
-            [<Import("channel", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.channel")>]
             static member inline channel: Node.child_process.Control = nativeOnly
             /// <summary>
             /// If Node.js is spawned with an IPC channel, the <c>process.send()</c> method can be
@@ -119100,7 +119142,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// <param name="options">
             /// used to parameterize the sending of certain types of handles. <c>options</c> supports the following properties:
             /// </param>
-            [<Import("send", "process")>]
+            [<ImportDefault("process"); Emit("$0.send($1...)")>]
             static member send (message: obj, ?sendHandle: Node.child_process.SendHandle, ?options: Node.child_process.MessageOptions, ?callback: (Exception option -> unit)) : bool = nativeOnly
             /// <summary>
             /// If Node.js is spawned with an IPC channel, the <c>process.send()</c> method can be
@@ -119111,7 +119153,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// The message goes through serialization and parsing. The resulting message might
             /// not be the same as what is originally sent.
             /// </summary>
-            [<Import("send", "process")>]
+            [<ImportDefault("process"); Emit("$0.send($1...)")>]
             static member send (message: obj, sendHandle: Node.child_process.SendHandle, ?callback: (Exception option -> unit)) : bool = nativeOnly
             /// <summary>
             /// If Node.js is spawned with an IPC channel, the <c>process.send()</c> method can be
@@ -119122,7 +119164,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// The message goes through serialization and parsing. The resulting message might
             /// not be the same as what is originally sent.
             /// </summary>
-            [<Import("send", "process")>]
+            [<ImportDefault("process"); Emit("$0.send($1...)")>]
             static member send (message: obj, callback: (Exception option -> unit)) : bool = nativeOnly
             /// <summary>
             /// If the Node.js process is spawned with an IPC channel (see the <c>Child Process</c> and <c>Cluster</c> documentation), the <c>process.disconnect()</c> method will close the
@@ -119133,7 +119175,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             ///
             /// If the Node.js process was not spawned with an IPC channel, <c>process.disconnect()</c> will be <c>undefined</c>.
             /// </summary>
-            [<Import("disconnect", "process")>]
+            [<ImportDefault("process"); Emit("$0.disconnect($1...)")>]
             static member disconnect () : unit = nativeOnly
             /// <summary>
             /// If the Node.js process is spawned with an IPC channel (see the <c>Child Process</c> and <c>Cluster</c> documentation), the <c>process.connected</c> property will return <c>true</c> so long as the IPC
@@ -119142,7 +119184,8 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// Once <c>process.connected</c> is <c>false</c>, it is no longer possible to send messages
             /// over the IPC channel using <c>process.send()</c>.
             /// </summary>
-            [<Import("connected", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.connected")>]
             static member inline connected: bool = nativeOnly
             /// <summary>
             /// The <c>process.allowedNodeEnvironmentFlags</c> property is a special,
@@ -119184,13 +119227,15 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// If Node.js was compiled _without_ <c>NODE_OPTIONS</c> support (shown in <see href="config">config</see>), <c>process.allowedNodeEnvironmentFlags</c> will
             /// contain what _would have_ been allowable.
             /// </summary>
-            [<Import("allowedNodeEnvironmentFlags", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.allowedNodeEnvironmentFlags")>]
             static member inline allowedNodeEnvironmentFlags: obj = nativeOnly
             /// <summary>
             /// <c>process.report</c> is an object whose methods are used to generate diagnostic reports for the current process.
             /// Additional documentation is available in the [report documentation](https://nodejs.org/docs/latest-v22.x/api/report.html).
             /// </summary>
-            [<Import("report", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.report")>]
             static member inline report: Node.NodeJS.ProcessReport = nativeOnly
             /// <summary>
             /// <code lang="js">
@@ -119223,7 +119268,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// <returns>
             /// the resource usage for the current process. All of these values come from the <c>uv_getrusage</c> call which returns a [<c>uv_rusage_t</c> struct][uv_rusage_t].
             /// </returns>
-            [<Import("resourceUsage", "process")>]
+            [<ImportDefault("process"); Emit("$0.resourceUsage($1...)")>]
             static member resourceUsage () : Node.NodeJS.ResourceUsage = nativeOnly
             /// <summary>
             /// The initial value of <c>process.throwDeprecation</c> indicates whether the <c>--throw-deprecation</c> flag is set on the current Node.js process. <c>process.throwDeprecation</c>
@@ -119246,14 +119291,16 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// [DeprecationWarning: test] { name: 'DeprecationWarning' }
             /// </code>
             /// </summary>
-            [<Import("throwDeprecation", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.throwDeprecation")>]
             static member inline throwDeprecation: bool = nativeOnly
             /// <summary>
             /// The <c>process.traceDeprecation</c> property indicates whether the <c>--trace-deprecation</c> flag is set on the current Node.js process. See the
             /// documentation for the <c>'warning' event</c> and the <c>emitWarning() method</c> for more information about this
             /// flag's behavior.
             /// </summary>
-            [<Import("traceDeprecation", "process")>]
+            [<ImportDefault("process")>]
+            [<Emit("$0.traceDeprecation")>]
             static member inline traceDeprecation: bool = nativeOnly
             /// <summary>
             /// An object is "refable" if it implements the Node.js "Refable protocol".
@@ -119268,7 +119315,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// <param name="maybeRefable">
             /// An object that may be "refable".
             /// </param>
-            [<Import("ref", "process")>]
+            [<ImportDefault("process"); Emit("$0.ref($1...)")>]
             static member ref (maybeRefable: obj) : unit = nativeOnly
             /// <summary>
             /// An object is "unrefable" if it implements the Node.js "Refable protocol".
@@ -119283,7 +119330,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// <param name="maybeRefable">
             /// An object that may be "unref'd".
             /// </param>
-            [<Import("unref", "process")>]
+            [<ImportDefault("process"); Emit("$0.unref($1...)")>]
             static member unref (maybeRefable: obj) : unit = nativeOnly
             /// <summary>
             /// Replaces the current process with a new process.
@@ -119310,67 +119357,67 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// No key or value can contain a null-byte (<c>\u0000</c>).
             /// **Default:** <c>process.env</c>.
             /// </param>
-            [<Import("execve", "process")>]
+            [<ImportDefault("process"); Emit("$0.execve($1...)")>]
             static member execve (file: string, ?args: ReadonlyArray<string>, ?env: Node.NodeJS.ProcessEnv) : obj = nativeOnly
             /// <summary>
             /// Alias for <c>emitter.on(eventName, listener)</c>.
             /// </summary>
-            [<Import("addListener", "process")>]
+            [<ImportDefault("process"); Emit("$0.addListener($1...)")>]
             static member addListener (event: string, listener: Node.NodeJS.BeforeExitListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Alias for <c>emitter.on(eventName, listener)</c>.
             /// </summary>
-            [<Import("addListener", "process")>]
+            [<ImportDefault("process"); Emit("$0.addListener($1...)")>]
             static member addListener (event: string, listener: Node.NodeJS.DisconnectListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Alias for <c>emitter.on(eventName, listener)</c>.
             /// </summary>
-            [<Import("addListener", "process")>]
+            [<ImportDefault("process"); Emit("$0.addListener($1...)")>]
             static member addListener (event: string, listener: Node.NodeJS.ExitListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Alias for <c>emitter.on(eventName, listener)</c>.
             /// </summary>
-            [<Import("addListener", "process")>]
+            [<ImportDefault("process"); Emit("$0.addListener($1...)")>]
             static member addListener (event: string, listener: Node.NodeJS.RejectionHandledListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Alias for <c>emitter.on(eventName, listener)</c>.
             /// </summary>
-            [<Import("addListener", "process")>]
+            [<ImportDefault("process"); Emit("$0.addListener($1...)")>]
             static member addListener (event: string, listener: Node.NodeJS.UncaughtExceptionListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Alias for <c>emitter.on(eventName, listener)</c>.
             /// </summary>
-            [<Import("addListener", "process")>]
+            [<ImportDefault("process"); Emit("$0.addListener($1...)")>]
             static member addListener (event: string, listener: Node.NodeJS.UnhandledRejectionListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Alias for <c>emitter.on(eventName, listener)</c>.
             /// </summary>
-            [<Import("addListener", "process")>]
+            [<ImportDefault("process"); Emit("$0.addListener($1...)")>]
             static member addListener (event: string, listener: Node.NodeJS.WarningListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Alias for <c>emitter.on(eventName, listener)</c>.
             /// </summary>
-            [<Import("addListener", "process")>]
+            [<ImportDefault("process"); Emit("$0.addListener($1...)")>]
             static member addListener (event: string, listener: Node.NodeJS.MessageListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Alias for <c>emitter.on(eventName, listener)</c>.
             /// </summary>
-            [<Import("addListener", "process")>]
+            [<ImportDefault("process"); Emit("$0.addListener($1...)")>]
             static member addListener (event: string, listener: Exports.addListener.listener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Alias for <c>emitter.on(eventName, listener)</c>.
             /// </summary>
-            [<Import("addListener", "process")>]
+            [<ImportDefault("process"); Emit("$0.addListener($1...)")>]
             static member addListener (event: Node.NodeJS.Signals, listener: Node.NodeJS.SignalsListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Alias for <c>emitter.on(eventName, listener)</c>.
             /// </summary>
-            [<Import("addListener", "process")>]
+            [<ImportDefault("process"); Emit("$0.addListener($1...)")>]
             static member addListener (event: string, listener: Node.NodeJS.MultipleResolveListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Alias for <c>emitter.on(eventName, listener)</c>.
             /// </summary>
-            [<Import("addListener", "process")>]
+            [<ImportDefault("process"); Emit("$0.addListener($1...)")>]
             static member addListener (event: string, listener: Node.NodeJS.WorkerListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Synchronously calls each of the listeners registered for the event named <c>eventName</c>, in the order they were registered, passing the supplied arguments
@@ -119411,7 +119458,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// // event with parameters 1, 2, 3, 4, 5 in third listener
             /// </c><c></c>
             /// </summary>
-            [<Import("emit", "process")>]
+            [<ImportDefault("process"); Emit("$0.emit($1...)")>]
             static member emit (event: string, code: float) : bool = nativeOnly
             /// <summary>
             /// Synchronously calls each of the listeners registered for the event named <c>eventName</c>, in the order they were registered, passing the supplied arguments
@@ -119452,7 +119499,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// // event with parameters 1, 2, 3, 4, 5 in third listener
             /// </c><c></c>
             /// </summary>
-            [<Import("emit", "process")>]
+            [<ImportDefault("process"); Emit("$0.emit($1...)")>]
             static member emit (event: string) : bool = nativeOnly
             /// <summary>
             /// Synchronously calls each of the listeners registered for the event named <c>eventName</c>, in the order they were registered, passing the supplied arguments
@@ -119493,7 +119540,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// // event with parameters 1, 2, 3, 4, 5 in third listener
             /// </c><c></c>
             /// </summary>
-            [<Import("emit", "process")>]
+            [<ImportDefault("process"); Emit("$0.emit($1...)")>]
             static member emit (event: string, promise: JS.Promise<obj>) : bool = nativeOnly
             /// <summary>
             /// Synchronously calls each of the listeners registered for the event named <c>eventName</c>, in the order they were registered, passing the supplied arguments
@@ -119534,7 +119581,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// // event with parameters 1, 2, 3, 4, 5 in third listener
             /// </c><c></c>
             /// </summary>
-            [<Import("emit", "process")>]
+            [<ImportDefault("process"); Emit("$0.emit($1...)")>]
             static member emit (event: string, error: Exception) : bool = nativeOnly
             /// <summary>
             /// Synchronously calls each of the listeners registered for the event named <c>eventName</c>, in the order they were registered, passing the supplied arguments
@@ -119575,7 +119622,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// // event with parameters 1, 2, 3, 4, 5 in third listener
             /// </c><c></c>
             /// </summary>
-            [<Import("emit", "process")>]
+            [<ImportDefault("process"); Emit("$0.emit($1...)")>]
             static member emit (event: string, reason: obj, promise: JS.Promise<obj>) : bool = nativeOnly
             /// <summary>
             /// Synchronously calls each of the listeners registered for the event named <c>eventName</c>, in the order they were registered, passing the supplied arguments
@@ -119616,7 +119663,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// // event with parameters 1, 2, 3, 4, 5 in third listener
             /// </c><c></c>
             /// </summary>
-            [<Import("emit", "process")>]
+            [<ImportDefault("process"); Emit("$0.emit($1...)")>]
             static member emit (event: string, message: obj, sendHandle: Node.child_process.SendHandle) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Synchronously calls each of the listeners registered for the event named <c>eventName</c>, in the order they were registered, passing the supplied arguments
@@ -119657,7 +119704,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// // event with parameters 1, 2, 3, 4, 5 in third listener
             /// </c><c></c>
             /// </summary>
-            [<Import("emit", "process")>]
+            [<ImportDefault("process"); Emit("$0.emit($1...)")>]
             static member emit (event: string, value: obj, source: float) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Synchronously calls each of the listeners registered for the event named <c>eventName</c>, in the order they were registered, passing the supplied arguments
@@ -119698,7 +119745,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// // event with parameters 1, 2, 3, 4, 5 in third listener
             /// </c><c></c>
             /// </summary>
-            [<Import("emit", "process")>]
+            [<ImportDefault("process"); Emit("$0.emit($1...)")>]
             static member emit (event: Node.NodeJS.Signals, ?signal: Node.NodeJS.Signals) : bool = nativeOnly
             /// <summary>
             /// Synchronously calls each of the listeners registered for the event named <c>eventName</c>, in the order they were registered, passing the supplied arguments
@@ -119739,7 +119786,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// // event with parameters 1, 2, 3, 4, 5 in third listener
             /// </c><c></c>
             /// </summary>
-            [<Import("emit", "process")>]
+            [<ImportDefault("process"); Emit("$0.emit($1...)")>]
             static member emit (event: string, ``type``: Node.NodeJS.MultipleResolveType, promise: JS.Promise<obj>, value: obj) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Synchronously calls each of the listeners registered for the event named <c>eventName</c>, in the order they were registered, passing the supplied arguments
@@ -119780,7 +119827,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// // event with parameters 1, 2, 3, 4, 5 in third listener
             /// </c><c></c>
             /// </summary>
-            [<Import("emit", "process")>]
+            [<ImportDefault("process"); Emit("$0.emit($1...)")>]
             static member emit (event: string, listener: Node.NodeJS.WorkerListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
@@ -119810,7 +119857,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// //   a
             /// </code>
             /// </summary>
-            [<Import("on", "process")>]
+            [<ImportDefault("process"); Emit("$0.on($1...)")>]
             static member on (event: string, listener: Node.NodeJS.BeforeExitListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
@@ -119840,7 +119887,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// //   a
             /// </code>
             /// </summary>
-            [<Import("on", "process")>]
+            [<ImportDefault("process"); Emit("$0.on($1...)")>]
             static member on (event: string, listener: Node.NodeJS.DisconnectListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
@@ -119870,7 +119917,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// //   a
             /// </code>
             /// </summary>
-            [<Import("on", "process")>]
+            [<ImportDefault("process"); Emit("$0.on($1...)")>]
             static member on (event: string, listener: Node.NodeJS.ExitListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
@@ -119900,7 +119947,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// //   a
             /// </code>
             /// </summary>
-            [<Import("on", "process")>]
+            [<ImportDefault("process"); Emit("$0.on($1...)")>]
             static member on (event: string, listener: Node.NodeJS.RejectionHandledListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
@@ -119930,7 +119977,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// //   a
             /// </code>
             /// </summary>
-            [<Import("on", "process")>]
+            [<ImportDefault("process"); Emit("$0.on($1...)")>]
             static member on (event: string, listener: Node.NodeJS.UncaughtExceptionListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
@@ -119960,7 +120007,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// //   a
             /// </code>
             /// </summary>
-            [<Import("on", "process")>]
+            [<ImportDefault("process"); Emit("$0.on($1...)")>]
             static member on (event: string, listener: Node.NodeJS.UnhandledRejectionListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
@@ -119990,7 +120037,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// //   a
             /// </code>
             /// </summary>
-            [<Import("on", "process")>]
+            [<ImportDefault("process"); Emit("$0.on($1...)")>]
             static member on (event: string, listener: Node.NodeJS.WarningListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
@@ -120020,7 +120067,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// //   a
             /// </code>
             /// </summary>
-            [<Import("on", "process")>]
+            [<ImportDefault("process"); Emit("$0.on($1...)")>]
             static member on (event: string, listener: Node.NodeJS.MessageListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
@@ -120050,7 +120097,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// //   a
             /// </code>
             /// </summary>
-            [<Import("on", "process")>]
+            [<ImportDefault("process"); Emit("$0.on($1...)")>]
             static member on (event: Node.NodeJS.Signals, listener: Node.NodeJS.SignalsListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
@@ -120080,7 +120127,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// //   a
             /// </code>
             /// </summary>
-            [<Import("on", "process")>]
+            [<ImportDefault("process"); Emit("$0.on($1...)")>]
             static member on (event: string, listener: Node.NodeJS.MultipleResolveListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
@@ -120110,7 +120157,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// //   a
             /// </code>
             /// </summary>
-            [<Import("on", "process")>]
+            [<ImportDefault("process"); Emit("$0.on($1...)")>]
             static member on (event: string, listener: Node.NodeJS.WorkerListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
@@ -120140,7 +120187,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// //   a
             /// </code>
             /// </summary>
-            [<Import("on", "process")>]
+            [<ImportDefault("process"); Emit("$0.on($1...)")>]
             static member on (event: string, listener: Exports.on.listener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
@@ -120170,7 +120217,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// //   a
             /// </code>
             /// </summary>
-            [<Import("on", "process")>]
+            [<ImportDefault("process"); Emit("$0.on($1...)")>]
             static member on (event: U2<string, obj>, listener: System.Delegate) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
@@ -120198,7 +120245,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// //   a
             /// </code>
             /// </summary>
-            [<Import("once", "process")>]
+            [<ImportDefault("process"); Emit("$0.once($1...)")>]
             static member once (event: string, listener: Node.NodeJS.BeforeExitListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
@@ -120226,7 +120273,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// //   a
             /// </code>
             /// </summary>
-            [<Import("once", "process")>]
+            [<ImportDefault("process"); Emit("$0.once($1...)")>]
             static member once (event: string, listener: Node.NodeJS.DisconnectListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
@@ -120254,7 +120301,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// //   a
             /// </code>
             /// </summary>
-            [<Import("once", "process")>]
+            [<ImportDefault("process"); Emit("$0.once($1...)")>]
             static member once (event: string, listener: Node.NodeJS.ExitListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
@@ -120282,7 +120329,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// //   a
             /// </code>
             /// </summary>
-            [<Import("once", "process")>]
+            [<ImportDefault("process"); Emit("$0.once($1...)")>]
             static member once (event: string, listener: Node.NodeJS.RejectionHandledListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
@@ -120310,7 +120357,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// //   a
             /// </code>
             /// </summary>
-            [<Import("once", "process")>]
+            [<ImportDefault("process"); Emit("$0.once($1...)")>]
             static member once (event: string, listener: Node.NodeJS.UncaughtExceptionListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
@@ -120338,7 +120385,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// //   a
             /// </code>
             /// </summary>
-            [<Import("once", "process")>]
+            [<ImportDefault("process"); Emit("$0.once($1...)")>]
             static member once (event: string, listener: Node.NodeJS.UnhandledRejectionListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
@@ -120366,7 +120413,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// //   a
             /// </code>
             /// </summary>
-            [<Import("once", "process")>]
+            [<ImportDefault("process"); Emit("$0.once($1...)")>]
             static member once (event: string, listener: Node.NodeJS.WarningListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
@@ -120394,7 +120441,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// //   a
             /// </code>
             /// </summary>
-            [<Import("once", "process")>]
+            [<ImportDefault("process"); Emit("$0.once($1...)")>]
             static member once (event: string, listener: Node.NodeJS.MessageListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
@@ -120422,7 +120469,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// //   a
             /// </code>
             /// </summary>
-            [<Import("once", "process")>]
+            [<ImportDefault("process"); Emit("$0.once($1...)")>]
             static member once (event: Node.NodeJS.Signals, listener: Node.NodeJS.SignalsListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
@@ -120450,7 +120497,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// //   a
             /// </code>
             /// </summary>
-            [<Import("once", "process")>]
+            [<ImportDefault("process"); Emit("$0.once($1...)")>]
             static member once (event: string, listener: Node.NodeJS.MultipleResolveListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
@@ -120478,7 +120525,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// //   a
             /// </code>
             /// </summary>
-            [<Import("once", "process")>]
+            [<ImportDefault("process"); Emit("$0.once($1...)")>]
             static member once (event: string, listener: Node.NodeJS.WorkerListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
@@ -120506,7 +120553,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// //   a
             /// </code>
             /// </summary>
-            [<Import("once", "process")>]
+            [<ImportDefault("process"); Emit("$0.once($1...)")>]
             static member once (event: string, listener: Exports.once.listener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
@@ -120534,7 +120581,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// //   a
             /// </code>
             /// </summary>
-            [<Import("once", "process")>]
+            [<ImportDefault("process"); Emit("$0.once($1...)")>]
             static member once (event: U2<string, obj>, listener: System.Delegate) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
@@ -120550,7 +120597,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
-            [<Import("prependListener", "process")>]
+            [<ImportDefault("process"); Emit("$0.prependListener($1...)")>]
             static member prependListener (event: string, listener: Node.NodeJS.BeforeExitListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
@@ -120566,7 +120613,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
-            [<Import("prependListener", "process")>]
+            [<ImportDefault("process"); Emit("$0.prependListener($1...)")>]
             static member prependListener (event: string, listener: Node.NodeJS.DisconnectListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
@@ -120582,7 +120629,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
-            [<Import("prependListener", "process")>]
+            [<ImportDefault("process"); Emit("$0.prependListener($1...)")>]
             static member prependListener (event: string, listener: Node.NodeJS.ExitListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
@@ -120598,7 +120645,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
-            [<Import("prependListener", "process")>]
+            [<ImportDefault("process"); Emit("$0.prependListener($1...)")>]
             static member prependListener (event: string, listener: Node.NodeJS.RejectionHandledListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
@@ -120614,7 +120661,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
-            [<Import("prependListener", "process")>]
+            [<ImportDefault("process"); Emit("$0.prependListener($1...)")>]
             static member prependListener (event: string, listener: Node.NodeJS.UncaughtExceptionListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
@@ -120630,7 +120677,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
-            [<Import("prependListener", "process")>]
+            [<ImportDefault("process"); Emit("$0.prependListener($1...)")>]
             static member prependListener (event: string, listener: Node.NodeJS.UnhandledRejectionListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
@@ -120646,7 +120693,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
-            [<Import("prependListener", "process")>]
+            [<ImportDefault("process"); Emit("$0.prependListener($1...)")>]
             static member prependListener (event: string, listener: Node.NodeJS.WarningListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
@@ -120662,7 +120709,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
-            [<Import("prependListener", "process")>]
+            [<ImportDefault("process"); Emit("$0.prependListener($1...)")>]
             static member prependListener (event: string, listener: Node.NodeJS.MessageListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
@@ -120678,7 +120725,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
-            [<Import("prependListener", "process")>]
+            [<ImportDefault("process"); Emit("$0.prependListener($1...)")>]
             static member prependListener (event: string, listener: Exports.prependListener.listener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
@@ -120694,7 +120741,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
-            [<Import("prependListener", "process")>]
+            [<ImportDefault("process"); Emit("$0.prependListener($1...)")>]
             static member prependListener (event: Node.NodeJS.Signals, listener: Node.NodeJS.SignalsListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
@@ -120710,7 +120757,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
-            [<Import("prependListener", "process")>]
+            [<ImportDefault("process"); Emit("$0.prependListener($1...)")>]
             static member prependListener (event: string, listener: Node.NodeJS.MultipleResolveListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
@@ -120726,7 +120773,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
-            [<Import("prependListener", "process")>]
+            [<ImportDefault("process"); Emit("$0.prependListener($1...)")>]
             static member prependListener (event: string, listener: Node.NodeJS.WorkerListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
@@ -120740,7 +120787,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
-            [<Import("prependOnceListener", "process")>]
+            [<ImportDefault("process"); Emit("$0.prependOnceListener($1...)")>]
             static member prependOnceListener (event: string, listener: Node.NodeJS.BeforeExitListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
@@ -120754,7 +120801,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
-            [<Import("prependOnceListener", "process")>]
+            [<ImportDefault("process"); Emit("$0.prependOnceListener($1...)")>]
             static member prependOnceListener (event: string, listener: Node.NodeJS.DisconnectListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
@@ -120768,7 +120815,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
-            [<Import("prependOnceListener", "process")>]
+            [<ImportDefault("process"); Emit("$0.prependOnceListener($1...)")>]
             static member prependOnceListener (event: string, listener: Node.NodeJS.ExitListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
@@ -120782,7 +120829,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
-            [<Import("prependOnceListener", "process")>]
+            [<ImportDefault("process"); Emit("$0.prependOnceListener($1...)")>]
             static member prependOnceListener (event: string, listener: Node.NodeJS.RejectionHandledListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
@@ -120796,7 +120843,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
-            [<Import("prependOnceListener", "process")>]
+            [<ImportDefault("process"); Emit("$0.prependOnceListener($1...)")>]
             static member prependOnceListener (event: string, listener: Node.NodeJS.UncaughtExceptionListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
@@ -120810,7 +120857,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
-            [<Import("prependOnceListener", "process")>]
+            [<ImportDefault("process"); Emit("$0.prependOnceListener($1...)")>]
             static member prependOnceListener (event: string, listener: Node.NodeJS.UnhandledRejectionListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
@@ -120824,7 +120871,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
-            [<Import("prependOnceListener", "process")>]
+            [<ImportDefault("process"); Emit("$0.prependOnceListener($1...)")>]
             static member prependOnceListener (event: string, listener: Node.NodeJS.WarningListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
@@ -120838,7 +120885,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
-            [<Import("prependOnceListener", "process")>]
+            [<ImportDefault("process"); Emit("$0.prependOnceListener($1...)")>]
             static member prependOnceListener (event: string, listener: Node.NodeJS.MessageListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
@@ -120852,7 +120899,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
-            [<Import("prependOnceListener", "process")>]
+            [<ImportDefault("process"); Emit("$0.prependOnceListener($1...)")>]
             static member prependOnceListener (event: string, listener: Exports.prependOnceListener.listener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
@@ -120866,7 +120913,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
-            [<Import("prependOnceListener", "process")>]
+            [<ImportDefault("process"); Emit("$0.prependOnceListener($1...)")>]
             static member prependOnceListener (event: Node.NodeJS.Signals, listener: Node.NodeJS.SignalsListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
@@ -120880,7 +120927,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
-            [<Import("prependOnceListener", "process")>]
+            [<ImportDefault("process"); Emit("$0.prependOnceListener($1...)")>]
             static member prependOnceListener (event: string, listener: Node.NodeJS.MultipleResolveListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
@@ -120894,7 +120941,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             ///
             /// Returns a reference to the <c>EventEmitter</c>, so that calls can be chained.
             /// </summary>
-            [<Import("prependOnceListener", "process")>]
+            [<ImportDefault("process"); Emit("$0.prependOnceListener($1...)")>]
             static member prependOnceListener (event: string, listener: Node.NodeJS.WorkerListener) : Node.NodeJS.Process = nativeOnly
             /// <summary>
             /// Returns a copy of the array of listeners for the event named <c>eventName</c>.
@@ -120907,7 +120954,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// // Prints: [ [Function] ]
             /// </code>
             /// </summary>
-            [<Import("listeners", "process")>]
+            [<ImportDefault("process"); Emit("$0.listeners($1...)")>]
             static member listeners (event: string) : ResizeArray<Node.NodeJS.BeforeExitListener> = nativeOnly
             /// <summary>
             /// Returns a copy of the array of listeners for the event named <c>eventName</c>.
@@ -120920,7 +120967,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// // Prints: [ [Function] ]
             /// </code>
             /// </summary>
-            [<Import("listeners", "process")>]
+            [<ImportDefault("process"); Emit("$0.listeners($1...)")>]
             static member listeners (event: Node.NodeJS.Signals) : ResizeArray<Node.NodeJS.SignalsListener> = nativeOnly
 
         [<AllowNullLiteral>]
