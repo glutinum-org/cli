@@ -46,60 +46,13 @@ let update msg model =
 
         | _ -> model, Cmd.none
 
-let private navbar =
-    Bulma.navbar [
-        navbar.isFixedTop
-        navbar.hasShadow
-        color.isPrimary
-        prop.children [
-            Bulma.navbarBrand.div [
-                Bulma.navbarItem.a [
-                    None |> Router.EditorsRoute.FSharpCode |> Router.Route.Editors |> Router.href
-
-                    prop.text $"Glutinum tools - %s{Prelude.VERSION}"
-                ]
-            ]
-            Bulma.navbarMenu [
-                Bulma.navbarEnd.div [
-                    Bulma.navbarItem.div [
-                        Bulma.button.a [
-                            prop.href "https://mangelmaxime.github.io/sponsors"
-                            prop.children [
-                                Bulma.icon [
-                                    prop.children [
-                                        Icon [
-                                            icon.color "#bf3989"
-                                            icon.icon lucide.heart
-                                        ]
-                                    ]
-                                ]
-                                Html.span "Sponsors"
-                            ]
-                        ]
-                    ]
-
-                    Bulma.navbarItem.div [
-                        Bulma.button.a [
-                            prop.style [
-                                style.color "#181717" // GitHub's color
-                            ]
-                            prop.href "https://github.com/glutinum-org/cli"
-                            prop.children [
-                                Bulma.icon [
-                                    prop.children [ Icon [ icon.icon simpleIcons.github ] ]
-                                ]
-                                Html.span "Github"
-                            ]
-                        ]
-                    ]
-                ]
-            ]
-        ]
-    ]
-
 let view model dispatch =
     React.Fragment [
-        navbar
+        Html.div [
+            prop.className "glutinum-app__version"
+            prop.title "Glutinum version"
+            prop.text $"v%s{Prelude.VERSION}"
+        ]
 
         match model with
         | Editors editorsModel -> Editors.view editorsModel (fun msg -> dispatch (EditorsMsg msg))

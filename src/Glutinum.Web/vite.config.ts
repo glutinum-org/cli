@@ -10,6 +10,17 @@ export default defineConfig((env) => {
             devSourcemap: isDevelpoment
         },
         plugins: [react()],
+        build: {
+            // The documentation site links `app.js` and `app.css` from its own page
+            rollupOptions: {
+                output: {
+                    entryFileNames: "app.js",
+                    chunkFileNames: "[name].js",
+                    assetFileNames: (asset) =>
+                        (asset.name ?? "").endsWith(".css") ? "app.css" : "[name][extname]"
+                }
+            }
+        },
         server: {
             watch: {
                 ignored: [

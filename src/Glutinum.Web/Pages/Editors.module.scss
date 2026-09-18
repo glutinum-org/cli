@@ -3,12 +3,9 @@
 .panel-container {
     display: flex;
     flex: 1;
-    height: calc(100vh - 3.5rem);
-    max-height: calc(100vh - 3.5rem);
+    height: calc(100vh - var(--nacara-navbar-height, 3.5rem));
+    max-height: calc(100vh - var(--nacara-navbar-height, 3.5rem));
     position: relative;
-    // z-index just above the navbar otherwise the top of the editor is cropped
-    // Don't know why Bulma always have issues with fixed navbar
-    z-index: 31;
 
     // Make the separator between the editors visible
     & > :last-child {
@@ -22,7 +19,7 @@
 
     display: flex;
     flex-direction: column;
-    height: calc(100vh - 3.5rem);
+    height: calc(100vh - var(--nacara-navbar-height, 3.5rem));
     width: 50%;
 
     :global(.tabs) {

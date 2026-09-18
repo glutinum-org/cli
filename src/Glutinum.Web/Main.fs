@@ -15,6 +15,8 @@ open type Feliz.Iconify.Offline.Exports
 
 importSideEffects "./scss/main.scss"
 
+SiteTheme.observe ()
+
 let renderToastWithBulma =
     { new Toast.IRenderer<IconifyIcon> with
         member __.Toast children color =

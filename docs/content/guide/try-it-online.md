@@ -3,7 +3,7 @@ title: Try it online
 order: 2
 ---
 
-The [web application](https://glutinum.net/app/) runs the generator in the browser. Nothing is installed and nothing leaves your machine.
+The [web application](../app.md) runs the generator in the browser. Nothing is installed and nothing leaves your machine.
 
 ## Single file
 

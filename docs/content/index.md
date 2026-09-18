@@ -12,7 +12,7 @@ layout: splash
 <p class="landing-hero__lede">Glutinum reads the TypeScript declarations of a JavaScript package and writes the F# binding for it. Fable compiles your F# against that binding, and the JavaScript library runs unchanged.</p>
 
 <p class="landing-actions">
-<a class="landing-button landing-button--primary" href="https://glutinum.net/app/">Try it in the browser</a>
+<a class="landing-button landing-button--primary" href="/app/">Try it in the browser</a>
 <a class="landing-button" href="/guide/getting-started/">Get started</a>
 <a class="landing-button" href="https://github.com/glutinum-org/cli">View on GitHub</a>
 </p>

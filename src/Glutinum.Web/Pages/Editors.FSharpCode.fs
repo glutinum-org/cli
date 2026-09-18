@@ -246,6 +246,8 @@ let private actions dispatch =
 let private FSharpEditor fsharpCode =
     Editor [
         editor.width "100%"
+        editor.theme (Glutinum.Web.SiteTheme.monacoTheme ())
+        editor.onMount (fun _ monaco -> Glutinum.Web.SiteTheme.register monaco)
         editor.value fsharpCode
         editor.language "fsharp"
         editor.options

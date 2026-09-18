@@ -42,6 +42,9 @@ let private buildWebApp () =
         workingDirectory = "src/Glutinum.Web"
     )
 
+    // The page `content/app.md` of the site is `/app/`
+    File.Delete "docs/static/app/index.html"
+
 type DocsCommand() =
     inherit Command<DocsSettings>()
 

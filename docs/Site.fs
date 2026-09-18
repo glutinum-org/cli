@@ -12,6 +12,7 @@ let theme =
             NavbarSection("Guide", "guide", "guide/getting-started.md")
             NavbarSection("Reference", "reference", "reference/command-line.md")
             NavbarSection("Bindings", "bindings", "bindings/index.md")
+            NavbarSection("Try it", "app", "app.md")
         ]
     |> Theme.navbarEnd
         [

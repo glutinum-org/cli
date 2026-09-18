@@ -4,20 +4,56 @@
 // in the "./variables.scss" for usage in CSS modules.
 @import "./variables.scss";
 
-// Load rest of bulma
-@import "./../../../node_modules/bulma/sass/base/_all.sass";
-@import "./../../../node_modules/bulma/sass/elements/_all.sass";
-@import "./../../../node_modules/bulma/sass/form/_all.sass";
-@import "./../../../node_modules/bulma/sass/components/_all.sass";
-@import "./../../../node_modules/bulma/sass/grid/_all.sass";
-@import "./../../../node_modules/bulma/sass/helpers/_all.sass";
-@import "./../../../node_modules/bulma/sass/layout/_all.sass";
+// The app is a page of the documentation site, Bulma must not restyle the site
+.glutinum-app {
+    @import "./../../../node_modules/bulma/sass/base/_all.sass";
+    @import "./../../../node_modules/bulma/sass/elements/_all.sass";
+    @import "./../../../node_modules/bulma/sass/form/_all.sass";
+    @import "./../../../node_modules/bulma/sass/components/_all.sass";
+    @import "./../../../node_modules/bulma/sass/grid/_all.sass";
+    @import "./../../../node_modules/bulma/sass/helpers/_all.sass";
+    @import "./../../../node_modules/bulma/sass/layout/_all.sass";
 
-// Load adapters
-@import "./lib-adapters/_all.scss";
+    // Load adapters
+    @import "./lib-adapters/_all.scss";
 
-@import "./components/thoth-toast.scss";
+    @import "./components/thoth-toast.scss";
+
+    font-family: $family-primary;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: $text;
+}
 
 // body {
 //     overflow: hidden;
 // }
+
+.glutinum-app__version {
+    position: fixed;
+    left: .75rem;
+    bottom: .5rem;
+    z-index: 40;
+    font-size: .75rem;
+    color: var(--nacara-text-muted, #7a7a7a);
+    pointer-events: none;
+}
+
+[data-theme="dark"] .glutinum-app {
+    background: var(--nacara-bg);
+    color: var(--nacara-text);
+
+    .tabs a {
+        color: var(--nacara-text-muted);
+    }
+
+    .tabs a:hover {
+        color: var(--nacara-text);
+    }
+
+    .tabs.is-toggle li.is-active a {
+        background: var(--nacara-primary);
+        border-color: var(--nacara-primary);
+        color: var(--nacara-primary-contrast);
+    }
+}

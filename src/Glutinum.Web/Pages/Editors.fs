@@ -272,6 +272,8 @@ let private leftPanel model dispatch =
                         Editor [
                             editor.width "100%"
                             editor.height "100%"
+                            editor.theme (Glutinum.Web.SiteTheme.monacoTheme ())
+                            editor.onMount (fun _ monaco -> Glutinum.Web.SiteTheme.register monaco)
                             editor.value model.TypeScriptCode
                             editor.onChange (fun code _ ->
                                 match code with
