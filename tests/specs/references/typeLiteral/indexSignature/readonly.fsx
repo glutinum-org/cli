@@ -8,7 +8,7 @@ open System
 [<Interface>]
 type MyType =
     [<EmitIndexer>]
-    abstract member Item: n: float -> string with get
+    abstract member Item: n: int -> string with get
 
 (***)
 #r "nuget: Fable.Core"

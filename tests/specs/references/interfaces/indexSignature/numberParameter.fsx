@@ -8,7 +8,7 @@ open System
 [<Interface>]
 type StringArray =
     [<EmitIndexer>]
-    abstract member Item: index: float -> string with get, set
+    abstract member Item: index: int -> string with get, set
 
 (***)
 #r "nuget: Fable.Core"

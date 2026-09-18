@@ -22,7 +22,7 @@ export default function createProgramForCLI(filePath, source) {
  *
  * @param {import("./host.js").Host} host
  * @param {string[]} entryFiles
- * @param {{ withoutDomLib?: boolean }} options
+ * @param {{ withoutDomLib?: boolean, noLib?: boolean }} options
  * @returns
  */
 export function createProgramFromFiles(host, entryFiles, options = {}) {
@@ -34,6 +34,11 @@ export function createProgramFromFiles(host, entryFiles, options = {}) {
     // A package replacing the DOM lib (`@types/web`) redeclares its globals
     if (options.withoutDomLib) {
         compilerOptions.lib = ["lib.esnext.d.ts", "lib.decorators.d.ts", "lib.decorators.legacy.d.ts"]
+    }
+
+    // A package made of the ES library files declares the library itself
+    if (options.noLib) {
+        compilerOptions.noLib = true
     }
 
     const project = host.createProject(compilerOptions)

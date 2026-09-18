@@ -346,9 +346,26 @@ let private mapTypeNameToFableCoreAwareName
             | "Float32Array" -> "JS.Float32Array"
             | "Float64Array" -> "JS.Float64Array"
             | "Array" -> "ResizeArray"
+            | "ArrayBuffer" -> "JS.ArrayBuffer"
+            | "ArrayBufferView" -> "JS.ArrayBufferView"
+            | "DataView" -> "JS.DataView"
+            | "PropertyDescriptor" -> "JS.PropertyDescriptor"
+            | "Map" -> "JS.Map"
+            | "Set" -> "JS.Set"
+            | "WeakMap" -> "JS.WeakMap"
+            | "WeakSet" -> "JS.WeakSet"
+            | "FlatArray"
+            | "Symbol" -> "obj"
             | "Boolean" -> "bool"
             | "Function" -> "Action"
-            | "Error" -> "Exception"
+            | "Error"
+            | "EvalError"
+            | "RangeError"
+            | "ReferenceError"
+            | "SyntaxError"
+            | "TypeError"
+            | "URIError" -> "Exception"
+            | "BigInt" -> "bigint"
             | "PromiseConstructor"
             | "PromiseConstructorLike" -> "obj"
             | name -> name
@@ -834,6 +851,12 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
                     TypeArguments =
                         ownNames |> List.map (fun _ -> GlueType.Primitive GluePrimitive.Any)
                 })
+
+    // `FlatArray<A, D>` has no counterpart, the type arguments go with it
+    | GlueType.TypeReference typeReference when
+        mapTypeNameToFableCoreAwareName context typeReference = "obj"
+        ->
+        FSharpType.Object
 
     | GlueType.TypeReference typeReference ->
         ({
@@ -2648,12 +2671,24 @@ module private TransformMembers =
             | GlueMember.IndexSignature indexSignature ->
                 let name, context = sanitizeNameAndPushScope "Item" context
 
+                // `[index: number]: T` is indexed with an `int`
+                let parameters =
+                    indexSignature.Parameters
+                    |> List.map (fun parameter ->
+                        match parameter.Type with
+                        | GlueType.Primitive GluePrimitive.Number ->
+                            { parameter with
+                                Type = GlueType.Primitive GluePrimitive.Int
+                            }
+                        | _ -> parameter
+                    )
+
                 {
                     Attributes = [ FSharpAttribute.EmitIndexer ]
                     Name = name
                     OriginalName = "Item"
                     Parameters =
-                        indexSignature.Parameters
+                        parameters
                         |> List.map (transformParameter context)
                         |> requiredBeforeParamArray
                     Type = transformType context indexSignature.Type

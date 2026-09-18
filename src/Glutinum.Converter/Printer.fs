@@ -1150,6 +1150,7 @@ let rec private print (printer: Printer) (fsharpTypes: FSharpType list) =
 /// <c>Glutinum.Types</c> live together in a project.
 /// </summary>
 let printFileWith
+    (namespace_: string)
     (isPackage: bool)
     (externalBindings: string list)
     (printer: Printer)
@@ -1162,7 +1163,7 @@ let printFileWith
 
     let outFile =
         {
-            Name = "Glutinum"
+            Name = namespace_
             Opens = [ "Fable.Core"; "Fable.Core.JsInterop"; "System" ]
         }
 
@@ -1180,7 +1181,11 @@ let printFileWith
         printer.NewLine
     )
 
-    if transformResult.IncludeReadonlyArrayAlias then
+    // `Glutinum.Types` is generated too, it can't open itself
+    if
+        transformResult.IncludeReadonlyArrayAlias
+        && not (namespace_.StartsWith "Glutinum.Types")
+    then
         printer.NewLine
 
         printer.Write "// You need to add Glutinum.Types NuGet package to your project"
@@ -1211,4 +1216,4 @@ let printFileWith
     printer.WriteInline("\n" + body.TrimStart('\n'))
 
 let printFile (printer: Printer) (transformResult: Transform.TransformResult) =
-    printFileWith false [] printer transformResult
+    printFileWith "Glutinum" false [] printer transformResult

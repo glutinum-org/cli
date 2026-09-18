@@ -17092,7 +17092,7 @@ module Web =
         /// </summary>
         abstract member findRule: select: string -> Web.CSSKeyframeRule option
         [<EmitIndexer>]
-        abstract member Item: index: float -> Web.CSSKeyframeRule with get, set
+        abstract member Item: index: int -> Web.CSSKeyframeRule with get, set
 
     /// <summary>
     /// The **<c>CSSKeywordValue</c>** interface of the CSS Typed Object Model API creates an object to represent CSS keywords and other identifiers.
@@ -17359,7 +17359,7 @@ module Web =
         abstract member length: float with get
         abstract member forEach: callbackfn: CSSNumericArray.forEach.callbackfn * ?thisArg: obj -> unit
         [<EmitIndexer>]
-        abstract member Item: index: float -> Web.CSSNumericValue with get, set
+        abstract member Item: index: int -> Web.CSSNumericValue with get, set
         abstract member entries: unit -> Iterable<float * Web.CSSNumericValue>
         abstract member keys: unit -> Iterable<float>
         abstract member values: unit -> Iterable<Web.CSSNumericValue>
@@ -17945,7 +17945,7 @@ module Web =
         /// </summary>
         abstract member item: index: float -> Web.CSSRule option
         [<EmitIndexer>]
-        abstract member Item: index: float -> Web.CSSRule with get, set
+        abstract member Item: index: int -> Web.CSSRule with get, set
 
     /// <summary>
     /// The **<c>CSSScale</c>** interface of the CSS Typed Object Model API represents the scale() and scale3d() values of the individual transform property in CSS. It inherits properties and methods from its parent CSSTransformValue.
@@ -18110,7 +18110,7 @@ module Web =
         /// </summary>
         abstract member setProperty: property: string * value: string option * ?priority: string -> unit
         [<EmitIndexer>]
-        abstract member Item: index: float -> string with get, set
+        abstract member Item: index: int -> string with get, set
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -21327,7 +21327,7 @@ module Web =
         abstract member toMatrix: unit -> Web.DOMMatrix
         abstract member forEach: callbackfn: CSSTransformValue.forEach.callbackfn * ?thisArg: obj -> unit
         [<EmitIndexer>]
-        abstract member Item: index: float -> Web.CSSTransformComponent with get, set
+        abstract member Item: index: int -> Web.CSSTransformComponent with get, set
         abstract member entries: unit -> Iterable<float * Web.CSSTransformComponent>
         abstract member keys: unit -> Iterable<float>
         abstract member values: unit -> Iterable<Web.CSSTransformComponent>
@@ -21524,7 +21524,7 @@ module Web =
         abstract member length: float with get
         abstract member forEach: callbackfn: CSSUnparsedValue.forEach.callbackfn * ?thisArg: obj -> unit
         [<EmitIndexer>]
-        abstract member Item: index: float -> Web.CSSUnparsedSegment with get, set
+        abstract member Item: index: int -> Web.CSSUnparsedSegment with get, set
         abstract member entries: unit -> Iterable<float * Web.CSSUnparsedSegment>
         abstract member keys: unit -> Iterable<float>
         abstract member values: unit -> Iterable<Web.CSSUnparsedSegment>
@@ -24268,7 +24268,7 @@ module Web =
         /// </summary>
         abstract member item: index: float -> Web.DOMRect option
         [<EmitIndexer>]
-        abstract member Item: index: float -> Web.DOMRect with get, set
+        abstract member Item: index: int -> Web.DOMRect with get, set
 
     /// <summary>
     /// The **<c>DOMRectReadOnly</c>** interface specifies the standard properties (also used by DOMRect) to define a rectangle whose properties are immutable.
@@ -24361,7 +24361,7 @@ module Web =
         /// </summary>
         abstract member item: index: float -> string option
         [<EmitIndexer>]
-        abstract member Item: index: float -> string with get, set
+        abstract member Item: index: int -> string with get, set
 
     /// <summary>
     /// The **<c>DOMStringMap</c>** interface is used for the HTMLElement.dataset attribute, to represent data for custom attributes added to elements.
@@ -24440,7 +24440,7 @@ module Web =
         abstract member toggle: token: string * ?force: bool -> bool
         abstract member forEach: callbackfn: DOMTokenList.forEach.callbackfn * ?thisArg: obj -> unit
         [<EmitIndexer>]
-        abstract member Item: index: float -> string with get, set
+        abstract member Item: index: int -> string with get, set
         abstract member entries: unit -> Iterable<float * string>
         abstract member keys: unit -> Iterable<float>
         abstract member values: unit -> Iterable<string>
@@ -24587,7 +24587,7 @@ module Web =
         /// </summary>
         abstract member remove: index: float -> unit
         [<EmitIndexer>]
-        abstract member Item: index: float -> Web.DataTransferItem with get, set
+        abstract member Item: index: int -> Web.DataTransferItem with get, set
 
     /// <summary>
     /// The **<c>DecompressionStream</c>** interface of the Compression Streams API decompresses a stream of data. It implements the same shape as a TransformStream, allowing it to be used in ReadableStream.pipeThrough() and similar methods.
@@ -28134,7 +28134,7 @@ module Web =
         /// </summary>
         abstract member item: index: float -> Web.File option
         [<EmitIndexer>]
-        abstract member Item: index: float -> Web.File with get, set
+        abstract member Item: index: int -> Web.File with get, set
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -31565,7 +31565,7 @@ module Web =
         /// </summary>
         abstract member namedItem: name: string -> U2<Web.HTMLCollection, Web.Element> option
         [<EmitIndexer>]
-        abstract member Item: index: float -> Web.Element with get, set
+        abstract member Item: index: int -> Web.Element with get, set
 
     /// <summary>
     /// The **<c>HTMLAnchorElement</c>** interface represents hyperlink elements and provides special properties and methods (beyond those of the regular HTMLElement object interface that they inherit from) for manipulating the layout and presentation of such elements. This interface corresponds to <a> element; not to be confused with <link>, which is represented by HTMLLinkElement.
@@ -33125,7 +33125,7 @@ module Web =
         /// </summary>
         abstract member item: index: float -> Web.Element option
         [<EmitIndexer>]
-        abstract member Item: index: float -> Web.Element with get, set
+        abstract member Item: index: int -> Web.Element with get, set
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -33150,7 +33150,7 @@ module Web =
         abstract member item: index: float -> 'T option
         abstract member namedItem: name: string -> 'T option
         [<EmitIndexer>]
-        abstract member Item: index: float -> 'T with get, set
+        abstract member Item: index: int -> 'T with get, set
 
     /// <summary>
     /// The **<c>HTMLDListElement</c>** interface provides special properties (beyond those of the regular HTMLElement interface it also has available to it by inheritance) for manipulating definition list (<dl>) elements.
@@ -35400,7 +35400,7 @@ module Web =
         /// </summary>
         abstract member removeEventListener: ``type``: string * listener: Web.EventListenerObject * options: Web.EventListenerOptions -> unit
         [<EmitIndexer>]
-        abstract member Item: index: float -> Web.Element with get, set
+        abstract member Item: index: int -> Web.Element with get, set
         [<EmitIndexer>]
         abstract member Item: name: string -> obj with get, set
 
@@ -41642,7 +41642,7 @@ module Web =
         /// </summary>
         abstract member removeEventListener: ``type``: string * listener: Web.EventListenerObject * options: Web.EventListenerOptions -> unit
         [<EmitIndexer>]
-        abstract member Item: name: float -> U2<Web.HTMLOptionElement, Web.HTMLOptGroupElement> with get, set
+        abstract member Item: name: int -> U2<Web.HTMLOptionElement, Web.HTMLOptGroupElement> with get, set
 
     /// <summary>
     /// The **<c>HTMLSlotElement</c>** interface of the Shadow DOM API enables access to the name and assigned nodes of an HTML <slot> element.
@@ -47328,7 +47328,7 @@ module Web =
         /// </summary>
         abstract member selectedTrack: Web.ImageTrack option with get
         [<EmitIndexer>]
-        abstract member Item: index: float -> Web.ImageTrack with get, set
+        abstract member Item: index: int -> Web.ImageTrack with get, set
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -49552,7 +49552,7 @@ module Web =
         /// </summary>
         abstract member item: index: float -> string option
         [<EmitIndexer>]
-        abstract member Item: index: float -> string with get, set
+        abstract member Item: index: int -> string with get, set
 
     /// <summary>
     /// The **<c>MediaMetadata</c>** interface of the Media Session API allows a web page to provide rich media metadata for display in a platform UI.
@@ -51074,7 +51074,7 @@ module Web =
         [<Obsolete>]
         abstract member namedItem: name: string -> Web.MimeType option
         [<EmitIndexer>]
-        abstract member Item: index: float -> Web.MimeType with get, set
+        abstract member Item: index: int -> Web.MimeType with get, set
 
     /// <summary>
     /// The **<c>MouseEvent</c>** interface represents events that occur due to the user interacting with a pointing device (such as a mouse). Common events using this interface include click, dblclick, mouseup, mousedown.
@@ -51371,7 +51371,7 @@ module Web =
         /// </summary>
         abstract member setNamedItemNS: attr: Web.Attr -> Web.Attr option
         [<EmitIndexer>]
-        abstract member Item: index: float -> Web.Attr with get, set
+        abstract member Item: index: int -> Web.Attr with get, set
 
     /// <summary>
     /// The **<c>NavigateEvent</c>** interface of the Navigation API is the event object for the navigate event, which fires when any type of navigation is initiated (this includes usage of History API features like History.go()). NavigateEvent provides access to information about that navigation, and allows developers to intercept and control the navigation handling.
@@ -52816,7 +52816,7 @@ module Web =
         abstract member item: index: float -> Web.Node option
         abstract member forEach: callbackfn: NodeList.forEach.callbackfn * ?thisArg: obj -> unit
         [<EmitIndexer>]
-        abstract member Item: index: float -> Web.Node with get, set
+        abstract member Item: index: int -> Web.Node with get, set
         /// <summary>
         /// Returns an array of key, value pairs for every entry in the list.
         /// </summary>
@@ -52842,7 +52842,7 @@ module Web =
         abstract member item: index: float -> 'TNode
         abstract member forEach: callbackfn: NodeListOf.forEach.callbackfn<'TNode> * ?thisArg: obj -> unit
         [<EmitIndexer>]
-        abstract member Item: index: float -> 'TNode with get, set
+        abstract member Item: index: int -> 'TNode with get, set
         /// <summary>
         /// Returns an array of key, value pairs for every entry in the list.
         /// </summary>
@@ -55941,7 +55941,7 @@ module Web =
         [<Obsolete>]
         abstract member namedItem: name: string -> Web.MimeType option
         [<EmitIndexer>]
-        abstract member Item: index: float -> Web.MimeType with get, set
+        abstract member Item: index: int -> Web.MimeType with get, set
 
     /// <summary>
     /// The **<c>PluginArray</c>** interface is used to store a list of Plugin objects; it's returned by the navigator.plugins property. The PluginArray is not a JavaScript array, but has the length property and supports accessing individual items using bracket notation (plugins[2]), as well as via item(index) and namedItem("name") methods.
@@ -55960,7 +55960,7 @@ module Web =
         [<Obsolete>]
         abstract member refresh: unit -> unit
         [<EmitIndexer>]
-        abstract member Item: index: float -> Web.Plugin with get, set
+        abstract member Item: index: int -> Web.Plugin with get, set
 
     /// <summary>
     /// The **<c>PointerEvent</c>** interface represents the state of a DOM event produced by a pointer such as the geometry of the contact point, the device type that generated the event, the amount of pressure that was applied on the contact surface, etc.
@@ -65917,7 +65917,7 @@ module Web =
         /// </summary>
         abstract member replaceItem: newItem: Web.SVGLength * index: float -> Web.SVGLength
         [<EmitIndexer>]
-        abstract member Item: index: float -> Web.SVGLength with get, set
+        abstract member Item: index: int -> Web.SVGLength with get, set
 
     /// <summary>
     /// The **<c>SVGLineElement</c>** interface provides access to the properties of <line> elements, as well as methods to manipulate them.
@@ -66853,7 +66853,7 @@ module Web =
         /// </summary>
         abstract member replaceItem: newItem: Web.SVGNumber * index: float -> Web.SVGNumber
         [<EmitIndexer>]
-        abstract member Item: index: float -> Web.SVGNumber with get, set
+        abstract member Item: index: int -> Web.SVGNumber with get, set
 
     /// <summary>
     /// The **<c>SVGPathElement</c>** interface corresponds to the <path> element.
@@ -67217,7 +67217,7 @@ module Web =
         /// </summary>
         abstract member replaceItem: newItem: Web.SVGPoint * index: float -> Web.SVGPoint
         [<EmitIndexer>]
-        abstract member Item: index: float -> Web.SVGPoint with get, set
+        abstract member Item: index: int -> Web.SVGPoint with get, set
 
     /// <summary>
     /// The **<c>SVGPolygonElement</c>** interface provides access to the properties of <polygon> elements, as well as methods to manipulate them.
@@ -68772,7 +68772,7 @@ module Web =
         /// </summary>
         abstract member replaceItem: newItem: string * index: float -> string
         [<EmitIndexer>]
-        abstract member Item: index: float -> string with get, set
+        abstract member Item: index: int -> string with get, set
 
     /// <summary>
     /// The **<c>SVGStyleElement</c>** interface corresponds to the SVG <style> element.
@@ -70139,7 +70139,7 @@ module Web =
         /// </summary>
         abstract member replaceItem: newItem: Web.SVGTransform * index: float -> Web.SVGTransform
         [<EmitIndexer>]
-        abstract member Item: index: float -> Web.SVGTransform with get, set
+        abstract member Item: index: int -> Web.SVGTransform with get, set
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -72666,7 +72666,7 @@ module Web =
         /// </summary>
         abstract member removeEventListener: ``type``: string * listener: Web.EventListenerObject * options: Web.EventListenerOptions -> unit
         [<EmitIndexer>]
-        abstract member Item: index: float -> Web.SourceBuffer with get, set
+        abstract member Item: index: int -> Web.SourceBuffer with get, set
 
     /// <summary>
     /// The **<c>SpeechRecognitionAlternative</c>** interface of the Web Speech API represents a single word that has been recognized by the speech recognition service.
@@ -72765,7 +72765,7 @@ module Web =
         /// </summary>
         abstract member item: index: float -> Web.SpeechRecognitionAlternative
         [<EmitIndexer>]
-        abstract member Item: index: float -> Web.SpeechRecognitionAlternative with get, set
+        abstract member Item: index: int -> Web.SpeechRecognitionAlternative with get, set
 
     /// <summary>
     /// The **<c>SpeechRecognitionResultList</c>** interface of the Web Speech API represents a list of SpeechRecognitionResult objects, or a single one if results are being captured in non-continuous mode.
@@ -72790,7 +72790,7 @@ module Web =
         /// </summary>
         abstract member item: index: float -> Web.SpeechRecognitionResult
         [<EmitIndexer>]
-        abstract member Item: index: float -> Web.SpeechRecognitionResult with get, set
+        abstract member Item: index: int -> Web.SpeechRecognitionResult with get, set
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -73590,7 +73590,7 @@ module Web =
         /// </summary>
         abstract member item: index: float -> Web.CSSStyleSheet option
         [<EmitIndexer>]
-        abstract member Item: index: float -> Web.CSSStyleSheet with get, set
+        abstract member Item: index: int -> Web.CSSStyleSheet with get, set
 
     /// <summary>
     /// The **<c>SubmitEvent</c>** interface defines the object used to represent an HTML form's submit event. This event is fired at the <form> when the form's submit action is invoked.
@@ -74958,7 +74958,7 @@ module Web =
         /// </summary>
         abstract member getCueById: id: string -> Web.TextTrackCue option
         [<EmitIndexer>]
-        abstract member Item: index: float -> Web.TextTrackCue with get, set
+        abstract member Item: index: int -> Web.TextTrackCue with get, set
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -75127,7 +75127,7 @@ module Web =
         /// </summary>
         abstract member removeEventListener: ``type``: string * listener: Web.EventListenerObject * options: Web.EventListenerOptions -> unit
         [<EmitIndexer>]
-        abstract member Item: index: float -> Web.TextTrack with get, set
+        abstract member Item: index: int -> Web.TextTrack with get, set
 
     /// <summary>
     /// When loading a media resource for use by an <audio> or <video> element, the **<c>TimeRanges</c>** interface is used for representing the time ranges of the media resource that have been buffered, the time ranges that have been played, and the time ranges that are seekable.
@@ -75339,7 +75339,7 @@ module Web =
         /// </summary>
         abstract member item: index: float -> Web.Touch option
         [<EmitIndexer>]
-        abstract member Item: index: float -> Web.Touch with get, set
+        abstract member Item: index: int -> Web.Touch with get, set
 
     /// <summary>
     /// The **<c>TrackEvent</c>** interface of the HTML DOM API is used for events which represent changes to a set of available tracks on an HTML media element; these events are addtrack and removetrack.
@@ -81648,7 +81648,7 @@ module Web =
         /// </summary>
         abstract member removeEventListener: ``type``: string * listener: Web.EventListenerObject * options: Web.EventListenerOptions -> unit
         [<EmitIndexer>]
-        abstract member Item: index: float -> Web.Window with get, set
+        abstract member Item: index: int -> Web.Window with get, set
 
     [<AllowNullLiteral>]
     [<Interface>]

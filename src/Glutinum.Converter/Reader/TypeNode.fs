@@ -125,6 +125,11 @@ let private readInstantiatedMember
 let private intersectionsInProgress = ResizeArray<Ts.Type>()
 
 /// A conditional type the checker can't resolve without its type arguments
+let private isLibraryName (reader: ITypeScriptReader) (name: string) =
+    match reader.PackageContext with
+    | Some packageContext -> packageContext.IsLibraryName name
+    | None -> false
+
 let private isDeferredConditional (typ: Ts.Type) =
     match typ.flags with
     | HasTypeFlags Ts.TypeFlags.Conditional -> true
@@ -1033,11 +1038,14 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                                     Naming.sanitizeTypeName name
                             FullName = getFullNameOrEmpty checker (!!typeReferenceNode.typeName)
                             ModulePath =
-                                modulePathForSymbol
-                                    checker
-                                    reader.PackageContext
-                                    isQualified
-                                    symbolOpt
+                                if isLibraryName reader name then
+                                    []
+                                else
+                                    modulePathForSymbol
+                                        checker
+                                        reader.PackageContext
+                                        isQualified
+                                        symbolOpt
                             TypeArguments =
                                 // `MessageEvent<T>` of the DOM lib merged with a non-generic
                                 // `interface MessageEvent` of a package: the arguments of the
@@ -1045,7 +1053,8 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                                 readTypeArguments reader typeReferenceNode
                                 |> truncateToDeclaredArity reader symbolOpt
                             // `Uint8Array` from `lib.es2015` is mapped like the `lib.es5` types
-                            IsStandardLibrary = isStandardLibrary || isExternal
+                            IsStandardLibrary =
+                                isStandardLibrary || isExternal || isLibraryName reader name
                         })
                         |> GlueType.TypeReference
 
@@ -1540,7 +1549,10 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                         | Some symbol -> checker.getFullyQualifiedName symbol
                         | None -> getFullNameOrEmpty checker expression.expression
                     ModulePath =
-                        modulePathForSymbol checker reader.PackageContext isQualified symbolOpt
+                        if isLibraryName reader name then
+                            []
+                        else
+                            modulePathForSymbol checker reader.PackageContext isQualified symbolOpt
                     TypeArguments =
                         match readTypeArguments reader expression with
                         | [] ->
@@ -1554,7 +1566,8 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                                 |> reader.ReadTypeNode
                             )
                         | typeArguments -> typeArguments
-                    IsStandardLibrary = isFromEs5Lib symbolOpt || isExternal
+                    IsStandardLibrary =
+                        isFromEs5Lib symbolOpt || isExternal || isLibraryName reader name
                 })
                 |> GlueType.TypeReference
 

@@ -7,7 +7,9 @@ The packages a generated binding depends on. The header of a generated file name
 
 ## `Glutinum.Types`
 
-The types the generator refers to that `Fable.Core` does not have: `ReadonlyArray<'T>`, `Iterable<'T>`, `AsyncIterable<'T>`, `ArrayLike<'T>`, `PromiseLike<'T>` and the other TypeScript library types. Every binding needs it.
+The ES library types the generator refers to that `Fable.Core` does not define: `ReadonlyArray<'T>`, `ArrayLike<'T>`, `PromiseLike<'T>`, `Iterator<'T>`, `Generator<'T>`, `ReadonlyMap<'K, 'V>` and their neighbours. It is generated from the `lib.es*.d.ts` files of TypeScript. `Array`, `Date`, `Promise`, `Map`, `Set` and the typed arrays are the ones of `Fable.Core`. Every binding needs it.
+
+A `ReadonlyArray<'T>` is a sequence, `Seq.map` and `for` read it, and `.[i]` indexes it.
 
 ```bash frame="terminal"
 dotnet add package Glutinum.Types

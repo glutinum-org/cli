@@ -75,7 +75,7 @@ let private listInstalledPackages (_host: Host) : string[] = jsNative
 
 [<Import("createProgramFromFiles", "./js/bootstrap.js")>]
 let private createProgramFromFiles
-    (_host: Host, _entryFiles: string[], _options: {| withoutDomLib: bool |})
+    (_host: Host, _entryFiles: string[], _options: {| withoutDomLib: bool; noLib: bool |})
     : Ts.Program
     =
     jsNative
@@ -119,13 +119,59 @@ type GenerateOptions =
         /// Other packages published as their own bindings: the package name and the module
         /// under `Glutinum`, derived from the package name when not given
         Externals: (string * string option) list
+        /// The full name of the module of the generated package, `Glutinum.Types.TypeScript`,
+        /// instead of `Glutinum.<Module>` derived from the package name
+        ModuleName: string option
+        /// The declarations of the generated package to keep, every one when empty
+        Include: string list
+        /// The package is the ES library itself, the program is created without it
+        NoLib: bool
     }
 
 let defaultOptions =
     {
         ExternalPackages = true
         Externals = []
+        ModuleName = None
+        Include = []
+        NoLib = false
     }
+
+/// `Glutinum.Types.TypeScript` is the namespace `Glutinum.Types` and the module `TypeScript`
+let private splitModuleName (fullName: string) =
+    match fullName.LastIndexOf '.' with
+    | -1 -> "Glutinum", fullName
+    | index -> fullName.Substring(0, index), fullName.Substring(index + 1)
+
+let rec private declarationName (glueType: GlueAST.GlueType) =
+    match glueType with
+    | GlueAST.GlueType.Interface info -> Some info.Name
+    | GlueAST.GlueType.ClassDeclaration info -> Some info.Name
+    | GlueAST.GlueType.TypeAliasDeclaration info -> Some info.Name
+    | GlueAST.GlueType.Enum info -> Some info.Name
+    | GlueAST.GlueType.Variable info -> Some info.Name
+    | GlueAST.GlueType.FunctionDeclaration info -> Some info.Name
+    | GlueAST.GlueType.ExportDefault inner -> declarationName inner
+    | _ -> None
+
+/// The declarations named in `include`, the modules holding them kept around them
+let rec private keepIncluded (included: Set<string>) (types: GlueAST.GlueType list) =
+    types
+    |> List.choose (fun glueType ->
+        match glueType with
+        | GlueAST.GlueType.FileModule info ->
+            match keepIncluded included info.Types with
+            | [] -> None
+            | kept -> Some(GlueAST.GlueType.FileModule { info with Types = kept })
+        | GlueAST.GlueType.ModuleDeclaration info ->
+            match keepIncluded included info.Types with
+            | [] -> None
+            | kept -> Some(GlueAST.GlueType.ModuleDeclaration { info with Types = kept })
+        | glueType ->
+            match declarationName glueType with
+            | Some name when included.Contains name -> Some glueType
+            | _ -> None
+    )
 
 /// The packages published as their own bindings, with the TypeScript lib files standing for them
 let private builtInExternalPackageNames =
@@ -176,7 +222,14 @@ let generateWith (options: GenerateOptions) (host: Host) (inputs: string list) :
         targets |> List.exists (fun target -> domLibReplacements.Contains target.name)
 
     let program =
-        createProgramFromFiles (host, entryFiles, {| withoutDomLib = withoutDomLib |})
+        createProgramFromFiles (
+            host,
+            entryFiles,
+            {|
+                withoutDomLib = withoutDomLib
+                noLib = options.NoLib
+            |}
+        )
 
     let checker = program.getTypeChecker ()
 
@@ -247,11 +300,30 @@ let generateWith (options: GenerateOptions) (host: Host) (inputs: string list) :
         )
         |> List.sortBy _.runtimeName
 
+    let namespace_, moduleName =
+        match options.ModuleName with
+        | Some fullName -> splitModuleName fullName
+        | None -> "Glutinum", ""
+
+    let targetPackages =
+        targets
+        |> List.map toPackageInfo
+        |> List.map (fun package ->
+            if moduleName = "" then
+                package
+            else
+                { package with ModuleName = moduleName }
+        )
+
+    let included = set options.Include
+
     let packageContext: Reader.Types.PackageContext =
         {
-            Packages =
-                (targets |> List.map toPackageInfo) @ (dependencies |> List.map toPackageInfo)
+            Packages = targetPackages @ (dependencies |> List.map toPackageInfo)
             Externals = externals
+            // Without the library, the declarations left out of the package stand for it
+            IsLibraryName =
+                fun name -> options.NoLib && not included.IsEmpty && not (included.Contains name)
         }
 
     let sourceFiles =
@@ -263,13 +335,23 @@ let generateWith (options: GenerateOptions) (host: Host) (inputs: string list) :
 
     let readerResult = Read.readPackages checker packageContext sourceFiles
 
+    let glueAst =
+        match options.Include with
+        | [] -> readerResult.GlueAST
+        | included -> keepIncluded (set included) readerResult.GlueAST
+
     // Every package is a module with its own import specifier
     let transformResult =
-        Transform.applyWith Naming.MODULE_PLACEHOLDER readerResult.TypeMemory readerResult.GlueAST
+        Transform.applyWith Naming.MODULE_PLACEHOLDER readerResult.TypeMemory glueAst
 
     let printer = new Printer.Printer()
 
-    Printer.printFileWith true (externals |> List.map _.ModuleName) printer transformResult
+    Printer.printFileWith
+        namespace_
+        true
+        (externals |> List.map _.ModuleName)
+        printer
+        transformResult
 
     {
         GlueAST = readerResult.GlueAST

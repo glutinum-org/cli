@@ -58,6 +58,9 @@ The bindings of the runtimes are generated from this repository and published on
 | --- | --- | --- |
 | [Glutinum.Web](bindings/Glutinum.Web/README.md) | `@types/web` | `open type Glutinum.Web.Exports` |
 | [Glutinum.Node](bindings/Glutinum.Node/README.md) | `@types/node` | `open Glutinum.Node.Exports` |
+| Glutinum.Types | the `lib.es*.d.ts` files of `typescript` | `open Glutinum.Types.TypeScript` |
+
+`Glutinum.Types` holds the ES library types Fable.Core does not define, `ReadonlyArray`, `ArrayLike`, `Iterator` or `PromiseLike`. The list is `esLibraryTypes` in `src/Glutinum.Build/Commands/Bindings.fs`; `Array`, `Date`, `Promise`, `Map` and the typed arrays stay on Fable.Core.
 
 A binding generated for a package using the DOM or the Node types references them instead of generating them again, the header of the file tells which one to add. `--no-externals` generates them inline.
 

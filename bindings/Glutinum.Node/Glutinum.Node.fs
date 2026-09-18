@@ -82303,7 +82303,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 [<Interface>]
                 type Type =
                     [<EmitIndexer>]
-                    abstract member Item: errorCode: float -> string option with get, set
+                    abstract member Item: errorCode: int -> string option with get, set
                     [<EmitIndexer>]
                     abstract member Item: errorCode: string -> string option with get, set
 
@@ -102621,7 +102621,7 @@ EventEmitter.defaultMaxListeners = $0"""
             [<Interface>]
             type customSettings =
                 [<EmitIndexer>]
-                abstract member Item: key: float -> float with get, set
+                abstract member Item: key: int -> float with get, set
 
         module Http2Session =
 
@@ -166500,7 +166500,7 @@ URL.parse($0, $1)"""
             [<Interface>]
             type ``params`` =
                 [<EmitIndexer>]
-                abstract member Item: key: float -> U2<bool, float> with get, set
+                abstract member Item: key: int -> U2<bool, float> with get, set
 
         module ZstdOptions =
 
@@ -166508,7 +166508,7 @@ URL.parse($0, $1)"""
             [<Interface>]
             type ``params`` =
                 [<EmitIndexer>]
-                abstract member Item: key: float -> U2<float, bool> with get, set
+                abstract member Item: key: int -> U2<float, bool> with get, set
 
 module UndiciTypes =
 

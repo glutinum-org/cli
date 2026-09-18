@@ -36,6 +36,9 @@ type PackageContext =
     {
         Packages: PackageInfo list
         Externals: ExternalPackage list
+        /// A declaration of the generated package standing for the standard library, when the
+        /// package is the library itself generated without it
+        IsLibraryName: string -> bool
     }
 
     member this.TryFindPackage(fileName: string) =

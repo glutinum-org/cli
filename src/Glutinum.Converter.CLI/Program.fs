@@ -40,6 +40,12 @@ OPTIONS
                             generating it, `Glutinum.<Module>` is derived from its
                             name unless given as <package>=<Module>
                             Can be repeated
+    --module-name <name>    Full name of the generated module, `Glutinum.Types.TypeScript`,
+                            instead of `Glutinum.<Module>` derived from the package name
+    --include <names>       Comma-separated declarations to keep, the others are dropped
+                            Can be repeated
+    --no-lib                Create the program without the TypeScript library, for a
+                            package made of its files
     -h, --help              Print this help message
 
 EXAMPLES
@@ -94,9 +100,9 @@ let main (argv: string array) =
             | outFile :: "--out-file" :: inputs -> List.rev inputs, Some outFile
             | _ -> argv, None
 
-        let rec takeExternals
+        let rec takeOptions
             (args: string list)
-            (externals: (string * string option) list)
+            (options: Packages.GenerateOptions)
             (rest: string list)
             =
             match args with
@@ -106,16 +112,30 @@ let main (argv: string array) =
                     | [| name; moduleName |] -> name, Some moduleName
                     | _ -> value, None
 
-                takeExternals tail (external :: externals) rest
-            | arg :: tail -> takeExternals tail externals (arg :: rest)
-            | [] -> List.rev externals, List.rev rest
+                takeOptions
+                    tail
+                    { options with
+                        Externals = options.Externals @ [ external ]
+                    }
+                    rest
+            | "--module-name" :: value :: tail ->
+                takeOptions tail { options with ModuleName = Some value } rest
+            | "--no-lib" :: tail -> takeOptions tail { options with NoLib = true } rest
+            | "--include" :: value :: tail ->
+                takeOptions
+                    tail
+                    { options with
+                        Include = options.Include @ (value.Split(',') |> Array.toList)
+                    }
+                    rest
+            | arg :: tail -> takeOptions tail options (arg :: rest)
+            | [] -> options, List.rev rest
 
-        let externals, inputs = takeExternals inputs [] []
+        let options, inputs = takeOptions inputs Packages.defaultOptions []
 
-        let options: Packages.GenerateOptions =
-            {
+        let options =
+            { options with
                 ExternalPackages = not (List.contains "--no-externals" inputs)
-                Externals = externals
             }
 
         let inputs = inputs |> List.filter (fun input -> input <> "--no-externals")

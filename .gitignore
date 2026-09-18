@@ -3,6 +3,7 @@ build/
 npm/
 tests/**/out
 docs/output/
+bindings/es/
 docs/static/app/
 
 ## Ignore Visual Studio temporary files, build results, and
