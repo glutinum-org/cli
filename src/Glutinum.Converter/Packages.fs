@@ -154,8 +154,22 @@ let rec private declarationName (glueType: GlueAST.GlueType) =
     | GlueAST.GlueType.ExportDefault inner -> declarationName inner
     | _ -> None
 
-/// The declarations named in `include`, the modules holding them kept around them
+let rec private isValue (glueType: GlueAST.GlueType) =
+    match glueType with
+    | GlueAST.GlueType.Variable _
+    | GlueAST.GlueType.FunctionDeclaration _ -> true
+    | GlueAST.GlueType.ExportDefault inner -> isValue inner
+    | _ -> false
+
+/// The declarations named in `include`, the modules holding them kept around them. A name
+/// prefixed by `value:` keeps the variable or function only, `value:Number` keeps
+/// `declare var Number` and not `interface Number`. A namespace named is kept whole.
 let rec private keepIncluded (included: Set<string>) (types: GlueAST.GlueType list) =
+    let values =
+        included
+        |> Set.filter (fun name -> name.StartsWith "value:")
+        |> Set.map (fun name -> name.Substring "value:".Length)
+
     types
     |> List.choose (fun glueType ->
         match glueType with
@@ -163,6 +177,7 @@ let rec private keepIncluded (included: Set<string>) (types: GlueAST.GlueType li
             match keepIncluded included info.Types with
             | [] -> None
             | kept -> Some(GlueAST.GlueType.FileModule { info with Types = kept })
+        | GlueAST.GlueType.ModuleDeclaration info when included.Contains info.Name -> Some glueType
         | GlueAST.GlueType.ModuleDeclaration info ->
             match keepIncluded included info.Types with
             | [] -> None
@@ -170,6 +185,7 @@ let rec private keepIncluded (included: Set<string>) (types: GlueAST.GlueType li
         | glueType ->
             match declarationName glueType with
             | Some name when included.Contains name -> Some glueType
+            | Some name when values.Contains name && isValue glueType -> Some glueType
             | _ -> None
     )
 

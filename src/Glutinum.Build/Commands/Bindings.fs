@@ -24,6 +24,19 @@ let esLibraryTypes =
     [
         "Date"
         "DateConstructor"
+        // The static side of the globals, their instances are `float`, `string` and `obj`
+        "value:Number"
+        "NumberConstructor"
+        "value:String"
+        "StringConstructor"
+        "value:Object"
+        "ObjectConstructor"
+        "value:Symbol"
+        "SymbolConstructor"
+        // `JSON` and `Math` are complete in Fable.Core
+        "Reflect"
+        "PropertyDescriptor"
+        "TypedPropertyDescriptor"
         "ArrayLike"
         "ConcatArray"
         "ReadonlyArray"

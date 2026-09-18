@@ -11,14 +11,38 @@ module TypeScript =
     [<AbstractClass>]
     [<Erase>]
     type Exports =
+        [<Global("Symbol")>]
+        static member inline Symbol: TypeScript.SymbolConstructor = nativeOnly
+
         [<Global("SharedArrayBuffer")>]
         static member inline SharedArrayBuffer: TypeScript.SharedArrayBufferConstructor = nativeOnly
+
+        /// <summary>
+        /// Provides functionality common to all JavaScript objects.
+        /// </summary>
+        [<Global("Object")>]
+        static member inline Object: TypeScript.ObjectConstructor = nativeOnly
+
+        /// <summary>
+        /// Allows manipulation and formatting of text strings and determination and location of substrings within strings.
+        /// </summary>
+        [<Global("String")>]
+        static member inline String: TypeScript.StringConstructor = nativeOnly
+
+        /// <summary>
+        /// An object that represents a number of any kind. All JavaScript numbers are 64-bit floating-point numbers.
+        /// </summary>
+        [<Global("Number")>]
+        static member inline Number: TypeScript.NumberConstructor = nativeOnly
 
         /// <summary>
         /// Enables basic storage and retrieval of dates and times.
         /// </summary>
         [<Global("Date")>]
         static member inline Date: TypeScript.DateConstructor = nativeOnly
+
+        [<Global("Reflect")>]
+        static member Reflect: Reflect.Exports = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -142,6 +166,495 @@ module TypeScript =
         /// Returns the number of milliseconds elapsed since midnight, January 1, 1970 Universal Coordinated Time (UTC).
         /// </summary>
         abstract member now: unit -> float
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type NumberConstructor =
+        /// <summary>
+        /// The value of Number.EPSILON is the difference between 1 and the smallest value greater than 1
+        /// that is representable as a Number value, which is approximately:
+        /// 2.2204460492503130808472633361816 x 10‍−‍16.
+        /// </summary>
+        abstract member EPSILON: float with get
+        /// <summary>
+        /// Returns true if passed value is finite.
+        /// Unlike the global isFinite, Number.isFinite doesn't forcibly convert the parameter to a
+        /// number. Only finite values of the type number, result in true.
+        /// </summary>
+        /// <param name="number">
+        /// A numeric value.
+        /// </param>
+        abstract member isFinite: number: obj -> bool
+        /// <summary>
+        /// Returns true if the value passed is an integer, false otherwise.
+        /// </summary>
+        /// <param name="number">
+        /// A numeric value.
+        /// </param>
+        abstract member isInteger: number: obj -> bool
+        /// <summary>
+        /// Returns a Boolean value that indicates whether a value is the reserved value NaN (not a
+        /// number). Unlike the global isNaN(), Number.isNaN() doesn't forcefully convert the parameter
+        /// to a number. Only values of the type number, that are also NaN, result in true.
+        /// </summary>
+        /// <param name="number">
+        /// A numeric value.
+        /// </param>
+        abstract member isNaN: number: obj -> bool
+        /// <summary>
+        /// Returns true if the value passed is a safe integer.
+        /// </summary>
+        /// <param name="number">
+        /// A numeric value.
+        /// </param>
+        abstract member isSafeInteger: number: obj -> bool
+        /// <summary>
+        /// The value of the largest integer n such that n and n + 1 are both exactly representable as
+        /// a Number value.
+        /// The value of Number.MAX_SAFE_INTEGER is 9007199254740991 2^53 − 1.
+        /// </summary>
+        abstract member MAX_SAFE_INTEGER: float with get
+        /// <summary>
+        /// The value of the smallest integer n such that n and n − 1 are both exactly representable as
+        /// a Number value.
+        /// The value of Number.MIN_SAFE_INTEGER is −9007199254740991 (−(2^53 − 1)).
+        /// </summary>
+        abstract member MIN_SAFE_INTEGER: float with get
+        /// <summary>
+        /// Converts a string to a floating-point number.
+        /// </summary>
+        /// <param name="string">
+        /// A string that contains a floating-point number.
+        /// </param>
+        abstract member parseFloat: string: string -> float
+        /// <summary>
+        /// Converts A string to an integer.
+        /// </summary>
+        /// <param name="string">
+        /// A string to convert into a number.
+        /// </param>
+        /// <param name="radix">
+        /// A value between 2 and 36 that specifies the base of the number in <c>string</c>.
+        /// If this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.
+        /// All other strings are considered decimal.
+        /// </param>
+        abstract member parseInt: string: string * ?radix: float -> float
+
+        [<EmitConstructor>]
+        abstract member Create: ?value: obj -> float
+
+        [<Emit("$0($1...)")>]
+        abstract member Invoke: ?value: obj -> float
+
+        abstract member prototype: float with get
+        /// <summary>
+        /// The largest number that can be represented in JavaScript. Equal to approximately 1.79E+308.
+        /// </summary>
+        abstract member MAX_VALUE: float with get
+        /// <summary>
+        /// The closest number to zero that can be represented in JavaScript. Equal to approximately 5.00E-324.
+        /// </summary>
+        abstract member MIN_VALUE: float with get
+        /// <summary>
+        /// A value that is not a number.
+        /// In equality comparisons, NaN does not equal any value, including itself. To test whether a value is equivalent to NaN, use the isNaN function.
+        /// </summary>
+        abstract member NaN: float with get
+        /// <summary>
+        /// A value that is less than the largest negative number that can be represented in JavaScript.
+        /// JavaScript displays NEGATIVE_INFINITY values as -infinity.
+        /// </summary>
+        abstract member NEGATIVE_INFINITY: float with get
+        /// <summary>
+        /// A value greater than the largest number that can be represented in JavaScript.
+        /// JavaScript displays POSITIVE_INFINITY values as infinity.
+        /// </summary>
+        abstract member POSITIVE_INFINITY: float with get
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type ObjectConstructor =
+        /// <summary>
+        /// Copy the values of all of the enumerable own properties from one or more source objects to a
+        /// target object. Returns the target object.
+        /// </summary>
+        /// <param name="target">
+        /// The target object to copy to.
+        /// </param>
+        /// <param name="source">
+        /// The source object from which to copy properties.
+        /// </param>
+        abstract member assign<'T, 'U> : target: 'T * source: 'U -> obj
+        /// <summary>
+        /// Copy the values of all of the enumerable own properties from one or more source objects to a
+        /// target object. Returns the target object.
+        /// </summary>
+        /// <param name="target">
+        /// The target object to copy to.
+        /// </param>
+        /// <param name="source1">
+        /// The first source object from which to copy properties.
+        /// </param>
+        /// <param name="source2">
+        /// The second source object from which to copy properties.
+        /// </param>
+        abstract member assign<'T, 'U, 'V> : target: 'T * source1: 'U * source2: 'V -> obj
+
+        /// <summary>
+        /// Copy the values of all of the enumerable own properties from one or more source objects to a
+        /// target object. Returns the target object.
+        /// </summary>
+        /// <param name="target">
+        /// The target object to copy to.
+        /// </param>
+        /// <param name="source1">
+        /// The first source object from which to copy properties.
+        /// </param>
+        /// <param name="source2">
+        /// The second source object from which to copy properties.
+        /// </param>
+        /// <param name="source3">
+        /// The third source object from which to copy properties.
+        /// </param>
+        abstract member assign<'T, 'U, 'V, 'W> :
+            target: 'T * source1: 'U * source2: 'V * source3: 'W -> obj
+
+        /// <summary>
+        /// Copy the values of all of the enumerable own properties from one or more source objects to a
+        /// target object. Returns the target object.
+        /// </summary>
+        /// <param name="target">
+        /// The target object to copy to.
+        /// </param>
+        /// <param name="sources">
+        /// One or more source objects from which to copy properties
+        /// </param>
+        abstract member assign: target: obj * [<ParamArray>] sources: obj[] -> obj
+        /// <summary>
+        /// Returns an array of all symbol properties found directly on object o.
+        /// </summary>
+        /// <param name="o">
+        /// Object to retrieve the symbols from.
+        /// </param>
+        abstract member getOwnPropertySymbols: o: obj -> ResizeArray<obj>
+        /// <summary>
+        /// Returns the names of the enumerable string properties and methods of an object.
+        /// </summary>
+        /// <param name="o">
+        /// Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
+        /// </param>
+        abstract member keys: o: obj -> ResizeArray<string>
+        /// <summary>
+        /// Returns true if the values are the same value, false otherwise.
+        /// </summary>
+        /// <param name="value1">
+        /// The first value.
+        /// </param>
+        /// <param name="value2">
+        /// The second value.
+        /// </param>
+        abstract member is: value1: obj * value2: obj -> bool
+        /// <summary>
+        /// Sets the prototype of a specified object o to object proto or null. Returns the object o.
+        /// </summary>
+        /// <param name="o">
+        /// The object to change its prototype.
+        /// </param>
+        /// <param name="proto">
+        /// The value of the new prototype or null.
+        /// </param>
+        abstract member setPrototypeOf: o: obj * proto: obj option -> obj
+        /// <summary>
+        /// Returns an array of values of the enumerable properties of an object
+        /// </summary>
+        /// <param name="o">
+        /// Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
+        /// </param>
+        abstract member values<'T> : o: ObjectConstructor.values.o<'T> -> ResizeArray<'T>
+        /// <summary>
+        /// Returns an array of values of the enumerable properties of an object
+        /// </summary>
+        /// <param name="o">
+        /// Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
+        /// </param>
+        abstract member values<'T> : o: TypeScript.ArrayLike<'T> -> ResizeArray<'T>
+        /// <summary>
+        /// Returns an array of values of the enumerable properties of an object
+        /// </summary>
+        /// <param name="o">
+        /// Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
+        /// </param>
+        abstract member values: o: obj -> ResizeArray<obj>
+        /// <summary>
+        /// Returns an array of key/values of the enumerable properties of an object
+        /// </summary>
+        /// <param name="o">
+        /// Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
+        /// </param>
+        abstract member entries<'T> : o: ObjectConstructor.entries.o<'T> -> ResizeArray<string * 'T>
+        /// <summary>
+        /// Returns an array of key/values of the enumerable properties of an object
+        /// </summary>
+        /// <param name="o">
+        /// Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
+        /// </param>
+        abstract member entries<'T> : o: TypeScript.ArrayLike<'T> -> ResizeArray<string * 'T>
+        /// <summary>
+        /// Returns an array of key/values of the enumerable properties of an object
+        /// </summary>
+        /// <param name="o">
+        /// Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
+        /// </param>
+        abstract member entries: o: obj -> ResizeArray<string * obj>
+        /// <summary>
+        /// Returns an object containing all own property descriptors of an object
+        /// </summary>
+        /// <param name="o">
+        /// Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
+        /// </param>
+        abstract member getOwnPropertyDescriptors<'T> : o: 'T -> obj
+
+        /// <summary>
+        /// Returns an object created by key-value entries for properties and methods
+        /// </summary>
+        /// <param name="entries">
+        /// An iterable object that contains key-value entries for properties and methods.
+        /// </param>
+        abstract member fromEntries<'T> :
+            entries: Iterable<TypeScript.PropertyKey * 'T> -> ObjectConstructor.fromEntries<'T>
+
+        /// <summary>
+        /// Returns an object created by key-value entries for properties and methods
+        /// </summary>
+        /// <param name="entries">
+        /// An iterable object that contains key-value entries for properties and methods.
+        /// </param>
+        abstract member fromEntries:
+            entries: Iterable<TypeScript.PropertyKey * obj> -> ObjectConstructor.fromEntries_1
+
+        /// <summary>
+        /// Returns an object created by key-value entries for properties and methods
+        /// </summary>
+        /// <param name="entries">
+        /// An iterable object that contains key-value entries for properties and methods.
+        /// </param>
+        abstract member fromEntries: entries: Iterable<ReadonlyArray<obj>> -> obj
+        /// <summary>
+        /// Determines whether an object has a property with the specified name.
+        /// </summary>
+        /// <param name="o">
+        /// An object.
+        /// </param>
+        /// <param name="v">
+        /// A property name.
+        /// </param>
+        abstract member hasOwn: o: obj * v: string -> bool
+        /// <summary>
+        /// Determines whether an object has a property with the specified name.
+        /// </summary>
+        /// <param name="o">
+        /// An object.
+        /// </param>
+        /// <param name="v">
+        /// A property name.
+        /// </param>
+        abstract member hasOwn: o: obj * v: float -> bool
+        /// <summary>
+        /// Determines whether an object has a property with the specified name.
+        /// </summary>
+        /// <param name="o">
+        /// An object.
+        /// </param>
+        /// <param name="v">
+        /// A property name.
+        /// </param>
+        abstract member hasOwn: o: obj * v: obj -> bool
+
+        [<EmitConstructor>]
+        abstract member Create: ?value: obj -> obj
+
+        [<Emit("$0($1...)")>]
+        abstract member Invoke: unit -> obj
+
+        [<Emit("$0($1...)")>]
+        abstract member Invoke: value: obj -> obj
+
+        /// <summary>
+        /// A reference to the prototype for a class of objects.
+        /// </summary>
+        abstract member prototype: obj with get
+        /// <summary>
+        /// Returns the prototype of an object.
+        /// </summary>
+        /// <param name="o">
+        /// The object that references the prototype.
+        /// </param>
+        abstract member getPrototypeOf: o: obj -> obj
+
+        /// <summary>
+        /// Gets the own property descriptor of the specified object.
+        /// An own property descriptor is one that is defined directly on the object and is not inherited from the object's prototype.
+        /// </summary>
+        /// <param name="o">
+        /// Object that contains the property.
+        /// </param>
+        /// <param name="p">
+        /// Name of the property.
+        /// </param>
+        abstract member getOwnPropertyDescriptor:
+            o: obj * p: string -> TypeScript.PropertyDescriptor option
+
+        /// <summary>
+        /// Gets the own property descriptor of the specified object.
+        /// An own property descriptor is one that is defined directly on the object and is not inherited from the object's prototype.
+        /// </summary>
+        /// <param name="o">
+        /// Object that contains the property.
+        /// </param>
+        /// <param name="p">
+        /// Name of the property.
+        /// </param>
+        abstract member getOwnPropertyDescriptor:
+            o: obj * p: float -> TypeScript.PropertyDescriptor option
+
+        /// <summary>
+        /// Gets the own property descriptor of the specified object.
+        /// An own property descriptor is one that is defined directly on the object and is not inherited from the object's prototype.
+        /// </summary>
+        /// <param name="o">
+        /// Object that contains the property.
+        /// </param>
+        /// <param name="p">
+        /// Name of the property.
+        /// </param>
+        abstract member getOwnPropertyDescriptor:
+            o: obj * p: obj -> TypeScript.PropertyDescriptor option
+
+        /// <summary>
+        /// Returns the names of the own properties of an object. The own properties of an object are those that are defined directly
+        /// on that object, and are not inherited from the object's prototype. The properties of an object include both fields (objects) and functions.
+        /// </summary>
+        /// <param name="o">
+        /// Object that contains the own properties.
+        /// </param>
+        abstract member getOwnPropertyNames: o: obj -> ResizeArray<string>
+        /// <summary>
+        /// Creates an object that has the specified prototype or that has null prototype.
+        /// Creates an object that has the specified prototype, and that optionally contains specified properties.
+        /// </summary>
+        /// <param name="o">
+        /// Object to use as a prototype. May be null.
+        /// </param>
+        abstract member create: o: obj option -> obj
+        /// <summary>
+        /// Creates an object that has the specified prototype or that has null prototype.
+        /// Creates an object that has the specified prototype, and that optionally contains specified properties.
+        /// </summary>
+        /// <param name="o">
+        /// Object to use as a prototype. May be null
+        /// </param>
+        /// <param name="properties">
+        /// JavaScript object that contains one or more property descriptors.
+        /// </param>
+        abstract member create: o: obj option * properties: obj -> obj
+
+        /// <summary>
+        /// Adds a property to an object, or modifies attributes of an existing property.
+        /// </summary>
+        /// <param name="o">
+        /// Object on which to add or modify the property. This can be a native JavaScript object (that is, a user-defined object or a built in object) or a DOM object.
+        /// </param>
+        /// <param name="p">
+        /// The property name.
+        /// </param>
+        /// <param name="attributes">
+        /// Descriptor for the property. It can be for a data property or an accessor property.
+        /// </param>
+        abstract member defineProperty<'T> :
+            o: 'T * p: string * attributes: ObjectConstructor.defineProperty.attributes -> 'T
+
+        /// <summary>
+        /// Adds a property to an object, or modifies attributes of an existing property.
+        /// </summary>
+        /// <param name="o">
+        /// Object on which to add or modify the property. This can be a native JavaScript object (that is, a user-defined object or a built in object) or a DOM object.
+        /// </param>
+        /// <param name="p">
+        /// The property name.
+        /// </param>
+        /// <param name="attributes">
+        /// Descriptor for the property. It can be for a data property or an accessor property.
+        /// </param>
+        abstract member defineProperty<'T> :
+            o: 'T * p: float * attributes: ObjectConstructor.defineProperty.attributes -> 'T
+
+        /// <summary>
+        /// Adds a property to an object, or modifies attributes of an existing property.
+        /// </summary>
+        /// <param name="o">
+        /// Object on which to add or modify the property. This can be a native JavaScript object (that is, a user-defined object or a built in object) or a DOM object.
+        /// </param>
+        /// <param name="p">
+        /// The property name.
+        /// </param>
+        /// <param name="attributes">
+        /// Descriptor for the property. It can be for a data property or an accessor property.
+        /// </param>
+        abstract member defineProperty<'T> :
+            o: 'T * p: obj * attributes: ObjectConstructor.defineProperty.attributes -> 'T
+
+        /// <summary>
+        /// Adds one or more properties to an object, and/or modifies attributes of existing properties.
+        /// </summary>
+        /// <param name="o">
+        /// Object on which to add or modify the properties. This can be a native JavaScript object or a DOM object.
+        /// </param>
+        /// <param name="properties">
+        /// JavaScript object that contains one or more descriptor objects. Each descriptor object describes a data property or an accessor property.
+        /// </param>
+        abstract member defineProperties<'T> : o: 'T * properties: obj -> 'T
+        /// <summary>
+        /// Prevents the modification of attributes of existing properties, and prevents the addition of new properties.
+        /// </summary>
+        /// <param name="o">
+        /// Object on which to lock the attributes.
+        /// </param>
+        abstract member seal<'T> : o: 'T -> 'T
+        /// <summary>
+        /// Prevents the modification of existing property attributes and values, and prevents the addition of new properties.
+        /// </summary>
+        /// <param name="f">
+        /// Object on which to lock the attributes.
+        /// </param>
+        abstract member freeze<'T> : f: 'T -> 'T
+        /// <summary>
+        /// Prevents the addition of new properties to an object.
+        /// </summary>
+        /// <param name="o">
+        /// Object to make non-extensible.
+        /// </param>
+        abstract member preventExtensions<'T> : o: 'T -> 'T
+        /// <summary>
+        /// Returns true if existing property attributes cannot be modified in an object and new properties cannot be added to the object.
+        /// </summary>
+        /// <param name="o">
+        /// Object to test.
+        /// </param>
+        abstract member isSealed: o: obj -> bool
+        /// <summary>
+        /// Returns true if existing property attributes and values cannot be modified in an object, and new properties cannot be added to the object.
+        /// </summary>
+        /// <param name="o">
+        /// Object to test.
+        /// </param>
+        abstract member isFrozen: o: obj -> bool
+        /// <summary>
+        /// Returns a value that indicates whether new properties can be added to an object.
+        /// </summary>
+        /// <param name="o">
+        /// Object to test.
+        /// </param>
+        abstract member isExtensible: o: obj -> bool
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -571,6 +1084,40 @@ module TypeScript =
 
     [<AllowNullLiteral>]
     [<Interface>]
+    type StringConstructor =
+        /// <summary>
+        /// Return the String value whose elements are, in order, the elements in the List elements.
+        /// If length is 0, the empty string is returned.
+        /// </summary>
+        abstract member fromCodePoint: [<ParamArray>] codePoints: float[] -> string
+
+        /// <summary>
+        /// String.raw is usually used as a tag function of a Tagged Template String. When called as
+        /// such, the first argument will be a well formed template call site object and the rest
+        /// parameter will contain the substitution values. It can also be called directly, for example,
+        /// to interleave strings and values from your own tag function, and in this case the only thing
+        /// it needs from the first argument is the raw property.
+        /// </summary>
+        /// <param name="template">
+        /// A well-formed template string call site representation.
+        /// </param>
+        /// <param name="substitutions">
+        /// A set of substitution values.
+        /// </param>
+        abstract member raw:
+            template: StringConstructor.raw.template * [<ParamArray>] substitutions: obj[] -> string
+
+        [<EmitConstructor>]
+        abstract member Create: ?value: obj -> string
+
+        [<Emit("$0($1...)")>]
+        abstract member Invoke: ?value: obj -> string
+
+        abstract member prototype: string with get
+        abstract member fromCharCode: [<ParamArray>] codes: float[] -> string
+
+    [<AllowNullLiteral>]
+    [<Interface>]
     type Generator<'T, 'TReturn, 'TNext> =
         inherit TypeScript.Iterator<'T, 'TReturn, 'TNext>
         inherit Iterable<'T>
@@ -581,6 +1128,108 @@ module TypeScript =
 
         abstract member ``return``: value: 'TReturn -> TypeScript.IteratorResult<'T, 'TReturn>
         abstract member throw: e: obj -> TypeScript.IteratorResult<'T, 'TReturn>
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type SymbolConstructor =
+        /// <summary>
+        /// A method that returns the default iterator for an object. Called by the semantics of the
+        /// for-of statement.
+        /// </summary>
+        abstract member iterator: obj with get
+        /// <summary>
+        /// A reference to the prototype.
+        /// </summary>
+        abstract member prototype: obj with get
+
+        [<Emit("$0($1...)")>]
+        abstract member Invoke: ?description: U2<string, float> -> obj
+
+        /// <summary>
+        /// Returns a Symbol object from the global symbol registry matching the given key if found.
+        /// Otherwise, returns a new symbol with this key.
+        /// </summary>
+        /// <param name="key">
+        /// key to search for.
+        /// </param>
+        abstract member ``for``: key: string -> obj
+        /// <summary>
+        /// Returns a key from the global symbol registry matching the given Symbol if found.
+        /// Otherwise, returns a undefined.
+        /// </summary>
+        /// <param name="sym">
+        /// Symbol to find the key for.
+        /// </param>
+        abstract member keyFor: sym: obj -> string option
+        /// <summary>
+        /// A method that determines if a constructor object recognizes an object as one of the
+        /// constructor’s instances. Called by the semantics of the instanceof operator.
+        /// </summary>
+        abstract member hasInstance: obj with get
+        /// <summary>
+        /// A Boolean value that if true indicates that an object should flatten to its array elements
+        /// by Array.prototype.concat.
+        /// </summary>
+        abstract member isConcatSpreadable: obj with get
+        /// <summary>
+        /// A regular expression method that matches the regular expression against a string. Called
+        /// by the String.prototype.match method.
+        /// </summary>
+        abstract member ``match``: obj with get
+        /// <summary>
+        /// A regular expression method that replaces matched substrings of a string. Called by the
+        /// String.prototype.replace method.
+        /// </summary>
+        abstract member replace: obj with get
+        /// <summary>
+        /// A regular expression method that returns the index within a string that matches the
+        /// regular expression. Called by the String.prototype.search method.
+        /// </summary>
+        abstract member search: obj with get
+        /// <summary>
+        /// A function valued property that is the constructor function that is used to create
+        /// derived objects.
+        /// </summary>
+        abstract member species: obj with get
+        /// <summary>
+        /// A regular expression method that splits a string at the indices that match the regular
+        /// expression. Called by the String.prototype.split method.
+        /// </summary>
+        abstract member split: obj with get
+        /// <summary>
+        /// A method that converts an object to a corresponding primitive value.
+        /// Called by the ToPrimitive abstract operation.
+        /// </summary>
+        abstract member toPrimitive: obj with get
+        /// <summary>
+        /// A String value that is used in the creation of the default string description of an object.
+        /// Called by the built-in method Object.prototype.toString.
+        /// </summary>
+        abstract member toStringTag: obj with get
+        /// <summary>
+        /// An Object whose truthy properties are properties that are excluded from the 'with'
+        /// environment bindings of the associated objects.
+        /// </summary>
+        abstract member unscopables: obj with get
+        /// <summary>
+        /// A method that returns the default async iterator for an object. Called by the semantics of
+        /// the for-await-of statement.
+        /// </summary>
+        abstract member asyncIterator: obj with get
+        /// <summary>
+        /// A regular expression method that matches the regular expression against a string. Called
+        /// by the String.prototype.matchAll method.
+        /// </summary>
+        abstract member matchAll: obj with get
+        abstract member metadata: obj with get
+        /// <summary>
+        /// A method that is used to release resources held by an object. Called by the semantics of the <c>using</c> statement.
+        /// </summary>
+        abstract member dispose: obj with get
+        /// <summary>
+        /// A method that is used to asynchronously release resources held by an object. Called by the semantics of the <c>await using</c> statement.
+        /// </summary>
+        abstract member asyncDispose: obj with get
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -647,7 +1296,7 @@ module TypeScript =
         /// A <c>Boolean</c> indicating whether or not the property has been defined.
         /// </returns>
         abstract member defineProperty:
-            target: 'T * property: string * attributes: JS.PropertyDescriptor -> bool
+            target: 'T * property: string * attributes: TypeScript.PropertyDescriptor -> bool
 
         /// <summary>
         /// A trap for <c>Object.defineProperty()</c>.
@@ -659,7 +1308,7 @@ module TypeScript =
         /// A <c>Boolean</c> indicating whether or not the property has been defined.
         /// </returns>
         abstract member defineProperty:
-            target: 'T * property: obj * attributes: JS.PropertyDescriptor -> bool
+            target: 'T * property: obj * attributes: TypeScript.PropertyDescriptor -> bool
 
         /// <summary>
         /// A trap for the <c>delete</c> operator.
@@ -724,7 +1373,7 @@ module TypeScript =
         /// The name of the property whose description should be retrieved.
         /// </param>
         abstract member getOwnPropertyDescriptor:
-            target: 'T * p: string -> JS.PropertyDescriptor option
+            target: 'T * p: string -> TypeScript.PropertyDescriptor option
 
         /// <summary>
         /// A trap for <c>Object.getOwnPropertyDescriptor()</c>.
@@ -736,7 +1385,7 @@ module TypeScript =
         /// The name of the property whose description should be retrieved.
         /// </param>
         abstract member getOwnPropertyDescriptor:
-            target: 'T * p: obj -> JS.PropertyDescriptor option
+            target: 'T * p: obj -> TypeScript.PropertyDescriptor option
 
         /// <summary>
         /// A trap for the <c>[[GetPrototypeOf]]</c> internal method.
@@ -846,6 +1495,328 @@ module TypeScript =
 
         [<EmitConstructor>]
         abstract member Create: target: 'T * handler: TypeScript.ProxyHandler<'T> -> 'T
+
+    module Reflect =
+
+        [<AbstractClass>]
+        [<Erase>]
+        type Exports =
+            /// <summary>
+            /// Calls the function with the specified object as the this value
+            /// and the elements of specified array as the arguments.
+            /// </summary>
+            /// <param name="target">
+            /// The function to call.
+            /// </param>
+            /// <param name="thisArgument">
+            /// The object to be used as the this object.
+            /// </param>
+            /// <param name="argumentsList">
+            /// An array of argument values to be passed to the function.
+            /// </param>
+            [<Emit("$0.apply($1...)")>]
+            abstract member apply<'T, 'A, 'R> :
+                target: System.Delegate * thisArgument: 'T * argumentsList: 'A -> 'R
+
+            [<Emit("$0.apply($1...)")>]
+            abstract member apply:
+                target: Action * thisArgument: obj * argumentsList: TypeScript.ArrayLike<obj> -> obj
+
+            /// <summary>
+            /// Constructs the target with the elements of specified array as the arguments
+            /// and the specified constructor as the <c>new.target</c> value.
+            /// </summary>
+            /// <param name="target">
+            /// The constructor to invoke.
+            /// </param>
+            /// <param name="argumentsList">
+            /// An array of argument values to be passed to the constructor.
+            /// </param>
+            /// <param name="newTarget">
+            /// The constructor to be used as the <c>new.target</c> object.
+            /// </param>
+            [<Emit("$0.construct($1...)")>]
+            abstract member construct<'A, 'R> :
+                target: Exports.construct.target<'R> *
+                argumentsList: 'A *
+                ?newTarget: Exports.construct.newTarget ->
+                    'R
+
+            [<Emit("$0.construct($1...)")>]
+            abstract member construct:
+                target: Action * argumentsList: TypeScript.ArrayLike<obj> * ?newTarget: Action ->
+                    obj
+
+            /// <summary>
+            /// Adds a property to an object, or modifies attributes of an existing property.
+            /// </summary>
+            /// <param name="target">
+            /// Object on which to add or modify the property. This can be a native JavaScript object
+            /// (that is, a user-defined object or a built in object) or a DOM object.
+            /// </param>
+            /// <param name="propertyKey">
+            /// The property name.
+            /// </param>
+            /// <param name="attributes">
+            /// Descriptor for the property. It can be for a data property or an accessor property.
+            /// </param>
+            [<Emit("$0.defineProperty($1...)")>]
+            abstract member defineProperty:
+                target: obj * propertyKey: string * attributes: Exports.defineProperty.attributes ->
+                    bool
+
+            /// <summary>
+            /// Adds a property to an object, or modifies attributes of an existing property.
+            /// </summary>
+            /// <param name="target">
+            /// Object on which to add or modify the property. This can be a native JavaScript object
+            /// (that is, a user-defined object or a built in object) or a DOM object.
+            /// </param>
+            /// <param name="propertyKey">
+            /// The property name.
+            /// </param>
+            /// <param name="attributes">
+            /// Descriptor for the property. It can be for a data property or an accessor property.
+            /// </param>
+            [<Emit("$0.defineProperty($1...)")>]
+            abstract member defineProperty:
+                target: obj * propertyKey: float * attributes: Exports.defineProperty.attributes ->
+                    bool
+
+            /// <summary>
+            /// Adds a property to an object, or modifies attributes of an existing property.
+            /// </summary>
+            /// <param name="target">
+            /// Object on which to add or modify the property. This can be a native JavaScript object
+            /// (that is, a user-defined object or a built in object) or a DOM object.
+            /// </param>
+            /// <param name="propertyKey">
+            /// The property name.
+            /// </param>
+            /// <param name="attributes">
+            /// Descriptor for the property. It can be for a data property or an accessor property.
+            /// </param>
+            [<Emit("$0.defineProperty($1...)")>]
+            abstract member defineProperty:
+                target: obj * propertyKey: obj * attributes: Exports.defineProperty.attributes ->
+                    bool
+
+            /// <summary>
+            /// Removes a property from an object, equivalent to <c>delete target[propertyKey]</c>,
+            /// except it won't throw if <c>target[propertyKey]</c> is non-configurable.
+            /// </summary>
+            /// <param name="target">
+            /// Object from which to remove the own property.
+            /// </param>
+            /// <param name="propertyKey">
+            /// The property name.
+            /// </param>
+            [<Emit("$0.deleteProperty($1...)")>]
+            abstract member deleteProperty: target: obj * propertyKey: string -> bool
+
+            /// <summary>
+            /// Removes a property from an object, equivalent to <c>delete target[propertyKey]</c>,
+            /// except it won't throw if <c>target[propertyKey]</c> is non-configurable.
+            /// </summary>
+            /// <param name="target">
+            /// Object from which to remove the own property.
+            /// </param>
+            /// <param name="propertyKey">
+            /// The property name.
+            /// </param>
+            [<Emit("$0.deleteProperty($1...)")>]
+            abstract member deleteProperty: target: obj * propertyKey: float -> bool
+
+            /// <summary>
+            /// Removes a property from an object, equivalent to <c>delete target[propertyKey]</c>,
+            /// except it won't throw if <c>target[propertyKey]</c> is non-configurable.
+            /// </summary>
+            /// <param name="target">
+            /// Object from which to remove the own property.
+            /// </param>
+            /// <param name="propertyKey">
+            /// The property name.
+            /// </param>
+            [<Emit("$0.deleteProperty($1...)")>]
+            abstract member deleteProperty: target: obj * propertyKey: obj -> bool
+
+            /// <summary>
+            /// Gets the property of target, equivalent to <c>target[propertyKey]</c> when <c>receiver === target</c>.
+            /// </summary>
+            /// <param name="target">
+            /// Object that contains the property on itself or in its prototype chain.
+            /// </param>
+            /// <param name="propertyKey">
+            /// The property name.
+            /// </param>
+            /// <param name="receiver">
+            /// The reference to use as the <c>this</c> value in the getter function,
+            /// if <c>target[propertyKey]</c> is an accessor property.
+            /// </param>
+            [<Emit("$0.get($1...)")>]
+            abstract member get<'P> : target: obj * propertyKey: 'P * ?receiver: obj -> obj
+
+            /// <summary>
+            /// Gets the own property descriptor of the specified object.
+            /// An own property descriptor is one that is defined directly on the object and is not inherited from the object's prototype.
+            /// </summary>
+            /// <param name="target">
+            /// Object that contains the property.
+            /// </param>
+            /// <param name="propertyKey">
+            /// The property name.
+            /// </param>
+            [<Emit("$0.getOwnPropertyDescriptor($1...)")>]
+            abstract member getOwnPropertyDescriptor<'P> :
+                target: obj * propertyKey: 'P -> TypeScript.TypedPropertyDescriptor<obj> option
+
+            /// <summary>
+            /// Returns the prototype of an object.
+            /// </summary>
+            /// <param name="target">
+            /// The object that references the prototype.
+            /// </param>
+            [<Emit("$0.getPrototypeOf($1...)")>]
+            abstract member getPrototypeOf: target: obj -> obj option
+
+            /// <summary>
+            /// Equivalent to <c>propertyKey in target</c>.
+            /// </summary>
+            /// <param name="target">
+            /// Object that contains the property on itself or in its prototype chain.
+            /// </param>
+            /// <param name="propertyKey">
+            /// Name of the property.
+            /// </param>
+            [<Emit("$0.has($1...)")>]
+            abstract member has: target: obj * propertyKey: string -> bool
+
+            /// <summary>
+            /// Equivalent to <c>propertyKey in target</c>.
+            /// </summary>
+            /// <param name="target">
+            /// Object that contains the property on itself or in its prototype chain.
+            /// </param>
+            /// <param name="propertyKey">
+            /// Name of the property.
+            /// </param>
+            [<Emit("$0.has($1...)")>]
+            abstract member has: target: obj * propertyKey: float -> bool
+
+            /// <summary>
+            /// Equivalent to <c>propertyKey in target</c>.
+            /// </summary>
+            /// <param name="target">
+            /// Object that contains the property on itself or in its prototype chain.
+            /// </param>
+            /// <param name="propertyKey">
+            /// Name of the property.
+            /// </param>
+            [<Emit("$0.has($1...)")>]
+            abstract member has: target: obj * propertyKey: obj -> bool
+
+            /// <summary>
+            /// Returns a value that indicates whether new properties can be added to an object.
+            /// </summary>
+            /// <param name="target">
+            /// Object to test.
+            /// </param>
+            [<Emit("$0.isExtensible($1...)")>]
+            abstract member isExtensible: target: obj -> bool
+
+            /// <summary>
+            /// Returns the string and symbol keys of the own properties of an object. The own properties of an object
+            /// are those that are defined directly on that object, and are not inherited from the object's prototype.
+            /// </summary>
+            /// <param name="target">
+            /// Object that contains the own properties.
+            /// </param>
+            [<Emit("$0.ownKeys($1...)")>]
+            abstract member ownKeys: target: obj -> ResizeArray<U2<string, obj>>
+
+            /// <summary>
+            /// Prevents the addition of new properties to an object.
+            /// </summary>
+            /// <param name="target">
+            /// Object to make non-extensible.
+            /// </param>
+            /// <returns>
+            /// Whether the object has been made non-extensible.
+            /// </returns>
+            [<Emit("$0.preventExtensions($1...)")>]
+            abstract member preventExtensions: target: obj -> bool
+
+            /// <summary>
+            /// Sets the property of target, equivalent to <c>target[propertyKey] = value</c> when <c>receiver === target</c>.
+            /// </summary>
+            /// <param name="target">
+            /// Object that contains the property on itself or in its prototype chain.
+            /// </param>
+            /// <param name="propertyKey">
+            /// Name of the property.
+            /// </param>
+            /// <param name="receiver">
+            /// The reference to use as the <c>this</c> value in the setter function,
+            /// if <c>target[propertyKey]</c> is an accessor property.
+            /// </param>
+            [<Emit("$0.set($1...)")>]
+            abstract member set<'P> :
+                target: obj * propertyKey: 'P * value: obj * ?receiver: obj -> bool
+
+            [<Emit("$0.set($1...)")>]
+            abstract member set:
+                target: obj * propertyKey: string * value: obj * ?receiver: obj -> bool
+
+            [<Emit("$0.set($1...)")>]
+            abstract member set:
+                target: obj * propertyKey: float * value: obj * ?receiver: obj -> bool
+
+            [<Emit("$0.set($1...)")>]
+            abstract member set:
+                target: obj * propertyKey: obj * value: obj * ?receiver: obj -> bool
+
+            /// <summary>
+            /// Sets the prototype of a specified object o to object proto or null.
+            /// </summary>
+            /// <param name="target">
+            /// The object to change its prototype.
+            /// </param>
+            /// <param name="proto">
+            /// The value of the new prototype or null.
+            /// </param>
+            /// <returns>
+            /// Whether setting the prototype was successful.
+            /// </returns>
+            [<Emit("$0.setPrototypeOf($1...)")>]
+            abstract member setPrototypeOf: target: obj * proto: obj option -> bool
+
+        module Exports =
+
+            module construct =
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type target<'R> =
+                    [<EmitConstructor>]
+                    abstract member Create: [<ParamArray>] args: 'A[] -> 'R
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type newTarget =
+                    [<EmitConstructor>]
+                    abstract member Create: [<ParamArray>] args: obj[] -> obj
+
+            module defineProperty =
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type attributes =
+                    abstract member configurable: bool option with get, set
+                    abstract member enumerable: bool option with get, set
+                    abstract member value: obj option with get, set
+                    abstract member writable: bool option with get, set
+                    abstract member get: unit -> obj
+                    abstract member set: v: obj -> unit
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -1311,9 +2282,19 @@ module TypeScript =
 
     [<AllowNullLiteral>]
     [<Interface>]
+    type PropertyDescriptor =
+        abstract member configurable: bool option with get, set
+        abstract member enumerable: bool option with get, set
+        abstract member value: obj option with get, set
+        abstract member writable: bool option with get, set
+        abstract member get: unit -> obj
+        abstract member set: v: obj -> unit
+
+    [<AllowNullLiteral>]
+    [<Interface>]
     type PropertyDescriptorMap =
         [<EmitIndexer>]
-        abstract member Item: key: TypeScript.PropertyKey -> JS.PropertyDescriptor with get, set
+        abstract member Item: key: TypeScript.PropertyKey -> TypeScript.PropertyDescriptor with get, set
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -1342,6 +2323,16 @@ module TypeScript =
 
         abstract member join: ?separator: string -> string
         abstract member slice: ?start: float * ?``end``: float -> ResizeArray<'T>
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type TypedPropertyDescriptor<'T> =
+        abstract member enumerable: bool option with get, set
+        abstract member configurable: bool option with get, set
+        abstract member writable: bool option with get, set
+        abstract member value: 'T option with get, set
+        abstract member get: (unit -> 'T) option with get, set
+        abstract member set: ('T -> unit) option with get, set
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -1431,6 +2422,48 @@ module TypeScript =
 
             type callbackfn<'T> =
                 delegate of value: 'T * value2: 'T * set: TypeScript.ReadonlySet<'T> -> unit
+
+    module ObjectConstructor =
+
+        [<AllowNullLiteral>]
+        [<Interface>]
+        type fromEntries<'T> =
+            [<EmitIndexer>]
+            abstract member Item: k: string -> 'T with get, set
+
+        [<AllowNullLiteral>]
+        [<Interface>]
+        type fromEntries_1 =
+            [<EmitIndexer>]
+            abstract member Item: k: string -> obj with get, set
+
+        module values =
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type o<'T> =
+                [<EmitIndexer>]
+                abstract member Item: s: string -> 'T with get, set
+
+        module entries =
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type o<'T> =
+                [<EmitIndexer>]
+                abstract member Item: s: string -> 'T with get, set
+
+        module defineProperty =
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type attributes =
+                abstract member configurable: bool option with get, set
+                abstract member enumerable: bool option with get, set
+                abstract member value: obj option with get, set
+                abstract member writable: bool option with get, set
+                abstract member get: unit -> obj
+                abstract member set: v: obj -> unit
 
     module ReadonlyArray =
 
@@ -1535,6 +2568,23 @@ module TypeScript =
                     currentIndex: float *
                     array: ResizeArray<'T> ->
                         'U
+
+    module StringConstructor =
+
+        module raw =
+
+            [<Global>]
+            [<AllowNullLiteral>]
+            type template private () =
+
+                [<ParamObject; Emit("$0")>]
+                new(raw: ReadonlyArray<string>) = template ()
+
+                [<ParamObject; Emit("$0")>]
+                new(raw: TypeScript.ArrayLike<string>) = template ()
+
+                member val raw: U2<ReadonlyArray<string>, TypeScript.ArrayLike<string>> =
+                    nativeOnly with get, set
 
     module ProxyConstructor =
 

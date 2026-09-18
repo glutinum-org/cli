@@ -166,6 +166,44 @@ let private importDefaultAttribute (name: string) (source: ImportSource) =
 // pure functional way, using a Tree structure or something similar
 // It seems like for now this implementation does the job which is the most important
 // And this is probably more readable than what a pure functional implementation would be
+/// The types generated into `Glutinum.Types` from the ES library, `esLibraryTypes` of the build
+/// keeps the same list, a binding naming one opens the package
+let private glutinumTypesNames =
+    set
+        [
+            "ReadonlyArray"
+            "ConcatArray"
+            "ArrayLike"
+            "ReadonlyMap"
+            "ReadonlySet"
+            "PromiseLike"
+            "TemplateStringsArray"
+            "Iterator"
+            "IteratorResult"
+            "IteratorYieldResult"
+            "IteratorReturnResult"
+            "IterableIterator"
+            "Generator"
+            "ArrayBufferLike"
+            "ArrayBufferTypes"
+            "SharedArrayBuffer"
+            "SharedArrayBufferConstructor"
+            "ErrorOptions"
+            "PropertyKey"
+            "PropertyDescriptor"
+            "TypedPropertyDescriptor"
+            "PropertyDescriptorMap"
+            "ProxyHandler"
+            "ProxyConstructor"
+            "BooleanConstructor"
+            "Date"
+            "DateConstructor"
+            "NumberConstructor"
+            "StringConstructor"
+            "ObjectConstructor"
+            "SymbolConstructor"
+        ]
+
 type TransformContext
     (
         reporter: Reporter,
@@ -284,8 +322,8 @@ type TransformContext
     member this.ExposeTypeAlias(name: string) =
         match name with
         | "RegExp" -> this.ExposeRegExp()
-        | "ReadonlyArray" -> this.ExposeReadonlyArray()
         | "Iterable" -> this.ExposeIterable()
+        | name when glutinumTypesNames.Contains name -> this.ExposeReadonlyArray()
         | _ -> ()
 
     member this.ExposeTypeAlias(typ: GlueType) =
@@ -352,13 +390,16 @@ let private mapTypeNameToFableCoreAwareName
             | "ArrayBuffer" -> "JS.ArrayBuffer"
             | "ArrayBufferView" -> "JS.ArrayBufferView"
             | "DataView" -> "JS.DataView"
-            | "PropertyDescriptor" -> "JS.PropertyDescriptor"
             | "Map" -> "JS.Map"
             | "Set" -> "JS.Set"
             | "WeakMap" -> "JS.WeakMap"
             | "WeakSet" -> "JS.WeakSet"
             | "FlatArray"
-            | "Symbol" -> "obj"
+            | "Symbol"
+            | "Object" -> "obj"
+            // A JavaScript number is a `float` and a string a `string`, the interfaces are not types
+            | "Number" -> "float"
+            | "String" -> "string"
             // The `Intl` namespace is not generated yet
             | _ when typeReference.FullName.StartsWith "Intl." -> "obj"
             | "Boolean" -> "bool"
@@ -870,6 +911,13 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
         mapTypeNameToFableCoreAwareName context typeReference = "obj"
         ->
         FSharpType.Object
+
+    // `Readonly<A>` with `A` unknown is `A`
+    | GlueType.TypeReference {
+                                 Name = "Readonly"
+                                 IsStandardLibrary = true
+                                 TypeArguments = [ argument ]
+                             } -> transformType context argument
 
     | GlueType.TypeReference typeReference ->
         ({
@@ -1867,8 +1915,10 @@ let private transformExports
                         else
                             sanitizedName
 
+                    // The module is printed with the suffix when it is top level itself, a
+                    // namespace of a script file of the package is nested in its globals
                     let exportTypeName =
-                        if isTopLevel then
+                        if moduleDeclaration.IsTopLevel then
                             $"{withSuffix}.Exports"
                         else
                             $"{sanitizedName}.Exports"

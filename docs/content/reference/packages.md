@@ -11,13 +11,16 @@ The ES library types the generator refers to that `Fable.Core` does not define: 
 
 A `ReadonlyArray<'T>` is a sequence, `Seq.map` and `for` read it, and `.[i]` indexes it.
 
-`Date` is here too, with its constructor on `Exports`:
+The static side of the globals is on `Exports`: `Date` with its constructor, and `Number`, `String`, `Object`, `Symbol` and `Reflect` with every member the library declares. A number stays a `float`, a string a `string`, an object an `obj`. `JSON`, `Math`, `Promise`, `Map` and `Set` are the ones of `Fable.Core`.
 
 ```fsharp
 open type Glutinum.Types.TypeScript.Exports
 
 let today = Date.Create(2026, 8, 17)
 let stamp = Date.now ()
+let whole = Number.isInteger 3.0
+let text = String.fromCharCode (72.0, 105.0)
+let keys = Object.keys {| a = 1 |}
 ```
 
 ```bash frame="terminal"

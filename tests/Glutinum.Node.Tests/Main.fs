@@ -173,20 +173,52 @@ let main _ =
 
                             let parsed = Date.Create "2026-01-01T00:00:00Z"
                             assertThat (parsed.getTime ()) (isEqualTo (Date.UTC(2026, 0, 1)))
-                            assertThat (parsed.toISOString ()) (isEqualTo "2026-01-01T00:00:00.000Z")
+
+                            assertThat
+                                (parsed.toISOString ())
+                                (isEqualTo "2026-01-01T00:00:00.000Z")
                     )
                     test (
                         "Date: the static members of the constructor",
                         fun _ ->
                             assertThat (Date.now () > 0.0) isTrue
-                            assertThat (Date.parse "2026-01-01T00:00:00Z") (isEqualTo (Date.UTC(2026, 0, 1)))
+
+                            assertThat
+                                (Date.parse "2026-01-01T00:00:00Z")
+                                (isEqualTo (Date.UTC(2026, 0, 1)))
+                    )
+                    test (
+                        "Number, String, Object, Symbol and Reflect: the static side of the globals",
+                        fun _ ->
+                            assertThat (Number.isInteger 3.0) isTrue
+                            assertThat (Number.isInteger 3.5) isFalse
+                            assertThat (Number.parseFloat "2.5") (isEqualTo 2.5)
+                            assertThat (Number.Invoke "42") (isEqualTo 42.0)
+                            assertThat (String.fromCharCode (72.0, 105.0)) (isEqualTo "Hi")
+                            assertThat (String.Invoke 12) (isEqualTo "12")
+
+                            assertThat
+                                (Object.keys {| a = 1; b = 2 |} |> String.concat ",")
+                                (isEqualTo "a,b")
+
+                            assertThat (Object.hasOwn ({| a = 1 |}, "a")) isTrue
+
+                            assertThat
+                                (Symbol.``for`` "glutinum" = Symbol.``for`` "glutinum")
+                                isTrue
+
+                            assertThat (Reflect.has ({| a = 1 |}, "a")) isTrue
                     )
                     test (
                         "ReadonlyArray: a sequence with an index",
                         fun _ ->
                             let names: ReadonlyArray<string> = unbox [| "a"; "b"; "c" |]
                             assertThat names.[1] (isEqualTo "b")
-                            assertThat (names |> Seq.map (fun name -> name.ToUpper()) |> String.concat "") (isEqualTo "ABC")
+
+                            assertThat
+                                (names |> Seq.map (fun name -> name.ToUpper()) |> String.concat "")
+                                (isEqualTo "ABC")
+
                             assertThat (names.length) (isEqualTo 3.0)
                     )
                 ]
