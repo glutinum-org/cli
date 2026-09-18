@@ -342,12 +342,23 @@ module UtilityType =
             cases |> GlueTypeUnion |> GlueType.Union
 
         // `Exclude<T, undefined>` and `Exclude<T[K], undefined>` with `T` unknown are `T` and `T[K]`
-        | HasTypeFlags Ts.TypeFlags.Conditional when
+        | HasTypeFlags Ts.TypeFlags.Conditional
+        | HasTypeFlags Ts.TypeFlags.Any when
             (match typeReferenceNode.typeArguments with
-             | Some typeArguments when typeArguments.Count > 0 ->
+             | Some typeArguments when typeArguments.Count > 1 ->
                  let excluded = typeArguments.[0]
 
-                 excluded.kind = Ts.SyntaxKind.IndexedAccessType
+                 let rec isNullish (typeNode: Ts.TypeNode) =
+                     match typeNode.kind with
+                     | Ts.SyntaxKind.UndefinedKeyword -> true
+                     | Ts.SyntaxKind.LiteralType ->
+                         (unbox<Ts.Node> (typeNode :?> Ts.LiteralTypeNode).literal).kind = Ts.SyntaxKind.NullKeyword
+                     | Ts.SyntaxKind.UnionType ->
+                         (typeNode :?> Ts.UnionTypeNode).types |> Seq.forall isNullish
+                     | _ -> false
+
+                 isNullish typeArguments.[1]
+                 || excluded.kind = Ts.SyntaxKind.IndexedAccessType
                  || (excluded.kind = Ts.SyntaxKind.TypeReference
                      && (
                          match
@@ -363,6 +374,11 @@ module UtilityType =
              | _ -> false)
             ->
             reader.ReadTypeNode typeReferenceNode.typeArguments.Value.[0]
+
+        // `Exclude<ComponentOption["type"], undefined>` widened to `string`
+        | HasTypeFlags Ts.TypeFlags.String -> GlueType.Primitive GluePrimitive.String
+        | HasTypeFlags Ts.TypeFlags.Number -> GlueType.Primitive GluePrimitive.Number
+        | HasTypeFlags Ts.TypeFlags.Boolean -> GlueType.Primitive GluePrimitive.Bool
 
         | _ ->
             Report.readerError (
@@ -506,9 +522,98 @@ module UtilityType =
 
     let private partialsBeingRead = ResizeArray<Ts.Type>()
 
+    /// A node synthesized by `typeToTypeNode` is unknown to the checker, its identifier still
+    /// carries the symbol: the declared type stands in, `defaultTypeArguments` binds its parameters
+    let private baseTypeOf (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : Ts.Type =
+        let typ = reader.checker.getTypeFromTypeNode typeNode
+
+        match typ.flags with
+        | HasTypeFlags Ts.TypeFlags.Any when
+            typeNode.pos < 0 && typeNode.kind = Ts.SyntaxKind.TypeReference
+            ->
+            symbolAtLocation reader.checker !!(typeNode :?> Ts.TypeReferenceNode).typeName
+            |> Option.bind (resolveAlias reader.checker)
+            |> Option.map reader.checker.getDeclaredTypeOfSymbol
+            |> Option.defaultValue typ
+        | _ -> typ
+
+    /// `"a" | "b"` written by `typeToTypeNode`, the checker can't type the node
+    let rec private literalKeysOf (typeNode: Ts.TypeNode) : string list =
+        match typeNode.kind with
+        | Ts.SyntaxKind.LiteralType ->
+            let literal: Ts.Node = !!(typeNode :?> Ts.LiteralTypeNode).literal
+
+            if literal.kind = Ts.SyntaxKind.StringLiteral then
+                [ (literal :?> Ts.StringLiteral).text ]
+            else
+                []
+        | Ts.SyntaxKind.UnionType ->
+            (typeNode :?> Ts.UnionTypeNode).types
+            |> Seq.toList
+            |> List.collect literalKeysOf
+        | Ts.SyntaxKind.ParenthesizedType ->
+            literalKeysOf (typeNode :?> Ts.ParenthesizedTypeNode).``type``
+        | _ -> []
+
+    /// `Partial<{ padding: Scriptable<key> }>` written by `typeToTypeNode` names the variable of
+    /// the mapped type it was taken from, unknown where the members end up
+    let private withoutForeignTypeParameters
+        (reader: ITypeScriptReader)
+        (bound: Collections.Map<string, GlueType>)
+        (members: GlueMember list)
+        =
+        let rec declaredAbove (node: Ts.Node) =
+            if isNull node then
+                []
+            else
+                let typeParameters: ResizeArray<Ts.TypeParameterDeclaration> option =
+                    node?typeParameters
+
+                (match typeParameters with
+                 | Some typeParameters ->
+                     typeParameters |> Seq.toList |> List.map (fun p -> identifierText p.name)
+                 | None -> [])
+                @ declaredAbove node.parent
+
+        let inScope =
+            match reader.SyntheticContext with
+            | Some context -> declaredAbove context
+            | None -> []
+
+        let mentioned (glueMember: GlueMember) =
+            match glueMember with
+            | GlueMember.Property property -> GlueSubstitution.mentionedTypeParameters property.Type
+            | GlueMember.Method method ->
+                GlueSubstitution.mentionedTypeParameters method.Type
+                @ (method.Parameters
+                   |> List.collect (fun parameter ->
+                       GlueSubstitution.mentionedTypeParameters parameter.Type
+                   ))
+            | GlueMember.MethodSignature method ->
+                GlueSubstitution.mentionedTypeParameters method.Type
+                @ (method.Parameters
+                   |> List.collect (fun parameter ->
+                       GlueSubstitution.mentionedTypeParameters parameter.Type
+                   ))
+            | _ -> []
+
+        let foreign =
+            members
+            |> List.collect mentioned
+            |> List.distinct
+            |> List.filter (fun name ->
+                not (List.contains name inScope) && not (bound.ContainsKey name)
+            )
+            |> List.map (fun name -> name, GlueType.Primitive GluePrimitive.Any)
+            |> Collections.Map.ofList
+
+        if foreign.IsEmpty then
+            members
+        else
+            members |> List.map (GlueSubstitution.substituteMember foreign)
+
     let readPartial (reader: ITypeScriptReader) (typeReferenceNode: Ts.TypeReferenceNode) =
-        let baseType =
-            typeReferenceNode.typeArguments.Value[0] |> reader.checker.getTypeFromTypeNode
+        let baseType = baseTypeOf reader typeReferenceNode.typeArguments.Value[0]
 
         if partialsBeingRead |> Seq.exists (fun typ -> obj.ReferenceEquals(typ, baseType)) then
             Report.readerError (
@@ -537,8 +642,22 @@ module UtilityType =
                     |> reader.ReadTypeNode
                 else
 
+                    let baseNode = typeReferenceNode.typeArguments.Value[0]
+
                     let members =
                         match baseType.flags with
+                        // `Partial<any>`
+                        | HasTypeFlags Ts.TypeFlags.Any when
+                            baseNode.kind = Ts.SyntaxKind.AnyKeyword
+                            ->
+                            []
+                        // `Partial<{ padding: number }>` written by `typeToTypeNode`
+                        | HasTypeFlags Ts.TypeFlags.Any when
+                            baseNode.pos < 0 && baseNode.kind = Ts.SyntaxKind.TypeLiteral
+                            ->
+                            match reader.ReadTypeNode baseNode with
+                            | GlueType.TypeLiteral typeLiteral -> typeLiteral.Members
+                            | _ -> []
                         | HasTypeFlags Ts.TypeFlags.Any ->
                             Report.readerError (
                                 "partial inner type",
@@ -554,11 +673,20 @@ module UtilityType =
                     let defaults =
                         defaultTypeArguments reader typeReferenceNode.typeArguments.Value[0]
 
+                    let members =
+                        members
+                        |> List.map (GlueSubstitution.substituteMember defaults)
+                        |> fun members ->
+                            if typeReferenceNode.pos < 0 then
+                                withoutForeignTypeParameters reader defaults members
+                            else
+                                members
+
                     ({
                         Documentation = []
                         FullName = getFullNameOrEmpty reader.checker typeReferenceNode
                         Name = entityNameText !!typeReferenceNode.typeName
-                        Members = members |> List.map (GlueSubstitution.substituteMember defaults)
+                        Members = members
                         TypeParameters = []
                         HeritageClauses = []
                     }
@@ -636,19 +764,33 @@ module UtilityType =
                 None
 
         let keysToOmit =
-            if keysToOmitType.isUnion () then
-                (keysToOmitType :?> Ts.UnionOrIntersectionType).types
-                |> Seq.choose tryReadValueOfKeys
-            else
-                tryReadValueOfKeys keysToOmitType
-                |> Option.map Seq.singleton
-                |> Option.defaultValue []
+            match keysToOmitType.flags with
+            | HasTypeFlags Ts.TypeFlags.Any when typeReferenceNode.pos < 0 ->
+                literalKeysOf typeReferenceNode.typeArguments.Value[1] |> Seq.ofList
+            | _ ->
+                if keysToOmitType.isUnion () then
+                    (keysToOmitType :?> Ts.UnionOrIntersectionType).types
+                    |> Seq.choose tryReadValueOfKeys
+                else
+                    tryReadValueOfKeys keysToOmitType
+                    |> Option.map Seq.singleton
+                    |> Option.defaultValue []
 
-        let baseType =
-            typeReferenceNode.typeArguments.Value[0] |> reader.checker.getTypeFromTypeNode
+        let baseType = baseTypeOf reader typeReferenceNode.typeArguments.Value[0]
+
+        // `Omit<{ uid: string } & { type: T }, "uid">` written by `typeToTypeNode`
+        let literalMembers =
+            match baseType.flags with
+            | HasTypeFlags Ts.TypeFlags.Any when typeReferenceNode.pos < 0 ->
+                match reader.ReadTypeNode typeReferenceNode.typeArguments.Value[0] with
+                | GlueType.IntersectionType members -> Some members
+                | GlueType.TypeLiteral typeLiteral -> Some typeLiteral.Members
+                | _ -> None
+            | _ -> None
 
         let baseProperties =
             match baseType.flags with
+            | HasTypeFlags Ts.TypeFlags.Any when literalMembers.IsSome -> ResizeArray []
             | HasTypeFlags Ts.TypeFlags.Any ->
                 Report.readerError (
                     "omit base type",
@@ -681,8 +823,35 @@ module UtilityType =
 
         let defaults = defaultTypeArguments reader typeReferenceNode.typeArguments.Value[0]
 
+        let memberName (glueMember: GlueMember) =
+            match glueMember with
+            | GlueMember.Property property -> Some property.Name
+            | GlueMember.Method method -> Some method.Name
+            | GlueMember.MethodSignature methodSignature -> Some methodSignature.Name
+            | GlueMember.GetAccessor accessor -> Some accessor.Name
+            | GlueMember.SetAccessor accessor -> Some accessor.Name
+            | GlueMember.CallSignature _
+            | GlueMember.IndexSignature _
+            | GlueMember.ConstructSignature _ -> None
+
+        let members =
+            match literalMembers with
+            | Some literalMembers ->
+                literalMembers
+                |> List.filter (fun glueMember ->
+                    match memberName glueMember with
+                    | Some name -> not (keysToOmit |> Seq.contains name)
+                    | None -> true
+                )
+            | None -> members
+
         members
         |> List.map (GlueSubstitution.substituteMember defaults)
+        |> fun members ->
+            if typeReferenceNode.pos < 0 then
+                withoutForeignTypeParameters reader defaults members
+            else
+                members
         |> GlueUtilityType.Omit
         |> GlueType.UtilityType
 

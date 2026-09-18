@@ -28,10 +28,27 @@ type Report =
         let sourceFile = node.getSourceFile ()
 
         if isNull sourceFile then
+            // A node synthesized by `typeToTypeNode` has no source, the printer writes it
+            let text =
+                try
+                    let printer = ts.createPrinter ()
+
+                    printer.printNode (
+                        Ts.EmitHint.Unspecified,
+                        node,
+                        Unchecked.defaultof<Ts.SourceFile>
+                    )
+                with _ ->
+                    ""
+
             $"""%s{errorOrigin}: Error while reading %s{errorContext} from:
 (source file not available for report)
 
-%s{reason}"""
+%s{reason}
+
+--- Text ---
+%s{text}
+---"""
         else
             let lineAndChar = sourceFile.getLineAndCharacterOfPosition node.pos
             let line = int lineAndChar.line + 1
