@@ -63,9 +63,9 @@
       },
       "Nacara.Plugin.FSharpApi": {
         "type": "Direct",
-        "requested": "[1.0.0-beta.4, )",
-        "resolved": "1.0.0-beta.4",
-        "contentHash": "OYSte59bNcE8egjC6NrwJkbHh3f1k5kC752ckfiyXILbAO5RxjL0D0l8hegCN808JVcB5mNgzNZAJvhf1sLe1w==",
+        "requested": "[1.0.0-beta.5, )",
+        "resolved": "1.0.0-beta.5",
+        "contentHash": "ljaeNaKcGGbCF1zM1X1GZmf81BDHPp6oURgajUD1EuHuIYV4COYCf4hinTC5am+Kw2PCfQxxHviuCvRttGRHSQ==",
         "dependencies": {
           "FSharp.Compiler.Service": "43.12.400",
           "FSharp.Core": "10.1.400",

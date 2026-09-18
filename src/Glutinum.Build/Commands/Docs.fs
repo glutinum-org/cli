@@ -84,6 +84,7 @@ let private buildPackages () =
         [
             "src/Glutinum.Types/Glutinum.Types.fsproj"
             "bindings/Glutinum.Web/Glutinum.Web.fsproj"
+            "bindings/Glutinum.Node/Glutinum.Node.fsproj"
         ] do
         Command.Run(
             "dotnet",

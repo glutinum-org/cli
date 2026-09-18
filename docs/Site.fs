@@ -16,9 +16,8 @@ let apiOptions =
                     "../src/Glutinum.Types/bin/Release/netstandard2.1/Glutinum.Types.dll"
                 FSharpApiSource.create
                     "../bindings/Glutinum.Web/bin/Release/netstandard2.1/Glutinum.Web.dll"
-            // `Glutinum.Node` waits for the plugin: `crypto.webcrypto_.CryptoKeyConstructor.Invoke._`
-            // is named after a TypeScript parameter called `_`, and its slug is empty, so its page
-            // takes the route of the module holding it
+                FSharpApiSource.create
+                    "../bindings/Glutinum.Node/bin/Release/netstandard2.1/Glutinum.Node.dll"
             ]
     }
 

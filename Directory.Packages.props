@@ -39,7 +39,7 @@
     <PackageVersion Include="Nacara.Plugin.Assets.LightningCss" Version="1.0.0-beta.1" />
     <PackageVersion Include="Nacara.Plugin.Assets.Nuglify" Version="1.0.0-beta.1" />
     <PackageVersion Include="Nacara.Plugin.Deploy.GitHubPages" Version="1.0.0-beta.2" />
-    <PackageVersion Include="Nacara.Plugin.FSharpApi" Version="1.0.0-beta.4" />
+    <PackageVersion Include="Nacara.Plugin.FSharpApi" Version="1.0.0-beta.5" />
     <PackageVersion Include="Nacara.Theme.Default" Version="1.0.0-beta.13" />
     <PackageVersion Include="Thoth.Elmish.Debouncer" Version="2.1.0" />
     <PackageVersion Include="Thoth.Elmish.Toast" Version="4.0.0" />
