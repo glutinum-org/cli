@@ -75,7 +75,13 @@ let readIndexedAccessType
     | Ts.SyntaxKind.LiteralType -> GlueType.Primitive GluePrimitive.Any
 
     // `T[K]`, only a mapped type can use it
-    | Ts.SyntaxKind.TypeReference -> reader.ReadTypeNode idxNodeType |> withIndexType
+    | Ts.SyntaxKind.TypeReference
+    // `T[string]`
+    | Ts.SyntaxKind.StringKeyword
+    | Ts.SyntaxKind.NumberKeyword -> reader.ReadTypeNode idxNodeType |> withIndexType
+
+    // `T[keyof Def & StatusCode]`, the keys can't be known
+    | Ts.SyntaxKind.IntersectionType -> withIndexType GlueType.Discard
 
     | unsupported ->
         let warning =

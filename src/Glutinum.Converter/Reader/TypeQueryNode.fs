@@ -81,6 +81,8 @@ let readTypeQueryNode (reader: ITypeScriptReader) (typeQueryNode: Ts.TypeQueryNo
                     let typeOperatorNode = typeNode :?> Ts.TypeOperatorNode
                     return reader.ReadTypeOperatorNode typeOperatorNode
 
+                | Ts.SyntaxKind.TupleType -> return reader.ReadTypeNode typeNode
+
                 | unsupported ->
                     return!
                         Report.readerError (

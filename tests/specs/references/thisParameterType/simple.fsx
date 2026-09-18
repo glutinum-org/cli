@@ -8,7 +8,7 @@ open System
 [<Erase>]
 type Exports =
     [<Import("toHex", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member toHex (this: float) : string = nativeOnly
+    static member toHex () : string = nativeOnly
     [<Import("numberToString", "REPLACE_ME_WITH_MODULE_NAME")>]
     static member numberToString (n: float) : string = nativeOnly
 

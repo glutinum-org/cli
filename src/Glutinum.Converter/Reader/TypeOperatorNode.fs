@@ -71,7 +71,18 @@ let readTypeOperatorNode (reader: ITypeScriptReader) (node: Ts.TypeOperatorNode)
             TypeQueryNode.readTypeQueryNode reader typeQueryNode |> GlueType.KeyOf
 
         // `keyof T["options"]`, the keys can't be known
-        | Ts.SyntaxKind.IndexedAccessType -> GlueType.KeyOf GlueType.Discard
+        | Ts.SyntaxKind.IndexedAccessType
+        | Ts.SyntaxKind.IntersectionType -> GlueType.KeyOf GlueType.Discard
+
+        | Ts.SyntaxKind.AnyKeyword ->
+            GlueType.Union(
+                GlueTypeUnion
+                    [
+                        GlueType.Primitive GluePrimitive.String
+                        GlueType.Primitive GluePrimitive.Number
+                        GlueType.Primitive GluePrimitive.Symbol
+                    ]
+            )
 
         | _ ->
             Report.readerError (

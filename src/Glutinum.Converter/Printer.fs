@@ -1044,6 +1044,15 @@ let rec private print (printer: Printer) (fsharpTypes: FSharpType list) =
                 printer.NewLine
             )
 
+            unionInfo.Constants
+            |> List.iter (fun constant ->
+                printer.Write(
+                    $"static member inline {constant.Name}: {unionInfo.Name} = {unionInfo.Name}.{constant.Case} {constant.Value}"
+                )
+
+                printer.NewLine
+            )
+
             printer.Unindent
 
         | FSharpType.Enum enumInfo -> printEnum printer enumInfo

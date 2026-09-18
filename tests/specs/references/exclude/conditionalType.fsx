@@ -4,10 +4,8 @@ open Fable.Core
 open Fable.Core.JsInterop
 open System
 
-[<AllowNullLiteral>]
-[<Interface>]
 type NonFunction<'T> =
-    interface end
+    'T
 
 (***)
 #r "nuget: Fable.Core"

@@ -14675,7 +14675,7 @@ TypeScript versions earlier than 5.7.""")>]
             /// The input that is checked for being truthy.
             /// </param>
             [<ImportDefault("assert")>]
-            static member ``assert`` (value: obj) : bool = nativeOnly
+            static member ``assert`` (value: obj) : unit = nativeOnly
             /// <summary>
             /// An alias of <see href="assert.ok">assert.ok</see>.
             /// </summary>
@@ -14683,7 +14683,7 @@ TypeScript versions earlier than 5.7.""")>]
             /// The input that is checked for being truthy.
             /// </param>
             [<ImportDefault("assert")>]
-            static member ``assert`` (value: obj, message: string) : bool = nativeOnly
+            static member ``assert`` (value: obj, message: string) : unit = nativeOnly
             /// <summary>
             /// An alias of <see href="assert.ok">assert.ok</see>.
             /// </summary>
@@ -14691,7 +14691,7 @@ TypeScript versions earlier than 5.7.""")>]
             /// The input that is checked for being truthy.
             /// </param>
             [<ImportDefault("assert")>]
-            static member ``assert`` (value: obj, message: Exception) : bool = nativeOnly
+            static member ``assert`` (value: obj, message: Exception) : unit = nativeOnly
             [<Import("kOptions", "assert")>]
             static member inline kOptions: obj = nativeOnly
             /// <summary>
@@ -14791,7 +14791,7 @@ TypeScript versions earlier than 5.7.""")>]
             /// </c><c></c>
             /// </summary>
             [<ImportDefault("assert"); Emit("$0.ok($1...)")>]
-            static member ok (value: obj, ?message: U2<string, Exception>) : bool = nativeOnly
+            static member ok (value: obj, ?message: U2<string, Exception>) : unit = nativeOnly
             /// <summary>
             /// **Strict assertion mode**
             ///
@@ -14961,7 +14961,7 @@ TypeScript versions earlier than 5.7.""")>]
             /// instead of the <c>AssertionError</c>.
             /// </summary>
             [<ImportDefault("assert"); Emit("$0.strictEqual($1...)")>]
-            static member strictEqual<'T> (actual: obj, expected: 'T, ?message: U2<string, Exception>) : bool = nativeOnly
+            static member strictEqual<'T> (actual: obj, expected: 'T, ?message: U2<string, Exception>) : unit = nativeOnly
             /// <summary>
             /// Tests strict inequality between the <c>actual</c> and <c>expected</c> parameters as
             /// determined by [<c>Object.is()</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is).
@@ -14993,7 +14993,7 @@ TypeScript versions earlier than 5.7.""")>]
             /// are recursively evaluated also by the following rules.
             /// </summary>
             [<ImportDefault("assert"); Emit("$0.deepStrictEqual($1...)")>]
-            static member deepStrictEqual<'T> (actual: obj, expected: 'T, ?message: U2<string, Exception>) : bool = nativeOnly
+            static member deepStrictEqual<'T> (actual: obj, expected: 'T, ?message: U2<string, Exception>) : unit = nativeOnly
             /// <summary>
             /// Tests for deep strict inequality. Opposite of <see href="deepStrictEqual">deepStrictEqual</see>.
             ///
@@ -15297,7 +15297,7 @@ TypeScript versions earlier than 5.7.""")>]
             /// </code>
             /// </summary>
             [<ImportDefault("assert"); Emit("$0.ifError($1...)")>]
-            static member ifError (value: obj) : bool = nativeOnly
+            static member ifError (value: obj) : unit = nativeOnly
             /// <summary>
             /// Awaits the <c>asyncFn</c> promise or, if <c>asyncFn</c> is a function, immediately
             /// calls the function and awaits the returned promise to complete. It will then
@@ -15618,7 +15618,7 @@ TypeScript versions earlier than 5.7.""")>]
                 /// </c><c></c>
                 /// </summary>
                 [<Emit("$0.ok($1...)")>]
-                abstract member ok: value: obj -> bool
+                abstract member ok: value: obj -> unit
                 /// <summary>
                 /// Tests if <c>value</c> is truthy. It is equivalent to <c>assert.equal(!!value, true, message)</c>.
                 ///
@@ -15675,7 +15675,7 @@ TypeScript versions earlier than 5.7.""")>]
                 /// </c><c></c>
                 /// </summary>
                 [<Emit("$0.ok($1...)")>]
-                abstract member ok: value: obj * message: string -> bool
+                abstract member ok: value: obj * message: string -> unit
                 /// <summary>
                 /// Tests if <c>value</c> is truthy. It is equivalent to <c>assert.equal(!!value, true, message)</c>.
                 ///
@@ -15732,7 +15732,7 @@ TypeScript versions earlier than 5.7.""")>]
                 /// </c><c></c>
                 /// </summary>
                 [<Emit("$0.ok($1...)")>]
-                abstract member ok: value: obj * message: Exception -> bool
+                abstract member ok: value: obj * message: Exception -> unit
                 /// <summary>
                 /// **Strict assertion mode**
                 ///
@@ -16166,7 +16166,7 @@ TypeScript versions earlier than 5.7.""")>]
                 /// instead of the <c>AssertionError</c>.
                 /// </summary>
                 [<Emit("$0.strictEqual($1...)")>]
-                abstract member strictEqual<'T>: actual: obj * expected: 'T -> bool
+                abstract member strictEqual<'T>: actual: obj * expected: 'T -> unit
                 /// <summary>
                 /// Tests strict equality between the <c>actual</c> and <c>expected</c> parameters as
                 /// determined by [<c>Object.is()</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is).
@@ -16204,7 +16204,7 @@ TypeScript versions earlier than 5.7.""")>]
                 /// instead of the <c>AssertionError</c>.
                 /// </summary>
                 [<Emit("$0.strictEqual($1...)")>]
-                abstract member strictEqual<'T>: actual: obj * expected: 'T * message: string -> bool
+                abstract member strictEqual<'T>: actual: obj * expected: 'T * message: string -> unit
                 /// <summary>
                 /// Tests strict equality between the <c>actual</c> and <c>expected</c> parameters as
                 /// determined by [<c>Object.is()</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is).
@@ -16242,7 +16242,7 @@ TypeScript versions earlier than 5.7.""")>]
                 /// instead of the <c>AssertionError</c>.
                 /// </summary>
                 [<Emit("$0.strictEqual($1...)")>]
-                abstract member strictEqual<'T>: actual: obj * expected: 'T * message: Exception -> bool
+                abstract member strictEqual<'T>: actual: obj * expected: 'T * message: Exception -> unit
                 /// <summary>
                 /// Tests strict inequality between the <c>actual</c> and <c>expected</c> parameters as
                 /// determined by [<c>Object.is()</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is).
@@ -16324,21 +16324,21 @@ TypeScript versions earlier than 5.7.""")>]
                 /// are recursively evaluated also by the following rules.
                 /// </summary>
                 [<Emit("$0.deepStrictEqual($1...)")>]
-                abstract member deepStrictEqual<'T>: actual: obj * expected: 'T -> bool
+                abstract member deepStrictEqual<'T>: actual: obj * expected: 'T -> unit
                 /// <summary>
                 /// Tests for deep equality between the <c>actual</c> and <c>expected</c> parameters.
                 /// "Deep" equality means that the enumerable "own" properties of child objects
                 /// are recursively evaluated also by the following rules.
                 /// </summary>
                 [<Emit("$0.deepStrictEqual($1...)")>]
-                abstract member deepStrictEqual<'T>: actual: obj * expected: 'T * message: string -> bool
+                abstract member deepStrictEqual<'T>: actual: obj * expected: 'T * message: string -> unit
                 /// <summary>
                 /// Tests for deep equality between the <c>actual</c> and <c>expected</c> parameters.
                 /// "Deep" equality means that the enumerable "own" properties of child objects
                 /// are recursively evaluated also by the following rules.
                 /// </summary>
                 [<Emit("$0.deepStrictEqual($1...)")>]
-                abstract member deepStrictEqual<'T>: actual: obj * expected: 'T * message: Exception -> bool
+                abstract member deepStrictEqual<'T>: actual: obj * expected: 'T * message: Exception -> unit
                 /// <summary>
                 /// Tests for deep strict inequality. Opposite of <see href="deepStrictEqual">deepStrictEqual</see>.
                 ///
@@ -17228,7 +17228,7 @@ TypeScript versions earlier than 5.7.""")>]
                 /// </code>
                 /// </summary>
                 [<Emit("$0.ifError($1...)")>]
-                abstract member ifError: value: obj -> bool
+                abstract member ifError: value: obj -> unit
                 /// <summary>
                 /// Awaits the <c>asyncFn</c> promise or, if <c>asyncFn</c> is a function, immediately
                 /// calls the function and awaits the returned promise to complete. It will then
@@ -18579,11 +18579,11 @@ TypeScript versions earlier than 5.7.""")>]
         [<Erase>]
         type Exports =
             [<ImportDefault("assert/strict")>]
-            static member strict (value: obj) : bool = nativeOnly
+            static member strict (value: obj) : unit = nativeOnly
             [<ImportDefault("assert/strict")>]
-            static member strict (value: obj, message: string) : bool = nativeOnly
+            static member strict (value: obj, message: string) : unit = nativeOnly
             [<ImportDefault("assert/strict")>]
-            static member strict (value: obj, message: Exception) : bool = nativeOnly
+            static member strict (value: obj, message: Exception) : unit = nativeOnly
 
     module async_hooks =
 
@@ -125788,13 +125788,13 @@ the userland-provided Punycode.js module instead.""")>]
             member val breakEvalOnSigint : bool option = nativeOnly with get, set
 
         type REPLEval =
-            delegate of this: Node.repl.REPLServer * evalCmd: string * context: Node.vm.Context * file: string * cb: REPLEval.cb -> unit
+            delegate of evalCmd: string * context: Node.vm.Context * file: string * cb: REPLEval.cb -> unit
 
         type REPLWriter =
-            delegate of this: Node.repl.REPLServer * obj: obj -> string
+            delegate of obj: obj -> string
 
         type REPLCommandAction =
-            delegate of this: Node.repl.REPLServer * text: string -> unit
+            delegate of text: string -> unit
 
         [<Global>]
         [<AllowNullLiteral>]
@@ -125877,7 +125877,7 @@ the userland-provided Punycode.js module instead.""")>]
             /// given line of input. If not specified in the REPL options, this is an async wrapper
             /// for the JavaScript <c>eval()</c> function.
             /// </summary>
-            abstract member eval: this: Node.repl.REPLServer * evalCmd: string * context: Node.vm.Context * file: string * cb: REPLServer.eval.cb -> unit
+            abstract member eval: evalCmd: string * context: Node.vm.Context * file: string * cb: REPLServer.eval.cb -> unit
             /// <summary>
             /// Specified in the REPL options, this is a value indicating whether the default
             /// <c>writer</c> function should include ANSI color styling to REPL output.
@@ -125899,7 +125899,7 @@ the userland-provided Punycode.js module instead.""")>]
             /// each command before writing to <c>outputStream</c>. If not specified in the REPL options,
             /// this will be a wrapper for <c>util.inspect</c>.
             /// </summary>
-            abstract member writer: this: Node.repl.REPLServer * obj: obj -> string
+            abstract member writer: obj: obj -> string
             /// <summary>
             /// Specified in the REPL options, this is the function to use for custom Tab auto-completion.
             /// </summary>
@@ -127818,7 +127818,7 @@ the userland-provided Punycode.js module instead.""")>]
                 type Type =
                     abstract member options: Node.util.InspectOptions with get, set
                     [<Emit("$0($1...)")>]
-                    abstract member Invoke: this: Node.repl.REPLServer * obj: obj -> string
+                    abstract member Invoke: obj: obj -> string
 
     module sea =
 

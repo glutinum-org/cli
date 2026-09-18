@@ -12,6 +12,11 @@ let readParameters
     =
     parameters
     |> Seq.toList
+    // `function f(this: T)` is called without it, `ThisParameterType` goes through the checker
+    |> List.filter (fun parameter ->
+        let nameNode = unbox<Ts.Node> parameter.name
+        not (nameNode.kind = Ts.SyntaxKind.Identifier && identifierText nameNode = "this")
+    )
     |> List.mapi (fun index parameter ->
         let nameNode = unbox<Ts.Node> parameter.name
 

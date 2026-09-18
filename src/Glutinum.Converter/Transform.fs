@@ -693,6 +693,7 @@ module private UtilityType =
                     Cases = cases
                     IsOptional = false
                     TypeParameters = []
+                    Constants = []
                 }
                 : FSharpUnion)
                 |> FSharpType.Union
@@ -808,6 +809,7 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
                     Cases = cases
                     IsOptional = isOptional
                     TypeParameters = []
+                    Constants = []
                 }
                 |> FSharpType.Union
 
@@ -4991,14 +4993,48 @@ let private transformEnum (glueEnum: GlueEnum) : FSharpType =
             Cases = stringValues |> List.map transformMembers |> List.distinct
             IsOptional = false
             TypeParameters = []
+            Constants = []
         }
         |> FSharpType.Union
+    // `enum Mixed { A = "a", B = 2 }`: an erased union of the value kinds, the members are constants
     | _ ->
-        failwith
-            $"""Mix enums are not supported in F#
+        let name = Naming.sanitizeTypeName glueEnum.Name
 
-Errored enum: {glueEnum.Name}
-"""
+        let constants =
+            glueEnum.Members
+            |> List.choose (fun glueMember ->
+                let constant case value =
+                    Some
+                        {
+                            Name = Naming.sanitizeTypeName glueMember.Name
+                            Case = case
+                            Value = value
+                        }
+
+                match glueMember.Value with
+                | GlueLiteral.String value ->
+                    constant "String" (Naming.removeSurroundingQuotes value |> sprintf "%A")
+                | GlueLiteral.Int value -> constant "Number" $"{value}.0"
+                | GlueLiteral.Float value -> constant "Number" (string value)
+                | GlueLiteral.Bool _
+                | GlueLiteral.Null -> None
+            )
+
+        {
+            Attributes = [ FSharpAttribute.RequireQualifiedAccess; FSharpAttribute.Erase ]
+            Name = name
+            Cases =
+                [
+                    if constants |> List.exists (fun constant -> constant.Case = "String") then
+                        FSharpUnionCase.Field("String", FSharpType.Primitive FSharpPrimitive.String)
+                    if constants |> List.exists (fun constant -> constant.Case = "Number") then
+                        FSharpUnionCase.Field("Number", FSharpType.Primitive FSharpPrimitive.Float)
+                ]
+            IsOptional = false
+            TypeParameters = []
+            Constants = constants
+        }
+        |> FSharpType.Union
 
 module TypeAliasDeclaration =
 
@@ -5073,6 +5109,7 @@ module TypeAliasDeclaration =
                 Cases = cases
                 IsOptional = false
                 TypeParameters = []
+                Constants = []
             }
             : FSharpUnion)
             |> FSharpType.Union
@@ -5143,6 +5180,7 @@ module TypeAliasDeclaration =
                 Cases = [ case ]
                 IsOptional = false
                 TypeParameters = []
+                Constants = []
             }
             : FSharpUnion)
             |> FSharpType.Union
@@ -5830,6 +5868,7 @@ let private tryOptimizeUnionType
             Cases = cases
             IsOptional = false
             TypeParameters = []
+            Constants = []
         }
         : FSharpUnion)
         |> FSharpType.Union
@@ -5863,6 +5902,7 @@ let private tryOptimizeUnionType
                 Cases = literalCases @ fieldCases
                 IsOptional = false
                 TypeParameters = []
+                Constants = []
             }
             : FSharpUnion)
             |> FSharpType.Union
@@ -5892,6 +5932,7 @@ let private tryOptimizeUnionType
                 Cases = literalCases @ transformFieldCases literalCases
                 IsOptional = false
                 TypeParameters = []
+                Constants = []
             }
             : FSharpUnion)
             |> FSharpType.Union

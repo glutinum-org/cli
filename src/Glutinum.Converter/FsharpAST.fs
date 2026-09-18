@@ -106,6 +106,14 @@ type FSharpUnionType =
     | Numeric
     | Unknown
 
+/// `static member inline A: Mixed = Mixed.String "a"`
+type FSharpUnionConstant =
+    {
+        Name: string
+        Case: string
+        Value: string
+    }
+
 type FSharpUnion =
     {
         Attributes: FSharpAttribute list
@@ -113,6 +121,7 @@ type FSharpUnion =
         Cases: FSharpUnionCase list
         IsOptional: bool
         TypeParameters: FSharpTypeParameter list
+        Constants: FSharpUnionConstant list
     }
 
 type FSharpModule =

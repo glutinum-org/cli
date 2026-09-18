@@ -341,6 +341,29 @@ module UtilityType =
 
             cases |> GlueTypeUnion |> GlueType.Union
 
+        // `Exclude<T, undefined>` and `Exclude<T[K], undefined>` with `T` unknown are `T` and `T[K]`
+        | HasTypeFlags Ts.TypeFlags.Conditional when
+            (match typeReferenceNode.typeArguments with
+             | Some typeArguments when typeArguments.Count > 0 ->
+                 let excluded = typeArguments.[0]
+
+                 excluded.kind = Ts.SyntaxKind.IndexedAccessType
+                 || (excluded.kind = Ts.SyntaxKind.TypeReference
+                     && (
+                         match
+                             reader.checker.getSymbolAtLocation
+                                 !!(excluded :?> Ts.TypeReferenceNode).typeName
+                         with
+                         | Some symbol ->
+                             match symbol.flags with
+                             | HasSymbolFlags Ts.SymbolFlags.TypeParameter -> true
+                             | _ -> false
+                         | None -> false
+                     ))
+             | _ -> false)
+            ->
+            reader.ReadTypeNode typeReferenceNode.typeArguments.Value.[0]
+
         | _ ->
             Report.readerError (
                 "Exclude",
@@ -919,7 +942,11 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
 
         GlueType.Array elementType
 
-    | Ts.SyntaxKind.TypePredicate -> GlueType.Primitive GluePrimitive.Bool
+    | Ts.SyntaxKind.TypePredicate ->
+        // `asserts x is T` returns nothing, it throws
+        match (typeNode :?> Ts.TypePredicateNode).assertsModifier with
+        | Some _ -> GlueType.Primitive GluePrimitive.Unit
+        | None -> GlueType.Primitive GluePrimitive.Bool
 
     | Ts.SyntaxKind.FunctionType ->
         let functionTypeNode = typeNode :?> Ts.FunctionTypeNode
@@ -1062,13 +1089,29 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
     | Ts.SyntaxKind.TupleType ->
         let tupleTypeNode = typeNode :?> Ts.TupleTypeNode
 
-        tupleTypeNode.elements
-        |> Seq.toList
-        |> List.map (fun element ->
-            let element = unbox<Ts.TypeNode> element
-            reader.ReadTypeNode element
-        )
-        |> GlueType.TupleType
+        let elements = tupleTypeNode.elements |> Seq.toList |> List.map unbox<Ts.TypeNode>
+
+        // `[number, ...T, string]` has no fixed length, it is an array
+        if elements |> List.exists (fun element -> element.kind = Ts.SyntaxKind.RestType) then
+            let elementTypes =
+                elements
+                |> List.map (fun element ->
+                    if element.kind = Ts.SyntaxKind.RestType then
+                        match reader.ReadTypeNode (element :?> Ts.RestTypeNode).``type`` with
+                        | GlueType.Array elementType -> elementType
+                        | _ -> GlueType.Primitive GluePrimitive.Any
+                    else
+                        reader.ReadTypeNode element
+                )
+                |> List.distinct
+
+            match elementTypes with
+            | [ elementType ] -> GlueType.Array elementType
+            | _ -> GlueType.Array(GlueType.Primitive GluePrimitive.Any)
+        else
+            elements |> List.map reader.ReadTypeNode |> GlueType.TupleType
+
+    | Ts.SyntaxKind.RestType -> reader.ReadTypeNode (typeNode :?> Ts.RestTypeNode).``type``
 
     // `class ProgressEvent { __proto__: Event & ProgressEvent }` reads itself forever
     | Ts.SyntaxKind.IntersectionType when

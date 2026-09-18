@@ -56,6 +56,8 @@ let readNode (reader: ITypeScriptReader) (node: Ts.Node) : GlueType =
 
     // Re-exports are read by `Read.readPackages` in package mode
     | Ts.SyntaxKind.ExportDeclaration
+    // `export as namespace L` names the UMD global
+    | Ts.SyntaxKind.NamespaceExportDeclaration
     | Ts.SyntaxKind.ImportEqualsDeclaration
     | Ts.SyntaxKind.EmptyStatement
     // The module object of `export * from "./file"`
