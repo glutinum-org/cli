@@ -2515,7 +2515,7 @@ module Node =
             [<Emit("$0($1...)")>]
             abstract member Invoke: ?minor: bool -> unit
             [<Emit("$0($1...)")>]
-            abstract member Invoke: options: obj -> JS.Promise<unit>
+            abstract member Invoke: options: GCFunction.Invoke.options -> JS.Promise<unit>
             [<Emit("$0($1...)")>]
             abstract member Invoke: options: Node.NodeJS.GCOptions -> unit
 
@@ -2548,6 +2548,33 @@ module Node =
                     ) =
 
                     member val ``end`` : bool option = nativeOnly with get, set
+
+        module GCFunction =
+
+            module Invoke =
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type options =
+                    abstract member execution: string with get, set
+                    abstract member flavor: GCFunction.Invoke.options.flavor option with get, set
+                    abstract member ``type``: GCFunction.Invoke.options.``type`` option with get, set
+                    abstract member filename: string option with get, set
+
+                module options =
+
+                    [<RequireQualifiedAccess>]
+                    [<StringEnum(CaseRules.None)>]
+                    type flavor =
+                        | regular
+                        | ``last-resort``
+
+                    [<RequireQualifiedAccess>]
+                    [<StringEnum(CaseRules.None)>]
+                    type ``type`` =
+                        | ``major-snapshot``
+                        | major
+                        | minor
 
         module GCOptions =
 
@@ -17666,9 +17693,30 @@ TypeScript versions earlier than 5.7.""")>]
                     [<Interface>]
                     type Type =
                         [<EmitConstructor>]
-                        abstract member Create: ?options: obj -> Node.``assert``.assert_.AssertStrict
+                        abstract member Create: ?options: Exports.Assert.Type.Create.options -> Node.``assert``.assert_.AssertStrict
                         [<EmitConstructor>]
                         abstract member Create: options: Node.``assert``.assert_.AssertOptions -> Node.``assert``.assert_.Assert
+
+                    module Type =
+
+                        module Create =
+
+                            [<AllowNullLiteral>]
+                            [<Interface>]
+                            type options =
+                                /// <summary>
+                                /// If set to <c>'full'</c>, shows the full diff in assertion errors.
+                                /// </summary>
+                                abstract member diff: Exports.Assert.Type.Create.options.diff option with get, set
+                                abstract member strict: bool option with get, set
+
+                            module options =
+
+                                [<RequireQualifiedAccess>]
+                                [<StringEnum(CaseRules.None)>]
+                                type diff =
+                                    | simple
+                                    | full
 
                 module throws =
 
@@ -24739,8 +24787,22 @@ AsyncLocalStorage.snapshot()"""
         type ExecFileOptionsWithOtherEncoding =
             inherit Node.child_process.ExecFileOptions
 
+        [<AllowNullLiteral>]
+        [<Interface>]
         type ExecFileException =
-            obj
+            abstract member cmd: string option with get, set
+            abstract member killed: bool option with get, set
+            abstract member signal: Node.NodeJS.Signals option with get, set
+            abstract member stdout: string option with get, set
+            abstract member stderr: string option with get, set
+            abstract member name: string with get, set
+            abstract member message: string with get, set
+            abstract member stack: string option with get, set
+            abstract member cause: obj option with get, set
+            abstract member errno: float option with get, set
+            abstract member path: string option with get, set
+            abstract member syscall: string option with get, set
+            abstract member code: U2<string, float> option with get, set
 
         module execFile_ =
 
@@ -49856,17 +49918,17 @@ EventEmitter.defaultMaxListeners = $0"""
             [<Import("stat", "fs")>]
             static member stat (path: Node.url.URL, callback: Exports.stat.callback) : unit = nativeOnly
             [<Import("stat", "fs")>]
-            static member stat (path: string, options: obj option, callback: Exports.stat.callback) : unit = nativeOnly
+            static member stat (path: string, options: Exports.stat.options option, callback: Exports.stat.callback) : unit = nativeOnly
             [<Import("stat", "fs")>]
-            static member stat (path: Node.Buffer, options: obj option, callback: Exports.stat.callback) : unit = nativeOnly
+            static member stat (path: Node.Buffer, options: Exports.stat.options option, callback: Exports.stat.callback) : unit = nativeOnly
             [<Import("stat", "fs")>]
-            static member stat (path: Node.url.URL, options: obj option, callback: Exports.stat.callback) : unit = nativeOnly
+            static member stat (path: Node.url.URL, options: Exports.stat.options option, callback: Exports.stat.callback) : unit = nativeOnly
             [<Import("stat", "fs")>]
-            static member stat (path: string, options: obj, callback: Exports.stat.callback_1) : unit = nativeOnly
+            static member stat (path: string, options: Exports.stat.options_1, callback: Exports.stat.callback_1) : unit = nativeOnly
             [<Import("stat", "fs")>]
-            static member stat (path: Node.Buffer, options: obj, callback: Exports.stat.callback_1) : unit = nativeOnly
+            static member stat (path: Node.Buffer, options: Exports.stat.options_1, callback: Exports.stat.callback_1) : unit = nativeOnly
             [<Import("stat", "fs")>]
-            static member stat (path: Node.url.URL, options: obj, callback: Exports.stat.callback_1) : unit = nativeOnly
+            static member stat (path: Node.url.URL, options: Exports.stat.options_1, callback: Exports.stat.callback_1) : unit = nativeOnly
             [<Import("stat", "fs")>]
             static member stat (path: string, options: Node.fs.StatOptions option, callback: Exports.stat.callback_2) : unit = nativeOnly
             [<Import("stat", "fs")>]
@@ -49889,9 +49951,9 @@ EventEmitter.defaultMaxListeners = $0"""
             [<Import("fstat", "fs")>]
             static member fstat (fd: float, callback: Exports.fstat.callback) : unit = nativeOnly
             [<Import("fstat", "fs")>]
-            static member fstat (fd: float, options: obj option, callback: Exports.fstat.callback) : unit = nativeOnly
+            static member fstat (fd: float, options: Exports.fstat.options option, callback: Exports.fstat.callback) : unit = nativeOnly
             [<Import("fstat", "fs")>]
-            static member fstat (fd: float, options: obj, callback: Exports.fstat.callback_1) : unit = nativeOnly
+            static member fstat (fd: float, options: Exports.fstat.options_1, callback: Exports.fstat.callback_1) : unit = nativeOnly
             [<Import("fstat", "fs")>]
             static member fstat (fd: float, options: Node.fs.StatOptions option, callback: Exports.fstat.callback_2) : unit = nativeOnly
             /// <summary>
@@ -49900,9 +49962,9 @@ EventEmitter.defaultMaxListeners = $0"""
             /// See the POSIX [<c>fstat(2)</c>](http://man7.org/linux/man-pages/man2/fstat.2.html) documentation for more detail.
             /// </summary>
             [<Import("fstatSync", "fs")>]
-            static member fstatSync (fd: float, ?options: obj) : Node.fs.Stats = nativeOnly
+            static member fstatSync (fd: float, ?options: Exports.fstatSync.options) : Node.fs.Stats = nativeOnly
             [<Import("fstatSync", "fs")>]
-            static member fstatSync (fd: float, options: obj) : Node.fs.BigIntStats = nativeOnly
+            static member fstatSync (fd: float, options: Exports.fstatSync.options_1) : Node.fs.BigIntStats = nativeOnly
             [<Import("fstatSync", "fs")>]
             static member fstatSync (fd: float, ?options: Node.fs.StatOptions) : U2<Node.fs.Stats, Node.fs.BigIntStats> = nativeOnly
             /// <summary>
@@ -49933,17 +49995,17 @@ EventEmitter.defaultMaxListeners = $0"""
             [<Import("lstat", "fs")>]
             static member lstat (path: Node.url.URL, callback: Exports.lstat.callback) : unit = nativeOnly
             [<Import("lstat", "fs")>]
-            static member lstat (path: string, options: obj option, callback: Exports.lstat.callback) : unit = nativeOnly
+            static member lstat (path: string, options: Exports.lstat.options option, callback: Exports.lstat.callback) : unit = nativeOnly
             [<Import("lstat", "fs")>]
-            static member lstat (path: Node.Buffer, options: obj option, callback: Exports.lstat.callback) : unit = nativeOnly
+            static member lstat (path: Node.Buffer, options: Exports.lstat.options option, callback: Exports.lstat.callback) : unit = nativeOnly
             [<Import("lstat", "fs")>]
-            static member lstat (path: Node.url.URL, options: obj option, callback: Exports.lstat.callback) : unit = nativeOnly
+            static member lstat (path: Node.url.URL, options: Exports.lstat.options option, callback: Exports.lstat.callback) : unit = nativeOnly
             [<Import("lstat", "fs")>]
-            static member lstat (path: string, options: obj, callback: Exports.lstat.callback_1) : unit = nativeOnly
+            static member lstat (path: string, options: Exports.lstat.options_1, callback: Exports.lstat.callback_1) : unit = nativeOnly
             [<Import("lstat", "fs")>]
-            static member lstat (path: Node.Buffer, options: obj, callback: Exports.lstat.callback_1) : unit = nativeOnly
+            static member lstat (path: Node.Buffer, options: Exports.lstat.options_1, callback: Exports.lstat.callback_1) : unit = nativeOnly
             [<Import("lstat", "fs")>]
-            static member lstat (path: Node.url.URL, options: obj, callback: Exports.lstat.callback_1) : unit = nativeOnly
+            static member lstat (path: Node.url.URL, options: Exports.lstat.options_1, callback: Exports.lstat.callback_1) : unit = nativeOnly
             [<Import("lstat", "fs")>]
             static member lstat (path: string, options: Node.fs.StatOptions option, callback: Exports.lstat.callback_2) : unit = nativeOnly
             [<Import("lstat", "fs")>]
@@ -49984,17 +50046,17 @@ EventEmitter.defaultMaxListeners = $0"""
             [<Import("statfs", "fs")>]
             static member statfs (path: Node.url.URL, callback: Exports.statfs.callback) : unit = nativeOnly
             [<Import("statfs", "fs")>]
-            static member statfs (path: string, options: obj option, callback: Exports.statfs.callback) : unit = nativeOnly
+            static member statfs (path: string, options: Exports.statfs.options option, callback: Exports.statfs.callback) : unit = nativeOnly
             [<Import("statfs", "fs")>]
-            static member statfs (path: Node.Buffer, options: obj option, callback: Exports.statfs.callback) : unit = nativeOnly
+            static member statfs (path: Node.Buffer, options: Exports.statfs.options option, callback: Exports.statfs.callback) : unit = nativeOnly
             [<Import("statfs", "fs")>]
-            static member statfs (path: Node.url.URL, options: obj option, callback: Exports.statfs.callback) : unit = nativeOnly
+            static member statfs (path: Node.url.URL, options: Exports.statfs.options option, callback: Exports.statfs.callback) : unit = nativeOnly
             [<Import("statfs", "fs")>]
-            static member statfs (path: string, options: obj, callback: Exports.statfs.callback_1) : unit = nativeOnly
+            static member statfs (path: string, options: Exports.statfs.options_1, callback: Exports.statfs.callback_1) : unit = nativeOnly
             [<Import("statfs", "fs")>]
-            static member statfs (path: Node.Buffer, options: obj, callback: Exports.statfs.callback_1) : unit = nativeOnly
+            static member statfs (path: Node.Buffer, options: Exports.statfs.options_1, callback: Exports.statfs.callback_1) : unit = nativeOnly
             [<Import("statfs", "fs")>]
-            static member statfs (path: Node.url.URL, options: obj, callback: Exports.statfs.callback_1) : unit = nativeOnly
+            static member statfs (path: Node.url.URL, options: Exports.statfs.options_1, callback: Exports.statfs.callback_1) : unit = nativeOnly
             [<Import("statfs", "fs")>]
             static member statfs (path: string, options: Node.fs.StatFsOptions option, callback: Exports.statfs.callback_2) : unit = nativeOnly
             [<Import("statfs", "fs")>]
@@ -50011,7 +50073,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// A path to an existing file or directory on the file system to be queried.
             /// </param>
             [<Import("statfsSync", "fs")>]
-            static member statfsSync (path: string, ?options: obj) : Node.fs.StatsFs = nativeOnly
+            static member statfsSync (path: string, ?options: Exports.statfsSync.options) : Node.fs.StatsFs = nativeOnly
             /// <summary>
             /// Synchronous [<c>statfs(2)</c>](http://man7.org/linux/man-pages/man2/statfs.2.html). Returns information about the mounted file system which
             /// contains <c>path</c>.
@@ -50022,7 +50084,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// A path to an existing file or directory on the file system to be queried.
             /// </param>
             [<Import("statfsSync", "fs")>]
-            static member statfsSync (path: Node.Buffer, ?options: obj) : Node.fs.StatsFs = nativeOnly
+            static member statfsSync (path: Node.Buffer, ?options: Exports.statfsSync.options) : Node.fs.StatsFs = nativeOnly
             /// <summary>
             /// Synchronous [<c>statfs(2)</c>](http://man7.org/linux/man-pages/man2/statfs.2.html). Returns information about the mounted file system which
             /// contains <c>path</c>.
@@ -50033,13 +50095,13 @@ EventEmitter.defaultMaxListeners = $0"""
             /// A path to an existing file or directory on the file system to be queried.
             /// </param>
             [<Import("statfsSync", "fs")>]
-            static member statfsSync (path: Node.url.URL, ?options: obj) : Node.fs.StatsFs = nativeOnly
+            static member statfsSync (path: Node.url.URL, ?options: Exports.statfsSync.options) : Node.fs.StatsFs = nativeOnly
             [<Import("statfsSync", "fs")>]
-            static member statfsSync (path: string, options: obj) : Node.fs.BigIntStatsFs = nativeOnly
+            static member statfsSync (path: string, options: Exports.statfsSync.options_1) : Node.fs.BigIntStatsFs = nativeOnly
             [<Import("statfsSync", "fs")>]
-            static member statfsSync (path: Node.Buffer, options: obj) : Node.fs.BigIntStatsFs = nativeOnly
+            static member statfsSync (path: Node.Buffer, options: Exports.statfsSync.options_1) : Node.fs.BigIntStatsFs = nativeOnly
             [<Import("statfsSync", "fs")>]
-            static member statfsSync (path: Node.url.URL, options: obj) : Node.fs.BigIntStatsFs = nativeOnly
+            static member statfsSync (path: Node.url.URL, options: Exports.statfsSync.options_1) : Node.fs.BigIntStatsFs = nativeOnly
             [<Import("statfsSync", "fs")>]
             static member statfsSync (path: string, ?options: Node.fs.StatFsOptions) : U2<Node.fs.StatsFs, Node.fs.BigIntStatsFs> = nativeOnly
             [<Import("statfsSync", "fs")>]
@@ -51635,7 +51697,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// See the POSIX [<c>mkdir(2)</c>](http://man7.org/linux/man-pages/man2/mkdir.2.html) documentation for more details.
             /// </summary>
             [<Import("mkdir", "fs")>]
-            static member mkdir (path: string, options: obj, callback: Exports.mkdir.callback) : unit = nativeOnly
+            static member mkdir (path: string, options: Exports.mkdir.options, callback: Exports.mkdir.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronously creates a directory.
             ///
@@ -51672,7 +51734,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// See the POSIX [<c>mkdir(2)</c>](http://man7.org/linux/man-pages/man2/mkdir.2.html) documentation for more details.
             /// </summary>
             [<Import("mkdir", "fs")>]
-            static member mkdir (path: Node.Buffer, options: obj, callback: Exports.mkdir.callback) : unit = nativeOnly
+            static member mkdir (path: Node.Buffer, options: Exports.mkdir.options, callback: Exports.mkdir.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronously creates a directory.
             ///
@@ -51709,7 +51771,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// See the POSIX [<c>mkdir(2)</c>](http://man7.org/linux/man-pages/man2/mkdir.2.html) documentation for more details.
             /// </summary>
             [<Import("mkdir", "fs")>]
-            static member mkdir (path: Node.url.URL, options: obj, callback: Exports.mkdir.callback) : unit = nativeOnly
+            static member mkdir (path: Node.url.URL, options: Exports.mkdir.options, callback: Exports.mkdir.callback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous mkdir(2) - create a directory.
             /// </summary>
@@ -51745,7 +51807,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// should be created. If a string is passed, it is parsed as an octal integer. If not specified, defaults to <c>0o777</c>.
             /// </param>
             [<Import("mkdir", "fs")>]
-            static member mkdir (path: string, options: obj option, callback: Node.fs.NoParamCallback) : unit = nativeOnly
+            static member mkdir (path: string, options: Exports.mkdir.options_1 option, callback: Node.fs.NoParamCallback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous mkdir(2) - create a directory.
             /// </summary>
@@ -51781,7 +51843,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// should be created. If a string is passed, it is parsed as an octal integer. If not specified, defaults to <c>0o777</c>.
             /// </param>
             [<Import("mkdir", "fs")>]
-            static member mkdir (path: Node.Buffer, options: obj option, callback: Node.fs.NoParamCallback) : unit = nativeOnly
+            static member mkdir (path: Node.Buffer, options: Exports.mkdir.options_1 option, callback: Node.fs.NoParamCallback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous mkdir(2) - create a directory.
             /// </summary>
@@ -51817,7 +51879,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// should be created. If a string is passed, it is parsed as an octal integer. If not specified, defaults to <c>0o777</c>.
             /// </param>
             [<Import("mkdir", "fs")>]
-            static member mkdir (path: Node.url.URL, options: obj option, callback: Node.fs.NoParamCallback) : unit = nativeOnly
+            static member mkdir (path: Node.url.URL, options: Exports.mkdir.options_1 option, callback: Node.fs.NoParamCallback) : unit = nativeOnly
             /// <summary>
             /// Asynchronous mkdir(2) - create a directory.
             /// </summary>
@@ -51957,7 +52019,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// See the POSIX [<c>mkdir(2)</c>](http://man7.org/linux/man-pages/man2/mkdir.2.html) documentation for more details.
             /// </summary>
             [<Import("mkdirSync", "fs")>]
-            static member mkdirSync (path: string, options: obj) : string option = nativeOnly
+            static member mkdirSync (path: string, options: Exports.mkdirSync.options) : string option = nativeOnly
             /// <summary>
             /// Synchronously creates a directory. Returns <c>undefined</c>, or if <c>recursive</c> is <c>true</c>, the first directory path created.
             /// This is the synchronous version of <see href="mkdir">mkdir</see>.
@@ -51965,7 +52027,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// See the POSIX [<c>mkdir(2)</c>](http://man7.org/linux/man-pages/man2/mkdir.2.html) documentation for more details.
             /// </summary>
             [<Import("mkdirSync", "fs")>]
-            static member mkdirSync (path: Node.Buffer, options: obj) : string option = nativeOnly
+            static member mkdirSync (path: Node.Buffer, options: Exports.mkdirSync.options) : string option = nativeOnly
             /// <summary>
             /// Synchronously creates a directory. Returns <c>undefined</c>, or if <c>recursive</c> is <c>true</c>, the first directory path created.
             /// This is the synchronous version of <see href="mkdir">mkdir</see>.
@@ -51973,7 +52035,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// See the POSIX [<c>mkdir(2)</c>](http://man7.org/linux/man-pages/man2/mkdir.2.html) documentation for more details.
             /// </summary>
             [<Import("mkdirSync", "fs")>]
-            static member mkdirSync (path: Node.url.URL, options: obj) : string option = nativeOnly
+            static member mkdirSync (path: Node.url.URL, options: Exports.mkdirSync.options) : string option = nativeOnly
             /// <summary>
             /// Synchronous mkdir(2) - create a directory.
             /// </summary>
@@ -52021,6 +52083,18 @@ EventEmitter.defaultMaxListeners = $0"""
             /// should be created. If a string is passed, it is parsed as an octal integer. If not specified, defaults to <c>0o777</c>.
             /// </param>
             [<Import("mkdirSync", "fs")>]
+            static member mkdirSync (path: string, options: Exports.mkdirSync.options_1) : unit = nativeOnly
+            /// <summary>
+            /// Synchronous mkdir(2) - create a directory.
+            /// </summary>
+            /// <param name="path">
+            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
+            /// </param>
+            /// <param name="options">
+            /// Either the file mode, or an object optionally specifying the file mode and whether parent folders
+            /// should be created. If a string is passed, it is parsed as an octal integer. If not specified, defaults to <c>0o777</c>.
+            /// </param>
+            [<Import("mkdirSync", "fs")>]
             static member mkdirSync (path: Node.Buffer) : unit = nativeOnly
             /// <summary>
             /// Synchronous mkdir(2) - create a directory.
@@ -52057,6 +52131,18 @@ EventEmitter.defaultMaxListeners = $0"""
             /// should be created. If a string is passed, it is parsed as an octal integer. If not specified, defaults to <c>0o777</c>.
             /// </param>
             [<Import("mkdirSync", "fs")>]
+            static member mkdirSync (path: Node.Buffer, options: Exports.mkdirSync.options_1) : unit = nativeOnly
+            /// <summary>
+            /// Synchronous mkdir(2) - create a directory.
+            /// </summary>
+            /// <param name="path">
+            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
+            /// </param>
+            /// <param name="options">
+            /// Either the file mode, or an object optionally specifying the file mode and whether parent folders
+            /// should be created. If a string is passed, it is parsed as an octal integer. If not specified, defaults to <c>0o777</c>.
+            /// </param>
+            [<Import("mkdirSync", "fs")>]
             static member mkdirSync (path: Node.url.URL) : unit = nativeOnly
             /// <summary>
             /// Synchronous mkdir(2) - create a directory.
@@ -52082,6 +52168,18 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("mkdirSync", "fs")>]
             static member mkdirSync (path: Node.url.URL, options: string) : unit = nativeOnly
+            /// <summary>
+            /// Synchronous mkdir(2) - create a directory.
+            /// </summary>
+            /// <param name="path">
+            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
+            /// </param>
+            /// <param name="options">
+            /// Either the file mode, or an object optionally specifying the file mode and whether parent folders
+            /// should be created. If a string is passed, it is parsed as an octal integer. If not specified, defaults to <c>0o777</c>.
+            /// </param>
+            [<Import("mkdirSync", "fs")>]
+            static member mkdirSync (path: Node.url.URL, options: Exports.mkdirSync.options_1) : unit = nativeOnly
             /// <summary>
             /// Synchronous mkdir(2) - create a directory.
             /// </summary>
@@ -57331,7 +57429,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// * the file is renamed and then renamed a second time back to its original name
             /// </summary>
             [<Import("watchFile", "fs")>]
-            static member watchFile (filename: string, options: obj option, listener: Node.fs.StatsListener) : Node.fs.StatWatcher = nativeOnly
+            static member watchFile (filename: string, options: Exports.watchFile.options option, listener: Node.fs.StatsListener) : Node.fs.StatWatcher = nativeOnly
             /// <summary>
             /// Watch for changes on <c>filename</c>. The callback <c>listener</c> will be called each
             /// time the file is accessed.
@@ -57378,7 +57476,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// * the file is renamed and then renamed a second time back to its original name
             /// </summary>
             [<Import("watchFile", "fs")>]
-            static member watchFile (filename: Node.Buffer, options: obj option, listener: Node.fs.StatsListener) : Node.fs.StatWatcher = nativeOnly
+            static member watchFile (filename: Node.Buffer, options: Exports.watchFile.options option, listener: Node.fs.StatsListener) : Node.fs.StatWatcher = nativeOnly
             /// <summary>
             /// Watch for changes on <c>filename</c>. The callback <c>listener</c> will be called each
             /// time the file is accessed.
@@ -57425,13 +57523,13 @@ EventEmitter.defaultMaxListeners = $0"""
             /// * the file is renamed and then renamed a second time back to its original name
             /// </summary>
             [<Import("watchFile", "fs")>]
-            static member watchFile (filename: Node.url.URL, options: obj option, listener: Node.fs.StatsListener) : Node.fs.StatWatcher = nativeOnly
+            static member watchFile (filename: Node.url.URL, options: Exports.watchFile.options option, listener: Node.fs.StatsListener) : Node.fs.StatWatcher = nativeOnly
             [<Import("watchFile", "fs")>]
-            static member watchFile (filename: string, options: obj option, listener: Node.fs.BigIntStatsListener) : Node.fs.StatWatcher = nativeOnly
+            static member watchFile (filename: string, options: Exports.watchFile.options_1 option, listener: Node.fs.BigIntStatsListener) : Node.fs.StatWatcher = nativeOnly
             [<Import("watchFile", "fs")>]
-            static member watchFile (filename: Node.Buffer, options: obj option, listener: Node.fs.BigIntStatsListener) : Node.fs.StatWatcher = nativeOnly
+            static member watchFile (filename: Node.Buffer, options: Exports.watchFile.options_1 option, listener: Node.fs.BigIntStatsListener) : Node.fs.StatWatcher = nativeOnly
             [<Import("watchFile", "fs")>]
-            static member watchFile (filename: Node.url.URL, options: obj option, listener: Node.fs.BigIntStatsListener) : Node.fs.StatWatcher = nativeOnly
+            static member watchFile (filename: Node.url.URL, options: Exports.watchFile.options_1 option, listener: Node.fs.BigIntStatsListener) : Node.fs.StatWatcher = nativeOnly
             /// <summary>
             /// Watch for changes on <c>filename</c>. The callback <c>listener</c> will be called each time the file is accessed.
             /// </summary>
@@ -64039,7 +64137,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: string * ?options: obj -> JS.Promise<Node.fs.Stats>
+                abstract member __promisify__: path: string * ?options: Exports.__promisify__.options -> JS.Promise<Node.fs.Stats>
                 /// <summary>
                 /// Asynchronous stat(2) - Get file status.
                 /// </summary>
@@ -64047,7 +64145,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.Buffer * ?options: obj -> JS.Promise<Node.fs.Stats>
+                abstract member __promisify__: path: Node.Buffer * ?options: Exports.__promisify__.options -> JS.Promise<Node.fs.Stats>
                 /// <summary>
                 /// Asynchronous stat(2) - Get file status.
                 /// </summary>
@@ -64055,13 +64153,13 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.url.URL * ?options: obj -> JS.Promise<Node.fs.Stats>
+                abstract member __promisify__: path: Node.url.URL * ?options: Exports.__promisify__.options -> JS.Promise<Node.fs.Stats>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: string * options: obj -> JS.Promise<Node.fs.BigIntStats>
+                abstract member __promisify__: path: string * options: Exports.__promisify__.options_1 -> JS.Promise<Node.fs.BigIntStats>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.Buffer * options: obj -> JS.Promise<Node.fs.BigIntStats>
+                abstract member __promisify__: path: Node.Buffer * options: Exports.__promisify__.options_1 -> JS.Promise<Node.fs.BigIntStats>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.url.URL * options: obj -> JS.Promise<Node.fs.BigIntStats>
+                abstract member __promisify__: path: Node.url.URL * options: Exports.__promisify__.options_1 -> JS.Promise<Node.fs.BigIntStats>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__: path: string * ?options: Node.fs.StatOptions -> JS.Promise<U2<Node.fs.Stats, Node.fs.BigIntStats>>
                 [<Emit("$0.__promisify__($1...)")>]
@@ -64069,13 +64167,33 @@ EventEmitter.defaultMaxListeners = $0"""
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__: path: Node.url.URL * ?options: Node.fs.StatOptions -> JS.Promise<U2<Node.fs.Stats, Node.fs.BigIntStats>>
 
+            module Exports =
+
+                module __promisify__ =
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type options =
+                        abstract member bigint: bool option with get, set
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type options_1 =
+                        abstract member bigint: bool with get, set
+
         [<AllowNullLiteral>]
         [<Interface>]
         type StatSyncFn =
             [<Emit("$0($1...)")>]
             abstract member Invoke: path: Node.fs.PathLike * ?options: obj -> Node.fs.Stats
             [<Emit("$0($1...)")>]
-            abstract member Invoke: path: Node.fs.PathLike * options: obj -> Node.fs.BigIntStats option
+            abstract member Invoke: path: Node.fs.PathLike * ?options: StatSyncFn.Invoke.options -> Node.fs.Stats option
+            [<Emit("$0($1...)")>]
+            abstract member Invoke: path: Node.fs.PathLike * options: StatSyncFn.Invoke.options_1 -> Node.fs.BigIntStats option
+            [<Emit("$0($1...)")>]
+            abstract member Invoke: path: Node.fs.PathLike * ?options: StatSyncFn.Invoke.options_2 -> Node.fs.Stats
+            [<Emit("$0($1...)")>]
+            abstract member Invoke: path: Node.fs.PathLike * options: StatSyncFn.Invoke.options_3 -> Node.fs.BigIntStats
             [<Emit("$0($1...)")>]
             abstract member Invoke: path: Node.fs.PathLike * ?options: Node.fs.StatSyncOptions -> U2<Node.fs.Stats, Node.fs.BigIntStats> option
 
@@ -64091,11 +64209,25 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// A file descriptor.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: fd: float * ?options: obj -> JS.Promise<Node.fs.Stats>
+                abstract member __promisify__: fd: float * ?options: Exports.__promisify__.options_2 -> JS.Promise<Node.fs.Stats>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: fd: float * options: obj -> JS.Promise<Node.fs.BigIntStats>
+                abstract member __promisify__: fd: float * options: Exports.__promisify__.options_3 -> JS.Promise<Node.fs.BigIntStats>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__: fd: float * ?options: Node.fs.StatOptions -> JS.Promise<U2<Node.fs.Stats, Node.fs.BigIntStats>>
+
+            module Exports =
+
+                module __promisify__ =
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type options_2 =
+                        abstract member bigint: bool option with get, set
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type options_3 =
+                        abstract member bigint: bool with get, set
 
         module lstat_ =
 
@@ -64109,7 +64241,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: string * ?options: obj -> JS.Promise<Node.fs.Stats>
+                abstract member __promisify__: path: string * ?options: Exports.__promisify__.options_4 -> JS.Promise<Node.fs.Stats>
                 /// <summary>
                 /// Asynchronous lstat(2) - Get file status. Does not dereference symbolic links.
                 /// </summary>
@@ -64117,7 +64249,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.Buffer * ?options: obj -> JS.Promise<Node.fs.Stats>
+                abstract member __promisify__: path: Node.Buffer * ?options: Exports.__promisify__.options_4 -> JS.Promise<Node.fs.Stats>
                 /// <summary>
                 /// Asynchronous lstat(2) - Get file status. Does not dereference symbolic links.
                 /// </summary>
@@ -64125,19 +64257,33 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.url.URL * ?options: obj -> JS.Promise<Node.fs.Stats>
+                abstract member __promisify__: path: Node.url.URL * ?options: Exports.__promisify__.options_4 -> JS.Promise<Node.fs.Stats>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: string * options: obj -> JS.Promise<Node.fs.BigIntStats>
+                abstract member __promisify__: path: string * options: Exports.__promisify__.options_5 -> JS.Promise<Node.fs.BigIntStats>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.Buffer * options: obj -> JS.Promise<Node.fs.BigIntStats>
+                abstract member __promisify__: path: Node.Buffer * options: Exports.__promisify__.options_5 -> JS.Promise<Node.fs.BigIntStats>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.url.URL * options: obj -> JS.Promise<Node.fs.BigIntStats>
+                abstract member __promisify__: path: Node.url.URL * options: Exports.__promisify__.options_5 -> JS.Promise<Node.fs.BigIntStats>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__: path: string * ?options: Node.fs.StatOptions -> JS.Promise<U2<Node.fs.Stats, Node.fs.BigIntStats>>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__: path: Node.Buffer * ?options: Node.fs.StatOptions -> JS.Promise<U2<Node.fs.Stats, Node.fs.BigIntStats>>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__: path: Node.url.URL * ?options: Node.fs.StatOptions -> JS.Promise<U2<Node.fs.Stats, Node.fs.BigIntStats>>
+
+            module Exports =
+
+                module __promisify__ =
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type options_4 =
+                        abstract member bigint: bool option with get, set
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type options_5 =
+                        abstract member bigint: bool with get, set
 
         module statfs_ =
 
@@ -64151,7 +64297,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// A path to an existing file or directory on the file system to be queried.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: string * ?options: obj -> JS.Promise<Node.fs.StatsFs>
+                abstract member __promisify__: path: string * ?options: Exports.__promisify__.options_6 -> JS.Promise<Node.fs.StatsFs>
                 /// <summary>
                 /// Asynchronous statfs(2) - Returns information about the mounted file system which contains path. The callback gets two arguments (err, stats) where stats is an <fs.StatFs> object.
                 /// </summary>
@@ -64159,7 +64305,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// A path to an existing file or directory on the file system to be queried.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.Buffer * ?options: obj -> JS.Promise<Node.fs.StatsFs>
+                abstract member __promisify__: path: Node.Buffer * ?options: Exports.__promisify__.options_6 -> JS.Promise<Node.fs.StatsFs>
                 /// <summary>
                 /// Asynchronous statfs(2) - Returns information about the mounted file system which contains path. The callback gets two arguments (err, stats) where stats is an <fs.StatFs> object.
                 /// </summary>
@@ -64167,19 +64313,33 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// A path to an existing file or directory on the file system to be queried.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.url.URL * ?options: obj -> JS.Promise<Node.fs.StatsFs>
+                abstract member __promisify__: path: Node.url.URL * ?options: Exports.__promisify__.options_6 -> JS.Promise<Node.fs.StatsFs>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: string * options: obj -> JS.Promise<Node.fs.BigIntStatsFs>
+                abstract member __promisify__: path: string * options: Exports.__promisify__.options_7 -> JS.Promise<Node.fs.BigIntStatsFs>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.Buffer * options: obj -> JS.Promise<Node.fs.BigIntStatsFs>
+                abstract member __promisify__: path: Node.Buffer * options: Exports.__promisify__.options_7 -> JS.Promise<Node.fs.BigIntStatsFs>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.url.URL * options: obj -> JS.Promise<Node.fs.BigIntStatsFs>
+                abstract member __promisify__: path: Node.url.URL * options: Exports.__promisify__.options_7 -> JS.Promise<Node.fs.BigIntStatsFs>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__: path: string * ?options: Node.fs.StatFsOptions -> JS.Promise<U2<Node.fs.StatsFs, Node.fs.BigIntStatsFs>>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__: path: Node.Buffer * ?options: Node.fs.StatFsOptions -> JS.Promise<U2<Node.fs.StatsFs, Node.fs.BigIntStatsFs>>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__: path: Node.url.URL * ?options: Node.fs.StatFsOptions -> JS.Promise<U2<Node.fs.StatsFs, Node.fs.BigIntStatsFs>>
+
+            module Exports =
+
+                module __promisify__ =
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type options_6 =
+                        abstract member bigint: bool option with get, set
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type options_7 =
+                        abstract member bigint: bool with get, set
 
         module link_ =
 
@@ -65060,7 +65220,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// should be created. If a string is passed, it is parsed as an octal integer. If not specified, defaults to <c>0o777</c>.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: string * options: obj -> JS.Promise<string option>
+                abstract member __promisify__: path: string * options: Exports.__promisify__.options_8 -> JS.Promise<string option>
                 /// <summary>
                 /// Asynchronous mkdir(2) - create a directory.
                 /// </summary>
@@ -65072,7 +65232,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// should be created. If a string is passed, it is parsed as an octal integer. If not specified, defaults to <c>0o777</c>.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.Buffer * options: obj -> JS.Promise<string option>
+                abstract member __promisify__: path: Node.Buffer * options: Exports.__promisify__.options_8 -> JS.Promise<string option>
                 /// <summary>
                 /// Asynchronous mkdir(2) - create a directory.
                 /// </summary>
@@ -65084,7 +65244,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// should be created. If a string is passed, it is parsed as an octal integer. If not specified, defaults to <c>0o777</c>.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.url.URL * options: obj -> JS.Promise<string option>
+                abstract member __promisify__: path: Node.url.URL * options: Exports.__promisify__.options_8 -> JS.Promise<string option>
                 /// <summary>
                 /// Asynchronous mkdir(2) - create a directory.
                 /// </summary>
@@ -65132,6 +65292,18 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// should be created. If a string is passed, it is parsed as an octal integer. If not specified, defaults to <c>0o777</c>.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
+                abstract member __promisify__: path: string * options: Exports.__promisify__.options_9 -> JS.Promise<unit>
+                /// <summary>
+                /// Asynchronous mkdir(2) - create a directory.
+                /// </summary>
+                /// <param name="path">
+                /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
+                /// </param>
+                /// <param name="options">
+                /// Either the file mode, or an object optionally specifying the file mode and whether parent folders
+                /// should be created. If a string is passed, it is parsed as an octal integer. If not specified, defaults to <c>0o777</c>.
+                /// </param>
+                [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__: path: Node.Buffer -> JS.Promise<unit>
                 /// <summary>
                 /// Asynchronous mkdir(2) - create a directory.
@@ -65157,6 +65329,18 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__: path: Node.Buffer * options: string -> JS.Promise<unit>
+                /// <summary>
+                /// Asynchronous mkdir(2) - create a directory.
+                /// </summary>
+                /// <param name="path">
+                /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
+                /// </param>
+                /// <param name="options">
+                /// Either the file mode, or an object optionally specifying the file mode and whether parent folders
+                /// should be created. If a string is passed, it is parsed as an octal integer. If not specified, defaults to <c>0o777</c>.
+                /// </param>
+                [<Emit("$0.__promisify__($1...)")>]
+                abstract member __promisify__: path: Node.Buffer * options: Exports.__promisify__.options_9 -> JS.Promise<unit>
                 /// <summary>
                 /// Asynchronous mkdir(2) - create a directory.
                 /// </summary>
@@ -65204,6 +65388,18 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// should be created. If a string is passed, it is parsed as an octal integer. If not specified, defaults to <c>0o777</c>.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
+                abstract member __promisify__: path: Node.url.URL * options: Exports.__promisify__.options_9 -> JS.Promise<unit>
+                /// <summary>
+                /// Asynchronous mkdir(2) - create a directory.
+                /// </summary>
+                /// <param name="path">
+                /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
+                /// </param>
+                /// <param name="options">
+                /// Either the file mode, or an object optionally specifying the file mode and whether parent folders
+                /// should be created. If a string is passed, it is parsed as an octal integer. If not specified, defaults to <c>0o777</c>.
+                /// </param>
+                [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__: path: string * options: Node.fs.MakeDirectoryOptions -> JS.Promise<string option>
                 /// <summary>
                 /// Asynchronous mkdir(2) - create a directory.
@@ -65229,6 +65425,28 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__: path: Node.url.URL * options: Node.fs.MakeDirectoryOptions -> JS.Promise<string option>
+
+            module Exports =
+
+                module __promisify__ =
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type options_8 =
+                        abstract member ``recursive``: bool with get, set
+                        /// <summary>
+                        /// A file mode. If a string is passed, it is parsed as an octal integer. If not specified
+                        /// </summary>
+                        abstract member mode: Node.fs.Mode option with get, set
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type options_9 =
+                        abstract member ``recursive``: bool option with get, set
+                        /// <summary>
+                        /// A file mode. If a string is passed, it is parsed as an octal integer. If not specified
+                        /// </summary>
+                        abstract member mode: Node.fs.Mode option with get, set
 
         module mkdtemp_ =
 
@@ -65298,7 +65516,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: string * options: Exports.__promisify__.options -> JS.Promise<ResizeArray<string>>
+                abstract member __promisify__: path: string * options: Exports.__promisify__.options_10 -> JS.Promise<ResizeArray<string>>
                 /// <summary>
                 /// Asynchronous readdir(3) - read a directory.
                 /// </summary>
@@ -65331,7 +65549,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.Buffer * options: Exports.__promisify__.options -> JS.Promise<ResizeArray<string>>
+                abstract member __promisify__: path: Node.Buffer * options: Exports.__promisify__.options_10 -> JS.Promise<ResizeArray<string>>
                 /// <summary>
                 /// Asynchronous readdir(3) - read a directory.
                 /// </summary>
@@ -65364,7 +65582,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.url.URL * options: Exports.__promisify__.options -> JS.Promise<ResizeArray<string>>
+                abstract member __promisify__: path: Node.url.URL * options: Exports.__promisify__.options_10 -> JS.Promise<ResizeArray<string>>
                 /// <summary>
                 /// Asynchronous readdir(3) - read a directory.
                 /// </summary>
@@ -65386,7 +65604,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: string * options: Exports.__promisify__.options_1 -> JS.Promise<ResizeArray<Node.NonSharedBuffer>>
+                abstract member __promisify__: path: string * options: Exports.__promisify__.options_11 -> JS.Promise<ResizeArray<Node.NonSharedBuffer>>
                 /// <summary>
                 /// Asynchronous readdir(3) - read a directory.
                 /// </summary>
@@ -65397,7 +65615,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.Buffer * options: Exports.__promisify__.options_1 -> JS.Promise<ResizeArray<Node.NonSharedBuffer>>
+                abstract member __promisify__: path: Node.Buffer * options: Exports.__promisify__.options_11 -> JS.Promise<ResizeArray<Node.NonSharedBuffer>>
                 /// <summary>
                 /// Asynchronous readdir(3) - read a directory.
                 /// </summary>
@@ -65408,7 +65626,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.url.URL * options: Exports.__promisify__.options_1 -> JS.Promise<ResizeArray<Node.NonSharedBuffer>>
+                abstract member __promisify__: path: Node.url.URL * options: Exports.__promisify__.options_11 -> JS.Promise<ResizeArray<Node.NonSharedBuffer>>
                 /// <summary>
                 /// Asynchronous readdir(3) - read a directory.
                 /// </summary>
@@ -65419,7 +65637,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: string * options: Exports.__promisify__.options_2 -> JS.Promise<U2<ResizeArray<string>, ResizeArray<Node.NonSharedBuffer>>>
+                abstract member __promisify__: path: string * options: Exports.__promisify__.options_12 -> JS.Promise<U2<ResizeArray<string>, ResizeArray<Node.NonSharedBuffer>>>
                 /// <summary>
                 /// Asynchronous readdir(3) - read a directory.
                 /// </summary>
@@ -65430,7 +65648,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.Buffer * options: Exports.__promisify__.options_2 -> JS.Promise<U2<ResizeArray<string>, ResizeArray<Node.NonSharedBuffer>>>
+                abstract member __promisify__: path: Node.Buffer * options: Exports.__promisify__.options_12 -> JS.Promise<U2<ResizeArray<string>, ResizeArray<Node.NonSharedBuffer>>>
                 /// <summary>
                 /// Asynchronous readdir(3) - read a directory.
                 /// </summary>
@@ -65441,7 +65659,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// The encoding (or an object specifying the encoding), used as the encoding of the result. If not provided, <c>'utf8'</c> is used.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.url.URL * options: Exports.__promisify__.options_2 -> JS.Promise<U2<ResizeArray<string>, ResizeArray<Node.NonSharedBuffer>>>
+                abstract member __promisify__: path: Node.url.URL * options: Exports.__promisify__.options_12 -> JS.Promise<U2<ResizeArray<string>, ResizeArray<Node.NonSharedBuffer>>>
                 /// <summary>
                 /// Asynchronous readdir(3) - read a directory.
                 /// </summary>
@@ -65452,7 +65670,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// If called with <c>withFileTypes: true</c> the result data will be an array of Dirent
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: string * options: Exports.__promisify__.options_3 -> JS.Promise<ResizeArray<Node.fs.Dirent>>
+                abstract member __promisify__: path: string * options: Exports.__promisify__.options_13 -> JS.Promise<ResizeArray<Node.fs.Dirent>>
                 /// <summary>
                 /// Asynchronous readdir(3) - read a directory.
                 /// </summary>
@@ -65463,7 +65681,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// If called with <c>withFileTypes: true</c> the result data will be an array of Dirent
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.Buffer * options: Exports.__promisify__.options_3 -> JS.Promise<ResizeArray<Node.fs.Dirent>>
+                abstract member __promisify__: path: Node.Buffer * options: Exports.__promisify__.options_13 -> JS.Promise<ResizeArray<Node.fs.Dirent>>
                 /// <summary>
                 /// Asynchronous readdir(3) - read a directory.
                 /// </summary>
@@ -65474,7 +65692,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// If called with <c>withFileTypes: true</c> the result data will be an array of Dirent
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.url.URL * options: Exports.__promisify__.options_3 -> JS.Promise<ResizeArray<Node.fs.Dirent>>
+                abstract member __promisify__: path: Node.url.URL * options: Exports.__promisify__.options_13 -> JS.Promise<ResizeArray<Node.fs.Dirent>>
                 /// <summary>
                 /// Asynchronous readdir(3) - read a directory.
                 /// </summary>
@@ -65485,7 +65703,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// Must include <c>withFileTypes: true</c> and <c>encoding: 'buffer'</c>.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: string * options: Exports.__promisify__.options_4 -> JS.Promise<ResizeArray<Node.fs.Dirent<Node.NonSharedBuffer>>>
+                abstract member __promisify__: path: string * options: Exports.__promisify__.options_14 -> JS.Promise<ResizeArray<Node.fs.Dirent<Node.NonSharedBuffer>>>
                 /// <summary>
                 /// Asynchronous readdir(3) - read a directory.
                 /// </summary>
@@ -65496,7 +65714,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// Must include <c>withFileTypes: true</c> and <c>encoding: 'buffer'</c>.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.Buffer * options: Exports.__promisify__.options_4 -> JS.Promise<ResizeArray<Node.fs.Dirent<Node.NonSharedBuffer>>>
+                abstract member __promisify__: path: Node.Buffer * options: Exports.__promisify__.options_14 -> JS.Promise<ResizeArray<Node.fs.Dirent<Node.NonSharedBuffer>>>
                 /// <summary>
                 /// Asynchronous readdir(3) - read a directory.
                 /// </summary>
@@ -65507,7 +65725,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// Must include <c>withFileTypes: true</c> and <c>encoding: 'buffer'</c>.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.url.URL * options: Exports.__promisify__.options_4 -> JS.Promise<ResizeArray<Node.fs.Dirent<Node.NonSharedBuffer>>>
+                abstract member __promisify__: path: Node.url.URL * options: Exports.__promisify__.options_14 -> JS.Promise<ResizeArray<Node.fs.Dirent<Node.NonSharedBuffer>>>
 
             module Exports =
 
@@ -65515,7 +65733,7 @@ EventEmitter.defaultMaxListeners = $0"""
 
                     [<Global>]
                     [<AllowNullLiteral>]
-                    type options
+                    type options_10
                         [<ParamObject; Emit("$0")>]
                         (
                             ?encoding: Node.BufferEncoding,
@@ -65529,7 +65747,7 @@ EventEmitter.defaultMaxListeners = $0"""
 
                     [<RequireQualifiedAccess>]
                     [<Erase(CaseRules.None)>]
-                    type options_1 =
+                    type options_11 =
                         | buffer
                         | Case1 of Exports.__promisify__.options.Cases.Case1
 
@@ -65553,21 +65771,21 @@ EventEmitter.defaultMaxListeners = $0"""
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type options_2 =
+                    type options_12 =
                         abstract member encoding: Node.BufferEncoding option with get, set
                         abstract member withFileTypes: bool option with get, set
                         abstract member ``recursive``: bool option with get, set
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type options_3 =
+                    type options_13 =
                         abstract member encoding: Node.BufferEncoding option with get, set
                         abstract member withFileTypes: bool with get, set
                         abstract member ``recursive``: bool option with get, set
 
                     [<Global>]
                     [<AllowNullLiteral>]
-                    type options_4
+                    type options_14
                         [<ParamObject; Emit("$0")>]
                         (
                             encoding: string,
@@ -66152,7 +66370,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// If a flag is not provided, it defaults to <c>'r'</c>.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: string * ?options: Exports.__promisify__.options_5 -> JS.Promise<Node.NonSharedBuffer>
+                abstract member __promisify__: path: string * ?options: Exports.__promisify__.options_15 -> JS.Promise<Node.NonSharedBuffer>
                 /// <summary>
                 /// Asynchronously reads the entire contents of a file.
                 /// </summary>
@@ -66165,7 +66383,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// If a flag is not provided, it defaults to <c>'r'</c>.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.Buffer * ?options: Exports.__promisify__.options_5 -> JS.Promise<Node.NonSharedBuffer>
+                abstract member __promisify__: path: Node.Buffer * ?options: Exports.__promisify__.options_15 -> JS.Promise<Node.NonSharedBuffer>
                 /// <summary>
                 /// Asynchronously reads the entire contents of a file.
                 /// </summary>
@@ -66178,7 +66396,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// If a flag is not provided, it defaults to <c>'r'</c>.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.url.URL * ?options: Exports.__promisify__.options_5 -> JS.Promise<Node.NonSharedBuffer>
+                abstract member __promisify__: path: Node.url.URL * ?options: Exports.__promisify__.options_15 -> JS.Promise<Node.NonSharedBuffer>
                 /// <summary>
                 /// Asynchronously reads the entire contents of a file.
                 /// </summary>
@@ -66191,7 +66409,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// If a flag is not provided, it defaults to <c>'r'</c>.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: float * ?options: Exports.__promisify__.options_5 -> JS.Promise<Node.NonSharedBuffer>
+                abstract member __promisify__: path: float * ?options: Exports.__promisify__.options_15 -> JS.Promise<Node.NonSharedBuffer>
                 /// <summary>
                 /// Asynchronously reads the entire contents of a file.
                 /// </summary>
@@ -66205,7 +66423,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// If a flag is not provided, it defaults to <c>'r'</c>.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: string * options: Exports.__promisify__.options_6 -> JS.Promise<string>
+                abstract member __promisify__: path: string * options: Exports.__promisify__.options_16 -> JS.Promise<string>
                 /// <summary>
                 /// Asynchronously reads the entire contents of a file.
                 /// </summary>
@@ -66233,7 +66451,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// If a flag is not provided, it defaults to <c>'r'</c>.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.Buffer * options: Exports.__promisify__.options_6 -> JS.Promise<string>
+                abstract member __promisify__: path: Node.Buffer * options: Exports.__promisify__.options_16 -> JS.Promise<string>
                 /// <summary>
                 /// Asynchronously reads the entire contents of a file.
                 /// </summary>
@@ -66261,7 +66479,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// If a flag is not provided, it defaults to <c>'r'</c>.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.url.URL * options: Exports.__promisify__.options_6 -> JS.Promise<string>
+                abstract member __promisify__: path: Node.url.URL * options: Exports.__promisify__.options_16 -> JS.Promise<string>
                 /// <summary>
                 /// Asynchronously reads the entire contents of a file.
                 /// </summary>
@@ -66289,7 +66507,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// If a flag is not provided, it defaults to <c>'r'</c>.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: float * options: Exports.__promisify__.options_6 -> JS.Promise<string>
+                abstract member __promisify__: path: float * options: Exports.__promisify__.options_16 -> JS.Promise<string>
                 /// <summary>
                 /// Asynchronously reads the entire contents of a file.
                 /// </summary>
@@ -66331,7 +66549,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// If a flag is not provided, it defaults to <c>'r'</c>.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: string * options: Exports.__promisify__.options_7 -> JS.Promise<U2<string, Node.NonSharedBuffer>>
+                abstract member __promisify__: path: string * options: Exports.__promisify__.options_17 -> JS.Promise<U2<string, Node.NonSharedBuffer>>
                 /// <summary>
                 /// Asynchronously reads the entire contents of a file.
                 /// </summary>
@@ -66359,7 +66577,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// If a flag is not provided, it defaults to <c>'r'</c>.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.Buffer * options: Exports.__promisify__.options_7 -> JS.Promise<U2<string, Node.NonSharedBuffer>>
+                abstract member __promisify__: path: Node.Buffer * options: Exports.__promisify__.options_17 -> JS.Promise<U2<string, Node.NonSharedBuffer>>
                 /// <summary>
                 /// Asynchronously reads the entire contents of a file.
                 /// </summary>
@@ -66387,7 +66605,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// If a flag is not provided, it defaults to <c>'r'</c>.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: Node.url.URL * options: Exports.__promisify__.options_7 -> JS.Promise<U2<string, Node.NonSharedBuffer>>
+                abstract member __promisify__: path: Node.url.URL * options: Exports.__promisify__.options_17 -> JS.Promise<U2<string, Node.NonSharedBuffer>>
                 /// <summary>
                 /// Asynchronously reads the entire contents of a file.
                 /// </summary>
@@ -66415,7 +66633,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// If a flag is not provided, it defaults to <c>'r'</c>.
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: path: float * options: Exports.__promisify__.options_7 -> JS.Promise<U2<string, Node.NonSharedBuffer>>
+                abstract member __promisify__: path: float * options: Exports.__promisify__.options_17 -> JS.Promise<U2<string, Node.NonSharedBuffer>>
 
             module Exports =
 
@@ -66423,7 +66641,7 @@ EventEmitter.defaultMaxListeners = $0"""
 
                     [<Global>]
                     [<AllowNullLiteral>]
-                    type options_5
+                    type options_15
                         [<ParamObject; Emit("$0")>]
                         (
                             ?encoding: obj,
@@ -66435,7 +66653,7 @@ EventEmitter.defaultMaxListeners = $0"""
 
                     [<Global>]
                     [<AllowNullLiteral>]
-                    type options_6
+                    type options_16
                         [<ParamObject; Emit("$0")>]
                         (
                             encoding: Node.BufferEncoding,
@@ -66447,7 +66665,7 @@ EventEmitter.defaultMaxListeners = $0"""
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type options_7 =
+                    type options_17 =
                         abstract member encoding: Node.BufferEncoding option with get, set
                         abstract member flag: string option with get, set
 
@@ -67664,6 +67882,34 @@ EventEmitter.defaultMaxListeners = $0"""
                 type listener =
                     delegate of eventType: string * filename: U2<string, Node.NonSharedBuffer> -> unit
 
+        module StatSyncFn =
+
+            module Invoke =
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type options =
+                    abstract member throwIfNoEntry: bool with get, set
+                    abstract member bigint: bool option with get, set
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type options_1 =
+                    abstract member throwIfNoEntry: bool with get, set
+                    abstract member bigint: bool with get, set
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type options_2 =
+                    abstract member throwIfNoEntry: bool option with get, set
+                    abstract member bigint: bool option with get, set
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type options_3 =
+                    abstract member throwIfNoEntry: bool option with get, set
+                    abstract member bigint: bool with get, set
+
         module WriteFileOptions =
 
             module U2 =
@@ -67716,6 +67962,16 @@ EventEmitter.defaultMaxListeners = $0"""
                 type callback =
                     delegate of err: Node.NodeJS.ErrnoException option * stats: Node.fs.Stats -> unit
 
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type options =
+                    abstract member bigint: bool option with get, set
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type options_1 =
+                    abstract member bigint: bool with get, set
+
                 type callback_1 =
                     delegate of err: Node.NodeJS.ErrnoException option * stats: Node.fs.BigIntStats -> unit
 
@@ -67727,16 +67983,48 @@ EventEmitter.defaultMaxListeners = $0"""
                 type callback =
                     delegate of err: Node.NodeJS.ErrnoException option * stats: Node.fs.Stats -> unit
 
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type options =
+                    abstract member bigint: bool option with get, set
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type options_1 =
+                    abstract member bigint: bool with get, set
+
                 type callback_1 =
                     delegate of err: Node.NodeJS.ErrnoException option * stats: Node.fs.BigIntStats -> unit
 
                 type callback_2 =
                     delegate of err: Node.NodeJS.ErrnoException option * stats: U2<Node.fs.Stats, Node.fs.BigIntStats> -> unit
 
+            module fstatSync =
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type options =
+                    abstract member bigint: bool option with get, set
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type options_1 =
+                    abstract member bigint: bool with get, set
+
             module lstat =
 
                 type callback =
                     delegate of err: Node.NodeJS.ErrnoException option * stats: Node.fs.Stats -> unit
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type options =
+                    abstract member bigint: bool option with get, set
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type options_1 =
+                    abstract member bigint: bool with get, set
 
                 type callback_1 =
                     delegate of err: Node.NodeJS.ErrnoException option * stats: Node.fs.BigIntStats -> unit
@@ -67749,11 +68037,33 @@ EventEmitter.defaultMaxListeners = $0"""
                 type callback =
                     delegate of err: Node.NodeJS.ErrnoException option * stats: Node.fs.StatsFs -> unit
 
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type options =
+                    abstract member bigint: bool option with get, set
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type options_1 =
+                    abstract member bigint: bool with get, set
+
                 type callback_1 =
                     delegate of err: Node.NodeJS.ErrnoException option * stats: Node.fs.BigIntStatsFs -> unit
 
                 type callback_2 =
                     delegate of err: Node.NodeJS.ErrnoException option * stats: U2<Node.fs.StatsFs, Node.fs.BigIntStatsFs> -> unit
+
+            module statfsSync =
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type options =
+                    abstract member bigint: bool option with get, set
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type options_1 =
+                    abstract member bigint: bool with get, set
 
             module readlink =
 
@@ -67779,8 +68089,46 @@ EventEmitter.defaultMaxListeners = $0"""
 
             module mkdir =
 
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type options =
+                    abstract member ``recursive``: bool with get, set
+                    /// <summary>
+                    /// A file mode. If a string is passed, it is parsed as an octal integer. If not specified
+                    /// </summary>
+                    abstract member mode: Node.fs.Mode option with get, set
+
                 type callback =
                     delegate of err: Node.NodeJS.ErrnoException option * ?path: string -> unit
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type options_1 =
+                    abstract member ``recursive``: bool option with get, set
+                    /// <summary>
+                    /// A file mode. If a string is passed, it is parsed as an octal integer. If not specified
+                    /// </summary>
+                    abstract member mode: Node.fs.Mode option with get, set
+
+            module mkdirSync =
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type options =
+                    abstract member ``recursive``: bool with get, set
+                    /// <summary>
+                    /// A file mode. If a string is passed, it is parsed as an octal integer. If not specified
+                    /// </summary>
+                    abstract member mode: Node.fs.Mode option with get, set
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type options_1 =
+                    abstract member ``recursive``: bool option with get, set
+                    /// <summary>
+                    /// A file mode. If a string is passed, it is parsed as an octal integer. If not specified
+                    /// </summary>
+                    abstract member mode: Node.fs.Mode option with get, set
 
             module mkdtemp =
 
@@ -68065,6 +68413,22 @@ EventEmitter.defaultMaxListeners = $0"""
                     abstract member mode: Node.fs.Mode option with get, set
                     abstract member flag: string option with get, set
                     abstract member flush: bool option with get, set
+
+            module watchFile =
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type options =
+                    abstract member bigint: bool option with get, set
+                    abstract member persistent: bool option with get, set
+                    abstract member interval: float option with get, set
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type options_1 =
+                    abstract member bigint: bool with get, set
+                    abstract member persistent: bool option with get, set
+                    abstract member interval: float option with get, set
 
             module watch =
 
@@ -68976,7 +69340,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Upon success, fulfills with <c>undefined</c> if <c>recursive</c> is <c>false</c>, or the first directory path created if <c>recursive</c> is <c>true</c>.
             /// </returns>
             [<Import("mkdir", "fs/promises")>]
-            static member mkdir (path: string, options: obj) : JS.Promise<string option> = nativeOnly
+            static member mkdir (path: string, options: Exports.mkdir.options_2) : JS.Promise<string option> = nativeOnly
             /// <summary>
             /// Asynchronously creates a directory.
             ///
@@ -69002,7 +69366,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Upon success, fulfills with <c>undefined</c> if <c>recursive</c> is <c>false</c>, or the first directory path created if <c>recursive</c> is <c>true</c>.
             /// </returns>
             [<Import("mkdir", "fs/promises")>]
-            static member mkdir (path: Node.Buffer, options: obj) : JS.Promise<string option> = nativeOnly
+            static member mkdir (path: Node.Buffer, options: Exports.mkdir.options_2) : JS.Promise<string option> = nativeOnly
             /// <summary>
             /// Asynchronously creates a directory.
             ///
@@ -69028,7 +69392,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Upon success, fulfills with <c>undefined</c> if <c>recursive</c> is <c>false</c>, or the first directory path created if <c>recursive</c> is <c>true</c>.
             /// </returns>
             [<Import("mkdir", "fs/promises")>]
-            static member mkdir (path: Node.url.URL, options: obj) : JS.Promise<string option> = nativeOnly
+            static member mkdir (path: Node.url.URL, options: Exports.mkdir.options_2) : JS.Promise<string option> = nativeOnly
             /// <summary>
             /// Asynchronous mkdir(2) - create a directory.
             /// </summary>
@@ -69076,6 +69440,18 @@ EventEmitter.defaultMaxListeners = $0"""
             /// should be created. If a string is passed, it is parsed as an octal integer. If not specified, defaults to <c>0o777</c>.
             /// </param>
             [<Import("mkdir", "fs/promises")>]
+            static member mkdir (path: string, options: Exports.mkdir.options_3) : JS.Promise<unit> = nativeOnly
+            /// <summary>
+            /// Asynchronous mkdir(2) - create a directory.
+            /// </summary>
+            /// <param name="path">
+            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
+            /// </param>
+            /// <param name="options">
+            /// Either the file mode, or an object optionally specifying the file mode and whether parent folders
+            /// should be created. If a string is passed, it is parsed as an octal integer. If not specified, defaults to <c>0o777</c>.
+            /// </param>
+            [<Import("mkdir", "fs/promises")>]
             static member mkdir (path: Node.Buffer) : JS.Promise<unit> = nativeOnly
             /// <summary>
             /// Asynchronous mkdir(2) - create a directory.
@@ -69112,6 +69488,18 @@ EventEmitter.defaultMaxListeners = $0"""
             /// should be created. If a string is passed, it is parsed as an octal integer. If not specified, defaults to <c>0o777</c>.
             /// </param>
             [<Import("mkdir", "fs/promises")>]
+            static member mkdir (path: Node.Buffer, options: Exports.mkdir.options_3) : JS.Promise<unit> = nativeOnly
+            /// <summary>
+            /// Asynchronous mkdir(2) - create a directory.
+            /// </summary>
+            /// <param name="path">
+            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
+            /// </param>
+            /// <param name="options">
+            /// Either the file mode, or an object optionally specifying the file mode and whether parent folders
+            /// should be created. If a string is passed, it is parsed as an octal integer. If not specified, defaults to <c>0o777</c>.
+            /// </param>
+            [<Import("mkdir", "fs/promises")>]
             static member mkdir (path: Node.url.URL) : JS.Promise<unit> = nativeOnly
             /// <summary>
             /// Asynchronous mkdir(2) - create a directory.
@@ -69137,6 +69525,18 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("mkdir", "fs/promises")>]
             static member mkdir (path: Node.url.URL, options: string) : JS.Promise<unit> = nativeOnly
+            /// <summary>
+            /// Asynchronous mkdir(2) - create a directory.
+            /// </summary>
+            /// <param name="path">
+            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
+            /// </param>
+            /// <param name="options">
+            /// Either the file mode, or an object optionally specifying the file mode and whether parent folders
+            /// should be created. If a string is passed, it is parsed as an octal integer. If not specified, defaults to <c>0o777</c>.
+            /// </param>
+            [<Import("mkdir", "fs/promises")>]
+            static member mkdir (path: Node.url.URL, options: Exports.mkdir.options_3) : JS.Promise<unit> = nativeOnly
             /// <summary>
             /// Asynchronous mkdir(2) - create a directory.
             /// </summary>
@@ -69878,7 +70278,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with the {fs.Stats} object for the given symbolic link <c>path</c>.
             /// </returns>
             [<Import("lstat", "fs/promises")>]
-            static member lstat (path: string, ?opts: obj) : JS.Promise<Node.fs.Stats> = nativeOnly
+            static member lstat (path: string, ?opts: Exports.lstat.opts) : JS.Promise<Node.fs.Stats> = nativeOnly
             /// <summary>
             /// Equivalent to <c>fsPromises.stat()</c> unless <c>path</c> refers to a symbolic link,
             /// in which case the link itself is stat-ed, not the file that it refers to.
@@ -69888,7 +70288,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with the {fs.Stats} object for the given symbolic link <c>path</c>.
             /// </returns>
             [<Import("lstat", "fs/promises")>]
-            static member lstat (path: Node.Buffer, ?opts: obj) : JS.Promise<Node.fs.Stats> = nativeOnly
+            static member lstat (path: Node.Buffer, ?opts: Exports.lstat.opts) : JS.Promise<Node.fs.Stats> = nativeOnly
             /// <summary>
             /// Equivalent to <c>fsPromises.stat()</c> unless <c>path</c> refers to a symbolic link,
             /// in which case the link itself is stat-ed, not the file that it refers to.
@@ -69898,13 +70298,13 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with the {fs.Stats} object for the given symbolic link <c>path</c>.
             /// </returns>
             [<Import("lstat", "fs/promises")>]
-            static member lstat (path: Node.url.URL, ?opts: obj) : JS.Promise<Node.fs.Stats> = nativeOnly
+            static member lstat (path: Node.url.URL, ?opts: Exports.lstat.opts) : JS.Promise<Node.fs.Stats> = nativeOnly
             [<Import("lstat", "fs/promises")>]
-            static member lstat (path: string, opts: obj) : JS.Promise<Node.fs.BigIntStats> = nativeOnly
+            static member lstat (path: string, opts: Exports.lstat.opts_1) : JS.Promise<Node.fs.BigIntStats> = nativeOnly
             [<Import("lstat", "fs/promises")>]
-            static member lstat (path: Node.Buffer, opts: obj) : JS.Promise<Node.fs.BigIntStats> = nativeOnly
+            static member lstat (path: Node.Buffer, opts: Exports.lstat.opts_1) : JS.Promise<Node.fs.BigIntStats> = nativeOnly
             [<Import("lstat", "fs/promises")>]
-            static member lstat (path: Node.url.URL, opts: obj) : JS.Promise<Node.fs.BigIntStats> = nativeOnly
+            static member lstat (path: Node.url.URL, opts: Exports.lstat.opts_1) : JS.Promise<Node.fs.BigIntStats> = nativeOnly
             [<Import("lstat", "fs/promises")>]
             static member lstat (path: string, ?opts: Node.fs.StatOptions) : JS.Promise<U2<Node.fs.Stats, Node.fs.BigIntStats>> = nativeOnly
             [<Import("lstat", "fs/promises")>]
@@ -69915,23 +70315,23 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with the {fs.Stats} object for the given <c>path</c>.
             /// </returns>
             [<Import("stat", "fs/promises")>]
-            static member stat (path: string, ?opts: obj) : JS.Promise<Node.fs.Stats> = nativeOnly
+            static member stat (path: string, ?opts: Exports.stat.opts) : JS.Promise<Node.fs.Stats> = nativeOnly
             /// <returns>
             /// Fulfills with the {fs.Stats} object for the given <c>path</c>.
             /// </returns>
             [<Import("stat", "fs/promises")>]
-            static member stat (path: Node.Buffer, ?opts: obj) : JS.Promise<Node.fs.Stats> = nativeOnly
+            static member stat (path: Node.Buffer, ?opts: Exports.stat.opts) : JS.Promise<Node.fs.Stats> = nativeOnly
             /// <returns>
             /// Fulfills with the {fs.Stats} object for the given <c>path</c>.
             /// </returns>
             [<Import("stat", "fs/promises")>]
-            static member stat (path: Node.url.URL, ?opts: obj) : JS.Promise<Node.fs.Stats> = nativeOnly
+            static member stat (path: Node.url.URL, ?opts: Exports.stat.opts) : JS.Promise<Node.fs.Stats> = nativeOnly
             [<Import("stat", "fs/promises")>]
-            static member stat (path: string, opts: obj) : JS.Promise<Node.fs.BigIntStats> = nativeOnly
+            static member stat (path: string, opts: Exports.stat.opts_1) : JS.Promise<Node.fs.BigIntStats> = nativeOnly
             [<Import("stat", "fs/promises")>]
-            static member stat (path: Node.Buffer, opts: obj) : JS.Promise<Node.fs.BigIntStats> = nativeOnly
+            static member stat (path: Node.Buffer, opts: Exports.stat.opts_1) : JS.Promise<Node.fs.BigIntStats> = nativeOnly
             [<Import("stat", "fs/promises")>]
-            static member stat (path: Node.url.URL, opts: obj) : JS.Promise<Node.fs.BigIntStats> = nativeOnly
+            static member stat (path: Node.url.URL, opts: Exports.stat.opts_1) : JS.Promise<Node.fs.BigIntStats> = nativeOnly
             [<Import("stat", "fs/promises")>]
             static member stat (path: string, ?opts: Node.fs.StatOptions) : JS.Promise<U2<Node.fs.Stats, Node.fs.BigIntStats>> = nativeOnly
             [<Import("stat", "fs/promises")>]
@@ -69942,23 +70342,23 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Fulfills with the {fs.StatFs} object for the given <c>path</c>.
             /// </returns>
             [<Import("statfs", "fs/promises")>]
-            static member statfs (path: string, ?opts: obj) : JS.Promise<Node.fs.StatsFs> = nativeOnly
+            static member statfs (path: string, ?opts: Exports.statfs.opts) : JS.Promise<Node.fs.StatsFs> = nativeOnly
             /// <returns>
             /// Fulfills with the {fs.StatFs} object for the given <c>path</c>.
             /// </returns>
             [<Import("statfs", "fs/promises")>]
-            static member statfs (path: Node.Buffer, ?opts: obj) : JS.Promise<Node.fs.StatsFs> = nativeOnly
+            static member statfs (path: Node.Buffer, ?opts: Exports.statfs.opts) : JS.Promise<Node.fs.StatsFs> = nativeOnly
             /// <returns>
             /// Fulfills with the {fs.StatFs} object for the given <c>path</c>.
             /// </returns>
             [<Import("statfs", "fs/promises")>]
-            static member statfs (path: Node.url.URL, ?opts: obj) : JS.Promise<Node.fs.StatsFs> = nativeOnly
+            static member statfs (path: Node.url.URL, ?opts: Exports.statfs.opts) : JS.Promise<Node.fs.StatsFs> = nativeOnly
             [<Import("statfs", "fs/promises")>]
-            static member statfs (path: string, opts: obj) : JS.Promise<Node.fs.BigIntStatsFs> = nativeOnly
+            static member statfs (path: string, opts: Exports.statfs.opts_1) : JS.Promise<Node.fs.BigIntStatsFs> = nativeOnly
             [<Import("statfs", "fs/promises")>]
-            static member statfs (path: Node.Buffer, opts: obj) : JS.Promise<Node.fs.BigIntStatsFs> = nativeOnly
+            static member statfs (path: Node.Buffer, opts: Exports.statfs.opts_1) : JS.Promise<Node.fs.BigIntStatsFs> = nativeOnly
             [<Import("statfs", "fs/promises")>]
-            static member statfs (path: Node.url.URL, opts: obj) : JS.Promise<Node.fs.BigIntStatsFs> = nativeOnly
+            static member statfs (path: Node.url.URL, opts: Exports.statfs.opts_1) : JS.Promise<Node.fs.BigIntStatsFs> = nativeOnly
             [<Import("statfs", "fs/promises")>]
             static member statfs (path: string, ?opts: Node.fs.StatFsOptions) : JS.Promise<U2<Node.fs.StatsFs, Node.fs.BigIntStatsFs>> = nativeOnly
             [<Import("statfs", "fs/promises")>]
@@ -73396,12 +73796,12 @@ EventEmitter.defaultMaxListeners = $0"""
             /// <returns>
             /// Fulfills with an {fs.Stats} for the file.
             /// </returns>
-            abstract member stat: ?opts: obj -> JS.Promise<Node.fs.Stats>
+            abstract member stat: ?opts: FileHandle.stat.opts -> JS.Promise<Node.fs.Stats>
             /// <returns>
             /// Fulfills with an {fs.Stats} for the file.
             /// </returns>
             abstract member stat: unit -> JS.Promise<Node.fs.Stats>
-            abstract member stat: opts: obj -> JS.Promise<Node.fs.BigIntStats>
+            abstract member stat: opts: FileHandle.stat.opts_1 -> JS.Promise<Node.fs.BigIntStats>
             abstract member stat: ?opts: Node.fs.StatOptions -> JS.Promise<U2<Node.fs.Stats, Node.fs.BigIntStats>>
             /// <summary>
             /// Truncates the file.
@@ -73911,6 +74311,18 @@ EventEmitter.defaultMaxListeners = $0"""
                     /// </summary>
                     abstract member signal: Node.AbortSignal option with get, set
 
+            module stat =
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type opts =
+                    abstract member bigint: bool option with get, set
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type opts_1 =
+                    abstract member bigint: bool with get, set
+
             module writeFile =
 
                 [<AllowNullLiteral>]
@@ -73963,6 +74375,26 @@ EventEmitter.defaultMaxListeners = $0"""
                 | throw
 
         module Exports =
+
+            module mkdir =
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type options_2 =
+                    abstract member ``recursive``: bool with get, set
+                    /// <summary>
+                    /// A file mode. If a string is passed, it is parsed as an octal integer. If not specified
+                    /// </summary>
+                    abstract member mode: Node.fs.Mode option with get, set
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type options_3 =
+                    abstract member ``recursive``: bool option with get, set
+                    /// <summary>
+                    /// A file mode. If a string is passed, it is parsed as an octal integer. If not specified
+                    /// </summary>
+                    abstract member mode: Node.fs.Mode option with get, set
 
             module readdir =
 
@@ -74017,6 +74449,42 @@ EventEmitter.defaultMaxListeners = $0"""
                     member val encoding : string = nativeOnly with get, set
                     member val withFileTypes : bool = nativeOnly with get, set
                     member val ``recursive`` : bool option = nativeOnly with get, set
+
+            module lstat =
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type opts =
+                    abstract member bigint: bool option with get, set
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type opts_1 =
+                    abstract member bigint: bool with get, set
+
+            module stat =
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type opts =
+                    abstract member bigint: bool option with get, set
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type opts_1 =
+                    abstract member bigint: bool with get, set
+
+            module statfs =
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type opts =
+                    abstract member bigint: bool option with get, set
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type opts_1 =
+                    abstract member bigint: bool with get, set
 
             module writeFile =
 
@@ -165402,8 +165870,267 @@ module UndiciTypes =
 
         module buildConnector_ =
 
+            [<AllowNullLiteral>]
+            [<Interface>]
             type BuildOptions =
-                obj
+                abstract member host: string option with get, set
+                abstract member port: float option with get, set
+                abstract member path: string option with get, set
+                abstract member socket: Node.stream.Stream_.Duplex option with get, set
+                abstract member checkServerIdentity: BuildOptions.checkServerIdentity option with get, set
+                abstract member servername: string option with get, set
+                abstract member session: Node.Buffer option with get, set
+                abstract member minDHSize: float option with get, set
+                abstract member lookup: Node.net.LookupFunction option with get, set
+                abstract member timeout: float option with get, set
+                /// <summary>
+                /// When negotiating TLS-PSK (pre-shared keys), this function is called
+                /// with optional identity <c>hint</c> provided by the server or <c>null</c>
+                /// in case of TLS 1.3 where <c>hint</c> was removed.
+                /// It will be necessary to provide a custom <c>tls.checkServerIdentity()</c>
+                /// for the connection as the default one will try to check hostname/IP
+                /// of the server against the certificate but that's not applicable for PSK
+                /// because there won't be a certificate present.
+                /// More information can be found in the RFC 4279.
+                /// </summary>
+                /// <param name="hint">
+                /// message sent from the server to help client
+                /// decide which identity to use during negotiation.
+                /// Always <c>null</c> if TLS 1.3 is used.
+                /// </param>
+                /// <returns>
+                /// Return <c>null</c> to stop the negotiation process. <c>psk</c> must be
+                /// compatible with the selected cipher's digest.
+                /// <c>identity</c> must use UTF-8 encoding.
+                /// </returns>
+                abstract member pskCallback: (string option -> Node.tls.PSKCallbackNegotation option) option with get, set
+                /// <summary>
+                /// If set, this will be called when a client opens a connection using the ALPN extension.
+                /// One argument will be passed to the callback: an object containing <c>servername</c> and <c>protocols</c> fields,
+                /// respectively containing the server name from the SNI extension (if any) and an array of
+                /// ALPN protocol name strings. The callback must return either one of the strings listed in <c>protocols</c>,
+                /// which will be returned to the client as the selected ALPN protocol, or <c>undefined</c>,
+                /// to reject the connection with a fatal alert. If a string is returned that does not match one of
+                /// the client's ALPN protocols, an error will be thrown.
+                /// This option cannot be used with the <c>ALPNProtocols</c> option, and setting both options will throw an error.
+                /// </summary>
+                abstract member ALPNCallback: (BuildOptions.ALPNCallback.arg -> string option) option with get, set
+                /// <summary>
+                /// Treat intermediate (non-self-signed)
+                /// certificates in the trust CA certificate list as trusted.
+                /// </summary>
+                abstract member allowPartialTrustChain: bool option with get, set
+                /// <summary>
+                /// Optionally override the trusted CA certificates. Default is to trust
+                /// the well-known CAs curated by Mozilla. Mozilla's CAs are completely
+                /// replaced when CAs are explicitly specified using this option.
+                /// </summary>
+                abstract member ca: U3<string, Node.Buffer, ResizeArray<U2<string, Node.Buffer>>> option with get, set
+                /// <summary>
+                /// Cert chains in PEM format. One cert chain should be provided per
+                /// private key. Each cert chain should consist of the PEM formatted
+                /// certificate for a provided private key, followed by the PEM
+                /// formatted intermediate certificates (if any), in order, and not
+                /// including the root CA (the root CA must be pre-known to the peer,
+                /// see ca). When providing multiple cert chains, they do not have to
+                /// be in the same order as their private keys in key. If the
+                /// intermediate certificates are not provided, the peer will not be
+                /// able to validate the certificate, and the handshake will fail.
+                /// </summary>
+                abstract member cert: U3<string, Node.Buffer, ResizeArray<U2<string, Node.Buffer>>> option with get, set
+                /// <summary>
+                /// Colon-separated list of supported signature algorithms. The list
+                /// can contain digest algorithms (SHA256, MD5 etc.), public key
+                /// algorithms (RSA-PSS, ECDSA etc.), combination of both (e.g
+                /// 'RSA+SHA384') or TLS v1.3 scheme names (e.g. rsa_pss_pss_sha512).
+                /// </summary>
+                abstract member sigalgs: string option with get, set
+                /// <summary>
+                /// Cipher suite specification, replacing the default. For more
+                /// information, see modifying the default cipher suite. Permitted
+                /// ciphers can be obtained via tls.getCiphers(). Cipher names must be
+                /// uppercased in order for OpenSSL to accept them.
+                /// </summary>
+                abstract member ciphers: string option with get, set
+                /// <summary>
+                /// Name of an OpenSSL engine which can provide the client certificate.
+                /// </summary>
+                [<Obsolete>]
+                abstract member clientCertEngine: string option with get, set
+                /// <summary>
+                /// PEM formatted CRLs (Certificate Revocation Lists).
+                /// </summary>
+                abstract member crl: U3<string, Node.Buffer, ResizeArray<U2<string, Node.Buffer>>> option with get, set
+                /// <summary>
+                /// <c>'auto'</c> or custom Diffie-Hellman parameters, required for non-ECDHE perfect forward secrecy.
+                /// If omitted or invalid, the parameters are silently discarded and DHE ciphers will not be available.
+                /// ECDHE-based perfect forward secrecy will still be available.
+                /// </summary>
+                abstract member dhparam: U2<string, Node.Buffer> option with get, set
+                /// <summary>
+                /// A string describing a named curve or a colon separated list of curve
+                /// NIDs or names, for example P-521:P-384:P-256, to use for ECDH key
+                /// agreement. Set to auto to select the curve automatically. Use
+                /// crypto.getCurves() to obtain a list of available curve names. On
+                /// recent releases, openssl ecparam -list_curves will also display the
+                /// name and description of each available elliptic curve. Default:
+                /// tls.DEFAULT_ECDH_CURVE.
+                /// </summary>
+                abstract member ecdhCurve: string option with get, set
+                /// <summary>
+                /// Attempt to use the server's cipher suite preferences instead of the
+                /// client's. When true, causes SSL_OP_CIPHER_SERVER_PREFERENCE to be
+                /// set in secureOptions
+                /// </summary>
+                abstract member honorCipherOrder: bool option with get, set
+                /// <summary>
+                /// Private keys in PEM format. PEM allows the option of private keys
+                /// being encrypted. Encrypted keys will be decrypted with
+                /// options.passphrase. Multiple keys using different algorithms can be
+                /// provided either as an array of unencrypted key strings or buffers,
+                /// or an array of objects in the form {pem: <string|buffer>[,
+                /// passphrase: <string>]}. The object form can only occur in an array.
+                /// object.passphrase is optional. Encrypted keys will be decrypted with
+                /// object.passphrase if provided, or options.passphrase if it is not.
+                /// </summary>
+                abstract member key: U3<string, Node.Buffer, ResizeArray<U3<string, Node.Buffer, Node.tls.KeyObject>>> option with get, set
+                /// <summary>
+                /// Name of an OpenSSL engine to get private key from. Should be used
+                /// together with privateKeyIdentifier.
+                /// </summary>
+                [<Obsolete>]
+                abstract member privateKeyEngine: string option with get, set
+                /// <summary>
+                /// Identifier of a private key managed by an OpenSSL engine. Should be
+                /// used together with privateKeyEngine. Should not be set together with
+                /// key, because both options define a private key in different ways.
+                /// </summary>
+                [<Obsolete>]
+                abstract member privateKeyIdentifier: string option with get, set
+                /// <summary>
+                /// Optionally set the maximum TLS version to allow. One
+                /// of <c>'TLSv1.3'</c>, <c>'TLSv1.2'</c>, <c>'TLSv1.1'</c>, or <c>'TLSv1'</c>. Cannot be specified along with the
+                /// <c>secureProtocol</c> option, use one or the other.
+                /// **Default:** <c>'TLSv1.3'</c>, unless changed using CLI options. Using
+                /// <c>--tls-max-v1.2</c> sets the default to <c>'TLSv1.2'</c>. Using <c>--tls-max-v1.3</c> sets the default to
+                /// <c>'TLSv1.3'</c>. If multiple of the options are provided, the highest maximum is used.
+                /// </summary>
+                abstract member maxVersion: Node.tls.SecureVersion option with get, set
+                /// <summary>
+                /// Optionally set the minimum TLS version to allow. One
+                /// of <c>'TLSv1.3'</c>, <c>'TLSv1.2'</c>, <c>'TLSv1.1'</c>, or <c>'TLSv1'</c>. Cannot be specified along with the
+                /// <c>secureProtocol</c> option, use one or the other.  It is not recommended to use
+                /// less than TLSv1.2, but it may be required for interoperability.
+                /// **Default:** <c>'TLSv1.2'</c>, unless changed using CLI options. Using
+                /// <c>--tls-v1.0</c> sets the default to <c>'TLSv1'</c>. Using <c>--tls-v1.1</c> sets the default to
+                /// <c>'TLSv1.1'</c>. Using <c>--tls-min-v1.3</c> sets the default to
+                /// 'TLSv1.3'. If multiple of the options are provided, the lowest minimum is used.
+                /// </summary>
+                abstract member minVersion: Node.tls.SecureVersion option with get, set
+                /// <summary>
+                /// Shared passphrase used for a single private key and/or a PFX.
+                /// </summary>
+                abstract member passphrase: string option with get, set
+                /// <summary>
+                /// PFX or PKCS12 encoded private key and certificate chain. pfx is an
+                /// alternative to providing key and cert individually. PFX is usually
+                /// encrypted, if it is, passphrase will be used to decrypt it. Multiple
+                /// PFX can be provided either as an array of unencrypted PFX buffers,
+                /// or an array of objects in the form {buf: <string|buffer>[,
+                /// passphrase: <string>]}. The object form can only occur in an array.
+                /// object.passphrase is optional. Encrypted PFX will be decrypted with
+                /// object.passphrase if provided, or options.passphrase if it is not.
+                /// </summary>
+                abstract member pfx: U3<string, Node.Buffer, ResizeArray<U3<string, Node.Buffer, Node.tls.PxfObject>>> option with get, set
+                /// <summary>
+                /// Optionally affect the OpenSSL protocol behavior, which is not
+                /// usually necessary. This should be used carefully if at all! Value is
+                /// a numeric bitmask of the SSL_OP_* options from OpenSSL Options
+                /// </summary>
+                abstract member secureOptions: float option with get, set
+                /// <summary>
+                /// Legacy mechanism to select the TLS protocol version to use, it does
+                /// not support independent control of the minimum and maximum version,
+                /// and does not support limiting the protocol to TLSv1.3. Use
+                /// minVersion and maxVersion instead. The possible values are listed as
+                /// SSL_METHODS, use the function names as strings. For example, use
+                /// 'TLSv1_1_method' to force TLS version 1.1, or 'TLS_method' to allow
+                /// any TLS protocol version up to TLSv1.3. It is not recommended to use
+                /// TLS versions less than 1.2, but it may be required for
+                /// interoperability. Default: none, see minVersion.
+                /// </summary>
+                abstract member secureProtocol: string option with get, set
+                /// <summary>
+                /// Opaque identifier used by servers to ensure session state is not
+                /// shared between applications. Unused by clients.
+                /// </summary>
+                abstract member sessionIdContext: string option with get, set
+                /// <summary>
+                /// 48-bytes of cryptographically strong pseudo-random data.
+                /// See Session Resumption for more information.
+                /// </summary>
+                abstract member ticketKeys: Node.Buffer option with get, set
+                /// <summary>
+                /// The number of seconds after which a TLS session created by the
+                /// server will no longer be resumable. See Session Resumption for more
+                /// information. Default: 300.
+                /// </summary>
+                abstract member sessionTimeout: float option with get, set
+                /// <summary>
+                /// An optional TLS context object from tls.createSecureContext()
+                /// </summary>
+                abstract member secureContext: Node.tls.SecureContext option with get, set
+                /// <summary>
+                /// When enabled, TLS packet trace information is written to <c>stderr</c>. This can be
+                /// used to debug TLS connection problems.
+                /// </summary>
+                abstract member enableTrace: bool option with get, set
+                /// <summary>
+                /// If true the server will request a certificate from clients that
+                /// connect and attempt to verify that certificate. Defaults to
+                /// false.
+                /// </summary>
+                abstract member requestCert: bool option with get, set
+                /// <summary>
+                /// An array of strings or a Buffer naming possible ALPN protocols.
+                /// (Protocols should be ordered by their priority.)
+                /// </summary>
+                abstract member ALPNProtocols: U2<ReadonlyArray<string>, Node.NodeJS.ArrayBufferView> option with get, set
+                /// <summary>
+                /// SNICallback(servername, cb) <Function> A function that will be
+                /// called if the client supports SNI TLS extension. Two arguments
+                /// will be passed when called: servername and cb. SNICallback should
+                /// invoke cb(null, ctx), where ctx is a SecureContext instance.
+                /// (tls.createSecureContext(...) can be used to get a proper
+                /// SecureContext.) If SNICallback wasn't provided the default callback
+                /// with high-level API will be used (see below).
+                /// </summary>
+                abstract member SNICallback: BuildOptions.SNICallback option with get, set
+                /// <summary>
+                /// If true the server will reject any connection which is not
+                /// authorized with the list of supplied CAs. This option only has an
+                /// effect if requestCert is true.
+                /// </summary>
+                abstract member rejectUnauthorized: bool option with get, set
+                abstract member allowH2: bool option with get, set
+                abstract member maxCachedSessions: float option with get, set
+                abstract member socketPath: string option with get, set
+                abstract member keepAlive: bool option with get, set
+                abstract member keepAliveInitialDelay: float option with get, set
+                abstract member localAddress: string option with get, set
+                abstract member localPort: float option with get, set
+                abstract member hints: float option with get, set
+                abstract member family: float option with get, set
+                abstract member noDelay: bool option with get, set
+                abstract member autoSelectFamily: bool option with get, set
+                abstract member autoSelectFamilyAttemptTimeout: float option with get, set
+                abstract member blockList: Node.net.BlockList option with get, set
+                abstract member fd: float option with get, set
+                abstract member allowHalfOpen: bool option with get, set
+                abstract member onread: Node.net.OnReadOpts option with get, set
+                abstract member readable: bool option with get, set
+                abstract member writable: bool option with get, set
+                abstract member signal: Node.AbortSignal option with get, set
 
             [<Global>]
             [<AllowNullLiteral>]
@@ -165435,6 +166162,33 @@ module UndiciTypes =
 
             type connector =
                 delegate of options: UndiciTypes.connector.buildConnector_.Options * callback: UndiciTypes.connector.buildConnector_.Callback -> unit
+
+            module BuildOptions =
+
+                type checkServerIdentity =
+                    delegate of hostname: string * cert: Node.tls.PeerCertificate -> Exception option
+
+                type SNICallback =
+                    delegate of servername: string * cb: BuildOptions.SNICallback.cb -> unit
+
+                module ALPNCallback =
+
+                    [<Global>]
+                    [<AllowNullLiteral>]
+                    type arg
+                        [<ParamObject; Emit("$0")>]
+                        (
+                            servername: string,
+                            protocols: ResizeArray<string>
+                        ) =
+
+                        member val servername : string = nativeOnly with get, set
+                        member val protocols : ResizeArray<string> = nativeOnly with get, set
+
+                module SNICallback =
+
+                    type cb =
+                        delegate of err: Exception option * ?ctx: Node.tls.SecureContext -> unit
 
         type BuildOptions =
             buildConnector_.BuildOptions

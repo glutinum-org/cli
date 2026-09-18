@@ -22,7 +22,11 @@ let private readPropertyWithoutDeclaration
     =
     let typ = reader.checker.getTypeOfSymbol property
 
-    match reader.checker.typeToTypeNode (typ, None, None) with
+    let flags =
+        Ts.NodeBuilderFlags.NoTruncation
+        ||| Ts.NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope
+
+    match reader.checker.typeToTypeNode (typ, None, Some flags) with
     | Some typeNode ->
         let previousContext = reader.SyntheticContext
         reader.SyntheticContext <- Some contextNode
@@ -1052,7 +1056,19 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                     |> List.distinct
 
                 else
-                    unionOrIntersectionType.getProperties () |> Seq.toList
+                    match unionOrIntersectionType.getProperties () |> Seq.toList with
+                    // `DeepPartial<Registry[T]> & Properties<T>`: the checker gives up on the
+                    // deferred part, the members of the others are still known
+                    | [] when (unbox<Ts.Node> intersectionTypeNode).pos >= 0 ->
+                        intersectionTypeNode.types
+                        |> Seq.toList
+                        |> List.collect (fun constituent ->
+                            checker.getTypeAtLocation (constituent :> Ts.Node)
+                            |> checker.getPropertiesOfType
+                            |> Seq.toList
+                        )
+                        |> List.distinctBy (fun property -> property.name)
+                    | properties -> properties
 
             computedProperties
             |> List.choose (fun property ->
@@ -1060,6 +1076,16 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                 | Some declarations ->
                     if declarations.Count = 1 then
                         Some(Single(property, declarations.[0]))
+                    // `type` declared by the dataset options of every chart type: the checker
+                    // knows the type of the merged property
+                    elif
+                        declarations
+                        |> Seq.forall (fun declaration ->
+                            declaration.kind = Ts.SyntaxKind.PropertySignature
+                            || declaration.kind = Ts.SyntaxKind.PropertyDeclaration
+                        )
+                    then
+                        Some(WithoutDeclaration property)
                     else
                         Some ForceAny
                 | None -> Some(WithoutDeclaration property)
