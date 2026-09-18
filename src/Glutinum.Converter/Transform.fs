@@ -898,10 +898,30 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
         // it adds an unnecessary complexity for the user
         | []
         | _ :: [] ->
+            // `<RG = Default>(req: Req<RG>) => void`: an F# function can't declare the type
+            // parameters of the function, they are their default
+            let ownDefaults =
+                functionTypeInfo.TypeParameters
+                |> List.filter (fun typeParameter ->
+                    List.contains typeParameter.Name functionTypeInfo.OwnTypeParameterNames
+                )
+                |> List.map (fun typeParameter ->
+                    typeParameter.Name,
+                    typeParameter.Default
+                    |> Option.defaultValue (GlueType.Primitive GluePrimitive.Any)
+                )
+                |> Map.ofList
+
+            let paremeters =
+                paremeters |> List.map (GlueSubstitution.substituteParameter ownDefaults)
+
             ({
                 Parameters =
                     paremeters |> List.map (transformParameter context) |> requiredBeforeParamArray
-                ReturnType = transformCallbackReturnType context functionTypeInfo.Type
+                ReturnType =
+                    transformCallbackReturnType
+                        context
+                        (GlueSubstitution.substitute ownDefaults functionTypeInfo.Type)
             }
             : FSharpFunctionType)
             |> FSharpType.Function
