@@ -84,10 +84,24 @@ let readVariableStatement (reader: ITypeScriptReader) (statement: Ts.VariableSta
                     )
                     |> failwith
 
+            let typ =
+                match declaration.``type``, declaration.initializer with
+                // `const versionMajorMinor = "5.3"` is typed by its initializer
+                | None, Some _ ->
+                    let flags =
+                        Ts.NodeBuilderFlags.NoTruncation
+                        ||| Ts.NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope
+
+                    reader.checker.getTypeAtLocation declaration
+                    |> reader.checker.getBaseTypeOfLiteralType
+                    |> fun typ -> reader.checker.typeToTypeNode (typ, None, Some flags)
+                    |> reader.ReadTypeNode
+                | typeNode, _ -> reader.ReadTypeNode typeNode
+
             ({
                 Documentation = reader.ReadDocumentationFromNode declaration
                 Name = name
-                Type = reader.ReadTypeNode declaration.``type``
+                Type = typ
             }
             : GlueVariable)
             |> GlueType.Variable
