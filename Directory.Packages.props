@@ -31,6 +31,15 @@
     <PackageVersion Include="Glutinum.Feliz.Iconify" Version="3.0.0" />
     <PackageVersion Include="Glutinum.IconifyIcons.Lucide" Version="1.0.0" />
     <PackageVersion Include="Glutinum.IconifyIcons.SimpleIcons" Version="1.0.0" />
+    <PackageVersion Include="Nacara.Core" Version="2.0.0-beta.6" />
+    <PackageVersion Include="Nacara.Plugin.Markdown" Version="1.0.0-beta.2" />
+    <PackageVersion Include="Nacara.Plugin.Highlight.TreeSitter" Version="1.0.0-beta.2" />
+    <PackageVersion Include="Nacara.Plugin.Search" Version="1.0.0-beta.1" />
+    <PackageVersion Include="Nacara.Plugin.Sitemap" Version="1.0.0-beta.1" />
+    <PackageVersion Include="Nacara.Plugin.Assets.LightningCss" Version="1.0.0-beta.1" />
+    <PackageVersion Include="Nacara.Plugin.Assets.Nuglify" Version="1.0.0-beta.1" />
+    <PackageVersion Include="Nacara.Plugin.Deploy.GitHubPages" Version="1.0.0-beta.2" />
+    <PackageVersion Include="Nacara.Theme.Default" Version="1.0.0-beta.11" />
     <PackageVersion Include="Thoth.Elmish.Debouncer" Version="2.1.0" />
     <PackageVersion Include="Thoth.Elmish.Toast" Version="4.0.0" />
   </ItemGroup>

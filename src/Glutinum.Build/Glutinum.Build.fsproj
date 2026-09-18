@@ -20,6 +20,7 @@
     <Compile Include="Commands/Test/All.fs" />
     <Compile Include="Commands/Release.fs" />
     <Compile Include="Commands/Web.fs" />
+    <Compile Include="Commands/Docs.fs" />
     <Compile Include="Main.fs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,139 @@
+/*
+    The home page only. It leans on the theme's tokens, so it follows the colour scheme.
+*/
+
+.landing {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--nacara-space-8) * 2);
+}
+
+.landing-hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--nacara-space-6);
+    text-align: center;
+}
+
+.landing-hero__title {
+    margin: 0;
+    max-width: 20ch;
+    font-size: clamp(2.25rem, 5vw, 3.5rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+}
+
+.landing-hero__lede {
+    margin: 0;
+    max-width: 60ch;
+    font-size: 1.125rem;
+    line-height: 1.6;
+    color: var(--nacara-text-muted);
+}
+
+.landing-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--nacara-space-3);
+}
+
+.landing-button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--nacara-space-2);
+    padding: 0.75rem 1.25rem;
+    border: 1px solid var(--nacara-border);
+    border-radius: var(--nacara-radius);
+    font-weight: 600;
+    color: var(--nacara-text);
+    text-decoration: none;
+    transition: background-color 0.15s ease;
+}
+
+.landing-button:hover {
+    background: var(--nacara-bg-subtle);
+    text-decoration: none;
+}
+
+.landing-button--primary {
+    border-color: transparent;
+    background: var(--nacara-primary);
+    color: var(--nacara-primary-contrast);
+}
+
+.landing-button--primary:hover {
+    background: color-mix(in srgb, var(--nacara-primary) 85%, var(--nacara-text));
+    color: var(--nacara-primary-contrast);
+}
+
+.landing-lede {
+    margin: 0;
+    max-width: 68ch;
+    color: var(--nacara-text-muted);
+    line-height: 1.6;
+}
+
+/* A line of introduction above what it introduces. */
+.landing-intro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--nacara-space-3);
+    margin-bottom: calc(var(--nacara-space-8) * -1);
+    text-align: center;
+}
+
+.landing-intro .landing-section__title {
+    margin: 0;
+}
+
+.landing-intro .landing-lede {
+    max-width: 62ch;
+}
+
+.landing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: var(--nacara-space-6);
+}
+
+.landing-card {
+    padding: var(--nacara-space-6);
+    border: 1px solid var(--nacara-border);
+    border-radius: var(--nacara-radius);
+    background: var(--nacara-bg-raised);
+}
+
+.landing-card h3 {
+    margin: 0 0 var(--nacara-space-2);
+    font-size: 1rem;
+}
+
+.landing-card p {
+    margin: 0;
+    color: var(--nacara-text-muted);
+    line-height: 1.6;
+}
+
+.landing-hero--closing .landing-hero__title {
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
+}
+
+.landing-section__title {
+    margin: 0 0 var(--nacara-space-6);
+    font-size: 1.5rem;
+    letter-spacing: -0.01em;
+}
+
+@media (max-width: 40rem) {
+    .landing-actions {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .landing-button {
+        justify-content: center;
+    }
+}

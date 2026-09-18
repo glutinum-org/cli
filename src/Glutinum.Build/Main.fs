@@ -4,6 +4,7 @@ open SimpleExec
 open Build.Commands.Cli
 open Build.Commands.Bindings
 open Build.Commands.Web
+open Build.Commands.Docs
 open Build.Commands.Test.Specs
 open Build.Commands.Test.Bindings
 open Build.Commands.Test.All
@@ -74,6 +75,11 @@ You can then invoke the local version of Glutinum by running `node cli.js <args>
         config
             .AddCommand<WebCommand>("web")
             .WithDescription("Command related to the web app")
+        |> ignore
+
+        config
+            .AddCommand<DocsCommand>("docs")
+            .WithDescription("Build the documentation site, with the web app under /app/")
         |> ignore
 
         config

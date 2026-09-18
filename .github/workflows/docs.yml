@@ -1,0 +1,52 @@
+name: docs
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: write
+
+# Two deploys writing the branch at once would lose one of them
+concurrency:
+  group: gh-pages
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    name: Publish the documentation and the web app
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 300
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: package.json
+
+      - uses: pnpm/action-setup@v6
+
+      - name: Cache the tree-sitter runtime
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/nacara
+          key: nacara-${{ runner.os }}
+
+      - name: Restore .NET dependencies
+        run: dotnet tool restore
+
+      - name: Generate preview version
+        run: dotnet shipit --mode local --pre-release preview
+
+      - name: Build the documentation and the web app
+        run: ./build.sh docs
+
+      - name: Publish
+        run: dotnet run --project docs -- gh-pages

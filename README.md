@@ -2,13 +2,15 @@
 
 This is a compiler from `.d.ts` to F# bindings for [Fable](https://fable.io/).
 
+The documentation is at [glutinum.net](https://glutinum.net/), the web application at [glutinum.net/app](https://glutinum.net/app/).
+
 ## Getting Started
 
 Glutinum is delivered both as a CLI tool and web interface.
 
 ### Web Interface
 
-The web interface is available [here](https://glutinum.net/).
+The web interface is available [here](https://glutinum.net/app/).
 
 It is a simple and easy-to-use tool, allowing you to convert `.d.ts` files to F# bindings directly from your browser without installing anything.
 

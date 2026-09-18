@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net10.0</TargetFramework>
+        <IsPackable>false</IsPackable>
+        <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    </PropertyGroup>
+    <ItemGroup>
+        <Compile Include="Site.fs" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Nacara.Core" />
+        <PackageReference Include="Nacara.Plugin.Markdown" />
+        <PackageReference Include="Nacara.Plugin.Highlight.TreeSitter" />
+        <PackageReference Include="Nacara.Plugin.Search" />
+        <PackageReference Include="Nacara.Plugin.Sitemap" />
+        <PackageReference Include="Nacara.Plugin.Assets.LightningCss" />
+        <PackageReference Include="Nacara.Plugin.Assets.Nuglify" />
+        <PackageReference Include="Nacara.Plugin.Deploy.GitHubPages" />
+        <PackageReference Include="Nacara.Theme.Default" />
+    </ItemGroup>
+</Project>
