@@ -440,12 +440,7 @@ module UtilityType =
 
             try
                 // `Partial<[x: number, order?: Order]>` is the tuple with optional elements
-                let isArrayLike: bool =
-                    match baseType.flags with
-                    | HasTypeFlags Ts.TypeFlags.Object -> reader.checker?isArrayLikeType (baseType)
-                    | _ -> false
-
-                if isTupleType baseType || isArrayLike then
+                if isTupleType baseType then
                     let flags =
                         Ts.NodeBuilderFlags.NoTruncation
                         ||| Ts.NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope
@@ -875,7 +870,12 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                 if isNull node then
                     acc
                 // `FacetConfig<Input, Output>` expanded by the checker: the members have no parent
-                elif isNull node.parent && node.pos < 0 && reader.SyntheticContext.IsSome then
+                elif
+                    isNull node.parent
+                    && node.pos < 0
+                    && reader.SyntheticContext.IsSome
+                    && not (obj.ReferenceEquals(node, reader.SyntheticContext.Value))
+                then
                     collectEnclosing reader.SyntheticContext.Value acc
                 // A function type used as a constraint is read while reading the type parameters
                 elif node.kind = Ts.SyntaxKind.TypeParameter then
@@ -1129,8 +1129,11 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
 
                     match synthesized with
                     | Some declaration ->
+                        // The type parameters of the signature enclose the callbacks of its
+                        // parameters, the intersection encloses the signature
+                        declaration?parent <- typeNode
                         let previousContext = reader.SyntheticContext
-                        reader.SyntheticContext <- Some(typeNode :> Ts.Node)
+                        reader.SyntheticContext <- Some declaration
 
                         try
                             Some(reader.ReadDeclaration(declaration :?> Ts.Declaration))

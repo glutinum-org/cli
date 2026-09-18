@@ -4132,6 +4132,88 @@ module private CallableProperties =
         | GlueMember.CallSignature _ -> true
         | _ -> false
 
+    /// A signature copied from another file names its own types without a module path
+    let rec private qualify (modulePath: string list) (glueType: GlueType) : GlueType =
+        let qualify = qualify modulePath
+
+        match glueType with
+        | GlueType.TypeReference typeReference ->
+            { typeReference with
+                ModulePath =
+                    if typeReference.ModulePath.IsEmpty && not typeReference.IsStandardLibrary then
+                        modulePath
+                    else
+                        typeReference.ModulePath
+                TypeArguments = typeReference.TypeArguments |> List.map qualify
+            }
+            |> GlueType.TypeReference
+        | GlueType.Array glueType -> GlueType.Array(qualify glueType)
+        | GlueType.ReadOnly glueType -> GlueType.ReadOnly(qualify glueType)
+        | GlueType.OptionalType glueType -> GlueType.OptionalType(qualify glueType)
+        | GlueType.Union(GlueTypeUnion cases) ->
+            GlueType.Union(GlueTypeUnion(cases |> List.map qualify))
+        | GlueType.TupleType glueTypes -> GlueType.TupleType(glueTypes |> List.map qualify)
+        | GlueType.FunctionType functionType ->
+            { functionType with
+                Type = qualify functionType.Type
+                Parameters =
+                    functionType.Parameters
+                    |> List.map (fun parameter ->
+                        { parameter with
+                            Type = qualify parameter.Type
+                        }
+                    )
+            }
+            |> GlueType.FunctionType
+        | glueType -> glueType
+
+    // `this` of the callable is the property's own type
+    let rec private replaceThis (reference: GlueType) (glueType: GlueType) : GlueType =
+        let replaceThis = replaceThis reference
+
+        match glueType with
+        | GlueType.ThisType _ -> reference
+        | GlueType.TypeReference typeReference ->
+            { typeReference with
+                TypeArguments = typeReference.TypeArguments |> List.map replaceThis
+            }
+            |> GlueType.TypeReference
+        | GlueType.Array glueType -> GlueType.Array(replaceThis glueType)
+        | GlueType.OptionalType glueType -> GlueType.OptionalType(replaceThis glueType)
+        | GlueType.Union(GlueTypeUnion cases) ->
+            GlueType.Union(GlueTypeUnion(cases |> List.map replaceThis))
+        | GlueType.FunctionType functionType ->
+            { functionType with
+                Type = replaceThis functionType.Type
+            }
+            |> GlueType.FunctionType
+        | glueType -> glueType
+
+    let private qualifySignature (reference: GlueType) (callSignature: GlueCallSignature) =
+        let modulePath =
+            match reference with
+            | GlueType.TypeReference typeReference -> typeReference.ModulePath
+            | _ -> []
+
+        let adapt (glueType: GlueType) =
+            let glueType = replaceThis reference glueType
+
+            if modulePath.IsEmpty then
+                glueType
+            else
+                qualify modulePath glueType
+
+        { callSignature with
+            Type = adapt callSignature.Type
+            Parameters =
+                callSignature.Parameters
+                |> List.map (fun parameter ->
+                    { parameter with
+                        Type = adapt parameter.Type
+                    }
+                )
+        }
+
     let private callSignatures (members: GlueMember list) =
         members
         |> List.choose (
@@ -4231,6 +4313,7 @@ module private CallableProperties =
                 match signaturesOf typeMemory 0 property.Type with
                 | Some(_ :: _ as callSignatures) ->
                     callSignatures
+                    |> List.map (qualifySignature property.Type)
                     |> List.map (fun callSignature ->
                         ({
                             Name = property.Name
@@ -5808,6 +5891,15 @@ let private transformTypeAliasDeclaration
         | GlueType.UtilityType utilityType ->
             match utilityType with
             | GlueUtilityType.Partial interfaceInfo ->
+                // `type PartialSchema<T> = Partial<Schema<T>>` declares the type parameters its members use
+                let interfaceInfo =
+                    if interfaceInfo.TypeParameters.IsEmpty then
+                        { interfaceInfo with
+                            TypeParameters = glueTypeAliasDeclaration.TypeParameters
+                        }
+                    else
+                        interfaceInfo
+
                 transformInterface context interfaceInfo
                 // Use the alias name instead of the original interface name
                 |> Interface.makePartial typeAliasName
