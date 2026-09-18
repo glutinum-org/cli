@@ -17,6 +17,8 @@ type ConcatArray<'T> =
 [<AllowNullLiteral>]
 [<Interface>]
 type ReadonlyArray<'T> =
+    // A JavaScript array is iterable, the `Seq` functions read it
+    inherit System.Collections.Generic.IEnumerable<'T>
     /// <summary>
     /// Gets the length of the array. This is a number one higher than the highest element defined in an array.
     /// </summary>

@@ -4491,7 +4491,7 @@ module Node =
             /// Android).
             /// This feature is not available in <c>Worker</c> threads.
             /// </summary>
-            abstract member setgroups: (ReadonlyArray<U2<string, float>> -> unit) option with get, set
+            abstract member setgroups: (ResizeArray<U2<string, float>> -> unit) option with get, set
             /// <summary>
             /// The <c>process.setUncaughtExceptionCaptureCallback()</c> function sets a function
             /// that will be invoked when an uncaught exception occurs, which will receive the
@@ -5367,7 +5367,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// No key or value can contain a null-byte (<c>\u0000</c>).
             /// **Default:** <c>process.env</c>.
             /// </param>
-            abstract member execve: file: string * ?args: ReadonlyArray<string> * ?env: Node.NodeJS.ProcessEnv -> obj
+            abstract member execve: file: string * ?args: ResizeArray<string> * ?env: Node.NodeJS.ProcessEnv -> obj
             /// <summary>
             /// Alias for <c>emitter.on(eventName, listener)</c>.
             /// </summary>
@@ -8453,7 +8453,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
         /// <param name="properties">
         /// Alternate properties for constructing the table.
         /// </param>
-        abstract member table: tabularData: obj * ?properties: ReadonlyArray<string> -> unit
+        abstract member table: tabularData: obj * ?properties: ResizeArray<string> -> unit
         /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/console/time)
         /// Starts a timer that can be used to compute the duration of an operation. Timers
@@ -10102,7 +10102,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
         /// <param name="totalLength">
         /// Total length of the <c>Buffer</c> instances in <c>list</c> when concatenated.
         /// </param>
-        abstract member concat: list: ReadonlyArray<JS.Uint8Array> * ?totalLength: float -> Node.Buffer
+        abstract member concat: list: ResizeArray<JS.Uint8Array> * ?totalLength: float -> Node.Buffer
         /// <summary>
         /// Copies the underlying memory of <c>view</c> into a new <c>Buffer</c>.
         ///
@@ -14701,6 +14701,772 @@ TypeScript versions earlier than 5.7.""")>]
             static member inline assert_
                 with get () : assert_.Exports =
                     nativeOnly
+            /// <summary>
+            /// The <c>Assert</c> class allows creating independent assertion instances with custom options.
+            /// </summary>
+            [<ImportDefault("assert")>]
+            [<Emit("$0.Assert")>]
+            static member inline Assert: Exports.Assert.Type_1 = nativeOnly
+            /// <summary>
+            /// Throws an <c>AssertionError</c> with the provided error message or a default
+            /// error message. If the <c>message</c> parameter is an instance of an <c>Error</c> then
+            /// it will be thrown instead of the <c>AssertionError</c>.
+            ///
+            /// <code lang="js">
+            /// import assert from 'node:assert/strict';
+            ///
+            /// assert.fail();
+            /// // AssertionError [ERR_ASSERTION]: Failed
+            ///
+            /// assert.fail('boom');
+            /// // AssertionError [ERR_ASSERTION]: boom
+            ///
+            /// assert.fail(new TypeError('need array'));
+            /// // TypeError: need array
+            /// </code>
+            ///
+            /// Using <c>assert.fail()</c> with more than two arguments is possible but deprecated.
+            /// See below for further details.
+            /// </summary>
+            /// <param name="message">
+            ///
+            /// </param>
+            [<ImportDefault("assert"); Emit("$0.fail($1...)")>]
+            static member fail (?message: U2<string, Exception>) : obj = nativeOnly
+            [<ImportDefault("assert"); Emit("$0.fail($1...)"); Obsolete("since v10.0.0 - use fail([message]) or other assert functions instead.")>]
+            static member fail (actual: obj, expected: obj, ?message: U2<string, Exception>, ?operator: string, ?stackStartFn: Action) : obj = nativeOnly
+            /// <summary>
+            /// Tests if <c>value</c> is truthy. It is equivalent to <c>assert.equal(!!value, true, message)</c>.
+            ///
+            /// If <c>value</c> is not truthy, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is <c>undefined</c>, a default
+            /// error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown instead of the <c>AssertionError</c>.
+            /// If no arguments are passed in at all <c>message</c> will be set to the string:<c></c> 'No value argument passed to <c>assert.ok()</c>' <c></c>.
+            ///
+            /// Be aware that in the <c>repl</c> the error message will be different to the one
+            /// thrown in a file! See below for further details.
+            ///
+            /// <c></c><c>js
+            /// import assert from 'node:assert/strict';
+            ///
+            /// assert.ok(true);
+            /// // OK
+            /// assert.ok(1);
+            /// // OK
+            ///
+            /// assert.ok();
+            /// // AssertionError: No value argument passed to </c>assert.ok()<c>
+            ///
+            /// assert.ok(false, 'it\'s false');
+            /// // AssertionError: it's false
+            ///
+            /// // In the repl:
+            /// assert.ok(typeof 123 === 'string');
+            /// // AssertionError: false == true
+            ///
+            /// // In a file (e.g. test.js):
+            /// assert.ok(typeof 123 === 'string');
+            /// // AssertionError: The expression evaluated to a falsy value:
+            /// //
+            /// //   assert.ok(typeof 123 === 'string')
+            ///
+            /// assert.ok(false);
+            /// // AssertionError: The expression evaluated to a falsy value:
+            /// //
+            /// //   assert.ok(false)
+            ///
+            /// assert.ok(0);
+            /// // AssertionError: The expression evaluated to a falsy value:
+            /// //
+            /// //   assert.ok(0)
+            /// <code>
+            ///
+            /// </code>js
+            /// import assert from 'node:assert/strict';
+            ///
+            /// // Using </c>assert()<c> works the same:
+            /// assert(0);
+            /// // AssertionError: The expression evaluated to a falsy value:
+            /// //
+            /// //   assert(0)
+            /// </c><c></c>
+            /// </summary>
+            [<ImportDefault("assert"); Emit("$0.ok($1...)")>]
+            static member ok (value: obj, ?message: U2<string, Exception>) : bool = nativeOnly
+            /// <summary>
+            /// **Strict assertion mode**
+            ///
+            /// An alias of <see href="strictEqual">strictEqual</see>.
+            ///
+            /// **Legacy assertion mode**
+            ///
+            /// > Stability: 3 - Legacy: Use <see href="strictEqual">strictEqual</see> instead.
+            ///
+            /// Tests shallow, coercive equality between the <c>actual</c> and <c>expected</c> parameters
+            /// using the [<c>==</c> operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Equality). <c>NaN</c> is specially handled
+            /// and treated as being identical if both sides are <c>NaN</c>.
+            ///
+            /// <code lang="js">
+            /// import assert from 'node:assert';
+            ///
+            /// assert.equal(1, 1);
+            /// // OK, 1 == 1
+            /// assert.equal(1, '1');
+            /// // OK, 1 == '1'
+            /// assert.equal(NaN, NaN);
+            /// // OK
+            ///
+            /// assert.equal(1, 2);
+            /// // AssertionError: 1 == 2
+            /// assert.equal({ a: { b: 1 } }, { a: { b: 1 } });
+            /// // AssertionError: { a: { b: 1 } } == { a: { b: 1 } }
+            /// </code>
+            ///
+            /// If the values are not equal, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is undefined, a default
+            /// error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown instead of the <c>AssertionError</c>.
+            /// </summary>
+            [<ImportDefault("assert"); Emit("$0.equal($1...)")>]
+            static member equal (actual: obj, expected: obj, ?message: U2<string, Exception>) : unit = nativeOnly
+            /// <summary>
+            /// **Strict assertion mode**
+            ///
+            /// An alias of <see href="notStrictEqual">notStrictEqual</see>.
+            ///
+            /// **Legacy assertion mode**
+            ///
+            /// > Stability: 3 - Legacy: Use <see href="notStrictEqual">notStrictEqual</see> instead.
+            ///
+            /// Tests shallow, coercive inequality with the [<c>!=</c> operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Inequality). <c>NaN</c> is
+            /// specially handled and treated as being identical if both sides are <c>NaN</c>.
+            ///
+            /// <code lang="js">
+            /// import assert from 'node:assert';
+            ///
+            /// assert.notEqual(1, 2);
+            /// // OK
+            ///
+            /// assert.notEqual(1, 1);
+            /// // AssertionError: 1 != 1
+            ///
+            /// assert.notEqual(1, '1');
+            /// // AssertionError: 1 != '1'
+            /// </code>
+            ///
+            /// If the values are equal, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is undefined, a default error
+            /// message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown instead of the <c>AssertionError</c>.
+            /// </summary>
+            [<ImportDefault("assert"); Emit("$0.notEqual($1...)")>]
+            static member notEqual (actual: obj, expected: obj, ?message: U2<string, Exception>) : unit = nativeOnly
+            /// <summary>
+            /// **Strict assertion mode**
+            ///
+            /// An alias of <see href="deepStrictEqual">deepStrictEqual</see>.
+            ///
+            /// **Legacy assertion mode**
+            ///
+            /// > Stability: 3 - Legacy: Use <see href="deepStrictEqual">deepStrictEqual</see> instead.
+            ///
+            /// Tests for deep equality between the <c>actual</c> and <c>expected</c> parameters. Consider
+            /// using <see href="deepStrictEqual">deepStrictEqual</see> instead. <see href="deepEqual">deepEqual</see> can have
+            /// surprising results.
+            ///
+            /// _Deep equality_ means that the enumerable "own" properties of child objects
+            /// are also recursively evaluated by the following rules.
+            /// </summary>
+            [<ImportDefault("assert"); Emit("$0.deepEqual($1...)")>]
+            static member deepEqual (actual: obj, expected: obj, ?message: U2<string, Exception>) : unit = nativeOnly
+            /// <summary>
+            /// **Strict assertion mode**
+            ///
+            /// An alias of <see href="notDeepStrictEqual">notDeepStrictEqual</see>.
+            ///
+            /// **Legacy assertion mode**
+            ///
+            /// > Stability: 3 - Legacy: Use <see href="notDeepStrictEqual">notDeepStrictEqual</see> instead.
+            ///
+            /// Tests for any deep inequality. Opposite of <see href="deepEqual">deepEqual</see>.
+            ///
+            /// <code lang="js">
+            /// import assert from 'node:assert';
+            ///
+            /// const obj1 = {
+            ///   a: {
+            ///     b: 1,
+            ///   },
+            /// };
+            /// const obj2 = {
+            ///   a: {
+            ///     b: 2,
+            ///   },
+            /// };
+            /// const obj3 = {
+            ///   a: {
+            ///     b: 1,
+            ///   },
+            /// };
+            /// const obj4 = { __proto__: obj1 };
+            ///
+            /// assert.notDeepEqual(obj1, obj1);
+            /// // AssertionError: { a: { b: 1 } } notDeepEqual { a: { b: 1 } }
+            ///
+            /// assert.notDeepEqual(obj1, obj2);
+            /// // OK
+            ///
+            /// assert.notDeepEqual(obj1, obj3);
+            /// // AssertionError: { a: { b: 1 } } notDeepEqual { a: { b: 1 } }
+            ///
+            /// assert.notDeepEqual(obj1, obj4);
+            /// // OK
+            /// </code>
+            ///
+            /// If the values are deeply equal, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is undefined, a default
+            /// error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown
+            /// instead of the <c>AssertionError</c>.
+            /// </summary>
+            [<ImportDefault("assert"); Emit("$0.notDeepEqual($1...)")>]
+            static member notDeepEqual (actual: obj, expected: obj, ?message: U2<string, Exception>) : unit = nativeOnly
+            /// <summary>
+            /// Tests strict equality between the <c>actual</c> and <c>expected</c> parameters as
+            /// determined by [<c>Object.is()</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is).
+            ///
+            /// <c></c><c>js
+            /// import assert from 'node:assert/strict';
+            ///
+            /// assert.strictEqual(1, 2);
+            /// // AssertionError [ERR_ASSERTION]: Expected inputs to be strictly equal:
+            /// //
+            /// // 1 !== 2
+            ///
+            /// assert.strictEqual(1, 1);
+            /// // OK
+            ///
+            /// assert.strictEqual('Hello foobar', 'Hello World!');
+            /// // AssertionError [ERR_ASSERTION]: Expected inputs to be strictly equal:
+            /// // + actual - expected
+            /// //
+            /// // + 'Hello foobar'
+            /// // - 'Hello World!'
+            /// //          ^
+            ///
+            /// const apples = 1;
+            /// const oranges = 2;
+            /// assert.strictEqual(apples, oranges, </c>apples ${apples} !== oranges ${oranges}<c>);
+            /// // AssertionError [ERR_ASSERTION]: apples 1 !== oranges 2
+            ///
+            /// assert.strictEqual(1, '1', new TypeError('Inputs are not identical'));
+            /// // TypeError: Inputs are not identical
+            /// </c><c></c>
+            ///
+            /// If the values are not strictly equal, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is undefined, a
+            /// default error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown
+            /// instead of the <c>AssertionError</c>.
+            /// </summary>
+            [<ImportDefault("assert"); Emit("$0.strictEqual($1...)")>]
+            static member strictEqual<'T> (actual: obj, expected: 'T, ?message: U2<string, Exception>) : bool = nativeOnly
+            /// <summary>
+            /// Tests strict inequality between the <c>actual</c> and <c>expected</c> parameters as
+            /// determined by [<c>Object.is()</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is).
+            ///
+            /// <code lang="js">
+            /// import assert from 'node:assert/strict';
+            ///
+            /// assert.notStrictEqual(1, 2);
+            /// // OK
+            ///
+            /// assert.notStrictEqual(1, 1);
+            /// // AssertionError [ERR_ASSERTION]: Expected "actual" to be strictly unequal to:
+            /// //
+            /// // 1
+            ///
+            /// assert.notStrictEqual(1, '1');
+            /// // OK
+            /// </code>
+            ///
+            /// If the values are strictly equal, an <c>AssertionError</c> is thrown with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If the <c>message</c> parameter is undefined, a
+            /// default error message is assigned. If the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown
+            /// instead of the <c>AssertionError</c>.
+            /// </summary>
+            [<ImportDefault("assert"); Emit("$0.notStrictEqual($1...)")>]
+            static member notStrictEqual (actual: obj, expected: obj, ?message: U2<string, Exception>) : unit = nativeOnly
+            /// <summary>
+            /// Tests for deep equality between the <c>actual</c> and <c>expected</c> parameters.
+            /// "Deep" equality means that the enumerable "own" properties of child objects
+            /// are recursively evaluated also by the following rules.
+            /// </summary>
+            [<ImportDefault("assert"); Emit("$0.deepStrictEqual($1...)")>]
+            static member deepStrictEqual<'T> (actual: obj, expected: 'T, ?message: U2<string, Exception>) : bool = nativeOnly
+            /// <summary>
+            /// Tests for deep strict inequality. Opposite of <see href="deepStrictEqual">deepStrictEqual</see>.
+            ///
+            /// <code lang="js">
+            /// import assert from 'node:assert/strict';
+            ///
+            /// assert.notDeepStrictEqual({ a: 1 }, { a: '1' });
+            /// // OK
+            /// </code>
+            ///
+            /// If the values are deeply and strictly equal, an <c>AssertionError</c> is thrown
+            /// with a <c>message</c> property set equal to the value of the <c>message</c> parameter. If
+            /// the <c>message</c> parameter is undefined, a default error message is assigned. If
+            /// the <c>message</c> parameter is an instance of an <c>Error</c> then it will be thrown
+            /// instead of the <c>AssertionError</c>.
+            /// </summary>
+            [<ImportDefault("assert"); Emit("$0.notDeepStrictEqual($1...)")>]
+            static member notDeepStrictEqual (actual: obj, expected: obj, ?message: U2<string, Exception>) : unit = nativeOnly
+            /// <summary>
+            /// Expects the function <c>fn</c> to throw an error.
+            ///
+            /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+            /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), a validation function,
+            /// a validation object where each property will be tested for strict deep equality,
+            /// or an instance of error where each property will be tested for strict deep
+            /// equality including the non-enumerable <c>message</c> and <c>name</c> properties. When
+            /// using an object, it is also possible to use a regular expression, when
+            /// validating against a string property. See below for examples.
+            ///
+            /// If specified, <c>message</c> will be appended to the message provided by the <c>AssertionError</c> if the <c>fn</c> call fails to throw or in case the error validation
+            /// fails.
+            ///
+            /// Custom validation object/error instance:
+            ///
+            /// <c></c><c>js
+            /// import assert from 'node:assert/strict';
+            ///
+            /// const err = new TypeError('Wrong value');
+            /// err.code = 404;
+            /// err.foo = 'bar';
+            /// err.info = {
+            ///   nested: true,
+            ///   baz: 'text',
+            /// };
+            /// err.reg = /abc/i;
+            ///
+            /// assert.throws(
+            ///   () => {
+            ///     throw err;
+            ///   },
+            ///   {
+            ///     name: 'TypeError',
+            ///     message: 'Wrong value',
+            ///     info: {
+            ///       nested: true,
+            ///       baz: 'text',
+            ///     },
+            ///     // Only properties on the validation object will be tested for.
+            ///     // Using nested objects requires all properties to be present. Otherwise
+            ///     // the validation is going to fail.
+            ///   },
+            /// );
+            ///
+            /// // Using regular expressions to validate error properties:
+            /// assert.throws(
+            ///   () => {
+            ///     throw err;
+            ///   },
+            ///   {
+            ///     // The </c>name<c> and </c>message<c> properties are strings and using regular
+            ///     // expressions on those will match against the string. If they fail, an
+            ///     // error is thrown.
+            ///     name: /^TypeError$/,
+            ///     message: /Wrong/,
+            ///     foo: 'bar',
+            ///     info: {
+            ///       nested: true,
+            ///       // It is not possible to use regular expressions for nested properties!
+            ///       baz: 'text',
+            ///     },
+            ///     // The </c>reg<c> property contains a regular expression and only if the
+            ///     // validation object contains an identical regular expression, it is going
+            ///     // to pass.
+            ///     reg: /abc/i,
+            ///   },
+            /// );
+            ///
+            /// // Fails due to the different </c>message<c> and </c>name<c> properties:
+            /// assert.throws(
+            ///   () => {
+            ///     const otherErr = new Error('Not found');
+            ///     // Copy all enumerable properties from </c>err<c> to </c>otherErr<c>.
+            ///     for (const [key, value] of Object.entries(err)) {
+            ///       otherErr[key] = value;
+            ///     }
+            ///     throw otherErr;
+            ///   },
+            ///   // The error's </c>message<c> and </c>name<c> properties will also be checked when using
+            ///   // an error as validation object.
+            ///   err,
+            /// );
+            /// <code>
+            ///
+            /// Validate instanceof using constructor:
+            ///
+            /// </code>js
+            /// import assert from 'node:assert/strict';
+            ///
+            /// assert.throws(
+            ///   () => {
+            ///     throw new Error('Wrong value');
+            ///   },
+            ///   Error,
+            /// );
+            /// </c><c></c>
+            ///
+            /// Validate error message using [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions):
+            ///
+            /// Using a regular expression runs <c>.toString</c> on the error object, and will
+            /// therefore also include the error name.
+            ///
+            /// <code lang="js">
+            /// import assert from 'node:assert/strict';
+            ///
+            /// assert.throws(
+            ///   () => {
+            ///     throw new Error('Wrong value');
+            ///   },
+            ///   /^Error: Wrong value$/,
+            /// );
+            /// </code>
+            ///
+            /// Custom error validation:
+            ///
+            /// The function must return <c>true</c> to indicate all internal validations passed.
+            /// It will otherwise fail with an <c>AssertionError</c>.
+            ///
+            /// <c></c><c>js
+            /// import assert from 'node:assert/strict';
+            ///
+            /// assert.throws(
+            ///   () => {
+            ///     throw new Error('Wrong value');
+            ///   },
+            ///   (err) => {
+            ///     assert(err instanceof Error);
+            ///     assert(/value/.test(err));
+            ///     // Avoid returning anything from validation functions besides </c>true<c>.
+            ///     // Otherwise, it's not clear what part of the validation failed. Instead,
+            ///     // throw an error about the specific validation that failed (as done in this
+            ///     // example) and add as much helpful debugging information to that error as
+            ///     // possible.
+            ///     return true;
+            ///   },
+            ///   'unexpected error',
+            /// );
+            /// </c><c></c>
+            ///
+            /// <c>error</c> cannot be a string. If a string is provided as the second
+            /// argument, then <c>error</c> is assumed to be omitted and the string will be used for <c>message</c> instead. This can lead to easy-to-miss mistakes. Using the same
+            /// message as the thrown error message is going to result in an <c>ERR_AMBIGUOUS_ARGUMENT</c> error. Please read the example below carefully if using
+            /// a string as the second argument gets considered:
+            ///
+            /// <c></c><c>js
+            /// import assert from 'node:assert/strict';
+            ///
+            /// function throwingFirst() {
+            ///   throw new Error('First');
+            /// }
+            ///
+            /// function throwingSecond() {
+            ///   throw new Error('Second');
+            /// }
+            ///
+            /// function notThrowing() {}
+            ///
+            /// // The second argument is a string and the input function threw an Error.
+            /// // The first case will not throw as it does not match for the error message
+            /// // thrown by the input function!
+            /// assert.throws(throwingFirst, 'Second');
+            /// // In the next example the message has no benefit over the message from the
+            /// // error and since it is not clear if the user intended to actually match
+            /// // against the error message, Node.js throws an </c>ERR_AMBIGUOUS_ARGUMENT<c> error.
+            /// assert.throws(throwingSecond, 'Second');
+            /// // TypeError [ERR_AMBIGUOUS_ARGUMENT]
+            ///
+            /// // The string is only used (as message) in case the function does not throw:
+            /// assert.throws(notThrowing, 'Second');
+            /// // AssertionError [ERR_ASSERTION]: Missing expected exception: Second
+            ///
+            /// // If it was intended to match for the error message do this instead:
+            /// // It does not throw because the error messages match.
+            /// assert.throws(throwingSecond, /Second$/);
+            ///
+            /// // If the error message does not match, an AssertionError is thrown.
+            /// assert.throws(throwingFirst, /Second$/);
+            /// // AssertionError [ERR_ASSERTION]
+            /// </c><c></c>
+            ///
+            /// Due to the confusing error-prone notation, avoid a string as the second
+            /// argument.
+            /// </summary>
+            [<ImportDefault("assert"); Emit("$0.throws($1...)")>]
+            static member throws (block: (unit -> unit), ?message: U2<string, Exception>) : unit = nativeOnly
+            [<ImportDefault("assert"); Emit("$0.throws($1...)")>]
+            static member throws (block: (unit -> unit), error: Node.``assert``.assert_.AssertPredicate, ?message: U2<string, Exception>) : unit = nativeOnly
+            /// <summary>
+            /// Asserts that the function <c>fn</c> does not throw an error.
+            ///
+            /// Using <c>assert.doesNotThrow()</c> is actually not useful because there
+            /// is no benefit in catching an error and then rethrowing it. Instead, consider
+            /// adding a comment next to the specific code path that should not throw and keep
+            /// error messages as expressive as possible.
+            ///
+            /// When <c>assert.doesNotThrow()</c> is called, it will immediately call the <c>fn</c> function.
+            ///
+            /// If an error is thrown and it is the same type as that specified by the <c>error</c> parameter, then an <c>AssertionError</c> is thrown. If the error is of a
+            /// different type, or if the <c>error</c> parameter is undefined, the error is
+            /// propagated back to the caller.
+            ///
+            /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+            /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), or a validation
+            /// function. See <see href="throws">throws</see> for more details.
+            ///
+            /// The following, for instance, will throw the <c>TypeError</c> because there is no
+            /// matching error type in the assertion:
+            ///
+            /// <code lang="js">
+            /// import assert from 'node:assert/strict';
+            ///
+            /// assert.doesNotThrow(
+            ///   () => {
+            ///     throw new TypeError('Wrong value');
+            ///   },
+            ///   SyntaxError,
+            /// );
+            /// </code>
+            ///
+            /// However, the following will result in an <c>AssertionError</c> with the message
+            /// 'Got unwanted exception...':
+            ///
+            /// <code lang="js">
+            /// import assert from 'node:assert/strict';
+            ///
+            /// assert.doesNotThrow(
+            ///   () => {
+            ///     throw new TypeError('Wrong value');
+            ///   },
+            ///   TypeError,
+            /// );
+            /// </code>
+            ///
+            /// If an <c>AssertionError</c> is thrown and a value is provided for the <c>message</c> parameter, the value of <c>message</c> will be appended to the <c>AssertionError</c> message:
+            ///
+            /// <code lang="js">
+            /// import assert from 'node:assert/strict';
+            ///
+            /// assert.doesNotThrow(
+            ///   () => {
+            ///     throw new TypeError('Wrong value');
+            ///   },
+            ///   /Wrong value/,
+            ///   'Whoops',
+            /// );
+            /// // Throws: AssertionError: Got unwanted exception: Whoops
+            /// </code>
+            /// </summary>
+            [<ImportDefault("assert"); Emit("$0.doesNotThrow($1...)")>]
+            static member doesNotThrow (block: (unit -> unit), ?message: U2<string, Exception>) : unit = nativeOnly
+            [<ImportDefault("assert"); Emit("$0.doesNotThrow($1...)")>]
+            static member doesNotThrow (block: (unit -> unit), error: Node.``assert``.assert_.AssertPredicate, ?message: U2<string, Exception>) : unit = nativeOnly
+            /// <summary>
+            /// Throws <c>value</c> if <c>value</c> is not <c>undefined</c> or <c>null</c>. This is useful when
+            /// testing the <c>error</c> argument in callbacks. The stack trace contains all frames
+            /// from the error passed to <c>ifError()</c> including the potential new frames for <c>ifError()</c> itself.
+            ///
+            /// <code lang="js">
+            /// import assert from 'node:assert/strict';
+            ///
+            /// assert.ifError(null);
+            /// // OK
+            /// assert.ifError(0);
+            /// // AssertionError [ERR_ASSERTION]: ifError got unwanted exception: 0
+            /// assert.ifError('error');
+            /// // AssertionError [ERR_ASSERTION]: ifError got unwanted exception: 'error'
+            /// assert.ifError(new Error());
+            /// // AssertionError [ERR_ASSERTION]: ifError got unwanted exception: Error
+            ///
+            /// // Create some random error frames.
+            /// let err;
+            /// (function errorFrame() {
+            ///   err = new Error('test error');
+            /// })();
+            ///
+            /// (function ifErrorFrame() {
+            ///   assert.ifError(err);
+            /// })();
+            /// // AssertionError [ERR_ASSERTION]: ifError got unwanted exception: test error
+            /// //     at ifErrorFrame
+            /// //     at errorFrame
+            /// </code>
+            /// </summary>
+            [<ImportDefault("assert"); Emit("$0.ifError($1...)")>]
+            static member ifError (value: obj) : bool = nativeOnly
+            /// <summary>
+            /// Awaits the <c>asyncFn</c> promise or, if <c>asyncFn</c> is a function, immediately
+            /// calls the function and awaits the returned promise to complete. It will then
+            /// check that the promise is rejected.
+            ///
+            /// If <c>asyncFn</c> is a function and it throws an error synchronously, <c>assert.rejects()</c> will return a rejected <c>Promise</c> with that error. If the
+            /// function does not return a promise, <c>assert.rejects()</c> will return a rejected <c>Promise</c> with an [ERR_INVALID_RETURN_VALUE](https://nodejs.org/docs/latest-v22.x/api/errors.html#err_invalid_return_value)
+            /// error. In both cases the error handler is skipped.
+            ///
+            /// Besides the async nature to await the completion behaves identically to <see href="throws">throws</see>.
+            ///
+            /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+            /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), a validation function,
+            /// an object where each property will be tested for, or an instance of error where
+            /// each property will be tested for including the non-enumerable <c>message</c> and <c>name</c> properties.
+            ///
+            /// If specified, <c>message</c> will be the message provided by the <c><see href="AssertionError">AssertionError</see></c> if the <c>asyncFn</c> fails to reject.
+            ///
+            /// <code lang="js">
+            /// import assert from 'node:assert/strict';
+            ///
+            /// await assert.rejects(
+            ///   async () => {
+            ///     throw new TypeError('Wrong value');
+            ///   },
+            ///   {
+            ///     name: 'TypeError',
+            ///     message: 'Wrong value',
+            ///   },
+            /// );
+            /// </code>
+            ///
+            /// <code lang="js">
+            /// import assert from 'node:assert/strict';
+            ///
+            /// await assert.rejects(
+            ///   async () => {
+            ///     throw new TypeError('Wrong value');
+            ///   },
+            ///   (err) => {
+            ///     assert.strictEqual(err.name, 'TypeError');
+            ///     assert.strictEqual(err.message, 'Wrong value');
+            ///     return true;
+            ///   },
+            /// );
+            /// </code>
+            ///
+            /// <code lang="js">
+            /// import assert from 'node:assert/strict';
+            ///
+            /// assert.rejects(
+            ///   Promise.reject(new Error('Wrong value')),
+            ///   Error,
+            /// ).then(() => {
+            ///   // ...
+            /// });
+            /// </code>
+            ///
+            /// <c>error</c> cannot be a string. If a string is provided as the second argument, then <c>error</c> is assumed to
+            /// be omitted and the string will be used for <c>message</c> instead. This can lead to easy-to-miss mistakes. Please read the
+            /// example in <see href="throws">throws</see> carefully if using a string as the second argument gets considered.
+            /// </summary>
+            [<ImportDefault("assert"); Emit("$0.rejects($1...)")>]
+            static member rejects (block: U2<(unit -> JS.Promise<obj>), JS.Promise<obj>>, ?message: U2<string, Exception>) : JS.Promise<unit> = nativeOnly
+            [<ImportDefault("assert"); Emit("$0.rejects($1...)")>]
+            static member rejects (block: U2<(unit -> JS.Promise<obj>), JS.Promise<obj>>, error: Node.``assert``.assert_.AssertPredicate, ?message: U2<string, Exception>) : JS.Promise<unit> = nativeOnly
+            /// <summary>
+            /// Awaits the <c>asyncFn</c> promise or, if <c>asyncFn</c> is a function, immediately
+            /// calls the function and awaits the returned promise to complete. It will then
+            /// check that the promise is not rejected.
+            ///
+            /// If <c>asyncFn</c> is a function and it throws an error synchronously, <c>assert.doesNotReject()</c> will return a rejected <c>Promise</c> with that error. If
+            /// the function does not return a promise, <c>assert.doesNotReject()</c> will return a
+            /// rejected <c>Promise</c> with an [ERR_INVALID_RETURN_VALUE](https://nodejs.org/docs/latest-v22.x/api/errors.html#err_invalid_return_value) error. In both cases
+            /// the error handler is skipped.
+            ///
+            /// Using <c>assert.doesNotReject()</c> is actually not useful because there is little
+            /// benefit in catching a rejection and then rejecting it again. Instead, consider
+            /// adding a comment next to the specific code path that should not reject and keep
+            /// error messages as expressive as possible.
+            ///
+            /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
+            /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), or a validation
+            /// function. See <see href="throws">throws</see> for more details.
+            ///
+            /// Besides the async nature to await the completion behaves identically to <see href="doesNotThrow">doesNotThrow</see>.
+            ///
+            /// <code lang="js">
+            /// import assert from 'node:assert/strict';
+            ///
+            /// await assert.doesNotReject(
+            ///   async () => {
+            ///     throw new TypeError('Wrong value');
+            ///   },
+            ///   SyntaxError,
+            /// );
+            /// </code>
+            ///
+            /// <code lang="js">
+            /// import assert from 'node:assert/strict';
+            ///
+            /// assert.doesNotReject(Promise.reject(new TypeError('Wrong value')))
+            ///   .then(() => {
+            ///     // ...
+            ///   });
+            /// </code>
+            /// </summary>
+            [<ImportDefault("assert"); Emit("$0.doesNotReject($1...)")>]
+            static member doesNotReject (block: U2<(unit -> JS.Promise<obj>), JS.Promise<obj>>, ?message: U2<string, Exception>) : JS.Promise<unit> = nativeOnly
+            [<ImportDefault("assert"); Emit("$0.doesNotReject($1...)")>]
+            static member doesNotReject (block: U2<(unit -> JS.Promise<obj>), JS.Promise<obj>>, error: Node.``assert``.assert_.AssertPredicate, ?message: U2<string, Exception>) : JS.Promise<unit> = nativeOnly
+            /// <summary>
+            /// Expects the <c>string</c> input to match the regular expression.
+            ///
+            /// <code lang="js">
+            /// import assert from 'node:assert/strict';
+            ///
+            /// assert.match('I will fail', /pass/);
+            /// // AssertionError [ERR_ASSERTION]: The input did not match the regular ...
+            ///
+            /// assert.match(123, /pass/);
+            /// // AssertionError [ERR_ASSERTION]: The "string" argument must be of type string.
+            ///
+            /// assert.match('I will pass', /pass/);
+            /// // OK
+            /// </code>
+            ///
+            /// If the values do not match, or if the <c>string</c> argument is of another type than <c>string</c>, an <c><see href="AssertionError">AssertionError</see></c> is thrown with a <c>message</c> property set equal
+            /// to the value of the <c>message</c> parameter. If the <c>message</c> parameter is
+            /// undefined, a default error message is assigned. If the <c>message</c> parameter is an
+            /// instance of an [Error](https://nodejs.org/docs/latest-v22.x/api/errors.html#class-error) then it will be thrown instead of the <c><see href="AssertionError">AssertionError</see></c>.
+            /// </summary>
+            [<ImportDefault("assert"); Emit("$0.match($1...)")>]
+            static member ``match`` (value: string, regExp: RegExp, ?message: U2<string, Exception>) : unit = nativeOnly
+            /// <summary>
+            /// Expects the <c>string</c> input not to match the regular expression.
+            ///
+            /// <code lang="js">
+            /// import assert from 'node:assert/strict';
+            ///
+            /// assert.doesNotMatch('I will fail', /fail/);
+            /// // AssertionError [ERR_ASSERTION]: The input was expected to not match the ...
+            ///
+            /// assert.doesNotMatch(123, /pass/);
+            /// // AssertionError [ERR_ASSERTION]: The "string" argument must be of type string.
+            ///
+            /// assert.doesNotMatch('I will pass', /different/);
+            /// // OK
+            /// </code>
+            ///
+            /// If the values do match, or if the <c>string</c> argument is of another type than <c>string</c>, an <c><see href="AssertionError">AssertionError</see></c> is thrown with a <c>message</c> property set equal
+            /// to the value of the <c>message</c> parameter. If the <c>message</c> parameter is
+            /// undefined, a default error message is assigned. If the <c>message</c> parameter is an
+            /// instance of an [Error](https://nodejs.org/docs/latest-v22.x/api/errors.html#class-error) then it will be thrown instead of the <c><see href="AssertionError">AssertionError</see></c>.
+            /// </summary>
+            [<ImportDefault("assert"); Emit("$0.doesNotMatch($1...)")>]
+            static member doesNotMatch (value: string, regExp: RegExp, ?message: U2<string, Exception>) : unit = nativeOnly
+            /// <summary>
+            /// Tests for partial deep equality between the <c>actual</c> and <c>expected</c> parameters.
+            /// "Deep" equality means that the enumerable "own" properties of child objects
+            /// are recursively evaluated also by the following rules. "Partial" equality means
+            /// that only properties that exist on the <c>expected</c> parameter are going to be
+            /// compared.
+            ///
+            /// This method always passes the same test cases as <c>assert.deepStrictEqual()</c>,
+            /// behaving as a super set of it.
+            /// </summary>
+            [<ImportDefault("assert"); Emit("$0.partialDeepStrictEqual($1...)")>]
+            static member partialDeepStrictEqual (actual: obj, expected: obj, ?message: U2<string, Exception>) : unit = nativeOnly
 
         module assert_ =
 
@@ -17774,6 +18540,39 @@ TypeScript versions earlier than 5.7.""")>]
         type AssertPredicate =
             assert_.AssertPredicate
 
+        module Exports =
+
+            module Assert =
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type Type_1 =
+                    [<EmitConstructor>]
+                    abstract member Create: ?options: Exports.Assert.Type.Create.options_1 -> Node.``assert``.assert_.AssertStrict
+                    [<EmitConstructor>]
+                    abstract member Create: options: Node.``assert``.assert_.AssertOptions -> Node.``assert``.assert_.Assert
+
+                module Type =
+
+                    module Create =
+
+                        [<AllowNullLiteral>]
+                        [<Interface>]
+                        type options_1 =
+                            /// <summary>
+                            /// If set to <c>'full'</c>, shows the full diff in assertion errors.
+                            /// </summary>
+                            abstract member diff: Exports.Assert.Type.Create.options.diff_1 option with get, set
+                            abstract member strict: bool option with get, set
+
+                        module options =
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type diff_1 =
+                                | simple
+                                | full
+
     module assert_strict =
 
         [<AbstractClass>]
@@ -19022,25 +19821,25 @@ AsyncLocalStorage.snapshot()"""
             [<Import("spawn", "child_process")>]
             static member spawn (command: string, options: Node.child_process.SpawnOptions) : Node.child_process.ChildProcess = nativeOnly
             [<Import("spawn", "child_process")>]
-            static member spawn (command: string, ?args: ReadonlyArray<string>, ?options: Node.child_process.SpawnOptionsWithoutStdio) : Node.child_process.ChildProcessWithoutNullStreams = nativeOnly
+            static member spawn (command: string, ?args: ResizeArray<string>, ?options: Node.child_process.SpawnOptionsWithoutStdio) : Node.child_process.ChildProcessWithoutNullStreams = nativeOnly
             [<Import("spawn", "child_process")>]
-            static member spawn (command: string, args: ReadonlyArray<string>, options: Node.child_process.SpawnOptionsWithStdioTuple<Node.child_process.StdioPipe, Node.child_process.StdioPipe, Node.child_process.StdioPipe>) : Node.child_process.ChildProcessByStdio<Node.stream.Stream_.Writable, Node.stream.Stream_.Readable, Node.stream.Stream_.Readable> = nativeOnly
+            static member spawn (command: string, args: ResizeArray<string>, options: Node.child_process.SpawnOptionsWithStdioTuple<Node.child_process.StdioPipe, Node.child_process.StdioPipe, Node.child_process.StdioPipe>) : Node.child_process.ChildProcessByStdio<Node.stream.Stream_.Writable, Node.stream.Stream_.Readable, Node.stream.Stream_.Readable> = nativeOnly
             [<Import("spawn", "child_process")>]
-            static member spawn (command: string, args: ReadonlyArray<string>, options: Node.child_process.SpawnOptionsWithStdioTuple<Node.child_process.StdioPipe, Node.child_process.StdioPipe, Node.child_process.StdioNull>) : Node.child_process.ChildProcessByStdio<Node.stream.Stream_.Writable, Node.stream.Stream_.Readable, obj> = nativeOnly
+            static member spawn (command: string, args: ResizeArray<string>, options: Node.child_process.SpawnOptionsWithStdioTuple<Node.child_process.StdioPipe, Node.child_process.StdioPipe, Node.child_process.StdioNull>) : Node.child_process.ChildProcessByStdio<Node.stream.Stream_.Writable, Node.stream.Stream_.Readable, obj> = nativeOnly
             [<Import("spawn", "child_process")>]
-            static member spawn (command: string, args: ReadonlyArray<string>, options: Node.child_process.SpawnOptionsWithStdioTuple<Node.child_process.StdioPipe, Node.child_process.StdioNull, Node.child_process.StdioPipe>) : Node.child_process.ChildProcessByStdio<Node.stream.Stream_.Writable, obj, Node.stream.Stream_.Readable> = nativeOnly
+            static member spawn (command: string, args: ResizeArray<string>, options: Node.child_process.SpawnOptionsWithStdioTuple<Node.child_process.StdioPipe, Node.child_process.StdioNull, Node.child_process.StdioPipe>) : Node.child_process.ChildProcessByStdio<Node.stream.Stream_.Writable, obj, Node.stream.Stream_.Readable> = nativeOnly
             [<Import("spawn", "child_process")>]
-            static member spawn (command: string, args: ReadonlyArray<string>, options: Node.child_process.SpawnOptionsWithStdioTuple<Node.child_process.StdioNull, Node.child_process.StdioPipe, Node.child_process.StdioPipe>) : Node.child_process.ChildProcessByStdio<obj, Node.stream.Stream_.Readable, Node.stream.Stream_.Readable> = nativeOnly
+            static member spawn (command: string, args: ResizeArray<string>, options: Node.child_process.SpawnOptionsWithStdioTuple<Node.child_process.StdioNull, Node.child_process.StdioPipe, Node.child_process.StdioPipe>) : Node.child_process.ChildProcessByStdio<obj, Node.stream.Stream_.Readable, Node.stream.Stream_.Readable> = nativeOnly
             [<Import("spawn", "child_process")>]
-            static member spawn (command: string, args: ReadonlyArray<string>, options: Node.child_process.SpawnOptionsWithStdioTuple<Node.child_process.StdioPipe, Node.child_process.StdioNull, Node.child_process.StdioNull>) : Node.child_process.ChildProcessByStdio<Node.stream.Stream_.Writable, obj, obj> = nativeOnly
+            static member spawn (command: string, args: ResizeArray<string>, options: Node.child_process.SpawnOptionsWithStdioTuple<Node.child_process.StdioPipe, Node.child_process.StdioNull, Node.child_process.StdioNull>) : Node.child_process.ChildProcessByStdio<Node.stream.Stream_.Writable, obj, obj> = nativeOnly
             [<Import("spawn", "child_process")>]
-            static member spawn (command: string, args: ReadonlyArray<string>, options: Node.child_process.SpawnOptionsWithStdioTuple<Node.child_process.StdioNull, Node.child_process.StdioPipe, Node.child_process.StdioNull>) : Node.child_process.ChildProcessByStdio<obj, Node.stream.Stream_.Readable, obj> = nativeOnly
+            static member spawn (command: string, args: ResizeArray<string>, options: Node.child_process.SpawnOptionsWithStdioTuple<Node.child_process.StdioNull, Node.child_process.StdioPipe, Node.child_process.StdioNull>) : Node.child_process.ChildProcessByStdio<obj, Node.stream.Stream_.Readable, obj> = nativeOnly
             [<Import("spawn", "child_process")>]
-            static member spawn (command: string, args: ReadonlyArray<string>, options: Node.child_process.SpawnOptionsWithStdioTuple<Node.child_process.StdioNull, Node.child_process.StdioNull, Node.child_process.StdioPipe>) : Node.child_process.ChildProcessByStdio<obj, obj, Node.stream.Stream_.Readable> = nativeOnly
+            static member spawn (command: string, args: ResizeArray<string>, options: Node.child_process.SpawnOptionsWithStdioTuple<Node.child_process.StdioNull, Node.child_process.StdioNull, Node.child_process.StdioPipe>) : Node.child_process.ChildProcessByStdio<obj, obj, Node.stream.Stream_.Readable> = nativeOnly
             [<Import("spawn", "child_process")>]
-            static member spawn (command: string, args: ReadonlyArray<string>, options: Node.child_process.SpawnOptionsWithStdioTuple<Node.child_process.StdioNull, Node.child_process.StdioNull, Node.child_process.StdioNull>) : Node.child_process.ChildProcessByStdio<obj, obj, obj> = nativeOnly
+            static member spawn (command: string, args: ResizeArray<string>, options: Node.child_process.SpawnOptionsWithStdioTuple<Node.child_process.StdioNull, Node.child_process.StdioNull, Node.child_process.StdioNull>) : Node.child_process.ChildProcessByStdio<obj, obj, obj> = nativeOnly
             [<Import("spawn", "child_process")>]
-            static member spawn (command: string, args: ReadonlyArray<string>, options: Node.child_process.SpawnOptions) : Node.child_process.ChildProcess = nativeOnly
+            static member spawn (command: string, args: ResizeArray<string>, options: Node.child_process.SpawnOptions) : Node.child_process.ChildProcess = nativeOnly
             /// <summary>
             /// Spawns a shell then executes the <c>command</c> within that shell, buffering any
             /// generated output. The <c>command</c> string passed to the exec function is processed
@@ -19210,19 +20009,19 @@ AsyncLocalStorage.snapshot()"""
             [<Import("execFile", "child_process")>]
             static member execFile (file: string, ?callback: Exports.execFile.callback) : Node.child_process.ChildProcess = nativeOnly
             [<Import("execFile", "child_process")>]
-            static member execFile (file: string, args: ReadonlyArray<string> option, ?callback: Exports.execFile.callback) : Node.child_process.ChildProcess = nativeOnly
+            static member execFile (file: string, args: ResizeArray<string> option, ?callback: Exports.execFile.callback) : Node.child_process.ChildProcess = nativeOnly
             [<Import("execFile", "child_process")>]
             static member execFile (file: string, options: Node.child_process.ExecFileOptionsWithBufferEncoding, ?callback: Exports.execFile.callback_1) : Node.child_process.ChildProcess = nativeOnly
             [<Import("execFile", "child_process")>]
-            static member execFile (file: string, args: ReadonlyArray<string> option, options: Node.child_process.ExecFileOptionsWithBufferEncoding, ?callback: Exports.execFile.callback_1) : Node.child_process.ChildProcess = nativeOnly
+            static member execFile (file: string, args: ResizeArray<string> option, options: Node.child_process.ExecFileOptionsWithBufferEncoding, ?callback: Exports.execFile.callback_1) : Node.child_process.ChildProcess = nativeOnly
             [<Import("execFile", "child_process")>]
             static member execFile (file: string, options: Node.child_process.ExecFileOptionsWithStringEncoding, ?callback: Exports.execFile.callback) : Node.child_process.ChildProcess = nativeOnly
             [<Import("execFile", "child_process")>]
-            static member execFile (file: string, args: ReadonlyArray<string> option, options: Node.child_process.ExecFileOptionsWithStringEncoding, ?callback: Exports.execFile.callback) : Node.child_process.ChildProcess = nativeOnly
+            static member execFile (file: string, args: ResizeArray<string> option, options: Node.child_process.ExecFileOptionsWithStringEncoding, ?callback: Exports.execFile.callback) : Node.child_process.ChildProcess = nativeOnly
             [<Import("execFile", "child_process")>]
             static member execFile (file: string, options: Node.child_process.ExecFileOptions option, callback: Exports.execFile.callback_2 option) : Node.child_process.ChildProcess = nativeOnly
             [<Import("execFile", "child_process")>]
-            static member execFile (file: string, args: ReadonlyArray<string> option, options: Node.child_process.ExecFileOptions option, callback: Exports.execFile.callback_2 option) : Node.child_process.ChildProcess = nativeOnly
+            static member execFile (file: string, args: ResizeArray<string> option, options: Node.child_process.ExecFileOptions option, callback: Exports.execFile.callback_2 option) : Node.child_process.ChildProcess = nativeOnly
             /// <summary>
             /// The <c>child_process.fork()</c> method is a special case of <see href="spawn">spawn</see> used specifically to spawn new Node.js processes.
             /// Like <see href="spawn">spawn</see>, a <c>ChildProcess</c> object is returned. The
@@ -19332,9 +20131,9 @@ AsyncLocalStorage.snapshot()"""
             [<Import("fork", "child_process")>]
             static member fork (modulePath: Node.url.URL, ?options: Node.child_process.ForkOptions) : Node.child_process.ChildProcess = nativeOnly
             [<Import("fork", "child_process")>]
-            static member fork (modulePath: string, ?args: ReadonlyArray<string>, ?options: Node.child_process.ForkOptions) : Node.child_process.ChildProcess = nativeOnly
+            static member fork (modulePath: string, ?args: ResizeArray<string>, ?options: Node.child_process.ForkOptions) : Node.child_process.ChildProcess = nativeOnly
             [<Import("fork", "child_process")>]
-            static member fork (modulePath: Node.url.URL, ?args: ReadonlyArray<string>, ?options: Node.child_process.ForkOptions) : Node.child_process.ChildProcess = nativeOnly
+            static member fork (modulePath: Node.url.URL, ?args: ResizeArray<string>, ?options: Node.child_process.ForkOptions) : Node.child_process.ChildProcess = nativeOnly
             /// <summary>
             /// The <c>child_process.spawnSync()</c> method is generally identical to <see href="spawn">spawn</see> with the exception that the function will not return
             /// until the child process has fully closed. When a timeout has been encountered
@@ -19362,13 +20161,13 @@ AsyncLocalStorage.snapshot()"""
             [<Import("spawnSync", "child_process")>]
             static member spawnSync (command: string, ?options: Node.child_process.SpawnSyncOptions) : Node.child_process.SpawnSyncReturns<U2<string, Node.NonSharedBuffer>> = nativeOnly
             [<Import("spawnSync", "child_process")>]
-            static member spawnSync (command: string, args: ReadonlyArray<string>) : Node.child_process.SpawnSyncReturns<Node.NonSharedBuffer> = nativeOnly
+            static member spawnSync (command: string, args: ResizeArray<string>) : Node.child_process.SpawnSyncReturns<Node.NonSharedBuffer> = nativeOnly
             [<Import("spawnSync", "child_process")>]
-            static member spawnSync (command: string, args: ReadonlyArray<string>, options: Node.child_process.SpawnSyncOptionsWithStringEncoding) : Node.child_process.SpawnSyncReturns<string> = nativeOnly
+            static member spawnSync (command: string, args: ResizeArray<string>, options: Node.child_process.SpawnSyncOptionsWithStringEncoding) : Node.child_process.SpawnSyncReturns<string> = nativeOnly
             [<Import("spawnSync", "child_process")>]
-            static member spawnSync (command: string, args: ReadonlyArray<string>, options: Node.child_process.SpawnSyncOptionsWithBufferEncoding) : Node.child_process.SpawnSyncReturns<Node.NonSharedBuffer> = nativeOnly
+            static member spawnSync (command: string, args: ResizeArray<string>, options: Node.child_process.SpawnSyncOptionsWithBufferEncoding) : Node.child_process.SpawnSyncReturns<Node.NonSharedBuffer> = nativeOnly
             [<Import("spawnSync", "child_process")>]
-            static member spawnSync (command: string, ?args: ReadonlyArray<string>, ?options: Node.child_process.SpawnSyncOptions) : Node.child_process.SpawnSyncReturns<U2<string, Node.NonSharedBuffer>> = nativeOnly
+            static member spawnSync (command: string, ?args: ResizeArray<string>, ?options: Node.child_process.SpawnSyncOptions) : Node.child_process.SpawnSyncReturns<U2<string, Node.NonSharedBuffer>> = nativeOnly
             /// <summary>
             /// The <c>child_process.execSync()</c> method is generally identical to <see href="exec">exec</see> with the exception that the method will not return
             /// until the child process has fully closed. When a timeout has been encountered
@@ -19430,13 +20229,13 @@ AsyncLocalStorage.snapshot()"""
             [<Import("execFileSync", "child_process")>]
             static member execFileSync (file: string, ?options: Node.child_process.ExecFileSyncOptions) : U2<string, Node.NonSharedBuffer> = nativeOnly
             [<Import("execFileSync", "child_process")>]
-            static member execFileSync (file: string, args: ReadonlyArray<string>) : Node.NonSharedBuffer = nativeOnly
+            static member execFileSync (file: string, args: ResizeArray<string>) : Node.NonSharedBuffer = nativeOnly
             [<Import("execFileSync", "child_process")>]
-            static member execFileSync (file: string, args: ReadonlyArray<string>, options: Node.child_process.ExecFileSyncOptionsWithStringEncoding) : string = nativeOnly
+            static member execFileSync (file: string, args: ResizeArray<string>, options: Node.child_process.ExecFileSyncOptionsWithStringEncoding) : string = nativeOnly
             [<Import("execFileSync", "child_process")>]
-            static member execFileSync (file: string, args: ReadonlyArray<string>, options: Node.child_process.ExecFileSyncOptionsWithBufferEncoding) : Node.NonSharedBuffer = nativeOnly
+            static member execFileSync (file: string, args: ResizeArray<string>, options: Node.child_process.ExecFileSyncOptionsWithBufferEncoding) : Node.NonSharedBuffer = nativeOnly
             [<Import("execFileSync", "child_process")>]
-            static member execFileSync (file: string, ?args: ReadonlyArray<string>, ?options: Node.child_process.ExecFileSyncOptions) : U2<string, Node.NonSharedBuffer> = nativeOnly
+            static member execFileSync (file: string, ?args: ResizeArray<string>, ?options: Node.child_process.ExecFileSyncOptions) : U2<string, Node.NonSharedBuffer> = nativeOnly
             [<Import("ChildProcess", "child_process"); EmitConstructor>]
             static member ChildProcess () : ChildProcess = nativeOnly
             /// <summary>
@@ -24812,19 +25611,19 @@ AsyncLocalStorage.snapshot()"""
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__: file: string -> Node.child_process.PromiseWithChild<Exports.__promisify___3>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: file: string * args: ReadonlyArray<string> option -> Node.child_process.PromiseWithChild<Exports.__promisify___3>
+                abstract member __promisify__: file: string * args: ResizeArray<string> option -> Node.child_process.PromiseWithChild<Exports.__promisify___3>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__: file: string * options: Node.child_process.ExecFileOptionsWithBufferEncoding -> Node.child_process.PromiseWithChild<Exports.__promisify___4>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: file: string * args: ReadonlyArray<string> option * options: Node.child_process.ExecFileOptionsWithBufferEncoding -> Node.child_process.PromiseWithChild<Exports.__promisify___4>
+                abstract member __promisify__: file: string * args: ResizeArray<string> option * options: Node.child_process.ExecFileOptionsWithBufferEncoding -> Node.child_process.PromiseWithChild<Exports.__promisify___4>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__: file: string * options: Node.child_process.ExecFileOptionsWithStringEncoding -> Node.child_process.PromiseWithChild<Exports.__promisify___3>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: file: string * args: ReadonlyArray<string> option * options: Node.child_process.ExecFileOptionsWithStringEncoding -> Node.child_process.PromiseWithChild<Exports.__promisify___3>
+                abstract member __promisify__: file: string * args: ResizeArray<string> option * options: Node.child_process.ExecFileOptionsWithStringEncoding -> Node.child_process.PromiseWithChild<Exports.__promisify___3>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__: file: string * options: Node.child_process.ExecFileOptions option -> Node.child_process.PromiseWithChild<Exports.__promisify___5>
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: file: string * args: ReadonlyArray<string> option * options: Node.child_process.ExecFileOptions option -> Node.child_process.PromiseWithChild<Exports.__promisify___5>
+                abstract member __promisify__: file: string * args: ResizeArray<string> option * options: Node.child_process.ExecFileOptions option -> Node.child_process.PromiseWithChild<Exports.__promisify___5>
 
             module Exports =
 
@@ -35054,23 +35853,23 @@ KeyObject.from($0)"""
             /// <summary>
             /// Converts a <c>KeyObject</c> instance to a <c>CryptoKey</c>.
             /// </summary>
-            abstract member toCryptoKey: algorithm: Node.crypto.webcrypto_.Algorithm * extractable: bool * keyUsages: ReadonlyArray<Node.crypto.webcrypto_.KeyUsage> -> Node.crypto.webcrypto_.CryptoKey
+            abstract member toCryptoKey: algorithm: Node.crypto.webcrypto_.Algorithm * extractable: bool * keyUsages: ResizeArray<Node.crypto.webcrypto_.KeyUsage> -> Node.crypto.webcrypto_.CryptoKey
             /// <summary>
             /// Converts a <c>KeyObject</c> instance to a <c>CryptoKey</c>.
             /// </summary>
-            abstract member toCryptoKey: algorithm: string * extractable: bool * keyUsages: ReadonlyArray<Node.crypto.webcrypto_.KeyUsage> -> Node.crypto.webcrypto_.CryptoKey
+            abstract member toCryptoKey: algorithm: string * extractable: bool * keyUsages: ResizeArray<Node.crypto.webcrypto_.KeyUsage> -> Node.crypto.webcrypto_.CryptoKey
             /// <summary>
             /// Converts a <c>KeyObject</c> instance to a <c>CryptoKey</c>.
             /// </summary>
-            abstract member toCryptoKey: algorithm: Node.crypto.webcrypto_.RsaHashedImportParams * extractable: bool * keyUsages: ReadonlyArray<Node.crypto.webcrypto_.KeyUsage> -> Node.crypto.webcrypto_.CryptoKey
+            abstract member toCryptoKey: algorithm: Node.crypto.webcrypto_.RsaHashedImportParams * extractable: bool * keyUsages: ResizeArray<Node.crypto.webcrypto_.KeyUsage> -> Node.crypto.webcrypto_.CryptoKey
             /// <summary>
             /// Converts a <c>KeyObject</c> instance to a <c>CryptoKey</c>.
             /// </summary>
-            abstract member toCryptoKey: algorithm: Node.crypto.webcrypto_.EcKeyImportParams * extractable: bool * keyUsages: ReadonlyArray<Node.crypto.webcrypto_.KeyUsage> -> Node.crypto.webcrypto_.CryptoKey
+            abstract member toCryptoKey: algorithm: Node.crypto.webcrypto_.EcKeyImportParams * extractable: bool * keyUsages: ResizeArray<Node.crypto.webcrypto_.KeyUsage> -> Node.crypto.webcrypto_.CryptoKey
             /// <summary>
             /// Converts a <c>KeyObject</c> instance to a <c>CryptoKey</c>.
             /// </summary>
-            abstract member toCryptoKey: algorithm: Node.crypto.webcrypto_.HmacImportParams * extractable: bool * keyUsages: ReadonlyArray<Node.crypto.webcrypto_.KeyUsage> -> Node.crypto.webcrypto_.CryptoKey
+            abstract member toCryptoKey: algorithm: Node.crypto.webcrypto_.HmacImportParams * extractable: bool * keyUsages: ResizeArray<Node.crypto.webcrypto_.KeyUsage> -> Node.crypto.webcrypto_.CryptoKey
             /// <summary>
             /// Depending on the type of this <c>KeyObject</c>, this property is either<c>'secret'</c> for secret (symmetric) keys, <c>'public'</c> for public (asymmetric) keys
             /// or <c>'private'</c> for private (asymmetric) keys.
@@ -38711,7 +39510,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 /// <param name="keyUsages">
                 /// See <see href="https://nodejs.org/docs/latest/api/webcrypto.html#cryptokeyusages">Key usages</see>.
                 /// </param>
-                abstract member deriveKey: algorithm: Node.crypto.webcrypto_.EcdhKeyDeriveParams * baseKey: Node.crypto.webcrypto_.CryptoKey * derivedKeyAlgorithm: Node.crypto.webcrypto_.Algorithm * extractable: bool * keyUsages: ReadonlyArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
+                abstract member deriveKey: algorithm: Node.crypto.webcrypto_.EcdhKeyDeriveParams * baseKey: Node.crypto.webcrypto_.CryptoKey * derivedKeyAlgorithm: Node.crypto.webcrypto_.Algorithm * extractable: bool * keyUsages: ResizeArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
                 /// <summary>
                 /// Using the method and parameters specified in <c>algorithm</c>, and the keying material provided by <c>baseKey</c>,
                 /// <c>subtle.deriveKey()</c> attempts to generate a new <CryptoKey><c> based on the method and parameters in </c>derivedKeyAlgorithm<c>.
@@ -38730,7 +39529,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 /// <param name="keyUsages">
                 /// See <see href="https://nodejs.org/docs/latest/api/webcrypto.html#cryptokeyusages">Key usages</see>.
                 /// </param>
-                abstract member deriveKey: algorithm: Node.crypto.webcrypto_.EcdhKeyDeriveParams * baseKey: Node.crypto.webcrypto_.CryptoKey * derivedKeyAlgorithm: string * extractable: bool * keyUsages: ReadonlyArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
+                abstract member deriveKey: algorithm: Node.crypto.webcrypto_.EcdhKeyDeriveParams * baseKey: Node.crypto.webcrypto_.CryptoKey * derivedKeyAlgorithm: string * extractable: bool * keyUsages: ResizeArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
                 /// <summary>
                 /// Using the method and parameters specified in <c>algorithm</c>, and the keying material provided by <c>baseKey</c>,
                 /// <c>subtle.deriveKey()</c> attempts to generate a new <CryptoKey><c> based on the method and parameters in </c>derivedKeyAlgorithm<c>.
@@ -38749,7 +39548,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 /// <param name="keyUsages">
                 /// See <see href="https://nodejs.org/docs/latest/api/webcrypto.html#cryptokeyusages">Key usages</see>.
                 /// </param>
-                abstract member deriveKey: algorithm: Node.crypto.webcrypto_.EcdhKeyDeriveParams * baseKey: Node.crypto.webcrypto_.CryptoKey * derivedKeyAlgorithm: Node.crypto.webcrypto_.HmacImportParams * extractable: bool * keyUsages: ReadonlyArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
+                abstract member deriveKey: algorithm: Node.crypto.webcrypto_.EcdhKeyDeriveParams * baseKey: Node.crypto.webcrypto_.CryptoKey * derivedKeyAlgorithm: Node.crypto.webcrypto_.HmacImportParams * extractable: bool * keyUsages: ResizeArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
                 /// <summary>
                 /// Using the method and parameters specified in <c>algorithm</c>, and the keying material provided by <c>baseKey</c>,
                 /// <c>subtle.deriveKey()</c> attempts to generate a new <CryptoKey><c> based on the method and parameters in </c>derivedKeyAlgorithm<c>.
@@ -38768,7 +39567,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 /// <param name="keyUsages">
                 /// See <see href="https://nodejs.org/docs/latest/api/webcrypto.html#cryptokeyusages">Key usages</see>.
                 /// </param>
-                abstract member deriveKey: algorithm: Node.crypto.webcrypto_.EcdhKeyDeriveParams * baseKey: Node.crypto.webcrypto_.CryptoKey * derivedKeyAlgorithm: Node.crypto.webcrypto_.AesDerivedKeyParams * extractable: bool * keyUsages: ReadonlyArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
+                abstract member deriveKey: algorithm: Node.crypto.webcrypto_.EcdhKeyDeriveParams * baseKey: Node.crypto.webcrypto_.CryptoKey * derivedKeyAlgorithm: Node.crypto.webcrypto_.AesDerivedKeyParams * extractable: bool * keyUsages: ResizeArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
                 /// <summary>
                 /// Using the method and parameters specified in <c>algorithm</c>, and the keying material provided by <c>baseKey</c>,
                 /// <c>subtle.deriveKey()</c> attempts to generate a new <CryptoKey><c> based on the method and parameters in </c>derivedKeyAlgorithm<c>.
@@ -38787,7 +39586,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 /// <param name="keyUsages">
                 /// See <see href="https://nodejs.org/docs/latest/api/webcrypto.html#cryptokeyusages">Key usages</see>.
                 /// </param>
-                abstract member deriveKey: algorithm: Node.crypto.webcrypto_.HkdfParams * baseKey: Node.crypto.webcrypto_.CryptoKey * derivedKeyAlgorithm: Node.crypto.webcrypto_.Algorithm * extractable: bool * keyUsages: ReadonlyArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
+                abstract member deriveKey: algorithm: Node.crypto.webcrypto_.HkdfParams * baseKey: Node.crypto.webcrypto_.CryptoKey * derivedKeyAlgorithm: Node.crypto.webcrypto_.Algorithm * extractable: bool * keyUsages: ResizeArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
                 /// <summary>
                 /// Using the method and parameters specified in <c>algorithm</c>, and the keying material provided by <c>baseKey</c>,
                 /// <c>subtle.deriveKey()</c> attempts to generate a new <CryptoKey><c> based on the method and parameters in </c>derivedKeyAlgorithm<c>.
@@ -38806,7 +39605,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 /// <param name="keyUsages">
                 /// See <see href="https://nodejs.org/docs/latest/api/webcrypto.html#cryptokeyusages">Key usages</see>.
                 /// </param>
-                abstract member deriveKey: algorithm: Node.crypto.webcrypto_.HkdfParams * baseKey: Node.crypto.webcrypto_.CryptoKey * derivedKeyAlgorithm: string * extractable: bool * keyUsages: ReadonlyArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
+                abstract member deriveKey: algorithm: Node.crypto.webcrypto_.HkdfParams * baseKey: Node.crypto.webcrypto_.CryptoKey * derivedKeyAlgorithm: string * extractable: bool * keyUsages: ResizeArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
                 /// <summary>
                 /// Using the method and parameters specified in <c>algorithm</c>, and the keying material provided by <c>baseKey</c>,
                 /// <c>subtle.deriveKey()</c> attempts to generate a new <CryptoKey><c> based on the method and parameters in </c>derivedKeyAlgorithm<c>.
@@ -38825,7 +39624,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 /// <param name="keyUsages">
                 /// See <see href="https://nodejs.org/docs/latest/api/webcrypto.html#cryptokeyusages">Key usages</see>.
                 /// </param>
-                abstract member deriveKey: algorithm: Node.crypto.webcrypto_.HkdfParams * baseKey: Node.crypto.webcrypto_.CryptoKey * derivedKeyAlgorithm: Node.crypto.webcrypto_.HmacImportParams * extractable: bool * keyUsages: ReadonlyArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
+                abstract member deriveKey: algorithm: Node.crypto.webcrypto_.HkdfParams * baseKey: Node.crypto.webcrypto_.CryptoKey * derivedKeyAlgorithm: Node.crypto.webcrypto_.HmacImportParams * extractable: bool * keyUsages: ResizeArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
                 /// <summary>
                 /// Using the method and parameters specified in <c>algorithm</c>, and the keying material provided by <c>baseKey</c>,
                 /// <c>subtle.deriveKey()</c> attempts to generate a new <CryptoKey><c> based on the method and parameters in </c>derivedKeyAlgorithm<c>.
@@ -38844,7 +39643,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 /// <param name="keyUsages">
                 /// See <see href="https://nodejs.org/docs/latest/api/webcrypto.html#cryptokeyusages">Key usages</see>.
                 /// </param>
-                abstract member deriveKey: algorithm: Node.crypto.webcrypto_.HkdfParams * baseKey: Node.crypto.webcrypto_.CryptoKey * derivedKeyAlgorithm: Node.crypto.webcrypto_.AesDerivedKeyParams * extractable: bool * keyUsages: ReadonlyArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
+                abstract member deriveKey: algorithm: Node.crypto.webcrypto_.HkdfParams * baseKey: Node.crypto.webcrypto_.CryptoKey * derivedKeyAlgorithm: Node.crypto.webcrypto_.AesDerivedKeyParams * extractable: bool * keyUsages: ResizeArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
                 /// <summary>
                 /// Using the method and parameters specified in <c>algorithm</c>, and the keying material provided by <c>baseKey</c>,
                 /// <c>subtle.deriveKey()</c> attempts to generate a new <CryptoKey><c> based on the method and parameters in </c>derivedKeyAlgorithm<c>.
@@ -38863,7 +39662,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 /// <param name="keyUsages">
                 /// See <see href="https://nodejs.org/docs/latest/api/webcrypto.html#cryptokeyusages">Key usages</see>.
                 /// </param>
-                abstract member deriveKey: algorithm: Node.crypto.webcrypto_.Pbkdf2Params * baseKey: Node.crypto.webcrypto_.CryptoKey * derivedKeyAlgorithm: Node.crypto.webcrypto_.Algorithm * extractable: bool * keyUsages: ReadonlyArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
+                abstract member deriveKey: algorithm: Node.crypto.webcrypto_.Pbkdf2Params * baseKey: Node.crypto.webcrypto_.CryptoKey * derivedKeyAlgorithm: Node.crypto.webcrypto_.Algorithm * extractable: bool * keyUsages: ResizeArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
                 /// <summary>
                 /// Using the method and parameters specified in <c>algorithm</c>, and the keying material provided by <c>baseKey</c>,
                 /// <c>subtle.deriveKey()</c> attempts to generate a new <CryptoKey><c> based on the method and parameters in </c>derivedKeyAlgorithm<c>.
@@ -38882,7 +39681,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 /// <param name="keyUsages">
                 /// See <see href="https://nodejs.org/docs/latest/api/webcrypto.html#cryptokeyusages">Key usages</see>.
                 /// </param>
-                abstract member deriveKey: algorithm: Node.crypto.webcrypto_.Pbkdf2Params * baseKey: Node.crypto.webcrypto_.CryptoKey * derivedKeyAlgorithm: string * extractable: bool * keyUsages: ReadonlyArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
+                abstract member deriveKey: algorithm: Node.crypto.webcrypto_.Pbkdf2Params * baseKey: Node.crypto.webcrypto_.CryptoKey * derivedKeyAlgorithm: string * extractable: bool * keyUsages: ResizeArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
                 /// <summary>
                 /// Using the method and parameters specified in <c>algorithm</c>, and the keying material provided by <c>baseKey</c>,
                 /// <c>subtle.deriveKey()</c> attempts to generate a new <CryptoKey><c> based on the method and parameters in </c>derivedKeyAlgorithm<c>.
@@ -38901,7 +39700,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 /// <param name="keyUsages">
                 /// See <see href="https://nodejs.org/docs/latest/api/webcrypto.html#cryptokeyusages">Key usages</see>.
                 /// </param>
-                abstract member deriveKey: algorithm: Node.crypto.webcrypto_.Pbkdf2Params * baseKey: Node.crypto.webcrypto_.CryptoKey * derivedKeyAlgorithm: Node.crypto.webcrypto_.HmacImportParams * extractable: bool * keyUsages: ReadonlyArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
+                abstract member deriveKey: algorithm: Node.crypto.webcrypto_.Pbkdf2Params * baseKey: Node.crypto.webcrypto_.CryptoKey * derivedKeyAlgorithm: Node.crypto.webcrypto_.HmacImportParams * extractable: bool * keyUsages: ResizeArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
                 /// <summary>
                 /// Using the method and parameters specified in <c>algorithm</c>, and the keying material provided by <c>baseKey</c>,
                 /// <c>subtle.deriveKey()</c> attempts to generate a new <CryptoKey><c> based on the method and parameters in </c>derivedKeyAlgorithm<c>.
@@ -38920,7 +39719,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 /// <param name="keyUsages">
                 /// See <see href="https://nodejs.org/docs/latest/api/webcrypto.html#cryptokeyusages">Key usages</see>.
                 /// </param>
-                abstract member deriveKey: algorithm: Node.crypto.webcrypto_.Pbkdf2Params * baseKey: Node.crypto.webcrypto_.CryptoKey * derivedKeyAlgorithm: Node.crypto.webcrypto_.AesDerivedKeyParams * extractable: bool * keyUsages: ReadonlyArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
+                abstract member deriveKey: algorithm: Node.crypto.webcrypto_.Pbkdf2Params * baseKey: Node.crypto.webcrypto_.CryptoKey * derivedKeyAlgorithm: Node.crypto.webcrypto_.AesDerivedKeyParams * extractable: bool * keyUsages: ResizeArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
                 /// <summary>
                 /// Using the method identified by <c>algorithm</c>, <c>subtle.digest()</c> attempts to generate a digest of <c>data</c>.
                 /// If successful, the returned promise is resolved with an <c><ArrayBuffer></c> containing the computed digest.
@@ -39085,7 +39884,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 /// <param name="keyUsages">
                 /// See <see href="https://nodejs.org/docs/latest/api/webcrypto.html#cryptokeyusages">Key usages</see>.
                 /// </param>
-                abstract member generateKey: algorithm: Node.crypto.webcrypto_.RsaHashedKeyGenParams * extractable: bool * keyUsages: ReadonlyArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKeyPair>
+                abstract member generateKey: algorithm: Node.crypto.webcrypto_.RsaHashedKeyGenParams * extractable: bool * keyUsages: ResizeArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKeyPair>
                 /// <summary>
                 /// Using the method and parameters provided in <c>algorithm</c>,
                 /// <c>subtle.generateKey()</c> attempts to generate new keying material.
@@ -39113,7 +39912,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 /// <param name="keyUsages">
                 /// See <see href="https://nodejs.org/docs/latest/api/webcrypto.html#cryptokeyusages">Key usages</see>.
                 /// </param>
-                abstract member generateKey: algorithm: Node.crypto.webcrypto_.EcKeyGenParams * extractable: bool * keyUsages: ReadonlyArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKeyPair>
+                abstract member generateKey: algorithm: Node.crypto.webcrypto_.EcKeyGenParams * extractable: bool * keyUsages: ResizeArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKeyPair>
                 /// <summary>
                 /// Using the method and parameters provided in <c>algorithm</c>,
                 /// <c>subtle.generateKey()</c> attempts to generate new keying material.
@@ -39138,7 +39937,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 /// - <c>'AES-GCM'</c>
                 /// - <c>'AES-KW'</c>
                 /// </summary>
-                abstract member generateKey: algorithm: Node.crypto.webcrypto_.AesKeyGenParams * extractable: bool * keyUsages: ReadonlyArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
+                abstract member generateKey: algorithm: Node.crypto.webcrypto_.AesKeyGenParams * extractable: bool * keyUsages: ResizeArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
                 /// <summary>
                 /// Using the method and parameters provided in <c>algorithm</c>,
                 /// <c>subtle.generateKey()</c> attempts to generate new keying material.
@@ -39163,7 +39962,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 /// - <c>'AES-GCM'</c>
                 /// - <c>'AES-KW'</c>
                 /// </summary>
-                abstract member generateKey: algorithm: Node.crypto.webcrypto_.HmacKeyGenParams * extractable: bool * keyUsages: ReadonlyArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
+                abstract member generateKey: algorithm: Node.crypto.webcrypto_.HmacKeyGenParams * extractable: bool * keyUsages: ResizeArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
                 /// <summary>
                 /// Using the method and parameters provided in <c>algorithm</c>,
                 /// <c>subtle.generateKey()</c> attempts to generate new keying material.
@@ -39188,7 +39987,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 /// - <c>'AES-GCM'</c>
                 /// - <c>'AES-KW'</c>
                 /// </summary>
-                abstract member generateKey: algorithm: Node.crypto.webcrypto_.Pbkdf2Params * extractable: bool * keyUsages: ReadonlyArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
+                abstract member generateKey: algorithm: Node.crypto.webcrypto_.Pbkdf2Params * extractable: bool * keyUsages: ResizeArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
                 /// <summary>
                 /// Using the method and parameters provided in <c>algorithm</c>,
                 /// <c>subtle.generateKey()</c> attempts to generate new keying material.
@@ -39253,7 +40052,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 /// See <see href="https://nodejs.org/docs/latest/api/webcrypto.html#cryptokeyusages">Key usages</see>.
                 /// </param>
                 [<Emit("$0.importKey('jwk',$1...)")>]
-                abstract member importKey_jwk: keyData: Node.crypto.webcrypto_.JsonWebKey * algorithm: Node.crypto.webcrypto_.Algorithm * extractable: bool * keyUsages: ReadonlyArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
+                abstract member importKey_jwk: keyData: Node.crypto.webcrypto_.JsonWebKey * algorithm: Node.crypto.webcrypto_.Algorithm * extractable: bool * keyUsages: ResizeArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
                 /// <summary>
                 /// The <c>subtle.importKey()</c> method attempts to interpret the provided <c>keyData</c> as the given <c>format</c>
                 /// to create a <c><CryptoKey></c> instance using the provided <c>algorithm</c>, <c>extractable</c>, and <c>keyUsages</c> arguments.
@@ -39268,7 +40067,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 /// See <see href="https://nodejs.org/docs/latest/api/webcrypto.html#cryptokeyusages">Key usages</see>.
                 /// </param>
                 [<Emit("$0.importKey('jwk',$1...)")>]
-                abstract member importKey_jwk: keyData: Node.crypto.webcrypto_.JsonWebKey * algorithm: string * extractable: bool * keyUsages: ReadonlyArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
+                abstract member importKey_jwk: keyData: Node.crypto.webcrypto_.JsonWebKey * algorithm: string * extractable: bool * keyUsages: ResizeArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
                 /// <summary>
                 /// The <c>subtle.importKey()</c> method attempts to interpret the provided <c>keyData</c> as the given <c>format</c>
                 /// to create a <c><CryptoKey></c> instance using the provided <c>algorithm</c>, <c>extractable</c>, and <c>keyUsages</c> arguments.
@@ -39283,7 +40082,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 /// See <see href="https://nodejs.org/docs/latest/api/webcrypto.html#cryptokeyusages">Key usages</see>.
                 /// </param>
                 [<Emit("$0.importKey('jwk',$1...)")>]
-                abstract member importKey_jwk: keyData: Node.crypto.webcrypto_.JsonWebKey * algorithm: Node.crypto.webcrypto_.RsaHashedImportParams * extractable: bool * keyUsages: ReadonlyArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
+                abstract member importKey_jwk: keyData: Node.crypto.webcrypto_.JsonWebKey * algorithm: Node.crypto.webcrypto_.RsaHashedImportParams * extractable: bool * keyUsages: ResizeArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
                 /// <summary>
                 /// The <c>subtle.importKey()</c> method attempts to interpret the provided <c>keyData</c> as the given <c>format</c>
                 /// to create a <c><CryptoKey></c> instance using the provided <c>algorithm</c>, <c>extractable</c>, and <c>keyUsages</c> arguments.
@@ -39298,7 +40097,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 /// See <see href="https://nodejs.org/docs/latest/api/webcrypto.html#cryptokeyusages">Key usages</see>.
                 /// </param>
                 [<Emit("$0.importKey('jwk',$1...)")>]
-                abstract member importKey_jwk: keyData: Node.crypto.webcrypto_.JsonWebKey * algorithm: Node.crypto.webcrypto_.EcKeyImportParams * extractable: bool * keyUsages: ReadonlyArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
+                abstract member importKey_jwk: keyData: Node.crypto.webcrypto_.JsonWebKey * algorithm: Node.crypto.webcrypto_.EcKeyImportParams * extractable: bool * keyUsages: ResizeArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
                 /// <summary>
                 /// The <c>subtle.importKey()</c> method attempts to interpret the provided <c>keyData</c> as the given <c>format</c>
                 /// to create a <c><CryptoKey></c> instance using the provided <c>algorithm</c>, <c>extractable</c>, and <c>keyUsages</c> arguments.
@@ -39313,7 +40112,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 /// See <see href="https://nodejs.org/docs/latest/api/webcrypto.html#cryptokeyusages">Key usages</see>.
                 /// </param>
                 [<Emit("$0.importKey('jwk',$1...)")>]
-                abstract member importKey_jwk: keyData: Node.crypto.webcrypto_.JsonWebKey * algorithm: Node.crypto.webcrypto_.HmacImportParams * extractable: bool * keyUsages: ReadonlyArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
+                abstract member importKey_jwk: keyData: Node.crypto.webcrypto_.JsonWebKey * algorithm: Node.crypto.webcrypto_.HmacImportParams * extractable: bool * keyUsages: ResizeArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
                 /// <summary>
                 /// The <c>subtle.importKey()</c> method attempts to interpret the provided <c>keyData</c> as the given <c>format</c>
                 /// to create a <c><CryptoKey></c> instance using the provided <c>algorithm</c>, <c>extractable</c>, and <c>keyUsages</c> arguments.
@@ -39328,7 +40127,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 /// See <see href="https://nodejs.org/docs/latest/api/webcrypto.html#cryptokeyusages">Key usages</see>.
                 /// </param>
                 [<Emit("$0.importKey('jwk',$1...)")>]
-                abstract member importKey_jwk: keyData: Node.crypto.webcrypto_.JsonWebKey * algorithm: Node.crypto.webcrypto_.AesKeyAlgorithm * extractable: bool * keyUsages: ReadonlyArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
+                abstract member importKey_jwk: keyData: Node.crypto.webcrypto_.JsonWebKey * algorithm: Node.crypto.webcrypto_.AesKeyAlgorithm * extractable: bool * keyUsages: ResizeArray<Node.crypto.webcrypto_.KeyUsage> -> JS.Promise<Node.crypto.webcrypto_.CryptoKey>
                 /// <summary>
                 /// The <c>subtle.importKey()</c> method attempts to interpret the provided <c>keyData</c> as the given <c>format</c>
                 /// to create a <c><CryptoKey></c> instance using the provided <c>algorithm</c>, <c>extractable</c>, and <c>keyUsages</c> arguments.
@@ -41268,7 +42067,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// <param name="callback">
             /// Called when the message has been sent.
             /// </param>
-            abstract member send: msg: ReadonlyArray<obj> * ?port: float * ?address: string * ?callback: Socket.send.callback -> unit
+            abstract member send: msg: ResizeArray<obj> * ?port: float * ?address: string * ?callback: Socket.send.callback -> unit
             /// <summary>
             /// Broadcasts a datagram on the socket.
             /// For connectionless sockets, the destination <c>port</c> and <c>address</c> must be
@@ -41529,7 +42328,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// });
             /// </code>
             /// </summary>
-            abstract member send: msg: ReadonlyArray<obj> * ?port: float * ?callback: Socket.send.callback -> unit
+            abstract member send: msg: ResizeArray<obj> * ?port: float * ?callback: Socket.send.callback -> unit
             /// <summary>
             /// Broadcasts a datagram on the socket.
             /// For connectionless sockets, the destination <c>port</c> and <c>address</c> must be
@@ -41790,7 +42589,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// });
             /// </code>
             /// </summary>
-            abstract member send: msg: ReadonlyArray<obj> * ?callback: Socket.send.callback -> unit
+            abstract member send: msg: ResizeArray<obj> * ?callback: Socket.send.callback -> unit
             /// <summary>
             /// Broadcasts a datagram on the socket.
             /// For connectionless sockets, the destination <c>port</c> and <c>address</c> must be
@@ -45423,7 +46222,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// array of [RFC 5952](https://datatracker.ietf.org/doc/html/rfc5952#section-6) formatted addresses
             /// </param>
             [<Import("setServers", "dns")>]
-            static member setServers (servers: ReadonlyArray<string>) : unit = nativeOnly
+            static member setServers (servers: ResizeArray<string>) : unit = nativeOnly
             /// <summary>
             /// Returns an array of IP address strings, formatted according to [RFC 5952](https://tools.ietf.org/html/rfc5952#section-6),
             /// that are currently configured for DNS resolution. A string will include a port
@@ -46353,7 +47152,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// A string representation of an IPv6 address.
             /// </param>
             abstract member setLocalAddress: ?ipv4: string * ?ipv6: string -> unit
-            abstract member setServers: (ReadonlyArray<string> -> unit) with get, set
+            abstract member setServers: (ResizeArray<string> -> unit) with get, set
 
         module LookupOptions =
 
@@ -47031,7 +47830,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// array of <c>RFC 5952</c> formatted addresses
             /// </param>
             [<Import("setServers", "dns/promises")>]
-            static member setServers (servers: ReadonlyArray<string>) : unit = nativeOnly
+            static member setServers (servers: ResizeArray<string>) : unit = nativeOnly
             /// <summary>
             /// Set the default value of <c>order</c> in <c>dns.lookup()</c> and <c><see href="lookup">lookup</see></c>. The value could be:
             ///
@@ -47185,7 +47984,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// A string representation of an IPv6 address.
             /// </param>
             abstract member setLocalAddress: ?ipv4: string * ?ipv6: string -> unit
-            abstract member setServers: (ReadonlyArray<string> -> unit) with get, set
+            abstract member setServers: (ResizeArray<string> -> unit) with get, set
 
         module Exports =
 
@@ -60523,7 +61322,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// The number of bytes written.
             /// </returns>
             [<Import("writevSync", "fs")>]
-            static member writevSync (fd: float, buffers: ReadonlyArray<Node.NodeJS.ArrayBufferView>, ?position: float) : float = nativeOnly
+            static member writevSync (fd: float, buffers: ResizeArray<Node.NodeJS.ArrayBufferView>, ?position: float) : float = nativeOnly
             /// <summary>
             /// Read from a file specified by <c>fd</c> and write to an array of <c>ArrayBufferView</c>s
             /// using <c>readv()</c>.
@@ -60555,7 +61354,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// The number of bytes read.
             /// </returns>
             [<Import("readvSync", "fs")>]
-            static member readvSync (fd: float, buffers: ReadonlyArray<Node.NodeJS.ArrayBufferView>, ?position: float) : float = nativeOnly
+            static member readvSync (fd: float, buffers: ResizeArray<Node.NodeJS.ArrayBufferView>, ?position: float) : float = nativeOnly
             /// <summary>
             /// Returns a <c>Blob</c> whose data is backed by the given file.
             ///
@@ -60840,19 +61639,19 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </code>
             /// </summary>
             [<Import("glob", "fs")>]
-            static member glob (pattern: ReadonlyArray<string>, callback: Exports.glob.callback) : unit = nativeOnly
+            static member glob (pattern: ResizeArray<string>, callback: Exports.glob.callback) : unit = nativeOnly
             [<Import("glob", "fs")>]
             static member glob (pattern: string, options: Node.fs.GlobOptionsWithFileTypes, callback: Exports.glob.callback_1) : unit = nativeOnly
             [<Import("glob", "fs")>]
-            static member glob (pattern: ReadonlyArray<string>, options: Node.fs.GlobOptionsWithFileTypes, callback: Exports.glob.callback_1) : unit = nativeOnly
+            static member glob (pattern: ResizeArray<string>, options: Node.fs.GlobOptionsWithFileTypes, callback: Exports.glob.callback_1) : unit = nativeOnly
             [<Import("glob", "fs")>]
             static member glob (pattern: string, options: Node.fs.GlobOptionsWithoutFileTypes, callback: Exports.glob.callback) : unit = nativeOnly
             [<Import("glob", "fs")>]
-            static member glob (pattern: ReadonlyArray<string>, options: Node.fs.GlobOptionsWithoutFileTypes, callback: Exports.glob.callback) : unit = nativeOnly
+            static member glob (pattern: ResizeArray<string>, options: Node.fs.GlobOptionsWithoutFileTypes, callback: Exports.glob.callback) : unit = nativeOnly
             [<Import("glob", "fs")>]
             static member glob (pattern: string, options: Node.fs.GlobOptions, callback: Exports.glob.callback_2) : unit = nativeOnly
             [<Import("glob", "fs")>]
-            static member glob (pattern: ReadonlyArray<string>, options: Node.fs.GlobOptions, callback: Exports.glob.callback_2) : unit = nativeOnly
+            static member glob (pattern: ResizeArray<string>, options: Node.fs.GlobOptions, callback: Exports.glob.callback_2) : unit = nativeOnly
             /// <summary>
             /// <code lang="js">
             /// import { globSync } from 'node:fs';
@@ -60876,19 +61675,19 @@ EventEmitter.defaultMaxListeners = $0"""
             /// paths of files that match the pattern.
             /// </returns>
             [<Import("globSync", "fs")>]
-            static member globSync (pattern: ReadonlyArray<string>) : ResizeArray<string> = nativeOnly
+            static member globSync (pattern: ResizeArray<string>) : ResizeArray<string> = nativeOnly
             [<Import("globSync", "fs")>]
             static member globSync (pattern: string, options: Node.fs.GlobOptionsWithFileTypes) : ResizeArray<Node.fs.Dirent> = nativeOnly
             [<Import("globSync", "fs")>]
-            static member globSync (pattern: ReadonlyArray<string>, options: Node.fs.GlobOptionsWithFileTypes) : ResizeArray<Node.fs.Dirent> = nativeOnly
+            static member globSync (pattern: ResizeArray<string>, options: Node.fs.GlobOptionsWithFileTypes) : ResizeArray<Node.fs.Dirent> = nativeOnly
             [<Import("globSync", "fs")>]
             static member globSync (pattern: string, options: Node.fs.GlobOptionsWithoutFileTypes) : ResizeArray<string> = nativeOnly
             [<Import("globSync", "fs")>]
-            static member globSync (pattern: ReadonlyArray<string>, options: Node.fs.GlobOptionsWithoutFileTypes) : ResizeArray<string> = nativeOnly
+            static member globSync (pattern: ResizeArray<string>, options: Node.fs.GlobOptionsWithoutFileTypes) : ResizeArray<string> = nativeOnly
             [<Import("globSync", "fs")>]
             static member globSync (pattern: string, options: Node.fs.GlobOptions) : U2<ResizeArray<Node.fs.Dirent>, ResizeArray<string>> = nativeOnly
             [<Import("globSync", "fs")>]
-            static member globSync (pattern: ReadonlyArray<string>, options: Node.fs.GlobOptions) : U2<ResizeArray<Node.fs.Dirent>, ResizeArray<string>> = nativeOnly
+            static member globSync (pattern: ResizeArray<string>, options: Node.fs.GlobOptions) : U2<ResizeArray<Node.fs.Dirent>, ResizeArray<string>> = nativeOnly
             [<Import("Stats", "fs"); EmitConstructor>]
             static member Stats () : Stats = nativeOnly
             [<Import("StatsFs", "fs"); EmitConstructor>]
@@ -73285,19 +74084,19 @@ EventEmitter.defaultMaxListeners = $0"""
             /// that match the pattern.
             /// </returns>
             [<Import("glob", "fs/promises")>]
-            static member glob (pattern: ReadonlyArray<string>) : Node.NodeJS.AsyncIterator<string> = nativeOnly
+            static member glob (pattern: ResizeArray<string>) : Node.NodeJS.AsyncIterator<string> = nativeOnly
             [<Import("glob", "fs/promises")>]
             static member glob (pattern: string, options: Node.fs.GlobOptionsWithFileTypes) : Node.NodeJS.AsyncIterator<Node.fs.Dirent> = nativeOnly
             [<Import("glob", "fs/promises")>]
-            static member glob (pattern: ReadonlyArray<string>, options: Node.fs.GlobOptionsWithFileTypes) : Node.NodeJS.AsyncIterator<Node.fs.Dirent> = nativeOnly
+            static member glob (pattern: ResizeArray<string>, options: Node.fs.GlobOptionsWithFileTypes) : Node.NodeJS.AsyncIterator<Node.fs.Dirent> = nativeOnly
             [<Import("glob", "fs/promises")>]
             static member glob (pattern: string, options: Node.fs.GlobOptionsWithoutFileTypes) : Node.NodeJS.AsyncIterator<string> = nativeOnly
             [<Import("glob", "fs/promises")>]
-            static member glob (pattern: ReadonlyArray<string>, options: Node.fs.GlobOptionsWithoutFileTypes) : Node.NodeJS.AsyncIterator<string> = nativeOnly
+            static member glob (pattern: ResizeArray<string>, options: Node.fs.GlobOptionsWithoutFileTypes) : Node.NodeJS.AsyncIterator<string> = nativeOnly
             [<Import("glob", "fs/promises")>]
             static member glob (pattern: string, options: Node.fs.GlobOptions) : Node.NodeJS.AsyncIterator<U2<Node.fs.Dirent, string>> = nativeOnly
             [<Import("glob", "fs/promises")>]
-            static member glob (pattern: ReadonlyArray<string>, options: Node.fs.GlobOptions) : Node.NodeJS.AsyncIterator<U2<Node.fs.Dirent, string>> = nativeOnly
+            static member glob (pattern: ResizeArray<string>, options: Node.fs.GlobOptions) : Node.NodeJS.AsyncIterator<U2<Node.fs.Dirent, string>> = nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -77840,7 +78639,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// <param name="value">
             /// Header value
             /// </param>
-            abstract member setHeader: name: string * value: ReadonlyArray<string> -> OutgoingMessage<'Request>
+            abstract member setHeader: name: string * value: ResizeArray<string> -> OutgoingMessage<'Request>
             /// <summary>
             /// Sets multiple header values for implicit headers. headers must be an instance of
             /// <c>Headers</c> or <c>Map</c>, if a header already exists in the to-be-sent headers, its
@@ -77954,7 +78753,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// <param name="value">
             /// Header value
             /// </param>
-            abstract member appendHeader: name: string * value: ReadonlyArray<string> -> OutgoingMessage<'Request>
+            abstract member appendHeader: name: string * value: ResizeArray<string> -> OutgoingMessage<'Request>
             /// <summary>
             /// Gets the value of the HTTP header with the given name. If that header is not
             /// set, the returned value will be <c>undefined</c>.
@@ -78050,7 +78849,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Attempting to set a header field name or value that contains invalid characters
             /// will result in a <c>TypeError</c> being thrown.
             /// </summary>
-            abstract member addTrailers: headers: ReadonlyArray<string * string> -> unit
+            abstract member addTrailers: headers: ResizeArray<string * string> -> unit
             /// <summary>
             /// Flushes the message headers.
             ///
@@ -81535,7 +82334,7 @@ EventEmitter.defaultMaxListeners = $0"""
             [<Import("performServerHandshake", "http2")>]
             static member performServerHandshake<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response> (socket: Node.stream.Stream_.Duplex, ?options: Node.http2.ServerOptions<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response>) : Node.http2.ServerHttp2Session<'Http1Request, 'Http1Response, 'Http2Request, 'Http2Response> = nativeOnly
             [<Import("Http2ServerRequest", "http2"); EmitConstructor>]
-            static member Http2ServerRequest (stream: Node.http2.ServerHttp2Stream, headers: Node.http2.IncomingHttpHeaders, options: Node.stream.Stream_.ReadableOptions, rawHeaders: ReadonlyArray<string>) : Http2ServerRequest = nativeOnly
+            static member Http2ServerRequest (stream: Node.http2.ServerHttp2Stream, headers: Node.http2.IncomingHttpHeaders, options: Node.stream.Stream_.ReadableOptions, rawHeaders: ResizeArray<string>) : Http2ServerRequest = nativeOnly
             [<Import("Http2ServerResponse", "http2"); EmitConstructor>]
             static member Http2ServerResponse<'Request> (stream: Node.http2.ServerHttp2Stream) : Http2ServerResponse<'Request> = nativeOnly
             [<ImportAll("http2")>]
@@ -86340,7 +87139,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// });
             /// </code>
             /// </summary>
-            abstract member respond: headers: ReadonlyArray<string> * ?options: Node.http2.ServerStreamResponseOptions -> unit
+            abstract member respond: headers: ResizeArray<string> * ?options: Node.http2.ServerStreamResponseOptions -> unit
             /// <summary>
             /// Initiates a response whose data is read from the given file descriptor. No
             /// validation is performed on the given file descriptor. If an error occurs while
@@ -88856,7 +89655,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// * <c>:method</c> \= <c>'GET'</c>
             /// * <c>:path</c> \= <c>/</c>
             /// </summary>
-            abstract member request: headers: ReadonlyArray<string> * ?options: Node.http2.ClientSessionRequestOptions -> Node.http2.ClientHttp2Stream
+            abstract member request: headers: ResizeArray<string> * ?options: Node.http2.ClientSessionRequestOptions -> Node.http2.ClientHttp2Stream
             /// <summary>
             /// Alias for <c>emitter.on(eventName, listener)</c>.
             /// </summary>
@@ -88990,7 +89789,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </c><c></c>
             /// </summary>
             [<Emit("$0.emit('origin',$1...)")>]
-            abstract member emit_origin: origins: ReadonlyArray<string> -> bool
+            abstract member emit_origin: origins: ResizeArray<string> -> bool
             /// <summary>
             /// Synchronously calls each of the listeners registered for the event named <c>eventName</c>, in the order they were registered, passing the supplied arguments
             /// to each.
@@ -97891,7 +98690,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// });
             /// </code>
             /// </summary>
-            abstract member setHeader: name: string * value: ReadonlyArray<string> -> unit
+            abstract member setHeader: name: string * value: ResizeArray<string> -> unit
             /// <summary>
             /// Sets the <c>Http2Stream</c>'s timeout value to <c>msecs</c>. If a callback is
             /// provided, then it is added as a listener on the <c>'timeout'</c> event on
@@ -98183,7 +98982,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Attempting to set a header field name or value that contains invalid characters
             /// will result in a <c>TypeError</c> being thrown.
             /// </summary>
-            abstract member writeHead: statusCode: float * headers: ReadonlyArray<string> -> Http2ServerResponse<'Request>
+            abstract member writeHead: statusCode: float * headers: ResizeArray<string> -> Http2ServerResponse<'Request>
             /// <summary>
             /// Sends a response header to the request. The status code is a 3-digit HTTP
             /// status code, like <c>404</c>. The last argument, <c>headers</c>, are the response headers.
@@ -98324,7 +99123,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Attempting to set a header field name or value that contains invalid characters
             /// will result in a <c>TypeError</c> being thrown.
             /// </summary>
-            abstract member writeHead: statusCode: float * statusMessage: string * headers: ReadonlyArray<string> -> Http2ServerResponse<'Request>
+            abstract member writeHead: statusCode: float * statusMessage: string * headers: ResizeArray<string> -> Http2ServerResponse<'Request>
             /// <summary>
             /// Call <c>http2stream.pushStream()</c> with the given headers, and wrap the
             /// given <c>Http2Stream</c> on a newly created <c>Http2ServerResponse</c> as the callback
@@ -108970,6 +109769,284 @@ EventEmitter.defaultMaxListeners = $0"""
             static member inline Module_
                 with get () : Module_.Exports =
                     nativeOnly
+            /// <summary>
+            /// A list of the names of all modules provided by Node.js. Can be used to verify
+            /// if a module is maintained by a third party or not.
+            ///
+            /// Note: the list doesn't contain prefix-only modules like <c>node:test</c>.
+            /// </summary>
+            [<ImportDefault("module")>]
+            [<Emit("$0.builtinModules")>]
+            static member inline builtinModules: ReadonlyArray<string> = nativeOnly
+            /// <param name="path">
+            /// Filename to be used to construct the require
+            /// function. Must be a file URL object, file URL string, or absolute path
+            /// string.
+            /// </param>
+            [<ImportDefault("module"); Emit("$0.createRequire($1...)")>]
+            static member createRequire (path: U2<string, Node.url.URL>) : Node.NodeJS.Require = nativeOnly
+            /// <summary>
+            /// Enable [module compile cache](https://nodejs.org/docs/latest-v22.x/api/module.html#module-compile-cache)
+            /// in the current Node.js instance.
+            ///
+            /// If <c>cacheDir</c> is not specified, Node.js will either use the directory specified by the
+            /// <c>NODE_COMPILE_CACHE=dir</c> environment variable if it's set, or use
+            /// <c>path.join(os.tmpdir(), 'node-compile-cache')</c> otherwise. For general use cases, it's
+            /// recommended to call <c>module.enableCompileCache()</c> without specifying the <c>cacheDir</c>,
+            /// so that the directory can be overridden by the <c>NODE_COMPILE_CACHE</c> environment
+            /// variable when necessary.
+            ///
+            /// Since compile cache is supposed to be a quiet optimization that is not required for the
+            /// application to be functional, this method is designed to not throw any exception when the
+            /// compile cache cannot be enabled. Instead, it will return an object containing an error
+            /// message in the <c>message</c> field to aid debugging.
+            /// If compile cache is enabled successfully, the <c>directory</c> field in the returned object
+            /// contains the path to the directory where the compile cache is stored. The <c>status</c>
+            /// field in the returned object would be one of the <c>module.constants.compileCacheStatus</c>
+            /// values to indicate the result of the attempt to enable the
+            /// [module compile cache](https://nodejs.org/docs/latest-v22.x/api/module.html#module-compile-cache).
+            ///
+            /// This method only affects the current Node.js instance. To enable it in child worker threads,
+            /// either call this method in child worker threads too, or set the
+            /// <c>process.env.NODE_COMPILE_CACHE</c> value to compile cache directory so the behavior can
+            /// be inherited into the child workers. The directory can be obtained either from the
+            /// <c>directory</c> field returned by this method, or with <see href="getCompileCacheDir">getCompileCacheDir</see>.
+            /// </summary>
+            /// <param name="cacheDir">
+            /// Optional path to specify the directory where the compile cache
+            /// will be stored/retrieved.
+            /// </param>
+            [<ImportDefault("module"); Emit("$0.enableCompileCache($1...)")>]
+            static member enableCompileCache (?cacheDir: string) : Node.``module``.Module_.EnableCompileCacheResult = nativeOnly
+            /// <summary>
+            /// Flush the [module compile cache](https://nodejs.org/docs/latest-v22.x/api/module.html#module-compile-cache)
+            /// accumulated from modules already loaded
+            /// in the current Node.js instance to disk. This returns after all the flushing
+            /// file system operations come to an end, no matter they succeed or not. If there
+            /// are any errors, this will fail silently, since compile cache misses should not
+            /// interfere with the actual operation of the application.
+            /// </summary>
+            [<ImportDefault("module"); Emit("$0.flushCompileCache($1...)")>]
+            static member flushCompileCache () : unit = nativeOnly
+            /// <returns>
+            /// Path to the [module compile cache](https://nodejs.org/docs/latest-v22.x/api/module.html#module-compile-cache)
+            /// directory if it is enabled, or <c>undefined</c> otherwise.
+            /// </returns>
+            [<ImportDefault("module"); Emit("$0.getCompileCacheDir($1...)")>]
+            static member getCompileCacheDir () : string option = nativeOnly
+            /// <summary>
+            /// <code lang="text">
+            /// /path/to/project
+            ///   ├ packages/
+            ///     ├ bar/
+            ///       ├ bar.js
+            ///       └ package.json // name = '@foo/bar'
+            ///     └ qux/
+            ///       ├ node_modules/
+            ///         └ some-package/
+            ///           └ package.json // name = 'some-package'
+            ///       ├ qux.js
+            ///       └ package.json // name = '@foo/qux'
+            ///   ├ main.js
+            ///   └ package.json // name = '@foo'
+            /// </code>
+            /// <c></c><c>js
+            /// // /path/to/project/packages/bar/bar.js
+            /// import { findPackageJSON } from 'node:module';
+            ///
+            /// findPackageJSON('..', import.meta.url);
+            /// // '/path/to/project/package.json'
+            /// // Same result when passing an absolute specifier instead:
+            /// findPackageJSON(new URL('../', import.meta.url));
+            /// findPackageJSON(import.meta.resolve('../'));
+            ///
+            /// findPackageJSON('some-package', import.meta.url);
+            /// // '/path/to/project/packages/bar/node_modules/some-package/package.json'
+            /// // When passing an absolute specifier, you might get a different result if the
+            /// // resolved module is inside a subfolder that has nested </c>package.json<c>.
+            /// findPackageJSON(import.meta.resolve('some-package'));
+            /// // '/path/to/project/packages/bar/node_modules/some-package/some-subfolder/package.json'
+            ///
+            /// findPackageJSON('@foo/qux', import.meta.url);
+            /// // '/path/to/project/packages/qux/package.json'
+            /// </c><c></c>
+            /// </summary>
+            /// <param name="specifier">
+            /// The specifier for the module whose <c>package.json</c> to
+            /// retrieve. When passing a _bare specifier_, the <c>package.json</c> at the root of
+            /// the package is returned. When passing a _relative specifier_ or an _absolute specifier_,
+            /// the closest parent <c>package.json</c> is returned.
+            /// </param>
+            /// <param name="base">
+            /// The absolute location (<c>file:</c> URL string or FS path) of the
+            /// containing  module. For CJS, use <c>__filename</c> (not <c>__dirname</c>!); for ESM, use
+            /// <c>import.meta.url</c>. You do not need to pass it if <c>specifier</c> is an _absolute specifier_.
+            /// </param>
+            /// <returns>
+            /// A path if the <c>package.json</c> is found. When <c>startLocation</c>
+            /// is a package, the package's root <c>package.json</c>; when a relative or unresolved, the closest
+            /// <c>package.json</c> to the <c>startLocation</c>.
+            /// </returns>
+            [<ImportDefault("module"); Emit("$0.findPackageJSON($1...)")>]
+            static member findPackageJSON (specifier: U2<string, Node.url.URL>, ?``base``: U2<string, Node.url.URL>) : string option = nativeOnly
+            [<ImportDefault("module"); Emit("$0.isBuiltin($1...)")>]
+            static member isBuiltin (moduleName: string) : bool = nativeOnly
+            /// <summary>
+            /// Register a module that exports hooks that customize Node.js module
+            /// resolution and loading behavior. See
+            /// [Customization hooks](https://nodejs.org/docs/latest-v22.x/api/module.html#customization-hooks).
+            ///
+            /// This feature requires <c>--allow-worker</c> if used with the
+            /// [Permission Model](https://nodejs.org/docs/latest-v22.x/api/permissions.html#permission-model).
+            /// </summary>
+            /// <param name="specifier">
+            /// Customization hooks to be registered; this should be
+            /// the same string that would be passed to <c>import()</c>, except that if it is
+            /// relative, it is resolved relative to <c>parentURL</c>.
+            /// </param>
+            /// <param name="parentURL">
+            /// f you want to resolve <c>specifier</c> relative to a base
+            /// URL, such as <c>import.meta.url</c>, you can pass that URL here.
+            /// </param>
+            [<ImportDefault("module"); Emit("$0.register($1...)")>]
+            static member register<'Data> (specifier: U2<string, Node.url.URL>, ?parentURL: U2<string, Node.url.URL>, ?options: Node.``module``.Module_.RegisterOptions<'Data>) : unit = nativeOnly
+            [<ImportDefault("module"); Emit("$0.register($1...)")>]
+            static member register<'Data> (specifier: U2<string, Node.url.URL>, ?options: Node.``module``.Module_.RegisterOptions<'Data>) : unit = nativeOnly
+            /// <summary>
+            /// Register [hooks](https://nodejs.org/docs/latest-v22.x/api/module.html#customization-hooks)
+            /// that customize Node.js module resolution and loading behavior.
+            /// </summary>
+            [<ImportDefault("module"); Emit("$0.registerHooks($1...)")>]
+            static member registerHooks (options: Node.``module``.Module_.RegisterHooksOptions) : Node.``module``.Module_.ModuleHooks = nativeOnly
+            /// <summary>
+            /// <c>module.stripTypeScriptTypes()</c> removes type annotations from TypeScript code. It
+            /// can be used to strip type annotations from TypeScript code before running it
+            /// with <c>vm.runInContext()</c> or <c>vm.compileFunction()</c>.
+            /// By default, it will throw an error if the code contains TypeScript features
+            /// that require transformation such as <c>Enums</c>,
+            /// see [type-stripping](https://nodejs.org/docs/latest-v22.x/api/typescript.md#type-stripping) for more information.
+            /// When mode is <c>'transform'</c>, it also transforms TypeScript features to JavaScript,
+            /// see [transform TypeScript features](https://nodejs.org/docs/latest-v22.x/api/typescript.md#typescript-features) for more information.
+            /// When mode is <c>'strip'</c>, source maps are not generated, because locations are preserved.
+            /// If <c>sourceMap</c> is provided, when mode is <c>'strip'</c>, an error will be thrown.
+            ///
+            /// _WARNING_: The output of this function should not be considered stable across Node.js versions,
+            /// due to changes in the TypeScript parser.
+            ///
+            /// <code lang="js">
+            /// import { stripTypeScriptTypes } from 'node:module';
+            /// const code = 'const a: number = 1;';
+            /// const strippedCode = stripTypeScriptTypes(code);
+            /// console.log(strippedCode);
+            /// // Prints: const a         = 1;
+            /// </code>
+            ///
+            /// If <c>sourceUrl</c> is provided, it will be used appended as a comment at the end of the output:
+            ///
+            /// <code lang="js">
+            /// import { stripTypeScriptTypes } from 'node:module';
+            /// const code = 'const a: number = 1;';
+            /// const strippedCode = stripTypeScriptTypes(code, { mode: 'strip', sourceUrl: 'source.ts' });
+            /// console.log(strippedCode);
+            /// // Prints: const a         = 1\n\n//# sourceURL=source.ts;
+            /// </code>
+            ///
+            /// When <c>mode</c> is <c>'transform'</c>, the code is transformed to JavaScript:
+            ///
+            /// <c></c><c>js
+            /// import { stripTypeScriptTypes } from 'node:module';
+            /// const code = </c>
+            ///   namespace MathUtil {
+            ///     export const add = (a: number, b: number) => a + b;
+            ///   }<c>;
+            /// const strippedCode = stripTypeScriptTypes(code, { mode: 'transform', sourceMap: true });
+            /// console.log(strippedCode);
+            /// // Prints:
+            /// // var MathUtil;
+            /// // (function(MathUtil) {
+            /// //     MathUtil.add = (a, b)=>a + b;
+            /// // })(MathUtil || (MathUtil = {}));
+            /// // # sourceMappingURL=data:application/json;base64, ...
+            /// </c><c></c>
+            /// </summary>
+            /// <param name="code">
+            /// The code to strip type annotations from.
+            /// </param>
+            /// <returns>
+            /// The code with type annotations stripped.
+            /// </returns>
+            [<ImportDefault("module"); Emit("$0.stripTypeScriptTypes($1...)")>]
+            static member stripTypeScriptTypes (code: string, ?options: Node.``module``.Module_.StripTypeScriptTypesOptions) : string = nativeOnly
+            /// <summary>
+            /// The <c>module.syncBuiltinESMExports()</c> method updates all the live bindings for
+            /// builtin <c>ES Modules</c> to match the properties of the <c>CommonJS</c> exports. It
+            /// does not add or remove exported names from the <c>ES Modules</c>.
+            ///
+            /// <code lang="js">
+            /// import fs from 'node:fs';
+            /// import assert from 'node:assert';
+            /// import { syncBuiltinESMExports } from 'node:module';
+            ///
+            /// fs.readFile = newAPI;
+            ///
+            /// delete fs.readFileSync;
+            ///
+            /// function newAPI() {
+            ///   // ...
+            /// }
+            ///
+            /// fs.newAPI = newAPI;
+            ///
+            /// syncBuiltinESMExports();
+            ///
+            /// import('node:fs').then((esmFS) => {
+            ///   // It syncs the existing readFile property with the new value
+            ///   assert.strictEqual(esmFS.readFile, newAPI);
+            ///   // readFileSync has been deleted from the required fs
+            ///   assert.strictEqual('readFileSync' in fs, false);
+            ///   // syncBuiltinESMExports() does not remove readFileSync from esmFS
+            ///   assert.strictEqual('readFileSync' in esmFS, true);
+            ///   // syncBuiltinESMExports() does not add names
+            ///   assert.strictEqual(esmFS.newAPI, undefined);
+            /// });
+            /// </code>
+            /// </summary>
+            [<ImportDefault("module"); Emit("$0.syncBuiltinESMExports($1...)")>]
+            static member syncBuiltinESMExports () : unit = nativeOnly
+            /// <summary>
+            /// This method returns whether the [Source Map v3](https://tc39.es/ecma426/) support for stack
+            /// traces is enabled.
+            /// </summary>
+            [<ImportDefault("module"); Emit("$0.getSourceMapsSupport($1...)")>]
+            static member getSourceMapsSupport () : Node.``module``.Module_.SourceMapsSupport = nativeOnly
+            /// <summary>
+            /// <c>path</c> is the resolved path for the file for which a corresponding source map
+            /// should be fetched.
+            /// </summary>
+            /// <returns>
+            /// Returns <c>module.SourceMap</c> if a source map is found, <c>undefined</c> otherwise.
+            /// </returns>
+            [<ImportDefault("module"); Emit("$0.findSourceMap($1...)")>]
+            static member findSourceMap (path: string) : Node.``module``.Module_.SourceMap option = nativeOnly
+            /// <summary>
+            /// This function enables or disables the [Source Map v3](https://tc39.es/ecma426/) support for
+            /// stack traces.
+            ///
+            /// It provides same features as launching Node.js process with commandline options
+            /// <c>--enable-source-maps</c>, with additional options to alter the support for files
+            /// in <c>node_modules</c> or generated codes.
+            ///
+            /// Only source maps in JavaScript files that are loaded after source maps has been
+            /// enabled will be parsed and loaded. Preferably, use the commandline options
+            /// <c>--enable-source-maps</c> to avoid losing track of source maps of modules loaded
+            /// before this API call.
+            /// </summary>
+            [<ImportDefault("module"); Emit("$0.setSourceMapsSupport($1...)")>]
+            static member setSourceMapsSupport (enabled: bool, ?options: Node.``module``.Module_.SetSourceMapsSupportOptions) : unit = nativeOnly
+            [<ImportDefault("module"); Emit("$0.runMain($1...)")>]
+            static member runMain (?main: string) : unit = nativeOnly
+            [<ImportDefault("module"); Emit("$0.wrap($1...)")>]
+            static member wrap (script: string) : string = nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -115208,7 +116285,7 @@ BlockList.isBlockList($0)"""
             /// blockList.fromJSON(JSON.stringify(data));
             /// </code>
             /// </summary>
-            abstract member fromJSON: data: ReadonlyArray<string> -> unit
+            abstract member fromJSON: data: ResizeArray<string> -> unit
             abstract member toJSON: unit -> ReadonlyArray<string>
 
         [<AllowNullLiteral>]
@@ -118609,7 +119686,7 @@ SocketAddress.parse($0)"""
             /// </summary>
             [<ImportDefault("process")>]
             [<Emit("$0.setgroups")>]
-            static member inline setgroups: (ReadonlyArray<U2<string, float>> -> unit) = nativeOnly
+            static member inline setgroups: (ResizeArray<U2<string, float>> -> unit) = nativeOnly
             /// <summary>
             /// The <c>process.setUncaughtExceptionCaptureCallback()</c> function sets a function
             /// that will be invoked when an uncaught exception occurs, which will receive the
@@ -119358,7 +120435,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// **Default:** <c>process.env</c>.
             /// </param>
             [<ImportDefault("process"); Emit("$0.execve($1...)")>]
-            static member execve (file: string, ?args: ReadonlyArray<string>, ?env: Node.NodeJS.ProcessEnv) : obj = nativeOnly
+            static member execve (file: string, ?args: ResizeArray<string>, ?env: Node.NodeJS.ProcessEnv) : obj = nativeOnly
             /// <summary>
             /// Alias for <c>emitter.on(eventName, listener)</c>.
             /// </summary>
@@ -121484,7 +122561,7 @@ The version of the punycode module bundled in Node.js is being deprecated.
 In a future major version of Node.js this module will be removed.
 Users currently depending on the punycode module should switch to using
 the userland-provided Punycode.js module instead.""")>]
-            abstract member encode: codePoints: ReadonlyArray<float> -> string
+            abstract member encode: codePoints: ResizeArray<float> -> string
 
     module querystring =
 
@@ -127427,6 +128504,280 @@ the userland-provided Punycode.js module instead.""")>]
             static member inline Stream_
                 with get () : Stream_.Exports =
                     nativeOnly
+            /// <summary>
+            /// The utility function <c>duplexPair</c> returns an Array with two items,
+            /// each being a <c>Duplex</c> stream connected to the other side:
+            ///
+            /// <code lang="js">
+            /// const [ sideA, sideB ] = duplexPair();
+            /// </code>
+            ///
+            /// Whatever is written to one stream is made readable on the other. It provides
+            /// behavior analogous to a network connection, where the data written by the client
+            /// becomes readable by the server, and vice-versa.
+            ///
+            /// The Duplex streams are symmetrical; one or the other may be used without any
+            /// difference in behavior.
+            /// </summary>
+            /// <param name="options">
+            /// A value to pass to both <see href="Duplex">Duplex</see> constructors,
+            /// to set options such as buffering.
+            /// </param>
+            [<ImportDefault("stream"); Emit("$0.duplexPair($1...)")>]
+            static member duplexPair (?options: Node.stream.Stream_.DuplexOptions) : Node.stream.Stream_.Duplex * Node.stream.Stream_.Duplex = nativeOnly
+            /// <summary>
+            /// A stream to attach a signal to.
+            ///
+            /// Attaches an AbortSignal to a readable or writeable stream. This lets code
+            /// control stream destruction using an <c>AbortController</c>.
+            ///
+            /// Calling <c>abort</c> on the <c>AbortController</c> corresponding to the passed <c>AbortSignal</c> will behave the same way as calling <c>.destroy(new AbortError())</c> on the
+            /// stream, and <c>controller.error(new AbortError())</c> for webstreams.
+            ///
+            /// <code lang="js">
+            /// import fs from 'node:fs';
+            ///
+            /// const controller = new AbortController();
+            /// const read = addAbortSignal(
+            ///   controller.signal,
+            ///   fs.createReadStream(('object.json')),
+            /// );
+            /// // Later, abort the operation closing the stream
+            /// controller.abort();
+            /// </code>
+            ///
+            /// Or using an <c>AbortSignal</c> with a readable stream as an async iterable:
+            ///
+            /// <code lang="js">
+            /// const controller = new AbortController();
+            /// setTimeout(() => controller.abort(), 10_000); // set a timeout
+            /// const stream = addAbortSignal(
+            ///   controller.signal,
+            ///   fs.createReadStream(('object.json')),
+            /// );
+            /// (async () => {
+            ///   try {
+            ///     for await (const chunk of stream) {
+            ///       await process(chunk);
+            ///     }
+            ///   } catch (e) {
+            ///     if (e.name === 'AbortError') {
+            ///       // The operation was cancelled
+            ///     } else {
+            ///       throw e;
+            ///     }
+            ///   }
+            /// })();
+            /// </code>
+            ///
+            /// Or using an <c>AbortSignal</c> with a ReadableStream:
+            ///
+            /// <code lang="js">
+            /// const controller = new AbortController();
+            /// const rs = new ReadableStream({
+            ///   start(controller) {
+            ///     controller.enqueue('hello');
+            ///     controller.enqueue('world');
+            ///     controller.close();
+            ///   },
+            /// });
+            ///
+            /// addAbortSignal(controller.signal, rs);
+            ///
+            /// finished(rs, (err) => {
+            ///   if (err) {
+            ///     if (err.name === 'AbortError') {
+            ///       // The operation was cancelled
+            ///     }
+            ///   }
+            /// });
+            ///
+            /// const reader = rs.getReader();
+            ///
+            /// reader.read().then(({ value, done }) => {
+            ///   console.log(value); // hello
+            ///   console.log(done); // false
+            ///   controller.abort();
+            /// });
+            /// </code>
+            /// </summary>
+            /// <param name="signal">
+            /// A signal representing possible cancellation
+            /// </param>
+            /// <param name="stream">
+            /// A stream to attach a signal to.
+            /// </param>
+            [<ImportDefault("stream"); Emit("$0.addAbortSignal($1...)")>]
+            static member addAbortSignal<'T> (signal: Node.AbortSignal, stream: 'T) : 'T = nativeOnly
+            /// <summary>
+            /// Returns the default highWaterMark used by streams.
+            /// Defaults to <c>65536</c> (64 KiB), or <c>16</c> for <c>objectMode</c>.
+            /// </summary>
+            [<ImportDefault("stream"); Emit("$0.getDefaultHighWaterMark($1...)")>]
+            static member getDefaultHighWaterMark (objectMode: bool) : float = nativeOnly
+            /// <summary>
+            /// Sets the default highWaterMark used by streams.
+            /// </summary>
+            /// <param name="value">
+            /// highWaterMark value
+            /// </param>
+            [<ImportDefault("stream"); Emit("$0.setDefaultHighWaterMark($1...)")>]
+            static member setDefaultHighWaterMark (objectMode: bool, value: float) : unit = nativeOnly
+            /// <summary>
+            /// A readable and/or writable stream/webstream.
+            ///
+            /// A function to get notified when a stream is no longer readable, writable
+            /// or has experienced an error or a premature close event.
+            ///
+            /// <code lang="js">
+            /// import { finished } from 'node:stream';
+            /// import fs from 'node:fs';
+            ///
+            /// const rs = fs.createReadStream('archive.tar');
+            ///
+            /// finished(rs, (err) => {
+            ///   if (err) {
+            ///     console.error('Stream failed.', err);
+            ///   } else {
+            ///     console.log('Stream is done reading.');
+            ///   }
+            /// });
+            ///
+            /// rs.resume(); // Drain the stream.
+            /// </code>
+            ///
+            /// Especially useful in error handling scenarios where a stream is destroyed
+            /// prematurely (like an aborted HTTP request), and will not emit <c>'end'</c> or <c>'finish'</c>.
+            ///
+            /// The <c>finished</c> API provides [<c>promise version</c>](https://nodejs.org/docs/latest-v22.x/api/stream.html#streamfinishedstream-options).
+            ///
+            /// <c>stream.finished()</c> leaves dangling event listeners (in particular <c>'error'</c>, <c>'end'</c>, <c>'finish'</c> and <c>'close'</c>) after <c>callback</c> has been
+            /// invoked. The reason for this is so that unexpected <c>'error'</c> events (due to
+            /// incorrect stream implementations) do not cause unexpected crashes.
+            /// If this is unwanted behavior then the returned cleanup function needs to be
+            /// invoked in the callback:
+            ///
+            /// <code lang="js">
+            /// const cleanup = finished(rs, (err) => {
+            ///   cleanup();
+            ///   // ...
+            /// });
+            /// </code>
+            /// </summary>
+            /// <param name="stream">
+            /// A readable and/or writable stream.
+            /// </param>
+            /// <param name="callback">
+            /// A callback function that takes an optional error argument.
+            /// </param>
+            /// <returns>
+            /// A cleanup function which removes all registered listeners.
+            /// </returns>
+            [<ImportDefault("stream"); Emit("$0.finished($1...)")>]
+            static member finished (stream: U3<Node.NodeJS.ReadableStream, Node.NodeJS.WritableStream, Node.NodeJS.ReadWriteStream>, options: Node.stream.Stream_.FinishedOptions, callback: (Node.NodeJS.ErrnoException option -> unit)) : (unit -> unit) = nativeOnly
+            [<ImportDefault("stream"); Emit("$0.finished($1...)")>]
+            static member finished (stream: U3<Node.NodeJS.ReadableStream, Node.NodeJS.WritableStream, Node.NodeJS.ReadWriteStream>, callback: (Node.NodeJS.ErrnoException option -> unit)) : (unit -> unit) = nativeOnly
+            /// <summary>
+            /// A module method to pipe between streams and generators forwarding errors and
+            /// properly cleaning up and provide a callback when the pipeline is complete.
+            ///
+            /// <code lang="js">
+            /// import { pipeline } from 'node:stream';
+            /// import fs from 'node:fs';
+            /// import zlib from 'node:zlib';
+            ///
+            /// // Use the pipeline API to easily pipe a series of streams
+            /// // together and get notified when the pipeline is fully done.
+            ///
+            /// // A pipeline to gzip a potentially huge tar file efficiently:
+            ///
+            /// pipeline(
+            ///   fs.createReadStream('archive.tar'),
+            ///   zlib.createGzip(),
+            ///   fs.createWriteStream('archive.tar.gz'),
+            ///   (err) => {
+            ///     if (err) {
+            ///       console.error('Pipeline failed.', err);
+            ///     } else {
+            ///       console.log('Pipeline succeeded.');
+            ///     }
+            ///   },
+            /// );
+            /// </code>
+            ///
+            /// The <c>pipeline</c> API provides a [<c>promise version</c>](https://nodejs.org/docs/latest-v22.x/api/stream.html#streampipelinesource-transforms-destination-options).
+            ///
+            /// <c>stream.pipeline()</c> will call <c>stream.destroy(err)</c> on all streams except:
+            ///
+            /// * <c>Readable</c> streams which have emitted <c>'end'</c> or <c>'close'</c>.
+            /// * <c>Writable</c> streams which have emitted <c>'finish'</c> or <c>'close'</c>.
+            ///
+            /// <c>stream.pipeline()</c> leaves dangling event listeners on the streams
+            /// after the <c>callback</c> has been invoked. In the case of reuse of streams after
+            /// failure, this can cause event listener leaks and swallowed errors. If the last
+            /// stream is readable, dangling event listeners will be removed so that the last
+            /// stream can be consumed later.
+            ///
+            /// <c>stream.pipeline()</c> closes all the streams when an error is raised.
+            /// The <c>IncomingRequest</c> usage with <c>pipeline</c> could lead to an unexpected behavior
+            /// once it would destroy the socket without sending the expected response.
+            /// See the example below:
+            ///
+            /// <c></c><c>js
+            /// import fs from 'node:fs';
+            /// import http from 'node:http';
+            /// import { pipeline } from 'node:stream';
+            ///
+            /// const server = http.createServer((req, res) => {
+            ///   const fileStream = fs.createReadStream('./fileNotExist.txt');
+            ///   pipeline(fileStream, res, (err) => {
+            ///     if (err) {
+            ///       console.log(err); // No such file
+            ///       // this message can't be sent once </c>pipeline<c> already destroyed the socket
+            ///       return res.end('error!!!');
+            ///     }
+            ///   });
+            /// });
+            /// </c><c></c>
+            /// </summary>
+            /// <param name="callback">
+            /// Called when the pipeline is fully done.
+            /// </param>
+            [<ImportDefault("stream"); Emit("$0.pipeline($1...)")>]
+            static member pipeline<'A, 'B> (source: 'A, destination: 'B, callback: Node.stream.Stream_.PipelineCallback<'B>) : obj = nativeOnly
+            [<ImportDefault("stream"); Emit("$0.pipeline($1...)")>]
+            static member pipeline<'A, 'T1, 'B> (source: 'A, transform1: 'T1, destination: 'B, callback: Node.stream.Stream_.PipelineCallback<'B>) : obj = nativeOnly
+            [<ImportDefault("stream"); Emit("$0.pipeline($1...)")>]
+            static member pipeline<'A, 'T1, 'T2, 'B> (source: 'A, transform1: 'T1, transform2: 'T2, destination: 'B, callback: Node.stream.Stream_.PipelineCallback<'B>) : obj = nativeOnly
+            [<ImportDefault("stream"); Emit("$0.pipeline($1...)")>]
+            static member pipeline<'A, 'T1, 'T2, 'T3, 'B> (source: 'A, transform1: 'T1, transform2: 'T2, transform3: 'T3, destination: 'B, callback: Node.stream.Stream_.PipelineCallback<'B>) : obj = nativeOnly
+            [<ImportDefault("stream"); Emit("$0.pipeline($1...)")>]
+            static member pipeline<'A, 'T1, 'T2, 'T3, 'T4, 'B> (source: 'A, transform1: 'T1, transform2: 'T2, transform3: 'T3, transform4: 'T4, destination: 'B, callback: Node.stream.Stream_.PipelineCallback<'B>) : obj = nativeOnly
+            [<ImportDefault("stream"); Emit("$0.pipeline($1...)")>]
+            static member pipeline (streams: ResizeArray<U3<Node.NodeJS.ReadableStream, Node.NodeJS.WritableStream, Node.NodeJS.ReadWriteStream>>, callback: (Node.NodeJS.ErrnoException option -> unit)) : Node.NodeJS.WritableStream = nativeOnly
+            [<ImportDefault("stream"); Emit("$0.pipeline($1...)")>]
+            static member pipeline (stream1: Node.NodeJS.ReadableStream, stream2: U2<Node.NodeJS.ReadWriteStream, Node.NodeJS.WritableStream>, [<ParamArray>] streams: U3<Node.NodeJS.ReadWriteStream, Node.NodeJS.WritableStream, (Node.NodeJS.ErrnoException option -> unit)> []) : Node.NodeJS.WritableStream = nativeOnly
+            /// <summary>
+            /// Returns whether the stream has encountered an error.
+            /// </summary>
+            [<ImportDefault("stream"); Emit("$0.isErrored($1...)")>]
+            static member isErrored (stream: U4<Node.stream.Stream_.Readable, Node.stream.Stream_.Writable, Node.NodeJS.ReadableStream, Node.NodeJS.WritableStream>) : bool = nativeOnly
+            /// <summary>
+            /// Returns whether the stream is readable.
+            /// </summary>
+            /// <returns>
+            /// Only returns <c>null</c> if <c>stream</c> is not a valid <c>Readable</c>, <c>Duplex</c> or <c>ReadableStream</c>.
+            /// </returns>
+            [<ImportDefault("stream"); Emit("$0.isReadable($1...)")>]
+            static member isReadable (stream: U2<Node.stream.Stream_.Readable, Node.NodeJS.ReadableStream>) : bool option = nativeOnly
+            /// <summary>
+            /// Returns whether the stream is writable.
+            /// </summary>
+            /// <returns>
+            /// Only returns <c>null</c> if <c>stream</c> is not a valid <c>Writable</c>, <c>Duplex</c> or <c>WritableStream</c>.
+            /// </returns>
+            [<ImportDefault("stream"); Emit("$0.isWritable($1...)")>]
+            static member isWritable (stream: U2<Node.stream.Stream_.Writable, Node.NodeJS.WritableStream>) : bool option = nativeOnly
 
         type ComposeFnParam =
             delegate of source: obj -> unit
@@ -127804,7 +129155,7 @@ the userland-provided Punycode.js module instead.""")>]
                 [<Emit("$0.pipeline($1...)")>]
                 abstract member pipeline<'A, 'T1, 'T2, 'T3, 'T4, 'B>: source: 'A * transform1: 'T1 * transform2: 'T2 * transform3: 'T3 * transform4: 'T4 * destination: 'B * callback: Node.stream.Stream_.PipelineCallback<'B> -> Node.NodeJS.WritableStream
                 [<Emit("$0.pipeline($1...)")>]
-                abstract member pipeline: streams: ReadonlyArray<U3<Node.NodeJS.ReadableStream, Node.NodeJS.WritableStream, Node.NodeJS.ReadWriteStream>> * callback: (Node.NodeJS.ErrnoException option -> unit) -> Node.NodeJS.WritableStream
+                abstract member pipeline: streams: ResizeArray<U3<Node.NodeJS.ReadableStream, Node.NodeJS.WritableStream, Node.NodeJS.ReadWriteStream>> * callback: (Node.NodeJS.ErrnoException option -> unit) -> Node.NodeJS.WritableStream
                 [<Emit("$0.pipeline($1...)")>]
                 abstract member pipeline: stream1: Node.NodeJS.ReadableStream * stream2: Node.NodeJS.ReadWriteStream * [<ParamArray>] streams: U3<Node.NodeJS.ReadWriteStream, Node.NodeJS.WritableStream, (Node.NodeJS.ErrnoException option -> unit)> [] -> Node.NodeJS.WritableStream
                 [<Emit("$0.pipeline($1...)")>]
@@ -139290,7 +140641,7 @@ Duplex.fromWeb($0, $1)"""
                     [<Emit("$0.__promisify__($1...)")>]
                     abstract member __promisify__<'A, 'T1, 'T2, 'T3, 'T4, 'B>: source: 'A * transform1: 'T1 * transform2: 'T2 * transform3: 'T3 * transform4: 'T4 * destination: 'B * ?options: Node.stream.Stream_.PipelineOptions -> Node.stream.Stream_.PipelinePromise<'B>
                     [<Emit("$0.__promisify__($1...)")>]
-                    abstract member __promisify__: streams: ReadonlyArray<U3<Node.NodeJS.ReadableStream, Node.NodeJS.WritableStream, Node.NodeJS.ReadWriteStream>> * ?options: Node.stream.Stream_.PipelineOptions -> JS.Promise<unit>
+                    abstract member __promisify__: streams: ResizeArray<U3<Node.NodeJS.ReadableStream, Node.NodeJS.WritableStream, Node.NodeJS.ReadWriteStream>> * ?options: Node.stream.Stream_.PipelineOptions -> JS.Promise<unit>
                     [<Emit("$0.__promisify__($1...)")>]
                     abstract member __promisify__: stream1: Node.NodeJS.ReadableStream * stream2: Node.NodeJS.ReadWriteStream * [<ParamArray>] streams: U3<Node.NodeJS.ReadWriteStream, Node.NodeJS.WritableStream, Node.stream.Stream_.PipelineOptions> [] -> JS.Promise<unit>
                     [<Emit("$0.__promisify__($1...)")>]
@@ -139929,7 +141280,7 @@ Duplex.fromWeb($0, $1)"""
             [<Import("pipeline", "stream/promises")>]
             static member pipeline<'A, 'T1, 'T2, 'T3, 'T4, 'B> (source: 'A, transform1: 'T1, transform2: 'T2, transform3: 'T3, transform4: 'T4, destination: 'B, ?options: Node.stream.Stream_.PipelineOptions) : Node.stream.Stream_.PipelinePromise<'B> = nativeOnly
             [<Import("pipeline", "stream/promises")>]
-            static member pipeline (streams: ReadonlyArray<U3<Node.NodeJS.ReadableStream, Node.NodeJS.WritableStream, Node.NodeJS.ReadWriteStream>>, ?options: Node.stream.Stream_.PipelineOptions) : JS.Promise<unit> = nativeOnly
+            static member pipeline (streams: ResizeArray<U3<Node.NodeJS.ReadableStream, Node.NodeJS.WritableStream, Node.NodeJS.ReadWriteStream>>, ?options: Node.stream.Stream_.PipelineOptions) : JS.Promise<unit> = nativeOnly
             [<Import("pipeline", "stream/promises")>]
             static member pipeline (stream1: Node.NodeJS.ReadableStream, stream2: Node.NodeJS.ReadWriteStream, [<ParamArray>] streams: U3<Node.NodeJS.ReadWriteStream, Node.NodeJS.WritableStream, Node.stream.Stream_.PipelineOptions> []) : JS.Promise<unit> = nativeOnly
             [<Import("pipeline", "stream/promises")>]
@@ -140932,6 +142283,202 @@ Duplex.fromWeb($0, $1)"""
             static member inline test_
                 with get () : test_.Exports =
                     nativeOnly
+            /// <summary>
+            /// **Note:** <c>shard</c> is used to horizontally parallelize test running across
+            /// machines or processes, ideal for large-scale executions across varied
+            /// environments. It's incompatible with <c>watch</c> mode, tailored for rapid
+            /// code iteration by automatically rerunning tests on file changes.
+            ///
+            /// <code lang="js">
+            /// import { tap } from 'node:test/reporters';
+            /// import { run } from 'node:test';
+            /// import process from 'node:process';
+            /// import path from 'node:path';
+            ///
+            /// run({ files: [path.resolve('./tests/test.js')] })
+            ///   .compose(tap)
+            ///   .pipe(process.stdout);
+            /// </code>
+            /// </summary>
+            /// <param name="options">
+            /// Configuration options for running tests.
+            /// </param>
+            [<ImportDefault("node:test"); Emit("$0.run($1...)")>]
+            static member run (?options: Node.test.test_.RunOptions) : Node.test.test_.TestsStream = nativeOnly
+            /// <summary>
+            /// The <c>suite()</c> function is imported from the <c>node:test</c> module.
+            /// </summary>
+            /// <param name="name">
+            /// The name of the suite, which is displayed when reporting test results.
+            /// Defaults to the <c>name</c> property of <c>fn</c>, or <c>'<anonymous>'</c> if <c>fn</c> does not have a name.
+            /// </param>
+            /// <param name="options">
+            /// Configuration options for the suite. This supports the same options as <see href="test">test</see>.
+            /// </param>
+            /// <param name="fn">
+            /// The suite function declaring nested tests and suites. The first argument to this function is a <see href="SuiteContext">SuiteContext</see> object.
+            /// </param>
+            /// <returns>
+            /// Immediately fulfilled with <c>undefined</c>.
+            /// </returns>
+            [<ImportDefault("node:test"); Emit("$0.suite($1...)")>]
+            static member suite (?name: string, ?options: Node.test.test_.TestOptions, ?fn: Node.test.test_.SuiteFn) : JS.Promise<unit> = nativeOnly
+            /// <summary>
+            /// The <c>suite()</c> function is imported from the <c>node:test</c> module.
+            /// </summary>
+            /// <param name="name">
+            /// The name of the suite, which is displayed when reporting test results.
+            /// Defaults to the <c>name</c> property of <c>fn</c>, or <c>'<anonymous>'</c> if <c>fn</c> does not have a name.
+            /// </param>
+            /// <param name="options">
+            /// Configuration options for the suite. This supports the same options as <see href="test">test</see>.
+            /// </param>
+            /// <param name="fn">
+            /// The suite function declaring nested tests and suites. The first argument to this function is a <see href="SuiteContext">SuiteContext</see> object.
+            /// </param>
+            /// <returns>
+            /// Immediately fulfilled with <c>undefined</c>.
+            /// </returns>
+            [<ImportDefault("node:test"); Emit("$0.suite($1...)")>]
+            static member suite () : JS.Promise<unit> = nativeOnly
+            [<ImportDefault("node:test"); Emit("$0.suite($1...)")>]
+            static member suite (?name: string, ?fn: Node.test.test_.SuiteFn) : JS.Promise<unit> = nativeOnly
+            [<ImportDefault("node:test"); Emit("$0.suite($1...)")>]
+            static member suite (?options: Node.test.test_.TestOptions, ?fn: Node.test.test_.SuiteFn) : JS.Promise<unit> = nativeOnly
+            [<ImportDefault("node:test"); Emit("$0.suite($1...)")>]
+            static member suite (?fn: Node.test.test_.SuiteFn) : JS.Promise<unit> = nativeOnly
+            /// <summary>
+            /// Shorthand for skipping a test. This is the same as calling <see href="test">test</see> with <c>options.skip</c> set to <c>true</c>.
+            /// </summary>
+            [<ImportDefault("node:test"); Emit("$0.skip($1...)")>]
+            static member skip (?name: string, ?options: Node.test.test_.TestOptions, ?fn: Node.test.test_.TestFn) : JS.Promise<unit> = nativeOnly
+            /// <summary>
+            /// Shorthand for skipping a test. This is the same as calling <see href="test">test</see> with <c>options.skip</c> set to <c>true</c>.
+            /// </summary>
+            [<ImportDefault("node:test"); Emit("$0.skip($1...)")>]
+            static member skip () : JS.Promise<unit> = nativeOnly
+            [<ImportDefault("node:test"); Emit("$0.skip($1...)")>]
+            static member skip (?name: string, ?fn: Node.test.test_.TestFn) : JS.Promise<unit> = nativeOnly
+            [<ImportDefault("node:test"); Emit("$0.skip($1...)")>]
+            static member skip (?options: Node.test.test_.TestOptions, ?fn: Node.test.test_.TestFn) : JS.Promise<unit> = nativeOnly
+            [<ImportDefault("node:test"); Emit("$0.skip($1...)")>]
+            static member skip (?fn: Node.test.test_.TestFn) : JS.Promise<unit> = nativeOnly
+            /// <summary>
+            /// Shorthand for marking a test as <c>TODO</c>. This is the same as calling <see href="test">test</see> with <c>options.todo</c> set to <c>true</c>.
+            /// </summary>
+            [<ImportDefault("node:test"); Emit("$0.todo($1...)")>]
+            static member todo (?name: string, ?options: Node.test.test_.TestOptions, ?fn: Node.test.test_.TestFn) : JS.Promise<unit> = nativeOnly
+            /// <summary>
+            /// Shorthand for marking a test as <c>TODO</c>. This is the same as calling <see href="test">test</see> with <c>options.todo</c> set to <c>true</c>.
+            /// </summary>
+            [<ImportDefault("node:test"); Emit("$0.todo($1...)")>]
+            static member todo () : JS.Promise<unit> = nativeOnly
+            [<ImportDefault("node:test"); Emit("$0.todo($1...)")>]
+            static member todo (?name: string, ?fn: Node.test.test_.TestFn) : JS.Promise<unit> = nativeOnly
+            [<ImportDefault("node:test"); Emit("$0.todo($1...)")>]
+            static member todo (?options: Node.test.test_.TestOptions, ?fn: Node.test.test_.TestFn) : JS.Promise<unit> = nativeOnly
+            [<ImportDefault("node:test"); Emit("$0.todo($1...)")>]
+            static member todo (?fn: Node.test.test_.TestFn) : JS.Promise<unit> = nativeOnly
+            /// <summary>
+            /// Shorthand for marking a test as <c>only</c>. This is the same as calling <see href="test">test</see> with <c>options.only</c> set to <c>true</c>.
+            /// </summary>
+            [<ImportDefault("node:test"); Emit("$0.only($1...)")>]
+            static member only (?name: string, ?options: Node.test.test_.TestOptions, ?fn: Node.test.test_.TestFn) : JS.Promise<unit> = nativeOnly
+            /// <summary>
+            /// Shorthand for marking a test as <c>only</c>. This is the same as calling <see href="test">test</see> with <c>options.only</c> set to <c>true</c>.
+            /// </summary>
+            [<ImportDefault("node:test"); Emit("$0.only($1...)")>]
+            static member only () : JS.Promise<unit> = nativeOnly
+            [<ImportDefault("node:test"); Emit("$0.only($1...)")>]
+            static member only (?name: string, ?fn: Node.test.test_.TestFn) : JS.Promise<unit> = nativeOnly
+            [<ImportDefault("node:test"); Emit("$0.only($1...)")>]
+            static member only (?options: Node.test.test_.TestOptions, ?fn: Node.test.test_.TestFn) : JS.Promise<unit> = nativeOnly
+            [<ImportDefault("node:test"); Emit("$0.only($1...)")>]
+            static member only (?fn: Node.test.test_.TestFn) : JS.Promise<unit> = nativeOnly
+            /// <summary>
+            /// This function creates a hook that runs before executing a suite.
+            ///
+            /// <code lang="js">
+            /// describe('tests', async () => {
+            ///   before(() => console.log('about to run some test'));
+            ///   it('is a subtest', () => {
+            ///     assert.ok('some relevant assertion here');
+            ///   });
+            /// });
+            /// </code>
+            /// </summary>
+            /// <param name="fn">
+            /// The hook function. If the hook uses callbacks, the callback function is passed as the second argument.
+            /// </param>
+            /// <param name="options">
+            /// Configuration options for the hook.
+            /// </param>
+            [<ImportDefault("node:test"); Emit("$0.before($1...)")>]
+            static member before (?fn: Node.test.test_.HookFn, ?options: Node.test.test_.HookOptions) : unit = nativeOnly
+            /// <summary>
+            /// This function creates a hook that runs after executing a suite.
+            ///
+            /// <code lang="js">
+            /// describe('tests', async () => {
+            ///   after(() => console.log('finished running tests'));
+            ///   it('is a subtest', () => {
+            ///     assert.ok('some relevant assertion here');
+            ///   });
+            /// });
+            /// </code>
+            /// </summary>
+            /// <param name="fn">
+            /// The hook function. If the hook uses callbacks, the callback function is passed as the second argument.
+            /// </param>
+            /// <param name="options">
+            /// Configuration options for the hook.
+            /// </param>
+            [<ImportDefault("node:test"); Emit("$0.after($1...)")>]
+            static member after (?fn: Node.test.test_.HookFn, ?options: Node.test.test_.HookOptions) : unit = nativeOnly
+            /// <summary>
+            /// This function creates a hook that runs before each test in the current suite.
+            ///
+            /// <code lang="js">
+            /// describe('tests', async () => {
+            ///   beforeEach(() => console.log('about to run a test'));
+            ///   it('is a subtest', () => {
+            ///     assert.ok('some relevant assertion here');
+            ///   });
+            /// });
+            /// </code>
+            /// </summary>
+            /// <param name="fn">
+            /// The hook function. If the hook uses callbacks, the callback function is passed as the second argument.
+            /// </param>
+            /// <param name="options">
+            /// Configuration options for the hook.
+            /// </param>
+            [<ImportDefault("node:test"); Emit("$0.beforeEach($1...)")>]
+            static member beforeEach (?fn: Node.test.test_.HookFn, ?options: Node.test.test_.HookOptions) : unit = nativeOnly
+            /// <summary>
+            /// This function creates a hook that runs after each test in the current suite.
+            /// The <c>afterEach()</c> hook is run even if the test fails.
+            ///
+            /// <code lang="js">
+            /// describe('tests', async () => {
+            ///   afterEach(() => console.log('finished running a test'));
+            ///   it('is a subtest', () => {
+            ///     assert.ok('some relevant assertion here');
+            ///   });
+            /// });
+            /// </code>
+            /// </summary>
+            /// <param name="fn">
+            /// The hook function. If the hook uses callbacks, the callback function is passed as the second argument.
+            /// </param>
+            /// <param name="options">
+            /// Configuration options for the hook.
+            /// </param>
+            [<ImportDefault("node:test"); Emit("$0.afterEach($1...)")>]
+            static member afterEach (?fn: Node.test.test_.HookFn, ?options: Node.test.test_.HookOptions) : unit = nativeOnly
+            [<ImportDefault("node:test")>]
+            [<Emit("$0.mock")>]
+            static member inline mock: Node.test.test_.MockTracker = nativeOnly
             /// <summary>
             /// The <c>node:test/reporters</c> module exposes the builtin-reporters for <c>node:test</c>.
             /// To access it:
@@ -146063,7 +147610,7 @@ Duplex.fromWeb($0, $1)"""
                     /// An array of synchronous functions used as the default serializers for snapshot tests.
                     /// </param>
                     [<Emit("$0.setDefaultSnapshotSerializers($1...)")>]
-                    abstract member setDefaultSnapshotSerializers: serializers: ReadonlyArray<(obj -> unit)> -> unit
+                    abstract member setDefaultSnapshotSerializers: serializers: ResizeArray<(obj -> unit)> -> unit
                     /// <summary>
                     /// This function is used to set a custom resolver for the location of the snapshot file used for snapshot testing.
                     /// By default, the snapshot filename is the same as the entry point filename with <c>.snapshot</c> appended.
@@ -146772,7 +148319,7 @@ Duplex.fromWeb($0, $1)"""
             /// An array of CA certificates in PEM format.
             /// </param>
             [<Import("setDefaultCACertificates", "tls")>]
-            static member setDefaultCACertificates (certs: ReadonlyArray<U2<string, Node.NodeJS.ArrayBufferView>>) : unit = nativeOnly
+            static member setDefaultCACertificates (certs: ResizeArray<U2<string, Node.NodeJS.ArrayBufferView>>) : unit = nativeOnly
             /// <summary>
             /// The default curve name to use for ECDH key agreement in a tls server.
             /// The default value is <c>'auto'</c>. See <c><see href="createSecureContext()">createSecureContext()</see></c> for further
@@ -152099,7 +153646,7 @@ Duplex.fromWeb($0, $1)"""
             [<Import("URLSearchParams", "url"); EmitConstructor>]
             static member URLSearchParams (init: Iterable<string * string>) : URLSearchParams = nativeOnly
             [<Import("URLSearchParams", "url"); EmitConstructor>]
-            static member URLSearchParams (init: ReadonlyArray<string * string>) : URLSearchParams = nativeOnly
+            static member URLSearchParams (init: ResizeArray<string * string>) : URLSearchParams = nativeOnly
 
         [<Global>]
         [<AllowNullLiteral>]
@@ -152948,7 +154495,7 @@ URL.parse($0, $1)"""
             /// * Index 1: <c>string</c> The value associated with the operation
             /// </returns>
             [<Import("diff", "util")>]
-            static member diff (actual: string, expected: ReadonlyArray<string>) : ResizeArray<Node.util.DiffEntry> = nativeOnly
+            static member diff (actual: string, expected: ResizeArray<string>) : ResizeArray<Node.util.DiffEntry> = nativeOnly
             /// <summary>
             /// <c>util.diff()</c> compares two string or array values and returns an array of difference entries.
             /// It uses the Myers diff algorithm to compute minimal differences, which is the same algorithm
@@ -153004,7 +154551,7 @@ URL.parse($0, $1)"""
             /// * Index 1: <c>string</c> The value associated with the operation
             /// </returns>
             [<Import("diff", "util")>]
-            static member diff (actual: ReadonlyArray<string>, expected: string) : ResizeArray<Node.util.DiffEntry> = nativeOnly
+            static member diff (actual: ResizeArray<string>, expected: string) : ResizeArray<Node.util.DiffEntry> = nativeOnly
             /// <summary>
             /// <c>util.diff()</c> compares two string or array values and returns an array of difference entries.
             /// It uses the Myers diff algorithm to compute minimal differences, which is the same algorithm
@@ -153060,7 +154607,7 @@ URL.parse($0, $1)"""
             /// * Index 1: <c>string</c> The value associated with the operation
             /// </returns>
             [<Import("diff", "util")>]
-            static member diff (actual: ReadonlyArray<string>, expected: ReadonlyArray<string>) : ResizeArray<Node.util.DiffEntry> = nativeOnly
+            static member diff (actual: ResizeArray<string>, expected: ResizeArray<string>) : ResizeArray<Node.util.DiffEntry> = nativeOnly
             /// <summary>
             /// The <c>util.format()</c> method returns a formatted string using the first argument
             /// as a <c>printf</c>-like format string which can contain zero or more format
@@ -158345,7 +159892,7 @@ URL.parse($0, $1)"""
             /// An array of strings containing all parameters for the function.
             /// </param>
             [<Import("compileFunction", "vm")>]
-            static member compileFunction (code: string, ?``params``: ReadonlyArray<string>, ?options: Node.vm.CompileFunctionOptions) : obj = nativeOnly
+            static member compileFunction (code: string, ?``params``: ResizeArray<string>, ?options: Node.vm.CompileFunctionOptions) : obj = nativeOnly
             /// <summary>
             /// Measure the memory known to V8 and used by all contexts known to the
             /// current V8 isolate, or the main context.
@@ -160103,7 +161650,7 @@ URL.parse($0, $1)"""
             [<Import("postMessageToThread", "worker_threads")>]
             static member postMessageToThread (threadId: float, value: obj, ?timeout: float) : JS.Promise<unit> = nativeOnly
             [<Import("postMessageToThread", "worker_threads")>]
-            static member postMessageToThread (threadId: float, value: obj, transferList: ReadonlyArray<Node.worker_threads.Transferable>, ?timeout: float) : JS.Promise<unit> = nativeOnly
+            static member postMessageToThread (threadId: float, value: obj, transferList: ResizeArray<Node.worker_threads.Transferable>, ?timeout: float) : JS.Promise<unit> = nativeOnly
             [<Import("MessageChannel", "worker_threads"); EmitConstructor>]
             static member MessageChannel () : MessageChannel = nativeOnly
             [<Import("MessagePort", "worker_threads"); EmitConstructor>]
@@ -160242,7 +161789,7 @@ URL.parse($0, $1)"""
             /// For more information on the serialization and deserialization mechanisms
             /// behind this API, see the <c>serialization API of the node:v8 module</c>.
             /// </summary>
-            abstract member postMessage: value: obj * ?transferList: ReadonlyArray<Node.worker_threads.Transferable> -> unit
+            abstract member postMessage: value: obj * ?transferList: ResizeArray<Node.worker_threads.Transferable> -> unit
             /// <summary>
             /// If true, the <c>MessagePort</c> object will keep the Node.js event loop active.
             /// </summary>
@@ -160498,7 +162045,7 @@ URL.parse($0, $1)"""
             /// Send a message to the worker that is received via <c>require('node:worker_threads').parentPort.on('message')</c>.
             /// See <c>port.postMessage()</c> for more details.
             /// </summary>
-            abstract member postMessage: value: obj * ?transferList: ReadonlyArray<Node.worker_threads.Transferable> -> unit
+            abstract member postMessage: value: obj * ?transferList: ResizeArray<Node.worker_threads.Transferable> -> unit
             /// <summary>
             /// Opposite of <c>unref()</c>, calling <c>ref()</c> on a previously <c>unref()</c>ed worker does _not_ let the program exit if it's the only active handle left (the default
             /// behavior). If the worker is <c>ref()</c>ed, calling <c>ref()</c> again has
@@ -164642,7 +166189,7 @@ module UndiciTypes =
         /// An options object containing optional attributes for the file.
         /// </param>
         [<Import("File", "undici-types"); EmitConstructor>]
-        static member File (fileBits: ReadonlyArray<U3<string, Node.NodeJS.ArrayBufferView, Node.buffer.buffer_.Blob>>, fileName: string, ?options: UndiciTypes.file.FilePropertyBag) : File = nativeOnly
+        static member File (fileBits: ResizeArray<U3<string, Node.NodeJS.ArrayBufferView, Node.buffer.buffer_.Blob>>, fileName: string, ?options: UndiciTypes.file.FilePropertyBag) : File = nativeOnly
         [<Import("FileReader", "undici-types"); EmitConstructor>]
         static member FileReader () : FileReader = nativeOnly
         [<Import("ProgressEvent", "undici-types"); EmitConstructor>]
@@ -167465,7 +169012,7 @@ module UndiciTypes =
             /// </c><c></c>
             /// </summary>
             [<Emit("$0.emit('connect',$1...)")>]
-            abstract member emit_connect: origin: Node.url.URL * targets: ReadonlyArray<UndiciTypes.dispatcher.Dispatcher> -> bool
+            abstract member emit_connect: origin: Node.url.URL * targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> -> bool
             /// <summary>
             /// Synchronously calls each of the listeners registered for the event named <c>eventName</c>, in the order they were registered, passing the supplied arguments
             /// to each.
@@ -167506,7 +169053,7 @@ module UndiciTypes =
             /// </c><c></c>
             /// </summary>
             [<Emit("$0.emit('disconnect',$1...)")>]
-            abstract member emit_disconnect: origin: Node.url.URL * targets: ReadonlyArray<UndiciTypes.dispatcher.Dispatcher> * error: UndiciTypes.errors.Errors_.UndiciError -> bool
+            abstract member emit_disconnect: origin: Node.url.URL * targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> * error: UndiciTypes.errors.Errors_.UndiciError -> bool
             /// <summary>
             /// Synchronously calls each of the listeners registered for the event named <c>eventName</c>, in the order they were registered, passing the supplied arguments
             /// to each.
@@ -167547,7 +169094,7 @@ module UndiciTypes =
             /// </c><c></c>
             /// </summary>
             [<Emit("$0.emit('connectionError',$1...)")>]
-            abstract member emit_connectionError: origin: Node.url.URL * targets: ReadonlyArray<UndiciTypes.dispatcher.Dispatcher> * error: UndiciTypes.errors.Errors_.UndiciError -> bool
+            abstract member emit_connectionError: origin: Node.url.URL * targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> * error: UndiciTypes.errors.Errors_.UndiciError -> bool
             /// <summary>
             /// Synchronously calls each of the listeners registered for the event named <c>eventName</c>, in the order they were registered, passing the supplied arguments
             /// to each.
@@ -168188,22 +169735,22 @@ module UndiciTypes =
         module Dispatcher =
 
             type listeners_connect =
-                delegate of origin: Node.url.URL * targets: ReadonlyArray<UndiciTypes.dispatcher.Dispatcher> -> unit
+                delegate of origin: Node.url.URL * targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> -> unit
 
             type listeners_disconnect =
-                delegate of origin: Node.url.URL * targets: ReadonlyArray<UndiciTypes.dispatcher.Dispatcher> * error: UndiciTypes.errors.Errors_.UndiciError -> unit
+                delegate of origin: Node.url.URL * targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> * error: UndiciTypes.errors.Errors_.UndiciError -> unit
 
             type listeners_connectionError =
-                delegate of origin: Node.url.URL * targets: ReadonlyArray<UndiciTypes.dispatcher.Dispatcher> * error: UndiciTypes.errors.Errors_.UndiciError -> unit
+                delegate of origin: Node.url.URL * targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> * error: UndiciTypes.errors.Errors_.UndiciError -> unit
 
             type rawListeners_connect =
-                delegate of origin: Node.url.URL * targets: ReadonlyArray<UndiciTypes.dispatcher.Dispatcher> -> unit
+                delegate of origin: Node.url.URL * targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> -> unit
 
             type rawListeners_disconnect =
-                delegate of origin: Node.url.URL * targets: ReadonlyArray<UndiciTypes.dispatcher.Dispatcher> * error: UndiciTypes.errors.Errors_.UndiciError -> unit
+                delegate of origin: Node.url.URL * targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> * error: UndiciTypes.errors.Errors_.UndiciError -> unit
 
             type rawListeners_connectionError =
-                delegate of origin: Node.url.URL * targets: ReadonlyArray<UndiciTypes.dispatcher.Dispatcher> * error: UndiciTypes.errors.Errors_.UndiciError -> unit
+                delegate of origin: Node.url.URL * targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> * error: UndiciTypes.errors.Errors_.UndiciError -> unit
 
             module connect =
 
@@ -168228,107 +169775,107 @@ module UndiciTypes =
             module on_connect =
 
                 type callback =
-                    delegate of origin: Node.url.URL * targets: ReadonlyArray<UndiciTypes.dispatcher.Dispatcher> -> unit
+                    delegate of origin: Node.url.URL * targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> -> unit
 
             module on_disconnect =
 
                 type callback =
-                    delegate of origin: Node.url.URL * targets: ReadonlyArray<UndiciTypes.dispatcher.Dispatcher> * error: UndiciTypes.errors.Errors_.UndiciError -> unit
+                    delegate of origin: Node.url.URL * targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> * error: UndiciTypes.errors.Errors_.UndiciError -> unit
 
             module on_connectionError =
 
                 type callback =
-                    delegate of origin: Node.url.URL * targets: ReadonlyArray<UndiciTypes.dispatcher.Dispatcher> * error: UndiciTypes.errors.Errors_.UndiciError -> unit
+                    delegate of origin: Node.url.URL * targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> * error: UndiciTypes.errors.Errors_.UndiciError -> unit
 
             module once_connect =
 
                 type callback =
-                    delegate of origin: Node.url.URL * targets: ReadonlyArray<UndiciTypes.dispatcher.Dispatcher> -> unit
+                    delegate of origin: Node.url.URL * targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> -> unit
 
             module once_disconnect =
 
                 type callback =
-                    delegate of origin: Node.url.URL * targets: ReadonlyArray<UndiciTypes.dispatcher.Dispatcher> * error: UndiciTypes.errors.Errors_.UndiciError -> unit
+                    delegate of origin: Node.url.URL * targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> * error: UndiciTypes.errors.Errors_.UndiciError -> unit
 
             module once_connectionError =
 
                 type callback =
-                    delegate of origin: Node.url.URL * targets: ReadonlyArray<UndiciTypes.dispatcher.Dispatcher> * error: UndiciTypes.errors.Errors_.UndiciError -> unit
+                    delegate of origin: Node.url.URL * targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> * error: UndiciTypes.errors.Errors_.UndiciError -> unit
 
             module off_connect =
 
                 type callback =
-                    delegate of origin: Node.url.URL * targets: ReadonlyArray<UndiciTypes.dispatcher.Dispatcher> -> unit
+                    delegate of origin: Node.url.URL * targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> -> unit
 
             module off_disconnect =
 
                 type callback =
-                    delegate of origin: Node.url.URL * targets: ReadonlyArray<UndiciTypes.dispatcher.Dispatcher> * error: UndiciTypes.errors.Errors_.UndiciError -> unit
+                    delegate of origin: Node.url.URL * targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> * error: UndiciTypes.errors.Errors_.UndiciError -> unit
 
             module off_connectionError =
 
                 type callback =
-                    delegate of origin: Node.url.URL * targets: ReadonlyArray<UndiciTypes.dispatcher.Dispatcher> * error: UndiciTypes.errors.Errors_.UndiciError -> unit
+                    delegate of origin: Node.url.URL * targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> * error: UndiciTypes.errors.Errors_.UndiciError -> unit
 
             module addListener_connect =
 
                 type callback =
-                    delegate of origin: Node.url.URL * targets: ReadonlyArray<UndiciTypes.dispatcher.Dispatcher> -> unit
+                    delegate of origin: Node.url.URL * targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> -> unit
 
             module addListener_disconnect =
 
                 type callback =
-                    delegate of origin: Node.url.URL * targets: ReadonlyArray<UndiciTypes.dispatcher.Dispatcher> * error: UndiciTypes.errors.Errors_.UndiciError -> unit
+                    delegate of origin: Node.url.URL * targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> * error: UndiciTypes.errors.Errors_.UndiciError -> unit
 
             module addListener_connectionError =
 
                 type callback =
-                    delegate of origin: Node.url.URL * targets: ReadonlyArray<UndiciTypes.dispatcher.Dispatcher> * error: UndiciTypes.errors.Errors_.UndiciError -> unit
+                    delegate of origin: Node.url.URL * targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> * error: UndiciTypes.errors.Errors_.UndiciError -> unit
 
             module removeListener_connect =
 
                 type callback =
-                    delegate of origin: Node.url.URL * targets: ReadonlyArray<UndiciTypes.dispatcher.Dispatcher> -> unit
+                    delegate of origin: Node.url.URL * targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> -> unit
 
             module removeListener_disconnect =
 
                 type callback =
-                    delegate of origin: Node.url.URL * targets: ReadonlyArray<UndiciTypes.dispatcher.Dispatcher> * error: UndiciTypes.errors.Errors_.UndiciError -> unit
+                    delegate of origin: Node.url.URL * targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> * error: UndiciTypes.errors.Errors_.UndiciError -> unit
 
             module removeListener_connectionError =
 
                 type callback =
-                    delegate of origin: Node.url.URL * targets: ReadonlyArray<UndiciTypes.dispatcher.Dispatcher> * error: UndiciTypes.errors.Errors_.UndiciError -> unit
+                    delegate of origin: Node.url.URL * targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> * error: UndiciTypes.errors.Errors_.UndiciError -> unit
 
             module prependListener_connect =
 
                 type callback =
-                    delegate of origin: Node.url.URL * targets: ReadonlyArray<UndiciTypes.dispatcher.Dispatcher> -> unit
+                    delegate of origin: Node.url.URL * targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> -> unit
 
             module prependListener_disconnect =
 
                 type callback =
-                    delegate of origin: Node.url.URL * targets: ReadonlyArray<UndiciTypes.dispatcher.Dispatcher> * error: UndiciTypes.errors.Errors_.UndiciError -> unit
+                    delegate of origin: Node.url.URL * targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> * error: UndiciTypes.errors.Errors_.UndiciError -> unit
 
             module prependListener_connectionError =
 
                 type callback =
-                    delegate of origin: Node.url.URL * targets: ReadonlyArray<UndiciTypes.dispatcher.Dispatcher> * error: UndiciTypes.errors.Errors_.UndiciError -> unit
+                    delegate of origin: Node.url.URL * targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> * error: UndiciTypes.errors.Errors_.UndiciError -> unit
 
             module prependOnceListener_connect =
 
                 type callback =
-                    delegate of origin: Node.url.URL * targets: ReadonlyArray<UndiciTypes.dispatcher.Dispatcher> -> unit
+                    delegate of origin: Node.url.URL * targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> -> unit
 
             module prependOnceListener_disconnect =
 
                 type callback =
-                    delegate of origin: Node.url.URL * targets: ReadonlyArray<UndiciTypes.dispatcher.Dispatcher> * error: UndiciTypes.errors.Errors_.UndiciError -> unit
+                    delegate of origin: Node.url.URL * targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> * error: UndiciTypes.errors.Errors_.UndiciError -> unit
 
             module prependOnceListener_connectionError =
 
                 type callback =
-                    delegate of origin: Node.url.URL * targets: ReadonlyArray<UndiciTypes.dispatcher.Dispatcher> * error: UndiciTypes.errors.Errors_.UndiciError -> unit
+                    delegate of origin: Node.url.URL * targets: ResizeArray<UndiciTypes.dispatcher.Dispatcher> * error: UndiciTypes.errors.Errors_.UndiciError -> unit
 
     module env_http_proxy_agent =
 
@@ -169279,7 +170826,7 @@ Response.redirect($0, $1)"""
             /// An options object containing optional attributes for the file.
             /// </param>
             [<Import("File", "undici-types/file.js"); EmitConstructor>]
-            static member File (fileBits: ReadonlyArray<U3<string, Node.NodeJS.ArrayBufferView, Node.buffer.buffer_.Blob>>, fileName: string, ?options: UndiciTypes.file.FilePropertyBag) : File = nativeOnly
+            static member File (fileBits: ResizeArray<U3<string, Node.NodeJS.ArrayBufferView, Node.buffer.buffer_.Blob>>, fileName: string, ?options: UndiciTypes.file.FilePropertyBag) : File = nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -169851,7 +171398,7 @@ FileReader.DONE"""
         [<AllowNullLiteral>]
         [<Interface>]
         type PendingInterceptorsFormatter =
-            abstract member format: pendingInterceptors: ReadonlyArray<UndiciTypes.mock_agent.PendingInterceptor> -> string
+            abstract member format: pendingInterceptors: ResizeArray<UndiciTypes.mock_agent.PendingInterceptor> -> string
 
         module MockAgent_ =
 

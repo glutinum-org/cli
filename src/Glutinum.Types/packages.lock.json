@@ -10,9 +10,9 @@
       },
       "Fable.Core": {
         "type": "Direct",
-        "requested": "[5.1.0, )",
-        "resolved": "5.1.0",
-        "contentHash": "YtU/i2SlymwzBhYl0rvhQ9uHJAsMpNRT4LVPDHz47WiiAlqreiGXMBNVk84f9NP7Pl9af/XhCkI0t2Ss1lYfKQ==",
+        "requested": "[5.2.0, )",
+        "resolved": "5.2.0",
+        "contentHash": "3+HVoyYMjPGeKJEhMzRti0coDS6AkLVOWXmGwSvqokeTuwdZLyiKMoNgQrE6ZeJ0cSy9qHBB4VBpw5RAfb6zmQ==",
         "dependencies": {
           "FSharp.Core": "4.7.2"
         }

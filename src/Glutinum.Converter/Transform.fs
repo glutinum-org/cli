@@ -1549,15 +1549,37 @@ let private transformExports
         // `import { alias } from "yargs"` may not exist at runtime
         let exportEqualsMembers = Dictionary<string, string>()
 
+        // `export = yargs` of a callable object: calling the default import
+        let exportEqualsCalls = HashSet<string>()
+
         let throughDefault (memberName: string) (emit: string) =
             match exportEqualsMembers.TryGetValue memberName with
             | true, objectName when isTopLevel ->
+                let emit =
+                    if exportEqualsCalls.Contains memberName then
+                        "$0($1...)"
+                    else
+                        emit
+
                 Some
                     [
                         importDefaultAttribute objectName context.ImportSource
                         FSharpAttribute.Text $"Emit(\"%s{emit}\")"
                     ]
             | _ -> None
+
+        let declaredValueNames =
+            exports
+            |> List.choose (
+                function
+                | GlueType.FunctionDeclaration info
+                | GlueType.ExportDefault(GlueType.FunctionDeclaration info) -> Some info.Name
+                | GlueType.Variable info -> Some info.Name
+                | GlueType.ClassDeclaration info
+                | GlueType.ExportDefault(GlueType.ClassDeclaration info) -> Some info.Name
+                | _ -> None
+            )
+            |> set
 
         let rec apply (acc: FSharpMember list) (seenNames: Set<string>) (glueTypes: GlueType list) =
             match glueTypes with
@@ -1824,6 +1846,34 @@ let private transformExports
 
                     let xmlDocInfo = transformComment moduleDeclaration.Documentation
 
+                    // `export = e` with `declare namespace e { function json(): ... }`: the
+                    // values of the namespace are properties of the default import
+                    let namespaceValues =
+                        if
+                            isTopLevel
+                            && (exportEqualsNames.Contains moduleDeclaration.Name
+                                || defaultExportedDeclarations.Contains moduleDeclaration.Name)
+                        then
+                            moduleDeclaration.Types
+                            |> List.choose (
+                                function
+                                | GlueType.FunctionDeclaration info when
+                                    not (declaredValueNames.Contains info.Name)
+                                    && not (seenNames.Contains info.Name)
+                                    ->
+                                    exportEqualsMembers.[info.Name] <- moduleDeclaration.Name
+                                    Some(GlueType.FunctionDeclaration info)
+                                | GlueType.Variable info when
+                                    not (declaredValueNames.Contains info.Name)
+                                    && not (seenNames.Contains info.Name)
+                                    ->
+                                    exportEqualsMembers.[info.Name] <- moduleDeclaration.Name
+                                    Some(GlueType.Variable info)
+                                | _ -> None
+                            )
+                        else
+                            []
+
                     let newTypes =
                         {
                             Attributes =
@@ -1866,7 +1916,7 @@ let private transformExports
                         |> FSharpMember.Property
                         |> List.singleton
 
-                    applyHelper newTypes (Set.singleton mangledName)
+                    apply (acc @ newTypes) (Set.add mangledName seenNames) (namespaceValues @ tail)
 
                 // `export = path` of a variable: the module is the variable. Inside a module
                 // declaration it is consumed by the module, at the top level the whole import is it
@@ -1960,10 +2010,57 @@ let private transformExports
                             // A member named like the object itself is the object
                             |> List.filter (fun glueType -> glueType.Name <> name)
 
+                        // `yargs (argv)`: the call signatures of the object are its function
+                        let calls =
+                            match typ with
+                            | GlueType.TypeReference typeReference ->
+                                context.TypeMemory
+                                |> List.tryPick (
+                                    function
+                                    | GlueType.Interface info when
+                                        info.FullName = typeReference.FullName
+                                        ->
+                                        Some info.Members
+                                    | _ -> None
+                                )
+                                |> Option.defaultValue []
+                            | GlueType.TypeLiteral info -> info.Members
+                            | _ -> []
+                            |> List.choose (
+                                function
+                                | GlueMember.CallSignature info ->
+                                    ({
+                                        Documentation = []
+                                        IsDeclared = true
+                                        Name = name
+                                        Type = withoutThis info.Type
+                                        Parameters = info.Parameters
+                                        TypeParameters = info.TypeParameters
+                                    }
+                                    : GlueFunctionDeclaration)
+                                    |> GlueType.FunctionDeclaration
+                                    |> Some
+                                | _ -> None
+                            )
+
                         for memberExport in memberExports do
                             exportEqualsMembers.[memberExport.Name] <- name
 
-                        apply (acc @ newTypes) (Set.add name seenNames) (memberExports @ tail)
+                        if not calls.IsEmpty then
+                            exportEqualsMembers.[name] <- name
+                            exportEqualsCalls.Add name |> ignore
+
+                        // The object is the function when it is callable
+                        let newTypes =
+                            if calls.IsEmpty then
+                                newTypes
+                            else
+                                []
+
+                        apply
+                            (acc @ newTypes)
+                            (Set.add name seenNames)
+                            (calls @ memberExports @ tail)
 
                 // `export default Errors` of a namespace: its members through the default import
                 | GlueType.ExportDefault(GlueType.ModuleDeclaration moduleDeclaration) ->
@@ -2071,6 +2168,25 @@ let private transformParameter
     : FSharpParameter
     =
     let name, context = sanitizeNameAndPushScope parameter.Name context
+
+    // `readonly string[]` given to a function accepts any array, a `ResizeArray` is the F# one
+    let rec asArray (glueType: GlueType) =
+        match glueType with
+        | GlueType.ReadOnly(GlueType.Array elementType) -> GlueType.Array elementType
+        | GlueType.TypeReference {
+                                     Name = "ReadonlyArray"
+                                     IsStandardLibrary = true
+                                     TypeArguments = [ elementType ]
+                                 } -> GlueType.Array elementType
+        | GlueType.Union(GlueTypeUnion cases) ->
+            GlueType.Union(GlueTypeUnion(cases |> List.map asArray))
+        | GlueType.OptionalType glueType -> GlueType.OptionalType(asArray glueType)
+        | glueType -> glueType
+
+    let parameter =
+        { parameter with
+            Type = asArray parameter.Type
+        }
 
     let typ =
         let computedType =

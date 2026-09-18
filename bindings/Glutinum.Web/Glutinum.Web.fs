@@ -73780,43 +73780,43 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/generateKey)
         /// </summary>
-        abstract member generateKey: algorithm: SubtleCrypto.generateKey.algorithm * extractable: bool * keyUsages: ReadonlyArray<SubtleCrypto.generateKey.keyUsages> -> JS.Promise<Web.CryptoKeyPair>
+        abstract member generateKey: algorithm: SubtleCrypto.generateKey.algorithm * extractable: bool * keyUsages: ResizeArray<SubtleCrypto.generateKey.keyUsages> -> JS.Promise<Web.CryptoKeyPair>
         /// <summary>
         /// The **<c>generateKey()</c>** method of the SubtleCrypto interface is used to generate a new key (for symmetric algorithms) or key pair (for public-key algorithms).
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/generateKey)
         /// </summary>
-        abstract member generateKey: algorithm: SubtleCrypto.generateKey.algorithm_1 * extractable: bool * keyUsages: ReadonlyArray<SubtleCrypto.generateKey.keyUsages_1> -> JS.Promise<Web.CryptoKeyPair>
+        abstract member generateKey: algorithm: SubtleCrypto.generateKey.algorithm_1 * extractable: bool * keyUsages: ResizeArray<SubtleCrypto.generateKey.keyUsages_1> -> JS.Promise<Web.CryptoKeyPair>
         /// <summary>
         /// The **<c>generateKey()</c>** method of the SubtleCrypto interface is used to generate a new key (for symmetric algorithms) or key pair (for public-key algorithms).
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/generateKey)
         /// </summary>
-        abstract member generateKey: algorithm: Web.RsaHashedKeyGenParams * extractable: bool * keyUsages: ReadonlyArray<Web.KeyUsage> -> JS.Promise<Web.CryptoKeyPair>
+        abstract member generateKey: algorithm: Web.RsaHashedKeyGenParams * extractable: bool * keyUsages: ResizeArray<Web.KeyUsage> -> JS.Promise<Web.CryptoKeyPair>
         /// <summary>
         /// The **<c>generateKey()</c>** method of the SubtleCrypto interface is used to generate a new key (for symmetric algorithms) or key pair (for public-key algorithms).
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/generateKey)
         /// </summary>
-        abstract member generateKey: algorithm: Web.EcKeyGenParams * extractable: bool * keyUsages: ReadonlyArray<Web.KeyUsage> -> JS.Promise<Web.CryptoKeyPair>
+        abstract member generateKey: algorithm: Web.EcKeyGenParams * extractable: bool * keyUsages: ResizeArray<Web.KeyUsage> -> JS.Promise<Web.CryptoKeyPair>
         /// <summary>
         /// The **<c>generateKey()</c>** method of the SubtleCrypto interface is used to generate a new key (for symmetric algorithms) or key pair (for public-key algorithms).
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/generateKey)
         /// </summary>
-        abstract member generateKey: algorithm: Web.AesKeyGenParams * extractable: bool * keyUsages: ReadonlyArray<Web.KeyUsage> -> JS.Promise<Web.CryptoKey>
+        abstract member generateKey: algorithm: Web.AesKeyGenParams * extractable: bool * keyUsages: ResizeArray<Web.KeyUsage> -> JS.Promise<Web.CryptoKey>
         /// <summary>
         /// The **<c>generateKey()</c>** method of the SubtleCrypto interface is used to generate a new key (for symmetric algorithms) or key pair (for public-key algorithms).
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/generateKey)
         /// </summary>
-        abstract member generateKey: algorithm: Web.HmacKeyGenParams * extractable: bool * keyUsages: ReadonlyArray<Web.KeyUsage> -> JS.Promise<Web.CryptoKey>
+        abstract member generateKey: algorithm: Web.HmacKeyGenParams * extractable: bool * keyUsages: ResizeArray<Web.KeyUsage> -> JS.Promise<Web.CryptoKey>
         /// <summary>
         /// The **<c>generateKey()</c>** method of the SubtleCrypto interface is used to generate a new key (for symmetric algorithms) or key pair (for public-key algorithms).
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/generateKey)
         /// </summary>
-        abstract member generateKey: algorithm: Web.Pbkdf2Params * extractable: bool * keyUsages: ReadonlyArray<Web.KeyUsage> -> JS.Promise<Web.CryptoKey>
+        abstract member generateKey: algorithm: Web.Pbkdf2Params * extractable: bool * keyUsages: ResizeArray<Web.KeyUsage> -> JS.Promise<Web.CryptoKey>
         /// <summary>
         /// The **<c>generateKey()</c>** method of the SubtleCrypto interface is used to generate a new key (for symmetric algorithms) or key pair (for public-key algorithms).
         ///
@@ -73835,42 +73835,42 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/importKey)
         /// </summary>
         [<Emit("$0.importKey('jwk',$1...)")>]
-        abstract member importKey_jwk: keyData: Web.JsonWebKey * algorithm: Web.Algorithm * extractable: bool * keyUsages: ReadonlyArray<Web.KeyUsage> -> JS.Promise<Web.CryptoKey>
+        abstract member importKey_jwk: keyData: Web.JsonWebKey * algorithm: Web.Algorithm * extractable: bool * keyUsages: ResizeArray<Web.KeyUsage> -> JS.Promise<Web.CryptoKey>
         /// <summary>
         /// The **<c>importKey()</c>** method of the SubtleCrypto interface imports a key: that is, it takes as input a key in an external, portable format and gives you a CryptoKey object that you can use in the Web Crypto API.
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/importKey)
         /// </summary>
         [<Emit("$0.importKey('jwk',$1...)")>]
-        abstract member importKey_jwk: keyData: Web.JsonWebKey * algorithm: string * extractable: bool * keyUsages: ReadonlyArray<Web.KeyUsage> -> JS.Promise<Web.CryptoKey>
+        abstract member importKey_jwk: keyData: Web.JsonWebKey * algorithm: string * extractable: bool * keyUsages: ResizeArray<Web.KeyUsage> -> JS.Promise<Web.CryptoKey>
         /// <summary>
         /// The **<c>importKey()</c>** method of the SubtleCrypto interface imports a key: that is, it takes as input a key in an external, portable format and gives you a CryptoKey object that you can use in the Web Crypto API.
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/importKey)
         /// </summary>
         [<Emit("$0.importKey('jwk',$1...)")>]
-        abstract member importKey_jwk: keyData: Web.JsonWebKey * algorithm: Web.RsaHashedImportParams * extractable: bool * keyUsages: ReadonlyArray<Web.KeyUsage> -> JS.Promise<Web.CryptoKey>
+        abstract member importKey_jwk: keyData: Web.JsonWebKey * algorithm: Web.RsaHashedImportParams * extractable: bool * keyUsages: ResizeArray<Web.KeyUsage> -> JS.Promise<Web.CryptoKey>
         /// <summary>
         /// The **<c>importKey()</c>** method of the SubtleCrypto interface imports a key: that is, it takes as input a key in an external, portable format and gives you a CryptoKey object that you can use in the Web Crypto API.
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/importKey)
         /// </summary>
         [<Emit("$0.importKey('jwk',$1...)")>]
-        abstract member importKey_jwk: keyData: Web.JsonWebKey * algorithm: Web.EcKeyImportParams * extractable: bool * keyUsages: ReadonlyArray<Web.KeyUsage> -> JS.Promise<Web.CryptoKey>
+        abstract member importKey_jwk: keyData: Web.JsonWebKey * algorithm: Web.EcKeyImportParams * extractable: bool * keyUsages: ResizeArray<Web.KeyUsage> -> JS.Promise<Web.CryptoKey>
         /// <summary>
         /// The **<c>importKey()</c>** method of the SubtleCrypto interface imports a key: that is, it takes as input a key in an external, portable format and gives you a CryptoKey object that you can use in the Web Crypto API.
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/importKey)
         /// </summary>
         [<Emit("$0.importKey('jwk',$1...)")>]
-        abstract member importKey_jwk: keyData: Web.JsonWebKey * algorithm: Web.HmacImportParams * extractable: bool * keyUsages: ReadonlyArray<Web.KeyUsage> -> JS.Promise<Web.CryptoKey>
+        abstract member importKey_jwk: keyData: Web.JsonWebKey * algorithm: Web.HmacImportParams * extractable: bool * keyUsages: ResizeArray<Web.KeyUsage> -> JS.Promise<Web.CryptoKey>
         /// <summary>
         /// The **<c>importKey()</c>** method of the SubtleCrypto interface imports a key: that is, it takes as input a key in an external, portable format and gives you a CryptoKey object that you can use in the Web Crypto API.
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/importKey)
         /// </summary>
         [<Emit("$0.importKey('jwk',$1...)")>]
-        abstract member importKey_jwk: keyData: Web.JsonWebKey * algorithm: Web.AesKeyAlgorithm * extractable: bool * keyUsages: ReadonlyArray<Web.KeyUsage> -> JS.Promise<Web.CryptoKey>
+        abstract member importKey_jwk: keyData: Web.JsonWebKey * algorithm: Web.AesKeyAlgorithm * extractable: bool * keyUsages: ResizeArray<Web.KeyUsage> -> JS.Promise<Web.CryptoKey>
         /// <summary>
         /// The **<c>importKey()</c>** method of the SubtleCrypto interface imports a key: that is, it takes as input a key in an external, portable format and gives you a CryptoKey object that you can use in the Web Crypto API.
         ///

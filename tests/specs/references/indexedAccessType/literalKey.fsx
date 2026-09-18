@@ -13,7 +13,7 @@ type Exports =
     [<Import("ensure", "REPLACE_ME_WITH_MODULE_NAME")>]
     static member ensure<'T, 'K when 'K :> obj> (target: 'T, key: 'K) : obj = nativeOnly
     [<Import("asDocumentation", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member asDocumentation (value: ReadonlyArray<Exports.asDocumentation.value>) : unit = nativeOnly
+    static member asDocumentation (value: ResizeArray<Exports.asDocumentation.value>) : unit = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
