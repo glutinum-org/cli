@@ -1,6 +1,5 @@
 ---
 title: Command line
-order: 8
 ---
 
 The generator is the npm package `@glutinum/cli`. Run it with `npx`, or install it and run `glue`.
@@ -46,7 +45,7 @@ Generates every package installed in the nearest `node_modules`.
 References the package from its own binding instead of generating it. The types are written as `Glutinum.<Module>.X`, with `<Module>` derived from the package name unless given. The option can be repeated.
 
 ```bash frame="terminal"
-npx @glutinum/cli @types/leaflet --external @types/geojson=Geojson
+npx @glutinum/cli @types/leaflet --external @types/geojson=GeoJson
 ```
 
 ### `--no-externals`

@@ -1,6 +1,5 @@
 ---
 title: Limitations
-order: 6
 ---
 
 Some TypeScript types have no F# equivalent. Glutinum generates `obj` for them rather than failing, and this page lists what they are and what to do.
@@ -56,3 +55,5 @@ When an API is awkward from F#, [extend the binding](extending.md) with a hand-w
 ## Report what is wrong
 
 A construct that is generated wrongly, rather than as `obj`, is a bug. Reduce it to a few lines in the [web application](try-it-online.md) and open an issue from there.
+
+An `obj` that this page does not explain is worth reporting the same way. It may be a type Glutinum can generate.

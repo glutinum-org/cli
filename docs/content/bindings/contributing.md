@@ -1,6 +1,5 @@
 ---
 title: Contributing a binding
-order: 2
 ---
 
 A binding lives in the [hub](https://github.com/glutinum-org/hub) repository, in `bindings/Glutinum.<Module>/`, with its tests.

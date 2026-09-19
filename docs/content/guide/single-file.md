@@ -1,6 +1,5 @@
 ---
 title: A single file
-order: 3
 ---
 
 Give Glutinum the path of a `.d.ts` file and it generates that file alone.

@@ -1,6 +1,5 @@
 ---
 title: NuGet packages
-order: 10
 ---
 
 The packages a generated binding depends on. The header of a generated file names the ones it needs.

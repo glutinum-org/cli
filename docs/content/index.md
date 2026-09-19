@@ -7,7 +7,7 @@ layout: splash
 <div class="landing">
 <section class="landing-hero">
 
-<h1 class="landing-hero__title">Typed JavaScript, from F#</h1>
+<h1 class="landing-hero__title">From .d.ts to F#</h1>
 
 <p class="landing-hero__lede">Glutinum reads the TypeScript declarations of a JavaScript package and writes the F# binding for it. Fable compiles your F# against that binding, and the JavaScript library runs unchanged.</p>
 
@@ -50,13 +50,13 @@ printfn "%s" (DateFns.format (later, "yyyy-MM-dd"))
 </div>
 
 <div class="landing-card">
-<h3>Unions you can match on</h3>
-<p>String literal unions are string enums, mixed unions are <code>U2</code> and <code>U3</code>, optional members are <code>option</code>.</p>
+<h3>Unions, not <code>obj</code></h3>
+<p>Literal unions become string enums you can match on. Mixed unions become erased unions with named cases, or <code>U2</code> to <code>U9</code>.</p>
 </div>
 
 <div class="landing-card">
-<h3>Shared runtime bindings</h3>
-<p>The DOM and Node types come from <code>Glutinum.Web</code> and <code>Glutinum.Node</code>. A binding references them instead of embedding a copy.</p>
+<h3>Shared packages, not copies</h3>
+<p>Every binding references <code>Glutinum.Types</code> for the ES library types, plus <code>Glutinum.Web</code> for the DOM or <code>Glutinum.Node</code> for the Node API. None of it is copied into your file.</p>
 </div>
 
 <div class="landing-card">

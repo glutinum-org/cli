@@ -1,6 +1,5 @@
 ---
 title: Extending a binding
-order: 7
 ---
 
 A generated binding is faithful to the declarations. Some APIs are still awkward from F#, and the fix is a hand-written file compiled after the generated one, not an edit of the generated file.

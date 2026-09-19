@@ -1,6 +1,5 @@
 ---
 title: Reading the output
-order: 5
 ---
 
 A generated file is a `module rec` holding one type per TypeScript declaration. This page shows the shapes you will meet. The [mapping reference](mapping.md) lists every construct.
@@ -26,6 +25,14 @@ Open the type to call them without the prefix:
 open type Glutinum.DateFns.Exports
 
 format (today, "yyyy-MM-dd")
+```
+
+Alias the type to call them under a name of your choice:
+
+```fsharp
+type DateFns = Glutinum.DateFns.Exports
+
+DateFns.format (today, "yyyy-MM-dd")
 ```
 
 ## Interfaces and classes
@@ -72,6 +79,8 @@ match request.params.["id"] with
 | U2.Case1 single -> single
 | U2.Case2 several -> String.concat "," several
 ```
+
+A match works when the cases have distinct runtime types, a string and an array here. A case that is an interface cannot be tested: Fable warns and the branch is never taken.
 
 An overloaded parameter is generated as one overload per case, so a union in parameter position rarely needs `U2`.
 

@@ -1,6 +1,5 @@
 ---
 title: Bindings
-order: 1
 ---
 
 Bindings generated with Glutinum and published on NuGet, with tests that run them in Node or in a browser.

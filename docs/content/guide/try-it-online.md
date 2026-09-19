@@ -1,6 +1,5 @@
 ---
 title: Try it online
-order: 2
 ---
 
 The [web application](../app.md) runs the generator in the browser. Nothing is installed and nothing leaves your machine.
