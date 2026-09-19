@@ -46,7 +46,7 @@ jobs:
         run: dotnet shipit --mode local --pre-release preview
 
       - name: Build the documentation and the web app
-        run: ./build.sh docs
+        run: ./build.sh docs build
 
       - name: Publish
-        run: dotnet run --project docs -- gh-pages
+        run: ./build.sh docs deploy

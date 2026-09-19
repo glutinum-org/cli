@@ -23,6 +23,7 @@ let main args =
 
     app.Configure(fun config ->
         config.Settings.ApplicationName <- "./build.sh"
+        config.UseStrictParsing() |> ignore
 
         config
             .AddCommand<CliCommand>("cli")
@@ -77,9 +78,43 @@ You can then invoke the local version of Glutinum by running `node cli.js <args>
             .WithDescription("Command related to the web app")
         |> ignore
 
-        config
-            .AddCommand<DocsCommand>("docs")
-            .WithDescription("Build the documentation site, with the web app under /app/")
+        config.AddBranch(
+            "docs",
+            fun (docs: IConfigurator<CommandSettings>) ->
+                docs.SetDescription "Build the documentation site, with the web app under /app/"
+
+                docs
+                    .AddCommand<WatchCommand>("watch")
+                    .WithDescription("Serve it, rebuilding as you write")
+                    .WithExample("docs watch")
+                    .WithExample("docs watch --host")
+                |> ignore
+
+                docs
+                    .AddCommand<BuildCommand>("build")
+                    .WithDescription("Build it into docs/output")
+                    .WithExample("docs build")
+                |> ignore
+
+                docs
+                    .AddCommand<CheckCommand>("check")
+                    .WithDescription("Build it all, write none of it, fail on anything wrong")
+                    .WithExample("docs check")
+                |> ignore
+
+                docs
+                    .AddCommand<CleanCommand>("clean")
+                    .WithDescription("Remove what a build wrote")
+                    .WithExample("docs clean")
+                |> ignore
+
+                docs
+                    .AddCommand<DeployCommand>("deploy")
+                    .WithDescription("Publish the last build to the gh-pages branch")
+                    .WithExample("docs deploy --dry-run")
+                    .WithExample("docs deploy")
+                |> ignore
+        )
         |> ignore
 
         config
