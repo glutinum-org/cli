@@ -167,7 +167,7 @@ let rec private signatureTypeAt (depth: int) (typ: FSharpType) : FSharpType =
         depth < 8
         && typeReference.TypeArguments.IsEmpty
         && (aliasTargets.ContainsKey(
-                String.concat "." (typeReference.ModulePath @ [ typeReference.Name ])
+               String.concat "." (typeReference.ModulePath @ [ typeReference.Name ])
             )
             || (typeReference.ModulePath.IsEmpty && aliasTargets.ContainsKey typeReference.Name))
         ->
@@ -476,7 +476,8 @@ let private mergeTypes (types: FSharpType list) =
                             // `interface SeriesModel {}` merged with `class SeriesModel<Opt>`
                             TypeParameters =
                                 if
-                                    interfaceInfo.TypeParameters.Length > existingInterfaceInfo.TypeParameters.Length
+                                    interfaceInfo.TypeParameters.Length >
+                                        existingInterfaceInfo.TypeParameters.Length
                                 then
                                     interfaceInfo.TypeParameters
                                 else

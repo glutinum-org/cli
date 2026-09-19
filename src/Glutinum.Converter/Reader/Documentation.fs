@@ -200,7 +200,7 @@ let readDocumentationForNode (reader: ITypeScriptReader) (node: Ts.Node) =
         | Some symbol ->
             readDocumentation
                 reader
-                ((unbox<Ts.Symbol> symbol).getDocumentationComment (Some reader.checker))
+                ((unbox<Ts.Symbol> symbol).getDocumentationComment(Some reader.checker))
                 (ts.getJSDocTags node)
 
         | None -> []

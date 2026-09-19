@@ -25,6 +25,6 @@ let private observeAttribute (onChange: unit -> unit) : unit = jsNative
 let observe () =
     observeAttribute (fun () ->
         match monaco with
-        | Some monaco -> monaco?editor?setTheme (monacoTheme ())
+        | Some monaco -> monaco?editor?setTheme(monacoTheme ())
         | None -> ()
     )

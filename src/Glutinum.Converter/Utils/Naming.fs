@@ -41,10 +41,7 @@ let private replaceDot (text: string) : string = text.Replace(".", "_")
 let private replaceAt (text: string) : string = text.Replace("@", "_AT_")
 
 let private replaceControlChars (text: string) : string =
-    text
-        .Replace("\r", "_CARRIAGE_RETURN_")
-        .Replace("\n", "_NEWLINE_")
-        .Replace("\t", "_TAB_")
+    text.Replace("\r", "_CARRIAGE_RETURN_").Replace("\n", "_NEWLINE_").Replace("\t", "_TAB_")
 
 let private replaceEmpty (text: string) : string =
     if String.IsNullOrWhiteSpace text then

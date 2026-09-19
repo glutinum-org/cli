@@ -100,7 +100,7 @@ let main _ =
                         fun _ ->
                             async {
                                 let server =
-                                    Node.http.Exports.createServer<obj, obj> (
+                                    Node.http.Exports.createServer<obj, obj>(
                                         Node.http.RequestListener<obj, obj>(fun _ res ->
                                             let res = unbox<Node.http.ServerResponse> res
                                             res.setHeader ("content-type", "text/plain") |> ignore
@@ -132,7 +132,7 @@ let main _ =
 
                                                     response.on (
                                                         "data",
-                                                        unbox<System.Delegate> (fun (chunk: obj) ->
+                                                        unbox<System.Delegate>(fun (chunk: obj) ->
                                                             chunks.Add(string chunk)
                                                         )
                                                     )
@@ -140,7 +140,7 @@ let main _ =
 
                                                     response.on (
                                                         "end",
-                                                        unbox<System.Delegate> (fun () ->
+                                                        unbox<System.Delegate>(fun () ->
                                                             resolve (String.concat "" chunks)
                                                         )
                                                     )

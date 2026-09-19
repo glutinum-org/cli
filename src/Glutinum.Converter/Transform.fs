@@ -4380,7 +4380,8 @@ module Conditionals =
         match glueType with
         | GlueType.TypeReference typeReference when
             aliases.ContainsKey typeReference.FullName
-            && aliases.[typeReference.FullName].TypeParameters.Length = typeReference.TypeArguments.Length
+            && aliases.[typeReference.FullName].TypeParameters.Length =
+                typeReference.TypeArguments.Length
             ->
             let alias = aliases.[typeReference.FullName]
 

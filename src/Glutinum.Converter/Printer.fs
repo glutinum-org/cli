@@ -383,8 +383,7 @@ module FSharpAccessibility =
 
 // Comment adaptation should be moved in the transform phase
 let private codeInline (line: string) =
-    Regex("`(?<code>[^`]*)`")
-        .Replace(line, (fun m -> $"""<c>{m.Groups.["code"].Value}</c>"""))
+    Regex("`(?<code>[^`]*)`").Replace(line, (fun m -> $"""<c>{m.Groups.["code"].Value}</c>"""))
 
 let private codeBlock (text: string) =
     Regex("```(?<lang>\S*)(?<code>[^`]+)```", RegexOptions.Multiline)

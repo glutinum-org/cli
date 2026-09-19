@@ -73,9 +73,7 @@ You can then invoke the local version of Glutinum by running `node cli.js <args>
             )
         |> ignore
 
-        config
-            .AddCommand<WebCommand>("web")
-            .WithDescription("Command related to the web app")
+        config.AddCommand<WebCommand>("web").WithDescription("Command related to the web app")
         |> ignore
 
         config.AddBranch(
@@ -117,14 +115,10 @@ You can then invoke the local version of Glutinum by running `node cli.js <args>
         )
         |> ignore
 
-        config
-            .AddCommand<LintCommand>("lint")
-            .WithDescription("Run the linter on the source code")
+        config.AddCommand<LintCommand>("lint").WithDescription("Run the linter on the source code")
         |> ignore
 
-        config
-            .AddCommand<FormatCommand>("format")
-            .WithDescription("Format the source code")
+        config.AddCommand<FormatCommand>("format").WithDescription("Format the source code")
         |> ignore
 
     )

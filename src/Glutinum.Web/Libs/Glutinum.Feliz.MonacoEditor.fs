@@ -10,7 +10,7 @@ module Types =
 
 module Interop =
 
-    let mkEditorProps (name: string) (value: obj) = unbox<Types.IEditorProps> (name, value)
+    let mkEditorProps (name: string) (value: obj) = unbox<Types.IEditorProps>(name, value)
 
 [<Erase>]
 type editor =

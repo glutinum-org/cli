@@ -358,7 +358,8 @@ module UtilityType =
                      match typeNode.kind with
                      | Ts.SyntaxKind.UndefinedKeyword -> true
                      | Ts.SyntaxKind.LiteralType ->
-                         (unbox<Ts.Node> (typeNode :?> Ts.LiteralTypeNode).literal).kind = Ts.SyntaxKind.NullKeyword
+                         (unbox<Ts.Node> (typeNode :?> Ts.LiteralTypeNode).literal).kind =
+                             Ts.SyntaxKind.NullKeyword
                      | Ts.SyntaxKind.UnionType ->
                          (typeNode :?> Ts.UnionTypeNode).types |> Seq.forall isNullish
                      | _ -> false
@@ -944,7 +945,8 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                         let declaration = declarations.[0]
 
                         declaration.kind = Ts.SyntaxKind.TypeAliasDeclaration
-                        && (declaration :?> Ts.TypeAliasDeclaration).``type``.kind = Ts.SyntaxKind.ConditionalType
+                        && (declaration :?> Ts.TypeAliasDeclaration).``type``.kind =
+                            Ts.SyntaxKind.ConditionalType
                     | _ -> false
                 | None -> false
 
@@ -1009,7 +1011,7 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                                     // we need to find the name of the Enum type, not the name of the member
                                     match valueDeclaration.kind with
                                     | Ts.SyntaxKind.EnumMember ->
-                                        valueDeclaration?symbol?parent?getName ()
+                                        valueDeclaration?symbol?parent?getName()
                                     | Ts.SyntaxKind.EnumDeclaration when isQualified -> symbol.name
                                     | _ -> writtenName ()
                                 )

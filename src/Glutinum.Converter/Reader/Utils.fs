@@ -847,7 +847,7 @@ let private namespaceChain (packageContext: PackageContext option) (declaration:
                 let moduleDeclaration = node :?> Ts.ModuleDeclaration
 
                 let rawName =
-                    (unbox<Ts.Node> moduleDeclaration.name).getText ()
+                    (unbox<Ts.Node> moduleDeclaration.name).getText()
                     |> Naming.removeSurroundingQuotes
 
                 // The suffix is part of the name to escape (`assert_`, not ``` ``assert``_ ```)
