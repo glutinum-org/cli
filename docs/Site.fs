@@ -27,7 +27,7 @@ let theme =
         [
             NavbarSection("Guide", "guide", "guide/getting-started.md")
             NavbarSection("Reference", "reference", "/reference/")
-            NavbarSection("Bindings", "bindings", "bindings/index.md")
+            // NavbarSection("Bindings", "bindings", "bindings/index.md")
             NavbarSection("Try it", "app", "app.md")
         ]
     |> Theme.navbarEnd
@@ -61,18 +61,20 @@ let theme =
                     Menu.page "guide/nuget-packages.md"
                 ]
         ]
-    |> Theme.menu
-        "bindings"
-        [
-            Menu.section
-                "Bindings"
-                [ Menu.page "bindings/index.md"; Menu.page "bindings/contributing.md" ]
-        ]
+    // |> Theme.menu
+    //     "bindings"
+    //     [
+    //         Menu.section
+    //             "Bindings"
+    //             [ Menu.page "bindings/index.md"; Menu.page "bindings/contributing.md" ]
+    //     ]
     |> Theme.editUrl "https://github.com/glutinum-org/cli/edit/main/docs"
     |> Theme.footer (
         Html.p
             [
-                Html.text "Glutinum is built with F# · "
+                Html.text "Built with "
+                Html.a [ prop.href "https://github.com/MangelMaxime/Nacara"; prop.text "Nacara" ]
+                Html.text " · "
                 Html.a [ prop.href "https://github.com/glutinum-org/cli"; prop.text "Source" ]
             ]
     )
