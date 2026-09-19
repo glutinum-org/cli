@@ -1,5 +1,5 @@
 ---
-last_commit_released: bf24a421107ba2d69215745f2e9bac7674eb9285
+last_commit_released: 865f54ebdd8defd9b7f8e3f26e42bf563043372d
 ---
 
 # Changelog
@@ -7,6 +7,18 @@ last_commit_released: bf24a421107ba2d69215745f2e9bac7674eb9285
 All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## 0.2.0 - 2026-09-19
+
+### 🚀 Features
+
+* Arrays for readonly parameters, calls and values through the default import ([d359e77](https://github.com/glutinum-org/cli/commit/d359e776cf05a2dfa420467012bfc2acca1bb080))
+* `Glutinum.Types` is generated from the ES library files ([3197153](https://github.com/glutinum-org/cli/commit/31971538c26476615d1c90f9ae6fff57901f37da))
+* `Date` and its constructor come from `Glutinum.Types` ([a55bb5f](https://github.com/glutinum-org/cli/commit/a55bb5f05cf21aa379eeb92fa7ba9f5343d23dbb))
+* The type parameters of a method are declared ([4c79e16](https://github.com/glutinum-org/cli/commit/4c79e1677afea19071d2fd054195f4d4744dd1d7))
+* The static side of `Number`, `String`, `Object`, `Symbol` and `Reflect` in `Glutinum.Types` ([120c2c0](https://github.com/glutinum-org/cli/commit/120c2c001008ff649846251f5c64c528aeeab903))
+
+<strong><small>[View changes on Github](https://github.com/glutinum-org/cli/compare/bf24a421107ba2d69215745f2e9bac7674eb9285..865f54ebdd8defd9b7f8e3f26e42bf563043372d)</small></strong>
 
 ## 0.1.0
 
