@@ -74,13 +74,13 @@ jobs:
         id: version
         run: echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
 
-      # # The hub regenerates its bindings with the release, in a pull request.
-      # # HUB_DISPATCH_TOKEN is a fine-grained token with "Contents: write" on glutinum-org/hub.
-      # - name: Notify the hub
-      #   uses: peter-evans/repository-dispatch@v3
-      #   continue-on-error: true
-      #   with:
-      #     token: ${{ secrets.HUB_DISPATCH_TOKEN }}
-      #     repository: glutinum-org/hub
-      #     event-type: glutinum-release
-      #     client-payload: '{"version": "${{ steps.version.outputs.version }}"}'
+      # The hub regenerates its bindings with the release, in a pull request.
+      # HUB_DISPATCH_TOKEN is a fine-grained token with "Contents: write" on glutinum-org/hub.
+      - name: Notify the hub
+        uses: peter-evans/repository-dispatch@v3
+        continue-on-error: true
+        with:
+          token: ${{ secrets.HUB_DISPATCH_TOKEN }}
+          repository: glutinum-org/hub
+          event-type: glutinum-release
+          client-payload: '{"version": "${{ steps.version.outputs.version }}"}'
