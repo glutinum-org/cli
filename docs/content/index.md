@@ -72,7 +72,7 @@ printfn "%s" (DateFns.format (later, "yyyy-MM-dd"))
 
 <p class="landing-actions">
 <a class="landing-button landing-button--primary" href="/guide/getting-started/">Read the guide</a>
-<a class="landing-button" href="/bindings/">Browse the bindings</a>
+<!--<a class="landing-button" href="/bindings/">Browse the bindings</a>-->
 </p>
 
 </section>
