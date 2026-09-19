@@ -1,6 +1,6 @@
 ---
+last_commit_released: 865f54ebdd8defd9b7f8e3f26e42bf563043372d
 name: Glutinum.Converter.CLI
-last_commit_released: 24210b74ed4fac16d7c232d822ede822c7a2c38b
 exclude:
   - src/Glutinum.Types/
   - bindings/
@@ -17,6 +17,149 @@ updaters:
 All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## 0.14.0 - 2026-09-19
+
+### 🚀 Features
+
+* Forward interface documentation to F# code ([e4c9598](https://github.com/glutinum-org/cli/commit/e4c9598c135a6cf12218ff95894326e657ffc78e))
+* Unwrap methods with a string-literal first argument ([9afcfab](https://github.com/glutinum-org/cli/commit/9afcfabf5971c7611a3583fbe1eb67180c208e38))
+* Forward namespace documentation to F# code ([d533e05](https://github.com/glutinum-org/cli/commit/d533e05d891a996dcd0b77997c11e7253658b448))
+* Generate a concrete type when applying a generic type alias ([d4bcb96](https://github.com/glutinum-org/cli/commit/d4bcb96be9e2081149279ff39f7d5bd9a97e1463))
+* Warn when the code is too long to report an issue ([3f1052a](https://github.com/glutinum-org/cli/commit/3f1052a23065fd0a4434056c50a6c27f048963a0))
+* Generate a TypeScriptTaggedUnion for unions of tagged type literals ([4d0909d](https://github.com/glutinum-org/cli/commit/4d0909d4adbfa8eed8e8baa9edd1666e6e76b961))
+* Forward documentation to generated classes ([8c33918](https://github.com/glutinum-org/cli/commit/8c339189c06ba8f33f7ba4a78192579a3773ffa3))
+* Generate a `[<ParamObject>]` class for interfaces used as arguments ([2531649](https://github.com/glutinum-org/cli/commit/2531649418f64abb266d3797befeb30d5b444408))
+* Generate constructor overloads for union properties of `[<ParamObject>]` classes ([f63f0f6](https://github.com/glutinum-org/cli/commit/f63f0f65a30127d8895c26bae649d530d1aa7eda))
+* Generate bindings for a package and its dependencies ([39d98fd](https://github.com/glutinum-org/cli/commit/39d98fd50a34879302b198fbd755b724f817337a))
+* Generate the target package as a module named after it ([3126f30](https://github.com/glutinum-org/cli/commit/3126f30563084f1a80713692018868f1fd87510e))
+* Generate several packages in one file ([bb7ad21](https://github.com/glutinum-org/cli/commit/bb7ad21c39323723bc86e5b3a5889e133e5d6d04))
+* A file made of an ambient module is that module ([84c248d](https://github.com/glutinum-org/cli/commit/84c248d5926d3e947ceb8fff73da08f3bc741642))
+* Gather the `Exports` of the files of a package in one module ([1267114](https://github.com/glutinum-org/cli/commit/1267114da8996a3aa36a99aa4c0fb1529d83844d))
+* Download the declaration files of a package from jsDelivr into a file system ([6787d5d](https://github.com/glutinum-org/cli/commit/6787d5d98154db4b6adb1c5cde7b51d5383a5e51))
+* Generate the bindings of an npm package from the web app ([2a71612](https://github.com/glutinum-org/cli/commit/2a716122fabef7d9a45cf2c19f0d6dad3bfde5f4))
+* Generate the DOM API from `@types/web` ([d4ee538](https://github.com/glutinum-org/cli/commit/d4ee53853f96b4dc83c4185715a0fb0bc615abb6))
+* Reference the DOM and Node types from the Glutinum.Web and Glutinum.Node bindings ([4153298](https://github.com/glutinum-org/cli/commit/41532980f97d7aea0bb831d7ba202400bc898563))
+* Delegates for callable types, iterable interfaces and defaulted type parameters ([6775a84](https://github.com/glutinum-org/cli/commit/6775a84d1a31c8ecf4e3aebb110725c8d31cb9df))
+* Focus the package input when the mode is selected ([00827c1](https://github.com/glutinum-org/cli/commit/00827c114245adf983a6ee429d2f109c6a12ce04))
+* One overload per case of a union parameter ([01dcad8](https://github.com/glutinum-org/cli/commit/01dcad887b2029e1faed0381c8696bf2aebd0498))
+* Packages are modules of the `Glutinum` namespace ([b11533b](https://github.com/glutinum-org/cli/commit/b11533b452091b4f312cf44482a1b6756d1fdae7))
+* Publish Glutinum.Web and Glutinum.Node from the repository ([e90f3dd](https://github.com/glutinum-org/cli/commit/e90f3ddb54c929c213d6af2c50ee2ecd9a221e92))
+* Typed keys for `keyof` maps ([9f6e4b8](https://github.com/glutinum-org/cli/commit/9f6e4b8e41e230874240fd39ae7ed9f4be2488e4))
+* Package globals at the package level and typed keys for functions ([b85805d](https://github.com/glutinum-org/cli/commit/b85805dfc7b166c7c0160e2afb06ab67872d5021))
+* Typed listeners of the Node event emitter ([ea428f4](https://github.com/glutinum-org/cli/commit/ea428f41632137188d4ca7596b82667f1f1918f1))
+* Conditional types resolved by the checker, the constraints and the known keys ([b135bd5](https://github.com/glutinum-org/cli/commit/b135bd50e549e00f7043cda368235528554c9039))
+* Overloads through a generic union alias and a type parameter case ([109a3d1](https://github.com/glutinum-org/cli/commit/109a3d15e9d4eeee8f5f7d10dc6d7e318d68894a))
+* A package subpath is an input ([32b5bc2](https://github.com/glutinum-org/cli/commit/32b5bc29584e03f85c0bb7a2986ca0cb63676a5d))
+* --external references a package from its own binding ([7177391](https://github.com/glutinum-org/cli/commit/7177391d7d38c33f93fa238a489ad9577c553462))
+* A property typed by a callable is a method ([b9d2984](https://github.com/glutinum-org/cli/commit/b9d29842ebf5ddd9937c5604020abd36ba414c19))
+* Plain arguments where a union alias, a default or an option got in the way ([2517555](https://github.com/glutinum-org/cli/commit/2517555e42660c00c5ace5e5ddd47745d356b4ca))
+* Arrays for readonly parameters, calls and values through the default import ([d359e77](https://github.com/glutinum-org/cli/commit/d359e776cf05a2dfa420467012bfc2acca1bb080))
+* Infer constraints in conditional types and non-generic overloads of defaulted functions ([af408c6](https://github.com/glutinum-org/cli/commit/af408c6e79273e7e40aa0d5728a4f6bc678b3f1e))
+* Mixed enums, variadic tuples, `this` parameters and assertion signatures ([0602097](https://github.com/glutinum-org/cli/commit/06020971729daac74c7f2fe284d90010cae5992d))
+* The web app is a page of the documentation site ([2c577dc](https://github.com/glutinum-org/cli/commit/2c577dc5e7e19f9b2ad7620fda150eafd19e0c9e))
+* `Glutinum.Types` is generated from the ES library files ([3197153](https://github.com/glutinum-org/cli/commit/31971538c26476615d1c90f9ae6fff57901f37da))
+* `Date` and its constructor come from `Glutinum.Types` ([a55bb5f](https://github.com/glutinum-org/cli/commit/a55bb5f05cf21aa379eeb92fa7ba9f5343d23dbb))
+* The type parameters of a method are declared ([4c79e16](https://github.com/glutinum-org/cli/commit/4c79e1677afea19071d2fd054195f4d4744dd1d7))
+* The static side of `Number`, `String`, `Object`, `Symbol` and `Reflect` in `Glutinum.Types` ([120c2c0](https://github.com/glutinum-org/cli/commit/120c2c001008ff649846251f5c64c528aeeab903))
+
+### 🐞 Bug Fixes
+
+* Keep boolean literals in unions instead of dropping them ([0e1a3fb](https://github.com/glutinum-org/cli/commit/0e1a3fb3daab0286a5dd07e2bf1b7751c79d89ba))
+
+    A union mixing a boolean literal with string literals is now represented
+    as a `StringEnum` using `[<CompiledValue(...)>]` for the boolean case,
+    and a union mixing a boolean literal with another primitive is
+    represented
+    as an erased union (`U2`).
+
+    ```ts
+    export type DevTool = false | 'eval'
+    ```
+
+    ```fs
+    [<RequireQualifiedAccess>]
+    [<StringEnum(CaseRules.None)>]
+    type DevTool =
+        | [<CompiledValue(false)>] False
+        | eval
+    ```
+* Resolve template literal types to a StringEnum when possible ([3ba3335](https://github.com/glutinum-org/cli/commit/3ba33350fbb5c1be19177c5f8f514dbd64a374e5))
+* Read numeric literal values from the TypeChecker ([22b2a53](https://github.com/glutinum-org/cli/commit/22b2a53c9c6dae3e117c158f53eaa9100294b5dc))
+* Replace `$` and `/` in type and union case names ([482388c](https://github.com/glutinum-org/cli/commit/482388ca51a36bc9329702850f982988b7f06269))
+* Don't merge a union of type literals into a single interface ([0c7d9ba](https://github.com/glutinum-org/cli/commit/0c7d9ba51b0acb63b8163fcd3b2e4ffc9614579e))
+* Resolve enum member values via the TypeChecker ([8ecdd5f](https://github.com/glutinum-org/cli/commit/8ecdd5f58f2d0345bb23b9e88de04adb2a3b9366))
+* Remove unecessary warning on the reader side ([c036674](https://github.com/glutinum-org/cli/commit/c0366740275ff9cec674b39a6be7d958b127c486))
+* Resolve `ReturnType<this[...]>` ([5ccc8dd](https://github.com/glutinum-org/cli/commit/5ccc8ddbd75921de2aece807b3798653ef026e72))
+* Resolve `Omit<_>` in interface heritage clause ([73c771f](https://github.com/glutinum-org/cli/commit/73c771f71b0b271c9f96281aa906b18eeea765ed))
+* Generate an interface for callable type literals ([4ee01d2](https://github.com/glutinum-org/cli/commit/4ee01d2be21466424ee066afbedb1cfcb85f893b))
+* Use TypeScript bundled with @ts-morph/bootstrap ([b9a890b](https://github.com/glutinum-org/cli/commit/b9a890b1d7bb9dec187111ee70bf0167283e525f))
+* Generate an empty interface for empty enums ([35b20ff](https://github.com/glutinum-org/cli/commit/35b20ffa208d911d472a375e39108135c0b0a4c9))
+* Remove stray quote after `<see>` in documentation links ([144ab05](https://github.com/glutinum-org/cli/commit/144ab05616443635836cb6abeb3df77ef4fbfdef))
+* Support `@link` block tag in documentation ([874c1ff](https://github.com/glutinum-org/cli/commit/874c1ff848472199fa96ba01876551efe7116091))
+* Support parenthesized and unsupported types in `keyof` ([7191505](https://github.com/glutinum-org/cli/commit/7191505600dfccc7a8566701b65b71ee1351e17c))
+* Generate an interface for type aliases with unused type parameters ([9beaeed](https://github.com/glutinum-org/cli/commit/9beaeedddd8fb7b30ee61e83136702b5a787823b))
+* Don't crash when `Exclude<_>` doesn't resolve to a union ([06db4bd](https://github.com/glutinum-org/cli/commit/06db4bd66bf1af72357758281d6fcafd26a28adc))
+* Rename delegates generated for overloads with a function type argument ([754e323](https://github.com/glutinum-org/cli/commit/754e3239933e751fd2d33c6f9049335c8543715b))
+* Rename intersection and `Omit<_>` types generated for overloads ([a8198e9](https://github.com/glutinum-org/cli/commit/a8198e970f99c06e9b55873345db9f72c245c685))
+* Prevent infinite recursion on recursive `Partial<_>` ([7fd1d7c](https://github.com/glutinum-org/cli/commit/7fd1d7c062ec1bdfa0afae44b5e8eab48ddccb9d))
+* Rename `Partial<_>` types generated for overloads ([caf5272](https://github.com/glutinum-org/cli/commit/caf527290002bb7b12eb195471e155bbd73528ac))
+* Keep non-literal types in unions with string literals ([eba770b](https://github.com/glutinum-org/cli/commit/eba770b855f47cc14a4cfb5984a89e1e34aa357b))
+* Keep non-literal types in unions with numeric literals ([827c843](https://github.com/glutinum-org/cli/commit/827c843a30ea04c1f65ae511d0816d5e6c7c9100))
+* Support unions mixing string and numeric literals ([b4409e9](https://github.com/glutinum-org/cli/commit/b4409e988289c1cf9d1289a2153ab0a3f9b35606))
+* Read `{@link}` at the start of `@returns` and `@throws` ([d7046f5](https://github.com/glutinum-org/cli/commit/d7046f595207cfff3decf49bc6a41d6444e66704))
+* Resolve type alias applications to primitive types ([219a43e](https://github.com/glutinum-org/cli/commit/219a43e90674c45c811daa50e699016d6b4f028e))
+* Keep sealed type parameters on type declarations and expose a specialized alias ([195b9da](https://github.com/glutinum-org/cli/commit/195b9da4f16f1fcfacb9c6424c90c435672308be))
+* Read a single type union with a leading pipe as its type ([1576711](https://github.com/glutinum-org/cli/commit/1576711e265051d2b8a66e682376a8af3c3634d7))
+* Prevent infinite recursion on recursive `Partial<_>` in a heritage clause ([6ce7d02](https://github.com/glutinum-org/cli/commit/6ce7d02eead668429f7276ddf1c7cf86edc61534))
+* Generate namespaces declared with a dotted name ([bd1b428](https://github.com/glutinum-org/cli/commit/bd1b428a3e5e2a6f0ff5228ae7423d91652f1339))
+* Don't wrap optional unions twice in `option` ([2a5d428](https://github.com/glutinum-org/cli/commit/2a5d4288ea234e8c56022f79e1d2de1a58899d15))
+* Keep the parameters and return type of constructor types ([195dbe6](https://github.com/glutinum-org/cli/commit/195dbe60275c02b41a28e15c53ee2fc4a33152ba))
+* Read properties created by mapped types ([0ce0de4](https://github.com/glutinum-org/cli/commit/0ce0de4bb868eba2e22c3027c229f38ce1a580bc))
+* Declare type parameters on interfaces generated for object types ([253d433](https://github.com/glutinum-org/cli/commit/253d433eb3ac801c1fb5aa71ffee604e9a28d27f))
+* Don't escape a name twice when it is used as a scope ([367efa5](https://github.com/glutinum-org/cli/commit/367efa5074662e814d0065c1e86b3783007c1600))
+* Read `typeof` of a method as a function type ([cfeb4c5](https://github.com/glutinum-org/cli/commit/cfeb4c5a5c3ba53e886455006242e6a7d7193a53))
+* Nest the type of an exported variable under a module named after it ([52d027f](https://github.com/glutinum-org/cli/commit/52d027f8252caf80baedb6f6d5a136cdeffbac92))
+* Generate default type parameter aliases for type aliases ([dc9ed18](https://github.com/glutinum-org/cli/commit/dc9ed185831cacb28203f264ecf9f04d7f980856))
+* Read the variables of an ambient namespace as exported ([b4dab8b](https://github.com/glutinum-org/cli/commit/b4dab8b32f63de545bae2b7bdd32c942b96e241e))
+* Make `--all` work on packages like minimatch ([5d36589](https://github.com/glutinum-org/cli/commit/5d36589b8cb57e87daf92ddfeebc7ae9a2eedbef))
+* Reference the declaration name of a renamed import ([9ab569b](https://github.com/glutinum-org/cli/commit/9ab569b2858c4b05bd149550cf607bd4ce6cbe4c))
+* Read the members of an instantiated generic type from the checker ([ba59fdf](https://github.com/glutinum-org/cli/commit/ba59fdf438eed856f54c9cf74ccdd31140f9d11f))
+* Generate valid constraints and delegates for generic declarations ([9c00a72](https://github.com/glutinum-org/cli/commit/9c00a729c75869af6495250bd75df0b1a28350d5))
+* Generate a class for a subclass of an `Error` subclass ([8e3f65b](https://github.com/glutinum-org/cli/commit/8e3f65b2925ca73fb8400673d87e2764e7f29b36))
+* Don't generate overloads F# can't tell apart ([bfc2475](https://github.com/glutinum-org/cli/commit/bfc24756904e719dcc62e4f3e1d12c084b5ac129))
+* Resolve `Foo["bar"]` and export aliases through the checker ([26f30ae](https://github.com/glutinum-org/cli/commit/26f30ae005ead1bde4272c643ede03ad6b4bf75d))
+* Expose the anonymous type of an optional alias under a `Value` module ([f90cf52](https://github.com/glutinum-org/cli/commit/f90cf52ec25c3c37b7cf1b67d1ff126b1610e40d))
+* Don't clash a default export with a member of the same name ([2515e53](https://github.com/glutinum-org/cli/commit/2515e53829ffa250b758ae9bfc49605d021e6bad))
+* Generate packages installed by pnpm ([5b3be4b](https://github.com/glutinum-org/cli/commit/5b3be4b53837376566ffc1c95bdea833e2d73b67))
+* Drop nominal constraints and generate the remaining ts-morph constructs ([8a3674c](https://github.com/glutinum-org/cli/commit/8a3674c4ce9368e18607f766f00df52afc03f402))
+* Generate the packages used by the Ionide extension ([8d1083e](https://github.com/glutinum-org/cli/commit/8d1083ee6db98e013ce8ba861fb064af3254d296))
+* Generate `@ts-morph/bootstrap` without error ([72b156a](https://github.com/glutinum-org/cli/commit/72b156abd3fb8646f0b7ca43296d34f42bdae150))
+* Generate `@types/node` without error ([9a6792e](https://github.com/glutinum-org/cli/commit/9a6792e3942a30cc46529f2fcaa84e2eaaa1b3ec))
+* Only the properties of an intersection carry the enclosing type parameters ([6b08935](https://github.com/glutinum-org/cli/commit/6b0893511307f1d5467a395228047b4aa90654a1))
+* Import an ambient module by its name and follow its `export =` ([925577f](https://github.com/glutinum-org/cli/commit/925577fa71adf760f74f991b1e3f4b8cbe239daa))
+* Generate vite, vitest and @vitejs/plugin-react ([59aae06](https://github.com/glutinum-org/cli/commit/59aae06e0a8d63b0594fd78f3feb6f064158a7c2))
+* Generate `@types/node` without warning ([b4064c2](https://github.com/glutinum-org/cli/commit/b4064c2008f31ba7bfd66aa128941a0cbd6c89f1))
+* The members of an `export =` object are the exports of the module ([e6f331d](https://github.com/glutinum-org/cli/commit/e6f331d0ee34219478b65b7ce074d7d578820f69))
+* Names and generics found by generating Playwright ([9df1aee](https://github.com/glutinum-org/cli/commit/9df1aee3f6a906a29bb365f49df6ae772196f138))
+* A `void` alias property has no setter and constructors are distinct through aliases ([676df2f](https://github.com/glutinum-org/cli/commit/676df2f136680466472a8009bb6ead3af0947a62))
+* An anonymous type identical to one of its scope takes its name ([3aa5613](https://github.com/glutinum-org/cli/commit/3aa56133337704342710141341d9b752d1d2444d))
+* `Parameters<F>`, intrinsic string types, `NoInfer` and tuple rest parameters ([a23cb77](https://github.com/glutinum-org/cli/commit/a23cb7721937c76edde8634e2727f685106d8917))
+* Generate date-fns, Chart.js, CodeMirror and ECharts ([761ebeb](https://github.com/glutinum-org/cli/commit/761ebebf32d076a808c03f5d071a5329c8b3d0f3))
+* Generate express, luxon, leaflet, yaml, d3, three and rxjs ([f60b33c](https://github.com/glutinum-org/cli/commit/f60b33cc6a527e433b47fa2f1e818d7ef5441b61))
+* `export =` and `export default class` are default imports ([effe9f0](https://github.com/glutinum-org/cli/commit/effe9f06aec7463ae7d62ca190549c1c056fac45))
+* A property declared by several members of an intersection keeps its type ([40ff6b8](https://github.com/glutinum-org/cli/commit/40ff6b8a464d633ca24c3120c3a4018c2af5dfe6))
+* Signatures copied from another file, synthesized signatures and Partial aliases ([4621e8f](https://github.com/glutinum-org/cli/commit/4621e8f26206bac5879bfccb79e7fdae0fa9f42a))
+* The type parameters of a one-parameter function type are their default ([c1175a1](https://github.com/glutinum-org/cli/commit/c1175a12c2e64c324d8418e54e5b5d7802ba6719))
+* The members of an `export =` object go through the default import ([152d3f2](https://github.com/glutinum-org/cli/commit/152d3f28df0ad095cc5176ff7ea7b3937f43a78c))
+* `Partial`, `Omit` and `Exclude` written by the checker are expanded ([5bf78c8](https://github.com/glutinum-org/cli/commit/5bf78c8540c45e7ded322f8ca9ef64923541d508))
+* A variable without a type annotation has the type of its initializer ([f6b5404](https://github.com/glutinum-org/cli/commit/f6b5404bea3aa6182fe97c8be47d913c5dc7dc3b))
+* Renamed local exports and classes that are not exported ([b79494d](https://github.com/glutinum-org/cli/commit/b79494d12d1550d8f8ab09f23bc1aaa587200237))
+* No solution folder shares a name with a project ([420b976](https://github.com/glutinum-org/cli/commit/420b9761e7d8ad41b548349bda2d500fd71d524e))
+* The generated bindings are written formatted ([7c7d588](https://github.com/glutinum-org/cli/commit/7c7d588b0717aaa317a4db15c36071991792239b))
+* Every generated binding is formatted, not only the one under src ([17764a8](https://github.com/glutinum-org/cli/commit/17764a85a92b04a6dcb032efe7fcb773cf052877))
+
+<strong><small>[View changes on Github](https://github.com/glutinum-org/cli/compare/24210b74ed4fac16d7c232d822ede822c7a2c38b..865f54ebdd8defd9b7f8e3f26e42bf563043372d)</small></strong>
 
 ## 0.13.0
 
