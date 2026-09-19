@@ -65,9 +65,9 @@
       },
       "SimpleExec": {
         "type": "Direct",
-        "requested": "[13.0.0, )",
-        "resolved": "13.0.0",
-        "contentHash": "zcCR1pupa1wI1VqBULRiQKeHKKZOuJhi/K+4V5oO+rHJZlaOD53ViFo1c3PavDoMAfSn/FAXGAWpPoF57rwhYg=="
+        "requested": "[13.1.0, )",
+        "resolved": "13.1.0",
+        "contentHash": "Q/xUWjrB98Aq+guCJtGFAHmnH00J3Ux7Q/gbnVkuh1U4FHZ2/3PgBHTcZuuhs2cSv5pNgZeHEmGwLgSjjbFlrw=="
       },
       "Spectre.Console.Cli": {
         "type": "Direct",

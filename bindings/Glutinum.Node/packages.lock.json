@@ -19,9 +19,9 @@
       },
       "Fable.Package.SDK": {
         "type": "Direct",
-        "requested": "[1.3.2, )",
-        "resolved": "1.3.2",
-        "contentHash": "vQB5IvCyy86LP9ilSpZGjLUT/7HI0Bp4Ht1Oyl+w68h734ySaq9xLjttErYoHx+nmnMjcv2EBjxrA24mZ/U/jQ=="
+        "requested": "[1.4.0, )",
+        "resolved": "1.4.0",
+        "contentHash": "Bj7mRtJXQQyQueOKNfQ4M5Vdg7BWbCpB5IVzIUYbKAicGlTgw1OvH8q0pv0S+DSvm1JwgEEFDXYklJc6GT3i3A=="
       },
       "FSharp.Core": {
         "type": "Direct",

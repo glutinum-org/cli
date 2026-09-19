@@ -4,9 +4,9 @@
     ".NETStandard,Version=v2.0": {
       "Fable.Core": {
         "type": "Direct",
-        "requested": "[5.1.0, )",
-        "resolved": "5.1.0",
-        "contentHash": "YtU/i2SlymwzBhYl0rvhQ9uHJAsMpNRT4LVPDHz47WiiAlqreiGXMBNVk84f9NP7Pl9af/XhCkI0t2Ss1lYfKQ==",
+        "requested": "[5.2.0, )",
+        "resolved": "5.2.0",
+        "contentHash": "3+HVoyYMjPGeKJEhMzRti0coDS6AkLVOWXmGwSvqokeTuwdZLyiKMoNgQrE6ZeJ0cSy9qHBB4VBpw5RAfb6zmQ==",
         "dependencies": {
           "FSharp.Core": "4.7.2"
         }
@@ -23,12 +23,12 @@
       },
       "Fable.Promise": {
         "type": "Direct",
-        "requested": "[3.2.0, )",
-        "resolved": "3.2.0",
-        "contentHash": "4A+Iiembrny2h3AE2BIbchfuLmWHNhpkOTvbTtFXHtGzHVMqEVFRXrAfdy83wX2wK5Og3fqRo1y8t/Bqkd7j6g==",
+        "requested": "[3.2.1, )",
+        "resolved": "3.2.1",
+        "contentHash": "OKiQ4yU8w6krUUY/5oHn+qIYZWS6qg8ts3kr6STRsub2fbwyodisewCK+rBbReZgzvHnLxNwP8YEZZxDEL6UEQ==",
         "dependencies": {
           "FSharp.Core": "4.7.2",
-          "Fable.Core": "3.7.1"
+          "Fable.Core": "5.2.0"
         }
       },
       "FSharp.Core": {
