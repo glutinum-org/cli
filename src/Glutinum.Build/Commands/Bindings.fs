@@ -143,25 +143,14 @@ type BindingsCommand() =
                 workingDirectory = "bindings"
             )
 
-        // The pre-commit hook formats `src/**/*.fs`, so those outputs are written formatted.
-        // Fantomas turns `Glutinum.Node.fs` into invalid F#, and `bindings/` is outside the hook.
-        let underSrc =
-            bindings
-            |> List.choose (fun (_, file, _) ->
-                if file.StartsWith "../src/" then
-                    Some("bindings/" + file)
-                else
-                    None
-            )
-
-        if not underSrc.IsEmpty then
-            Command.Run(
-                "dotnet",
-                CmdLine.empty
-                |> CmdLine.appendRaw "fantomas"
-                |> CmdLine.appendSeq underSrc
-                |> CmdLine.toString
-            )
+        // The pre-commit hook formats `src/**/*.fs`, so a file left unformatted churns on commit
+        Command.Run(
+            "dotnet",
+            CmdLine.empty
+            |> CmdLine.appendRaw "fantomas"
+            |> CmdLine.appendSeq (bindings |> List.map (fun (_, file, _) -> "bindings/" + file))
+            |> CmdLine.toString
+        )
 
         if settings.IsCheck then
             let files = bindings |> List.map (fun (_, file, _) -> "bindings/" + file)
