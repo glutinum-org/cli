@@ -18,17 +18,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v6
+      - uses: ./.github/actions/setup-dotnet
+      - uses: ./.github/actions/setup-node
+
+      - name: Cache the Playwright browsers
+        id: playwright
+        uses: actions/cache@v4
         with:
-          global-json-file: global.json
-      - name: Setup Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version-file: package.json
-      - uses: pnpm/action-setup@v6
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+
+      - run: pnpm install
+
       # The Glutinum.Web tests drive a real browser
-      - run: pnpm install && npx playwright install --with-deps chromium
+      - name: Install the Playwright browsers
+        if: steps.playwright.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+
+      # The browsers come back from the cache, the system libraries they need do not
+      - name: Install the Playwright system libraries
+        if: steps.playwright.outputs.cache-hit == 'true'
+        run: npx playwright install-deps chromium
+
       - name: Test
         run: ./build.sh test
 
@@ -37,15 +48,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v6
-        with:
-          global-json-file: global.json
-      - name: Setup Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version-file: package.json
-      - uses: pnpm/action-setup@v6
+      - uses: ./.github/actions/setup-dotnet
+      - uses: ./.github/actions/setup-node
       # A generator change must come with the bindings it produces
       - run: ./build.sh bindings --check
 
@@ -54,8 +58,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v6
-        with:
-          global-json-file: global.json
+      - uses: ./.github/actions/setup-dotnet
       - run: ./build.sh lint

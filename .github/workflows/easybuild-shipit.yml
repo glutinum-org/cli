@@ -31,10 +31,7 @@ jobs:
           # We need to fetch more than the last commit to be able to generate the changelog based on the commit history.
           # Adapt this value based on your needs.
           fetch-depth: 300
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v6
-        with:
-          global-json-file: global.json
+      - uses: ./.github/actions/setup-dotnet
       - name: ShipIt (Pull Request)
         run: |
           dotnet tool restore
@@ -50,16 +47,10 @@ jobs:
     if: "github.event.workflow_run.conclusion == 'success' && startsWith(github.event.workflow_run.head_commit.message, 'chore: release ')"
     steps:
       - uses: actions/checkout@v7
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v6
+      - uses: ./.github/actions/setup-dotnet
+      - uses: ./.github/actions/setup-node
         with:
-          global-json-file: global.json
-      - name: Setup Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version-file: package.json
           registry-url: https://registry.npmjs.org
-      - uses: pnpm/action-setup@v6
 
       # Trusted publishing: NuGet hands out a short-lived key in exchange for this run's OIDC
       # token, so the repository holds no API key. Register this repository as a trusted
@@ -83,13 +74,13 @@ jobs:
         id: version
         run: echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
 
-      # The hub regenerates its bindings with the release, in a pull request.
-      # HUB_DISPATCH_TOKEN is a fine-grained token with "Contents: write" on glutinum-org/hub.
-      - name: Notify the hub
-        uses: peter-evans/repository-dispatch@v3
-        continue-on-error: true
-        with:
-          token: ${{ secrets.HUB_DISPATCH_TOKEN }}
-          repository: glutinum-org/hub
-          event-type: glutinum-release
-          client-payload: '{"version": "${{ steps.version.outputs.version }}"}'
+      # # The hub regenerates its bindings with the release, in a pull request.
+      # # HUB_DISPATCH_TOKEN is a fine-grained token with "Contents: write" on glutinum-org/hub.
+      # - name: Notify the hub
+      #   uses: peter-evans/repository-dispatch@v3
+      #   continue-on-error: true
+      #   with:
+      #     token: ${{ secrets.HUB_DISPATCH_TOKEN }}
+      #     repository: glutinum-org/hub
+      #     event-type: glutinum-release
+      #     client-payload: '{"version": "${{ steps.version.outputs.version }}"}'

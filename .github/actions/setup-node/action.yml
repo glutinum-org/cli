@@ -1,0 +1,21 @@
+name: Setup Node.js
+description: Install pnpm and the Node.js version pinned by package.json, with a cached pnpm store.
+
+inputs:
+  registry-url:
+    description: The registry to authenticate against, for a job that publishes.
+    required: false
+    default: ''
+
+runs:
+  using: composite
+  steps:
+    # setup-node reads the store location from `pnpm store path`, so pnpm comes first.
+    - uses: pnpm/action-setup@v6
+
+    - uses: actions/setup-node@v7
+      with:
+        node-version-file: package.json
+        registry-url: ${{ inputs.registry-url }}
+        cache: pnpm
+        cache-dependency-path: pnpm-lock.yaml

@@ -1,0 +1,14 @@
+name: Setup .NET
+description: Install the .NET SDK pinned by global.json with a cached NuGet package directory.
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-dotnet@v6
+      with:
+        global-json-file: global.json
+        cache: true
+        # `dotnet tool restore` fetches fable, fantomas, husky and shipit from NuGet too.
+        cache-dependency-path: |
+          **/packages.lock.json
+          .config/dotnet-tools.json
