@@ -77,10 +77,11 @@ jobs:
       # The hub regenerates its bindings with the release, in a pull request.
       # HUB_DISPATCH_TOKEN is a fine-grained token with "Contents: write" on glutinum-org/hub.
       - name: Notify the hub
-        uses: peter-evans/repository-dispatch@v3
         continue-on-error: true
-        with:
-          token: ${{ secrets.HUB_DISPATCH_TOKEN }}
-          repository: glutinum-org/hub
-          event-type: glutinum-release
-          client-payload: '{"version": "${{ steps.version.outputs.version }}"}'
+        env:
+          GH_TOKEN: ${{ secrets.HUB_DISPATCH_TOKEN }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          jq -n --arg version "$VERSION" \
+            '{event_type: "glutinum-release", client_payload: {version: $version}}' \
+            | gh api repos/glutinum-org/hub/dispatches --input -
