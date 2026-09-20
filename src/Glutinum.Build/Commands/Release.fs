@@ -6,10 +6,17 @@ open SimpleExec
 open BlackFox.CommandLine
 open Spectre.Console.Cli
 open Build.Utils.Pnpm
+open Build.Workspace
+open EasyBuild.Tools.DotNet
+open EasyBuild.Tools.Fable
 
 // A package is pushed after the ones it references, so a restore never sees a missing dependency
 let private packages =
-    [ "src/Glutinum.Types"; "bindings/Glutinum.Web"; "bindings/Glutinum.Node" ]
+    [
+        Workspace.src.``Glutinum.Types``.``.``
+        Workspace.bindings.``Glutinum.Web``.``.``
+        Workspace.bindings.``Glutinum.Node``.``.``
+    ]
 
 type ReleaseSettings() =
     inherit CommandSettings()
@@ -25,43 +32,27 @@ type ReleaseCommand() =
             printfn "NUGET_KEY is not set"
             1
         else
-            if Directory.Exists "nupkgs" then
-                Directory.Delete("nupkgs", true)
+            if Directory.Exists VirtualWorkspace.nupkgs.``.`` then
+                Directory.Delete(VirtualWorkspace.nupkgs.``.``, true)
 
             for package in packages do
-                Command.Run(
-                    "dotnet",
-                    CmdLine.empty
-                    |> CmdLine.appendRaw "pack"
-                    |> CmdLine.appendRaw package
-                    |> CmdLine.appendPrefix "-c" "Release"
-                    |> CmdLine.appendPrefix "-o" "nupkgs"
-                    |> CmdLine.toString
+                let nupkg = DotNet.pack package
+
+                DotNet.nugetPush (
+                    nupkg,
+                    apiKey = apiKey,
+                    source = "https://api.nuget.org/v3/index.json",
+                    skipDuplicate = true
                 )
 
-                let name = Path.GetFileName package
+            if Directory.Exists VirtualWorkspace.dist.``.`` then
+                Directory.Delete(VirtualWorkspace.dist.``.``, true)
 
-                for nupkg in Directory.GetFiles("nupkgs", $"{name}.*.nupkg") do
-                    Command.Run(
-                        "dotnet",
-                        CmdLine.empty
-                        |> CmdLine.appendRaw "nuget"
-                        |> CmdLine.appendRaw "push"
-                        |> CmdLine.appendRaw nupkg
-                        |> CmdLine.appendPrefix "--api-key" apiKey
-                        |> CmdLine.appendPrefix "--source" "https://api.nuget.org/v3/index.json"
-                        |> CmdLine.appendRaw "--skip-duplicate"
-                        |> CmdLine.toString
-                    )
-
-            // The CLI on npm
-            Command.Run(
-                "dotnet",
-                CmdLine.empty
-                |> CmdLine.appendRaw "fable"
-                |> CmdLine.appendRaw "src/Glutinum.Converter.CLI"
-                |> CmdLine.appendPrefix "--outDir" "dist"
-                |> CmdLine.toString
+            Fable.build (
+                Workspace.src.``Glutinum.Converter.CLI``.``.``,
+                noGitignore = true,
+                noCache = true,
+                outDir = VirtualWorkspace.dist.``.``
             )
 
             Pnpm.publish (noGitChecks = true, access = Publish.Access.Public)

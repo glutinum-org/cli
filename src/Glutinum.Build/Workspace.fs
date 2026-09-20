@@ -14,5 +14,6 @@ type VirtualWorkspace =
 dist
     fable_modules
         .gitignore
+nupkgs/
 """
      >

@@ -27,7 +27,7 @@
     <PackageReference Include="BlackFox.CommandLine" Version="1.0.0" />
     <PackageReference Include="EasyBuild.CommitParser" Version="3.0.0" />
     <PackageReference Include="EasyBuild.FileSystemProvider" Version="1.1.0" />
-    <PackageReference Include="EasyBuild.Tools" Version="8.0.0" />
+    <PackageReference Include="EasyBuild.Tools" Version="9.0.0" />
     <PackageReference Include="FSharp.Core" Version="10.1.301" />
     <PackageReference Include="LibGit2Sharp" Version="0.31.0" />
     <PackageReference Include="Semver" Version="3.0.0" />

@@ -12,12 +12,12 @@ open Build.Commands.Release
 open Build.Commands.Lint
 open Build.Commands.Format
 open Spectre.Console.Cli
+open EasyBuild.Tools.Husky
 
 [<EntryPoint>]
 let main args =
 
-    if System.Environment.GetEnvironmentVariable "ACT" = null then
-        Command.Run("dotnet", "husky install")
+    Husky.install ()
 
     let app = CommandApp()
 
