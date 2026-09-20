@@ -1,5 +1,5 @@
 ---
-last_commit_released: 865f54ebdd8defd9b7f8e3f26e42bf563043372d
+last_commit_released: 9699a781e7f42d59a8e5ca71f3026a3911ae3d87
 name: Glutinum.Converter.CLI
 exclude:
   - src/Glutinum.Types/
@@ -17,6 +17,14 @@ updaters:
 All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## 0.14.1 - 2026-09-20
+
+### 🐞 Bug Fixes
+
+* Use EasyBuild.Tools for release process and fix NPM released CLI ([9699a78](https://github.com/glutinum-org/cli/commit/9699a781e7f42d59a8e5ca71f3026a3911ae3d87))
+
+<strong><small>[View changes on Github](https://github.com/glutinum-org/cli/compare/865f54ebdd8defd9b7f8e3f26e42bf563043372d..9699a781e7f42d59a8e5ca71f3026a3911ae3d87)</small></strong>
 
 ## 0.14.0 - 2026-09-19
 
