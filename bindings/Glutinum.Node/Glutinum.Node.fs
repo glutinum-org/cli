@@ -80846,7 +80846,7 @@ EventEmitter.defaultMaxListeners = $0"""
         [<Erase>]
         type Exports =
             [<Import("constants", "fs/promises")>]
-            static member inline constants: obj = nativeOnly
+            static member inline constants: Node.fs.constants_.Exports = nativeOnly
 
             /// <summary>
             /// Tests a user's permissions for the file or directory specified by <c>path</c>.

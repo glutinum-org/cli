@@ -25,10 +25,10 @@ module constants_ =
 [<AllowNullLiteral>]
 [<Interface>]
 type Dl =
-    abstract member flags: obj with get, set
+    abstract member flags: constants_.Exports with get, set
 
 type Flags =
-    obj
+    constants_.Exports
 
 (***)
 #r "nuget: Fable.Core"

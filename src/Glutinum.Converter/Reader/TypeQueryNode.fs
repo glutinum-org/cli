@@ -119,6 +119,22 @@ let readTypeQueryNode (reader: ITypeScriptReader) (typeQueryNode: Ts.TypeQueryNo
             | Some declarations when declarations.Count > 0 ->
                 let declaration = declarations.[0]
 
+                // Only a module holding values has an `Exports` type generated for it
+                let hasValueExport (isOwnDeclaration: Ts.Declaration -> bool) =
+                    checker.getExportsOfModule symbol
+                    |> Seq.exists (fun export ->
+                        // `export default x` and `export { x } from` are aliases of the value
+                        let export = resolveAlias checker export |> Option.defaultValue export
+
+                        match export.flags with
+                        | HasSymbolFlags Ts.SymbolFlags.Value ->
+                            match export.declarations with
+                            | Some declarations when declarations.Count > 0 ->
+                                isOwnDeclaration declarations.[0]
+                            | _ -> false
+                        | _ -> false
+                    )
+
                 match declaration.kind with
                 | Ts.SyntaxKind.ClassDeclaration ->
                     // `typeof Action` is the constructor, the instance type arguments are unknown
@@ -141,9 +157,62 @@ let readTypeQueryNode (reader: ITypeScriptReader) (typeQueryNode: Ts.TypeQueryNo
                     : GlueTypeReference)
                     |> GlueType.TypeReference
 
-                // We don't support TypeQuery for ModuleDeclaration yet
-                // See https://github.com/glutinum-org/cli/issues/70 for a possible solution
-                | Ts.SyntaxKind.ModuleDeclaration -> GlueType.Discard
+                // `typeof DomEvent` of a namespace is the `Exports` of its F# module
+                | Ts.SyntaxKind.ModuleDeclaration ->
+                    if not (hasValueExport (fun _ -> true)) then
+                        GlueType.Primitive GluePrimitive.Any
+                    else
+                        let moduleDeclaration = declaration :?> Ts.ModuleDeclaration
+
+                        let rawName =
+                            (unbox<Ts.Node> moduleDeclaration.name).getText()
+                            |> Naming.removeSurroundingQuotes
+
+                        // The suffix is part of the name to escape, as in `namespaceChain`
+                        let moduleName =
+                            if isTopLevelModuleDeclaration reader.PackageContext declaration then
+                                Naming.sanitizeTypeName (rawName + "_")
+                            else
+                                Naming.sanitizeTypeName rawName
+
+                        ({
+                            Name = "Exports"
+                            FullName = checker.getFullyQualifiedName symbol
+                            ModulePath =
+                                modulePathForSymbol
+                                    checker
+                                    reader.PackageContext
+                                    false
+                                    (Some symbol)
+                                @ [ moduleName ]
+                            TypeArguments = []
+                            IsStandardLibrary = false
+                        }
+                        : GlueTypeReference)
+                        |> GlueType.TypeReference
+
+                // `import * as foo from "./file"` used as `typeof foo` is the file module
+                | Ts.SyntaxKind.SourceFile ->
+                    let sourceFile = declaration :?> Ts.SourceFile
+
+                    // A file re-exporting everything holds no value of its own
+                    let isDeclaredHere (declaration: Ts.Declaration) =
+                        String.normalizePath (declaration.getSourceFile().fileName) =
+                            String.normalizePath sourceFile.fileName
+
+                    match reader.PackageContext with
+                    | Some packageContext when hasValueExport isDeclaredHere ->
+                        ({
+                            Name = "Exports"
+                            FullName = checker.getFullyQualifiedName symbol
+                            ModulePath = packageContext.ModulePath sourceFile.fileName
+                            TypeArguments = []
+                            IsStandardLibrary = false
+                        }
+                        : GlueTypeReference)
+                        |> GlueType.TypeReference
+                    | _ -> GlueType.Primitive GluePrimitive.Any
+
                 // `typeof fn` is the function type, a generic one has no F# delegate at the use site
                 | Ts.SyntaxKind.FunctionDeclaration ->
                     match reader.ReadNode declaration with

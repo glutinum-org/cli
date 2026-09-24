@@ -22,6 +22,7 @@ const fixtures = [
     "typesOnlyDependency",
     "subpathEntries",
     "unresolvedImport",
+    "namespaceImport",
 ]
 
 const footer = `

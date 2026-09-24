@@ -18,7 +18,7 @@ module DomEvent_ =
     [<Erase>]
     type Exports =
         [<Emit("$0.stop($1...)")>]
-        abstract member stop: unit -> obj
+        abstract member stop: unit -> DomEvent_.Exports
 
 (***)
 #r "nuget: Fable.Core"
