@@ -80,7 +80,18 @@ let readExportDeclaration
     : GlueType list
     =
     match reader.PackageContext with
-    | None -> []
+    | None ->
+        // Only package mode knows the module the declaration of another file lands in
+        match exportDeclaration.moduleSpecifier with
+        | Some _ ->
+            let warning =
+                "A re-export from another file is only resolved when generating a package, run `glue <package>` instead of a single declaration file"
+
+            if not (reader.Warnings.Contains warning) then
+                reader.Warnings.Add warning
+        | None -> ()
+
+        []
     | Some packageContext ->
         let checker = reader.checker
 
