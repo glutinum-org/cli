@@ -21,6 +21,7 @@ const fixtures = [
     "globalAugmentation",
     "typesOnlyDependency",
     "subpathEntries",
+    "unresolvedImport",
 ]
 
 const footer = `

@@ -1193,18 +1193,42 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
     | Ts.SyntaxKind.ImportType ->
         let importTypeNode = typeNode :?> Ts.ImportTypeNode
 
-        match importTypeNode.qualifier with
+        let unresolvedModule =
+            // A node synthesized by `typeToTypeNode` has no position to resolve its module from
+            if importTypeNode.pos < 0 then
+                None
+            else
+                match importTypeNode.argument.kind with
+                | Ts.SyntaxKind.LiteralType ->
+                    let literal = (importTypeNode.argument :?> Ts.LiteralTypeNode).literal
+
+                    if (symbolAtLocation checker !!literal).IsSome then
+                        None
+                    else
+                        Some(!!literal?text: string)
+                | _ -> None
+
+        match unresolvedModule, importTypeNode.qualifier with
+        // `import("three").WebGLRenderer` of a package that is not installed
+        | Some moduleName, _ ->
+            let warning =
+                $"'%s{moduleName}' is not installed, the types imported from it are generated as 'obj'"
+
+            if not (reader.Warnings.Contains warning) then
+                reader.Warnings.Add warning
+
+            GlueType.Primitive GluePrimitive.Any
         // `typeof import("./file").fn` is the type of the value
-        | Some qualifier when importTypeNode.isTypeOf ->
+        | None, Some qualifier when importTypeNode.isTypeOf ->
             ts.factory.createTypeQueryNode qualifier |> reader.ReadTypeNode
-        | Some qualifier ->
+        | None, Some qualifier ->
             ts.factory.createTypeReferenceNode (
                 U2.Case2 qualifier,
                 ?typeArguments = importTypeNode.typeArguments
             )
             |> reader.ReadTypeNode
         // `typeof import("./file")`, the module object
-        | None -> GlueType.Primitive GluePrimitive.Any
+        | None, None -> GlueType.Primitive GluePrimitive.Any
 
     | Ts.SyntaxKind.LiteralType ->
         let literalTypeNode = typeNode :?> Ts.LiteralTypeNode
