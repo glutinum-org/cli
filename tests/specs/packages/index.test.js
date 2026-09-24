@@ -19,6 +19,7 @@ const fixtures = [
     "globalScript",
     "externalRuntime",
     "globalAugmentation",
+    "typesOnlyDependency",
 ]
 
 const footer = `

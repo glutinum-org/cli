@@ -151,6 +151,7 @@ let readPackages
                         Name = packageContext.FileModuleName(package, fileName)
                         ImportSpecifier = importSpecifier
                         IsGlobal = false
+                        HasRuntime = package.HasRuntime
                         Types = types
                     }
                     : GlueFileModule)
@@ -239,6 +240,7 @@ let readPackages
                     Name = package.ModuleName
                     ImportSpecifier = package.RuntimeName
                     IsGlobal = isGlobal
+                    HasRuntime = package.HasRuntime
                     Types = types
                 }
                 : GlueFileModule)

@@ -17,6 +17,7 @@ type SubpathEntry =
 type PackageDescription =
     abstract name: string
     abstract runtimeName: string
+    abstract hasRuntime: bool
     abstract dir: string
     abstract typesRoot: string
     abstract entryFile: string
@@ -99,6 +100,7 @@ let private toPackageInfo (description: PackageDescription) : Reader.Types.Packa
     {
         ModuleName = moduleNameForPackage description.runtimeName
         RuntimeName = description.runtimeName
+        HasRuntime = description.hasRuntime
         Dir = String.normalizePath description.dir + "/"
         TypesRoot = String.normalizePath description.typesRoot + "/"
         EntryFile = String.normalizePath description.entryFile

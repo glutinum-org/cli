@@ -126,6 +126,53 @@ function collectExportsTypes(exportsField) {
 
 
 /**
+ * Whether a `package.json` `exports` map names a file that is not a declaration file.
+ *
+ * @param {unknown} node
+ * @returns {boolean}
+ */
+function exportsRuntimeFile(node) {
+    if (typeof node === "string") {
+        return !DECLARATION_FILE.test(node);
+    }
+
+    if (node !== null && typeof node === "object") {
+        return Object.values(node).some(exportsRuntimeFile);
+    }
+
+    return false;
+}
+
+/**
+ * Whether the package ships JavaScript. `undici-types` is declaration files and nothing else,
+ * importing it throws at runtime.
+ *
+ * @param {import("./host.js").Host} host
+ * @param {string} packageDir
+ * @param {Record<string, unknown>} pkg
+ * @returns {boolean}
+ */
+function hasRuntime(host, packageDir, pkg) {
+    const { path, fs } = host;
+
+    // `csstype` declares `"main": ""`
+    const declared = (field) => (typeof field === "string" ? field !== "" : field !== undefined && field !== null);
+
+    if (declared(pkg.main) || declared(pkg.module) || declared(pkg.bin) || declared(pkg.browser)) {
+        return true;
+    }
+
+    if (exportsRuntimeFile(pkg.exports)) {
+        return true;
+    }
+
+    // `.glutinum-runtime` is written by the downloader of the web app, which only fetches declarations
+    return ["index.js", "index.mjs", "index.cjs", ".glutinum-runtime"].some((file) =>
+        fs.fileExists(path.join(packageDir, file))
+    );
+}
+
+/**
  * `[major, minor, patch]` of a version, missing parts are 0
  *
  * @param {string} version
@@ -247,7 +294,7 @@ function applyTypesVersions(typesVersions, file) {
  *
  * @param {import("./host.js").Host} host
  * @param {string} packageDir
- * @returns {{ name: string, runtimeName: string, dir: string, typesRoot: string, entryFile: string, subpathEntries: { subpath: string, file: string }[] } | null}
+ * @returns {{ name: string, runtimeName: string, hasRuntime: boolean, dir: string, typesRoot: string, entryFile: string, subpathEntries: { subpath: string, file: string }[] } | null}
  */
 export function describePackage(host, packageDir) {
     const { path, fs } = host;
@@ -312,6 +359,7 @@ export function describePackage(host, packageDir) {
     return {
         name,
         runtimeName,
+        hasRuntime: name.startsWith("@types/") || hasRuntime(host, packageDir, pkg),
         dir: packageDir,
         // The files of a `typesVersions` folder are named as if they were at the root
         typesRoot: main.isMapped ? path.dirname(main.file) : packageDir,

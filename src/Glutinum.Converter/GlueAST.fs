@@ -513,6 +513,8 @@ and GlueFileModule =
         ImportSpecifier: string
         /// The file is a script: its declarations are globals instead of exports
         IsGlobal: bool
+        /// The package the file belongs to ships JavaScript: its values can be imported
+        HasRuntime: bool
         Types: GlueType list
     }
 

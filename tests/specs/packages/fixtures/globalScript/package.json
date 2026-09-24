@@ -1,4 +1,5 @@
 {
     "name": "web-lib",
+    "main": "index.js",
     "types": "index.d.ts"
 }

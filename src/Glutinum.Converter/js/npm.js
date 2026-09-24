@@ -1,4 +1,7 @@
 const DECLARATION_FILE = /\.d\.[cm]?ts$/;
+const JAVASCRIPT_FILE = /\.[cm]?js$/;
+// Written next to a package shipping JavaScript, read by `hasRuntime` of `resolve.js`
+const RUNTIME_MARKER = ".glutinum-runtime";
 const REGISTRY = "https://data.jsdelivr.com/v1/package";
 const CDN = "https://cdn.jsdelivr.net/npm";
 const CONCURRENCY = 8;
@@ -110,6 +113,11 @@ export async function installPackage(fileSystem, spec, options = {}) {
         await Promise.all(Array.from({ length: CONCURRENCY }, worker));
 
         const packageJson = JSON.parse(fileSystem.readFileSync(`/node_modules/${name}/package.json`, "utf8"));
+
+        // The JavaScript is never downloaded, the file system cannot be asked for it
+        if (files.some((file) => JAVASCRIPT_FILE.test(file.name))) {
+            fileSystem.writeFileSync(`/node_modules/${name}/${RUNTIME_MARKER}`, "");
+        }
 
         const hasDeclarations = files.some((file) => DECLARATION_FILE.test(file.name));
 

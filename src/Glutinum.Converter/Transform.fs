@@ -146,21 +146,26 @@ type ImportSource =
     | Module of specifier: string
     /// Globals of a script
     | Global
+    /// A types-only package: it has no JavaScript to bind a value to
+    | NoRuntime
 
 let private importAttribute (name: string) (source: ImportSource) =
     match source with
-    | ImportSource.Module specifier -> FSharpAttribute.Import(name, specifier)
-    | ImportSource.Global -> FSharpAttribute.Global(Some name)
+    | ImportSource.Module specifier -> [ FSharpAttribute.Import(name, specifier) ]
+    | ImportSource.Global -> [ FSharpAttribute.Global(Some name) ]
+    | ImportSource.NoRuntime -> []
 
 let private importAllAttribute (name: string) (source: ImportSource) =
     match source with
-    | ImportSource.Module specifier -> FSharpAttribute.ImportAll specifier
-    | ImportSource.Global -> FSharpAttribute.Global(Some name)
+    | ImportSource.Module specifier -> [ FSharpAttribute.ImportAll specifier ]
+    | ImportSource.Global -> [ FSharpAttribute.Global(Some name) ]
+    | ImportSource.NoRuntime -> []
 
 let private importDefaultAttribute (name: string) (source: ImportSource) =
     match source with
-    | ImportSource.Module specifier -> FSharpAttribute.ImportDefault specifier
-    | ImportSource.Global -> FSharpAttribute.Global(Some name)
+    | ImportSource.Module specifier -> [ FSharpAttribute.ImportDefault specifier ]
+    | ImportSource.Global -> [ FSharpAttribute.Global(Some name) ]
+    | ImportSource.NoRuntime -> []
 
 // Not really proud of this implementation, but I was not able to make it in a
 // pure functional way, using a Tree structure or something similar
@@ -1652,7 +1657,7 @@ let private transformExports
 
                 Some
                     [
-                        importDefaultAttribute objectName context.ImportSource
+                        yield! importDefaultAttribute objectName context.ImportSource
                         FSharpAttribute.Text $"Emit(\"%s{emit}\")"
                     ]
             | _ -> None
@@ -1697,7 +1702,7 @@ let private transformExports
                                     | Some attributes -> yield! attributes
                                     | None ->
                                         if isTopLevel then
-                                            importAttribute info.Name context.ImportSource
+                                            yield! importAttribute info.Name context.ImportSource
                                         else
                                             FSharpAttribute.EmitMacroProperty info.Name
                                     yield! xmlDocInfo.ObsoleteAttributes
@@ -1735,11 +1740,13 @@ let private transformExports
                                     | None ->
                                         if isTopLevel then
                                             if defaultExportedDeclarations.Contains info.Name then
-                                                importDefaultAttribute
-                                                    info.Name
-                                                    context.ImportSource
+                                                yield!
+                                                    importDefaultAttribute
+                                                        info.Name
+                                                        context.ImportSource
                                             else
-                                                importAttribute info.Name context.ImportSource
+                                                yield!
+                                                    importAttribute info.Name context.ImportSource
                                         else
                                             FSharpAttribute.EmitMacroInvoke info.Name
                                     yield! xmlDocInfo.ObsoleteAttributes
@@ -1856,11 +1863,15 @@ let private transformExports
                                         [
                                             if isTopLevel then
                                                 if isDefaultExport then
-                                                    importDefaultAttribute
-                                                        info.Name
-                                                        context.ImportSource
+                                                    yield!
+                                                        importDefaultAttribute
+                                                            info.Name
+                                                            context.ImportSource
                                                 else
-                                                    importAttribute info.Name context.ImportSource
+                                                    yield!
+                                                        importAttribute
+                                                            info.Name
+                                                            context.ImportSource
 
                                                 FSharpAttribute.EmitConstructor
                                             else
@@ -1980,9 +1991,11 @@ let private transformExports
                                             Naming.removeSurroundingQuotes moduleDeclaration.Name
                                         )
                                     elif isTopLevel then
-                                        importAllAttribute
-                                            (Naming.removeSurroundingQuotes moduleDeclaration.Name)
-                                            context.ImportSource
+                                        yield!
+                                            importAllAttribute
+                                                (Naming.removeSurroundingQuotes
+                                                    moduleDeclaration.Name)
+                                                context.ImportSource
                                     else
                                         FSharpAttribute.EmitMacroProperty(
                                             Naming.removeSurroundingQuotes moduleDeclaration.Name
@@ -2027,7 +2040,7 @@ let private transformExports
 
                         let newTypes =
                             {
-                                Attributes = [ importDefaultAttribute name context.ImportSource ]
+                                Attributes = importDefaultAttribute name context.ImportSource
                                 Name = name
                                 OriginalName = name
                                 Parameters = []
@@ -2180,9 +2193,10 @@ let private transformExports
                             Attributes =
                                 [
                                     yield! xmlDocInfo.ObsoleteAttributes
-                                    importDefaultAttribute
-                                        moduleDeclaration.Name
-                                        context.ImportSource
+                                    yield!
+                                        importDefaultAttribute
+                                            moduleDeclaration.Name
+                                            context.ImportSource
                                 ]
                             Name = name
                             OriginalName = $"{moduleDeclaration.Name}.Exports"
@@ -2224,8 +2238,7 @@ let private transformExports
 
                     let newTypes =
                         {
-                            Attributes =
-                                [ importDefaultAttribute glueType.Name context.ImportSource ]
+                            Attributes = importDefaultAttribute glueType.Name context.ImportSource
                             Name = name
                             OriginalName = glueType.Name
                             Parameters = []
@@ -2337,6 +2350,21 @@ module private TransformMembers =
 
     let withoutComputedNames (members: GlueMember list) =
         members |> List.filter (hasComputedName >> not)
+
+    // A static member prints an inline import of its class from the package
+    let private withoutStaticMembers (members: GlueMember list) =
+        members
+        |> List.filter (
+            function
+            | GlueMember.Method { IsStatic = isStatic }
+            | GlueMember.Property { IsStatic = isStatic }
+            | GlueMember.GetAccessor { IsStatic = isStatic }
+            | GlueMember.SetAccessor { IsStatic = isStatic } -> not isStatic
+            | GlueMember.CallSignature _
+            | GlueMember.ConstructSignature _
+            | GlueMember.IndexSignature _
+            | GlueMember.MethodSignature _ -> true
+        )
 
     /// Declared next to the overload made of the defaults, so F# tells the two apart
     let private defaultsOf
@@ -2569,6 +2597,10 @@ module private TransformMembers =
         members
         // The iterator information is stored in the Iterable<T> inheritance
         |> withoutComputedNames
+        |> (if context.ImportSource = ImportSource.NoRuntime then
+                withoutStaticMembers
+            else
+                id)
         |> KeyOfMaps.expandMembers
         |> withDefaultedTypeParameterOverloads
         |> UnionOverloads.expandMembers context.TypeMemory
@@ -7260,6 +7292,8 @@ let private transformToFsharp
                     context.TypeLiteralsMemory
                     (if fileModule.IsGlobal then
                          ImportSource.Global
+                     elif not fileModule.HasRuntime then
+                         ImportSource.NoRuntime
                      else
                          ImportSource.Module fileModule.ImportSpecifier)
                     true
@@ -7468,7 +7502,11 @@ let private transform
             | _ -> false
         )
 
-    let exports = exports @ classes @ reExportedClasses
+    let exports =
+        match importSource with
+        | ImportSource.NoRuntime -> []
+        | ImportSource.Global
+        | ImportSource.Module _ -> exports @ classes @ reExportedClasses
 
     let rootTransformContext =
         TransformContext(reporter, "", typeMemory, typeLiteralsMemory, importSource)

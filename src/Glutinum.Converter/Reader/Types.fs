@@ -11,6 +11,8 @@ type PackageInfo =
         ModuleName: string
         /// Name used to import the package at runtime (e.g. `vscode` for `@types/vscode`)
         RuntimeName: string
+        /// The package ships JavaScript, `undici-types` is declaration files and nothing else
+        HasRuntime: bool
         /// Normalized absolute directory, with a trailing `/`
         Dir: string
         /// Directory the file modules are named from: the `typesVersions` folder of the entry, else `Dir`
