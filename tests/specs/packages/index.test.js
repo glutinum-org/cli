@@ -20,6 +20,7 @@ const fixtures = [
     "externalRuntime",
     "globalAugmentation",
     "typesOnlyDependency",
+    "subpathEntries",
 ]
 
 const footer = `
