@@ -4714,16 +4714,25 @@ module Conditionals =
             || mentionsConditional indexedAccess.IndexType
         | _ -> false
 
-    let rec private resolve (defaults: Map<string, GlueType>) (glueType: GlueType) : GlueType =
-        let resolve = resolve defaults
+    let rec private resolveWith
+        (seen: Set<string>)
+        (defaults: Map<string, GlueType>)
+        (glueType: GlueType)
+        : GlueType
+        =
+        let resolve = resolveWith seen defaults
 
         match glueType with
         | GlueType.TypeReference typeReference when
             aliases.ContainsKey typeReference.FullName
             && aliases.[typeReference.FullName].TypeParameters.Length =
                 typeReference.TypeArguments.Length
+            && not (seen.Contains typeReference.FullName)
             ->
             let alias = aliases.[typeReference.FullName]
+
+            // An alias whose body names itself would expand without end
+            let resolve = resolveWith (Set.add typeReference.FullName seen) defaults
 
             let substitutions =
                 List.zip (alias.TypeParameters |> List.map _.Name) typeReference.TypeArguments
@@ -4802,6 +4811,9 @@ module Conditionals =
         | _ -> glueType
 
     /// A type parameter is its default, else its constraint, when a condition is checked
+    let private resolve (defaults: Map<string, GlueType>) (glueType: GlueType) =
+        resolveWith Set.empty defaults glueType
+
     let private bindings (typeParameters: GlueTypeParameter list) =
         typeParameters
         |> List.choose (fun typeParameter ->
