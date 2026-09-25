@@ -176,7 +176,12 @@ type GlueInterface =
         HeritageClauses: GlueType list
     }
 
-type GlueTypeLiteral = { Members: GlueMember list }
+type GlueTypeLiteral =
+    {
+        Members: GlueMember list
+        /// The node declaring the anonymous type, two references to it are the same type
+        Id: string option
+    }
 
 type GlueVariable =
     {

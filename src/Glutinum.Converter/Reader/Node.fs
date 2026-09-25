@@ -38,7 +38,12 @@ let readNode (reader: ITypeScriptReader) (node: Ts.Node) : GlueType =
         let members =
             typeLiteralNode.members |> Seq.toList |> List.map reader.ReadDeclaration
 
-        ({ Members = members }: GlueTypeLiteral) |> GlueType.TypeLiteral
+        ({
+            Members = members
+            Id = typeLiteralId typeLiteralNode
+        }
+        : GlueTypeLiteral)
+        |> GlueType.TypeLiteral
 
     // `export { X }` resolved from another module, the declaration of `X` is the node to read
     | Ts.SyntaxKind.ExportSpecifier ->

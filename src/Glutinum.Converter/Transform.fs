@@ -76,6 +76,7 @@ type TypeLiteralsMemory() =
 
     let assigned = Dictionary<string, string * int>()
     let pending = Dictionary<string, string>()
+    let byDeclaration = Dictionary<string, obj * string>()
 
     member _.GetTypeName(fullName: string, currentScopeName: string) =
         let types =
@@ -131,6 +132,15 @@ type TypeLiteralsMemory() =
                 | _ ->
                     types.[last] <- Some(signature, root, modulePath)
                     false
+
+    /// The name already given to the anonymous type declared by `id`, when the name is
+    /// reachable from `root`: it qualifies the type inside one generated module only
+    member _.TryReference(id: string, root: obj) =
+        match byDeclaration.TryGetValue id with
+        | true, (candidateRoot, name) when obj.ReferenceEquals(candidateRoot, root) -> Some name
+        | _ -> None
+
+    member _.Remember(id: string, root: obj, name: string) = byDeclaration.[id] <- (root, name)
 
     /// The qualified name to reference the type named `name` by `GetTypeName` in `fullName`
     member _.ReferenceName(fullName: string, name: string) =
@@ -777,6 +787,7 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
     | GlueType.ConstructorType constructSignature ->
         ({
             Members = [ GlueMember.ConstructSignature constructSignature ]
+            Id = None
         }
         : GlueTypeLiteral)
         |> GlueType.TypeLiteral
@@ -1112,6 +1123,20 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
     // `{}` is any non-null value
     | GlueType.TypeLiteral { Members = [] } -> FSharpType.Object
 
+    // The same declaration reached twice, `ReturnType<typeof f>` and the return of `f`
+    | GlueType.TypeLiteral { Id = Some id } when
+        (context.TypeLiteralsMemory.TryReference(id, context.Root)).IsSome
+        ->
+        ({
+            Name = (context.TypeLiteralsMemory.TryReference(id, context.Root)).Value
+            FullName = context.FullName
+            ModulePath = []
+            TypeArguments = []
+            Type = FSharpType.Discard
+        }
+        : FSharpTypeReference)
+        |> FSharpType.TypeReference
+
     | GlueType.TypeLiteral typeLiteralInfo ->
         // A `[<ParamObject>]` class only makes sense for a plain data object.
         // If the type literal is callable/constructable (call or construct
@@ -1181,6 +1206,11 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
             |> context.ExposeType
 
         let name = context.TypeLiteralsMemory.ReferenceName(context.FullName, name)
+
+        // A generic anonymous type is not the same type at every use site
+        if typeParameterNames.IsEmpty then
+            typeLiteralInfo.Id
+            |> Option.iter (fun id -> context.TypeLiteralsMemory.Remember(id, context.Root, name))
 
         // Get fullname
         // Store type in the exposed types memory

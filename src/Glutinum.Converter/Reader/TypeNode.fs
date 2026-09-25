@@ -520,7 +520,9 @@ module UtilityType =
                 if members.IsEmpty then
                     None
                 else
-                    ({ Members = members }: GlueTypeLiteral) |> GlueType.TypeLiteral |> Some
+                    ({ Members = members; Id = None }: GlueTypeLiteral)
+                    |> GlueType.TypeLiteral
+                    |> Some
             | HasTypeFlags Ts.TypeFlags.String
             | HasTypeFlags Ts.TypeFlags.Number
             | HasTypeFlags Ts.TypeFlags.Boolean when isTypeAliasApplication ->
@@ -730,9 +732,21 @@ module UtilityType =
             | HasTypeFlags Ts.TypeFlags.Index -> reader.checker.getApparentType rawTyp
             | _ -> rawTyp
 
+        // `typeToTypeNode` synthesizes the node, the identity is the literal the type is declared by
+        let declaredId () =
+            match typ.getSymbol () with
+            | Some symbol ->
+                match symbol.declarations with
+                | Some declarations when declarations.Count > 0 -> typeLiteralId declarations.[0]
+                | _ -> None
+            | None -> None
+
         match reader.checker.typeToTypeNode (typ, None, None) with
         | Some typeNode ->
-            reader.ReadTypeNode typeNode
+            (match reader.ReadTypeNode typeNode with
+             | GlueType.TypeLiteral info when info.Id.IsNone ->
+                 GlueType.TypeLiteral { info with Id = declaredId () }
+             | glueType -> glueType)
             |> GlueUtilityType.ReturnType
             |> GlueType.UtilityType
         | None ->
@@ -1472,7 +1486,12 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
         let members =
             typeLiteralNode.members |> Seq.toList |> List.map reader.ReadDeclaration
 
-        ({ Members = members }: GlueTypeLiteral) |> GlueType.TypeLiteral
+        ({
+            Members = members
+            Id = typeLiteralId typeLiteralNode
+        }
+        : GlueTypeLiteral)
+        |> GlueType.TypeLiteral
 
     | Ts.SyntaxKind.ParenthesizedType ->
         let parenthesizedTypeNode = typeNode :?> Ts.ParenthesizedTypeNode

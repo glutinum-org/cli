@@ -106,6 +106,13 @@ let entityNameText (node: Ts.Node) : string =
     else
         identifierText node
 
+/// Identity of an anonymous type, a node synthesized by `typeToTypeNode` has none
+let typeLiteralId (node: Ts.Node) : string option =
+    if node.pos < 0 then
+        None
+    else
+        Some $"{String.normalizePath (node.getSourceFile().fileName)}:{node.pos}"
+
 /// Identifiers synthesized by <c>typeToTypeNode</c> carry their symbol, they can't be resolved by position
 let symbolAtLocation (checker: Ts.TypeChecker) (node: Ts.Node) : Ts.Symbol option =
     if not (isNull node?symbol) then

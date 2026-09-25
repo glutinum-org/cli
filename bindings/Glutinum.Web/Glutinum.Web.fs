@@ -1058,10 +1058,10 @@ module Web =
         static member inline DOMMatrix: Exports.DOMMatrix.Type = nativeOnly
 
         [<Global("SVGMatrix")>]
-        static member inline SVGMatrix: Exports.SVGMatrix.Type = nativeOnly
+        static member inline SVGMatrix: Exports.DOMMatrix.Type = nativeOnly
 
         [<Global("WebKitCSSMatrix")>]
-        static member inline WebKitCSSMatrix: Exports.WebKitCSSMatrix.Type = nativeOnly
+        static member inline WebKitCSSMatrix: Exports.DOMMatrix.Type = nativeOnly
 
         /// <summary>
         /// The **<c>DOMMatrixReadOnly</c>** interface represents a read-only 4×4 matrix, suitable for 2D and 3D operations. The DOMMatrix interface — which is based upon DOMMatrixReadOnly—adds mutability, allowing you to alter the matrix after creating it.
@@ -1088,7 +1088,7 @@ module Web =
         static member inline DOMPoint: Exports.DOMPoint.Type = nativeOnly
 
         [<Global("SVGPoint")>]
-        static member inline SVGPoint: Exports.SVGPoint.Type = nativeOnly
+        static member inline SVGPoint: Exports.DOMPoint.Type = nativeOnly
 
         /// <summary>
         /// The **<c>DOMPointReadOnly</c>** interface specifies the coordinate and perspective fields used by DOMPoint to define a 2D or 3D point in a coordinate system.
@@ -1115,7 +1115,7 @@ module Web =
         static member inline DOMRect: Exports.DOMRect.Type = nativeOnly
 
         [<Global("SVGRect")>]
-        static member inline SVGRect: Exports.SVGRect.Type = nativeOnly
+        static member inline SVGRect: Exports.DOMRect.Type = nativeOnly
 
         /// <summary>
         /// The **<c>DOMRectList</c>** interface represents a collection of DOMRect objects, typically used to hold the rectangles associated with a particular element, like bounding boxes returned by methods such as getClientRects(). It provides access to each rectangle in the list via its index, along with a length property that indicates the total number of rectangles in the list.
@@ -5293,7 +5293,7 @@ module Web =
         static member inline URL: Exports.URL.Type = nativeOnly
 
         [<Global("webkitURL")>]
-        static member inline webkitURL: Exports.webkitURL.Type = nativeOnly
+        static member inline webkitURL: Exports.URL.Type = nativeOnly
 
         /// <summary>
         /// The **<c>URLPattern</c>** interface of the URL Pattern API matches URLs or parts of URLs against a pattern. The pattern can contain capturing groups that extract parts of the matched URL.
@@ -101831,8 +101831,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/createExpression)
         /// </summary>
         abstract member createExpression:
-            expression: string * resolver: XPathEvaluatorBase.createExpression.resolver ->
-                Web.XPathExpression
+            expression: string * resolver: XPathNSResolver.U2.Case2 -> Web.XPathExpression
 
         [<Obsolete("[MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/createNSResolver)")>]
         abstract member createNSResolver: nodeResolver: Web.Node -> Web.Node
@@ -101859,7 +101858,7 @@ module Web =
         abstract member evaluate:
             expression: string *
             contextNode: Web.Node *
-            resolver: XPathEvaluatorBase.evaluate.resolver *
+            resolver: XPathNSResolver.U2.Case2 *
             ?``type``: float *
             ?result: Web.XPathResult ->
                 Web.XPathResult
@@ -107934,24 +107933,6 @@ module Web =
             | ``2`` = 2
             | ``3`` = 3
 
-    module XPathEvaluatorBase =
-
-        module createExpression =
-
-            [<Global>]
-            [<AllowNullLiteral>]
-            type resolver [<ParamObject; Emit("$0")>] (?lookupNamespaceURI: string) =
-
-                member val lookupNamespaceURI: string option = nativeOnly
-
-        module evaluate =
-
-            [<Global>]
-            [<AllowNullLiteral>]
-            type resolver [<ParamObject; Emit("$0")>] (?lookupNamespaceURI: string) =
-
-                member val lookupNamespaceURI: string option = nativeOnly
-
     module HeadersInit =
 
         module U3 =
@@ -109663,76 +109644,6 @@ module Web =
                 /// </summary>
                 abstract member fromMatrix: ?other: Web.DOMMatrixInit -> Web.DOMMatrix
 
-        module SVGMatrix =
-
-            [<AllowNullLiteral>]
-            [<Interface>]
-            type Type =
-                abstract member prototype: Web.DOMMatrix with get, set
-
-                [<EmitConstructor>]
-                abstract member Create: unit -> Web.DOMMatrix
-
-                [<EmitConstructor>]
-                abstract member Create: init: string -> Web.DOMMatrix
-
-                [<EmitConstructor>]
-                abstract member Create: init: ResizeArray<float> -> Web.DOMMatrix
-
-                /// <summary>
-                /// The **<c>fromFloat32Array()</c>** static method of the DOMMatrix interface creates a new DOMMatrix object given an array of single-precision (32-bit) floating-point values.
-                ///
-                /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrix/fromFloat32Array_static)
-                /// </summary>
-                abstract member fromFloat32Array: array32: JS.Float32Array -> Web.DOMMatrix
-                /// <summary>
-                /// The **<c>fromFloat64Array()</c>** static method of the DOMMatrix interface creates a new DOMMatrix object given an array of double-precision (64-bit) floating-point values.
-                ///
-                /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrix/fromFloat64Array_static)
-                /// </summary>
-                abstract member fromFloat64Array: array64: JS.Float64Array -> Web.DOMMatrix
-                /// <summary>
-                /// The **<c>fromMatrix()</c>** static method of the DOMMatrix interface creates a new DOMMatrix object given an existing matrix or an object which provides the values for its properties.
-                ///
-                /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrix/fromMatrix_static)
-                /// </summary>
-                abstract member fromMatrix: ?other: Web.DOMMatrixInit -> Web.DOMMatrix
-
-        module WebKitCSSMatrix =
-
-            [<AllowNullLiteral>]
-            [<Interface>]
-            type Type =
-                abstract member prototype: Web.DOMMatrix with get, set
-
-                [<EmitConstructor>]
-                abstract member Create: unit -> Web.DOMMatrix
-
-                [<EmitConstructor>]
-                abstract member Create: init: string -> Web.DOMMatrix
-
-                [<EmitConstructor>]
-                abstract member Create: init: ResizeArray<float> -> Web.DOMMatrix
-
-                /// <summary>
-                /// The **<c>fromFloat32Array()</c>** static method of the DOMMatrix interface creates a new DOMMatrix object given an array of single-precision (32-bit) floating-point values.
-                ///
-                /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrix/fromFloat32Array_static)
-                /// </summary>
-                abstract member fromFloat32Array: array32: JS.Float32Array -> Web.DOMMatrix
-                /// <summary>
-                /// The **<c>fromFloat64Array()</c>** static method of the DOMMatrix interface creates a new DOMMatrix object given an array of double-precision (64-bit) floating-point values.
-                ///
-                /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrix/fromFloat64Array_static)
-                /// </summary>
-                abstract member fromFloat64Array: array64: JS.Float64Array -> Web.DOMMatrix
-                /// <summary>
-                /// The **<c>fromMatrix()</c>** static method of the DOMMatrix interface creates a new DOMMatrix object given an existing matrix or an object which provides the values for its properties.
-                ///
-                /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrix/fromMatrix_static)
-                /// </summary>
-                abstract member fromMatrix: ?other: Web.DOMMatrixInit -> Web.DOMMatrix
-
         module DOMMatrixReadOnly =
 
             [<AllowNullLiteral>]
@@ -109779,24 +109690,6 @@ module Web =
                 abstract member Create: unit -> Web.DOMParser
 
         module DOMPoint =
-
-            [<AllowNullLiteral>]
-            [<Interface>]
-            type Type =
-                abstract member prototype: Web.DOMPoint with get, set
-
-                [<EmitConstructor>]
-                abstract member Create:
-                    ?x: float * ?y: float * ?z: float * ?w: float -> Web.DOMPoint
-
-                /// <summary>
-                /// The **<c>fromPoint()</c>** static method of the DOMPoint interface creates and returns a new mutable DOMPoint object given a source point.
-                ///
-                /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMPoint/fromPoint_static)
-                /// </summary>
-                abstract member fromPoint: ?other: Web.DOMPointInit -> Web.DOMPoint
-
-        module SVGPoint =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109861,24 +109754,6 @@ module Web =
                 abstract member fromRect: ?other: Web.DOMRectInit -> Web.DOMQuad
 
         module DOMRect =
-
-            [<AllowNullLiteral>]
-            [<Interface>]
-            type Type =
-                abstract member prototype: Web.DOMRect with get, set
-
-                [<EmitConstructor>]
-                abstract member Create:
-                    ?x: float * ?y: float * ?width: float * ?height: float -> Web.DOMRect
-
-                /// <summary>
-                /// The **<c>fromRect()</c>** static method of the DOMRect object creates a new DOMRect object with a given location and dimensions.
-                ///
-                /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMRect/fromRect_static)
-                /// </summary>
-                abstract member fromRect: ?other: Web.DOMRectInit -> Web.DOMRect
-
-        module SVGRect =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115732,122 +115607,6 @@ module Web =
                     ``type``: string * ?eventInitDict: Web.UIEventInit -> Web.UIEvent
 
         module URL =
-
-            [<AllowNullLiteral>]
-            [<Interface>]
-            type Type =
-                abstract member prototype: Web.URL with get, set
-
-                [<EmitConstructor>]
-                abstract member Create: url: string -> Web.URL
-
-                [<EmitConstructor>]
-                abstract member Create: url: string * ``base``: string -> Web.URL
-
-                [<EmitConstructor>]
-                abstract member Create: url: string * ``base``: Web.URL -> Web.URL
-
-                [<EmitConstructor>]
-                abstract member Create: url: Web.URL -> Web.URL
-
-                [<EmitConstructor>]
-                abstract member Create: url: Web.URL * ``base``: string -> Web.URL
-
-                [<EmitConstructor>]
-                abstract member Create: url: Web.URL * ``base``: Web.URL -> Web.URL
-
-                /// <summary>
-                /// The **<c>URL.canParse()</c>** static method of the URL interface returns a boolean indicating whether or not an absolute URL, or a relative URL combined with a base URL, are parsable and valid.
-                ///
-                /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/URL/canParse_static)
-                /// </summary>
-                abstract member canParse: url: string -> bool
-                /// <summary>
-                /// The **<c>URL.canParse()</c>** static method of the URL interface returns a boolean indicating whether or not an absolute URL, or a relative URL combined with a base URL, are parsable and valid.
-                ///
-                /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/URL/canParse_static)
-                /// </summary>
-                abstract member canParse: url: string * ``base``: string -> bool
-                /// <summary>
-                /// The **<c>URL.canParse()</c>** static method of the URL interface returns a boolean indicating whether or not an absolute URL, or a relative URL combined with a base URL, are parsable and valid.
-                ///
-                /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/URL/canParse_static)
-                /// </summary>
-                abstract member canParse: url: string * ``base``: Web.URL -> bool
-                /// <summary>
-                /// The **<c>URL.canParse()</c>** static method of the URL interface returns a boolean indicating whether or not an absolute URL, or a relative URL combined with a base URL, are parsable and valid.
-                ///
-                /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/URL/canParse_static)
-                /// </summary>
-                abstract member canParse: url: Web.URL -> bool
-                /// <summary>
-                /// The **<c>URL.canParse()</c>** static method of the URL interface returns a boolean indicating whether or not an absolute URL, or a relative URL combined with a base URL, are parsable and valid.
-                ///
-                /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/URL/canParse_static)
-                /// </summary>
-                abstract member canParse: url: Web.URL * ``base``: string -> bool
-                /// <summary>
-                /// The **<c>URL.canParse()</c>** static method of the URL interface returns a boolean indicating whether or not an absolute URL, or a relative URL combined with a base URL, are parsable and valid.
-                ///
-                /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/URL/canParse_static)
-                /// </summary>
-                abstract member canParse: url: Web.URL * ``base``: Web.URL -> bool
-                /// <summary>
-                /// The **<c>createObjectURL()</c>** static method of the URL interface creates a string containing a blob URL pointing to the object given in the parameter.
-                ///
-                /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/URL/createObjectURL_static)
-                /// </summary>
-                abstract member createObjectURL: obj: Web.Blob -> string
-                /// <summary>
-                /// The **<c>createObjectURL()</c>** static method of the URL interface creates a string containing a blob URL pointing to the object given in the parameter.
-                ///
-                /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/URL/createObjectURL_static)
-                /// </summary>
-                abstract member createObjectURL: obj: Web.MediaSource -> string
-                /// <summary>
-                /// The **<c>URL.parse()</c>** static method of the URL interface returns a newly created URL object representing the URL defined by the parameters.
-                ///
-                /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/URL/parse_static)
-                /// </summary>
-                abstract member parse: url: string -> Web.URL option
-                /// <summary>
-                /// The **<c>URL.parse()</c>** static method of the URL interface returns a newly created URL object representing the URL defined by the parameters.
-                ///
-                /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/URL/parse_static)
-                /// </summary>
-                abstract member parse: url: string * ``base``: string -> Web.URL option
-                /// <summary>
-                /// The **<c>URL.parse()</c>** static method of the URL interface returns a newly created URL object representing the URL defined by the parameters.
-                ///
-                /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/URL/parse_static)
-                /// </summary>
-                abstract member parse: url: string * ``base``: Web.URL -> Web.URL option
-                /// <summary>
-                /// The **<c>URL.parse()</c>** static method of the URL interface returns a newly created URL object representing the URL defined by the parameters.
-                ///
-                /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/URL/parse_static)
-                /// </summary>
-                abstract member parse: url: Web.URL -> Web.URL option
-                /// <summary>
-                /// The **<c>URL.parse()</c>** static method of the URL interface returns a newly created URL object representing the URL defined by the parameters.
-                ///
-                /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/URL/parse_static)
-                /// </summary>
-                abstract member parse: url: Web.URL * ``base``: string -> Web.URL option
-                /// <summary>
-                /// The **<c>URL.parse()</c>** static method of the URL interface returns a newly created URL object representing the URL defined by the parameters.
-                ///
-                /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/URL/parse_static)
-                /// </summary>
-                abstract member parse: url: Web.URL * ``base``: Web.URL -> Web.URL option
-                /// <summary>
-                /// The **<c>revokeObjectURL()</c>** static method of the URL interface releases an existing object URL which was previously created by calling URL.createObjectURL().
-                ///
-                /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/URL/revokeObjectURL_static)
-                /// </summary>
-                abstract member revokeObjectURL: url: string -> unit
-
-        module webkitURL =
 
             [<AllowNullLiteral>]
             [<Interface>]

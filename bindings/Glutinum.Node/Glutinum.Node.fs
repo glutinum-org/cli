@@ -9906,7 +9906,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
         /// <c>arrayBuffer.byteLength - byteOffset</c>.
         /// </param>
         abstract member from:
-            arrayBuffer: BufferConstructor.from.arrayBuffer * ?byteOffset: float * ?length: float ->
+            arrayBuffer: BufferConstructor.from.array * ?byteOffset: float * ?length: float ->
                 Node.Buffer
 
         /// <summary>
@@ -10132,7 +10132,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
         /// The encoding of <c>string</c>. **Default:** <c>'utf8'</c>.
         /// </param>
         abstract member from:
-            string: BufferConstructor.from.string * ?encoding: Node.BufferEncoding -> Node.Buffer
+            string: BufferConstructor.from.array * ?encoding: Node.BufferEncoding -> Node.Buffer
 
         /// <summary>
         /// Allocates a new <c>Buffer</c> using an <c>array</c> of bytes in the range <c>0</c> – <c>255</c>.
@@ -10350,111 +10350,6 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
         /// <c>Buffer.allocUnsafe()</c> does.
         /// </summary>
         abstract member from: arrayOrString: U2<obj, string> -> Node.Buffer
-        /// <summary>
-        /// Allocates a new <c>Buffer</c> using an <c>array</c> of bytes in the range <c>0</c> – <c>255</c>.
-        /// Array entries outside that range will be truncated to fit into it.
-        ///
-        /// <code lang="js">
-        /// import { Buffer } from 'node:buffer';
-        ///
-        /// // Creates a new Buffer containing the UTF-8 bytes of the string 'buffer'.
-        /// const buf = Buffer.from([0x62, 0x75, 0x66, 0x66, 0x65, 0x72]);
-        /// </code>
-        ///
-        /// If <c>array</c> is an <c>Array</c>-like object (that is, one with a <c>length</c> property of
-        /// type <c>number</c>), it is treated as if it is an array, unless it is a <c>Buffer</c> or
-        /// a <c>Uint8Array</c>. This means all other <c>TypedArray</c> variants get treated as an
-        /// <c>Array</c>. To create a <c>Buffer</c> from the bytes backing a <c>TypedArray</c>, use
-        /// <c>Buffer.copyBytesFrom()</c>.
-        ///
-        /// A <c>TypeError</c> will be thrown if <c>array</c> is not an <c>Array</c> or another type
-        /// appropriate for <c>Buffer.from()</c> variants.
-        ///
-        /// <c>Buffer.from(array)</c> and <c>Buffer.from(string)</c> may also use the internal
-        /// <c>Buffer</c> pool like <c>Buffer.allocUnsafe()</c> does.
-        /// This creates a view of the <c>ArrayBuffer</c> without copying the underlying
-        /// memory. For example, when passed a reference to the <c>.buffer</c> property of a
-        /// <c>TypedArray</c> instance, the newly created <c>Buffer</c> will share the same
-        /// allocated memory as the <c>TypedArray</c>'s underlying <c>ArrayBuffer</c>.
-        ///
-        /// <c></c><c>js
-        /// import { Buffer } from 'node:buffer';
-        ///
-        /// const arr = new Uint16Array(2);
-        ///
-        /// arr[0] = 5000;
-        /// arr[1] = 4000;
-        ///
-        /// // Shares memory with </c>arr<c>.
-        /// const buf = Buffer.from(arr.buffer);
-        ///
-        /// console.log(buf);
-        /// // Prints: <Buffer 88 13 a0 0f>
-        ///
-        /// // Changing the original Uint16Array changes the Buffer also.
-        /// arr[1] = 6000;
-        ///
-        /// console.log(buf);
-        /// // Prints: <Buffer 88 13 70 17>
-        /// </c><c></c>
-        ///
-        /// The optional <c>byteOffset</c> and <c>length</c> arguments specify a memory range within
-        /// the <c>arrayBuffer</c> that will be shared by the <c>Buffer</c>.
-        ///
-        /// <code lang="js">
-        /// import { Buffer } from 'node:buffer';
-        ///
-        /// const ab = new ArrayBuffer(10);
-        /// const buf = Buffer.from(ab, 0, 2);
-        ///
-        /// console.log(buf.length);
-        /// // Prints: 2
-        /// </code>
-        ///
-        /// A <c>TypeError</c> will be thrown if <c>arrayBuffer</c> is not an <c>ArrayBuffer</c> or a
-        /// <c>SharedArrayBuffer</c> or another type appropriate for <c>Buffer.from()</c>
-        /// variants.
-        ///
-        /// It is important to remember that a backing <c>ArrayBuffer</c> can cover a range
-        /// of memory that extends beyond the bounds of a <c>TypedArray</c> view. A new
-        /// <c>Buffer</c> created using the <c>buffer</c> property of a <c>TypedArray</c> may extend
-        /// beyond the range of the <c>TypedArray</c>:
-        ///
-        /// <code lang="js">
-        /// import { Buffer } from 'node:buffer';
-        ///
-        /// const arrA = Uint8Array.from([0x63, 0x64, 0x65, 0x66]); // 4 elements
-        /// const arrB = new Uint8Array(arrA.buffer, 1, 2); // 2 elements
-        /// console.log(arrA.buffer === arrB.buffer); // true
-        ///
-        /// const buf = Buffer.from(arrB.buffer);
-        /// console.log(buf);
-        /// // Prints: <Buffer 63 64 65 66>
-        /// </code>
-        /// Creates a new <c>Buffer</c> containing <c>string</c>. The <c>encoding</c> parameter identifies
-        /// the character encoding to be used when converting <c>string</c> into bytes.
-        ///
-        /// <code lang="js">
-        /// import { Buffer } from 'node:buffer';
-        ///
-        /// const buf1 = Buffer.from('this is a tést');
-        /// const buf2 = Buffer.from('7468697320697320612074c3a97374', 'hex');
-        ///
-        /// console.log(buf1.toString());
-        /// // Prints: this is a tést
-        /// console.log(buf2.toString());
-        /// // Prints: this is a tést
-        /// console.log(buf1.toString('latin1'));
-        /// // Prints: this is a tÃ©st
-        /// </code>
-        ///
-        /// A <c>TypeError</c> will be thrown if <c>string</c> is not a string or another type
-        /// appropriate for <c>Buffer.from()</c> variants.
-        ///
-        /// <c>Buffer.from(string)</c> may also use the internal <c>Buffer</c> pool like
-        /// <c>Buffer.allocUnsafe()</c> does.
-        /// </summary>
-        abstract member from: arrayOrString: BufferConstructor.from.arrayOrString -> Node.Buffer
         /// <summary>
         /// Creates a new Buffer using the passed {data}
         /// </summary>
@@ -14328,30 +14223,6 @@ TypeScript versions earlier than 5.7.""")>]
             type array [<ParamObject; Emit("$0")>] (valueOf: obj) =
 
                 member val valueOf: obj = nativeOnly
-
-            [<Global>]
-            [<AllowNullLiteral>]
-            type arrayBuffer [<ParamObject; Emit("$0")>] (valueOf: obj) =
-
-                member val valueOf: obj = nativeOnly
-
-            [<Global>]
-            [<AllowNullLiteral>]
-            type string [<ParamObject; Emit("$0")>] (valueOf: string) =
-
-                member val valueOf: string = nativeOnly
-
-            [<Global>]
-            [<AllowNullLiteral>]
-            type arrayOrString private () =
-
-                [<ParamObject; Emit("$0")>]
-                new(valueOf: obj) = arrayOrString ()
-
-                [<ParamObject; Emit("$0")>]
-                new(valueOf: string) = arrayOrString ()
-
-                member val valueOf: U2<obj, string> = nativeOnly
 
     module Buffer =
 
@@ -172468,7 +172339,7 @@ Duplex.fromWeb($0, $1)"""
             /// This option cannot be used with the <c>ALPNProtocols</c> option, and setting both options will throw an error.
             /// </summary>
             abstract member ALPNCallback:
-                (SecureContextOptions.ALPNCallback.arg -> string option) option with get, set
+                (TLSSocketOptions.ALPNCallback.arg -> string option) option with get, set
 
             /// <summary>
             /// Treat intermediate (non-self-signed)
@@ -172944,20 +172815,6 @@ Duplex.fromWeb($0, $1)"""
 
                 type listener_1 =
                     delegate of line: Node.NonSharedBuffer * tlsSocket: Node.tls.TLSSocket -> unit
-
-        module SecureContextOptions =
-
-            module ALPNCallback =
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type arg
-                    [<ParamObject; Emit("$0")>]
-                    (servername: string, protocols: ResizeArray<string>)
-                    =
-
-                    member val servername: string = nativeOnly with get, set
-                    member val protocols: ResizeArray<string> = nativeOnly with get, set
 
         module Exports =
 
@@ -191345,7 +191202,7 @@ module UndiciTypes =
                     ?signal: U2<UndiciTypes.dispatcher.AbortSignal, Node.events.EventEmitter>,
                     ?maxRedirections: float,
                     ?redirectionLimitReached: bool,
-                    ?onInfo: (PipelineOptions.onInfo.info -> unit),
+                    ?onInfo: (RequestOptions.onInfo.info -> unit),
                     ?responseHeader: string,
                     ?highWaterMark: float,
                     ?objectMode: bool
@@ -191438,7 +191295,7 @@ module UndiciTypes =
                 /// <summary>
                 /// Default: <c>null</c>
                 /// </summary>
-                member val onInfo: (PipelineOptions.onInfo.info -> unit) option =
+                member val onInfo: (RequestOptions.onInfo.info -> unit) option =
                     nativeOnly with get, set
 
                 /// <summary>
@@ -191823,30 +191680,6 @@ module UndiciTypes =
                         member val statusCode: float = nativeOnly with get, set
 
                         member val headers: RequestOptions.onInfo.info.headers =
-                            nativeOnly with get, set
-
-                    module info =
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type headers =
-                            [<EmitIndexer>]
-                            abstract member Item: key: string -> U2<string, ResizeArray<string>> with get, set
-
-            module PipelineOptions =
-
-                module onInfo =
-
-                    [<Global>]
-                    [<AllowNullLiteral>]
-                    type info
-                        [<ParamObject; Emit("$0")>]
-                        (statusCode: float, headers: PipelineOptions.onInfo.info.headers)
-                        =
-
-                        member val statusCode: float = nativeOnly with get, set
-
-                        member val headers: PipelineOptions.onInfo.info.headers =
                             nativeOnly with get, set
 
                     module info =

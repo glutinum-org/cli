@@ -57,20 +57,6 @@ module Named =
 
         member val verbose : bool = nativeOnly with get, set
 
-module Exports =
-
-    module Named =
-
-        [<Global>]
-        [<AllowNullLiteral>]
-        type Options
-            [<ParamObject; Emit("$0")>]
-            (
-                verbose: bool
-            ) =
-
-            member val verbose : bool = nativeOnly with get, set
-
 (***)
 #r "nuget: Fable.Core"
 #r "nuget: Glutinum.Types"

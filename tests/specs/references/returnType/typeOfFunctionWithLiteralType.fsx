@@ -8,7 +8,7 @@ open System
 [<Erase>]
 type Exports =
     [<Import("f1", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member f1 () : Exports.f1 = nativeOnly
+    static member f1 () : T4.ReturnType = nativeOnly
 
 type T4 =
     T4.ReturnType
@@ -18,20 +18,6 @@ module T4 =
     [<Global>]
     [<AllowNullLiteral>]
     type ReturnType
-        [<ParamObject; Emit("$0")>]
-        (
-            a: float,
-            b: string
-        ) =
-
-        member val a : float = nativeOnly with get, set
-        member val b : string = nativeOnly with get, set
-
-module Exports =
-
-    [<Global>]
-    [<AllowNullLiteral>]
-    type f1
         [<ParamObject; Emit("$0")>]
         (
             a: float,
