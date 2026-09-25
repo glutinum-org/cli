@@ -3816,6 +3816,8 @@ module KeyOfMaps =
             match glueMember with
             | GlueMember.Method info -> collectFromTypeParameters info.TypeParameters
             | GlueMember.MethodSignature info -> collectFromTypeParameters info.TypeParameters
+            // A callable interface is inlined as a method by the use site
+            | GlueMember.CallSignature info -> collectFromTypeParameters info.TypeParameters
             | _ -> ()
 
     let rec private collect (glueType: GlueType) =
@@ -4039,17 +4041,19 @@ module KeyOfMaps =
                     : FSharpInterface)
                     |> FSharpType.Interface
 
-                    ({
-                        Attributes = [ FSharpAttribute.AbstractClass; FSharpAttribute.Erase ]
-                        Name = "Keys"
-                        XmlDoc = []
-                        OriginalName = "Keys"
-                        TypeParameters = []
-                        Members = keys
-                        Inheritance = []
-                    }
-                    : FSharpInterface)
-                    |> FSharpType.Interface
+                    // `[<AbstractClass>]` on a type without a member is an interface to F#
+                    if not keys.IsEmpty then
+                        ({
+                            Attributes = [ FSharpAttribute.AbstractClass; FSharpAttribute.Erase ]
+                            Name = "Keys"
+                            XmlDoc = []
+                            OriginalName = "Keys"
+                            TypeParameters = []
+                            Members = keys
+                            Inheritance = []
+                        }
+                        : FSharpInterface)
+                        |> FSharpType.Interface
                 ]
         }
         : FSharpModule)
