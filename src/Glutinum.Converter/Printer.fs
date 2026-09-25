@@ -130,7 +130,19 @@ let private attributeToText (fsharpAttribute: FSharpAttribute) =
     | FSharpAttribute.Obsolete message ->
         match message with
         | Some message ->
-            if message.Contains("\n") || message.Contains("\"") then
+            // ``` of a markdown fence opens a quoted identifier, a triple quoted string
+            // does not protect it
+            if message.Contains "``" || message.Contains "\"\"\"" then
+                let escaped =
+                    message
+                        .Replace("\\", "\\\\")
+                        .Replace("\"", "\\\"")
+                        .Replace("\r", "\\r")
+                        .Replace("\n", "\\n")
+                        .Replace("\t", "\\t")
+
+                $"[<Obsolete(\"%s{escaped}\")>]"
+            elif message.Contains "\n" || message.Contains "\"" then
                 $"[<Obsolete(\"\"\"%s{message}\"\"\")>]"
             else
                 $"[<Obsolete(\"%s{message}\")>]"
