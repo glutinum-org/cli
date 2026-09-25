@@ -1537,7 +1537,7 @@ module TypeScript =
             /// </param>
             [<Emit("$0.construct($1...)")>]
             abstract member construct<'A, 'R> :
-                target: Exports.construct.target<'R> *
+                target: Exports.construct.target<'R, 'A> *
                 argumentsList: 'A *
                 ?newTarget: Exports.construct.newTarget ->
                     'R
@@ -1796,7 +1796,7 @@ module TypeScript =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type target<'R> =
+                type target<'R, 'A> =
                     [<EmitConstructor>]
                     abstract member Create: [<ParamArray>] args: 'A[] -> 'R
 

@@ -1183,20 +1183,7 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
 
         let typeParameterNames =
             typeLiteralInfo.Members
-            |> List.collect (fun m ->
-                match m with
-                | GlueMember.MethodSignature { Type = typ }
-                | GlueMember.Method { Type = typ }
-                | GlueMember.CallSignature { Type = typ }
-                | GlueMember.ConstructSignature { Type = typ } ->
-                    match typ with
-                    | GlueType.TypeParameter name -> [ name ]
-                    | _ -> []
-                | GlueMember.Property _
-                | GlueMember.GetAccessor _
-                | GlueMember.SetAccessor _
-                | GlueMember.IndexSignature _ -> memberTypeParameterNames m
-            )
+            |> List.collect memberTypeParameterNames
             |> List.distinct
 
         let name =
@@ -1583,16 +1570,28 @@ let rec private typeParameterNames (glueType: GlueType) : string list =
     | _ -> []
 
 and private memberTypeParameterNames (glueMember: GlueMember) : string list =
+    // A method declares the type parameters of its own signature, the ones it takes from an
+    // enclosing scope are declared by the type holding it
+    let fromSignature
+        (own: GlueTypeParameter list)
+        (parameters: GlueParameter list)
+        (returnType: GlueType)
+        =
+        let own = own |> List.map _.Name |> Set.ofList
+
+        (typeParameterNames returnType
+         @ (parameters |> List.collect (fun parameter -> typeParameterNames parameter.Type)))
+        |> List.filter (fun name -> not (own.Contains name))
+
     match glueMember with
     | GlueMember.Property { Type = typ }
     | GlueMember.GetAccessor { Type = typ }
     | GlueMember.SetAccessor { ArgumentType = typ }
     | GlueMember.IndexSignature { Type = typ } -> typeParameterNames typ
-    // A method declares the type parameters it mentions, a property can't
-    | GlueMember.Method _
-    | GlueMember.MethodSignature _
-    | GlueMember.CallSignature _
-    | GlueMember.ConstructSignature _ -> []
+    | GlueMember.Method info -> fromSignature info.TypeParameters info.Parameters info.Type
+    | GlueMember.MethodSignature info -> fromSignature info.TypeParameters info.Parameters info.Type
+    | GlueMember.CallSignature info -> fromSignature info.TypeParameters info.Parameters info.Type
+    | GlueMember.ConstructSignature info -> fromSignature [] info.Parameters info.Type
 
 let rec private mentionsTypeParameter (name: string) (glueType: GlueType) : bool =
     let mentions = mentionsTypeParameter name
@@ -1641,6 +1640,56 @@ let private requiredBeforeParamArray (parameters: FSharpParameter list) : FSharp
         )
     else
         parameters
+
+/// `Exports` is a static holder, it can't declare a type parameter. A member naming one it does
+/// not declare takes `obj`, the same erasure a property of a generic function type gets.
+let private withoutFreeTypeParameters (members: FSharpMember list) : FSharpMember list =
+    let erase (declared: FSharpTypeParameter list) (typ: FSharpType) =
+        let declaredNames =
+            declared
+            |> List.choose (
+                function
+                | FSharpTypeParameter.FSharpTypeParameter info -> Some info.Name
+                | FSharpTypeParameter.FSharpType _ -> None
+            )
+            |> Set.ofList
+
+        let free =
+            namedTypeParameters typ
+            |> List.distinct
+            |> List.filter (fun name -> not (declaredNames.Contains name))
+            |> List.map (fun name ->
+                ({
+                    TypeParameterName = name
+                    FSharpType = FSharpType.Object
+                }
+                : TypeParameter.SealedTypeInfo)
+            )
+
+        if free.IsEmpty then
+            typ
+        else
+            TypeParameter.mapFSharpType free typ
+
+    let eraseInfo (info: FSharpMemberInfo) =
+        { info with
+            Type = erase info.TypeParameters info.Type
+            Parameters =
+                info.Parameters
+                |> List.map (fun parameter ->
+                    { parameter with
+                        Type = erase info.TypeParameters parameter.Type
+                    }
+                )
+        }
+
+    members
+    |> List.map (
+        function
+        | FSharpMember.Method info -> FSharpMember.Method(eraseInfo info)
+        | FSharpMember.Property info -> FSharpMember.Property(eraseInfo info)
+        | FSharpMember.StaticMember info -> FSharpMember.StaticMember info
+    )
 
 let private transformExports
     (context: TransformContext)
@@ -2344,7 +2393,7 @@ let private transformExports
         Attributes = [ FSharpAttribute.AbstractClass; FSharpAttribute.Erase ]
         Name = "Exports"
         OriginalName = "Exports"
-        Members = Merge.distinctBySignature members
+        Members = members |> withoutFreeTypeParameters |> Merge.distinctBySignature
         TypeParameters = []
         Inheritance = []
     }
@@ -3188,18 +3237,27 @@ let private membersNameUndeclaredTypeParameters
     =
     let declared = set declared
 
+    // A member declares the type parameters of its own signature
+    let names (own: FSharpTypeParameter list) (typ: FSharpType) (parameters: FSharpParameter list) =
+        let own =
+            own
+            |> List.choose (
+                function
+                | FSharpTypeParameter.FSharpTypeParameter info -> Some info.Name
+                | FSharpTypeParameter.FSharpType _ -> None
+            )
+            |> Set.ofList
+
+        (namedTypeParameters typ
+         @ (parameters |> List.collect (fun parameter -> namedTypeParameters parameter.Type)))
+        |> List.exists (fun name -> not (declared.Contains name || own.Contains name))
+
     members
     |> List.exists (
         function
         | FSharpMember.Method info
-        | FSharpMember.Property info ->
-            (namedTypeParameters info.Type
-             @ (info.Parameters |> List.collect (fun p -> namedTypeParameters p.Type)))
-            |> List.exists (fun name -> not (declared.Contains name))
-        | FSharpMember.StaticMember info ->
-            (namedTypeParameters info.Type
-             @ (info.Parameters |> List.collect (fun p -> namedTypeParameters p.Type)))
-            |> List.exists (fun name -> not (declared.Contains name))
+        | FSharpMember.Property info -> names info.TypeParameters info.Type info.Parameters
+        | FSharpMember.StaticMember info -> names info.TypeParameters info.Type info.Parameters
     )
 
 /// The parameter sets of the `Create` members of an object type: one per combination of the
@@ -3324,22 +3382,7 @@ let private transformParamObjectClass
     let xmlDocInfo = transformComment documentation
 
     let typeParameterNames =
-        members
-        |> List.collect (fun m ->
-            match m with
-            | GlueMember.MethodSignature { Type = typ }
-            | GlueMember.Method { Type = typ }
-            | GlueMember.CallSignature { Type = typ }
-            | GlueMember.ConstructSignature { Type = typ } ->
-                match typ with
-                | GlueType.TypeParameter name -> [ name ]
-                | _ -> []
-            | GlueMember.Property _
-            | GlueMember.GetAccessor _
-            | GlueMember.SetAccessor _
-            | GlueMember.IndexSignature _ -> memberTypeParameterNames m
-        )
-        |> List.distinct
+        members |> List.collect memberTypeParameterNames |> List.distinct
 
     let typeLiteralParameters =
         members
@@ -5862,6 +5905,37 @@ module private TypeParameter =
             match needMapping with
             | Some mapperInfo -> mapperInfo.FSharpType
             | None -> typ
+        // A nested anonymous type is a `Mapped`, a type parameter one named `'T`
+        | FSharpType.Mapped info when info.Name.StartsWith "'" ->
+            match
+                seadledTypes
+                |> List.tryFind (fun mapperInfo ->
+                    mapperInfo.TypeParameterName = info.Name.Substring 1
+                )
+            with
+            | Some mapperInfo -> mapperInfo.FSharpType
+            | None -> typ
+        | FSharpType.Mapped info ->
+            { info with
+                TypeParameters =
+                    info.TypeParameters
+                    |> List.map (
+                        function
+                        | FSharpTypeParameter.FSharpType typ ->
+                            mapFSharpType seadledTypes typ |> FSharpTypeParameter.FSharpType
+                        | FSharpTypeParameter.FSharpTypeParameter paramInfo ->
+                            match
+                                seadledTypes
+                                |> List.tryFind (fun mapperInfo ->
+                                    mapperInfo.TypeParameterName = paramInfo.Name
+                                )
+                            with
+                            | Some mapperInfo ->
+                                FSharpTypeParameter.FSharpType mapperInfo.FSharpType
+                            | None -> FSharpTypeParameter.FSharpTypeParameter paramInfo
+                    )
+            }
+            |> FSharpType.Mapped
         | FSharpType.Option innerType -> FSharpType.Option(mapFSharpType seadledTypes innerType)
         | FSharpType.TypeReference typeReference ->
             { typeReference with

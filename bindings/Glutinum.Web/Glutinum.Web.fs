@@ -1023,7 +1023,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CustomEvent)
         /// </summary>
         [<Global("CustomEvent")>]
-        static member inline CustomEvent: Exports.CustomEvent.Type = nativeOnly
+        static member inline CustomEvent: Exports.CustomEvent.Type<obj> = nativeOnly
 
         /// <summary>
         /// The **<c>CustomStateSet</c>** interface of the Document Object Model stores a list of states for an autonomous custom element, and allows states to be added and removed from the set.
@@ -3100,7 +3100,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/MessageEvent)
         /// </summary>
         [<Global("MessageEvent")>]
-        static member inline MessageEvent: Exports.MessageEvent.Type = nativeOnly
+        static member inline MessageEvent: Exports.MessageEvent.Type<obj> = nativeOnly
 
         /// <summary>
         /// The **<c>MessagePort</c>** interface of the Channel Messaging API represents one of the two ports of a MessageChannel, allowing messages to be sent from one port and listening out for them arriving at the other.
@@ -3883,7 +3883,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStream)
         /// </summary>
         [<Global("ReadableStream")>]
-        static member inline ReadableStream: Exports.ReadableStream.Type = nativeOnly
+        static member inline ReadableStream: Exports.ReadableStream.Type<obj> = nativeOnly
 
         /// <summary>
         /// The **<c>ReadableStreamBYOBReader</c>** interface of the Streams API defines a reader for a ReadableStream that supports zero-copy reading from an underlying byte source. It is used for efficient copying from underlying sources where the data is delivered as an "anonymous" sequence of bytes, such as files.
@@ -3919,7 +3919,8 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStreamDefaultReader)
         /// </summary>
         [<Global("ReadableStreamDefaultReader")>]
-        static member inline ReadableStreamDefaultReader: Exports.ReadableStreamDefaultReader.Type =
+        static member inline ReadableStreamDefaultReader
+            : Exports.ReadableStreamDefaultReader.Type<obj> =
             nativeOnly
 
         /// <summary>
@@ -5248,7 +5249,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/TransformStream)
         /// </summary>
         [<Global("TransformStream")>]
-        static member inline TransformStream: Exports.TransformStream.Type = nativeOnly
+        static member inline TransformStream: Exports.TransformStream.Type<obj, obj> = nativeOnly
 
         /// <summary>
         /// The **<c>TransformStreamDefaultController</c>** interface of the Streams API provides methods to manipulate the associated ReadableStream and WritableStream.
@@ -5699,7 +5700,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WritableStream)
         /// </summary>
         [<Global("WritableStream")>]
-        static member inline WritableStream: Exports.WritableStream.Type = nativeOnly
+        static member inline WritableStream: Exports.WritableStream.Type<obj> = nativeOnly
 
         /// <summary>
         /// The **<c>WritableStreamDefaultController</c>** interface of the Streams API represents a controller allowing control of a WritableStream's state. When constructing a WritableStream, the underlying sink is given a corresponding WritableStreamDefaultController instance to manipulate.
@@ -5717,7 +5718,8 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WritableStreamDefaultWriter)
         /// </summary>
         [<Global("WritableStreamDefaultWriter")>]
-        static member inline WritableStreamDefaultWriter: Exports.WritableStreamDefaultWriter.Type =
+        static member inline WritableStreamDefaultWriter
+            : Exports.WritableStreamDefaultWriter.Type<obj> =
             nativeOnly
 
         /// <summary>
@@ -102955,7 +102957,7 @@ module Web =
             /// [MDN Reference](https://developer.mozilla.org/docs/WebAssembly/Reference/JavaScript_interface/Global)
             /// </summary>
             [<Emit("$0.Global")>]
-            abstract member Global: Exports.Global.Type
+            abstract member Global: Exports.Global.Type<obj>
 
             /// <summary>
             /// A **<c>WebAssembly.Instance</c>** object is a stateful, executable instance of a WebAssembly.Module. Instance objects contain all the Exported WebAssembly functions that allow calling into WebAssembly code from JavaScript.
@@ -103440,7 +103442,7 @@ module Web =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type Type =
+                type Type<'T> =
                     abstract member prototype: Web.WebAssembly_.Global with get, set
 
                     [<EmitConstructor>]
@@ -109997,7 +109999,7 @@ module Web =
 
             [<AllowNullLiteral>]
             [<Interface>]
-            type Type =
+            type Type<'T> =
                 abstract member prototype: Web.CustomEvent with get, set
 
                 [<EmitConstructor>]
@@ -112884,7 +112886,7 @@ module Web =
 
             [<AllowNullLiteral>]
             [<Interface>]
-            type Type =
+            type Type<'T> =
                 abstract member prototype: Web.MessageEvent with get, set
 
                 [<EmitConstructor>]
@@ -114102,7 +114104,7 @@ module Web =
 
             [<AllowNullLiteral>]
             [<Interface>]
-            type Type =
+            type Type<'R> =
                 abstract member prototype: Web.ReadableStream with get, set
 
                 [<EmitConstructor>]
@@ -114169,7 +114171,7 @@ module Web =
 
             [<AllowNullLiteral>]
             [<Interface>]
-            type Type =
+            type Type<'R> =
                 abstract member prototype: Web.ReadableStreamDefaultReader with get, set
 
                 [<EmitConstructor>]
@@ -116007,7 +116009,7 @@ module Web =
 
             [<AllowNullLiteral>]
             [<Interface>]
-            type Type =
+            type Type<'I, 'O> =
                 abstract member prototype: Web.TransformStream with get, set
 
                 [<EmitConstructor>]
@@ -117650,7 +117652,7 @@ module Web =
 
             [<AllowNullLiteral>]
             [<Interface>]
-            type Type =
+            type Type<'W> =
                 abstract member prototype: Web.WritableStream with get, set
 
                 [<EmitConstructor>]
@@ -117672,7 +117674,7 @@ module Web =
 
             [<AllowNullLiteral>]
             [<Interface>]
-            type Type =
+            type Type<'W> =
                 abstract member prototype: Web.WritableStreamDefaultWriter with get, set
 
                 [<EmitConstructor>]

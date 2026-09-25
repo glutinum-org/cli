@@ -251,7 +251,7 @@ module Node =
         /// https://nodejs.org/api/globals.html#class-readablestream
         /// </summary>
         [<Global("ReadableStream")>]
-        static member inline ReadableStream: Exports.ReadableStream.Type = nativeOnly
+        static member inline ReadableStream: Exports.ReadableStream.Type<obj> = nativeOnly
 
         /// <summary>
         /// <c>ReadableStreamBYOBReader</c> class is a global reference for <c>import { ReadableStreamBYOBReader } from 'node:stream/web'</c>.
@@ -283,7 +283,8 @@ module Node =
         /// https://nodejs.org/api/globals.html#class-readablestreamdefaultreader
         /// </summary>
         [<Global("ReadableStreamDefaultReader")>]
-        static member inline ReadableStreamDefaultReader: Exports.ReadableStreamDefaultReader.Type =
+        static member inline ReadableStreamDefaultReader
+            : Exports.ReadableStreamDefaultReader.Type<obj> =
             nativeOnly
 
         /// <summary>
@@ -305,7 +306,7 @@ module Node =
         /// https://nodejs.org/api/globals.html#class-transformstream
         /// </summary>
         [<Global("TransformStream")>]
-        static member inline TransformStream: Exports.TransformStream.Type = nativeOnly
+        static member inline TransformStream: Exports.TransformStream.Type<obj, obj> = nativeOnly
 
         /// <summary>
         /// <c>TransformStreamDefaultController</c> class is a global reference for <c>import { TransformStreamDefaultController } from 'node:stream/web'</c>.
@@ -321,7 +322,7 @@ module Node =
         /// https://nodejs.org/api/globals.html#class-writablestream
         /// </summary>
         [<Global("WritableStream")>]
-        static member inline WritableStream: Exports.WritableStream.Type = nativeOnly
+        static member inline WritableStream: Exports.WritableStream.Type<obj> = nativeOnly
 
         /// <summary>
         /// <c>WritableStreamDefaultController</c> class is a global reference for <c>import { WritableStreamDefaultController } from 'node:stream/web'</c>.
@@ -337,7 +338,8 @@ module Node =
         /// https://nodejs.org/api/globals.html#class-writablestreamdefaultwriter
         /// </summary>
         [<Global("WritableStreamDefaultWriter")>]
-        static member inline WritableStreamDefaultWriter: Exports.WritableStreamDefaultWriter.Type =
+        static member inline WritableStreamDefaultWriter
+            : Exports.WritableStreamDefaultWriter.Type<obj> =
             nativeOnly
 
         /// <summary>
@@ -573,7 +575,7 @@ module Node =
         static member inline DOMException: Exports.DOMException.Type = nativeOnly
 
         [<Global("CustomEvent")>]
-        static member inline CustomEvent: Exports.CustomEvent.Type = nativeOnly
+        static member inline CustomEvent: Exports.CustomEvent.Type<obj> = nativeOnly
 
         [<Global("Event")>]
         static member inline Event: Exports.Event.Type = nativeOnly
@@ -8330,13 +8332,9 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
 
         module Process =
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type finalization
-                [<ParamObject; Emit("$0")>]
-                (register: unit, registerBeforeExit: unit, unregister: unit)
-                =
-
+            [<Interface>]
+            type finalization =
                 /// <summary>
                 /// This function registers a callback to be called when the process emits the <c>exit</c> event if the <c>ref</c> object was not garbage collected.
                 /// If the object <c>ref</c> was garbage collected before the <c>exit</c> event is emitted, the callback will be removed from the finalization registry, and it will not be called on process exit.
@@ -8353,7 +8351,9 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
                 /// <param name="callback">
                 /// The callback function to be called when the resource is finalized.
                 /// </param>
-                member val register: unit = nativeOnly
+                abstract member register<'T> :
+                    ref: 'T * callback: Process.finalization.register.callback -> unit
+
                 /// <summary>
                 /// This function behaves exactly like the <c>register</c>, except that the callback will be called when the process emits the <c>beforeExit</c> event if <c>ref</c> object was not garbage collected.
                 ///
@@ -8365,14 +8365,23 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
                 /// <param name="callback">
                 /// The callback function to be called when the resource is finalized.
                 /// </param>
-                member val registerBeforeExit: unit = nativeOnly
+                abstract member registerBeforeExit<'T> :
+                    ref: 'T * callback: Process.finalization.registerBeforeExit.callback -> unit
+
                 /// <summary>
                 /// This function remove the register of the object from the finalization registry, so the callback will not be called anymore.
                 /// </summary>
                 /// <param name="ref">
                 /// The reference to the resource that was registered previously.
                 /// </param>
-                member val unregister: unit = nativeOnly
+                abstract member unregister: ref: obj -> unit
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (register: unit, registerBeforeExit: unit, unregister: unit)
+                    : finalization
+                    =
+                    nativeOnly
 
             type listeners_workerMessage = delegate of value: obj * source: float -> unit
 
@@ -14193,7 +14202,7 @@ TypeScript versions earlier than 5.7.""")>]
 
             [<AllowNullLiteral>]
             [<Interface>]
-            type Type =
+            type Type<'R> =
                 abstract member prototype: Node.ReadableStream with get, set
 
                 [<EmitConstructor>]
@@ -14260,7 +14269,7 @@ TypeScript versions earlier than 5.7.""")>]
 
             [<AllowNullLiteral>]
             [<Interface>]
-            type Type =
+            type Type<'R> =
                 abstract member prototype: Node.ReadableStreamDefaultReader with get, set
 
                 [<EmitConstructor>]
@@ -14293,7 +14302,7 @@ TypeScript versions earlier than 5.7.""")>]
 
             [<AllowNullLiteral>]
             [<Interface>]
-            type Type =
+            type Type<'I, 'O> =
                 abstract member prototype: Node.TransformStream with get, set
 
                 [<EmitConstructor>]
@@ -14317,7 +14326,7 @@ TypeScript versions earlier than 5.7.""")>]
 
             [<AllowNullLiteral>]
             [<Interface>]
-            type Type =
+            type Type<'W> =
                 abstract member prototype: Node.WritableStream with get, set
 
                 [<EmitConstructor>]
@@ -14340,7 +14349,7 @@ TypeScript versions earlier than 5.7.""")>]
 
             [<AllowNullLiteral>]
             [<Interface>]
-            type Type =
+            type Type<'W> =
                 abstract member prototype: Node.WritableStreamDefaultWriter with get, set
 
                 [<EmitConstructor>]
@@ -14512,7 +14521,7 @@ TypeScript versions earlier than 5.7.""")>]
 
             [<AllowNullLiteral>]
             [<Interface>]
-            type Type =
+            type Type<'T> =
                 abstract member prototype: Node.CustomEvent with get, set
 
                 [<EmitConstructor>]
@@ -136646,7 +136655,7 @@ SocketAddress.parse($0)"""
             /// ID of the built-in module being requested.
             /// </param>
             [<ImportDefault("process"); Emit("$0.getBuiltinModule($1...)")>]
-            static member getBuiltinModule(id: 'ID) : obj = nativeOnly
+            static member getBuiltinModule(id: obj) : obj = nativeOnly
 
             /// <summary>
             /// Provides a way to load built-in modules in a globally available function.
@@ -140145,13 +140154,9 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
 
             module finalization =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type Type
-                    [<ParamObject; Emit("$0")>]
-                    (register: unit, registerBeforeExit: unit, unregister: unit)
-                    =
-
+                [<Interface>]
+                type Type =
                     /// <summary>
                     /// This function registers a callback to be called when the process emits the <c>exit</c> event if the <c>ref</c> object was not garbage collected.
                     /// If the object <c>ref</c> was garbage collected before the <c>exit</c> event is emitted, the callback will be removed from the finalization registry, and it will not be called on process exit.
@@ -140168,7 +140173,9 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
                     /// <param name="callback">
                     /// The callback function to be called when the resource is finalized.
                     /// </param>
-                    member val register: unit = nativeOnly
+                    abstract member register<'T> :
+                        ref: 'T * callback: Exports.finalization.Type.register.callback -> unit
+
                     /// <summary>
                     /// This function behaves exactly like the <c>register</c>, except that the callback will be called when the process emits the <c>beforeExit</c> event if <c>ref</c> object was not garbage collected.
                     ///
@@ -140180,14 +140187,24 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
                     /// <param name="callback">
                     /// The callback function to be called when the resource is finalized.
                     /// </param>
-                    member val registerBeforeExit: unit = nativeOnly
+                    abstract member registerBeforeExit<'T> :
+                        ref: 'T * callback: Exports.finalization.Type.registerBeforeExit.callback ->
+                            unit
+
                     /// <summary>
                     /// This function remove the register of the object from the finalization registry, so the callback will not be called anymore.
                     /// </summary>
                     /// <param name="ref">
                     /// The reference to the resource that was registered previously.
                     /// </param>
-                    member val unregister: unit = nativeOnly
+                    abstract member unregister: ref: obj -> unit
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (register: unit, registerBeforeExit: unit, unregister: unit)
+                        : Type
+                        =
+                        nativeOnly
 
                 module Type =
 
@@ -160660,11 +160677,11 @@ Duplex.fromWeb($0, $1)"""
                 /// This Streams API interface represents a readable stream of byte data.
                 /// </summary>
                 [<Emit("$0.ReadableStream")>]
-                abstract member ReadableStream: Exports.ReadableStream.Type_1
+                abstract member ReadableStream: Exports.ReadableStream.Type_1<obj>
 
                 [<Emit("$0.ReadableStreamDefaultReader")>]
                 abstract member ReadableStreamDefaultReader:
-                    Exports.ReadableStreamDefaultReader.Type_1
+                    Exports.ReadableStreamDefaultReader.Type_1<obj>
 
                 /// <summary>
                 /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStreamBYOBReader)
@@ -160687,7 +160704,7 @@ Duplex.fromWeb($0, $1)"""
                     Exports.ReadableStreamDefaultController.Type_1
 
                 [<Emit("$0.TransformStream")>]
-                abstract member TransformStream: Exports.TransformStream.Type_1
+                abstract member TransformStream: Exports.TransformStream.Type_1<obj, obj>
 
                 [<Emit("$0.TransformStreamDefaultController")>]
                 abstract member TransformStreamDefaultController:
@@ -160699,7 +160716,7 @@ Duplex.fromWeb($0, $1)"""
                 /// built-in back pressure and queuing.
                 /// </summary>
                 [<Emit("$0.WritableStream")>]
-                abstract member WritableStream: Exports.WritableStream.Type_1
+                abstract member WritableStream: Exports.WritableStream.Type_1<obj>
 
                 /// <summary>
                 /// This Streams API interface is the object returned by
@@ -160709,7 +160726,7 @@ Duplex.fromWeb($0, $1)"""
                 /// </summary>
                 [<Emit("$0.WritableStreamDefaultWriter")>]
                 abstract member WritableStreamDefaultWriter:
-                    Exports.WritableStreamDefaultWriter.Type_1
+                    Exports.WritableStreamDefaultWriter.Type_1<obj>
 
                 /// <summary>
                 /// This Streams API interface represents a controller allowing control of a
@@ -161375,7 +161392,7 @@ Duplex.fromWeb($0, $1)"""
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type Type_1 =
+                    type Type_1<'R> =
                         abstract member prototype: Node.stream_web.stream_SLASH_web_.ReadableStream with get, set
 
                         abstract member from<'T> :
@@ -161403,7 +161420,7 @@ Duplex.fromWeb($0, $1)"""
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type Type_1 =
+                    type Type_1<'R> =
                         abstract member prototype:
                             Node.stream_web.stream_SLASH_web_.ReadableStreamDefaultReader with get, set
 
@@ -161466,7 +161483,7 @@ Duplex.fromWeb($0, $1)"""
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type Type_1 =
+                    type Type_1<'I, 'O> =
                         abstract member prototype: Node.stream_web.stream_SLASH_web_.TransformStream with get, set
 
                         [<EmitConstructor>]
@@ -161493,7 +161510,7 @@ Duplex.fromWeb($0, $1)"""
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type Type_1 =
+                    type Type_1<'W> =
                         abstract member prototype: Node.stream_web.stream_SLASH_web_.WritableStream with get, set
 
                         [<EmitConstructor>]
@@ -161506,7 +161523,7 @@ Duplex.fromWeb($0, $1)"""
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type Type_1 =
+                    type Type_1<'W> =
                         abstract member prototype:
                             Node.stream_web.stream_SLASH_web_.WritableStreamDefaultWriter with get, set
 
