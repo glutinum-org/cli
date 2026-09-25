@@ -9567,216 +9567,6 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
         /// <c>Buffer.from(string)</c> may also use the internal <c>Buffer</c> pool like
         /// <c>Buffer.allocUnsafe()</c> does.
         /// </summary>
-        abstract member from: array: obj -> Node.Buffer
-        /// <summary>
-        /// Allocates a new <c>Buffer</c> using an <c>array</c> of bytes in the range <c>0</c> – <c>255</c>.
-        /// Array entries outside that range will be truncated to fit into it.
-        ///
-        /// <code lang="js">
-        /// import { Buffer } from 'node:buffer';
-        ///
-        /// // Creates a new Buffer containing the UTF-8 bytes of the string 'buffer'.
-        /// const buf = Buffer.from([0x62, 0x75, 0x66, 0x66, 0x65, 0x72]);
-        /// </code>
-        ///
-        /// If <c>array</c> is an <c>Array</c>-like object (that is, one with a <c>length</c> property of
-        /// type <c>number</c>), it is treated as if it is an array, unless it is a <c>Buffer</c> or
-        /// a <c>Uint8Array</c>. This means all other <c>TypedArray</c> variants get treated as an
-        /// <c>Array</c>. To create a <c>Buffer</c> from the bytes backing a <c>TypedArray</c>, use
-        /// <c>Buffer.copyBytesFrom()</c>.
-        ///
-        /// A <c>TypeError</c> will be thrown if <c>array</c> is not an <c>Array</c> or another type
-        /// appropriate for <c>Buffer.from()</c> variants.
-        ///
-        /// <c>Buffer.from(array)</c> and <c>Buffer.from(string)</c> may also use the internal
-        /// <c>Buffer</c> pool like <c>Buffer.allocUnsafe()</c> does.
-        /// This creates a view of the <c>ArrayBuffer</c> without copying the underlying
-        /// memory. For example, when passed a reference to the <c>.buffer</c> property of a
-        /// <c>TypedArray</c> instance, the newly created <c>Buffer</c> will share the same
-        /// allocated memory as the <c>TypedArray</c>'s underlying <c>ArrayBuffer</c>.
-        ///
-        /// <c></c><c>js
-        /// import { Buffer } from 'node:buffer';
-        ///
-        /// const arr = new Uint16Array(2);
-        ///
-        /// arr[0] = 5000;
-        /// arr[1] = 4000;
-        ///
-        /// // Shares memory with </c>arr<c>.
-        /// const buf = Buffer.from(arr.buffer);
-        ///
-        /// console.log(buf);
-        /// // Prints: <Buffer 88 13 a0 0f>
-        ///
-        /// // Changing the original Uint16Array changes the Buffer also.
-        /// arr[1] = 6000;
-        ///
-        /// console.log(buf);
-        /// // Prints: <Buffer 88 13 70 17>
-        /// </c><c></c>
-        ///
-        /// The optional <c>byteOffset</c> and <c>length</c> arguments specify a memory range within
-        /// the <c>arrayBuffer</c> that will be shared by the <c>Buffer</c>.
-        ///
-        /// <code lang="js">
-        /// import { Buffer } from 'node:buffer';
-        ///
-        /// const ab = new ArrayBuffer(10);
-        /// const buf = Buffer.from(ab, 0, 2);
-        ///
-        /// console.log(buf.length);
-        /// // Prints: 2
-        /// </code>
-        ///
-        /// A <c>TypeError</c> will be thrown if <c>arrayBuffer</c> is not an <c>ArrayBuffer</c> or a
-        /// <c>SharedArrayBuffer</c> or another type appropriate for <c>Buffer.from()</c>
-        /// variants.
-        ///
-        /// It is important to remember that a backing <c>ArrayBuffer</c> can cover a range
-        /// of memory that extends beyond the bounds of a <c>TypedArray</c> view. A new
-        /// <c>Buffer</c> created using the <c>buffer</c> property of a <c>TypedArray</c> may extend
-        /// beyond the range of the <c>TypedArray</c>:
-        ///
-        /// <code lang="js">
-        /// import { Buffer } from 'node:buffer';
-        ///
-        /// const arrA = Uint8Array.from([0x63, 0x64, 0x65, 0x66]); // 4 elements
-        /// const arrB = new Uint8Array(arrA.buffer, 1, 2); // 2 elements
-        /// console.log(arrA.buffer === arrB.buffer); // true
-        ///
-        /// const buf = Buffer.from(arrB.buffer);
-        /// console.log(buf);
-        /// // Prints: <Buffer 63 64 65 66>
-        /// </code>
-        /// Creates a new <c>Buffer</c> containing <c>string</c>. The <c>encoding</c> parameter identifies
-        /// the character encoding to be used when converting <c>string</c> into bytes.
-        ///
-        /// <code lang="js">
-        /// import { Buffer } from 'node:buffer';
-        ///
-        /// const buf1 = Buffer.from('this is a tést');
-        /// const buf2 = Buffer.from('7468697320697320612074c3a97374', 'hex');
-        ///
-        /// console.log(buf1.toString());
-        /// // Prints: this is a tést
-        /// console.log(buf2.toString());
-        /// // Prints: this is a tést
-        /// console.log(buf1.toString('latin1'));
-        /// // Prints: this is a tÃ©st
-        /// </code>
-        ///
-        /// A <c>TypeError</c> will be thrown if <c>string</c> is not a string or another type
-        /// appropriate for <c>Buffer.from()</c> variants.
-        ///
-        /// <c>Buffer.from(string)</c> may also use the internal <c>Buffer</c> pool like
-        /// <c>Buffer.allocUnsafe()</c> does.
-        /// </summary>
-        abstract member from: array: BufferConstructor.from.array -> Node.Buffer
-        /// <summary>
-        /// Allocates a new <c>Buffer</c> using an <c>array</c> of bytes in the range <c>0</c> – <c>255</c>.
-        /// Array entries outside that range will be truncated to fit into it.
-        ///
-        /// <code lang="js">
-        /// import { Buffer } from 'node:buffer';
-        ///
-        /// // Creates a new Buffer containing the UTF-8 bytes of the string 'buffer'.
-        /// const buf = Buffer.from([0x62, 0x75, 0x66, 0x66, 0x65, 0x72]);
-        /// </code>
-        ///
-        /// If <c>array</c> is an <c>Array</c>-like object (that is, one with a <c>length</c> property of
-        /// type <c>number</c>), it is treated as if it is an array, unless it is a <c>Buffer</c> or
-        /// a <c>Uint8Array</c>. This means all other <c>TypedArray</c> variants get treated as an
-        /// <c>Array</c>. To create a <c>Buffer</c> from the bytes backing a <c>TypedArray</c>, use
-        /// <c>Buffer.copyBytesFrom()</c>.
-        ///
-        /// A <c>TypeError</c> will be thrown if <c>array</c> is not an <c>Array</c> or another type
-        /// appropriate for <c>Buffer.from()</c> variants.
-        ///
-        /// <c>Buffer.from(array)</c> and <c>Buffer.from(string)</c> may also use the internal
-        /// <c>Buffer</c> pool like <c>Buffer.allocUnsafe()</c> does.
-        /// This creates a view of the <c>ArrayBuffer</c> without copying the underlying
-        /// memory. For example, when passed a reference to the <c>.buffer</c> property of a
-        /// <c>TypedArray</c> instance, the newly created <c>Buffer</c> will share the same
-        /// allocated memory as the <c>TypedArray</c>'s underlying <c>ArrayBuffer</c>.
-        ///
-        /// <c></c><c>js
-        /// import { Buffer } from 'node:buffer';
-        ///
-        /// const arr = new Uint16Array(2);
-        ///
-        /// arr[0] = 5000;
-        /// arr[1] = 4000;
-        ///
-        /// // Shares memory with </c>arr<c>.
-        /// const buf = Buffer.from(arr.buffer);
-        ///
-        /// console.log(buf);
-        /// // Prints: <Buffer 88 13 a0 0f>
-        ///
-        /// // Changing the original Uint16Array changes the Buffer also.
-        /// arr[1] = 6000;
-        ///
-        /// console.log(buf);
-        /// // Prints: <Buffer 88 13 70 17>
-        /// </c><c></c>
-        ///
-        /// The optional <c>byteOffset</c> and <c>length</c> arguments specify a memory range within
-        /// the <c>arrayBuffer</c> that will be shared by the <c>Buffer</c>.
-        ///
-        /// <code lang="js">
-        /// import { Buffer } from 'node:buffer';
-        ///
-        /// const ab = new ArrayBuffer(10);
-        /// const buf = Buffer.from(ab, 0, 2);
-        ///
-        /// console.log(buf.length);
-        /// // Prints: 2
-        /// </code>
-        ///
-        /// A <c>TypeError</c> will be thrown if <c>arrayBuffer</c> is not an <c>ArrayBuffer</c> or a
-        /// <c>SharedArrayBuffer</c> or another type appropriate for <c>Buffer.from()</c>
-        /// variants.
-        ///
-        /// It is important to remember that a backing <c>ArrayBuffer</c> can cover a range
-        /// of memory that extends beyond the bounds of a <c>TypedArray</c> view. A new
-        /// <c>Buffer</c> created using the <c>buffer</c> property of a <c>TypedArray</c> may extend
-        /// beyond the range of the <c>TypedArray</c>:
-        ///
-        /// <code lang="js">
-        /// import { Buffer } from 'node:buffer';
-        ///
-        /// const arrA = Uint8Array.from([0x63, 0x64, 0x65, 0x66]); // 4 elements
-        /// const arrB = new Uint8Array(arrA.buffer, 1, 2); // 2 elements
-        /// console.log(arrA.buffer === arrB.buffer); // true
-        ///
-        /// const buf = Buffer.from(arrB.buffer);
-        /// console.log(buf);
-        /// // Prints: <Buffer 63 64 65 66>
-        /// </code>
-        /// Creates a new <c>Buffer</c> containing <c>string</c>. The <c>encoding</c> parameter identifies
-        /// the character encoding to be used when converting <c>string</c> into bytes.
-        ///
-        /// <code lang="js">
-        /// import { Buffer } from 'node:buffer';
-        ///
-        /// const buf1 = Buffer.from('this is a tést');
-        /// const buf2 = Buffer.from('7468697320697320612074c3a97374', 'hex');
-        ///
-        /// console.log(buf1.toString());
-        /// // Prints: this is a tést
-        /// console.log(buf2.toString());
-        /// // Prints: this is a tést
-        /// console.log(buf1.toString('latin1'));
-        /// // Prints: this is a tÃ©st
-        /// </code>
-        ///
-        /// A <c>TypeError</c> will be thrown if <c>string</c> is not a string or another type
-        /// appropriate for <c>Buffer.from()</c> variants.
-        ///
-        /// <c>Buffer.from(string)</c> may also use the internal <c>Buffer</c> pool like
-        /// <c>Buffer.allocUnsafe()</c> does.
-        /// </summary>
         /// <param name="arrayBuffer">
         /// An <c>ArrayBuffer</c>, <c>SharedArrayBuffer</c>, for example the
         /// <c>.buffer</c> property of a <c>TypedArray</c>.
@@ -18095,72 +17885,6 @@ TypeScript versions earlier than 5.7.""")>]
                 /// example in <see href="throws">throws</see> carefully if using a string as the second argument gets considered.
                 /// </summary>
                 [<Emit("$0.rejects($1...)")>]
-                abstract member rejects:
-                    block: (unit -> JS.Promise<obj>) * message: Exception -> JS.Promise<unit>
-
-                /// <summary>
-                /// Awaits the <c>asyncFn</c> promise or, if <c>asyncFn</c> is a function, immediately
-                /// calls the function and awaits the returned promise to complete. It will then
-                /// check that the promise is rejected.
-                ///
-                /// If <c>asyncFn</c> is a function and it throws an error synchronously, <c>assert.rejects()</c> will return a rejected <c>Promise</c> with that error. If the
-                /// function does not return a promise, <c>assert.rejects()</c> will return a rejected <c>Promise</c> with an [ERR_INVALID_RETURN_VALUE](https://nodejs.org/docs/latest-v22.x/api/errors.html#err_invalid_return_value)
-                /// error. In both cases the error handler is skipped.
-                ///
-                /// Besides the async nature to await the completion behaves identically to <see href="throws">throws</see>.
-                ///
-                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
-                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), a validation function,
-                /// an object where each property will be tested for, or an instance of error where
-                /// each property will be tested for including the non-enumerable <c>message</c> and <c>name</c> properties.
-                ///
-                /// If specified, <c>message</c> will be the message provided by the <c><see href="AssertionError">AssertionError</see></c> if the <c>asyncFn</c> fails to reject.
-                ///
-                /// <code lang="js">
-                /// import assert from 'node:assert/strict';
-                ///
-                /// await assert.rejects(
-                ///   async () => {
-                ///     throw new TypeError('Wrong value');
-                ///   },
-                ///   {
-                ///     name: 'TypeError',
-                ///     message: 'Wrong value',
-                ///   },
-                /// );
-                /// </code>
-                ///
-                /// <code lang="js">
-                /// import assert from 'node:assert/strict';
-                ///
-                /// await assert.rejects(
-                ///   async () => {
-                ///     throw new TypeError('Wrong value');
-                ///   },
-                ///   (err) => {
-                ///     assert.strictEqual(err.name, 'TypeError');
-                ///     assert.strictEqual(err.message, 'Wrong value');
-                ///     return true;
-                ///   },
-                /// );
-                /// </code>
-                ///
-                /// <code lang="js">
-                /// import assert from 'node:assert/strict';
-                ///
-                /// assert.rejects(
-                ///   Promise.reject(new Error('Wrong value')),
-                ///   Error,
-                /// ).then(() => {
-                ///   // ...
-                /// });
-                /// </code>
-                ///
-                /// <c>error</c> cannot be a string. If a string is provided as the second argument, then <c>error</c> is assumed to
-                /// be omitted and the string will be used for <c>message</c> instead. This can lead to easy-to-miss mistakes. Please read the
-                /// example in <see href="throws">throws</see> carefully if using a string as the second argument gets considered.
-                /// </summary>
-                [<Emit("$0.rejects($1...)")>]
                 abstract member rejects: block: JS.Promise<obj> -> JS.Promise<unit>
 
                 /// <summary>
@@ -18228,72 +17952,6 @@ TypeScript versions earlier than 5.7.""")>]
                 [<Emit("$0.rejects($1...)")>]
                 abstract member rejects:
                     block: JS.Promise<obj> * message: string -> JS.Promise<unit>
-
-                /// <summary>
-                /// Awaits the <c>asyncFn</c> promise or, if <c>asyncFn</c> is a function, immediately
-                /// calls the function and awaits the returned promise to complete. It will then
-                /// check that the promise is rejected.
-                ///
-                /// If <c>asyncFn</c> is a function and it throws an error synchronously, <c>assert.rejects()</c> will return a rejected <c>Promise</c> with that error. If the
-                /// function does not return a promise, <c>assert.rejects()</c> will return a rejected <c>Promise</c> with an [ERR_INVALID_RETURN_VALUE](https://nodejs.org/docs/latest-v22.x/api/errors.html#err_invalid_return_value)
-                /// error. In both cases the error handler is skipped.
-                ///
-                /// Besides the async nature to await the completion behaves identically to <see href="throws">throws</see>.
-                ///
-                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
-                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), a validation function,
-                /// an object where each property will be tested for, or an instance of error where
-                /// each property will be tested for including the non-enumerable <c>message</c> and <c>name</c> properties.
-                ///
-                /// If specified, <c>message</c> will be the message provided by the <c><see href="AssertionError">AssertionError</see></c> if the <c>asyncFn</c> fails to reject.
-                ///
-                /// <code lang="js">
-                /// import assert from 'node:assert/strict';
-                ///
-                /// await assert.rejects(
-                ///   async () => {
-                ///     throw new TypeError('Wrong value');
-                ///   },
-                ///   {
-                ///     name: 'TypeError',
-                ///     message: 'Wrong value',
-                ///   },
-                /// );
-                /// </code>
-                ///
-                /// <code lang="js">
-                /// import assert from 'node:assert/strict';
-                ///
-                /// await assert.rejects(
-                ///   async () => {
-                ///     throw new TypeError('Wrong value');
-                ///   },
-                ///   (err) => {
-                ///     assert.strictEqual(err.name, 'TypeError');
-                ///     assert.strictEqual(err.message, 'Wrong value');
-                ///     return true;
-                ///   },
-                /// );
-                /// </code>
-                ///
-                /// <code lang="js">
-                /// import assert from 'node:assert/strict';
-                ///
-                /// assert.rejects(
-                ///   Promise.reject(new Error('Wrong value')),
-                ///   Error,
-                /// ).then(() => {
-                ///   // ...
-                /// });
-                /// </code>
-                ///
-                /// <c>error</c> cannot be a string. If a string is provided as the second argument, then <c>error</c> is assumed to
-                /// be omitted and the string will be used for <c>message</c> instead. This can lead to easy-to-miss mistakes. Please read the
-                /// example in <see href="throws">throws</see> carefully if using a string as the second argument gets considered.
-                /// </summary>
-                [<Emit("$0.rejects($1...)")>]
-                abstract member rejects:
-                    block: JS.Promise<obj> * message: Exception -> JS.Promise<unit>
 
                 [<Emit("$0.rejects($1...)")>]
                 abstract member rejects:
@@ -18486,51 +18144,6 @@ TypeScript versions earlier than 5.7.""")>]
                 /// </code>
                 /// </summary>
                 [<Emit("$0.doesNotReject($1...)")>]
-                abstract member doesNotReject:
-                    block: (unit -> JS.Promise<obj>) * message: Exception -> JS.Promise<unit>
-
-                /// <summary>
-                /// Awaits the <c>asyncFn</c> promise or, if <c>asyncFn</c> is a function, immediately
-                /// calls the function and awaits the returned promise to complete. It will then
-                /// check that the promise is not rejected.
-                ///
-                /// If <c>asyncFn</c> is a function and it throws an error synchronously, <c>assert.doesNotReject()</c> will return a rejected <c>Promise</c> with that error. If
-                /// the function does not return a promise, <c>assert.doesNotReject()</c> will return a
-                /// rejected <c>Promise</c> with an [ERR_INVALID_RETURN_VALUE](https://nodejs.org/docs/latest-v22.x/api/errors.html#err_invalid_return_value) error. In both cases
-                /// the error handler is skipped.
-                ///
-                /// Using <c>assert.doesNotReject()</c> is actually not useful because there is little
-                /// benefit in catching a rejection and then rejecting it again. Instead, consider
-                /// adding a comment next to the specific code path that should not reject and keep
-                /// error messages as expressive as possible.
-                ///
-                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
-                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), or a validation
-                /// function. See <see href="throws">throws</see> for more details.
-                ///
-                /// Besides the async nature to await the completion behaves identically to <see href="doesNotThrow">doesNotThrow</see>.
-                ///
-                /// <code lang="js">
-                /// import assert from 'node:assert/strict';
-                ///
-                /// await assert.doesNotReject(
-                ///   async () => {
-                ///     throw new TypeError('Wrong value');
-                ///   },
-                ///   SyntaxError,
-                /// );
-                /// </code>
-                ///
-                /// <code lang="js">
-                /// import assert from 'node:assert/strict';
-                ///
-                /// assert.doesNotReject(Promise.reject(new TypeError('Wrong value')))
-                ///   .then(() => {
-                ///     // ...
-                ///   });
-                /// </code>
-                /// </summary>
-                [<Emit("$0.doesNotReject($1...)")>]
                 abstract member doesNotReject: block: JS.Promise<obj> -> JS.Promise<unit>
 
                 /// <summary>
@@ -18577,51 +18190,6 @@ TypeScript versions earlier than 5.7.""")>]
                 [<Emit("$0.doesNotReject($1...)")>]
                 abstract member doesNotReject:
                     block: JS.Promise<obj> * message: string -> JS.Promise<unit>
-
-                /// <summary>
-                /// Awaits the <c>asyncFn</c> promise or, if <c>asyncFn</c> is a function, immediately
-                /// calls the function and awaits the returned promise to complete. It will then
-                /// check that the promise is not rejected.
-                ///
-                /// If <c>asyncFn</c> is a function and it throws an error synchronously, <c>assert.doesNotReject()</c> will return a rejected <c>Promise</c> with that error. If
-                /// the function does not return a promise, <c>assert.doesNotReject()</c> will return a
-                /// rejected <c>Promise</c> with an [ERR_INVALID_RETURN_VALUE](https://nodejs.org/docs/latest-v22.x/api/errors.html#err_invalid_return_value) error. In both cases
-                /// the error handler is skipped.
-                ///
-                /// Using <c>assert.doesNotReject()</c> is actually not useful because there is little
-                /// benefit in catching a rejection and then rejecting it again. Instead, consider
-                /// adding a comment next to the specific code path that should not reject and keep
-                /// error messages as expressive as possible.
-                ///
-                /// If specified, <c>error</c> can be a [<c>Class</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes),
-                /// [<c>RegExp</c>](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions), or a validation
-                /// function. See <see href="throws">throws</see> for more details.
-                ///
-                /// Besides the async nature to await the completion behaves identically to <see href="doesNotThrow">doesNotThrow</see>.
-                ///
-                /// <code lang="js">
-                /// import assert from 'node:assert/strict';
-                ///
-                /// await assert.doesNotReject(
-                ///   async () => {
-                ///     throw new TypeError('Wrong value');
-                ///   },
-                ///   SyntaxError,
-                /// );
-                /// </code>
-                ///
-                /// <code lang="js">
-                /// import assert from 'node:assert/strict';
-                ///
-                /// assert.doesNotReject(Promise.reject(new TypeError('Wrong value')))
-                ///   .then(() => {
-                ///     // ...
-                ///   });
-                /// </code>
-                /// </summary>
-                [<Emit("$0.doesNotReject($1...)")>]
-                abstract member doesNotReject:
-                    block: JS.Promise<obj> * message: Exception -> JS.Promise<unit>
 
                 [<Emit("$0.doesNotReject($1...)")>]
                 abstract member doesNotReject:
@@ -92245,64 +91813,6 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Attempting to set a header field name or value that contains invalid characters
             /// will result in a [<c>TypeError</c>](https://nodejs.org/docs/latest-v22.x/api/errors.html#class-typeerror) being thrown.
             /// </summary>
-            abstract member writeHead: statusCode: float -> ServerResponse<'Request>
-
-            /// <summary>
-            /// Sends a response header to the request. The status code is a 3-digit HTTP
-            /// status code, like <c>404</c>. The last argument, <c>headers</c>, are the response headers.
-            /// Optionally one can give a human-readable <c>statusMessage</c> as the second
-            /// argument.
-            ///
-            /// <c>headers</c> may be an <c>Array</c> where the keys and values are in the same list.
-            /// It is _not_ a list of tuples. So, the even-numbered offsets are key values,
-            /// and the odd-numbered offsets are the associated values. The array is in the same
-            /// format as <c>request.rawHeaders</c>.
-            ///
-            /// Returns a reference to the <c>ServerResponse</c>, so that calls can be chained.
-            ///
-            /// <code lang="js">
-            /// const body = 'hello world';
-            /// response
-            ///   .writeHead(200, {
-            ///     'Content-Length': Buffer.byteLength(body),
-            ///     'Content-Type': 'text/plain',
-            ///   })
-            ///   .end(body);
-            /// </code>
-            ///
-            /// This method must only be called once on a message and it must
-            /// be called before <c>response.end()</c> is called.
-            ///
-            /// If <c>response.write()</c> or <c>response.end()</c> are called before calling
-            /// this, the implicit/mutable headers will be calculated and call this function.
-            ///
-            /// When headers have been set with <c>response.setHeader()</c>, they will be merged
-            /// with any headers passed to <c>response.writeHead()</c>, with the headers passed
-            /// to <c>response.writeHead()</c> given precedence.
-            ///
-            /// If this method is called and <c>response.setHeader()</c> has not been called,
-            /// it will directly write the supplied header values onto the network channel
-            /// without caching internally, and the <c>response.getHeader()</c> on the header
-            /// will not yield the expected result. If progressive population of headers is
-            /// desired with potential future retrieval and modification, use <c>response.setHeader()</c> instead.
-            ///
-            /// <code lang="js">
-            /// // Returns content-type = text/plain
-            /// const server = http.createServer((req, res) => {
-            ///   res.setHeader('Content-Type', 'text/html');
-            ///   res.setHeader('X-Foo', 'bar');
-            ///   res.writeHead(200, { 'Content-Type': 'text/plain' });
-            ///   res.end('ok');
-            /// });
-            /// </code>
-            ///
-            /// <c>Content-Length</c> is read in bytes, not characters. Use <c>Buffer.byteLength()</c> to determine the length of the body in bytes. Node.js
-            /// will check whether <c>Content-Length</c> and the length of the body which has
-            /// been transmitted are equal or not.
-            ///
-            /// Attempting to set a header field name or value that contains invalid characters
-            /// will result in a [<c>TypeError</c>](https://nodejs.org/docs/latest-v22.x/api/errors.html#class-typeerror) being thrown.
-            /// </summary>
             abstract member writeHead:
                 statusCode: float * headers: Node.http.OutgoingHttpHeaders ->
                     ServerResponse<'Request>
@@ -127274,26 +126784,6 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// URL, such as <c>import.meta.url</c>, you can pass that URL here.
                 /// </param>
                 [<Emit("$0.register($1...)")>]
-                abstract member register<'Data> : specifier: string -> unit
-
-                /// <summary>
-                /// Register a module that exports hooks that customize Node.js module
-                /// resolution and loading behavior. See
-                /// [Customization hooks](https://nodejs.org/docs/latest-v22.x/api/module.html#customization-hooks).
-                ///
-                /// This feature requires <c>--allow-worker</c> if used with the
-                /// [Permission Model](https://nodejs.org/docs/latest-v22.x/api/permissions.html#permission-model).
-                /// </summary>
-                /// <param name="specifier">
-                /// Customization hooks to be registered; this should be
-                /// the same string that would be passed to <c>import()</c>, except that if it is
-                /// relative, it is resolved relative to <c>parentURL</c>.
-                /// </param>
-                /// <param name="parentURL">
-                /// f you want to resolve <c>specifier</c> relative to a base
-                /// URL, such as <c>import.meta.url</c>, you can pass that URL here.
-                /// </param>
-                [<Emit("$0.register($1...)")>]
                 abstract member register<'Data> :
                     specifier: string *
                     parentURL: string *
@@ -127323,26 +126813,6 @@ EventEmitter.defaultMaxListeners = $0"""
                     parentURL: Node.url.URL *
                     ?options: Node.``module``.Module_.RegisterOptions<'Data> ->
                         unit
-
-                /// <summary>
-                /// Register a module that exports hooks that customize Node.js module
-                /// resolution and loading behavior. See
-                /// [Customization hooks](https://nodejs.org/docs/latest-v22.x/api/module.html#customization-hooks).
-                ///
-                /// This feature requires <c>--allow-worker</c> if used with the
-                /// [Permission Model](https://nodejs.org/docs/latest-v22.x/api/permissions.html#permission-model).
-                /// </summary>
-                /// <param name="specifier">
-                /// Customization hooks to be registered; this should be
-                /// the same string that would be passed to <c>import()</c>, except that if it is
-                /// relative, it is resolved relative to <c>parentURL</c>.
-                /// </param>
-                /// <param name="parentURL">
-                /// f you want to resolve <c>specifier</c> relative to a base
-                /// URL, such as <c>import.meta.url</c>, you can pass that URL here.
-                /// </param>
-                [<Emit("$0.register($1...)")>]
-                abstract member register<'Data> : specifier: Node.url.URL -> unit
 
                 /// <summary>
                 /// Register a module that exports hooks that customize Node.js module
@@ -127410,26 +126880,6 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// URL, such as <c>import.meta.url</c>, you can pass that URL here.
                 /// </param>
                 [<Emit("$0.register($1...)")>]
-                abstract member register: specifier: string -> unit
-
-                /// <summary>
-                /// Register a module that exports hooks that customize Node.js module
-                /// resolution and loading behavior. See
-                /// [Customization hooks](https://nodejs.org/docs/latest-v22.x/api/module.html#customization-hooks).
-                ///
-                /// This feature requires <c>--allow-worker</c> if used with the
-                /// [Permission Model](https://nodejs.org/docs/latest-v22.x/api/permissions.html#permission-model).
-                /// </summary>
-                /// <param name="specifier">
-                /// Customization hooks to be registered; this should be
-                /// the same string that would be passed to <c>import()</c>, except that if it is
-                /// relative, it is resolved relative to <c>parentURL</c>.
-                /// </param>
-                /// <param name="parentURL">
-                /// f you want to resolve <c>specifier</c> relative to a base
-                /// URL, such as <c>import.meta.url</c>, you can pass that URL here.
-                /// </param>
-                [<Emit("$0.register($1...)")>]
                 abstract member register:
                     specifier: string *
                     parentURL: string *
@@ -127459,26 +126909,6 @@ EventEmitter.defaultMaxListeners = $0"""
                     parentURL: Node.url.URL *
                     ?options: Node.``module``.Module_.RegisterOptions<obj> ->
                         unit
-
-                /// <summary>
-                /// Register a module that exports hooks that customize Node.js module
-                /// resolution and loading behavior. See
-                /// [Customization hooks](https://nodejs.org/docs/latest-v22.x/api/module.html#customization-hooks).
-                ///
-                /// This feature requires <c>--allow-worker</c> if used with the
-                /// [Permission Model](https://nodejs.org/docs/latest-v22.x/api/permissions.html#permission-model).
-                /// </summary>
-                /// <param name="specifier">
-                /// Customization hooks to be registered; this should be
-                /// the same string that would be passed to <c>import()</c>, except that if it is
-                /// relative, it is resolved relative to <c>parentURL</c>.
-                /// </param>
-                /// <param name="parentURL">
-                /// f you want to resolve <c>specifier</c> relative to a base
-                /// URL, such as <c>import.meta.url</c>, you can pass that URL here.
-                /// </param>
-                [<Emit("$0.register($1...)")>]
-                abstract member register: specifier: Node.url.URL -> unit
 
                 /// <summary>
                 /// Register a module that exports hooks that customize Node.js module
@@ -169383,15 +168813,6 @@ Duplex.fromWeb($0, $1)"""
             /// certificate.
             /// </summary>
             abstract member getPeerCertificate: ?detailed: bool -> Node.tls.PeerCertificate
-            /// <summary>
-            /// Returns an object representing the peer's certificate. If the peer does not
-            /// provide a certificate, an empty object will be returned. If the socket has been
-            /// destroyed, <c>null</c> will be returned.
-            ///
-            /// If the full certificate chain was requested, each certificate will include an<c>issuerCertificate</c> property containing an object representing its issuer's
-            /// certificate.
-            /// </summary>
-            abstract member getPeerCertificate: unit -> Node.tls.PeerCertificate
             /// <summary>
             /// As the <c>Finished</c> messages are message digests of the complete handshake
             /// (with a total of 192 bits for TLS 1.0 and more for SSL 3.0), they can

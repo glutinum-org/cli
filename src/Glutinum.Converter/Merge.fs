@@ -392,8 +392,52 @@ let private withParameterlessOverloads (members: FSharpMember list) : FSharpMemb
             | _ -> [ fsharpMember ]
         )
 
+/// `log(value, ?prefix)` takes every call `log(value, ?prefix, ?time)` takes, F# can't choose
+/// between them when the trailing parameters are left out
+let private withoutSubsumedOverloads (members: FSharpMember list) : FSharpMember list =
+    let signatureOf (fsharpMember: FSharpMember) =
+        match fsharpMember with
+        | FSharpMember.Method info ->
+            Some(
+                (info.Name, true, info.IsStatic),
+                info.TypeParameters,
+                parametersSignature info.Parameters,
+                info.Type
+            )
+        | FSharpMember.StaticMember info ->
+            Some(
+                (info.Name, false, true),
+                info.TypeParameters,
+                parametersSignature info.Parameters,
+                info.Type
+            )
+        | FSharpMember.Property _ -> None
+
+    let subsumes (longer: FSharpMember) (shorter: FSharpMember) =
+        match signatureOf longer, signatureOf shorter with
+        | Some(longKey, longTypeParameters, longParameters, longType),
+          Some(shortKey, shortTypeParameters, shortParameters, shortType) ->
+            longKey = shortKey
+            && longTypeParameters = shortTypeParameters
+            && longType = shortType
+            && longParameters.Length > shortParameters.Length
+            // A call the shorter accepts is a call the longer accepts
+            && List.forall2
+                (fun (longType, longIsOptional) (shortType, shortIsOptional) ->
+                    longType = shortType && (not shortIsOptional || longIsOptional)
+                )
+                (longParameters |> List.take shortParameters.Length)
+                shortParameters
+            && longParameters |> List.skip shortParameters.Length |> List.forall snd
+        | _ -> false
+
+    members
+    |> List.filter (fun candidate ->
+        not (members |> List.exists (fun other -> subsumes other candidate))
+    )
+
 let distinctBySignature (members: FSharpMember list) : FSharpMember list =
-    let members = withParameterlessOverloads members
+    let members = withoutSubsumedOverloads members |> withParameterlessOverloads
 
     let methodNames =
         members

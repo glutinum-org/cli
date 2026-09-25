@@ -28082,14 +28082,6 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/createElementNS)
         /// </summary>
         abstract member createElementNS:
-            ``namespace``: string option * qualifiedName: string -> Web.Element
-
-        /// <summary>
-        /// The **<c>createElementNS()</c>** method of the Document interface creates a new element with the specified namespace URI and qualified name.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/createElementNS)
-        /// </summary>
-        abstract member createElementNS:
             ``namespace``: string option * qualifiedName: string * options: string -> Web.Element
 
         /// <summary>
@@ -32155,12 +32147,6 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/FormData/append)
         /// </summary>
-        abstract member append: name: string * value: Web.Blob -> unit
-        /// <summary>
-        /// The **<c>append()</c>** method of the FormData interface appends a new value onto an existing key inside a FormData object, or adds the key if it does not already exist.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/FormData/append)
-        /// </summary>
         abstract member append: name: string * blobValue: Web.Blob * ?filename: string -> unit
         /// <summary>
         /// The **<c>delete()</c>** method of the FormData interface deletes a key and its value(s) from a FormData object.
@@ -32192,12 +32178,6 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/FormData/set)
         /// </summary>
         abstract member set: name: string * value: string -> unit
-        /// <summary>
-        /// The **<c>set()</c>** method of the FormData interface sets a new value for an existing key inside a FormData object, or adds the key/value if it does not already exist.
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/FormData/set)
-        /// </summary>
-        abstract member set: name: string * value: Web.Blob -> unit
         /// <summary>
         /// The **<c>set()</c>** method of the FormData interface sets a new value for an existing key inside a FormData object, or adds the key/value if it does not already exist.
         ///
