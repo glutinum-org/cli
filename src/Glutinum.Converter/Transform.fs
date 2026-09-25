@@ -780,6 +780,50 @@ module private UtilityType =
             | Some makeTypeAlias -> makeTypeAlias unionType
             | None -> unionType
 
+/// The type each own type parameter of a function type stands for outside a generic position.
+/// `<P, P2 = P>`: the default of `P2` is another own parameter, which has none itself.
+let private ownTypeParameterDefaults (functionTypeInfo: GlueFunctionType) =
+    let declared =
+        functionTypeInfo.TypeParameters
+        |> List.filter (fun typeParameter ->
+            List.contains typeParameter.Name functionTypeInfo.OwnTypeParameterNames
+        )
+
+    let byName =
+        declared
+        |> List.map (fun typeParameter -> typeParameter.Name, typeParameter)
+        |> Map.ofList
+
+    // A parameter with no default falls back to its constraint when F# seals it,
+    // `P extends string` can only ever be `string`
+    let withoutDefault (typeParameter: GlueTypeParameter) =
+        match typeParameter.Constraint with
+        | Some(GlueType.Primitive _ as constraintType) -> constraintType
+        | _ -> GlueType.Primitive GluePrimitive.Any
+
+    let rec resolve (seen: Set<string>) (typeParameter: GlueTypeParameter) =
+        match typeParameter.Default with
+        | None -> withoutDefault typeParameter
+        | Some(GlueType.TypeParameter name) when byName.ContainsKey name ->
+            if seen.Contains name then
+                GlueType.Primitive GluePrimitive.Any
+            else
+                resolve (Set.add name seen) byName.[name]
+        | Some glueType -> glueType
+
+    let resolved =
+        declared
+        |> List.map (fun typeParameter ->
+            typeParameter.Name, resolve (Set.singleton typeParameter.Name) typeParameter
+        )
+        |> Map.ofList
+
+    // `VF = (c: Context<any, P2>) => any`: the default mentions another own parameter
+    resolved
+    |> Map.map (fun name glueType ->
+        GlueSubstitution.substitute (Map.remove name resolved) glueType
+    )
+
 let rec private transformType (context: TransformContext) (glueType: GlueType) : FSharpType =
     match glueType with
     | GlueType.Unknown -> FSharpType.Object
@@ -1002,17 +1046,7 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
         | _ :: [] ->
             // `<RG = Default>(req: Req<RG>) => void`: an F# function can't declare the type
             // parameters of the function, they are their default
-            let ownDefaults =
-                functionTypeInfo.TypeParameters
-                |> List.filter (fun typeParameter ->
-                    List.contains typeParameter.Name functionTypeInfo.OwnTypeParameterNames
-                )
-                |> List.map (fun typeParameter ->
-                    typeParameter.Name,
-                    typeParameter.Default
-                    |> Option.defaultValue (GlueType.Primitive GluePrimitive.Any)
-                )
-                |> Map.ofList
+            let ownDefaults = ownTypeParameterDefaults functionTypeInfo
 
             let paremeters =
                 paremeters |> List.map (GlueSubstitution.substituteParameter ownDefaults)
@@ -1084,17 +1118,8 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
             // `mount: <Id>(id: Id) => ...`: a property or a type argument can't be generic,
             // the function's own type parameters are their default, else `obj`
             let ownDefaults =
-                functionTypeInfo.TypeParameters
-                |> List.filter (fun typeParameter ->
-                    List.contains typeParameter.Name functionTypeInfo.OwnTypeParameterNames
-                )
-                |> List.map (fun typeParameter ->
-                    typeParameter.Name,
-                    typeParameter.Default
-                    |> Option.map (transformType context)
-                    |> Option.defaultValue FSharpType.Object
-                )
-                |> Map.ofList
+                ownTypeParameterDefaults functionTypeInfo
+                |> Map.map (fun _ glueType -> transformType context glueType)
 
             ({
                 Attributes = []
