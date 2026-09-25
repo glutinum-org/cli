@@ -3084,6 +3084,17 @@ module private TransformMembers =
             | m -> m
         )
 
+    /// `Pick<Link | Image, "title">` picks `title` from each case, one optional and one not:
+    /// a parameter list can't name it twice, and the optional one takes both calls
+    let private distinctByName (parameters: FSharpParameter list) =
+        parameters
+        |> List.groupBy _.Name
+        |> List.map (fun (_, group) ->
+            match group |> List.tryFind _.IsOptional with
+            | Some optional -> optional
+            | None -> List.head group
+        )
+
     let toFSharpParameters
         (context: TransformContext)
         (members: GlueMember list)
@@ -3189,6 +3200,7 @@ module private TransformMembers =
                 }
                 : FSharpParameter
         )
+        |> distinctByName
 
 [<Literal>]
 let private MAX_GENERATED_CONSTRUCTORS = 12
