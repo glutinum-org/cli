@@ -5470,7 +5470,10 @@ let private transformRecord
         Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
         Name = name
         OriginalName = ""
-        TypeParameters = transformTypeParameters context typeParameters |> _.TypeParameters
+        // The interface is a declaration, a constrained parameter stays generic instead of
+        // being replaced by its constraint in the members
+        TypeParameters =
+            transformDeclarationTypeParameters context typeParameters |> _.TypeParameters
         Members =
             {
                 Attributes = [ FSharpAttribute.EmitIndexer ]
