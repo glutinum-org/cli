@@ -2272,11 +2272,13 @@ module TypeScript =
         abstract member SharedArrayBuffer: TypeScript.SharedArrayBuffer with get, set
         abstract member ArrayBuffer: JS.ArrayBuffer with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type ErrorOptions [<ParamObject; Emit("$0")>] (?cause: obj) =
+    [<Interface>]
+    type ErrorOptions =
+        abstract member cause: obj option with get, set
 
-        member val cause: obj option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create(?cause: obj) : ErrorOptions = nativeOnly
 
     type PropertyKey = U3<string, float, obj>
 
@@ -2573,24 +2575,24 @@ module TypeScript =
 
         module raw =
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type template private () =
+            [<Interface>]
+            type template =
+                abstract member raw: U2<ReadonlyArray<string>, TypeScript.ArrayLike<string>> with get, set
 
                 [<ParamObject; Emit("$0")>]
-                new(raw: ReadonlyArray<string>) = template ()
+                static member Create(raw: ReadonlyArray<string>) : template = nativeOnly
 
                 [<ParamObject; Emit("$0")>]
-                new(raw: TypeScript.ArrayLike<string>) = template ()
-
-                member val raw: U2<ReadonlyArray<string>, TypeScript.ArrayLike<string>> =
-                    nativeOnly with get, set
+                static member Create(raw: TypeScript.ArrayLike<string>) : template = nativeOnly
 
     module ProxyConstructor =
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type revocable<'T> [<ParamObject; Emit("$0")>] (proxy: 'T, revoke: (unit -> unit)) =
+        [<Interface>]
+        type revocable<'T> =
+            abstract member proxy: 'T with get, set
+            abstract member revoke: (unit -> unit) with get, set
 
-            member val proxy: 'T = nativeOnly with get, set
-            member val revoke: (unit -> unit) = nativeOnly with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create(proxy: 'T, revoke: (unit -> unit)) : revocable<'T> = nativeOnly

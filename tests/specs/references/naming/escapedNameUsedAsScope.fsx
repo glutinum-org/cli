@@ -25,15 +25,12 @@ module Names =
         | c
         | d
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type ``x-options``
+    [<Interface>]
+    type ``x-options`` =
+        abstract member debug: bool with get, set
         [<ParamObject; Emit("$0")>]
-        (
-            debug: bool
-        ) =
-
-        member val debug : bool = nativeOnly with get, set
+        static member Create (debug: bool) : ``x-options`` = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

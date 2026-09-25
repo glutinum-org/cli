@@ -16,25 +16,19 @@ module Exports =
 
     module openTextDocument =
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type options
+        [<Interface>]
+        type options =
+            abstract member encoding: string option with get
             [<ParamObject; Emit("$0")>]
-            (
-                ?encoding: string
-            ) =
+            static member Create (?encoding: string) : options = nativeOnly
 
-            member val encoding : string option = nativeOnly with get
-
-        [<Global>]
         [<AllowNullLiteral>]
-        type options_1
+        [<Interface>]
+        type options_1 =
+            abstract member permissions: ResizeArray<string> option with get
             [<ParamObject; Emit("$0")>]
-            (
-                ?permissions: ResizeArray<string>
-            ) =
-
-            member val permissions : ResizeArray<string> option = nativeOnly with get
+            static member Create (?permissions: ResizeArray<string>) : options_1 = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

@@ -7732,17 +7732,20 @@ module Web =
     type AacEncoderConfig =
         abstract member format: Web.AacBitstreamFormat option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type AddEventListenerOptions
-        [<ParamObject; Emit("$0")>]
-        (?capture: bool, ?once: bool, ?passive: bool, ?signal: Web.AbortSignal)
-        =
+    [<Interface>]
+    type AddEventListenerOptions =
+        inherit Web.EventListenerOptions
+        abstract member once: bool option with get, set
+        abstract member passive: bool option with get, set
+        abstract member signal: Web.AbortSignal option with get, set
 
-        member val capture: bool option = nativeOnly with get, set
-        member val once: bool option = nativeOnly with get, set
-        member val passive: bool option = nativeOnly with get, set
-        member val signal: Web.AbortSignal option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?capture: bool, ?once: bool, ?passive: bool, ?signal: Web.AbortSignal)
+            : AddEventListenerOptions
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -7758,184 +7761,212 @@ module Web =
         abstract member region: string option with get, set
         abstract member sortingCode: string option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type AesCbcParams [<ParamObject; Emit("$0")>] (name: string, iv: Web.BufferSource) =
+    [<Interface>]
+    type AesCbcParams =
+        inherit Web.Algorithm
+        abstract member iv: Web.BufferSource with get, set
 
-        member val name: string = nativeOnly with get, set
-        member val iv: Web.BufferSource = nativeOnly with get, set
-
-    [<Global>]
-    [<AllowNullLiteral>]
-    type AesCtrParams
         [<ParamObject; Emit("$0")>]
-        (name: string, counter: Web.BufferSource, length: float)
-        =
+        static member Create(name: string, iv: Web.BufferSource) : AesCbcParams = nativeOnly
 
-        member val name: string = nativeOnly with get, set
-        member val counter: Web.BufferSource = nativeOnly with get, set
-        member val length: float = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type AesDerivedKeyParams [<ParamObject; Emit("$0")>] (name: string, length: float) =
+    [<Interface>]
+    type AesCtrParams =
+        inherit Web.Algorithm
+        abstract member counter: Web.BufferSource with get, set
+        abstract member length: float with get, set
 
-        member val name: string = nativeOnly with get, set
-        member val length: float = nativeOnly with get, set
-
-    [<Global>]
-    [<AllowNullLiteral>]
-    type AesGcmParams
         [<ParamObject; Emit("$0")>]
-        (name: string, iv: Web.BufferSource, ?additionalData: Web.BufferSource, ?tagLength: float)
-        =
+        static member Create
+            (name: string, counter: Web.BufferSource, length: float)
+            : AesCtrParams
+            =
+            nativeOnly
 
-        member val name: string = nativeOnly with get, set
-        member val iv: Web.BufferSource = nativeOnly with get, set
-        member val additionalData: Web.BufferSource option = nativeOnly with get, set
-        member val tagLength: float option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type AesKeyAlgorithm [<ParamObject; Emit("$0")>] (name: string, length: float) =
+    [<Interface>]
+    type AesDerivedKeyParams =
+        inherit Web.Algorithm
+        abstract member length: float with get, set
 
-        member val name: string = nativeOnly with get, set
-        member val length: float = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create(name: string, length: float) : AesDerivedKeyParams = nativeOnly
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type AesKeyGenParams [<ParamObject; Emit("$0")>] (name: string, length: float) =
+    [<Interface>]
+    type AesGcmParams =
+        inherit Web.Algorithm
+        abstract member additionalData: Web.BufferSource option with get, set
+        abstract member iv: Web.BufferSource with get, set
+        abstract member tagLength: float option with get, set
 
-        member val name: string = nativeOnly with get, set
-        member val length: float = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                name: string,
+                iv: Web.BufferSource,
+                ?additionalData: Web.BufferSource,
+                ?tagLength: float
+            )
+            : AesGcmParams
+            =
+            nativeOnly
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type AesKeyAlgorithm =
+        inherit Web.KeyAlgorithm
+        abstract member length: float with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(name: string, length: float) : AesKeyAlgorithm = nativeOnly
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type AesKeyGenParams =
+        inherit Web.Algorithm
+        abstract member length: float with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(name: string, length: float) : AesKeyGenParams = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
     type Algorithm =
         abstract member name: string with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type AllAcceptedCredentialsOptions
+    [<Interface>]
+    type AllAcceptedCredentialsOptions =
+        abstract member allAcceptedCredentialIds: ResizeArray<Web.Base64URLString> with get, set
+        abstract member rpId: string with get, set
+        abstract member userId: Web.Base64URLString with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            allAcceptedCredentialIds: ResizeArray<Web.Base64URLString>,
-            rpId: string,
-            userId: Web.Base64URLString
-        )
-        =
+        static member Create
+            (
+                allAcceptedCredentialIds: ResizeArray<Web.Base64URLString>,
+                rpId: string,
+                userId: Web.Base64URLString
+            )
+            : AllAcceptedCredentialsOptions
+            =
+            nativeOnly
 
-        member val allAcceptedCredentialIds: ResizeArray<Web.Base64URLString> =
-            nativeOnly with get, set
-
-        member val rpId: string = nativeOnly with get, set
-        member val userId: Web.Base64URLString = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type AnalyserOptions
+    [<Interface>]
+    type AnalyserOptions =
+        inherit Web.AudioNodeOptions
+        abstract member fftSize: float option with get, set
+        abstract member maxDecibels: float option with get, set
+        abstract member minDecibels: float option with get, set
+        abstract member smoothingTimeConstant: float option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?channelCount: float,
-            ?channelCountMode: Web.ChannelCountMode,
-            ?channelInterpretation: Web.ChannelInterpretation,
-            ?fftSize: float,
-            ?maxDecibels: float,
-            ?minDecibels: float,
-            ?smoothingTimeConstant: float
-        )
-        =
+        static member Create
+            (
+                ?channelCount: float,
+                ?channelCountMode: Web.ChannelCountMode,
+                ?channelInterpretation: Web.ChannelInterpretation,
+                ?fftSize: float,
+                ?maxDecibels: float,
+                ?minDecibels: float,
+                ?smoothingTimeConstant: float
+            )
+            : AnalyserOptions
+            =
+            nativeOnly
 
-        member val channelCount: float option = nativeOnly with get, set
-        member val channelCountMode: Web.ChannelCountMode option = nativeOnly with get, set
-
-        member val channelInterpretation: Web.ChannelInterpretation option =
-            nativeOnly with get, set
-
-        member val fftSize: float option = nativeOnly with get, set
-        member val maxDecibels: float option = nativeOnly with get, set
-        member val minDecibels: float option = nativeOnly with get, set
-        member val smoothingTimeConstant: float option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type AnimationEventInit
+    [<Interface>]
+    type AnimationEventInit =
+        inherit Web.EventInit
+        abstract member animation: Web.CSSAnimation option with get, set
+        abstract member animationName: string option with get, set
+        abstract member elapsedTime: float option with get, set
+        abstract member pseudoElement: string option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?bubbles: bool,
-            ?cancelable: bool,
-            ?composed: bool,
-            ?animation: Web.CSSAnimation,
-            ?animationName: string,
-            ?elapsedTime: float,
-            ?pseudoElement: string
-        )
-        =
+        static member Create
+            (
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool,
+                ?animation: Web.CSSAnimation,
+                ?animationName: string,
+                ?elapsedTime: float,
+                ?pseudoElement: string
+            )
+            : AnimationEventInit
+            =
+            nativeOnly
 
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val animation: Web.CSSAnimation option = nativeOnly with get, set
-        member val animationName: string option = nativeOnly with get, set
-        member val elapsedTime: float option = nativeOnly with get, set
-        member val pseudoElement: string option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type AnimationPlaybackEventInit
+    [<Interface>]
+    type AnimationPlaybackEventInit =
+        inherit Web.EventInit
+        abstract member currentTime: Web.CSSNumberish option with get, set
+        abstract member timelineTime: Web.CSSNumberish option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?bubbles: bool,
-            ?cancelable: bool,
-            ?composed: bool,
-            ?currentTime: Web.CSSNumberish,
-            ?timelineTime: Web.CSSNumberish
-        )
-        =
+        static member Create
+            (
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool,
+                ?currentTime: Web.CSSNumberish,
+                ?timelineTime: Web.CSSNumberish
+            )
+            : AnimationPlaybackEventInit
+            =
+            nativeOnly
 
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val currentTime: Web.CSSNumberish option = nativeOnly with get, set
-        member val timelineTime: Web.CSSNumberish option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type AssignedNodesOptions [<ParamObject; Emit("$0")>] (?flatten: bool) =
+    [<Interface>]
+    type AssignedNodesOptions =
+        abstract member flatten: bool option with get, set
 
-        member val flatten: bool option = nativeOnly with get, set
-
-    [<Global>]
-    [<AllowNullLiteral>]
-    type AudioBufferOptions
         [<ParamObject; Emit("$0")>]
-        (length: float, sampleRate: float, ?numberOfChannels: float)
-        =
+        static member Create(?flatten: bool) : AssignedNodesOptions = nativeOnly
 
-        member val length: float = nativeOnly with get, set
-        member val sampleRate: float = nativeOnly with get, set
-        member val numberOfChannels: float option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type AudioBufferSourceOptions
-        [<ParamObject; Emit("$0")>]
-        (
-            ?buffer: Web.AudioBuffer,
-            ?detune: float,
-            ?loop: bool,
-            ?loopEnd: float,
-            ?loopStart: float,
-            ?playbackRate: float
-        )
-        =
+    [<Interface>]
+    type AudioBufferOptions =
+        abstract member length: float with get, set
+        abstract member numberOfChannels: float option with get, set
+        abstract member sampleRate: float with get, set
 
-        member val buffer: Web.AudioBuffer option = nativeOnly with get, set
-        member val detune: float option = nativeOnly with get, set
-        member val loop: bool option = nativeOnly with get, set
-        member val loopEnd: float option = nativeOnly with get, set
-        member val loopStart: float option = nativeOnly with get, set
-        member val playbackRate: float option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (length: float, sampleRate: float, ?numberOfChannels: float)
+            : AudioBufferOptions
+            =
+            nativeOnly
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type AudioBufferSourceOptions =
+        abstract member buffer: Web.AudioBuffer option with get, set
+        abstract member detune: float option with get, set
+        abstract member loop: bool option with get, set
+        abstract member loopEnd: float option with get, set
+        abstract member loopStart: float option with get, set
+        abstract member playbackRate: float option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?buffer: Web.AudioBuffer,
+                ?detune: float,
+                ?loop: bool,
+                ?loopEnd: float,
+                ?loopStart: float,
+                ?playbackRate: float
+            )
+            : AudioBufferSourceOptions
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -7946,85 +7977,104 @@ module Web =
         abstract member samplerate: float option with get, set
         abstract member spatialRendering: bool option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type AudioContextOptions private () =
+    [<Interface>]
+    type AudioContextOptions =
+        abstract member latencyHint: U2<Web.AudioContextLatencyCategory, float> option with get, set
+        abstract member sampleRate: float option with get, set
 
         [<ParamObject; Emit("$0")>]
-        new(?sampleRate: float) = AudioContextOptions()
+        static member Create(?sampleRate: float) : AudioContextOptions = nativeOnly
 
         [<ParamObject; Emit("$0")>]
-        new(latencyHint: Web.AudioContextLatencyCategory, ?sampleRate: float)= AudioContextOptions()
+        static member Create
+            (latencyHint: Web.AudioContextLatencyCategory, ?sampleRate: float)
+            : AudioContextOptions
+            =
+            nativeOnly
 
         [<ParamObject; Emit("$0")>]
-        new(latencyHint: float, ?sampleRate: float) = AudioContextOptions()
+        static member Create(latencyHint: float, ?sampleRate: float) : AudioContextOptions =
+            nativeOnly
 
-        member val latencyHint: U2<Web.AudioContextLatencyCategory, float> option =
-            nativeOnly with get, set
-
-        member val sampleRate: float option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type AudioDataCopyToOptions
+    [<Interface>]
+    type AudioDataCopyToOptions =
+        abstract member format: Web.AudioSampleFormat option with get, set
+        abstract member frameCount: float option with get, set
+        abstract member frameOffset: float option with get, set
+        abstract member planeIndex: float with get, set
+
         [<ParamObject; Emit("$0")>]
-        (planeIndex: float, ?format: Web.AudioSampleFormat, ?frameCount: float, ?frameOffset: float)
-        =
+        static member Create
+            (
+                planeIndex: float,
+                ?format: Web.AudioSampleFormat,
+                ?frameCount: float,
+                ?frameOffset: float
+            )
+            : AudioDataCopyToOptions
+            =
+            nativeOnly
 
-        member val planeIndex: float = nativeOnly with get, set
-        member val format: Web.AudioSampleFormat option = nativeOnly with get, set
-        member val frameCount: float option = nativeOnly with get, set
-        member val frameOffset: float option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type AudioDataInit
+    [<Interface>]
+    type AudioDataInit =
+        abstract member data: Web.BufferSource with get, set
+        abstract member format: Web.AudioSampleFormat with get, set
+        abstract member numberOfChannels: float with get, set
+        abstract member numberOfFrames: float with get, set
+        abstract member sampleRate: float with get, set
+        abstract member timestamp: float with get, set
+        abstract member transfer: ResizeArray<obj> option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            data: Web.BufferSource,
-            format: Web.AudioSampleFormat,
-            numberOfChannels: float,
-            numberOfFrames: float,
-            sampleRate: float,
-            timestamp: float,
-            ?transfer: ResizeArray<obj>
-        )
-        =
+        static member Create
+            (
+                data: Web.BufferSource,
+                format: Web.AudioSampleFormat,
+                numberOfChannels: float,
+                numberOfFrames: float,
+                sampleRate: float,
+                timestamp: float,
+                ?transfer: ResizeArray<obj>
+            )
+            : AudioDataInit
+            =
+            nativeOnly
 
-        member val data: Web.BufferSource = nativeOnly with get, set
-        member val format: Web.AudioSampleFormat = nativeOnly with get, set
-        member val numberOfChannels: float = nativeOnly with get, set
-        member val numberOfFrames: float = nativeOnly with get, set
-        member val sampleRate: float = nativeOnly with get, set
-        member val timestamp: float = nativeOnly with get, set
-        member val transfer: ResizeArray<obj> option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type AudioDecoderConfig
+    [<Interface>]
+    type AudioDecoderConfig =
+        abstract member codec: string with get, set
+        abstract member description: Web.AllowSharedBufferSource option with get, set
+        abstract member numberOfChannels: float with get, set
+        abstract member sampleRate: float with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            codec: string,
-            numberOfChannels: float,
-            sampleRate: float,
-            ?description: Web.AllowSharedBufferSource
-        )
-        =
+        static member Create
+            (
+                codec: string,
+                numberOfChannels: float,
+                sampleRate: float,
+                ?description: Web.AllowSharedBufferSource
+            )
+            : AudioDecoderConfig
+            =
+            nativeOnly
 
-        member val codec: string = nativeOnly with get, set
-        member val numberOfChannels: float = nativeOnly with get, set
-        member val sampleRate: float = nativeOnly with get, set
-        member val description: Web.AllowSharedBufferSource option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type AudioDecoderInit
-        [<ParamObject; Emit("$0")>]
-        (error: Web.WebCodecsErrorCallback, output: Web.AudioDataOutputCallback)
-        =
+    [<Interface>]
+    type AudioDecoderInit =
+        abstract member error: error: Web.DOMException -> unit
+        abstract member output: output: Web.AudioData -> unit
 
-        member val error: Web.WebCodecsErrorCallback = nativeOnly with get, set
-        member val output: Web.AudioDataOutputCallback = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (error: Web.WebCodecsErrorCallback, output: Web.AudioDataOutputCallback)
+            : AudioDecoderInit
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -8032,38 +8082,46 @@ module Web =
         abstract member config: Web.AudioDecoderConfig option with get, set
         abstract member supported: bool option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type AudioEncoderConfig
+    [<Interface>]
+    type AudioEncoderConfig =
+        abstract member aac: Web.AacEncoderConfig option with get, set
+        abstract member bitrate: float option with get, set
+        abstract member bitrateMode: Web.BitrateMode option with get, set
+        abstract member codec: string with get, set
+        abstract member numberOfChannels: float with get, set
+        abstract member opus: Web.OpusEncoderConfig option with get, set
+        abstract member sampleRate: float with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            codec: string,
-            numberOfChannels: float,
-            sampleRate: float,
-            ?aac: Web.AacEncoderConfig,
-            ?bitrate: float,
-            ?bitrateMode: Web.BitrateMode,
-            ?opus: Web.OpusEncoderConfig
-        )
-        =
+        static member Create
+            (
+                codec: string,
+                numberOfChannels: float,
+                sampleRate: float,
+                ?aac: Web.AacEncoderConfig,
+                ?bitrate: float,
+                ?bitrateMode: Web.BitrateMode,
+                ?opus: Web.OpusEncoderConfig
+            )
+            : AudioEncoderConfig
+            =
+            nativeOnly
 
-        member val codec: string = nativeOnly with get, set
-        member val numberOfChannels: float = nativeOnly with get, set
-        member val sampleRate: float = nativeOnly with get, set
-        member val aac: Web.AacEncoderConfig option = nativeOnly with get, set
-        member val bitrate: float option = nativeOnly with get, set
-        member val bitrateMode: Web.BitrateMode option = nativeOnly with get, set
-        member val opus: Web.OpusEncoderConfig option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type AudioEncoderInit
-        [<ParamObject; Emit("$0")>]
-        (error: Web.WebCodecsErrorCallback, output: Web.EncodedAudioChunkOutputCallback)
-        =
+    [<Interface>]
+    type AudioEncoderInit =
+        abstract member error: error: Web.DOMException -> unit
 
-        member val error: Web.WebCodecsErrorCallback = nativeOnly with get, set
-        member val output: Web.EncodedAudioChunkOutputCallback = nativeOnly with get, set
+        abstract member output:
+            output: Web.EncodedAudioChunk * ?metadata: Web.EncodedAudioChunkMetadata -> unit
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (error: Web.WebCodecsErrorCallback, output: Web.EncodedAudioChunkOutputCallback)
+            : AudioEncoderInit
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -8078,26 +8136,27 @@ module Web =
         abstract member channelCountMode: Web.ChannelCountMode option with get, set
         abstract member channelInterpretation: Web.ChannelInterpretation option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type AudioProcessingEventInit
-        [<ParamObject; Emit("$0")>]
-        (
-            inputBuffer: Web.AudioBuffer,
-            outputBuffer: Web.AudioBuffer,
-            playbackTime: float,
-            ?bubbles: bool,
-            ?cancelable: bool,
-            ?composed: bool
-        )
-        =
+    [<Interface>]
+    type AudioProcessingEventInit =
+        inherit Web.EventInit
+        abstract member inputBuffer: Web.AudioBuffer with get, set
+        abstract member outputBuffer: Web.AudioBuffer with get, set
+        abstract member playbackTime: float with get, set
 
-        member val inputBuffer: Web.AudioBuffer = nativeOnly with get, set
-        member val outputBuffer: Web.AudioBuffer = nativeOnly with get, set
-        member val playbackTime: float = nativeOnly with get, set
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                inputBuffer: Web.AudioBuffer,
+                outputBuffer: Web.AudioBuffer,
+                playbackTime: float,
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool
+            )
+            : AudioProcessingEventInit
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -8105,36 +8164,31 @@ module Web =
         abstract member contextTime: float option with get, set
         abstract member performanceTime: Web.DOMHighResTimeStamp option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type AudioWorkletNodeOptions
+    [<Interface>]
+    type AudioWorkletNodeOptions =
+        inherit Web.AudioNodeOptions
+        abstract member numberOfInputs: float option with get, set
+        abstract member numberOfOutputs: float option with get, set
+        abstract member outputChannelCount: ResizeArray<float> option with get, set
+        abstract member parameterData: AudioWorkletNodeOptions.parameterData option with get, set
+        abstract member processorOptions: obj option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?channelCount: float,
-            ?channelCountMode: Web.ChannelCountMode,
-            ?channelInterpretation: Web.ChannelInterpretation,
-            ?numberOfInputs: float,
-            ?numberOfOutputs: float,
-            ?outputChannelCount: ResizeArray<float>,
-            ?parameterData: AudioWorkletNodeOptions.parameterData,
-            ?processorOptions: obj
-        )
-        =
-
-        member val channelCount: float option = nativeOnly with get, set
-        member val channelCountMode: Web.ChannelCountMode option = nativeOnly with get, set
-
-        member val channelInterpretation: Web.ChannelInterpretation option =
-            nativeOnly with get, set
-
-        member val numberOfInputs: float option = nativeOnly with get, set
-        member val numberOfOutputs: float option = nativeOnly with get, set
-        member val outputChannelCount: ResizeArray<float> option = nativeOnly with get, set
-
-        member val parameterData: AudioWorkletNodeOptions.parameterData option =
-            nativeOnly with get, set
-
-        member val processorOptions: obj option = nativeOnly with get, set
+        static member Create
+            (
+                ?channelCount: float,
+                ?channelCountMode: Web.ChannelCountMode,
+                ?channelInterpretation: Web.ChannelInterpretation,
+                ?numberOfInputs: float,
+                ?numberOfOutputs: float,
+                ?outputChannelCount: ResizeArray<float>,
+                ?parameterData: AudioWorkletNodeOptions.parameterData,
+                ?processorOptions: obj
+            )
+            : AudioWorkletNodeOptions
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -8280,52 +8334,51 @@ module Web =
     type AvcEncoderConfig =
         abstract member format: Web.AvcBitstreamFormat option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type BiquadFilterOptions
+    [<Interface>]
+    type BiquadFilterOptions =
+        inherit Web.AudioNodeOptions
+        abstract member Q: float option with get, set
+        abstract member detune: float option with get, set
+        abstract member frequency: float option with get, set
+        abstract member gain: float option with get, set
+        abstract member ``type``: Web.BiquadFilterType option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?channelCount: float,
-            ?channelCountMode: Web.ChannelCountMode,
-            ?channelInterpretation: Web.ChannelInterpretation,
-            ?Q: float,
-            ?detune: float,
-            ?frequency: float,
-            ?gain: float,
-            ?``type``: Web.BiquadFilterType
-        )
-        =
+        static member Create
+            (
+                ?channelCount: float,
+                ?channelCountMode: Web.ChannelCountMode,
+                ?channelInterpretation: Web.ChannelInterpretation,
+                ?Q: float,
+                ?detune: float,
+                ?frequency: float,
+                ?gain: float,
+                ?``type``: Web.BiquadFilterType
+            )
+            : BiquadFilterOptions
+            =
+            nativeOnly
 
-        member val channelCount: float option = nativeOnly with get, set
-        member val channelCountMode: Web.ChannelCountMode option = nativeOnly with get, set
-
-        member val channelInterpretation: Web.ChannelInterpretation option =
-            nativeOnly with get, set
-
-        member val Q: float option = nativeOnly with get, set
-        member val detune: float option = nativeOnly with get, set
-        member val frequency: float option = nativeOnly with get, set
-        member val gain: float option = nativeOnly with get, set
-        member val ``type``: Web.BiquadFilterType option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type BlobEventInit
-        [<ParamObject; Emit("$0")>]
-        (
-            data: Web.Blob,
-            ?bubbles: bool,
-            ?cancelable: bool,
-            ?composed: bool,
-            ?timecode: Web.DOMHighResTimeStamp
-        )
-        =
+    [<Interface>]
+    type BlobEventInit =
+        inherit Web.EventInit
+        abstract member data: Web.Blob with get, set
+        abstract member timecode: Web.DOMHighResTimeStamp option with get, set
 
-        member val data: Web.Blob = nativeOnly with get, set
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val timecode: Web.DOMHighResTimeStamp option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                data: Web.Blob,
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool,
+                ?timecode: Web.DOMHighResTimeStamp
+            )
+            : BlobEventInit
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -8339,11 +8392,13 @@ module Web =
         abstract member name: string with get, set
         abstract member query: string with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type CSSMatrixComponentOptions [<ParamObject; Emit("$0")>] (?is2D: bool) =
+    [<Interface>]
+    type CSSMatrixComponentOptions =
+        abstract member is2D: bool option with get, set
 
-        member val is2D: bool option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create(?is2D: bool) : CSSMatrixComponentOptions = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -8357,22 +8412,26 @@ module Web =
         abstract member resolution: float option with get, set
         abstract member time: float option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type CSSStyleSheetInit private () =
+    [<Interface>]
+    type CSSStyleSheetInit =
+        abstract member baseURL: string option with get, set
+        abstract member disabled: bool option with get, set
+        abstract member media: U2<Web.MediaList, string> option with get, set
 
         [<ParamObject; Emit("$0")>]
-        new(?baseURL: string, ?disabled: bool) = CSSStyleSheetInit()
+        static member Create(?baseURL: string, ?disabled: bool) : CSSStyleSheetInit = nativeOnly
 
         [<ParamObject; Emit("$0")>]
-        new(media: Web.MediaList, ?baseURL: string, ?disabled: bool) = CSSStyleSheetInit()
+        static member Create
+            (media: Web.MediaList, ?baseURL: string, ?disabled: bool)
+            : CSSStyleSheetInit
+            =
+            nativeOnly
 
         [<ParamObject; Emit("$0")>]
-        new(media: string, ?baseURL: string, ?disabled: bool) = CSSStyleSheetInit()
-
-        member val baseURL: string option = nativeOnly with get, set
-        member val disabled: bool option = nativeOnly with get, set
-        member val media: U2<Web.MediaList, string> option = nativeOnly with get, set
+        static member Create(media: string, ?baseURL: string, ?disabled: bool) : CSSStyleSheetInit =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -8389,73 +8448,75 @@ module Web =
         abstract member desynchronized: bool option with get, set
         abstract member willReadFrequently: bool option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type CaretPositionFromPointOptions
+    [<Interface>]
+    type CaretPositionFromPointOptions =
+        abstract member shadowRoots: ResizeArray<Web.ShadowRoot> option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (?shadowRoots: ResizeArray<Web.ShadowRoot>)
-        =
+        static member Create
+            (?shadowRoots: ResizeArray<Web.ShadowRoot>)
+            : CaretPositionFromPointOptions
+            =
+            nativeOnly
 
-        member val shadowRoots: ResizeArray<Web.ShadowRoot> option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type ChannelMergerOptions
+    [<Interface>]
+    type ChannelMergerOptions =
+        inherit Web.AudioNodeOptions
+        abstract member numberOfInputs: float option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?channelCount: float,
-            ?channelCountMode: Web.ChannelCountMode,
-            ?channelInterpretation: Web.ChannelInterpretation,
-            ?numberOfInputs: float
-        )
-        =
+        static member Create
+            (
+                ?channelCount: float,
+                ?channelCountMode: Web.ChannelCountMode,
+                ?channelInterpretation: Web.ChannelInterpretation,
+                ?numberOfInputs: float
+            )
+            : ChannelMergerOptions
+            =
+            nativeOnly
 
-        member val channelCount: float option = nativeOnly with get, set
-        member val channelCountMode: Web.ChannelCountMode option = nativeOnly with get, set
-
-        member val channelInterpretation: Web.ChannelInterpretation option =
-            nativeOnly with get, set
-
-        member val numberOfInputs: float option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type ChannelSplitterOptions
+    [<Interface>]
+    type ChannelSplitterOptions =
+        inherit Web.AudioNodeOptions
+        abstract member numberOfOutputs: float option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?channelCount: float,
-            ?channelCountMode: Web.ChannelCountMode,
-            ?channelInterpretation: Web.ChannelInterpretation,
-            ?numberOfOutputs: float
-        )
-        =
+        static member Create
+            (
+                ?channelCount: float,
+                ?channelCountMode: Web.ChannelCountMode,
+                ?channelInterpretation: Web.ChannelInterpretation,
+                ?numberOfOutputs: float
+            )
+            : ChannelSplitterOptions
+            =
+            nativeOnly
 
-        member val channelCount: float option = nativeOnly with get, set
-        member val channelCountMode: Web.ChannelCountMode option = nativeOnly with get, set
-
-        member val channelInterpretation: Web.ChannelInterpretation option =
-            nativeOnly with get, set
-
-        member val numberOfOutputs: float option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type CheckVisibilityOptions
-        [<ParamObject; Emit("$0")>]
-        (
-            ?checkOpacity: bool,
-            ?checkVisibilityCSS: bool,
-            ?contentVisibilityAuto: bool,
-            ?opacityProperty: bool,
-            ?visibilityProperty: bool
-        )
-        =
+    [<Interface>]
+    type CheckVisibilityOptions =
+        abstract member checkOpacity: bool option with get, set
+        abstract member checkVisibilityCSS: bool option with get, set
+        abstract member contentVisibilityAuto: bool option with get, set
+        abstract member opacityProperty: bool option with get, set
+        abstract member visibilityProperty: bool option with get, set
 
-        member val checkOpacity: bool option = nativeOnly with get, set
-        member val checkVisibilityCSS: bool option = nativeOnly with get, set
-        member val contentVisibilityAuto: bool option = nativeOnly with get, set
-        member val opacityProperty: bool option = nativeOnly with get, set
-        member val visibilityProperty: bool option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?checkOpacity: bool,
+                ?checkVisibilityCSS: bool,
+                ?contentVisibilityAuto: bool,
+                ?opacityProperty: bool,
+                ?visibilityProperty: bool
+            )
+            : CheckVisibilityOptions
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -8463,89 +8524,98 @@ module Web =
         abstract member includeUncontrolled: bool option with get, set
         abstract member ``type``: Web.ClientTypes option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type ClipboardEventInit
+    [<Interface>]
+    type ClipboardEventInit =
+        inherit Web.EventInit
+        abstract member clipboardData: Web.DataTransfer option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (?bubbles: bool, ?cancelable: bool, ?composed: bool, ?clipboardData: Web.DataTransfer)
-        =
+        static member Create
+            (?bubbles: bool, ?cancelable: bool, ?composed: bool, ?clipboardData: Web.DataTransfer)
+            : ClipboardEventInit
+            =
+            nativeOnly
 
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val clipboardData: Web.DataTransfer option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type ClipboardItemOptions
+    [<Interface>]
+    type ClipboardItemOptions =
+        abstract member presentationStyle: Web.PresentationStyle option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (?presentationStyle: Web.PresentationStyle)
-        =
+        static member Create(?presentationStyle: Web.PresentationStyle) : ClipboardItemOptions =
+            nativeOnly
 
-        member val presentationStyle: Web.PresentationStyle option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type CloseEventInit
+    [<Interface>]
+    type CloseEventInit =
+        inherit Web.EventInit
+        abstract member code: float option with get, set
+        abstract member reason: string option with get, set
+        abstract member wasClean: bool option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?bubbles: bool,
-            ?cancelable: bool,
-            ?composed: bool,
-            ?code: float,
-            ?reason: string,
-            ?wasClean: bool
-        )
-        =
+        static member Create
+            (
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool,
+                ?code: float,
+                ?reason: string,
+                ?wasClean: bool
+            )
+            : CloseEventInit
+            =
+            nativeOnly
 
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val code: float option = nativeOnly with get, set
-        member val reason: string option = nativeOnly with get, set
-        member val wasClean: bool option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type CloseWatcherOptions [<ParamObject; Emit("$0")>] (?signal: Web.AbortSignal) =
+    [<Interface>]
+    type CloseWatcherOptions =
+        abstract member signal: Web.AbortSignal option with get, set
 
-        member val signal: Web.AbortSignal option = nativeOnly with get, set
-
-    [<Global>]
-    [<AllowNullLiteral>]
-    type CommandEventInit
         [<ParamObject; Emit("$0")>]
-        (?bubbles: bool, ?cancelable: bool, ?composed: bool, ?command: string, ?source: Web.Element)
-        =
+        static member Create(?signal: Web.AbortSignal) : CloseWatcherOptions = nativeOnly
 
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val command: string option = nativeOnly with get, set
-        member val source: Web.Element option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type CompositionEventInit
-        [<ParamObject; Emit("$0")>]
-        (
-            ?bubbles: bool,
-            ?cancelable: bool,
-            ?composed: bool,
-            ?detail: float,
-            ?view: Web.Window,
-            ?which: float,
-            ?data: string
-        )
-        =
+    [<Interface>]
+    type CommandEventInit =
+        inherit Web.EventInit
+        abstract member command: string option with get, set
+        abstract member source: Web.Element option with get, set
 
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val detail: float option = nativeOnly with get, set
-        member val view: Web.Window option = nativeOnly with get, set
-        member val which: float option = nativeOnly with get, set
-        member val data: string option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool,
+                ?command: string,
+                ?source: Web.Element
+            )
+            : CommandEventInit
+            =
+            nativeOnly
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type CompositionEventInit =
+        inherit Web.UIEventInit
+        abstract member data: string option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool,
+                ?detail: float,
+                ?view: Web.Window,
+                ?which: float,
+                ?data: string
+            )
+            : CompositionEventInit
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -8569,11 +8639,13 @@ module Web =
         [<EmitIndexer>]
         abstract member Item: property: string -> U2<string, float> option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type ConstantSourceOptions [<ParamObject; Emit("$0")>] (?offset: float) =
+    [<Interface>]
+    type ConstantSourceOptions =
+        abstract member offset: float option with get, set
 
-        member val offset: float option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create(?offset: float) : ConstantSourceOptions = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -8607,81 +8679,84 @@ module Web =
         abstract member exact: float option with get, set
         abstract member ideal: float option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type ContentVisibilityAutoStateChangeEventInit
+    [<Interface>]
+    type ContentVisibilityAutoStateChangeEventInit =
+        inherit Web.EventInit
+        abstract member skipped: bool option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (?bubbles: bool, ?cancelable: bool, ?composed: bool, ?skipped: bool)
-        =
+        static member Create
+            (?bubbles: bool, ?cancelable: bool, ?composed: bool, ?skipped: bool)
+            : ContentVisibilityAutoStateChangeEventInit
+            =
+            nativeOnly
 
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val skipped: bool option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type ConvolverOptions
+    [<Interface>]
+    type ConvolverOptions =
+        inherit Web.AudioNodeOptions
+        abstract member buffer: Web.AudioBuffer option with get, set
+        abstract member disableNormalization: bool option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?channelCount: float,
-            ?channelCountMode: Web.ChannelCountMode,
-            ?channelInterpretation: Web.ChannelInterpretation,
-            ?buffer: Web.AudioBuffer,
-            ?disableNormalization: bool
-        )
-        =
+        static member Create
+            (
+                ?channelCount: float,
+                ?channelCountMode: Web.ChannelCountMode,
+                ?channelInterpretation: Web.ChannelInterpretation,
+                ?buffer: Web.AudioBuffer,
+                ?disableNormalization: bool
+            )
+            : ConvolverOptions
+            =
+            nativeOnly
 
-        member val channelCount: float option = nativeOnly with get, set
-        member val channelCountMode: Web.ChannelCountMode option = nativeOnly with get, set
-
-        member val channelInterpretation: Web.ChannelInterpretation option =
-            nativeOnly with get, set
-
-        member val buffer: Web.AudioBuffer option = nativeOnly with get, set
-        member val disableNormalization: bool option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type CookieChangeEventInit
+    [<Interface>]
+    type CookieChangeEventInit =
+        inherit Web.EventInit
+        abstract member changed: Web.CookieList option with get, set
+        abstract member deleted: Web.CookieList option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?bubbles: bool,
-            ?cancelable: bool,
-            ?composed: bool,
-            ?changed: Web.CookieList,
-            ?deleted: Web.CookieList
-        )
-        =
+        static member Create
+            (
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool,
+                ?changed: Web.CookieList,
+                ?deleted: Web.CookieList
+            )
+            : CookieChangeEventInit
+            =
+            nativeOnly
 
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val changed: Web.CookieList option = nativeOnly with get, set
-        member val deleted: Web.CookieList option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type CookieInit
-        [<ParamObject; Emit("$0")>]
-        (
-            name: string,
-            value: string,
-            ?domain: string,
-            ?expires: Web.DOMHighResTimeStamp,
-            ?partitioned: bool,
-            ?path: string,
-            ?sameSite: Web.CookieSameSite
-        )
-        =
+    [<Interface>]
+    type CookieInit =
+        abstract member domain: string option with get, set
+        abstract member expires: Web.DOMHighResTimeStamp option with get, set
+        abstract member name: string with get, set
+        abstract member partitioned: bool option with get, set
+        abstract member path: string option with get, set
+        abstract member sameSite: Web.CookieSameSite option with get, set
+        abstract member value: string with get, set
 
-        member val name: string = nativeOnly with get, set
-        member val value: string = nativeOnly with get, set
-        member val domain: string option = nativeOnly with get, set
-        member val expires: Web.DOMHighResTimeStamp option = nativeOnly with get, set
-        member val partitioned: bool option = nativeOnly with get, set
-        member val path: string option = nativeOnly with get, set
-        member val sameSite: Web.CookieSameSite option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                name: string,
+                value: string,
+                ?domain: string,
+                ?expires: Web.DOMHighResTimeStamp,
+                ?partitioned: bool,
+                ?path: string,
+                ?sameSite: Web.CookieSameSite
+            )
+            : CookieInit
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -8689,59 +8764,65 @@ module Web =
         abstract member name: string option with get, set
         abstract member value: string option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type CookieStoreDeleteOptions
+    [<Interface>]
+    type CookieStoreDeleteOptions =
+        abstract member domain: string option with get, set
+        abstract member name: string with get, set
+        abstract member partitioned: bool option with get, set
+        abstract member path: string option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (name: string, ?domain: string, ?partitioned: bool, ?path: string)
-        =
+        static member Create
+            (name: string, ?domain: string, ?partitioned: bool, ?path: string)
+            : CookieStoreDeleteOptions
+            =
+            nativeOnly
 
-        member val name: string = nativeOnly with get, set
-        member val domain: string option = nativeOnly with get, set
-        member val partitioned: bool option = nativeOnly with get, set
-        member val path: string option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type CookieStoreGetOptions [<ParamObject; Emit("$0")>] (?name: string, ?url: string) =
+    [<Interface>]
+    type CookieStoreGetOptions =
+        abstract member name: string option with get, set
+        abstract member url: string option with get, set
 
-        member val name: string option = nativeOnly with get, set
-        member val url: string option = nativeOnly with get, set
-
-    [<Global>]
-    [<AllowNullLiteral>]
-    type CredentialCreationOptions
         [<ParamObject; Emit("$0")>]
-        (?publicKey: Web.PublicKeyCredentialCreationOptions, ?signal: Web.AbortSignal)
-        =
+        static member Create(?name: string, ?url: string) : CookieStoreGetOptions = nativeOnly
 
-        member val publicKey: Web.PublicKeyCredentialCreationOptions option =
-            nativeOnly with get, set
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type CredentialCreationOptions =
+        abstract member publicKey: Web.PublicKeyCredentialCreationOptions option with get, set
+        abstract member signal: Web.AbortSignal option with get, set
 
-        member val signal: Web.AbortSignal option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?publicKey: Web.PublicKeyCredentialCreationOptions, ?signal: Web.AbortSignal)
+            : CredentialCreationOptions
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
     type CredentialPropertiesOutput =
         abstract member rk: bool option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type CredentialRequestOptions
+    [<Interface>]
+    type CredentialRequestOptions =
+        abstract member mediation: Web.CredentialMediationRequirement option with get, set
+        abstract member publicKey: Web.PublicKeyCredentialRequestOptions option with get, set
+        abstract member signal: Web.AbortSignal option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?mediation: Web.CredentialMediationRequirement,
-            ?publicKey: Web.PublicKeyCredentialRequestOptions,
-            ?signal: Web.AbortSignal
-        )
-        =
-
-        member val mediation: Web.CredentialMediationRequirement option = nativeOnly with get, set
-
-        member val publicKey: Web.PublicKeyCredentialRequestOptions option =
-            nativeOnly with get, set
-
-        member val signal: Web.AbortSignal option = nativeOnly with get, set
+        static member Create
+            (
+                ?mediation: Web.CredentialMediationRequirement,
+                ?publicKey: Web.PublicKeyCredentialRequestOptions,
+                ?signal: Web.AbortSignal
+            )
+            : CredentialRequestOptions
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -8749,17 +8830,20 @@ module Web =
         abstract member privateKey: Web.CryptoKey with get, set
         abstract member publicKey: Web.CryptoKey with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type CurrentUserDetailsOptions
-        [<ParamObject; Emit("$0")>]
-        (displayName: string, name: string, rpId: string, userId: Web.Base64URLString)
-        =
+    [<Interface>]
+    type CurrentUserDetailsOptions =
+        abstract member displayName: string with get, set
+        abstract member name: string with get, set
+        abstract member rpId: string with get, set
+        abstract member userId: Web.Base64URLString with get, set
 
-        member val displayName: string = nativeOnly with get, set
-        member val name: string = nativeOnly with get, set
-        member val rpId: string = nativeOnly with get, set
-        member val userId: Web.Base64URLString = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (displayName: string, name: string, rpId: string, userId: Web.Base64URLString)
+            : CurrentUserDetailsOptions
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -8783,115 +8867,115 @@ module Web =
         abstract member m41: float option with get, set
         abstract member m42: float option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type DOMMatrixInit
+    [<Interface>]
+    type DOMMatrixInit =
+        inherit Web.DOMMatrix2DInit
+        abstract member is2D: bool option with get, set
+        abstract member m13: float option with get, set
+        abstract member m14: float option with get, set
+        abstract member m23: float option with get, set
+        abstract member m24: float option with get, set
+        abstract member m31: float option with get, set
+        abstract member m32: float option with get, set
+        abstract member m33: float option with get, set
+        abstract member m34: float option with get, set
+        abstract member m43: float option with get, set
+        abstract member m44: float option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?a: float,
-            ?b: float,
-            ?c: float,
-            ?d: float,
-            ?e: float,
-            ?f: float,
-            ?m11: float,
-            ?m12: float,
-            ?m21: float,
-            ?m22: float,
-            ?m41: float,
-            ?m42: float,
-            ?is2D: bool,
-            ?m13: float,
-            ?m14: float,
-            ?m23: float,
-            ?m24: float,
-            ?m31: float,
-            ?m32: float,
-            ?m33: float,
-            ?m34: float,
-            ?m43: float,
-            ?m44: float
-        )
-        =
+        static member Create
+            (
+                ?a: float,
+                ?b: float,
+                ?c: float,
+                ?d: float,
+                ?e: float,
+                ?f: float,
+                ?m11: float,
+                ?m12: float,
+                ?m21: float,
+                ?m22: float,
+                ?m41: float,
+                ?m42: float,
+                ?is2D: bool,
+                ?m13: float,
+                ?m14: float,
+                ?m23: float,
+                ?m24: float,
+                ?m31: float,
+                ?m32: float,
+                ?m33: float,
+                ?m34: float,
+                ?m43: float,
+                ?m44: float
+            )
+            : DOMMatrixInit
+            =
+            nativeOnly
 
-        member val a: float option = nativeOnly with get, set
-        member val b: float option = nativeOnly with get, set
-        member val c: float option = nativeOnly with get, set
-        member val d: float option = nativeOnly with get, set
-        member val e: float option = nativeOnly with get, set
-        member val f: float option = nativeOnly with get, set
-        member val m11: float option = nativeOnly with get, set
-        member val m12: float option = nativeOnly with get, set
-        member val m21: float option = nativeOnly with get, set
-        member val m22: float option = nativeOnly with get, set
-        member val m41: float option = nativeOnly with get, set
-        member val m42: float option = nativeOnly with get, set
-        member val is2D: bool option = nativeOnly with get, set
-        member val m13: float option = nativeOnly with get, set
-        member val m14: float option = nativeOnly with get, set
-        member val m23: float option = nativeOnly with get, set
-        member val m24: float option = nativeOnly with get, set
-        member val m31: float option = nativeOnly with get, set
-        member val m32: float option = nativeOnly with get, set
-        member val m33: float option = nativeOnly with get, set
-        member val m34: float option = nativeOnly with get, set
-        member val m43: float option = nativeOnly with get, set
-        member val m44: float option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type DOMPointInit [<ParamObject; Emit("$0")>] (?w: float, ?x: float, ?y: float, ?z: float) =
+    [<Interface>]
+    type DOMPointInit =
+        abstract member w: float option with get, set
+        abstract member x: float option with get, set
+        abstract member y: float option with get, set
+        abstract member z: float option with get, set
 
-        member val w: float option = nativeOnly with get, set
-        member val x: float option = nativeOnly with get, set
-        member val y: float option = nativeOnly with get, set
-        member val z: float option = nativeOnly with get, set
-
-    [<Global>]
-    [<AllowNullLiteral>]
-    type DOMQuadInit
         [<ParamObject; Emit("$0")>]
-        (?p1: Web.DOMPointInit, ?p2: Web.DOMPointInit, ?p3: Web.DOMPointInit, ?p4: Web.DOMPointInit)
-        =
+        static member Create(?w: float, ?x: float, ?y: float, ?z: float) : DOMPointInit = nativeOnly
 
-        member val p1: Web.DOMPointInit option = nativeOnly with get, set
-        member val p2: Web.DOMPointInit option = nativeOnly with get, set
-        member val p3: Web.DOMPointInit option = nativeOnly with get, set
-        member val p4: Web.DOMPointInit option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type DOMRectInit
+    [<Interface>]
+    type DOMQuadInit =
+        abstract member p1: Web.DOMPointInit option with get, set
+        abstract member p2: Web.DOMPointInit option with get, set
+        abstract member p3: Web.DOMPointInit option with get, set
+        abstract member p4: Web.DOMPointInit option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (?height: float, ?width: float, ?x: float, ?y: float)
-        =
+        static member Create
+            (
+                ?p1: Web.DOMPointInit,
+                ?p2: Web.DOMPointInit,
+                ?p3: Web.DOMPointInit,
+                ?p4: Web.DOMPointInit
+            )
+            : DOMQuadInit
+            =
+            nativeOnly
 
-        member val height: float option = nativeOnly with get, set
-        member val width: float option = nativeOnly with get, set
-        member val x: float option = nativeOnly with get, set
-        member val y: float option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type DelayOptions
+    [<Interface>]
+    type DOMRectInit =
+        abstract member height: float option with get, set
+        abstract member width: float option with get, set
+        abstract member x: float option with get, set
+        abstract member y: float option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?channelCount: float,
-            ?channelCountMode: Web.ChannelCountMode,
-            ?channelInterpretation: Web.ChannelInterpretation,
-            ?delayTime: float,
-            ?maxDelayTime: float
-        )
-        =
+        static member Create(?height: float, ?width: float, ?x: float, ?y: float) : DOMRectInit =
+            nativeOnly
 
-        member val channelCount: float option = nativeOnly with get, set
-        member val channelCountMode: Web.ChannelCountMode option = nativeOnly with get, set
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type DelayOptions =
+        inherit Web.AudioNodeOptions
+        abstract member delayTime: float option with get, set
+        abstract member maxDelayTime: float option with get, set
 
-        member val channelInterpretation: Web.ChannelInterpretation option =
-            nativeOnly with get, set
-
-        member val delayTime: float option = nativeOnly with get, set
-        member val maxDelayTime: float option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?channelCount: float,
+                ?channelCountMode: Web.ChannelCountMode,
+                ?channelInterpretation: Web.ChannelInterpretation,
+                ?delayTime: float,
+                ?maxDelayTime: float
+            )
+            : DelayOptions
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -8900,35 +8984,29 @@ module Web =
         abstract member y: float option with get, set
         abstract member z: float option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type DeviceMotionEventInit
+    [<Interface>]
+    type DeviceMotionEventInit =
+        inherit Web.EventInit
+        abstract member acceleration: Web.DeviceMotionEventAccelerationInit option with get, set
+        abstract member accelerationIncludingGravity: Web.DeviceMotionEventAccelerationInit option with get, set
+        abstract member interval: float option with get, set
+        abstract member rotationRate: Web.DeviceMotionEventRotationRateInit option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?bubbles: bool,
-            ?cancelable: bool,
-            ?composed: bool,
-            ?acceleration: Web.DeviceMotionEventAccelerationInit,
-            ?accelerationIncludingGravity: Web.DeviceMotionEventAccelerationInit,
-            ?interval: float,
-            ?rotationRate: Web.DeviceMotionEventRotationRateInit
-        )
-        =
-
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-
-        member val acceleration: Web.DeviceMotionEventAccelerationInit option =
-            nativeOnly with get, set
-
-        member val accelerationIncludingGravity: Web.DeviceMotionEventAccelerationInit option =
-            nativeOnly with get, set
-
-        member val interval: float option = nativeOnly with get, set
-
-        member val rotationRate: Web.DeviceMotionEventRotationRateInit option =
-            nativeOnly with get, set
+        static member Create
+            (
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool,
+                ?acceleration: Web.DeviceMotionEventAccelerationInit,
+                ?accelerationIncludingGravity: Web.DeviceMotionEventAccelerationInit,
+                ?interval: float,
+                ?rotationRate: Web.DeviceMotionEventRotationRateInit
+            )
+            : DeviceMotionEventInit
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -8937,74 +9015,87 @@ module Web =
         abstract member beta: float option with get, set
         abstract member gamma: float option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type DeviceOrientationEventInit
+    [<Interface>]
+    type DeviceOrientationEventInit =
+        inherit Web.EventInit
+        abstract member absolute: bool option with get, set
+        abstract member alpha: float option with get, set
+        abstract member beta: float option with get, set
+        abstract member gamma: float option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?bubbles: bool,
-            ?cancelable: bool,
-            ?composed: bool,
-            ?absolute: bool,
-            ?alpha: float,
-            ?beta: float,
-            ?gamma: float
-        )
-        =
+        static member Create
+            (
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool,
+                ?absolute: bool,
+                ?alpha: float,
+                ?beta: float,
+                ?gamma: float
+            )
+            : DeviceOrientationEventInit
+            =
+            nativeOnly
 
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val absolute: bool option = nativeOnly with get, set
-        member val alpha: float option = nativeOnly with get, set
-        member val beta: float option = nativeOnly with get, set
-        member val gamma: float option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type DisplayMediaStreamOptions
+    [<Interface>]
+    type DisplayMediaStreamOptions =
+        abstract member audio: U2<bool, Web.MediaTrackConstraints> option with get, set
+        abstract member video: U2<bool, Web.MediaTrackConstraints> option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (?audio: U2<bool, Web.MediaTrackConstraints>, ?video: U2<bool, Web.MediaTrackConstraints>)
-        =
+        static member Create
+            (
+                ?audio: U2<bool, Web.MediaTrackConstraints>,
+                ?video: U2<bool, Web.MediaTrackConstraints>
+            )
+            : DisplayMediaStreamOptions
+            =
+            nativeOnly
 
-        member val audio: U2<bool, Web.MediaTrackConstraints> option = nativeOnly with get, set
-        member val video: U2<bool, Web.MediaTrackConstraints> option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type DocumentPictureInPictureEventInit
+    [<Interface>]
+    type DocumentPictureInPictureEventInit =
+        inherit Web.EventInit
+        abstract member window: Web.Window with get, set
+
         [<ParamObject; Emit("$0")>]
-        (window: Web.Window, ?bubbles: bool, ?cancelable: bool, ?composed: bool)
-        =
+        static member Create
+            (window: Web.Window, ?bubbles: bool, ?cancelable: bool, ?composed: bool)
+            : DocumentPictureInPictureEventInit
+            =
+            nativeOnly
 
-        member val window: Web.Window = nativeOnly with get, set
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type DocumentPictureInPictureOptions
+    [<Interface>]
+    type DocumentPictureInPictureOptions =
+        abstract member disallowReturnToOpener: bool option with get, set
+        abstract member height: float option with get, set
+        abstract member preferInitialWindowPlacement: bool option with get, set
+        abstract member width: float option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?disallowReturnToOpener: bool,
-            ?height: float,
-            ?preferInitialWindowPlacement: bool,
-            ?width: float
-        )
-        =
+        static member Create
+            (
+                ?disallowReturnToOpener: bool,
+                ?height: float,
+                ?preferInitialWindowPlacement: bool,
+                ?width: float
+            )
+            : DocumentPictureInPictureOptions
+            =
+            nativeOnly
 
-        member val disallowReturnToOpener: bool option = nativeOnly with get, set
-        member val height: float option = nativeOnly with get, set
-        member val preferInitialWindowPlacement: bool option = nativeOnly with get, set
-        member val width: float option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type DocumentTimelineOptions [<ParamObject; Emit("$0")>] (?originTime: Web.DOMHighResTimeStamp)
-        =
+    [<Interface>]
+    type DocumentTimelineOptions =
+        abstract member originTime: Web.DOMHighResTimeStamp option with get, set
 
-        member val originTime: Web.DOMHighResTimeStamp option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create(?originTime: Web.DOMHighResTimeStamp) : DocumentTimelineOptions =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -9012,102 +9103,75 @@ module Web =
         abstract member max: float option with get, set
         abstract member min: float option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type DragEventInit
+    [<Interface>]
+    type DragEventInit =
+        inherit Web.MouseEventInit
+        abstract member dataTransfer: Web.DataTransfer option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?bubbles: bool,
-            ?cancelable: bool,
-            ?composed: bool,
-            ?detail: float,
-            ?view: Web.Window,
-            ?which: float,
-            ?altKey: bool,
-            ?ctrlKey: bool,
-            ?metaKey: bool,
-            ?modifierAltGraph: bool,
-            ?modifierCapsLock: bool,
-            ?modifierFn: bool,
-            ?modifierFnLock: bool,
-            ?modifierHyper: bool,
-            ?modifierNumLock: bool,
-            ?modifierScrollLock: bool,
-            ?modifierSuper: bool,
-            ?modifierSymbol: bool,
-            ?modifierSymbolLock: bool,
-            ?shiftKey: bool,
-            ?button: float,
-            ?buttons: float,
-            ?clientX: float,
-            ?clientY: float,
-            ?movementX: float,
-            ?movementY: float,
-            ?relatedTarget: Web.EventTarget,
-            ?screenX: float,
-            ?screenY: float,
-            ?dataTransfer: Web.DataTransfer
-        )
-        =
+        static member Create
+            (
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool,
+                ?detail: float,
+                ?view: Web.Window,
+                ?which: float,
+                ?altKey: bool,
+                ?ctrlKey: bool,
+                ?metaKey: bool,
+                ?modifierAltGraph: bool,
+                ?modifierCapsLock: bool,
+                ?modifierFn: bool,
+                ?modifierFnLock: bool,
+                ?modifierHyper: bool,
+                ?modifierNumLock: bool,
+                ?modifierScrollLock: bool,
+                ?modifierSuper: bool,
+                ?modifierSymbol: bool,
+                ?modifierSymbolLock: bool,
+                ?shiftKey: bool,
+                ?button: float,
+                ?buttons: float,
+                ?clientX: float,
+                ?clientY: float,
+                ?movementX: float,
+                ?movementY: float,
+                ?relatedTarget: Web.EventTarget,
+                ?screenX: float,
+                ?screenY: float,
+                ?dataTransfer: Web.DataTransfer
+            )
+            : DragEventInit
+            =
+            nativeOnly
 
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val detail: float option = nativeOnly with get, set
-        member val view: Web.Window option = nativeOnly with get, set
-        member val which: float option = nativeOnly with get, set
-        member val altKey: bool option = nativeOnly with get, set
-        member val ctrlKey: bool option = nativeOnly with get, set
-        member val metaKey: bool option = nativeOnly with get, set
-        member val modifierAltGraph: bool option = nativeOnly with get, set
-        member val modifierCapsLock: bool option = nativeOnly with get, set
-        member val modifierFn: bool option = nativeOnly with get, set
-        member val modifierFnLock: bool option = nativeOnly with get, set
-        member val modifierHyper: bool option = nativeOnly with get, set
-        member val modifierNumLock: bool option = nativeOnly with get, set
-        member val modifierScrollLock: bool option = nativeOnly with get, set
-        member val modifierSuper: bool option = nativeOnly with get, set
-        member val modifierSymbol: bool option = nativeOnly with get, set
-        member val modifierSymbolLock: bool option = nativeOnly with get, set
-        member val shiftKey: bool option = nativeOnly with get, set
-        member val button: float option = nativeOnly with get, set
-        member val buttons: float option = nativeOnly with get, set
-        member val clientX: float option = nativeOnly with get, set
-        member val clientY: float option = nativeOnly with get, set
-        member val movementX: float option = nativeOnly with get, set
-        member val movementY: float option = nativeOnly with get, set
-        member val relatedTarget: Web.EventTarget option = nativeOnly with get, set
-        member val screenX: float option = nativeOnly with get, set
-        member val screenY: float option = nativeOnly with get, set
-        member val dataTransfer: Web.DataTransfer option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type DynamicsCompressorOptions
+    [<Interface>]
+    type DynamicsCompressorOptions =
+        inherit Web.AudioNodeOptions
+        abstract member attack: float option with get, set
+        abstract member knee: float option with get, set
+        abstract member ratio: float option with get, set
+        abstract member release: float option with get, set
+        abstract member threshold: float option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?channelCount: float,
-            ?channelCountMode: Web.ChannelCountMode,
-            ?channelInterpretation: Web.ChannelInterpretation,
-            ?attack: float,
-            ?knee: float,
-            ?ratio: float,
-            ?release: float,
-            ?threshold: float
-        )
-        =
-
-        member val channelCount: float option = nativeOnly with get, set
-        member val channelCountMode: Web.ChannelCountMode option = nativeOnly with get, set
-
-        member val channelInterpretation: Web.ChannelInterpretation option =
-            nativeOnly with get, set
-
-        member val attack: float option = nativeOnly with get, set
-        member val knee: float option = nativeOnly with get, set
-        member val ratio: float option = nativeOnly with get, set
-        member val release: float option = nativeOnly with get, set
-        member val threshold: float option = nativeOnly with get, set
+        static member Create
+            (
+                ?channelCount: float,
+                ?channelCountMode: Web.ChannelCountMode,
+                ?channelInterpretation: Web.ChannelInterpretation,
+                ?attack: float,
+                ?knee: float,
+                ?ratio: float,
+                ?release: float,
+                ?threshold: float
+            )
+            : DynamicsCompressorOptions
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -9115,33 +9179,44 @@ module Web =
         inherit Web.KeyAlgorithm
         abstract member namedCurve: Web.NamedCurve with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type EcKeyGenParams [<ParamObject; Emit("$0")>] (name: string, namedCurve: Web.NamedCurve) =
+    [<Interface>]
+    type EcKeyGenParams =
+        inherit Web.Algorithm
+        abstract member namedCurve: Web.NamedCurve with get, set
 
-        member val name: string = nativeOnly with get, set
-        member val namedCurve: Web.NamedCurve = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create(name: string, namedCurve: Web.NamedCurve) : EcKeyGenParams = nativeOnly
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type EcKeyImportParams [<ParamObject; Emit("$0")>] (name: string, namedCurve: Web.NamedCurve) =
+    [<Interface>]
+    type EcKeyImportParams =
+        inherit Web.Algorithm
+        abstract member namedCurve: Web.NamedCurve with get, set
 
-        member val name: string = nativeOnly with get, set
-        member val namedCurve: Web.NamedCurve = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create(name: string, namedCurve: Web.NamedCurve) : EcKeyImportParams =
+            nativeOnly
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type EcdhKeyDeriveParams [<ParamObject; Emit("$0")>] (name: string, ``public``: Web.CryptoKey) =
+    [<Interface>]
+    type EcdhKeyDeriveParams =
+        inherit Web.Algorithm
+        abstract member ``public``: Web.CryptoKey with get, set
 
-        member val name: string = nativeOnly with get, set
-        member val ``public``: Web.CryptoKey = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create(name: string, ``public``: Web.CryptoKey) : EcdhKeyDeriveParams =
+            nativeOnly
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type EcdsaParams [<ParamObject; Emit("$0")>] (name: string, hash: Web.HashAlgorithmIdentifier) =
+    [<Interface>]
+    type EcdsaParams =
+        inherit Web.Algorithm
+        abstract member hash: Web.HashAlgorithmIdentifier with get, set
 
-        member val name: string = nativeOnly with get, set
-        member val hash: Web.HashAlgorithmIdentifier = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create(name: string, hash: Web.HashAlgorithmIdentifier) : EcdsaParams =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -9156,103 +9231,116 @@ module Web =
         abstract member iterations: float option with get, set
         abstract member playbackRate: float option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type ElementCreationOptions
+    [<Interface>]
+    type ElementCreationOptions =
+        abstract member customElementRegistry: Web.CustomElementRegistry option with get, set
+        abstract member is: string option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (?customElementRegistry: Web.CustomElementRegistry, ?is: string)
-        =
+        static member Create
+            (?customElementRegistry: Web.CustomElementRegistry, ?is: string)
+            : ElementCreationOptions
+            =
+            nativeOnly
 
-        member val customElementRegistry: Web.CustomElementRegistry option =
-            nativeOnly with get, set
-
-        member val is: string option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type ElementDefinitionOptions [<ParamObject; Emit("$0")>] (?extends: string) =
+    [<Interface>]
+    type ElementDefinitionOptions =
+        abstract member extends: string option with get, set
 
-        member val extends: string option = nativeOnly with get, set
-
-    [<Global>]
-    [<AllowNullLiteral>]
-    type EncodedAudioChunkInit
         [<ParamObject; Emit("$0")>]
-        (
-            data: Web.AllowSharedBufferSource,
-            timestamp: float,
-            ``type``: Web.EncodedAudioChunkType,
-            ?duration: float,
-            ?transfer: ResizeArray<obj>
-        )
-        =
+        static member Create(?extends: string) : ElementDefinitionOptions = nativeOnly
 
-        member val data: Web.AllowSharedBufferSource = nativeOnly with get, set
-        member val timestamp: float = nativeOnly with get, set
-        member val ``type``: Web.EncodedAudioChunkType = nativeOnly with get, set
-        member val duration: float option = nativeOnly with get, set
-        member val transfer: ResizeArray<obj> option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type EncodedAudioChunkMetadata
+    [<Interface>]
+    type EncodedAudioChunkInit =
+        abstract member data: Web.AllowSharedBufferSource with get, set
+        abstract member duration: float option with get, set
+        abstract member timestamp: float with get, set
+        abstract member transfer: ResizeArray<obj> option with get, set
+        abstract member ``type``: Web.EncodedAudioChunkType with get, set
+
         [<ParamObject; Emit("$0")>]
-        (?decoderConfig: Web.AudioDecoderConfig)
-        =
+        static member Create
+            (
+                data: Web.AllowSharedBufferSource,
+                timestamp: float,
+                ``type``: Web.EncodedAudioChunkType,
+                ?duration: float,
+                ?transfer: ResizeArray<obj>
+            )
+            : EncodedAudioChunkInit
+            =
+            nativeOnly
 
-        member val decoderConfig: Web.AudioDecoderConfig option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type EncodedVideoChunkInit
+    [<Interface>]
+    type EncodedAudioChunkMetadata =
+        abstract member decoderConfig: Web.AudioDecoderConfig option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            data: Web.AllowSharedBufferSource,
-            timestamp: float,
-            ``type``: Web.EncodedVideoChunkType,
-            ?duration: float
-        )
-        =
+        static member Create(?decoderConfig: Web.AudioDecoderConfig) : EncodedAudioChunkMetadata =
+            nativeOnly
 
-        member val data: Web.AllowSharedBufferSource = nativeOnly with get, set
-        member val timestamp: float = nativeOnly with get, set
-        member val ``type``: Web.EncodedVideoChunkType = nativeOnly with get, set
-        member val duration: float option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type EncodedVideoChunkMetadata
+    [<Interface>]
+    type EncodedVideoChunkInit =
+        abstract member data: Web.AllowSharedBufferSource with get, set
+        abstract member duration: float option with get, set
+        abstract member timestamp: float with get, set
+        abstract member ``type``: Web.EncodedVideoChunkType with get, set
+
         [<ParamObject; Emit("$0")>]
-        (?decoderConfig: Web.VideoDecoderConfig, ?svc: Web.SvcOutputMetadata)
-        =
+        static member Create
+            (
+                data: Web.AllowSharedBufferSource,
+                timestamp: float,
+                ``type``: Web.EncodedVideoChunkType,
+                ?duration: float
+            )
+            : EncodedVideoChunkInit
+            =
+            nativeOnly
 
-        member val decoderConfig: Web.VideoDecoderConfig option = nativeOnly with get, set
-        member val svc: Web.SvcOutputMetadata option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type ErrorEventInit
-        [<ParamObject; Emit("$0")>]
-        (
-            ?bubbles: bool,
-            ?cancelable: bool,
-            ?composed: bool,
-            ?colno: float,
-            ?error: obj,
-            ?filename: string,
-            ?lineno: float,
-            ?message: string
-        )
-        =
+    [<Interface>]
+    type EncodedVideoChunkMetadata =
+        abstract member decoderConfig: Web.VideoDecoderConfig option with get, set
+        abstract member svc: Web.SvcOutputMetadata option with get, set
 
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val colno: float option = nativeOnly with get, set
-        member val error: obj option = nativeOnly with get, set
-        member val filename: string option = nativeOnly with get, set
-        member val lineno: float option = nativeOnly with get, set
-        member val message: string option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?decoderConfig: Web.VideoDecoderConfig, ?svc: Web.SvcOutputMetadata)
+            : EncodedVideoChunkMetadata
+            =
+            nativeOnly
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type ErrorEventInit =
+        inherit Web.EventInit
+        abstract member colno: float option with get, set
+        abstract member error: obj option with get, set
+        abstract member filename: string option with get, set
+        abstract member lineno: float option with get, set
+        abstract member message: string option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool,
+                ?colno: float,
+                ?error: obj,
+                ?filename: string,
+                ?lineno: float,
+                ?message: string
+            )
+            : ErrorEventInit
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -9285,157 +9373,191 @@ module Web =
         abstract member modifierSymbolLock: bool option with get, set
         abstract member shiftKey: bool option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type EventSourceInit [<ParamObject; Emit("$0")>] (?withCredentials: bool) =
+    [<Interface>]
+    type EventSourceInit =
+        abstract member withCredentials: bool option with get, set
 
-        member val withCredentials: bool option = nativeOnly with get, set
-
-    [<Global>]
-    [<AllowNullLiteral>]
-    type FilePropertyBag
         [<ParamObject; Emit("$0")>]
-        (?endings: Web.EndingType, ?``type``: string, ?lastModified: float)
-        =
+        static member Create(?withCredentials: bool) : EventSourceInit = nativeOnly
 
-        member val endings: Web.EndingType option = nativeOnly with get, set
-        member val ``type``: string option = nativeOnly with get, set
-        member val lastModified: float option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type FileSystemCreateWritableOptions [<ParamObject; Emit("$0")>] (?keepExistingData: bool) =
+    [<Interface>]
+    type FilePropertyBag =
+        inherit Web.BlobPropertyBag
+        abstract member lastModified: float option with get, set
 
-        member val keepExistingData: bool option = nativeOnly with get, set
-
-    [<Global>]
-    [<AllowNullLiteral>]
-    type FileSystemFlags [<ParamObject; Emit("$0")>] (?create: bool, ?exclusive: bool) =
-
-        member val create: bool option = nativeOnly with get, set
-        member val exclusive: bool option = nativeOnly with get, set
-
-    [<Global>]
-    [<AllowNullLiteral>]
-    type FileSystemGetDirectoryOptions [<ParamObject; Emit("$0")>] (?create: bool) =
-
-        member val create: bool option = nativeOnly with get, set
-
-    [<Global>]
-    [<AllowNullLiteral>]
-    type FileSystemGetFileOptions [<ParamObject; Emit("$0")>] (?create: bool) =
-
-        member val create: bool option = nativeOnly with get, set
-
-    [<Global>]
-    [<AllowNullLiteral>]
-    type FileSystemRemoveOptions [<ParamObject; Emit("$0")>] (?``recursive``: bool) =
-
-        member val ``recursive``: bool option = nativeOnly with get, set
-
-    [<Global>]
-    [<AllowNullLiteral>]
-    type FocusEventInit
         [<ParamObject; Emit("$0")>]
-        (
-            ?bubbles: bool,
-            ?cancelable: bool,
-            ?composed: bool,
-            ?detail: float,
-            ?view: Web.Window,
-            ?which: float,
-            ?relatedTarget: Web.EventTarget
-        )
-        =
+        static member Create
+            (?endings: Web.EndingType, ?``type``: string, ?lastModified: float)
+            : FilePropertyBag
+            =
+            nativeOnly
 
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val detail: float option = nativeOnly with get, set
-        member val view: Web.Window option = nativeOnly with get, set
-        member val which: float option = nativeOnly with get, set
-        member val relatedTarget: Web.EventTarget option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type FocusOptions [<ParamObject; Emit("$0")>] (?focusVisible: bool, ?preventScroll: bool) =
+    [<Interface>]
+    type FileSystemCreateWritableOptions =
+        abstract member keepExistingData: bool option with get, set
 
-        member val focusVisible: bool option = nativeOnly with get, set
-        member val preventScroll: bool option = nativeOnly with get, set
-
-    [<Global>]
-    [<AllowNullLiteral>]
-    type FontFaceDescriptors
         [<ParamObject; Emit("$0")>]
-        (
-            ?ascentOverride: string,
-            ?descentOverride: string,
-            ?display: Web.FontDisplay,
-            ?featureSettings: string,
-            ?lineGapOverride: string,
-            ?stretch: string,
-            ?style: string,
-            ?unicodeRange: string,
-            ?variationSettings: string,
-            ?weight: string
-        )
-        =
+        static member Create(?keepExistingData: bool) : FileSystemCreateWritableOptions = nativeOnly
 
-        member val ascentOverride: string option = nativeOnly with get, set
-        member val descentOverride: string option = nativeOnly with get, set
-        member val display: Web.FontDisplay option = nativeOnly with get, set
-        member val featureSettings: string option = nativeOnly with get, set
-        member val lineGapOverride: string option = nativeOnly with get, set
-        member val stretch: string option = nativeOnly with get, set
-        member val style: string option = nativeOnly with get, set
-        member val unicodeRange: string option = nativeOnly with get, set
-        member val variationSettings: string option = nativeOnly with get, set
-        member val weight: string option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type FontFaceSetLoadEventInit
+    [<Interface>]
+    type FileSystemFlags =
+        abstract member create: bool option with get, set
+        abstract member exclusive: bool option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (?bubbles: bool, ?cancelable: bool, ?composed: bool, ?fontfaces: ResizeArray<Web.FontFace>)
-        =
+        static member Create(?create: bool, ?exclusive: bool) : FileSystemFlags = nativeOnly
 
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val fontfaces: ResizeArray<Web.FontFace> option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type FormDataEventInit
+    [<Interface>]
+    type FileSystemGetDirectoryOptions =
+        abstract member create: bool option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (formData: Web.FormData, ?bubbles: bool, ?cancelable: bool, ?composed: bool)
-        =
+        static member Create(?create: bool) : FileSystemGetDirectoryOptions = nativeOnly
 
-        member val formData: Web.FormData = nativeOnly with get, set
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type FullscreenOptions
+    [<Interface>]
+    type FileSystemGetFileOptions =
+        abstract member create: bool option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (?keyboardLock: Web.FullscreenKeyboardLock, ?navigationUI: Web.FullscreenNavigationUI)
-        =
+        static member Create(?create: bool) : FileSystemGetFileOptions = nativeOnly
 
-        member val keyboardLock: Web.FullscreenKeyboardLock option = nativeOnly with get, set
-        member val navigationUI: Web.FullscreenNavigationUI option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type GPUBindGroupDescriptor
-        [<ParamObject; Emit("$0")>]
-        (entries: ResizeArray<Web.GPUBindGroupEntry>, layout: Web.GPUBindGroupLayout, ?label: string)
-        =
+    [<Interface>]
+    type FileSystemRemoveOptions =
+        abstract member ``recursive``: bool option with get, set
 
-        member val entries: ResizeArray<Web.GPUBindGroupEntry> = nativeOnly with get, set
-        member val layout: Web.GPUBindGroupLayout = nativeOnly with get, set
-        member val label: string option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create(?``recursive``: bool) : FileSystemRemoveOptions = nativeOnly
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type FocusEventInit =
+        inherit Web.UIEventInit
+        abstract member relatedTarget: Web.EventTarget option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool,
+                ?detail: float,
+                ?view: Web.Window,
+                ?which: float,
+                ?relatedTarget: Web.EventTarget
+            )
+            : FocusEventInit
+            =
+            nativeOnly
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type FocusOptions =
+        abstract member focusVisible: bool option with get, set
+        abstract member preventScroll: bool option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(?focusVisible: bool, ?preventScroll: bool) : FocusOptions = nativeOnly
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type FontFaceDescriptors =
+        abstract member ascentOverride: string option with get, set
+        abstract member descentOverride: string option with get, set
+        abstract member display: Web.FontDisplay option with get, set
+        abstract member featureSettings: string option with get, set
+        abstract member lineGapOverride: string option with get, set
+        abstract member stretch: string option with get, set
+        abstract member style: string option with get, set
+        abstract member unicodeRange: string option with get, set
+        abstract member variationSettings: string option with get, set
+        abstract member weight: string option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?ascentOverride: string,
+                ?descentOverride: string,
+                ?display: Web.FontDisplay,
+                ?featureSettings: string,
+                ?lineGapOverride: string,
+                ?stretch: string,
+                ?style: string,
+                ?unicodeRange: string,
+                ?variationSettings: string,
+                ?weight: string
+            )
+            : FontFaceDescriptors
+            =
+            nativeOnly
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type FontFaceSetLoadEventInit =
+        inherit Web.EventInit
+        abstract member fontfaces: ResizeArray<Web.FontFace> option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool,
+                ?fontfaces: ResizeArray<Web.FontFace>
+            )
+            : FontFaceSetLoadEventInit
+            =
+            nativeOnly
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type FormDataEventInit =
+        inherit Web.EventInit
+        abstract member formData: Web.FormData with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (formData: Web.FormData, ?bubbles: bool, ?cancelable: bool, ?composed: bool)
+            : FormDataEventInit
+            =
+            nativeOnly
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type FullscreenOptions =
+        abstract member keyboardLock: Web.FullscreenKeyboardLock option with get, set
+        abstract member navigationUI: Web.FullscreenNavigationUI option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?keyboardLock: Web.FullscreenKeyboardLock, ?navigationUI: Web.FullscreenNavigationUI)
+            : FullscreenOptions
+            =
+            nativeOnly
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type GPUBindGroupDescriptor =
+        inherit Web.GPUObjectDescriptorBase
+        abstract member entries: ResizeArray<Web.GPUBindGroupEntry> with get, set
+        abstract member layout: Web.GPUBindGroupLayout with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                entries: ResizeArray<Web.GPUBindGroupEntry>,
+                layout: Web.GPUBindGroupLayout,
+                ?label: string
+            )
+            : GPUBindGroupDescriptor
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -9443,15 +9565,18 @@ module Web =
         abstract member binding: Web.GPUIndex32 with get, set
         abstract member resource: Web.GPUBindingResource with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type GPUBindGroupLayoutDescriptor
-        [<ParamObject; Emit("$0")>]
-        (entries: ResizeArray<Web.GPUBindGroupLayoutEntry>, ?label: string)
-        =
+    [<Interface>]
+    type GPUBindGroupLayoutDescriptor =
+        inherit Web.GPUObjectDescriptorBase
+        abstract member entries: ResizeArray<Web.GPUBindGroupLayoutEntry> with get, set
 
-        member val entries: ResizeArray<Web.GPUBindGroupLayoutEntry> = nativeOnly with get, set
-        member val label: string option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (entries: ResizeArray<Web.GPUBindGroupLayoutEntry>, ?label: string)
+            : GPUBindGroupLayoutDescriptor
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -9491,22 +9616,25 @@ module Web =
         abstract member minBindingSize: Web.GPUSize64 option with get, set
         abstract member ``type``: Web.GPUBufferBindingType option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type GPUBufferDescriptor
-        [<ParamObject; Emit("$0")>]
-        (
-            size: Web.GPUSize64,
-            usage: Web.GPUBufferUsageFlags,
-            ?label: string,
-            ?mappedAtCreation: bool
-        )
-        =
+    [<Interface>]
+    type GPUBufferDescriptor =
+        inherit Web.GPUObjectDescriptorBase
+        abstract member mappedAtCreation: bool option with get, set
+        abstract member size: Web.GPUSize64 with get, set
+        abstract member usage: Web.GPUBufferUsageFlags with get, set
 
-        member val size: Web.GPUSize64 = nativeOnly with get, set
-        member val usage: Web.GPUBufferUsageFlags = nativeOnly with get, set
-        member val label: string option = nativeOnly with get, set
-        member val mappedAtCreation: bool option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                size: Web.GPUSize64,
+                usage: Web.GPUBufferUsageFlags,
+                ?label: string,
+                ?mappedAtCreation: bool
+            )
+            : GPUBufferDescriptor
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -9539,29 +9667,34 @@ module Web =
         abstract member format: Web.GPUTextureFormat with get, set
         abstract member writeMask: Web.GPUColorWriteFlags option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type GPUCommandBufferDescriptor [<ParamObject; Emit("$0")>] (?label: string) =
+    [<Interface>]
+    type GPUCommandBufferDescriptor =
+        inherit Web.GPUObjectDescriptorBase
 
-        member val label: string option = nativeOnly with get, set
-
-    [<Global>]
-    [<AllowNullLiteral>]
-    type GPUCommandEncoderDescriptor [<ParamObject; Emit("$0")>] (?label: string) =
-
-        member val label: string option = nativeOnly with get, set
-
-    [<Global>]
-    [<AllowNullLiteral>]
-    type GPUComputePassDescriptor
         [<ParamObject; Emit("$0")>]
-        (?label: string, ?timestampWrites: Web.GPUComputePassTimestampWrites)
-        =
+        static member Create(?label: string) : GPUCommandBufferDescriptor = nativeOnly
 
-        member val label: string option = nativeOnly with get, set
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type GPUCommandEncoderDescriptor =
+        inherit Web.GPUObjectDescriptorBase
 
-        member val timestampWrites: Web.GPUComputePassTimestampWrites option =
-            nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create(?label: string) : GPUCommandEncoderDescriptor = nativeOnly
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type GPUComputePassDescriptor =
+        inherit Web.GPUObjectDescriptorBase
+        abstract member timestampWrites: Web.GPUComputePassTimestampWrites option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?label: string, ?timestampWrites: Web.GPUComputePassTimestampWrites)
+            : GPUComputePassDescriptor
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -9570,57 +9703,60 @@ module Web =
         abstract member endOfPassWriteIndex: Web.GPUSize32 option with get, set
         abstract member querySet: Web.GPUQuerySet with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type GPUComputePipelineDescriptor private () =
+    [<Interface>]
+    type GPUComputePipelineDescriptor =
+        inherit Web.GPUPipelineDescriptorBase
+        abstract member compute: Web.GPUProgrammableStage with get, set
 
         [<ParamObject; Emit("$0")>]
-        new(layout: Web.GPUPipelineLayout, compute: Web.GPUProgrammableStage, ?label: string)
+        static member Create
+            (layout: Web.GPUPipelineLayout, compute: Web.GPUProgrammableStage, ?label: string)
+            : GPUComputePipelineDescriptor
             =
-            GPUComputePipelineDescriptor()
+            nativeOnly
 
         [<ParamObject; Emit("$0")>]
-        new(layout: Web.GPUAutoLayoutMode, compute: Web.GPUProgrammableStage, ?label: string)
+        static member Create
+            (layout: Web.GPUAutoLayoutMode, compute: Web.GPUProgrammableStage, ?label: string)
+            : GPUComputePipelineDescriptor
             =
-            GPUComputePipelineDescriptor()
+            nativeOnly
 
-        member val layout: U2<Web.GPUPipelineLayout, Web.GPUAutoLayoutMode> =
-            nativeOnly with get, set
-
-        member val compute: Web.GPUProgrammableStage = nativeOnly with get, set
-        member val label: string option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type GPUCopyExternalImageDestInfo
+    [<Interface>]
+    type GPUCopyExternalImageDestInfo =
+        inherit Web.GPUTexelCopyTextureInfo
+        abstract member colorSpace: Web.PredefinedColorSpace option with get, set
+        abstract member premultipliedAlpha: bool option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            texture: Web.GPUTexture,
-            ?aspect: Web.GPUTextureAspect,
-            ?mipLevel: Web.GPUIntegerCoordinate,
-            ?origin: Web.GPUOrigin3D,
-            ?colorSpace: Web.PredefinedColorSpace,
-            ?premultipliedAlpha: bool
-        )
-        =
+        static member Create
+            (
+                texture: Web.GPUTexture,
+                ?aspect: Web.GPUTextureAspect,
+                ?mipLevel: Web.GPUIntegerCoordinate,
+                ?origin: Web.GPUOrigin3D,
+                ?colorSpace: Web.PredefinedColorSpace,
+                ?premultipliedAlpha: bool
+            )
+            : GPUCopyExternalImageDestInfo
+            =
+            nativeOnly
 
-        member val texture: Web.GPUTexture = nativeOnly with get, set
-        member val aspect: Web.GPUTextureAspect option = nativeOnly with get, set
-        member val mipLevel: Web.GPUIntegerCoordinate option = nativeOnly with get, set
-        member val origin: Web.GPUOrigin3D option = nativeOnly with get, set
-        member val colorSpace: Web.PredefinedColorSpace option = nativeOnly with get, set
-        member val premultipliedAlpha: bool option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type GPUCopyExternalImageSourceInfo
-        [<ParamObject; Emit("$0")>]
-        (source: Web.GPUCopyExternalImageSource, ?flipY: bool, ?origin: Web.GPUOrigin2D)
-        =
+    [<Interface>]
+    type GPUCopyExternalImageSourceInfo =
+        abstract member flipY: bool option with get, set
+        abstract member origin: Web.GPUOrigin2D option with get, set
+        abstract member source: Web.GPUCopyExternalImageSource with get, set
 
-        member val source: Web.GPUCopyExternalImageSource = nativeOnly with get, set
-        member val flipY: bool option = nativeOnly with get, set
-        member val origin: Web.GPUOrigin2D option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (source: Web.GPUCopyExternalImageSource, ?flipY: bool, ?origin: Web.GPUOrigin2D)
+            : GPUCopyExternalImageSourceInfo
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -9636,26 +9772,25 @@ module Web =
         abstract member stencilReadMask: Web.GPUStencilValue option with get, set
         abstract member stencilWriteMask: Web.GPUStencilValue option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type GPUDeviceDescriptor
+    [<Interface>]
+    type GPUDeviceDescriptor =
+        inherit Web.GPUObjectDescriptorBase
+        abstract member defaultQueue: Web.GPUQueueDescriptor option with get, set
+        abstract member requiredFeatures: ResizeArray<Web.GPUFeatureName> option with get, set
+        abstract member requiredLimits: GPUDeviceDescriptor.requiredLimits option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?label: string,
-            ?defaultQueue: Web.GPUQueueDescriptor,
-            ?requiredFeatures: ResizeArray<Web.GPUFeatureName>,
-            ?requiredLimits: GPUDeviceDescriptor.requiredLimits
-        )
-        =
-
-        member val label: string option = nativeOnly with get, set
-        member val defaultQueue: Web.GPUQueueDescriptor option = nativeOnly with get, set
-
-        member val requiredFeatures: ResizeArray<Web.GPUFeatureName> option =
-            nativeOnly with get, set
-
-        member val requiredLimits: GPUDeviceDescriptor.requiredLimits option =
-            nativeOnly with get, set
+        static member Create
+            (
+                ?label: string,
+                ?defaultQueue: Web.GPUQueueDescriptor,
+                ?requiredFeatures: ResizeArray<Web.GPUFeatureName>,
+                ?requiredLimits: GPUDeviceDescriptor.requiredLimits
+            )
+            : GPUDeviceDescriptor
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -9668,23 +9803,26 @@ module Web =
     [<Interface>]
     type GPUExternalTextureBindingLayout = interface end
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type GPUExternalTextureDescriptor private () =
+    [<Interface>]
+    type GPUExternalTextureDescriptor =
+        inherit Web.GPUObjectDescriptorBase
+        abstract member colorSpace: Web.PredefinedColorSpace option with get, set
+        abstract member source: U2<Web.HTMLVideoElement, Web.VideoFrame> with get, set
 
         [<ParamObject; Emit("$0")>]
-        new(source: Web.HTMLVideoElement, ?label: string, ?colorSpace: Web.PredefinedColorSpace)
+        static member Create
+            (source: Web.HTMLVideoElement, ?label: string, ?colorSpace: Web.PredefinedColorSpace)
+            : GPUExternalTextureDescriptor
             =
-            GPUExternalTextureDescriptor()
+            nativeOnly
 
         [<ParamObject; Emit("$0")>]
-        new(source: Web.VideoFrame, ?label: string, ?colorSpace: Web.PredefinedColorSpace)
+        static member Create
+            (source: Web.VideoFrame, ?label: string, ?colorSpace: Web.PredefinedColorSpace)
+            : GPUExternalTextureDescriptor
             =
-            GPUExternalTextureDescriptor()
-
-        member val source: U2<Web.HTMLVideoElement, Web.VideoFrame> = nativeOnly with get, set
-        member val label: string option = nativeOnly with get, set
-        member val colorSpace: Web.PredefinedColorSpace option = nativeOnly with get, set
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -9723,28 +9861,31 @@ module Web =
         inherit Web.GPUObjectDescriptorBase
         abstract member layout: U2<Web.GPUPipelineLayout, Web.GPUAutoLayoutMode> with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type GPUPipelineErrorInit [<ParamObject; Emit("$0")>] (reason: Web.GPUPipelineErrorReason) =
+    [<Interface>]
+    type GPUPipelineErrorInit =
+        abstract member reason: Web.GPUPipelineErrorReason with get, set
 
-        member val reason: Web.GPUPipelineErrorReason = nativeOnly with get, set
-
-    [<Global>]
-    [<AllowNullLiteral>]
-    type GPUPipelineLayoutDescriptor
         [<ParamObject; Emit("$0")>]
-        (
-            bindGroupLayouts: ResizeArray<Web.GPUBindGroupLayout option>,
-            ?label: string,
-            ?immediateSize: Web.GPUSize32
-        )
-        =
+        static member Create(reason: Web.GPUPipelineErrorReason) : GPUPipelineErrorInit = nativeOnly
 
-        member val bindGroupLayouts: ResizeArray<Web.GPUBindGroupLayout option> =
-            nativeOnly with get, set
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type GPUPipelineLayoutDescriptor =
+        inherit Web.GPUObjectDescriptorBase
+        abstract member bindGroupLayouts: ResizeArray<Web.GPUBindGroupLayout option> with get, set
+        abstract member immediateSize: Web.GPUSize32 option with get, set
 
-        member val label: string option = nativeOnly with get, set
-        member val immediateSize: Web.GPUSize32 option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                bindGroupLayouts: ResizeArray<Web.GPUBindGroupLayout option>,
+                ?label: string,
+                ?immediateSize: Web.GPUSize32
+            )
+            : GPUPipelineLayoutDescriptor
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -9762,48 +9903,53 @@ module Web =
         abstract member entryPoint: string option with get, set
         abstract member ``module``: Web.GPUShaderModule with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type GPUQuerySetDescriptor
-        [<ParamObject; Emit("$0")>]
-        (count: Web.GPUSize32, ``type``: Web.GPUQueryType, ?label: string)
-        =
+    [<Interface>]
+    type GPUQuerySetDescriptor =
+        inherit Web.GPUObjectDescriptorBase
+        abstract member count: Web.GPUSize32 with get, set
+        abstract member ``type``: Web.GPUQueryType with get, set
 
-        member val count: Web.GPUSize32 = nativeOnly with get, set
-        member val ``type``: Web.GPUQueryType = nativeOnly with get, set
-        member val label: string option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (count: Web.GPUSize32, ``type``: Web.GPUQueryType, ?label: string)
+            : GPUQuerySetDescriptor
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
     type GPUQueueDescriptor =
         inherit Web.GPUObjectDescriptorBase
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type GPURenderBundleDescriptor [<ParamObject; Emit("$0")>] (?label: string) =
+    [<Interface>]
+    type GPURenderBundleDescriptor =
+        inherit Web.GPUObjectDescriptorBase
 
-        member val label: string option = nativeOnly with get, set
-
-    [<Global>]
-    [<AllowNullLiteral>]
-    type GPURenderBundleEncoderDescriptor
         [<ParamObject; Emit("$0")>]
-        (
-            colorFormats: ResizeArray<Web.GPUTextureFormat option>,
-            ?label: string,
-            ?depthStencilFormat: Web.GPUTextureFormat,
-            ?sampleCount: Web.GPUSize32,
-            ?depthReadOnly: bool,
-            ?stencilReadOnly: bool
-        )
-        =
+        static member Create(?label: string) : GPURenderBundleDescriptor = nativeOnly
 
-        member val colorFormats: ResizeArray<Web.GPUTextureFormat option> = nativeOnly with get, set
-        member val label: string option = nativeOnly with get, set
-        member val depthStencilFormat: Web.GPUTextureFormat option = nativeOnly with get, set
-        member val sampleCount: Web.GPUSize32 option = nativeOnly with get, set
-        member val depthReadOnly: bool option = nativeOnly with get, set
-        member val stencilReadOnly: bool option = nativeOnly with get, set
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type GPURenderBundleEncoderDescriptor =
+        inherit Web.GPURenderPassLayout
+        abstract member depthReadOnly: bool option with get, set
+        abstract member stencilReadOnly: bool option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                colorFormats: ResizeArray<Web.GPUTextureFormat option>,
+                ?label: string,
+                ?depthStencilFormat: Web.GPUTextureFormat,
+                ?sampleCount: Web.GPUSize32,
+                ?depthReadOnly: bool,
+                ?stencilReadOnly: bool
+            )
+            : GPURenderBundleEncoderDescriptor
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -9828,33 +9974,29 @@ module Web =
         abstract member stencilStoreOp: Web.GPUStoreOp option with get, set
         abstract member view: U2<Web.GPUTexture, Web.GPUTextureView> with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type GPURenderPassDescriptor
+    [<Interface>]
+    type GPURenderPassDescriptor =
+        inherit Web.GPUObjectDescriptorBase
+        abstract member colorAttachments: ResizeArray<Web.GPURenderPassColorAttachment option> with get, set
+        abstract member depthStencilAttachment: Web.GPURenderPassDepthStencilAttachment option with get, set
+        abstract member maxDrawCount: Web.GPUSize64 option with get, set
+        abstract member occlusionQuerySet: Web.GPUQuerySet option with get, set
+        abstract member timestampWrites: Web.GPURenderPassTimestampWrites option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            colorAttachments: ResizeArray<Web.GPURenderPassColorAttachment option>,
-            ?label: string,
-            ?depthStencilAttachment: Web.GPURenderPassDepthStencilAttachment,
-            ?maxDrawCount: Web.GPUSize64,
-            ?occlusionQuerySet: Web.GPUQuerySet,
-            ?timestampWrites: Web.GPURenderPassTimestampWrites
-        )
-        =
-
-        member val colorAttachments: ResizeArray<Web.GPURenderPassColorAttachment option> =
-            nativeOnly with get, set
-
-        member val label: string option = nativeOnly with get, set
-
-        member val depthStencilAttachment: Web.GPURenderPassDepthStencilAttachment option =
-            nativeOnly with get, set
-
-        member val maxDrawCount: Web.GPUSize64 option = nativeOnly with get, set
-        member val occlusionQuerySet: Web.GPUQuerySet option = nativeOnly with get, set
-
-        member val timestampWrites: Web.GPURenderPassTimestampWrites option =
-            nativeOnly with get, set
+        static member Create
+            (
+                colorAttachments: ResizeArray<Web.GPURenderPassColorAttachment option>,
+                ?label: string,
+                ?depthStencilAttachment: Web.GPURenderPassDepthStencilAttachment,
+                ?maxDrawCount: Web.GPUSize64,
+                ?occlusionQuerySet: Web.GPUQuerySet,
+                ?timestampWrites: Web.GPURenderPassTimestampWrites
+            )
+            : GPURenderPassDescriptor
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -9871,12 +10013,18 @@ module Web =
         abstract member endOfPassWriteIndex: Web.GPUSize32 option with get, set
         abstract member querySet: Web.GPUQuerySet with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type GPURenderPipelineDescriptor private () =
+    [<Interface>]
+    type GPURenderPipelineDescriptor =
+        inherit Web.GPUPipelineDescriptorBase
+        abstract member depthStencil: Web.GPUDepthStencilState option with get, set
+        abstract member fragment: Web.GPUFragmentState option with get, set
+        abstract member multisample: Web.GPUMultisampleState option with get, set
+        abstract member primitive: Web.GPUPrimitiveState option with get, set
+        abstract member vertex: Web.GPUVertexState with get, set
 
         [<ParamObject; Emit("$0")>]
-        new
+        static member Create
             (
                 layout: Web.GPUPipelineLayout,
                 vertex: Web.GPUVertexState,
@@ -9886,11 +10034,12 @@ module Web =
                 ?multisample: Web.GPUMultisampleState,
                 ?primitive: Web.GPUPrimitiveState
             )
+            : GPURenderPipelineDescriptor
             =
-            GPURenderPipelineDescriptor()
+            nativeOnly
 
         [<ParamObject; Emit("$0")>]
-        new
+        static member Create
             (
                 layout: Web.GPUAutoLayoutMode,
                 vertex: Web.GPUVertexState,
@@ -9900,71 +10049,70 @@ module Web =
                 ?multisample: Web.GPUMultisampleState,
                 ?primitive: Web.GPUPrimitiveState
             )
+            : GPURenderPipelineDescriptor
             =
-            GPURenderPipelineDescriptor()
+            nativeOnly
 
-        member val layout: U2<Web.GPUPipelineLayout, Web.GPUAutoLayoutMode> =
-            nativeOnly with get, set
-
-        member val vertex: Web.GPUVertexState = nativeOnly with get, set
-        member val label: string option = nativeOnly with get, set
-        member val depthStencil: Web.GPUDepthStencilState option = nativeOnly with get, set
-        member val fragment: Web.GPUFragmentState option = nativeOnly with get, set
-        member val multisample: Web.GPUMultisampleState option = nativeOnly with get, set
-        member val primitive: Web.GPUPrimitiveState option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type GPURequestAdapterOptions
-        [<ParamObject; Emit("$0")>]
-        (?forceFallbackAdapter: bool, ?powerPreference: Web.GPUPowerPreference)
-        =
+    [<Interface>]
+    type GPURequestAdapterOptions =
+        abstract member forceFallbackAdapter: bool option with get, set
+        abstract member powerPreference: Web.GPUPowerPreference option with get, set
 
-        member val forceFallbackAdapter: bool option = nativeOnly with get, set
-        member val powerPreference: Web.GPUPowerPreference option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?forceFallbackAdapter: bool, ?powerPreference: Web.GPUPowerPreference)
+            : GPURequestAdapterOptions
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
     type GPUSamplerBindingLayout =
         abstract member ``type``: Web.GPUSamplerBindingType option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type GPUSamplerDescriptor
+    [<Interface>]
+    type GPUSamplerDescriptor =
+        inherit Web.GPUObjectDescriptorBase
+        abstract member addressModeU: Web.GPUAddressMode option with get, set
+        abstract member addressModeV: Web.GPUAddressMode option with get, set
+        abstract member addressModeW: Web.GPUAddressMode option with get, set
+        abstract member compare: Web.GPUCompareFunction option with get, set
+        abstract member lodMaxClamp: float option with get, set
+        abstract member lodMinClamp: float option with get, set
+        abstract member magFilter: Web.GPUFilterMode option with get, set
+        abstract member maxAnisotropy: float option with get, set
+        abstract member minFilter: Web.GPUFilterMode option with get, set
+        abstract member mipmapFilter: Web.GPUMipmapFilterMode option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?label: string,
-            ?addressModeU: Web.GPUAddressMode,
-            ?addressModeV: Web.GPUAddressMode,
-            ?addressModeW: Web.GPUAddressMode,
-            ?compare: Web.GPUCompareFunction,
-            ?lodMaxClamp: float,
-            ?lodMinClamp: float,
-            ?magFilter: Web.GPUFilterMode,
-            ?maxAnisotropy: float,
-            ?minFilter: Web.GPUFilterMode,
-            ?mipmapFilter: Web.GPUMipmapFilterMode
-        )
-        =
+        static member Create
+            (
+                ?label: string,
+                ?addressModeU: Web.GPUAddressMode,
+                ?addressModeV: Web.GPUAddressMode,
+                ?addressModeW: Web.GPUAddressMode,
+                ?compare: Web.GPUCompareFunction,
+                ?lodMaxClamp: float,
+                ?lodMinClamp: float,
+                ?magFilter: Web.GPUFilterMode,
+                ?maxAnisotropy: float,
+                ?minFilter: Web.GPUFilterMode,
+                ?mipmapFilter: Web.GPUMipmapFilterMode
+            )
+            : GPUSamplerDescriptor
+            =
+            nativeOnly
 
-        member val label: string option = nativeOnly with get, set
-        member val addressModeU: Web.GPUAddressMode option = nativeOnly with get, set
-        member val addressModeV: Web.GPUAddressMode option = nativeOnly with get, set
-        member val addressModeW: Web.GPUAddressMode option = nativeOnly with get, set
-        member val compare: Web.GPUCompareFunction option = nativeOnly with get, set
-        member val lodMaxClamp: float option = nativeOnly with get, set
-        member val lodMinClamp: float option = nativeOnly with get, set
-        member val magFilter: Web.GPUFilterMode option = nativeOnly with get, set
-        member val maxAnisotropy: float option = nativeOnly with get, set
-        member val minFilter: Web.GPUFilterMode option = nativeOnly with get, set
-        member val mipmapFilter: Web.GPUMipmapFilterMode option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type GPUShaderModuleDescriptor [<ParamObject; Emit("$0")>] (code: string, ?label: string) =
+    [<Interface>]
+    type GPUShaderModuleDescriptor =
+        inherit Web.GPUObjectDescriptorBase
+        abstract member code: string with get, set
 
-        member val code: string = nativeOnly with get, set
-        member val label: string option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create(code: string, ?label: string) : GPUShaderModuleDescriptor = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -9981,22 +10129,23 @@ module Web =
         abstract member format: Web.GPUTextureFormat with get, set
         abstract member viewDimension: Web.GPUTextureViewDimension option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type GPUTexelCopyBufferInfo
-        [<ParamObject; Emit("$0")>]
-        (
-            buffer: Web.GPUBuffer,
-            ?bytesPerRow: Web.GPUSize32,
-            ?offset: Web.GPUSize64,
-            ?rowsPerImage: Web.GPUSize32
-        )
-        =
+    [<Interface>]
+    type GPUTexelCopyBufferInfo =
+        inherit Web.GPUTexelCopyBufferLayout
+        abstract member buffer: Web.GPUBuffer with get, set
 
-        member val buffer: Web.GPUBuffer = nativeOnly with get, set
-        member val bytesPerRow: Web.GPUSize32 option = nativeOnly with get, set
-        member val offset: Web.GPUSize64 option = nativeOnly with get, set
-        member val rowsPerImage: Web.GPUSize32 option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                buffer: Web.GPUBuffer,
+                ?bytesPerRow: Web.GPUSize32,
+                ?offset: Web.GPUSize64,
+                ?rowsPerImage: Web.GPUSize32
+            )
+            : GPUTexelCopyBufferInfo
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -10020,69 +10169,76 @@ module Web =
         abstract member sampleType: Web.GPUTextureSampleType option with get, set
         abstract member viewDimension: Web.GPUTextureViewDimension option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type GPUTextureDescriptor
+    [<Interface>]
+    type GPUTextureDescriptor =
+        inherit Web.GPUObjectDescriptorBase
+        abstract member dimension: Web.GPUTextureDimension option with get, set
+        abstract member format: Web.GPUTextureFormat with get, set
+        abstract member mipLevelCount: Web.GPUIntegerCoordinate option with get, set
+        abstract member sampleCount: Web.GPUSize32 option with get, set
+        abstract member size: Web.GPUExtent3D with get, set
+        abstract member usage: Web.GPUTextureUsageFlags with get, set
+        abstract member viewFormats: ResizeArray<Web.GPUTextureFormat> option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            format: Web.GPUTextureFormat,
-            size: Web.GPUExtent3D,
-            usage: Web.GPUTextureUsageFlags,
-            ?label: string,
-            ?dimension: Web.GPUTextureDimension,
-            ?mipLevelCount: Web.GPUIntegerCoordinate,
-            ?sampleCount: Web.GPUSize32,
-            ?viewFormats: ResizeArray<Web.GPUTextureFormat>
-        )
-        =
+        static member Create
+            (
+                format: Web.GPUTextureFormat,
+                size: Web.GPUExtent3D,
+                usage: Web.GPUTextureUsageFlags,
+                ?label: string,
+                ?dimension: Web.GPUTextureDimension,
+                ?mipLevelCount: Web.GPUIntegerCoordinate,
+                ?sampleCount: Web.GPUSize32,
+                ?viewFormats: ResizeArray<Web.GPUTextureFormat>
+            )
+            : GPUTextureDescriptor
+            =
+            nativeOnly
 
-        member val format: Web.GPUTextureFormat = nativeOnly with get, set
-        member val size: Web.GPUExtent3D = nativeOnly with get, set
-        member val usage: Web.GPUTextureUsageFlags = nativeOnly with get, set
-        member val label: string option = nativeOnly with get, set
-        member val dimension: Web.GPUTextureDimension option = nativeOnly with get, set
-        member val mipLevelCount: Web.GPUIntegerCoordinate option = nativeOnly with get, set
-        member val sampleCount: Web.GPUSize32 option = nativeOnly with get, set
-        member val viewFormats: ResizeArray<Web.GPUTextureFormat> option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type GPUTextureViewDescriptor
+    [<Interface>]
+    type GPUTextureViewDescriptor =
+        inherit Web.GPUObjectDescriptorBase
+        abstract member arrayLayerCount: Web.GPUIntegerCoordinate option with get, set
+        abstract member aspect: Web.GPUTextureAspect option with get, set
+        abstract member baseArrayLayer: Web.GPUIntegerCoordinate option with get, set
+        abstract member baseMipLevel: Web.GPUIntegerCoordinate option with get, set
+        abstract member dimension: Web.GPUTextureViewDimension option with get, set
+        abstract member format: Web.GPUTextureFormat option with get, set
+        abstract member mipLevelCount: Web.GPUIntegerCoordinate option with get, set
+        abstract member usage: Web.GPUTextureUsageFlags option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?label: string,
-            ?arrayLayerCount: Web.GPUIntegerCoordinate,
-            ?aspect: Web.GPUTextureAspect,
-            ?baseArrayLayer: Web.GPUIntegerCoordinate,
-            ?baseMipLevel: Web.GPUIntegerCoordinate,
-            ?dimension: Web.GPUTextureViewDimension,
-            ?format: Web.GPUTextureFormat,
-            ?mipLevelCount: Web.GPUIntegerCoordinate,
-            ?usage: Web.GPUTextureUsageFlags
-        )
-        =
+        static member Create
+            (
+                ?label: string,
+                ?arrayLayerCount: Web.GPUIntegerCoordinate,
+                ?aspect: Web.GPUTextureAspect,
+                ?baseArrayLayer: Web.GPUIntegerCoordinate,
+                ?baseMipLevel: Web.GPUIntegerCoordinate,
+                ?dimension: Web.GPUTextureViewDimension,
+                ?format: Web.GPUTextureFormat,
+                ?mipLevelCount: Web.GPUIntegerCoordinate,
+                ?usage: Web.GPUTextureUsageFlags
+            )
+            : GPUTextureViewDescriptor
+            =
+            nativeOnly
 
-        member val label: string option = nativeOnly with get, set
-        member val arrayLayerCount: Web.GPUIntegerCoordinate option = nativeOnly with get, set
-        member val aspect: Web.GPUTextureAspect option = nativeOnly with get, set
-        member val baseArrayLayer: Web.GPUIntegerCoordinate option = nativeOnly with get, set
-        member val baseMipLevel: Web.GPUIntegerCoordinate option = nativeOnly with get, set
-        member val dimension: Web.GPUTextureViewDimension option = nativeOnly with get, set
-        member val format: Web.GPUTextureFormat option = nativeOnly with get, set
-        member val mipLevelCount: Web.GPUIntegerCoordinate option = nativeOnly with get, set
-        member val usage: Web.GPUTextureUsageFlags option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type GPUUncapturedErrorEventInit
-        [<ParamObject; Emit("$0")>]
-        (error: Web.GPUError, ?bubbles: bool, ?cancelable: bool, ?composed: bool)
-        =
+    [<Interface>]
+    type GPUUncapturedErrorEventInit =
+        inherit Web.EventInit
+        abstract member error: Web.GPUError with get, set
 
-        member val error: Web.GPUError = nativeOnly with get, set
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (error: Web.GPUError, ?bubbles: bool, ?cancelable: bool, ?composed: bool)
+            : GPUUncapturedErrorEventInit
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -10104,108 +10260,120 @@ module Web =
         inherit Web.GPUProgrammableStage
         abstract member buffers: ResizeArray<Web.GPUVertexBufferLayout option> option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type GainOptions
+    [<Interface>]
+    type GainOptions =
+        inherit Web.AudioNodeOptions
+        abstract member gain: float option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?channelCount: float,
-            ?channelCountMode: Web.ChannelCountMode,
-            ?channelInterpretation: Web.ChannelInterpretation,
-            ?gain: float
-        )
-        =
+        static member Create
+            (
+                ?channelCount: float,
+                ?channelCountMode: Web.ChannelCountMode,
+                ?channelInterpretation: Web.ChannelInterpretation,
+                ?gain: float
+            )
+            : GainOptions
+            =
+            nativeOnly
 
-        member val channelCount: float option = nativeOnly with get, set
-        member val channelCountMode: Web.ChannelCountMode option = nativeOnly with get, set
-
-        member val channelInterpretation: Web.ChannelInterpretation option =
-            nativeOnly with get, set
-
-        member val gain: float option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type GamepadEffectParameters
+    [<Interface>]
+    type GamepadEffectParameters =
+        abstract member duration: float option with get, set
+        abstract member leftTrigger: float option with get, set
+        abstract member rightTrigger: float option with get, set
+        abstract member startDelay: float option with get, set
+        abstract member strongMagnitude: float option with get, set
+        abstract member weakMagnitude: float option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?duration: float,
-            ?leftTrigger: float,
-            ?rightTrigger: float,
-            ?startDelay: float,
-            ?strongMagnitude: float,
-            ?weakMagnitude: float
-        )
-        =
+        static member Create
+            (
+                ?duration: float,
+                ?leftTrigger: float,
+                ?rightTrigger: float,
+                ?startDelay: float,
+                ?strongMagnitude: float,
+                ?weakMagnitude: float
+            )
+            : GamepadEffectParameters
+            =
+            nativeOnly
 
-        member val duration: float option = nativeOnly with get, set
-        member val leftTrigger: float option = nativeOnly with get, set
-        member val rightTrigger: float option = nativeOnly with get, set
-        member val startDelay: float option = nativeOnly with get, set
-        member val strongMagnitude: float option = nativeOnly with get, set
-        member val weakMagnitude: float option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type GamepadEventInit
+    [<Interface>]
+    type GamepadEventInit =
+        inherit Web.EventInit
+        abstract member gamepad: Web.Gamepad option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (?bubbles: bool, ?cancelable: bool, ?composed: bool, ?gamepad: Web.Gamepad)
-        =
+        static member Create
+            (?bubbles: bool, ?cancelable: bool, ?composed: bool, ?gamepad: Web.Gamepad)
+            : GamepadEventInit
+            =
+            nativeOnly
 
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val gamepad: Web.Gamepad option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type GetAnimationsOptions [<ParamObject; Emit("$0")>] (?subtree: bool) =
+    [<Interface>]
+    type GetAnimationsOptions =
+        abstract member subtree: bool option with get, set
 
-        member val subtree: bool option = nativeOnly with get, set
-
-    [<Global>]
-    [<AllowNullLiteral>]
-    type GetComposedRangesOptions
         [<ParamObject; Emit("$0")>]
-        (?shadowRoots: ResizeArray<Web.ShadowRoot>)
-        =
+        static member Create(?subtree: bool) : GetAnimationsOptions = nativeOnly
 
-        member val shadowRoots: ResizeArray<Web.ShadowRoot> option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type GetHTMLOptions
+    [<Interface>]
+    type GetComposedRangesOptions =
+        abstract member shadowRoots: ResizeArray<Web.ShadowRoot> option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (?serializableShadowRoots: bool, ?shadowRoots: ResizeArray<Web.ShadowRoot>)
-        =
+        static member Create(?shadowRoots: ResizeArray<Web.ShadowRoot>) : GetComposedRangesOptions =
+            nativeOnly
 
-        member val serializableShadowRoots: bool option = nativeOnly with get, set
-        member val shadowRoots: ResizeArray<Web.ShadowRoot> option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type GetNotificationOptions [<ParamObject; Emit("$0")>] (?tag: string) =
+    [<Interface>]
+    type GetHTMLOptions =
+        abstract member serializableShadowRoots: bool option with get, set
+        abstract member shadowRoots: ResizeArray<Web.ShadowRoot> option with get, set
 
-        member val tag: string option = nativeOnly with get, set
-
-    [<Global>]
-    [<AllowNullLiteral>]
-    type GetRootNodeOptions [<ParamObject; Emit("$0")>] (?composed: bool) =
-
-        member val composed: bool option = nativeOnly with get, set
-
-    [<Global>]
-    [<AllowNullLiteral>]
-    type HashChangeEventInit
         [<ParamObject; Emit("$0")>]
-        (?bubbles: bool, ?cancelable: bool, ?composed: bool, ?newURL: string, ?oldURL: string)
-        =
+        static member Create
+            (?serializableShadowRoots: bool, ?shadowRoots: ResizeArray<Web.ShadowRoot>)
+            : GetHTMLOptions
+            =
+            nativeOnly
 
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val newURL: string option = nativeOnly with get, set
-        member val oldURL: string option = nativeOnly with get, set
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type GetNotificationOptions =
+        abstract member tag: string option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(?tag: string) : GetNotificationOptions = nativeOnly
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type GetRootNodeOptions =
+        abstract member composed: bool option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(?composed: bool) : GetRootNodeOptions = nativeOnly
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type HashChangeEventInit =
+        inherit Web.EventInit
+        abstract member newURL: string option with get, set
+        abstract member oldURL: string option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?bubbles: bool, ?cancelable: bool, ?composed: bool, ?newURL: string, ?oldURL: string)
+            : HashChangeEventInit
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -10213,42 +10381,51 @@ module Web =
         abstract member highlight: Web.Highlight option with get, set
         abstract member ranges: ResizeArray<Web.AbstractRange> option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type HighlightsFromPointOptions
+    [<Interface>]
+    type HighlightsFromPointOptions =
+        abstract member shadowRoots: ResizeArray<Web.ShadowRoot> option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (?shadowRoots: ResizeArray<Web.ShadowRoot>)
-        =
+        static member Create
+            (?shadowRoots: ResizeArray<Web.ShadowRoot>)
+            : HighlightsFromPointOptions
+            =
+            nativeOnly
 
-        member val shadowRoots: ResizeArray<Web.ShadowRoot> option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type HkdfParams
+    [<Interface>]
+    type HkdfParams =
+        inherit Web.Algorithm
+        abstract member hash: Web.HashAlgorithmIdentifier with get, set
+        abstract member info: Web.BufferSource with get, set
+        abstract member salt: Web.BufferSource with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            name: string,
-            hash: Web.HashAlgorithmIdentifier,
-            info: Web.BufferSource,
-            salt: Web.BufferSource
-        )
-        =
+        static member Create
+            (
+                name: string,
+                hash: Web.HashAlgorithmIdentifier,
+                info: Web.BufferSource,
+                salt: Web.BufferSource
+            )
+            : HkdfParams
+            =
+            nativeOnly
 
-        member val name: string = nativeOnly with get, set
-        member val hash: Web.HashAlgorithmIdentifier = nativeOnly with get, set
-        member val info: Web.BufferSource = nativeOnly with get, set
-        member val salt: Web.BufferSource = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type HmacImportParams
-        [<ParamObject; Emit("$0")>]
-        (name: string, hash: Web.HashAlgorithmIdentifier, ?length: float)
-        =
+    [<Interface>]
+    type HmacImportParams =
+        inherit Web.Algorithm
+        abstract member hash: Web.HashAlgorithmIdentifier with get, set
+        abstract member length: float option with get, set
 
-        member val name: string = nativeOnly with get, set
-        member val hash: Web.HashAlgorithmIdentifier = nativeOnly with get, set
-        member val length: float option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (name: string, hash: Web.HashAlgorithmIdentifier, ?length: float)
+            : HmacImportParams
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -10257,16 +10434,19 @@ module Web =
         abstract member hash: Web.KeyAlgorithm with get, set
         abstract member length: float with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type HmacKeyGenParams
-        [<ParamObject; Emit("$0")>]
-        (name: string, hash: Web.HashAlgorithmIdentifier, ?length: float)
-        =
+    [<Interface>]
+    type HmacKeyGenParams =
+        inherit Web.Algorithm
+        abstract member hash: Web.HashAlgorithmIdentifier with get, set
+        abstract member length: float option with get, set
 
-        member val name: string = nativeOnly with get, set
-        member val hash: Web.HashAlgorithmIdentifier = nativeOnly with get, set
-        member val length: float option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (name: string, hash: Web.HashAlgorithmIdentifier, ?length: float)
+            : HmacKeyGenParams
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -10274,124 +10454,146 @@ module Web =
         abstract member name: string option with get, set
         abstract member version: float option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type IDBIndexParameters [<ParamObject; Emit("$0")>] (?multiEntry: bool, ?unique: bool) =
-
-        member val multiEntry: bool option = nativeOnly with get, set
-        member val unique: bool option = nativeOnly with get, set
-
-    [<Global>]
-    [<AllowNullLiteral>]
-    type IDBObjectStoreParameters private () =
+    [<Interface>]
+    type IDBIndexParameters =
+        abstract member multiEntry: bool option with get, set
+        abstract member unique: bool option with get, set
 
         [<ParamObject; Emit("$0")>]
-        new(?autoIncrement: bool) = IDBObjectStoreParameters()
+        static member Create(?multiEntry: bool, ?unique: bool) : IDBIndexParameters = nativeOnly
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type IDBObjectStoreParameters =
+        abstract member autoIncrement: bool option with get, set
+        abstract member keyPath: U2<string, ResizeArray<string>> option with get, set
 
         [<ParamObject; Emit("$0")>]
-        new(keyPath: string, ?autoIncrement: bool) = IDBObjectStoreParameters()
+        static member Create(?autoIncrement: bool) : IDBObjectStoreParameters = nativeOnly
 
         [<ParamObject; Emit("$0")>]
-        new(keyPath: ResizeArray<string>, ?autoIncrement: bool) = IDBObjectStoreParameters()
+        static member Create(keyPath: string, ?autoIncrement: bool) : IDBObjectStoreParameters =
+            nativeOnly
 
-        member val autoIncrement: bool option = nativeOnly with get, set
-        member val keyPath: U2<string, ResizeArray<string>> option = nativeOnly with get, set
-
-    [<Global>]
-    [<AllowNullLiteral>]
-    type IDBTransactionOptions
         [<ParamObject; Emit("$0")>]
-        (?durability: Web.IDBTransactionDurability)
-        =
+        static member Create
+            (keyPath: ResizeArray<string>, ?autoIncrement: bool)
+            : IDBObjectStoreParameters
+            =
+            nativeOnly
 
-        member val durability: Web.IDBTransactionDurability option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type IDBVersionChangeEventInit
+    [<Interface>]
+    type IDBTransactionOptions =
+        abstract member durability: Web.IDBTransactionDurability option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (?bubbles: bool, ?cancelable: bool, ?composed: bool, ?newVersion: float, ?oldVersion: float)
-        =
+        static member Create(?durability: Web.IDBTransactionDurability) : IDBTransactionOptions =
+            nativeOnly
 
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val newVersion: float option = nativeOnly with get, set
-        member val oldVersion: float option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type IIRFilterOptions
+    [<Interface>]
+    type IDBVersionChangeEventInit =
+        inherit Web.EventInit
+        abstract member newVersion: float option with get, set
+        abstract member oldVersion: float option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            feedback: ResizeArray<float>,
-            feedforward: ResizeArray<float>,
-            ?channelCount: float,
-            ?channelCountMode: Web.ChannelCountMode,
-            ?channelInterpretation: Web.ChannelInterpretation
-        )
-        =
+        static member Create
+            (
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool,
+                ?newVersion: float,
+                ?oldVersion: float
+            )
+            : IDBVersionChangeEventInit
+            =
+            nativeOnly
 
-        member val feedback: ResizeArray<float> = nativeOnly with get, set
-        member val feedforward: ResizeArray<float> = nativeOnly with get, set
-        member val channelCount: float option = nativeOnly with get, set
-        member val channelCountMode: Web.ChannelCountMode option = nativeOnly with get, set
-
-        member val channelInterpretation: Web.ChannelInterpretation option =
-            nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type IdleRequestOptions [<ParamObject; Emit("$0")>] (?timeout: float) =
+    [<Interface>]
+    type IIRFilterOptions =
+        inherit Web.AudioNodeOptions
+        abstract member feedback: ResizeArray<float> with get, set
+        abstract member feedforward: ResizeArray<float> with get, set
 
-        member val timeout: float option = nativeOnly with get, set
-
-    [<Global>]
-    [<AllowNullLiteral>]
-    type ImageBitmapOptions
         [<ParamObject; Emit("$0")>]
-        (
-            ?colorSpaceConversion: Web.ColorSpaceConversion,
-            ?imageOrientation: Web.ImageOrientation,
-            ?premultiplyAlpha: Web.PremultiplyAlpha,
-            ?resizeHeight: float,
-            ?resizeQuality: Web.ResizeQuality,
-            ?resizeWidth: float
-        )
-        =
+        static member Create
+            (
+                feedback: ResizeArray<float>,
+                feedforward: ResizeArray<float>,
+                ?channelCount: float,
+                ?channelCountMode: Web.ChannelCountMode,
+                ?channelInterpretation: Web.ChannelInterpretation
+            )
+            : IIRFilterOptions
+            =
+            nativeOnly
 
-        member val colorSpaceConversion: Web.ColorSpaceConversion option = nativeOnly with get, set
-        member val imageOrientation: Web.ImageOrientation option = nativeOnly with get, set
-        member val premultiplyAlpha: Web.PremultiplyAlpha option = nativeOnly with get, set
-        member val resizeHeight: float option = nativeOnly with get, set
-        member val resizeQuality: Web.ResizeQuality option = nativeOnly with get, set
-        member val resizeWidth: float option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type ImageBitmapRenderingContextSettings [<ParamObject; Emit("$0")>] (?alpha: bool) =
+    [<Interface>]
+    type IdleRequestOptions =
+        abstract member timeout: float option with get, set
 
-        member val alpha: bool option = nativeOnly with get, set
-
-    [<Global>]
-    [<AllowNullLiteral>]
-    type ImageDataSettings
         [<ParamObject; Emit("$0")>]
-        (?colorSpace: Web.PredefinedColorSpace, ?pixelFormat: Web.ImageDataPixelFormat)
-        =
+        static member Create(?timeout: float) : IdleRequestOptions = nativeOnly
 
-        member val colorSpace: Web.PredefinedColorSpace option = nativeOnly with get, set
-        member val pixelFormat: Web.ImageDataPixelFormat option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type ImageDecodeOptions
-        [<ParamObject; Emit("$0")>]
-        (?completeFramesOnly: bool, ?frameIndex: float)
-        =
+    [<Interface>]
+    type ImageBitmapOptions =
+        abstract member colorSpaceConversion: Web.ColorSpaceConversion option with get, set
+        abstract member imageOrientation: Web.ImageOrientation option with get, set
+        abstract member premultiplyAlpha: Web.PremultiplyAlpha option with get, set
+        abstract member resizeHeight: float option with get, set
+        abstract member resizeQuality: Web.ResizeQuality option with get, set
+        abstract member resizeWidth: float option with get, set
 
-        member val completeFramesOnly: bool option = nativeOnly with get, set
-        member val frameIndex: float option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?colorSpaceConversion: Web.ColorSpaceConversion,
+                ?imageOrientation: Web.ImageOrientation,
+                ?premultiplyAlpha: Web.PremultiplyAlpha,
+                ?resizeHeight: float,
+                ?resizeQuality: Web.ResizeQuality,
+                ?resizeWidth: float
+            )
+            : ImageBitmapOptions
+            =
+            nativeOnly
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type ImageBitmapRenderingContextSettings =
+        abstract member alpha: bool option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(?alpha: bool) : ImageBitmapRenderingContextSettings = nativeOnly
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type ImageDataSettings =
+        abstract member colorSpace: Web.PredefinedColorSpace option with get, set
+        abstract member pixelFormat: Web.ImageDataPixelFormat option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?colorSpace: Web.PredefinedColorSpace, ?pixelFormat: Web.ImageDataPixelFormat)
+            : ImageDataSettings
+            =
+            nativeOnly
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type ImageDecodeOptions =
+        abstract member completeFramesOnly: bool option with get, set
+        abstract member frameIndex: float option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(?completeFramesOnly: bool, ?frameIndex: float) : ImageDecodeOptions =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -10399,187 +10601,211 @@ module Web =
         abstract member complete: bool with get, set
         abstract member image: Web.VideoFrame with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type ImageDecoderInit
-        [<ParamObject; Emit("$0")>]
-        (
-            data: Web.ImageBufferSource,
-            ``type``: string,
-            ?colorSpaceConversion: Web.ColorSpaceConversion,
-            ?desiredHeight: float,
-            ?desiredWidth: float,
-            ?preferAnimation: bool,
-            ?transfer: ResizeArray<obj>
-        )
-        =
-
-        member val data: Web.ImageBufferSource = nativeOnly with get, set
-        member val ``type``: string = nativeOnly with get, set
-        member val colorSpaceConversion: Web.ColorSpaceConversion option = nativeOnly with get, set
-        member val desiredHeight: float option = nativeOnly with get, set
-        member val desiredWidth: float option = nativeOnly with get, set
-        member val preferAnimation: bool option = nativeOnly with get, set
-        member val transfer: ResizeArray<obj> option = nativeOnly with get, set
-
-    [<Global>]
-    [<AllowNullLiteral>]
-    type ImageEncodeOptions [<ParamObject; Emit("$0")>] (?quality: float, ?``type``: string) =
-
-        member val quality: float option = nativeOnly with get, set
-        member val ``type``: string option = nativeOnly with get, set
-
-    [<Global>]
-    [<AllowNullLiteral>]
-    type ImportNodeOptions
-        [<ParamObject; Emit("$0")>]
-        (?customElementRegistry: Web.CustomElementRegistry, ?selfOnly: bool)
-        =
-
-        member val customElementRegistry: Web.CustomElementRegistry option =
-            nativeOnly with get, set
-
-        member val selfOnly: bool option = nativeOnly with get, set
-
-    [<Global>]
-    [<AllowNullLiteral>]
-    type InputEventInit
-        [<ParamObject; Emit("$0")>]
-        (
-            ?bubbles: bool,
-            ?cancelable: bool,
-            ?composed: bool,
-            ?detail: float,
-            ?view: Web.Window,
-            ?which: float,
-            ?data: string,
-            ?dataTransfer: Web.DataTransfer,
-            ?inputType: string,
-            ?isComposing: bool,
-            ?targetRanges: ResizeArray<Web.StaticRange>
-        )
-        =
-
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val detail: float option = nativeOnly with get, set
-        member val view: Web.Window option = nativeOnly with get, set
-        member val which: float option = nativeOnly with get, set
-        member val data: string option = nativeOnly with get, set
-        member val dataTransfer: Web.DataTransfer option = nativeOnly with get, set
-        member val inputType: string option = nativeOnly with get, set
-        member val isComposing: bool option = nativeOnly with get, set
-        member val targetRanges: ResizeArray<Web.StaticRange> option = nativeOnly with get, set
-
-    [<Global>]
-    [<AllowNullLiteral>]
-    type IntersectionObserverInit private () =
+    [<Interface>]
+    type ImageDecoderInit =
+        abstract member colorSpaceConversion: Web.ColorSpaceConversion option with get, set
+        abstract member data: Web.ImageBufferSource with get, set
+        abstract member desiredHeight: float option with get, set
+        abstract member desiredWidth: float option with get, set
+        abstract member preferAnimation: bool option with get, set
+        abstract member transfer: ResizeArray<obj> option with get, set
+        abstract member ``type``: string with get, set
 
         [<ParamObject; Emit("$0")>]
-        new(?rootMargin: string, ?scrollMargin: string) = IntersectionObserverInit()
-
-        [<ParamObject; Emit("$0")>]
-        new(threshold: float, ?rootMargin: string, ?scrollMargin: string)
+        static member Create
+            (
+                data: Web.ImageBufferSource,
+                ``type``: string,
+                ?colorSpaceConversion: Web.ColorSpaceConversion,
+                ?desiredHeight: float,
+                ?desiredWidth: float,
+                ?preferAnimation: bool,
+                ?transfer: ResizeArray<obj>
+            )
+            : ImageDecoderInit
             =
-            IntersectionObserverInit()
+            nativeOnly
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type ImageEncodeOptions =
+        abstract member quality: float option with get, set
+        abstract member ``type``: string option with get, set
 
         [<ParamObject; Emit("$0")>]
-        new(threshold: ResizeArray<float>, ?rootMargin: string, ?scrollMargin: string)
+        static member Create(?quality: float, ?``type``: string) : ImageEncodeOptions = nativeOnly
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type ImportNodeOptions =
+        abstract member customElementRegistry: Web.CustomElementRegistry option with get, set
+        abstract member selfOnly: bool option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?customElementRegistry: Web.CustomElementRegistry, ?selfOnly: bool)
+            : ImportNodeOptions
             =
-            IntersectionObserverInit()
+            nativeOnly
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type InputEventInit =
+        inherit Web.UIEventInit
+        abstract member data: string option with get, set
+        abstract member dataTransfer: Web.DataTransfer option with get, set
+        abstract member inputType: string option with get, set
+        abstract member isComposing: bool option with get, set
+        abstract member targetRanges: ResizeArray<Web.StaticRange> option with get, set
 
         [<ParamObject; Emit("$0")>]
-        new(root: Web.Element, ?rootMargin: string, ?scrollMargin: string)
+        static member Create
+            (
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool,
+                ?detail: float,
+                ?view: Web.Window,
+                ?which: float,
+                ?data: string,
+                ?dataTransfer: Web.DataTransfer,
+                ?inputType: string,
+                ?isComposing: bool,
+                ?targetRanges: ResizeArray<Web.StaticRange>
+            )
+            : InputEventInit
             =
-            IntersectionObserverInit()
+            nativeOnly
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type IntersectionObserverInit =
+        abstract member root: U2<Web.Element, Web.Document> option with get, set
+        abstract member rootMargin: string option with get, set
+        abstract member scrollMargin: string option with get, set
+        abstract member threshold: U2<float, ResizeArray<float>> option with get, set
 
         [<ParamObject; Emit("$0")>]
-        new(root: Web.Element, threshold: float, ?rootMargin: string, ?scrollMargin: string)
+        static member Create
+            (?rootMargin: string, ?scrollMargin: string)
+            : IntersectionObserverInit
             =
-            IntersectionObserverInit()
+            nativeOnly
 
         [<ParamObject; Emit("$0")>]
-        new
+        static member Create
+            (threshold: float, ?rootMargin: string, ?scrollMargin: string)
+            : IntersectionObserverInit
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (threshold: ResizeArray<float>, ?rootMargin: string, ?scrollMargin: string)
+            : IntersectionObserverInit
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (root: Web.Element, ?rootMargin: string, ?scrollMargin: string)
+            : IntersectionObserverInit
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (root: Web.Element, threshold: float, ?rootMargin: string, ?scrollMargin: string)
+            : IntersectionObserverInit
+            =
+            nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
             (
                 root: Web.Element,
                 threshold: ResizeArray<float>,
                 ?rootMargin: string,
                 ?scrollMargin: string
             )
+            : IntersectionObserverInit
             =
-            IntersectionObserverInit()
+            nativeOnly
 
         [<ParamObject; Emit("$0")>]
-        new(root: Web.Document, ?rootMargin: string, ?scrollMargin: string)
+        static member Create
+            (root: Web.Document, ?rootMargin: string, ?scrollMargin: string)
+            : IntersectionObserverInit
             =
-            IntersectionObserverInit()
+            nativeOnly
 
         [<ParamObject; Emit("$0")>]
-        new(root: Web.Document, threshold: float, ?rootMargin: string, ?scrollMargin: string)
+        static member Create
+            (root: Web.Document, threshold: float, ?rootMargin: string, ?scrollMargin: string)
+            : IntersectionObserverInit
             =
-            IntersectionObserverInit()
+            nativeOnly
 
         [<ParamObject; Emit("$0")>]
-        new
+        static member Create
             (
                 root: Web.Document,
                 threshold: ResizeArray<float>,
                 ?rootMargin: string,
                 ?scrollMargin: string
             )
+            : IntersectionObserverInit
             =
-            IntersectionObserverInit()
+            nativeOnly
 
-        member val root: U2<Web.Element, Web.Document> option = nativeOnly with get, set
-        member val rootMargin: string option = nativeOnly with get, set
-        member val scrollMargin: string option = nativeOnly with get, set
-        member val threshold: U2<float, ResizeArray<float>> option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type JsonWebKey
-        [<ParamObject; Emit("$0")>]
-        (
-            ?alg: string,
-            ?crv: string,
-            ?d: string,
-            ?dp: string,
-            ?dq: string,
-            ?e: string,
-            ?ext: bool,
-            ?k: string,
-            ?key_ops: ResizeArray<string>,
-            ?kty: string,
-            ?n: string,
-            ?oth: ResizeArray<Web.RsaOtherPrimesInfo>,
-            ?p: string,
-            ?q: string,
-            ?qi: string,
-            ?``use``: string,
-            ?x: string,
-            ?y: string
-        )
-        =
+    [<Interface>]
+    type JsonWebKey =
+        abstract member alg: string option with get, set
+        abstract member crv: string option with get, set
+        abstract member d: string option with get, set
+        abstract member dp: string option with get, set
+        abstract member dq: string option with get, set
+        abstract member e: string option with get, set
+        abstract member ext: bool option with get, set
+        abstract member k: string option with get, set
+        abstract member key_ops: ResizeArray<string> option with get, set
+        abstract member kty: string option with get, set
+        abstract member n: string option with get, set
+        abstract member oth: ResizeArray<Web.RsaOtherPrimesInfo> option with get, set
+        abstract member p: string option with get, set
+        abstract member q: string option with get, set
+        abstract member qi: string option with get, set
+        abstract member ``use``: string option with get, set
+        abstract member x: string option with get, set
+        abstract member y: string option with get, set
 
-        member val alg: string option = nativeOnly with get, set
-        member val crv: string option = nativeOnly with get, set
-        member val d: string option = nativeOnly with get, set
-        member val dp: string option = nativeOnly with get, set
-        member val dq: string option = nativeOnly with get, set
-        member val e: string option = nativeOnly with get, set
-        member val ext: bool option = nativeOnly with get, set
-        member val k: string option = nativeOnly with get, set
-        member val key_ops: ResizeArray<string> option = nativeOnly with get, set
-        member val kty: string option = nativeOnly with get, set
-        member val n: string option = nativeOnly with get, set
-        member val oth: ResizeArray<Web.RsaOtherPrimesInfo> option = nativeOnly with get, set
-        member val p: string option = nativeOnly with get, set
-        member val q: string option = nativeOnly with get, set
-        member val qi: string option = nativeOnly with get, set
-        member val ``use``: string option = nativeOnly with get, set
-        member val x: string option = nativeOnly with get, set
-        member val y: string option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?alg: string,
+                ?crv: string,
+                ?d: string,
+                ?dp: string,
+                ?dq: string,
+                ?e: string,
+                ?ext: bool,
+                ?k: string,
+                ?key_ops: ResizeArray<string>,
+                ?kty: string,
+                ?n: string,
+                ?oth: ResizeArray<Web.RsaOtherPrimesInfo>,
+                ?p: string,
+                ?q: string,
+                ?qi: string,
+                ?``use``: string,
+                ?x: string,
+                ?y: string
+            )
+            : JsonWebKey
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -10591,68 +10817,58 @@ module Web =
     type KeySystemTrackConfiguration =
         abstract member robustness: string option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type KeyboardEventInit
-        [<ParamObject; Emit("$0")>]
-        (
-            ?bubbles: bool,
-            ?cancelable: bool,
-            ?composed: bool,
-            ?detail: float,
-            ?view: Web.Window,
-            ?which: float,
-            ?altKey: bool,
-            ?ctrlKey: bool,
-            ?metaKey: bool,
-            ?modifierAltGraph: bool,
-            ?modifierCapsLock: bool,
-            ?modifierFn: bool,
-            ?modifierFnLock: bool,
-            ?modifierHyper: bool,
-            ?modifierNumLock: bool,
-            ?modifierScrollLock: bool,
-            ?modifierSuper: bool,
-            ?modifierSymbol: bool,
-            ?modifierSymbolLock: bool,
-            ?shiftKey: bool,
-            ?charCode: float,
-            ?code: string,
-            ?isComposing: bool,
-            ?key: string,
-            ?keyCode: float,
-            ?location: float,
-            ?repeat: bool
-        )
-        =
+    [<Interface>]
+    type KeyboardEventInit =
+        inherit Web.EventModifierInit
 
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val detail: float option = nativeOnly with get, set
-        member val view: Web.Window option = nativeOnly with get, set
-        member val which: float option = nativeOnly with get, set
-        member val altKey: bool option = nativeOnly with get, set
-        member val ctrlKey: bool option = nativeOnly with get, set
-        member val metaKey: bool option = nativeOnly with get, set
-        member val modifierAltGraph: bool option = nativeOnly with get, set
-        member val modifierCapsLock: bool option = nativeOnly with get, set
-        member val modifierFn: bool option = nativeOnly with get, set
-        member val modifierFnLock: bool option = nativeOnly with get, set
-        member val modifierHyper: bool option = nativeOnly with get, set
-        member val modifierNumLock: bool option = nativeOnly with get, set
-        member val modifierScrollLock: bool option = nativeOnly with get, set
-        member val modifierSuper: bool option = nativeOnly with get, set
-        member val modifierSymbol: bool option = nativeOnly with get, set
-        member val modifierSymbolLock: bool option = nativeOnly with get, set
-        member val shiftKey: bool option = nativeOnly with get, set
-        member val charCode: float option = nativeOnly with get, set
-        member val code: string option = nativeOnly with get, set
-        member val isComposing: bool option = nativeOnly with get, set
-        member val key: string option = nativeOnly with get, set
-        member val keyCode: float option = nativeOnly with get, set
-        member val location: float option = nativeOnly with get, set
-        member val repeat: bool option = nativeOnly with get, set
+        [<Obsolete("`charCode` is inconsistent across environments, consider using `key` instead.")>]
+        abstract member charCode: float option with get, set
+
+        abstract member code: string option with get, set
+        abstract member isComposing: bool option with get, set
+        abstract member key: string option with get, set
+
+        [<Obsolete("`keyCode` is inconsistent across environments, consider using `key` instead.")>]
+        abstract member keyCode: float option with get, set
+
+        abstract member location: float option with get, set
+        abstract member repeat: bool option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool,
+                ?detail: float,
+                ?view: Web.Window,
+                ?which: float,
+                ?altKey: bool,
+                ?ctrlKey: bool,
+                ?metaKey: bool,
+                ?modifierAltGraph: bool,
+                ?modifierCapsLock: bool,
+                ?modifierFn: bool,
+                ?modifierFnLock: bool,
+                ?modifierHyper: bool,
+                ?modifierNumLock: bool,
+                ?modifierScrollLock: bool,
+                ?modifierSuper: bool,
+                ?modifierSymbol: bool,
+                ?modifierSymbolLock: bool,
+                ?shiftKey: bool,
+                ?charCode: float,
+                ?code: string,
+                ?isComposing: bool,
+                ?key: string,
+                ?keyCode: float,
+                ?location: float,
+                ?repeat: bool
+            )
+            : KeyboardEventInit
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -10664,66 +10880,45 @@ module Web =
         [<EmitIndexer>]
         abstract member Item: property: string -> U3<string, float, Web.CSSStyleValue> option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type KeyframeAnimationOptions
+    [<Interface>]
+    type KeyframeAnimationOptions =
+        inherit Web.KeyframeEffectOptions
+        abstract member id: string option with get, set
+
+        abstract member rangeEnd:
+            U4<Web.TimelineRangeOffset, Web.CSSNumericValue, Web.CSSKeywordValue, string> option with get, set
+
+        abstract member rangeStart:
+            U4<Web.TimelineRangeOffset, Web.CSSNumericValue, Web.CSSKeywordValue, string> option with get, set
+
+        abstract member timeline: Web.AnimationTimeline option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?delay: float,
-            ?direction: Web.PlaybackDirection,
-            ?duration: U3<float, Web.CSSNumericValue, string>,
-            ?easing: string,
-            ?endDelay: float,
-            ?fill: Web.FillMode,
-            ?iterationStart: float,
-            ?iterations: float,
-            ?playbackRate: float,
-            ?composite: Web.CompositeOperation,
-            ?iterationComposite: Web.IterationCompositeOperation,
-            ?pseudoElement: string,
-            ?id: string,
-            ?rangeEnd: U4<Web.TimelineRangeOffset, Web.CSSNumericValue, Web.CSSKeywordValue, string>,
-            ?rangeStart:
-                U4<Web.TimelineRangeOffset, Web.CSSNumericValue, Web.CSSKeywordValue, string>,
-            ?timeline: Web.AnimationTimeline
-        )
-        =
-
-        member val delay: float option = nativeOnly with get, set
-        member val direction: Web.PlaybackDirection option = nativeOnly with get, set
-
-        member val duration: U3<float, Web.CSSNumericValue, string> option =
-            nativeOnly with get, set
-
-        member val easing: string option = nativeOnly with get, set
-        member val endDelay: float option = nativeOnly with get, set
-        member val fill: Web.FillMode option = nativeOnly with get, set
-        member val iterationStart: float option = nativeOnly with get, set
-        member val iterations: float option = nativeOnly with get, set
-        member val playbackRate: float option = nativeOnly with get, set
-        member val composite: Web.CompositeOperation option = nativeOnly with get, set
-
-        member val iterationComposite: Web.IterationCompositeOperation option =
-            nativeOnly with get, set
-
-        member val pseudoElement: string option = nativeOnly with get, set
-        member val id: string option = nativeOnly with get, set
-
-        member val rangeEnd: U4<
-            Web.TimelineRangeOffset,
-            Web.CSSNumericValue,
-            Web.CSSKeywordValue,
-            string
-                              > option = nativeOnly with get, set
-
-        member val rangeStart: U4<
-            Web.TimelineRangeOffset,
-            Web.CSSNumericValue,
-            Web.CSSKeywordValue,
-            string
-                                > option = nativeOnly with get, set
-
-        member val timeline: Web.AnimationTimeline option = nativeOnly with get, set
+        static member Create
+            (
+                ?delay: float,
+                ?direction: Web.PlaybackDirection,
+                ?duration: U3<float, Web.CSSNumericValue, string>,
+                ?easing: string,
+                ?endDelay: float,
+                ?fill: Web.FillMode,
+                ?iterationStart: float,
+                ?iterations: float,
+                ?playbackRate: float,
+                ?composite: Web.CompositeOperation,
+                ?iterationComposite: Web.IterationCompositeOperation,
+                ?pseudoElement: string,
+                ?id: string,
+                ?rangeEnd:
+                    U4<Web.TimelineRangeOffset, Web.CSSNumericValue, Web.CSSKeywordValue, string>,
+                ?rangeStart:
+                    U4<Web.TimelineRangeOffset, Web.CSSNumericValue, Web.CSSKeywordValue, string>,
+                ?timeline: Web.AnimationTimeline
+            )
+            : KeyframeAnimationOptions
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -10746,48 +10941,55 @@ module Web =
         abstract member held: ResizeArray<Web.LockInfo> option with get, set
         abstract member pending: ResizeArray<Web.LockInfo> option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type LockOptions
+    [<Interface>]
+    type LockOptions =
+        abstract member ifAvailable: bool option with get, set
+        abstract member mode: Web.LockMode option with get, set
+        abstract member signal: Web.AbortSignal option with get, set
+        abstract member steal: bool option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (?ifAvailable: bool, ?mode: Web.LockMode, ?signal: Web.AbortSignal, ?steal: bool)
-        =
+        static member Create
+            (?ifAvailable: bool, ?mode: Web.LockMode, ?signal: Web.AbortSignal, ?steal: bool)
+            : LockOptions
+            =
+            nativeOnly
 
-        member val ifAvailable: bool option = nativeOnly with get, set
-        member val mode: Web.LockMode option = nativeOnly with get, set
-        member val signal: Web.AbortSignal option = nativeOnly with get, set
-        member val steal: bool option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type MIDIConnectionEventInit
+    [<Interface>]
+    type MIDIConnectionEventInit =
+        inherit Web.EventInit
+        abstract member port: Web.MIDIPort option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (?bubbles: bool, ?cancelable: bool, ?composed: bool, ?port: Web.MIDIPort)
-        =
+        static member Create
+            (?bubbles: bool, ?cancelable: bool, ?composed: bool, ?port: Web.MIDIPort)
+            : MIDIConnectionEventInit
+            =
+            nativeOnly
 
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val port: Web.MIDIPort option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type MIDIMessageEventInit
+    [<Interface>]
+    type MIDIMessageEventInit =
+        inherit Web.EventInit
+        abstract member data: JS.Uint8Array option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (?bubbles: bool, ?cancelable: bool, ?composed: bool, ?data: JS.Uint8Array)
-        =
+        static member Create
+            (?bubbles: bool, ?cancelable: bool, ?composed: bool, ?data: JS.Uint8Array)
+            : MIDIMessageEventInit
+            =
+            nativeOnly
 
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val data: JS.Uint8Array option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type MIDIOptions [<ParamObject; Emit("$0")>] (?software: bool, ?sysex: bool) =
+    [<Interface>]
+    type MIDIOptions =
+        abstract member software: bool option with get, set
+        abstract member sysex: bool option with get, set
 
-        member val software: bool option = nativeOnly with get, set
-        member val sysex: bool option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create(?software: bool, ?sysex: bool) : MIDIOptions = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -10824,61 +11026,70 @@ module Web =
         abstract member audio: Web.AudioConfiguration option with get, set
         abstract member video: Web.VideoConfiguration option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type MediaDecodingConfiguration
+    [<Interface>]
+    type MediaDecodingConfiguration =
+        inherit Web.MediaConfiguration
+        abstract member keySystemConfiguration: Web.MediaCapabilitiesKeySystemConfiguration option with get, set
+        abstract member ``type``: Web.MediaDecodingType with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ``type``: Web.MediaDecodingType,
-            ?audio: Web.AudioConfiguration,
-            ?video: Web.VideoConfiguration,
-            ?keySystemConfiguration: Web.MediaCapabilitiesKeySystemConfiguration
-        )
-        =
+        static member Create
+            (
+                ``type``: Web.MediaDecodingType,
+                ?audio: Web.AudioConfiguration,
+                ?video: Web.VideoConfiguration,
+                ?keySystemConfiguration: Web.MediaCapabilitiesKeySystemConfiguration
+            )
+            : MediaDecodingConfiguration
+            =
+            nativeOnly
 
-        member val ``type``: Web.MediaDecodingType = nativeOnly with get, set
-        member val audio: Web.AudioConfiguration option = nativeOnly with get, set
-        member val video: Web.VideoConfiguration option = nativeOnly with get, set
-
-        member val keySystemConfiguration: Web.MediaCapabilitiesKeySystemConfiguration option =
-            nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type MediaElementAudioSourceOptions
+    [<Interface>]
+    type MediaElementAudioSourceOptions =
+        abstract member mediaElement: Web.HTMLMediaElement with get, set
+
         [<ParamObject; Emit("$0")>]
-        (mediaElement: Web.HTMLMediaElement)
-        =
+        static member Create(mediaElement: Web.HTMLMediaElement) : MediaElementAudioSourceOptions =
+            nativeOnly
 
-        member val mediaElement: Web.HTMLMediaElement = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type MediaEncodingConfiguration
+    [<Interface>]
+    type MediaEncodingConfiguration =
+        inherit Web.MediaConfiguration
+        abstract member ``type``: Web.MediaEncodingType with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ``type``: Web.MediaEncodingType,
-            ?audio: Web.AudioConfiguration,
-            ?video: Web.VideoConfiguration
-        )
-        =
+        static member Create
+            (
+                ``type``: Web.MediaEncodingType,
+                ?audio: Web.AudioConfiguration,
+                ?video: Web.VideoConfiguration
+            )
+            : MediaEncodingConfiguration
+            =
+            nativeOnly
 
-        member val ``type``: Web.MediaEncodingType = nativeOnly with get, set
-        member val audio: Web.AudioConfiguration option = nativeOnly with get, set
-        member val video: Web.VideoConfiguration option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type MediaEncryptedEventInit
-        [<ParamObject; Emit("$0")>]
-        (?bubbles: bool, ?cancelable: bool, ?composed: bool, ?initData: obj, ?initDataType: string)
-        =
+    [<Interface>]
+    type MediaEncryptedEventInit =
+        inherit Web.EventInit
+        abstract member initData: obj option with get, set
+        abstract member initDataType: string option with get, set
 
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val initData: obj option = nativeOnly with get, set
-        member val initDataType: string option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool,
+                ?initData: obj,
+                ?initDataType: string
+            )
+            : MediaEncryptedEventInit
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -10887,24 +11098,25 @@ module Web =
         abstract member src: string with get, set
         abstract member ``type``: string option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type MediaKeyMessageEventInit
-        [<ParamObject; Emit("$0")>]
-        (
-            message: obj,
-            messageType: Web.MediaKeyMessageType,
-            ?bubbles: bool,
-            ?cancelable: bool,
-            ?composed: bool
-        )
-        =
+    [<Interface>]
+    type MediaKeyMessageEventInit =
+        inherit Web.EventInit
+        abstract member message: obj with get, set
+        abstract member messageType: Web.MediaKeyMessageType with get, set
 
-        member val message: obj = nativeOnly with get, set
-        member val messageType: Web.MediaKeyMessageType = nativeOnly with get, set
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                message: obj,
+                messageType: Web.MediaKeyMessageType,
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool
+            )
+            : MediaKeyMessageEventInit
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -10924,76 +11136,91 @@ module Web =
         abstract member encryptionScheme: string option with get, set
         abstract member robustness: string option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type MediaKeysPolicy [<ParamObject; Emit("$0")>] (?minHdcpVersion: string) =
+    [<Interface>]
+    type MediaKeysPolicy =
+        abstract member minHdcpVersion: string option with get, set
 
-        member val minHdcpVersion: string option = nativeOnly with get, set
-
-    [<Global>]
-    [<AllowNullLiteral>]
-    type MediaMetadataInit
         [<ParamObject; Emit("$0")>]
-        (?album: string, ?artist: string, ?artwork: ResizeArray<Web.MediaImage>, ?title: string)
-        =
+        static member Create(?minHdcpVersion: string) : MediaKeysPolicy = nativeOnly
 
-        member val album: string option = nativeOnly with get, set
-        member val artist: string option = nativeOnly with get, set
-        member val artwork: ResizeArray<Web.MediaImage> option = nativeOnly with get, set
-        member val title: string option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type MediaPositionState
+    [<Interface>]
+    type MediaMetadataInit =
+        abstract member album: string option with get, set
+        abstract member artist: string option with get, set
+        abstract member artwork: ResizeArray<Web.MediaImage> option with get, set
+        abstract member title: string option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (?duration: float, ?playbackRate: float, ?position: float)
-        =
+        static member Create
+            (?album: string, ?artist: string, ?artwork: ResizeArray<Web.MediaImage>, ?title: string)
+            : MediaMetadataInit
+            =
+            nativeOnly
 
-        member val duration: float option = nativeOnly with get, set
-        member val playbackRate: float option = nativeOnly with get, set
-        member val position: float option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type MediaQueryListEventInit
+    [<Interface>]
+    type MediaPositionState =
+        abstract member duration: float option with get, set
+        abstract member playbackRate: float option with get, set
+        abstract member position: float option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (?bubbles: bool, ?cancelable: bool, ?composed: bool, ?matches: bool, ?media: string)
-        =
+        static member Create
+            (?duration: float, ?playbackRate: float, ?position: float)
+            : MediaPositionState
+            =
+            nativeOnly
 
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val matches: bool option = nativeOnly with get, set
-        member val media: string option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type MediaRecorderOptions
+    [<Interface>]
+    type MediaQueryListEventInit =
+        inherit Web.EventInit
+        abstract member matches: bool option with get, set
+        abstract member media: string option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?audioBitsPerSecond: float,
-            ?bitsPerSecond: float,
-            ?mimeType: string,
-            ?videoBitsPerSecond: float
-        )
-        =
+        static member Create
+            (?bubbles: bool, ?cancelable: bool, ?composed: bool, ?matches: bool, ?media: string)
+            : MediaQueryListEventInit
+            =
+            nativeOnly
 
-        member val audioBitsPerSecond: float option = nativeOnly with get, set
-        member val bitsPerSecond: float option = nativeOnly with get, set
-        member val mimeType: string option = nativeOnly with get, set
-        member val videoBitsPerSecond: float option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type MediaSessionActionDetails
-        [<ParamObject; Emit("$0")>]
-        (action: Web.MediaSessionAction, ?fastSeek: bool, ?seekOffset: float, ?seekTime: float)
-        =
+    [<Interface>]
+    type MediaRecorderOptions =
+        abstract member audioBitsPerSecond: float option with get, set
+        abstract member bitsPerSecond: float option with get, set
+        abstract member mimeType: string option with get, set
+        abstract member videoBitsPerSecond: float option with get, set
 
-        member val action: Web.MediaSessionAction = nativeOnly with get, set
-        member val fastSeek: bool option = nativeOnly with get, set
-        member val seekOffset: float option = nativeOnly with get, set
-        member val seekTime: float option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?audioBitsPerSecond: float,
+                ?bitsPerSecond: float,
+                ?mimeType: string,
+                ?videoBitsPerSecond: float
+            )
+            : MediaRecorderOptions
+            =
+            nativeOnly
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type MediaSessionActionDetails =
+        abstract member action: Web.MediaSessionAction with get, set
+        abstract member fastSeek: bool option with get, set
+        abstract member seekOffset: float option with get, set
+        abstract member seekTime: float option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (action: Web.MediaSessionAction, ?fastSeek: bool, ?seekOffset: float, ?seekTime: float)
+            : MediaSessionActionDetails
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -11002,40 +11229,47 @@ module Web =
         abstract member min: float option with get, set
         abstract member step: float option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type MediaStreamAudioSourceOptions [<ParamObject; Emit("$0")>] (mediaStream: Web.MediaStream) =
+    [<Interface>]
+    type MediaStreamAudioSourceOptions =
+        abstract member mediaStream: Web.MediaStream with get, set
 
-        member val mediaStream: Web.MediaStream = nativeOnly with get, set
-
-    [<Global>]
-    [<AllowNullLiteral>]
-    type MediaStreamConstraints
         [<ParamObject; Emit("$0")>]
-        (
-            ?audio: U2<bool, Web.MediaTrackConstraints>,
-            ?peerIdentity: string,
-            ?preferCurrentTab: bool,
-            ?video: U2<bool, Web.MediaTrackConstraints>
-        )
-        =
+        static member Create(mediaStream: Web.MediaStream) : MediaStreamAudioSourceOptions =
+            nativeOnly
 
-        member val audio: U2<bool, Web.MediaTrackConstraints> option = nativeOnly with get, set
-        member val peerIdentity: string option = nativeOnly with get, set
-        member val preferCurrentTab: bool option = nativeOnly with get, set
-        member val video: U2<bool, Web.MediaTrackConstraints> option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type MediaStreamTrackEventInit
-        [<ParamObject; Emit("$0")>]
-        (track: Web.MediaStreamTrack, ?bubbles: bool, ?cancelable: bool, ?composed: bool)
-        =
+    [<Interface>]
+    type MediaStreamConstraints =
+        abstract member audio: U2<bool, Web.MediaTrackConstraints> option with get, set
+        abstract member peerIdentity: string option with get, set
+        abstract member preferCurrentTab: bool option with get, set
+        abstract member video: U2<bool, Web.MediaTrackConstraints> option with get, set
 
-        member val track: Web.MediaStreamTrack = nativeOnly with get, set
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?audio: U2<bool, Web.MediaTrackConstraints>,
+                ?peerIdentity: string,
+                ?preferCurrentTab: bool,
+                ?video: U2<bool, Web.MediaTrackConstraints>
+            )
+            : MediaStreamConstraints
+            =
+            nativeOnly
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type MediaStreamTrackEventInit =
+        inherit Web.EventInit
+        abstract member track: Web.MediaStreamTrack with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (track: Web.MediaStreamTrack, ?bubbles: bool, ?cancelable: bool, ?composed: bool)
+            : MediaStreamTrackEventInit
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -11146,148 +11380,157 @@ module Web =
         abstract member screenX: float option with get, set
         abstract member screenY: float option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type MultiCacheQueryOptions
+    [<Interface>]
+    type MultiCacheQueryOptions =
+        inherit Web.CacheQueryOptions
+        abstract member cacheName: string option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (?ignoreMethod: bool, ?ignoreSearch: bool, ?ignoreVary: bool, ?cacheName: string)
-        =
+        static member Create
+            (?ignoreMethod: bool, ?ignoreSearch: bool, ?ignoreVary: bool, ?cacheName: string)
+            : MultiCacheQueryOptions
+            =
+            nativeOnly
 
-        member val ignoreMethod: bool option = nativeOnly with get, set
-        member val ignoreSearch: bool option = nativeOnly with get, set
-        member val ignoreVary: bool option = nativeOnly with get, set
-        member val cacheName: string option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type MutationObserverInit
-        [<ParamObject; Emit("$0")>]
-        (
-            ?attributeFilter: ResizeArray<string>,
-            ?attributeOldValue: bool,
-            ?attributes: bool,
-            ?characterData: bool,
-            ?characterDataOldValue: bool,
-            ?childList: bool,
-            ?subtree: bool
-        )
-        =
-
+    [<Interface>]
+    type MutationObserverInit =
         /// <summary>
         /// Set to a list of attribute local names (without namespace) if not all attribute mutations need to be observed and attributes is true or omitted.
         /// </summary>
-        member val attributeFilter: ResizeArray<string> option = nativeOnly with get, set
+        abstract member attributeFilter: ResizeArray<string> option with get, set
         /// <summary>
         /// Set to true if attributes is true or omitted and target's attribute value before the mutation needs to be recorded.
         /// </summary>
-        member val attributeOldValue: bool option = nativeOnly with get, set
+        abstract member attributeOldValue: bool option with get, set
         /// <summary>
         /// Set to true if mutations to target's attributes are to be observed. Can be omitted if attributeOldValue or attributeFilter is specified.
         /// </summary>
-        member val attributes: bool option = nativeOnly with get, set
+        abstract member attributes: bool option with get, set
         /// <summary>
         /// Set to true if mutations to target's data are to be observed. Can be omitted if characterDataOldValue is specified.
         /// </summary>
-        member val characterData: bool option = nativeOnly with get, set
+        abstract member characterData: bool option with get, set
         /// <summary>
         /// Set to true if characterData is set to true or omitted and target's data before the mutation needs to be recorded.
         /// </summary>
-        member val characterDataOldValue: bool option = nativeOnly with get, set
+        abstract member characterDataOldValue: bool option with get, set
         /// <summary>
         /// Set to true if mutations to target's children are to be observed.
         /// </summary>
-        member val childList: bool option = nativeOnly with get, set
+        abstract member childList: bool option with get, set
         /// <summary>
         /// Set to true if mutations to not just target, but also target's descendants are to be observed.
         /// </summary>
-        member val subtree: bool option = nativeOnly with get, set
+        abstract member subtree: bool option with get, set
 
-    [<Global>]
-    [<AllowNullLiteral>]
-    type NavigateEventInit
         [<ParamObject; Emit("$0")>]
-        (
-            destination: Web.NavigationDestination,
-            signal: Web.AbortSignal,
-            ?bubbles: bool,
-            ?cancelable: bool,
-            ?composed: bool,
-            ?canIntercept: bool,
-            ?downloadRequest: string,
-            ?formData: Web.FormData,
-            ?hasUAVisualTransition: bool,
-            ?hashChange: bool,
-            ?info: obj,
-            ?navigationType: Web.NavigationType,
-            ?sourceElement: Web.Element,
-            ?userInitiated: bool
-        )
-        =
+        static member Create
+            (
+                ?attributeFilter: ResizeArray<string>,
+                ?attributeOldValue: bool,
+                ?attributes: bool,
+                ?characterData: bool,
+                ?characterDataOldValue: bool,
+                ?childList: bool,
+                ?subtree: bool
+            )
+            : MutationObserverInit
+            =
+            nativeOnly
 
-        member val destination: Web.NavigationDestination = nativeOnly with get, set
-        member val signal: Web.AbortSignal = nativeOnly with get, set
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val canIntercept: bool option = nativeOnly with get, set
-        member val downloadRequest: string option = nativeOnly with get, set
-        member val formData: Web.FormData option = nativeOnly with get, set
-        member val hasUAVisualTransition: bool option = nativeOnly with get, set
-        member val hashChange: bool option = nativeOnly with get, set
-        member val info: obj option = nativeOnly with get, set
-        member val navigationType: Web.NavigationType option = nativeOnly with get, set
-        member val sourceElement: Web.Element option = nativeOnly with get, set
-        member val userInitiated: bool option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type NavigationCurrentEntryChangeEventInit
+    [<Interface>]
+    type NavigateEventInit =
+        inherit Web.EventInit
+        abstract member canIntercept: bool option with get, set
+        abstract member destination: Web.NavigationDestination with get, set
+        abstract member downloadRequest: string option with get, set
+        abstract member formData: Web.FormData option with get, set
+        abstract member hasUAVisualTransition: bool option with get, set
+        abstract member hashChange: bool option with get, set
+        abstract member info: obj option with get, set
+        abstract member navigationType: Web.NavigationType option with get, set
+        abstract member signal: Web.AbortSignal with get, set
+        abstract member sourceElement: Web.Element option with get, set
+        abstract member userInitiated: bool option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            from: Web.NavigationHistoryEntry,
-            ?bubbles: bool,
-            ?cancelable: bool,
-            ?composed: bool,
-            ?navigationType: Web.NavigationType
-        )
-        =
+        static member Create
+            (
+                destination: Web.NavigationDestination,
+                signal: Web.AbortSignal,
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool,
+                ?canIntercept: bool,
+                ?downloadRequest: string,
+                ?formData: Web.FormData,
+                ?hasUAVisualTransition: bool,
+                ?hashChange: bool,
+                ?info: obj,
+                ?navigationType: Web.NavigationType,
+                ?sourceElement: Web.Element,
+                ?userInitiated: bool
+            )
+            : NavigateEventInit
+            =
+            nativeOnly
 
-        member val from: Web.NavigationHistoryEntry = nativeOnly with get, set
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val navigationType: Web.NavigationType option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type NavigationInterceptOptions
+    [<Interface>]
+    type NavigationCurrentEntryChangeEventInit =
+        inherit Web.EventInit
+        abstract member from: Web.NavigationHistoryEntry with get, set
+        abstract member navigationType: Web.NavigationType option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?focusReset: Web.NavigationFocusReset,
-            ?handler: Web.NavigationInterceptHandler,
-            ?precommitHandler: Web.NavigationPrecommitHandler,
-            ?scroll: Web.NavigationScrollBehavior
-        )
-        =
+        static member Create
+            (
+                from: Web.NavigationHistoryEntry,
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool,
+                ?navigationType: Web.NavigationType
+            )
+            : NavigationCurrentEntryChangeEventInit
+            =
+            nativeOnly
 
-        member val focusReset: Web.NavigationFocusReset option = nativeOnly with get, set
-        member val handler: Web.NavigationInterceptHandler option = nativeOnly with get, set
-
-        member val precommitHandler: Web.NavigationPrecommitHandler option =
-            nativeOnly with get, set
-
-        member val scroll: Web.NavigationScrollBehavior option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type NavigationNavigateOptions
-        [<ParamObject; Emit("$0")>]
-        (?info: obj, ?history: Web.NavigationHistoryBehavior, ?state: obj)
-        =
+    [<Interface>]
+    type NavigationInterceptOptions =
+        abstract member focusReset: Web.NavigationFocusReset option with get, set
+        abstract member handler: Web.NavigationInterceptHandler option with get, set
+        abstract member precommitHandler: Web.NavigationPrecommitHandler option with get, set
+        abstract member scroll: Web.NavigationScrollBehavior option with get, set
 
-        member val info: obj option = nativeOnly with get, set
-        member val history: Web.NavigationHistoryBehavior option = nativeOnly with get, set
-        member val state: obj option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?focusReset: Web.NavigationFocusReset,
+                ?handler: Web.NavigationInterceptHandler,
+                ?precommitHandler: Web.NavigationPrecommitHandler,
+                ?scroll: Web.NavigationScrollBehavior
+            )
+            : NavigationInterceptOptions
+            =
+            nativeOnly
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type NavigationNavigateOptions =
+        inherit Web.NavigationOptions
+        abstract member history: Web.NavigationHistoryBehavior option with get, set
+        abstract member state: obj option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?info: obj, ?history: Web.NavigationHistoryBehavior, ?state: obj)
+            : NavigationNavigateOptions
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -11300,12 +11543,14 @@ module Web =
         abstract member enabled: bool option with get, set
         abstract member headerValue: string option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type NavigationReloadOptions [<ParamObject; Emit("$0")>] (?info: obj, ?state: obj) =
+    [<Interface>]
+    type NavigationReloadOptions =
+        inherit Web.NavigationOptions
+        abstract member state: obj option with get, set
 
-        member val info: obj option = nativeOnly with get, set
-        member val state: obj option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create(?info: obj, ?state: obj) : NavigationReloadOptions = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -11313,11 +11558,13 @@ module Web =
         abstract member committed: JS.Promise<Web.NavigationHistoryEntry> option with get, set
         abstract member finished: JS.Promise<Web.NavigationHistoryEntry> option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type NavigationUpdateCurrentEntryOptions [<ParamObject; Emit("$0")>] (state: obj) =
+    [<Interface>]
+    type NavigationUpdateCurrentEntryOptions =
+        abstract member state: obj with get, set
 
-        member val state: obj = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create(state: obj) : NavigationUpdateCurrentEntryOptions = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -11325,62 +11572,78 @@ module Web =
         abstract member action: string with get, set
         abstract member title: string with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type NotificationOptions
-        [<ParamObject; Emit("$0")>]
-        (
-            ?badge: string,
-            ?body: string,
-            ?data: obj,
-            ?dir: Web.NotificationDirection,
-            ?icon: string,
-            ?lang: string,
-            ?requireInteraction: bool,
-            ?silent: bool,
-            ?tag: string
-        )
-        =
-
-        member val badge: string option = nativeOnly with get, set
-        member val body: string option = nativeOnly with get, set
-        member val data: obj option = nativeOnly with get, set
-        member val dir: Web.NotificationDirection option = nativeOnly with get, set
-        member val icon: string option = nativeOnly with get, set
-        member val lang: string option = nativeOnly with get, set
-        member val requireInteraction: bool option = nativeOnly with get, set
-        member val silent: bool option = nativeOnly with get, set
-        member val tag: string option = nativeOnly with get, set
-
-    [<Global>]
-    [<AllowNullLiteral>]
-    type OfflineAudioCompletionEventInit
-        [<ParamObject; Emit("$0")>]
-        (renderedBuffer: Web.AudioBuffer, ?bubbles: bool, ?cancelable: bool, ?composed: bool)
-        =
-
-        member val renderedBuffer: Web.AudioBuffer = nativeOnly with get, set
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-
-    [<Global>]
-    [<AllowNullLiteral>]
-    type OfflineAudioContextOptions
-        [<ParamObject; Emit("$0")>]
-        (length: float, sampleRate: float, ?numberOfChannels: float)
-        =
-
-        member val length: float = nativeOnly with get, set
-        member val sampleRate: float = nativeOnly with get, set
-        member val numberOfChannels: float option = nativeOnly with get, set
-
-    [<Global>]
-    [<AllowNullLiteral>]
-    type OptionalEffectTiming private () =
+    [<Interface>]
+    type NotificationOptions =
+        abstract member badge: string option with get, set
+        abstract member body: string option with get, set
+        abstract member data: obj option with get, set
+        abstract member dir: Web.NotificationDirection option with get, set
+        abstract member icon: string option with get, set
+        abstract member lang: string option with get, set
+        abstract member requireInteraction: bool option with get, set
+        abstract member silent: bool option with get, set
+        abstract member tag: string option with get, set
 
         [<ParamObject; Emit("$0")>]
-        new
+        static member Create
+            (
+                ?badge: string,
+                ?body: string,
+                ?data: obj,
+                ?dir: Web.NotificationDirection,
+                ?icon: string,
+                ?lang: string,
+                ?requireInteraction: bool,
+                ?silent: bool,
+                ?tag: string
+            )
+            : NotificationOptions
+            =
+            nativeOnly
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type OfflineAudioCompletionEventInit =
+        inherit Web.EventInit
+        abstract member renderedBuffer: Web.AudioBuffer with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (renderedBuffer: Web.AudioBuffer, ?bubbles: bool, ?cancelable: bool, ?composed: bool)
+            : OfflineAudioCompletionEventInit
+            =
+            nativeOnly
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type OfflineAudioContextOptions =
+        abstract member length: float with get, set
+        abstract member numberOfChannels: float option with get, set
+        abstract member sampleRate: float with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (length: float, sampleRate: float, ?numberOfChannels: float)
+            : OfflineAudioContextOptions
+            =
+            nativeOnly
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type OptionalEffectTiming =
+        abstract member delay: float option with get, set
+        abstract member direction: Web.PlaybackDirection option with get, set
+        abstract member duration: U2<float, string> option with get, set
+        abstract member easing: string option with get, set
+        abstract member endDelay: float option with get, set
+        abstract member fill: Web.FillMode option with get, set
+        abstract member iterationStart: float option with get, set
+        abstract member iterations: float option with get, set
+        abstract member playbackRate: float option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
             (
                 ?delay: float,
                 ?direction: Web.PlaybackDirection,
@@ -11391,11 +11654,12 @@ module Web =
                 ?iterations: float,
                 ?playbackRate: float
             )
+            : OptionalEffectTiming
             =
-            OptionalEffectTiming()
+            nativeOnly
 
         [<ParamObject; Emit("$0")>]
-        new
+        static member Create
             (
                 duration: float,
                 ?delay: float,
@@ -11407,11 +11671,12 @@ module Web =
                 ?iterations: float,
                 ?playbackRate: float
             )
+            : OptionalEffectTiming
             =
-            OptionalEffectTiming()
+            nativeOnly
 
         [<ParamObject; Emit("$0")>]
-        new
+        static member Create
             (
                 duration: string,
                 ?delay: float,
@@ -11423,18 +11688,9 @@ module Web =
                 ?iterations: float,
                 ?playbackRate: float
             )
+            : OptionalEffectTiming
             =
-            OptionalEffectTiming()
-
-        member val delay: float option = nativeOnly with get, set
-        member val direction: Web.PlaybackDirection option = nativeOnly with get, set
-        member val duration: U2<float, string> option = nativeOnly with get, set
-        member val easing: string option = nativeOnly with get, set
-        member val endDelay: float option = nativeOnly with get, set
-        member val fill: Web.FillMode option = nativeOnly with get, set
-        member val iterationStart: float option = nativeOnly with get, set
-        member val iterations: float option = nativeOnly with get, set
-        member val playbackRate: float option = nativeOnly with get, set
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -11446,136 +11702,137 @@ module Web =
         abstract member usedtx: bool option with get, set
         abstract member useinbandfec: bool option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type OscillatorOptions
+    [<Interface>]
+    type OscillatorOptions =
+        inherit Web.AudioNodeOptions
+        abstract member detune: float option with get, set
+        abstract member frequency: float option with get, set
+        abstract member periodicWave: Web.PeriodicWave option with get, set
+        abstract member ``type``: Web.OscillatorType option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?channelCount: float,
-            ?channelCountMode: Web.ChannelCountMode,
-            ?channelInterpretation: Web.ChannelInterpretation,
-            ?detune: float,
-            ?frequency: float,
-            ?periodicWave: Web.PeriodicWave,
-            ?``type``: Web.OscillatorType
-        )
-        =
+        static member Create
+            (
+                ?channelCount: float,
+                ?channelCountMode: Web.ChannelCountMode,
+                ?channelInterpretation: Web.ChannelInterpretation,
+                ?detune: float,
+                ?frequency: float,
+                ?periodicWave: Web.PeriodicWave,
+                ?``type``: Web.OscillatorType
+            )
+            : OscillatorOptions
+            =
+            nativeOnly
 
-        member val channelCount: float option = nativeOnly with get, set
-        member val channelCountMode: Web.ChannelCountMode option = nativeOnly with get, set
-
-        member val channelInterpretation: Web.ChannelInterpretation option =
-            nativeOnly with get, set
-
-        member val detune: float option = nativeOnly with get, set
-        member val frequency: float option = nativeOnly with get, set
-        member val periodicWave: Web.PeriodicWave option = nativeOnly with get, set
-        member val ``type``: Web.OscillatorType option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type PageRevealEventInit
+    [<Interface>]
+    type PageRevealEventInit =
+        inherit Web.EventInit
+        abstract member viewTransition: Web.ViewTransition option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (?bubbles: bool, ?cancelable: bool, ?composed: bool, ?viewTransition: Web.ViewTransition)
-        =
+        static member Create
+            (?bubbles: bool, ?cancelable: bool, ?composed: bool, ?viewTransition: Web.ViewTransition)
+            : PageRevealEventInit
+            =
+            nativeOnly
 
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val viewTransition: Web.ViewTransition option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type PageSwapEventInit
+    [<Interface>]
+    type PageSwapEventInit =
+        inherit Web.EventInit
+        abstract member activation: Web.NavigationActivation option with get, set
+        abstract member viewTransition: Web.ViewTransition option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?bubbles: bool,
-            ?cancelable: bool,
-            ?composed: bool,
-            ?activation: Web.NavigationActivation,
-            ?viewTransition: Web.ViewTransition
-        )
-        =
+        static member Create
+            (
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool,
+                ?activation: Web.NavigationActivation,
+                ?viewTransition: Web.ViewTransition
+            )
+            : PageSwapEventInit
+            =
+            nativeOnly
 
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val activation: Web.NavigationActivation option = nativeOnly with get, set
-        member val viewTransition: Web.ViewTransition option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type PageTransitionEventInit
+    [<Interface>]
+    type PageTransitionEventInit =
+        inherit Web.EventInit
+        abstract member persisted: bool option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (?bubbles: bool, ?cancelable: bool, ?composed: bool, ?persisted: bool)
-        =
+        static member Create
+            (?bubbles: bool, ?cancelable: bool, ?composed: bool, ?persisted: bool)
+            : PageTransitionEventInit
+            =
+            nativeOnly
 
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val persisted: bool option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type PannerOptions
+    [<Interface>]
+    type PannerOptions =
+        inherit Web.AudioNodeOptions
+        abstract member coneInnerAngle: float option with get, set
+        abstract member coneOuterAngle: float option with get, set
+        abstract member coneOuterGain: float option with get, set
+        abstract member distanceModel: Web.DistanceModelType option with get, set
+        abstract member maxDistance: float option with get, set
+        abstract member orientationX: float option with get, set
+        abstract member orientationY: float option with get, set
+        abstract member orientationZ: float option with get, set
+        abstract member panningModel: Web.PanningModelType option with get, set
+        abstract member positionX: float option with get, set
+        abstract member positionY: float option with get, set
+        abstract member positionZ: float option with get, set
+        abstract member refDistance: float option with get, set
+        abstract member rolloffFactor: float option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?channelCount: float,
-            ?channelCountMode: Web.ChannelCountMode,
-            ?channelInterpretation: Web.ChannelInterpretation,
-            ?coneInnerAngle: float,
-            ?coneOuterAngle: float,
-            ?coneOuterGain: float,
-            ?distanceModel: Web.DistanceModelType,
-            ?maxDistance: float,
-            ?orientationX: float,
-            ?orientationY: float,
-            ?orientationZ: float,
-            ?panningModel: Web.PanningModelType,
-            ?positionX: float,
-            ?positionY: float,
-            ?positionZ: float,
-            ?refDistance: float,
-            ?rolloffFactor: float
-        )
-        =
+        static member Create
+            (
+                ?channelCount: float,
+                ?channelCountMode: Web.ChannelCountMode,
+                ?channelInterpretation: Web.ChannelInterpretation,
+                ?coneInnerAngle: float,
+                ?coneOuterAngle: float,
+                ?coneOuterGain: float,
+                ?distanceModel: Web.DistanceModelType,
+                ?maxDistance: float,
+                ?orientationX: float,
+                ?orientationY: float,
+                ?orientationZ: float,
+                ?panningModel: Web.PanningModelType,
+                ?positionX: float,
+                ?positionY: float,
+                ?positionZ: float,
+                ?refDistance: float,
+                ?rolloffFactor: float
+            )
+            : PannerOptions
+            =
+            nativeOnly
 
-        member val channelCount: float option = nativeOnly with get, set
-        member val channelCountMode: Web.ChannelCountMode option = nativeOnly with get, set
-
-        member val channelInterpretation: Web.ChannelInterpretation option =
-            nativeOnly with get, set
-
-        member val coneInnerAngle: float option = nativeOnly with get, set
-        member val coneOuterAngle: float option = nativeOnly with get, set
-        member val coneOuterGain: float option = nativeOnly with get, set
-        member val distanceModel: Web.DistanceModelType option = nativeOnly with get, set
-        member val maxDistance: float option = nativeOnly with get, set
-        member val orientationX: float option = nativeOnly with get, set
-        member val orientationY: float option = nativeOnly with get, set
-        member val orientationZ: float option = nativeOnly with get, set
-        member val panningModel: Web.PanningModelType option = nativeOnly with get, set
-        member val positionX: float option = nativeOnly with get, set
-        member val positionY: float option = nativeOnly with get, set
-        member val positionZ: float option = nativeOnly with get, set
-        member val refDistance: float option = nativeOnly with get, set
-        member val rolloffFactor: float option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type ParseHTMLUnsafeOptions [<ParamObject; Emit("$0")>] () =
+    [<Interface>]
+    type ParseHTMLUnsafeOptions =
+        abstract member sanitizer:
+            U3<Web.Sanitizer, Web.SanitizerConfig, Web.SanitizerPresets> option with get, set
 
         [<ParamObject; Emit("$0")>]
-        new(sanitizer: Web.Sanitizer) = ParseHTMLUnsafeOptions()
+        static member Create() : ParseHTMLUnsafeOptions = nativeOnly
 
         [<ParamObject; Emit("$0")>]
-        new(sanitizer: Web.SanitizerConfig) = ParseHTMLUnsafeOptions()
+        static member Create(sanitizer: Web.Sanitizer) : ParseHTMLUnsafeOptions = nativeOnly
 
         [<ParamObject; Emit("$0")>]
-        new(sanitizer: Web.SanitizerPresets) = ParseHTMLUnsafeOptions()
+        static member Create(sanitizer: Web.SanitizerConfig) : ParseHTMLUnsafeOptions = nativeOnly
 
-        member val sanitizer: U3<Web.Sanitizer, Web.SanitizerConfig, Web.SanitizerPresets> option =
-            nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create(sanitizer: Web.SanitizerPresets) : ParseHTMLUnsafeOptions = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -11597,29 +11854,25 @@ module Web =
         abstract member modifiers: ResizeArray<Web.PaymentDetailsModifier> option with get, set
         abstract member shippingOptions: ResizeArray<Web.PaymentShippingOption> option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type PaymentDetailsInit
+    [<Interface>]
+    type PaymentDetailsInit =
+        inherit Web.PaymentDetailsBase
+        abstract member id: string option with get, set
+        abstract member total: Web.PaymentItem with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            total: Web.PaymentItem,
-            ?displayItems: ResizeArray<Web.PaymentItem>,
-            ?modifiers: ResizeArray<Web.PaymentDetailsModifier>,
-            ?shippingOptions: ResizeArray<Web.PaymentShippingOption>,
-            ?id: string
-        )
-        =
-
-        member val total: Web.PaymentItem = nativeOnly with get, set
-        member val displayItems: ResizeArray<Web.PaymentItem> option = nativeOnly with get, set
-
-        member val modifiers: ResizeArray<Web.PaymentDetailsModifier> option =
-            nativeOnly with get, set
-
-        member val shippingOptions: ResizeArray<Web.PaymentShippingOption> option =
-            nativeOnly with get, set
-
-        member val id: string option = nativeOnly with get, set
+        static member Create
+            (
+                total: Web.PaymentItem,
+                ?displayItems: ResizeArray<Web.PaymentItem>,
+                ?modifiers: ResizeArray<Web.PaymentDetailsModifier>,
+                ?shippingOptions: ResizeArray<Web.PaymentShippingOption>,
+                ?id: string
+            )
+            : PaymentDetailsInit
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -11629,33 +11882,29 @@ module Web =
         abstract member supportedMethods: string with get, set
         abstract member total: Web.PaymentItem option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type PaymentDetailsUpdate
+    [<Interface>]
+    type PaymentDetailsUpdate =
+        inherit Web.PaymentDetailsBase
+        abstract member error: string option with get, set
+        abstract member paymentMethodErrors: obj option with get, set
+        abstract member shippingAddressErrors: Web.AddressErrors option with get, set
+        abstract member total: Web.PaymentItem option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?displayItems: ResizeArray<Web.PaymentItem>,
-            ?modifiers: ResizeArray<Web.PaymentDetailsModifier>,
-            ?shippingOptions: ResizeArray<Web.PaymentShippingOption>,
-            ?error: string,
-            ?paymentMethodErrors: obj,
-            ?shippingAddressErrors: Web.AddressErrors,
-            ?total: Web.PaymentItem
-        )
-        =
-
-        member val displayItems: ResizeArray<Web.PaymentItem> option = nativeOnly with get, set
-
-        member val modifiers: ResizeArray<Web.PaymentDetailsModifier> option =
-            nativeOnly with get, set
-
-        member val shippingOptions: ResizeArray<Web.PaymentShippingOption> option =
-            nativeOnly with get, set
-
-        member val error: string option = nativeOnly with get, set
-        member val paymentMethodErrors: obj option = nativeOnly with get, set
-        member val shippingAddressErrors: Web.AddressErrors option = nativeOnly with get, set
-        member val total: Web.PaymentItem option = nativeOnly with get, set
+        static member Create
+            (
+                ?displayItems: ResizeArray<Web.PaymentItem>,
+                ?modifiers: ResizeArray<Web.PaymentDetailsModifier>,
+                ?shippingOptions: ResizeArray<Web.PaymentShippingOption>,
+                ?error: string,
+                ?paymentMethodErrors: obj,
+                ?shippingAddressErrors: Web.AddressErrors,
+                ?total: Web.PaymentItem
+            )
+            : PaymentDetailsUpdate
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -11664,24 +11913,25 @@ module Web =
         abstract member label: string with get, set
         abstract member pending: bool option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type PaymentMethodChangeEventInit
-        [<ParamObject; Emit("$0")>]
-        (
-            ?bubbles: bool,
-            ?cancelable: bool,
-            ?composed: bool,
-            ?methodDetails: obj,
-            ?methodName: string
-        )
-        =
+    [<Interface>]
+    type PaymentMethodChangeEventInit =
+        inherit Web.PaymentRequestUpdateEventInit
+        abstract member methodDetails: obj option with get, set
+        abstract member methodName: string option with get, set
 
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val methodDetails: obj option = nativeOnly with get, set
-        member val methodName: string option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool,
+                ?methodDetails: obj,
+                ?methodName: string
+            )
+            : PaymentMethodChangeEventInit
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -11689,24 +11939,27 @@ module Web =
         abstract member data: obj option with get, set
         abstract member supportedMethods: string with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type PaymentOptions
-        [<ParamObject; Emit("$0")>]
-        (
-            ?requestPayerEmail: bool,
-            ?requestPayerName: bool,
-            ?requestPayerPhone: bool,
-            ?requestShipping: bool,
-            ?shippingType: Web.PaymentShippingType
-        )
-        =
+    [<Interface>]
+    type PaymentOptions =
+        abstract member requestPayerEmail: bool option with get, set
+        abstract member requestPayerName: bool option with get, set
+        abstract member requestPayerPhone: bool option with get, set
+        abstract member requestShipping: bool option with get, set
+        abstract member shippingType: Web.PaymentShippingType option with get, set
 
-        member val requestPayerEmail: bool option = nativeOnly with get, set
-        member val requestPayerName: bool option = nativeOnly with get, set
-        member val requestPayerPhone: bool option = nativeOnly with get, set
-        member val requestShipping: bool option = nativeOnly with get, set
-        member val shippingType: Web.PaymentShippingType option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?requestPayerEmail: bool,
+                ?requestPayerName: bool,
+                ?requestPayerPhone: bool,
+                ?requestShipping: bool,
+                ?shippingType: Web.PaymentShippingType
+            )
+            : PaymentOptions
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -11721,92 +11974,117 @@ module Web =
         abstract member label: string with get, set
         abstract member selected: bool option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type PaymentValidationErrors
+    [<Interface>]
+    type PaymentValidationErrors =
+        abstract member error: string option with get, set
+        abstract member payer: Web.PayerErrors option with get, set
+        abstract member shippingAddress: Web.AddressErrors option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (?error: string, ?payer: Web.PayerErrors, ?shippingAddress: Web.AddressErrors)
-        =
+        static member Create
+            (?error: string, ?payer: Web.PayerErrors, ?shippingAddress: Web.AddressErrors)
+            : PaymentValidationErrors
+            =
+            nativeOnly
 
-        member val error: string option = nativeOnly with get, set
-        member val payer: Web.PayerErrors option = nativeOnly with get, set
-        member val shippingAddress: Web.AddressErrors option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type Pbkdf2Params
+    [<Interface>]
+    type Pbkdf2Params =
+        inherit Web.Algorithm
+        abstract member hash: Web.HashAlgorithmIdentifier with get, set
+        abstract member iterations: float with get, set
+        abstract member salt: Web.BufferSource with get, set
+
         [<ParamObject; Emit("$0")>]
-        (name: string, hash: Web.HashAlgorithmIdentifier, iterations: float, salt: Web.BufferSource)
-        =
+        static member Create
+            (
+                name: string,
+                hash: Web.HashAlgorithmIdentifier,
+                iterations: float,
+                salt: Web.BufferSource
+            )
+            : Pbkdf2Params
+            =
+            nativeOnly
 
-        member val name: string = nativeOnly with get, set
-        member val hash: Web.HashAlgorithmIdentifier = nativeOnly with get, set
-        member val iterations: float = nativeOnly with get, set
-        member val salt: Web.BufferSource = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type PerformanceMarkOptions
+    [<Interface>]
+    type PerformanceMarkOptions =
+        abstract member detail: obj option with get, set
+        abstract member startTime: Web.DOMHighResTimeStamp option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (?detail: obj, ?startTime: Web.DOMHighResTimeStamp)
-        =
+        static member Create
+            (?detail: obj, ?startTime: Web.DOMHighResTimeStamp)
+            : PerformanceMarkOptions
+            =
+            nativeOnly
 
-        member val detail: obj option = nativeOnly with get, set
-        member val startTime: Web.DOMHighResTimeStamp option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type PerformanceMeasureOptions
+    [<Interface>]
+    type PerformanceMeasureOptions =
+        abstract member detail: obj option with get, set
+        abstract member duration: Web.DOMHighResTimeStamp option with get, set
+        abstract member ``end``: U2<string, Web.DOMHighResTimeStamp> option with get, set
+        abstract member start: U2<string, Web.DOMHighResTimeStamp> option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?detail: obj,
-            ?duration: Web.DOMHighResTimeStamp,
-            ?``end``: U2<string, Web.DOMHighResTimeStamp>,
-            ?start: U2<string, Web.DOMHighResTimeStamp>
-        )
-        =
+        static member Create
+            (
+                ?detail: obj,
+                ?duration: Web.DOMHighResTimeStamp,
+                ?``end``: U2<string, Web.DOMHighResTimeStamp>,
+                ?start: U2<string, Web.DOMHighResTimeStamp>
+            )
+            : PerformanceMeasureOptions
+            =
+            nativeOnly
 
-        member val detail: obj option = nativeOnly with get, set
-        member val duration: Web.DOMHighResTimeStamp option = nativeOnly with get, set
-        member val ``end``: U2<string, Web.DOMHighResTimeStamp> option = nativeOnly with get, set
-        member val start: U2<string, Web.DOMHighResTimeStamp> option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type PerformanceObserverInit
-        [<ParamObject; Emit("$0")>]
-        (?buffered: bool, ?entryTypes: ResizeArray<string>, ?``type``: string)
-        =
+    [<Interface>]
+    type PerformanceObserverInit =
+        abstract member buffered: bool option with get, set
+        abstract member entryTypes: ResizeArray<string> option with get, set
+        abstract member ``type``: string option with get, set
 
-        member val buffered: bool option = nativeOnly with get, set
-        member val entryTypes: ResizeArray<string> option = nativeOnly with get, set
-        member val ``type``: string option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?buffered: bool, ?entryTypes: ResizeArray<string>, ?``type``: string)
+            : PerformanceObserverInit
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
     type PeriodicWaveConstraints =
         abstract member disableNormalization: bool option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type PeriodicWaveOptions
+    [<Interface>]
+    type PeriodicWaveOptions =
+        inherit Web.PeriodicWaveConstraints
+        abstract member imag: U2<ResizeArray<float>, JS.Float32Array> option with get, set
+        abstract member real: U2<ResizeArray<float>, JS.Float32Array> option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?disableNormalization: bool,
-            ?imag: U2<ResizeArray<float>, JS.Float32Array>,
-            ?real: U2<ResizeArray<float>, JS.Float32Array>
-        )
-        =
+        static member Create
+            (
+                ?disableNormalization: bool,
+                ?imag: U2<ResizeArray<float>, JS.Float32Array>,
+                ?real: U2<ResizeArray<float>, JS.Float32Array>
+            )
+            : PeriodicWaveOptions
+            =
+            nativeOnly
 
-        member val disableNormalization: bool option = nativeOnly with get, set
-        member val imag: U2<ResizeArray<float>, JS.Float32Array> option = nativeOnly with get, set
-        member val real: U2<ResizeArray<float>, JS.Float32Array> option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type PermissionDescriptor [<ParamObject; Emit("$0")>] (name: Web.PermissionName) =
+    [<Interface>]
+    type PermissionDescriptor =
+        abstract member name: Web.PermissionName with get, set
 
-        member val name: Web.PermissionName = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create(name: Web.PermissionName) : PermissionDescriptor = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -11816,39 +12094,43 @@ module Web =
         abstract member imageWidth: Web.MediaSettingsRange option with get, set
         abstract member redEyeReduction: Web.RedEyeReduction option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type PhotoSettings
+    [<Interface>]
+    type PhotoSettings =
+        abstract member fillLightMode: Web.FillLightMode option with get, set
+        abstract member imageHeight: float option with get, set
+        abstract member imageWidth: float option with get, set
+        abstract member redEyeReduction: bool option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?fillLightMode: Web.FillLightMode,
-            ?imageHeight: float,
-            ?imageWidth: float,
-            ?redEyeReduction: bool
-        )
-        =
+        static member Create
+            (
+                ?fillLightMode: Web.FillLightMode,
+                ?imageHeight: float,
+                ?imageWidth: float,
+                ?redEyeReduction: bool
+            )
+            : PhotoSettings
+            =
+            nativeOnly
 
-        member val fillLightMode: Web.FillLightMode option = nativeOnly with get, set
-        member val imageHeight: float option = nativeOnly with get, set
-        member val imageWidth: float option = nativeOnly with get, set
-        member val redEyeReduction: bool option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type PictureInPictureEventInit
-        [<ParamObject; Emit("$0")>]
-        (
-            pictureInPictureWindow: Web.PictureInPictureWindow,
-            ?bubbles: bool,
-            ?cancelable: bool,
-            ?composed: bool
-        )
-        =
+    [<Interface>]
+    type PictureInPictureEventInit =
+        inherit Web.EventInit
+        abstract member pictureInPictureWindow: Web.PictureInPictureWindow with get, set
 
-        member val pictureInPictureWindow: Web.PictureInPictureWindow = nativeOnly with get, set
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                pictureInPictureWindow: Web.PictureInPictureWindow,
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool
+            )
+            : PictureInPictureEventInit
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -11856,182 +12138,174 @@ module Web =
         abstract member offset: float with get, set
         abstract member stride: float with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type PointerEventInit
+    [<Interface>]
+    type PointerEventInit =
+        inherit Web.MouseEventInit
+        abstract member altitudeAngle: float option with get, set
+        abstract member azimuthAngle: float option with get, set
+        abstract member coalescedEvents: ResizeArray<Web.PointerEvent> option with get, set
+        abstract member height: float option with get, set
+        abstract member isPrimary: bool option with get, set
+        abstract member pointerId: float option with get, set
+        abstract member pointerType: string option with get, set
+        abstract member predictedEvents: ResizeArray<Web.PointerEvent> option with get, set
+        abstract member pressure: float option with get, set
+        abstract member tangentialPressure: float option with get, set
+        abstract member tiltX: float option with get, set
+        abstract member tiltY: float option with get, set
+        abstract member twist: float option with get, set
+        abstract member width: float option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?bubbles: bool,
-            ?cancelable: bool,
-            ?composed: bool,
-            ?detail: float,
-            ?view: Web.Window,
-            ?which: float,
-            ?altKey: bool,
-            ?ctrlKey: bool,
-            ?metaKey: bool,
-            ?modifierAltGraph: bool,
-            ?modifierCapsLock: bool,
-            ?modifierFn: bool,
-            ?modifierFnLock: bool,
-            ?modifierHyper: bool,
-            ?modifierNumLock: bool,
-            ?modifierScrollLock: bool,
-            ?modifierSuper: bool,
-            ?modifierSymbol: bool,
-            ?modifierSymbolLock: bool,
-            ?shiftKey: bool,
-            ?button: float,
-            ?buttons: float,
-            ?clientX: float,
-            ?clientY: float,
-            ?movementX: float,
-            ?movementY: float,
-            ?relatedTarget: Web.EventTarget,
-            ?screenX: float,
-            ?screenY: float,
-            ?altitudeAngle: float,
-            ?azimuthAngle: float,
-            ?coalescedEvents: ResizeArray<Web.PointerEvent>,
-            ?height: float,
-            ?isPrimary: bool,
-            ?pointerId: float,
-            ?pointerType: string,
-            ?predictedEvents: ResizeArray<Web.PointerEvent>,
-            ?pressure: float,
-            ?tangentialPressure: float,
-            ?tiltX: float,
-            ?tiltY: float,
-            ?twist: float,
-            ?width: float
-        )
-        =
+        static member Create
+            (
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool,
+                ?detail: float,
+                ?view: Web.Window,
+                ?which: float,
+                ?altKey: bool,
+                ?ctrlKey: bool,
+                ?metaKey: bool,
+                ?modifierAltGraph: bool,
+                ?modifierCapsLock: bool,
+                ?modifierFn: bool,
+                ?modifierFnLock: bool,
+                ?modifierHyper: bool,
+                ?modifierNumLock: bool,
+                ?modifierScrollLock: bool,
+                ?modifierSuper: bool,
+                ?modifierSymbol: bool,
+                ?modifierSymbolLock: bool,
+                ?shiftKey: bool,
+                ?button: float,
+                ?buttons: float,
+                ?clientX: float,
+                ?clientY: float,
+                ?movementX: float,
+                ?movementY: float,
+                ?relatedTarget: Web.EventTarget,
+                ?screenX: float,
+                ?screenY: float,
+                ?altitudeAngle: float,
+                ?azimuthAngle: float,
+                ?coalescedEvents: ResizeArray<Web.PointerEvent>,
+                ?height: float,
+                ?isPrimary: bool,
+                ?pointerId: float,
+                ?pointerType: string,
+                ?predictedEvents: ResizeArray<Web.PointerEvent>,
+                ?pressure: float,
+                ?tangentialPressure: float,
+                ?tiltX: float,
+                ?tiltY: float,
+                ?twist: float,
+                ?width: float
+            )
+            : PointerEventInit
+            =
+            nativeOnly
 
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val detail: float option = nativeOnly with get, set
-        member val view: Web.Window option = nativeOnly with get, set
-        member val which: float option = nativeOnly with get, set
-        member val altKey: bool option = nativeOnly with get, set
-        member val ctrlKey: bool option = nativeOnly with get, set
-        member val metaKey: bool option = nativeOnly with get, set
-        member val modifierAltGraph: bool option = nativeOnly with get, set
-        member val modifierCapsLock: bool option = nativeOnly with get, set
-        member val modifierFn: bool option = nativeOnly with get, set
-        member val modifierFnLock: bool option = nativeOnly with get, set
-        member val modifierHyper: bool option = nativeOnly with get, set
-        member val modifierNumLock: bool option = nativeOnly with get, set
-        member val modifierScrollLock: bool option = nativeOnly with get, set
-        member val modifierSuper: bool option = nativeOnly with get, set
-        member val modifierSymbol: bool option = nativeOnly with get, set
-        member val modifierSymbolLock: bool option = nativeOnly with get, set
-        member val shiftKey: bool option = nativeOnly with get, set
-        member val button: float option = nativeOnly with get, set
-        member val buttons: float option = nativeOnly with get, set
-        member val clientX: float option = nativeOnly with get, set
-        member val clientY: float option = nativeOnly with get, set
-        member val movementX: float option = nativeOnly with get, set
-        member val movementY: float option = nativeOnly with get, set
-        member val relatedTarget: Web.EventTarget option = nativeOnly with get, set
-        member val screenX: float option = nativeOnly with get, set
-        member val screenY: float option = nativeOnly with get, set
-        member val altitudeAngle: float option = nativeOnly with get, set
-        member val azimuthAngle: float option = nativeOnly with get, set
-        member val coalescedEvents: ResizeArray<Web.PointerEvent> option = nativeOnly with get, set
-        member val height: float option = nativeOnly with get, set
-        member val isPrimary: bool option = nativeOnly with get, set
-        member val pointerId: float option = nativeOnly with get, set
-        member val pointerType: string option = nativeOnly with get, set
-        member val predictedEvents: ResizeArray<Web.PointerEvent> option = nativeOnly with get, set
-        member val pressure: float option = nativeOnly with get, set
-        member val tangentialPressure: float option = nativeOnly with get, set
-        member val tiltX: float option = nativeOnly with get, set
-        member val tiltY: float option = nativeOnly with get, set
-        member val twist: float option = nativeOnly with get, set
-        member val width: float option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type PointerLockOptions [<ParamObject; Emit("$0")>] (?unadjustedMovement: bool) =
+    [<Interface>]
+    type PointerLockOptions =
+        abstract member unadjustedMovement: bool option with get, set
 
-        member val unadjustedMovement: bool option = nativeOnly with get, set
-
-    [<Global>]
-    [<AllowNullLiteral>]
-    type PopStateEventInit
         [<ParamObject; Emit("$0")>]
-        (
-            ?bubbles: bool,
-            ?cancelable: bool,
-            ?composed: bool,
-            ?hasUAVisualTransition: bool,
-            ?state: obj
-        )
-        =
+        static member Create(?unadjustedMovement: bool) : PointerLockOptions = nativeOnly
 
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val hasUAVisualTransition: bool option = nativeOnly with get, set
-        member val state: obj option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type PositionOptions
+    [<Interface>]
+    type PopStateEventInit =
+        inherit Web.EventInit
+        abstract member hasUAVisualTransition: bool option with get, set
+        abstract member state: obj option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (?enableHighAccuracy: bool, ?maximumAge: float, ?timeout: float)
-        =
+        static member Create
+            (
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool,
+                ?hasUAVisualTransition: bool,
+                ?state: obj
+            )
+            : PopStateEventInit
+            =
+            nativeOnly
 
-        member val enableHighAccuracy: bool option = nativeOnly with get, set
-        member val maximumAge: float option = nativeOnly with get, set
-        member val timeout: float option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type ProgressEventInit
+    [<Interface>]
+    type PositionOptions =
+        abstract member enableHighAccuracy: bool option with get, set
+        abstract member maximumAge: float option with get, set
+        abstract member timeout: float option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?bubbles: bool,
-            ?cancelable: bool,
-            ?composed: bool,
-            ?lengthComputable: bool,
-            ?loaded: float,
-            ?total: float
-        )
-        =
+        static member Create
+            (?enableHighAccuracy: bool, ?maximumAge: float, ?timeout: float)
+            : PositionOptions
+            =
+            nativeOnly
 
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val lengthComputable: bool option = nativeOnly with get, set
-        member val loaded: float option = nativeOnly with get, set
-        member val total: float option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type PromiseRejectionEventInit
+    [<Interface>]
+    type ProgressEventInit =
+        inherit Web.EventInit
+        abstract member lengthComputable: bool option with get, set
+        abstract member loaded: float option with get, set
+        abstract member total: float option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (promise: JS.Promise<obj>, ?bubbles: bool, ?cancelable: bool, ?composed: bool, ?reason: obj)
-        =
+        static member Create
+            (
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool,
+                ?lengthComputable: bool,
+                ?loaded: float,
+                ?total: float
+            )
+            : ProgressEventInit
+            =
+            nativeOnly
 
-        member val promise: JS.Promise<obj> = nativeOnly with get, set
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val reason: obj option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type PropertyDefinition
-        [<ParamObject; Emit("$0")>]
-        (inherits: bool, name: string, ?initialValue: string, ?syntax: string)
-        =
+    [<Interface>]
+    type PromiseRejectionEventInit =
+        inherit Web.EventInit
+        abstract member promise: JS.Promise<obj> with get, set
+        abstract member reason: obj option with get, set
 
-        member val inherits: bool = nativeOnly with get, set
-        member val name: string = nativeOnly with get, set
-        member val initialValue: string option = nativeOnly with get, set
-        member val syntax: string option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                promise: JS.Promise<obj>,
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool,
+                ?reason: obj
+            )
+            : PromiseRejectionEventInit
+            =
+            nativeOnly
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type PropertyDefinition =
+        abstract member inherits: bool with get, set
+        abstract member initialValue: string option with get, set
+        abstract member name: string with get, set
+        abstract member syntax: string option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (inherits: bool, name: string, ?initialValue: string, ?syntax: string)
+            : PropertyDefinition
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -12067,44 +12341,40 @@ module Web =
         abstract member timeout: float option with get, set
         abstract member user: Web.PublicKeyCredentialUserEntity with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type PublicKeyCredentialCreationOptionsJSON
+    [<Interface>]
+    type PublicKeyCredentialCreationOptionsJSON =
+        abstract member attestation: string option with get, set
+        abstract member authenticatorSelection: Web.AuthenticatorSelectionCriteria option with get, set
+        abstract member challenge: Web.Base64URLString with get, set
+
+        abstract member excludeCredentials:
+            ResizeArray<Web.PublicKeyCredentialDescriptorJSON> option with get, set
+
+        abstract member extensions: Web.AuthenticationExtensionsClientInputsJSON option with get, set
+        abstract member hints: ResizeArray<string> option with get, set
+        abstract member pubKeyCredParams: ResizeArray<Web.PublicKeyCredentialParameters> with get, set
+        abstract member rp: Web.PublicKeyCredentialRpEntity with get, set
+        abstract member timeout: float option with get, set
+        abstract member user: Web.PublicKeyCredentialUserEntityJSON with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            challenge: Web.Base64URLString,
-            pubKeyCredParams: ResizeArray<Web.PublicKeyCredentialParameters>,
-            rp: Web.PublicKeyCredentialRpEntity,
-            user: Web.PublicKeyCredentialUserEntityJSON,
-            ?attestation: string,
-            ?authenticatorSelection: Web.AuthenticatorSelectionCriteria,
-            ?excludeCredentials: ResizeArray<Web.PublicKeyCredentialDescriptorJSON>,
-            ?extensions: Web.AuthenticationExtensionsClientInputsJSON,
-            ?hints: ResizeArray<string>,
-            ?timeout: float
-        )
-        =
-
-        member val challenge: Web.Base64URLString = nativeOnly with get, set
-
-        member val pubKeyCredParams: ResizeArray<Web.PublicKeyCredentialParameters> =
-            nativeOnly with get, set
-
-        member val rp: Web.PublicKeyCredentialRpEntity = nativeOnly with get, set
-        member val user: Web.PublicKeyCredentialUserEntityJSON = nativeOnly with get, set
-        member val attestation: string option = nativeOnly with get, set
-
-        member val authenticatorSelection: Web.AuthenticatorSelectionCriteria option =
-            nativeOnly with get, set
-
-        member val excludeCredentials: ResizeArray<Web.PublicKeyCredentialDescriptorJSON> option =
-            nativeOnly with get, set
-
-        member val extensions: Web.AuthenticationExtensionsClientInputsJSON option =
-            nativeOnly with get, set
-
-        member val hints: ResizeArray<string> option = nativeOnly with get, set
-        member val timeout: float option = nativeOnly with get, set
+        static member Create
+            (
+                challenge: Web.Base64URLString,
+                pubKeyCredParams: ResizeArray<Web.PublicKeyCredentialParameters>,
+                rp: Web.PublicKeyCredentialRpEntity,
+                user: Web.PublicKeyCredentialUserEntityJSON,
+                ?attestation: string,
+                ?authenticatorSelection: Web.AuthenticatorSelectionCriteria,
+                ?excludeCredentials: ResizeArray<Web.PublicKeyCredentialDescriptorJSON>,
+                ?extensions: Web.AuthenticationExtensionsClientInputsJSON,
+                ?hints: ResizeArray<string>,
+                ?timeout: float
+            )
+            : PublicKeyCredentialCreationOptionsJSON
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -12141,33 +12411,31 @@ module Web =
         abstract member timeout: float option with get, set
         abstract member userVerification: Web.UserVerificationRequirement option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type PublicKeyCredentialRequestOptionsJSON
+    [<Interface>]
+    type PublicKeyCredentialRequestOptionsJSON =
+        abstract member allowCredentials: ResizeArray<Web.PublicKeyCredentialDescriptorJSON> option with get, set
+        abstract member challenge: Web.Base64URLString with get, set
+        abstract member extensions: Web.AuthenticationExtensionsClientInputsJSON option with get, set
+        abstract member hints: ResizeArray<string> option with get, set
+        abstract member rpId: string option with get, set
+        abstract member timeout: float option with get, set
+        abstract member userVerification: string option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            challenge: Web.Base64URLString,
-            ?allowCredentials: ResizeArray<Web.PublicKeyCredentialDescriptorJSON>,
-            ?extensions: Web.AuthenticationExtensionsClientInputsJSON,
-            ?hints: ResizeArray<string>,
-            ?rpId: string,
-            ?timeout: float,
-            ?userVerification: string
-        )
-        =
-
-        member val challenge: Web.Base64URLString = nativeOnly with get, set
-
-        member val allowCredentials: ResizeArray<Web.PublicKeyCredentialDescriptorJSON> option =
-            nativeOnly with get, set
-
-        member val extensions: Web.AuthenticationExtensionsClientInputsJSON option =
-            nativeOnly with get, set
-
-        member val hints: ResizeArray<string> option = nativeOnly with get, set
-        member val rpId: string option = nativeOnly with get, set
-        member val timeout: float option = nativeOnly with get, set
-        member val userVerification: string option = nativeOnly with get, set
+        static member Create
+            (
+                challenge: Web.Base64URLString,
+                ?allowCredentials: ResizeArray<Web.PublicKeyCredentialDescriptorJSON>,
+                ?extensions: Web.AuthenticationExtensionsClientInputsJSON,
+                ?hints: ResizeArray<string>,
+                ?rpId: string,
+                ?timeout: float,
+                ?userVerification: string
+            )
+            : PublicKeyCredentialRequestOptionsJSON
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -12196,25 +12464,28 @@ module Web =
         abstract member expirationTime: Web.EpochTimeStamp option with get, set
         abstract member keys: PushSubscriptionJSON.keys option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type PushSubscriptionOptionsInit private () =
+    [<Interface>]
+    type PushSubscriptionOptionsInit =
+        abstract member applicationServerKey: U2<Web.BufferSource, string> option with get, set
+        abstract member userVisibleOnly: bool option with get, set
 
         [<ParamObject; Emit("$0")>]
-        new(?userVisibleOnly: bool) = PushSubscriptionOptionsInit()
+        static member Create(?userVisibleOnly: bool) : PushSubscriptionOptionsInit = nativeOnly
 
         [<ParamObject; Emit("$0")>]
-        new(applicationServerKey: Web.BufferSource, ?userVisibleOnly: bool)
+        static member Create
+            (applicationServerKey: Web.BufferSource, ?userVisibleOnly: bool)
+            : PushSubscriptionOptionsInit
             =
-            PushSubscriptionOptionsInit()
+            nativeOnly
 
         [<ParamObject; Emit("$0")>]
-        new(applicationServerKey: string, ?userVisibleOnly: bool) = PushSubscriptionOptionsInit()
-
-        member val applicationServerKey: U2<Web.BufferSource, string> option =
-            nativeOnly with get, set
-
-        member val userVisibleOnly: bool option = nativeOnly with get, set
+        static member Create
+            (applicationServerKey: string, ?userVisibleOnly: bool)
+            : PushSubscriptionOptionsInit
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -12222,16 +12493,18 @@ module Web =
         abstract member highWaterMark: float option with get, set
         abstract member size: Web.QueuingStrategySize<'T> option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type QueuingStrategyInit [<ParamObject; Emit("$0")>] (highWaterMark: float) =
-
+    [<Interface>]
+    type QueuingStrategyInit =
         /// <summary>
         /// Creates a new ByteLengthQueuingStrategy with the provided high water mark.
         ///
         /// Note that the provided high water mark will not be validated ahead of time. Instead, if it is negative, NaN, or not a number, the resulting ByteLengthQueuingStrategy will cause the corresponding stream constructor to throw.
         /// </summary>
-        member val highWaterMark: float = nativeOnly with get, set
+        abstract member highWaterMark: float with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(highWaterMark: float) : QueuingStrategyInit = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -12253,50 +12526,55 @@ module Web =
         abstract member iceTransportPolicy: Web.RTCIceTransportPolicy option with get, set
         abstract member rtcpMuxPolicy: Web.RTCRtcpMuxPolicy option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type RTCDTMFToneChangeEventInit
+    [<Interface>]
+    type RTCDTMFToneChangeEventInit =
+        inherit Web.EventInit
+        abstract member tone: string option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (?bubbles: bool, ?cancelable: bool, ?composed: bool, ?tone: string)
-        =
+        static member Create
+            (?bubbles: bool, ?cancelable: bool, ?composed: bool, ?tone: string)
+            : RTCDTMFToneChangeEventInit
+            =
+            nativeOnly
 
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val tone: string option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type RTCDataChannelEventInit
+    [<Interface>]
+    type RTCDataChannelEventInit =
+        inherit Web.EventInit
+        abstract member channel: Web.RTCDataChannel with get, set
+
         [<ParamObject; Emit("$0")>]
-        (channel: Web.RTCDataChannel, ?bubbles: bool, ?cancelable: bool, ?composed: bool)
-        =
+        static member Create
+            (channel: Web.RTCDataChannel, ?bubbles: bool, ?cancelable: bool, ?composed: bool)
+            : RTCDataChannelEventInit
+            =
+            nativeOnly
 
-        member val channel: Web.RTCDataChannel = nativeOnly with get, set
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type RTCDataChannelInit
-        [<ParamObject; Emit("$0")>]
-        (
-            ?id: float,
-            ?maxPacketLifeTime: float,
-            ?maxRetransmits: float,
-            ?negotiated: bool,
-            ?ordered: bool,
-            ?protocol: string
-        )
-        =
+    [<Interface>]
+    type RTCDataChannelInit =
+        abstract member id: float option with get, set
+        abstract member maxPacketLifeTime: float option with get, set
+        abstract member maxRetransmits: float option with get, set
+        abstract member negotiated: bool option with get, set
+        abstract member ordered: bool option with get, set
+        abstract member protocol: string option with get, set
 
-        member val id: float option = nativeOnly with get, set
-        member val maxPacketLifeTime: float option = nativeOnly with get, set
-        member val maxRetransmits: float option = nativeOnly with get, set
-        member val negotiated: bool option = nativeOnly with get, set
-        member val ordered: bool option = nativeOnly with get, set
-        member val protocol: string option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?id: float,
+                ?maxPacketLifeTime: float,
+                ?maxRetransmits: float,
+                ?negotiated: bool,
+                ?ordered: bool,
+                ?protocol: string
+            )
+            : RTCDataChannelInit
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -12331,38 +12609,42 @@ module Web =
         abstract member timestamp: float option with get, set
         abstract member width: float option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type RTCErrorEventInit
+    [<Interface>]
+    type RTCErrorEventInit =
+        inherit Web.EventInit
+        abstract member error: Web.RTCError with get, set
+
         [<ParamObject; Emit("$0")>]
-        (error: Web.RTCError, ?bubbles: bool, ?cancelable: bool, ?composed: bool)
-        =
+        static member Create
+            (error: Web.RTCError, ?bubbles: bool, ?cancelable: bool, ?composed: bool)
+            : RTCErrorEventInit
+            =
+            nativeOnly
 
-        member val error: Web.RTCError = nativeOnly with get, set
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type RTCErrorInit
-        [<ParamObject; Emit("$0")>]
-        (
-            errorDetail: Web.RTCErrorDetailType,
-            ?httpRequestStatusCode: float,
-            ?receivedAlert: float,
-            ?sctpCauseCode: float,
-            ?sdpLineNumber: float,
-            ?sentAlert: float
-        )
-        =
+    [<Interface>]
+    type RTCErrorInit =
+        abstract member errorDetail: Web.RTCErrorDetailType with get, set
+        abstract member httpRequestStatusCode: float option with get, set
+        abstract member receivedAlert: float option with get, set
+        abstract member sctpCauseCode: float option with get, set
+        abstract member sdpLineNumber: float option with get, set
+        abstract member sentAlert: float option with get, set
 
-        member val errorDetail: Web.RTCErrorDetailType = nativeOnly with get, set
-        member val httpRequestStatusCode: float option = nativeOnly with get, set
-        member val receivedAlert: float option = nativeOnly with get, set
-        member val sctpCauseCode: float option = nativeOnly with get, set
-        member val sdpLineNumber: float option = nativeOnly with get, set
-        member val sentAlert: float option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                errorDetail: Web.RTCErrorDetailType,
+                ?httpRequestStatusCode: float,
+                ?receivedAlert: float,
+                ?sctpCauseCode: float,
+                ?sdpLineNumber: float,
+                ?sentAlert: float
+            )
+            : RTCErrorInit
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -12463,42 +12745,49 @@ module Web =
         abstract member totalSquaredInterFrameDelay: float option with get, set
         abstract member trackIdentifier: string with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type RTCLocalIceCandidateInit
+    [<Interface>]
+    type RTCLocalIceCandidateInit =
+        inherit Web.RTCIceCandidateInit
+
         [<ParamObject; Emit("$0")>]
-        (?candidate: string, ?sdpMLineIndex: float, ?sdpMid: string, ?usernameFragment: string)
-        =
+        static member Create
+            (?candidate: string, ?sdpMLineIndex: float, ?sdpMid: string, ?usernameFragment: string)
+            : RTCLocalIceCandidateInit
+            =
+            nativeOnly
 
-        member val candidate: string option = nativeOnly with get, set
-        member val sdpMLineIndex: float option = nativeOnly with get, set
-        member val sdpMid: string option = nativeOnly with get, set
-        member val usernameFragment: string option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type RTCLocalSessionDescriptionInit
-        [<ParamObject; Emit("$0")>]
-        (?sdp: string, ?``type``: Web.RTCSdpType)
-        =
+    [<Interface>]
+    type RTCLocalSessionDescriptionInit =
+        abstract member sdp: string option with get, set
+        abstract member ``type``: Web.RTCSdpType option with get, set
 
-        member val sdp: string option = nativeOnly with get, set
-        member val ``type``: Web.RTCSdpType option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?sdp: string, ?``type``: Web.RTCSdpType)
+            : RTCLocalSessionDescriptionInit
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
     type RTCOfferAnswerOptions = interface end
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type RTCOfferOptions
-        [<ParamObject; Emit("$0")>]
-        (?iceRestart: bool, ?offerToReceiveAudio: bool, ?offerToReceiveVideo: bool)
-        =
+    [<Interface>]
+    type RTCOfferOptions =
+        inherit Web.RTCOfferAnswerOptions
+        abstract member iceRestart: bool option with get, set
+        abstract member offerToReceiveAudio: bool option with get, set
+        abstract member offerToReceiveVideo: bool option with get, set
 
-        member val iceRestart: bool option = nativeOnly with get, set
-        member val offerToReceiveAudio: bool option = nativeOnly with get, set
-        member val offerToReceiveVideo: bool option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?iceRestart: bool, ?offerToReceiveAudio: bool, ?offerToReceiveVideo: bool)
+            : RTCOfferOptions
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -12536,42 +12825,44 @@ module Web =
         abstract member totalEncodedBytesTarget: float option with get, set
         abstract member totalPacketSendDelay: float option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type RTCPeerConnectionIceErrorEventInit
+    [<Interface>]
+    type RTCPeerConnectionIceErrorEventInit =
+        inherit Web.EventInit
+        abstract member address: string option with get, set
+        abstract member errorCode: float with get, set
+        abstract member errorText: string option with get, set
+        abstract member port: float option with get, set
+        abstract member url: string option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            errorCode: float,
-            ?bubbles: bool,
-            ?cancelable: bool,
-            ?composed: bool,
-            ?address: string,
-            ?errorText: string,
-            ?port: float,
-            ?url: string
-        )
-        =
+        static member Create
+            (
+                errorCode: float,
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool,
+                ?address: string,
+                ?errorText: string,
+                ?port: float,
+                ?url: string
+            )
+            : RTCPeerConnectionIceErrorEventInit
+            =
+            nativeOnly
 
-        member val errorCode: float = nativeOnly with get, set
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val address: string option = nativeOnly with get, set
-        member val errorText: string option = nativeOnly with get, set
-        member val port: float option = nativeOnly with get, set
-        member val url: string option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type RTCPeerConnectionIceEventInit
-        [<ParamObject; Emit("$0")>]
-        (?bubbles: bool, ?cancelable: bool, ?composed: bool, ?candidate: Web.RTCIceCandidate)
-        =
+    [<Interface>]
+    type RTCPeerConnectionIceEventInit =
+        inherit Web.EventInit
+        abstract member candidate: Web.RTCIceCandidate option with get, set
 
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val candidate: Web.RTCIceCandidate option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?bubbles: bool, ?cancelable: bool, ?composed: bool, ?candidate: Web.RTCIceCandidate)
+            : RTCPeerConnectionIceEventInit
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -12677,23 +12968,23 @@ module Web =
     type RTCRtpSynchronizationSource =
         inherit Web.RTCRtpContributingSource
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type RTCRtpTransceiverInit
+    [<Interface>]
+    type RTCRtpTransceiverInit =
+        abstract member direction: Web.RTCRtpTransceiverDirection option with get, set
+        abstract member sendEncodings: ResizeArray<Web.RTCRtpEncodingParameters> option with get, set
+        abstract member streams: ResizeArray<Web.MediaStream> option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?direction: Web.RTCRtpTransceiverDirection,
-            ?sendEncodings: ResizeArray<Web.RTCRtpEncodingParameters>,
-            ?streams: ResizeArray<Web.MediaStream>
-        )
-        =
-
-        member val direction: Web.RTCRtpTransceiverDirection option = nativeOnly with get, set
-
-        member val sendEncodings: ResizeArray<Web.RTCRtpEncodingParameters> option =
-            nativeOnly with get, set
-
-        member val streams: ResizeArray<Web.MediaStream> option = nativeOnly with get, set
+        static member Create
+            (
+                ?direction: Web.RTCRtpTransceiverDirection,
+                ?sendEncodings: ResizeArray<Web.RTCRtpEncodingParameters>,
+                ?streams: ResizeArray<Web.MediaStream>
+            )
+            : RTCRtpTransceiverInit
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -12719,28 +13010,29 @@ module Web =
         abstract member timestamp: Web.DOMHighResTimeStamp with get, set
         abstract member ``type``: Web.RTCStatsType with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type RTCTrackEventInit
-        [<ParamObject; Emit("$0")>]
-        (
-            receiver: Web.RTCRtpReceiver,
-            track: Web.MediaStreamTrack,
-            transceiver: Web.RTCRtpTransceiver,
-            ?bubbles: bool,
-            ?cancelable: bool,
-            ?composed: bool,
-            ?streams: ResizeArray<Web.MediaStream>
-        )
-        =
+    [<Interface>]
+    type RTCTrackEventInit =
+        inherit Web.EventInit
+        abstract member receiver: Web.RTCRtpReceiver with get, set
+        abstract member streams: ResizeArray<Web.MediaStream> option with get, set
+        abstract member track: Web.MediaStreamTrack with get, set
+        abstract member transceiver: Web.RTCRtpTransceiver with get, set
 
-        member val receiver: Web.RTCRtpReceiver = nativeOnly with get, set
-        member val track: Web.MediaStreamTrack = nativeOnly with get, set
-        member val transceiver: Web.RTCRtpTransceiver = nativeOnly with get, set
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val streams: ResizeArray<Web.MediaStream> option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                receiver: Web.RTCRtpReceiver,
+                track: Web.MediaStreamTrack,
+                transceiver: Web.RTCRtpTransceiver,
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool,
+                ?streams: ResizeArray<Web.MediaStream>
+            )
+            : RTCTrackEventInit
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -12763,30 +13055,31 @@ module Web =
         abstract member srtpCipher: string option with get, set
         abstract member tlsVersion: string option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type ReadableStreamBYOBReaderReadOptions [<ParamObject; Emit("$0")>] (?min: float) =
+    [<Interface>]
+    type ReadableStreamBYOBReaderReadOptions =
+        abstract member min: float option with get, set
 
-        member val min: float option = nativeOnly with get, set
-
-    [<Global>]
-    [<AllowNullLiteral>]
-    type ReadableStreamGetReaderOptions
         [<ParamObject; Emit("$0")>]
-        (?mode: Web.ReadableStreamReaderMode)
-        =
+        static member Create(?min: float) : ReadableStreamBYOBReaderReadOptions = nativeOnly
 
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type ReadableStreamGetReaderOptions =
         /// <summary>
         /// Creates a ReadableStreamBYOBReader and locks the stream to the new reader.
         ///
         /// This call behaves the same way as the no-argument variant, except that it only works on readable byte streams, i.e. streams which were constructed specifically with the ability to handle "bring your own buffer" reading. The returned BYOB reader provides the ability to directly read individual chunks from the stream via its read() method, into developer-supplied buffers, allowing more precise control over allocation.
         /// </summary>
-        member val mode: Web.ReadableStreamReaderMode option = nativeOnly with get, set
+        abstract member mode: Web.ReadableStreamReaderMode option with get, set
 
-    [<Global>]
+        [<ParamObject; Emit("$0")>]
+        static member Create(?mode: Web.ReadableStreamReaderMode) : ReadableStreamGetReaderOptions =
+            nativeOnly
+
     [<AllowNullLiteral>]
-    type ReadableStreamIteratorOptions [<ParamObject; Emit("$0")>] (?preventCancel: bool) =
-
+    [<Interface>]
+    type ReadableStreamIteratorOptions =
         /// <summary>
         /// Asynchronously iterates over the chunks in the stream's internal queue.
         ///
@@ -12794,7 +13087,10 @@ module Web =
         ///
         /// By default, calling the async iterator's return() method will also cancel the stream. To prevent this, use the stream's values() method, passing true for the preventCancel option.
         /// </summary>
-        member val preventCancel: bool option = nativeOnly with get, set
+        abstract member preventCancel: bool option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(?preventCancel: bool) : ReadableStreamIteratorOptions = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -12819,16 +13115,23 @@ module Web =
         /// </summary>
         abstract member writable: Web.WritableStream<'W> with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type RegistrationOptions
-        [<ParamObject; Emit("$0")>]
-        (?scope: string, ?``type``: Web.WorkerType, ?updateViaCache: Web.ServiceWorkerUpdateViaCache)
-        =
+    [<Interface>]
+    type RegistrationOptions =
+        abstract member scope: string option with get, set
+        abstract member ``type``: Web.WorkerType option with get, set
+        abstract member updateViaCache: Web.ServiceWorkerUpdateViaCache option with get, set
 
-        member val scope: string option = nativeOnly with get, set
-        member val ``type``: Web.WorkerType option = nativeOnly with get, set
-        member val updateViaCache: Web.ServiceWorkerUpdateViaCache option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?scope: string,
+                ?``type``: Web.WorkerType,
+                ?updateViaCache: Web.ServiceWorkerUpdateViaCache
+            )
+            : RegistrationOptions
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -12851,118 +13154,133 @@ module Web =
     [<Interface>]
     type ReportBody = interface end
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type ReportingObserverOptions
+    [<Interface>]
+    type ReportingObserverOptions =
+        abstract member buffered: bool option with get, set
+        abstract member types: ResizeArray<string> option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (?buffered: bool, ?types: ResizeArray<string>)
-        =
+        static member Create
+            (?buffered: bool, ?types: ResizeArray<string>)
+            : ReportingObserverOptions
+            =
+            nativeOnly
 
-        member val buffered: bool option = nativeOnly with get, set
-        member val types: ResizeArray<string> option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type RequestInit
-        [<ParamObject; Emit("$0")>]
-        (
-            ?body: Web.BodyInit,
-            ?cache: Web.RequestCache,
-            ?credentials: Web.RequestCredentials,
-            ?headers: Web.HeadersInit,
-            ?integrity: string,
-            ?keepalive: bool,
-            ?``method``: string,
-            ?mode: Web.RequestMode,
-            ?priority: Web.RequestPriority,
-            ?redirect: Web.RequestRedirect,
-            ?referrer: string,
-            ?referrerPolicy: Web.ReferrerPolicy,
-            ?signal: Web.AbortSignal,
-            ?window: obj
-        )
-        =
-
+    [<Interface>]
+    type RequestInit =
         /// <summary>
         /// A BodyInit object or null to set request's body.
         /// </summary>
-        member val body: Web.BodyInit option = nativeOnly with get, set
+        abstract member body: Web.BodyInit option with get, set
         /// <summary>
         /// A string indicating how the request will interact with the browser's cache to set request's cache.
         /// </summary>
-        member val cache: Web.RequestCache option = nativeOnly with get, set
+        abstract member cache: Web.RequestCache option with get, set
         /// <summary>
         /// A string indicating whether credentials will be sent with the request always, never, or only when sent to a same-origin URL. Sets request's credentials.
         /// </summary>
-        member val credentials: Web.RequestCredentials option = nativeOnly with get, set
+        abstract member credentials: Web.RequestCredentials option with get, set
         /// <summary>
         /// A Headers object, an object literal, or an array of two-item arrays to set request's headers.
         /// </summary>
-        member val headers: Web.HeadersInit option = nativeOnly with get, set
+        abstract member headers: Web.HeadersInit option with get, set
         /// <summary>
         /// A cryptographic hash of the resource to be fetched by request. Sets request's integrity.
         /// </summary>
-        member val integrity: string option = nativeOnly with get, set
+        abstract member integrity: string option with get, set
         /// <summary>
         /// A boolean to set request's keepalive.
         /// </summary>
-        member val keepalive: bool option = nativeOnly with get, set
+        abstract member keepalive: bool option with get, set
         /// <summary>
         /// A string to set request's method.
         /// </summary>
-        member val ``method``: string option = nativeOnly with get, set
+        abstract member ``method``: string option with get, set
         /// <summary>
         /// A string to indicate whether the request will use CORS, or will be restricted to same-origin URLs. Sets request's mode.
         /// </summary>
-        member val mode: Web.RequestMode option = nativeOnly with get, set
-        member val priority: Web.RequestPriority option = nativeOnly with get, set
+        abstract member mode: Web.RequestMode option with get, set
+        abstract member priority: Web.RequestPriority option with get, set
         /// <summary>
         /// A string indicating whether request follows redirects, results in an error upon encountering a redirect, or returns the redirect (in an opaque fashion). Sets request's redirect.
         /// </summary>
-        member val redirect: Web.RequestRedirect option = nativeOnly with get, set
+        abstract member redirect: Web.RequestRedirect option with get, set
         /// <summary>
         /// A string whose value is a same-origin URL, "about:client", or the empty string, to set request's referrer.
         /// </summary>
-        member val referrer: string option = nativeOnly with get, set
+        abstract member referrer: string option with get, set
         /// <summary>
         /// A referrer policy to set request's referrerPolicy.
         /// </summary>
-        member val referrerPolicy: Web.ReferrerPolicy option = nativeOnly with get, set
+        abstract member referrerPolicy: Web.ReferrerPolicy option with get, set
         /// <summary>
         /// An AbortSignal to set request's signal.
         /// </summary>
-        member val signal: Web.AbortSignal option = nativeOnly with get, set
+        abstract member signal: Web.AbortSignal option with get, set
         /// <summary>
         /// Can only be null. Used to disassociate request from any Window.
         /// </summary>
-        member val window: obj option = nativeOnly with get, set
+        abstract member window: obj option with get, set
 
-    [<Global>]
-    [<AllowNullLiteral>]
-    type ResizeObserverOptions [<ParamObject; Emit("$0")>] (?box: Web.ResizeObserverBoxOptions) =
-
-        member val box: Web.ResizeObserverBoxOptions option = nativeOnly with get, set
-
-    [<Global>]
-    [<AllowNullLiteral>]
-    type ResponseInit
         [<ParamObject; Emit("$0")>]
-        (?headers: Web.HeadersInit, ?status: float, ?statusText: string)
-        =
+        static member Create
+            (
+                ?body: Web.BodyInit,
+                ?cache: Web.RequestCache,
+                ?credentials: Web.RequestCredentials,
+                ?headers: Web.HeadersInit,
+                ?integrity: string,
+                ?keepalive: bool,
+                ?``method``: string,
+                ?mode: Web.RequestMode,
+                ?priority: Web.RequestPriority,
+                ?redirect: Web.RequestRedirect,
+                ?referrer: string,
+                ?referrerPolicy: Web.ReferrerPolicy,
+                ?signal: Web.AbortSignal,
+                ?window: obj
+            )
+            : RequestInit
+            =
+            nativeOnly
 
-        member val headers: Web.HeadersInit option = nativeOnly with get, set
-        member val status: float option = nativeOnly with get, set
-        member val statusText: string option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type RsaHashedImportParams
-        [<ParamObject; Emit("$0")>]
-        (name: string, hash: Web.HashAlgorithmIdentifier)
-        =
+    [<Interface>]
+    type ResizeObserverOptions =
+        abstract member box: Web.ResizeObserverBoxOptions option with get, set
 
-        member val name: string = nativeOnly with get, set
-        member val hash: Web.HashAlgorithmIdentifier = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create(?box: Web.ResizeObserverBoxOptions) : ResizeObserverOptions =
+            nativeOnly
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type ResponseInit =
+        abstract member headers: Web.HeadersInit option with get, set
+        abstract member status: float option with get, set
+        abstract member statusText: string option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?headers: Web.HeadersInit, ?status: float, ?statusText: string)
+            : ResponseInit
+            =
+            nativeOnly
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type RsaHashedImportParams =
+        inherit Web.Algorithm
+        abstract member hash: Web.HashAlgorithmIdentifier with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (name: string, hash: Web.HashAlgorithmIdentifier)
+            : RsaHashedImportParams
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -12970,22 +13288,23 @@ module Web =
         inherit Web.RsaKeyAlgorithm
         abstract member hash: Web.KeyAlgorithm with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type RsaHashedKeyGenParams
-        [<ParamObject; Emit("$0")>]
-        (
-            name: string,
-            modulusLength: float,
-            publicExponent: Web.BigInteger,
-            hash: Web.HashAlgorithmIdentifier
-        )
-        =
+    [<Interface>]
+    type RsaHashedKeyGenParams =
+        inherit Web.RsaKeyGenParams
+        abstract member hash: Web.HashAlgorithmIdentifier with get, set
 
-        member val name: string = nativeOnly with get, set
-        member val modulusLength: float = nativeOnly with get, set
-        member val publicExponent: Web.BigInteger = nativeOnly with get, set
-        member val hash: Web.HashAlgorithmIdentifier = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                name: string,
+                modulusLength: float,
+                publicExponent: Web.BigInteger,
+                hash: Web.HashAlgorithmIdentifier
+            )
+            : RsaHashedKeyGenParams
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -13001,12 +13320,14 @@ module Web =
         abstract member modulusLength: float with get, set
         abstract member publicExponent: Web.BigInteger with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type RsaOaepParams [<ParamObject; Emit("$0")>] (name: string, ?label: Web.BufferSource) =
+    [<Interface>]
+    type RsaOaepParams =
+        inherit Web.Algorithm
+        abstract member label: Web.BufferSource option with get, set
 
-        member val name: string = nativeOnly with get, set
-        member val label: Web.BufferSource option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create(name: string, ?label: Web.BufferSource) : RsaOaepParams = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -13015,24 +13336,29 @@ module Web =
         abstract member r: string option with get, set
         abstract member t: string option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type RsaPssParams [<ParamObject; Emit("$0")>] (name: string, saltLength: float) =
+    [<Interface>]
+    type RsaPssParams =
+        inherit Web.Algorithm
+        abstract member saltLength: float with get, set
 
-        member val name: string = nativeOnly with get, set
-        member val saltLength: float = nativeOnly with get, set
-
-    [<Global>]
-    [<AllowNullLiteral>]
-    type SVGBoundingBoxOptions
         [<ParamObject; Emit("$0")>]
-        (?clipped: bool, ?fill: bool, ?markers: bool, ?stroke: bool)
-        =
+        static member Create(name: string, saltLength: float) : RsaPssParams = nativeOnly
 
-        member val clipped: bool option = nativeOnly with get, set
-        member val fill: bool option = nativeOnly with get, set
-        member val markers: bool option = nativeOnly with get, set
-        member val stroke: bool option = nativeOnly with get, set
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type SVGBoundingBoxOptions =
+        abstract member clipped: bool option with get, set
+        abstract member fill: bool option with get, set
+        abstract member markers: bool option with get, set
+        abstract member stroke: bool option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?clipped: bool, ?fill: bool, ?markers: bool, ?stroke: bool)
+            : SVGBoundingBoxOptions
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -13071,99 +13397,106 @@ module Web =
     type SanitizerProcessingInstruction =
         abstract member target: string with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type SchedulerPostTaskOptions
+    [<Interface>]
+    type SchedulerPostTaskOptions =
+        abstract member delay: float option with get, set
+        abstract member priority: Web.TaskPriority option with get, set
+        abstract member signal: Web.AbortSignal option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (?delay: float, ?priority: Web.TaskPriority, ?signal: Web.AbortSignal)
-        =
+        static member Create
+            (?delay: float, ?priority: Web.TaskPriority, ?signal: Web.AbortSignal)
+            : SchedulerPostTaskOptions
+            =
+            nativeOnly
 
-        member val delay: float option = nativeOnly with get, set
-        member val priority: Web.TaskPriority option = nativeOnly with get, set
-        member val signal: Web.AbortSignal option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type ScrollIntoViewOptions
-        [<ParamObject; Emit("$0")>]
-        (
-            ?behavior: Web.ScrollBehavior,
-            ?block: Web.ScrollLogicalPosition,
-            ?``inline``: Web.ScrollLogicalPosition
-        )
-        =
+    [<Interface>]
+    type ScrollIntoViewOptions =
+        inherit Web.ScrollOptions
+        abstract member block: Web.ScrollLogicalPosition option with get, set
+        abstract member ``inline``: Web.ScrollLogicalPosition option with get, set
 
-        member val behavior: Web.ScrollBehavior option = nativeOnly with get, set
-        member val block: Web.ScrollLogicalPosition option = nativeOnly with get, set
-        member val ``inline``: Web.ScrollLogicalPosition option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?behavior: Web.ScrollBehavior,
+                ?block: Web.ScrollLogicalPosition,
+                ?``inline``: Web.ScrollLogicalPosition
+            )
+            : ScrollIntoViewOptions
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
     type ScrollOptions =
         abstract member behavior: Web.ScrollBehavior option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type ScrollTimelineOptions
+    [<Interface>]
+    type ScrollTimelineOptions =
+        abstract member axis: Web.ScrollAxis option with get, set
+        abstract member source: Web.Element option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (?axis: Web.ScrollAxis, ?source: Web.Element)
-        =
+        static member Create(?axis: Web.ScrollAxis, ?source: Web.Element) : ScrollTimelineOptions =
+            nativeOnly
 
-        member val axis: Web.ScrollAxis option = nativeOnly with get, set
-        member val source: Web.Element option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type ScrollToOptions
+    [<Interface>]
+    type ScrollToOptions =
+        inherit Web.ScrollOptions
+        abstract member left: float option with get, set
+        abstract member top: float option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (?behavior: Web.ScrollBehavior, ?left: float, ?top: float)
-        =
+        static member Create
+            (?behavior: Web.ScrollBehavior, ?left: float, ?top: float)
+            : ScrollToOptions
+            =
+            nativeOnly
 
-        member val behavior: Web.ScrollBehavior option = nativeOnly with get, set
-        member val left: float option = nativeOnly with get, set
-        member val top: float option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type SecurityPolicyViolationEventInit
+    [<Interface>]
+    type SecurityPolicyViolationEventInit =
+        inherit Web.EventInit
+        abstract member blockedURI: string option with get, set
+        abstract member columnNumber: float option with get, set
+        abstract member disposition: Web.SecurityPolicyViolationEventDisposition option with get, set
+        abstract member documentURI: string option with get, set
+        abstract member effectiveDirective: string option with get, set
+        abstract member lineNumber: float option with get, set
+        abstract member originalPolicy: string option with get, set
+        abstract member referrer: string option with get, set
+        abstract member sample: string option with get, set
+        abstract member sourceFile: string option with get, set
+        abstract member statusCode: float option with get, set
+        abstract member violatedDirective: string option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?bubbles: bool,
-            ?cancelable: bool,
-            ?composed: bool,
-            ?blockedURI: string,
-            ?columnNumber: float,
-            ?disposition: Web.SecurityPolicyViolationEventDisposition,
-            ?documentURI: string,
-            ?effectiveDirective: string,
-            ?lineNumber: float,
-            ?originalPolicy: string,
-            ?referrer: string,
-            ?sample: string,
-            ?sourceFile: string,
-            ?statusCode: float,
-            ?violatedDirective: string
-        )
-        =
-
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val blockedURI: string option = nativeOnly with get, set
-        member val columnNumber: float option = nativeOnly with get, set
-
-        member val disposition: Web.SecurityPolicyViolationEventDisposition option =
-            nativeOnly with get, set
-
-        member val documentURI: string option = nativeOnly with get, set
-        member val effectiveDirective: string option = nativeOnly with get, set
-        member val lineNumber: float option = nativeOnly with get, set
-        member val originalPolicy: string option = nativeOnly with get, set
-        member val referrer: string option = nativeOnly with get, set
-        member val sample: string option = nativeOnly with get, set
-        member val sourceFile: string option = nativeOnly with get, set
-        member val statusCode: float option = nativeOnly with get, set
-        member val violatedDirective: string option = nativeOnly with get, set
+        static member Create
+            (
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool,
+                ?blockedURI: string,
+                ?columnNumber: float,
+                ?disposition: Web.SecurityPolicyViolationEventDisposition,
+                ?documentURI: string,
+                ?effectiveDirective: string,
+                ?lineNumber: float,
+                ?originalPolicy: string,
+                ?referrer: string,
+                ?sample: string,
+                ?sourceFile: string,
+                ?statusCode: float,
+                ?violatedDirective: string
+            )
+            : SecurityPolicyViolationEventInit
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -13173,37 +13506,43 @@ module Web =
         abstract member dataSetReady: bool with get, set
         abstract member ringIndicator: bool with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type SerialOptions
+    [<Interface>]
+    type SerialOptions =
+        abstract member baudRate: float with get, set
+        abstract member bufferSize: float option with get, set
+        abstract member dataBits: float option with get, set
+        abstract member flowControl: Web.FlowControlType option with get, set
+        abstract member parity: Web.ParityType option with get, set
+        abstract member stopBits: float option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            baudRate: float,
-            ?bufferSize: float,
-            ?dataBits: float,
-            ?flowControl: Web.FlowControlType,
-            ?parity: Web.ParityType,
-            ?stopBits: float
-        )
-        =
+        static member Create
+            (
+                baudRate: float,
+                ?bufferSize: float,
+                ?dataBits: float,
+                ?flowControl: Web.FlowControlType,
+                ?parity: Web.ParityType,
+                ?stopBits: float
+            )
+            : SerialOptions
+            =
+            nativeOnly
 
-        member val baudRate: float = nativeOnly with get, set
-        member val bufferSize: float option = nativeOnly with get, set
-        member val dataBits: float option = nativeOnly with get, set
-        member val flowControl: Web.FlowControlType option = nativeOnly with get, set
-        member val parity: Web.ParityType option = nativeOnly with get, set
-        member val stopBits: float option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type SerialOutputSignals
-        [<ParamObject; Emit("$0")>]
-        (?``break``: bool, ?dataTerminalReady: bool, ?requestToSend: bool)
-        =
+    [<Interface>]
+    type SerialOutputSignals =
+        abstract member ``break``: bool option with get, set
+        abstract member dataTerminalReady: bool option with get, set
+        abstract member requestToSend: bool option with get, set
 
-        member val ``break``: bool option = nativeOnly with get, set
-        member val dataTerminalReady: bool option = nativeOnly with get, set
-        member val requestToSend: bool option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?``break``: bool, ?dataTerminalReady: bool, ?requestToSend: bool)
+            : SerialOutputSignals
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -13219,158 +13558,166 @@ module Web =
         abstract member usbProductId: float option with get, set
         abstract member usbVendorId: float option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type SerialPortRequestOptions
+    [<Interface>]
+    type SerialPortRequestOptions =
+        abstract member allowedBluetoothServiceClassIds:
+            ResizeArray<Web.BluetoothServiceUUID> option with get, set
+
+        abstract member filters: ResizeArray<Web.SerialPortFilter> option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?allowedBluetoothServiceClassIds: ResizeArray<Web.BluetoothServiceUUID>,
-            ?filters: ResizeArray<Web.SerialPortFilter>
-        )
-        =
+        static member Create
+            (
+                ?allowedBluetoothServiceClassIds: ResizeArray<Web.BluetoothServiceUUID>,
+                ?filters: ResizeArray<Web.SerialPortFilter>
+            )
+            : SerialPortRequestOptions
+            =
+            nativeOnly
 
-        member val allowedBluetoothServiceClassIds: ResizeArray<Web.BluetoothServiceUUID> option =
-            nativeOnly with get, set
-
-        member val filters: ResizeArray<Web.SerialPortFilter> option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type SetHTMLOptions [<ParamObject; Emit("$0")>] () =
+    [<Interface>]
+    type SetHTMLOptions =
+        abstract member sanitizer:
+            U3<Web.Sanitizer, Web.SanitizerConfig, Web.SanitizerPresets> option with get, set
 
         [<ParamObject; Emit("$0")>]
-        new(sanitizer: Web.Sanitizer) = SetHTMLOptions()
+        static member Create() : SetHTMLOptions = nativeOnly
 
         [<ParamObject; Emit("$0")>]
-        new(sanitizer: Web.SanitizerConfig) = SetHTMLOptions()
+        static member Create(sanitizer: Web.Sanitizer) : SetHTMLOptions = nativeOnly
 
         [<ParamObject; Emit("$0")>]
-        new(sanitizer: Web.SanitizerPresets) = SetHTMLOptions()
+        static member Create(sanitizer: Web.SanitizerConfig) : SetHTMLOptions = nativeOnly
 
-        member val sanitizer: U3<Web.Sanitizer, Web.SanitizerConfig, Web.SanitizerPresets> option =
-            nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create(sanitizer: Web.SanitizerPresets) : SetHTMLOptions = nativeOnly
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type SetHTMLUnsafeOptions [<ParamObject; Emit("$0")>] () =
+    [<Interface>]
+    type SetHTMLUnsafeOptions =
+        abstract member sanitizer:
+            U3<Web.Sanitizer, Web.SanitizerConfig, Web.SanitizerPresets> option with get, set
 
         [<ParamObject; Emit("$0")>]
-        new(sanitizer: Web.Sanitizer) = SetHTMLUnsafeOptions()
+        static member Create() : SetHTMLUnsafeOptions = nativeOnly
 
         [<ParamObject; Emit("$0")>]
-        new(sanitizer: Web.SanitizerConfig) = SetHTMLUnsafeOptions()
+        static member Create(sanitizer: Web.Sanitizer) : SetHTMLUnsafeOptions = nativeOnly
 
         [<ParamObject; Emit("$0")>]
-        new(sanitizer: Web.SanitizerPresets) = SetHTMLUnsafeOptions()
+        static member Create(sanitizer: Web.SanitizerConfig) : SetHTMLUnsafeOptions = nativeOnly
 
-        member val sanitizer: U3<Web.Sanitizer, Web.SanitizerConfig, Web.SanitizerPresets> option =
-            nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create(sanitizer: Web.SanitizerPresets) : SetHTMLUnsafeOptions = nativeOnly
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type ShadowRootInit
+    [<Interface>]
+    type ShadowRootInit =
+        abstract member clonable: bool option with get, set
+        abstract member customElementRegistry: Web.CustomElementRegistry option with get, set
+        abstract member delegatesFocus: bool option with get, set
+        abstract member mode: Web.ShadowRootMode with get, set
+        abstract member serializable: bool option with get, set
+        abstract member slotAssignment: Web.SlotAssignmentMode option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            mode: Web.ShadowRootMode,
-            ?clonable: bool,
-            ?customElementRegistry: Web.CustomElementRegistry,
-            ?delegatesFocus: bool,
-            ?serializable: bool,
-            ?slotAssignment: Web.SlotAssignmentMode
-        )
-        =
+        static member Create
+            (
+                mode: Web.ShadowRootMode,
+                ?clonable: bool,
+                ?customElementRegistry: Web.CustomElementRegistry,
+                ?delegatesFocus: bool,
+                ?serializable: bool,
+                ?slotAssignment: Web.SlotAssignmentMode
+            )
+            : ShadowRootInit
+            =
+            nativeOnly
 
-        member val mode: Web.ShadowRootMode = nativeOnly with get, set
-        member val clonable: bool option = nativeOnly with get, set
-
-        member val customElementRegistry: Web.CustomElementRegistry option =
-            nativeOnly with get, set
-
-        member val delegatesFocus: bool option = nativeOnly with get, set
-        member val serializable: bool option = nativeOnly with get, set
-        member val slotAssignment: Web.SlotAssignmentMode option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type ShareData
-        [<ParamObject; Emit("$0")>]
-        (?files: ResizeArray<Web.File>, ?text: string, ?title: string, ?url: string)
-        =
+    [<Interface>]
+    type ShareData =
+        abstract member files: ResizeArray<Web.File> option with get, set
+        abstract member text: string option with get, set
+        abstract member title: string option with get, set
+        abstract member url: string option with get, set
 
-        member val files: ResizeArray<Web.File> option = nativeOnly with get, set
-        member val text: string option = nativeOnly with get, set
-        member val title: string option = nativeOnly with get, set
-        member val url: string option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?files: ResizeArray<Web.File>, ?text: string, ?title: string, ?url: string)
+            : ShareData
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
     type ShowPopoverOptions =
         abstract member source: Web.HTMLElement option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type SpeechRecognitionErrorEventInit
+    [<Interface>]
+    type SpeechRecognitionErrorEventInit =
+        inherit Web.EventInit
+        abstract member error: Web.SpeechRecognitionErrorCode with get, set
+        abstract member message: string option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            error: Web.SpeechRecognitionErrorCode,
-            ?bubbles: bool,
-            ?cancelable: bool,
-            ?composed: bool,
-            ?message: string
-        )
-        =
+        static member Create
+            (
+                error: Web.SpeechRecognitionErrorCode,
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool,
+                ?message: string
+            )
+            : SpeechRecognitionErrorEventInit
+            =
+            nativeOnly
 
-        member val error: Web.SpeechRecognitionErrorCode = nativeOnly with get, set
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val message: string option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type SpeechRecognitionEventInit
+    [<Interface>]
+    type SpeechRecognitionEventInit =
+        inherit Web.EventInit
+        abstract member resultIndex: float option with get, set
+        abstract member results: Web.SpeechRecognitionResultList with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            results: Web.SpeechRecognitionResultList,
-            ?bubbles: bool,
-            ?cancelable: bool,
-            ?composed: bool,
-            ?resultIndex: float
-        )
-        =
+        static member Create
+            (
+                results: Web.SpeechRecognitionResultList,
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool,
+                ?resultIndex: float
+            )
+            : SpeechRecognitionEventInit
+            =
+            nativeOnly
 
-        member val results: Web.SpeechRecognitionResultList = nativeOnly with get, set
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val resultIndex: float option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type SpeechSynthesisErrorEventInit
-        [<ParamObject; Emit("$0")>]
-        (
-            utterance: Web.SpeechSynthesisUtterance,
-            error: Web.SpeechSynthesisErrorCode,
-            ?bubbles: bool,
-            ?cancelable: bool,
-            ?composed: bool,
-            ?charIndex: float,
-            ?charLength: float,
-            ?elapsedTime: float,
-            ?name: string
-        )
-        =
+    [<Interface>]
+    type SpeechSynthesisErrorEventInit =
+        inherit Web.SpeechSynthesisEventInit
+        abstract member error: Web.SpeechSynthesisErrorCode with get, set
 
-        member val utterance: Web.SpeechSynthesisUtterance = nativeOnly with get, set
-        member val error: Web.SpeechSynthesisErrorCode = nativeOnly with get, set
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val charIndex: float option = nativeOnly with get, set
-        member val charLength: float option = nativeOnly with get, set
-        member val elapsedTime: float option = nativeOnly with get, set
-        member val name: string option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                utterance: Web.SpeechSynthesisUtterance,
+                error: Web.SpeechSynthesisErrorCode,
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool,
+                ?charIndex: float,
+                ?charLength: float,
+                ?elapsedTime: float,
+                ?name: string
+            )
+            : SpeechSynthesisErrorEventInit
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -13382,47 +13729,51 @@ module Web =
         abstract member name: string option with get, set
         abstract member utterance: Web.SpeechSynthesisUtterance with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type StartViewTransitionOptions
+    [<Interface>]
+    type StartViewTransitionOptions =
+        abstract member types: ResizeArray<string> option with get, set
+        abstract member update: Web.ViewTransitionUpdateCallback option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (?types: ResizeArray<string>, ?update: Web.ViewTransitionUpdateCallback)
-        =
+        static member Create
+            (?types: ResizeArray<string>, ?update: Web.ViewTransitionUpdateCallback)
+            : StartViewTransitionOptions
+            =
+            nativeOnly
 
-        member val types: ResizeArray<string> option = nativeOnly with get, set
-        member val update: Web.ViewTransitionUpdateCallback option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type StaticRangeInit
+    [<Interface>]
+    type StaticRangeInit =
+        abstract member endContainer: Web.Node with get, set
+        abstract member endOffset: float with get, set
+        abstract member startContainer: Web.Node with get, set
+        abstract member startOffset: float with get, set
+
         [<ParamObject; Emit("$0")>]
-        (endContainer: Web.Node, endOffset: float, startContainer: Web.Node, startOffset: float)
-        =
+        static member Create
+            (endContainer: Web.Node, endOffset: float, startContainer: Web.Node, startOffset: float)
+            : StaticRangeInit
+            =
+            nativeOnly
 
-        member val endContainer: Web.Node = nativeOnly with get, set
-        member val endOffset: float = nativeOnly with get, set
-        member val startContainer: Web.Node = nativeOnly with get, set
-        member val startOffset: float = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type StereoPannerOptions
+    [<Interface>]
+    type StereoPannerOptions =
+        inherit Web.AudioNodeOptions
+        abstract member pan: float option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?channelCount: float,
-            ?channelCountMode: Web.ChannelCountMode,
-            ?channelInterpretation: Web.ChannelInterpretation,
-            ?pan: float
-        )
-        =
-
-        member val channelCount: float option = nativeOnly with get, set
-        member val channelCountMode: Web.ChannelCountMode option = nativeOnly with get, set
-
-        member val channelInterpretation: Web.ChannelInterpretation option =
-            nativeOnly with get, set
-
-        member val pan: float option = nativeOnly with get, set
+        static member Create
+            (
+                ?channelCount: float,
+                ?channelCountMode: Web.ChannelCountMode,
+                ?channelInterpretation: Web.ChannelInterpretation,
+                ?pan: float
+            )
+            : StereoPannerOptions
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -13430,40 +13781,37 @@ module Web =
         abstract member quota: float option with get, set
         abstract member usage: float option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type StorageEventInit
+    [<Interface>]
+    type StorageEventInit =
+        inherit Web.EventInit
+        abstract member key: string option with get, set
+        abstract member newValue: string option with get, set
+        abstract member oldValue: string option with get, set
+        abstract member storageArea: Web.Storage option with get, set
+        abstract member url: string option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?bubbles: bool,
-            ?cancelable: bool,
-            ?composed: bool,
-            ?key: string,
-            ?newValue: string,
-            ?oldValue: string,
-            ?storageArea: Web.Storage,
-            ?url: string
-        )
-        =
+        static member Create
+            (
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool,
+                ?key: string,
+                ?newValue: string,
+                ?oldValue: string,
+                ?storageArea: Web.Storage,
+                ?url: string
+            )
+            : StorageEventInit
+            =
+            nativeOnly
 
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val key: string option = nativeOnly with get, set
-        member val newValue: string option = nativeOnly with get, set
-        member val oldValue: string option = nativeOnly with get, set
-        member val storageArea: Web.Storage option = nativeOnly with get, set
-        member val url: string option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type StreamPipeOptions
-        [<ParamObject; Emit("$0")>]
-        (?preventAbort: bool, ?preventCancel: bool, ?preventClose: bool, ?signal: Web.AbortSignal)
-        =
-
-        member val preventAbort: bool option = nativeOnly with get, set
-        member val preventCancel: bool option = nativeOnly with get, set
+    [<Interface>]
+    type StreamPipeOptions =
+        abstract member preventAbort: bool option with get, set
+        abstract member preventCancel: bool option with get, set
         /// <summary>
         /// Pipes this readable stream to a given writable stream destination. The way in which the piping process behaves under various error conditions can be customized with a number of passed options. It returns a promise that fulfills when the piping process completes successfully, or rejects if any errors were encountered.
         ///
@@ -13481,73 +13829,95 @@ module Web =
         ///
         /// The signal option can be set to an AbortSignal to allow aborting an ongoing pipe operation via the corresponding AbortController. In this case, this source readable stream will be canceled, and destination aborted, unless the respective options preventCancel or preventAbort are set.
         /// </summary>
-        member val preventClose: bool option = nativeOnly with get, set
-        member val signal: Web.AbortSignal option = nativeOnly with get, set
+        abstract member preventClose: bool option with get, set
+        abstract member signal: Web.AbortSignal option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?preventAbort: bool,
+                ?preventCancel: bool,
+                ?preventClose: bool,
+                ?signal: Web.AbortSignal
+            )
+            : StreamPipeOptions
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
     type StructuredSerializeOptions =
         abstract member transfer: ResizeArray<Web.Transferable> option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type SubmitEventInit
-        [<ParamObject; Emit("$0")>]
-        (?bubbles: bool, ?cancelable: bool, ?composed: bool, ?submitter: Web.HTMLElement)
-        =
+    [<Interface>]
+    type SubmitEventInit =
+        inherit Web.EventInit
+        abstract member submitter: Web.HTMLElement option with get, set
 
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val submitter: Web.HTMLElement option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?bubbles: bool, ?cancelable: bool, ?composed: bool, ?submitter: Web.HTMLElement)
+            : SubmitEventInit
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
     type SvcOutputMetadata =
         abstract member temporalLayerId: float option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type TaskControllerInit [<ParamObject; Emit("$0")>] (?priority: Web.TaskPriority) =
-
-        member val priority: Web.TaskPriority option = nativeOnly with get, set
-
-    [<Global>]
-    [<AllowNullLiteral>]
-    type TaskPriorityChangeEventInit
-        [<ParamObject; Emit("$0")>]
-        (previousPriority: Web.TaskPriority, ?bubbles: bool, ?cancelable: bool, ?composed: bool)
-        =
-
-        member val previousPriority: Web.TaskPriority = nativeOnly with get, set
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-
-    [<Global>]
-    [<AllowNullLiteral>]
-    type TaskSignalAnyInit [<ParamObject; Emit("$0")>] () =
+    [<Interface>]
+    type TaskControllerInit =
+        abstract member priority: Web.TaskPriority option with get, set
 
         [<ParamObject; Emit("$0")>]
-        new(priority: Web.TaskPriority) = TaskSignalAnyInit()
+        static member Create(?priority: Web.TaskPriority) : TaskControllerInit = nativeOnly
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type TaskPriorityChangeEventInit =
+        inherit Web.EventInit
+        abstract member previousPriority: Web.TaskPriority with get, set
 
         [<ParamObject; Emit("$0")>]
-        new(priority: Web.TaskSignal) = TaskSignalAnyInit()
+        static member Create
+            (previousPriority: Web.TaskPriority, ?bubbles: bool, ?cancelable: bool, ?composed: bool)
+            : TaskPriorityChangeEventInit
+            =
+            nativeOnly
 
-        member val priority: U2<Web.TaskPriority, Web.TaskSignal> option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type TextDecodeOptions [<ParamObject; Emit("$0")>] (?stream: bool) =
+    [<Interface>]
+    type TaskSignalAnyInit =
+        abstract member priority: U2<Web.TaskPriority, Web.TaskSignal> option with get, set
 
-        member val stream: bool option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create() : TaskSignalAnyInit = nativeOnly
 
-    [<Global>]
+        [<ParamObject; Emit("$0")>]
+        static member Create(priority: Web.TaskPriority) : TaskSignalAnyInit = nativeOnly
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(priority: Web.TaskSignal) : TaskSignalAnyInit = nativeOnly
+
     [<AllowNullLiteral>]
-    type TextDecoderOptions [<ParamObject; Emit("$0")>] (?fatal: bool, ?ignoreBOM: bool) =
+    [<Interface>]
+    type TextDecodeOptions =
+        abstract member stream: bool option with get, set
 
-        member val fatal: bool option = nativeOnly with get, set
-        member val ignoreBOM: bool option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create(?stream: bool) : TextDecodeOptions = nativeOnly
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type TextDecoderOptions =
+        abstract member fatal: bool option with get, set
+        abstract member ignoreBOM: bool option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(?fatal: bool, ?ignoreBOM: bool) : TextDecoderOptions = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -13561,139 +13931,131 @@ module Web =
         abstract member offset: Web.CSSNumericValue option with get, set
         abstract member rangeName: string option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type ToggleEventInit
+    [<Interface>]
+    type ToggleEventInit =
+        inherit Web.EventInit
+        abstract member newState: string option with get, set
+        abstract member oldState: string option with get, set
+        abstract member source: Web.Element option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?bubbles: bool,
-            ?cancelable: bool,
-            ?composed: bool,
-            ?newState: string,
-            ?oldState: string,
-            ?source: Web.Element
-        )
-        =
+        static member Create
+            (
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool,
+                ?newState: string,
+                ?oldState: string,
+                ?source: Web.Element
+            )
+            : ToggleEventInit
+            =
+            nativeOnly
 
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val newState: string option = nativeOnly with get, set
-        member val oldState: string option = nativeOnly with get, set
-        member val source: Web.Element option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type TogglePopoverOptions [<ParamObject; Emit("$0")>] (?source: Web.HTMLElement, ?force: bool) =
+    [<Interface>]
+    type TogglePopoverOptions =
+        inherit Web.ShowPopoverOptions
+        abstract member force: bool option with get, set
 
-        member val source: Web.HTMLElement option = nativeOnly with get, set
-        member val force: bool option = nativeOnly with get, set
-
-    [<Global>]
-    [<AllowNullLiteral>]
-    type TouchEventInit
         [<ParamObject; Emit("$0")>]
-        (
-            ?bubbles: bool,
-            ?cancelable: bool,
-            ?composed: bool,
-            ?detail: float,
-            ?view: Web.Window,
-            ?which: float,
-            ?altKey: bool,
-            ?ctrlKey: bool,
-            ?metaKey: bool,
-            ?modifierAltGraph: bool,
-            ?modifierCapsLock: bool,
-            ?modifierFn: bool,
-            ?modifierFnLock: bool,
-            ?modifierHyper: bool,
-            ?modifierNumLock: bool,
-            ?modifierScrollLock: bool,
-            ?modifierSuper: bool,
-            ?modifierSymbol: bool,
-            ?modifierSymbolLock: bool,
-            ?shiftKey: bool,
-            ?changedTouches: ResizeArray<Web.Touch>,
-            ?targetTouches: ResizeArray<Web.Touch>,
-            ?touches: ResizeArray<Web.Touch>
-        )
-        =
+        static member Create(?source: Web.HTMLElement, ?force: bool) : TogglePopoverOptions =
+            nativeOnly
 
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val detail: float option = nativeOnly with get, set
-        member val view: Web.Window option = nativeOnly with get, set
-        member val which: float option = nativeOnly with get, set
-        member val altKey: bool option = nativeOnly with get, set
-        member val ctrlKey: bool option = nativeOnly with get, set
-        member val metaKey: bool option = nativeOnly with get, set
-        member val modifierAltGraph: bool option = nativeOnly with get, set
-        member val modifierCapsLock: bool option = nativeOnly with get, set
-        member val modifierFn: bool option = nativeOnly with get, set
-        member val modifierFnLock: bool option = nativeOnly with get, set
-        member val modifierHyper: bool option = nativeOnly with get, set
-        member val modifierNumLock: bool option = nativeOnly with get, set
-        member val modifierScrollLock: bool option = nativeOnly with get, set
-        member val modifierSuper: bool option = nativeOnly with get, set
-        member val modifierSymbol: bool option = nativeOnly with get, set
-        member val modifierSymbolLock: bool option = nativeOnly with get, set
-        member val shiftKey: bool option = nativeOnly with get, set
-        member val changedTouches: ResizeArray<Web.Touch> option = nativeOnly with get, set
-        member val targetTouches: ResizeArray<Web.Touch> option = nativeOnly with get, set
-        member val touches: ResizeArray<Web.Touch> option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type TouchInit
+    [<Interface>]
+    type TouchEventInit =
+        inherit Web.EventModifierInit
+        abstract member changedTouches: ResizeArray<Web.Touch> option with get, set
+        abstract member targetTouches: ResizeArray<Web.Touch> option with get, set
+        abstract member touches: ResizeArray<Web.Touch> option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            identifier: float,
-            target: Web.EventTarget,
-            ?altitudeAngle: float,
-            ?azimuthAngle: float,
-            ?clientX: float,
-            ?clientY: float,
-            ?force: float,
-            ?pageX: float,
-            ?pageY: float,
-            ?radiusX: float,
-            ?radiusY: float,
-            ?rotationAngle: float,
-            ?screenX: float,
-            ?screenY: float,
-            ?touchType: Web.TouchType
-        )
-        =
+        static member Create
+            (
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool,
+                ?detail: float,
+                ?view: Web.Window,
+                ?which: float,
+                ?altKey: bool,
+                ?ctrlKey: bool,
+                ?metaKey: bool,
+                ?modifierAltGraph: bool,
+                ?modifierCapsLock: bool,
+                ?modifierFn: bool,
+                ?modifierFnLock: bool,
+                ?modifierHyper: bool,
+                ?modifierNumLock: bool,
+                ?modifierScrollLock: bool,
+                ?modifierSuper: bool,
+                ?modifierSymbol: bool,
+                ?modifierSymbolLock: bool,
+                ?shiftKey: bool,
+                ?changedTouches: ResizeArray<Web.Touch>,
+                ?targetTouches: ResizeArray<Web.Touch>,
+                ?touches: ResizeArray<Web.Touch>
+            )
+            : TouchEventInit
+            =
+            nativeOnly
 
-        member val identifier: float = nativeOnly with get, set
-        member val target: Web.EventTarget = nativeOnly with get, set
-        member val altitudeAngle: float option = nativeOnly with get, set
-        member val azimuthAngle: float option = nativeOnly with get, set
-        member val clientX: float option = nativeOnly with get, set
-        member val clientY: float option = nativeOnly with get, set
-        member val force: float option = nativeOnly with get, set
-        member val pageX: float option = nativeOnly with get, set
-        member val pageY: float option = nativeOnly with get, set
-        member val radiusX: float option = nativeOnly with get, set
-        member val radiusY: float option = nativeOnly with get, set
-        member val rotationAngle: float option = nativeOnly with get, set
-        member val screenX: float option = nativeOnly with get, set
-        member val screenY: float option = nativeOnly with get, set
-        member val touchType: Web.TouchType option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type TrackEventInit
-        [<ParamObject; Emit("$0")>]
-        (?bubbles: bool, ?cancelable: bool, ?composed: bool, ?track: Web.TextTrack)
-        =
+    [<Interface>]
+    type TouchInit =
+        abstract member altitudeAngle: float option with get, set
+        abstract member azimuthAngle: float option with get, set
+        abstract member clientX: float option with get, set
+        abstract member clientY: float option with get, set
+        abstract member force: float option with get, set
+        abstract member identifier: float with get, set
+        abstract member pageX: float option with get, set
+        abstract member pageY: float option with get, set
+        abstract member radiusX: float option with get, set
+        abstract member radiusY: float option with get, set
+        abstract member rotationAngle: float option with get, set
+        abstract member screenX: float option with get, set
+        abstract member screenY: float option with get, set
+        abstract member target: Web.EventTarget with get, set
+        abstract member touchType: Web.TouchType option with get, set
 
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val track: Web.TextTrack option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                identifier: float,
+                target: Web.EventTarget,
+                ?altitudeAngle: float,
+                ?azimuthAngle: float,
+                ?clientX: float,
+                ?clientY: float,
+                ?force: float,
+                ?pageX: float,
+                ?pageY: float,
+                ?radiusX: float,
+                ?radiusY: float,
+                ?rotationAngle: float,
+                ?screenX: float,
+                ?screenY: float,
+                ?touchType: Web.TouchType
+            )
+            : TouchInit
+            =
+            nativeOnly
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type TrackEventInit =
+        inherit Web.EventInit
+        abstract member track: Web.TextTrack option with get, set
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?bubbles: bool, ?cancelable: bool, ?composed: bool, ?track: Web.TextTrack)
+            : TrackEventInit
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -13704,28 +14066,29 @@ module Web =
         abstract member transform: Web.TransformerTransformCallback<'I, 'O> option with get, set
         abstract member writableType: obj option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type TransitionEventInit
-        [<ParamObject; Emit("$0")>]
-        (
-            ?bubbles: bool,
-            ?cancelable: bool,
-            ?composed: bool,
-            ?animation: Web.CSSTransition,
-            ?elapsedTime: float,
-            ?propertyName: string,
-            ?pseudoElement: string
-        )
-        =
+    [<Interface>]
+    type TransitionEventInit =
+        inherit Web.EventInit
+        abstract member animation: Web.CSSTransition option with get, set
+        abstract member elapsedTime: float option with get, set
+        abstract member propertyName: string option with get, set
+        abstract member pseudoElement: string option with get, set
 
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val animation: Web.CSSTransition option = nativeOnly with get, set
-        member val elapsedTime: float option = nativeOnly with get, set
-        member val propertyName: string option = nativeOnly with get, set
-        member val pseudoElement: string option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool,
+                ?animation: Web.CSSTransition,
+                ?elapsedTime: float,
+                ?propertyName: string,
+                ?pseudoElement: string
+            )
+            : TransitionEventInit
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -13762,11 +14125,13 @@ module Web =
         abstract member search: string option with get, set
         abstract member username: string option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type URLPatternOptions [<ParamObject; Emit("$0")>] (?ignoreCase: bool) =
+    [<Interface>]
+    type URLPatternOptions =
+        abstract member ignoreCase: bool option with get, set
 
-        member val ignoreCase: bool option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create(?ignoreCase: bool) : URLPatternOptions = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -13781,28 +14146,27 @@ module Web =
         abstract member search: Web.URLPatternComponentResult with get, set
         abstract member username: Web.URLPatternComponentResult with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type UnderlyingByteSource
+    [<Interface>]
+    type UnderlyingByteSource =
+        abstract member autoAllocateChunkSize: float option with get, set
+        abstract member cancel: Web.UnderlyingSourceCancelCallback option with get, set
+        abstract member pull: (Web.ReadableByteStreamController -> U2<unit, obj>) option with get, set
+        abstract member start: (Web.ReadableByteStreamController -> unit) option with get, set
+        abstract member ``type``: string with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ``type``: string,
-            ?autoAllocateChunkSize: float,
-            ?cancel: Web.UnderlyingSourceCancelCallback,
-            ?pull: (Web.ReadableByteStreamController -> U2<unit, obj>),
-            ?start: (Web.ReadableByteStreamController -> unit)
-        )
-        =
-
-        member val ``type``: string = nativeOnly with get, set
-        member val autoAllocateChunkSize: float option = nativeOnly with get, set
-        member val cancel: Web.UnderlyingSourceCancelCallback option = nativeOnly with get, set
-
-        member val pull: (Web.ReadableByteStreamController -> U2<unit, obj>) option =
-            nativeOnly with get, set
-
-        member val start: (Web.ReadableByteStreamController -> unit) option =
-            nativeOnly with get, set
+        static member Create
+            (
+                ``type``: string,
+                ?autoAllocateChunkSize: float,
+                ?cancel: Web.UnderlyingSourceCancelCallback,
+                ?pull: (Web.ReadableByteStreamController -> U2<unit, obj>),
+                ?start: (Web.ReadableByteStreamController -> unit)
+            )
+            : UnderlyingByteSource
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -13830,44 +14194,50 @@ module Web =
         abstract member start: Web.UnderlyingSourceStartCallback<'R> option with get, set
         abstract member ``type``: Web.ReadableStreamType option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type UnknownCredentialOptions
+    [<Interface>]
+    type UnknownCredentialOptions =
+        abstract member credentialId: Web.Base64URLString with get, set
+        abstract member rpId: string with get, set
+
         [<ParamObject; Emit("$0")>]
-        (credentialId: Web.Base64URLString, rpId: string)
-        =
+        static member Create
+            (credentialId: Web.Base64URLString, rpId: string)
+            : UnknownCredentialOptions
+            =
+            nativeOnly
 
-        member val credentialId: Web.Base64URLString = nativeOnly with get, set
-        member val rpId: string = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type ValidityStateFlags
-        [<ParamObject; Emit("$0")>]
-        (
-            ?badInput: bool,
-            ?customError: bool,
-            ?patternMismatch: bool,
-            ?rangeOverflow: bool,
-            ?rangeUnderflow: bool,
-            ?stepMismatch: bool,
-            ?tooLong: bool,
-            ?tooShort: bool,
-            ?typeMismatch: bool,
-            ?valueMissing: bool
-        )
-        =
+    [<Interface>]
+    type ValidityStateFlags =
+        abstract member badInput: bool option with get, set
+        abstract member customError: bool option with get, set
+        abstract member patternMismatch: bool option with get, set
+        abstract member rangeOverflow: bool option with get, set
+        abstract member rangeUnderflow: bool option with get, set
+        abstract member stepMismatch: bool option with get, set
+        abstract member tooLong: bool option with get, set
+        abstract member tooShort: bool option with get, set
+        abstract member typeMismatch: bool option with get, set
+        abstract member valueMissing: bool option with get, set
 
-        member val badInput: bool option = nativeOnly with get, set
-        member val customError: bool option = nativeOnly with get, set
-        member val patternMismatch: bool option = nativeOnly with get, set
-        member val rangeOverflow: bool option = nativeOnly with get, set
-        member val rangeUnderflow: bool option = nativeOnly with get, set
-        member val stepMismatch: bool option = nativeOnly with get, set
-        member val tooLong: bool option = nativeOnly with get, set
-        member val tooShort: bool option = nativeOnly with get, set
-        member val typeMismatch: bool option = nativeOnly with get, set
-        member val valueMissing: bool option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                ?badInput: bool,
+                ?customError: bool,
+                ?patternMismatch: bool,
+                ?rangeOverflow: bool,
+                ?rangeUnderflow: bool,
+                ?stepMismatch: bool,
+                ?tooLong: bool,
+                ?tooShort: bool,
+                ?typeMismatch: bool,
+                ?valueMissing: bool
+            )
+            : ValidityStateFlags
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -13891,42 +14261,48 @@ module Web =
         abstract member transferFunction: Web.TransferFunction option with get, set
         abstract member width: float with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type VideoDecoderConfig
+    [<Interface>]
+    type VideoDecoderConfig =
+        abstract member codec: string with get, set
+        abstract member codedHeight: float option with get, set
+        abstract member codedWidth: float option with get, set
+        abstract member colorSpace: Web.VideoColorSpaceInit option with get, set
+        abstract member description: Web.AllowSharedBufferSource option with get, set
+        abstract member displayAspectHeight: float option with get, set
+        abstract member displayAspectWidth: float option with get, set
+        abstract member hardwareAcceleration: Web.HardwareAcceleration option with get, set
+        abstract member optimizeForLatency: bool option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            codec: string,
-            ?codedHeight: float,
-            ?codedWidth: float,
-            ?colorSpace: Web.VideoColorSpaceInit,
-            ?description: Web.AllowSharedBufferSource,
-            ?displayAspectHeight: float,
-            ?displayAspectWidth: float,
-            ?hardwareAcceleration: Web.HardwareAcceleration,
-            ?optimizeForLatency: bool
-        )
-        =
+        static member Create
+            (
+                codec: string,
+                ?codedHeight: float,
+                ?codedWidth: float,
+                ?colorSpace: Web.VideoColorSpaceInit,
+                ?description: Web.AllowSharedBufferSource,
+                ?displayAspectHeight: float,
+                ?displayAspectWidth: float,
+                ?hardwareAcceleration: Web.HardwareAcceleration,
+                ?optimizeForLatency: bool
+            )
+            : VideoDecoderConfig
+            =
+            nativeOnly
 
-        member val codec: string = nativeOnly with get, set
-        member val codedHeight: float option = nativeOnly with get, set
-        member val codedWidth: float option = nativeOnly with get, set
-        member val colorSpace: Web.VideoColorSpaceInit option = nativeOnly with get, set
-        member val description: Web.AllowSharedBufferSource option = nativeOnly with get, set
-        member val displayAspectHeight: float option = nativeOnly with get, set
-        member val displayAspectWidth: float option = nativeOnly with get, set
-        member val hardwareAcceleration: Web.HardwareAcceleration option = nativeOnly with get, set
-        member val optimizeForLatency: bool option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type VideoDecoderInit
-        [<ParamObject; Emit("$0")>]
-        (error: Web.WebCodecsErrorCallback, output: Web.VideoFrameOutputCallback)
-        =
+    [<Interface>]
+    type VideoDecoderInit =
+        abstract member error: error: Web.DOMException -> unit
+        abstract member output: output: Web.VideoFrame -> unit
 
-        member val error: Web.WebCodecsErrorCallback = nativeOnly with get, set
-        member val output: Web.VideoFrameOutputCallback = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (error: Web.WebCodecsErrorCallback, output: Web.VideoFrameOutputCallback)
+            : VideoDecoderInit
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -13934,67 +14310,78 @@ module Web =
         abstract member config: Web.VideoDecoderConfig option with get, set
         abstract member supported: bool option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type VideoEncoderConfig
+    [<Interface>]
+    type VideoEncoderConfig =
+        abstract member alpha: Web.AlphaOption option with get, set
+        abstract member avc: Web.AvcEncoderConfig option with get, set
+        abstract member bitrate: float option with get, set
+        abstract member bitrateMode: Web.VideoEncoderBitrateMode option with get, set
+        abstract member codec: string with get, set
+        abstract member contentHint: string option with get, set
+        abstract member displayHeight: float option with get, set
+        abstract member displayWidth: float option with get, set
+        abstract member framerate: float option with get, set
+        abstract member hardwareAcceleration: Web.HardwareAcceleration option with get, set
+        abstract member height: float with get, set
+        abstract member latencyMode: Web.LatencyMode option with get, set
+        abstract member scalabilityMode: string option with get, set
+        abstract member width: float with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            codec: string,
-            height: float,
-            width: float,
-            ?alpha: Web.AlphaOption,
-            ?avc: Web.AvcEncoderConfig,
-            ?bitrate: float,
-            ?bitrateMode: Web.VideoEncoderBitrateMode,
-            ?contentHint: string,
-            ?displayHeight: float,
-            ?displayWidth: float,
-            ?framerate: float,
-            ?hardwareAcceleration: Web.HardwareAcceleration,
-            ?latencyMode: Web.LatencyMode,
-            ?scalabilityMode: string
-        )
-        =
+        static member Create
+            (
+                codec: string,
+                height: float,
+                width: float,
+                ?alpha: Web.AlphaOption,
+                ?avc: Web.AvcEncoderConfig,
+                ?bitrate: float,
+                ?bitrateMode: Web.VideoEncoderBitrateMode,
+                ?contentHint: string,
+                ?displayHeight: float,
+                ?displayWidth: float,
+                ?framerate: float,
+                ?hardwareAcceleration: Web.HardwareAcceleration,
+                ?latencyMode: Web.LatencyMode,
+                ?scalabilityMode: string
+            )
+            : VideoEncoderConfig
+            =
+            nativeOnly
 
-        member val codec: string = nativeOnly with get, set
-        member val height: float = nativeOnly with get, set
-        member val width: float = nativeOnly with get, set
-        member val alpha: Web.AlphaOption option = nativeOnly with get, set
-        member val avc: Web.AvcEncoderConfig option = nativeOnly with get, set
-        member val bitrate: float option = nativeOnly with get, set
-        member val bitrateMode: Web.VideoEncoderBitrateMode option = nativeOnly with get, set
-        member val contentHint: string option = nativeOnly with get, set
-        member val displayHeight: float option = nativeOnly with get, set
-        member val displayWidth: float option = nativeOnly with get, set
-        member val framerate: float option = nativeOnly with get, set
-        member val hardwareAcceleration: Web.HardwareAcceleration option = nativeOnly with get, set
-        member val latencyMode: Web.LatencyMode option = nativeOnly with get, set
-        member val scalabilityMode: string option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type VideoEncoderEncodeOptions
-        [<ParamObject; Emit("$0")>]
-        (?avc: Web.VideoEncoderEncodeOptionsForAvc, ?keyFrame: bool)
-        =
+    [<Interface>]
+    type VideoEncoderEncodeOptions =
+        abstract member avc: Web.VideoEncoderEncodeOptionsForAvc option with get, set
+        abstract member keyFrame: bool option with get, set
 
-        member val avc: Web.VideoEncoderEncodeOptionsForAvc option = nativeOnly with get, set
-        member val keyFrame: bool option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?avc: Web.VideoEncoderEncodeOptionsForAvc, ?keyFrame: bool)
+            : VideoEncoderEncodeOptions
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
     type VideoEncoderEncodeOptionsForAvc =
         abstract member quantizer: float option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type VideoEncoderInit
-        [<ParamObject; Emit("$0")>]
-        (error: Web.WebCodecsErrorCallback, output: Web.EncodedVideoChunkOutputCallback)
-        =
+    [<Interface>]
+    type VideoEncoderInit =
+        abstract member error: error: Web.DOMException -> unit
 
-        member val error: Web.WebCodecsErrorCallback = nativeOnly with get, set
-        member val output: Web.EncodedVideoChunkOutputCallback = nativeOnly with get, set
+        abstract member output:
+            chunk: Web.EncodedVideoChunk * ?metadata: Web.EncodedVideoChunkMetadata -> unit
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (error: Web.WebCodecsErrorCallback, output: Web.EncodedVideoChunkOutputCallback)
+            : VideoEncoderInit
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -14002,146 +14389,167 @@ module Web =
         abstract member config: Web.VideoEncoderConfig option with get, set
         abstract member supported: bool option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type VideoFrameBufferInit
+    [<Interface>]
+    type VideoFrameBufferInit =
+        abstract member codedHeight: float with get, set
+        abstract member codedWidth: float with get, set
+        abstract member colorSpace: Web.VideoColorSpaceInit option with get, set
+        abstract member displayHeight: float option with get, set
+        abstract member displayWidth: float option with get, set
+        abstract member duration: float option with get, set
+        abstract member format: Web.VideoPixelFormat with get, set
+        abstract member layout: ResizeArray<Web.PlaneLayout> option with get, set
+        abstract member timestamp: float with get, set
+        abstract member visibleRect: Web.DOMRectInit option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            codedHeight: float,
-            codedWidth: float,
-            format: Web.VideoPixelFormat,
-            timestamp: float,
-            ?colorSpace: Web.VideoColorSpaceInit,
-            ?displayHeight: float,
-            ?displayWidth: float,
-            ?duration: float,
-            ?layout: ResizeArray<Web.PlaneLayout>,
-            ?visibleRect: Web.DOMRectInit
-        )
-        =
+        static member Create
+            (
+                codedHeight: float,
+                codedWidth: float,
+                format: Web.VideoPixelFormat,
+                timestamp: float,
+                ?colorSpace: Web.VideoColorSpaceInit,
+                ?displayHeight: float,
+                ?displayWidth: float,
+                ?duration: float,
+                ?layout: ResizeArray<Web.PlaneLayout>,
+                ?visibleRect: Web.DOMRectInit
+            )
+            : VideoFrameBufferInit
+            =
+            nativeOnly
 
-        member val codedHeight: float = nativeOnly with get, set
-        member val codedWidth: float = nativeOnly with get, set
-        member val format: Web.VideoPixelFormat = nativeOnly with get, set
-        member val timestamp: float = nativeOnly with get, set
-        member val colorSpace: Web.VideoColorSpaceInit option = nativeOnly with get, set
-        member val displayHeight: float option = nativeOnly with get, set
-        member val displayWidth: float option = nativeOnly with get, set
-        member val duration: float option = nativeOnly with get, set
-        member val layout: ResizeArray<Web.PlaneLayout> option = nativeOnly with get, set
-        member val visibleRect: Web.DOMRectInit option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type VideoFrameCallbackMetadata
+    [<Interface>]
+    type VideoFrameCallbackMetadata =
+        abstract member captureTime: Web.DOMHighResTimeStamp option with get, set
+        abstract member expectedDisplayTime: Web.DOMHighResTimeStamp with get, set
+        abstract member height: float with get, set
+        abstract member mediaTime: float with get, set
+        abstract member presentationTime: Web.DOMHighResTimeStamp with get, set
+        abstract member presentedFrames: float with get, set
+        abstract member processingDuration: float option with get, set
+        abstract member receiveTime: Web.DOMHighResTimeStamp option with get, set
+        abstract member rtpTimestamp: float option with get, set
+        abstract member width: float with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            expectedDisplayTime: Web.DOMHighResTimeStamp,
-            height: float,
-            mediaTime: float,
-            presentationTime: Web.DOMHighResTimeStamp,
-            presentedFrames: float,
-            width: float,
-            ?captureTime: Web.DOMHighResTimeStamp,
-            ?processingDuration: float,
-            ?receiveTime: Web.DOMHighResTimeStamp,
-            ?rtpTimestamp: float
-        )
-        =
+        static member Create
+            (
+                expectedDisplayTime: Web.DOMHighResTimeStamp,
+                height: float,
+                mediaTime: float,
+                presentationTime: Web.DOMHighResTimeStamp,
+                presentedFrames: float,
+                width: float,
+                ?captureTime: Web.DOMHighResTimeStamp,
+                ?processingDuration: float,
+                ?receiveTime: Web.DOMHighResTimeStamp,
+                ?rtpTimestamp: float
+            )
+            : VideoFrameCallbackMetadata
+            =
+            nativeOnly
 
-        member val expectedDisplayTime: Web.DOMHighResTimeStamp = nativeOnly with get, set
-        member val height: float = nativeOnly with get, set
-        member val mediaTime: float = nativeOnly with get, set
-        member val presentationTime: Web.DOMHighResTimeStamp = nativeOnly with get, set
-        member val presentedFrames: float = nativeOnly with get, set
-        member val width: float = nativeOnly with get, set
-        member val captureTime: Web.DOMHighResTimeStamp option = nativeOnly with get, set
-        member val processingDuration: float option = nativeOnly with get, set
-        member val receiveTime: Web.DOMHighResTimeStamp option = nativeOnly with get, set
-        member val rtpTimestamp: float option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type VideoFrameCopyToOptions
+    [<Interface>]
+    type VideoFrameCopyToOptions =
+        abstract member colorSpace: Web.PredefinedColorSpace option with get, set
+        abstract member format: Web.VideoPixelFormat option with get, set
+        abstract member layout: ResizeArray<Web.PlaneLayout> option with get, set
+        abstract member rect: Web.DOMRectInit option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?colorSpace: Web.PredefinedColorSpace,
-            ?format: Web.VideoPixelFormat,
-            ?layout: ResizeArray<Web.PlaneLayout>,
-            ?rect: Web.DOMRectInit
-        )
-        =
+        static member Create
+            (
+                ?colorSpace: Web.PredefinedColorSpace,
+                ?format: Web.VideoPixelFormat,
+                ?layout: ResizeArray<Web.PlaneLayout>,
+                ?rect: Web.DOMRectInit
+            )
+            : VideoFrameCopyToOptions
+            =
+            nativeOnly
 
-        member val colorSpace: Web.PredefinedColorSpace option = nativeOnly with get, set
-        member val format: Web.VideoPixelFormat option = nativeOnly with get, set
-        member val layout: ResizeArray<Web.PlaneLayout> option = nativeOnly with get, set
-        member val rect: Web.DOMRectInit option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type VideoFrameInit
+    [<Interface>]
+    type VideoFrameInit =
+        abstract member alpha: Web.AlphaOption option with get, set
+        abstract member displayHeight: float option with get, set
+        abstract member displayWidth: float option with get, set
+        abstract member duration: float option with get, set
+        abstract member timestamp: float option with get, set
+        abstract member visibleRect: Web.DOMRectInit option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?alpha: Web.AlphaOption,
-            ?displayHeight: float,
-            ?displayWidth: float,
-            ?duration: float,
-            ?timestamp: float,
-            ?visibleRect: Web.DOMRectInit
-        )
-        =
+        static member Create
+            (
+                ?alpha: Web.AlphaOption,
+                ?displayHeight: float,
+                ?displayWidth: float,
+                ?duration: float,
+                ?timestamp: float,
+                ?visibleRect: Web.DOMRectInit
+            )
+            : VideoFrameInit
+            =
+            nativeOnly
 
-        member val alpha: Web.AlphaOption option = nativeOnly with get, set
-        member val displayHeight: float option = nativeOnly with get, set
-        member val displayWidth: float option = nativeOnly with get, set
-        member val duration: float option = nativeOnly with get, set
-        member val timestamp: float option = nativeOnly with get, set
-        member val visibleRect: Web.DOMRectInit option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type ViewTimelineOptions private () =
+    [<Interface>]
+    type ViewTimelineOptions =
+        abstract member axis: Web.ScrollAxis option with get, set
+
+        abstract member inset:
+            U2<string, ResizeArray<U2<Web.CSSNumericValue, Web.CSSKeywordValue>>> option with get, set
+
+        abstract member subject: Web.Element option with get, set
 
         [<ParamObject; Emit("$0")>]
-        new(?axis: Web.ScrollAxis, ?subject: Web.Element) = ViewTimelineOptions()
+        static member Create(?axis: Web.ScrollAxis, ?subject: Web.Element) : ViewTimelineOptions =
+            nativeOnly
 
         [<ParamObject; Emit("$0")>]
-        new(inset: string, ?axis: Web.ScrollAxis, ?subject: Web.Element) = ViewTimelineOptions()
+        static member Create
+            (inset: string, ?axis: Web.ScrollAxis, ?subject: Web.Element)
+            : ViewTimelineOptions
+            =
+            nativeOnly
 
         [<ParamObject; Emit("$0")>]
-        new
+        static member Create
             (
                 inset: ResizeArray<U2<Web.CSSNumericValue, Web.CSSKeywordValue>>,
                 ?axis: Web.ScrollAxis,
                 ?subject: Web.Element
             )
+            : ViewTimelineOptions
             =
-            ViewTimelineOptions()
+            nativeOnly
 
-        member val axis: Web.ScrollAxis option = nativeOnly with get, set
-
-        member val inset: U2<string, ResizeArray<U2<Web.CSSNumericValue, Web.CSSKeywordValue>>> option =
-            nativeOnly with get, set
-
-        member val subject: Web.Element option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type WaveShaperOptions private () =
+    [<Interface>]
+    type WaveShaperOptions =
+        inherit Web.AudioNodeOptions
+        abstract member curve: U2<ResizeArray<float>, JS.Float32Array> option with get, set
+        abstract member oversample: Web.OverSampleType option with get, set
 
         [<ParamObject; Emit("$0")>]
-        new
+        static member Create
             (
                 ?channelCount: float,
                 ?channelCountMode: Web.ChannelCountMode,
                 ?channelInterpretation: Web.ChannelInterpretation,
                 ?oversample: Web.OverSampleType
             )
+            : WaveShaperOptions
             =
-            WaveShaperOptions()
+            nativeOnly
 
         [<ParamObject; Emit("$0")>]
-        new
+        static member Create
             (
                 curve: ResizeArray<float>,
                 ?channelCount: float,
@@ -14149,11 +14557,12 @@ module Web =
                 ?channelInterpretation: Web.ChannelInterpretation,
                 ?oversample: Web.OverSampleType
             )
+            : WaveShaperOptions
             =
-            WaveShaperOptions()
+            nativeOnly
 
         [<ParamObject; Emit("$0")>]
-        new
+        static member Create
             (
                 curve: JS.Float32Array,
                 ?channelCount: float,
@@ -14161,17 +14570,9 @@ module Web =
                 ?channelInterpretation: Web.ChannelInterpretation,
                 ?oversample: Web.OverSampleType
             )
+            : WaveShaperOptions
             =
-            WaveShaperOptions()
-
-        member val channelCount: float option = nativeOnly with get, set
-        member val channelCountMode: Web.ChannelCountMode option = nativeOnly with get, set
-
-        member val channelInterpretation: Web.ChannelInterpretation option =
-            nativeOnly with get, set
-
-        member val curve: U2<ResizeArray<float>, JS.Float32Array> option = nativeOnly with get, set
-        member val oversample: Web.OverSampleType option = nativeOnly with get, set
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -14187,24 +14588,28 @@ module Web =
         abstract member stencil: bool option with get, set
         abstract member xrCompatible: bool option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type WebGLContextEventInit
+    [<Interface>]
+    type WebGLContextEventInit =
+        inherit Web.EventInit
+        abstract member statusMessage: string option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (?bubbles: bool, ?cancelable: bool, ?composed: bool, ?statusMessage: string)
-        =
+        static member Create
+            (?bubbles: bool, ?cancelable: bool, ?composed: bool, ?statusMessage: string)
+            : WebGLContextEventInit
+            =
+            nativeOnly
 
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val statusMessage: string option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type WebTransportCloseInfo [<ParamObject; Emit("$0")>] (?closeCode: float, ?reason: string) =
+    [<Interface>]
+    type WebTransportCloseInfo =
+        abstract member closeCode: float option with get, set
+        abstract member reason: string option with get, set
 
-        member val closeCode: float option = nativeOnly with get, set
-        member val reason: string option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create(?closeCode: float, ?reason: string) : WebTransportCloseInfo =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -14225,15 +14630,18 @@ module Web =
         abstract member expiredOutgoing: float option with get, set
         abstract member lostOutgoing: float option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type WebTransportErrorOptions
-        [<ParamObject; Emit("$0")>]
-        (?source: Web.WebTransportErrorSource, ?streamErrorCode: float)
-        =
+    [<Interface>]
+    type WebTransportErrorOptions =
+        abstract member source: Web.WebTransportErrorSource option with get, set
+        abstract member streamErrorCode: float option with get, set
 
-        member val source: Web.WebTransportErrorSource option = nativeOnly with get, set
-        member val streamErrorCode: float option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (?source: Web.WebTransportErrorSource, ?streamErrorCode: float)
+            : WebTransportErrorOptions
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -14241,29 +14649,27 @@ module Web =
         abstract member algorithm: string with get, set
         abstract member value: Web.BufferSource with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type WebTransportOptions
+    [<Interface>]
+    type WebTransportOptions =
+        abstract member allowPooling: bool option with get, set
+        abstract member congestionControl: Web.WebTransportCongestionControl option with get, set
+        abstract member protocols: ResizeArray<string> option with get, set
+        abstract member requireUnreliable: bool option with get, set
+        abstract member serverCertificateHashes: ResizeArray<Web.WebTransportHash> option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?allowPooling: bool,
-            ?congestionControl: Web.WebTransportCongestionControl,
-            ?protocols: ResizeArray<string>,
-            ?requireUnreliable: bool,
-            ?serverCertificateHashes: ResizeArray<Web.WebTransportHash>
-        )
-        =
-
-        member val allowPooling: bool option = nativeOnly with get, set
-
-        member val congestionControl: Web.WebTransportCongestionControl option =
-            nativeOnly with get, set
-
-        member val protocols: ResizeArray<string> option = nativeOnly with get, set
-        member val requireUnreliable: bool option = nativeOnly with get, set
-
-        member val serverCertificateHashes: ResizeArray<Web.WebTransportHash> option =
-            nativeOnly with get, set
+        static member Create
+            (
+                ?allowPooling: bool,
+                ?congestionControl: Web.WebTransportCongestionControl,
+                ?protocols: ResizeArray<string>,
+                ?requireUnreliable: bool,
+                ?serverCertificateHashes: ResizeArray<Web.WebTransportHash>
+            )
+            : WebTransportOptions
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -14276,11 +14682,13 @@ module Web =
     type WebTransportSendOptions =
         abstract member sendOrder: float option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type WebTransportSendStreamOptions [<ParamObject; Emit("$0")>] (?sendOrder: float) =
+    [<Interface>]
+    type WebTransportSendStreamOptions =
+        inherit Web.WebTransportSendOptions
 
-        member val sendOrder: float option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create(?sendOrder: float) : WebTransportSendStreamOptions = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -14289,107 +14697,90 @@ module Web =
         abstract member bytesSent: float option with get, set
         abstract member bytesWritten: float option with get, set
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type WheelEventInit
+    [<Interface>]
+    type WheelEventInit =
+        inherit Web.MouseEventInit
+        abstract member deltaMode: float option with get, set
+        abstract member deltaX: float option with get, set
+        abstract member deltaY: float option with get, set
+        abstract member deltaZ: float option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (
-            ?bubbles: bool,
-            ?cancelable: bool,
-            ?composed: bool,
-            ?detail: float,
-            ?view: Web.Window,
-            ?which: float,
-            ?altKey: bool,
-            ?ctrlKey: bool,
-            ?metaKey: bool,
-            ?modifierAltGraph: bool,
-            ?modifierCapsLock: bool,
-            ?modifierFn: bool,
-            ?modifierFnLock: bool,
-            ?modifierHyper: bool,
-            ?modifierNumLock: bool,
-            ?modifierScrollLock: bool,
-            ?modifierSuper: bool,
-            ?modifierSymbol: bool,
-            ?modifierSymbolLock: bool,
-            ?shiftKey: bool,
-            ?button: float,
-            ?buttons: float,
-            ?clientX: float,
-            ?clientY: float,
-            ?movementX: float,
-            ?movementY: float,
-            ?relatedTarget: Web.EventTarget,
-            ?screenX: float,
-            ?screenY: float,
-            ?deltaMode: float,
-            ?deltaX: float,
-            ?deltaY: float,
-            ?deltaZ: float
-        )
-        =
+        static member Create
+            (
+                ?bubbles: bool,
+                ?cancelable: bool,
+                ?composed: bool,
+                ?detail: float,
+                ?view: Web.Window,
+                ?which: float,
+                ?altKey: bool,
+                ?ctrlKey: bool,
+                ?metaKey: bool,
+                ?modifierAltGraph: bool,
+                ?modifierCapsLock: bool,
+                ?modifierFn: bool,
+                ?modifierFnLock: bool,
+                ?modifierHyper: bool,
+                ?modifierNumLock: bool,
+                ?modifierScrollLock: bool,
+                ?modifierSuper: bool,
+                ?modifierSymbol: bool,
+                ?modifierSymbolLock: bool,
+                ?shiftKey: bool,
+                ?button: float,
+                ?buttons: float,
+                ?clientX: float,
+                ?clientY: float,
+                ?movementX: float,
+                ?movementY: float,
+                ?relatedTarget: Web.EventTarget,
+                ?screenX: float,
+                ?screenY: float,
+                ?deltaMode: float,
+                ?deltaX: float,
+                ?deltaY: float,
+                ?deltaZ: float
+            )
+            : WheelEventInit
+            =
+            nativeOnly
 
-        member val bubbles: bool option = nativeOnly with get, set
-        member val cancelable: bool option = nativeOnly with get, set
-        member val composed: bool option = nativeOnly with get, set
-        member val detail: float option = nativeOnly with get, set
-        member val view: Web.Window option = nativeOnly with get, set
-        member val which: float option = nativeOnly with get, set
-        member val altKey: bool option = nativeOnly with get, set
-        member val ctrlKey: bool option = nativeOnly with get, set
-        member val metaKey: bool option = nativeOnly with get, set
-        member val modifierAltGraph: bool option = nativeOnly with get, set
-        member val modifierCapsLock: bool option = nativeOnly with get, set
-        member val modifierFn: bool option = nativeOnly with get, set
-        member val modifierFnLock: bool option = nativeOnly with get, set
-        member val modifierHyper: bool option = nativeOnly with get, set
-        member val modifierNumLock: bool option = nativeOnly with get, set
-        member val modifierScrollLock: bool option = nativeOnly with get, set
-        member val modifierSuper: bool option = nativeOnly with get, set
-        member val modifierSymbol: bool option = nativeOnly with get, set
-        member val modifierSymbolLock: bool option = nativeOnly with get, set
-        member val shiftKey: bool option = nativeOnly with get, set
-        member val button: float option = nativeOnly with get, set
-        member val buttons: float option = nativeOnly with get, set
-        member val clientX: float option = nativeOnly with get, set
-        member val clientY: float option = nativeOnly with get, set
-        member val movementX: float option = nativeOnly with get, set
-        member val movementY: float option = nativeOnly with get, set
-        member val relatedTarget: Web.EventTarget option = nativeOnly with get, set
-        member val screenX: float option = nativeOnly with get, set
-        member val screenY: float option = nativeOnly with get, set
-        member val deltaMode: float option = nativeOnly with get, set
-        member val deltaX: float option = nativeOnly with get, set
-        member val deltaY: float option = nativeOnly with get, set
-        member val deltaZ: float option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type WindowPostMessageOptions
+    [<Interface>]
+    type WindowPostMessageOptions =
+        inherit Web.StructuredSerializeOptions
+        abstract member targetOrigin: string option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (?transfer: ResizeArray<Web.Transferable>, ?targetOrigin: string)
-        =
+        static member Create
+            (?transfer: ResizeArray<Web.Transferable>, ?targetOrigin: string)
+            : WindowPostMessageOptions
+            =
+            nativeOnly
 
-        member val transfer: ResizeArray<Web.Transferable> option = nativeOnly with get, set
-        member val targetOrigin: string option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type WorkerOptions
+    [<Interface>]
+    type WorkerOptions =
+        abstract member credentials: Web.RequestCredentials option with get, set
+        abstract member name: string option with get, set
+        abstract member ``type``: Web.WorkerType option with get, set
+
         [<ParamObject; Emit("$0")>]
-        (?credentials: Web.RequestCredentials, ?name: string, ?``type``: Web.WorkerType)
-        =
+        static member Create
+            (?credentials: Web.RequestCredentials, ?name: string, ?``type``: Web.WorkerType)
+            : WorkerOptions
+            =
+            nativeOnly
 
-        member val credentials: Web.RequestCredentials option = nativeOnly with get, set
-        member val name: string option = nativeOnly with get, set
-        member val ``type``: Web.WorkerType option = nativeOnly with get, set
-
-    [<Global>]
     [<AllowNullLiteral>]
-    type WorkletOptions [<ParamObject; Emit("$0")>] (?credentials: Web.RequestCredentials) =
+    [<Interface>]
+    type WorkletOptions =
+        abstract member credentials: Web.RequestCredentials option with get, set
 
-        member val credentials: Web.RequestCredentials option = nativeOnly with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create(?credentials: Web.RequestCredentials) : WorkletOptions = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -25908,42 +26299,45 @@ module Web =
     ///
     /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CryptoKey)
     /// </summary>
-    [<Global>]
     [<AllowNullLiteral>]
-    type CryptoKey
-        [<ParamObject; Emit("$0")>]
-        (
-            algorithm: Web.KeyAlgorithm,
-            extractable: bool,
-            ``type``: Web.KeyType,
-            usages: ResizeArray<Web.KeyUsage>
-        )
-        =
-
+    [<Interface>]
+    type CryptoKey =
         /// <summary>
         /// The read-only **<c>algorithm</c>** property of the CryptoKey interface returns an object describing the algorithm for which this key can be used, and any associated extra parameters.
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CryptoKey/algorithm)
         /// </summary>
-        member val algorithm: Web.KeyAlgorithm = nativeOnly with get
+        abstract member algorithm: Web.KeyAlgorithm with get
         /// <summary>
         /// The read-only **<c>extractable</c>** property of the CryptoKey interface indicates whether or not the key may be extracted using SubtleCrypto.exportKey() or SubtleCrypto.wrapKey().
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CryptoKey/extractable)
         /// </summary>
-        member val extractable: bool = nativeOnly with get
+        abstract member extractable: bool with get
         /// <summary>
         /// The read-only **<c>type</c>** property of the CryptoKey interface indicates which kind of key is represented by the object. It can have the following values:
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CryptoKey/type)
         /// </summary>
-        member val ``type``: Web.KeyType = nativeOnly with get
+        abstract member ``type``: Web.KeyType with get
         /// <summary>
         /// The read-only **<c>usages</c>** property of the CryptoKey interface indicates what can be done with the key.
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CryptoKey/usages)
         /// </summary>
-        member val usages: ResizeArray<Web.KeyUsage> = nativeOnly with get
+        abstract member usages: ResizeArray<Web.KeyUsage> with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                algorithm: Web.KeyAlgorithm,
+                extractable: bool,
+                ``type``: Web.KeyType,
+                usages: ResizeArray<Web.KeyUsage>
+            )
+            : CryptoKey
+            =
+            nativeOnly
 
     /// <summary>
     /// The **<c>CustomElementRegistry</c>** interface provides methods for registering custom elements and querying registered elements. To get an instance of it, use the window.customElements property. To create a scoped registry, use the CustomElementRegistry() constructor.
@@ -34184,34 +34578,37 @@ module Web =
     ///
     /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GeolocationPositionError)
     /// </summary>
-    [<Global>]
     [<AllowNullLiteral>]
-    type GeolocationPositionError
-        [<ParamObject; Emit("$0")>]
-        (
-            code: float,
-            message: string,
-            PERMISSION_DENIED: int,
-            POSITION_UNAVAILABLE: int,
-            TIMEOUT: int
-        )
-        =
-
+    [<Interface>]
+    type GeolocationPositionError =
         /// <summary>
         /// The **<c>code</c>** read-only property of the GeolocationPositionError interface is an unsigned short representing the error code.
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GeolocationPositionError/code)
         /// </summary>
-        member val code: float = nativeOnly with get
+        abstract member code: float with get
         /// <summary>
         /// The **<c>message</c>** read-only property of the GeolocationPositionError interface returns a human-readable string describing the details of the error.
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GeolocationPositionError/message)
         /// </summary>
-        member val message: string = nativeOnly with get
-        member val PERMISSION_DENIED: int = nativeOnly with get
-        member val POSITION_UNAVAILABLE: int = nativeOnly with get
-        member val TIMEOUT: int = nativeOnly with get
+        abstract member message: string with get
+        abstract member PERMISSION_DENIED: int with get
+        abstract member POSITION_UNAVAILABLE: int with get
+        abstract member TIMEOUT: int with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create
+            (
+                code: float,
+                message: string,
+                PERMISSION_DENIED: int,
+                POSITION_UNAVAILABLE: int,
+                TIMEOUT: int
+            )
+            : GeolocationPositionError
+            =
+            nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -56168,22 +56565,24 @@ module Web =
     ///
     /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Lock)
     /// </summary>
-    [<Global>]
     [<AllowNullLiteral>]
-    type Lock [<ParamObject; Emit("$0")>] (mode: Web.LockMode, name: string) =
-
+    [<Interface>]
+    type Lock =
         /// <summary>
         /// The **<c>mode</c>** read-only property of the Lock interface returns the access mode passed to LockManager.request() when the lock was requested. The mode is either "exclusive" (the default) or "shared".
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Lock/mode)
         /// </summary>
-        member val mode: Web.LockMode = nativeOnly with get
+        abstract member mode: Web.LockMode with get
         /// <summary>
         /// The **<c>name</c>** read-only property of the Lock interface returns the name passed to LockManager.request selected when the lock was requested.
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Lock/name)
         /// </summary>
-        member val name: string = nativeOnly with get
+        abstract member name: string with get
+
+        [<ParamObject; Emit("$0")>]
+        static member Create(mode: Web.LockMode, name: string) : Lock = nativeOnly
 
     /// <summary>
     /// The **<c>LockManager</c>** interface of the Web Locks API provides methods for requesting a new Lock object and querying for an existing Lock object. To get an instance of LockManager, call navigator.locks.
@@ -89199,6 +89598,28 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/generateKey)
         /// </summary>
         abstract member generateKey:
+            algorithm: SubtleCrypto.generateKey.algorithm_2 *
+            extractable: bool *
+            keyUsages: ResizeArray<SubtleCrypto.generateKey.keyUsages> ->
+                JS.Promise<Web.CryptoKeyPair>
+
+        /// <summary>
+        /// The **<c>generateKey()</c>** method of the SubtleCrypto interface is used to generate a new key (for symmetric algorithms) or key pair (for public-key algorithms).
+        ///
+        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/generateKey)
+        /// </summary>
+        abstract member generateKey:
+            algorithm: SubtleCrypto.generateKey.algorithm_3 *
+            extractable: bool *
+            keyUsages: ResizeArray<SubtleCrypto.generateKey.keyUsages_1> ->
+                JS.Promise<Web.CryptoKeyPair>
+
+        /// <summary>
+        /// The **<c>generateKey()</c>** method of the SubtleCrypto interface is used to generate a new key (for symmetric algorithms) or key pair (for public-key algorithms).
+        ///
+        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/generateKey)
+        /// </summary>
+        abstract member generateKey:
             algorithm: Web.Algorithm * extractable: bool * keyUsages: Iterable<Web.KeyUsage> ->
                 JS.Promise<U2<Web.CryptoKeyPair, Web.CryptoKey>>
 
@@ -102825,11 +103246,13 @@ module Web =
         [<Interface>]
         type Tag = interface end
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type ExceptionOptions [<ParamObject; Emit("$0")>] (?traceStack: bool) =
+        [<Interface>]
+        type ExceptionOptions =
+            abstract member traceStack: bool option with get, set
 
-            member val traceStack: bool option = nativeOnly with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create(?traceStack: bool) : ExceptionOptions = nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -102837,22 +103260,25 @@ module Web =
             abstract member ``mutable``: bool option with get, set
             abstract member value: 'T with get, set
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type MemoryDescriptor
-            [<ParamObject; Emit("$0")>]
-            (
-                initial: Web.WebAssembly_.AddressValue,
-                ?address: Web.WebAssembly_.AddressType,
-                ?maximum: Web.WebAssembly_.AddressValue,
-                ?shared: bool
-            )
-            =
+        [<Interface>]
+        type MemoryDescriptor =
+            abstract member address: Web.WebAssembly_.AddressType option with get, set
+            abstract member initial: Web.WebAssembly_.AddressValue with get, set
+            abstract member maximum: Web.WebAssembly_.AddressValue option with get, set
+            abstract member shared: bool option with get, set
 
-            member val initial: Web.WebAssembly_.AddressValue = nativeOnly with get, set
-            member val address: Web.WebAssembly_.AddressType option = nativeOnly with get, set
-            member val maximum: Web.WebAssembly_.AddressValue option = nativeOnly with get, set
-            member val shared: bool option = nativeOnly with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    initial: Web.WebAssembly_.AddressValue,
+                    ?address: Web.WebAssembly_.AddressType,
+                    ?maximum: Web.WebAssembly_.AddressValue,
+                    ?shared: bool
+                )
+                : MemoryDescriptor
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -102867,32 +103293,34 @@ module Web =
             abstract member ``module``: string with get, set
             abstract member name: string with get, set
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type TableDescriptor
+        [<Interface>]
+        type TableDescriptor =
+            abstract member address: Web.WebAssembly_.AddressType option with get, set
+            abstract member element: Web.WebAssembly_.TableKind with get, set
+            abstract member initial: Web.WebAssembly_.AddressValue with get, set
+            abstract member maximum: Web.WebAssembly_.AddressValue option with get, set
+
             [<ParamObject; Emit("$0")>]
-            (
-                element: Web.WebAssembly_.TableKind,
-                initial: Web.WebAssembly_.AddressValue,
-                ?address: Web.WebAssembly_.AddressType,
-                ?maximum: Web.WebAssembly_.AddressValue
-            )
-            =
+            static member Create
+                (
+                    element: Web.WebAssembly_.TableKind,
+                    initial: Web.WebAssembly_.AddressValue,
+                    ?address: Web.WebAssembly_.AddressType,
+                    ?maximum: Web.WebAssembly_.AddressValue
+                )
+                : TableDescriptor
+                =
+                nativeOnly
 
-            member val element: Web.WebAssembly_.TableKind = nativeOnly with get, set
-            member val initial: Web.WebAssembly_.AddressValue = nativeOnly with get, set
-            member val address: Web.WebAssembly_.AddressType option = nativeOnly with get, set
-            member val maximum: Web.WebAssembly_.AddressValue option = nativeOnly with get, set
-
-        [<Global>]
         [<AllowNullLiteral>]
-        type TagType
-            [<ParamObject; Emit("$0")>]
-            (parameters: ResizeArray<Web.WebAssembly_.ValueType>)
-            =
+        [<Interface>]
+        type TagType =
+            abstract member parameters: ResizeArray<Web.WebAssembly_.ValueType> with get, set
 
-            member val parameters: ResizeArray<Web.WebAssembly_.ValueType> =
-                nativeOnly with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create(parameters: ResizeArray<Web.WebAssembly_.ValueType>) : TagType =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -102905,15 +103333,18 @@ module Web =
             abstract member i64: bigint with get, set
             abstract member v128: obj with get, set
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type WebAssemblyCompileOptions
-            [<ParamObject; Emit("$0")>]
-            (?builtins: ResizeArray<string>, ?importedStringConstants: string)
-            =
+        [<Interface>]
+        type WebAssemblyCompileOptions =
+            abstract member builtins: ResizeArray<string> option with get, set
+            abstract member importedStringConstants: string option with get, set
 
-            member val builtins: ResizeArray<string> option = nativeOnly with get, set
-            member val importedStringConstants: string option = nativeOnly with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (?builtins: ResizeArray<string>, ?importedStringConstants: string)
+                : WebAssemblyCompileOptions
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -107524,21 +107955,25 @@ module Web =
 
         module U2 =
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type Case2 [<ParamObject; Emit("$0")>] (acceptNode: float) =
+            [<Interface>]
+            type Case2 =
+                abstract member acceptNode: node: Web.Node -> float
 
-                member val acceptNode: float = nativeOnly
+                [<ParamObject; Emit("$0")>]
+                static member Create(acceptNode: float) : Case2 = nativeOnly
 
     module XPathNSResolver =
 
         module U2 =
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type Case2 [<ParamObject; Emit("$0")>] (?lookupNamespaceURI: string) =
+            [<Interface>]
+            type Case2 =
+                abstract member lookupNamespaceURI: prefix: string option -> string option
 
-                member val lookupNamespaceURI: string option = nativeOnly
+                [<ParamObject; Emit("$0")>]
+                static member Create(?lookupNamespaceURI: string) : Case2 = nativeOnly
 
     module AudioParamMap =
 
@@ -107804,11 +108239,13 @@ module Web =
 
         module getReader =
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type options [<ParamObject; Emit("$0")>] (mode: string) =
+            [<Interface>]
+            type options =
+                abstract member mode: string with get, set
 
-                member val mode: string = nativeOnly with get, set
+                [<ParamObject; Emit("$0")>]
+                static member Create(mode: string) : options = nativeOnly
 
     module StylePropertyMapReadOnly =
 
@@ -107850,17 +108287,37 @@ module Web =
 
                 module Cases =
 
-                    [<Global>]
                     [<AllowNullLiteral>]
-                    type Case1 [<ParamObject; Emit("$0")>] (name: string) =
+                    [<Interface>]
+                    type Case1 =
+                        abstract member name: string with get, set
 
-                        member val name: string = nativeOnly with get, set
+                        [<ParamObject; Emit("$0")>]
+                        static member Create(name: string) : Case1 = nativeOnly
 
-                    [<Global>]
                     [<AllowNullLiteral>]
-                    type Case1_1 [<ParamObject; Emit("$0")>] (name: string) =
+                    [<Interface>]
+                    type Case1_1 =
+                        abstract member name: string with get, set
 
-                        member val name: string = nativeOnly with get, set
+                        [<ParamObject; Emit("$0")>]
+                        static member Create(name: string) : Case1_1 = nativeOnly
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type Case1_2 =
+                        abstract member name: string with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create(name: string) : Case1_2 = nativeOnly
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type Case1_3 =
+                        abstract member name: string with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create(name: string) : Case1_3 = nativeOnly
 
             [<RequireQualifiedAccess>]
             [<Erase(CaseRules.None)>]
@@ -107873,6 +108330,18 @@ module Web =
             type keyUsages_1 =
                 | deriveBits
                 | deriveKey
+
+            [<RequireQualifiedAccess>]
+            [<Erase(CaseRules.None)>]
+            type algorithm_2 =
+                | Ed25519
+                | Case1 of SubtleCrypto.generateKey.algorithm.Cases.Case1_2
+
+            [<RequireQualifiedAccess>]
+            [<Erase(CaseRules.None)>]
+            type algorithm_3 =
+                | X25519
+                | Case1 of SubtleCrypto.generateKey.algorithm.Cases.Case1_3
 
         module importKey =
 
@@ -107927,46 +108396,49 @@ module Web =
 
         module NodeFilter =
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type Type
-                [<ParamObject; Emit("$0")>]
-                (
-                    FILTER_ACCEPT: int,
-                    FILTER_REJECT: int,
-                    FILTER_SKIP: int,
-                    SHOW_ALL: int,
-                    SHOW_ELEMENT: int,
-                    SHOW_ATTRIBUTE: int,
-                    SHOW_TEXT: int,
-                    SHOW_CDATA_SECTION: int,
-                    SHOW_ENTITY_REFERENCE: int,
-                    SHOW_ENTITY: int,
-                    SHOW_PROCESSING_INSTRUCTION: int,
-                    SHOW_COMMENT: int,
-                    SHOW_DOCUMENT: int,
-                    SHOW_DOCUMENT_TYPE: int,
-                    SHOW_DOCUMENT_FRAGMENT: int,
-                    SHOW_NOTATION: int
-                )
-                =
+            [<Interface>]
+            type Type =
+                abstract member FILTER_ACCEPT: int with get
+                abstract member FILTER_REJECT: int with get
+                abstract member FILTER_SKIP: int with get
+                abstract member SHOW_ALL: int with get
+                abstract member SHOW_ELEMENT: int with get
+                abstract member SHOW_ATTRIBUTE: int with get
+                abstract member SHOW_TEXT: int with get
+                abstract member SHOW_CDATA_SECTION: int with get
+                abstract member SHOW_ENTITY_REFERENCE: int with get
+                abstract member SHOW_ENTITY: int with get
+                abstract member SHOW_PROCESSING_INSTRUCTION: int with get
+                abstract member SHOW_COMMENT: int with get
+                abstract member SHOW_DOCUMENT: int with get
+                abstract member SHOW_DOCUMENT_TYPE: int with get
+                abstract member SHOW_DOCUMENT_FRAGMENT: int with get
+                abstract member SHOW_NOTATION: int with get
 
-                member val FILTER_ACCEPT: int = nativeOnly with get
-                member val FILTER_REJECT: int = nativeOnly with get
-                member val FILTER_SKIP: int = nativeOnly with get
-                member val SHOW_ALL: int = nativeOnly with get
-                member val SHOW_ELEMENT: int = nativeOnly with get
-                member val SHOW_ATTRIBUTE: int = nativeOnly with get
-                member val SHOW_TEXT: int = nativeOnly with get
-                member val SHOW_CDATA_SECTION: int = nativeOnly with get
-                member val SHOW_ENTITY_REFERENCE: int = nativeOnly with get
-                member val SHOW_ENTITY: int = nativeOnly with get
-                member val SHOW_PROCESSING_INSTRUCTION: int = nativeOnly with get
-                member val SHOW_COMMENT: int = nativeOnly with get
-                member val SHOW_DOCUMENT: int = nativeOnly with get
-                member val SHOW_DOCUMENT_TYPE: int = nativeOnly with get
-                member val SHOW_DOCUMENT_FRAGMENT: int = nativeOnly with get
-                member val SHOW_NOTATION: int = nativeOnly with get
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        FILTER_ACCEPT: int,
+                        FILTER_REJECT: int,
+                        FILTER_SKIP: int,
+                        SHOW_ALL: int,
+                        SHOW_ELEMENT: int,
+                        SHOW_ATTRIBUTE: int,
+                        SHOW_TEXT: int,
+                        SHOW_CDATA_SECTION: int,
+                        SHOW_ENTITY_REFERENCE: int,
+                        SHOW_ENTITY: int,
+                        SHOW_PROCESSING_INSTRUCTION: int,
+                        SHOW_COMMENT: int,
+                        SHOW_DOCUMENT: int,
+                        SHOW_DOCUMENT_TYPE: int,
+                        SHOW_DOCUMENT_FRAGMENT: int,
+                        SHOW_NOTATION: int
+                    )
+                    : Type
+                    =
+                    nativeOnly
 
         module AbortController =
 
@@ -113654,11 +114126,13 @@ module Web =
 
                 module Create =
 
-                    [<Global>]
                     [<AllowNullLiteral>]
-                    type strategy [<ParamObject; Emit("$0")>] (?highWaterMark: float) =
+                    [<Interface>]
+                    type strategy =
+                        abstract member highWaterMark: float option with get, set
 
-                        member val highWaterMark: float option = nativeOnly with get, set
+                        [<ParamObject; Emit("$0")>]
+                        static member Create(?highWaterMark: float) : strategy = nativeOnly
 
         module ReadableStreamBYOBReader =
 

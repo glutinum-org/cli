@@ -10,105 +10,75 @@ type Exports =
     [<Import("f", "REPLACE_ME_WITH_MODULE_NAME")>]
     static member f (value: obj option) : unit = nativeOnly
 
-[<Global>]
 [<AllowNullLiteral>]
-type A
+[<Interface>]
+type A =
+    abstract member a: string with get, set
     [<ParamObject; Emit("$0")>]
-    (
-        a: string
-    ) =
+    static member Create (a: string) : A = nativeOnly
 
-    member val a : string = nativeOnly with get, set
-
-[<Global>]
 [<AllowNullLiteral>]
-type B
+[<Interface>]
+type B =
+    abstract member b: string with get, set
     [<ParamObject; Emit("$0")>]
-    (
-        b: string
-    ) =
+    static member Create (b: string) : B = nativeOnly
 
-    member val b : string = nativeOnly with get, set
-
-[<Global>]
 [<AllowNullLiteral>]
-type C
+[<Interface>]
+type C =
+    abstract member c: string with get, set
     [<ParamObject; Emit("$0")>]
-    (
-        c: string
-    ) =
+    static member Create (c: string) : C = nativeOnly
 
-    member val c : string = nativeOnly with get, set
-
-[<Global>]
 [<AllowNullLiteral>]
-type D
+[<Interface>]
+type D =
+    abstract member d: string with get, set
     [<ParamObject; Emit("$0")>]
-    (
-        d: string
-    ) =
+    static member Create (d: string) : D = nativeOnly
 
-    member val d : string = nativeOnly with get, set
-
-[<Global>]
 [<AllowNullLiteral>]
-type E
+[<Interface>]
+type E =
+    abstract member e: string with get, set
     [<ParamObject; Emit("$0")>]
-    (
-        e: string
-    ) =
+    static member Create (e: string) : E = nativeOnly
 
-    member val e : string = nativeOnly with get, set
-
-[<Global>]
 [<AllowNullLiteral>]
-type F
+[<Interface>]
+type F =
+    abstract member f: string with get, set
     [<ParamObject; Emit("$0")>]
-    (
-        f: string
-    ) =
+    static member Create (f: string) : F = nativeOnly
 
-    member val f : string = nativeOnly with get, set
-
-[<Global>]
 [<AllowNullLiteral>]
-type G
+[<Interface>]
+type G =
+    abstract member g: string with get, set
     [<ParamObject; Emit("$0")>]
-    (
-        g: string
-    ) =
+    static member Create (g: string) : G = nativeOnly
 
-    member val g : string = nativeOnly with get, set
-
-[<Global>]
 [<AllowNullLiteral>]
-type H
+[<Interface>]
+type H =
+    abstract member h: string with get, set
     [<ParamObject; Emit("$0")>]
-    (
-        h: string
-    ) =
+    static member Create (h: string) : H = nativeOnly
 
-    member val h : string = nativeOnly with get, set
-
-[<Global>]
 [<AllowNullLiteral>]
-type I
+[<Interface>]
+type I =
+    abstract member i: string with get, set
     [<ParamObject; Emit("$0")>]
-    (
-        i: string
-    ) =
+    static member Create (i: string) : I = nativeOnly
 
-    member val i : string = nativeOnly with get, set
-
-[<Global>]
 [<AllowNullLiteral>]
-type J
+[<Interface>]
+type J =
+    abstract member j: string with get, set
     [<ParamObject; Emit("$0")>]
-    (
-        j: string
-    ) =
-
-    member val j : string = nativeOnly with get, set
+    static member Create (j: string) : J = nativeOnly
 
 type Big =
     obj

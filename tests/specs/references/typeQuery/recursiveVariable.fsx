@@ -10,15 +10,12 @@ type Exports =
     [<Import("minimatch", "REPLACE_ME_WITH_MODULE_NAME")>]
     static member inline minimatch: Exports.minimatch.Type = nativeOnly
 
-[<Global>]
 [<AllowNullLiteral>]
-type Options
+[<Interface>]
+type Options =
+    abstract member debug: bool option with get, set
     [<ParamObject; Emit("$0")>]
-    (
-        ?debug: bool
-    ) =
-
-    member val debug : bool option = nativeOnly with get, set
+    static member Create (?debug: bool) : Options = nativeOnly
 
 module Exports =
 

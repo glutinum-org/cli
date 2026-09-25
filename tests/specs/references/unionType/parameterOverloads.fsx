@@ -16,15 +16,12 @@ type Exports =
     [<Import("Reader", "REPLACE_ME_WITH_MODULE_NAME"); EmitConstructor>]
     static member Reader (source: JS.Uint8Array) : Reader = nativeOnly
 
-[<Global>]
 [<AllowNullLiteral>]
-type Event
+[<Interface>]
+type Event =
+    abstract member ``type``: string with get, set
     [<ParamObject; Emit("$0")>]
-    (
-        ``type``: string
-    ) =
-
-    member val ``type`` : string = nativeOnly with get, set
+    static member Create (``type``: string) : Event = nativeOnly
 
 type EventListener =
     delegate of evt: Event -> unit
@@ -37,15 +34,12 @@ type EventListenerObject =
 type EventListenerOrEventListenerObject =
     U2<EventListener, EventListenerObject>
 
-[<Global>]
 [<AllowNullLiteral>]
-type AddEventListenerOptions
+[<Interface>]
+type AddEventListenerOptions =
+    abstract member once: bool option with get, set
     [<ParamObject; Emit("$0")>]
-    (
-        ?once: bool
-    ) =
-
-    member val once : bool option = nativeOnly with get, set
+    static member Create (?once: bool) : AddEventListenerOptions = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

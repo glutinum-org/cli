@@ -9,19 +9,14 @@ type Callback<'Param, 'AtomType> =
 
 module Callback =
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type event<'Param, 'AtomType>
+    [<Interface>]
+    type event<'Param, 'AtomType> =
+        abstract member ``type``: Callback.event.``type`` with get, set
+        abstract member param: 'Param with get, set
+        abstract member atom: 'AtomType with get, set
         [<ParamObject; Emit("$0")>]
-        (
-            ``type``: Callback.event.``type``,
-            param: 'Param,
-            atom: 'AtomType
-        ) =
-
-        member val ``type`` : Callback.event.``type`` = nativeOnly with get, set
-        member val param : 'Param = nativeOnly with get, set
-        member val atom : 'AtomType = nativeOnly with get, set
+        static member Create (``type``: Callback.event.``type``, param: 'Param, atom: 'AtomType) : event<'Param, 'AtomType> = nativeOnly
 
     module event =
 

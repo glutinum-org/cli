@@ -13,22 +13,17 @@ type Exports =
 /// <summary>
 /// Options controlling the observer.
 /// </summary>
-[<Global>]
 [<AllowNullLiteral>]
-type IntersectionOptions
-    [<ParamObject; Emit("$0")>]
-    (
-        delay: float,
-        ?root: string,
-        ?threshold: float
-    ) =
-
-    member val delay : float = nativeOnly with get, set
+[<Interface>]
+type IntersectionOptions =
     /// <summary>
     /// The root element.
     /// </summary>
-    member val root : string option = nativeOnly with get, set
-    member val threshold : float option = nativeOnly with get, set
+    abstract member root: string option with get, set
+    abstract member threshold: float option with get, set
+    abstract member delay: float with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (delay: float, ?root: string, ?threshold: float) : IntersectionOptions = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

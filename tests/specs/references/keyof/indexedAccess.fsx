@@ -17,15 +17,12 @@ type Config =
 
 module Config =
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type options
+    [<Interface>]
+    type options =
+        abstract member strict: bool with get, set
         [<ParamObject; Emit("$0")>]
-        (
-            strict: bool
-        ) =
-
-        member val strict : bool = nativeOnly with get, set
+        static member Create (strict: bool) : options = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

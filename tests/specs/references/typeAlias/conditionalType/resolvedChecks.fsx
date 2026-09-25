@@ -69,15 +69,12 @@ type Handle =
 
 module Exports =
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type parse
+    [<Interface>]
+    type parse =
+        abstract member tokens: ResizeArray<Token> with get, set
         [<ParamObject; Emit("$0")>]
-        (
-            tokens: ResizeArray<Token>
-        ) =
-
-        member val tokens : ResizeArray<Token> = nativeOnly with get, set
+        static member Create (tokens: ResizeArray<Token>) : parse = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

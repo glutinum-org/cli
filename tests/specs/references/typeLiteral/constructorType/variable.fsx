@@ -10,15 +10,12 @@ type Exports =
     [<Import("Ctor", "REPLACE_ME_WITH_MODULE_NAME")>]
     static member inline Ctor: Exports.Ctor.Type = nativeOnly
 
-[<Global>]
 [<AllowNullLiteral>]
-type Options
+[<Interface>]
+type Options =
+    abstract member level: float option with get, set
     [<ParamObject; Emit("$0")>]
-    (
-        ?level: float
-    ) =
-
-    member val level : float option = nativeOnly with get, set
+    static member Create (?level: float) : Options = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

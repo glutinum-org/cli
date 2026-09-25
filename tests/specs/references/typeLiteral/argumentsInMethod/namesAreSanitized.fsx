@@ -13,15 +13,12 @@ module Test =
 
     module callback =
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type ``params``
+        [<Interface>]
+        type ``params`` =
+            abstract member table: string with get, set
             [<ParamObject; Emit("$0")>]
-            (
-                table: string
-            ) =
-
-            member val table : string = nativeOnly with get, set
+            static member Create (table: string) : ``params`` = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

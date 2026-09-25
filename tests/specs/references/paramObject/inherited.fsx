@@ -15,17 +15,13 @@ type Exports =
 type BaseOptions =
     abstract member debug: bool option with get, set
 
-[<Global>]
 [<AllowNullLiteral>]
-type ExtendedOptions
+[<Interface>]
+type ExtendedOptions =
+    inherit BaseOptions
+    abstract member level: float with get, set
     [<ParamObject; Emit("$0")>]
-    (
-        level: float,
-        ?debug: bool
-    ) =
-
-    member val level : float = nativeOnly with get, set
-    member val debug : bool option = nativeOnly with get, set
+    static member Create (level: float, ?debug: bool) : ExtendedOptions = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

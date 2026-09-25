@@ -19,19 +19,14 @@ module Test =
 
     module date =
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type config
+        [<Interface>]
+        type config =
+            abstract member day: float with get, set
+            abstract member month: float with get, set
+            abstract member year: float with get, set
             [<ParamObject; Emit("$0")>]
-            (
-                day: float,
-                month: float,
-                year: float
-            ) =
-
-            member val day : float = nativeOnly with get, set
-            member val month : float = nativeOnly with get, set
-            member val year : float = nativeOnly with get, set
+            static member Create (day: float, month: float, year: float) : config = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

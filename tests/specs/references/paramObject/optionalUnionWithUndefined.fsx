@@ -10,21 +10,16 @@ type Exports =
     [<Import("create", "REPLACE_ME_WITH_MODULE_NAME")>]
     static member create (options: Options) : unit = nativeOnly
 
-[<Global>]
 [<AllowNullLiteral>]
-type Options
+[<Interface>]
+type Options =
+    abstract member attribution: U2<string, ResizeArray<string>> option with get, set
     [<ParamObject; Emit("$0")>]
-    () =
-
+    static member Create () : Options = nativeOnly
     [<ParamObject; Emit("$0")>]
-    new (attribution: string) =
-        Options()
-
+    static member Create (attribution: string) : Options = nativeOnly
     [<ParamObject; Emit("$0")>]
-    new (attribution: ResizeArray<string>) =
-        Options()
-
-    member val attribution : U2<string, ResizeArray<string>> option = nativeOnly with get, set
+    static member Create (attribution: ResizeArray<string>) : Options = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

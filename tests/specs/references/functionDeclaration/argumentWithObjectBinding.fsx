@@ -10,25 +10,19 @@ type Exports =
     [<Import("toText", "REPLACE_ME_WITH_MODULE_NAME")>]
     static member toText (arg0: Context, data: string, ?arg2: LogOptions) : string = nativeOnly
 
-[<Global>]
 [<AllowNullLiteral>]
-type LogOptions
+[<Interface>]
+type LogOptions =
+    abstract member prefix: string with get, set
     [<ParamObject; Emit("$0")>]
-    (
-        prefix: string
-    ) =
+    static member Create (prefix: string) : LogOptions = nativeOnly
 
-    member val prefix : string = nativeOnly with get, set
-
-[<Global>]
 [<AllowNullLiteral>]
-type Context
+[<Interface>]
+type Context =
+    abstract member indentationLevel: float with get, set
     [<ParamObject; Emit("$0")>]
-    (
-        indentationLevel: float
-    ) =
-
-    member val indentationLevel : float = nativeOnly with get, set
+    static member Create (indentationLevel: float) : Context = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

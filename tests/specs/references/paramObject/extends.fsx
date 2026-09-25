@@ -22,71 +22,46 @@ type BaseOptions =
     abstract member debug: bool option with get, set
     abstract member level: U2<string, float> with get, set
 
-[<Global>]
 [<AllowNullLiteral>]
-type PlainExtends
-    private () =
-
+[<Interface>]
+type PlainExtends =
+    inherit BaseOptions
+    abstract member name: string with get, set
     [<ParamObject; Emit("$0")>]
-    new (level: string, name: string, ?debug: bool) =
-        PlainExtends()
-
+    static member Create (level: string, name: string, ?debug: bool) : PlainExtends = nativeOnly
     [<ParamObject; Emit("$0")>]
-    new (level: float, name: string, ?debug: bool) =
-        PlainExtends()
+    static member Create (level: float, name: string, ?debug: bool) : PlainExtends = nativeOnly
 
-    member val level : U2<string, float> = nativeOnly with get, set
-    member val name : string = nativeOnly with get, set
-    member val debug : bool option = nativeOnly with get, set
-
-[<Global>]
 [<AllowNullLiteral>]
-type PartialExtends
-    private () =
-
+[<Interface>]
+type PartialExtends =
+    abstract member name: string with get, set
+    abstract member debug: bool option with get, set
+    abstract member level: U2<string, float> option with get, set
     [<ParamObject; Emit("$0")>]
-    new (name: string, ?debug: bool) =
-        PartialExtends()
-
+    static member Create (name: string, ?debug: bool) : PartialExtends = nativeOnly
     [<ParamObject; Emit("$0")>]
-    new (name: string, level: string, ?debug: bool) =
-        PartialExtends()
-
+    static member Create (name: string, level: string, ?debug: bool) : PartialExtends = nativeOnly
     [<ParamObject; Emit("$0")>]
-    new (name: string, level: float, ?debug: bool) =
-        PartialExtends()
+    static member Create (name: string, level: float, ?debug: bool) : PartialExtends = nativeOnly
 
-    member val name : string = nativeOnly with get, set
-    member val debug : bool option = nativeOnly with get, set
-    member val level : U2<string, float> option = nativeOnly with get, set
-
-[<Global>]
 [<AllowNullLiteral>]
-type OmitExtends
-    private () =
-
+[<Interface>]
+type OmitExtends =
+    abstract member name: string with get, set
+    abstract member level: U2<string, float> with get, set
     [<ParamObject; Emit("$0")>]
-    new (level: string, name: string) =
-        OmitExtends()
-
+    static member Create (level: string, name: string) : OmitExtends = nativeOnly
     [<ParamObject; Emit("$0")>]
-    new (level: float, name: string) =
-        OmitExtends()
+    static member Create (level: float, name: string) : OmitExtends = nativeOnly
 
-    member val level : U2<string, float> = nativeOnly with get, set
-    member val name : string = nativeOnly with get, set
-
-[<Global>]
 [<AllowNullLiteral>]
-type Narrows
+[<Interface>]
+type Narrows =
+    abstract member level: string with get, set
+    abstract member debug: bool option with get, set
     [<ParamObject; Emit("$0")>]
-    (
-        level: string,
-        ?debug: bool
-    ) =
-
-    member val level : string = nativeOnly with get, set
-    member val debug : bool option = nativeOnly with get, set
+    static member Create (level: string, ?debug: bool) : Narrows = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

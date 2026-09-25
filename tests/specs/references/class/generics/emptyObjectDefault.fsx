@@ -47,15 +47,12 @@ type Collection =
 
 module Named =
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type Options
+    [<Interface>]
+    type Options =
+        abstract member verbose: bool with get, set
         [<ParamObject; Emit("$0")>]
-        (
-            verbose: bool
-        ) =
-
-        member val verbose : bool = nativeOnly with get, set
+        static member Create (verbose: bool) : Options = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

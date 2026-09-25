@@ -96,17 +96,13 @@ module ReExports =
             [<Import("Logger", "re-exports/logger.js"); EmitConstructor>]
             static member Logger (?options: ReExports.logger.Options) : Logger = nativeOnly
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type Options
+        [<Interface>]
+        type Options =
+            abstract member level: ReExports.logger.LogLevel option with get, set
+            abstract member formatter: ReExports.formatter.Formatter option with get, set
             [<ParamObject; Emit("$0")>]
-            (
-                ?level: ReExports.logger.LogLevel,
-                ?formatter: ReExports.formatter.Formatter
-            ) =
-
-            member val level : ReExports.logger.LogLevel option = nativeOnly with get, set
-            member val formatter : ReExports.formatter.Formatter option = nativeOnly with get, set
+            static member Create (?level: ReExports.logger.LogLevel, ?formatter: ReExports.formatter.Formatter) : Options = nativeOnly
 
         [<RequireQualifiedAccess>]
         type LogLevel =
@@ -126,15 +122,12 @@ module DepLib =
         [<Import("configure", "dep-lib")>]
         static member configure (config: DepLib.DepConfig) : unit = nativeOnly
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type DepConfig
+    [<Interface>]
+    type DepConfig =
+        abstract member retries: float with get, set
         [<ParamObject; Emit("$0")>]
-        (
-            retries: float
-        ) =
-
-        member val retries : float = nativeOnly with get, set
+        static member Create (retries: float) : DepConfig = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

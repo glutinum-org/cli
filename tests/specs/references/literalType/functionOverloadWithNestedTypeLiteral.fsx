@@ -16,53 +16,38 @@ module Exports =
 
     module openTextDocument =
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type options
+        [<Interface>]
+        type options =
+            abstract member encoding: string option with get
+            abstract member clamp: Exports.openTextDocument.options.clamp with get
             [<ParamObject; Emit("$0")>]
-            (
-                clamp: Exports.openTextDocument.options.clamp,
-                ?encoding: string
-            ) =
-
-            member val clamp : Exports.openTextDocument.options.clamp = nativeOnly with get
-            member val encoding : string option = nativeOnly with get
+            static member Create (clamp: Exports.openTextDocument.options.clamp, ?encoding: string) : options = nativeOnly
 
         module options =
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type clamp
+            [<Interface>]
+            type clamp =
+                abstract member min: float with get
+                abstract member max: float with get
                 [<ParamObject; Emit("$0")>]
-                (
-                    min: float,
-                    max: float
-                ) =
+                static member Create (min: float, max: float) : clamp = nativeOnly
 
-                member val min : float = nativeOnly with get
-                member val max : float = nativeOnly with get
-
-            [<Global>]
             [<AllowNullLiteral>]
-            type clamp_1
+            [<Interface>]
+            type clamp_1 =
+                abstract member min: float with get
                 [<ParamObject; Emit("$0")>]
-                (
-                    min: float
-                ) =
+                static member Create (min: float) : clamp_1 = nativeOnly
 
-                member val min : float = nativeOnly with get
-
-        [<Global>]
         [<AllowNullLiteral>]
-        type options_1
+        [<Interface>]
+        type options_1 =
+            abstract member encoding: string option with get
+            abstract member clamp: Exports.openTextDocument.options.clamp_1 with get
             [<ParamObject; Emit("$0")>]
-            (
-                clamp: Exports.openTextDocument.options.clamp_1,
-                ?encoding: string
-            ) =
-
-            member val clamp : Exports.openTextDocument.options.clamp_1 = nativeOnly with get
-            member val encoding : string option = nativeOnly with get
+            static member Create (clamp: Exports.openTextDocument.options.clamp_1, ?encoding: string) : options_1 = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

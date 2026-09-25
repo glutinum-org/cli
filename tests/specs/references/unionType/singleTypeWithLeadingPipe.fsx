@@ -20,17 +20,13 @@ type Props =
 
 module Props =
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type shape
+    [<Interface>]
+    type shape =
+        abstract member kind: string with get, set
+        abstract member x: float with get, set
         [<ParamObject; Emit("$0")>]
-        (
-            kind: string,
-            x: float
-        ) =
-
-        member val kind : string = nativeOnly with get, set
-        member val x : float = nativeOnly with get, set
+        static member Create (kind: string, x: float) : shape = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

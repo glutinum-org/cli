@@ -23,27 +23,21 @@ type MaybeNamed =
 
 module Documentation =
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type Value
+    [<Interface>]
+    type Value =
+        abstract member kind: string with get
         [<ParamObject; Emit("$0")>]
-        (
-            kind: string
-        ) =
-
-        member val kind : string = nativeOnly with get
+        static member Create (kind: string) : Value = nativeOnly
 
 module Docs =
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type Value
+    [<Interface>]
+    type Value =
+        abstract member kind: string with get
         [<ParamObject; Emit("$0")>]
-        (
-            kind: string
-        ) =
-
-        member val kind : string = nativeOnly with get
+        static member Create (kind: string) : Value = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

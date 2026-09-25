@@ -13,27 +13,21 @@ module Locale =
 
     module hello =
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type config
+        [<Interface>]
+        type config =
+            abstract member verbose: Locale.hello.config.verbose with get, set
             [<ParamObject; Emit("$0")>]
-            (
-                verbose: Locale.hello.config.verbose
-            ) =
-
-            member val verbose : Locale.hello.config.verbose = nativeOnly with get, set
+            static member Create (verbose: Locale.hello.config.verbose) : config = nativeOnly
 
         module config =
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type verbose
+            [<Interface>]
+            type verbose =
+                abstract member verbose: bool with get, set
                 [<ParamObject; Emit("$0")>]
-                (
-                    verbose: bool
-                ) =
-
-                member val verbose : bool = nativeOnly with get, set
+                static member Create (verbose: bool) : verbose = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

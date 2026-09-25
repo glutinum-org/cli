@@ -17,17 +17,13 @@ module Exports =
 
     module supportsColor =
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type Type
+        [<Interface>]
+        type Type =
+            abstract member stdout: ColorInfo with get, set
+            abstract member stderr: ColorInfo with get, set
             [<ParamObject; Emit("$0")>]
-            (
-                stdout: ColorInfo,
-                stderr: ColorInfo
-            ) =
-
-            member val stdout : ColorInfo = nativeOnly with get, set
-            member val stderr : ColorInfo = nativeOnly with get, set
+            static member Create (stdout: ColorInfo, stderr: ColorInfo) : Type = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

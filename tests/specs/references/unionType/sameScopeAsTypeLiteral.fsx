@@ -26,29 +26,21 @@ module Exports =
 
             module Cases =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type Case1
+                [<Interface>]
+                type Case1 =
+                    abstract member encoding: string with get, set
+                    abstract member withFileTypes: bool option with get, set
                     [<ParamObject; Emit("$0")>]
-                    (
-                        encoding: string,
-                        ?withFileTypes: bool
-                    ) =
+                    static member Create (encoding: string, ?withFileTypes: bool) : Case1 = nativeOnly
 
-                    member val encoding : string = nativeOnly with get, set
-                    member val withFileTypes : bool option = nativeOnly with get, set
-
-        [<Global>]
         [<AllowNullLiteral>]
-        type options_1
+        [<Interface>]
+        type options_1 =
+            abstract member encoding: string option with get, set
+            abstract member withFileTypes: bool with get, set
             [<ParamObject; Emit("$0")>]
-            (
-                withFileTypes: bool,
-                ?encoding: string
-            ) =
-
-            member val withFileTypes : bool = nativeOnly with get, set
-            member val encoding : string option = nativeOnly with get, set
+            static member Create (withFileTypes: bool, ?encoding: string) : options_1 = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

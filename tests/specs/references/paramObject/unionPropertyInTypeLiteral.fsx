@@ -14,21 +14,15 @@ module Exports =
 
     module show =
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type options
-            private () =
-
+        [<Interface>]
+        type options =
+            abstract member value: U2<bool, string> with get, set
+            abstract member delay: float option with get, set
             [<ParamObject; Emit("$0")>]
-            new (value: bool, ?delay: float) =
-                options()
-
+            static member Create (value: bool, ?delay: float) : options = nativeOnly
             [<ParamObject; Emit("$0")>]
-            new (value: string, ?delay: float) =
-                options()
-
-            member val value : U2<bool, string> = nativeOnly with get, set
-            member val delay : float option = nativeOnly with get, set
+            static member Create (value: string, ?delay: float) : options = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

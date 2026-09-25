@@ -15,17 +15,13 @@ type T4 =
 
 module T4 =
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type ReturnType
+    [<Interface>]
+    type ReturnType =
+        abstract member a: float with get, set
+        abstract member b: string with get, set
         [<ParamObject; Emit("$0")>]
-        (
-            a: float,
-            b: string
-        ) =
-
-        member val a : float = nativeOnly with get, set
-        member val b : string = nativeOnly with get, set
+        static member Create (a: float, b: string) : ReturnType = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

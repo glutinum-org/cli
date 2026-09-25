@@ -10,17 +10,13 @@ type Exports =
     [<Import("Chart", "REPLACE_ME_WITH_MODULE_NAME"); EmitConstructor>]
     static member Chart (options: ChartOptions) : Chart = nativeOnly
 
-[<Global>]
 [<AllowNullLiteral>]
-type ChartOptions
+[<Interface>]
+type ChartOptions =
+    abstract member title: string with get, set
+    abstract member axis: AxisOptions option with get, set
     [<ParamObject; Emit("$0")>]
-    (
-        title: string,
-        ?axis: AxisOptions
-    ) =
-
-    member val title : string = nativeOnly with get, set
-    member val axis : AxisOptions option = nativeOnly with get, set
+    static member Create (title: string, ?axis: AxisOptions) : ChartOptions = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

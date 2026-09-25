@@ -1202,12 +1202,36 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
         let name =
             context.TypeLiteralsMemory.GetTypeName(context.FullName, context.CurrentScopeName)
 
-        if isParamObjectCandidate then
+        let transformedMembers =
+            TransformMembers.toFSharpMember context typeLiteralInfo.Members
+
+        if
+            isParamObjectCandidate
+            && membersNameUndeclaredTypeParameters typeParameterNames transformedMembers
+        then
             transformParamObjectClass context name [] typeLiteralInfo.Members
             |> FSharpType.Class
             |> context.ExposeType
-
         else
+
+            let creates =
+                if isParamObjectCandidate then
+                    let returnType =
+                        ({
+                            Name = name
+                            TypeParameters =
+                                typeParameterNames
+                                |> List.map (
+                                    FSharpType.TypeParameter >> FSharpTypeParameter.FSharpType
+                                )
+                        }
+                        : FSharpMapped)
+                        |> FSharpType.Mapped
+
+                    paramObjectCreateMembers context returnType typeLiteralInfo.Members
+                else
+                    []
+
             {
                 XmlDoc = []
                 Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
@@ -1219,7 +1243,7 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
                         FSharpTypeParameterInfo.Create(name)
                         |> FSharpTypeParameter.FSharpTypeParameter
                     )
-                Members = TransformMembers.toFSharpMember context typeLiteralInfo.Members
+                Members = transformedMembers @ creates
                 Inheritance =
                     [
                         match TypeLiteral.tryFindIterableType context typeLiteralInfo.Members with
@@ -3119,6 +3143,176 @@ module private TransformMembers =
 
 [<Literal>]
 let private MAX_GENERATED_CONSTRUCTORS = 12
+
+/// The type parameters an F# type names. A nested anonymous type is a `Mapped` whose arguments
+/// are themselves `Mapped`, named `'VF` with the tick already in the name.
+let rec private namedTypeParameters (typ: FSharpType) : string list =
+    let ofTypeParameter (typeParameter: FSharpTypeParameter) =
+        match typeParameter with
+        | FSharpTypeParameter.FSharpTypeParameter info -> [ info.Name ]
+        | FSharpTypeParameter.FSharpType typ -> namedTypeParameters typ
+
+    match typ with
+    | FSharpType.TypeParameter name -> [ name ]
+    | FSharpType.Mapped info ->
+        [
+            if info.Name.StartsWith "'" then
+                info.Name.Substring 1
+
+            yield! info.TypeParameters |> List.collect ofTypeParameter
+        ]
+    | FSharpType.TypeReference typeReference ->
+        typeReference.TypeArguments |> List.collect namedTypeParameters
+    | FSharpType.Option typ
+    | FSharpType.ResizeArray typ
+    | FSharpType.JSApi(FSharpJSApi.ReadonlyArray typ) -> namedTypeParameters typ
+    | FSharpType.Tuple types -> types |> List.collect namedTypeParameters
+    | FSharpType.Union unionInfo ->
+        unionInfo.Cases
+        |> List.collect (
+            function
+            | FSharpUnionCase.Typed typ
+            | FSharpUnionCase.Field(_, typ) -> namedTypeParameters typ
+            | _ -> []
+        )
+    | FSharpType.Function functionType ->
+        namedTypeParameters functionType.ReturnType
+        @ (functionType.Parameters |> List.collect (fun p -> namedTypeParameters p.Type))
+    | _ -> []
+
+/// An interface can't absorb a type parameter it does not declare, a class definition
+/// generalizes it. The object type stays a class until the generator tracks it.
+let private membersNameUndeclaredTypeParameters
+    (declared: string list)
+    (members: FSharpMember list)
+    =
+    let declared = set declared
+
+    members
+    |> List.exists (
+        function
+        | FSharpMember.Method info
+        | FSharpMember.Property info ->
+            (namedTypeParameters info.Type
+             @ (info.Parameters |> List.collect (fun p -> namedTypeParameters p.Type)))
+            |> List.exists (fun name -> not (declared.Contains name))
+        | FSharpMember.StaticMember info ->
+            (namedTypeParameters info.Type
+             @ (info.Parameters |> List.collect (fun p -> namedTypeParameters p.Type)))
+            |> List.exists (fun name -> not (declared.Contains name))
+    )
+
+/// The parameter sets of the `Create` members of an object type: one per combination of the
+/// cases of its union properties, a single one when there is nothing to expand
+let private paramObjectParameterSets
+    (context: TransformContext)
+    (members: GlueMember list)
+    : FSharpParameter list list
+    =
+    let parameters =
+        members
+        |> TransformMembers.toFSharpParameters context
+        // An optional property is an optional parameter, not one of an option type
+        |> List.map (fun parameter ->
+            match tryUnwrapOption parameter.Type with
+            | Some underlyingType ->
+                { parameter with
+                    Type = underlyingType
+                    IsOptional = true
+                }
+            | None -> parameter
+        )
+        |> List.sortBy _.IsOptional
+
+    let tryErasedUnionCases (parameter: FSharpParameter) =
+        match parameter.Type with
+        | FSharpType.Union unionInfo when unionInfo.Cases.Length > 1 ->
+            unionInfo.Cases
+            |> List.map (
+                function
+                | FSharpUnionCase.Typed typ -> Some typ
+                | _ -> None
+            )
+            |> fun cases ->
+                if List.forall Option.isSome cases then
+                    Some(List.choose id cases)
+                else
+                    None
+        | _ -> None
+
+    let variants =
+        parameters
+        |> List.map (fun parameter ->
+            match tryErasedUnionCases parameter with
+            | Some cases ->
+                [
+                    if parameter.IsOptional then
+                        None
+
+                    for case in cases do
+                        Some
+                            { parameter with
+                                Type = case
+                                IsOptional = false
+                            }
+                ]
+            | None -> [ Some parameter ]
+        )
+
+    let combinationsCount =
+        (1, variants)
+        ||> List.fold (fun count parameterVariants ->
+            min (count * parameterVariants.Length) (MAX_GENERATED_CONSTRUCTORS + 1)
+        )
+
+    if combinationsCount = 1 || combinationsCount > MAX_GENERATED_CONSTRUCTORS then
+        [ parameters ]
+    else
+        let combinations =
+            (variants, [ [] ])
+            ||> List.foldBack (fun parameterVariants acc ->
+                parameterVariants
+                |> List.collect (fun variant -> acc |> List.map (fun tail -> variant :: tail))
+            )
+            |> List.map (List.choose id >> List.sortBy _.IsOptional)
+
+        // Properties accepting the same type give members F# can't tell apart
+        let hasDuplicateSignatures =
+            let signatures = combinations |> List.map Merge.parametersSignature
+
+            (List.distinct signatures).Length <> signatures.Length
+
+        if hasDuplicateSignatures then
+            [ parameters ]
+        else
+            combinations
+
+/// `[<ParamObject; Emit("$0")>] static member Create(...)` builds the object type as a literal,
+/// the type stays an interface so it can be inherited and substituted
+let private paramObjectCreateMembers
+    (context: TransformContext)
+    (returnType: FSharpType)
+    (members: GlueMember list)
+    : FSharpMember list
+    =
+    paramObjectParameterSets context members
+    |> List.map (fun parameters ->
+        {
+            Attributes = [ FSharpAttribute.ParamObject; FSharpAttribute.EmitSelf ]
+            Name = "Create"
+            OriginalName = "Create"
+            Parameters = parameters |> requiredBeforeParamArray
+            TypeParameters = []
+            Type = returnType
+            IsOptional = false
+            IsStatic = true
+            Accessor = None
+            Accessibility = FSharpAccessibility.Public
+            XmlDoc = []
+            Body = FSharpMemberInfoBody.NativeOnly
+        }
+        |> FSharpMember.Method
+    )
 
 let private transformParamObjectClass
     (context: TransformContext)
@@ -7303,15 +7497,30 @@ let private transformToFsharp
         | GlueType.Interface interfaceInfo when
             ParamObjectCandidate.isCandidate context.TypeMemory interfaceInfo
             ->
-            let name, context = sanitizeTypeNameAndPushScope interfaceInfo.Name context
+            let fsharpInterface = transformInterface context interfaceInfo
 
+            // `Create` takes the inherited properties too, the interface keeps the `inherit`
             let members =
                 ParamObjectCandidate.tryResolveMembers context.TypeMemory interfaceInfo
                 |> Option.defaultValue interfaceInfo.Members
 
-            transformParamObjectClass context name interfaceInfo.Documentation members
-            |> FSharpType.Class
-            |> List.singleton
+            let returnType =
+                ({
+                    Name = fsharpInterface.Name
+                    TypeParameters = fsharpInterface.TypeParameters
+                }
+                : FSharpMapped)
+                |> FSharpType.Mapped
+
+            let creates =
+                paramObjectCreateMembers (context.PushScope fsharpInterface.Name) returnType members
+
+            [
+                FSharpType.Interface
+                    { fsharpInterface with
+                        Members = fsharpInterface.Members @ creates
+                    }
+            ]
 
         | GlueType.Interface interfaceInfo ->
             match tryTransformCallableInterface context interfaceInfo with

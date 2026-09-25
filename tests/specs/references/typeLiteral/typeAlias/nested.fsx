@@ -11,15 +11,12 @@ type Animal =
 
 module Animal =
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type name
+    [<Interface>]
+    type name =
+        abstract member text: string with get, set
         [<ParamObject; Emit("$0")>]
-        (
-            text: string
-        ) =
-
-        member val text : string = nativeOnly with get, set
+        static member Create (text: string) : name = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

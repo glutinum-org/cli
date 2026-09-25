@@ -13,15 +13,12 @@ module Page =
 
     module _DOLLAR_ =
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type options
+        [<Interface>]
+        type options =
+            abstract member strict: bool option with get, set
             [<ParamObject; Emit("$0")>]
-            (
-                ?strict: bool
-            ) =
-
-            member val strict : bool option = nativeOnly with get, set
+            static member Create (?strict: bool) : options = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

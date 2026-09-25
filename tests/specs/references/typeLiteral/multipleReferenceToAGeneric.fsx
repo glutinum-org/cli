@@ -11,19 +11,14 @@ type WorkspaceConfiguration =
 
 module WorkspaceConfiguration =
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type inspect<'T>
+    [<Interface>]
+    type inspect<'T> =
+        abstract member key: string with get, set
+        abstract member defaultValue: 'T option with get, set
+        abstract member globalValue: 'T option with get, set
         [<ParamObject; Emit("$0")>]
-        (
-            key: string,
-            ?defaultValue: 'T,
-            ?globalValue: 'T
-        ) =
-
-        member val key : string = nativeOnly with get, set
-        member val defaultValue : 'T option = nativeOnly with get, set
-        member val globalValue : 'T option = nativeOnly with get, set
+        static member Create (key: string, ?defaultValue: 'T, ?globalValue: 'T) : inspect<'T> = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

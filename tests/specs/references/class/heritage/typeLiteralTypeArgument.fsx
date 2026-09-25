@@ -34,31 +34,23 @@ type RenameEvent =
 
 module RenameFeature =
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type Extends
+    [<Interface>]
+    type Extends =
+        abstract member oldUri: string with get, set
+        abstract member newUri: string with get, set
         [<ParamObject; Emit("$0")>]
-        (
-            oldUri: string,
-            newUri: string
-        ) =
-
-        member val oldUri : string = nativeOnly with get, set
-        member val newUri : string = nativeOnly with get, set
+        static member Create (oldUri: string, newUri: string) : Extends = nativeOnly
 
 module RenameEvent =
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type Extends
+    [<Interface>]
+    type Extends =
+        abstract member oldUri: string with get, set
+        abstract member newUri: string with get, set
         [<ParamObject; Emit("$0")>]
-        (
-            oldUri: string,
-            newUri: string
-        ) =
-
-        member val oldUri : string = nativeOnly with get, set
-        member val newUri : string = nativeOnly with get, set
+        static member Create (oldUri: string, newUri: string) : Extends = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

@@ -11,29 +11,21 @@ module Content =
 
     module U2 =
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type Case1
+        [<Interface>]
+        type Case1 =
+            abstract member kind: string with get, set
+            abstract member html: string with get, set
             [<ParamObject; Emit("$0")>]
-            (
-                kind: string,
-                html: string
-            ) =
+            static member Create (kind: string, html: string) : Case1 = nativeOnly
 
-            member val kind : string = nativeOnly with get, set
-            member val html : string = nativeOnly with get, set
-
-        [<Global>]
         [<AllowNullLiteral>]
-        type Case2
+        [<Interface>]
+        type Case2 =
+            abstract member ``type``: string with get, set
+            abstract member markdown: string with get, set
             [<ParamObject; Emit("$0")>]
-            (
-                ``type``: string,
-                markdown: string
-            ) =
-
-            member val ``type`` : string = nativeOnly with get, set
-            member val markdown : string = nativeOnly with get, set
+            static member Create (``type``: string, markdown: string) : Case2 = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

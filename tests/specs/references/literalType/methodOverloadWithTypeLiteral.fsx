@@ -14,25 +14,19 @@ module TelemetryLogger =
 
     module logError =
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type data
+        [<Interface>]
+        type data =
+            abstract member encoding: string option with get
             [<ParamObject; Emit("$0")>]
-            (
-                ?encoding: string
-            ) =
+            static member Create (?encoding: string) : data = nativeOnly
 
-            member val encoding : string option = nativeOnly with get
-
-        [<Global>]
         [<AllowNullLiteral>]
-        type data_1
+        [<Interface>]
+        type data_1 =
+            abstract member permissions: ResizeArray<string> option with get
             [<ParamObject; Emit("$0")>]
-            (
-                ?permissions: ResizeArray<string>
-            ) =
-
-            member val permissions : ResizeArray<string> option = nativeOnly with get
+            static member Create (?permissions: ResizeArray<string>) : data_1 = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

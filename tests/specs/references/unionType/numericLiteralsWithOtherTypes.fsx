@@ -27,15 +27,12 @@ module WithTypeLiteralAndUndefined =
 
     module Cases =
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type Case1
+        [<Interface>]
+        type Case1 =
+            abstract member x: string with get, set
             [<ParamObject; Emit("$0")>]
-            (
-                x: string
-            ) =
-
-            member val x : string = nativeOnly with get, set
+            static member Create (x: string) : Case1 = nativeOnly
 
 module Props =
 

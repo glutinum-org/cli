@@ -28,15 +28,12 @@ module google_ =
             [<Emit("new $0.Map($1...)")>]
             abstract member Map: element: string * ?options: MapOptions -> Map
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type MapOptions
+        [<Interface>]
+        type MapOptions =
+            abstract member zoom: float option with get, set
             [<ParamObject; Emit("$0")>]
-            (
-                ?zoom: float
-            ) =
-
-            member val zoom : float option = nativeOnly with get, set
+            static member Create (?zoom: float) : MapOptions = nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]

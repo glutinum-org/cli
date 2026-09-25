@@ -20,19 +20,14 @@ type StringNumber =
 
 module Pair =
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type swap<'S, 'C>
+    [<Interface>]
+    type swap<'S, 'C> =
+        abstract member client: 'S with get, set
+        abstract member server: 'C with get, set
+        abstract member swap: unit -> Pair<'C, 'S>
         [<ParamObject; Emit("$0")>]
-        (
-            client: 'S,
-            server: 'C,
-            swap: Pair<'C, 'S>
-        ) =
-
-        member val client : 'S = nativeOnly with get, set
-        member val server : 'C = nativeOnly with get, set
-        member val swap : Pair<'C, 'S> = nativeOnly
+        static member Create (client: 'S, server: 'C, swap: Pair<'C, 'S>) : swap<'S, 'C> = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

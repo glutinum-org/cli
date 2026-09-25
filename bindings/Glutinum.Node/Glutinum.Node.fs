@@ -2738,32 +2738,37 @@ module Node =
             [<Emit("$0($1...)")>]
             abstract member Invoke: options: Node.NodeJS.GCOptions -> unit
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type GCOptions
-            [<ParamObject; Emit("$0")>]
-            (
-                ?execution: GCOptions.execution,
-                ?flavor: GCOptions.flavor,
-                ?``type``: GCOptions.``type``,
-                ?filename: string
-            )
-            =
+        [<Interface>]
+        type GCOptions =
+            abstract member execution: GCOptions.execution option with get, set
+            abstract member flavor: GCOptions.flavor option with get, set
+            abstract member ``type``: GCOptions.``type`` option with get, set
+            abstract member filename: string option with get, set
 
-            member val execution: GCOptions.execution option = nativeOnly with get, set
-            member val flavor: GCOptions.flavor option = nativeOnly with get, set
-            member val ``type``: GCOptions.``type`` option = nativeOnly with get, set
-            member val filename: string option = nativeOnly with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?execution: GCOptions.execution,
+                    ?flavor: GCOptions.flavor,
+                    ?``type``: GCOptions.``type``,
+                    ?filename: string
+                )
+                : GCOptions
+                =
+                nativeOnly
 
         module ReadableStream =
 
             module pipe =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type options [<ParamObject; Emit("$0")>] (?``end``: bool) =
+                [<Interface>]
+                type options =
+                    abstract member ``end``: bool option with get, set
 
-                    member val ``end``: bool option = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(?``end``: bool) : options = nativeOnly
 
         module GCFunction =
 
@@ -2907,10 +2912,9 @@ module Node =
             abstract member _json: RequireExtensions._json with get, set
             abstract member _node: RequireExtensions._node with get, set
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type RequireResolveOptions [<ParamObject; Emit("$0")>] (?paths: ResizeArray<string>) =
-
+        [<Interface>]
+        type RequireResolveOptions =
             /// <summary>
             /// Paths to resolve module location from. If present, these
             /// paths are used instead of the default resolution paths, with the exception
@@ -2921,7 +2925,10 @@ module Node =
             /// the module resolution algorithm, meaning that the <c>node_modules</c> hierarchy
             /// is checked from this location.
             /// </summary>
-            member val paths: ResizeArray<string> option = nativeOnly with get, set
+            abstract member paths: ResizeArray<string> option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create(?paths: ResizeArray<string>) : RequireResolveOptions = nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -3397,29 +3404,32 @@ module Node =
             abstract member userCPUTime: float with get, set
             abstract member voluntaryContextSwitches: float with get, set
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type EmitWarningOptions
-            [<ParamObject; Emit("$0")>]
-            (?``type``: string, ?code: string, ?ctor: Action, ?detail: string)
-            =
-
+        [<Interface>]
+        type EmitWarningOptions =
             /// <summary>
             /// When <c>warning</c> is a <c>string</c>, <c>type</c> is the name to use for the _type_ of warning being emitted.
             /// </summary>
-            member val ``type``: string option = nativeOnly with get, set
+            abstract member ``type``: string option with get, set
             /// <summary>
             /// A unique identifier for the warning instance being emitted.
             /// </summary>
-            member val code: string option = nativeOnly with get, set
+            abstract member code: string option with get, set
             /// <summary>
             /// When <c>warning</c> is a <c>string</c>, <c>ctor</c> is an optional function used to limit the generated stack trace.
             /// </summary>
-            member val ctor: Action option = nativeOnly with get, set
+            abstract member ctor: Action option with get, set
             /// <summary>
             /// Additional text to include with the error.
             /// </summary>
-            member val detail: string option = nativeOnly with get, set
+            abstract member detail: string option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (?``type``: string, ?code: string, ?ctor: Action, ?detail: string)
+                : EmitWarningOptions
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -8254,63 +8264,69 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
 
         module ProcessConfig =
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type target_defaults
+            [<Interface>]
+            type target_defaults =
+                abstract member cflags: ResizeArray<obj> with get
+                abstract member default_configuration: string with get
+                abstract member defines: ResizeArray<string> with get
+                abstract member include_dirs: ResizeArray<string> with get
+                abstract member libraries: ResizeArray<string> with get
+
                 [<ParamObject; Emit("$0")>]
-                (
-                    cflags: ResizeArray<obj>,
-                    default_configuration: string,
-                    defines: ResizeArray<string>,
-                    include_dirs: ResizeArray<string>,
-                    libraries: ResizeArray<string>
-                )
-                =
+                static member Create
+                    (
+                        cflags: ResizeArray<obj>,
+                        default_configuration: string,
+                        defines: ResizeArray<string>,
+                        include_dirs: ResizeArray<string>,
+                        libraries: ResizeArray<string>
+                    )
+                    : target_defaults
+                    =
+                    nativeOnly
 
-                member val cflags: ResizeArray<obj> = nativeOnly with get
-                member val default_configuration: string = nativeOnly with get
-                member val defines: ResizeArray<string> = nativeOnly with get
-                member val include_dirs: ResizeArray<string> = nativeOnly with get
-                member val libraries: ResizeArray<string> = nativeOnly with get
-
-            [<Global>]
             [<AllowNullLiteral>]
-            type variables
-                [<ParamObject; Emit("$0")>]
-                (
-                    clang: float,
-                    host_arch: string,
-                    node_install_npm: bool,
-                    node_install_waf: bool,
-                    node_prefix: string,
-                    node_shared_openssl: bool,
-                    node_shared_v8: bool,
-                    node_shared_zlib: bool,
-                    node_use_dtrace: bool,
-                    node_use_etw: bool,
-                    node_use_openssl: bool,
-                    target_arch: string,
-                    v8_no_strict_aliasing: float,
-                    v8_use_snapshot: bool,
-                    visibility: string
-                )
-                =
+            [<Interface>]
+            type variables =
+                abstract member clang: float with get
+                abstract member host_arch: string with get
+                abstract member node_install_npm: bool with get
+                abstract member node_install_waf: bool with get
+                abstract member node_prefix: string with get
+                abstract member node_shared_openssl: bool with get
+                abstract member node_shared_v8: bool with get
+                abstract member node_shared_zlib: bool with get
+                abstract member node_use_dtrace: bool with get
+                abstract member node_use_etw: bool with get
+                abstract member node_use_openssl: bool with get
+                abstract member target_arch: string with get
+                abstract member v8_no_strict_aliasing: float with get
+                abstract member v8_use_snapshot: bool with get
+                abstract member visibility: string with get
 
-                member val clang: float = nativeOnly with get
-                member val host_arch: string = nativeOnly with get
-                member val node_install_npm: bool = nativeOnly with get
-                member val node_install_waf: bool = nativeOnly with get
-                member val node_prefix: string = nativeOnly with get
-                member val node_shared_openssl: bool = nativeOnly with get
-                member val node_shared_v8: bool = nativeOnly with get
-                member val node_shared_zlib: bool = nativeOnly with get
-                member val node_use_dtrace: bool = nativeOnly with get
-                member val node_use_etw: bool = nativeOnly with get
-                member val node_use_openssl: bool = nativeOnly with get
-                member val target_arch: string = nativeOnly with get
-                member val v8_no_strict_aliasing: float = nativeOnly with get
-                member val v8_use_snapshot: bool = nativeOnly with get
-                member val visibility: string = nativeOnly with get
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        clang: float,
+                        host_arch: string,
+                        node_install_npm: bool,
+                        node_install_waf: bool,
+                        node_prefix: string,
+                        node_shared_openssl: bool,
+                        node_shared_v8: bool,
+                        node_shared_zlib: bool,
+                        node_use_dtrace: bool,
+                        node_use_etw: bool,
+                        node_use_openssl: bool,
+                        target_arch: string,
+                        v8_no_strict_aliasing: float,
+                        v8_use_snapshot: bool,
+                        visibility: string
+                    )
+                    : variables
+                    =
+                    nativeOnly
 
         module Process =
 
@@ -8359,6 +8375,16 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
                 member val unregister: unit = nativeOnly
 
             type listeners_workerMessage = delegate of value: obj * source: float -> unit
+
+            module finalization =
+
+                module register =
+
+                    type callback = delegate of ref: obj * event: string -> unit
+
+                module registerBeforeExit =
+
+                    type callback = delegate of ref: obj * event: string -> unit
 
             module addListener_workerMessage =
 
@@ -8967,45 +8993,45 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
 
     module console =
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type ConsoleConstructorOptions
-            [<ParamObject; Emit("$0")>]
-            (
-                stdout: Node.NodeJS.WritableStream,
-                ?stderr: Node.NodeJS.WritableStream,
-                ?ignoreErrors: bool,
-                ?colorMode: ConsoleConstructorOptions.colorMode,
-                ?inspectOptions: Node.util.InspectOptions,
-                ?groupIndentation: float
-            )
-            =
-
-            member val stdout: Node.NodeJS.WritableStream = nativeOnly with get, set
-            member val stderr: Node.NodeJS.WritableStream option = nativeOnly with get, set
+        [<Interface>]
+        type ConsoleConstructorOptions =
+            abstract member stdout: Node.NodeJS.WritableStream with get, set
+            abstract member stderr: Node.NodeJS.WritableStream option with get, set
             /// <summary>
             /// Ignore errors when writing to the underlying streams.
             /// </summary>
-            member val ignoreErrors: bool option = nativeOnly with get, set
-
+            abstract member ignoreErrors: bool option with get, set
             /// <summary>
             /// Set color support for this <c>Console</c> instance. Setting to true enables coloring while inspecting
             /// values. Setting to <c>false</c> disables coloring while inspecting values. Setting to <c>'auto'</c> makes color
             /// support depend on the value of the <c>isTTY</c> property and the value returned by <c>getColorDepth()</c> on the
             /// respective stream. This option can not be used, if <c>inspectOptions.colors</c> is set as well.
             /// </summary>
-            member val colorMode: ConsoleConstructorOptions.colorMode option =
-                nativeOnly with get, set
-
+            abstract member colorMode: ConsoleConstructorOptions.colorMode option with get, set
             /// <summary>
             /// Specifies options that are passed along to
             /// [<c>util.inspect()</c>](https://nodejs.org/docs/latest-v22.x/api/util.html#utilinspectobject-options).
             /// </summary>
-            member val inspectOptions: Node.util.InspectOptions option = nativeOnly with get, set
+            abstract member inspectOptions: Node.util.InspectOptions option with get, set
             /// <summary>
             /// Set group indentation.
             /// </summary>
-            member val groupIndentation: float option = nativeOnly with get, set
+            abstract member groupIndentation: float option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    stdout: Node.NodeJS.WritableStream,
+                    ?stderr: Node.NodeJS.WritableStream,
+                    ?ignoreErrors: bool,
+                    ?colorMode: ConsoleConstructorOptions.colorMode,
+                    ?inspectOptions: Node.util.InspectOptions,
+                    ?groupIndentation: float
+                )
+                : ConsoleConstructorOptions
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -14008,20 +14034,24 @@ TypeScript versions earlier than 5.7.""")>]
 
         module from =
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type array [<ParamObject; Emit("$0")>] (valueOf: obj) =
+            [<Interface>]
+            type array =
+                abstract member valueOf: unit -> obj
 
-                member val valueOf: obj = nativeOnly
+                [<ParamObject; Emit("$0")>]
+                static member Create(valueOf: obj) : array = nativeOnly
 
     module Buffer =
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type toJSON [<ParamObject; Emit("$0")>] (``type``: string, data: ResizeArray<float>) =
+        [<Interface>]
+        type toJSON =
+            abstract member ``type``: string with get, set
+            abstract member data: ResizeArray<float> with get, set
 
-            member val ``type``: string = nativeOnly with get, set
-            member val data: ResizeArray<float> = nativeOnly with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create(``type``: string, data: ResizeArray<float>) : toJSON = nativeOnly
 
         [<RequireQualifiedAccess>]
         type compare =
@@ -14188,11 +14218,13 @@ TypeScript versions earlier than 5.7.""")>]
 
                 module Create =
 
-                    [<Global>]
                     [<AllowNullLiteral>]
-                    type strategy [<ParamObject; Emit("$0")>] (?highWaterMark: float) =
+                    [<Interface>]
+                    type strategy =
+                        abstract member highWaterMark: float option with get, set
 
-                        member val highWaterMark: float option = nativeOnly with get, set
+                        [<ParamObject; Emit("$0")>]
+                        static member Create(?highWaterMark: float) : strategy = nativeOnly
 
         module ReadableStreamBYOBReader =
 
@@ -14735,15 +14767,17 @@ TypeScript versions earlier than 5.7.""")>]
 
         module structuredClone =
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type options
-                [<ParamObject; Emit("$0")>]
-                (?transfer: ResizeArray<Node.worker_threads.Transferable>)
-                =
+            [<Interface>]
+            type options =
+                abstract member transfer: ResizeArray<Node.worker_threads.Transferable> option with get, set
 
-                member val transfer: ResizeArray<Node.worker_threads.Transferable> option =
-                    nativeOnly with get, set
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (?transfer: ResizeArray<Node.worker_threads.Transferable>)
+                    : options
+                    =
+                    nativeOnly
 
         module BroadcastChannel =
 
@@ -18468,22 +18502,22 @@ TypeScript versions earlier than 5.7.""")>]
                 | strictEqual
                 | throws
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type AssertOptions
-                [<ParamObject; Emit("$0")>]
-                (?diff: AssertOptions.diff, ?strict: bool)
-                =
-
+            [<Interface>]
+            type AssertOptions =
                 /// <summary>
                 /// If set to <c>'full'</c>, shows the full diff in assertion errors.
                 /// </summary>
-                member val diff: AssertOptions.diff option = nativeOnly with get, set
+                abstract member diff: AssertOptions.diff option with get, set
                 /// <summary>
                 /// If set to <c>true</c>, non-strict methods behave like their
                 /// corresponding strict methods.
                 /// </summary>
-                member val strict: bool option = nativeOnly with get, set
+                abstract member strict: bool option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create(?diff: AssertOptions.diff, ?strict: bool) : AssertOptions =
+                    nativeOnly
 
             /// <summary>
             /// The <c>Assert</c> class allows creating independent assertion instances with custom options.
@@ -18496,44 +18530,47 @@ TypeScript versions earlier than 5.7.""")>]
             [<Interface>]
             type AssertStrict = interface end
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type AssertionErrorOptions
-                [<ParamObject; Emit("$0")>]
-                (
-                    ?message: string,
-                    ?actual: obj,
-                    ?expected: obj,
-                    ?operator: string,
-                    ?stackStartFn: Action,
-                    ?diff: AssertionErrorOptions.diff
-                )
-                =
-
+            [<Interface>]
+            type AssertionErrorOptions =
                 /// <summary>
                 /// If provided, the error message is set to this value.
                 /// </summary>
-                member val message: string option = nativeOnly with get, set
+                abstract member message: string option with get, set
                 /// <summary>
                 /// The <c>actual</c> property on the error instance.
                 /// </summary>
-                member val actual: obj option = nativeOnly with get, set
+                abstract member actual: obj option with get, set
                 /// <summary>
                 /// The <c>expected</c> property on the error instance.
                 /// </summary>
-                member val expected: obj option = nativeOnly with get, set
+                abstract member expected: obj option with get, set
                 /// <summary>
                 /// The <c>operator</c> property on the error instance.
                 /// </summary>
-                member val operator: string option = nativeOnly with get, set
+                abstract member operator: string option with get, set
                 /// <summary>
                 /// If provided, the generated stack trace omits frames before this function.
                 /// </summary>
-                member val stackStartFn: Action option = nativeOnly with get, set
+                abstract member stackStartFn: Action option with get, set
                 /// <summary>
                 /// If set to <c>'full'</c>, shows the full diff in assertion errors.
                 /// </summary>
-                member val diff: AssertionErrorOptions.diff option = nativeOnly with get, set
+                abstract member diff: AssertionErrorOptions.diff option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        ?message: string,
+                        ?actual: obj,
+                        ?expected: obj,
+                        ?operator: string,
+                        ?stackStartFn: Action,
+                        ?diff: AssertionErrorOptions.diff
+                    )
+                    : AssertionErrorOptions
+                    =
+                    nativeOnly
 
             /// <summary>
             /// Indicates the failure of an assertion. All errors thrown by the <c>node:assert</c> module will be instances of the <c>AssertionError</c> class.
@@ -19978,24 +20015,27 @@ AsyncLocalStorage.snapshot()"""
                 | latin1
                 | binary
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type BlobOptions
-                [<ParamObject; Emit("$0")>]
-                (?endings: BlobOptions.endings, ?``type``: string)
-                =
-
+            [<Interface>]
+            type BlobOptions =
                 /// <summary>
                 /// One of either <c>'transparent'</c> or <c>'native'</c>. When set to <c>'native'</c>, line endings in string source parts
                 /// will be converted to the platform native line-ending as specified by <c>import { EOL } from 'node:os'</c>.
                 /// </summary>
-                member val endings: BlobOptions.endings option = nativeOnly with get, set
+                abstract member endings: BlobOptions.endings option with get, set
                 /// <summary>
                 /// The Blob content-type. The intent is for <c>type</c> to convey
                 /// the MIME media type of the data, however no validation of the type format
                 /// is performed.
                 /// </summary>
-                member val ``type``: string option = nativeOnly with get, set
+                abstract member ``type``: string option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (?endings: BlobOptions.endings, ?``type``: string)
+                    : BlobOptions
+                    =
+                    nativeOnly
 
             /// <summary>
             /// A <c>Blob</c> encapsulates immutable, raw data that can be safely shared across
@@ -20055,26 +20095,29 @@ AsyncLocalStorage.snapshot()"""
                 /// </summary>
                 abstract member stream: unit -> Node.stream_web.stream_SLASH_web_.ReadableStream
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type FileOptions
-                [<ParamObject; Emit("$0")>]
-                (?endings: FileOptions.endings, ?``type``: string, ?lastModified: float)
-                =
-
+            [<Interface>]
+            type FileOptions =
                 /// <summary>
                 /// One of either <c>'transparent'</c> or <c>'native'</c>. When set to <c>'native'</c>, line endings in string source parts will be
                 /// converted to the platform native line-ending as specified by <c>import { EOL } from 'node:os'</c>.
                 /// </summary>
-                member val endings: FileOptions.endings option = nativeOnly with get, set
+                abstract member endings: FileOptions.endings option with get, set
                 /// <summary>
                 /// The File content-type.
                 /// </summary>
-                member val ``type``: string option = nativeOnly with get, set
+                abstract member ``type``: string option with get, set
                 /// <summary>
                 /// The last modified date of the file. <c>Default</c>: Date.now().
                 /// </summary>
-                member val lastModified: float option = nativeOnly with get, set
+                abstract member lastModified: float option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (?endings: FileOptions.endings, ?``type``: string, ?lastModified: float)
+                    : FileOptions
+                    =
+                    nativeOnly
 
             /// <summary>
             /// A [<c>File</c>](https://developer.mozilla.org/en-US/docs/Web/API/File) provides information about files.
@@ -20114,25 +20157,27 @@ AsyncLocalStorage.snapshot()"""
 
                 module U3 =
 
-                    [<Global>]
                     [<AllowNullLiteral>]
-                    type Case2<'T> [<ParamObject; Emit("$0")>] (valueOf: 'T) =
+                    [<Interface>]
+                    type Case2<'T> =
+                        abstract member valueOf: unit -> 'T
 
-                        member val valueOf: 'T = nativeOnly
+                        [<ParamObject; Emit("$0")>]
+                        static member Create(valueOf: 'T) : Case2<'T> = nativeOnly
 
             module Exports =
 
                 module constants =
 
-                    [<Global>]
                     [<AllowNullLiteral>]
-                    type Type
-                        [<ParamObject; Emit("$0")>]
-                        (MAX_LENGTH: float, MAX_STRING_LENGTH: float)
-                        =
+                    [<Interface>]
+                    type Type =
+                        abstract member MAX_LENGTH: float with get, set
+                        abstract member MAX_STRING_LENGTH: float with get, set
 
-                        member val MAX_LENGTH: float = nativeOnly with get, set
-                        member val MAX_STRING_LENGTH: float = nativeOnly with get, set
+                        [<ParamObject; Emit("$0")>]
+                        static member Create(MAX_LENGTH: float, MAX_STRING_LENGTH: float) : Type =
+                            nativeOnly
 
     module child_process =
 
@@ -26295,11 +26340,13 @@ AsyncLocalStorage.snapshot()"""
             abstract member ref: unit -> unit
             abstract member unref: unit -> unit
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type MessageOptions [<ParamObject; Emit("$0")>] (?keepOpen: bool) =
+        [<Interface>]
+        type MessageOptions =
+            abstract member keepOpen: bool option with get, set
 
-            member val keepOpen: bool option = nativeOnly with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create(?keepOpen: bool) : MessageOptions = nativeOnly
 
         [<RequireQualifiedAccess>]
         [<StringEnum(CaseRules.None)>]
@@ -26373,54 +26420,10 @@ AsyncLocalStorage.snapshot()"""
             inherit Node.child_process.CommonSpawnOptions
             abstract member detached: bool option with get, set
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type SpawnOptionsWithoutStdio
-            [<ParamObject; Emit("$0")>]
-            (
-                ?uid: float,
-                ?gid: float,
-                ?cwd: U2<string, Node.url.URL>,
-                ?env: Node.NodeJS.ProcessEnv,
-                ?windowsHide: bool,
-                ?timeout: float,
-                ?signal: Node.AbortSignal,
-                ?serialization: Node.child_process.SerializationType,
-                ?killSignal: U2<Node.NodeJS.Signals, float>,
-                ?argv0: string,
-                ?shell: U2<bool, string>,
-                ?windowsVerbatimArguments: bool,
-                ?detached: bool,
-                ?stdio:
-                    U2<Node.child_process.StdioPipeNamed, ResizeArray<Node.child_process.StdioPipe>>
-            )
-            =
-
-            member val uid: float option = nativeOnly with get, set
-            member val gid: float option = nativeOnly with get, set
-            member val cwd: U2<string, Node.url.URL> option = nativeOnly with get, set
-            member val env: Node.NodeJS.ProcessEnv option = nativeOnly with get, set
-            member val windowsHide: bool option = nativeOnly with get, set
-            member val timeout: float option = nativeOnly with get, set
-            /// <summary>
-            /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-            /// </summary>
-            member val signal: Node.AbortSignal option = nativeOnly with get, set
-
-            /// <summary>
-            /// Specify the kind of serialization used for sending messages between processes.
-            /// </summary>
-            member val serialization: Node.child_process.SerializationType option =
-                nativeOnly with get, set
-
-            /// <summary>
-            /// The signal value to be used when the spawned process will be killed by the abort signal.
-            /// </summary>
-            member val killSignal: U2<Node.NodeJS.Signals, float> option = nativeOnly with get, set
-            member val argv0: string option = nativeOnly with get, set
-            member val shell: U2<bool, string> option = nativeOnly with get, set
-            member val windowsVerbatimArguments: bool option = nativeOnly with get, set
-            member val detached: bool option = nativeOnly with get, set
+        [<Interface>]
+        type SpawnOptionsWithoutStdio =
+            inherit Node.child_process.SpawnOptions
 
             /// <summary>
             /// Can be set to 'pipe', 'inherit', 'overlapped', or 'ignore', or an array of these strings.
@@ -26429,10 +26432,34 @@ AsyncLocalStorage.snapshot()"""
             /// specify the <c>stdio</c> behavior beyond the standard streams. See
             /// <see href="ChildProcess.stdio">ChildProcess.stdio</see> for more information.
             /// </summary>
-            member val stdio: U2<
-                Node.child_process.StdioPipeNamed,
-                ResizeArray<Node.child_process.StdioPipe>
-                               > option = nativeOnly with get, set
+            abstract member stdio:
+                U2<Node.child_process.StdioPipeNamed, ResizeArray<Node.child_process.StdioPipe>> option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?uid: float,
+                    ?gid: float,
+                    ?cwd: U2<string, Node.url.URL>,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float,
+                    ?signal: Node.AbortSignal,
+                    ?serialization: Node.child_process.SerializationType,
+                    ?killSignal: U2<Node.NodeJS.Signals, float>,
+                    ?argv0: string,
+                    ?shell: U2<bool, string>,
+                    ?windowsVerbatimArguments: bool,
+                    ?detached: bool,
+                    ?stdio:
+                        U2<
+                            Node.child_process.StdioPipeNamed,
+                            ResizeArray<Node.child_process.StdioPipe>
+                         >
+                )
+                : SpawnOptionsWithoutStdio
+                =
+                nativeOnly
 
         [<RequireQualifiedAccess>]
         [<Erase(CaseRules.None)>]
@@ -26476,12 +26503,14 @@ AsyncLocalStorage.snapshot()"""
             abstract member killSignal: U2<Node.NodeJS.Signals, float> option with get, set
             abstract member encoding: string option with get, set
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type ExecOptionsWithStringEncoding private () =
+        [<Interface>]
+        type ExecOptionsWithStringEncoding =
+            inherit Node.child_process.ExecOptions
+            abstract member encoding: Node.BufferEncoding option with get, set
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     ?uid: float,
                     ?gid: float,
@@ -26493,11 +26522,12 @@ AsyncLocalStorage.snapshot()"""
                     ?maxBuffer: float,
                     ?encoding: Node.BufferEncoding
                 )
+                : ExecOptionsWithStringEncoding
                 =
-                ExecOptionsWithStringEncoding()
+                nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     killSignal: Node.NodeJS.Signals,
                     ?uid: float,
@@ -26510,11 +26540,12 @@ AsyncLocalStorage.snapshot()"""
                     ?maxBuffer: float,
                     ?encoding: Node.BufferEncoding
                 )
+                : ExecOptionsWithStringEncoding
                 =
-                ExecOptionsWithStringEncoding()
+                nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     killSignal: float,
                     ?uid: float,
@@ -26527,11 +26558,12 @@ AsyncLocalStorage.snapshot()"""
                     ?maxBuffer: float,
                     ?encoding: Node.BufferEncoding
                 )
+                : ExecOptionsWithStringEncoding
                 =
-                ExecOptionsWithStringEncoding()
+                nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     cwd: string,
                     ?uid: float,
@@ -26544,11 +26576,12 @@ AsyncLocalStorage.snapshot()"""
                     ?maxBuffer: float,
                     ?encoding: Node.BufferEncoding
                 )
+                : ExecOptionsWithStringEncoding
                 =
-                ExecOptionsWithStringEncoding()
+                nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     cwd: string,
                     killSignal: Node.NodeJS.Signals,
@@ -26562,11 +26595,12 @@ AsyncLocalStorage.snapshot()"""
                     ?maxBuffer: float,
                     ?encoding: Node.BufferEncoding
                 )
+                : ExecOptionsWithStringEncoding
                 =
-                ExecOptionsWithStringEncoding()
+                nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     cwd: string,
                     killSignal: float,
@@ -26580,11 +26614,12 @@ AsyncLocalStorage.snapshot()"""
                     ?maxBuffer: float,
                     ?encoding: Node.BufferEncoding
                 )
+                : ExecOptionsWithStringEncoding
                 =
-                ExecOptionsWithStringEncoding()
+                nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     cwd: Node.url.URL,
                     ?uid: float,
@@ -26597,11 +26632,12 @@ AsyncLocalStorage.snapshot()"""
                     ?maxBuffer: float,
                     ?encoding: Node.BufferEncoding
                 )
+                : ExecOptionsWithStringEncoding
                 =
-                ExecOptionsWithStringEncoding()
+                nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     cwd: Node.url.URL,
                     killSignal: Node.NodeJS.Signals,
@@ -26615,11 +26651,12 @@ AsyncLocalStorage.snapshot()"""
                     ?maxBuffer: float,
                     ?encoding: Node.BufferEncoding
                 )
+                : ExecOptionsWithStringEncoding
                 =
-                ExecOptionsWithStringEncoding()
+                nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     cwd: Node.url.URL,
                     killSignal: float,
@@ -26633,27 +26670,18 @@ AsyncLocalStorage.snapshot()"""
                     ?maxBuffer: float,
                     ?encoding: Node.BufferEncoding
                 )
+                : ExecOptionsWithStringEncoding
                 =
-                ExecOptionsWithStringEncoding()
+                nativeOnly
 
-            member val uid: float option = nativeOnly with get, set
-            member val gid: float option = nativeOnly with get, set
-            member val cwd: U2<string, Node.url.URL> option = nativeOnly with get, set
-            member val env: Node.NodeJS.ProcessEnv option = nativeOnly with get, set
-            member val windowsHide: bool option = nativeOnly with get, set
-            member val timeout: float option = nativeOnly with get, set
-            member val shell: string option = nativeOnly with get, set
-            member val signal: Node.AbortSignal option = nativeOnly with get, set
-            member val maxBuffer: float option = nativeOnly with get, set
-            member val killSignal: U2<Node.NodeJS.Signals, float> option = nativeOnly with get, set
-            member val encoding: Node.BufferEncoding option = nativeOnly with get, set
-
-        [<Global>]
         [<AllowNullLiteral>]
-        type ExecOptionsWithBufferEncoding private () =
+        [<Interface>]
+        type ExecOptionsWithBufferEncoding =
+            inherit Node.child_process.ExecOptions
+            abstract member encoding: string option with get, set
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     ?uid: float,
                     ?gid: float,
@@ -26665,11 +26693,12 @@ AsyncLocalStorage.snapshot()"""
                     ?maxBuffer: float,
                     ?encoding: string
                 )
+                : ExecOptionsWithBufferEncoding
                 =
-                ExecOptionsWithBufferEncoding()
+                nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     killSignal: Node.NodeJS.Signals,
                     ?uid: float,
@@ -26682,11 +26711,12 @@ AsyncLocalStorage.snapshot()"""
                     ?maxBuffer: float,
                     ?encoding: string
                 )
+                : ExecOptionsWithBufferEncoding
                 =
-                ExecOptionsWithBufferEncoding()
+                nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     killSignal: float,
                     ?uid: float,
@@ -26699,11 +26729,12 @@ AsyncLocalStorage.snapshot()"""
                     ?maxBuffer: float,
                     ?encoding: string
                 )
+                : ExecOptionsWithBufferEncoding
                 =
-                ExecOptionsWithBufferEncoding()
+                nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     cwd: string,
                     ?uid: float,
@@ -26716,11 +26747,12 @@ AsyncLocalStorage.snapshot()"""
                     ?maxBuffer: float,
                     ?encoding: string
                 )
+                : ExecOptionsWithBufferEncoding
                 =
-                ExecOptionsWithBufferEncoding()
+                nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     cwd: string,
                     killSignal: Node.NodeJS.Signals,
@@ -26734,11 +26766,12 @@ AsyncLocalStorage.snapshot()"""
                     ?maxBuffer: float,
                     ?encoding: string
                 )
+                : ExecOptionsWithBufferEncoding
                 =
-                ExecOptionsWithBufferEncoding()
+                nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     cwd: string,
                     killSignal: float,
@@ -26752,11 +26785,12 @@ AsyncLocalStorage.snapshot()"""
                     ?maxBuffer: float,
                     ?encoding: string
                 )
+                : ExecOptionsWithBufferEncoding
                 =
-                ExecOptionsWithBufferEncoding()
+                nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     cwd: Node.url.URL,
                     ?uid: float,
@@ -26769,11 +26803,12 @@ AsyncLocalStorage.snapshot()"""
                     ?maxBuffer: float,
                     ?encoding: string
                 )
+                : ExecOptionsWithBufferEncoding
                 =
-                ExecOptionsWithBufferEncoding()
+                nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     cwd: Node.url.URL,
                     killSignal: Node.NodeJS.Signals,
@@ -26787,11 +26822,12 @@ AsyncLocalStorage.snapshot()"""
                     ?maxBuffer: float,
                     ?encoding: string
                 )
+                : ExecOptionsWithBufferEncoding
                 =
-                ExecOptionsWithBufferEncoding()
+                nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     cwd: Node.url.URL,
                     killSignal: float,
@@ -26805,20 +26841,9 @@ AsyncLocalStorage.snapshot()"""
                     ?maxBuffer: float,
                     ?encoding: string
                 )
+                : ExecOptionsWithBufferEncoding
                 =
-                ExecOptionsWithBufferEncoding()
-
-            member val uid: float option = nativeOnly with get, set
-            member val gid: float option = nativeOnly with get, set
-            member val cwd: U2<string, Node.url.URL> option = nativeOnly with get, set
-            member val env: Node.NodeJS.ProcessEnv option = nativeOnly with get, set
-            member val windowsHide: bool option = nativeOnly with get, set
-            member val timeout: float option = nativeOnly with get, set
-            member val shell: string option = nativeOnly with get, set
-            member val signal: Node.AbortSignal option = nativeOnly with get, set
-            member val maxBuffer: float option = nativeOnly with get, set
-            member val killSignal: U2<Node.NodeJS.Signals, float> option = nativeOnly with get, set
-            member val encoding: string option = nativeOnly with get, set
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -26852,52 +26877,78 @@ AsyncLocalStorage.snapshot()"""
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     command: string * options: Node.child_process.ExecOptionsWithStringEncoding ->
-                        Node.child_process.PromiseWithChild<Exports.__promisify__>
+                        Node.child_process.PromiseWithChild<Exports.__promisify___2>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     command: string * options: Node.child_process.ExecOptions option ->
-                        Node.child_process.PromiseWithChild<Exports.__promisify___2>
+                        Node.child_process.PromiseWithChild<Exports.__promisify___3>
 
             module Exports =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type __promisify__ [<ParamObject; Emit("$0")>] (stdout: string, stderr: string) =
+                [<Interface>]
+                type __promisify__ =
+                    abstract member stdout: string with get, set
+                    abstract member stderr: string with get, set
 
-                    member val stdout: string = nativeOnly with get, set
-                    member val stderr: string = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(stdout: string, stderr: string) : __promisify__ =
+                        nativeOnly
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type __promisify___1
-                    [<ParamObject; Emit("$0")>]
-                    (stdout: Node.NonSharedBuffer, stderr: Node.NonSharedBuffer)
-                    =
-
-                    member val stdout: Node.NonSharedBuffer = nativeOnly with get, set
-                    member val stderr: Node.NonSharedBuffer = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type __promisify___2 private () =
+                [<Interface>]
+                type __promisify___1 =
+                    abstract member stdout: Node.NonSharedBuffer with get, set
+                    abstract member stderr: Node.NonSharedBuffer with get, set
 
                     [<ParamObject; Emit("$0")>]
-                    new(stdout: string, stderr: string) = __promisify___2 ()
-
-                    [<ParamObject; Emit("$0")>]
-                    new(stdout: string, stderr: Node.NonSharedBuffer) = __promisify___2 ()
-
-                    [<ParamObject; Emit("$0")>]
-                    new(stdout: Node.NonSharedBuffer, stderr: string) = __promisify___2 ()
-
-                    [<ParamObject; Emit("$0")>]
-                    new(stdout: Node.NonSharedBuffer, stderr: Node.NonSharedBuffer)
+                    static member Create
+                        (stdout: Node.NonSharedBuffer, stderr: Node.NonSharedBuffer)
+                        : __promisify___1
                         =
-                        __promisify___2 ()
+                        nativeOnly
 
-                    member val stdout: U2<string, Node.NonSharedBuffer> = nativeOnly with get, set
-                    member val stderr: U2<string, Node.NonSharedBuffer> = nativeOnly with get, set
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type __promisify___2 =
+                    abstract member stdout: string with get, set
+                    abstract member stderr: string with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(stdout: string, stderr: string) : __promisify___2 =
+                        nativeOnly
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type __promisify___3 =
+                    abstract member stdout: U2<string, Node.NonSharedBuffer> with get, set
+                    abstract member stderr: U2<string, Node.NonSharedBuffer> with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(stdout: string, stderr: string) : __promisify___3 =
+                        nativeOnly
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (stdout: string, stderr: Node.NonSharedBuffer)
+                        : __promisify___3
+                        =
+                        nativeOnly
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (stdout: Node.NonSharedBuffer, stderr: string)
+                        : __promisify___3
+                        =
+                        nativeOnly
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (stdout: Node.NonSharedBuffer, stderr: Node.NonSharedBuffer)
+                        : __promisify___3
+                        =
+                        nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -26914,77 +26965,57 @@ AsyncLocalStorage.snapshot()"""
             abstract member signal: Node.AbortSignal option with get, set
             abstract member encoding: string option with get, set
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type ExecFileOptionsWithStringEncoding
+        [<Interface>]
+        type ExecFileOptionsWithStringEncoding =
+            inherit Node.child_process.ExecFileOptions
+            abstract member encoding: Node.BufferEncoding option with get, set
+
             [<ParamObject; Emit("$0")>]
-            (
-                ?uid: float,
-                ?gid: float,
-                ?cwd: U2<string, Node.url.URL>,
-                ?env: Node.NodeJS.ProcessEnv,
-                ?windowsHide: bool,
-                ?timeout: float,
-                ?maxBuffer: float,
-                ?killSignal: U2<Node.NodeJS.Signals, float>,
-                ?windowsVerbatimArguments: bool,
-                ?shell: U2<bool, string>,
-                ?signal: Node.AbortSignal,
-                ?encoding: Node.BufferEncoding
-            )
-            =
+            static member Create
+                (
+                    ?uid: float,
+                    ?gid: float,
+                    ?cwd: U2<string, Node.url.URL>,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float,
+                    ?maxBuffer: float,
+                    ?killSignal: U2<Node.NodeJS.Signals, float>,
+                    ?windowsVerbatimArguments: bool,
+                    ?shell: U2<bool, string>,
+                    ?signal: Node.AbortSignal,
+                    ?encoding: Node.BufferEncoding
+                )
+                : ExecFileOptionsWithStringEncoding
+                =
+                nativeOnly
 
-            member val uid: float option = nativeOnly with get, set
-            member val gid: float option = nativeOnly with get, set
-            member val cwd: U2<string, Node.url.URL> option = nativeOnly with get, set
-            member val env: Node.NodeJS.ProcessEnv option = nativeOnly with get, set
-            member val windowsHide: bool option = nativeOnly with get, set
-            member val timeout: float option = nativeOnly with get, set
-            member val maxBuffer: float option = nativeOnly with get, set
-            member val killSignal: U2<Node.NodeJS.Signals, float> option = nativeOnly with get, set
-            member val windowsVerbatimArguments: bool option = nativeOnly with get, set
-            member val shell: U2<bool, string> option = nativeOnly with get, set
-            /// <summary>
-            /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-            /// </summary>
-            member val signal: Node.AbortSignal option = nativeOnly with get, set
-            member val encoding: Node.BufferEncoding option = nativeOnly with get, set
-
-        [<Global>]
         [<AllowNullLiteral>]
-        type ExecFileOptionsWithBufferEncoding
-            [<ParamObject; Emit("$0")>]
-            (
-                ?uid: float,
-                ?gid: float,
-                ?cwd: U2<string, Node.url.URL>,
-                ?env: Node.NodeJS.ProcessEnv,
-                ?windowsHide: bool,
-                ?timeout: float,
-                ?maxBuffer: float,
-                ?killSignal: U2<Node.NodeJS.Signals, float>,
-                ?windowsVerbatimArguments: bool,
-                ?shell: U2<bool, string>,
-                ?signal: Node.AbortSignal,
-                ?encoding: string
-            )
-            =
+        [<Interface>]
+        type ExecFileOptionsWithBufferEncoding =
+            inherit Node.child_process.ExecFileOptions
+            abstract member encoding: string option with get, set
 
-            member val uid: float option = nativeOnly with get, set
-            member val gid: float option = nativeOnly with get, set
-            member val cwd: U2<string, Node.url.URL> option = nativeOnly with get, set
-            member val env: Node.NodeJS.ProcessEnv option = nativeOnly with get, set
-            member val windowsHide: bool option = nativeOnly with get, set
-            member val timeout: float option = nativeOnly with get, set
-            member val maxBuffer: float option = nativeOnly with get, set
-            member val killSignal: U2<Node.NodeJS.Signals, float> option = nativeOnly with get, set
-            member val windowsVerbatimArguments: bool option = nativeOnly with get, set
-            member val shell: U2<bool, string> option = nativeOnly with get, set
-            /// <summary>
-            /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-            /// </summary>
-            member val signal: Node.AbortSignal option = nativeOnly with get, set
-            member val encoding: string option = nativeOnly with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?uid: float,
+                    ?gid: float,
+                    ?cwd: U2<string, Node.url.URL>,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float,
+                    ?maxBuffer: float,
+                    ?killSignal: U2<Node.NodeJS.Signals, float>,
+                    ?windowsVerbatimArguments: bool,
+                    ?shell: U2<bool, string>,
+                    ?signal: Node.AbortSignal,
+                    ?encoding: string
+                )
+                : ExecFileOptionsWithBufferEncoding
+                =
+                nativeOnly
 
         [<Obsolete("Use `ExecFileOptions` instead.")>]
         [<AllowNullLiteral>]
@@ -27016,309 +27047,188 @@ AsyncLocalStorage.snapshot()"""
             type Exports =
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    file: string -> Node.child_process.PromiseWithChild<Exports.__promisify___3>
+                    file: string -> Node.child_process.PromiseWithChild<Exports.__promisify___4>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     file: string * args: ResizeArray<string> option ->
-                        Node.child_process.PromiseWithChild<Exports.__promisify___3>
+                        Node.child_process.PromiseWithChild<Exports.__promisify___5>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     file: string * options: Node.child_process.ExecFileOptionsWithBufferEncoding ->
-                        Node.child_process.PromiseWithChild<Exports.__promisify___4>
+                        Node.child_process.PromiseWithChild<Exports.__promisify___6>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     file: string *
                     args: ResizeArray<string> option *
                     options: Node.child_process.ExecFileOptionsWithBufferEncoding ->
-                        Node.child_process.PromiseWithChild<Exports.__promisify___4>
+                        Node.child_process.PromiseWithChild<Exports.__promisify___7>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     file: string * options: Node.child_process.ExecFileOptionsWithStringEncoding ->
-                        Node.child_process.PromiseWithChild<Exports.__promisify___3>
+                        Node.child_process.PromiseWithChild<Exports.__promisify___8>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     file: string *
                     args: ResizeArray<string> option *
                     options: Node.child_process.ExecFileOptionsWithStringEncoding ->
-                        Node.child_process.PromiseWithChild<Exports.__promisify___3>
+                        Node.child_process.PromiseWithChild<Exports.__promisify___9>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     file: string * options: Node.child_process.ExecFileOptions option ->
-                        Node.child_process.PromiseWithChild<Exports.__promisify___5>
+                        Node.child_process.PromiseWithChild<Exports.__promisify___10>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     file: string *
                     args: ResizeArray<string> option *
                     options: Node.child_process.ExecFileOptions option ->
-                        Node.child_process.PromiseWithChild<Exports.__promisify___5>
+                        Node.child_process.PromiseWithChild<Exports.__promisify___11>
 
             module Exports =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type __promisify___3 [<ParamObject; Emit("$0")>] (stdout: string, stderr: string) =
+                [<Interface>]
+                type __promisify___4 =
+                    abstract member stdout: string with get, set
+                    abstract member stderr: string with get, set
 
-                    member val stdout: string = nativeOnly with get, set
-                    member val stderr: string = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(stdout: string, stderr: string) : __promisify___4 =
+                        nativeOnly
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type __promisify___4
+                [<Interface>]
+                type __promisify___5 =
+                    abstract member stdout: string with get, set
+                    abstract member stderr: string with get, set
+
                     [<ParamObject; Emit("$0")>]
-                    (stdout: Node.NonSharedBuffer, stderr: Node.NonSharedBuffer)
-                    =
+                    static member Create(stdout: string, stderr: string) : __promisify___5 =
+                        nativeOnly
 
-                    member val stdout: Node.NonSharedBuffer = nativeOnly with get, set
-                    member val stderr: Node.NonSharedBuffer = nativeOnly with get, set
-
-                [<Global>]
                 [<AllowNullLiteral>]
-                type __promisify___5 private () =
+                [<Interface>]
+                type __promisify___6 =
+                    abstract member stdout: Node.NonSharedBuffer with get, set
+                    abstract member stderr: Node.NonSharedBuffer with get, set
 
                     [<ParamObject; Emit("$0")>]
-                    new(stdout: string, stderr: string) = __promisify___5 ()
-
-                    [<ParamObject; Emit("$0")>]
-                    new(stdout: string, stderr: Node.NonSharedBuffer) = __promisify___5 ()
-
-                    [<ParamObject; Emit("$0")>]
-                    new(stdout: Node.NonSharedBuffer, stderr: string) = __promisify___5 ()
-
-                    [<ParamObject; Emit("$0")>]
-                    new(stdout: Node.NonSharedBuffer, stderr: Node.NonSharedBuffer)
+                    static member Create
+                        (stdout: Node.NonSharedBuffer, stderr: Node.NonSharedBuffer)
+                        : __promisify___6
                         =
-                        __promisify___5 ()
+                        nativeOnly
 
-                    member val stdout: U2<string, Node.NonSharedBuffer> = nativeOnly with get, set
-                    member val stderr: U2<string, Node.NonSharedBuffer> = nativeOnly with get, set
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type __promisify___7 =
+                    abstract member stdout: Node.NonSharedBuffer with get, set
+                    abstract member stderr: Node.NonSharedBuffer with get, set
 
-        [<Global>]
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (stdout: Node.NonSharedBuffer, stderr: Node.NonSharedBuffer)
+                        : __promisify___7
+                        =
+                        nativeOnly
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type __promisify___8 =
+                    abstract member stdout: string with get, set
+                    abstract member stderr: string with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(stdout: string, stderr: string) : __promisify___8 =
+                        nativeOnly
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type __promisify___9 =
+                    abstract member stdout: string with get, set
+                    abstract member stderr: string with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(stdout: string, stderr: string) : __promisify___9 =
+                        nativeOnly
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type __promisify___10 =
+                    abstract member stdout: U2<string, Node.NonSharedBuffer> with get, set
+                    abstract member stderr: U2<string, Node.NonSharedBuffer> with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(stdout: string, stderr: string) : __promisify___10 =
+                        nativeOnly
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (stdout: string, stderr: Node.NonSharedBuffer)
+                        : __promisify___10
+                        =
+                        nativeOnly
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (stdout: Node.NonSharedBuffer, stderr: string)
+                        : __promisify___10
+                        =
+                        nativeOnly
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (stdout: Node.NonSharedBuffer, stderr: Node.NonSharedBuffer)
+                        : __promisify___10
+                        =
+                        nativeOnly
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type __promisify___11 =
+                    abstract member stdout: U2<string, Node.NonSharedBuffer> with get, set
+                    abstract member stderr: U2<string, Node.NonSharedBuffer> with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(stdout: string, stderr: string) : __promisify___11 =
+                        nativeOnly
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (stdout: string, stderr: Node.NonSharedBuffer)
+                        : __promisify___11
+                        =
+                        nativeOnly
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (stdout: Node.NonSharedBuffer, stderr: string)
+                        : __promisify___11
+                        =
+                        nativeOnly
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (stdout: Node.NonSharedBuffer, stderr: Node.NonSharedBuffer)
+                        : __promisify___11
+                        =
+                        nativeOnly
+
         [<AllowNullLiteral>]
-        type ForkOptions private () =
-
-            [<ParamObject; Emit("$0")>]
-            new
-                (
-                    ?uid: float,
-                    ?gid: float,
-                    ?env: Node.NodeJS.ProcessEnv,
-                    ?windowsHide: bool,
-                    ?timeout: float,
-                    ?signal: Node.AbortSignal,
-                    ?serialization: Node.child_process.SerializationType,
-                    ?execPath: string,
-                    ?execArgv: ResizeArray<string>,
-                    ?silent: bool,
-                    ?stdio: Node.child_process.StdioOptions,
-                    ?detached: bool,
-                    ?windowsVerbatimArguments: bool
-                )
-                =
-                ForkOptions()
-
-            [<ParamObject; Emit("$0")>]
-            new
-                (
-                    killSignal: Node.NodeJS.Signals,
-                    ?uid: float,
-                    ?gid: float,
-                    ?env: Node.NodeJS.ProcessEnv,
-                    ?windowsHide: bool,
-                    ?timeout: float,
-                    ?signal: Node.AbortSignal,
-                    ?serialization: Node.child_process.SerializationType,
-                    ?execPath: string,
-                    ?execArgv: ResizeArray<string>,
-                    ?silent: bool,
-                    ?stdio: Node.child_process.StdioOptions,
-                    ?detached: bool,
-                    ?windowsVerbatimArguments: bool
-                )
-                =
-                ForkOptions()
-
-            [<ParamObject; Emit("$0")>]
-            new
-                (
-                    killSignal: float,
-                    ?uid: float,
-                    ?gid: float,
-                    ?env: Node.NodeJS.ProcessEnv,
-                    ?windowsHide: bool,
-                    ?timeout: float,
-                    ?signal: Node.AbortSignal,
-                    ?serialization: Node.child_process.SerializationType,
-                    ?execPath: string,
-                    ?execArgv: ResizeArray<string>,
-                    ?silent: bool,
-                    ?stdio: Node.child_process.StdioOptions,
-                    ?detached: bool,
-                    ?windowsVerbatimArguments: bool
-                )
-                =
-                ForkOptions()
-
-            [<ParamObject; Emit("$0")>]
-            new
-                (
-                    cwd: string,
-                    ?uid: float,
-                    ?gid: float,
-                    ?env: Node.NodeJS.ProcessEnv,
-                    ?windowsHide: bool,
-                    ?timeout: float,
-                    ?signal: Node.AbortSignal,
-                    ?serialization: Node.child_process.SerializationType,
-                    ?execPath: string,
-                    ?execArgv: ResizeArray<string>,
-                    ?silent: bool,
-                    ?stdio: Node.child_process.StdioOptions,
-                    ?detached: bool,
-                    ?windowsVerbatimArguments: bool
-                )
-                =
-                ForkOptions()
-
-            [<ParamObject; Emit("$0")>]
-            new
-                (
-                    cwd: string,
-                    killSignal: Node.NodeJS.Signals,
-                    ?uid: float,
-                    ?gid: float,
-                    ?env: Node.NodeJS.ProcessEnv,
-                    ?windowsHide: bool,
-                    ?timeout: float,
-                    ?signal: Node.AbortSignal,
-                    ?serialization: Node.child_process.SerializationType,
-                    ?execPath: string,
-                    ?execArgv: ResizeArray<string>,
-                    ?silent: bool,
-                    ?stdio: Node.child_process.StdioOptions,
-                    ?detached: bool,
-                    ?windowsVerbatimArguments: bool
-                )
-                =
-                ForkOptions()
-
-            [<ParamObject; Emit("$0")>]
-            new
-                (
-                    cwd: string,
-                    killSignal: float,
-                    ?uid: float,
-                    ?gid: float,
-                    ?env: Node.NodeJS.ProcessEnv,
-                    ?windowsHide: bool,
-                    ?timeout: float,
-                    ?signal: Node.AbortSignal,
-                    ?serialization: Node.child_process.SerializationType,
-                    ?execPath: string,
-                    ?execArgv: ResizeArray<string>,
-                    ?silent: bool,
-                    ?stdio: Node.child_process.StdioOptions,
-                    ?detached: bool,
-                    ?windowsVerbatimArguments: bool
-                )
-                =
-                ForkOptions()
-
-            [<ParamObject; Emit("$0")>]
-            new
-                (
-                    cwd: Node.url.URL,
-                    ?uid: float,
-                    ?gid: float,
-                    ?env: Node.NodeJS.ProcessEnv,
-                    ?windowsHide: bool,
-                    ?timeout: float,
-                    ?signal: Node.AbortSignal,
-                    ?serialization: Node.child_process.SerializationType,
-                    ?execPath: string,
-                    ?execArgv: ResizeArray<string>,
-                    ?silent: bool,
-                    ?stdio: Node.child_process.StdioOptions,
-                    ?detached: bool,
-                    ?windowsVerbatimArguments: bool
-                )
-                =
-                ForkOptions()
-
-            [<ParamObject; Emit("$0")>]
-            new
-                (
-                    cwd: Node.url.URL,
-                    killSignal: Node.NodeJS.Signals,
-                    ?uid: float,
-                    ?gid: float,
-                    ?env: Node.NodeJS.ProcessEnv,
-                    ?windowsHide: bool,
-                    ?timeout: float,
-                    ?signal: Node.AbortSignal,
-                    ?serialization: Node.child_process.SerializationType,
-                    ?execPath: string,
-                    ?execArgv: ResizeArray<string>,
-                    ?silent: bool,
-                    ?stdio: Node.child_process.StdioOptions,
-                    ?detached: bool,
-                    ?windowsVerbatimArguments: bool
-                )
-                =
-                ForkOptions()
-
-            [<ParamObject; Emit("$0")>]
-            new
-                (
-                    cwd: Node.url.URL,
-                    killSignal: float,
-                    ?uid: float,
-                    ?gid: float,
-                    ?env: Node.NodeJS.ProcessEnv,
-                    ?windowsHide: bool,
-                    ?timeout: float,
-                    ?signal: Node.AbortSignal,
-                    ?serialization: Node.child_process.SerializationType,
-                    ?execPath: string,
-                    ?execArgv: ResizeArray<string>,
-                    ?silent: bool,
-                    ?stdio: Node.child_process.StdioOptions,
-                    ?detached: bool,
-                    ?windowsVerbatimArguments: bool
-                )
-                =
-                ForkOptions()
-
-            member val uid: float option = nativeOnly with get, set
-            member val gid: float option = nativeOnly with get, set
-            member val cwd: U2<string, Node.url.URL> option = nativeOnly with get, set
-            member val env: Node.NodeJS.ProcessEnv option = nativeOnly with get, set
-            member val windowsHide: bool option = nativeOnly with get, set
-            member val timeout: float option = nativeOnly with get, set
-            /// <summary>
-            /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-            /// </summary>
-            member val signal: Node.AbortSignal option = nativeOnly with get, set
-
-            /// <summary>
-            /// Specify the kind of serialization used for sending messages between processes.
-            /// </summary>
-            member val serialization: Node.child_process.SerializationType option =
-                nativeOnly with get, set
-
-            /// <summary>
-            /// The signal value to be used when the spawned process will be killed by the abort signal.
-            /// </summary>
-            member val killSignal: U2<Node.NodeJS.Signals, float> option = nativeOnly with get, set
-            member val execPath: string option = nativeOnly with get, set
-            member val execArgv: ResizeArray<string> option = nativeOnly with get, set
-            member val silent: bool option = nativeOnly with get, set
+        [<Interface>]
+        type ForkOptions =
+            inherit Node.child_process.CommonOptions
+            inherit Node.child_process.MessagingOptions
+            inherit Node.events.EventEmitter_.Abortable
+            abstract member execPath: string option with get, set
+            abstract member execArgv: ResizeArray<string> option with get, set
+            abstract member silent: bool option with get, set
             /// <summary>
             /// Can be set to 'pipe', 'inherit', 'overlapped', or 'ignore', or an array of these strings.
             /// If passed as an array, the first element is used for <c>stdin</c>, the second for
@@ -27326,9 +27236,210 @@ AsyncLocalStorage.snapshot()"""
             /// specify the <c>stdio</c> behavior beyond the standard streams. See
             /// <see href="ChildProcess.stdio">ChildProcess.stdio</see> for more information.
             /// </summary>
-            member val stdio: Node.child_process.StdioOptions option = nativeOnly with get, set
-            member val detached: bool option = nativeOnly with get, set
-            member val windowsVerbatimArguments: bool option = nativeOnly with get, set
+            abstract member stdio: Node.child_process.StdioOptions option with get, set
+            abstract member detached: bool option with get, set
+            abstract member windowsVerbatimArguments: bool option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?uid: float,
+                    ?gid: float,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float,
+                    ?signal: Node.AbortSignal,
+                    ?serialization: Node.child_process.SerializationType,
+                    ?execPath: string,
+                    ?execArgv: ResizeArray<string>,
+                    ?silent: bool,
+                    ?stdio: Node.child_process.StdioOptions,
+                    ?detached: bool,
+                    ?windowsVerbatimArguments: bool
+                )
+                : ForkOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    killSignal: Node.NodeJS.Signals,
+                    ?uid: float,
+                    ?gid: float,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float,
+                    ?signal: Node.AbortSignal,
+                    ?serialization: Node.child_process.SerializationType,
+                    ?execPath: string,
+                    ?execArgv: ResizeArray<string>,
+                    ?silent: bool,
+                    ?stdio: Node.child_process.StdioOptions,
+                    ?detached: bool,
+                    ?windowsVerbatimArguments: bool
+                )
+                : ForkOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    killSignal: float,
+                    ?uid: float,
+                    ?gid: float,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float,
+                    ?signal: Node.AbortSignal,
+                    ?serialization: Node.child_process.SerializationType,
+                    ?execPath: string,
+                    ?execArgv: ResizeArray<string>,
+                    ?silent: bool,
+                    ?stdio: Node.child_process.StdioOptions,
+                    ?detached: bool,
+                    ?windowsVerbatimArguments: bool
+                )
+                : ForkOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    cwd: string,
+                    ?uid: float,
+                    ?gid: float,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float,
+                    ?signal: Node.AbortSignal,
+                    ?serialization: Node.child_process.SerializationType,
+                    ?execPath: string,
+                    ?execArgv: ResizeArray<string>,
+                    ?silent: bool,
+                    ?stdio: Node.child_process.StdioOptions,
+                    ?detached: bool,
+                    ?windowsVerbatimArguments: bool
+                )
+                : ForkOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    cwd: string,
+                    killSignal: Node.NodeJS.Signals,
+                    ?uid: float,
+                    ?gid: float,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float,
+                    ?signal: Node.AbortSignal,
+                    ?serialization: Node.child_process.SerializationType,
+                    ?execPath: string,
+                    ?execArgv: ResizeArray<string>,
+                    ?silent: bool,
+                    ?stdio: Node.child_process.StdioOptions,
+                    ?detached: bool,
+                    ?windowsVerbatimArguments: bool
+                )
+                : ForkOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    cwd: string,
+                    killSignal: float,
+                    ?uid: float,
+                    ?gid: float,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float,
+                    ?signal: Node.AbortSignal,
+                    ?serialization: Node.child_process.SerializationType,
+                    ?execPath: string,
+                    ?execArgv: ResizeArray<string>,
+                    ?silent: bool,
+                    ?stdio: Node.child_process.StdioOptions,
+                    ?detached: bool,
+                    ?windowsVerbatimArguments: bool
+                )
+                : ForkOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    cwd: Node.url.URL,
+                    ?uid: float,
+                    ?gid: float,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float,
+                    ?signal: Node.AbortSignal,
+                    ?serialization: Node.child_process.SerializationType,
+                    ?execPath: string,
+                    ?execArgv: ResizeArray<string>,
+                    ?silent: bool,
+                    ?stdio: Node.child_process.StdioOptions,
+                    ?detached: bool,
+                    ?windowsVerbatimArguments: bool
+                )
+                : ForkOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    cwd: Node.url.URL,
+                    killSignal: Node.NodeJS.Signals,
+                    ?uid: float,
+                    ?gid: float,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float,
+                    ?signal: Node.AbortSignal,
+                    ?serialization: Node.child_process.SerializationType,
+                    ?execPath: string,
+                    ?execArgv: ResizeArray<string>,
+                    ?silent: bool,
+                    ?stdio: Node.child_process.StdioOptions,
+                    ?detached: bool,
+                    ?windowsVerbatimArguments: bool
+                )
+                : ForkOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    cwd: Node.url.URL,
+                    killSignal: float,
+                    ?uid: float,
+                    ?gid: float,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float,
+                    ?signal: Node.AbortSignal,
+                    ?serialization: Node.child_process.SerializationType,
+                    ?execPath: string,
+                    ?execArgv: ResizeArray<string>,
+                    ?silent: bool,
+                    ?stdio: Node.child_process.StdioOptions,
+                    ?detached: bool,
+                    ?windowsVerbatimArguments: bool
+                )
+                : ForkOptions
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -27338,131 +27449,65 @@ AsyncLocalStorage.snapshot()"""
             abstract member maxBuffer: float option with get, set
             abstract member encoding: SpawnSyncOptions.encoding option with get, set
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type SpawnSyncOptionsWithStringEncoding
+        [<Interface>]
+        type SpawnSyncOptionsWithStringEncoding =
+            inherit Node.child_process.SpawnSyncOptions
+            abstract member encoding: Node.BufferEncoding with get, set
+
             [<ParamObject; Emit("$0")>]
-            (
-                encoding: Node.BufferEncoding,
-                ?uid: float,
-                ?gid: float,
-                ?cwd: U2<string, Node.url.URL>,
-                ?env: Node.NodeJS.ProcessEnv,
-                ?windowsHide: bool,
-                ?timeout: float,
-                ?signal: Node.AbortSignal,
-                ?serialization: Node.child_process.SerializationType,
-                ?killSignal: U2<Node.NodeJS.Signals, float>,
-                ?argv0: string,
-                ?stdio: Node.child_process.StdioOptions,
-                ?shell: U2<bool, string>,
-                ?windowsVerbatimArguments: bool,
-                ?input: U2<string, Node.NodeJS.ArrayBufferView>,
-                ?maxBuffer: float
-            )
-            =
+            static member Create
+                (
+                    encoding: Node.BufferEncoding,
+                    ?uid: float,
+                    ?gid: float,
+                    ?cwd: U2<string, Node.url.URL>,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float,
+                    ?signal: Node.AbortSignal,
+                    ?serialization: Node.child_process.SerializationType,
+                    ?killSignal: U2<Node.NodeJS.Signals, float>,
+                    ?argv0: string,
+                    ?stdio: Node.child_process.StdioOptions,
+                    ?shell: U2<bool, string>,
+                    ?windowsVerbatimArguments: bool,
+                    ?input: U2<string, Node.NodeJS.ArrayBufferView>,
+                    ?maxBuffer: float
+                )
+                : SpawnSyncOptionsWithStringEncoding
+                =
+                nativeOnly
 
-            member val encoding: Node.BufferEncoding = nativeOnly with get, set
-            member val uid: float option = nativeOnly with get, set
-            member val gid: float option = nativeOnly with get, set
-            member val cwd: U2<string, Node.url.URL> option = nativeOnly with get, set
-            member val env: Node.NodeJS.ProcessEnv option = nativeOnly with get, set
-            member val windowsHide: bool option = nativeOnly with get, set
-            member val timeout: float option = nativeOnly with get, set
-            /// <summary>
-            /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-            /// </summary>
-            member val signal: Node.AbortSignal option = nativeOnly with get, set
-
-            /// <summary>
-            /// Specify the kind of serialization used for sending messages between processes.
-            /// </summary>
-            member val serialization: Node.child_process.SerializationType option =
-                nativeOnly with get, set
-
-            /// <summary>
-            /// The signal value to be used when the spawned process will be killed by the abort signal.
-            /// </summary>
-            member val killSignal: U2<Node.NodeJS.Signals, float> option = nativeOnly with get, set
-            member val argv0: string option = nativeOnly with get, set
-            /// <summary>
-            /// Can be set to 'pipe', 'inherit', 'overlapped', or 'ignore', or an array of these strings.
-            /// If passed as an array, the first element is used for <c>stdin</c>, the second for
-            /// <c>stdout</c>, and the third for <c>stderr</c>. A fourth element can be used to
-            /// specify the <c>stdio</c> behavior beyond the standard streams. See
-            /// <see href="ChildProcess.stdio">ChildProcess.stdio</see> for more information.
-            /// </summary>
-            member val stdio: Node.child_process.StdioOptions option = nativeOnly with get, set
-            member val shell: U2<bool, string> option = nativeOnly with get, set
-            member val windowsVerbatimArguments: bool option = nativeOnly with get, set
-
-            member val input: U2<string, Node.NodeJS.ArrayBufferView> option =
-                nativeOnly with get, set
-
-            member val maxBuffer: float option = nativeOnly with get, set
-
-        [<Global>]
         [<AllowNullLiteral>]
-        type SpawnSyncOptionsWithBufferEncoding
+        [<Interface>]
+        type SpawnSyncOptionsWithBufferEncoding =
+            inherit Node.child_process.SpawnSyncOptions
+            abstract member encoding: string option with get, set
+
             [<ParamObject; Emit("$0")>]
-            (
-                ?uid: float,
-                ?gid: float,
-                ?cwd: U2<string, Node.url.URL>,
-                ?env: Node.NodeJS.ProcessEnv,
-                ?windowsHide: bool,
-                ?timeout: float,
-                ?signal: Node.AbortSignal,
-                ?serialization: Node.child_process.SerializationType,
-                ?killSignal: U2<Node.NodeJS.Signals, float>,
-                ?argv0: string,
-                ?stdio: Node.child_process.StdioOptions,
-                ?shell: U2<bool, string>,
-                ?windowsVerbatimArguments: bool,
-                ?input: U2<string, Node.NodeJS.ArrayBufferView>,
-                ?maxBuffer: float,
-                ?encoding: string
-            )
-            =
-
-            member val uid: float option = nativeOnly with get, set
-            member val gid: float option = nativeOnly with get, set
-            member val cwd: U2<string, Node.url.URL> option = nativeOnly with get, set
-            member val env: Node.NodeJS.ProcessEnv option = nativeOnly with get, set
-            member val windowsHide: bool option = nativeOnly with get, set
-            member val timeout: float option = nativeOnly with get, set
-            /// <summary>
-            /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-            /// </summary>
-            member val signal: Node.AbortSignal option = nativeOnly with get, set
-
-            /// <summary>
-            /// Specify the kind of serialization used for sending messages between processes.
-            /// </summary>
-            member val serialization: Node.child_process.SerializationType option =
-                nativeOnly with get, set
-
-            /// <summary>
-            /// The signal value to be used when the spawned process will be killed by the abort signal.
-            /// </summary>
-            member val killSignal: U2<Node.NodeJS.Signals, float> option = nativeOnly with get, set
-            member val argv0: string option = nativeOnly with get, set
-            /// <summary>
-            /// Can be set to 'pipe', 'inherit', 'overlapped', or 'ignore', or an array of these strings.
-            /// If passed as an array, the first element is used for <c>stdin</c>, the second for
-            /// <c>stdout</c>, and the third for <c>stderr</c>. A fourth element can be used to
-            /// specify the <c>stdio</c> behavior beyond the standard streams. See
-            /// <see href="ChildProcess.stdio">ChildProcess.stdio</see> for more information.
-            /// </summary>
-            member val stdio: Node.child_process.StdioOptions option = nativeOnly with get, set
-            member val shell: U2<bool, string> option = nativeOnly with get, set
-            member val windowsVerbatimArguments: bool option = nativeOnly with get, set
-
-            member val input: U2<string, Node.NodeJS.ArrayBufferView> option =
-                nativeOnly with get, set
-
-            member val maxBuffer: float option = nativeOnly with get, set
-            member val encoding: string option = nativeOnly with get, set
+            static member Create
+                (
+                    ?uid: float,
+                    ?gid: float,
+                    ?cwd: U2<string, Node.url.URL>,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float,
+                    ?signal: Node.AbortSignal,
+                    ?serialization: Node.child_process.SerializationType,
+                    ?killSignal: U2<Node.NodeJS.Signals, float>,
+                    ?argv0: string,
+                    ?stdio: Node.child_process.StdioOptions,
+                    ?shell: U2<bool, string>,
+                    ?windowsVerbatimArguments: bool,
+                    ?input: U2<string, Node.NodeJS.ArrayBufferView>,
+                    ?maxBuffer: float,
+                    ?encoding: string
+                )
+                : SpawnSyncOptionsWithBufferEncoding
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -27498,91 +27543,57 @@ AsyncLocalStorage.snapshot()"""
             inherit Node.child_process.CommonExecOptions
             abstract member shell: string option with get, set
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type ExecSyncOptionsWithStringEncoding
+        [<Interface>]
+        type ExecSyncOptionsWithStringEncoding =
+            inherit Node.child_process.ExecSyncOptions
+            abstract member encoding: Node.BufferEncoding with get, set
+
             [<ParamObject; Emit("$0")>]
-            (
-                encoding: Node.BufferEncoding,
-                ?uid: float,
-                ?gid: float,
-                ?cwd: U2<string, Node.url.URL>,
-                ?env: Node.NodeJS.ProcessEnv,
-                ?windowsHide: bool,
-                ?timeout: float,
-                ?input: U2<string, Node.NodeJS.ArrayBufferView>,
-                ?stdio: Node.child_process.StdioOptions,
-                ?killSignal: U2<Node.NodeJS.Signals, float>,
-                ?maxBuffer: float,
-                ?shell: string
-            )
-            =
+            static member Create
+                (
+                    encoding: Node.BufferEncoding,
+                    ?uid: float,
+                    ?gid: float,
+                    ?cwd: U2<string, Node.url.URL>,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float,
+                    ?input: U2<string, Node.NodeJS.ArrayBufferView>,
+                    ?stdio: Node.child_process.StdioOptions,
+                    ?killSignal: U2<Node.NodeJS.Signals, float>,
+                    ?maxBuffer: float,
+                    ?shell: string
+                )
+                : ExecSyncOptionsWithStringEncoding
+                =
+                nativeOnly
 
-            member val encoding: Node.BufferEncoding = nativeOnly with get, set
-            member val uid: float option = nativeOnly with get, set
-            member val gid: float option = nativeOnly with get, set
-            member val cwd: U2<string, Node.url.URL> option = nativeOnly with get, set
-            member val env: Node.NodeJS.ProcessEnv option = nativeOnly with get, set
-            member val windowsHide: bool option = nativeOnly with get, set
-            member val timeout: float option = nativeOnly with get, set
-
-            member val input: U2<string, Node.NodeJS.ArrayBufferView> option =
-                nativeOnly with get, set
-
-            /// <summary>
-            /// Can be set to 'pipe', 'inherit, or 'ignore', or an array of these strings.
-            /// If passed as an array, the first element is used for <c>stdin</c>, the second for
-            /// <c>stdout</c>, and the third for <c>stderr</c>. A fourth element can be used to
-            /// specify the <c>stdio</c> behavior beyond the standard streams. See
-            /// <see href="ChildProcess.stdio">ChildProcess.stdio</see> for more information.
-            /// </summary>
-            member val stdio: Node.child_process.StdioOptions option = nativeOnly with get, set
-            member val killSignal: U2<Node.NodeJS.Signals, float> option = nativeOnly with get, set
-            member val maxBuffer: float option = nativeOnly with get, set
-            member val shell: string option = nativeOnly with get, set
-
-        [<Global>]
         [<AllowNullLiteral>]
-        type ExecSyncOptionsWithBufferEncoding
+        [<Interface>]
+        type ExecSyncOptionsWithBufferEncoding =
+            inherit Node.child_process.ExecSyncOptions
+            abstract member encoding: string option with get, set
+
             [<ParamObject; Emit("$0")>]
-            (
-                ?uid: float,
-                ?gid: float,
-                ?cwd: U2<string, Node.url.URL>,
-                ?env: Node.NodeJS.ProcessEnv,
-                ?windowsHide: bool,
-                ?timeout: float,
-                ?input: U2<string, Node.NodeJS.ArrayBufferView>,
-                ?stdio: Node.child_process.StdioOptions,
-                ?killSignal: U2<Node.NodeJS.Signals, float>,
-                ?maxBuffer: float,
-                ?shell: string,
-                ?encoding: string
-            )
-            =
-
-            member val uid: float option = nativeOnly with get, set
-            member val gid: float option = nativeOnly with get, set
-            member val cwd: U2<string, Node.url.URL> option = nativeOnly with get, set
-            member val env: Node.NodeJS.ProcessEnv option = nativeOnly with get, set
-            member val windowsHide: bool option = nativeOnly with get, set
-            member val timeout: float option = nativeOnly with get, set
-
-            member val input: U2<string, Node.NodeJS.ArrayBufferView> option =
-                nativeOnly with get, set
-
-            /// <summary>
-            /// Can be set to 'pipe', 'inherit, or 'ignore', or an array of these strings.
-            /// If passed as an array, the first element is used for <c>stdin</c>, the second for
-            /// <c>stdout</c>, and the third for <c>stderr</c>. A fourth element can be used to
-            /// specify the <c>stdio</c> behavior beyond the standard streams. See
-            /// <see href="ChildProcess.stdio">ChildProcess.stdio</see> for more information.
-            /// </summary>
-            member val stdio: Node.child_process.StdioOptions option = nativeOnly with get, set
-            member val killSignal: U2<Node.NodeJS.Signals, float> option = nativeOnly with get, set
-            member val maxBuffer: float option = nativeOnly with get, set
-            member val shell: string option = nativeOnly with get, set
-            member val encoding: string option = nativeOnly with get, set
+            static member Create
+                (
+                    ?uid: float,
+                    ?gid: float,
+                    ?cwd: U2<string, Node.url.URL>,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float,
+                    ?input: U2<string, Node.NodeJS.ArrayBufferView>,
+                    ?stdio: Node.child_process.StdioOptions,
+                    ?killSignal: U2<Node.NodeJS.Signals, float>,
+                    ?maxBuffer: float,
+                    ?shell: string,
+                    ?encoding: string
+                )
+                : ExecSyncOptionsWithBufferEncoding
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -27590,91 +27601,57 @@ AsyncLocalStorage.snapshot()"""
             inherit Node.child_process.CommonExecOptions
             abstract member shell: U2<bool, string> option with get, set
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type ExecFileSyncOptionsWithStringEncoding
+        [<Interface>]
+        type ExecFileSyncOptionsWithStringEncoding =
+            inherit Node.child_process.ExecFileSyncOptions
+            abstract member encoding: Node.BufferEncoding with get, set
+
             [<ParamObject; Emit("$0")>]
-            (
-                encoding: Node.BufferEncoding,
-                ?uid: float,
-                ?gid: float,
-                ?cwd: U2<string, Node.url.URL>,
-                ?env: Node.NodeJS.ProcessEnv,
-                ?windowsHide: bool,
-                ?timeout: float,
-                ?input: U2<string, Node.NodeJS.ArrayBufferView>,
-                ?stdio: Node.child_process.StdioOptions,
-                ?killSignal: U2<Node.NodeJS.Signals, float>,
-                ?maxBuffer: float,
-                ?shell: U2<bool, string>
-            )
-            =
+            static member Create
+                (
+                    encoding: Node.BufferEncoding,
+                    ?uid: float,
+                    ?gid: float,
+                    ?cwd: U2<string, Node.url.URL>,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float,
+                    ?input: U2<string, Node.NodeJS.ArrayBufferView>,
+                    ?stdio: Node.child_process.StdioOptions,
+                    ?killSignal: U2<Node.NodeJS.Signals, float>,
+                    ?maxBuffer: float,
+                    ?shell: U2<bool, string>
+                )
+                : ExecFileSyncOptionsWithStringEncoding
+                =
+                nativeOnly
 
-            member val encoding: Node.BufferEncoding = nativeOnly with get, set
-            member val uid: float option = nativeOnly with get, set
-            member val gid: float option = nativeOnly with get, set
-            member val cwd: U2<string, Node.url.URL> option = nativeOnly with get, set
-            member val env: Node.NodeJS.ProcessEnv option = nativeOnly with get, set
-            member val windowsHide: bool option = nativeOnly with get, set
-            member val timeout: float option = nativeOnly with get, set
-
-            member val input: U2<string, Node.NodeJS.ArrayBufferView> option =
-                nativeOnly with get, set
-
-            /// <summary>
-            /// Can be set to 'pipe', 'inherit, or 'ignore', or an array of these strings.
-            /// If passed as an array, the first element is used for <c>stdin</c>, the second for
-            /// <c>stdout</c>, and the third for <c>stderr</c>. A fourth element can be used to
-            /// specify the <c>stdio</c> behavior beyond the standard streams. See
-            /// <see href="ChildProcess.stdio">ChildProcess.stdio</see> for more information.
-            /// </summary>
-            member val stdio: Node.child_process.StdioOptions option = nativeOnly with get, set
-            member val killSignal: U2<Node.NodeJS.Signals, float> option = nativeOnly with get, set
-            member val maxBuffer: float option = nativeOnly with get, set
-            member val shell: U2<bool, string> option = nativeOnly with get, set
-
-        [<Global>]
         [<AllowNullLiteral>]
-        type ExecFileSyncOptionsWithBufferEncoding
+        [<Interface>]
+        type ExecFileSyncOptionsWithBufferEncoding =
+            inherit Node.child_process.ExecFileSyncOptions
+            abstract member encoding: string option with get, set
+
             [<ParamObject; Emit("$0")>]
-            (
-                ?uid: float,
-                ?gid: float,
-                ?cwd: U2<string, Node.url.URL>,
-                ?env: Node.NodeJS.ProcessEnv,
-                ?windowsHide: bool,
-                ?timeout: float,
-                ?input: U2<string, Node.NodeJS.ArrayBufferView>,
-                ?stdio: Node.child_process.StdioOptions,
-                ?killSignal: U2<Node.NodeJS.Signals, float>,
-                ?maxBuffer: float,
-                ?shell: U2<bool, string>,
-                ?encoding: string
-            )
-            =
-
-            member val uid: float option = nativeOnly with get, set
-            member val gid: float option = nativeOnly with get, set
-            member val cwd: U2<string, Node.url.URL> option = nativeOnly with get, set
-            member val env: Node.NodeJS.ProcessEnv option = nativeOnly with get, set
-            member val windowsHide: bool option = nativeOnly with get, set
-            member val timeout: float option = nativeOnly with get, set
-
-            member val input: U2<string, Node.NodeJS.ArrayBufferView> option =
-                nativeOnly with get, set
-
-            /// <summary>
-            /// Can be set to 'pipe', 'inherit, or 'ignore', or an array of these strings.
-            /// If passed as an array, the first element is used for <c>stdin</c>, the second for
-            /// <c>stdout</c>, and the third for <c>stderr</c>. A fourth element can be used to
-            /// specify the <c>stdio</c> behavior beyond the standard streams. See
-            /// <see href="ChildProcess.stdio">ChildProcess.stdio</see> for more information.
-            /// </summary>
-            member val stdio: Node.child_process.StdioOptions option = nativeOnly with get, set
-            member val killSignal: U2<Node.NodeJS.Signals, float> option = nativeOnly with get, set
-            member val maxBuffer: float option = nativeOnly with get, set
-            member val shell: U2<bool, string> option = nativeOnly with get, set
-            member val encoding: string option = nativeOnly with get, set
+            static member Create
+                (
+                    ?uid: float,
+                    ?gid: float,
+                    ?cwd: U2<string, Node.url.URL>,
+                    ?env: Node.NodeJS.ProcessEnv,
+                    ?windowsHide: bool,
+                    ?timeout: float,
+                    ?input: U2<string, Node.NodeJS.ArrayBufferView>,
+                    ?stdio: Node.child_process.StdioOptions,
+                    ?killSignal: U2<Node.NodeJS.Signals, float>,
+                    ?maxBuffer: float,
+                    ?shell: U2<bool, string>,
+                    ?encoding: string
+                )
+                : ExecFileSyncOptionsWithBufferEncoding
+                =
+                nativeOnly
 
         type ChildProcessByStdio =
             ChildProcessByStdio<
@@ -27952,15 +27929,11 @@ AsyncLocalStorage.snapshot()"""
             /// </summary>
             abstract member windowsHide: bool option with get, set
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type Address
-            [<ParamObject; Emit("$0")>]
-            (address: string, port: float, addressType: Address.addressType)
-            =
-
-            member val address: string = nativeOnly with get, set
-            member val port: float = nativeOnly with get, set
+        [<Interface>]
+        type Address =
+            abstract member address: string with get, set
+            abstract member port: float with get, set
             /// <summary>
             /// The <c>addressType</c> is one of:
             ///
@@ -27969,7 +27942,14 @@ AsyncLocalStorage.snapshot()"""
             /// * <c>-1</c> (Unix domain socket)
             /// * <c>'udp4'</c> or <c>'udp6'</c> (UDPv4 or UDPv6)
             /// </summary>
-            member val addressType: Address.addressType = nativeOnly with get, set
+            abstract member addressType: Address.addressType with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (address: string, port: float, addressType: Address.addressType)
+                : Address
+                =
+                nativeOnly
 
         /// <summary>
         /// A <c>Worker</c> object contains all public information and method about a worker.
@@ -40071,11 +40051,13 @@ Certificate.verifySpkac($0)"""
             abstract member cipher: string option with get, set
             abstract member passphrase: U2<string, Node.Buffer> option with get, set
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type JwkKeyExportOptions [<ParamObject; Emit("$0")>] (format: string) =
+        [<Interface>]
+        type JwkKeyExportOptions =
+            abstract member format: string with get, set
 
-            member val format: string = nativeOnly with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create(format: string) : JwkKeyExportOptions = nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -41376,12 +41358,14 @@ KeyObject.from($0)"""
             abstract member saltLength: float option with get, set
             abstract member dsaEncoding: Node.crypto.DSAEncoding option with get, set
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type SignPrivateKeyInput private () =
+        [<Interface>]
+        type SignPrivateKeyInput =
+            inherit Node.crypto.PrivateKeyInput
+            inherit Node.crypto.SigningOptions
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     key: string,
                     ?format: Node.crypto.KeyFormat,
@@ -41391,11 +41375,12 @@ KeyObject.from($0)"""
                     ?saltLength: float,
                     ?dsaEncoding: Node.crypto.DSAEncoding
                 )
+                : SignPrivateKeyInput
                 =
-                SignPrivateKeyInput()
+                nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     key: string,
                     passphrase: string,
@@ -41406,11 +41391,12 @@ KeyObject.from($0)"""
                     ?saltLength: float,
                     ?dsaEncoding: Node.crypto.DSAEncoding
                 )
+                : SignPrivateKeyInput
                 =
-                SignPrivateKeyInput()
+                nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     key: string,
                     passphrase: Node.Buffer,
@@ -41421,11 +41407,12 @@ KeyObject.from($0)"""
                     ?saltLength: float,
                     ?dsaEncoding: Node.crypto.DSAEncoding
                 )
+                : SignPrivateKeyInput
                 =
-                SignPrivateKeyInput()
+                nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     key: Node.Buffer,
                     ?format: Node.crypto.KeyFormat,
@@ -41435,11 +41422,12 @@ KeyObject.from($0)"""
                     ?saltLength: float,
                     ?dsaEncoding: Node.crypto.DSAEncoding
                 )
+                : SignPrivateKeyInput
                 =
-                SignPrivateKeyInput()
+                nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     key: Node.Buffer,
                     passphrase: string,
@@ -41450,11 +41438,12 @@ KeyObject.from($0)"""
                     ?saltLength: float,
                     ?dsaEncoding: Node.crypto.DSAEncoding
                 )
+                : SignPrivateKeyInput
                 =
-                SignPrivateKeyInput()
+                nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     key: Node.Buffer,
                     passphrase: Node.Buffer,
@@ -41465,60 +41454,55 @@ KeyObject.from($0)"""
                     ?saltLength: float,
                     ?dsaEncoding: Node.crypto.DSAEncoding
                 )
+                : SignPrivateKeyInput
                 =
-                SignPrivateKeyInput()
+                nativeOnly
 
-            member val key: U2<string, Node.Buffer> = nativeOnly with get, set
-            member val format: Node.crypto.KeyFormat option = nativeOnly with get, set
-            member val ``type``: SignPrivateKeyInput.``type`` option = nativeOnly with get, set
-            member val passphrase: U2<string, Node.Buffer> option = nativeOnly with get, set
-            member val encoding: string option = nativeOnly with get, set
-            member val padding: float option = nativeOnly with get, set
-            member val saltLength: float option = nativeOnly with get, set
-            member val dsaEncoding: Node.crypto.DSAEncoding option = nativeOnly with get, set
-
-        [<Global>]
         [<AllowNullLiteral>]
-        type SignKeyObjectInput
-            [<ParamObject; Emit("$0")>]
-            (
-                key: Node.crypto.KeyObject,
-                ?padding: float,
-                ?saltLength: float,
-                ?dsaEncoding: Node.crypto.DSAEncoding
-            )
-            =
-
-            member val key: Node.crypto.KeyObject = nativeOnly with get, set
-            member val padding: float option = nativeOnly with get, set
-            member val saltLength: float option = nativeOnly with get, set
-            member val dsaEncoding: Node.crypto.DSAEncoding option = nativeOnly with get, set
-
-        [<Global>]
-        [<AllowNullLiteral>]
-        type SignJsonWebKeyInput
-            [<ParamObject; Emit("$0")>]
-            (
-                key: Node.crypto.JsonWebKey,
-                format: string,
-                ?padding: float,
-                ?saltLength: float,
-                ?dsaEncoding: Node.crypto.DSAEncoding
-            )
-            =
-
-            member val key: Node.crypto.JsonWebKey = nativeOnly with get, set
-            member val format: string = nativeOnly with get, set
-            member val padding: float option = nativeOnly with get, set
-            member val saltLength: float option = nativeOnly with get, set
-            member val dsaEncoding: Node.crypto.DSAEncoding option = nativeOnly with get, set
-
-        [<Global>]
-        [<AllowNullLiteral>]
-        type VerifyPublicKeyInput private () =
+        [<Interface>]
+        type SignKeyObjectInput =
+            inherit Node.crypto.SigningOptions
+            abstract member key: Node.crypto.KeyObject with get, set
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
+                (
+                    key: Node.crypto.KeyObject,
+                    ?padding: float,
+                    ?saltLength: float,
+                    ?dsaEncoding: Node.crypto.DSAEncoding
+                )
+                : SignKeyObjectInput
+                =
+                nativeOnly
+
+        [<AllowNullLiteral>]
+        [<Interface>]
+        type SignJsonWebKeyInput =
+            inherit Node.crypto.JsonWebKeyInput
+            inherit Node.crypto.SigningOptions
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    key: Node.crypto.JsonWebKey,
+                    format: string,
+                    ?padding: float,
+                    ?saltLength: float,
+                    ?dsaEncoding: Node.crypto.DSAEncoding
+                )
+                : SignJsonWebKeyInput
+                =
+                nativeOnly
+
+        [<AllowNullLiteral>]
+        [<Interface>]
+        type VerifyPublicKeyInput =
+            inherit Node.crypto.PublicKeyInput
+            inherit Node.crypto.SigningOptions
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
                 (
                     key: string,
                     ?format: Node.crypto.KeyFormat,
@@ -41528,11 +41512,12 @@ KeyObject.from($0)"""
                     ?saltLength: float,
                     ?dsaEncoding: Node.crypto.DSAEncoding
                 )
+                : VerifyPublicKeyInput
                 =
-                VerifyPublicKeyInput()
+                nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     key: Node.Buffer,
                     ?format: Node.crypto.KeyFormat,
@@ -41542,52 +41527,46 @@ KeyObject.from($0)"""
                     ?saltLength: float,
                     ?dsaEncoding: Node.crypto.DSAEncoding
                 )
+                : VerifyPublicKeyInput
                 =
-                VerifyPublicKeyInput()
+                nativeOnly
 
-            member val key: U2<string, Node.Buffer> = nativeOnly with get, set
-            member val format: Node.crypto.KeyFormat option = nativeOnly with get, set
-            member val ``type``: VerifyPublicKeyInput.``type`` option = nativeOnly with get, set
-            member val encoding: string option = nativeOnly with get, set
-            member val padding: float option = nativeOnly with get, set
-            member val saltLength: float option = nativeOnly with get, set
-            member val dsaEncoding: Node.crypto.DSAEncoding option = nativeOnly with get, set
-
-        [<Global>]
         [<AllowNullLiteral>]
-        type VerifyKeyObjectInput
+        [<Interface>]
+        type VerifyKeyObjectInput =
+            inherit Node.crypto.SigningOptions
+            abstract member key: Node.crypto.KeyObject with get, set
+
             [<ParamObject; Emit("$0")>]
-            (
-                key: Node.crypto.KeyObject,
-                ?padding: float,
-                ?saltLength: float,
-                ?dsaEncoding: Node.crypto.DSAEncoding
-            )
-            =
+            static member Create
+                (
+                    key: Node.crypto.KeyObject,
+                    ?padding: float,
+                    ?saltLength: float,
+                    ?dsaEncoding: Node.crypto.DSAEncoding
+                )
+                : VerifyKeyObjectInput
+                =
+                nativeOnly
 
-            member val key: Node.crypto.KeyObject = nativeOnly with get, set
-            member val padding: float option = nativeOnly with get, set
-            member val saltLength: float option = nativeOnly with get, set
-            member val dsaEncoding: Node.crypto.DSAEncoding option = nativeOnly with get, set
-
-        [<Global>]
         [<AllowNullLiteral>]
-        type VerifyJsonWebKeyInput
-            [<ParamObject; Emit("$0")>]
-            (
-                key: Node.crypto.JsonWebKey,
-                format: string,
-                ?padding: float,
-                ?saltLength: float,
-                ?dsaEncoding: Node.crypto.DSAEncoding
-            )
-            =
+        [<Interface>]
+        type VerifyJsonWebKeyInput =
+            inherit Node.crypto.JsonWebKeyInput
+            inherit Node.crypto.SigningOptions
 
-            member val key: Node.crypto.JsonWebKey = nativeOnly with get, set
-            member val format: string = nativeOnly with get, set
-            member val padding: float option = nativeOnly with get, set
-            member val saltLength: float option = nativeOnly with get, set
-            member val dsaEncoding: Node.crypto.DSAEncoding option = nativeOnly with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    key: Node.crypto.JsonWebKey,
+                    format: string,
+                    ?padding: float,
+                    ?saltLength: float,
+                    ?dsaEncoding: Node.crypto.DSAEncoding
+                )
+                : VerifyJsonWebKeyInput
+                =
+                nativeOnly
 
         type KeyLike = U3<string, Node.Buffer, Node.crypto.KeyObject>
 
@@ -42662,54 +42641,63 @@ KeyObject.from($0)"""
             /// </summary>
             abstract member verifyError: float with get, set
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type ScryptOptions
+        [<Interface>]
+        type ScryptOptions =
+            abstract member cost: float option with get, set
+            abstract member blockSize: float option with get, set
+            abstract member parallelization: float option with get, set
+            abstract member N: float option with get, set
+            abstract member r: float option with get, set
+            abstract member p: float option with get, set
+            abstract member maxmem: float option with get, set
+
             [<ParamObject; Emit("$0")>]
-            (
-                ?cost: float,
-                ?blockSize: float,
-                ?parallelization: float,
-                ?N: float,
-                ?r: float,
-                ?p: float,
-                ?maxmem: float
-            )
-            =
+            static member Create
+                (
+                    ?cost: float,
+                    ?blockSize: float,
+                    ?parallelization: float,
+                    ?N: float,
+                    ?r: float,
+                    ?p: float,
+                    ?maxmem: float
+                )
+                : ScryptOptions
+                =
+                nativeOnly
 
-            member val cost: float option = nativeOnly with get, set
-            member val blockSize: float option = nativeOnly with get, set
-            member val parallelization: float option = nativeOnly with get, set
-            member val N: float option = nativeOnly with get, set
-            member val r: float option = nativeOnly with get, set
-            member val p: float option = nativeOnly with get, set
-            member val maxmem: float option = nativeOnly with get, set
-
-        [<Global>]
         [<AllowNullLiteral>]
-        type RsaPublicKey [<ParamObject; Emit("$0")>] (key: Node.crypto.KeyLike, ?padding: float) =
+        [<Interface>]
+        type RsaPublicKey =
+            abstract member key: Node.crypto.KeyLike with get, set
+            abstract member padding: float option with get, set
 
-            member val key: Node.crypto.KeyLike = nativeOnly with get, set
-            member val padding: float option = nativeOnly with get, set
-
-        [<Global>]
-        [<AllowNullLiteral>]
-        type RsaPrivateKey
             [<ParamObject; Emit("$0")>]
-            (
-                key: Node.crypto.KeyLike,
-                ?passphrase: string,
-                ?oaepHash: string,
-                ?oaepLabel: Node.NodeJS.TypedArray,
-                ?padding: float
-            )
-            =
+            static member Create(key: Node.crypto.KeyLike, ?padding: float) : RsaPublicKey =
+                nativeOnly
 
-            member val key: Node.crypto.KeyLike = nativeOnly with get, set
-            member val passphrase: string option = nativeOnly with get, set
-            member val oaepHash: string option = nativeOnly with get, set
-            member val oaepLabel: Node.NodeJS.TypedArray option = nativeOnly with get, set
-            member val padding: float option = nativeOnly with get, set
+        [<AllowNullLiteral>]
+        [<Interface>]
+        type RsaPrivateKey =
+            abstract member key: Node.crypto.KeyLike with get, set
+            abstract member passphrase: string option with get, set
+            abstract member oaepHash: string option with get, set
+            abstract member oaepLabel: Node.NodeJS.TypedArray option with get, set
+            abstract member padding: float option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    key: Node.crypto.KeyLike,
+                    ?passphrase: string,
+                    ?oaepHash: string,
+                    ?oaepLabel: Node.NodeJS.TypedArray,
+                    ?padding: float
+                )
+                : RsaPrivateKey
+                =
+                nativeOnly
 
         /// <summary>
         /// The <c>ECDH</c> class is a utility for creating Elliptic Curve Diffie-Hellman (ECDH)
@@ -43110,71 +43098,80 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// </summary>
             abstract member paramEncoding: ECKeyPairKeyObjectOptions.paramEncoding option with get, set
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type RSAKeyPairKeyObjectOptions
-            [<ParamObject; Emit("$0")>]
-            (modulusLength: float, ?publicExponent: float)
-            =
-
+        [<Interface>]
+        type RSAKeyPairKeyObjectOptions =
             /// <summary>
             /// Key size in bits
             /// </summary>
-            member val modulusLength: float = nativeOnly with get, set
+            abstract member modulusLength: float with get, set
             /// <summary>
             /// Public exponent
             /// </summary>
-            member val publicExponent: float option = nativeOnly with get, set
+            abstract member publicExponent: float option with get, set
 
-        [<Global>]
-        [<AllowNullLiteral>]
-        type RSAPSSKeyPairKeyObjectOptions
             [<ParamObject; Emit("$0")>]
-            (
-                modulusLength: float,
-                ?publicExponent: float,
-                ?hashAlgorithm: string,
-                ?mgf1HashAlgorithm: string,
-                ?saltLength: string
-            )
-            =
+            static member Create
+                (modulusLength: float, ?publicExponent: float)
+                : RSAKeyPairKeyObjectOptions
+                =
+                nativeOnly
 
+        [<AllowNullLiteral>]
+        [<Interface>]
+        type RSAPSSKeyPairKeyObjectOptions =
             /// <summary>
             /// Key size in bits
             /// </summary>
-            member val modulusLength: float = nativeOnly with get, set
+            abstract member modulusLength: float with get, set
             /// <summary>
             /// Public exponent
             /// </summary>
-            member val publicExponent: float option = nativeOnly with get, set
+            abstract member publicExponent: float option with get, set
             /// <summary>
             /// Name of the message digest
             /// </summary>
-            member val hashAlgorithm: string option = nativeOnly with get, set
+            abstract member hashAlgorithm: string option with get, set
             /// <summary>
             /// Name of the message digest used by MGF1
             /// </summary>
-            member val mgf1HashAlgorithm: string option = nativeOnly with get, set
+            abstract member mgf1HashAlgorithm: string option with get, set
             /// <summary>
             /// Minimal salt length in bytes
             /// </summary>
-            member val saltLength: string option = nativeOnly with get, set
+            abstract member saltLength: string option with get, set
 
-        [<Global>]
-        [<AllowNullLiteral>]
-        type DSAKeyPairKeyObjectOptions
             [<ParamObject; Emit("$0")>]
-            (modulusLength: float, divisorLength: float)
-            =
+            static member Create
+                (
+                    modulusLength: float,
+                    ?publicExponent: float,
+                    ?hashAlgorithm: string,
+                    ?mgf1HashAlgorithm: string,
+                    ?saltLength: string
+                )
+                : RSAPSSKeyPairKeyObjectOptions
+                =
+                nativeOnly
 
+        [<AllowNullLiteral>]
+        [<Interface>]
+        type DSAKeyPairKeyObjectOptions =
             /// <summary>
             /// Key size in bits
             /// </summary>
-            member val modulusLength: float = nativeOnly with get, set
+            abstract member modulusLength: float with get, set
             /// <summary>
             /// Size of q in bits
             /// </summary>
-            member val divisorLength: float = nativeOnly with get, set
+            abstract member divisorLength: float with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (modulusLength: float, divisorLength: float)
+                : DSAKeyPairKeyObjectOptions
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -43275,7 +43272,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     ``type``: string * options: Node.crypto.RSAKeyPairOptions<string, string> ->
-                        JS.Promise<Exports.__promisify___6>
+                        JS.Promise<Exports.__promisify___12>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
@@ -43285,7 +43282,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     ``type``: string * options: Node.crypto.RSAPSSKeyPairOptions<string, string> ->
-                        JS.Promise<Exports.__promisify___6>
+                        JS.Promise<Exports.__promisify___16>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
@@ -43295,7 +43292,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     ``type``: string * options: Node.crypto.DSAKeyPairOptions<string, string> ->
-                        JS.Promise<Exports.__promisify___6>
+                        JS.Promise<Exports.__promisify___20>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
@@ -43305,7 +43302,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     ``type``: string * options: Node.crypto.ECKeyPairOptions<string, string> ->
-                        JS.Promise<Exports.__promisify___6>
+                        JS.Promise<Exports.__promisify___24>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
@@ -43315,7 +43312,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     ``type``: string * options: Node.crypto.ED25519KeyPairOptions<string, string> ->
-                        JS.Promise<Exports.__promisify___6>
+                        JS.Promise<Exports.__promisify___28>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
@@ -43325,7 +43322,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     ``type``: string * options: Node.crypto.ED448KeyPairOptions<string, string> ->
-                        JS.Promise<Exports.__promisify___6>
+                        JS.Promise<Exports.__promisify___32>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
@@ -43335,7 +43332,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     ``type``: string * options: Node.crypto.X25519KeyPairOptions<string, string> ->
-                        JS.Promise<Exports.__promisify___6>
+                        JS.Promise<Exports.__promisify___36>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
@@ -43345,7 +43342,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     ``type``: string * options: Node.crypto.X448KeyPairOptions<string, string> ->
-                        JS.Promise<Exports.__promisify___6>
+                        JS.Promise<Exports.__promisify___40>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
@@ -43354,45 +43351,397 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
 
             module Exports =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type __promisify___6
+                [<Interface>]
+                type __promisify___12 =
+                    abstract member publicKey: string with get, set
+                    abstract member privateKey: string with get, set
+
                     [<ParamObject; Emit("$0")>]
-                    (publicKey: string, privateKey: string)
-                    =
+                    static member Create(publicKey: string, privateKey: string) : __promisify___12 =
+                        nativeOnly
 
-                    member val publicKey: string = nativeOnly with get, set
-                    member val privateKey: string = nativeOnly with get, set
-
-                [<Global>]
                 [<AllowNullLiteral>]
-                type __promisify___7
+                [<Interface>]
+                type __promisify___13 =
+                    abstract member publicKey: string with get, set
+                    abstract member privateKey: Node.NonSharedBuffer with get, set
+
                     [<ParamObject; Emit("$0")>]
-                    (publicKey: string, privateKey: Node.NonSharedBuffer)
-                    =
+                    static member Create
+                        (publicKey: string, privateKey: Node.NonSharedBuffer)
+                        : __promisify___13
+                        =
+                        nativeOnly
 
-                    member val publicKey: string = nativeOnly with get, set
-                    member val privateKey: Node.NonSharedBuffer = nativeOnly with get, set
-
-                [<Global>]
                 [<AllowNullLiteral>]
-                type __promisify___8
+                [<Interface>]
+                type __promisify___14 =
+                    abstract member publicKey: Node.NonSharedBuffer with get, set
+                    abstract member privateKey: string with get, set
+
                     [<ParamObject; Emit("$0")>]
-                    (publicKey: Node.NonSharedBuffer, privateKey: string)
-                    =
+                    static member Create
+                        (publicKey: Node.NonSharedBuffer, privateKey: string)
+                        : __promisify___14
+                        =
+                        nativeOnly
 
-                    member val publicKey: Node.NonSharedBuffer = nativeOnly with get, set
-                    member val privateKey: string = nativeOnly with get, set
-
-                [<Global>]
                 [<AllowNullLiteral>]
-                type __promisify___9
-                    [<ParamObject; Emit("$0")>]
-                    (publicKey: Node.NonSharedBuffer, privateKey: Node.NonSharedBuffer)
-                    =
+                [<Interface>]
+                type __promisify___15 =
+                    abstract member publicKey: Node.NonSharedBuffer with get, set
+                    abstract member privateKey: Node.NonSharedBuffer with get, set
 
-                    member val publicKey: Node.NonSharedBuffer = nativeOnly with get, set
-                    member val privateKey: Node.NonSharedBuffer = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (publicKey: Node.NonSharedBuffer, privateKey: Node.NonSharedBuffer)
+                        : __promisify___15
+                        =
+                        nativeOnly
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type __promisify___16 =
+                    abstract member publicKey: string with get, set
+                    abstract member privateKey: string with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(publicKey: string, privateKey: string) : __promisify___16 =
+                        nativeOnly
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type __promisify___17 =
+                    abstract member publicKey: string with get, set
+                    abstract member privateKey: Node.NonSharedBuffer with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (publicKey: string, privateKey: Node.NonSharedBuffer)
+                        : __promisify___17
+                        =
+                        nativeOnly
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type __promisify___18 =
+                    abstract member publicKey: Node.NonSharedBuffer with get, set
+                    abstract member privateKey: string with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (publicKey: Node.NonSharedBuffer, privateKey: string)
+                        : __promisify___18
+                        =
+                        nativeOnly
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type __promisify___19 =
+                    abstract member publicKey: Node.NonSharedBuffer with get, set
+                    abstract member privateKey: Node.NonSharedBuffer with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (publicKey: Node.NonSharedBuffer, privateKey: Node.NonSharedBuffer)
+                        : __promisify___19
+                        =
+                        nativeOnly
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type __promisify___20 =
+                    abstract member publicKey: string with get, set
+                    abstract member privateKey: string with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(publicKey: string, privateKey: string) : __promisify___20 =
+                        nativeOnly
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type __promisify___21 =
+                    abstract member publicKey: string with get, set
+                    abstract member privateKey: Node.NonSharedBuffer with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (publicKey: string, privateKey: Node.NonSharedBuffer)
+                        : __promisify___21
+                        =
+                        nativeOnly
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type __promisify___22 =
+                    abstract member publicKey: Node.NonSharedBuffer with get, set
+                    abstract member privateKey: string with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (publicKey: Node.NonSharedBuffer, privateKey: string)
+                        : __promisify___22
+                        =
+                        nativeOnly
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type __promisify___23 =
+                    abstract member publicKey: Node.NonSharedBuffer with get, set
+                    abstract member privateKey: Node.NonSharedBuffer with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (publicKey: Node.NonSharedBuffer, privateKey: Node.NonSharedBuffer)
+                        : __promisify___23
+                        =
+                        nativeOnly
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type __promisify___24 =
+                    abstract member publicKey: string with get, set
+                    abstract member privateKey: string with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(publicKey: string, privateKey: string) : __promisify___24 =
+                        nativeOnly
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type __promisify___25 =
+                    abstract member publicKey: string with get, set
+                    abstract member privateKey: Node.NonSharedBuffer with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (publicKey: string, privateKey: Node.NonSharedBuffer)
+                        : __promisify___25
+                        =
+                        nativeOnly
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type __promisify___26 =
+                    abstract member publicKey: Node.NonSharedBuffer with get, set
+                    abstract member privateKey: string with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (publicKey: Node.NonSharedBuffer, privateKey: string)
+                        : __promisify___26
+                        =
+                        nativeOnly
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type __promisify___27 =
+                    abstract member publicKey: Node.NonSharedBuffer with get, set
+                    abstract member privateKey: Node.NonSharedBuffer with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (publicKey: Node.NonSharedBuffer, privateKey: Node.NonSharedBuffer)
+                        : __promisify___27
+                        =
+                        nativeOnly
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type __promisify___28 =
+                    abstract member publicKey: string with get, set
+                    abstract member privateKey: string with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(publicKey: string, privateKey: string) : __promisify___28 =
+                        nativeOnly
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type __promisify___29 =
+                    abstract member publicKey: string with get, set
+                    abstract member privateKey: Node.NonSharedBuffer with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (publicKey: string, privateKey: Node.NonSharedBuffer)
+                        : __promisify___29
+                        =
+                        nativeOnly
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type __promisify___30 =
+                    abstract member publicKey: Node.NonSharedBuffer with get, set
+                    abstract member privateKey: string with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (publicKey: Node.NonSharedBuffer, privateKey: string)
+                        : __promisify___30
+                        =
+                        nativeOnly
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type __promisify___31 =
+                    abstract member publicKey: Node.NonSharedBuffer with get, set
+                    abstract member privateKey: Node.NonSharedBuffer with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (publicKey: Node.NonSharedBuffer, privateKey: Node.NonSharedBuffer)
+                        : __promisify___31
+                        =
+                        nativeOnly
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type __promisify___32 =
+                    abstract member publicKey: string with get, set
+                    abstract member privateKey: string with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(publicKey: string, privateKey: string) : __promisify___32 =
+                        nativeOnly
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type __promisify___33 =
+                    abstract member publicKey: string with get, set
+                    abstract member privateKey: Node.NonSharedBuffer with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (publicKey: string, privateKey: Node.NonSharedBuffer)
+                        : __promisify___33
+                        =
+                        nativeOnly
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type __promisify___34 =
+                    abstract member publicKey: Node.NonSharedBuffer with get, set
+                    abstract member privateKey: string with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (publicKey: Node.NonSharedBuffer, privateKey: string)
+                        : __promisify___34
+                        =
+                        nativeOnly
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type __promisify___35 =
+                    abstract member publicKey: Node.NonSharedBuffer with get, set
+                    abstract member privateKey: Node.NonSharedBuffer with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (publicKey: Node.NonSharedBuffer, privateKey: Node.NonSharedBuffer)
+                        : __promisify___35
+                        =
+                        nativeOnly
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type __promisify___36 =
+                    abstract member publicKey: string with get, set
+                    abstract member privateKey: string with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(publicKey: string, privateKey: string) : __promisify___36 =
+                        nativeOnly
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type __promisify___37 =
+                    abstract member publicKey: string with get, set
+                    abstract member privateKey: Node.NonSharedBuffer with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (publicKey: string, privateKey: Node.NonSharedBuffer)
+                        : __promisify___37
+                        =
+                        nativeOnly
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type __promisify___38 =
+                    abstract member publicKey: Node.NonSharedBuffer with get, set
+                    abstract member privateKey: string with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (publicKey: Node.NonSharedBuffer, privateKey: string)
+                        : __promisify___38
+                        =
+                        nativeOnly
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type __promisify___39 =
+                    abstract member publicKey: Node.NonSharedBuffer with get, set
+                    abstract member privateKey: Node.NonSharedBuffer with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (publicKey: Node.NonSharedBuffer, privateKey: Node.NonSharedBuffer)
+                        : __promisify___39
+                        =
+                        nativeOnly
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type __promisify___40 =
+                    abstract member publicKey: string with get, set
+                    abstract member privateKey: string with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(publicKey: string, privateKey: string) : __promisify___40 =
+                        nativeOnly
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type __promisify___41 =
+                    abstract member publicKey: string with get, set
+                    abstract member privateKey: Node.NonSharedBuffer with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (publicKey: string, privateKey: Node.NonSharedBuffer)
+                        : __promisify___41
+                        =
+                        nativeOnly
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type __promisify___42 =
+                    abstract member publicKey: Node.NonSharedBuffer with get, set
+                    abstract member privateKey: string with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (publicKey: Node.NonSharedBuffer, privateKey: string)
+                        : __promisify___42
+                        =
+                        nativeOnly
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type __promisify___43 =
+                    abstract member publicKey: Node.NonSharedBuffer with get, set
+                    abstract member privateKey: Node.NonSharedBuffer with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (publicKey: Node.NonSharedBuffer, privateKey: Node.NonSharedBuffer)
+                        : __promisify___43
+                        =
+                        nativeOnly
 
         [<RequireQualifiedAccess>]
         [<StringEnum(CaseRules.None)>]
@@ -43409,18 +43758,21 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             | wrap
             | xts
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type CipherInfoOptions [<ParamObject; Emit("$0")>] (?keyLength: float, ?ivLength: float) =
-
+        [<Interface>]
+        type CipherInfoOptions =
             /// <summary>
             /// A test key length.
             /// </summary>
-            member val keyLength: float option = nativeOnly with get, set
+            abstract member keyLength: float option with get, set
             /// <summary>
             /// A test IV length.
             /// </summary>
-            member val ivLength: float option = nativeOnly with get, set
+            abstract member ivLength: float option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create(?keyLength: float, ?ivLength: float) : CipherInfoOptions =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -43472,38 +43824,43 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// </summary>
             abstract member utilization: float with get, set
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type RandomUUIDOptions [<ParamObject; Emit("$0")>] (?disableEntropyCache: bool) =
-
+        [<Interface>]
+        type RandomUUIDOptions =
             /// <summary>
             /// By default, to improve performance,
             /// Node.js will pre-emptively generate and persistently cache enough
             /// random data to generate up to 128 random UUIDs. To generate a UUID
             /// without using the cache, set <c>disableEntropyCache</c> to <c>true</c>.
             /// </summary>
-            member val disableEntropyCache: bool option = nativeOnly with get, set
+            abstract member disableEntropyCache: bool option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create(?disableEntropyCache: bool) : RandomUUIDOptions = nativeOnly
 
         type UUID = string
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type X509CheckOptions
-            [<ParamObject; Emit("$0")>]
-            (
-                ?subject: X509CheckOptions.subject,
-                ?wildcards: bool,
-                ?partialWildcards: bool,
-                ?multiLabelWildcards: bool,
-                ?singleLabelSubdomains: bool
-            )
-            =
+        [<Interface>]
+        type X509CheckOptions =
+            abstract member subject: X509CheckOptions.subject option with get, set
+            abstract member wildcards: bool option with get, set
+            abstract member partialWildcards: bool option with get, set
+            abstract member multiLabelWildcards: bool option with get, set
+            abstract member singleLabelSubdomains: bool option with get, set
 
-            member val subject: X509CheckOptions.subject option = nativeOnly with get, set
-            member val wildcards: bool option = nativeOnly with get, set
-            member val partialWildcards: bool option = nativeOnly with get, set
-            member val multiLabelWildcards: bool option = nativeOnly with get, set
-            member val singleLabelSubdomains: bool option = nativeOnly with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?subject: X509CheckOptions.subject,
+                    ?wildcards: bool,
+                    ?partialWildcards: bool,
+                    ?multiLabelWildcards: bool,
+                    ?singleLabelSubdomains: bool
+                )
+                : X509CheckOptions
+                =
+                nativeOnly
 
         /// <summary>
         /// Encapsulates an X509 certificate and provides read-only access to
@@ -43747,51 +44104,55 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             abstract member safe: bool option with get, set
             abstract member bigint: bool option with get, set
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type GeneratePrimeOptionsBigInt
+        [<Interface>]
+        type GeneratePrimeOptionsBigInt =
+            inherit Node.crypto.GeneratePrimeOptions
+            abstract member bigint: bool with get, set
+
             [<ParamObject; Emit("$0")>]
-            (
-                bigint: bool,
-                ?add: Node.crypto.LargeNumberLike,
-                ?rem: Node.crypto.LargeNumberLike,
-                ?safe: bool
-            )
-            =
+            static member Create
+                (
+                    bigint: bool,
+                    ?add: Node.crypto.LargeNumberLike,
+                    ?rem: Node.crypto.LargeNumberLike,
+                    ?safe: bool
+                )
+                : GeneratePrimeOptionsBigInt
+                =
+                nativeOnly
 
-            member val bigint: bool = nativeOnly with get, set
-            member val add: Node.crypto.LargeNumberLike option = nativeOnly with get, set
-            member val rem: Node.crypto.LargeNumberLike option = nativeOnly with get, set
-            member val safe: bool option = nativeOnly with get, set
-
-        [<Global>]
         [<AllowNullLiteral>]
-        type GeneratePrimeOptionsArrayBuffer
+        [<Interface>]
+        type GeneratePrimeOptionsArrayBuffer =
+            inherit Node.crypto.GeneratePrimeOptions
+            abstract member bigint: bool option with get, set
+
             [<ParamObject; Emit("$0")>]
-            (
-                ?add: Node.crypto.LargeNumberLike,
-                ?rem: Node.crypto.LargeNumberLike,
-                ?safe: bool,
-                ?bigint: bool
-            )
-            =
+            static member Create
+                (
+                    ?add: Node.crypto.LargeNumberLike,
+                    ?rem: Node.crypto.LargeNumberLike,
+                    ?safe: bool,
+                    ?bigint: bool
+                )
+                : GeneratePrimeOptionsArrayBuffer
+                =
+                nativeOnly
 
-            member val add: Node.crypto.LargeNumberLike option = nativeOnly with get, set
-            member val rem: Node.crypto.LargeNumberLike option = nativeOnly with get, set
-            member val safe: bool option = nativeOnly with get, set
-            member val bigint: bool option = nativeOnly with get, set
-
-        [<Global>]
         [<AllowNullLiteral>]
-        type CheckPrimeOptions [<ParamObject; Emit("$0")>] (?checks: float) =
-
+        [<Interface>]
+        type CheckPrimeOptions =
             /// <summary>
             /// The number of Miller-Rabin probabilistic primality iterations to perform.
             /// When the value is 0 (zero), a number of checks is used that yields a false positive rate of at most <c>2**-64</c> for random input.
             /// Care must be used when selecting a number of checks.
             /// Refer to the OpenSSL documentation for the BN_is_prime_ex function nchecks options for more details.
             /// </summary>
-            member val checks: float option = nativeOnly with get, set
+            abstract member checks: float option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create(?checks: float) : CheckPrimeOptions = nativeOnly
 
         module webcrypto_ =
 
@@ -43832,67 +44193,79 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
 
             type BigInteger = JS.Uint8Array
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type AesCbcParams
+            [<Interface>]
+            type AesCbcParams =
+                inherit Node.crypto.webcrypto_.Algorithm
+                abstract member iv: Node.crypto.webcrypto_.BufferSource with get, set
+
                 [<ParamObject; Emit("$0")>]
-                (name: string, iv: Node.crypto.webcrypto_.BufferSource)
-                =
+                static member Create
+                    (name: string, iv: Node.crypto.webcrypto_.BufferSource)
+                    : AesCbcParams
+                    =
+                    nativeOnly
 
-                member val name: string = nativeOnly with get, set
-                member val iv: Node.crypto.webcrypto_.BufferSource = nativeOnly with get, set
-
-            [<Global>]
             [<AllowNullLiteral>]
-            type AesCtrParams
+            [<Interface>]
+            type AesCtrParams =
+                inherit Node.crypto.webcrypto_.Algorithm
+                abstract member counter: Node.crypto.webcrypto_.BufferSource with get, set
+                abstract member length: float with get, set
+
                 [<ParamObject; Emit("$0")>]
-                (name: string, counter: Node.crypto.webcrypto_.BufferSource, length: float)
-                =
+                static member Create
+                    (name: string, counter: Node.crypto.webcrypto_.BufferSource, length: float)
+                    : AesCtrParams
+                    =
+                    nativeOnly
 
-                member val name: string = nativeOnly with get, set
-                member val counter: Node.crypto.webcrypto_.BufferSource = nativeOnly with get, set
-                member val length: float = nativeOnly with get, set
-
-            [<Global>]
             [<AllowNullLiteral>]
-            type AesDerivedKeyParams [<ParamObject; Emit("$0")>] (name: string, length: float) =
+            [<Interface>]
+            type AesDerivedKeyParams =
+                inherit Node.crypto.webcrypto_.Algorithm
+                abstract member length: float with get, set
 
-                member val name: string = nativeOnly with get, set
-                member val length: float = nativeOnly with get, set
-
-            [<Global>]
-            [<AllowNullLiteral>]
-            type AesGcmParams
                 [<ParamObject; Emit("$0")>]
-                (
-                    name: string,
-                    iv: Node.crypto.webcrypto_.BufferSource,
-                    ?additionalData: Node.crypto.webcrypto_.BufferSource,
-                    ?tagLength: float
-                )
-                =
+                static member Create(name: string, length: float) : AesDerivedKeyParams = nativeOnly
 
-                member val name: string = nativeOnly with get, set
-                member val iv: Node.crypto.webcrypto_.BufferSource = nativeOnly with get, set
-
-                member val additionalData: Node.crypto.webcrypto_.BufferSource option =
-                    nativeOnly with get, set
-
-                member val tagLength: float option = nativeOnly with get, set
-
-            [<Global>]
             [<AllowNullLiteral>]
-            type AesKeyAlgorithm [<ParamObject; Emit("$0")>] (name: string, length: float) =
+            [<Interface>]
+            type AesGcmParams =
+                inherit Node.crypto.webcrypto_.Algorithm
+                abstract member additionalData: Node.crypto.webcrypto_.BufferSource option with get, set
+                abstract member iv: Node.crypto.webcrypto_.BufferSource with get, set
+                abstract member tagLength: float option with get, set
 
-                member val name: string = nativeOnly with get, set
-                member val length: float = nativeOnly with get, set
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        name: string,
+                        iv: Node.crypto.webcrypto_.BufferSource,
+                        ?additionalData: Node.crypto.webcrypto_.BufferSource,
+                        ?tagLength: float
+                    )
+                    : AesGcmParams
+                    =
+                    nativeOnly
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type AesKeyGenParams [<ParamObject; Emit("$0")>] (name: string, length: float) =
+            [<Interface>]
+            type AesKeyAlgorithm =
+                inherit Node.crypto.webcrypto_.KeyAlgorithm
+                abstract member length: float with get, set
 
-                member val name: string = nativeOnly with get, set
-                member val length: float = nativeOnly with get, set
+                [<ParamObject; Emit("$0")>]
+                static member Create(name: string, length: float) : AesKeyAlgorithm = nativeOnly
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type AesKeyGenParams =
+                inherit Node.crypto.webcrypto_.Algorithm
+                abstract member length: float with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create(name: string, length: float) : AesKeyGenParams = nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -43905,93 +44278,108 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 inherit Node.crypto.webcrypto_.KeyAlgorithm
                 abstract member namedCurve: Node.crypto.webcrypto_.NamedCurve with get, set
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type EcKeyGenParams
+            [<Interface>]
+            type EcKeyGenParams =
+                inherit Node.crypto.webcrypto_.Algorithm
+                abstract member namedCurve: Node.crypto.webcrypto_.NamedCurve with get, set
+
                 [<ParamObject; Emit("$0")>]
-                (name: string, namedCurve: Node.crypto.webcrypto_.NamedCurve)
-                =
+                static member Create
+                    (name: string, namedCurve: Node.crypto.webcrypto_.NamedCurve)
+                    : EcKeyGenParams
+                    =
+                    nativeOnly
 
-                member val name: string = nativeOnly with get, set
-                member val namedCurve: Node.crypto.webcrypto_.NamedCurve = nativeOnly with get, set
-
-            [<Global>]
             [<AllowNullLiteral>]
-            type EcKeyImportParams
+            [<Interface>]
+            type EcKeyImportParams =
+                inherit Node.crypto.webcrypto_.Algorithm
+                abstract member namedCurve: Node.crypto.webcrypto_.NamedCurve with get, set
+
                 [<ParamObject; Emit("$0")>]
-                (name: string, namedCurve: Node.crypto.webcrypto_.NamedCurve)
-                =
+                static member Create
+                    (name: string, namedCurve: Node.crypto.webcrypto_.NamedCurve)
+                    : EcKeyImportParams
+                    =
+                    nativeOnly
 
-                member val name: string = nativeOnly with get, set
-                member val namedCurve: Node.crypto.webcrypto_.NamedCurve = nativeOnly with get, set
-
-            [<Global>]
             [<AllowNullLiteral>]
-            type EcdhKeyDeriveParams
+            [<Interface>]
+            type EcdhKeyDeriveParams =
+                inherit Node.crypto.webcrypto_.Algorithm
+                abstract member ``public``: Node.crypto.webcrypto_.CryptoKey with get, set
+
                 [<ParamObject; Emit("$0")>]
-                (name: string, ``public``: Node.crypto.webcrypto_.CryptoKey)
-                =
+                static member Create
+                    (name: string, ``public``: Node.crypto.webcrypto_.CryptoKey)
+                    : EcdhKeyDeriveParams
+                    =
+                    nativeOnly
 
-                member val name: string = nativeOnly with get, set
-                member val ``public``: Node.crypto.webcrypto_.CryptoKey = nativeOnly with get, set
-
-            [<Global>]
             [<AllowNullLiteral>]
-            type EcdsaParams
+            [<Interface>]
+            type EcdsaParams =
+                inherit Node.crypto.webcrypto_.Algorithm
+                abstract member hash: Node.crypto.webcrypto_.HashAlgorithmIdentifier with get, set
+
                 [<ParamObject; Emit("$0")>]
-                (name: string, hash: Node.crypto.webcrypto_.HashAlgorithmIdentifier)
-                =
+                static member Create
+                    (name: string, hash: Node.crypto.webcrypto_.HashAlgorithmIdentifier)
+                    : EcdsaParams
+                    =
+                    nativeOnly
 
-                member val name: string = nativeOnly with get, set
-
-                member val hash: Node.crypto.webcrypto_.HashAlgorithmIdentifier =
-                    nativeOnly with get, set
-
-            [<Global>]
             [<AllowNullLiteral>]
-            type Ed448Params
+            [<Interface>]
+            type Ed448Params =
+                inherit Node.crypto.webcrypto_.Algorithm
+                abstract member context: Node.crypto.webcrypto_.BufferSource option with get, set
+
                 [<ParamObject; Emit("$0")>]
-                (name: string, ?context: Node.crypto.webcrypto_.BufferSource)
-                =
+                static member Create
+                    (name: string, ?context: Node.crypto.webcrypto_.BufferSource)
+                    : Ed448Params
+                    =
+                    nativeOnly
 
-                member val name: string = nativeOnly with get, set
-
-                member val context: Node.crypto.webcrypto_.BufferSource option =
-                    nativeOnly with get, set
-
-            [<Global>]
             [<AllowNullLiteral>]
-            type HkdfParams
+            [<Interface>]
+            type HkdfParams =
+                inherit Node.crypto.webcrypto_.Algorithm
+                abstract member hash: Node.crypto.webcrypto_.HashAlgorithmIdentifier with get, set
+                abstract member info: Node.crypto.webcrypto_.BufferSource with get, set
+                abstract member salt: Node.crypto.webcrypto_.BufferSource with get, set
+
                 [<ParamObject; Emit("$0")>]
-                (
-                    name: string,
-                    hash: Node.crypto.webcrypto_.HashAlgorithmIdentifier,
-                    info: Node.crypto.webcrypto_.BufferSource,
-                    salt: Node.crypto.webcrypto_.BufferSource
-                )
-                =
+                static member Create
+                    (
+                        name: string,
+                        hash: Node.crypto.webcrypto_.HashAlgorithmIdentifier,
+                        info: Node.crypto.webcrypto_.BufferSource,
+                        salt: Node.crypto.webcrypto_.BufferSource
+                    )
+                    : HkdfParams
+                    =
+                    nativeOnly
 
-                member val name: string = nativeOnly with get, set
-
-                member val hash: Node.crypto.webcrypto_.HashAlgorithmIdentifier =
-                    nativeOnly with get, set
-
-                member val info: Node.crypto.webcrypto_.BufferSource = nativeOnly with get, set
-                member val salt: Node.crypto.webcrypto_.BufferSource = nativeOnly with get, set
-
-            [<Global>]
             [<AllowNullLiteral>]
-            type HmacImportParams
+            [<Interface>]
+            type HmacImportParams =
+                inherit Node.crypto.webcrypto_.Algorithm
+                abstract member hash: Node.crypto.webcrypto_.HashAlgorithmIdentifier with get, set
+                abstract member length: float option with get, set
+
                 [<ParamObject; Emit("$0")>]
-                (name: string, hash: Node.crypto.webcrypto_.HashAlgorithmIdentifier, ?length: float)
-                =
-
-                member val name: string = nativeOnly with get, set
-
-                member val hash: Node.crypto.webcrypto_.HashAlgorithmIdentifier =
-                    nativeOnly with get, set
-
-                member val length: float option = nativeOnly with get, set
+                static member Create
+                    (
+                        name: string,
+                        hash: Node.crypto.webcrypto_.HashAlgorithmIdentifier,
+                        ?length: float
+                    )
+                    : HmacImportParams
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -44000,104 +44388,109 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 abstract member hash: Node.crypto.webcrypto_.KeyAlgorithm with get, set
                 abstract member length: float with get, set
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type HmacKeyGenParams
+            [<Interface>]
+            type HmacKeyGenParams =
+                inherit Node.crypto.webcrypto_.Algorithm
+                abstract member hash: Node.crypto.webcrypto_.HashAlgorithmIdentifier with get, set
+                abstract member length: float option with get, set
+
                 [<ParamObject; Emit("$0")>]
-                (name: string, hash: Node.crypto.webcrypto_.HashAlgorithmIdentifier, ?length: float)
-                =
+                static member Create
+                    (
+                        name: string,
+                        hash: Node.crypto.webcrypto_.HashAlgorithmIdentifier,
+                        ?length: float
+                    )
+                    : HmacKeyGenParams
+                    =
+                    nativeOnly
 
-                member val name: string = nativeOnly with get, set
-
-                member val hash: Node.crypto.webcrypto_.HashAlgorithmIdentifier =
-                    nativeOnly with get, set
-
-                member val length: float option = nativeOnly with get, set
-
-            [<Global>]
             [<AllowNullLiteral>]
-            type JsonWebKey
+            [<Interface>]
+            type JsonWebKey =
+                abstract member alg: string option with get, set
+                abstract member crv: string option with get, set
+                abstract member d: string option with get, set
+                abstract member dp: string option with get, set
+                abstract member dq: string option with get, set
+                abstract member e: string option with get, set
+                abstract member ext: bool option with get, set
+                abstract member k: string option with get, set
+                abstract member key_ops: ResizeArray<string> option with get, set
+                abstract member kty: string option with get, set
+                abstract member n: string option with get, set
+                abstract member oth: ResizeArray<Node.crypto.webcrypto_.RsaOtherPrimesInfo> option with get, set
+                abstract member p: string option with get, set
+                abstract member q: string option with get, set
+                abstract member qi: string option with get, set
+                abstract member ``use``: string option with get, set
+                abstract member x: string option with get, set
+                abstract member y: string option with get, set
+
                 [<ParamObject; Emit("$0")>]
-                (
-                    ?alg: string,
-                    ?crv: string,
-                    ?d: string,
-                    ?dp: string,
-                    ?dq: string,
-                    ?e: string,
-                    ?ext: bool,
-                    ?k: string,
-                    ?key_ops: ResizeArray<string>,
-                    ?kty: string,
-                    ?n: string,
-                    ?oth: ResizeArray<Node.crypto.webcrypto_.RsaOtherPrimesInfo>,
-                    ?p: string,
-                    ?q: string,
-                    ?qi: string,
-                    ?``use``: string,
-                    ?x: string,
-                    ?y: string
-                )
-                =
-
-                member val alg: string option = nativeOnly with get, set
-                member val crv: string option = nativeOnly with get, set
-                member val d: string option = nativeOnly with get, set
-                member val dp: string option = nativeOnly with get, set
-                member val dq: string option = nativeOnly with get, set
-                member val e: string option = nativeOnly with get, set
-                member val ext: bool option = nativeOnly with get, set
-                member val k: string option = nativeOnly with get, set
-                member val key_ops: ResizeArray<string> option = nativeOnly with get, set
-                member val kty: string option = nativeOnly with get, set
-                member val n: string option = nativeOnly with get, set
-
-                member val oth: ResizeArray<Node.crypto.webcrypto_.RsaOtherPrimesInfo> option =
-                    nativeOnly with get, set
-
-                member val p: string option = nativeOnly with get, set
-                member val q: string option = nativeOnly with get, set
-                member val qi: string option = nativeOnly with get, set
-                member val ``use``: string option = nativeOnly with get, set
-                member val x: string option = nativeOnly with get, set
-                member val y: string option = nativeOnly with get, set
+                static member Create
+                    (
+                        ?alg: string,
+                        ?crv: string,
+                        ?d: string,
+                        ?dp: string,
+                        ?dq: string,
+                        ?e: string,
+                        ?ext: bool,
+                        ?k: string,
+                        ?key_ops: ResizeArray<string>,
+                        ?kty: string,
+                        ?n: string,
+                        ?oth: ResizeArray<Node.crypto.webcrypto_.RsaOtherPrimesInfo>,
+                        ?p: string,
+                        ?q: string,
+                        ?qi: string,
+                        ?``use``: string,
+                        ?x: string,
+                        ?y: string
+                    )
+                    : JsonWebKey
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
             type KeyAlgorithm =
                 abstract member name: string with get, set
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type Pbkdf2Params
+            [<Interface>]
+            type Pbkdf2Params =
+                inherit Node.crypto.webcrypto_.Algorithm
+                abstract member hash: Node.crypto.webcrypto_.HashAlgorithmIdentifier with get, set
+                abstract member iterations: float with get, set
+                abstract member salt: Node.crypto.webcrypto_.BufferSource with get, set
+
                 [<ParamObject; Emit("$0")>]
-                (
-                    name: string,
-                    hash: Node.crypto.webcrypto_.HashAlgorithmIdentifier,
-                    iterations: float,
-                    salt: Node.crypto.webcrypto_.BufferSource
-                )
-                =
+                static member Create
+                    (
+                        name: string,
+                        hash: Node.crypto.webcrypto_.HashAlgorithmIdentifier,
+                        iterations: float,
+                        salt: Node.crypto.webcrypto_.BufferSource
+                    )
+                    : Pbkdf2Params
+                    =
+                    nativeOnly
 
-                member val name: string = nativeOnly with get, set
-
-                member val hash: Node.crypto.webcrypto_.HashAlgorithmIdentifier =
-                    nativeOnly with get, set
-
-                member val iterations: float = nativeOnly with get, set
-                member val salt: Node.crypto.webcrypto_.BufferSource = nativeOnly with get, set
-
-            [<Global>]
             [<AllowNullLiteral>]
-            type RsaHashedImportParams
+            [<Interface>]
+            type RsaHashedImportParams =
+                inherit Node.crypto.webcrypto_.Algorithm
+                abstract member hash: Node.crypto.webcrypto_.HashAlgorithmIdentifier with get, set
+
                 [<ParamObject; Emit("$0")>]
-                (name: string, hash: Node.crypto.webcrypto_.HashAlgorithmIdentifier)
-                =
-
-                member val name: string = nativeOnly with get, set
-
-                member val hash: Node.crypto.webcrypto_.HashAlgorithmIdentifier =
-                    nativeOnly with get, set
+                static member Create
+                    (name: string, hash: Node.crypto.webcrypto_.HashAlgorithmIdentifier)
+                    : RsaHashedImportParams
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -44105,26 +44498,23 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 inherit Node.crypto.webcrypto_.RsaKeyAlgorithm
                 abstract member hash: Node.crypto.webcrypto_.KeyAlgorithm with get, set
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type RsaHashedKeyGenParams
+            [<Interface>]
+            type RsaHashedKeyGenParams =
+                inherit Node.crypto.webcrypto_.RsaKeyGenParams
+                abstract member hash: Node.crypto.webcrypto_.HashAlgorithmIdentifier with get, set
+
                 [<ParamObject; Emit("$0")>]
-                (
-                    name: string,
-                    modulusLength: float,
-                    publicExponent: Node.crypto.webcrypto_.BigInteger,
-                    hash: Node.crypto.webcrypto_.HashAlgorithmIdentifier
-                )
-                =
-
-                member val name: string = nativeOnly with get, set
-                member val modulusLength: float = nativeOnly with get, set
-
-                member val publicExponent: Node.crypto.webcrypto_.BigInteger =
-                    nativeOnly with get, set
-
-                member val hash: Node.crypto.webcrypto_.HashAlgorithmIdentifier =
-                    nativeOnly with get, set
+                static member Create
+                    (
+                        name: string,
+                        modulusLength: float,
+                        publicExponent: Node.crypto.webcrypto_.BigInteger,
+                        hash: Node.crypto.webcrypto_.HashAlgorithmIdentifier
+                    )
+                    : RsaHashedKeyGenParams
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -44140,17 +44530,18 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 abstract member modulusLength: float with get, set
                 abstract member publicExponent: Node.crypto.webcrypto_.BigInteger with get, set
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type RsaOaepParams
+            [<Interface>]
+            type RsaOaepParams =
+                inherit Node.crypto.webcrypto_.Algorithm
+                abstract member label: Node.crypto.webcrypto_.BufferSource option with get, set
+
                 [<ParamObject; Emit("$0")>]
-                (name: string, ?label: Node.crypto.webcrypto_.BufferSource)
-                =
-
-                member val name: string = nativeOnly with get, set
-
-                member val label: Node.crypto.webcrypto_.BufferSource option =
-                    nativeOnly with get, set
+                static member Create
+                    (name: string, ?label: Node.crypto.webcrypto_.BufferSource)
+                    : RsaOaepParams
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -44159,12 +44550,14 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 abstract member r: string option with get, set
                 abstract member t: string option with get, set
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type RsaPssParams [<ParamObject; Emit("$0")>] (name: string, saltLength: float) =
+            [<Interface>]
+            type RsaPssParams =
+                inherit Node.crypto.webcrypto_.Algorithm
+                abstract member saltLength: float with get, set
 
-                member val name: string = nativeOnly with get, set
-                member val saltLength: float = nativeOnly with get, set
+                [<ParamObject; Emit("$0")>]
+                static member Create(name: string, saltLength: float) : RsaPssParams = nativeOnly
 
             /// <summary>
             /// Importing the <c>webcrypto</c> object (<c>import { webcrypto } from 'node:crypto'</c>) gives an instance of the <c>Crypto</c> class.
@@ -46055,11 +46448,13 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
 
                 module Invoke =
 
-                    [<Global>]
                     [<AllowNullLiteral>]
-                    type ``_`` [<ParamObject; Emit("$0")>] (``_``: obj) =
+                    [<Interface>]
+                    type ``_`` =
+                        abstract member ``_``: obj with get
 
-                        member val ``_``: obj = nativeOnly with get
+                        [<ParamObject; Emit("$0")>]
+                        static member Create(``_``: obj) : ``_`` = nativeOnly
 
             module SubtleCrypto =
 
@@ -46097,81 +46492,97 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
 
             module setAAD =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type options [<ParamObject; Emit("$0")>] (plaintextLength: float) =
+                [<Interface>]
+                type options =
+                    abstract member plaintextLength: float with get, set
 
-                    member val plaintextLength: float = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(plaintextLength: float) : options = nativeOnly
 
         module CipherGCM =
 
             module setAAD =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type options [<ParamObject; Emit("$0")>] (plaintextLength: float) =
+                [<Interface>]
+                type options =
+                    abstract member plaintextLength: float with get, set
 
-                    member val plaintextLength: float = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(plaintextLength: float) : options = nativeOnly
 
         module CipherOCB =
 
             module setAAD =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type options [<ParamObject; Emit("$0")>] (plaintextLength: float) =
+                [<Interface>]
+                type options =
+                    abstract member plaintextLength: float with get, set
 
-                    member val plaintextLength: float = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(plaintextLength: float) : options = nativeOnly
 
         module CipherChaCha20Poly1305 =
 
             module setAAD =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type options [<ParamObject; Emit("$0")>] (plaintextLength: float) =
+                [<Interface>]
+                type options =
+                    abstract member plaintextLength: float with get, set
 
-                    member val plaintextLength: float = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(plaintextLength: float) : options = nativeOnly
 
         module DecipherCCM =
 
             module setAAD =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type options [<ParamObject; Emit("$0")>] (plaintextLength: float) =
+                [<Interface>]
+                type options =
+                    abstract member plaintextLength: float with get, set
 
-                    member val plaintextLength: float = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(plaintextLength: float) : options = nativeOnly
 
         module DecipherGCM =
 
             module setAAD =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type options [<ParamObject; Emit("$0")>] (plaintextLength: float) =
+                [<Interface>]
+                type options =
+                    abstract member plaintextLength: float with get, set
 
-                    member val plaintextLength: float = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(plaintextLength: float) : options = nativeOnly
 
         module DecipherOCB =
 
             module setAAD =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type options [<ParamObject; Emit("$0")>] (plaintextLength: float) =
+                [<Interface>]
+                type options =
+                    abstract member plaintextLength: float with get, set
 
-                    member val plaintextLength: float = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(plaintextLength: float) : options = nativeOnly
 
         module DecipherChaCha20Poly1305 =
 
             module setAAD =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type options [<ParamObject; Emit("$0")>] (plaintextLength: float) =
+                [<Interface>]
+                type options =
+                    abstract member plaintextLength: float with get, set
 
-                    member val plaintextLength: float = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(plaintextLength: float) : options = nativeOnly
 
         module PrivateKeyInput =
 
@@ -46236,17 +46647,18 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
 
         module RSAKeyPairOptions =
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type publicKeyEncoding<'PubF>
+            [<Interface>]
+            type publicKeyEncoding<'PubF> =
+                abstract member ``type``: RSAKeyPairOptions.publicKeyEncoding.``type`` with get, set
+                abstract member format: 'PubF with get, set
+
                 [<ParamObject; Emit("$0")>]
-                (``type``: RSAKeyPairOptions.publicKeyEncoding.``type``, format: 'PubF)
-                =
-
-                member val ``type``: RSAKeyPairOptions.publicKeyEncoding.``type`` =
-                    nativeOnly with get, set
-
-                member val format: 'PubF = nativeOnly with get, set
+                static member Create
+                    (``type``: RSAKeyPairOptions.publicKeyEncoding.``type``, format: 'PubF)
+                    : publicKeyEncoding<'PubF>
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -46274,15 +46686,15 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
 
         module RSAPSSKeyPairOptions =
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type publicKeyEncoding<'PubF>
-                [<ParamObject; Emit("$0")>]
-                (``type``: string, format: 'PubF)
-                =
+            [<Interface>]
+            type publicKeyEncoding<'PubF> =
+                abstract member ``type``: string with get, set
+                abstract member format: 'PubF with get, set
 
-                member val ``type``: string = nativeOnly with get, set
-                member val format: 'PubF = nativeOnly with get, set
+                [<ParamObject; Emit("$0")>]
+                static member Create(``type``: string, format: 'PubF) : publicKeyEncoding<'PubF> =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -46294,15 +46706,15 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
 
         module DSAKeyPairOptions =
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type publicKeyEncoding<'PubF>
-                [<ParamObject; Emit("$0")>]
-                (``type``: string, format: 'PubF)
-                =
+            [<Interface>]
+            type publicKeyEncoding<'PubF> =
+                abstract member ``type``: string with get, set
+                abstract member format: 'PubF with get, set
 
-                member val ``type``: string = nativeOnly with get, set
-                member val format: 'PubF = nativeOnly with get, set
+                [<ParamObject; Emit("$0")>]
+                static member Create(``type``: string, format: 'PubF) : publicKeyEncoding<'PubF> =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -46314,17 +46726,18 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
 
         module ECKeyPairOptions =
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type publicKeyEncoding<'PubF>
+            [<Interface>]
+            type publicKeyEncoding<'PubF> =
+                abstract member ``type``: ECKeyPairOptions.publicKeyEncoding.``type`` with get, set
+                abstract member format: 'PubF with get, set
+
                 [<ParamObject; Emit("$0")>]
-                (``type``: ECKeyPairOptions.publicKeyEncoding.``type``, format: 'PubF)
-                =
-
-                member val ``type``: ECKeyPairOptions.publicKeyEncoding.``type`` =
-                    nativeOnly with get, set
-
-                member val format: 'PubF = nativeOnly with get, set
+                static member Create
+                    (``type``: ECKeyPairOptions.publicKeyEncoding.``type``, format: 'PubF)
+                    : publicKeyEncoding<'PubF>
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -46352,15 +46765,15 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
 
         module ED25519KeyPairOptions =
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type publicKeyEncoding<'PubF>
-                [<ParamObject; Emit("$0")>]
-                (``type``: string, format: 'PubF)
-                =
+            [<Interface>]
+            type publicKeyEncoding<'PubF> =
+                abstract member ``type``: string with get, set
+                abstract member format: 'PubF with get, set
 
-                member val ``type``: string = nativeOnly with get, set
-                member val format: 'PubF = nativeOnly with get, set
+                [<ParamObject; Emit("$0")>]
+                static member Create(``type``: string, format: 'PubF) : publicKeyEncoding<'PubF> =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -46372,15 +46785,15 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
 
         module ED448KeyPairOptions =
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type publicKeyEncoding<'PubF>
-                [<ParamObject; Emit("$0")>]
-                (``type``: string, format: 'PubF)
-                =
+            [<Interface>]
+            type publicKeyEncoding<'PubF> =
+                abstract member ``type``: string with get, set
+                abstract member format: 'PubF with get, set
 
-                member val ``type``: string = nativeOnly with get, set
-                member val format: 'PubF = nativeOnly with get, set
+                [<ParamObject; Emit("$0")>]
+                static member Create(``type``: string, format: 'PubF) : publicKeyEncoding<'PubF> =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -46392,15 +46805,15 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
 
         module X25519KeyPairOptions =
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type publicKeyEncoding<'PubF>
-                [<ParamObject; Emit("$0")>]
-                (``type``: string, format: 'PubF)
-                =
+            [<Interface>]
+            type publicKeyEncoding<'PubF> =
+                abstract member ``type``: string with get, set
+                abstract member format: 'PubF with get, set
 
-                member val ``type``: string = nativeOnly with get, set
-                member val format: 'PubF = nativeOnly with get, set
+                [<ParamObject; Emit("$0")>]
+                static member Create(``type``: string, format: 'PubF) : publicKeyEncoding<'PubF> =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -46412,15 +46825,15 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
 
         module X448KeyPairOptions =
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type publicKeyEncoding<'PubF>
-                [<ParamObject; Emit("$0")>]
-                (``type``: string, format: 'PubF)
-                =
+            [<Interface>]
+            type publicKeyEncoding<'PubF> =
+                abstract member ``type``: string with get, set
+                abstract member format: 'PubF with get, set
 
-                member val ``type``: string = nativeOnly with get, set
-                member val format: 'PubF = nativeOnly with get, set
+                [<ParamObject; Emit("$0")>]
+                static member Create(``type``: string, format: 'PubF) : publicKeyEncoding<'PubF> =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -46443,15 +46856,17 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
 
             module checkEmail =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type options
-                    [<ParamObject; Emit("$0")>]
-                    (?subject: X509Certificate.checkEmail.options.subject)
-                    =
+                [<Interface>]
+                type options =
+                    abstract member subject: X509Certificate.checkEmail.options.subject option with get, set
 
-                    member val subject: X509Certificate.checkEmail.options.subject option =
-                        nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (?subject: X509Certificate.checkEmail.options.subject)
+                        : options
+                        =
+                        nativeOnly
 
                 module options =
 
@@ -46477,11 +46892,13 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                     | hmac
                     | aes
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type options [<ParamObject; Emit("$0")>] (length: float) =
+                [<Interface>]
+                type options =
+                    abstract member length: float with get, set
 
-                    member val length: float = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(length: float) : options = nativeOnly
 
                 type callback =
                     delegate of err: Exception option * key: Node.crypto.KeyObject -> unit
@@ -46494,11 +46911,13 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                     | hmac
                     | aes
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type options [<ParamObject; Emit("$0")>] (length: float) =
+                [<Interface>]
+                type options =
+                    abstract member length: float with get, set
 
-                    member val length: float = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(length: float) : options = nativeOnly
 
             module pbkdf2 =
 
@@ -46569,15 +46988,18 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
 
             module diffieHellman =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type options
-                    [<ParamObject; Emit("$0")>]
-                    (privateKey: Node.crypto.KeyObject, publicKey: Node.crypto.KeyObject)
-                    =
+                [<Interface>]
+                type options =
+                    abstract member privateKey: Node.crypto.KeyObject with get, set
+                    abstract member publicKey: Node.crypto.KeyObject with get, set
 
-                    member val privateKey: Node.crypto.KeyObject = nativeOnly with get, set
-                    member val publicKey: Node.crypto.KeyObject = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (privateKey: Node.crypto.KeyObject, publicKey: Node.crypto.KeyObject)
+                        : options
+                        =
+                        nativeOnly
 
             module hash =
 
@@ -46654,29 +47076,35 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             [<Import("Socket", "dgram"); EmitConstructor>]
             static member Socket() : Socket = nativeOnly
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type RemoteInfo
+        [<Interface>]
+        type RemoteInfo =
+            abstract member address: string with get, set
+            abstract member family: RemoteInfo.family with get, set
+            abstract member port: float with get, set
+            abstract member size: float with get, set
+
             [<ParamObject; Emit("$0")>]
-            (address: string, family: RemoteInfo.family, port: float, size: float)
-            =
+            static member Create
+                (address: string, family: RemoteInfo.family, port: float, size: float)
+                : RemoteInfo
+                =
+                nativeOnly
 
-            member val address: string = nativeOnly with get, set
-            member val family: RemoteInfo.family = nativeOnly with get, set
-            member val port: float = nativeOnly with get, set
-            member val size: float = nativeOnly with get, set
-
-        [<Global>]
         [<AllowNullLiteral>]
-        type BindOptions
-            [<ParamObject; Emit("$0")>]
-            (?port: float, ?address: string, ?exclusive: bool, ?fd: float)
-            =
+        [<Interface>]
+        type BindOptions =
+            abstract member port: float option with get, set
+            abstract member address: string option with get, set
+            abstract member exclusive: bool option with get, set
+            abstract member fd: float option with get, set
 
-            member val port: float option = nativeOnly with get, set
-            member val address: string option = nativeOnly with get, set
-            member val exclusive: bool option = nativeOnly with get, set
-            member val fd: float option = nativeOnly with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (?port: float, ?address: string, ?exclusive: bool, ?fd: float)
+                : BindOptions
+                =
+                nativeOnly
 
         [<RequireQualifiedAccess>]
         [<StringEnum(CaseRules.None)>]
@@ -46684,37 +47112,37 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             | udp4
             | udp6
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type SocketOptions
-            [<ParamObject; Emit("$0")>]
-            (
-                ``type``: Node.dgram.SocketType,
-                ?signal: Node.AbortSignal,
-                ?reuseAddr: bool,
-                ?reusePort: bool,
-                ?ipv6Only: bool,
-                ?recvBufferSize: float,
-                ?sendBufferSize: float,
-                ?lookup: SocketOptions.lookup,
-                ?receiveBlockList: Node.net.BlockList,
-                ?sendBlockList: Node.net.BlockList
-            )
-            =
+        [<Interface>]
+        type SocketOptions =
+            inherit Node.events.EventEmitter_.Abortable
+            abstract member ``type``: Node.dgram.SocketType with get, set
+            abstract member reuseAddr: bool option with get, set
+            abstract member reusePort: bool option with get, set
+            abstract member ipv6Only: bool option with get, set
+            abstract member recvBufferSize: float option with get, set
+            abstract member sendBufferSize: float option with get, set
+            abstract member lookup: SocketOptions.lookup option with get, set
+            abstract member receiveBlockList: Node.net.BlockList option with get, set
+            abstract member sendBlockList: Node.net.BlockList option with get, set
 
-            member val ``type``: Node.dgram.SocketType = nativeOnly with get, set
-            /// <summary>
-            /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-            /// </summary>
-            member val signal: Node.AbortSignal option = nativeOnly with get, set
-            member val reuseAddr: bool option = nativeOnly with get, set
-            member val reusePort: bool option = nativeOnly with get, set
-            member val ipv6Only: bool option = nativeOnly with get, set
-            member val recvBufferSize: float option = nativeOnly with get, set
-            member val sendBufferSize: float option = nativeOnly with get, set
-            member val lookup: SocketOptions.lookup option = nativeOnly with get, set
-            member val receiveBlockList: Node.net.BlockList option = nativeOnly with get, set
-            member val sendBlockList: Node.net.BlockList option = nativeOnly with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ``type``: Node.dgram.SocketType,
+                    ?signal: Node.AbortSignal,
+                    ?reuseAddr: bool,
+                    ?reusePort: bool,
+                    ?ipv6Only: bool,
+                    ?recvBufferSize: float,
+                    ?sendBufferSize: float,
+                    ?lookup: SocketOptions.lookup,
+                    ?receiveBlockList: Node.net.BlockList,
+                    ?sendBlockList: Node.net.BlockList
+                )
+                : SocketOptions
+                =
+                nativeOnly
 
         /// <summary>
         /// Encapsulates the datagram functionality.
@@ -52518,89 +52946,49 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             [<Obsolete("Please use `order` option")>]
             abstract member verbatim: bool option with get, set
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type LookupOneOptions
-            [<ParamObject; Emit("$0")>]
-            (
-                ?family: LookupOneOptions.family,
-                ?hints: float,
-                ?order: LookupOneOptions.order,
-                ?verbatim: bool,
-                ?all: bool
-            )
-            =
-
-            /// <summary>
-            /// The record family. Must be <c>4</c>, <c>6</c>, or <c>0</c>. For backward compatibility reasons, <c>'IPv4'</c> and <c>'IPv6'</c> are interpreted
-            /// as <c>4</c> and <c>6</c> respectively. The value 0 indicates that either an IPv4 or IPv6 address is returned. If the value <c>0</c> is used
-            /// with <c>{ all: true } (see below)</c>, both IPv4 and IPv6 addresses are returned.
-            /// </summary>
-            member val family: LookupOneOptions.family option = nativeOnly with get, set
-            /// <summary>
-            /// One or more [supported <c>getaddrinfo</c>](https://nodejs.org/docs/latest-v22.x/api/dns.html#supported-getaddrinfo-flags) flags. Multiple flags may be
-            /// passed by bitwise <c>OR</c>ing their values.
-            /// </summary>
-            member val hints: float option = nativeOnly with get, set
-            /// <summary>
-            /// When <c>verbatim</c>, the resolved addresses are return unsorted. When <c>ipv4first</c>, the resolved addresses are sorted
-            /// by placing IPv4 addresses before IPv6 addresses. When <c>ipv6first</c>, the resolved addresses are sorted by placing IPv6
-            /// addresses before IPv4 addresses. Default value is configurable using
-            /// <see href="setDefaultResultOrder">setDefaultResultOrder</see> or [<c>--dns-result-order</c>](https://nodejs.org/docs/latest-v22.x/api/cli.html#--dns-result-orderorder).
-            /// </summary>
-            member val order: LookupOneOptions.order option = nativeOnly with get, set
-            /// <summary>
-            /// When <c>true</c>, the callback receives IPv4 and IPv6 addresses in the order the DNS resolver returned them. When <c>false</c>, IPv4
-            /// addresses are placed before IPv6 addresses. This option will be deprecated in favor of <c>order</c>. When both are specified,
-            /// <c>order</c> has higher precedence. New code should only use <c>order</c>. Default value is configurable using <see href="setDefaultResultOrder">setDefaultResultOrder</see>
-            /// </summary>
-            member val verbatim: bool option = nativeOnly with get, set
+        [<Interface>]
+        type LookupOneOptions =
+            inherit Node.dns.LookupOptions
             /// <summary>
             /// When <c>true</c>, the callback returns all resolved addresses in an array. Otherwise, returns a single address.
             /// </summary>
-            member val all: bool option = nativeOnly with get, set
+            abstract member all: bool option with get, set
 
-        [<Global>]
-        [<AllowNullLiteral>]
-        type LookupAllOptions
             [<ParamObject; Emit("$0")>]
-            (
-                all: bool,
-                ?family: LookupAllOptions.family,
-                ?hints: float,
-                ?order: LookupAllOptions.order,
-                ?verbatim: bool
-            )
-            =
+            static member Create
+                (
+                    ?family: LookupOneOptions.family,
+                    ?hints: float,
+                    ?order: LookupOneOptions.order,
+                    ?verbatim: bool,
+                    ?all: bool
+                )
+                : LookupOneOptions
+                =
+                nativeOnly
 
+        [<AllowNullLiteral>]
+        [<Interface>]
+        type LookupAllOptions =
+            inherit Node.dns.LookupOptions
             /// <summary>
             /// When <c>true</c>, the callback returns all resolved addresses in an array. Otherwise, returns a single address.
             /// </summary>
-            member val all: bool = nativeOnly with get, set
-            /// <summary>
-            /// The record family. Must be <c>4</c>, <c>6</c>, or <c>0</c>. For backward compatibility reasons, <c>'IPv4'</c> and <c>'IPv6'</c> are interpreted
-            /// as <c>4</c> and <c>6</c> respectively. The value 0 indicates that either an IPv4 or IPv6 address is returned. If the value <c>0</c> is used
-            /// with <c>{ all: true } (see below)</c>, both IPv4 and IPv6 addresses are returned.
-            /// </summary>
-            member val family: LookupAllOptions.family option = nativeOnly with get, set
-            /// <summary>
-            /// One or more [supported <c>getaddrinfo</c>](https://nodejs.org/docs/latest-v22.x/api/dns.html#supported-getaddrinfo-flags) flags. Multiple flags may be
-            /// passed by bitwise <c>OR</c>ing their values.
-            /// </summary>
-            member val hints: float option = nativeOnly with get, set
-            /// <summary>
-            /// When <c>verbatim</c>, the resolved addresses are return unsorted. When <c>ipv4first</c>, the resolved addresses are sorted
-            /// by placing IPv4 addresses before IPv6 addresses. When <c>ipv6first</c>, the resolved addresses are sorted by placing IPv6
-            /// addresses before IPv4 addresses. Default value is configurable using
-            /// <see href="setDefaultResultOrder">setDefaultResultOrder</see> or [<c>--dns-result-order</c>](https://nodejs.org/docs/latest-v22.x/api/cli.html#--dns-result-orderorder).
-            /// </summary>
-            member val order: LookupAllOptions.order option = nativeOnly with get, set
-            /// <summary>
-            /// When <c>true</c>, the callback receives IPv4 and IPv6 addresses in the order the DNS resolver returned them. When <c>false</c>, IPv4
-            /// addresses are placed before IPv6 addresses. This option will be deprecated in favor of <c>order</c>. When both are specified,
-            /// <c>order</c> has higher precedence. New code should only use <c>order</c>. Default value is configurable using <see href="setDefaultResultOrder">setDefaultResultOrder</see>
-            /// </summary>
-            member val verbatim: bool option = nativeOnly with get, set
+            abstract member all: bool with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    all: bool,
+                    ?family: LookupAllOptions.family,
+                    ?hints: float,
+                    ?order: LookupAllOptions.order,
+                    ?verbatim: bool
+                )
+                : LookupAllOptions
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -52650,30 +53038,33 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             type Exports =
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    address: string * port: float -> JS.Promise<Exports.__promisify___10>
+                    address: string * port: float -> JS.Promise<Exports.__promisify___44>
 
             module Exports =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type __promisify___10
-                    [<ParamObject; Emit("$0")>]
-                    (hostname: string, service: string)
-                    =
+                [<Interface>]
+                type __promisify___44 =
+                    abstract member hostname: string with get, set
+                    abstract member service: string with get, set
 
-                    member val hostname: string = nativeOnly with get, set
-                    member val service: string = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(hostname: string, service: string) : __promisify___44 =
+                        nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
         type ResolveOptions =
             abstract member ttl: bool with get, set
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type ResolveWithTtlOptions [<ParamObject; Emit("$0")>] (ttl: bool) =
+        [<Interface>]
+        type ResolveWithTtlOptions =
+            inherit Node.dns.ResolveOptions
+            abstract member ttl: bool with get, set
 
-            member val ttl: bool = nativeOnly with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create(ttl: bool) : ResolveWithTtlOptions = nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -52969,25 +53360,28 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 abstract member __promisify__:
                     hostname: string -> JS.Promise<ResizeArray<Node.dns.AnyRecord>>
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type ResolverOptions
-            [<ParamObject; Emit("$0")>]
-            (?timeout: float, ?tries: float, ?maxTimeout: float)
-            =
-
+        [<Interface>]
+        type ResolverOptions =
             /// <summary>
             /// Query timeout in milliseconds, or <c>-1</c> to use the default timeout.
             /// </summary>
-            member val timeout: float option = nativeOnly with get, set
+            abstract member timeout: float option with get, set
             /// <summary>
             /// The number of tries the resolver will try contacting each name server before giving up.
             /// </summary>
-            member val tries: float option = nativeOnly with get, set
+            abstract member tries: float option with get, set
             /// <summary>
             /// The max retry timeout, in milliseconds.
             /// </summary>
-            member val maxTimeout: float option = nativeOnly with get, set
+            abstract member maxTimeout: float option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (?timeout: float, ?tries: float, ?maxTimeout: float)
+                : ResolverOptions
+                =
+                nativeOnly
 
         /// <summary>
         /// An independent resolver for DNS requests.
@@ -54166,12 +54560,14 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
 
         module Exports =
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type lookupService [<ParamObject; Emit("$0")>] (hostname: string, service: string) =
+            [<Interface>]
+            type lookupService =
+                abstract member hostname: string with get, set
+                abstract member service: string with get, set
 
-                member val hostname: string = nativeOnly with get, set
-                member val service: string = nativeOnly with get, set
+                [<ParamObject; Emit("$0")>]
+                static member Create(hostname: string, service: string) : lookupService = nativeOnly
 
             [<RequireQualifiedAccess>]
             [<StringEnum(CaseRules.None)>]
@@ -54439,36 +54835,36 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// </summary>
             abstract member signal: Node.AbortSignal option with get, set
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type StaticEventEmitterIteratorOptions
-            [<ParamObject; Emit("$0")>]
-            (
-                ?signal: Node.AbortSignal,
-                ?close: ResizeArray<string>,
-                ?highWaterMark: float,
-                ?lowWaterMark: float
-            )
-            =
-
-            /// <summary>
-            /// Can be used to cancel awaiting events.
-            /// </summary>
-            member val signal: Node.AbortSignal option = nativeOnly with get, set
+        [<Interface>]
+        type StaticEventEmitterIteratorOptions =
+            inherit Node.events.StaticEventEmitterOptions
             /// <summary>
             /// Names of events that will end the iteration.
             /// </summary>
-            member val close: ResizeArray<string> option = nativeOnly with get, set
+            abstract member close: ResizeArray<string> option with get, set
             /// <summary>
             /// The high watermark. The emitter is paused every time the size of events being buffered is higher than it.
             /// Supported only on emitters implementing <c>pause()</c> and <c>resume()</c> methods.
             /// </summary>
-            member val highWaterMark: float option = nativeOnly with get, set
+            abstract member highWaterMark: float option with get, set
             /// <summary>
             /// The low watermark. The emitter is resumed every time the size of events being buffered is lower than it.
             /// Supported only on emitters implementing <c>pause()</c> and <c>resume()</c> methods.
             /// </summary>
-            member val lowWaterMark: float option = nativeOnly with get, set
+            abstract member lowWaterMark: float option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?signal: Node.AbortSignal,
+                    ?close: ResizeArray<string>,
+                    ?highWaterMark: float,
+                    ?lowWaterMark: float
+                )
+                : StaticEventEmitterIteratorOptions
+                =
+                nativeOnly
 
         /// <summary>
         /// The <c>EventEmitter</c> class is defined and exposed by the <c>node:events</c> module:
@@ -55547,38 +55943,28 @@ EventEmitter.defaultMaxListeners = $0"""
                 inherit Node.async_hooks.AsyncResource
                 abstract member eventEmitter: Node.events.EventEmitter_.EventEmitterAsyncResource with get
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type EventEmitterAsyncResourceOptions
-                [<ParamObject; Emit("$0")>]
-                (
-                    ?triggerAsyncId: float,
-                    ?requireManualDestroy: bool,
-                    ?captureRejections: bool,
-                    ?name: string
-                )
-                =
-
-                /// <summary>
-                /// The ID of the execution context that created this async event.
-                /// </summary>
-                member val triggerAsyncId: float option = nativeOnly with get, set
-                /// <summary>
-                /// Disables automatic <c>emitDestroy</c> when the object is garbage collected.
-                /// This usually does not need to be set (even if <c>emitDestroy</c> is called
-                /// manually), unless the resource's <c>asyncId</c> is retrieved and the
-                /// sensitive API's <c>emitDestroy</c> is called with it.
-                /// </summary>
-                member val requireManualDestroy: bool option = nativeOnly with get, set
-                /// <summary>
-                /// Enables automatic capturing of promise rejection.
-                /// </summary>
-                member val captureRejections: bool option = nativeOnly with get, set
+            [<Interface>]
+            type EventEmitterAsyncResourceOptions =
+                inherit Node.async_hooks.AsyncResourceOptions
+                inherit Node.events.EventEmitterOptions
                 /// <summary>
                 /// The type of async event, this is required when instantiating <c>EventEmitterAsyncResource</c>
                 /// directly rather than as a child class.
                 /// </summary>
-                member val name: string option = nativeOnly with get, set
+                abstract member name: string option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        ?triggerAsyncId: float,
+                        ?requireManualDestroy: bool,
+                        ?captureRejections: bool,
+                        ?name: string
+                    )
+                    : EventEmitterAsyncResourceOptions
+                    =
+                    nativeOnly
 
             /// <summary>
             /// Integrates <c>EventEmitter</c> with <c>AsyncResource</c> for <c>EventEmitter</c>s that
@@ -73303,11 +73689,13 @@ EventEmitter.defaultMaxListeners = $0"""
         type BigIntStatsFs =
             inherit Node.fs.StatsFsBase<bigint>
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type StatFsOptions [<ParamObject; Emit("$0")>] (?bigint: bool) =
+        [<Interface>]
+        type StatFsOptions =
+            abstract member bigint: bool option with get, set
 
-            member val bigint: bool option = nativeOnly with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create(?bigint: bool) : StatFsOptions = nativeOnly
 
         /// <summary>
         /// A representation of a directory entry, which can be a file or a subdirectory
@@ -76432,13 +76820,9 @@ EventEmitter.defaultMaxListeners = $0"""
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__: path: Node.url.URL -> JS.Promise<unit>
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type RmDirOptions
-            [<ParamObject; Emit("$0")>]
-            (?maxRetries: float, ?``recursive``: bool, ?retryDelay: float)
-            =
-
+        [<Interface>]
+        type RmDirOptions =
             /// <summary>
             /// If an <c>EBUSY</c>, <c>EMFILE</c>, <c>ENFILE</c>, <c>ENOTEMPTY</c>, or
             /// <c>EPERM</c> error is encountered, Node.js will retry the operation with a linear
@@ -76446,13 +76830,28 @@ EventEmitter.defaultMaxListeners = $0"""
             /// number of retries. This option is ignored if the <c>recursive</c> option is not
             /// <c>true</c>.
             /// </summary>
-            member val maxRetries: float option = nativeOnly with get, set
-            member val ``recursive``: bool option = nativeOnly with get, set
+            abstract member maxRetries: float option with get, set
+
+            [<Obsolete("""since v14.14.0 In future versions of Node.js and will trigger a warning
+`fs.rmdir(path, { recursive: true })` will throw if `path` does not exist or is a file.
+Use `fs.rm(path, { recursive: true, force: true })` instead.
+
+If `true`, perform a recursive directory removal. In
+recursive mode, operations are retried on failure.""")>]
+            abstract member ``recursive``: bool option with get, set
+
             /// <summary>
             /// The amount of time in milliseconds to wait between retries.
             /// This option is ignored if the <c>recursive</c> option is not <c>true</c>.
             /// </summary>
-            member val retryDelay: float option = nativeOnly with get, set
+            abstract member retryDelay: float option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (?maxRetries: float, ?``recursive``: bool, ?retryDelay: float)
+                : RmDirOptions
+                =
+                nativeOnly
 
         module rmdir_ =
 
@@ -76489,17 +76888,13 @@ EventEmitter.defaultMaxListeners = $0"""
                 abstract member __promisify__:
                     path: Node.url.URL * ?options: Node.fs.RmDirOptions -> JS.Promise<unit>
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type RmOptions
-            [<ParamObject; Emit("$0")>]
-            (?force: bool, ?maxRetries: float, ?``recursive``: bool, ?retryDelay: float)
-            =
-
+        [<Interface>]
+        type RmOptions =
             /// <summary>
             /// When <c>true</c>, exceptions will be ignored if <c>path</c> does not exist.
             /// </summary>
-            member val force: bool option = nativeOnly with get, set
+            abstract member force: bool option with get, set
             /// <summary>
             /// If an <c>EBUSY</c>, <c>EMFILE</c>, <c>ENFILE</c>, <c>ENOTEMPTY</c>, or
             /// <c>EPERM</c> error is encountered, Node.js will retry the operation with a linear
@@ -76507,17 +76902,24 @@ EventEmitter.defaultMaxListeners = $0"""
             /// number of retries. This option is ignored if the <c>recursive</c> option is not
             /// <c>true</c>.
             /// </summary>
-            member val maxRetries: float option = nativeOnly with get, set
+            abstract member maxRetries: float option with get, set
             /// <summary>
             /// If <c>true</c>, perform a recursive directory removal. In
             /// recursive mode, operations are retried on failure.
             /// </summary>
-            member val ``recursive``: bool option = nativeOnly with get, set
+            abstract member ``recursive``: bool option with get, set
             /// <summary>
             /// The amount of time in milliseconds to wait between retries.
             /// This option is ignored if the <c>recursive</c> option is not <c>true</c>.
             /// </summary>
-            member val retryDelay: float option = nativeOnly with get, set
+            abstract member retryDelay: float option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (?force: bool, ?maxRetries: float, ?``recursive``: bool, ?retryDelay: float)
+                : RmOptions
+                =
+                nativeOnly
 
         module rm_ =
 
@@ -76545,22 +76947,22 @@ EventEmitter.defaultMaxListeners = $0"""
                 abstract member __promisify__:
                     path: Node.url.URL * ?options: Node.fs.RmOptions -> JS.Promise<unit>
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type MakeDirectoryOptions
-            [<ParamObject; Emit("$0")>]
-            (?``recursive``: bool, ?mode: Node.fs.Mode)
-            =
-
+        [<Interface>]
+        type MakeDirectoryOptions =
             /// <summary>
             /// Indicates whether parent folders should be created.
             /// If a folder was created, the path to the first created folder will be returned.
             /// </summary>
-            member val ``recursive``: bool option = nativeOnly with get, set
+            abstract member ``recursive``: bool option with get, set
             /// <summary>
             /// A file mode. If a string is passed, it is parsed as an octal integer. If not specified
             /// </summary>
-            member val mode: Node.fs.Mode option = nativeOnly with get, set
+            abstract member mode: Node.fs.Mode option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create(?``recursive``: bool, ?mode: Node.fs.Mode) : MakeDirectoryOptions =
+                nativeOnly
 
         module mkdir_ =
 
@@ -77188,16 +77590,23 @@ EventEmitter.defaultMaxListeners = $0"""
 
                 module __promisify__ =
 
-                    [<Global>]
                     [<AllowNullLiteral>]
-                    type options_10
-                        [<ParamObject; Emit("$0")>]
-                        (?encoding: Node.BufferEncoding, ?withFileTypes: bool, ?``recursive``: bool)
-                        =
+                    [<Interface>]
+                    type options_10 =
+                        abstract member encoding: Node.BufferEncoding option with get, set
+                        abstract member withFileTypes: bool option with get, set
+                        abstract member ``recursive``: bool option with get, set
 
-                        member val encoding: Node.BufferEncoding option = nativeOnly with get, set
-                        member val withFileTypes: bool option = nativeOnly with get, set
-                        member val ``recursive``: bool option = nativeOnly with get, set
+                        [<ParamObject; Emit("$0")>]
+                        static member Create
+                            (
+                                ?encoding: Node.BufferEncoding,
+                                ?withFileTypes: bool,
+                                ?``recursive``: bool
+                            )
+                            : options_10
+                            =
+                            nativeOnly
 
                     [<RequireQualifiedAccess>]
                     [<Erase(CaseRules.None)>]
@@ -77209,16 +77618,19 @@ EventEmitter.defaultMaxListeners = $0"""
 
                         module Cases =
 
-                            [<Global>]
                             [<AllowNullLiteral>]
-                            type Case1
-                                [<ParamObject; Emit("$0")>]
-                                (encoding: string, ?withFileTypes: bool, ?``recursive``: bool)
-                                =
+                            [<Interface>]
+                            type Case1 =
+                                abstract member encoding: string with get, set
+                                abstract member withFileTypes: bool option with get, set
+                                abstract member ``recursive``: bool option with get, set
 
-                                member val encoding: string = nativeOnly with get, set
-                                member val withFileTypes: bool option = nativeOnly with get, set
-                                member val ``recursive``: bool option = nativeOnly with get, set
+                                [<ParamObject; Emit("$0")>]
+                                static member Create
+                                    (encoding: string, ?withFileTypes: bool, ?``recursive``: bool)
+                                    : Case1
+                                    =
+                                    nativeOnly
 
                     [<AllowNullLiteral>]
                     [<Interface>]
@@ -77234,16 +77646,19 @@ EventEmitter.defaultMaxListeners = $0"""
                         abstract member withFileTypes: bool with get, set
                         abstract member ``recursive``: bool option with get, set
 
-                    [<Global>]
                     [<AllowNullLiteral>]
-                    type options_14
-                        [<ParamObject; Emit("$0")>]
-                        (encoding: string, withFileTypes: bool, ?``recursive``: bool)
-                        =
+                    [<Interface>]
+                    type options_14 =
+                        abstract member encoding: string with get, set
+                        abstract member withFileTypes: bool with get, set
+                        abstract member ``recursive``: bool option with get, set
 
-                        member val encoding: string = nativeOnly with get, set
-                        member val withFileTypes: bool = nativeOnly with get, set
-                        member val ``recursive``: bool option = nativeOnly with get, set
+                        [<ParamObject; Emit("$0")>]
+                        static member Create
+                            (encoding: string, withFileTypes: bool, ?``recursive``: bool)
+                            : options_14
+                            =
+                            nativeOnly
 
         module close_ =
 
@@ -77654,16 +78069,16 @@ EventEmitter.defaultMaxListeners = $0"""
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__: fd: float -> JS.Promise<unit>
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type WriteOptions
-            [<ParamObject; Emit("$0")>]
-            (?offset: float, ?length: float, ?position: float)
-            =
+        [<Interface>]
+        type WriteOptions =
+            abstract member offset: float option with get, set
+            abstract member length: float option with get, set
+            abstract member position: float option with get, set
 
-            member val offset: float option = nativeOnly with get, set
-            member val length: float option = nativeOnly with get, set
-            member val position: float option = nativeOnly with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create(?offset: float, ?length: float, ?position: float) : WriteOptions =
+                nativeOnly
 
         module write_ =
 
@@ -77692,7 +78107,7 @@ EventEmitter.defaultMaxListeners = $0"""
                     ?offset: float *
                     ?length: float *
                     ?position: float ->
-                        JS.Promise<Exports.__promisify___11<'TBuffer>>
+                        JS.Promise<Exports.__promisify___45<'TBuffer>>
 
                 /// <summary>
                 /// Asynchronously writes <c>buffer</c> to the file referenced by the supplied file descriptor.
@@ -77709,7 +78124,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__<'TBuffer> :
                     fd: float * ?buffer: 'TBuffer * ?options: Node.fs.WriteOptions ->
-                        JS.Promise<Exports.__promisify___11<'TBuffer>>
+                        JS.Promise<Exports.__promisify___46<'TBuffer>>
 
                 /// <summary>
                 /// Asynchronously writes <c>string</c> to the file referenced by the supplied file descriptor.
@@ -77729,29 +78144,45 @@ EventEmitter.defaultMaxListeners = $0"""
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     fd: float * string: string * ?position: float * ?encoding: Node.BufferEncoding ->
-                        JS.Promise<Exports.__promisify___12>
+                        JS.Promise<Exports.__promisify___47>
 
             module Exports =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type __promisify___11<'TBuffer>
+                [<Interface>]
+                type __promisify___45<'TBuffer> =
+                    abstract member bytesWritten: float with get, set
+                    abstract member buffer: 'TBuffer with get, set
+
                     [<ParamObject; Emit("$0")>]
-                    (bytesWritten: float, buffer: 'TBuffer)
-                    =
+                    static member Create
+                        (bytesWritten: float, buffer: 'TBuffer)
+                        : __promisify___45<'TBuffer>
+                        =
+                        nativeOnly
 
-                    member val bytesWritten: float = nativeOnly with get, set
-                    member val buffer: 'TBuffer = nativeOnly with get, set
-
-                [<Global>]
                 [<AllowNullLiteral>]
-                type __promisify___12
-                    [<ParamObject; Emit("$0")>]
-                    (bytesWritten: float, buffer: string)
-                    =
+                [<Interface>]
+                type __promisify___46<'TBuffer> =
+                    abstract member bytesWritten: float with get, set
+                    abstract member buffer: 'TBuffer with get, set
 
-                    member val bytesWritten: float = nativeOnly with get, set
-                    member val buffer: string = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (bytesWritten: float, buffer: 'TBuffer)
+                        : __promisify___46<'TBuffer>
+                        =
+                        nativeOnly
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type __promisify___47 =
+                    abstract member bytesWritten: float with get, set
+                    abstract member buffer: string with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(bytesWritten: float, buffer: string) : __promisify___47 =
+                        nativeOnly
 
         type ReadPosition = U2<float, bigint>
 
@@ -77807,7 +78238,7 @@ EventEmitter.defaultMaxListeners = $0"""
                     offset: float *
                     length: float *
                     position: float option ->
-                        JS.Promise<Exports.__promisify___13<'TBuffer>>
+                        JS.Promise<Exports.__promisify___48<'TBuffer>>
 
                 /// <param name="fd">
                 /// A file descriptor.
@@ -77831,42 +78262,87 @@ EventEmitter.defaultMaxListeners = $0"""
                     offset: float *
                     length: float *
                     position: bigint option ->
-                        JS.Promise<Exports.__promisify___13<'TBuffer>>
+                        JS.Promise<Exports.__promisify___49<'TBuffer>>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__<'TBuffer> :
                     fd: float * options: Node.fs.ReadOptionsWithBuffer<'TBuffer> ->
-                        JS.Promise<Exports.__promisify___13<'TBuffer>>
+                        JS.Promise<Exports.__promisify___50<'TBuffer>>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     fd: float * options: Node.fs.ReadOptionsWithBuffer<Node.NonSharedBuffer> ->
-                        JS.Promise<Exports.__promisify___14>
+                        JS.Promise<Exports.__promisify___51>
 
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: fd: float -> JS.Promise<Exports.__promisify___14>
+                abstract member __promisify__: fd: float -> JS.Promise<Exports.__promisify___52>
 
             module Exports =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type __promisify___13<'TBuffer>
+                [<Interface>]
+                type __promisify___48<'TBuffer> =
+                    abstract member bytesRead: float with get, set
+                    abstract member buffer: 'TBuffer with get, set
+
                     [<ParamObject; Emit("$0")>]
-                    (bytesRead: float, buffer: 'TBuffer)
-                    =
+                    static member Create
+                        (bytesRead: float, buffer: 'TBuffer)
+                        : __promisify___48<'TBuffer>
+                        =
+                        nativeOnly
 
-                    member val bytesRead: float = nativeOnly with get, set
-                    member val buffer: 'TBuffer = nativeOnly with get, set
-
-                [<Global>]
                 [<AllowNullLiteral>]
-                type __promisify___14
-                    [<ParamObject; Emit("$0")>]
-                    (bytesRead: float, buffer: Node.NonSharedBuffer)
-                    =
+                [<Interface>]
+                type __promisify___49<'TBuffer> =
+                    abstract member bytesRead: float with get, set
+                    abstract member buffer: 'TBuffer with get, set
 
-                    member val bytesRead: float = nativeOnly with get, set
-                    member val buffer: Node.NonSharedBuffer = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (bytesRead: float, buffer: 'TBuffer)
+                        : __promisify___49<'TBuffer>
+                        =
+                        nativeOnly
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type __promisify___50<'TBuffer> =
+                    abstract member bytesRead: float with get, set
+                    abstract member buffer: 'TBuffer with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (bytesRead: float, buffer: 'TBuffer)
+                        : __promisify___50<'TBuffer>
+                        =
+                        nativeOnly
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type __promisify___51 =
+                    abstract member bytesRead: float with get, set
+                    abstract member buffer: Node.NonSharedBuffer with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (bytesRead: float, buffer: Node.NonSharedBuffer)
+                        : __promisify___51
+                        =
+                        nativeOnly
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type __promisify___52 =
+                    abstract member bytesRead: float with get, set
+                    abstract member buffer: Node.NonSharedBuffer with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (bytesRead: float, buffer: Node.NonSharedBuffer)
+                        : __promisify___52
+                        =
+                        nativeOnly
 
         module readFile_ =
 
@@ -78203,22 +78679,28 @@ EventEmitter.defaultMaxListeners = $0"""
 
                 module __promisify__ =
 
-                    [<Global>]
                     [<AllowNullLiteral>]
-                    type options_15 [<ParamObject; Emit("$0")>] (?encoding: obj, ?flag: string) =
+                    [<Interface>]
+                    type options_15 =
+                        abstract member encoding: obj option with get, set
+                        abstract member flag: string option with get, set
 
-                        member val encoding: obj option = nativeOnly with get, set
-                        member val flag: string option = nativeOnly with get, set
-
-                    [<Global>]
-                    [<AllowNullLiteral>]
-                    type options_16
                         [<ParamObject; Emit("$0")>]
-                        (encoding: Node.BufferEncoding, ?flag: string)
-                        =
+                        static member Create(?encoding: obj, ?flag: string) : options_15 =
+                            nativeOnly
 
-                        member val encoding: Node.BufferEncoding = nativeOnly with get, set
-                        member val flag: string option = nativeOnly with get, set
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type options_16 =
+                        abstract member encoding: Node.BufferEncoding with get, set
+                        abstract member flag: string option with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create
+                            (encoding: Node.BufferEncoding, ?flag: string)
+                            : options_16
+                            =
+                            nativeOnly
 
                     [<AllowNullLiteral>]
                     [<Interface>]
@@ -78674,40 +79156,41 @@ EventEmitter.defaultMaxListeners = $0"""
             abstract member persistent: bool option with get, set
             abstract member ``recursive``: bool option with get, set
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type WatchOptionsWithBufferEncoding
+        [<Interface>]
+        type WatchOptionsWithBufferEncoding =
+            inherit Node.fs.WatchOptions
+            abstract member encoding: string with get, set
+
             [<ParamObject; Emit("$0")>]
-            (encoding: string, ?signal: Node.AbortSignal, ?persistent: bool, ?``recursive``: bool)
-            =
+            static member Create
+                (
+                    encoding: string,
+                    ?signal: Node.AbortSignal,
+                    ?persistent: bool,
+                    ?``recursive``: bool
+                )
+                : WatchOptionsWithBufferEncoding
+                =
+                nativeOnly
 
-            member val encoding: string = nativeOnly with get, set
-            /// <summary>
-            /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-            /// </summary>
-            member val signal: Node.AbortSignal option = nativeOnly with get, set
-            member val persistent: bool option = nativeOnly with get, set
-            member val ``recursive``: bool option = nativeOnly with get, set
-
-        [<Global>]
         [<AllowNullLiteral>]
-        type WatchOptionsWithStringEncoding
-            [<ParamObject; Emit("$0")>]
-            (
-                ?signal: Node.AbortSignal,
-                ?persistent: bool,
-                ?``recursive``: bool,
-                ?encoding: Node.BufferEncoding
-            )
-            =
+        [<Interface>]
+        type WatchOptionsWithStringEncoding =
+            inherit Node.fs.WatchOptions
+            abstract member encoding: Node.BufferEncoding option with get, set
 
-            /// <summary>
-            /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-            /// </summary>
-            member val signal: Node.AbortSignal option = nativeOnly with get, set
-            member val persistent: bool option = nativeOnly with get, set
-            member val ``recursive``: bool option = nativeOnly with get, set
-            member val encoding: Node.BufferEncoding option = nativeOnly with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?signal: Node.AbortSignal,
+                    ?persistent: bool,
+                    ?``recursive``: bool,
+                    ?encoding: Node.BufferEncoding
+                )
+                : WatchOptionsWithStringEncoding
+                =
+                nativeOnly
 
         [<RequireQualifiedAccess>]
         [<StringEnum(CaseRules.None)>]
@@ -79094,12 +79577,15 @@ EventEmitter.defaultMaxListeners = $0"""
             abstract member write: System.Delegate with get, set
             abstract member writev: System.Delegate option with get, set
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type ReadStreamOptions private () =
+        [<Interface>]
+        type ReadStreamOptions =
+            inherit Node.fs.StreamOptions
+            abstract member fs: Node.fs.CreateReadStreamFSImplementation option with get, set
+            abstract member ``end``: float option with get, set
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     ?flags: string,
                     ?encoding: Node.BufferEncoding,
@@ -79112,11 +79598,12 @@ EventEmitter.defaultMaxListeners = $0"""
                     ?fs: Node.fs.CreateReadStreamFSImplementation,
                     ?``end``: float
                 )
+                : ReadStreamOptions
                 =
-                ReadStreamOptions()
+                nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     fd: float,
                     ?flags: string,
@@ -79130,11 +79617,12 @@ EventEmitter.defaultMaxListeners = $0"""
                     ?fs: Node.fs.CreateReadStreamFSImplementation,
                     ?``end``: float
                 )
+                : ReadStreamOptions
                 =
-                ReadStreamOptions()
+                nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     fd: Node.fs_promises.FileHandle,
                     ?flags: string,
@@ -79148,30 +79636,19 @@ EventEmitter.defaultMaxListeners = $0"""
                     ?fs: Node.fs.CreateReadStreamFSImplementation,
                     ?``end``: float
                 )
+                : ReadStreamOptions
                 =
-                ReadStreamOptions()
+                nativeOnly
 
-            member val flags: string option = nativeOnly with get, set
-            member val encoding: Node.BufferEncoding option = nativeOnly with get, set
-            member val fd: U2<float, Node.fs_promises.FileHandle> option = nativeOnly with get, set
-            member val mode: float option = nativeOnly with get, set
-            member val autoClose: bool option = nativeOnly with get, set
-            member val emitClose: bool option = nativeOnly with get, set
-            member val start: float option = nativeOnly with get, set
-            member val signal: Node.AbortSignal option = nativeOnly with get, set
-            member val highWaterMark: float option = nativeOnly with get, set
-
-            member val fs: Node.fs.CreateReadStreamFSImplementation option =
-                nativeOnly with get, set
-
-            member val ``end``: float option = nativeOnly with get, set
-
-        [<Global>]
         [<AllowNullLiteral>]
-        type WriteStreamOptions private () =
+        [<Interface>]
+        type WriteStreamOptions =
+            inherit Node.fs.StreamOptions
+            abstract member fs: Node.fs.CreateWriteStreamFSImplementation option with get, set
+            abstract member flush: bool option with get, set
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     ?flags: string,
                     ?encoding: Node.BufferEncoding,
@@ -79184,11 +79661,12 @@ EventEmitter.defaultMaxListeners = $0"""
                     ?fs: Node.fs.CreateWriteStreamFSImplementation,
                     ?flush: bool
                 )
+                : WriteStreamOptions
                 =
-                WriteStreamOptions()
+                nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     fd: float,
                     ?flags: string,
@@ -79202,11 +79680,12 @@ EventEmitter.defaultMaxListeners = $0"""
                     ?fs: Node.fs.CreateWriteStreamFSImplementation,
                     ?flush: bool
                 )
+                : WriteStreamOptions
                 =
-                WriteStreamOptions()
+                nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     fd: Node.fs_promises.FileHandle,
                     ?flags: string,
@@ -79220,23 +79699,9 @@ EventEmitter.defaultMaxListeners = $0"""
                     ?fs: Node.fs.CreateWriteStreamFSImplementation,
                     ?flush: bool
                 )
+                : WriteStreamOptions
                 =
-                WriteStreamOptions()
-
-            member val flags: string option = nativeOnly with get, set
-            member val encoding: Node.BufferEncoding option = nativeOnly with get, set
-            member val fd: U2<float, Node.fs_promises.FileHandle> option = nativeOnly with get, set
-            member val mode: float option = nativeOnly with get, set
-            member val autoClose: bool option = nativeOnly with get, set
-            member val emitClose: bool option = nativeOnly with get, set
-            member val start: float option = nativeOnly with get, set
-            member val signal: Node.AbortSignal option = nativeOnly with get, set
-            member val highWaterMark: float option = nativeOnly with get, set
-
-            member val fs: Node.fs.CreateWriteStreamFSImplementation option =
-                nativeOnly with get, set
-
-            member val flush: bool option = nativeOnly with get, set
+                nativeOnly
 
         module fdatasync_ =
 
@@ -79325,30 +79790,35 @@ EventEmitter.defaultMaxListeners = $0"""
                     fd: float * buffers: 'TBuffers * ?position: float ->
                         JS.Promise<Node.fs.ReadVResult<'TBuffers>>
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type OpenAsBlobOptions [<ParamObject; Emit("$0")>] (?``type``: string) =
-
+        [<Interface>]
+        type OpenAsBlobOptions =
             /// <summary>
             /// An optional mime type for the blob.
             /// </summary>
-            member val ``type``: string option = nativeOnly with get, set
+            abstract member ``type``: string option with get, set
 
-        [<Global>]
-        [<AllowNullLiteral>]
-        type OpenDirOptions
             [<ParamObject; Emit("$0")>]
-            (?encoding: Node.BufferEncoding, ?bufferSize: float, ?``recursive``: bool)
-            =
+            static member Create(?``type``: string) : OpenAsBlobOptions = nativeOnly
 
-            member val encoding: Node.BufferEncoding option = nativeOnly with get, set
+        [<AllowNullLiteral>]
+        [<Interface>]
+        type OpenDirOptions =
+            abstract member encoding: Node.BufferEncoding option with get, set
             /// <summary>
             /// Number of directory entries that are buffered
             /// internally when reading from the directory. Higher values lead to better
             /// performance but higher memory usage.
             /// </summary>
-            member val bufferSize: float option = nativeOnly with get, set
-            member val ``recursive``: bool option = nativeOnly with get, set
+            abstract member bufferSize: float option with get, set
+            abstract member ``recursive``: bool option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (?encoding: Node.BufferEncoding, ?bufferSize: float, ?``recursive``: bool)
+                : OpenDirOptions
+                =
+                nativeOnly
 
         module opendir_ =
 
@@ -79386,12 +79856,15 @@ EventEmitter.defaultMaxListeners = $0"""
         type StatOptions =
             abstract member bigint: bool option with get, set
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type StatSyncOptions [<ParamObject; Emit("$0")>] (?bigint: bool, ?throwIfNoEntry: bool) =
+        [<Interface>]
+        type StatSyncOptions =
+            inherit Node.fs.StatOptions
+            abstract member throwIfNoEntry: bool option with get, set
 
-            member val bigint: bool option = nativeOnly with get, set
-            member val throwIfNoEntry: bool option = nativeOnly with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create(?bigint: bool, ?throwIfNoEntry: bool) : StatSyncOptions =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -79429,113 +79902,57 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </summary>
             abstract member verbatimSymlinks: bool option with get, set
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type CopyOptions
-            [<ParamObject; Emit("$0")>]
-            (
-                ?dereference: bool,
-                ?errorOnExist: bool,
-                ?force: bool,
-                ?mode: float,
-                ?preserveTimestamps: bool,
-                ?``recursive``: bool,
-                ?verbatimSymlinks: bool,
-                ?filter: CopyOptions.filter
-            )
-            =
-
-            /// <summary>
-            /// Dereference symlinks
-            /// </summary>
-            member val dereference: bool option = nativeOnly with get, set
-            /// <summary>
-            /// When <c>force</c> is <c>false</c>, and the destination
-            /// exists, throw an error.
-            /// </summary>
-            member val errorOnExist: bool option = nativeOnly with get, set
-            /// <summary>
-            /// Overwrite existing file or directory. _The copy
-            /// operation will ignore errors if you set this to false and the destination
-            /// exists. Use the <c>errorOnExist</c> option to change this behavior.
-            /// </summary>
-            member val force: bool option = nativeOnly with get, set
-            /// <summary>
-            /// Modifiers for copy operation. See <c>mode</c> flag of <see href="copyFileSync()">copyFileSync()</see>
-            /// </summary>
-            member val mode: float option = nativeOnly with get, set
-            /// <summary>
-            /// When <c>true</c> timestamps from <c>src</c> will
-            /// be preserved.
-            /// </summary>
-            member val preserveTimestamps: bool option = nativeOnly with get, set
-            /// <summary>
-            /// Copy directories recursively.
-            /// </summary>
-            member val ``recursive``: bool option = nativeOnly with get, set
-            /// <summary>
-            /// When true, path resolution for symlinks will be skipped
-            /// </summary>
-            member val verbatimSymlinks: bool option = nativeOnly with get, set
+        [<Interface>]
+        type CopyOptions =
+            inherit Node.fs.CopyOptionsBase
             /// <summary>
             /// Function to filter copied files/directories. Return
             /// <c>true</c> to copy the item, <c>false</c> to ignore it.
             /// </summary>
-            member val filter: CopyOptions.filter option = nativeOnly with get, set
+            abstract member filter: CopyOptions.filter option with get, set
 
-        [<Global>]
-        [<AllowNullLiteral>]
-        type CopySyncOptions
             [<ParamObject; Emit("$0")>]
-            (
-                ?dereference: bool,
-                ?errorOnExist: bool,
-                ?force: bool,
-                ?mode: float,
-                ?preserveTimestamps: bool,
-                ?``recursive``: bool,
-                ?verbatimSymlinks: bool,
-                ?filter: CopySyncOptions.filter
-            )
-            =
+            static member Create
+                (
+                    ?dereference: bool,
+                    ?errorOnExist: bool,
+                    ?force: bool,
+                    ?mode: float,
+                    ?preserveTimestamps: bool,
+                    ?``recursive``: bool,
+                    ?verbatimSymlinks: bool,
+                    ?filter: CopyOptions.filter
+                )
+                : CopyOptions
+                =
+                nativeOnly
 
-            /// <summary>
-            /// Dereference symlinks
-            /// </summary>
-            member val dereference: bool option = nativeOnly with get, set
-            /// <summary>
-            /// When <c>force</c> is <c>false</c>, and the destination
-            /// exists, throw an error.
-            /// </summary>
-            member val errorOnExist: bool option = nativeOnly with get, set
-            /// <summary>
-            /// Overwrite existing file or directory. _The copy
-            /// operation will ignore errors if you set this to false and the destination
-            /// exists. Use the <c>errorOnExist</c> option to change this behavior.
-            /// </summary>
-            member val force: bool option = nativeOnly with get, set
-            /// <summary>
-            /// Modifiers for copy operation. See <c>mode</c> flag of <see href="copyFileSync()">copyFileSync()</see>
-            /// </summary>
-            member val mode: float option = nativeOnly with get, set
-            /// <summary>
-            /// When <c>true</c> timestamps from <c>src</c> will
-            /// be preserved.
-            /// </summary>
-            member val preserveTimestamps: bool option = nativeOnly with get, set
-            /// <summary>
-            /// Copy directories recursively.
-            /// </summary>
-            member val ``recursive``: bool option = nativeOnly with get, set
-            /// <summary>
-            /// When true, path resolution for symlinks will be skipped
-            /// </summary>
-            member val verbatimSymlinks: bool option = nativeOnly with get, set
+        [<AllowNullLiteral>]
+        [<Interface>]
+        type CopySyncOptions =
+            inherit Node.fs.CopyOptionsBase
             /// <summary>
             /// Function to filter copied files/directories. Return
             /// <c>true</c> to copy the item, <c>false</c> to ignore it.
             /// </summary>
-            member val filter: CopySyncOptions.filter option = nativeOnly with get, set
+            abstract member filter: CopySyncOptions.filter option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?dereference: bool,
+                    ?errorOnExist: bool,
+                    ?force: bool,
+                    ?mode: float,
+                    ?preserveTimestamps: bool,
+                    ?``recursive``: bool,
+                    ?verbatimSymlinks: bool,
+                    ?filter: CopySyncOptions.filter
+                )
+                : CopySyncOptions
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -79590,11 +80007,13 @@ EventEmitter.defaultMaxListeners = $0"""
 
             module Cases =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type Case1 [<ParamObject; Emit("$0")>] (encoding: string) =
+                [<Interface>]
+                type Case1 =
+                    abstract member encoding: string with get, set
 
-                    member val encoding: string = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(encoding: string) : Case1 = nativeOnly
 
         module Dir =
 
@@ -79934,16 +80353,19 @@ EventEmitter.defaultMaxListeners = $0"""
 
             module readdir =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type options
-                    [<ParamObject; Emit("$0")>]
-                    (?encoding: Node.BufferEncoding, ?withFileTypes: bool, ?``recursive``: bool)
-                    =
+                [<Interface>]
+                type options =
+                    abstract member encoding: Node.BufferEncoding option with get, set
+                    abstract member withFileTypes: bool option with get, set
+                    abstract member ``recursive``: bool option with get, set
 
-                    member val encoding: Node.BufferEncoding option = nativeOnly with get, set
-                    member val withFileTypes: bool option = nativeOnly with get, set
-                    member val ``recursive``: bool option = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (?encoding: Node.BufferEncoding, ?withFileTypes: bool, ?``recursive``: bool)
+                        : options
+                        =
+                        nativeOnly
 
                 type callback =
                     delegate of
@@ -79965,16 +80387,19 @@ EventEmitter.defaultMaxListeners = $0"""
 
                     module Cases =
 
-                        [<Global>]
                         [<AllowNullLiteral>]
-                        type Case1
-                            [<ParamObject; Emit("$0")>]
-                            (encoding: string, ?withFileTypes: bool, ?``recursive``: bool)
-                            =
+                        [<Interface>]
+                        type Case1 =
+                            abstract member encoding: string with get, set
+                            abstract member withFileTypes: bool option with get, set
+                            abstract member ``recursive``: bool option with get, set
 
-                            member val encoding: string = nativeOnly with get, set
-                            member val withFileTypes: bool option = nativeOnly with get, set
-                            member val ``recursive``: bool option = nativeOnly with get, set
+                            [<ParamObject; Emit("$0")>]
+                            static member Create
+                                (encoding: string, ?withFileTypes: bool, ?``recursive``: bool)
+                                : Case1
+                                =
+                                nativeOnly
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -80001,16 +80426,19 @@ EventEmitter.defaultMaxListeners = $0"""
                         err: Node.NodeJS.ErrnoException option * files: ResizeArray<Node.fs.Dirent> ->
                             unit
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type options_4
-                    [<ParamObject; Emit("$0")>]
-                    (encoding: string, withFileTypes: bool, ?``recursive``: bool)
-                    =
+                [<Interface>]
+                type options_4 =
+                    abstract member encoding: string with get, set
+                    abstract member withFileTypes: bool with get, set
+                    abstract member ``recursive``: bool option with get, set
 
-                    member val encoding: string = nativeOnly with get, set
-                    member val withFileTypes: bool = nativeOnly with get, set
-                    member val ``recursive``: bool option = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (encoding: string, withFileTypes: bool, ?``recursive``: bool)
+                        : options_4
+                        =
+                        nativeOnly
 
                 type callback_4 =
                     delegate of
@@ -80020,16 +80448,19 @@ EventEmitter.defaultMaxListeners = $0"""
 
             module readdirSync =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type options
-                    [<ParamObject; Emit("$0")>]
-                    (?encoding: Node.BufferEncoding, ?withFileTypes: bool, ?``recursive``: bool)
-                    =
+                [<Interface>]
+                type options =
+                    abstract member encoding: Node.BufferEncoding option with get, set
+                    abstract member withFileTypes: bool option with get, set
+                    abstract member ``recursive``: bool option with get, set
 
-                    member val encoding: Node.BufferEncoding option = nativeOnly with get, set
-                    member val withFileTypes: bool option = nativeOnly with get, set
-                    member val ``recursive``: bool option = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (?encoding: Node.BufferEncoding, ?withFileTypes: bool, ?``recursive``: bool)
+                        : options
+                        =
+                        nativeOnly
 
                 [<RequireQualifiedAccess>]
                 [<Erase(CaseRules.None)>]
@@ -80041,16 +80472,19 @@ EventEmitter.defaultMaxListeners = $0"""
 
                     module Cases =
 
-                        [<Global>]
                         [<AllowNullLiteral>]
-                        type Case1
-                            [<ParamObject; Emit("$0")>]
-                            (encoding: string, ?withFileTypes: bool, ?``recursive``: bool)
-                            =
+                        [<Interface>]
+                        type Case1 =
+                            abstract member encoding: string with get, set
+                            abstract member withFileTypes: bool option with get, set
+                            abstract member ``recursive``: bool option with get, set
 
-                            member val encoding: string = nativeOnly with get, set
-                            member val withFileTypes: bool option = nativeOnly with get, set
-                            member val ``recursive``: bool option = nativeOnly with get, set
+                            [<ParamObject; Emit("$0")>]
+                            static member Create
+                                (encoding: string, ?withFileTypes: bool, ?``recursive``: bool)
+                                : Case1
+                                =
+                                nativeOnly
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -80066,16 +80500,19 @@ EventEmitter.defaultMaxListeners = $0"""
                     abstract member withFileTypes: bool with get, set
                     abstract member ``recursive``: bool option with get, set
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type options_4
-                    [<ParamObject; Emit("$0")>]
-                    (encoding: string, withFileTypes: bool, ?``recursive``: bool)
-                    =
+                [<Interface>]
+                type options_4 =
+                    abstract member encoding: string with get, set
+                    abstract member withFileTypes: bool with get, set
+                    abstract member ``recursive``: bool option with get, set
 
-                    member val encoding: string = nativeOnly with get, set
-                    member val withFileTypes: bool = nativeOnly with get, set
-                    member val ``recursive``: bool option = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (encoding: string, withFileTypes: bool, ?``recursive``: bool)
+                        : options_4
+                        =
+                        nativeOnly
 
             module ``open`` =
 
@@ -80155,22 +80592,24 @@ EventEmitter.defaultMaxListeners = $0"""
 
             module readFileSync =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type options [<ParamObject; Emit("$0")>] (?encoding: obj, ?flag: string) =
+                [<Interface>]
+                type options =
+                    abstract member encoding: obj option with get, set
+                    abstract member flag: string option with get, set
 
-                    member val encoding: obj option = nativeOnly with get, set
-                    member val flag: string option = nativeOnly with get, set
-
-                [<Global>]
-                [<AllowNullLiteral>]
-                type options_1
                     [<ParamObject; Emit("$0")>]
-                    (encoding: Node.BufferEncoding, ?flag: string)
-                    =
+                    static member Create(?encoding: obj, ?flag: string) : options = nativeOnly
 
-                    member val encoding: Node.BufferEncoding = nativeOnly with get, set
-                    member val flag: string option = nativeOnly with get, set
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type options_1 =
+                    abstract member encoding: Node.BufferEncoding with get, set
+                    abstract member flag: string option with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(encoding: Node.BufferEncoding, ?flag: string) : options_1 =
+                        nativeOnly
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -86364,58 +86803,63 @@ EventEmitter.defaultMaxListeners = $0"""
             abstract member length: float option with get, set
             abstract member position: Node.fs.ReadPosition option with get, set
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type CreateReadStreamOptions
+        [<Interface>]
+        type CreateReadStreamOptions =
+            inherit Node.events.EventEmitter_.Abortable
+            abstract member encoding: Node.BufferEncoding option with get, set
+            abstract member autoClose: bool option with get, set
+            abstract member emitClose: bool option with get, set
+            abstract member start: float option with get, set
+            abstract member ``end``: float option with get, set
+            abstract member highWaterMark: float option with get, set
+
             [<ParamObject; Emit("$0")>]
-            (
-                ?signal: Node.AbortSignal,
-                ?encoding: Node.BufferEncoding,
-                ?autoClose: bool,
-                ?emitClose: bool,
-                ?start: float,
-                ?``end``: float,
-                ?highWaterMark: float
-            )
-            =
+            static member Create
+                (
+                    ?signal: Node.AbortSignal,
+                    ?encoding: Node.BufferEncoding,
+                    ?autoClose: bool,
+                    ?emitClose: bool,
+                    ?start: float,
+                    ?``end``: float,
+                    ?highWaterMark: float
+                )
+                : CreateReadStreamOptions
+                =
+                nativeOnly
 
-            /// <summary>
-            /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-            /// </summary>
-            member val signal: Node.AbortSignal option = nativeOnly with get, set
-            member val encoding: Node.BufferEncoding option = nativeOnly with get, set
-            member val autoClose: bool option = nativeOnly with get, set
-            member val emitClose: bool option = nativeOnly with get, set
-            member val start: float option = nativeOnly with get, set
-            member val ``end``: float option = nativeOnly with get, set
-            member val highWaterMark: float option = nativeOnly with get, set
-
-        [<Global>]
         [<AllowNullLiteral>]
-        type CreateWriteStreamOptions
+        [<Interface>]
+        type CreateWriteStreamOptions =
+            abstract member encoding: Node.BufferEncoding option with get, set
+            abstract member autoClose: bool option with get, set
+            abstract member emitClose: bool option with get, set
+            abstract member start: float option with get, set
+            abstract member highWaterMark: float option with get, set
+            abstract member flush: bool option with get, set
+
             [<ParamObject; Emit("$0")>]
-            (
-                ?encoding: Node.BufferEncoding,
-                ?autoClose: bool,
-                ?emitClose: bool,
-                ?start: float,
-                ?highWaterMark: float,
-                ?flush: bool
-            )
-            =
+            static member Create
+                (
+                    ?encoding: Node.BufferEncoding,
+                    ?autoClose: bool,
+                    ?emitClose: bool,
+                    ?start: float,
+                    ?highWaterMark: float,
+                    ?flush: bool
+                )
+                : CreateWriteStreamOptions
+                =
+                nativeOnly
 
-            member val encoding: Node.BufferEncoding option = nativeOnly with get, set
-            member val autoClose: bool option = nativeOnly with get, set
-            member val emitClose: bool option = nativeOnly with get, set
-            member val start: float option = nativeOnly with get, set
-            member val highWaterMark: float option = nativeOnly with get, set
-            member val flush: bool option = nativeOnly with get, set
-
-        [<Global>]
         [<AllowNullLiteral>]
-        type ReadableWebStreamOptions [<ParamObject; Emit("$0")>] (?autoClose: bool) =
+        [<Interface>]
+        type ReadableWebStreamOptions =
+            abstract member autoClose: bool option with get, set
 
-            member val autoClose: bool option = nativeOnly with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create(?autoClose: bool) : ReadableWebStreamOptions = nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -87248,7 +87692,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </summary>
             abstract member write<'TBuffer> :
                 buffer: 'TBuffer * ?options: FileHandle.write.options ->
-                    JS.Promise<FileHandle.write<'TBuffer>>
+                    JS.Promise<FileHandle.write_1<'TBuffer>>
 
             /// <summary>
             /// Write <c>buffer</c> to the file.
@@ -87265,7 +87709,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </summary>
             abstract member write:
                 data: string * ?position: float * ?encoding: Node.BufferEncoding ->
-                    JS.Promise<FileHandle.write_1>
+                    JS.Promise<FileHandle.write_2>
 
             /// <summary>
             /// Write an array of [ArrayBufferView](https://developer.mozilla.org/en-US/docs/Web/API/ArrayBufferView) s to the file.
@@ -87325,58 +87769,45 @@ EventEmitter.defaultMaxListeners = $0"""
             abstract member maxQueue: float option with get, set
             abstract member overflow: WatchOptions.overflow option with get, set
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type WatchOptionsWithBufferEncoding
+        [<Interface>]
+        type WatchOptionsWithBufferEncoding =
+            inherit Node.fs_promises.WatchOptions
+            abstract member encoding: string with get, set
+
             [<ParamObject; Emit("$0")>]
-            (
-                encoding: string,
-                ?signal: Node.AbortSignal,
-                ?persistent: bool,
-                ?``recursive``: bool,
-                ?maxQueue: float,
-                ?overflow: WatchOptionsWithBufferEncoding.overflow
-            )
-            =
+            static member Create
+                (
+                    encoding: string,
+                    ?signal: Node.AbortSignal,
+                    ?persistent: bool,
+                    ?``recursive``: bool,
+                    ?maxQueue: float,
+                    ?overflow: WatchOptionsWithBufferEncoding.overflow
+                )
+                : WatchOptionsWithBufferEncoding
+                =
+                nativeOnly
 
-            member val encoding: string = nativeOnly with get, set
-            /// <summary>
-            /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-            /// </summary>
-            member val signal: Node.AbortSignal option = nativeOnly with get, set
-            member val persistent: bool option = nativeOnly with get, set
-            member val ``recursive``: bool option = nativeOnly with get, set
-            member val maxQueue: float option = nativeOnly with get, set
-
-            member val overflow: WatchOptionsWithBufferEncoding.overflow option =
-                nativeOnly with get, set
-
-        [<Global>]
         [<AllowNullLiteral>]
-        type WatchOptionsWithStringEncoding
+        [<Interface>]
+        type WatchOptionsWithStringEncoding =
+            inherit Node.fs_promises.WatchOptions
+            abstract member encoding: Node.BufferEncoding option with get, set
+
             [<ParamObject; Emit("$0")>]
-            (
-                ?signal: Node.AbortSignal,
-                ?persistent: bool,
-                ?``recursive``: bool,
-                ?maxQueue: float,
-                ?overflow: WatchOptionsWithStringEncoding.overflow,
-                ?encoding: Node.BufferEncoding
-            )
-            =
-
-            /// <summary>
-            /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-            /// </summary>
-            member val signal: Node.AbortSignal option = nativeOnly with get, set
-            member val persistent: bool option = nativeOnly with get, set
-            member val ``recursive``: bool option = nativeOnly with get, set
-            member val maxQueue: float option = nativeOnly with get, set
-
-            member val overflow: WatchOptionsWithStringEncoding.overflow option =
-                nativeOnly with get, set
-
-            member val encoding: Node.BufferEncoding option = nativeOnly with get, set
+            static member Create
+                (
+                    ?signal: Node.AbortSignal,
+                    ?persistent: bool,
+                    ?``recursive``: bool,
+                    ?maxQueue: float,
+                    ?overflow: WatchOptionsWithStringEncoding.overflow,
+                    ?encoding: Node.BufferEncoding
+                )
+                : WatchOptionsWithStringEncoding
+                =
+                nativeOnly
 
         type FileChangeInfo = FileChangeInfo<U2<string, Node.Buffer>>
 
@@ -87384,20 +87815,34 @@ EventEmitter.defaultMaxListeners = $0"""
 
         module FileHandle =
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type write<'TBuffer> [<ParamObject; Emit("$0")>] (bytesWritten: float, buffer: 'TBuffer)
-                =
+            [<Interface>]
+            type write<'TBuffer> =
+                abstract member bytesWritten: float with get, set
+                abstract member buffer: 'TBuffer with get, set
 
-                member val bytesWritten: float = nativeOnly with get, set
-                member val buffer: 'TBuffer = nativeOnly with get, set
+                [<ParamObject; Emit("$0")>]
+                static member Create(bytesWritten: float, buffer: 'TBuffer) : write<'TBuffer> =
+                    nativeOnly
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type write_1 [<ParamObject; Emit("$0")>] (bytesWritten: float, buffer: string) =
+            [<Interface>]
+            type write_1<'TBuffer> =
+                abstract member bytesWritten: float with get, set
+                abstract member buffer: 'TBuffer with get, set
 
-                member val bytesWritten: float = nativeOnly with get, set
-                member val buffer: string = nativeOnly with get, set
+                [<ParamObject; Emit("$0")>]
+                static member Create(bytesWritten: float, buffer: 'TBuffer) : write_1<'TBuffer> =
+                    nativeOnly
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type write_2 =
+                abstract member bytesWritten: float with get, set
+                abstract member buffer: string with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create(bytesWritten: float, buffer: string) : write_2 = nativeOnly
 
             module appendFile =
 
@@ -87464,16 +87909,19 @@ EventEmitter.defaultMaxListeners = $0"""
 
             module write =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type options
-                    [<ParamObject; Emit("$0")>]
-                    (?offset: float, ?length: float, ?position: float)
-                    =
+                [<Interface>]
+                type options =
+                    abstract member offset: float option with get, set
+                    abstract member length: float option with get, set
+                    abstract member position: float option with get, set
 
-                    member val offset: float option = nativeOnly with get, set
-                    member val length: float option = nativeOnly with get, set
-                    member val position: float option = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (?offset: float, ?length: float, ?position: float)
+                        : options
+                        =
+                        nativeOnly
 
         module WatchOptions =
 
@@ -87540,16 +87988,19 @@ EventEmitter.defaultMaxListeners = $0"""
 
                     module Cases =
 
-                        [<Global>]
                         [<AllowNullLiteral>]
-                        type Case1_1
-                            [<ParamObject; Emit("$0")>]
-                            (encoding: string, ?withFileTypes: bool, ?``recursive``: bool)
-                            =
+                        [<Interface>]
+                        type Case1_1 =
+                            abstract member encoding: string with get, set
+                            abstract member withFileTypes: bool option with get, set
+                            abstract member ``recursive``: bool option with get, set
 
-                            member val encoding: string = nativeOnly with get, set
-                            member val withFileTypes: bool option = nativeOnly with get, set
-                            member val ``recursive``: bool option = nativeOnly with get, set
+                            [<ParamObject; Emit("$0")>]
+                            static member Create
+                                (encoding: string, ?withFileTypes: bool, ?``recursive``: bool)
+                                : Case1_1
+                                =
+                                nativeOnly
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -87558,16 +88009,19 @@ EventEmitter.defaultMaxListeners = $0"""
                     abstract member withFileTypes: bool with get, set
                     abstract member ``recursive``: bool option with get, set
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type options_8
-                    [<ParamObject; Emit("$0")>]
-                    (encoding: string, withFileTypes: bool, ?``recursive``: bool)
-                    =
+                [<Interface>]
+                type options_8 =
+                    abstract member encoding: string with get, set
+                    abstract member withFileTypes: bool with get, set
+                    abstract member ``recursive``: bool option with get, set
 
-                    member val encoding: string = nativeOnly with get, set
-                    member val withFileTypes: bool = nativeOnly with get, set
-                    member val ``recursive``: bool option = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (encoding: string, withFileTypes: bool, ?``recursive``: bool)
+                        : options_8
+                        =
+                        nativeOnly
 
             module lstat =
 
@@ -95495,17 +95949,20 @@ EventEmitter.defaultMaxListeners = $0"""
             abstract member ``:scheme``: string option with get, set
             abstract member ``:protocol``: string option with get, set
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type StreamPriorityOptions
-            [<ParamObject; Emit("$0")>]
-            (?exclusive: bool, ?parent: float, ?weight: float, ?silent: bool)
-            =
+        [<Interface>]
+        type StreamPriorityOptions =
+            abstract member exclusive: bool option with get, set
+            abstract member parent: float option with get, set
+            abstract member weight: float option with get, set
+            abstract member silent: bool option with get, set
 
-            member val exclusive: bool option = nativeOnly with get, set
-            member val parent: float option = nativeOnly with get, set
-            member val weight: float option = nativeOnly with get, set
-            member val silent: bool option = nativeOnly with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (?exclusive: bool, ?parent: float, ?weight: float, ?silent: bool)
+                : StreamPriorityOptions
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -95517,15 +95974,18 @@ EventEmitter.defaultMaxListeners = $0"""
             abstract member sumDependencyWeight: float option with get, set
             abstract member weight: float option with get, set
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type ServerStreamResponseOptions
-            [<ParamObject; Emit("$0")>]
-            (?endStream: bool, ?waitForTrailers: bool)
-            =
+        [<Interface>]
+        type ServerStreamResponseOptions =
+            abstract member endStream: bool option with get, set
+            abstract member waitForTrailers: bool option with get, set
 
-            member val endStream: bool option = nativeOnly with get, set
-            member val waitForTrailers: bool option = nativeOnly with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (?endStream: bool, ?waitForTrailers: bool)
+                : ServerStreamResponseOptions
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -95541,28 +96001,24 @@ EventEmitter.defaultMaxListeners = $0"""
             abstract member offset: float option with get, set
             abstract member length: float option with get, set
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type ServerStreamFileResponseOptionsWithError
+        [<Interface>]
+        type ServerStreamFileResponseOptionsWithError =
+            inherit Node.http2.ServerStreamFileResponseOptions
+            abstract member onError: (Node.NodeJS.ErrnoException -> unit) option with get, set
+
             [<ParamObject; Emit("$0")>]
-            (
-                ?statCheck: ServerStreamFileResponseOptionsWithError.statCheck,
-                ?waitForTrailers: bool,
-                ?offset: float,
-                ?length: float,
-                ?onError: (Node.NodeJS.ErrnoException -> unit)
-            )
-            =
-
-            member val statCheck: ServerStreamFileResponseOptionsWithError.statCheck option =
-                nativeOnly with get, set
-
-            member val waitForTrailers: bool option = nativeOnly with get, set
-            member val offset: float option = nativeOnly with get, set
-            member val length: float option = nativeOnly with get, set
-
-            member val onError: (Node.NodeJS.ErrnoException -> unit) option =
-                nativeOnly with get, set
+            static member Create
+                (
+                    ?statCheck: ServerStreamFileResponseOptionsWithError.statCheck,
+                    ?waitForTrailers: bool,
+                    ?offset: float,
+                    ?length: float,
+                    ?onError: (Node.NodeJS.ErrnoException -> unit)
+                )
+                : ServerStreamFileResponseOptionsWithError
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -100868,26 +101324,29 @@ EventEmitter.defaultMaxListeners = $0"""
             abstract member enableConnectProtocol: bool option with get, set
             abstract member customSettings: Settings.customSettings option with get, set
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type ClientSessionRequestOptions
-            [<ParamObject; Emit("$0")>]
-            (
-                ?endStream: bool,
-                ?exclusive: bool,
-                ?parent: float,
-                ?weight: float,
-                ?waitForTrailers: bool,
-                ?signal: Node.AbortSignal
-            )
-            =
+        [<Interface>]
+        type ClientSessionRequestOptions =
+            abstract member endStream: bool option with get, set
+            abstract member exclusive: bool option with get, set
+            abstract member parent: float option with get, set
+            abstract member weight: float option with get, set
+            abstract member waitForTrailers: bool option with get, set
+            abstract member signal: Node.AbortSignal option with get, set
 
-            member val endStream: bool option = nativeOnly with get, set
-            member val exclusive: bool option = nativeOnly with get, set
-            member val parent: float option = nativeOnly with get, set
-            member val weight: float option = nativeOnly with get, set
-            member val waitForTrailers: bool option = nativeOnly with get, set
-            member val signal: Node.AbortSignal option = nativeOnly with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?endStream: bool,
+                    ?exclusive: bool,
+                    ?parent: float,
+                    ?weight: float,
+                    ?waitForTrailers: bool,
+                    ?signal: Node.AbortSignal
+                )
+                : ClientSessionRequestOptions
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -104748,20 +105207,19 @@ EventEmitter.defaultMaxListeners = $0"""
             abstract member prependOnceListener:
                 event: obj * listener: System.Delegate -> ClientHttp2Session
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type AlternativeServiceOptions private () =
+        [<Interface>]
+        type AlternativeServiceOptions =
+            abstract member origin: U3<float, string, Node.url.URL> with get, set
 
             [<ParamObject; Emit("$0")>]
-            new(origin: float) = AlternativeServiceOptions()
+            static member Create(origin: float) : AlternativeServiceOptions = nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            new(origin: string) = AlternativeServiceOptions()
+            static member Create(origin: string) : AlternativeServiceOptions = nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            new(origin: Node.url.URL) = AlternativeServiceOptions()
-
-            member val origin: U3<float, string, Node.url.URL> = nativeOnly with get, set
+            static member Create(origin: Node.url.URL) : AlternativeServiceOptions = nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -106411,428 +106869,84 @@ EventEmitter.defaultMaxListeners = $0"""
             abstract member Http2ServerRequest: 'Http2Request option with get, set
             abstract member Http2ServerResponse: 'Http2Response option with get, set
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type SecureClientSessionOptions
+        [<Interface>]
+        type SecureClientSessionOptions =
+            inherit Node.http2.ClientSessionOptions
+            inherit Node.tls.ConnectionOptions
+
             [<ParamObject; Emit("$0")>]
-            (
-                ?maxDeflateDynamicTableSize: float,
-                ?maxSettings: float,
-                ?maxSessionMemory: float,
-                ?maxHeaderListPairs: float,
-                ?maxOutstandingPings: float,
-                ?maxSendHeaderBlockLength: float,
-                ?paddingStrategy: float,
-                ?peerMaxConcurrentStreams: float,
-                ?settings: Node.http2.Settings,
-                ?remoteCustomSettings: ResizeArray<float>,
-                ?unknownProtocolTimeout: float,
-                ?strictFieldWhitespaceValidation: bool,
-                ?maxReservedRemoteStreams: float,
-                ?createConnection: SecureClientSessionOptions.createConnection,
-                ?protocol: SecureClientSessionOptions.protocol,
-                ?ALPNCallback: (SecureClientSessionOptions.ALPNCallback.arg -> string option),
-                ?allowPartialTrustChain: bool,
-                ?ca: U3<string, Node.Buffer, ResizeArray<U2<string, Node.Buffer>>>,
-                ?cert: U3<string, Node.Buffer, ResizeArray<U2<string, Node.Buffer>>>,
-                ?sigalgs: string,
-                ?ciphers: string,
-                ?clientCertEngine: string,
-                ?crl: U3<string, Node.Buffer, ResizeArray<U2<string, Node.Buffer>>>,
-                ?dhparam: U2<string, Node.Buffer>,
-                ?ecdhCurve: string,
-                ?honorCipherOrder: bool,
-                ?key:
-                    U3<string, Node.Buffer, ResizeArray<U3<string, Node.Buffer, Node.tls.KeyObject>>>,
-                ?privateKeyEngine: string,
-                ?privateKeyIdentifier: string,
-                ?maxVersion: Node.tls.SecureVersion,
-                ?minVersion: Node.tls.SecureVersion,
-                ?passphrase: string,
-                ?pfx:
-                    U3<string, Node.Buffer, ResizeArray<U3<string, Node.Buffer, Node.tls.PxfObject>>>,
-                ?secureOptions: float,
-                ?secureProtocol: string,
-                ?sessionIdContext: string,
-                ?ticketKeys: Node.Buffer,
-                ?sessionTimeout: float,
-                ?secureContext: Node.tls.SecureContext,
-                ?enableTrace: bool,
-                ?requestCert: bool,
-                ?ALPNProtocols: U2<ReadonlyArray<string>, Node.NodeJS.ArrayBufferView>,
-                ?SNICallback: SecureClientSessionOptions.SNICallback,
-                ?rejectUnauthorized: bool,
-                ?host: string,
-                ?port: float,
-                ?path: string,
-                ?socket: Node.stream.Stream_.Duplex,
-                ?checkServerIdentity: SecureClientSessionOptions.checkServerIdentity,
-                ?servername: string,
-                ?session: Node.Buffer,
-                ?minDHSize: float,
-                ?lookup: Node.net.LookupFunction,
-                ?timeout: float,
-                ?pskCallback: (string option -> Node.tls.PSKCallbackNegotation option)
-            )
-            =
-
-            /// <summary>
-            /// Sets the maximum dynamic table size for deflating header fields.
-            /// </summary>
-            member val maxDeflateDynamicTableSize: float option = nativeOnly with get, set
-            /// <summary>
-            /// Sets the maximum number of settings entries per <c>SETTINGS</c> frame.
-            /// The minimum value allowed is <c>1</c>.
-            /// </summary>
-            member val maxSettings: float option = nativeOnly with get, set
-            /// <summary>
-            /// Sets the maximum memory that the <c>Http2Session</c> is permitted to use.
-            /// The value is expressed in terms of number of megabytes, e.g. <c>1</c> equal 1 megabyte.
-            /// The minimum value allowed is <c>1</c>.
-            /// This is a credit based limit, existing <c>Http2Stream</c>s may cause this limit to be exceeded,
-            /// but new <c>Http2Stream</c> instances will be rejected while this limit is exceeded.
-            /// The current number of <c>Http2Stream</c> sessions, the current memory use of the header compression tables,
-            /// current data queued to be sent, and unacknowledged <c>PING</c> and <c>SETTINGS</c> frames are all counted towards the current limit.
-            /// </summary>
-            member val maxSessionMemory: float option = nativeOnly with get, set
-            /// <summary>
-            /// Sets the maximum number of header entries.
-            /// This is similar to <c>server.maxHeadersCount</c> or <c>request.maxHeadersCount</c> in the <c>node:http</c> module.
-            /// The minimum value is <c>1</c>.
-            /// </summary>
-            member val maxHeaderListPairs: float option = nativeOnly with get, set
-            /// <summary>
-            /// Sets the maximum number of outstanding, unacknowledged pings.
-            /// </summary>
-            member val maxOutstandingPings: float option = nativeOnly with get, set
-            /// <summary>
-            /// Sets the maximum allowed size for a serialized, compressed block of headers.
-            /// Attempts to send headers that exceed this limit will result in
-            /// a <c>'frameError'</c> event being emitted and the stream being closed and destroyed.
-            /// </summary>
-            member val maxSendHeaderBlockLength: float option = nativeOnly with get, set
-            /// <summary>
-            /// Strategy used for determining the amount of padding to use for <c>HEADERS</c> and <c>DATA</c> frames.
-            /// </summary>
-            member val paddingStrategy: float option = nativeOnly with get, set
-            /// <summary>
-            /// Sets the maximum number of concurrent streams for the remote peer as if a <c>SETTINGS</c> frame had been received.
-            /// Will be overridden if the remote peer sets its own value for <c>maxConcurrentStreams</c>.
-            /// </summary>
-            member val peerMaxConcurrentStreams: float option = nativeOnly with get, set
-            /// <summary>
-            /// The initial settings to send to the remote peer upon connection.
-            /// </summary>
-            member val settings: Node.http2.Settings option = nativeOnly with get, set
-            /// <summary>
-            /// The array of integer values determines the settings types,
-            /// which are included in the <c>CustomSettings</c>-property of the received remoteSettings.
-            /// Please see the <c>CustomSettings</c>-property of the <c>Http2Settings</c> object for more information, on the allowed setting types.
-            /// </summary>
-            member val remoteCustomSettings: ResizeArray<float> option = nativeOnly with get, set
-            /// <summary>
-            /// Specifies a timeout in milliseconds that
-            /// a server should wait when an [<c>'unknownProtocol'</c>][] is emitted. If the
-            /// socket has not been destroyed by that time the server will destroy it.
-            /// </summary>
-            member val unknownProtocolTimeout: float option = nativeOnly with get, set
-            /// <summary>
-            /// If <c>true</c>, it turns on strict leading
-            /// and trailing whitespace validation for HTTP/2 header field names and values
-            /// as per [RFC-9113](https://www.rfc-editor.org/rfc/rfc9113.html#section-8.2.1).
-            /// </summary>
-            member val strictFieldWhitespaceValidation: bool option = nativeOnly with get, set
-            /// <summary>
-            /// Sets the maximum number of reserved push streams the client will accept at any given time.
-            /// Once the current number of currently reserved push streams exceeds reaches this limit,
-            /// new push streams sent by the server will be automatically rejected.
-            /// The minimum allowed value is 0. The maximum allowed value is 2<sup>32</sup>-1.
-            /// A negative value sets this option to the maximum allowed value.
-            /// </summary>
-            member val maxReservedRemoteStreams: float option = nativeOnly with get, set
-
-            /// <summary>
-            /// An optional callback that receives the <c>URL</c> instance passed to <c>connect</c> and the <c>options</c> object,
-            /// and returns any <c>Duplex</c> stream that is to be used as the connection for this session.
-            /// </summary>
-            member val createConnection: SecureClientSessionOptions.createConnection option =
-                nativeOnly with get, set
-
-            /// <summary>
-            /// The protocol to connect with, if not set in the <c>authority</c>.
-            /// Value may be either <c>'http:'</c> or <c>'https:'</c>.
-            /// </summary>
-            member val protocol: SecureClientSessionOptions.protocol option =
-                nativeOnly with get, set
-
-            /// <summary>
-            /// If set, this will be called when a client opens a connection using the ALPN extension.
-            /// One argument will be passed to the callback: an object containing <c>servername</c> and <c>protocols</c> fields,
-            /// respectively containing the server name from the SNI extension (if any) and an array of
-            /// ALPN protocol name strings. The callback must return either one of the strings listed in <c>protocols</c>,
-            /// which will be returned to the client as the selected ALPN protocol, or <c>undefined</c>,
-            /// to reject the connection with a fatal alert. If a string is returned that does not match one of
-            /// the client's ALPN protocols, an error will be thrown.
-            /// This option cannot be used with the <c>ALPNProtocols</c> option, and setting both options will throw an error.
-            /// </summary>
-            member val ALPNCallback: (SecureClientSessionOptions.ALPNCallback.arg -> string option) option =
-                nativeOnly with get, set
-
-            /// <summary>
-            /// Treat intermediate (non-self-signed)
-            /// certificates in the trust CA certificate list as trusted.
-            /// </summary>
-            member val allowPartialTrustChain: bool option = nativeOnly with get, set
-
-            /// <summary>
-            /// Optionally override the trusted CA certificates. Default is to trust
-            /// the well-known CAs curated by Mozilla. Mozilla's CAs are completely
-            /// replaced when CAs are explicitly specified using this option.
-            /// </summary>
-            member val ca: U3<string, Node.Buffer, ResizeArray<U2<string, Node.Buffer>>> option =
-                nativeOnly with get, set
-
-            /// <summary>
-            /// Cert chains in PEM format. One cert chain should be provided per
-            /// private key. Each cert chain should consist of the PEM formatted
-            /// certificate for a provided private key, followed by the PEM
-            /// formatted intermediate certificates (if any), in order, and not
-            /// including the root CA (the root CA must be pre-known to the peer,
-            /// see ca). When providing multiple cert chains, they do not have to
-            /// be in the same order as their private keys in key. If the
-            /// intermediate certificates are not provided, the peer will not be
-            /// able to validate the certificate, and the handshake will fail.
-            /// </summary>
-            member val cert: U3<string, Node.Buffer, ResizeArray<U2<string, Node.Buffer>>> option =
-                nativeOnly with get, set
-
-            /// <summary>
-            /// Colon-separated list of supported signature algorithms. The list
-            /// can contain digest algorithms (SHA256, MD5 etc.), public key
-            /// algorithms (RSA-PSS, ECDSA etc.), combination of both (e.g
-            /// 'RSA+SHA384') or TLS v1.3 scheme names (e.g. rsa_pss_pss_sha512).
-            /// </summary>
-            member val sigalgs: string option = nativeOnly with get, set
-            /// <summary>
-            /// Cipher suite specification, replacing the default. For more
-            /// information, see modifying the default cipher suite. Permitted
-            /// ciphers can be obtained via tls.getCiphers(). Cipher names must be
-            /// uppercased in order for OpenSSL to accept them.
-            /// </summary>
-            member val ciphers: string option = nativeOnly with get, set
-            /// <summary>
-            /// Name of an OpenSSL engine which can provide the client certificate.
-            /// </summary>
-            member val clientCertEngine: string option = nativeOnly with get, set
-
-            /// <summary>
-            /// PEM formatted CRLs (Certificate Revocation Lists).
-            /// </summary>
-            member val crl: U3<string, Node.Buffer, ResizeArray<U2<string, Node.Buffer>>> option =
-                nativeOnly with get, set
-
-            /// <summary>
-            /// <c>'auto'</c> or custom Diffie-Hellman parameters, required for non-ECDHE perfect forward secrecy.
-            /// If omitted or invalid, the parameters are silently discarded and DHE ciphers will not be available.
-            /// ECDHE-based perfect forward secrecy will still be available.
-            /// </summary>
-            member val dhparam: U2<string, Node.Buffer> option = nativeOnly with get, set
-            /// <summary>
-            /// A string describing a named curve or a colon separated list of curve
-            /// NIDs or names, for example P-521:P-384:P-256, to use for ECDH key
-            /// agreement. Set to auto to select the curve automatically. Use
-            /// crypto.getCurves() to obtain a list of available curve names. On
-            /// recent releases, openssl ecparam -list_curves will also display the
-            /// name and description of each available elliptic curve. Default:
-            /// tls.DEFAULT_ECDH_CURVE.
-            /// </summary>
-            member val ecdhCurve: string option = nativeOnly with get, set
-            /// <summary>
-            /// Attempt to use the server's cipher suite preferences instead of the
-            /// client's. When true, causes SSL_OP_CIPHER_SERVER_PREFERENCE to be
-            /// set in secureOptions
-            /// </summary>
-            member val honorCipherOrder: bool option = nativeOnly with get, set
-
-            /// <summary>
-            /// Private keys in PEM format. PEM allows the option of private keys
-            /// being encrypted. Encrypted keys will be decrypted with
-            /// options.passphrase. Multiple keys using different algorithms can be
-            /// provided either as an array of unencrypted key strings or buffers,
-            /// or an array of objects in the form {pem: <string|buffer>[,
-            /// passphrase: <string>]}. The object form can only occur in an array.
-            /// object.passphrase is optional. Encrypted keys will be decrypted with
-            /// object.passphrase if provided, or options.passphrase if it is not.
-            /// </summary>
-            member val key: U3<
-                string,
-                Node.Buffer,
-                ResizeArray<U3<string, Node.Buffer, Node.tls.KeyObject>>
-                             > option = nativeOnly with get, set
-
-            /// <summary>
-            /// Name of an OpenSSL engine to get private key from. Should be used
-            /// together with privateKeyIdentifier.
-            /// </summary>
-            member val privateKeyEngine: string option = nativeOnly with get, set
-            /// <summary>
-            /// Identifier of a private key managed by an OpenSSL engine. Should be
-            /// used together with privateKeyEngine. Should not be set together with
-            /// key, because both options define a private key in different ways.
-            /// </summary>
-            member val privateKeyIdentifier: string option = nativeOnly with get, set
-            /// <summary>
-            /// Optionally set the maximum TLS version to allow. One
-            /// of <c>'TLSv1.3'</c>, <c>'TLSv1.2'</c>, <c>'TLSv1.1'</c>, or <c>'TLSv1'</c>. Cannot be specified along with the
-            /// <c>secureProtocol</c> option, use one or the other.
-            /// **Default:** <c>'TLSv1.3'</c>, unless changed using CLI options. Using
-            /// <c>--tls-max-v1.2</c> sets the default to <c>'TLSv1.2'</c>. Using <c>--tls-max-v1.3</c> sets the default to
-            /// <c>'TLSv1.3'</c>. If multiple of the options are provided, the highest maximum is used.
-            /// </summary>
-            member val maxVersion: Node.tls.SecureVersion option = nativeOnly with get, set
-            /// <summary>
-            /// Optionally set the minimum TLS version to allow. One
-            /// of <c>'TLSv1.3'</c>, <c>'TLSv1.2'</c>, <c>'TLSv1.1'</c>, or <c>'TLSv1'</c>. Cannot be specified along with the
-            /// <c>secureProtocol</c> option, use one or the other.  It is not recommended to use
-            /// less than TLSv1.2, but it may be required for interoperability.
-            /// **Default:** <c>'TLSv1.2'</c>, unless changed using CLI options. Using
-            /// <c>--tls-v1.0</c> sets the default to <c>'TLSv1'</c>. Using <c>--tls-v1.1</c> sets the default to
-            /// <c>'TLSv1.1'</c>. Using <c>--tls-min-v1.3</c> sets the default to
-            /// 'TLSv1.3'. If multiple of the options are provided, the lowest minimum is used.
-            /// </summary>
-            member val minVersion: Node.tls.SecureVersion option = nativeOnly with get, set
-            /// <summary>
-            /// Shared passphrase used for a single private key and/or a PFX.
-            /// </summary>
-            member val passphrase: string option = nativeOnly with get, set
-
-            /// <summary>
-            /// PFX or PKCS12 encoded private key and certificate chain. pfx is an
-            /// alternative to providing key and cert individually. PFX is usually
-            /// encrypted, if it is, passphrase will be used to decrypt it. Multiple
-            /// PFX can be provided either as an array of unencrypted PFX buffers,
-            /// or an array of objects in the form {buf: <string|buffer>[,
-            /// passphrase: <string>]}. The object form can only occur in an array.
-            /// object.passphrase is optional. Encrypted PFX will be decrypted with
-            /// object.passphrase if provided, or options.passphrase if it is not.
-            /// </summary>
-            member val pfx: U3<
-                string,
-                Node.Buffer,
-                ResizeArray<U3<string, Node.Buffer, Node.tls.PxfObject>>
-                             > option = nativeOnly with get, set
-
-            /// <summary>
-            /// Optionally affect the OpenSSL protocol behavior, which is not
-            /// usually necessary. This should be used carefully if at all! Value is
-            /// a numeric bitmask of the SSL_OP_* options from OpenSSL Options
-            /// </summary>
-            member val secureOptions: float option = nativeOnly with get, set
-            /// <summary>
-            /// Legacy mechanism to select the TLS protocol version to use, it does
-            /// not support independent control of the minimum and maximum version,
-            /// and does not support limiting the protocol to TLSv1.3. Use
-            /// minVersion and maxVersion instead. The possible values are listed as
-            /// SSL_METHODS, use the function names as strings. For example, use
-            /// 'TLSv1_1_method' to force TLS version 1.1, or 'TLS_method' to allow
-            /// any TLS protocol version up to TLSv1.3. It is not recommended to use
-            /// TLS versions less than 1.2, but it may be required for
-            /// interoperability. Default: none, see minVersion.
-            /// </summary>
-            member val secureProtocol: string option = nativeOnly with get, set
-            /// <summary>
-            /// Opaque identifier used by servers to ensure session state is not
-            /// shared between applications. Unused by clients.
-            /// </summary>
-            member val sessionIdContext: string option = nativeOnly with get, set
-            /// <summary>
-            /// 48-bytes of cryptographically strong pseudo-random data.
-            /// See Session Resumption for more information.
-            /// </summary>
-            member val ticketKeys: Node.Buffer option = nativeOnly with get, set
-            /// <summary>
-            /// The number of seconds after which a TLS session created by the
-            /// server will no longer be resumable. See Session Resumption for more
-            /// information. Default: 300.
-            /// </summary>
-            member val sessionTimeout: float option = nativeOnly with get, set
-            /// <summary>
-            /// An optional TLS context object from tls.createSecureContext()
-            /// </summary>
-            member val secureContext: Node.tls.SecureContext option = nativeOnly with get, set
-            /// <summary>
-            /// When enabled, TLS packet trace information is written to <c>stderr</c>. This can be
-            /// used to debug TLS connection problems.
-            /// </summary>
-            member val enableTrace: bool option = nativeOnly with get, set
-            /// <summary>
-            /// If true the server will request a certificate from clients that
-            /// connect and attempt to verify that certificate. Defaults to
-            /// false.
-            /// </summary>
-            member val requestCert: bool option = nativeOnly with get, set
-
-            /// <summary>
-            /// An array of strings or a Buffer naming possible ALPN protocols.
-            /// (Protocols should be ordered by their priority.)
-            /// </summary>
-            member val ALPNProtocols: U2<ReadonlyArray<string>, Node.NodeJS.ArrayBufferView> option =
-                nativeOnly with get, set
-
-            /// <summary>
-            /// SNICallback(servername, cb) <Function> A function that will be
-            /// called if the client supports SNI TLS extension. Two arguments
-            /// will be passed when called: servername and cb. SNICallback should
-            /// invoke cb(null, ctx), where ctx is a SecureContext instance.
-            /// (tls.createSecureContext(...) can be used to get a proper
-            /// SecureContext.) If SNICallback wasn't provided the default callback
-            /// with high-level API will be used (see below).
-            /// </summary>
-            member val SNICallback: SecureClientSessionOptions.SNICallback option =
-                nativeOnly with get, set
-
-            /// <summary>
-            /// If true the server will reject any connection which is not
-            /// authorized with the list of supplied CAs. This option only has an
-            /// effect if requestCert is true.
-            /// </summary>
-            member val rejectUnauthorized: bool option = nativeOnly with get, set
-            member val host: string option = nativeOnly with get, set
-            member val port: float option = nativeOnly with get, set
-            member val path: string option = nativeOnly with get, set
-            member val socket: Node.stream.Stream_.Duplex option = nativeOnly with get, set
-
-            member val checkServerIdentity: SecureClientSessionOptions.checkServerIdentity option =
-                nativeOnly with get, set
-
-            member val servername: string option = nativeOnly with get, set
-            member val session: Node.Buffer option = nativeOnly with get, set
-            member val minDHSize: float option = nativeOnly with get, set
-            member val lookup: Node.net.LookupFunction option = nativeOnly with get, set
-            member val timeout: float option = nativeOnly with get, set
-
-            /// <summary>
-            /// When negotiating TLS-PSK (pre-shared keys), this function is called
-            /// with optional identity <c>hint</c> provided by the server or <c>null</c>
-            /// in case of TLS 1.3 where <c>hint</c> was removed.
-            /// It will be necessary to provide a custom <c>tls.checkServerIdentity()</c>
-            /// for the connection as the default one will try to check hostname/IP
-            /// of the server against the certificate but that's not applicable for PSK
-            /// because there won't be a certificate present.
-            /// More information can be found in the RFC 4279.
-            /// </summary>
-            /// <param name="hint">
-            /// message sent from the server to help client
-            /// decide which identity to use during negotiation.
-            /// Always <c>null</c> if TLS 1.3 is used.
-            /// </param>
-            /// <returns>
-            /// Return <c>null</c> to stop the negotiation process. <c>psk</c> must be
-            /// compatible with the selected cipher's digest.
-            /// <c>identity</c> must use UTF-8 encoding.
-            /// </returns>
-            member val pskCallback: (string option -> Node.tls.PSKCallbackNegotation option) option =
-                nativeOnly with get, set
+            static member Create
+                (
+                    ?maxDeflateDynamicTableSize: float,
+                    ?maxSettings: float,
+                    ?maxSessionMemory: float,
+                    ?maxHeaderListPairs: float,
+                    ?maxOutstandingPings: float,
+                    ?maxSendHeaderBlockLength: float,
+                    ?paddingStrategy: float,
+                    ?peerMaxConcurrentStreams: float,
+                    ?settings: Node.http2.Settings,
+                    ?remoteCustomSettings: ResizeArray<float>,
+                    ?unknownProtocolTimeout: float,
+                    ?strictFieldWhitespaceValidation: bool,
+                    ?maxReservedRemoteStreams: float,
+                    ?createConnection: SecureClientSessionOptions.createConnection,
+                    ?protocol: SecureClientSessionOptions.protocol,
+                    ?ALPNCallback: (SecureClientSessionOptions.ALPNCallback.arg -> string option),
+                    ?allowPartialTrustChain: bool,
+                    ?ca: U3<string, Node.Buffer, ResizeArray<U2<string, Node.Buffer>>>,
+                    ?cert: U3<string, Node.Buffer, ResizeArray<U2<string, Node.Buffer>>>,
+                    ?sigalgs: string,
+                    ?ciphers: string,
+                    ?clientCertEngine: string,
+                    ?crl: U3<string, Node.Buffer, ResizeArray<U2<string, Node.Buffer>>>,
+                    ?dhparam: U2<string, Node.Buffer>,
+                    ?ecdhCurve: string,
+                    ?honorCipherOrder: bool,
+                    ?key:
+                        U3<
+                            string,
+                            Node.Buffer,
+                            ResizeArray<U3<string, Node.Buffer, Node.tls.KeyObject>>
+                         >,
+                    ?privateKeyEngine: string,
+                    ?privateKeyIdentifier: string,
+                    ?maxVersion: Node.tls.SecureVersion,
+                    ?minVersion: Node.tls.SecureVersion,
+                    ?passphrase: string,
+                    ?pfx:
+                        U3<
+                            string,
+                            Node.Buffer,
+                            ResizeArray<U3<string, Node.Buffer, Node.tls.PxfObject>>
+                         >,
+                    ?secureOptions: float,
+                    ?secureProtocol: string,
+                    ?sessionIdContext: string,
+                    ?ticketKeys: Node.Buffer,
+                    ?sessionTimeout: float,
+                    ?secureContext: Node.tls.SecureContext,
+                    ?enableTrace: bool,
+                    ?requestCert: bool,
+                    ?ALPNProtocols: U2<ReadonlyArray<string>, Node.NodeJS.ArrayBufferView>,
+                    ?SNICallback: SecureClientSessionOptions.SNICallback,
+                    ?rejectUnauthorized: bool,
+                    ?host: string,
+                    ?port: float,
+                    ?path: string,
+                    ?socket: Node.stream.Stream_.Duplex,
+                    ?checkServerIdentity: SecureClientSessionOptions.checkServerIdentity,
+                    ?servername: string,
+                    ?session: Node.Buffer,
+                    ?minDHSize: float,
+                    ?lookup: Node.net.LookupFunction,
+                    ?timeout: float,
+                    ?pskCallback: (string option -> Node.tls.PSKCallbackNegotation option)
+                )
+                : SecureClientSessionOptions
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -118477,11 +118591,13 @@ EventEmitter.defaultMaxListeners = $0"""
 
                     module U3 =
 
-                        [<Global>]
                         [<AllowNullLiteral>]
-                        type Case3 [<ParamObject; Emit("$0")>] (origin: string) =
+                        [<Interface>]
+                        type Case3 =
+                            abstract member origin: string with get, set
 
-                            member val origin: string = nativeOnly with get, set
+                            [<ParamObject; Emit("$0")>]
+                            static member Create(origin: string) : Case3 = nativeOnly
 
             module addListener_connect =
 
@@ -118638,15 +118754,15 @@ EventEmitter.defaultMaxListeners = $0"""
 
             module ALPNCallback =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type arg
-                    [<ParamObject; Emit("$0")>]
-                    (servername: string, protocols: ResizeArray<string>)
-                    =
+                [<Interface>]
+                type arg =
+                    abstract member servername: string with get, set
+                    abstract member protocols: ResizeArray<string> with get, set
 
-                    member val servername: string = nativeOnly with get, set
-                    member val protocols: ResizeArray<string> = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(servername: string, protocols: ResizeArray<string>) : arg =
+                        nativeOnly
 
             module SNICallback =
 
@@ -125735,179 +125851,165 @@ EventEmitter.defaultMaxListeners = $0"""
                 abstract member resource:
                     Node.inspector_generated.Network_.LoadNetworkResourcePageResult with get, set
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type RequestWillBeSentEventDataType
-                [<ParamObject; Emit("$0")>]
-                (
-                    requestId: Node.inspector_generated.Network_.RequestId,
-                    request: Node.inspector_generated.Network_.Request,
-                    initiator: Node.inspector_generated.Network_.Initiator,
-                    timestamp: Node.inspector_generated.Network_.MonotonicTime,
-                    wallTime: Node.inspector_generated.Network_.TimeSinceEpoch
-                )
-                =
-
+            [<Interface>]
+            type RequestWillBeSentEventDataType =
                 /// <summary>
                 /// Request identifier.
                 /// </summary>
-                member val requestId: Node.inspector_generated.Network_.RequestId =
-                    nativeOnly with get, set
-
+                abstract member requestId: Node.inspector_generated.Network_.RequestId with get, set
                 /// <summary>
                 /// Request data.
                 /// </summary>
-                member val request: Node.inspector_generated.Network_.Request =
-                    nativeOnly with get, set
-
+                abstract member request: Node.inspector_generated.Network_.Request with get, set
                 /// <summary>
                 /// Request initiator.
                 /// </summary>
-                member val initiator: Node.inspector_generated.Network_.Initiator =
-                    nativeOnly with get, set
-
+                abstract member initiator: Node.inspector_generated.Network_.Initiator with get, set
                 /// <summary>
                 /// Timestamp.
                 /// </summary>
-                member val timestamp: Node.inspector_generated.Network_.MonotonicTime =
-                    nativeOnly with get, set
-
+                abstract member timestamp: Node.inspector_generated.Network_.MonotonicTime with get, set
                 /// <summary>
                 /// Timestamp.
                 /// </summary>
-                member val wallTime: Node.inspector_generated.Network_.TimeSinceEpoch =
-                    nativeOnly with get, set
+                abstract member wallTime: Node.inspector_generated.Network_.TimeSinceEpoch with get, set
 
-            [<Global>]
-            [<AllowNullLiteral>]
-            type ResponseReceivedEventDataType
                 [<ParamObject; Emit("$0")>]
-                (
-                    requestId: Node.inspector_generated.Network_.RequestId,
-                    timestamp: Node.inspector_generated.Network_.MonotonicTime,
-                    ``type``: Node.inspector_generated.Network_.ResourceType,
-                    response: Node.inspector_generated.Network_.Response
-                )
-                =
+                static member Create
+                    (
+                        requestId: Node.inspector_generated.Network_.RequestId,
+                        request: Node.inspector_generated.Network_.Request,
+                        initiator: Node.inspector_generated.Network_.Initiator,
+                        timestamp: Node.inspector_generated.Network_.MonotonicTime,
+                        wallTime: Node.inspector_generated.Network_.TimeSinceEpoch
+                    )
+                    : RequestWillBeSentEventDataType
+                    =
+                    nativeOnly
 
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type ResponseReceivedEventDataType =
                 /// <summary>
                 /// Request identifier.
                 /// </summary>
-                member val requestId: Node.inspector_generated.Network_.RequestId =
-                    nativeOnly with get, set
-
+                abstract member requestId: Node.inspector_generated.Network_.RequestId with get, set
                 /// <summary>
                 /// Timestamp.
                 /// </summary>
-                member val timestamp: Node.inspector_generated.Network_.MonotonicTime =
-                    nativeOnly with get, set
-
+                abstract member timestamp: Node.inspector_generated.Network_.MonotonicTime with get, set
                 /// <summary>
                 /// Resource type.
                 /// </summary>
-                member val ``type``: Node.inspector_generated.Network_.ResourceType =
-                    nativeOnly with get, set
-
+                abstract member ``type``: Node.inspector_generated.Network_.ResourceType with get, set
                 /// <summary>
                 /// Response data.
                 /// </summary>
-                member val response: Node.inspector_generated.Network_.Response =
-                    nativeOnly with get, set
+                abstract member response: Node.inspector_generated.Network_.Response with get, set
 
-            [<Global>]
-            [<AllowNullLiteral>]
-            type LoadingFailedEventDataType
                 [<ParamObject; Emit("$0")>]
-                (
-                    requestId: Node.inspector_generated.Network_.RequestId,
-                    timestamp: Node.inspector_generated.Network_.MonotonicTime,
-                    ``type``: Node.inspector_generated.Network_.ResourceType,
-                    errorText: string
-                )
-                =
+                static member Create
+                    (
+                        requestId: Node.inspector_generated.Network_.RequestId,
+                        timestamp: Node.inspector_generated.Network_.MonotonicTime,
+                        ``type``: Node.inspector_generated.Network_.ResourceType,
+                        response: Node.inspector_generated.Network_.Response
+                    )
+                    : ResponseReceivedEventDataType
+                    =
+                    nativeOnly
 
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type LoadingFailedEventDataType =
                 /// <summary>
                 /// Request identifier.
                 /// </summary>
-                member val requestId: Node.inspector_generated.Network_.RequestId =
-                    nativeOnly with get, set
-
+                abstract member requestId: Node.inspector_generated.Network_.RequestId with get, set
                 /// <summary>
                 /// Timestamp.
                 /// </summary>
-                member val timestamp: Node.inspector_generated.Network_.MonotonicTime =
-                    nativeOnly with get, set
-
+                abstract member timestamp: Node.inspector_generated.Network_.MonotonicTime with get, set
                 /// <summary>
                 /// Resource type.
                 /// </summary>
-                member val ``type``: Node.inspector_generated.Network_.ResourceType =
-                    nativeOnly with get, set
-
+                abstract member ``type``: Node.inspector_generated.Network_.ResourceType with get, set
                 /// <summary>
                 /// Error message.
                 /// </summary>
-                member val errorText: string = nativeOnly with get, set
+                abstract member errorText: string with get, set
 
-            [<Global>]
-            [<AllowNullLiteral>]
-            type LoadingFinishedEventDataType
                 [<ParamObject; Emit("$0")>]
-                (
-                    requestId: Node.inspector_generated.Network_.RequestId,
-                    timestamp: Node.inspector_generated.Network_.MonotonicTime
-                )
-                =
+                static member Create
+                    (
+                        requestId: Node.inspector_generated.Network_.RequestId,
+                        timestamp: Node.inspector_generated.Network_.MonotonicTime,
+                        ``type``: Node.inspector_generated.Network_.ResourceType,
+                        errorText: string
+                    )
+                    : LoadingFailedEventDataType
+                    =
+                    nativeOnly
 
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type LoadingFinishedEventDataType =
                 /// <summary>
                 /// Request identifier.
                 /// </summary>
-                member val requestId: Node.inspector_generated.Network_.RequestId =
-                    nativeOnly with get, set
-
+                abstract member requestId: Node.inspector_generated.Network_.RequestId with get, set
                 /// <summary>
                 /// Timestamp.
                 /// </summary>
-                member val timestamp: Node.inspector_generated.Network_.MonotonicTime =
-                    nativeOnly with get, set
+                abstract member timestamp: Node.inspector_generated.Network_.MonotonicTime with get, set
 
-            [<Global>]
-            [<AllowNullLiteral>]
-            type DataReceivedEventDataType
                 [<ParamObject; Emit("$0")>]
-                (
-                    requestId: Node.inspector_generated.Network_.RequestId,
-                    timestamp: Node.inspector_generated.Network_.MonotonicTime,
-                    dataLength: float,
-                    encodedDataLength: float,
-                    ?data: string
-                )
-                =
+                static member Create
+                    (
+                        requestId: Node.inspector_generated.Network_.RequestId,
+                        timestamp: Node.inspector_generated.Network_.MonotonicTime
+                    )
+                    : LoadingFinishedEventDataType
+                    =
+                    nativeOnly
 
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type DataReceivedEventDataType =
                 /// <summary>
                 /// Request identifier.
                 /// </summary>
-                member val requestId: Node.inspector_generated.Network_.RequestId =
-                    nativeOnly with get, set
-
+                abstract member requestId: Node.inspector_generated.Network_.RequestId with get, set
                 /// <summary>
                 /// Timestamp.
                 /// </summary>
-                member val timestamp: Node.inspector_generated.Network_.MonotonicTime =
-                    nativeOnly with get, set
-
+                abstract member timestamp: Node.inspector_generated.Network_.MonotonicTime with get, set
                 /// <summary>
                 /// Data chunk length.
                 /// </summary>
-                member val dataLength: float = nativeOnly with get, set
+                abstract member dataLength: float with get, set
                 /// <summary>
                 /// Actual bytes received (might be less than dataLength for compressed encodings).
                 /// </summary>
-                member val encodedDataLength: float = nativeOnly with get, set
+                abstract member encodedDataLength: float with get, set
                 /// <summary>
                 /// Data that was received.
                 /// </summary>
-                member val data: string option = nativeOnly with get, set
+                abstract member data: string option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        requestId: Node.inspector_generated.Network_.RequestId,
+                        timestamp: Node.inspector_generated.Network_.MonotonicTime,
+                        dataLength: float,
+                        encodedDataLength: float,
+                        ?data: string
+                    )
+                    : DataReceivedEventDataType
+                    =
+                    nativeOnly
 
         module NodeRuntime_ =
 
@@ -127231,27 +127333,27 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// </summary>
                 abstract member transferList: ResizeArray<obj> option with get, set
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type RegisterHooksOptions
-                [<ParamObject; Emit("$0")>]
-                (
-                    ?load: Node.``module``.Module_.LoadHookSync,
-                    ?resolve: Node.``module``.Module_.ResolveHookSync
-                )
-                =
-
+            [<Interface>]
+            type RegisterHooksOptions =
                 /// <summary>
                 /// See [load hook](https://nodejs.org/docs/latest-v22.x/api/module.html#loadurl-context-nextload).
                 /// </summary>
-                member val load: Node.``module``.Module_.LoadHookSync option =
-                    nativeOnly with get, set
-
+                abstract member load: Node.``module``.Module_.LoadHookSync option with get, set
                 /// <summary>
                 /// See [resolve hook](https://nodejs.org/docs/latest-v22.x/api/module.html#resolvespecifier-context-nextresolve).
                 /// </summary>
-                member val resolve: Node.``module``.Module_.ResolveHookSync option =
-                    nativeOnly with get, set
+                abstract member resolve: Node.``module``.Module_.ResolveHookSync option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        ?load: Node.``module``.Module_.LoadHookSync,
+                        ?resolve: Node.``module``.Module_.ResolveHookSync
+                    )
+                    : RegisterHooksOptions
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -127261,28 +127363,31 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// </summary>
                 abstract member deregister: unit -> unit
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type StripTypeScriptTypesOptions
-                [<ParamObject; Emit("$0")>]
-                (?mode: StripTypeScriptTypesOptions.mode, ?sourceMap: bool, ?sourceUrl: string)
-                =
-
+            [<Interface>]
+            type StripTypeScriptTypesOptions =
                 /// <summary>
                 /// Possible values are:
                 /// * <c>'strip'</c> Only strip type annotations without performing the transformation of TypeScript features.
                 /// * <c>'transform'</c> Strip type annotations and transform TypeScript features to JavaScript.
                 /// </summary>
-                member val mode: StripTypeScriptTypesOptions.mode option = nativeOnly with get, set
+                abstract member mode: StripTypeScriptTypesOptions.mode option with get, set
                 /// <summary>
                 /// Only when <c>mode</c> is <c>'transform'</c>, if <c>true</c>, a source map
                 /// will be generated for the transformed code.
                 /// </summary>
-                member val sourceMap: bool option = nativeOnly with get, set
+                abstract member sourceMap: bool option with get, set
                 /// <summary>
                 /// Specifies the source url used in the source map.
                 /// </summary>
-                member val sourceUrl: string option = nativeOnly with get, set
+                abstract member sourceUrl: string option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (?mode: StripTypeScriptTypesOptions.mode, ?sourceMap: bool, ?sourceUrl: string)
+                    : StripTypeScriptTypesOptions
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -127315,32 +127420,32 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </summary>
             type InitializeHook<'Data> = delegate of data: 'Data -> U2<unit, JS.Promise<unit>>
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type ResolveHookContext
-                [<ParamObject; Emit("$0")>]
-                (
-                    conditions: ResizeArray<string>,
-                    importAttributes: Node.``module``.Module_.ImportAttributes,
-                    ?parentURL: string
-                )
-                =
-
+            [<Interface>]
+            type ResolveHookContext =
                 /// <summary>
                 /// Export conditions of the relevant <c>package.json</c>
                 /// </summary>
-                member val conditions: ResizeArray<string> = nativeOnly with get, set
-
+                abstract member conditions: ResizeArray<string> with get, set
                 /// <summary>
                 /// An object whose key-value pairs represent the assertions for the module to import
                 /// </summary>
-                member val importAttributes: Node.``module``.Module_.ImportAttributes =
-                    nativeOnly with get, set
-
+                abstract member importAttributes: Node.``module``.Module_.ImportAttributes with get, set
                 /// <summary>
                 /// The module importing this one, or undefined if this is the Node.js entry point
                 /// </summary>
-                member val parentURL: string option = nativeOnly with get, set
+                abstract member parentURL: string option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        conditions: ResizeArray<string>,
+                        importAttributes: Node.``module``.Module_.ImportAttributes,
+                        ?parentURL: string
+                    )
+                    : ResolveHookContext
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -127388,32 +127493,32 @@ EventEmitter.defaultMaxListeners = $0"""
                     nextResolve: ResolveHookSync.nextResolve ->
                         Node.``module``.Module_.ResolveFnOutput
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type LoadHookContext
-                [<ParamObject; Emit("$0")>]
-                (
-                    conditions: ResizeArray<string>,
-                    importAttributes: Node.``module``.Module_.ImportAttributes,
-                    ?format: string
-                )
-                =
-
+            [<Interface>]
+            type LoadHookContext =
                 /// <summary>
                 /// Export conditions of the relevant <c>package.json</c>
                 /// </summary>
-                member val conditions: ResizeArray<string> = nativeOnly with get, set
-
-                /// <summary>
-                /// An object whose key-value pairs represent the assertions for the module to import
-                /// </summary>
-                member val importAttributes: Node.``module``.Module_.ImportAttributes =
-                    nativeOnly with get, set
-
+                abstract member conditions: ResizeArray<string> with get, set
                 /// <summary>
                 /// The format optionally supplied by the <c>resolve</c> hook chain (can be an intermediary value).
                 /// </summary>
-                member val format: string option = nativeOnly with get, set
+                abstract member format: string option with get, set
+                /// <summary>
+                /// An object whose key-value pairs represent the assertions for the module to import
+                /// </summary>
+                abstract member importAttributes: Node.``module``.Module_.ImportAttributes with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        conditions: ResizeArray<string>,
+                        importAttributes: Node.``module``.Module_.ImportAttributes,
+                        ?format: string
+                    )
+                    : LoadHookContext
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -127466,30 +127571,36 @@ EventEmitter.defaultMaxListeners = $0"""
                 /// </summary>
                 abstract member generatedCode: bool with get, set
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type SetSourceMapsSupportOptions
-                [<ParamObject; Emit("$0")>]
-                (?nodeModules: bool, ?generatedCode: bool)
-                =
-
+            [<Interface>]
+            type SetSourceMapsSupportOptions =
                 /// <summary>
                 /// If enabling the support for files in <c>node_modules</c>.
                 /// </summary>
-                member val nodeModules: bool option = nativeOnly with get, set
+                abstract member nodeModules: bool option with get, set
                 /// <summary>
                 /// If enabling the support for generated code from <c>eval</c> or <c>new Function</c>.
                 /// </summary>
-                member val generatedCode: bool option = nativeOnly with get, set
+                abstract member generatedCode: bool option with get, set
 
-            [<Global>]
-            [<AllowNullLiteral>]
-            type SourceMapConstructorOptions
                 [<ParamObject; Emit("$0")>]
-                (?lineLengths: ReadonlyArray<float>)
-                =
+                static member Create
+                    (?nodeModules: bool, ?generatedCode: bool)
+                    : SetSourceMapsSupportOptions
+                    =
+                    nativeOnly
 
-                member val lineLengths: ReadonlyArray<float> option = nativeOnly with get, set
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type SourceMapConstructorOptions =
+                abstract member lineLengths: ReadonlyArray<float> option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (?lineLengths: ReadonlyArray<float>)
+                    : SourceMapConstructorOptions
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -131083,37 +131194,37 @@ EventEmitter.defaultMaxListeners = $0"""
             [<Emit("$0.prependOnceListener('timeout',$1...)")>]
             abstract member prependOnceListener_timeout: listener: (unit -> unit) -> Socket
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type ListenOptions
-            [<ParamObject; Emit("$0")>]
-            (
-                ?signal: Node.AbortSignal,
-                ?backlog: float,
-                ?exclusive: bool,
-                ?host: string,
-                ?ipv6Only: bool,
-                ?reusePort: bool,
-                ?path: string,
-                ?port: float,
-                ?readableAll: bool,
-                ?writableAll: bool
-            )
-            =
+        [<Interface>]
+        type ListenOptions =
+            inherit Node.events.EventEmitter_.Abortable
+            abstract member backlog: float option with get, set
+            abstract member exclusive: bool option with get, set
+            abstract member host: string option with get, set
+            abstract member ipv6Only: bool option with get, set
+            abstract member reusePort: bool option with get, set
+            abstract member path: string option with get, set
+            abstract member port: float option with get, set
+            abstract member readableAll: bool option with get, set
+            abstract member writableAll: bool option with get, set
 
-            /// <summary>
-            /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-            /// </summary>
-            member val signal: Node.AbortSignal option = nativeOnly with get, set
-            member val backlog: float option = nativeOnly with get, set
-            member val exclusive: bool option = nativeOnly with get, set
-            member val host: string option = nativeOnly with get, set
-            member val ipv6Only: bool option = nativeOnly with get, set
-            member val reusePort: bool option = nativeOnly with get, set
-            member val path: string option = nativeOnly with get, set
-            member val port: float option = nativeOnly with get, set
-            member val readableAll: bool option = nativeOnly with get, set
-            member val writableAll: bool option = nativeOnly with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?signal: Node.AbortSignal,
+                    ?backlog: float,
+                    ?exclusive: bool,
+                    ?host: string,
+                    ?ipv6Only: bool,
+                    ?reusePort: bool,
+                    ?path: string,
+                    ?port: float,
+                    ?readableAll: bool,
+                    ?writableAll: bool
+                )
+                : ListenOptions
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -131152,26 +131263,29 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </summary>
             abstract member blockList: Node.net.BlockList option with get, set
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type DropArgument
-            [<ParamObject; Emit("$0")>]
-            (
-                ?localAddress: string,
-                ?localPort: float,
-                ?localFamily: string,
-                ?remoteAddress: string,
-                ?remotePort: float,
-                ?remoteFamily: string
-            )
-            =
+        [<Interface>]
+        type DropArgument =
+            abstract member localAddress: string option with get, set
+            abstract member localPort: float option with get, set
+            abstract member localFamily: string option with get, set
+            abstract member remoteAddress: string option with get, set
+            abstract member remotePort: float option with get, set
+            abstract member remoteFamily: string option with get, set
 
-            member val localAddress: string option = nativeOnly with get, set
-            member val localPort: float option = nativeOnly with get, set
-            member val localFamily: string option = nativeOnly with get, set
-            member val remoteAddress: string option = nativeOnly with get, set
-            member val remotePort: float option = nativeOnly with get, set
-            member val remoteFamily: string option = nativeOnly with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?localAddress: string,
+                    ?localPort: float,
+                    ?localFamily: string,
+                    ?remoteAddress: string,
+                    ?remotePort: float,
+                    ?remoteFamily: string
+                )
+                : DropArgument
+                =
+                nativeOnly
 
         /// <summary>
         /// This class is used to create a TCP or <c>IPC</c> server.
@@ -133076,26 +133190,29 @@ BlockList.isBlockList($0)"""
 
         type NetConnectOpts = U2<Node.net.TcpNetConnectOpts, Node.net.IpcNetConnectOpts>
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type SocketAddressInitOptions
-            [<ParamObject; Emit("$0")>]
-            (?address: string, ?family: Node.net.IPVersion, ?flowlabel: float, ?port: float)
-            =
-
+        [<Interface>]
+        type SocketAddressInitOptions =
             /// <summary>
             /// The network address as either an IPv4 or IPv6 string.
             /// </summary>
-            member val address: string option = nativeOnly with get, set
-            member val family: Node.net.IPVersion option = nativeOnly with get, set
+            abstract member address: string option with get, set
+            abstract member family: Node.net.IPVersion option with get, set
             /// <summary>
             /// An IPv6 flow-label used only if <c>family</c> is <c>'ipv6'</c>.
             /// </summary>
-            member val flowlabel: float option = nativeOnly with get, set
+            abstract member flowlabel: float option with get, set
             /// <summary>
             /// An IP port.
             /// </summary>
-            member val port: float option = nativeOnly with get, set
+            abstract member port: float option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (?address: string, ?family: Node.net.IPVersion, ?flowlabel: float, ?port: float)
+                : SocketAddressInitOptions
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -133631,20 +133748,27 @@ SocketAddress.parse($0)"""
         type UserInfoOptions =
             abstract member encoding: UserInfoOptions.encoding option with get, set
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type UserInfoOptionsWithBufferEncoding [<ParamObject; Emit("$0")>] (encoding: string) =
+        [<Interface>]
+        type UserInfoOptionsWithBufferEncoding =
+            inherit Node.os.UserInfoOptions
+            abstract member encoding: string with get, set
 
-            member val encoding: string = nativeOnly with get, set
-
-        [<Global>]
-        [<AllowNullLiteral>]
-        type UserInfoOptionsWithStringEncoding
             [<ParamObject; Emit("$0")>]
-            (?encoding: Node.BufferEncoding)
-            =
+            static member Create(encoding: string) : UserInfoOptionsWithBufferEncoding = nativeOnly
 
-            member val encoding: Node.BufferEncoding option = nativeOnly with get, set
+        [<AllowNullLiteral>]
+        [<Interface>]
+        type UserInfoOptionsWithStringEncoding =
+            inherit Node.os.UserInfoOptions
+            abstract member encoding: Node.BufferEncoding option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (?encoding: Node.BufferEncoding)
+                : UserInfoOptionsWithStringEncoding
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -134168,33 +134292,36 @@ SocketAddress.parse($0)"""
 
         module CpuInfo =
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type times
-                [<ParamObject; Emit("$0")>]
-                (user: float, nice: float, sys: float, idle: float, irq: float)
-                =
-
+            [<Interface>]
+            type times =
                 /// <summary>
                 /// The number of milliseconds the CPU has spent in user mode.
                 /// </summary>
-                member val user: float = nativeOnly with get, set
+                abstract member user: float with get, set
                 /// <summary>
                 /// The number of milliseconds the CPU has spent in nice mode.
                 /// </summary>
-                member val nice: float = nativeOnly with get, set
+                abstract member nice: float with get, set
                 /// <summary>
                 /// The number of milliseconds the CPU has spent in sys mode.
                 /// </summary>
-                member val sys: float = nativeOnly with get, set
+                abstract member sys: float with get, set
                 /// <summary>
                 /// The number of milliseconds the CPU has spent in idle mode.
                 /// </summary>
-                member val idle: float = nativeOnly with get, set
+                abstract member idle: float with get, set
                 /// <summary>
                 /// The number of milliseconds the CPU has spent in irq mode.
                 /// </summary>
-                member val irq: float = nativeOnly with get, set
+                abstract member irq: float with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (user: float, nice: float, sys: float, idle: float, irq: float)
+                    : times
+                    =
+                    nativeOnly
 
         module UserInfoOptions =
 
@@ -134478,33 +134605,36 @@ SocketAddress.parse($0)"""
                 /// </summary>
                 abstract member name: string with get, set
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type FormatInputPathObject
-                [<ParamObject; Emit("$0")>]
-                (?root: string, ?dir: string, ?``base``: string, ?ext: string, ?name: string)
-                =
-
+            [<Interface>]
+            type FormatInputPathObject =
                 /// <summary>
                 /// The root of the path such as '/' or 'c:\'
                 /// </summary>
-                member val root: string option = nativeOnly with get, set
+                abstract member root: string option with get, set
                 /// <summary>
                 /// The full directory path such as '/home/user/dir' or 'c:\path\dir'
                 /// </summary>
-                member val dir: string option = nativeOnly with get, set
+                abstract member dir: string option with get, set
                 /// <summary>
                 /// The file name including extension (if any) such as 'index.html'
                 /// </summary>
-                member val ``base``: string option = nativeOnly with get, set
+                abstract member ``base``: string option with get, set
                 /// <summary>
                 /// The file extension (if any) such as '.html'
                 /// </summary>
-                member val ext: string option = nativeOnly with get, set
+                abstract member ext: string option with get, set
                 /// <summary>
                 /// The file name without extension (if any) such as 'index'
                 /// </summary>
-                member val name: string option = nativeOnly with get, set
+                abstract member name: string option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (?root: string, ?dir: string, ?``base``: string, ?ext: string, ?name: string)
+                    : FormatInputPathObject
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -134969,16 +135099,19 @@ SocketAddress.parse($0)"""
             /// </summary>
             abstract member v8Start: float with get
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type EventLoopUtilization
-            [<ParamObject; Emit("$0")>]
-            (idle: float, active: float, utilization: float)
-            =
+        [<Interface>]
+        type EventLoopUtilization =
+            abstract member idle: float with get, set
+            abstract member active: float with get, set
+            abstract member utilization: float with get, set
 
-            member val idle: float = nativeOnly with get, set
-            member val active: float = nativeOnly with get, set
-            member val utilization: float = nativeOnly with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (idle: float, active: float, utilization: float)
+                : EventLoopUtilization
+                =
+                nativeOnly
 
         /// <param name="utilization1">
         /// The result of a previous call to <c>eventLoopUtilization()</c>.
@@ -134992,56 +135125,68 @@ SocketAddress.parse($0)"""
                 ?utilization2: Node.perf_hooks.EventLoopUtilization ->
                     Node.perf_hooks.EventLoopUtilization
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type MarkOptions [<ParamObject; Emit("$0")>] (?detail: obj, ?startTime: float) =
-
+        [<Interface>]
+        type MarkOptions =
             /// <summary>
             /// Additional optional detail to include with the mark.
             /// </summary>
-            member val detail: obj option = nativeOnly with get, set
+            abstract member detail: obj option with get, set
             /// <summary>
             /// An optional timestamp to be used as the mark time.
             /// </summary>
-            member val startTime: float option = nativeOnly with get, set
+            abstract member startTime: float option with get, set
 
-        [<Global>]
-        [<AllowNullLiteral>]
-        type MeasureOptions
             [<ParamObject; Emit("$0")>]
-            (?detail: obj, ?duration: float, ?``end``: U2<float, string>, ?start: U2<float, string>)
-            =
+            static member Create(?detail: obj, ?startTime: float) : MarkOptions = nativeOnly
 
+        [<AllowNullLiteral>]
+        [<Interface>]
+        type MeasureOptions =
             /// <summary>
             /// Additional optional detail to include with the mark.
             /// </summary>
-            member val detail: obj option = nativeOnly with get, set
+            abstract member detail: obj option with get, set
             /// <summary>
             /// Duration between start and end times.
             /// </summary>
-            member val duration: float option = nativeOnly with get, set
+            abstract member duration: float option with get, set
             /// <summary>
             /// Timestamp to be used as the end time, or a string identifying a previously recorded mark.
             /// </summary>
-            member val ``end``: U2<float, string> option = nativeOnly with get, set
+            abstract member ``end``: U2<float, string> option with get, set
             /// <summary>
             /// Timestamp to be used as the start time, or a string identifying a previously recorded mark.
             /// </summary>
-            member val start: U2<float, string> option = nativeOnly with get, set
+            abstract member start: U2<float, string> option with get, set
 
-        [<Global>]
-        [<AllowNullLiteral>]
-        type TimerifyOptions
             [<ParamObject; Emit("$0")>]
-            (?histogram: Node.perf_hooks.RecordableHistogram)
-            =
+            static member Create
+                (
+                    ?detail: obj,
+                    ?duration: float,
+                    ?``end``: U2<float, string>,
+                    ?start: U2<float, string>
+                )
+                : MeasureOptions
+                =
+                nativeOnly
 
+        [<AllowNullLiteral>]
+        [<Interface>]
+        type TimerifyOptions =
             /// <summary>
             /// A histogram object created using <c>perf_hooks.createHistogram()</c> that will record runtime
             /// durations in nanoseconds.
             /// </summary>
-            member val histogram: Node.perf_hooks.RecordableHistogram option =
-                nativeOnly with get, set
+            abstract member histogram: Node.perf_hooks.RecordableHistogram option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (?histogram: Node.perf_hooks.RecordableHistogram)
+                : TimerifyOptions
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -135589,15 +135734,17 @@ SocketAddress.parse($0)"""
                 [<Emit("$0.NODE_PERFORMANCE_GC_FLAGS_SCHEDULE_IDLE")>]
                 abstract member NODE_PERFORMANCE_GC_FLAGS_SCHEDULE_IDLE: float
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type EventLoopMonitorOptions [<ParamObject; Emit("$0")>] (?resolution: float) =
-
+        [<Interface>]
+        type EventLoopMonitorOptions =
             /// <summary>
             /// The sampling rate in milliseconds.
             /// Must be greater than zero.
             /// </summary>
-            member val resolution: float option = nativeOnly with get, set
+            abstract member resolution: float option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create(?resolution: float) : EventLoopMonitorOptions = nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -135710,25 +135857,28 @@ SocketAddress.parse($0)"""
             /// </summary>
             abstract member add: other: Node.perf_hooks.RecordableHistogram -> unit
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type CreateHistogramOptions
-            [<ParamObject; Emit("$0")>]
-            (?lowest: U2<float, bigint>, ?highest: U2<float, bigint>, ?figures: float)
-            =
-
+        [<Interface>]
+        type CreateHistogramOptions =
             /// <summary>
             /// The minimum recordable value. Must be an integer value greater than 0.
             /// </summary>
-            member val lowest: U2<float, bigint> option = nativeOnly with get, set
+            abstract member lowest: U2<float, bigint> option with get, set
             /// <summary>
             /// The maximum recordable value. Must be an integer value greater than min.
             /// </summary>
-            member val highest: U2<float, bigint> option = nativeOnly with get, set
+            abstract member highest: U2<float, bigint> option with get, set
             /// <summary>
             /// The number of accuracy digits. Must be a number between 1 and 5.
             /// </summary>
-            member val figures: float option = nativeOnly with get, set
+            abstract member figures: float option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (?lowest: U2<float, bigint>, ?highest: U2<float, bigint>, ?figures: float)
+                : CreateHistogramOptions
+                =
+                nativeOnly
 
         module Performance =
 
@@ -135744,27 +135894,31 @@ SocketAddress.parse($0)"""
 
             module observe =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type options
+                [<Interface>]
+                type options =
+                    abstract member entryTypes: ReadonlyArray<Node.perf_hooks.EntryType> with get, set
+                    abstract member buffered: bool option with get, set
+
                     [<ParamObject; Emit("$0")>]
-                    (entryTypes: ReadonlyArray<Node.perf_hooks.EntryType>, ?buffered: bool)
-                    =
+                    static member Create
+                        (entryTypes: ReadonlyArray<Node.perf_hooks.EntryType>, ?buffered: bool)
+                        : options
+                        =
+                        nativeOnly
 
-                    member val entryTypes: ReadonlyArray<Node.perf_hooks.EntryType> =
-                        nativeOnly with get, set
-
-                    member val buffered: bool option = nativeOnly with get, set
-
-                [<Global>]
                 [<AllowNullLiteral>]
-                type options_1
-                    [<ParamObject; Emit("$0")>]
-                    (``type``: Node.perf_hooks.EntryType, ?buffered: bool)
-                    =
+                [<Interface>]
+                type options_1 =
+                    abstract member ``type``: Node.perf_hooks.EntryType with get, set
+                    abstract member buffered: bool option with get, set
 
-                    member val ``type``: Node.perf_hooks.EntryType = nativeOnly with get, set
-                    member val buffered: bool option = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (``type``: Node.perf_hooks.EntryType, ?buffered: bool)
+                        : options_1
+                        =
+                        nativeOnly
 
     module ``process`` =
 
@@ -140035,6 +140189,16 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
                     /// </param>
                     member val unregister: unit = nativeOnly
 
+                module Type =
+
+                    module register =
+
+                        type callback = delegate of ref: obj * event: string -> unit
+
+                    module registerBeforeExit =
+
+                        type callback = delegate of ref: obj * event: string -> unit
+
             module addListener =
 
                 type listener = delegate of value: obj * source: float -> unit
@@ -140289,31 +140453,36 @@ the userland-provided Punycode.js module instead.""")>]
             [<Import("unescape", "querystring")>]
             static member unescape(str: string) : string = nativeOnly
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type StringifyOptions [<ParamObject; Emit("$0")>] (?encodeURIComponent: (string -> string))
-            =
-
+        [<Interface>]
+        type StringifyOptions =
             /// <summary>
             /// The function to use when converting URL-unsafe characters to percent-encoding in the query string.
             /// </summary>
-            member val encodeURIComponent: (string -> string) option = nativeOnly with get, set
+            abstract member encodeURIComponent: (string -> string) option with get, set
 
-        [<Global>]
-        [<AllowNullLiteral>]
-        type ParseOptions
             [<ParamObject; Emit("$0")>]
-            (?maxKeys: float, ?decodeURIComponent: (string -> string))
-            =
+            static member Create(?encodeURIComponent: (string -> string)) : StringifyOptions =
+                nativeOnly
 
+        [<AllowNullLiteral>]
+        [<Interface>]
+        type ParseOptions =
             /// <summary>
             /// Specifies the maximum number of keys to parse. Specify <c>0</c> to remove key counting limitations.
             /// </summary>
-            member val maxKeys: float option = nativeOnly with get, set
+            abstract member maxKeys: float option with get, set
             /// <summary>
             /// The function to use when decoding percent-encoded characters in the query string.
             /// </summary>
-            member val decodeURIComponent: (string -> string) option = nativeOnly with get, set
+            abstract member decodeURIComponent: (string -> string) option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (?maxKeys: float, ?decodeURIComponent: (string -> string))
+                : ParseOptions
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -140628,18 +140797,21 @@ the userland-provided Punycode.js module instead.""")>]
             [<Import("Interface", "readline"); EmitConstructor>]
             static member Interface(options: Node.readline.ReadLineOptions) : Interface = nativeOnly
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type Key
-            [<ParamObject; Emit("$0")>]
-            (?sequence: string, ?name: string, ?ctrl: bool, ?meta: bool, ?shift: bool)
-            =
+        [<Interface>]
+        type Key =
+            abstract member sequence: string option with get, set
+            abstract member name: string option with get, set
+            abstract member ctrl: bool option with get, set
+            abstract member meta: bool option with get, set
+            abstract member shift: bool option with get, set
 
-            member val sequence: string option = nativeOnly with get, set
-            member val name: string option = nativeOnly with get, set
-            member val ctrl: bool option = nativeOnly with get, set
-            member val meta: bool option = nativeOnly with get, set
-            member val shift: bool option = nativeOnly with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (?sequence: string, ?name: string, ?ctrl: bool, ?meta: bool, ?shift: bool)
+                : Key
+                =
+                nativeOnly
 
         /// <summary>
         /// Instances of the <c>readline.Interface</c> class are constructed using the <c>readline.createInterface()</c> method. Every instance is associated with a
@@ -142612,12 +142784,80 @@ the userland-provided Punycode.js module instead.""")>]
 
         type CompleterResult = ResizeArray<string> * string
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type ReadLineOptions private () =
+        [<Interface>]
+        type ReadLineOptions =
+            /// <summary>
+            /// The [<c>Readable</c>](https://nodejs.org/docs/latest-v22.x/api/stream.html#readable-streams) stream to listen to
+            /// </summary>
+            abstract member input: Node.NodeJS.ReadableStream with get, set
+            /// <summary>
+            /// The [<c>Writable</c>](https://nodejs.org/docs/latest-v22.x/api/stream.html#writable-streams) stream to write readline data to.
+            /// </summary>
+            abstract member output: Node.NodeJS.WritableStream option with get, set
+
+            /// <summary>
+            /// An optional function used for Tab autocompletion.
+            /// </summary>
+            abstract member completer:
+                U2<Node.readline.Completer, Node.readline.AsyncCompleter> option with get, set
+
+            /// <summary>
+            /// <c>true</c> if the <c>input</c> and <c>output</c> streams should be treated like a TTY,
+            /// and have ANSI/VT100 escape codes written to it.
+            /// Default: checking <c>isTTY</c> on the <c>output</c> stream upon instantiation.
+            /// </summary>
+            abstract member terminal: bool option with get, set
+            /// <summary>
+            /// Initial list of history lines.
+            /// This option makes sense only if <c>terminal</c> is set to <c>true</c> by the user or by an internal <c>output</c> check,
+            /// otherwise the history caching mechanism is not initialized at all.
+            /// </summary>
+            abstract member history: ResizeArray<string> option with get, set
+            /// <summary>
+            /// Maximum number of history lines retained.
+            /// To disable the history set this value to <c>0</c>.
+            /// This option makes sense only if <c>terminal</c> is set to <c>true</c> by the user or by an internal <c>output</c> check,
+            /// otherwise the history caching mechanism is not initialized at all.
+            /// </summary>
+            abstract member historySize: float option with get, set
+            /// <summary>
+            /// If <c>true</c>, when a new input line added to the history list duplicates an older one,
+            /// this removes the older line from the list.
+            /// </summary>
+            abstract member removeHistoryDuplicates: bool option with get, set
+            /// <summary>
+            /// The prompt string to use.
+            /// </summary>
+            abstract member prompt: string option with get, set
+            /// <summary>
+            /// If the delay between <c>\r</c> and <c>\n</c> exceeds <c>crlfDelay</c> milliseconds,
+            /// both <c>\r</c> and <c>\n</c> will be treated as separate end-of-line input.
+            /// <c>crlfDelay</c> will be coerced to a number no less than <c>100</c>.
+            /// It can be set to <c>Infinity</c>, in which case
+            /// <c>\r</c> followed by <c>\n</c> will always be considered a single newline
+            /// (which may be reasonable for [reading files](https://nodejs.org/docs/latest-v22.x/api/readline.html#example-read-file-stream-line-by-line) with <c>\r\n</c> line delimiter).
+            /// </summary>
+            abstract member crlfDelay: float option with get, set
+            /// <summary>
+            /// The duration <c>readline</c> will wait for a character
+            /// (when reading an ambiguous key sequence in milliseconds
+            /// one that can both form a complete key sequence using the input read so far
+            /// and can take additional input to complete a longer key sequence).
+            /// </summary>
+            abstract member escapeCodeTimeout: float option with get, set
+            /// <summary>
+            /// The number of spaces a tab is equal to (minimum 1).
+            /// </summary>
+            abstract member tabSize: float option with get, set
+            /// <summary>
+            /// Allows closing the interface using an AbortSignal.
+            /// Aborting the signal will internally call <c>close</c> on the interface.
+            /// </summary>
+            abstract member signal: Node.AbortSignal option with get, set
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     input: Node.NodeJS.ReadableStream,
                     ?output: Node.NodeJS.WritableStream,
@@ -142631,11 +142871,12 @@ the userland-provided Punycode.js module instead.""")>]
                     ?tabSize: float,
                     ?signal: Node.AbortSignal
                 )
+                : ReadLineOptions
                 =
-                ReadLineOptions()
+                nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     input: Node.NodeJS.ReadableStream,
                     completer: Node.readline.Completer,
@@ -142650,11 +142891,12 @@ the userland-provided Punycode.js module instead.""")>]
                     ?tabSize: float,
                     ?signal: Node.AbortSignal
                 )
+                : ReadLineOptions
                 =
-                ReadLineOptions()
+                nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     input: Node.NodeJS.ReadableStream,
                     completer: Node.readline.AsyncCompleter,
@@ -142669,77 +142911,9 @@ the userland-provided Punycode.js module instead.""")>]
                     ?tabSize: float,
                     ?signal: Node.AbortSignal
                 )
+                : ReadLineOptions
                 =
-                ReadLineOptions()
-
-            /// <summary>
-            /// The [<c>Readable</c>](https://nodejs.org/docs/latest-v22.x/api/stream.html#readable-streams) stream to listen to
-            /// </summary>
-            member val input: Node.NodeJS.ReadableStream = nativeOnly with get, set
-            /// <summary>
-            /// The [<c>Writable</c>](https://nodejs.org/docs/latest-v22.x/api/stream.html#writable-streams) stream to write readline data to.
-            /// </summary>
-            member val output: Node.NodeJS.WritableStream option = nativeOnly with get, set
-
-            /// <summary>
-            /// An optional function used for Tab autocompletion.
-            /// </summary>
-            member val completer: U2<Node.readline.Completer, Node.readline.AsyncCompleter> option =
-                nativeOnly with get, set
-
-            /// <summary>
-            /// <c>true</c> if the <c>input</c> and <c>output</c> streams should be treated like a TTY,
-            /// and have ANSI/VT100 escape codes written to it.
-            /// Default: checking <c>isTTY</c> on the <c>output</c> stream upon instantiation.
-            /// </summary>
-            member val terminal: bool option = nativeOnly with get, set
-            /// <summary>
-            /// Initial list of history lines.
-            /// This option makes sense only if <c>terminal</c> is set to <c>true</c> by the user or by an internal <c>output</c> check,
-            /// otherwise the history caching mechanism is not initialized at all.
-            /// </summary>
-            member val history: ResizeArray<string> option = nativeOnly with get, set
-            /// <summary>
-            /// Maximum number of history lines retained.
-            /// To disable the history set this value to <c>0</c>.
-            /// This option makes sense only if <c>terminal</c> is set to <c>true</c> by the user or by an internal <c>output</c> check,
-            /// otherwise the history caching mechanism is not initialized at all.
-            /// </summary>
-            member val historySize: float option = nativeOnly with get, set
-            /// <summary>
-            /// If <c>true</c>, when a new input line added to the history list duplicates an older one,
-            /// this removes the older line from the list.
-            /// </summary>
-            member val removeHistoryDuplicates: bool option = nativeOnly with get, set
-            /// <summary>
-            /// The prompt string to use.
-            /// </summary>
-            member val prompt: string option = nativeOnly with get, set
-            /// <summary>
-            /// If the delay between <c>\r</c> and <c>\n</c> exceeds <c>crlfDelay</c> milliseconds,
-            /// both <c>\r</c> and <c>\n</c> will be treated as separate end-of-line input.
-            /// <c>crlfDelay</c> will be coerced to a number no less than <c>100</c>.
-            /// It can be set to <c>Infinity</c>, in which case
-            /// <c>\r</c> followed by <c>\n</c> will always be considered a single newline
-            /// (which may be reasonable for [reading files](https://nodejs.org/docs/latest-v22.x/api/readline.html#example-read-file-stream-line-by-line) with <c>\r\n</c> line delimiter).
-            /// </summary>
-            member val crlfDelay: float option = nativeOnly with get, set
-            /// <summary>
-            /// The duration <c>readline</c> will wait for a character
-            /// (when reading an ambiguous key sequence in milliseconds
-            /// one that can both form a complete key sequence using the input read so far
-            /// and can take additional input to complete a longer key sequence).
-            /// </summary>
-            member val escapeCodeTimeout: float option = nativeOnly with get, set
-            /// <summary>
-            /// The number of spaces a tab is equal to (minimum 1).
-            /// </summary>
-            member val tabSize: float option = nativeOnly with get, set
-            /// <summary>
-            /// Allows closing the interface using an AbortSignal.
-            /// Aborting the signal will internally call <c>close</c> on the interface.
-            /// </summary>
-            member val signal: Node.AbortSignal option = nativeOnly with get, set
+                nativeOnly
 
         [<RequireQualifiedAccess>]
         type Direction =
@@ -142963,62 +143137,49 @@ the userland-provided Punycode.js module instead.""")>]
                 line: string ->
                     U2<Node.readline.CompleterResult, JS.Promise<Node.readline.CompleterResult>>
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type ReadLineOptions
-            [<ParamObject; Emit("$0")>]
-            (
-                input: Node.NodeJS.ReadableStream,
-                ?output: Node.NodeJS.WritableStream,
-                ?terminal: bool,
-                ?history: ResizeArray<string>,
-                ?historySize: float,
-                ?removeHistoryDuplicates: bool,
-                ?prompt: string,
-                ?crlfDelay: float,
-                ?escapeCodeTimeout: float,
-                ?tabSize: float,
-                ?signal: Node.AbortSignal,
-                ?completer: Node.readline_promises.Completer
-            )
-            =
-
+        [<Interface>]
+        type ReadLineOptions =
+            /// <summary>
+            /// An optional function used for Tab autocompletion.
+            /// </summary>
+            abstract member completer: Node.readline_promises.Completer option with get, set
             /// <summary>
             /// The [<c>Readable</c>](https://nodejs.org/docs/latest-v22.x/api/stream.html#readable-streams) stream to listen to
             /// </summary>
-            member val input: Node.NodeJS.ReadableStream = nativeOnly with get, set
+            abstract member input: Node.NodeJS.ReadableStream with get, set
             /// <summary>
             /// The [<c>Writable</c>](https://nodejs.org/docs/latest-v22.x/api/stream.html#writable-streams) stream to write readline data to.
             /// </summary>
-            member val output: Node.NodeJS.WritableStream option = nativeOnly with get, set
+            abstract member output: Node.NodeJS.WritableStream option with get, set
             /// <summary>
             /// <c>true</c> if the <c>input</c> and <c>output</c> streams should be treated like a TTY,
             /// and have ANSI/VT100 escape codes written to it.
             /// Default: checking <c>isTTY</c> on the <c>output</c> stream upon instantiation.
             /// </summary>
-            member val terminal: bool option = nativeOnly with get, set
+            abstract member terminal: bool option with get, set
             /// <summary>
             /// Initial list of history lines.
             /// This option makes sense only if <c>terminal</c> is set to <c>true</c> by the user or by an internal <c>output</c> check,
             /// otherwise the history caching mechanism is not initialized at all.
             /// </summary>
-            member val history: ResizeArray<string> option = nativeOnly with get, set
+            abstract member history: ResizeArray<string> option with get, set
             /// <summary>
             /// Maximum number of history lines retained.
             /// To disable the history set this value to <c>0</c>.
             /// This option makes sense only if <c>terminal</c> is set to <c>true</c> by the user or by an internal <c>output</c> check,
             /// otherwise the history caching mechanism is not initialized at all.
             /// </summary>
-            member val historySize: float option = nativeOnly with get, set
+            abstract member historySize: float option with get, set
             /// <summary>
             /// If <c>true</c>, when a new input line added to the history list duplicates an older one,
             /// this removes the older line from the list.
             /// </summary>
-            member val removeHistoryDuplicates: bool option = nativeOnly with get, set
+            abstract member removeHistoryDuplicates: bool option with get, set
             /// <summary>
             /// The prompt string to use.
             /// </summary>
-            member val prompt: string option = nativeOnly with get, set
+            abstract member prompt: string option with get, set
             /// <summary>
             /// If the delay between <c>\r</c> and <c>\n</c> exceeds <c>crlfDelay</c> milliseconds,
             /// both <c>\r</c> and <c>\n</c> will be treated as separate end-of-line input.
@@ -143027,37 +143188,55 @@ the userland-provided Punycode.js module instead.""")>]
             /// <c>\r</c> followed by <c>\n</c> will always be considered a single newline
             /// (which may be reasonable for [reading files](https://nodejs.org/docs/latest-v22.x/api/readline.html#example-read-file-stream-line-by-line) with <c>\r\n</c> line delimiter).
             /// </summary>
-            member val crlfDelay: float option = nativeOnly with get, set
+            abstract member crlfDelay: float option with get, set
             /// <summary>
             /// The duration <c>readline</c> will wait for a character
             /// (when reading an ambiguous key sequence in milliseconds
             /// one that can both form a complete key sequence using the input read so far
             /// and can take additional input to complete a longer key sequence).
             /// </summary>
-            member val escapeCodeTimeout: float option = nativeOnly with get, set
+            abstract member escapeCodeTimeout: float option with get, set
             /// <summary>
             /// The number of spaces a tab is equal to (minimum 1).
             /// </summary>
-            member val tabSize: float option = nativeOnly with get, set
+            abstract member tabSize: float option with get, set
             /// <summary>
             /// Allows closing the interface using an AbortSignal.
             /// Aborting the signal will internally call <c>close</c> on the interface.
             /// </summary>
-            member val signal: Node.AbortSignal option = nativeOnly with get, set
-            /// <summary>
-            /// An optional function used for Tab autocompletion.
-            /// </summary>
-            member val completer: Node.readline_promises.Completer option = nativeOnly with get, set
+            abstract member signal: Node.AbortSignal option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    input: Node.NodeJS.ReadableStream,
+                    ?output: Node.NodeJS.WritableStream,
+                    ?terminal: bool,
+                    ?history: ResizeArray<string>,
+                    ?historySize: float,
+                    ?removeHistoryDuplicates: bool,
+                    ?prompt: string,
+                    ?crlfDelay: float,
+                    ?escapeCodeTimeout: float,
+                    ?tabSize: float,
+                    ?signal: Node.AbortSignal,
+                    ?completer: Node.readline_promises.Completer
+                )
+                : ReadLineOptions
+                =
+                nativeOnly
 
         module Exports =
 
             module Readline =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type options [<ParamObject; Emit("$0")>] (?autoCommit: bool) =
+                [<Interface>]
+                type options =
+                    abstract member autoCommit: bool option with get, set
 
-                    member val autoCommit: bool option = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(?autoCommit: bool) : options = nativeOnly
 
     module repl =
 
@@ -143143,12 +143322,85 @@ the userland-provided Punycode.js module instead.""")>]
             [<Import("Recoverable", "repl"); EmitConstructor>]
             static member Recoverable(err: Exception) : Recoverable = nativeOnly
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type ReplOptions private () =
+        [<Interface>]
+        type ReplOptions =
+            /// <summary>
+            /// The input prompt to display.
+            /// </summary>
+            abstract member prompt: string option with get, set
+            /// <summary>
+            /// The <c>Readable</c> stream from which REPL input will be read.
+            /// </summary>
+            abstract member input: Node.NodeJS.ReadableStream option with get, set
+            /// <summary>
+            /// The <c>Writable</c> stream to which REPL output will be written.
+            /// </summary>
+            abstract member output: Node.NodeJS.WritableStream option with get, set
+            /// <summary>
+            /// If <c>true</c>, specifies that the output should be treated as a TTY terminal, and have
+            /// ANSI/VT100 escape codes written to it.
+            /// Default: checking the value of the <c>isTTY</c> property on the output stream upon
+            /// instantiation.
+            /// </summary>
+            abstract member terminal: bool option with get, set
+            /// <summary>
+            /// The function to be used when evaluating each given line of input.
+            /// **Default:** an async wrapper for the JavaScript <c>eval()</c> function. An <c>eval</c> function can
+            /// error with <c>repl.Recoverable</c> to indicate the input was incomplete and prompt for
+            /// additional lines. See the [custom evaluation functions](https://nodejs.org/dist/latest-v22.x/docs/api/repl.html#custom-evaluation-functions)
+            /// section for more details.
+            /// </summary>
+            abstract member eval: Node.repl.REPLEval option with get, set
+            /// <summary>
+            /// Defines if the repl prints output previews or not.
+            /// </summary>
+            abstract member preview: bool option with get, set
+            /// <summary>
+            /// If <c>true</c>, specifies that the default <c>writer</c> function should include ANSI color
+            /// styling to REPL output. If a custom <c>writer</c> function is provided then this has no
+            /// effect.
+            /// </summary>
+            abstract member useColors: bool option with get, set
+            /// <summary>
+            /// If <c>true</c>, specifies that the default evaluation function will use the JavaScript
+            /// <c>global</c> as the context as opposed to creating a new separate context for the REPL
+            /// instance. The node CLI REPL sets this value to <c>true</c>.
+            /// </summary>
+            abstract member useGlobal: bool option with get, set
+            /// <summary>
+            /// If <c>true</c>, specifies that the default writer will not output the return value of a
+            /// command if it evaluates to <c>undefined</c>.
+            /// </summary>
+            abstract member ignoreUndefined: bool option with get, set
+            /// <summary>
+            /// The function to invoke to format the output of each command before writing to <c>output</c>.
+            /// </summary>
+            abstract member writer: Node.repl.REPLWriter option with get, set
+
+            /// <summary>
+            /// An optional function used for custom Tab auto completion.
+            /// </summary>
+            abstract member completer:
+                U2<Node.readline.Completer, Node.readline.AsyncCompleter> option with get, set
+
+            /// <summary>
+            /// A flag that specifies whether the default evaluator executes all JavaScript commands in
+            /// strict mode or default (sloppy) mode.
+            /// Accepted values are:
+            /// - <c>repl.REPL_MODE_SLOPPY</c> - evaluates expressions in sloppy mode.
+            /// - <c>repl.REPL_MODE_STRICT</c> - evaluates expressions in strict mode. This is equivalent to
+            ///   prefacing every repl statement with <c>'use strict'</c>.
+            /// </summary>
+            abstract member replMode: obj option with get, set
+            /// <summary>
+            /// Stop evaluating the current piece of code when <c>SIGINT</c> is received, i.e. <c>Ctrl+C</c> is
+            /// pressed. This cannot be used together with a custom <c>eval</c> function.
+            /// </summary>
+            abstract member breakEvalOnSigint: bool option with get, set
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     ?prompt: string,
                     ?input: Node.NodeJS.ReadableStream,
@@ -143163,11 +143415,12 @@ the userland-provided Punycode.js module instead.""")>]
                     ?replMode: obj,
                     ?breakEvalOnSigint: bool
                 )
+                : ReplOptions
                 =
-                ReplOptions()
+                nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     completer: Node.readline.Completer,
                     ?prompt: string,
@@ -143183,11 +143436,12 @@ the userland-provided Punycode.js module instead.""")>]
                     ?replMode: obj,
                     ?breakEvalOnSigint: bool
                 )
+                : ReplOptions
                 =
-                ReplOptions()
+                nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     completer: Node.readline.AsyncCompleter,
                     ?prompt: string,
@@ -143203,82 +143457,9 @@ the userland-provided Punycode.js module instead.""")>]
                     ?replMode: obj,
                     ?breakEvalOnSigint: bool
                 )
+                : ReplOptions
                 =
-                ReplOptions()
-
-            /// <summary>
-            /// The input prompt to display.
-            /// </summary>
-            member val prompt: string option = nativeOnly with get, set
-            /// <summary>
-            /// The <c>Readable</c> stream from which REPL input will be read.
-            /// </summary>
-            member val input: Node.NodeJS.ReadableStream option = nativeOnly with get, set
-            /// <summary>
-            /// The <c>Writable</c> stream to which REPL output will be written.
-            /// </summary>
-            member val output: Node.NodeJS.WritableStream option = nativeOnly with get, set
-            /// <summary>
-            /// If <c>true</c>, specifies that the output should be treated as a TTY terminal, and have
-            /// ANSI/VT100 escape codes written to it.
-            /// Default: checking the value of the <c>isTTY</c> property on the output stream upon
-            /// instantiation.
-            /// </summary>
-            member val terminal: bool option = nativeOnly with get, set
-            /// <summary>
-            /// The function to be used when evaluating each given line of input.
-            /// **Default:** an async wrapper for the JavaScript <c>eval()</c> function. An <c>eval</c> function can
-            /// error with <c>repl.Recoverable</c> to indicate the input was incomplete and prompt for
-            /// additional lines. See the [custom evaluation functions](https://nodejs.org/dist/latest-v22.x/docs/api/repl.html#custom-evaluation-functions)
-            /// section for more details.
-            /// </summary>
-            member val eval: Node.repl.REPLEval option = nativeOnly with get, set
-            /// <summary>
-            /// Defines if the repl prints output previews or not.
-            /// </summary>
-            member val preview: bool option = nativeOnly with get, set
-            /// <summary>
-            /// If <c>true</c>, specifies that the default <c>writer</c> function should include ANSI color
-            /// styling to REPL output. If a custom <c>writer</c> function is provided then this has no
-            /// effect.
-            /// </summary>
-            member val useColors: bool option = nativeOnly with get, set
-            /// <summary>
-            /// If <c>true</c>, specifies that the default evaluation function will use the JavaScript
-            /// <c>global</c> as the context as opposed to creating a new separate context for the REPL
-            /// instance. The node CLI REPL sets this value to <c>true</c>.
-            /// </summary>
-            member val useGlobal: bool option = nativeOnly with get, set
-            /// <summary>
-            /// If <c>true</c>, specifies that the default writer will not output the return value of a
-            /// command if it evaluates to <c>undefined</c>.
-            /// </summary>
-            member val ignoreUndefined: bool option = nativeOnly with get, set
-            /// <summary>
-            /// The function to invoke to format the output of each command before writing to <c>output</c>.
-            /// </summary>
-            member val writer: Node.repl.REPLWriter option = nativeOnly with get, set
-
-            /// <summary>
-            /// An optional function used for custom Tab auto completion.
-            /// </summary>
-            member val completer: U2<Node.readline.Completer, Node.readline.AsyncCompleter> option =
-                nativeOnly with get, set
-
-            /// <summary>
-            /// A flag that specifies whether the default evaluator executes all JavaScript commands in
-            /// strict mode or default (sloppy) mode.
-            /// Accepted values are:
-            /// - <c>repl.REPL_MODE_SLOPPY</c> - evaluates expressions in sloppy mode.
-            /// - <c>repl.REPL_MODE_STRICT</c> - evaluates expressions in strict mode. This is equivalent to
-            ///   prefacing every repl statement with <c>'use strict'</c>.
-            /// </summary>
-            member val replMode: obj option = nativeOnly with get, set
-            /// <summary>
-            /// Stop evaluating the current piece of code when <c>SIGINT</c> is received, i.e. <c>Ctrl+C</c> is
-            /// pressed. This cannot be used together with a custom <c>eval</c> function.
-            /// </summary>
-            member val breakEvalOnSigint: bool option = nativeOnly with get, set
+                nativeOnly
 
         type REPLEval =
             delegate of
@@ -143288,21 +143469,21 @@ the userland-provided Punycode.js module instead.""")>]
 
         type REPLCommandAction = delegate of text: string -> unit
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type REPLCommand
-            [<ParamObject; Emit("$0")>]
-            (action: Node.repl.REPLCommandAction, ?help: string)
-            =
-
-            /// <summary>
-            /// The function to execute, optionally accepting a single string argument.
-            /// </summary>
-            member val action: Node.repl.REPLCommandAction = nativeOnly with get, set
+        [<Interface>]
+        type REPLCommand =
             /// <summary>
             /// Help text to be displayed when <c>.help</c> is entered.
             /// </summary>
-            member val help: string option = nativeOnly with get, set
+            abstract member help: string option with get, set
+            /// <summary>
+            /// The function to execute, optionally accepting a single string argument.
+            /// </summary>
+            abstract member action: text: string -> unit
+
+            [<ParamObject; Emit("$0")>]
+            static member Create(action: Node.repl.REPLCommandAction, ?help: string) : REPLCommand =
+                nativeOnly
 
         /// <summary>
         /// Instances of <c>repl.REPLServer</c> are created using the <see href="start">start</see> method
@@ -145473,11 +145654,13 @@ the userland-provided Punycode.js module instead.""")>]
 
             module getAssetAsBlob =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type options [<ParamObject; Emit("$0")>] (``type``: string) =
+                [<Interface>]
+                type options =
+                    abstract member ``type``: string with get, set
 
-                    member val ``type``: string = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(``type``: string) : options = nativeOnly
 
     module sqlite =
 
@@ -145698,29 +145881,14 @@ the userland-provided Punycode.js module instead.""")>]
 
         type SQLOutputValue = U4<float, bigint, string, Node.NodeJS.NonSharedUint8Array> option
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type DatabaseSyncOptions
-            [<ParamObject; Emit("$0")>]
-            (
-                ?``open``: bool,
-                ?enableForeignKeyConstraints: bool,
-                ?enableDoubleQuotedStringLiterals: bool,
-                ?readOnly: bool,
-                ?allowExtension: bool,
-                ?timeout: float,
-                ?readBigInts: bool,
-                ?returnArrays: bool,
-                ?allowBareNamedParameters: bool,
-                ?allowUnknownNamedParameters: bool
-            )
-            =
-
+        [<Interface>]
+        type DatabaseSyncOptions =
             /// <summary>
             /// If <c>true</c>, the database is opened by the constructor. When
             /// this value is <c>false</c>, the database must be opened via the <c>open()</c> method.
             /// </summary>
-            member val ``open``: bool option = nativeOnly with get, set
+            abstract member ``open``: bool option with get, set
             /// <summary>
             /// If <c>true</c>, foreign key constraints
             /// are enabled. This is recommended but can be disabled for compatibility with
@@ -145728,77 +145896,93 @@ the userland-provided Punycode.js module instead.""")>]
             /// enabled and disabled after opening the database using
             /// [<c>PRAGMA foreign_keys</c>](https://www.sqlite.org/pragma.html#pragma_foreign_keys).
             /// </summary>
-            member val enableForeignKeyConstraints: bool option = nativeOnly with get, set
+            abstract member enableForeignKeyConstraints: bool option with get, set
             /// <summary>
             /// If <c>true</c>, SQLite will accept
             /// [double-quoted string literals](https://www.sqlite.org/quirks.html#dblquote).
             /// This is not recommended but can be
             /// enabled for compatibility with legacy database schemas.
             /// </summary>
-            member val enableDoubleQuotedStringLiterals: bool option = nativeOnly with get, set
+            abstract member enableDoubleQuotedStringLiterals: bool option with get, set
             /// <summary>
             /// If <c>true</c>, the database is opened in read-only mode.
             /// If the database does not exist, opening it will fail.
             /// </summary>
-            member val readOnly: bool option = nativeOnly with get, set
+            abstract member readOnly: bool option with get, set
             /// <summary>
             /// If <c>true</c>, the <c>loadExtension</c> SQL function
             /// and the <c>loadExtension()</c> method are enabled.
             /// You can call <c>enableLoadExtension(false)</c> later to disable this feature.
             /// </summary>
-            member val allowExtension: bool option = nativeOnly with get, set
+            abstract member allowExtension: bool option with get, set
             /// <summary>
             /// The [busy timeout](https://sqlite.org/c3ref/busy_timeout.html) in milliseconds. This is the maximum amount of
             /// time that SQLite will wait for a database lock to be released before
             /// returning an error.
             /// </summary>
-            member val timeout: float option = nativeOnly with get, set
+            abstract member timeout: float option with get, set
             /// <summary>
             /// If <c>true</c>, integer fields are read as JavaScript <c>BigInt</c> values. If <c>false</c>,
             /// integer fields are read as JavaScript numbers.
             /// </summary>
-            member val readBigInts: bool option = nativeOnly with get, set
+            abstract member readBigInts: bool option with get, set
             /// <summary>
             /// If <c>true</c>, query results are returned as arrays instead of objects.
             /// </summary>
-            member val returnArrays: bool option = nativeOnly with get, set
+            abstract member returnArrays: bool option with get, set
             /// <summary>
             /// If <c>true</c>, allows binding named parameters without the prefix
             /// character (e.g., <c>foo</c> instead of <c>:foo</c>).
             /// </summary>
-            member val allowBareNamedParameters: bool option = nativeOnly with get, set
+            abstract member allowBareNamedParameters: bool option with get, set
             /// <summary>
             /// If <c>true</c>, unknown named parameters are ignored when binding.
             /// If <c>false</c>, an exception is thrown for unknown named parameters.
             /// </summary>
-            member val allowUnknownNamedParameters: bool option = nativeOnly with get, set
+            abstract member allowUnknownNamedParameters: bool option with get, set
 
-        [<Global>]
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?``open``: bool,
+                    ?enableForeignKeyConstraints: bool,
+                    ?enableDoubleQuotedStringLiterals: bool,
+                    ?readOnly: bool,
+                    ?allowExtension: bool,
+                    ?timeout: float,
+                    ?readBigInts: bool,
+                    ?returnArrays: bool,
+                    ?allowBareNamedParameters: bool,
+                    ?allowUnknownNamedParameters: bool
+                )
+                : DatabaseSyncOptions
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
-        type CreateSessionOptions [<ParamObject; Emit("$0")>] (?table: string, ?db: string) =
-
+        [<Interface>]
+        type CreateSessionOptions =
             /// <summary>
             /// A specific table to track changes for. By default, changes to all tables are tracked.
             /// </summary>
-            member val table: string option = nativeOnly with get, set
+            abstract member table: string option with get, set
             /// <summary>
             /// Name of the database to track. This is useful when multiple databases have been added using
             /// [<c>ATTACH DATABASE</c>](https://www.sqlite.org/lang_attach.html).
             /// </summary>
-            member val db: string option = nativeOnly with get, set
+            abstract member db: string option with get, set
 
-        [<Global>]
-        [<AllowNullLiteral>]
-        type ApplyChangesetOptions
             [<ParamObject; Emit("$0")>]
-            (?filter: (string -> bool), ?onConflict: (float -> float))
-            =
+            static member Create(?table: string, ?db: string) : CreateSessionOptions = nativeOnly
 
+        [<AllowNullLiteral>]
+        [<Interface>]
+        type ApplyChangesetOptions =
             /// <summary>
             /// Skip changes that, when targeted table name is supplied to this function, return a truthy value.
             /// By default, all changes are attempted.
             /// </summary>
-            member val filter: (string -> bool) option = nativeOnly with get, set
+            abstract member filter: (string -> bool) option with get, set
             /// <summary>
             /// A function that determines how to handle conflicts. The function receives one argument,
             /// which can be one of the following values:
@@ -145822,7 +146006,14 @@ the userland-provided Punycode.js module instead.""")>]
             ///
             /// **Default**: A function that returns <c>SQLITE_CHANGESET_ABORT</c>.
             /// </summary>
-            member val onConflict: (float -> float) option = nativeOnly with get, set
+            abstract member onConflict: (float -> float) option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (?filter: (string -> bool), ?onConflict: (float -> float))
+                : ApplyChangesetOptions
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -146381,40 +146572,41 @@ the userland-provided Punycode.js module instead.""")>]
             /// </summary>
             abstract member sourceSQL: string with get
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type BackupOptions
-            [<ParamObject; Emit("$0")>]
-            (
-                ?source: string,
-                ?target: string,
-                ?rate: float,
-                ?progress: (Node.sqlite.BackupProgressInfo -> unit)
-            )
-            =
-
+        [<Interface>]
+        type BackupOptions =
             /// <summary>
             /// Name of the source database. This can be <c>'main'</c> (the default primary database) or any other
             /// database that have been added with [<c>ATTACH DATABASE</c>](https://www.sqlite.org/lang_attach.html)
             /// </summary>
-            member val source: string option = nativeOnly with get, set
+            abstract member source: string option with get, set
             /// <summary>
             /// Name of the target database. This can be <c>'main'</c> (the default primary database) or any other
             /// database that have been added with [<c>ATTACH DATABASE</c>](https://www.sqlite.org/lang_attach.html)
             /// </summary>
-            member val target: string option = nativeOnly with get, set
+            abstract member target: string option with get, set
             /// <summary>
             /// Number of pages to be transmitted in each batch of the backup.
             /// </summary>
-            member val rate: float option = nativeOnly with get, set
-
+            abstract member rate: float option with get, set
             /// <summary>
             /// An optional callback function that will be called after each backup step. The argument passed
             /// to this callback is an <c>Object</c> with <c>remainingPages</c> and <c>totalPages</c> properties, describing the current progress
             /// of the backup operation.
             /// </summary>
-            member val progress: (Node.sqlite.BackupProgressInfo -> unit) option =
-                nativeOnly with get, set
+            abstract member progress: (Node.sqlite.BackupProgressInfo -> unit) option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?source: string,
+                    ?target: string,
+                    ?rate: float,
+                    ?progress: (Node.sqlite.BackupProgressInfo -> unit)
+                )
+                : BackupOptions
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -147618,21 +147810,24 @@ the userland-provided Punycode.js module instead.""")>]
                 abstract member encoding: Node.BufferEncoding option with get, set
                 abstract member read: (float -> unit) option with get, set
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type ArrayOptions
-                [<ParamObject; Emit("$0")>]
-                (?concurrency: float, ?signal: Node.AbortSignal)
-                =
-
+            [<Interface>]
+            type ArrayOptions =
                 /// <summary>
                 /// The maximum concurrent invocations of <c>fn</c> to call on the stream at once.
                 /// </summary>
-                member val concurrency: float option = nativeOnly with get, set
+                abstract member concurrency: float option with get, set
                 /// <summary>
                 /// Allows destroying the stream if the signal is aborted.
                 /// </summary>
-                member val signal: Node.AbortSignal option = nativeOnly with get, set
+                abstract member signal: Node.AbortSignal option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (?concurrency: float, ?signal: Node.AbortSignal)
+                    : ArrayOptions
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -148296,7 +148491,7 @@ Readable.isDisturbed($0)"""
                 /// a promise for the final value of the reduction.
                 /// </returns>
                 abstract member reduce:
-                    fn: Readable.reduce.fn_1 * ?initial: obj * ?options: Readable.reduce.options ->
+                    fn: Readable.reduce.fn_1 * ?initial: obj * ?options: Readable.reduce.options_1 ->
                         JS.Promise<obj>
 
                 /// <summary>
@@ -148310,8 +148505,22 @@ Readable.isDisturbed($0)"""
                 /// or parallelism. To perform a reduce concurrently, you can extract the async function to <c>readable.map</c> method.
                 /// </summary>
                 abstract member reduce<'T> :
-                    fn: Readable.reduce.fn_2<'T> * initial: 'T * ?options: Readable.reduce.options ->
+                    fn: Readable.reduce.fn_2<'T> * initial: 'T * ?options: Readable.reduce.options_2 ->
                         JS.Promise<'T>
+
+                /// <summary>
+                /// This method calls *fn* on each chunk of the stream in order, passing it the result from the calculation
+                /// on the previous element. It returns a promise for the final value of the reduction.
+                ///
+                /// If no *initial* value is supplied the first chunk of the stream is used as the initial value.
+                /// If the stream is empty, the promise is rejected with a <c>TypeError</c> with the <c>ERR_INVALID_ARGS</c> code property.
+                ///
+                /// The reducer function iterates the stream element-by-element which means that there is no *concurrency* parameter
+                /// or parallelism. To perform a reduce concurrently, you can extract the async function to <c>readable.map</c> method.
+                /// </summary>
+                abstract member reduce:
+                    fn: Readable.reduce.fn_3 * initial: obj * ?options: Readable.reduce.options_3 ->
+                        JS.Promise<obj>
 
                 abstract member _destroy:
                     error: Exception option * callback: (Exception option -> unit) -> unit
@@ -159447,15 +159656,15 @@ Duplex.fromWeb($0, $1)"""
             [<Interface>]
             type PipelinePromise<'S> = interface end
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type PipelineOptions
-                [<ParamObject; Emit("$0")>]
-                (?signal: Node.AbortSignal, ?``end``: bool)
-                =
+            [<Interface>]
+            type PipelineOptions =
+                abstract member signal: Node.AbortSignal option with get, set
+                abstract member ``end``: bool option with get, set
 
-                member val signal: Node.AbortSignal option = nativeOnly with get, set
-                member val ``end``: bool option = nativeOnly with get, set
+                [<ParamObject; Emit("$0")>]
+                static member Create(?signal: Node.AbortSignal, ?``end``: bool) : PipelineOptions =
+                    nativeOnly
 
             module pipeline =
 
@@ -159586,45 +159795,53 @@ Duplex.fromWeb($0, $1)"""
 
                 module fromWeb =
 
-                    [<Global>]
                     [<AllowNullLiteral>]
-                    type options
-                        [<ParamObject; Emit("$0")>]
-                        (
-                            ?signal: Node.AbortSignal,
-                            ?encoding: Node.BufferEncoding,
-                            ?highWaterMark: float,
-                            ?objectMode: bool
-                        )
-                        =
-
+                    [<Interface>]
+                    type options =
                         /// <summary>
                         /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
                         /// </summary>
-                        member val signal: Node.AbortSignal option = nativeOnly with get, set
-                        member val encoding: Node.BufferEncoding option = nativeOnly with get, set
-                        member val highWaterMark: float option = nativeOnly with get, set
-                        member val objectMode: bool option = nativeOnly with get, set
+                        abstract member signal: Node.AbortSignal option with get, set
+                        abstract member encoding: Node.BufferEncoding option with get, set
+                        abstract member highWaterMark: float option with get, set
+                        abstract member objectMode: bool option with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create
+                            (
+                                ?signal: Node.AbortSignal,
+                                ?encoding: Node.BufferEncoding,
+                                ?highWaterMark: float,
+                                ?objectMode: bool
+                            )
+                            : options
+                            =
+                            nativeOnly
 
                 module toWeb =
 
-                    [<Global>]
                     [<AllowNullLiteral>]
-                    type options
-                        [<ParamObject; Emit("$0")>]
-                        (?strategy: Node.stream_web.stream_SLASH_web_.QueuingStrategy)
-                        =
+                    [<Interface>]
+                    type options =
+                        abstract member strategy:
+                            Node.stream_web.stream_SLASH_web_.QueuingStrategy option with get, set
 
-                        member val strategy: Node.stream_web.stream_SLASH_web_.QueuingStrategy option =
-                            nativeOnly with get, set
+                        [<ParamObject; Emit("$0")>]
+                        static member Create
+                            (?strategy: Node.stream_web.stream_SLASH_web_.QueuingStrategy)
+                            : options
+                            =
+                            nativeOnly
 
                 module iterator =
 
-                    [<Global>]
                     [<AllowNullLiteral>]
-                    type options [<ParamObject; Emit("$0")>] (?destroyOnReturn: bool) =
+                    [<Interface>]
+                    type options =
+                        abstract member destroyOnReturn: bool option with get, set
 
-                        member val destroyOnReturn: bool option = nativeOnly with get, set
+                        [<ParamObject; Emit("$0")>]
+                        static member Create(?destroyOnReturn: bool) : options = nativeOnly
 
                 module map =
 
@@ -159632,14 +159849,16 @@ Duplex.fromWeb($0, $1)"""
 
                     module fn =
 
-                        [<Global>]
                         [<AllowNullLiteral>]
-                        type options [<ParamObject; Emit("$0")>] (?signal: Node.AbortSignal) =
-
+                        [<Interface>]
+                        type options =
                             /// <summary>
                             /// Allows destroying the stream if the signal is aborted.
                             /// </summary>
-                            member val signal: Node.AbortSignal option = nativeOnly with get, set
+                            abstract member signal: Node.AbortSignal option with get, set
+
+                            [<ParamObject; Emit("$0")>]
+                            static member Create(?signal: Node.AbortSignal) : options = nativeOnly
 
                 module filter =
 
@@ -159650,14 +159869,16 @@ Duplex.fromWeb($0, $1)"""
 
                     module fn =
 
-                        [<Global>]
                         [<AllowNullLiteral>]
-                        type options [<ParamObject; Emit("$0")>] (?signal: Node.AbortSignal) =
-
+                        [<Interface>]
+                        type options =
                             /// <summary>
                             /// Allows destroying the stream if the signal is aborted.
                             /// </summary>
-                            member val signal: Node.AbortSignal option = nativeOnly with get, set
+                            abstract member signal: Node.AbortSignal option with get, set
+
+                            [<ParamObject; Emit("$0")>]
+                            static member Create(?signal: Node.AbortSignal) : options = nativeOnly
 
                 module forEach =
 
@@ -159668,25 +159889,29 @@ Duplex.fromWeb($0, $1)"""
 
                     module fn =
 
-                        [<Global>]
                         [<AllowNullLiteral>]
-                        type options [<ParamObject; Emit("$0")>] (?signal: Node.AbortSignal) =
-
+                        [<Interface>]
+                        type options =
                             /// <summary>
                             /// Allows destroying the stream if the signal is aborted.
                             /// </summary>
-                            member val signal: Node.AbortSignal option = nativeOnly with get, set
+                            abstract member signal: Node.AbortSignal option with get, set
+
+                            [<ParamObject; Emit("$0")>]
+                            static member Create(?signal: Node.AbortSignal) : options = nativeOnly
 
                 module toArray =
 
-                    [<Global>]
                     [<AllowNullLiteral>]
-                    type options [<ParamObject; Emit("$0")>] (?signal: Node.AbortSignal) =
-
+                    [<Interface>]
+                    type options =
                         /// <summary>
                         /// Allows destroying the stream if the signal is aborted.
                         /// </summary>
-                        member val signal: Node.AbortSignal option = nativeOnly with get, set
+                        abstract member signal: Node.AbortSignal option with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create(?signal: Node.AbortSignal) : options = nativeOnly
 
                 module some =
 
@@ -159697,14 +159922,16 @@ Duplex.fromWeb($0, $1)"""
 
                     module fn =
 
-                        [<Global>]
                         [<AllowNullLiteral>]
-                        type options [<ParamObject; Emit("$0")>] (?signal: Node.AbortSignal) =
-
+                        [<Interface>]
+                        type options =
                             /// <summary>
                             /// Allows destroying the stream if the signal is aborted.
                             /// </summary>
-                            member val signal: Node.AbortSignal option = nativeOnly with get, set
+                            abstract member signal: Node.AbortSignal option with get, set
+
+                            [<ParamObject; Emit("$0")>]
+                            static member Create(?signal: Node.AbortSignal) : options = nativeOnly
 
                 module find =
 
@@ -159712,18 +159939,31 @@ Duplex.fromWeb($0, $1)"""
 
                     module fn =
 
-                        [<Global>]
                         [<AllowNullLiteral>]
-                        type options [<ParamObject; Emit("$0")>] (?signal: Node.AbortSignal) =
-
+                        [<Interface>]
+                        type options =
                             /// <summary>
                             /// Allows destroying the stream if the signal is aborted.
                             /// </summary>
-                            member val signal: Node.AbortSignal option = nativeOnly with get, set
+                            abstract member signal: Node.AbortSignal option with get, set
+
+                            [<ParamObject; Emit("$0")>]
+                            static member Create(?signal: Node.AbortSignal) : options = nativeOnly
+
+                        [<AllowNullLiteral>]
+                        [<Interface>]
+                        type options_1 =
+                            /// <summary>
+                            /// Allows destroying the stream if the signal is aborted.
+                            /// </summary>
+                            abstract member signal: Node.AbortSignal option with get, set
+
+                            [<ParamObject; Emit("$0")>]
+                            static member Create(?signal: Node.AbortSignal) : options_1 = nativeOnly
 
                     type fn_1 =
                         delegate of
-                            data: obj * ?options: Readable.find.fn.options ->
+                            data: obj * ?options: Readable.find.fn.options_1 ->
                                 U2<bool, JS.Promise<bool>>
 
                 module every =
@@ -159735,14 +159975,16 @@ Duplex.fromWeb($0, $1)"""
 
                     module fn =
 
-                        [<Global>]
                         [<AllowNullLiteral>]
-                        type options [<ParamObject; Emit("$0")>] (?signal: Node.AbortSignal) =
-
+                        [<Interface>]
+                        type options =
                             /// <summary>
                             /// Allows destroying the stream if the signal is aborted.
                             /// </summary>
-                            member val signal: Node.AbortSignal option = nativeOnly with get, set
+                            abstract member signal: Node.AbortSignal option with get, set
+
+                            [<ParamObject; Emit("$0")>]
+                            static member Create(?signal: Node.AbortSignal) : options = nativeOnly
 
                 module flatMap =
 
@@ -159750,47 +159992,55 @@ Duplex.fromWeb($0, $1)"""
 
                     module fn =
 
-                        [<Global>]
                         [<AllowNullLiteral>]
-                        type options [<ParamObject; Emit("$0")>] (?signal: Node.AbortSignal) =
-
+                        [<Interface>]
+                        type options =
                             /// <summary>
                             /// Allows destroying the stream if the signal is aborted.
                             /// </summary>
-                            member val signal: Node.AbortSignal option = nativeOnly with get, set
+                            abstract member signal: Node.AbortSignal option with get, set
+
+                            [<ParamObject; Emit("$0")>]
+                            static member Create(?signal: Node.AbortSignal) : options = nativeOnly
 
                 module drop =
 
-                    [<Global>]
                     [<AllowNullLiteral>]
-                    type options [<ParamObject; Emit("$0")>] (?signal: Node.AbortSignal) =
-
+                    [<Interface>]
+                    type options =
                         /// <summary>
                         /// Allows destroying the stream if the signal is aborted.
                         /// </summary>
-                        member val signal: Node.AbortSignal option = nativeOnly with get, set
+                        abstract member signal: Node.AbortSignal option with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create(?signal: Node.AbortSignal) : options = nativeOnly
 
                 module take =
 
-                    [<Global>]
                     [<AllowNullLiteral>]
-                    type options [<ParamObject; Emit("$0")>] (?signal: Node.AbortSignal) =
-
+                    [<Interface>]
+                    type options =
                         /// <summary>
                         /// Allows destroying the stream if the signal is aborted.
                         /// </summary>
-                        member val signal: Node.AbortSignal option = nativeOnly with get, set
+                        abstract member signal: Node.AbortSignal option with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create(?signal: Node.AbortSignal) : options = nativeOnly
 
                 module asIndexedPairs =
 
-                    [<Global>]
                     [<AllowNullLiteral>]
-                    type options [<ParamObject; Emit("$0")>] (?signal: Node.AbortSignal) =
-
+                    [<Interface>]
+                    type options =
                         /// <summary>
                         /// Allows destroying the stream if the signal is aborted.
                         /// </summary>
-                        member val signal: Node.AbortSignal option = nativeOnly with get, set
+                        abstract member signal: Node.AbortSignal option with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create(?signal: Node.AbortSignal) : options = nativeOnly
 
                 module reduce =
 
@@ -159798,33 +160048,109 @@ Duplex.fromWeb($0, $1)"""
                         delegate of
                             previous: obj * data: obj * ?options: Readable.reduce.fn.options -> 'T
 
-                    [<Global>]
                     [<AllowNullLiteral>]
-                    type options [<ParamObject; Emit("$0")>] (?signal: Node.AbortSignal) =
-
+                    [<Interface>]
+                    type options =
                         /// <summary>
                         /// Allows destroying the stream if the signal is aborted.
                         /// </summary>
-                        member val signal: Node.AbortSignal option = nativeOnly with get, set
+                        abstract member signal: Node.AbortSignal option with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create(?signal: Node.AbortSignal) : options = nativeOnly
 
                     module fn =
 
-                        [<Global>]
                         [<AllowNullLiteral>]
-                        type options [<ParamObject; Emit("$0")>] (?signal: Node.AbortSignal) =
-
+                        [<Interface>]
+                        type options =
                             /// <summary>
                             /// Allows destroying the stream if the signal is aborted.
                             /// </summary>
-                            member val signal: Node.AbortSignal option = nativeOnly with get, set
+                            abstract member signal: Node.AbortSignal option with get, set
+
+                            [<ParamObject; Emit("$0")>]
+                            static member Create(?signal: Node.AbortSignal) : options = nativeOnly
+
+                        [<AllowNullLiteral>]
+                        [<Interface>]
+                        type options_1 =
+                            /// <summary>
+                            /// Allows destroying the stream if the signal is aborted.
+                            /// </summary>
+                            abstract member signal: Node.AbortSignal option with get, set
+
+                            [<ParamObject; Emit("$0")>]
+                            static member Create(?signal: Node.AbortSignal) : options_1 = nativeOnly
+
+                        [<AllowNullLiteral>]
+                        [<Interface>]
+                        type options_2 =
+                            /// <summary>
+                            /// Allows destroying the stream if the signal is aborted.
+                            /// </summary>
+                            abstract member signal: Node.AbortSignal option with get, set
+
+                            [<ParamObject; Emit("$0")>]
+                            static member Create(?signal: Node.AbortSignal) : options_2 = nativeOnly
+
+                        [<AllowNullLiteral>]
+                        [<Interface>]
+                        type options_3 =
+                            /// <summary>
+                            /// Allows destroying the stream if the signal is aborted.
+                            /// </summary>
+                            abstract member signal: Node.AbortSignal option with get, set
+
+                            [<ParamObject; Emit("$0")>]
+                            static member Create(?signal: Node.AbortSignal) : options_3 = nativeOnly
 
                     type fn_1 =
                         delegate of
-                            previous: obj * data: obj * ?options: Readable.reduce.fn.options -> unit
+                            previous: obj * data: obj * ?options: Readable.reduce.fn.options_1 ->
+                                unit
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type options_1 =
+                        /// <summary>
+                        /// Allows destroying the stream if the signal is aborted.
+                        /// </summary>
+                        abstract member signal: Node.AbortSignal option with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create(?signal: Node.AbortSignal) : options_1 = nativeOnly
 
                     type fn_2<'T> =
                         delegate of
-                            previous: 'T * data: obj * ?options: Readable.reduce.fn.options -> 'T
+                            previous: 'T * data: obj * ?options: Readable.reduce.fn.options_2 -> 'T
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type options_2 =
+                        /// <summary>
+                        /// Allows destroying the stream if the signal is aborted.
+                        /// </summary>
+                        abstract member signal: Node.AbortSignal option with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create(?signal: Node.AbortSignal) : options_2 = nativeOnly
+
+                    type fn_3 =
+                        delegate of
+                            previous: obj * data: obj * ?options: Readable.reduce.fn.options_3 ->
+                                unit
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type options_3 =
+                        /// <summary>
+                        /// Allows destroying the stream if the signal is aborted.
+                        /// </summary>
+                        abstract member signal: Node.AbortSignal option with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create(?signal: Node.AbortSignal) : options_3 = nativeOnly
 
             module WritableOptions =
 
@@ -159843,111 +160169,117 @@ Duplex.fromWeb($0, $1)"""
 
                 module writev =
 
-                    [<Global>]
                     [<AllowNullLiteral>]
-                    type chunks
-                        [<ParamObject; Emit("$0")>]
-                        (chunk: obj, encoding: Node.BufferEncoding)
-                        =
+                    [<Interface>]
+                    type chunks =
+                        abstract member chunk: obj with get, set
+                        abstract member encoding: Node.BufferEncoding with get, set
 
-                        member val chunk: obj = nativeOnly with get, set
-                        member val encoding: Node.BufferEncoding = nativeOnly with get, set
+                        [<ParamObject; Emit("$0")>]
+                        static member Create(chunk: obj, encoding: Node.BufferEncoding) : chunks =
+                            nativeOnly
 
             module Writable =
 
                 module fromWeb =
 
-                    [<Global>]
                     [<AllowNullLiteral>]
-                    type options
-                        [<ParamObject; Emit("$0")>]
-                        (
-                            ?signal: Node.AbortSignal,
-                            ?highWaterMark: float,
-                            ?objectMode: bool,
-                            ?decodeStrings: bool
-                        )
-                        =
-
+                    [<Interface>]
+                    type options =
                         /// <summary>
                         /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
                         /// </summary>
-                        member val signal: Node.AbortSignal option = nativeOnly with get, set
-                        member val highWaterMark: float option = nativeOnly with get, set
-                        member val objectMode: bool option = nativeOnly with get, set
-                        member val decodeStrings: bool option = nativeOnly with get, set
+                        abstract member signal: Node.AbortSignal option with get, set
+                        abstract member highWaterMark: float option with get, set
+                        abstract member objectMode: bool option with get, set
+                        abstract member decodeStrings: bool option with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create
+                            (
+                                ?signal: Node.AbortSignal,
+                                ?highWaterMark: float,
+                                ?objectMode: bool,
+                                ?decodeStrings: bool
+                            )
+                            : options
+                            =
+                            nativeOnly
 
                 module _writev =
 
-                    [<Global>]
                     [<AllowNullLiteral>]
-                    type chunks
-                        [<ParamObject; Emit("$0")>]
-                        (chunk: obj, encoding: Node.BufferEncoding)
-                        =
+                    [<Interface>]
+                    type chunks =
+                        abstract member chunk: obj with get, set
+                        abstract member encoding: Node.BufferEncoding with get, set
 
-                        member val chunk: obj = nativeOnly with get, set
-                        member val encoding: Node.BufferEncoding = nativeOnly with get, set
+                        [<ParamObject; Emit("$0")>]
+                        static member Create(chunk: obj, encoding: Node.BufferEncoding) : chunks =
+                            nativeOnly
 
             module Duplex =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type toWeb
+                [<Interface>]
+                type toWeb =
+                    abstract member readable: Node.stream_web.stream_SLASH_web_.ReadableStream with get, set
+                    abstract member writable: Node.stream_web.stream_SLASH_web_.WritableStream with get, set
+
                     [<ParamObject; Emit("$0")>]
-                    (
-                        readable: Node.stream_web.stream_SLASH_web_.ReadableStream,
-                        writable: Node.stream_web.stream_SLASH_web_.WritableStream
-                    )
-                    =
-
-                    member val readable: Node.stream_web.stream_SLASH_web_.ReadableStream =
-                        nativeOnly with get, set
-
-                    member val writable: Node.stream_web.stream_SLASH_web_.WritableStream =
-                        nativeOnly with get, set
-
-                module fromWeb =
-
-                    [<Global>]
-                    [<AllowNullLiteral>]
-                    type duplexStream
-                        [<ParamObject; Emit("$0")>]
+                    static member Create
                         (
                             readable: Node.stream_web.stream_SLASH_web_.ReadableStream,
                             writable: Node.stream_web.stream_SLASH_web_.WritableStream
                         )
+                        : toWeb
                         =
+                        nativeOnly
 
-                        member val readable: Node.stream_web.stream_SLASH_web_.ReadableStream =
-                            nativeOnly with get, set
+                module fromWeb =
 
-                        member val writable: Node.stream_web.stream_SLASH_web_.WritableStream =
-                            nativeOnly with get, set
-
-                    [<Global>]
                     [<AllowNullLiteral>]
-                    type options
-                        [<ParamObject; Emit("$0")>]
-                        (
-                            ?signal: Node.AbortSignal,
-                            ?encoding: Node.BufferEncoding,
-                            ?highWaterMark: float,
-                            ?objectMode: bool,
-                            ?decodeStrings: bool,
-                            ?allowHalfOpen: bool
-                        )
-                        =
+                    [<Interface>]
+                    type duplexStream =
+                        abstract member readable: Node.stream_web.stream_SLASH_web_.ReadableStream with get, set
+                        abstract member writable: Node.stream_web.stream_SLASH_web_.WritableStream with get, set
 
+                        [<ParamObject; Emit("$0")>]
+                        static member Create
+                            (
+                                readable: Node.stream_web.stream_SLASH_web_.ReadableStream,
+                                writable: Node.stream_web.stream_SLASH_web_.WritableStream
+                            )
+                            : duplexStream
+                            =
+                            nativeOnly
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type options =
                         /// <summary>
                         /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
                         /// </summary>
-                        member val signal: Node.AbortSignal option = nativeOnly with get, set
-                        member val encoding: Node.BufferEncoding option = nativeOnly with get, set
-                        member val highWaterMark: float option = nativeOnly with get, set
-                        member val objectMode: bool option = nativeOnly with get, set
-                        member val decodeStrings: bool option = nativeOnly with get, set
-                        member val allowHalfOpen: bool option = nativeOnly with get, set
+                        abstract member signal: Node.AbortSignal option with get, set
+                        abstract member encoding: Node.BufferEncoding option with get, set
+                        abstract member highWaterMark: float option with get, set
+                        abstract member objectMode: bool option with get, set
+                        abstract member decodeStrings: bool option with get, set
+                        abstract member allowHalfOpen: bool option with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create
+                            (
+                                ?signal: Node.AbortSignal,
+                                ?encoding: Node.BufferEncoding,
+                                ?highWaterMark: float,
+                                ?objectMode: bool,
+                                ?decodeStrings: bool,
+                                ?allowHalfOpen: bool
+                            )
+                            : options
+                            =
+                            nativeOnly
 
             module TransformOptions =
 
@@ -160008,19 +160340,23 @@ Duplex.fromWeb($0, $1)"""
 
             module pipe =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type options [<ParamObject; Emit("$0")>] (?``end``: bool) =
+                [<Interface>]
+                type options =
+                    abstract member ``end``: bool option with get, set
 
-                    member val ``end``: bool option = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(?``end``: bool) : options = nativeOnly
 
             module compose =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type options [<ParamObject; Emit("$0")>] (signal: Node.AbortSignal) =
+                [<Interface>]
+                type options =
+                    abstract member signal: Node.AbortSignal with get, set
 
-                    member val signal: Node.AbortSignal = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(signal: Node.AbortSignal) : options = nativeOnly
 
     module stream_consumers =
 
@@ -160285,30 +160621,27 @@ Duplex.fromWeb($0, $1)"""
                 =
                 nativeOnly
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type FinishedOptions
-            [<ParamObject; Emit("$0")>]
-            (
-                ?signal: Node.AbortSignal,
-                ?error: bool,
-                ?readable: bool,
-                ?writable: bool,
-                ?cleanup: bool
-            )
-            =
-
-            /// <summary>
-            /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-            /// </summary>
-            member val signal: Node.AbortSignal option = nativeOnly with get, set
-            member val error: bool option = nativeOnly with get, set
-            member val readable: bool option = nativeOnly with get, set
-            member val writable: bool option = nativeOnly with get, set
+        [<Interface>]
+        type FinishedOptions =
+            inherit Node.stream.Stream_.FinishedOptions
             /// <summary>
             /// If true, removes the listeners registered by this function before the promise is fulfilled.
             /// </summary>
-            member val cleanup: bool option = nativeOnly with get, set
+            abstract member cleanup: bool option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?signal: Node.AbortSignal,
+                    ?error: bool,
+                    ?readable: bool,
+                    ?writable: bool,
+                    ?cleanup: bool
+                )
+                : FinishedOptions
+                =
+                nativeOnly
 
     module stream_web =
 
@@ -160432,20 +160765,11 @@ Duplex.fromWeb($0, $1)"""
                 /// </summary>
                 abstract member writable: Node.stream_web.stream_SLASH_web_.WritableStream<'W> with get, set
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type StreamPipeOptions
-                [<ParamObject; Emit("$0")>]
-                (
-                    ?preventAbort: bool,
-                    ?preventCancel: bool,
-                    ?preventClose: bool,
-                    ?signal: Node.AbortSignal
-                )
-                =
-
-                member val preventAbort: bool option = nativeOnly with get, set
-                member val preventCancel: bool option = nativeOnly with get, set
+            [<Interface>]
+            type StreamPipeOptions =
+                abstract member preventAbort: bool option with get, set
+                abstract member preventCancel: bool option with get, set
                 /// <summary>
                 /// Pipes this readable stream to a given writable stream destination.
                 /// The way in which the piping process behaves under various error
@@ -160487,8 +160811,20 @@ Duplex.fromWeb($0, $1)"""
                 /// aborted, unless the respective options preventCancel or preventAbort
                 /// are set.
                 /// </summary>
-                member val preventClose: bool option = nativeOnly with get, set
-                member val signal: Node.AbortSignal option = nativeOnly with get, set
+                abstract member preventClose: bool option with get, set
+                abstract member signal: Node.AbortSignal option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        ?preventAbort: bool,
+                        ?preventCancel: bool,
+                        ?preventClose: bool,
+                        ?signal: Node.AbortSignal
+                    )
+                    : StreamPipeOptions
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -160570,30 +160906,36 @@ Duplex.fromWeb($0, $1)"""
 
             type TransformerCancelCallback = delegate of reason: obj -> U2<unit, obj>
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type UnderlyingByteSource
+            [<Interface>]
+            type UnderlyingByteSource =
+                abstract member autoAllocateChunkSize: float option with get, set
+
+                abstract member cancel:
+                    Node.stream_web.stream_SLASH_web_.ReadableStreamErrorCallback option with get, set
+
+                abstract member pull:
+                    Node.stream_web.stream_SLASH_web_.ReadableByteStreamControllerCallback option with get, set
+
+                abstract member start:
+                    Node.stream_web.stream_SLASH_web_.ReadableByteStreamControllerCallback option with get, set
+
+                abstract member ``type``: string with get, set
+
                 [<ParamObject; Emit("$0")>]
-                (
-                    ``type``: string,
-                    ?autoAllocateChunkSize: float,
-                    ?cancel: Node.stream_web.stream_SLASH_web_.ReadableStreamErrorCallback,
-                    ?pull: Node.stream_web.stream_SLASH_web_.ReadableByteStreamControllerCallback,
-                    ?start: Node.stream_web.stream_SLASH_web_.ReadableByteStreamControllerCallback
-                )
-                =
-
-                member val ``type``: string = nativeOnly with get, set
-                member val autoAllocateChunkSize: float option = nativeOnly with get, set
-
-                member val cancel: Node.stream_web.stream_SLASH_web_.ReadableStreamErrorCallback option =
-                    nativeOnly with get, set
-
-                member val pull: Node.stream_web.stream_SLASH_web_.ReadableByteStreamControllerCallback option =
-                    nativeOnly with get, set
-
-                member val start: Node.stream_web.stream_SLASH_web_.ReadableByteStreamControllerCallback option =
-                    nativeOnly with get, set
+                static member Create
+                    (
+                        ``type``: string,
+                        ?autoAllocateChunkSize: float,
+                        ?cancel: Node.stream_web.stream_SLASH_web_.ReadableStreamErrorCallback,
+                        ?pull:
+                            Node.stream_web.stream_SLASH_web_.ReadableByteStreamControllerCallback,
+                        ?start:
+                            Node.stream_web.stream_SLASH_web_.ReadableByteStreamControllerCallback
+                    )
+                    : UnderlyingByteSource
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -160676,20 +161018,23 @@ Duplex.fromWeb($0, $1)"""
             [<StringEnum(CaseRules.None)>]
             type ReadableStreamReaderMode = | byob
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type ReadableStreamGetReaderOptions
-                [<ParamObject; Emit("$0")>]
-                (?mode: Node.stream_web.stream_SLASH_web_.ReadableStreamReaderMode)
-                =
-
+            [<Interface>]
+            type ReadableStreamGetReaderOptions =
                 /// <summary>
                 /// Creates a ReadableStreamBYOBReader and locks the stream to the new reader.
                 ///
                 /// This call behaves the same way as the no-argument variant, except that it only works on readable byte streams, i.e. streams which were constructed specifically with the ability to handle "bring your own buffer" reading. The returned BYOB reader provides the ability to directly read individual chunks from the stream via its read() method, into developer-supplied buffers, allowing more precise control over allocation.
                 /// </summary>
-                member val mode: Node.stream_web.stream_SLASH_web_.ReadableStreamReaderMode option =
-                    nativeOnly with get, set
+                abstract member mode:
+                    Node.stream_web.stream_SLASH_web_.ReadableStreamReaderMode option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (?mode: Node.stream_web.stream_SLASH_web_.ReadableStreamReaderMode)
+                    : ReadableStreamGetReaderOptions
+                    =
+                    nativeOnly
 
             type ReadableStreamReader<'T> =
                 U2<
@@ -160852,10 +161197,9 @@ Duplex.fromWeb($0, $1)"""
 
             type QueuingStrategySize<'T> = delegate of chunk: 'T -> float
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type QueuingStrategyInit [<ParamObject; Emit("$0")>] (highWaterMark: float) =
-
+            [<Interface>]
+            type QueuingStrategyInit =
                 /// <summary>
                 /// Creates a new ByteLengthQueuingStrategy with the provided high water
                 /// mark.
@@ -160865,7 +161209,10 @@ Duplex.fromWeb($0, $1)"""
                 /// ByteLengthQueuingStrategy will cause the corresponding stream
                 /// constructor to throw.
                 /// </summary>
-                member val highWaterMark: float = nativeOnly with get, set
+                abstract member highWaterMark: float with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create(highWaterMark: float) : QueuingStrategyInit = nativeOnly
 
             /// <summary>
             /// This Streams API interface provides a built-in byte length queuing
@@ -160902,12 +161249,15 @@ Duplex.fromWeb($0, $1)"""
 
                 abstract member writable: Node.stream_web.stream_SLASH_web_.WritableStream<string> with get
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type TextDecoderOptions [<ParamObject; Emit("$0")>] (?fatal: bool, ?ignoreBOM: bool) =
+            [<Interface>]
+            type TextDecoderOptions =
+                abstract member fatal: bool option with get, set
+                abstract member ignoreBOM: bool option with get, set
 
-                member val fatal: bool option = nativeOnly with get, set
-                member val ignoreBOM: bool option = nativeOnly with get, set
+                [<ParamObject; Emit("$0")>]
+                static member Create(?fatal: bool, ?ignoreBOM: bool) : TextDecoderOptions =
+                    nativeOnly
 
             type BufferSource = obj
 
@@ -160989,29 +161339,35 @@ Duplex.fromWeb($0, $1)"""
 
                 module getReader =
 
-                    [<Global>]
                     [<AllowNullLiteral>]
-                    type options [<ParamObject; Emit("$0")>] (mode: string) =
+                    [<Interface>]
+                    type options =
+                        abstract member mode: string with get, set
 
-                        member val mode: string = nativeOnly with get, set
+                        [<ParamObject; Emit("$0")>]
+                        static member Create(mode: string) : options = nativeOnly
 
                 module values =
 
-                    [<Global>]
                     [<AllowNullLiteral>]
-                    type options [<ParamObject; Emit("$0")>] (?preventCancel: bool) =
+                    [<Interface>]
+                    type options =
+                        abstract member preventCancel: bool option with get, set
 
-                        member val preventCancel: bool option = nativeOnly with get, set
+                        [<ParamObject; Emit("$0")>]
+                        static member Create(?preventCancel: bool) : options = nativeOnly
 
             module ReadableStreamBYOBReader =
 
                 module read =
 
-                    [<Global>]
                     [<AllowNullLiteral>]
-                    type options [<ParamObject; Emit("$0")>] (?min: float) =
+                    [<Interface>]
+                    type options =
+                        abstract member min: float option with get, set
 
-                        member val min: float option = nativeOnly with get, set
+                        [<ParamObject; Emit("$0")>]
+                        static member Create(?min: float) : options = nativeOnly
 
             module Exports =
 
@@ -162139,58 +162495,31 @@ Duplex.fromWeb($0, $1)"""
                 /// </summary>
                 abstract member total: float with get, set
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type RunOptions
-                [<ParamObject; Emit("$0")>]
-                (
-                    ?concurrency: U2<float, bool>,
-                    ?files: ReadonlyArray<string>,
-                    ?forceExit: bool,
-                    ?globPatterns: ReadonlyArray<string>,
-                    ?inspectPort: U2<float, (unit -> float)>,
-                    ?isolation: RunOptions.isolation,
-                    ?only: bool,
-                    ?setup: (Node.test.test_.TestsStream -> U2<unit, JS.Promise<unit>>),
-                    ?execArgv: ReadonlyArray<string>,
-                    ?argv: ReadonlyArray<string>,
-                    ?signal: Node.AbortSignal,
-                    ?testNamePatterns: U3<string, RegExp, ReadonlyArray<U2<string, RegExp>>>,
-                    ?testSkipPatterns: U3<string, RegExp, ReadonlyArray<U2<string, RegExp>>>,
-                    ?timeout: float,
-                    ?watch: bool,
-                    ?shard: Node.test.test_.TestShard,
-                    ?coverage: bool,
-                    ?coverageExcludeGlobs: U2<string, ReadonlyArray<string>>,
-                    ?coverageIncludeGlobs: U2<string, ReadonlyArray<string>>,
-                    ?lineCoverage: float,
-                    ?branchCoverage: float,
-                    ?functionCoverage: float
-                )
-                =
-
+            [<Interface>]
+            type RunOptions =
                 /// <summary>
                 /// If a number is provided, then that many test processes would run in parallel, where each process corresponds to one test file.
                 /// If <c>true</c>, it would run <c>os.availableParallelism() - 1</c> test files in parallel. If <c>false</c>, it would only run one test file at a time.
                 /// </summary>
-                member val concurrency: U2<float, bool> option = nativeOnly with get, set
+                abstract member concurrency: U2<float, bool> option with get, set
                 /// <summary>
                 /// An array containing the list of files to run.
                 /// **Default:** Same as [running tests from the command line](https://nodejs.org/docs/latest-v22.x/api/test.html#running-tests-from-the-command-line).
                 /// </summary>
-                member val files: ReadonlyArray<string> option = nativeOnly with get, set
+                abstract member files: ReadonlyArray<string> option with get, set
                 /// <summary>
                 /// Configures the test runner to exit the process once all known
                 /// tests have finished executing even if the event loop would
                 /// otherwise remain active.
                 /// </summary>
-                member val forceExit: bool option = nativeOnly with get, set
+                abstract member forceExit: bool option with get, set
                 /// <summary>
                 /// An array containing the list of glob patterns to match test files.
                 /// This option cannot be used together with <c>files</c>.
                 /// **Default:** Same as [running tests from the command line](https://nodejs.org/docs/latest-v22.x/api/test.html#running-tests-from-the-command-line).
                 /// </summary>
-                member val globPatterns: ReadonlyArray<string> option = nativeOnly with get, set
+                abstract member globPatterns: ReadonlyArray<string> option with get, set
                 /// <summary>
                 /// Sets inspector port of test child process.
                 /// This can be a number, or a function that takes no arguments and returns a
@@ -162199,45 +162528,45 @@ Duplex.fromWeb($0, $1)"""
                 /// if the <c>isolation</c> option is set to <c>'none'</c> as no child processes are
                 /// spawned.
                 /// </summary>
-                member val inspectPort: U2<float, (unit -> float)> option = nativeOnly with get, set
+                abstract member inspectPort: U2<float, (unit -> float)> option with get, set
                 /// <summary>
                 /// Configures the type of test isolation. If set to
                 /// <c>'process'</c>, each test file is run in a separate child process. If set to
                 /// <c>'none'</c>, all test files run in the current process.
                 /// </summary>
-                member val isolation: RunOptions.isolation option = nativeOnly with get, set
+                abstract member isolation: RunOptions.isolation option with get, set
                 /// <summary>
                 /// If truthy, the test context will only run tests that have the <c>only</c> option set
                 /// </summary>
-                member val only: bool option = nativeOnly with get, set
+                abstract member only: bool option with get, set
 
                 /// <summary>
                 /// A function that accepts the <c>TestsStream</c> instance and can be used to setup listeners before any tests are run.
                 /// </summary>
-                member val setup: (Node.test.test_.TestsStream -> U2<unit, JS.Promise<unit>>) option =
-                    nativeOnly with get, set
+                abstract member setup:
+                    (Node.test.test_.TestsStream -> U2<unit, JS.Promise<unit>>) option with get, set
 
                 /// <summary>
                 /// An array of CLI flags to pass to the <c>node</c> executable when
                 /// spawning the subprocesses. This option has no effect when <c>isolation</c> is <c>'none</c>'.
                 /// </summary>
-                member val execArgv: ReadonlyArray<string> option = nativeOnly with get, set
+                abstract member execArgv: ReadonlyArray<string> option with get, set
                 /// <summary>
                 /// An array of CLI flags to pass to each test file when spawning the
                 /// subprocesses. This option has no effect when <c>isolation</c> is <c>'none'</c>.
                 /// </summary>
-                member val argv: ReadonlyArray<string> option = nativeOnly with get, set
+                abstract member argv: ReadonlyArray<string> option with get, set
                 /// <summary>
                 /// Allows aborting an in-progress test execution.
                 /// </summary>
-                member val signal: Node.AbortSignal option = nativeOnly with get, set
+                abstract member signal: Node.AbortSignal option with get, set
 
                 /// <summary>
                 /// If provided, only run tests whose name matches the provided pattern.
                 /// Strings are interpreted as JavaScript regular expressions.
                 /// </summary>
-                member val testNamePatterns: U3<string, RegExp, ReadonlyArray<U2<string, RegExp>>> option =
-                    nativeOnly with get, set
+                abstract member testNamePatterns:
+                    U3<string, RegExp, ReadonlyArray<U2<string, RegExp>>> option with get, set
 
                 /// <summary>
                 /// A String, RegExp or a RegExp Array, that can be used to exclude running tests whose
@@ -162245,27 +162574,26 @@ Duplex.fromWeb($0, $1)"""
                 /// regular expressions. For each test that is executed, any corresponding test hooks,
                 /// such as <c>beforeEach()</c>, are also run.
                 /// </summary>
-                member val testSkipPatterns: U3<string, RegExp, ReadonlyArray<U2<string, RegExp>>> option =
-                    nativeOnly with get, set
+                abstract member testSkipPatterns:
+                    U3<string, RegExp, ReadonlyArray<U2<string, RegExp>>> option with get, set
 
                 /// <summary>
                 /// The number of milliseconds after which the test execution will fail.
                 /// If unspecified, subtests inherit this value from their parent.
                 /// </summary>
-                member val timeout: float option = nativeOnly with get, set
+                abstract member timeout: float option with get, set
                 /// <summary>
                 /// Whether to run in watch mode or not.
                 /// </summary>
-                member val watch: bool option = nativeOnly with get, set
+                abstract member watch: bool option with get, set
                 /// <summary>
                 /// Running tests in a specific shard.
                 /// </summary>
-                member val shard: Node.test.test_.TestShard option = nativeOnly with get, set
+                abstract member shard: Node.test.test_.TestShard option with get, set
                 /// <summary>
                 /// enable [code coverage](https://nodejs.org/docs/latest-v22.x/api/test.html#collecting-code-coverage) collection.
                 /// </summary>
-                member val coverage: bool option = nativeOnly with get, set
-
+                abstract member coverage: bool option with get, set
                 /// <summary>
                 /// Excludes specific files from code coverage
                 /// using a glob pattern, which can match both absolute and relative file paths.
@@ -162273,9 +162601,7 @@ Duplex.fromWeb($0, $1)"""
                 /// If both <c>coverageExcludeGlobs</c> and <c>coverageIncludeGlobs</c> are provided,
                 /// files must meet **both** criteria to be included in the coverage report.
                 /// </summary>
-                member val coverageExcludeGlobs: U2<string, ReadonlyArray<string>> option =
-                    nativeOnly with get, set
-
+                abstract member coverageExcludeGlobs: U2<string, ReadonlyArray<string>> option with get, set
                 /// <summary>
                 /// Includes specific files in code coverage
                 /// using a glob pattern, which can match both absolute and relative file paths.
@@ -162283,24 +162609,52 @@ Duplex.fromWeb($0, $1)"""
                 /// If both <c>coverageExcludeGlobs</c> and <c>coverageIncludeGlobs</c> are provided,
                 /// files must meet **both** criteria to be included in the coverage report.
                 /// </summary>
-                member val coverageIncludeGlobs: U2<string, ReadonlyArray<string>> option =
-                    nativeOnly with get, set
-
+                abstract member coverageIncludeGlobs: U2<string, ReadonlyArray<string>> option with get, set
                 /// <summary>
                 /// Require a minimum percent of covered lines. If code
                 /// coverage does not reach the threshold specified, the process will exit with code <c>1</c>.
                 /// </summary>
-                member val lineCoverage: float option = nativeOnly with get, set
+                abstract member lineCoverage: float option with get, set
                 /// <summary>
                 /// Require a minimum percent of covered branches. If code
                 /// coverage does not reach the threshold specified, the process will exit with code <c>1</c>.
                 /// </summary>
-                member val branchCoverage: float option = nativeOnly with get, set
+                abstract member branchCoverage: float option with get, set
                 /// <summary>
                 /// Require a minimum percent of covered functions. If code
                 /// coverage does not reach the threshold specified, the process will exit with code <c>1</c>.
                 /// </summary>
-                member val functionCoverage: float option = nativeOnly with get, set
+                abstract member functionCoverage: float option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        ?concurrency: U2<float, bool>,
+                        ?files: ReadonlyArray<string>,
+                        ?forceExit: bool,
+                        ?globPatterns: ReadonlyArray<string>,
+                        ?inspectPort: U2<float, (unit -> float)>,
+                        ?isolation: RunOptions.isolation,
+                        ?only: bool,
+                        ?setup: (Node.test.test_.TestsStream -> U2<unit, JS.Promise<unit>>),
+                        ?execArgv: ReadonlyArray<string>,
+                        ?argv: ReadonlyArray<string>,
+                        ?signal: Node.AbortSignal,
+                        ?testNamePatterns: U3<string, RegExp, ReadonlyArray<U2<string, RegExp>>>,
+                        ?testSkipPatterns: U3<string, RegExp, ReadonlyArray<U2<string, RegExp>>>,
+                        ?timeout: float,
+                        ?watch: bool,
+                        ?shard: Node.test.test_.TestShard,
+                        ?coverage: bool,
+                        ?coverageExcludeGlobs: U2<string, ReadonlyArray<string>>,
+                        ?coverageIncludeGlobs: U2<string, ReadonlyArray<string>>,
+                        ?lineCoverage: float,
+                        ?branchCoverage: float,
+                        ?functionCoverage: float
+                    )
+                    : RunOptions
+                    =
+                    nativeOnly
 
             /// <summary>
             /// A successful call to <c>run()</c> will return a new <c>TestsStream</c> object, streaming a series of events representing the execution of the tests.
@@ -164833,28 +165187,18 @@ Duplex.fromWeb($0, $1)"""
                     /// </summary>
                     abstract member line: float option with get, set
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type TestDiagnostic
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        message: string,
-                        nesting: float,
-                        level: TestDiagnostic.level,
-                        ?column: float,
-                        ?file: string,
-                        ?line: float
-                    )
-                    =
-
+                [<Interface>]
+                type TestDiagnostic =
+                    inherit Node.test.test_.EventData.LocationInfo
                     /// <summary>
                     /// The diagnostic message.
                     /// </summary>
-                    member val message: string = nativeOnly with get, set
+                    abstract member message: string with get, set
                     /// <summary>
                     /// The nesting level of the test.
                     /// </summary>
-                    member val nesting: float = nativeOnly with get, set
+                    abstract member nesting: float with get, set
                     /// <summary>
                     /// The severity level of the diagnostic message.
                     /// Possible values are:
@@ -164862,393 +165206,346 @@ Duplex.fromWeb($0, $1)"""
                     /// * <c>'warn'</c>: Warnings.
                     /// * <c>'error'</c>: Errors.
                     /// </summary>
-                    member val level: TestDiagnostic.level = nativeOnly with get, set
-                    /// <summary>
-                    /// The column number where the test is defined, or
-                    /// <c>undefined</c> if the test was run through the REPL.
-                    /// </summary>
-                    member val column: float option = nativeOnly with get, set
-                    /// <summary>
-                    /// The path of the test file, <c>undefined</c> if test was run through the REPL.
-                    /// </summary>
-                    member val file: string option = nativeOnly with get, set
-                    /// <summary>
-                    /// The line number where the test is defined, or <c>undefined</c> if the test was run through the REPL.
-                    /// </summary>
-                    member val line: float option = nativeOnly with get, set
+                    abstract member level: TestDiagnostic.level with get, set
 
-                [<Global>]
-                [<AllowNullLiteral>]
-                type TestCoverage
                     [<ParamObject; Emit("$0")>]
-                    (summary: TestCoverage.summary, nesting: float)
-                    =
+                    static member Create
+                        (
+                            message: string,
+                            nesting: float,
+                            level: TestDiagnostic.level,
+                            ?column: float,
+                            ?file: string,
+                            ?line: float
+                        )
+                        : TestDiagnostic
+                        =
+                        nativeOnly
 
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type TestCoverage =
                     /// <summary>
                     /// An object containing the coverage report.
                     /// </summary>
-                    member val summary: TestCoverage.summary = nativeOnly with get, set
+                    abstract member summary: TestCoverage.summary with get, set
                     /// <summary>
                     /// The nesting level of the test.
                     /// </summary>
-                    member val nesting: float = nativeOnly with get, set
+                    abstract member nesting: float with get, set
 
-                [<Global>]
-                [<AllowNullLiteral>]
-                type TestComplete
                     [<ParamObject; Emit("$0")>]
-                    (
-                        details: TestComplete.details,
-                        name: string,
-                        nesting: float,
-                        testNumber: float,
-                        ?column: float,
-                        ?file: string,
-                        ?line: float,
-                        ?todo: U2<string, bool>,
-                        ?skip: U2<string, bool>
-                    )
-                    =
+                    static member Create
+                        (summary: TestCoverage.summary, nesting: float)
+                        : TestCoverage
+                        =
+                        nativeOnly
 
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type TestComplete =
+                    inherit Node.test.test_.EventData.LocationInfo
                     /// <summary>
                     /// Additional execution metadata.
                     /// </summary>
-                    member val details: TestComplete.details = nativeOnly with get, set
+                    abstract member details: TestComplete.details with get, set
                     /// <summary>
                     /// The test name.
                     /// </summary>
-                    member val name: string = nativeOnly with get, set
+                    abstract member name: string with get, set
                     /// <summary>
                     /// The nesting level of the test.
                     /// </summary>
-                    member val nesting: float = nativeOnly with get, set
+                    abstract member nesting: float with get, set
                     /// <summary>
                     /// The ordinal number of the test.
                     /// </summary>
-                    member val testNumber: float = nativeOnly with get, set
-                    /// <summary>
-                    /// The column number where the test is defined, or
-                    /// <c>undefined</c> if the test was run through the REPL.
-                    /// </summary>
-                    member val column: float option = nativeOnly with get, set
-                    /// <summary>
-                    /// The path of the test file, <c>undefined</c> if test was run through the REPL.
-                    /// </summary>
-                    member val file: string option = nativeOnly with get, set
-                    /// <summary>
-                    /// The line number where the test is defined, or <c>undefined</c> if the test was run through the REPL.
-                    /// </summary>
-                    member val line: float option = nativeOnly with get, set
+                    abstract member testNumber: float with get, set
                     /// <summary>
                     /// Present if <c>context.todo</c> is called.
                     /// </summary>
-                    member val todo: U2<string, bool> option = nativeOnly with get, set
+                    abstract member todo: U2<string, bool> option with get, set
                     /// <summary>
                     /// Present if <c>context.skip</c> is called.
                     /// </summary>
-                    member val skip: U2<string, bool> option = nativeOnly with get, set
+                    abstract member skip: U2<string, bool> option with get, set
 
-                [<Global>]
-                [<AllowNullLiteral>]
-                type TestDequeue
                     [<ParamObject; Emit("$0")>]
-                    (
-                        name: string,
-                        nesting: float,
-                        ``type``: TestDequeue.``type``,
-                        ?column: float,
-                        ?file: string,
-                        ?line: float
-                    )
-                    =
+                    static member Create
+                        (
+                            details: TestComplete.details,
+                            name: string,
+                            nesting: float,
+                            testNumber: float,
+                            ?column: float,
+                            ?file: string,
+                            ?line: float,
+                            ?todo: U2<string, bool>,
+                            ?skip: U2<string, bool>
+                        )
+                        : TestComplete
+                        =
+                        nativeOnly
 
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type TestDequeue =
+                    inherit Node.test.test_.EventData.LocationInfo
                     /// <summary>
                     /// The test name.
                     /// </summary>
-                    member val name: string = nativeOnly with get, set
+                    abstract member name: string with get, set
                     /// <summary>
                     /// The nesting level of the test.
                     /// </summary>
-                    member val nesting: float = nativeOnly with get, set
+                    abstract member nesting: float with get, set
                     /// <summary>
                     /// The test type. Either <c>'suite'</c> or <c>'test'</c>.
                     /// </summary>
-                    member val ``type``: TestDequeue.``type`` = nativeOnly with get, set
-                    /// <summary>
-                    /// The column number where the test is defined, or
-                    /// <c>undefined</c> if the test was run through the REPL.
-                    /// </summary>
-                    member val column: float option = nativeOnly with get, set
-                    /// <summary>
-                    /// The path of the test file, <c>undefined</c> if test was run through the REPL.
-                    /// </summary>
-                    member val file: string option = nativeOnly with get, set
-                    /// <summary>
-                    /// The line number where the test is defined, or <c>undefined</c> if the test was run through the REPL.
-                    /// </summary>
-                    member val line: float option = nativeOnly with get, set
+                    abstract member ``type``: TestDequeue.``type`` with get, set
 
-                [<Global>]
-                [<AllowNullLiteral>]
-                type TestEnqueue
                     [<ParamObject; Emit("$0")>]
-                    (
-                        name: string,
-                        nesting: float,
-                        ``type``: TestEnqueue.``type``,
-                        ?column: float,
-                        ?file: string,
-                        ?line: float
-                    )
-                    =
+                    static member Create
+                        (
+                            name: string,
+                            nesting: float,
+                            ``type``: TestDequeue.``type``,
+                            ?column: float,
+                            ?file: string,
+                            ?line: float
+                        )
+                        : TestDequeue
+                        =
+                        nativeOnly
 
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type TestEnqueue =
+                    inherit Node.test.test_.EventData.LocationInfo
                     /// <summary>
                     /// The test name.
                     /// </summary>
-                    member val name: string = nativeOnly with get, set
+                    abstract member name: string with get, set
                     /// <summary>
                     /// The nesting level of the test.
                     /// </summary>
-                    member val nesting: float = nativeOnly with get, set
+                    abstract member nesting: float with get, set
                     /// <summary>
                     /// The test type. Either <c>'suite'</c> or <c>'test'</c>.
                     /// </summary>
-                    member val ``type``: TestEnqueue.``type`` = nativeOnly with get, set
-                    /// <summary>
-                    /// The column number where the test is defined, or
-                    /// <c>undefined</c> if the test was run through the REPL.
-                    /// </summary>
-                    member val column: float option = nativeOnly with get, set
-                    /// <summary>
-                    /// The path of the test file, <c>undefined</c> if test was run through the REPL.
-                    /// </summary>
-                    member val file: string option = nativeOnly with get, set
-                    /// <summary>
-                    /// The line number where the test is defined, or <c>undefined</c> if the test was run through the REPL.
-                    /// </summary>
-                    member val line: float option = nativeOnly with get, set
+                    abstract member ``type``: TestEnqueue.``type`` with get, set
 
-                [<Global>]
-                [<AllowNullLiteral>]
-                type TestFail
                     [<ParamObject; Emit("$0")>]
-                    (
-                        details: TestFail.details,
-                        name: string,
-                        nesting: float,
-                        testNumber: float,
-                        ?column: float,
-                        ?file: string,
-                        ?line: float,
-                        ?todo: U2<string, bool>,
-                        ?skip: U2<string, bool>
-                    )
-                    =
+                    static member Create
+                        (
+                            name: string,
+                            nesting: float,
+                            ``type``: TestEnqueue.``type``,
+                            ?column: float,
+                            ?file: string,
+                            ?line: float
+                        )
+                        : TestEnqueue
+                        =
+                        nativeOnly
 
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type TestFail =
+                    inherit Node.test.test_.EventData.LocationInfo
                     /// <summary>
                     /// Additional execution metadata.
                     /// </summary>
-                    member val details: TestFail.details = nativeOnly with get, set
+                    abstract member details: TestFail.details with get, set
                     /// <summary>
                     /// The test name.
                     /// </summary>
-                    member val name: string = nativeOnly with get, set
+                    abstract member name: string with get, set
                     /// <summary>
                     /// The nesting level of the test.
                     /// </summary>
-                    member val nesting: float = nativeOnly with get, set
+                    abstract member nesting: float with get, set
                     /// <summary>
                     /// The ordinal number of the test.
                     /// </summary>
-                    member val testNumber: float = nativeOnly with get, set
-                    /// <summary>
-                    /// The column number where the test is defined, or
-                    /// <c>undefined</c> if the test was run through the REPL.
-                    /// </summary>
-                    member val column: float option = nativeOnly with get, set
-                    /// <summary>
-                    /// The path of the test file, <c>undefined</c> if test was run through the REPL.
-                    /// </summary>
-                    member val file: string option = nativeOnly with get, set
-                    /// <summary>
-                    /// The line number where the test is defined, or <c>undefined</c> if the test was run through the REPL.
-                    /// </summary>
-                    member val line: float option = nativeOnly with get, set
+                    abstract member testNumber: float with get, set
                     /// <summary>
                     /// Present if <c>context.todo</c> is called.
                     /// </summary>
-                    member val todo: U2<string, bool> option = nativeOnly with get, set
+                    abstract member todo: U2<string, bool> option with get, set
                     /// <summary>
                     /// Present if <c>context.skip</c> is called.
                     /// </summary>
-                    member val skip: U2<string, bool> option = nativeOnly with get, set
+                    abstract member skip: U2<string, bool> option with get, set
 
-                [<Global>]
-                [<AllowNullLiteral>]
-                type TestPass
                     [<ParamObject; Emit("$0")>]
-                    (
-                        details: TestPass.details,
-                        name: string,
-                        nesting: float,
-                        testNumber: float,
-                        ?column: float,
-                        ?file: string,
-                        ?line: float,
-                        ?todo: U2<string, bool>,
-                        ?skip: U2<string, bool>
-                    )
-                    =
+                    static member Create
+                        (
+                            details: TestFail.details,
+                            name: string,
+                            nesting: float,
+                            testNumber: float,
+                            ?column: float,
+                            ?file: string,
+                            ?line: float,
+                            ?todo: U2<string, bool>,
+                            ?skip: U2<string, bool>
+                        )
+                        : TestFail
+                        =
+                        nativeOnly
 
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type TestPass =
+                    inherit Node.test.test_.EventData.LocationInfo
                     /// <summary>
                     /// Additional execution metadata.
                     /// </summary>
-                    member val details: TestPass.details = nativeOnly with get, set
+                    abstract member details: TestPass.details with get, set
                     /// <summary>
                     /// The test name.
                     /// </summary>
-                    member val name: string = nativeOnly with get, set
+                    abstract member name: string with get, set
                     /// <summary>
                     /// The nesting level of the test.
                     /// </summary>
-                    member val nesting: float = nativeOnly with get, set
+                    abstract member nesting: float with get, set
                     /// <summary>
                     /// The ordinal number of the test.
                     /// </summary>
-                    member val testNumber: float = nativeOnly with get, set
-                    /// <summary>
-                    /// The column number where the test is defined, or
-                    /// <c>undefined</c> if the test was run through the REPL.
-                    /// </summary>
-                    member val column: float option = nativeOnly with get, set
-                    /// <summary>
-                    /// The path of the test file, <c>undefined</c> if test was run through the REPL.
-                    /// </summary>
-                    member val file: string option = nativeOnly with get, set
-                    /// <summary>
-                    /// The line number where the test is defined, or <c>undefined</c> if the test was run through the REPL.
-                    /// </summary>
-                    member val line: float option = nativeOnly with get, set
+                    abstract member testNumber: float with get, set
                     /// <summary>
                     /// Present if <c>context.todo</c> is called.
                     /// </summary>
-                    member val todo: U2<string, bool> option = nativeOnly with get, set
+                    abstract member todo: U2<string, bool> option with get, set
                     /// <summary>
                     /// Present if <c>context.skip</c> is called.
                     /// </summary>
-                    member val skip: U2<string, bool> option = nativeOnly with get, set
+                    abstract member skip: U2<string, bool> option with get, set
 
-                [<Global>]
-                [<AllowNullLiteral>]
-                type TestPlan
                     [<ParamObject; Emit("$0")>]
-                    (nesting: float, count: float, ?column: float, ?file: string, ?line: float)
-                    =
+                    static member Create
+                        (
+                            details: TestPass.details,
+                            name: string,
+                            nesting: float,
+                            testNumber: float,
+                            ?column: float,
+                            ?file: string,
+                            ?line: float,
+                            ?todo: U2<string, bool>,
+                            ?skip: U2<string, bool>
+                        )
+                        : TestPass
+                        =
+                        nativeOnly
 
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type TestPlan =
+                    inherit Node.test.test_.EventData.LocationInfo
                     /// <summary>
                     /// The nesting level of the test.
                     /// </summary>
-                    member val nesting: float = nativeOnly with get, set
+                    abstract member nesting: float with get, set
                     /// <summary>
                     /// The number of subtests that have ran.
                     /// </summary>
-                    member val count: float = nativeOnly with get, set
-                    /// <summary>
-                    /// The column number where the test is defined, or
-                    /// <c>undefined</c> if the test was run through the REPL.
-                    /// </summary>
-                    member val column: float option = nativeOnly with get, set
-                    /// <summary>
-                    /// The path of the test file, <c>undefined</c> if test was run through the REPL.
-                    /// </summary>
-                    member val file: string option = nativeOnly with get, set
-                    /// <summary>
-                    /// The line number where the test is defined, or <c>undefined</c> if the test was run through the REPL.
-                    /// </summary>
-                    member val line: float option = nativeOnly with get, set
+                    abstract member count: float with get, set
 
-                [<Global>]
-                [<AllowNullLiteral>]
-                type TestStart
                     [<ParamObject; Emit("$0")>]
-                    (name: string, nesting: float, ?column: float, ?file: string, ?line: float)
-                    =
+                    static member Create
+                        (nesting: float, count: float, ?column: float, ?file: string, ?line: float)
+                        : TestPlan
+                        =
+                        nativeOnly
 
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type TestStart =
+                    inherit Node.test.test_.EventData.LocationInfo
                     /// <summary>
                     /// The test name.
                     /// </summary>
-                    member val name: string = nativeOnly with get, set
+                    abstract member name: string with get, set
                     /// <summary>
                     /// The nesting level of the test.
                     /// </summary>
-                    member val nesting: float = nativeOnly with get, set
-                    /// <summary>
-                    /// The column number where the test is defined, or
-                    /// <c>undefined</c> if the test was run through the REPL.
-                    /// </summary>
-                    member val column: float option = nativeOnly with get, set
-                    /// <summary>
-                    /// The path of the test file, <c>undefined</c> if test was run through the REPL.
-                    /// </summary>
-                    member val file: string option = nativeOnly with get, set
-                    /// <summary>
-                    /// The line number where the test is defined, or <c>undefined</c> if the test was run through the REPL.
-                    /// </summary>
-                    member val line: float option = nativeOnly with get, set
+                    abstract member nesting: float with get, set
 
-                [<Global>]
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (name: string, nesting: float, ?column: float, ?file: string, ?line: float)
+                        : TestStart
+                        =
+                        nativeOnly
+
                 [<AllowNullLiteral>]
-                type TestStderr [<ParamObject; Emit("$0")>] (file: string, message: string) =
-
+                [<Interface>]
+                type TestStderr =
                     /// <summary>
                     /// The path of the test file.
                     /// </summary>
-                    member val file: string = nativeOnly with get, set
+                    abstract member file: string with get, set
                     /// <summary>
                     /// The message written to <c>stderr</c>.
                     /// </summary>
-                    member val message: string = nativeOnly with get, set
+                    abstract member message: string with get, set
 
-                [<Global>]
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(file: string, message: string) : TestStderr = nativeOnly
+
                 [<AllowNullLiteral>]
-                type TestStdout [<ParamObject; Emit("$0")>] (file: string, message: string) =
-
+                [<Interface>]
+                type TestStdout =
                     /// <summary>
                     /// The path of the test file.
                     /// </summary>
-                    member val file: string = nativeOnly with get, set
+                    abstract member file: string with get, set
                     /// <summary>
                     /// The message written to <c>stdout</c>.
                     /// </summary>
-                    member val message: string = nativeOnly with get, set
+                    abstract member message: string with get, set
 
-                [<Global>]
-                [<AllowNullLiteral>]
-                type TestSummary
                     [<ParamObject; Emit("$0")>]
-                    (counts: TestSummary.counts, duration_ms: float, success: bool, ?file: string)
-                    =
+                    static member Create(file: string, message: string) : TestStdout = nativeOnly
 
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type TestSummary =
                     /// <summary>
                     /// An object containing the counts of various test results.
                     /// </summary>
-                    member val counts: TestSummary.counts = nativeOnly with get, set
+                    abstract member counts: TestSummary.counts with get, set
                     /// <summary>
                     /// The duration of the test run in milliseconds.
                     /// </summary>
-                    member val duration_ms: float = nativeOnly with get, set
-                    /// <summary>
-                    /// Indicates whether or not the test run is considered
-                    /// successful or not. If any error condition occurs, such as a failing test or
-                    /// unmet coverage threshold, this value will be set to <c>false</c>.
-                    /// </summary>
-                    member val success: bool = nativeOnly with get, set
+                    abstract member duration_ms: float with get, set
                     /// <summary>
                     /// The path of the test file that generated the
                     /// summary. If the summary corresponds to multiple files, this value is
                     /// <c>undefined</c>.
                     /// </summary>
-                    member val file: string option = nativeOnly with get, set
+                    abstract member file: string option with get, set
+                    /// <summary>
+                    /// Indicates whether or not the test run is considered
+                    /// successful or not. If any error condition occurs, such as a failing test or
+                    /// unmet coverage threshold, this value will be set to <c>false</c>.
+                    /// </summary>
+                    abstract member success: bool with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (
+                            counts: TestSummary.counts,
+                            duration_ms: float,
+                            success: bool,
+                            ?file: string
+                        )
+                        : TestSummary
+                        =
+                        nativeOnly
 
                 module TestDiagnostic =
 
@@ -165261,279 +165558,294 @@ Duplex.fromWeb($0, $1)"""
 
                 module TestCoverage =
 
-                    [<Global>]
                     [<AllowNullLiteral>]
-                    type summary
-                        [<ParamObject; Emit("$0")>]
-                        (
-                            files: ResizeArray<TestCoverage.summary.files>,
-                            thresholds: TestCoverage.summary.thresholds,
-                            totals: TestCoverage.summary.totals,
-                            workingDirectory: string
-                        )
-                        =
-
+                    [<Interface>]
+                    type summary =
                         /// <summary>
                         /// An array of coverage reports for individual files.
                         /// </summary>
-                        member val files: ResizeArray<TestCoverage.summary.files> =
-                            nativeOnly with get, set
-
+                        abstract member files: ResizeArray<TestCoverage.summary.files> with get, set
                         /// <summary>
                         /// An object containing whether or not the coverage for
                         /// each coverage type.
                         /// </summary>
-                        member val thresholds: TestCoverage.summary.thresholds =
-                            nativeOnly with get, set
-
+                        abstract member thresholds: TestCoverage.summary.thresholds with get, set
                         /// <summary>
                         /// An object containing a summary of coverage for all files.
                         /// </summary>
-                        member val totals: TestCoverage.summary.totals = nativeOnly with get, set
+                        abstract member totals: TestCoverage.summary.totals with get, set
                         /// <summary>
                         /// The working directory when code coverage began. This
                         /// is useful for displaying relative path names in case
                         /// the tests changed the working directory of the Node.js process.
                         /// </summary>
-                        member val workingDirectory: string = nativeOnly with get, set
+                        abstract member workingDirectory: string with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create
+                            (
+                                files: ResizeArray<TestCoverage.summary.files>,
+                                thresholds: TestCoverage.summary.thresholds,
+                                totals: TestCoverage.summary.totals,
+                                workingDirectory: string
+                            )
+                            : summary
+                            =
+                            nativeOnly
 
                     module summary =
 
-                        [<Global>]
                         [<AllowNullLiteral>]
-                        type files
-                            [<ParamObject; Emit("$0")>]
-                            (
-                                path: string,
-                                totalLineCount: float,
-                                totalBranchCount: float,
-                                totalFunctionCount: float,
-                                coveredLineCount: float,
-                                coveredBranchCount: float,
-                                coveredFunctionCount: float,
-                                coveredLinePercent: float,
-                                coveredBranchPercent: float,
-                                coveredFunctionPercent: float,
-                                functions: ResizeArray<TestCoverage.summary.files.functions>,
-                                branches: ResizeArray<TestCoverage.summary.files.branches>,
-                                lines: ResizeArray<TestCoverage.summary.files.lines>
-                            )
-                            =
-
+                        [<Interface>]
+                        type files =
                             /// <summary>
                             /// The absolute path of the file.
                             /// </summary>
-                            member val path: string = nativeOnly with get, set
+                            abstract member path: string with get, set
                             /// <summary>
                             /// The total number of lines.
                             /// </summary>
-                            member val totalLineCount: float = nativeOnly with get, set
+                            abstract member totalLineCount: float with get, set
                             /// <summary>
                             /// The total number of branches.
                             /// </summary>
-                            member val totalBranchCount: float = nativeOnly with get, set
+                            abstract member totalBranchCount: float with get, set
                             /// <summary>
                             /// The total number of functions.
                             /// </summary>
-                            member val totalFunctionCount: float = nativeOnly with get, set
+                            abstract member totalFunctionCount: float with get, set
                             /// <summary>
                             /// The number of covered lines.
                             /// </summary>
-                            member val coveredLineCount: float = nativeOnly with get, set
+                            abstract member coveredLineCount: float with get, set
                             /// <summary>
                             /// The number of covered branches.
                             /// </summary>
-                            member val coveredBranchCount: float = nativeOnly with get, set
+                            abstract member coveredBranchCount: float with get, set
                             /// <summary>
                             /// The number of covered functions.
                             /// </summary>
-                            member val coveredFunctionCount: float = nativeOnly with get, set
+                            abstract member coveredFunctionCount: float with get, set
                             /// <summary>
                             /// The percentage of lines covered.
                             /// </summary>
-                            member val coveredLinePercent: float = nativeOnly with get, set
+                            abstract member coveredLinePercent: float with get, set
                             /// <summary>
                             /// The percentage of branches covered.
                             /// </summary>
-                            member val coveredBranchPercent: float = nativeOnly with get, set
+                            abstract member coveredBranchPercent: float with get, set
                             /// <summary>
                             /// The percentage of functions covered.
                             /// </summary>
-                            member val coveredFunctionPercent: float = nativeOnly with get, set
+                            abstract member coveredFunctionPercent: float with get, set
 
                             /// <summary>
                             /// An array of functions representing function coverage.
                             /// </summary>
-                            member val functions: ResizeArray<TestCoverage.summary.files.functions> =
-                                nativeOnly with get, set
+                            abstract member functions:
+                                ResizeArray<TestCoverage.summary.files.functions> with get, set
 
                             /// <summary>
                             /// An array of branches representing branch coverage.
                             /// </summary>
-                            member val branches: ResizeArray<TestCoverage.summary.files.branches> =
-                                nativeOnly with get, set
+                            abstract member branches:
+                                ResizeArray<TestCoverage.summary.files.branches> with get, set
 
                             /// <summary>
                             /// An array of lines representing line numbers and the number of times they were covered.
                             /// </summary>
-                            member val lines: ResizeArray<TestCoverage.summary.files.lines> =
-                                nativeOnly with get, set
+                            abstract member lines: ResizeArray<TestCoverage.summary.files.lines> with get, set
 
-                        [<Global>]
-                        [<AllowNullLiteral>]
-                        type thresholds
                             [<ParamObject; Emit("$0")>]
-                            (``function``: float, branch: float, line: float)
-                            =
+                            static member Create
+                                (
+                                    path: string,
+                                    totalLineCount: float,
+                                    totalBranchCount: float,
+                                    totalFunctionCount: float,
+                                    coveredLineCount: float,
+                                    coveredBranchCount: float,
+                                    coveredFunctionCount: float,
+                                    coveredLinePercent: float,
+                                    coveredBranchPercent: float,
+                                    coveredFunctionPercent: float,
+                                    functions: ResizeArray<TestCoverage.summary.files.functions>,
+                                    branches: ResizeArray<TestCoverage.summary.files.branches>,
+                                    lines: ResizeArray<TestCoverage.summary.files.lines>
+                                )
+                                : files
+                                =
+                                nativeOnly
 
+                        [<AllowNullLiteral>]
+                        [<Interface>]
+                        type thresholds =
                             /// <summary>
                             /// The function coverage threshold.
                             /// </summary>
-                            member val ``function``: float = nativeOnly with get, set
+                            abstract member ``function``: float with get, set
                             /// <summary>
                             /// The branch coverage threshold.
                             /// </summary>
-                            member val branch: float = nativeOnly with get, set
+                            abstract member branch: float with get, set
                             /// <summary>
                             /// The line coverage threshold.
                             /// </summary>
-                            member val line: float = nativeOnly with get, set
+                            abstract member line: float with get, set
 
-                        [<Global>]
-                        [<AllowNullLiteral>]
-                        type totals
                             [<ParamObject; Emit("$0")>]
-                            (
-                                totalLineCount: float,
-                                totalBranchCount: float,
-                                totalFunctionCount: float,
-                                coveredLineCount: float,
-                                coveredBranchCount: float,
-                                coveredFunctionCount: float,
-                                coveredLinePercent: float,
-                                coveredBranchPercent: float,
-                                coveredFunctionPercent: float
-                            )
-                            =
+                            static member Create
+                                (``function``: float, branch: float, line: float)
+                                : thresholds
+                                =
+                                nativeOnly
 
+                        [<AllowNullLiteral>]
+                        [<Interface>]
+                        type totals =
                             /// <summary>
                             /// The total number of lines.
                             /// </summary>
-                            member val totalLineCount: float = nativeOnly with get, set
+                            abstract member totalLineCount: float with get, set
                             /// <summary>
                             /// The total number of branches.
                             /// </summary>
-                            member val totalBranchCount: float = nativeOnly with get, set
+                            abstract member totalBranchCount: float with get, set
                             /// <summary>
                             /// The total number of functions.
                             /// </summary>
-                            member val totalFunctionCount: float = nativeOnly with get, set
+                            abstract member totalFunctionCount: float with get, set
                             /// <summary>
                             /// The number of covered lines.
                             /// </summary>
-                            member val coveredLineCount: float = nativeOnly with get, set
+                            abstract member coveredLineCount: float with get, set
                             /// <summary>
                             /// The number of covered branches.
                             /// </summary>
-                            member val coveredBranchCount: float = nativeOnly with get, set
+                            abstract member coveredBranchCount: float with get, set
                             /// <summary>
                             /// The number of covered functions.
                             /// </summary>
-                            member val coveredFunctionCount: float = nativeOnly with get, set
+                            abstract member coveredFunctionCount: float with get, set
                             /// <summary>
                             /// The percentage of lines covered.
                             /// </summary>
-                            member val coveredLinePercent: float = nativeOnly with get, set
+                            abstract member coveredLinePercent: float with get, set
                             /// <summary>
                             /// The percentage of branches covered.
                             /// </summary>
-                            member val coveredBranchPercent: float = nativeOnly with get, set
+                            abstract member coveredBranchPercent: float with get, set
                             /// <summary>
                             /// The percentage of functions covered.
                             /// </summary>
-                            member val coveredFunctionPercent: float = nativeOnly with get, set
+                            abstract member coveredFunctionPercent: float with get, set
+
+                            [<ParamObject; Emit("$0")>]
+                            static member Create
+                                (
+                                    totalLineCount: float,
+                                    totalBranchCount: float,
+                                    totalFunctionCount: float,
+                                    coveredLineCount: float,
+                                    coveredBranchCount: float,
+                                    coveredFunctionCount: float,
+                                    coveredLinePercent: float,
+                                    coveredBranchPercent: float,
+                                    coveredFunctionPercent: float
+                                )
+                                : totals
+                                =
+                                nativeOnly
 
                         module files =
 
-                            [<Global>]
                             [<AllowNullLiteral>]
-                            type functions
-                                [<ParamObject; Emit("$0")>]
-                                (name: string, line: float, count: float)
-                                =
-
+                            [<Interface>]
+                            type functions =
                                 /// <summary>
                                 /// The name of the function.
                                 /// </summary>
-                                member val name: string = nativeOnly with get, set
+                                abstract member name: string with get, set
                                 /// <summary>
                                 /// The line number where the function is defined.
                                 /// </summary>
-                                member val line: float = nativeOnly with get, set
+                                abstract member line: float with get, set
                                 /// <summary>
                                 /// The number of times the function was called.
                                 /// </summary>
-                                member val count: float = nativeOnly with get, set
+                                abstract member count: float with get, set
 
-                            [<Global>]
+                                [<ParamObject; Emit("$0")>]
+                                static member Create
+                                    (name: string, line: float, count: float)
+                                    : functions
+                                    =
+                                    nativeOnly
+
                             [<AllowNullLiteral>]
-                            type branches [<ParamObject; Emit("$0")>] (line: float, count: float) =
-
+                            [<Interface>]
+                            type branches =
                                 /// <summary>
                                 /// The line number where the branch is defined.
                                 /// </summary>
-                                member val line: float = nativeOnly with get, set
+                                abstract member line: float with get, set
                                 /// <summary>
                                 /// The number of times the branch was taken.
                                 /// </summary>
-                                member val count: float = nativeOnly with get, set
+                                abstract member count: float with get, set
 
-                            [<Global>]
+                                [<ParamObject; Emit("$0")>]
+                                static member Create(line: float, count: float) : branches =
+                                    nativeOnly
+
                             [<AllowNullLiteral>]
-                            type lines [<ParamObject; Emit("$0")>] (line: float, count: float) =
-
+                            [<Interface>]
+                            type lines =
                                 /// <summary>
                                 /// The line number.
                                 /// </summary>
-                                member val line: float = nativeOnly with get, set
+                                abstract member line: float with get, set
                                 /// <summary>
                                 /// The number of times the line was covered.
                                 /// </summary>
-                                member val count: float = nativeOnly with get, set
+                                abstract member count: float with get, set
+
+                                [<ParamObject; Emit("$0")>]
+                                static member Create(line: float, count: float) : lines = nativeOnly
 
                 module TestComplete =
 
-                    [<Global>]
                     [<AllowNullLiteral>]
-                    type details
-                        [<ParamObject; Emit("$0")>]
-                        (
-                            passed: bool,
-                            duration_ms: float,
-                            ?error: Node.test.test_.EventData.Error,
-                            ?``type``: string
-                        )
-                        =
-
+                    [<Interface>]
+                    type details =
                         /// <summary>
                         /// Whether the test passed or not.
                         /// </summary>
-                        member val passed: bool = nativeOnly with get, set
+                        abstract member passed: bool with get, set
                         /// <summary>
                         /// The duration of the test in milliseconds.
                         /// </summary>
-                        member val duration_ms: float = nativeOnly with get, set
-
+                        abstract member duration_ms: float with get, set
                         /// <summary>
                         /// An error wrapping the error thrown by the test if it did not pass.
                         /// </summary>
-                        member val error: Node.test.test_.EventData.Error option =
-                            nativeOnly with get, set
-
+                        abstract member error: Node.test.test_.EventData.Error option with get, set
                         /// <summary>
                         /// The type of the test, used to denote whether this is a suite.
                         /// </summary>
-                        member val ``type``: string option = nativeOnly with get, set
+                        abstract member ``type``: string option with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create
+                            (
+                                passed: bool,
+                                duration_ms: float,
+                                ?error: Node.test.test_.EventData.Error,
+                                ?``type``: string
+                            )
+                            : details
+                            =
+                            nativeOnly
 
                 module TestDequeue =
 
@@ -165553,91 +165865,99 @@ Duplex.fromWeb($0, $1)"""
 
                 module TestFail =
 
-                    [<Global>]
                     [<AllowNullLiteral>]
-                    type details
-                        [<ParamObject; Emit("$0")>]
-                        (
-                            duration_ms: float,
-                            error: Node.test.test_.EventData.Error,
-                            ?``type``: string
-                        )
-                        =
-
+                    [<Interface>]
+                    type details =
                         /// <summary>
                         /// The duration of the test in milliseconds.
                         /// </summary>
-                        member val duration_ms: float = nativeOnly with get, set
+                        abstract member duration_ms: float with get, set
                         /// <summary>
                         /// An error wrapping the error thrown by the test.
                         /// </summary>
-                        member val error: Node.test.test_.EventData.Error = nativeOnly with get, set
+                        abstract member error: Node.test.test_.EventData.Error with get, set
                         /// <summary>
                         /// The type of the test, used to denote whether this is a suite.
                         /// </summary>
-                        member val ``type``: string option = nativeOnly with get, set
+                        abstract member ``type``: string option with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create
+                            (
+                                duration_ms: float,
+                                error: Node.test.test_.EventData.Error,
+                                ?``type``: string
+                            )
+                            : details
+                            =
+                            nativeOnly
 
                 module TestPass =
 
-                    [<Global>]
                     [<AllowNullLiteral>]
-                    type details [<ParamObject; Emit("$0")>] (duration_ms: float, ?``type``: string)
-                        =
-
+                    [<Interface>]
+                    type details =
                         /// <summary>
                         /// The duration of the test in milliseconds.
                         /// </summary>
-                        member val duration_ms: float = nativeOnly with get, set
+                        abstract member duration_ms: float with get, set
                         /// <summary>
                         /// The type of the test, used to denote whether this is a suite.
                         /// </summary>
-                        member val ``type``: string option = nativeOnly with get, set
+                        abstract member ``type``: string option with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create(duration_ms: float, ?``type``: string) : details =
+                            nativeOnly
 
                 module TestSummary =
 
-                    [<Global>]
                     [<AllowNullLiteral>]
-                    type counts
-                        [<ParamObject; Emit("$0")>]
-                        (
-                            cancelled: float,
-                            passed: float,
-                            skipped: float,
-                            suites: float,
-                            tests: float,
-                            todo: float,
-                            topLevel: float
-                        )
-                        =
-
+                    [<Interface>]
+                    type counts =
                         /// <summary>
                         /// The total number of cancelled tests.
                         /// </summary>
-                        member val cancelled: float = nativeOnly with get, set
+                        abstract member cancelled: float with get, set
                         /// <summary>
                         /// The total number of passed tests.
                         /// </summary>
-                        member val passed: float = nativeOnly with get, set
+                        abstract member passed: float with get, set
                         /// <summary>
                         /// The total number of skipped tests.
                         /// </summary>
-                        member val skipped: float = nativeOnly with get, set
+                        abstract member skipped: float with get, set
                         /// <summary>
                         /// The total number of suites run.
                         /// </summary>
-                        member val suites: float = nativeOnly with get, set
+                        abstract member suites: float with get, set
                         /// <summary>
                         /// The total number of tests run, excluding suites.
                         /// </summary>
-                        member val tests: float = nativeOnly with get, set
+                        abstract member tests: float with get, set
                         /// <summary>
                         /// The total number of TODO tests.
                         /// </summary>
-                        member val todo: float = nativeOnly with get, set
+                        abstract member todo: float with get, set
                         /// <summary>
                         /// The total number of top level tests and suites.
                         /// </summary>
-                        member val topLevel: float = nativeOnly with get, set
+                        abstract member topLevel: float with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create
+                            (
+                                cancelled: float,
+                                passed: float,
+                                skipped: float,
+                                suites: float,
+                                tests: float,
+                                todo: float,
+                                topLevel: float
+                            )
+                            : counts
+                            =
+                            nativeOnly
 
             /// <summary>
             /// An instance of <c>TestContext</c> is passed to each test function in order to
@@ -165987,13 +166307,9 @@ Duplex.fromWeb($0, $1)"""
                 [<EmitIndexer>]
                 abstract member Item: name: string -> System.Delegate with get, set
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type AssertSnapshotOptions
-                [<ParamObject; Emit("$0")>]
-                (?serializers: ReadonlyArray<(obj -> unit)>)
-                =
-
+            [<Interface>]
+            type AssertSnapshotOptions =
                 /// <summary>
                 /// An array of synchronous functions used to serialize <c>value</c> into a string.
                 /// <c>value</c> is passed as the only argument to the first serializer function.
@@ -166002,19 +166318,18 @@ Duplex.fromWeb($0, $1)"""
                 ///
                 /// If no serializers are provided, the test runner's default serializers are used.
                 /// </summary>
-                member val serializers: ReadonlyArray<(obj -> unit)> option =
-                    nativeOnly with get, set
+                abstract member serializers: ReadonlyArray<(obj -> unit)> option with get, set
 
-            [<Global>]
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (?serializers: ReadonlyArray<(obj -> unit)>)
+                    : AssertSnapshotOptions
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
-            type TestContextPlanOptions [<ParamObject; Emit("$0")>] () =
-
-                [<ParamObject; Emit("$0")>]
-                new(wait: bool) = TestContextPlanOptions()
-
-                [<ParamObject; Emit("$0")>]
-                new(wait: float) = TestContextPlanOptions()
-
+            [<Interface>]
+            type TestContextPlanOptions =
                 /// <summary>
                 /// The wait time for the plan:
                 /// * If <c>true</c>, the plan waits indefinitely for all assertions and subtests to run.
@@ -166025,67 +166340,70 @@ Duplex.fromWeb($0, $1)"""
                 /// before timing out while waiting for expected assertions and subtests to be matched.
                 /// If the timeout is reached, the test will fail.
                 /// </summary>
-                member val wait: U2<bool, float> option = nativeOnly with get, set
+                abstract member wait: U2<bool, float> option with get, set
 
-            [<Global>]
-            [<AllowNullLiteral>]
-            type TestContextWaitForOptions
                 [<ParamObject; Emit("$0")>]
-                (?interval: float, ?timeout: float)
-                =
+                static member Create() : TestContextPlanOptions = nativeOnly
 
+                [<ParamObject; Emit("$0")>]
+                static member Create(wait: bool) : TestContextPlanOptions = nativeOnly
+
+                [<ParamObject; Emit("$0")>]
+                static member Create(wait: float) : TestContextPlanOptions = nativeOnly
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type TestContextWaitForOptions =
                 /// <summary>
                 /// The number of milliseconds to wait after an unsuccessful
                 /// invocation of <c>condition</c> before trying again.
                 /// </summary>
-                member val interval: float option = nativeOnly with get, set
+                abstract member interval: float option with get, set
                 /// <summary>
                 /// The poll timeout in milliseconds. If <c>condition</c> has not
                 /// succeeded by the time this elapses, an error occurs.
                 /// </summary>
-                member val timeout: float option = nativeOnly with get, set
+                abstract member timeout: float option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (?interval: float, ?timeout: float)
+                    : TestContextWaitForOptions
+                    =
+                    nativeOnly
 
             /// <summary>
             /// An instance of <c>SuiteContext</c> is passed to each suite function in order to
             /// interact with the test runner. However, the <c>SuiteContext</c> constructor is not
             /// exposed as part of the API.
             /// </summary>
-            [<Global>]
             [<AllowNullLiteral>]
-            type SuiteContext
-                [<ParamObject; Emit("$0")>]
-                (name: string, signal: Node.AbortSignal, ?filePath: string)
-                =
-
-                /// <summary>
-                /// The name of the suite.
-                /// </summary>
-                member val name: string = nativeOnly with get
-                /// <summary>
-                /// Can be used to abort test subtasks when the test has been aborted.
-                /// </summary>
-                member val signal: Node.AbortSignal = nativeOnly with get
+            [<Interface>]
+            type SuiteContext =
                 /// <summary>
                 /// The absolute path of the test file that created the current suite. If a test file imports
                 /// additional modules that generate suites, the imported suites will return the path of the root test file.
                 /// </summary>
-                member val filePath: string option = nativeOnly with get
+                abstract member filePath: string option with get
+                /// <summary>
+                /// The name of the suite.
+                /// </summary>
+                abstract member name: string with get
+                /// <summary>
+                /// Can be used to abort test subtasks when the test has been aborted.
+                /// </summary>
+                abstract member signal: Node.AbortSignal with get
 
-            [<Global>]
-            [<AllowNullLiteral>]
-            type TestOptions
                 [<ParamObject; Emit("$0")>]
-                (
-                    ?concurrency: U2<float, bool>,
-                    ?only: bool,
-                    ?signal: Node.AbortSignal,
-                    ?skip: U2<bool, string>,
-                    ?timeout: float,
-                    ?todo: U2<bool, string>,
-                    ?plan: float
-                )
-                =
+                static member Create
+                    (name: string, signal: Node.AbortSignal, ?filePath: string)
+                    : SuiteContext
+                    =
+                    nativeOnly
 
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type TestOptions =
                 /// <summary>
                 /// If a number is provided, then that many tests would run in parallel.
                 /// If truthy, it would run (number of cpu cores - 1) tests in parallel.
@@ -166093,37 +166411,52 @@ Duplex.fromWeb($0, $1)"""
                 /// If falsy, it would only run one test at a time.
                 /// If unspecified, subtests inherit this value from their parent.
                 /// </summary>
-                member val concurrency: U2<float, bool> option = nativeOnly with get, set
+                abstract member concurrency: U2<float, bool> option with get, set
                 /// <summary>
                 /// If truthy, and the test context is configured to run <c>only</c> tests, then this test will be
                 /// run. Otherwise, the test is skipped.
                 /// </summary>
-                member val only: bool option = nativeOnly with get, set
+                abstract member only: bool option with get, set
                 /// <summary>
                 /// Allows aborting an in-progress test.
                 /// </summary>
-                member val signal: Node.AbortSignal option = nativeOnly with get, set
+                abstract member signal: Node.AbortSignal option with get, set
                 /// <summary>
                 /// If truthy, the test is skipped. If a string is provided, that string is displayed in the
                 /// test results as the reason for skipping the test.
                 /// </summary>
-                member val skip: U2<bool, string> option = nativeOnly with get, set
+                abstract member skip: U2<bool, string> option with get, set
                 /// <summary>
                 /// A number of milliseconds the test will fail after. If unspecified, subtests inherit this
                 /// value from their parent.
                 /// </summary>
-                member val timeout: float option = nativeOnly with get, set
+                abstract member timeout: float option with get, set
                 /// <summary>
                 /// If truthy, the test marked as <c>TODO</c>. If a string is provided, that string is displayed in
                 /// the test results as the reason why the test is <c>TODO</c>.
                 /// </summary>
-                member val todo: U2<bool, string> option = nativeOnly with get, set
+                abstract member todo: U2<bool, string> option with get, set
                 /// <summary>
                 /// The number of assertions and subtests expected to be run in the test.
                 /// If the number of assertions run in the test does not match the number
                 /// specified in the plan, the test will fail.
                 /// </summary>
-                member val plan: float option = nativeOnly with get, set
+                abstract member plan: float option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        ?concurrency: U2<float, bool>,
+                        ?only: bool,
+                        ?signal: Node.AbortSignal,
+                        ?skip: U2<bool, string>,
+                        ?timeout: float,
+                        ?todo: U2<bool, string>,
+                        ?plan: float
+                    )
+                    : TestOptions
+                    =
+                    nativeOnly
 
             /// <summary>
             /// The hook function. The first argument is the context in which the hook is called.
@@ -166145,22 +166478,22 @@ Duplex.fromWeb($0, $1)"""
             /// <summary>
             /// Configuration options for hooks.
             /// </summary>
-            [<Global>]
             [<AllowNullLiteral>]
-            type HookOptions
-                [<ParamObject; Emit("$0")>]
-                (?signal: Node.AbortSignal, ?timeout: float)
-                =
-
+            [<Interface>]
+            type HookOptions =
                 /// <summary>
                 /// Allows aborting an in-progress hook.
                 /// </summary>
-                member val signal: Node.AbortSignal option = nativeOnly with get, set
+                abstract member signal: Node.AbortSignal option with get, set
                 /// <summary>
                 /// A number of milliseconds the hook will fail after. If unspecified, subtests inherit this
                 /// value from their parent.
                 /// </summary>
-                member val timeout: float option = nativeOnly with get, set
+                abstract member timeout: float option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create(?signal: Node.AbortSignal, ?timeout: float) : HookOptions =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -166173,47 +166506,40 @@ Duplex.fromWeb($0, $1)"""
                 /// </summary>
                 abstract member times: float option with get, set
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type MockMethodOptions
-                [<ParamObject; Emit("$0")>]
-                (?times: float, ?getter: bool, ?setter: bool)
-                =
-
-                /// <summary>
-                /// The number of times that the mock will use the behavior of <c>implementation</c>.
-                /// Once the mock function has been called <c>times</c> times,
-                /// it will automatically restore the behavior of <c>original</c>.
-                /// This value must be an integer greater than zero.
-                /// </summary>
-                member val times: float option = nativeOnly with get, set
+            [<Interface>]
+            type MockMethodOptions =
+                inherit Node.test.test_.MockFunctionOptions
                 /// <summary>
                 /// If <c>true</c>, <c>object[methodName]</c> is treated as a getter.
                 /// This option cannot be used with the <c>setter</c> option.
                 /// </summary>
-                member val getter: bool option = nativeOnly with get, set
+                abstract member getter: bool option with get, set
                 /// <summary>
                 /// If <c>true</c>, <c>object[methodName]</c> is treated as a setter.
                 /// This option cannot be used with the <c>getter</c> option.
                 /// </summary>
-                member val setter: bool option = nativeOnly with get, set
+                abstract member setter: bool option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (?times: float, ?getter: bool, ?setter: bool)
+                    : MockMethodOptions
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
             type Mock<'F> = interface end
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type MockModuleOptions
-                [<ParamObject; Emit("$0")>]
-                (?cache: bool, ?defaultExport: obj, ?namedExports: obj)
-                =
-
+            [<Interface>]
+            type MockModuleOptions =
                 /// <summary>
                 /// If false, each call to <c>require()</c> or <c>import()</c> generates a new mock module.
                 /// If true, subsequent calls will return the same module mock, and the mock module is inserted into the CommonJS cache.
                 /// </summary>
-                member val cache: bool option = nativeOnly with get, set
+                abstract member cache: bool option with get, set
                 /// <summary>
                 /// The value to use as the mocked module's default export.
                 ///
@@ -166221,7 +166547,7 @@ Duplex.fromWeb($0, $1)"""
                 /// If the mock is a CommonJS or builtin module, this setting is used as the value of <c>module.exports</c>.
                 /// If this value is not provided, CJS and builtin mocks use an empty object as the value of <c>module.exports</c>.
                 /// </summary>
-                member val defaultExport: obj option = nativeOnly with get, set
+                abstract member defaultExport: obj option with get, set
                 /// <summary>
                 /// An object whose keys and values are used to create the named exports of the mock module.
                 ///
@@ -166229,7 +166555,14 @@ Duplex.fromWeb($0, $1)"""
                 /// Therefore, if a mock is created with both named exports and a non-object default export,
                 /// the mock will throw an exception when used as a CJS or builtin module.
                 /// </summary>
-                member val namedExports: obj option = nativeOnly with get, set
+                abstract member namedExports: obj option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (?cache: bool, ?defaultExport: obj, ?namedExports: obj)
+                    : MockModuleOptions
+                    =
+                    nativeOnly
 
             /// <summary>
             /// The <c>MockTracker</c> class is used to manage mocking functionality. The test runner
@@ -166954,21 +167287,32 @@ Duplex.fromWeb($0, $1)"""
 
             type MockPropertyContext = MockPropertyContext<obj>
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type MockTimersOptions private () =
+            [<Interface>]
+            type MockTimersOptions =
+                abstract member apis: ReadonlyArray<MockTimersOptions.apis> with get, set
+                abstract member now: U2<float, Date> option with get, set
 
                 [<ParamObject; Emit("$0")>]
-                new(apis: ReadonlyArray<MockTimersOptions.apis>) = MockTimersOptions()
+                static member Create
+                    (apis: ReadonlyArray<MockTimersOptions.apis>)
+                    : MockTimersOptions
+                    =
+                    nativeOnly
 
                 [<ParamObject; Emit("$0")>]
-                new(apis: ReadonlyArray<MockTimersOptions.apis>, now: float) = MockTimersOptions()
+                static member Create
+                    (apis: ReadonlyArray<MockTimersOptions.apis>, now: float)
+                    : MockTimersOptions
+                    =
+                    nativeOnly
 
                 [<ParamObject; Emit("$0")>]
-                new(apis: ReadonlyArray<MockTimersOptions.apis>, now: Date) = MockTimersOptions()
-
-                member val apis: ReadonlyArray<MockTimersOptions.apis> = nativeOnly with get, set
-                member val now: U2<float, Date> option = nativeOnly with get, set
+                static member Create
+                    (apis: ReadonlyArray<MockTimersOptions.apis>, now: Date)
+                    : MockTimersOptions
+                    =
+                    nativeOnly
 
             /// <summary>
             /// Mocking timers is a technique commonly used in software testing to simulate and
@@ -167251,22 +167595,23 @@ Duplex.fromWeb($0, $1)"""
 
             module MockPropertyContext =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type accesses<'PropertyType>
+                [<Interface>]
+                type accesses<'PropertyType> =
+                    abstract member ``type``: MockPropertyContext.accesses.``type`` with get, set
+                    abstract member value: 'PropertyType with get, set
+                    abstract member stack: Exception with get, set
+
                     [<ParamObject; Emit("$0")>]
-                    (
-                        ``type``: MockPropertyContext.accesses.``type``,
-                        value: 'PropertyType,
-                        stack: Exception
-                    )
-                    =
-
-                    member val ``type``: MockPropertyContext.accesses.``type`` =
-                        nativeOnly with get, set
-
-                    member val value: 'PropertyType = nativeOnly with get, set
-                    member val stack: Exception = nativeOnly with get, set
+                    static member Create
+                        (
+                            ``type``: MockPropertyContext.accesses.``type``,
+                            value: 'PropertyType,
+                            stack: Exception
+                        )
+                        : accesses<'PropertyType>
+                        =
+                        nativeOnly
 
                 module accesses =
 
@@ -167442,15 +167787,18 @@ Duplex.fromWeb($0, $1)"""
 
                         module writev =
 
-                            [<Global>]
                             [<AllowNullLiteral>]
-                            type chunks
-                                [<ParamObject; Emit("$0")>]
-                                (chunk: obj, encoding: Node.BufferEncoding)
-                                =
+                            [<Interface>]
+                            type chunks =
+                                abstract member chunk: obj with get, set
+                                abstract member encoding: Node.BufferEncoding with get, set
 
-                                member val chunk: obj = nativeOnly with get, set
-                                member val encoding: Node.BufferEncoding = nativeOnly with get, set
+                                [<ParamObject; Emit("$0")>]
+                                static member Create
+                                    (chunk: obj, encoding: Node.BufferEncoding)
+                                    : chunks
+                                    =
+                                    nativeOnly
 
         type TestFn = test_.TestFn
 
@@ -167792,11 +168140,13 @@ Duplex.fromWeb($0, $1)"""
 
             module wait =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type options [<ParamObject; Emit("$0")>] (?signal: Node.AbortSignal) =
+                [<Interface>]
+                type options =
+                    abstract member signal: Node.AbortSignal option with get, set
 
-                    member val signal: Node.AbortSignal option = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(?signal: Node.AbortSignal) : options = nativeOnly
 
     module tls =
 
@@ -168415,298 +168765,81 @@ Duplex.fromWeb($0, $1)"""
             /// </summary>
             abstract member passphrase: string option with get, set
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type TLSSocketOptions
-            [<ParamObject; Emit("$0")>]
-            (
-                ?ALPNCallback: (TLSSocketOptions.ALPNCallback.arg -> string option),
-                ?allowPartialTrustChain: bool,
-                ?ca: U3<string, Node.Buffer, ResizeArray<U2<string, Node.Buffer>>>,
-                ?cert: U3<string, Node.Buffer, ResizeArray<U2<string, Node.Buffer>>>,
-                ?sigalgs: string,
-                ?ciphers: string,
-                ?clientCertEngine: string,
-                ?crl: U3<string, Node.Buffer, ResizeArray<U2<string, Node.Buffer>>>,
-                ?dhparam: U2<string, Node.Buffer>,
-                ?ecdhCurve: string,
-                ?honorCipherOrder: bool,
-                ?key:
-                    U3<string, Node.Buffer, ResizeArray<U3<string, Node.Buffer, Node.tls.KeyObject>>>,
-                ?privateKeyEngine: string,
-                ?privateKeyIdentifier: string,
-                ?maxVersion: Node.tls.SecureVersion,
-                ?minVersion: Node.tls.SecureVersion,
-                ?passphrase: string,
-                ?pfx:
-                    U3<string, Node.Buffer, ResizeArray<U3<string, Node.Buffer, Node.tls.PxfObject>>>,
-                ?secureOptions: float,
-                ?secureProtocol: string,
-                ?sessionIdContext: string,
-                ?ticketKeys: Node.Buffer,
-                ?sessionTimeout: float,
-                ?secureContext: Node.tls.SecureContext,
-                ?enableTrace: bool,
-                ?requestCert: bool,
-                ?ALPNProtocols: U2<ReadonlyArray<string>, Node.NodeJS.ArrayBufferView>,
-                ?SNICallback: TLSSocketOptions.SNICallback,
-                ?rejectUnauthorized: bool,
-                ?isServer: bool,
-                ?server: Node.net.Server,
-                ?session: Node.Buffer,
-                ?requestOCSP: bool
-            )
-            =
-
-            /// <summary>
-            /// If set, this will be called when a client opens a connection using the ALPN extension.
-            /// One argument will be passed to the callback: an object containing <c>servername</c> and <c>protocols</c> fields,
-            /// respectively containing the server name from the SNI extension (if any) and an array of
-            /// ALPN protocol name strings. The callback must return either one of the strings listed in <c>protocols</c>,
-            /// which will be returned to the client as the selected ALPN protocol, or <c>undefined</c>,
-            /// to reject the connection with a fatal alert. If a string is returned that does not match one of
-            /// the client's ALPN protocols, an error will be thrown.
-            /// This option cannot be used with the <c>ALPNProtocols</c> option, and setting both options will throw an error.
-            /// </summary>
-            member val ALPNCallback: (TLSSocketOptions.ALPNCallback.arg -> string option) option =
-                nativeOnly with get, set
-
-            /// <summary>
-            /// Treat intermediate (non-self-signed)
-            /// certificates in the trust CA certificate list as trusted.
-            /// </summary>
-            member val allowPartialTrustChain: bool option = nativeOnly with get, set
-
-            /// <summary>
-            /// Optionally override the trusted CA certificates. Default is to trust
-            /// the well-known CAs curated by Mozilla. Mozilla's CAs are completely
-            /// replaced when CAs are explicitly specified using this option.
-            /// </summary>
-            member val ca: U3<string, Node.Buffer, ResizeArray<U2<string, Node.Buffer>>> option =
-                nativeOnly with get, set
-
-            /// <summary>
-            /// Cert chains in PEM format. One cert chain should be provided per
-            /// private key. Each cert chain should consist of the PEM formatted
-            /// certificate for a provided private key, followed by the PEM
-            /// formatted intermediate certificates (if any), in order, and not
-            /// including the root CA (the root CA must be pre-known to the peer,
-            /// see ca). When providing multiple cert chains, they do not have to
-            /// be in the same order as their private keys in key. If the
-            /// intermediate certificates are not provided, the peer will not be
-            /// able to validate the certificate, and the handshake will fail.
-            /// </summary>
-            member val cert: U3<string, Node.Buffer, ResizeArray<U2<string, Node.Buffer>>> option =
-                nativeOnly with get, set
-
-            /// <summary>
-            /// Colon-separated list of supported signature algorithms. The list
-            /// can contain digest algorithms (SHA256, MD5 etc.), public key
-            /// algorithms (RSA-PSS, ECDSA etc.), combination of both (e.g
-            /// 'RSA+SHA384') or TLS v1.3 scheme names (e.g. rsa_pss_pss_sha512).
-            /// </summary>
-            member val sigalgs: string option = nativeOnly with get, set
-            /// <summary>
-            /// Cipher suite specification, replacing the default. For more
-            /// information, see modifying the default cipher suite. Permitted
-            /// ciphers can be obtained via tls.getCiphers(). Cipher names must be
-            /// uppercased in order for OpenSSL to accept them.
-            /// </summary>
-            member val ciphers: string option = nativeOnly with get, set
-            /// <summary>
-            /// Name of an OpenSSL engine which can provide the client certificate.
-            /// </summary>
-            member val clientCertEngine: string option = nativeOnly with get, set
-
-            /// <summary>
-            /// PEM formatted CRLs (Certificate Revocation Lists).
-            /// </summary>
-            member val crl: U3<string, Node.Buffer, ResizeArray<U2<string, Node.Buffer>>> option =
-                nativeOnly with get, set
-
-            /// <summary>
-            /// <c>'auto'</c> or custom Diffie-Hellman parameters, required for non-ECDHE perfect forward secrecy.
-            /// If omitted or invalid, the parameters are silently discarded and DHE ciphers will not be available.
-            /// ECDHE-based perfect forward secrecy will still be available.
-            /// </summary>
-            member val dhparam: U2<string, Node.Buffer> option = nativeOnly with get, set
-            /// <summary>
-            /// A string describing a named curve or a colon separated list of curve
-            /// NIDs or names, for example P-521:P-384:P-256, to use for ECDH key
-            /// agreement. Set to auto to select the curve automatically. Use
-            /// crypto.getCurves() to obtain a list of available curve names. On
-            /// recent releases, openssl ecparam -list_curves will also display the
-            /// name and description of each available elliptic curve. Default:
-            /// tls.DEFAULT_ECDH_CURVE.
-            /// </summary>
-            member val ecdhCurve: string option = nativeOnly with get, set
-            /// <summary>
-            /// Attempt to use the server's cipher suite preferences instead of the
-            /// client's. When true, causes SSL_OP_CIPHER_SERVER_PREFERENCE to be
-            /// set in secureOptions
-            /// </summary>
-            member val honorCipherOrder: bool option = nativeOnly with get, set
-
-            /// <summary>
-            /// Private keys in PEM format. PEM allows the option of private keys
-            /// being encrypted. Encrypted keys will be decrypted with
-            /// options.passphrase. Multiple keys using different algorithms can be
-            /// provided either as an array of unencrypted key strings or buffers,
-            /// or an array of objects in the form {pem: <string|buffer>[,
-            /// passphrase: <string>]}. The object form can only occur in an array.
-            /// object.passphrase is optional. Encrypted keys will be decrypted with
-            /// object.passphrase if provided, or options.passphrase if it is not.
-            /// </summary>
-            member val key: U3<
-                string,
-                Node.Buffer,
-                ResizeArray<U3<string, Node.Buffer, Node.tls.KeyObject>>
-                             > option = nativeOnly with get, set
-
-            /// <summary>
-            /// Name of an OpenSSL engine to get private key from. Should be used
-            /// together with privateKeyIdentifier.
-            /// </summary>
-            member val privateKeyEngine: string option = nativeOnly with get, set
-            /// <summary>
-            /// Identifier of a private key managed by an OpenSSL engine. Should be
-            /// used together with privateKeyEngine. Should not be set together with
-            /// key, because both options define a private key in different ways.
-            /// </summary>
-            member val privateKeyIdentifier: string option = nativeOnly with get, set
-            /// <summary>
-            /// Optionally set the maximum TLS version to allow. One
-            /// of <c>'TLSv1.3'</c>, <c>'TLSv1.2'</c>, <c>'TLSv1.1'</c>, or <c>'TLSv1'</c>. Cannot be specified along with the
-            /// <c>secureProtocol</c> option, use one or the other.
-            /// **Default:** <c>'TLSv1.3'</c>, unless changed using CLI options. Using
-            /// <c>--tls-max-v1.2</c> sets the default to <c>'TLSv1.2'</c>. Using <c>--tls-max-v1.3</c> sets the default to
-            /// <c>'TLSv1.3'</c>. If multiple of the options are provided, the highest maximum is used.
-            /// </summary>
-            member val maxVersion: Node.tls.SecureVersion option = nativeOnly with get, set
-            /// <summary>
-            /// Optionally set the minimum TLS version to allow. One
-            /// of <c>'TLSv1.3'</c>, <c>'TLSv1.2'</c>, <c>'TLSv1.1'</c>, or <c>'TLSv1'</c>. Cannot be specified along with the
-            /// <c>secureProtocol</c> option, use one or the other.  It is not recommended to use
-            /// less than TLSv1.2, but it may be required for interoperability.
-            /// **Default:** <c>'TLSv1.2'</c>, unless changed using CLI options. Using
-            /// <c>--tls-v1.0</c> sets the default to <c>'TLSv1'</c>. Using <c>--tls-v1.1</c> sets the default to
-            /// <c>'TLSv1.1'</c>. Using <c>--tls-min-v1.3</c> sets the default to
-            /// 'TLSv1.3'. If multiple of the options are provided, the lowest minimum is used.
-            /// </summary>
-            member val minVersion: Node.tls.SecureVersion option = nativeOnly with get, set
-            /// <summary>
-            /// Shared passphrase used for a single private key and/or a PFX.
-            /// </summary>
-            member val passphrase: string option = nativeOnly with get, set
-
-            /// <summary>
-            /// PFX or PKCS12 encoded private key and certificate chain. pfx is an
-            /// alternative to providing key and cert individually. PFX is usually
-            /// encrypted, if it is, passphrase will be used to decrypt it. Multiple
-            /// PFX can be provided either as an array of unencrypted PFX buffers,
-            /// or an array of objects in the form {buf: <string|buffer>[,
-            /// passphrase: <string>]}. The object form can only occur in an array.
-            /// object.passphrase is optional. Encrypted PFX will be decrypted with
-            /// object.passphrase if provided, or options.passphrase if it is not.
-            /// </summary>
-            member val pfx: U3<
-                string,
-                Node.Buffer,
-                ResizeArray<U3<string, Node.Buffer, Node.tls.PxfObject>>
-                             > option = nativeOnly with get, set
-
-            /// <summary>
-            /// Optionally affect the OpenSSL protocol behavior, which is not
-            /// usually necessary. This should be used carefully if at all! Value is
-            /// a numeric bitmask of the SSL_OP_* options from OpenSSL Options
-            /// </summary>
-            member val secureOptions: float option = nativeOnly with get, set
-            /// <summary>
-            /// Legacy mechanism to select the TLS protocol version to use, it does
-            /// not support independent control of the minimum and maximum version,
-            /// and does not support limiting the protocol to TLSv1.3. Use
-            /// minVersion and maxVersion instead. The possible values are listed as
-            /// SSL_METHODS, use the function names as strings. For example, use
-            /// 'TLSv1_1_method' to force TLS version 1.1, or 'TLS_method' to allow
-            /// any TLS protocol version up to TLSv1.3. It is not recommended to use
-            /// TLS versions less than 1.2, but it may be required for
-            /// interoperability. Default: none, see minVersion.
-            /// </summary>
-            member val secureProtocol: string option = nativeOnly with get, set
-            /// <summary>
-            /// Opaque identifier used by servers to ensure session state is not
-            /// shared between applications. Unused by clients.
-            /// </summary>
-            member val sessionIdContext: string option = nativeOnly with get, set
-            /// <summary>
-            /// 48-bytes of cryptographically strong pseudo-random data.
-            /// See Session Resumption for more information.
-            /// </summary>
-            member val ticketKeys: Node.Buffer option = nativeOnly with get, set
-            /// <summary>
-            /// The number of seconds after which a TLS session created by the
-            /// server will no longer be resumable. See Session Resumption for more
-            /// information. Default: 300.
-            /// </summary>
-            member val sessionTimeout: float option = nativeOnly with get, set
-            /// <summary>
-            /// An optional TLS context object from tls.createSecureContext()
-            /// </summary>
-            member val secureContext: Node.tls.SecureContext option = nativeOnly with get, set
-            /// <summary>
-            /// When enabled, TLS packet trace information is written to <c>stderr</c>. This can be
-            /// used to debug TLS connection problems.
-            /// </summary>
-            member val enableTrace: bool option = nativeOnly with get, set
-            /// <summary>
-            /// If true the server will request a certificate from clients that
-            /// connect and attempt to verify that certificate. Defaults to
-            /// false.
-            /// </summary>
-            member val requestCert: bool option = nativeOnly with get, set
-
-            /// <summary>
-            /// An array of strings or a Buffer naming possible ALPN protocols.
-            /// (Protocols should be ordered by their priority.)
-            /// </summary>
-            member val ALPNProtocols: U2<ReadonlyArray<string>, Node.NodeJS.ArrayBufferView> option =
-                nativeOnly with get, set
-
-            /// <summary>
-            /// SNICallback(servername, cb) <Function> A function that will be
-            /// called if the client supports SNI TLS extension. Two arguments
-            /// will be passed when called: servername and cb. SNICallback should
-            /// invoke cb(null, ctx), where ctx is a SecureContext instance.
-            /// (tls.createSecureContext(...) can be used to get a proper
-            /// SecureContext.) If SNICallback wasn't provided the default callback
-            /// with high-level API will be used (see below).
-            /// </summary>
-            member val SNICallback: TLSSocketOptions.SNICallback option = nativeOnly with get, set
-            /// <summary>
-            /// If true the server will reject any connection which is not
-            /// authorized with the list of supplied CAs. This option only has an
-            /// effect if requestCert is true.
-            /// </summary>
-            member val rejectUnauthorized: bool option = nativeOnly with get, set
+        [<Interface>]
+        type TLSSocketOptions =
+            inherit Node.tls.SecureContextOptions
+            inherit Node.tls.CommonConnectionOptions
             /// <summary>
             /// If true the TLS socket will be instantiated in server-mode.
             /// Defaults to false.
             /// </summary>
-            member val isServer: bool option = nativeOnly with get, set
+            abstract member isServer: bool option with get, set
             /// <summary>
             /// An optional net.Server instance.
             /// </summary>
-            member val server: Node.net.Server option = nativeOnly with get, set
+            abstract member server: Node.net.Server option with get, set
             /// <summary>
             /// An optional Buffer instance containing a TLS session.
             /// </summary>
-            member val session: Node.Buffer option = nativeOnly with get, set
+            abstract member session: Node.Buffer option with get, set
             /// <summary>
             /// If true, specifies that the OCSP status request extension will be
             /// added to the client hello and an 'OCSPResponse' event will be
             /// emitted on the socket before establishing a secure communication
             /// </summary>
-            member val requestOCSP: bool option = nativeOnly with get, set
+            abstract member requestOCSP: bool option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?ALPNCallback: (TLSSocketOptions.ALPNCallback.arg -> string option),
+                    ?allowPartialTrustChain: bool,
+                    ?ca: U3<string, Node.Buffer, ResizeArray<U2<string, Node.Buffer>>>,
+                    ?cert: U3<string, Node.Buffer, ResizeArray<U2<string, Node.Buffer>>>,
+                    ?sigalgs: string,
+                    ?ciphers: string,
+                    ?clientCertEngine: string,
+                    ?crl: U3<string, Node.Buffer, ResizeArray<U2<string, Node.Buffer>>>,
+                    ?dhparam: U2<string, Node.Buffer>,
+                    ?ecdhCurve: string,
+                    ?honorCipherOrder: bool,
+                    ?key:
+                        U3<
+                            string,
+                            Node.Buffer,
+                            ResizeArray<U3<string, Node.Buffer, Node.tls.KeyObject>>
+                         >,
+                    ?privateKeyEngine: string,
+                    ?privateKeyIdentifier: string,
+                    ?maxVersion: Node.tls.SecureVersion,
+                    ?minVersion: Node.tls.SecureVersion,
+                    ?passphrase: string,
+                    ?pfx:
+                        U3<
+                            string,
+                            Node.Buffer,
+                            ResizeArray<U3<string, Node.Buffer, Node.tls.PxfObject>>
+                         >,
+                    ?secureOptions: float,
+                    ?secureProtocol: string,
+                    ?sessionIdContext: string,
+                    ?ticketKeys: Node.Buffer,
+                    ?sessionTimeout: float,
+                    ?secureContext: Node.tls.SecureContext,
+                    ?enableTrace: bool,
+                    ?requestCert: bool,
+                    ?ALPNProtocols: U2<ReadonlyArray<string>, Node.NodeJS.ArrayBufferView>,
+                    ?SNICallback: TLSSocketOptions.SNICallback,
+                    ?rejectUnauthorized: bool,
+                    ?isServer: bool,
+                    ?server: Node.net.Server,
+                    ?session: Node.Buffer,
+                    ?requestOCSP: bool
+                )
+                : TLSSocketOptions
+                =
+                nativeOnly
 
         /// <summary>
         /// Performs transparent encryption of written data and all required TLS
@@ -171942,15 +172075,15 @@ Duplex.fromWeb($0, $1)"""
 
             module ALPNCallback =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type arg
-                    [<ParamObject; Emit("$0")>]
-                    (servername: string, protocols: ResizeArray<string>)
-                    =
+                [<Interface>]
+                type arg =
+                    abstract member servername: string with get, set
+                    abstract member protocols: ResizeArray<string> with get, set
 
-                    member val servername: string = nativeOnly with get, set
-                    member val protocols: ResizeArray<string> = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(servername: string, protocols: ResizeArray<string>) : arg =
+                        nativeOnly
 
             module SNICallback =
 
@@ -171960,15 +172093,15 @@ Duplex.fromWeb($0, $1)"""
 
             module renegotiate =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type options
-                    [<ParamObject; Emit("$0")>]
-                    (?rejectUnauthorized: bool, ?requestCert: bool)
-                    =
+                [<Interface>]
+                type options =
+                    abstract member rejectUnauthorized: bool option with get, set
+                    abstract member requestCert: bool option with get, set
 
-                    member val rejectUnauthorized: bool option = nativeOnly with get, set
-                    member val requestCert: bool option = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(?rejectUnauthorized: bool, ?requestCert: bool) : options =
+                        nativeOnly
 
         module CommonConnectionOptions =
 
@@ -172339,16 +172472,19 @@ Duplex.fromWeb($0, $1)"""
             /// </summary>
             abstract member enabled: bool with get
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type CreateTracingOptions [<ParamObject; Emit("$0")>] (categories: ResizeArray<string>) =
-
+        [<Interface>]
+        type CreateTracingOptions =
             /// <summary>
             /// An array of trace category names. Values included in the array are
             /// coerced to a string when possible. An error will be thrown if the
             /// value cannot be coerced.
             /// </summary>
-            member val categories: ResizeArray<string> = nativeOnly with get, set
+            abstract member categories: ResizeArray<string> with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create(categories: ResizeArray<string>) : CreateTracingOptions =
+                nativeOnly
 
     module buffer_buffer =
 
@@ -173831,38 +173967,39 @@ Duplex.fromWeb($0, $1)"""
             static member URLSearchParams(init: ResizeArray<string * string>) : URLSearchParams =
                 nativeOnly
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type UrlObject
+        [<Interface>]
+        type UrlObject =
+            abstract member auth: string option with get, set
+            abstract member hash: string option with get, set
+            abstract member host: string option with get, set
+            abstract member hostname: string option with get, set
+            abstract member href: string option with get, set
+            abstract member pathname: string option with get, set
+            abstract member protocol: string option with get, set
+            abstract member search: string option with get, set
+            abstract member slashes: bool option with get, set
+            abstract member port: U2<string, float> option with get, set
+            abstract member query: U2<string, Node.querystring.ParsedUrlQueryInput> option with get, set
+
             [<ParamObject; Emit("$0")>]
-            (
-                ?auth: string,
-                ?hash: string,
-                ?host: string,
-                ?hostname: string,
-                ?href: string,
-                ?pathname: string,
-                ?protocol: string,
-                ?search: string,
-                ?slashes: bool,
-                ?port: U2<string, float>,
-                ?query: U2<string, Node.querystring.ParsedUrlQueryInput>
-            )
-            =
-
-            member val auth: string option = nativeOnly with get, set
-            member val hash: string option = nativeOnly with get, set
-            member val host: string option = nativeOnly with get, set
-            member val hostname: string option = nativeOnly with get, set
-            member val href: string option = nativeOnly with get, set
-            member val pathname: string option = nativeOnly with get, set
-            member val protocol: string option = nativeOnly with get, set
-            member val search: string option = nativeOnly with get, set
-            member val slashes: bool option = nativeOnly with get, set
-            member val port: U2<string, float> option = nativeOnly with get, set
-
-            member val query: U2<string, Node.querystring.ParsedUrlQueryInput> option =
-                nativeOnly with get, set
+            static member Create
+                (
+                    ?auth: string,
+                    ?hash: string,
+                    ?host: string,
+                    ?hostname: string,
+                    ?href: string,
+                    ?pathname: string,
+                    ?protocol: string,
+                    ?search: string,
+                    ?slashes: bool,
+                    ?port: U2<string, float>,
+                    ?query: U2<string, Node.querystring.ParsedUrlQueryInput>
+                )
+                : UrlObject
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -173892,48 +174029,55 @@ Duplex.fromWeb($0, $1)"""
             inherit Node.url.Url
             abstract member query: string option with get, set
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type FileUrlToPathOptions [<ParamObject; Emit("$0")>] (?windows: bool) =
-
+        [<Interface>]
+        type FileUrlToPathOptions =
             /// <summary>
             /// <c>true</c> if the <c>path</c> should be return as a windows filepath, <c>false</c> for posix, and <c>undefined</c> for the system default.
             /// </summary>
-            member val windows: bool option = nativeOnly with get, set
+            abstract member windows: bool option with get, set
 
-        [<Global>]
-        [<AllowNullLiteral>]
-        type PathToFileUrlOptions [<ParamObject; Emit("$0")>] (?windows: bool) =
-
-            /// <summary>
-            /// <c>true</c> if the <c>path</c> should be return as a windows filepath, <c>false</c> for posix, and <c>undefined</c> for the system default.
-            /// </summary>
-            member val windows: bool option = nativeOnly with get, set
-
-        [<Global>]
-        [<AllowNullLiteral>]
-        type URLFormatOptions
             [<ParamObject; Emit("$0")>]
-            (?auth: bool, ?fragment: bool, ?search: bool, ?unicode: bool)
-            =
+            static member Create(?windows: bool) : FileUrlToPathOptions = nativeOnly
 
+        [<AllowNullLiteral>]
+        [<Interface>]
+        type PathToFileUrlOptions =
+            /// <summary>
+            /// <c>true</c> if the <c>path</c> should be return as a windows filepath, <c>false</c> for posix, and <c>undefined</c> for the system default.
+            /// </summary>
+            abstract member windows: bool option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create(?windows: bool) : PathToFileUrlOptions = nativeOnly
+
+        [<AllowNullLiteral>]
+        [<Interface>]
+        type URLFormatOptions =
             /// <summary>
             /// <c>true</c> if the serialized URL string should include the username and password, <c>false</c> otherwise.
             /// </summary>
-            member val auth: bool option = nativeOnly with get, set
+            abstract member auth: bool option with get, set
             /// <summary>
             /// <c>true</c> if the serialized URL string should include the fragment, <c>false</c> otherwise.
             /// </summary>
-            member val fragment: bool option = nativeOnly with get, set
+            abstract member fragment: bool option with get, set
             /// <summary>
             /// <c>true</c> if the serialized URL string should include the search query, <c>false</c> otherwise.
             /// </summary>
-            member val search: bool option = nativeOnly with get, set
+            abstract member search: bool option with get, set
             /// <summary>
             /// <c>true</c> if Unicode characters appearing in the host component of the URL string should be encoded directly as opposed to
             /// being Punycode encoded.
             /// </summary>
-            member val unicode: bool option = nativeOnly with get, set
+            abstract member unicode: bool option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (?auth: bool, ?fragment: bool, ?search: bool, ?unicode: bool)
+                : URLFormatOptions
+                =
+                nativeOnly
 
         /// <summary>
         /// Browser-compatible <c>URL</c> class, implemented by following the WHATWG URL
@@ -174554,11 +174698,13 @@ URL.parse($0, $1)"""
 
             module URL =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type input [<ParamObject; Emit("$0")>] (toString: (unit -> string)) =
+                [<Interface>]
+                type input =
+                    abstract member toString: (unit -> string) with get, set
 
-                    member val toString: (unit -> string) = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(toString: (unit -> string)) : input = nativeOnly
 
             module URLSearchParams =
 
@@ -176929,15 +177075,17 @@ URL.parse($0, $1)"""
 
         type DiffEntry = DiffEntry.Item * string
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type GetCallSitesOptions [<ParamObject; Emit("$0")>] (?sourceMap: bool) =
-
+        [<Interface>]
+        type GetCallSitesOptions =
             /// <summary>
             /// Reconstruct the original location in the stacktrace from the source-map.
             /// Enabled by default with the flag <c>--enable-source-maps</c>.
             /// </summary>
-            member val sourceMap: bool option = nativeOnly with get, set
+            abstract member sourceMap: bool option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create(?sourceMap: bool) : GetCallSitesOptions = nativeOnly
 
         module inspect_ =
 
@@ -177100,21 +177248,24 @@ URL.parse($0, $1)"""
             | strikethrough
             | underline
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type StyleTextOptions
-            [<ParamObject; Emit("$0")>]
-            (?validateStream: bool, ?stream: Node.NodeJS.WritableStream)
-            =
-
+        [<Interface>]
+        type StyleTextOptions =
             /// <summary>
             /// When true, <c>stream</c> is checked to see if it can handle colors.
             /// </summary>
-            member val validateStream: bool option = nativeOnly with get, set
+            abstract member validateStream: bool option with get, set
             /// <summary>
             /// A stream that will be validated if it can be colored.
             /// </summary>
-            member val stream: Node.NodeJS.WritableStream option = nativeOnly with get, set
+            abstract member stream: Node.NodeJS.WritableStream option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (?validateStream: bool, ?stream: Node.NodeJS.WritableStream)
+                : StyleTextOptions
+                =
+                nativeOnly
 
         /// <summary>
         /// An implementation of the [WHATWG Encoding Standard](https://encoding.spec.whatwg.org/) <c>TextDecoder</c> API.
@@ -178153,11 +178304,13 @@ URL.parse($0, $1)"""
 
             module decode =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type options [<ParamObject; Emit("$0")>] (?stream: bool) =
+                [<Interface>]
+                type options =
+                    abstract member stream: bool option with get, set
 
-                    member val stream: bool option = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(?stream: bool) : options = nativeOnly
 
         module ParsedTokens =
 
@@ -178165,77 +178318,90 @@ URL.parse($0, $1)"""
 
                 module U3 =
 
-                    [<Global>]
                     [<AllowNullLiteral>]
-                    type Case3 [<ParamObject; Emit("$0")>] (kind: string, index: float) =
+                    [<Interface>]
+                    type Case3 =
+                        abstract member kind: string with get, set
+                        abstract member index: float with get, set
 
-                        member val kind: string = nativeOnly with get, set
-                        member val index: float = nativeOnly with get, set
+                        [<ParamObject; Emit("$0")>]
+                        static member Create(kind: string, index: float) : Case3 = nativeOnly
 
         module OptionToken =
 
             module U2 =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type Case1
+                [<Interface>]
+                type Case1 =
+                    abstract member kind: string with get, set
+                    abstract member index: float with get, set
+                    abstract member name: string with get, set
+                    abstract member rawName: string with get, set
+                    abstract member value: string with get, set
+                    abstract member inlineValue: bool with get, set
+
                     [<ParamObject; Emit("$0")>]
-                    (
-                        kind: string,
-                        index: float,
-                        name: string,
-                        rawName: string,
-                        value: string,
-                        inlineValue: bool
-                    )
-                    =
+                    static member Create
+                        (
+                            kind: string,
+                            index: float,
+                            name: string,
+                            rawName: string,
+                            value: string,
+                            inlineValue: bool
+                        )
+                        : Case1
+                        =
+                        nativeOnly
 
-                    member val kind: string = nativeOnly with get, set
-                    member val index: float = nativeOnly with get, set
-                    member val name: string = nativeOnly with get, set
-                    member val rawName: string = nativeOnly with get, set
-                    member val value: string = nativeOnly with get, set
-                    member val inlineValue: bool = nativeOnly with get, set
-
-                [<Global>]
                 [<AllowNullLiteral>]
-                type Case2
-                    [<ParamObject; Emit("$0")>]
-                    (
-                        kind: string,
-                        index: float,
-                        name: string,
-                        rawName: string,
-                        value: obj,
-                        inlineValue: obj
-                    )
-                    =
+                [<Interface>]
+                type Case2 =
+                    abstract member kind: string with get, set
+                    abstract member index: float with get, set
+                    abstract member name: string with get, set
+                    abstract member rawName: string with get, set
+                    abstract member value: obj with get, set
+                    abstract member inlineValue: obj with get, set
 
-                    member val kind: string = nativeOnly with get, set
-                    member val index: float = nativeOnly with get, set
-                    member val name: string = nativeOnly with get, set
-                    member val rawName: string = nativeOnly with get, set
-                    member val value: obj = nativeOnly with get, set
-                    member val inlineValue: obj = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (
+                            kind: string,
+                            index: float,
+                            name: string,
+                            rawName: string,
+                            value: obj,
+                            inlineValue: obj
+                        )
+                        : Case2
+                        =
+                        nativeOnly
 
         module Token =
 
             module U3 =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type Case2 [<ParamObject; Emit("$0")>] (kind: string, index: float, value: string) =
+                [<Interface>]
+                type Case2 =
+                    abstract member kind: string with get, set
+                    abstract member index: float with get, set
+                    abstract member value: string with get, set
 
-                    member val kind: string = nativeOnly with get, set
-                    member val index: float = nativeOnly with get, set
-                    member val value: string = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(kind: string, index: float, value: string) : Case2 =
+                        nativeOnly
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type Case3 [<ParamObject; Emit("$0")>] (kind: string, index: float) =
+                [<Interface>]
+                type Case3 =
+                    abstract member kind: string with get, set
+                    abstract member index: float with get, set
 
-                    member val kind: string = nativeOnly with get, set
-                    member val index: float = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(kind: string, index: float) : Case3 = nativeOnly
 
         module Exports =
 
@@ -178356,20 +178522,23 @@ URL.parse($0, $1)"""
                 delegate of
                     arg1: 'T1 * arg2: 'T2 * arg3: 'T3 * arg4: 'T4 * arg5: 'T5 -> JS.Promise<unit>
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type parseArgs
-                [<ParamObject; Emit("$0")>]
-                (
-                    values: Exports.parseArgs.values,
-                    positionals: ResizeArray<string>,
-                    ?tokens: ResizeArray<Node.util.Token>
-                )
-                =
+            [<Interface>]
+            type parseArgs =
+                abstract member values: Exports.parseArgs.values with get, set
+                abstract member positionals: ResizeArray<string> with get, set
+                abstract member tokens: ResizeArray<Node.util.Token> option with get, set
 
-                member val values: Exports.parseArgs.values = nativeOnly with get, set
-                member val positionals: ResizeArray<string> = nativeOnly with get, set
-                member val tokens: ResizeArray<Node.util.Token> option = nativeOnly with get, set
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        values: Exports.parseArgs.values,
+                        positionals: ResizeArray<string>,
+                        ?tokens: ResizeArray<Node.util.Token>
+                    )
+                    : parseArgs
+                    =
+                    nativeOnly
 
             module callbackify =
 
@@ -178553,20 +178722,24 @@ URL.parse($0, $1)"""
 
             module TextDecoder =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type options [<ParamObject; Emit("$0")>] (?fatal: bool, ?ignoreBOM: bool) =
+                [<Interface>]
+                type options =
+                    abstract member fatal: bool option with get, set
+                    abstract member ignoreBOM: bool option with get, set
 
-                    member val fatal: bool option = nativeOnly with get, set
-                    member val ignoreBOM: bool option = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(?fatal: bool, ?ignoreBOM: bool) : options = nativeOnly
 
             module MIMEType =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type input [<ParamObject; Emit("$0")>] (toString: (unit -> string)) =
+                [<Interface>]
+                type input =
+                    abstract member toString: (unit -> string) with get, set
 
-                    member val toString: (unit -> string) = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(toString: (unit -> string)) : input = nativeOnly
 
     module v8 =
 
@@ -179187,21 +179360,24 @@ URL.parse($0, $1)"""
             abstract member bytecode_and_metadata_size: float with get, set
             abstract member external_script_source_size: float with get, set
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type HeapSnapshotOptions
-            [<ParamObject; Emit("$0")>]
-            (?exposeInternals: bool, ?exposeNumericValues: bool)
-            =
-
+        [<Interface>]
+        type HeapSnapshotOptions =
             /// <summary>
             /// If true, expose internals in the heap snapshot.
             /// </summary>
-            member val exposeInternals: bool option = nativeOnly with get, set
+            abstract member exposeInternals: bool option with get, set
             /// <summary>
             /// If true, expose numeric values in artificial fields.
             /// </summary>
-            member val exposeNumericValues: bool option = nativeOnly with get, set
+            abstract member exposeNumericValues: bool option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (?exposeInternals: bool, ?exposeNumericValues: bool)
+                : HeapSnapshotOptions
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -179590,54 +179766,59 @@ URL.parse($0, $1)"""
 
         module GCProfilerResult =
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type statistics
-                [<ParamObject; Emit("$0")>]
-                (
-                    gcType: string,
-                    cost: float,
-                    beforeGC: GCProfilerResult.statistics.beforeGC,
-                    afterGC: GCProfilerResult.statistics.afterGC
-                )
-                =
+            [<Interface>]
+            type statistics =
+                abstract member gcType: string with get, set
+                abstract member cost: float with get, set
+                abstract member beforeGC: GCProfilerResult.statistics.beforeGC with get, set
+                abstract member afterGC: GCProfilerResult.statistics.afterGC with get, set
 
-                member val gcType: string = nativeOnly with get, set
-                member val cost: float = nativeOnly with get, set
-                member val beforeGC: GCProfilerResult.statistics.beforeGC = nativeOnly with get, set
-                member val afterGC: GCProfilerResult.statistics.afterGC = nativeOnly with get, set
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        gcType: string,
+                        cost: float,
+                        beforeGC: GCProfilerResult.statistics.beforeGC,
+                        afterGC: GCProfilerResult.statistics.afterGC
+                    )
+                    : statistics
+                    =
+                    nativeOnly
 
             module statistics =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type beforeGC
+                [<Interface>]
+                type beforeGC =
+                    abstract member heapStatistics: Node.v8.HeapStatistics with get, set
+                    abstract member heapSpaceStatistics: ResizeArray<Node.v8.HeapSpaceStatistics> with get, set
+
                     [<ParamObject; Emit("$0")>]
-                    (
-                        heapStatistics: Node.v8.HeapStatistics,
-                        heapSpaceStatistics: ResizeArray<Node.v8.HeapSpaceStatistics>
-                    )
-                    =
+                    static member Create
+                        (
+                            heapStatistics: Node.v8.HeapStatistics,
+                            heapSpaceStatistics: ResizeArray<Node.v8.HeapSpaceStatistics>
+                        )
+                        : beforeGC
+                        =
+                        nativeOnly
 
-                    member val heapStatistics: Node.v8.HeapStatistics = nativeOnly with get, set
-
-                    member val heapSpaceStatistics: ResizeArray<Node.v8.HeapSpaceStatistics> =
-                        nativeOnly with get, set
-
-                [<Global>]
                 [<AllowNullLiteral>]
-                type afterGC
+                [<Interface>]
+                type afterGC =
+                    abstract member heapStatistics: Node.v8.HeapStatistics with get, set
+                    abstract member heapSpaceStatistics: ResizeArray<Node.v8.HeapSpaceStatistics> with get, set
+
                     [<ParamObject; Emit("$0")>]
-                    (
-                        heapStatistics: Node.v8.HeapStatistics,
-                        heapSpaceStatistics: ResizeArray<Node.v8.HeapSpaceStatistics>
-                    )
-                    =
-
-                    member val heapStatistics: Node.v8.HeapStatistics = nativeOnly with get, set
-
-                    member val heapSpaceStatistics: ResizeArray<Node.v8.HeapSpaceStatistics> =
-                        nativeOnly with get, set
+                    static member Create
+                        (
+                            heapStatistics: Node.v8.HeapStatistics,
+                            heapSpaceStatistics: ResizeArray<Node.v8.HeapSpaceStatistics>
+                        )
+                        : afterGC
+                        =
+                        nativeOnly
 
         module Exports =
 
@@ -179651,17 +179832,21 @@ URL.parse($0, $1)"""
 
             module queryObjects =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type options [<ParamObject; Emit("$0")>] (format: string) =
+                [<Interface>]
+                type options =
+                    abstract member format: string with get, set
 
-                    member val format: string = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(format: string) : options = nativeOnly
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type options_1 [<ParamObject; Emit("$0")>] (format: string) =
+                [<Interface>]
+                type options_1 =
+                    abstract member format: string with get, set
 
-                    member val format: string = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(format: string) : options_1 = nativeOnly
 
     module vm =
 
@@ -180703,12 +180888,28 @@ URL.parse($0, $1)"""
                 importAttributes: Node.``module``.Module_.ImportAttributes ->
                     U2<Node.vm.Module, JS.Promise<Node.vm.Module>>
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type ScriptOptions private () =
+        [<Interface>]
+        type ScriptOptions =
+            inherit Node.vm.BaseOptions
+            /// <summary>
+            /// Provides an optional data with V8's code cache data for the supplied source.
+            /// </summary>
+            abstract member cachedData: Node.NodeJS.ArrayBufferView option with get, set
+
+            [<Obsolete("in favor of `script.createCachedData()`")>]
+            abstract member produceCachedData: bool option with get, set
+
+            /// <summary>
+            /// Used to specify how the modules should be loaded during the evaluation of this script when <c>import()</c> is called. This option is
+            /// part of the experimental modules API. We do not recommend using it in a production environment. For detailed information, see
+            /// [Support of dynamic <c>import()</c> in compilation APIs](https://nodejs.org/docs/latest-v22.x/api/vm.html#support-of-dynamic-import-in-compilation-apis).
+            /// </summary>
+            abstract member importModuleDynamically:
+                U2<Node.vm.DynamicModuleLoader<Node.vm.Script>, float> option with get, set
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     ?filename: string,
                     ?lineOffset: float,
@@ -180716,11 +180917,12 @@ URL.parse($0, $1)"""
                     ?cachedData: Node.NodeJS.ArrayBufferView,
                     ?produceCachedData: bool
                 )
+                : ScriptOptions
                 =
-                ScriptOptions()
+                nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     importModuleDynamically: Node.vm.DynamicModuleLoader<Node.vm.Script>,
                     ?filename: string,
@@ -180729,11 +180931,12 @@ URL.parse($0, $1)"""
                     ?cachedData: Node.NodeJS.ArrayBufferView,
                     ?produceCachedData: bool
                 )
+                : ScriptOptions
                 =
-                ScriptOptions()
+                nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     importModuleDynamically: float,
                     ?filename: string,
@@ -180742,36 +180945,9 @@ URL.parse($0, $1)"""
                     ?cachedData: Node.NodeJS.ArrayBufferView,
                     ?produceCachedData: bool
                 )
+                : ScriptOptions
                 =
-                ScriptOptions()
-
-            /// <summary>
-            /// Specifies the filename used in stack traces produced by this script.
-            /// </summary>
-            member val filename: string option = nativeOnly with get, set
-            /// <summary>
-            /// Specifies the line number offset that is displayed in stack traces produced by this script.
-            /// </summary>
-            member val lineOffset: float option = nativeOnly with get, set
-            /// <summary>
-            /// Specifies the column number offset that is displayed in stack traces produced by this script.
-            /// </summary>
-            member val columnOffset: float option = nativeOnly with get, set
-            /// <summary>
-            /// Provides an optional data with V8's code cache data for the supplied source.
-            /// </summary>
-            member val cachedData: Node.NodeJS.ArrayBufferView option = nativeOnly with get, set
-            member val produceCachedData: bool option = nativeOnly with get, set
-
-            /// <summary>
-            /// Used to specify how the modules should be loaded during the evaluation of this script when <c>import()</c> is called. This option is
-            /// part of the experimental modules API. We do not recommend using it in a production environment. For detailed information, see
-            /// [Support of dynamic <c>import()</c> in compilation APIs](https://nodejs.org/docs/latest-v22.x/api/vm.html#support-of-dynamic-import-in-compilation-apis).
-            /// </summary>
-            member val importModuleDynamically: U2<
-                Node.vm.DynamicModuleLoader<Node.vm.Script>,
-                float
-                                                 > option = nativeOnly with get, set
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -180858,23 +181034,48 @@ URL.parse($0, $1)"""
             abstract member importModuleDynamically:
                 U2<Node.vm.DynamicModuleLoader<obj>, float> option with get, set
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type CreateContextOptions private () =
+        [<Interface>]
+        type CreateContextOptions =
+            /// <summary>
+            /// Human-readable name of the newly created context.
+            /// </summary>
+            abstract member name: string option with get, set
+            /// <summary>
+            /// Corresponds to the newly created context for display purposes.
+            /// The origin should be formatted like a <c>URL</c>, but with only the scheme, host, and port (if necessary),
+            /// like the value of the <c>url.origin</c> property of a URL object.
+            /// Most notably, this string should omit the trailing slash, as that denotes a path.
+            /// </summary>
+            abstract member origin: string option with get, set
+            abstract member codeGeneration: CreateContextOptions.codeGeneration option with get, set
+            /// <summary>
+            /// If set to <c>afterEvaluate</c>, microtasks will be run immediately after the script has run.
+            /// </summary>
+            abstract member microtaskMode: string option with get, set
+
+            /// <summary>
+            /// Used to specify how the modules should be loaded during the evaluation of this script when <c>import()</c> is called. This option is
+            /// part of the experimental modules API. We do not recommend using it in a production environment. For detailed information, see
+            /// [Support of dynamic <c>import()</c> in compilation APIs](https://nodejs.org/docs/latest-v22.x/api/vm.html#support-of-dynamic-import-in-compilation-apis).
+            /// </summary>
+            abstract member importModuleDynamically:
+                U2<Node.vm.DynamicModuleLoader<Node.vm.Context>, float> option with get, set
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     ?name: string,
                     ?origin: string,
                     ?codeGeneration: CreateContextOptions.codeGeneration,
                     ?microtaskMode: string
                 )
+                : CreateContextOptions
                 =
-                CreateContextOptions()
+                nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     importModuleDynamically: Node.vm.DynamicModuleLoader<Node.vm.Context>,
                     ?name: string,
@@ -180882,11 +181083,12 @@ URL.parse($0, $1)"""
                     ?codeGeneration: CreateContextOptions.codeGeneration,
                     ?microtaskMode: string
                 )
+                : CreateContextOptions
                 =
-                CreateContextOptions()
+                nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     importModuleDynamically: float,
                     ?name: string,
@@ -180894,38 +181096,9 @@ URL.parse($0, $1)"""
                     ?codeGeneration: CreateContextOptions.codeGeneration,
                     ?microtaskMode: string
                 )
+                : CreateContextOptions
                 =
-                CreateContextOptions()
-
-            /// <summary>
-            /// Human-readable name of the newly created context.
-            /// </summary>
-            member val name: string option = nativeOnly with get, set
-            /// <summary>
-            /// Corresponds to the newly created context for display purposes.
-            /// The origin should be formatted like a <c>URL</c>, but with only the scheme, host, and port (if necessary),
-            /// like the value of the <c>url.origin</c> property of a URL object.
-            /// Most notably, this string should omit the trailing slash, as that denotes a path.
-            /// </summary>
-            member val origin: string option = nativeOnly with get, set
-
-            member val codeGeneration: CreateContextOptions.codeGeneration option =
-                nativeOnly with get, set
-
-            /// <summary>
-            /// If set to <c>afterEvaluate</c>, microtasks will be run immediately after the script has run.
-            /// </summary>
-            member val microtaskMode: string option = nativeOnly with get, set
-
-            /// <summary>
-            /// Used to specify how the modules should be loaded during the evaluation of this script when <c>import()</c> is called. This option is
-            /// part of the experimental modules API. We do not recommend using it in a production environment. For detailed information, see
-            /// [Support of dynamic <c>import()</c> in compilation APIs](https://nodejs.org/docs/latest-v22.x/api/vm.html#support-of-dynamic-import-in-compilation-apis).
-            /// </summary>
-            member val importModuleDynamically: U2<
-                Node.vm.DynamicModuleLoader<Node.vm.Context>,
-                float
-                                                 > option = nativeOnly with get, set
+                nativeOnly
 
         [<RequireQualifiedAccess>]
         [<StringEnum(CaseRules.None)>]
@@ -180933,15 +181106,18 @@ URL.parse($0, $1)"""
             | summary
             | detailed
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type MeasureMemoryOptions
-            [<ParamObject; Emit("$0")>]
-            (?mode: Node.vm.MeasureMemoryMode, ?execution: MeasureMemoryOptions.execution)
-            =
+        [<Interface>]
+        type MeasureMemoryOptions =
+            abstract member mode: Node.vm.MeasureMemoryMode option with get, set
+            abstract member execution: MeasureMemoryOptions.execution option with get, set
 
-            member val mode: Node.vm.MeasureMemoryMode option = nativeOnly with get, set
-            member val execution: MeasureMemoryOptions.execution option = nativeOnly with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (?mode: Node.vm.MeasureMemoryMode, ?execution: MeasureMemoryOptions.execution)
+                : MeasureMemoryOptions
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -181532,21 +181708,24 @@ URL.parse($0, $1)"""
             /// </summary>
             abstract member moduleRequests: ReadonlyArray<Node.vm.ModuleRequest> with get
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type SyntheticModuleOptions
-            [<ParamObject; Emit("$0")>]
-            (?identifier: string, ?context: Node.vm.Context)
-            =
-
+        [<Interface>]
+        type SyntheticModuleOptions =
             /// <summary>
             /// String used in stack traces.
             /// </summary>
-            member val identifier: string option = nativeOnly with get, set
+            abstract member identifier: string option with get, set
             /// <summary>
             /// The contextified object as returned by the <c>vm.createContext()</c> method, to compile and evaluate this module in.
             /// </summary>
-            member val context: Node.vm.Context option = nativeOnly with get, set
+            abstract member context: Node.vm.Context option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (?identifier: string, ?context: Node.vm.Context)
+                : SyntheticModuleOptions
+                =
+                nativeOnly
 
         /// <summary>
         /// This feature is only available with the <c>--experimental-vm-modules</c> command
@@ -181630,28 +181809,33 @@ URL.parse($0, $1)"""
 
         module RunningScriptInNewContextOptions =
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type contextCodeGeneration [<ParamObject; Emit("$0")>] (?strings: bool, ?wasm: bool) =
+            [<Interface>]
+            type contextCodeGeneration =
+                abstract member strings: bool option with get, set
+                abstract member wasm: bool option with get, set
 
-                member val strings: bool option = nativeOnly with get, set
-                member val wasm: bool option = nativeOnly with get, set
+                [<ParamObject; Emit("$0")>]
+                static member Create(?strings: bool, ?wasm: bool) : contextCodeGeneration =
+                    nativeOnly
 
         module CreateContextOptions =
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type codeGeneration [<ParamObject; Emit("$0")>] (?strings: bool, ?wasm: bool) =
-
+            [<Interface>]
+            type codeGeneration =
                 /// <summary>
                 /// If set to false any calls to eval or function constructors (Function, GeneratorFunction, etc)
                 /// will throw an EvalError.
                 /// </summary>
-                member val strings: bool option = nativeOnly with get, set
+                abstract member strings: bool option with get, set
                 /// <summary>
                 /// If set to false any attempt to compile a WebAssembly module will throw a WebAssembly.CompileError.
                 /// </summary>
-                member val wasm: bool option = nativeOnly with get, set
+                abstract member wasm: bool option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create(?strings: bool, ?wasm: bool) : codeGeneration = nativeOnly
 
         module MeasureMemoryOptions =
 
@@ -181663,27 +181847,29 @@ URL.parse($0, $1)"""
 
         module MemoryMeasurement =
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type total
-                [<ParamObject; Emit("$0")>]
-                (jsMemoryEstimate: float, jsMemoryRange: float * float)
-                =
+            [<Interface>]
+            type total =
+                abstract member jsMemoryEstimate: float with get, set
+                abstract member jsMemoryRange: float * float with get, set
 
-                member val jsMemoryEstimate: float = nativeOnly with get, set
-                member val jsMemoryRange: float * float = nativeOnly with get, set
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (jsMemoryEstimate: float, jsMemoryRange: float * float)
+                    : total
+                    =
+                    nativeOnly
 
         module ModuleLinker =
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type extra
-                [<ParamObject; Emit("$0")>]
-                (attributes: Node.``module``.Module_.ImportAttributes)
-                =
+            [<Interface>]
+            type extra =
+                abstract member attributes: Node.``module``.Module_.ImportAttributes with get, set
 
-                member val attributes: Node.``module``.Module_.ImportAttributes =
-                    nativeOnly with get, set
+                [<ParamObject; Emit("$0")>]
+                static member Create(attributes: Node.``module``.Module_.ImportAttributes) : extra =
+                    nativeOnly
 
         module SourceTextModuleOptions =
 
@@ -181698,64 +181884,67 @@ URL.parse($0, $1)"""
             [<Import("WASI", "wasi"); EmitConstructor>]
             static member WASI(?options: Node.wasi.WASIOptions) : WASI = nativeOnly
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type WASIOptions
-            [<ParamObject; Emit("$0")>]
-            (
-                version: WASIOptions.version,
-                ?args: ReadonlyArray<string>,
-                ?env: obj,
-                ?preopens: Node.NodeJS.Dict<string>,
-                ?returnOnExit: bool,
-                ?stdin: float,
-                ?stdout: float,
-                ?stderr: float
-            )
-            =
-
-            /// <summary>
-            /// The version of WASI requested.
-            /// Currently the only supported versions are <c>'unstable'</c> and <c>'preview1'</c>. This option is mandatory.
-            /// </summary>
-            member val version: WASIOptions.version = nativeOnly with get, set
+        [<Interface>]
+        type WASIOptions =
             /// <summary>
             /// An array of strings that the WebAssembly application will
             /// see as command line arguments. The first argument is the virtual path to the
             /// WASI command itself.
             /// </summary>
-            member val args: ReadonlyArray<string> option = nativeOnly with get, set
+            abstract member args: ReadonlyArray<string> option with get, set
             /// <summary>
             /// An object similar to <c>process.env</c> that the WebAssembly
             /// application will see as its environment.
             /// </summary>
-            member val env: obj option = nativeOnly with get, set
+            abstract member env: obj option with get, set
             /// <summary>
             /// This object represents the WebAssembly application's
             /// sandbox directory structure. The string keys of <c>preopens</c> are treated as
             /// directories within the sandbox. The corresponding values in <c>preopens</c> are
             /// the real paths to those directories on the host machine.
             /// </summary>
-            member val preopens: Node.NodeJS.Dict<string> option = nativeOnly with get, set
+            abstract member preopens: Node.NodeJS.Dict<string> option with get, set
             /// <summary>
             /// By default, when WASI applications call <c>__wasi_proc_exit()</c>
             /// <c>wasi.start()</c> will return with the exit code specified rather than terminatng the process.
             /// Setting this option to <c>false</c> will cause the Node.js process to exit with
             /// the specified exit code instead.
             /// </summary>
-            member val returnOnExit: bool option = nativeOnly with get, set
+            abstract member returnOnExit: bool option with get, set
             /// <summary>
             /// The file descriptor used as standard input in the WebAssembly application.
             /// </summary>
-            member val stdin: float option = nativeOnly with get, set
+            abstract member stdin: float option with get, set
             /// <summary>
             /// The file descriptor used as standard output in the WebAssembly application.
             /// </summary>
-            member val stdout: float option = nativeOnly with get, set
+            abstract member stdout: float option with get, set
             /// <summary>
             /// The file descriptor used as standard error in the WebAssembly application.
             /// </summary>
-            member val stderr: float option = nativeOnly with get, set
+            abstract member stderr: float option with get, set
+            /// <summary>
+            /// The version of WASI requested.
+            /// Currently the only supported versions are <c>'unstable'</c> and <c>'preview1'</c>. This option is mandatory.
+            /// </summary>
+            abstract member version: WASIOptions.version with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    version: WASIOptions.version,
+                    ?args: ReadonlyArray<string>,
+                    ?env: obj,
+                    ?preopens: Node.NodeJS.Dict<string>,
+                    ?returnOnExit: bool,
+                    ?stdin: float,
+                    ?stdout: float,
+                    ?stderr: float
+                )
+                : WASIOptions
+                =
+                nativeOnly
 
         /// <summary>
         /// The <c>WASI</c> class provides the WASI system call API and additional convenience
@@ -181874,17 +182063,20 @@ URL.parse($0, $1)"""
 
     module web_globals_events =
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type AddEventListenerOptions
-            [<ParamObject; Emit("$0")>]
-            (?capture: bool, ?once: bool, ?passive: bool, ?signal: Node.AbortSignal)
-            =
+        [<Interface>]
+        type AddEventListenerOptions =
+            inherit Node.web_globals_events.EventListenerOptions
+            abstract member once: bool option with get, set
+            abstract member passive: bool option with get, set
+            abstract member signal: Node.AbortSignal option with get, set
 
-            member val capture: bool option = nativeOnly with get, set
-            member val once: bool option = nativeOnly with get, set
-            member val passive: bool option = nativeOnly with get, set
-            member val signal: Node.AbortSignal option = nativeOnly with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (?capture: bool, ?once: bool, ?passive: bool, ?signal: Node.AbortSignal)
+                : AddEventListenerOptions
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -182774,12 +182966,38 @@ URL.parse($0, $1)"""
                 event: string * listener: (obj -> unit) * ?options: Node.EventListenerOptions ->
                     MessagePort
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type WorkerOptions private () =
+        [<Interface>]
+        type WorkerOptions =
+            /// <summary>
+            /// List of arguments which would be stringified and appended to
+            /// <c>process.argv</c> in the worker. This is mostly similar to the <c>workerData</c>
+            /// but the values will be available on the global <c>process.argv</c> as if they
+            /// were passed as CLI options to the script.
+            /// </summary>
+            abstract member argv: ResizeArray<obj> option with get, set
+            abstract member env: U2<Node.NodeJS.Dict<string>, obj> option with get, set
+            abstract member eval: bool option with get, set
+            abstract member workerData: obj option with get, set
+            abstract member stdin: bool option with get, set
+            abstract member stdout: bool option with get, set
+            abstract member stderr: bool option with get, set
+            abstract member execArgv: ResizeArray<string> option with get, set
+            abstract member resourceLimits: Node.worker_threads.ResourceLimits option with get, set
+            /// <summary>
+            /// Additional data to send in the first worker message.
+            /// </summary>
+            abstract member transferList: ResizeArray<Node.worker_threads.Transferable> option with get, set
+            abstract member trackUnmanagedFds: bool option with get, set
+            /// <summary>
+            /// An optional <c>name</c> to be appended to the worker title
+            /// for debugging/identification purposes, making the final title as
+            /// <c>[worker ${id}] ${name}</c>.
+            /// </summary>
+            abstract member name: string option with get, set
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     ?argv: ResizeArray<obj>,
                     ?eval: bool,
@@ -182793,11 +183011,12 @@ URL.parse($0, $1)"""
                     ?trackUnmanagedFds: bool,
                     ?name: string
                 )
+                : WorkerOptions
                 =
-                WorkerOptions()
+                nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     env: Node.NodeJS.Dict<string>,
                     ?argv: ResizeArray<obj>,
@@ -182812,11 +183031,12 @@ URL.parse($0, $1)"""
                     ?trackUnmanagedFds: bool,
                     ?name: string
                 )
+                : WorkerOptions
                 =
-                WorkerOptions()
+                nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     env: obj,
                     ?argv: ResizeArray<obj>,
@@ -182831,40 +183051,9 @@ URL.parse($0, $1)"""
                     ?trackUnmanagedFds: bool,
                     ?name: string
                 )
+                : WorkerOptions
                 =
-                WorkerOptions()
-
-            /// <summary>
-            /// List of arguments which would be stringified and appended to
-            /// <c>process.argv</c> in the worker. This is mostly similar to the <c>workerData</c>
-            /// but the values will be available on the global <c>process.argv</c> as if they
-            /// were passed as CLI options to the script.
-            /// </summary>
-            member val argv: ResizeArray<obj> option = nativeOnly with get, set
-            member val env: U2<Node.NodeJS.Dict<string>, obj> option = nativeOnly with get, set
-            member val eval: bool option = nativeOnly with get, set
-            member val workerData: obj option = nativeOnly with get, set
-            member val stdin: bool option = nativeOnly with get, set
-            member val stdout: bool option = nativeOnly with get, set
-            member val stderr: bool option = nativeOnly with get, set
-            member val execArgv: ResizeArray<string> option = nativeOnly with get, set
-
-            member val resourceLimits: Node.worker_threads.ResourceLimits option =
-                nativeOnly with get, set
-
-            /// <summary>
-            /// Additional data to send in the first worker message.
-            /// </summary>
-            member val transferList: ResizeArray<Node.worker_threads.Transferable> option =
-                nativeOnly with get, set
-
-            member val trackUnmanagedFds: bool option = nativeOnly with get, set
-            /// <summary>
-            /// An optional <c>name</c> to be appended to the worker title
-            /// for debugging/identification purposes, making the final title as
-            /// <c>[worker ${id}] ${name}</c>.
-            /// </summary>
-            member val name: string option = nativeOnly with get, set
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -185820,11 +186009,13 @@ URL.parse($0, $1)"""
 
         module Exports =
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type receiveMessageOnPort [<ParamObject; Emit("$0")>] (message: obj) =
+            [<Interface>]
+            type receiveMessageOnPort =
+                abstract member message: obj with get, set
 
-                member val message: obj = nativeOnly with get, set
+                [<ParamObject; Emit("$0")>]
+                static member Create(message: obj) : receiveMessageOnPort = nativeOnly
 
     module zlib =
 
@@ -186917,12 +187108,40 @@ URL.parse($0, $1)"""
             [<ImportAll("zlib")>]
             static member constants: constants_.Exports = nativeOnly
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type ZlibOptions private () =
+        [<Interface>]
+        type ZlibOptions =
+            abstract member flush: float option with get, set
+            abstract member finishFlush: float option with get, set
+            abstract member chunkSize: float option with get, set
+            abstract member windowBits: float option with get, set
+            /// <summary>
+            /// compression only
+            /// </summary>
+            abstract member level: float option with get, set
+            /// <summary>
+            /// compression only
+            /// </summary>
+            abstract member memLevel: float option with get, set
+            /// <summary>
+            /// compression only
+            /// </summary>
+            abstract member strategy: float option with get, set
+            /// <summary>
+            /// deflate/inflate only, empty dictionary by default
+            /// </summary>
+            abstract member dictionary: U2<Node.NodeJS.ArrayBufferView, obj> option with get, set
+            /// <summary>
+            /// If <c>true</c>, returns an object with <c>buffer</c> and <c>engine</c>.
+            /// </summary>
+            abstract member info: bool option with get, set
+            /// <summary>
+            /// Limits output size when using convenience methods.
+            /// </summary>
+            abstract member maxOutputLength: float option with get, set
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     ?flush: float,
                     ?finishFlush: float,
@@ -186934,11 +187153,12 @@ URL.parse($0, $1)"""
                     ?info: bool,
                     ?maxOutputLength: float
                 )
+                : ZlibOptions
                 =
-                ZlibOptions()
+                nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     dictionary: Node.NodeJS.ArrayBufferView,
                     ?flush: float,
@@ -186951,11 +187171,12 @@ URL.parse($0, $1)"""
                     ?info: bool,
                     ?maxOutputLength: float
                 )
+                : ZlibOptions
                 =
-                ZlibOptions()
+                nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     dictionary: obj,
                     ?flush: float,
@@ -186968,105 +187189,80 @@ URL.parse($0, $1)"""
                     ?info: bool,
                     ?maxOutputLength: float
                 )
+                : ZlibOptions
                 =
-                ZlibOptions()
+                nativeOnly
 
-            member val flush: float option = nativeOnly with get, set
-            member val finishFlush: float option = nativeOnly with get, set
-            member val chunkSize: float option = nativeOnly with get, set
-            member val windowBits: float option = nativeOnly with get, set
-            /// <summary>
-            /// compression only
-            /// </summary>
-            member val level: float option = nativeOnly with get, set
-            /// <summary>
-            /// compression only
-            /// </summary>
-            member val memLevel: float option = nativeOnly with get, set
-            /// <summary>
-            /// compression only
-            /// </summary>
-            member val strategy: float option = nativeOnly with get, set
-
-            /// <summary>
-            /// deflate/inflate only, empty dictionary by default
-            /// </summary>
-            member val dictionary: U2<Node.NodeJS.ArrayBufferView, obj> option =
-                nativeOnly with get, set
-
-            /// <summary>
-            /// If <c>true</c>, returns an object with <c>buffer</c> and <c>engine</c>.
-            /// </summary>
-            member val info: bool option = nativeOnly with get, set
-            /// <summary>
-            /// Limits output size when using convenience methods.
-            /// </summary>
-            member val maxOutputLength: float option = nativeOnly with get, set
-
-        [<Global>]
         [<AllowNullLiteral>]
-        type BrotliOptions
-            [<ParamObject; Emit("$0")>]
-            (
-                ?flush: float,
-                ?finishFlush: float,
-                ?chunkSize: float,
-                ?``params``: BrotliOptions.``params``,
-                ?maxOutputLength: float,
-                ?info: bool
-            )
-            =
-
-            member val flush: float option = nativeOnly with get, set
-            member val finishFlush: float option = nativeOnly with get, set
-            member val chunkSize: float option = nativeOnly with get, set
-            member val ``params``: BrotliOptions.``params`` option = nativeOnly with get, set
+        [<Interface>]
+        type BrotliOptions =
+            abstract member flush: float option with get, set
+            abstract member finishFlush: float option with get, set
+            abstract member chunkSize: float option with get, set
+            abstract member ``params``: BrotliOptions.``params`` option with get, set
             /// <summary>
             /// Limits output size when using [convenience methods](https://nodejs.org/docs/latest-v22.x/api/zlib.html#convenience-methods).
             /// </summary>
-            member val maxOutputLength: float option = nativeOnly with get, set
+            abstract member maxOutputLength: float option with get, set
             /// <summary>
             /// If <c>true</c>, returns an object with <c>buffer</c> and <c>engine</c>.
             /// </summary>
-            member val info: bool option = nativeOnly with get, set
+            abstract member info: bool option with get, set
 
-        [<Global>]
-        [<AllowNullLiteral>]
-        type ZstdOptions
             [<ParamObject; Emit("$0")>]
-            (
-                ?flush: float,
-                ?finishFlush: float,
-                ?chunkSize: float,
-                ?``params``: ZstdOptions.``params``,
-                ?maxOutputLength: float,
-                ?info: bool,
-                ?dictionary: Node.NodeJS.ArrayBufferView
-            )
-            =
+            static member Create
+                (
+                    ?flush: float,
+                    ?finishFlush: float,
+                    ?chunkSize: float,
+                    ?``params``: BrotliOptions.``params``,
+                    ?maxOutputLength: float,
+                    ?info: bool
+                )
+                : BrotliOptions
+                =
+                nativeOnly
 
-            member val flush: float option = nativeOnly with get, set
-            member val finishFlush: float option = nativeOnly with get, set
-            member val chunkSize: float option = nativeOnly with get, set
+        [<AllowNullLiteral>]
+        [<Interface>]
+        type ZstdOptions =
+            abstract member flush: float option with get, set
+            abstract member finishFlush: float option with get, set
+            abstract member chunkSize: float option with get, set
             /// <summary>
             /// Key-value object containing indexed
             /// [Zstd parameters](https://nodejs.org/docs/latest-v22.x/api/zlib.html#zstd-constants).
             /// </summary>
-            member val ``params``: ZstdOptions.``params`` option = nativeOnly with get, set
+            abstract member ``params``: ZstdOptions.``params`` option with get, set
             /// <summary>
             /// Limits output size when using
             /// [convenience methods](https://nodejs.org/docs/latest-v22.x/api/zlib.html#convenience-methods).
             /// </summary>
-            member val maxOutputLength: float option = nativeOnly with get, set
+            abstract member maxOutputLength: float option with get, set
             /// <summary>
             /// If <c>true</c>, returns an object with <c>buffer</c> and <c>engine</c>.
             /// </summary>
-            member val info: bool option = nativeOnly with get, set
+            abstract member info: bool option with get, set
             /// <summary>
             /// Optional dictionary used to improve compression efficiency when compressing or decompressing data that
             /// shares common patterns with the dictionary.
             /// </summary>
-            member val dictionary: Node.NodeJS.ArrayBufferView option = nativeOnly with get, set
+            abstract member dictionary: Node.NodeJS.ArrayBufferView option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?flush: float,
+                    ?finishFlush: float,
+                    ?chunkSize: float,
+                    ?``params``: ZstdOptions.``params``,
+                    ?maxOutputLength: float,
+                    ?info: bool,
+                    ?dictionary: Node.NodeJS.ArrayBufferView
+                )
+                : ZstdOptions
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -188109,108 +188305,49 @@ module UndiciTypes =
                 /// </summary>
                 abstract member interceptors: Options.interceptors option with get, set
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type DispatchOptions
-                [<ParamObject; Emit("$0")>]
-                (
-                    path: string,
-                    ``method``: UndiciTypes.dispatcher.Dispatcher_.HttpMethod,
-                    ?origin: U2<string, Node.url.URL>,
-                    ?body:
-                        U5<
-                            string,
-                            Node.Buffer,
-                            JS.Uint8Array,
-                            Node.stream.Stream_.Readable,
-                            UndiciTypes.formdata.FormData
-                         >,
-                    ?headers:
-                        U3<
-                            UndiciTypes.header.IncomingHttpHeaders,
-                            ResizeArray<string>,
-                            Iterable<string * U2<string, ResizeArray<string>> option>
-                         >,
-                    ?query: obj,
-                    ?idempotent: bool,
-                    ?blocking: bool,
-                    ?upgrade: U2<bool, string>,
-                    ?headersTimeout: float,
-                    ?bodyTimeout: float,
-                    ?reset: bool,
-                    ?throwOnError: bool,
-                    ?expectContinue: bool,
-                    ?maxRedirections: float
-                )
-                =
-
-                member val path: string = nativeOnly with get, set
-
-                member val ``method``: UndiciTypes.dispatcher.Dispatcher_.HttpMethod =
-                    nativeOnly with get, set
-
-                member val origin: U2<string, Node.url.URL> option = nativeOnly with get, set
-
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                member val body: U5<
-                    string,
-                    Node.Buffer,
-                    JS.Uint8Array,
-                    Node.stream.Stream_.Readable,
-                    UndiciTypes.formdata.FormData
-                                  > option = nativeOnly with get, set
-
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                member val headers: U3<
-                    UndiciTypes.header.IncomingHttpHeaders,
-                    ResizeArray<string>,
-                    Iterable<string * U2<string, ResizeArray<string>> option>
-                                     > option = nativeOnly with get, set
-
-                /// <summary>
-                /// Query string params to be embedded in the request URL. Default: <c>null</c>
-                /// </summary>
-                member val query: obj option = nativeOnly with get, set
-                /// <summary>
-                /// Whether the requests can be safely retried or not. If <c>false</c> the request won't be sent until all preceding requests in the pipeline have completed. Default: <c>true</c> if <c>method</c> is <c>HEAD</c> or <c>GET</c>.
-                /// </summary>
-                member val idempotent: bool option = nativeOnly with get, set
-                /// <summary>
-                /// Whether the response is expected to take a long time and would end up blocking the pipeline. When this is set to <c>true</c> further pipelining will be avoided on the same connection until headers have been received.
-                /// </summary>
-                member val blocking: bool option = nativeOnly with get, set
-                /// <summary>
-                /// Upgrade the request. Should be used to specify the kind of upgrade i.e. <c>'Websocket'</c>. Default: <c>method === 'CONNECT' || null</c>.
-                /// </summary>
-                member val upgrade: U2<bool, string> option = nativeOnly with get, set
-                /// <summary>
-                /// The amount of time, in milliseconds, the parser will wait to receive the complete HTTP headers. Defaults to 300 seconds.
-                /// </summary>
-                member val headersTimeout: float option = nativeOnly with get, set
-                /// <summary>
-                /// The timeout after which a request will time out, in milliseconds. Monitors time between receiving body data. Use 0 to disable it entirely. Defaults to 300 seconds.
-                /// </summary>
-                member val bodyTimeout: float option = nativeOnly with get, set
-                /// <summary>
-                /// Whether the request should stablish a keep-alive or not. Default <c>false</c>
-                /// </summary>
-                member val reset: bool option = nativeOnly with get, set
-                /// <summary>
-                /// Whether Undici should throw an error upon receiving a 4xx or 5xx response from the server. Defaults to false
-                /// </summary>
-                member val throwOnError: bool option = nativeOnly with get, set
-                /// <summary>
-                /// For H2, it appends the expect: 100-continue header, and halts the request body until a 100-continue is received from the remote server
-                /// </summary>
-                member val expectContinue: bool option = nativeOnly with get, set
+            [<Interface>]
+            type DispatchOptions =
+                inherit UndiciTypes.dispatcher.Dispatcher_.DispatchOptions
                 /// <summary>
                 /// Integer.
                 /// </summary>
-                member val maxRedirections: float option = nativeOnly with get, set
+                abstract member maxRedirections: float option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        path: string,
+                        ``method``: UndiciTypes.dispatcher.Dispatcher_.HttpMethod,
+                        ?origin: U2<string, Node.url.URL>,
+                        ?body:
+                            U5<
+                                string,
+                                Node.Buffer,
+                                JS.Uint8Array,
+                                Node.stream.Stream_.Readable,
+                                UndiciTypes.formdata.FormData
+                             >,
+                        ?headers:
+                            U3<
+                                UndiciTypes.header.IncomingHttpHeaders,
+                                ResizeArray<string>,
+                                Iterable<string * U2<string, ResizeArray<string>> option>
+                             >,
+                        ?query: obj,
+                        ?idempotent: bool,
+                        ?blocking: bool,
+                        ?upgrade: U2<bool, string>,
+                        ?headersTimeout: float,
+                        ?bodyTimeout: float,
+                        ?reset: bool,
+                        ?throwOnError: bool,
+                        ?expectContinue: bool,
+                        ?maxRedirections: float
+                    )
+                    : DispatchOptions
+                    =
+                    nativeOnly
 
             module Options =
 
@@ -188416,17 +188553,18 @@ module UndiciTypes =
             abstract member ignoreMethod: bool option with get, set
             abstract member ignoreVary: bool option with get, set
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type MultiCacheQueryOptions
-            [<ParamObject; Emit("$0")>]
-            (?ignoreSearch: bool, ?ignoreMethod: bool, ?ignoreVary: bool, ?cacheName: string)
-            =
+        [<Interface>]
+        type MultiCacheQueryOptions =
+            inherit UndiciTypes.cache.CacheQueryOptions
+            abstract member cacheName: string option with get, set
 
-            member val ignoreSearch: bool option = nativeOnly with get, set
-            member val ignoreMethod: bool option = nativeOnly with get, set
-            member val ignoreVary: bool option = nativeOnly with get, set
-            member val cacheName: string option = nativeOnly with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (?ignoreSearch: bool, ?ignoreMethod: bool, ?ignoreVary: bool, ?cacheName: string)
+                : MultiCacheQueryOptions
+                =
+                nativeOnly
 
     module client =
 
@@ -188934,28 +189072,31 @@ module UndiciTypes =
                 abstract member writable: bool option with get, set
                 abstract member signal: Node.AbortSignal option with get, set
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type Options
-                [<ParamObject; Emit("$0")>]
-                (
-                    hostname: string,
-                    protocol: string,
-                    port: string,
-                    ?host: string,
-                    ?servername: string,
-                    ?localAddress: string,
-                    ?httpSocket: Node.net.Socket
-                )
-                =
+            [<Interface>]
+            type Options =
+                abstract member hostname: string with get, set
+                abstract member host: string option with get, set
+                abstract member protocol: string with get, set
+                abstract member port: string with get, set
+                abstract member servername: string option with get, set
+                abstract member localAddress: string option with get, set
+                abstract member httpSocket: Node.net.Socket option with get, set
 
-                member val hostname: string = nativeOnly with get, set
-                member val protocol: string = nativeOnly with get, set
-                member val port: string = nativeOnly with get, set
-                member val host: string option = nativeOnly with get, set
-                member val servername: string option = nativeOnly with get, set
-                member val localAddress: string option = nativeOnly with get, set
-                member val httpSocket: Node.net.Socket option = nativeOnly with get, set
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        hostname: string,
+                        protocol: string,
+                        port: string,
+                        ?host: string,
+                        ?servername: string,
+                        ?localAddress: string,
+                        ?httpSocket: Node.net.Socket
+                    )
+                    : Options
+                    =
+                    nativeOnly
 
             type Callback =
                 delegate of
@@ -188981,15 +189122,18 @@ module UndiciTypes =
 
                 module ALPNCallback =
 
-                    [<Global>]
                     [<AllowNullLiteral>]
-                    type arg
-                        [<ParamObject; Emit("$0")>]
-                        (servername: string, protocols: ResizeArray<string>)
-                        =
+                    [<Interface>]
+                    type arg =
+                        abstract member servername: string with get, set
+                        abstract member protocols: ResizeArray<string> with get, set
 
-                        member val servername: string = nativeOnly with get, set
-                        member val protocols: ResizeArray<string> = nativeOnly with get, set
+                        [<ParamObject; Emit("$0")>]
+                        static member Create
+                            (servername: string, protocols: ResizeArray<string>)
+                            : arg
+                            =
+                            nativeOnly
 
                 module SNICallback =
 
@@ -190495,53 +190639,56 @@ module UndiciTypes =
                 /// </summary>
                 abstract member expectContinue: bool option with get, set
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type ConnectOptions
-                [<ParamObject; Emit("$0")>]
-                (
-                    origin: U2<string, Node.url.URL>,
-                    path: string,
-                    ?headers: U2<UndiciTypes.header.IncomingHttpHeaders, ResizeArray<string>>,
-                    ?signal: U2<UndiciTypes.dispatcher.AbortSignal, Node.events.EventEmitter>,
-                    ?opaque: obj,
-                    ?maxRedirections: float,
-                    ?redirectionLimitReached: bool,
-                    ?responseHeader: string
-                )
-                =
-
-                member val origin: U2<string, Node.url.URL> = nativeOnly with get, set
-                member val path: string = nativeOnly with get, set
+            [<Interface>]
+            type ConnectOptions =
+                abstract member origin: U2<string, Node.url.URL> with get, set
+                abstract member path: string with get, set
 
                 /// <summary>
                 /// Default: <c>null</c>
                 /// </summary>
-                member val headers: U2<UndiciTypes.header.IncomingHttpHeaders, ResizeArray<string>> option =
-                    nativeOnly with get, set
+                abstract member headers:
+                    U2<UndiciTypes.header.IncomingHttpHeaders, ResizeArray<string>> option with get, set
 
                 /// <summary>
                 /// Default: <c>null</c>
                 /// </summary>
-                member val signal: U2<UndiciTypes.dispatcher.AbortSignal, Node.events.EventEmitter> option =
-                    nativeOnly with get, set
+                abstract member signal:
+                    U2<UndiciTypes.dispatcher.AbortSignal, Node.events.EventEmitter> option with get, set
 
                 /// <summary>
                 /// This argument parameter is passed through to <c>ConnectData</c>
                 /// </summary>
-                member val opaque: obj option = nativeOnly with get, set
+                abstract member opaque: obj option with get, set
                 /// <summary>
                 /// Default: 0
                 /// </summary>
-                member val maxRedirections: float option = nativeOnly with get, set
+                abstract member maxRedirections: float option with get, set
                 /// <summary>
                 /// Default: false
                 /// </summary>
-                member val redirectionLimitReached: bool option = nativeOnly with get, set
+                abstract member redirectionLimitReached: bool option with get, set
                 /// <summary>
                 /// Default: <c>null</c>
                 /// </summary>
-                member val responseHeader: string option = nativeOnly with get, set
+                abstract member responseHeader: string option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        origin: U2<string, Node.url.URL>,
+                        path: string,
+                        ?headers: U2<UndiciTypes.header.IncomingHttpHeaders, ResizeArray<string>>,
+                        ?signal: U2<UndiciTypes.dispatcher.AbortSignal, Node.events.EventEmitter>,
+                        ?opaque: obj,
+                        ?maxRedirections: float,
+                        ?redirectionLimitReached: bool,
+                        ?responseHeader: string
+                    )
+                    : ConnectOptions
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -190579,318 +190726,233 @@ module UndiciTypes =
                 /// </summary>
                 abstract member highWaterMark: float option with get, set
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type PipelineOptions
-                [<ParamObject; Emit("$0")>]
-                (
-                    path: string,
-                    ``method``: UndiciTypes.dispatcher.Dispatcher_.HttpMethod,
-                    ?origin: U2<string, Node.url.URL>,
-                    ?body:
-                        U5<
-                            string,
-                            Node.Buffer,
-                            JS.Uint8Array,
-                            Node.stream.Stream_.Readable,
-                            UndiciTypes.formdata.FormData
-                         >,
-                    ?headers:
-                        U3<
-                            UndiciTypes.header.IncomingHttpHeaders,
-                            ResizeArray<string>,
-                            Iterable<string * U2<string, ResizeArray<string>> option>
-                         >,
-                    ?query: obj,
-                    ?idempotent: bool,
-                    ?blocking: bool,
-                    ?upgrade: U2<bool, string>,
-                    ?headersTimeout: float,
-                    ?bodyTimeout: float,
-                    ?reset: bool,
-                    ?throwOnError: bool,
-                    ?expectContinue: bool,
-                    ?opaque: obj,
-                    ?signal: U2<UndiciTypes.dispatcher.AbortSignal, Node.events.EventEmitter>,
-                    ?maxRedirections: float,
-                    ?redirectionLimitReached: bool,
-                    ?onInfo: (RequestOptions.onInfo.info -> unit),
-                    ?responseHeader: string,
-                    ?highWaterMark: float,
-                    ?objectMode: bool
-                )
-                =
-
-                member val path: string = nativeOnly with get, set
-
-                member val ``method``: UndiciTypes.dispatcher.Dispatcher_.HttpMethod =
-                    nativeOnly with get, set
-
-                member val origin: U2<string, Node.url.URL> option = nativeOnly with get, set
-
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                member val body: U5<
-                    string,
-                    Node.Buffer,
-                    JS.Uint8Array,
-                    Node.stream.Stream_.Readable,
-                    UndiciTypes.formdata.FormData
-                                  > option = nativeOnly with get, set
-
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                member val headers: U3<
-                    UndiciTypes.header.IncomingHttpHeaders,
-                    ResizeArray<string>,
-                    Iterable<string * U2<string, ResizeArray<string>> option>
-                                     > option = nativeOnly with get, set
-
-                /// <summary>
-                /// Query string params to be embedded in the request URL. Default: <c>null</c>
-                /// </summary>
-                member val query: obj option = nativeOnly with get, set
-                /// <summary>
-                /// Whether the requests can be safely retried or not. If <c>false</c> the request won't be sent until all preceding requests in the pipeline have completed. Default: <c>true</c> if <c>method</c> is <c>HEAD</c> or <c>GET</c>.
-                /// </summary>
-                member val idempotent: bool option = nativeOnly with get, set
-                /// <summary>
-                /// Whether the response is expected to take a long time and would end up blocking the pipeline. When this is set to <c>true</c> further pipelining will be avoided on the same connection until headers have been received.
-                /// </summary>
-                member val blocking: bool option = nativeOnly with get, set
-                /// <summary>
-                /// Upgrade the request. Should be used to specify the kind of upgrade i.e. <c>'Websocket'</c>. Default: <c>method === 'CONNECT' || null</c>.
-                /// </summary>
-                member val upgrade: U2<bool, string> option = nativeOnly with get, set
-                /// <summary>
-                /// The amount of time, in milliseconds, the parser will wait to receive the complete HTTP headers. Defaults to 300 seconds.
-                /// </summary>
-                member val headersTimeout: float option = nativeOnly with get, set
-                /// <summary>
-                /// The timeout after which a request will time out, in milliseconds. Monitors time between receiving body data. Use 0 to disable it entirely. Defaults to 300 seconds.
-                /// </summary>
-                member val bodyTimeout: float option = nativeOnly with get, set
-                /// <summary>
-                /// Whether the request should stablish a keep-alive or not. Default <c>false</c>
-                /// </summary>
-                member val reset: bool option = nativeOnly with get, set
-                /// <summary>
-                /// Whether Undici should throw an error upon receiving a 4xx or 5xx response from the server. Defaults to false
-                /// </summary>
-                member val throwOnError: bool option = nativeOnly with get, set
-                /// <summary>
-                /// For H2, it appends the expect: 100-continue header, and halts the request body until a 100-continue is received from the remote server
-                /// </summary>
-                member val expectContinue: bool option = nativeOnly with get, set
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                member val opaque: obj option = nativeOnly with get, set
-
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                member val signal: U2<UndiciTypes.dispatcher.AbortSignal, Node.events.EventEmitter> option =
-                    nativeOnly with get, set
-
-                /// <summary>
-                /// Default: 0
-                /// </summary>
-                member val maxRedirections: float option = nativeOnly with get, set
-                /// <summary>
-                /// Default: false
-                /// </summary>
-                member val redirectionLimitReached: bool option = nativeOnly with get, set
-
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                member val onInfo: (RequestOptions.onInfo.info -> unit) option =
-                    nativeOnly with get, set
-
-                /// <summary>
-                /// Default: <c>null</c>
-                /// </summary>
-                member val responseHeader: string option = nativeOnly with get, set
-                /// <summary>
-                /// Default: <c>64 KiB</c>
-                /// </summary>
-                member val highWaterMark: float option = nativeOnly with get, set
+            [<Interface>]
+            type PipelineOptions =
+                inherit UndiciTypes.dispatcher.Dispatcher_.RequestOptions
                 /// <summary>
                 /// <c>true</c> if the <c>handler</c> will return an object stream. Default: <c>false</c>
                 /// </summary>
-                member val objectMode: bool option = nativeOnly with get, set
+                abstract member objectMode: bool option with get, set
 
-            [<Global>]
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        path: string,
+                        ``method``: UndiciTypes.dispatcher.Dispatcher_.HttpMethod,
+                        ?origin: U2<string, Node.url.URL>,
+                        ?body:
+                            U5<
+                                string,
+                                Node.Buffer,
+                                JS.Uint8Array,
+                                Node.stream.Stream_.Readable,
+                                UndiciTypes.formdata.FormData
+                             >,
+                        ?headers:
+                            U3<
+                                UndiciTypes.header.IncomingHttpHeaders,
+                                ResizeArray<string>,
+                                Iterable<string * U2<string, ResizeArray<string>> option>
+                             >,
+                        ?query: obj,
+                        ?idempotent: bool,
+                        ?blocking: bool,
+                        ?upgrade: U2<bool, string>,
+                        ?headersTimeout: float,
+                        ?bodyTimeout: float,
+                        ?reset: bool,
+                        ?throwOnError: bool,
+                        ?expectContinue: bool,
+                        ?opaque: obj,
+                        ?signal: U2<UndiciTypes.dispatcher.AbortSignal, Node.events.EventEmitter>,
+                        ?maxRedirections: float,
+                        ?redirectionLimitReached: bool,
+                        ?onInfo: (RequestOptions.onInfo.info -> unit),
+                        ?responseHeader: string,
+                        ?highWaterMark: float,
+                        ?objectMode: bool
+                    )
+                    : PipelineOptions
+                    =
+                    nativeOnly
+
             [<AllowNullLiteral>]
-            type UpgradeOptions private () =
-
-                [<ParamObject; Emit("$0")>]
-                new
-                    (
-                        path: string,
-                        ?``method``: string,
-                        ?protocol: string,
-                        ?maxRedirections: float,
-                        ?redirectionLimitReached: bool,
-                        ?responseHeader: string
-                    )
-                    =
-                    UpgradeOptions()
-
-                [<ParamObject; Emit("$0")>]
-                new
-                    (
-                        path: string,
-                        signal: UndiciTypes.dispatcher.AbortSignal,
-                        ?``method``: string,
-                        ?protocol: string,
-                        ?maxRedirections: float,
-                        ?redirectionLimitReached: bool,
-                        ?responseHeader: string
-                    )
-                    =
-                    UpgradeOptions()
-
-                [<ParamObject; Emit("$0")>]
-                new
-                    (
-                        path: string,
-                        signal: Node.events.EventEmitter,
-                        ?``method``: string,
-                        ?protocol: string,
-                        ?maxRedirections: float,
-                        ?redirectionLimitReached: bool,
-                        ?responseHeader: string
-                    )
-                    =
-                    UpgradeOptions()
-
-                [<ParamObject; Emit("$0")>]
-                new
-                    (
-                        path: string,
-                        headers: UndiciTypes.header.IncomingHttpHeaders,
-                        ?``method``: string,
-                        ?protocol: string,
-                        ?maxRedirections: float,
-                        ?redirectionLimitReached: bool,
-                        ?responseHeader: string
-                    )
-                    =
-                    UpgradeOptions()
-
-                [<ParamObject; Emit("$0")>]
-                new
-                    (
-                        path: string,
-                        headers: UndiciTypes.header.IncomingHttpHeaders,
-                        signal: UndiciTypes.dispatcher.AbortSignal,
-                        ?``method``: string,
-                        ?protocol: string,
-                        ?maxRedirections: float,
-                        ?redirectionLimitReached: bool,
-                        ?responseHeader: string
-                    )
-                    =
-                    UpgradeOptions()
-
-                [<ParamObject; Emit("$0")>]
-                new
-                    (
-                        path: string,
-                        headers: UndiciTypes.header.IncomingHttpHeaders,
-                        signal: Node.events.EventEmitter,
-                        ?``method``: string,
-                        ?protocol: string,
-                        ?maxRedirections: float,
-                        ?redirectionLimitReached: bool,
-                        ?responseHeader: string
-                    )
-                    =
-                    UpgradeOptions()
-
-                [<ParamObject; Emit("$0")>]
-                new
-                    (
-                        path: string,
-                        headers: ResizeArray<string>,
-                        ?``method``: string,
-                        ?protocol: string,
-                        ?maxRedirections: float,
-                        ?redirectionLimitReached: bool,
-                        ?responseHeader: string
-                    )
-                    =
-                    UpgradeOptions()
-
-                [<ParamObject; Emit("$0")>]
-                new
-                    (
-                        path: string,
-                        headers: ResizeArray<string>,
-                        signal: UndiciTypes.dispatcher.AbortSignal,
-                        ?``method``: string,
-                        ?protocol: string,
-                        ?maxRedirections: float,
-                        ?redirectionLimitReached: bool,
-                        ?responseHeader: string
-                    )
-                    =
-                    UpgradeOptions()
-
-                [<ParamObject; Emit("$0")>]
-                new
-                    (
-                        path: string,
-                        headers: ResizeArray<string>,
-                        signal: Node.events.EventEmitter,
-                        ?``method``: string,
-                        ?protocol: string,
-                        ?maxRedirections: float,
-                        ?redirectionLimitReached: bool,
-                        ?responseHeader: string
-                    )
-                    =
-                    UpgradeOptions()
-
-                member val path: string = nativeOnly with get, set
+            [<Interface>]
+            type UpgradeOptions =
+                abstract member path: string with get, set
                 /// <summary>
                 /// Default: <c>'GET'</c>
                 /// </summary>
-                member val ``method``: string option = nativeOnly with get, set
+                abstract member ``method``: string option with get, set
 
                 /// <summary>
                 /// Default: <c>null</c>
                 /// </summary>
-                member val headers: U2<UndiciTypes.header.IncomingHttpHeaders, ResizeArray<string>> option =
-                    nativeOnly with get, set
+                abstract member headers:
+                    U2<UndiciTypes.header.IncomingHttpHeaders, ResizeArray<string>> option with get, set
 
                 /// <summary>
                 /// A string of comma separated protocols, in descending preference order. Default: <c>'Websocket'</c>
                 /// </summary>
-                member val protocol: string option = nativeOnly with get, set
+                abstract member protocol: string option with get, set
 
                 /// <summary>
                 /// Default: <c>null</c>
                 /// </summary>
-                member val signal: U2<UndiciTypes.dispatcher.AbortSignal, Node.events.EventEmitter> option =
-                    nativeOnly with get, set
+                abstract member signal:
+                    U2<UndiciTypes.dispatcher.AbortSignal, Node.events.EventEmitter> option with get, set
 
                 /// <summary>
                 /// Default: 0
                 /// </summary>
-                member val maxRedirections: float option = nativeOnly with get, set
+                abstract member maxRedirections: float option with get, set
                 /// <summary>
                 /// Default: false
                 /// </summary>
-                member val redirectionLimitReached: bool option = nativeOnly with get, set
+                abstract member redirectionLimitReached: bool option with get, set
                 /// <summary>
                 /// Default: <c>null</c>
                 /// </summary>
-                member val responseHeader: string option = nativeOnly with get, set
+                abstract member responseHeader: string option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        path: string,
+                        ?``method``: string,
+                        ?protocol: string,
+                        ?maxRedirections: float,
+                        ?redirectionLimitReached: bool,
+                        ?responseHeader: string
+                    )
+                    : UpgradeOptions
+                    =
+                    nativeOnly
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        path: string,
+                        signal: UndiciTypes.dispatcher.AbortSignal,
+                        ?``method``: string,
+                        ?protocol: string,
+                        ?maxRedirections: float,
+                        ?redirectionLimitReached: bool,
+                        ?responseHeader: string
+                    )
+                    : UpgradeOptions
+                    =
+                    nativeOnly
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        path: string,
+                        signal: Node.events.EventEmitter,
+                        ?``method``: string,
+                        ?protocol: string,
+                        ?maxRedirections: float,
+                        ?redirectionLimitReached: bool,
+                        ?responseHeader: string
+                    )
+                    : UpgradeOptions
+                    =
+                    nativeOnly
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        path: string,
+                        headers: UndiciTypes.header.IncomingHttpHeaders,
+                        ?``method``: string,
+                        ?protocol: string,
+                        ?maxRedirections: float,
+                        ?redirectionLimitReached: bool,
+                        ?responseHeader: string
+                    )
+                    : UpgradeOptions
+                    =
+                    nativeOnly
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        path: string,
+                        headers: UndiciTypes.header.IncomingHttpHeaders,
+                        signal: UndiciTypes.dispatcher.AbortSignal,
+                        ?``method``: string,
+                        ?protocol: string,
+                        ?maxRedirections: float,
+                        ?redirectionLimitReached: bool,
+                        ?responseHeader: string
+                    )
+                    : UpgradeOptions
+                    =
+                    nativeOnly
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        path: string,
+                        headers: UndiciTypes.header.IncomingHttpHeaders,
+                        signal: Node.events.EventEmitter,
+                        ?``method``: string,
+                        ?protocol: string,
+                        ?maxRedirections: float,
+                        ?redirectionLimitReached: bool,
+                        ?responseHeader: string
+                    )
+                    : UpgradeOptions
+                    =
+                    nativeOnly
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        path: string,
+                        headers: ResizeArray<string>,
+                        ?``method``: string,
+                        ?protocol: string,
+                        ?maxRedirections: float,
+                        ?redirectionLimitReached: bool,
+                        ?responseHeader: string
+                    )
+                    : UpgradeOptions
+                    =
+                    nativeOnly
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        path: string,
+                        headers: ResizeArray<string>,
+                        signal: UndiciTypes.dispatcher.AbortSignal,
+                        ?``method``: string,
+                        ?protocol: string,
+                        ?maxRedirections: float,
+                        ?redirectionLimitReached: bool,
+                        ?responseHeader: string
+                    )
+                    : UpgradeOptions
+                    =
+                    nativeOnly
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        path: string,
+                        headers: ResizeArray<string>,
+                        signal: Node.events.EventEmitter,
+                        ?``method``: string,
+                        ?protocol: string,
+                        ?maxRedirections: float,
+                        ?redirectionLimitReached: bool,
+                        ?responseHeader: string
+                    )
+                    : UpgradeOptions
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -190910,27 +190972,27 @@ module UndiciTypes =
                 abstract member opaque: obj with get, set
                 abstract member context: obj with get, set
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type PipelineHandlerData
+            [<Interface>]
+            type PipelineHandlerData =
+                abstract member statusCode: float with get, set
+                abstract member headers: UndiciTypes.header.IncomingHttpHeaders with get, set
+                abstract member opaque: obj with get, set
+                abstract member body: UndiciTypes.readable.BodyReadable with get, set
+                abstract member context: obj with get, set
+
                 [<ParamObject; Emit("$0")>]
-                (
-                    statusCode: float,
-                    headers: UndiciTypes.header.IncomingHttpHeaders,
-                    opaque: obj,
-                    body: UndiciTypes.readable.BodyReadable,
-                    context: obj
-                )
-                =
-
-                member val statusCode: float = nativeOnly with get, set
-
-                member val headers: UndiciTypes.header.IncomingHttpHeaders =
-                    nativeOnly with get, set
-
-                member val opaque: obj = nativeOnly with get, set
-                member val body: UndiciTypes.readable.BodyReadable = nativeOnly with get, set
-                member val context: obj = nativeOnly with get, set
+                static member Create
+                    (
+                        statusCode: float,
+                        headers: UndiciTypes.header.IncomingHttpHeaders,
+                        opaque: obj,
+                        body: UndiciTypes.readable.BodyReadable,
+                        context: obj
+                    )
+                    : PipelineHandlerData
+                    =
+                    nativeOnly
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -190945,25 +191007,25 @@ module UndiciTypes =
                 abstract member socket: Node.stream.Stream_.Duplex with get, set
                 abstract member opaque: obj with get, set
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type StreamFactoryData
+            [<Interface>]
+            type StreamFactoryData =
+                abstract member statusCode: float with get, set
+                abstract member headers: UndiciTypes.header.IncomingHttpHeaders with get, set
+                abstract member opaque: obj with get, set
+                abstract member context: obj with get, set
+
                 [<ParamObject; Emit("$0")>]
-                (
-                    statusCode: float,
-                    headers: UndiciTypes.header.IncomingHttpHeaders,
-                    opaque: obj,
-                    context: obj
-                )
-                =
-
-                member val statusCode: float = nativeOnly with get, set
-
-                member val headers: UndiciTypes.header.IncomingHttpHeaders =
-                    nativeOnly with get, set
-
-                member val opaque: obj = nativeOnly with get, set
-                member val context: obj = nativeOnly with get, set
+                static member Create
+                    (
+                        statusCode: float,
+                        headers: UndiciTypes.header.IncomingHttpHeaders,
+                        opaque: obj,
+                        context: obj
+                    )
+                    : StreamFactoryData
+                    =
+                    nativeOnly
 
             type StreamFactory =
                 delegate of
@@ -191082,17 +191144,18 @@ module UndiciTypes =
 
                 module onInfo =
 
-                    [<Global>]
                     [<AllowNullLiteral>]
-                    type info
+                    [<Interface>]
+                    type info =
+                        abstract member statusCode: float with get, set
+                        abstract member headers: RequestOptions.onInfo.info.headers with get, set
+
                         [<ParamObject; Emit("$0")>]
-                        (statusCode: float, headers: RequestOptions.onInfo.info.headers)
-                        =
-
-                        member val statusCode: float = nativeOnly with get, set
-
-                        member val headers: RequestOptions.onInfo.info.headers =
-                            nativeOnly with get, set
+                        static member Create
+                            (statusCode: float, headers: RequestOptions.onInfo.info.headers)
+                            : info
+                            =
+                            nativeOnly
 
                     module info =
 
@@ -191628,11 +191691,13 @@ module UndiciTypes =
 
             module RequestRetryError =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type data [<ParamObject; Emit("$0")>] (count: float) =
+                [<Interface>]
+                type data =
+                    abstract member count: float with get, set
 
-                    member val count: float = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(count: float) : data = nativeOnly
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -191964,17 +192029,18 @@ module UndiciTypes =
                 options: UndiciTypes.patch.EventListenerOptions ->
                     unit
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type EventSourceInit
+        [<Interface>]
+        type EventSourceInit =
+            abstract member withCredentials: bool option with get, set
+            abstract member dispatcher: UndiciTypes.dispatcher.Dispatcher option with get, set
+
             [<ParamObject; Emit("$0")>]
-            (?withCredentials: bool, ?dispatcher: UndiciTypes.dispatcher.Dispatcher)
-            =
-
-            member val withCredentials: bool option = nativeOnly with get, set
-
-            member val dispatcher: UndiciTypes.dispatcher.Dispatcher option =
-                nativeOnly with get, set
+            static member Create
+                (?withCredentials: bool, ?dispatcher: UndiciTypes.dispatcher.Dispatcher)
+                : EventSourceInit
+                =
+                nativeOnly
 
         module EventSource =
 
@@ -192103,51 +192169,45 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
             | worker
             | xslt
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type RequestInit
+        [<Interface>]
+        type RequestInit =
+            abstract member ``method``: string option with get, set
+            abstract member keepalive: bool option with get, set
+            abstract member headers: UndiciTypes.fetch.HeadersInit option with get, set
+            abstract member body: UndiciTypes.fetch.BodyInit option with get, set
+            abstract member redirect: UndiciTypes.fetch.RequestRedirect option with get, set
+            abstract member integrity: string option with get, set
+            abstract member signal: Node.AbortSignal option with get, set
+            abstract member credentials: UndiciTypes.fetch.RequestCredentials option with get, set
+            abstract member mode: UndiciTypes.fetch.RequestMode option with get, set
+            abstract member referrer: string option with get, set
+            abstract member referrerPolicy: UndiciTypes.fetch.ReferrerPolicy option with get, set
+            abstract member window: obj option with get, set
+            abstract member dispatcher: UndiciTypes.dispatcher.Dispatcher option with get, set
+            abstract member duplex: UndiciTypes.fetch.RequestDuplex option with get, set
+
             [<ParamObject; Emit("$0")>]
-            (
-                ?``method``: string,
-                ?keepalive: bool,
-                ?headers: UndiciTypes.fetch.HeadersInit,
-                ?body: UndiciTypes.fetch.BodyInit,
-                ?redirect: UndiciTypes.fetch.RequestRedirect,
-                ?integrity: string,
-                ?signal: Node.AbortSignal,
-                ?credentials: UndiciTypes.fetch.RequestCredentials,
-                ?mode: UndiciTypes.fetch.RequestMode,
-                ?referrer: string,
-                ?referrerPolicy: UndiciTypes.fetch.ReferrerPolicy,
-                ?window: obj,
-                ?dispatcher: UndiciTypes.dispatcher.Dispatcher,
-                ?duplex: UndiciTypes.fetch.RequestDuplex
-            )
-            =
-
-            member val ``method``: string option = nativeOnly with get, set
-            member val keepalive: bool option = nativeOnly with get, set
-            member val headers: UndiciTypes.fetch.HeadersInit option = nativeOnly with get, set
-            member val body: UndiciTypes.fetch.BodyInit option = nativeOnly with get, set
-            member val redirect: UndiciTypes.fetch.RequestRedirect option = nativeOnly with get, set
-            member val integrity: string option = nativeOnly with get, set
-            member val signal: Node.AbortSignal option = nativeOnly with get, set
-
-            member val credentials: UndiciTypes.fetch.RequestCredentials option =
-                nativeOnly with get, set
-
-            member val mode: UndiciTypes.fetch.RequestMode option = nativeOnly with get, set
-            member val referrer: string option = nativeOnly with get, set
-
-            member val referrerPolicy: UndiciTypes.fetch.ReferrerPolicy option =
-                nativeOnly with get, set
-
-            member val window: obj option = nativeOnly with get, set
-
-            member val dispatcher: UndiciTypes.dispatcher.Dispatcher option =
-                nativeOnly with get, set
-
-            member val duplex: UndiciTypes.fetch.RequestDuplex option = nativeOnly with get, set
+            static member Create
+                (
+                    ?``method``: string,
+                    ?keepalive: bool,
+                    ?headers: UndiciTypes.fetch.HeadersInit,
+                    ?body: UndiciTypes.fetch.BodyInit,
+                    ?redirect: UndiciTypes.fetch.RequestRedirect,
+                    ?integrity: string,
+                    ?signal: Node.AbortSignal,
+                    ?credentials: UndiciTypes.fetch.RequestCredentials,
+                    ?mode: UndiciTypes.fetch.RequestMode,
+                    ?referrer: string,
+                    ?referrerPolicy: UndiciTypes.fetch.ReferrerPolicy,
+                    ?window: obj,
+                    ?dispatcher: UndiciTypes.dispatcher.Dispatcher,
+                    ?duplex: UndiciTypes.fetch.RequestDuplex
+                )
+                : RequestInit
+                =
+                nativeOnly
 
         [<RequireQualifiedAccess>]
         [<StringEnum(CaseRules.None)>]
@@ -192201,16 +192261,19 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
             abstract member duplex: UndiciTypes.fetch.RequestDuplex with get
             abstract member clone: (unit -> UndiciTypes.fetch.Request) with get
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type ResponseInit
-            [<ParamObject; Emit("$0")>]
-            (?status: float, ?statusText: string, ?headers: UndiciTypes.fetch.HeadersInit)
-            =
+        [<Interface>]
+        type ResponseInit =
+            abstract member status: float option with get
+            abstract member statusText: string option with get
+            abstract member headers: UndiciTypes.fetch.HeadersInit option with get
 
-            member val status: float option = nativeOnly with get
-            member val statusText: string option = nativeOnly with get
-            member val headers: UndiciTypes.fetch.HeadersInit option = nativeOnly with get
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (?status: float, ?statusText: string, ?headers: UndiciTypes.fetch.HeadersInit)
+                : ResponseInit
+                =
+                nativeOnly
 
         [<RequireQualifiedAccess>]
         [<StringEnum(CaseRules.None)>]
@@ -192280,19 +192343,21 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
             abstract member ``type``: string option with get, set
             abstract member endings: BlobPropertyBag.endings option with get, set
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type FilePropertyBag
-            [<ParamObject; Emit("$0")>]
-            (?``type``: string, ?endings: FilePropertyBag.endings, ?lastModified: float)
-            =
-
-            member val ``type``: string option = nativeOnly with get, set
-            member val endings: FilePropertyBag.endings option = nativeOnly with get, set
+        [<Interface>]
+        type FilePropertyBag =
+            inherit UndiciTypes.file.BlobPropertyBag
             /// <summary>
             /// The last modified date of the file as the number of milliseconds since the Unix epoch (January 1, 1970 at midnight). Files without a known last modified date return the current date.
             /// </summary>
-            member val lastModified: float option = nativeOnly with get, set
+            abstract member lastModified: float option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (?``type``: string, ?endings: FilePropertyBag.endings, ?lastModified: float)
+                : FilePropertyBag
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -192347,26 +192412,27 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
             abstract member onerror: (UndiciTypes.filereader.ProgressEvent -> unit) option with get, set
             abstract member onloadend: (UndiciTypes.filereader.ProgressEvent -> unit) option with get, set
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type ProgressEventInit
-            [<ParamObject; Emit("$0")>]
-            (
-                ?bubbles: bool,
-                ?cancelable: bool,
-                ?composed: bool,
-                ?lengthComputable: bool,
-                ?loaded: float,
-                ?total: float
-            )
-            =
+        [<Interface>]
+        type ProgressEventInit =
+            inherit UndiciTypes.patch.EventInit
+            abstract member lengthComputable: bool option with get, set
+            abstract member loaded: float option with get, set
+            abstract member total: float option with get, set
 
-            member val bubbles: bool option = nativeOnly with get, set
-            member val cancelable: bool option = nativeOnly with get, set
-            member val composed: bool option = nativeOnly with get, set
-            member val lengthComputable: bool option = nativeOnly with get, set
-            member val loaded: float option = nativeOnly with get, set
-            member val total: float option = nativeOnly with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?bubbles: bool,
+                    ?cancelable: bool,
+                    ?composed: bool,
+                    ?lengthComputable: bool,
+                    ?loaded: float,
+                    ?total: float
+                )
+                : ProgressEventInit
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -192808,16 +192874,19 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
 
             module assertNoPendingInterceptors =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type options
-                    [<ParamObject; Emit("$0")>]
-                    (?pendingInterceptorsFormatter:
-                        UndiciTypes.mock_agent.PendingInterceptorsFormatter)
-                    =
+                [<Interface>]
+                type options =
+                    abstract member pendingInterceptorsFormatter:
+                        UndiciTypes.mock_agent.PendingInterceptorsFormatter option with get, set
 
-                    member val pendingInterceptorsFormatter: UndiciTypes.mock_agent.PendingInterceptorsFormatter option =
-                        nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (?pendingInterceptorsFormatter:
+                            UndiciTypes.mock_agent.PendingInterceptorsFormatter)
+                        : options
+                        =
+                        nativeOnly
 
     module mock_client =
 
@@ -192855,12 +192924,17 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
             /// <summary>
             /// MockClient options.
             /// </summary>
-            [<Global>]
             [<AllowNullLiteral>]
-            type Options private () =
+            [<Interface>]
+            type Options =
+                inherit UndiciTypes.client.Client_.Options
+                /// <summary>
+                /// The agent to associate this MockClient with.
+                /// </summary>
+                abstract member agent: UndiciTypes.mock_agent.MockAgent with get, set
 
                 [<ParamObject; Emit("$0")>]
-                new
+                static member Create
                     (
                         agent: UndiciTypes.mock_agent.MockAgent,
                         ?interceptors: UndiciTypes.client.Client_.OptionsInterceptors,
@@ -192890,11 +192964,12 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
                         ?allowH2: bool,
                         ?maxConcurrentStreams: float
                     )
+                    : Options
                     =
-                    Options()
+                    nativeOnly
 
                 [<ParamObject; Emit("$0")>]
-                new
+                static member Create
                     (
                         agent: UndiciTypes.mock_agent.MockAgent,
                         connect: UndiciTypes.connector.buildConnector_.BuildOptions,
@@ -192925,11 +193000,12 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
                         ?allowH2: bool,
                         ?maxConcurrentStreams: float
                     )
+                    : Options
                     =
-                    Options()
+                    nativeOnly
 
                 [<ParamObject; Emit("$0")>]
-                new
+                static member Create
                     (
                         agent: UndiciTypes.mock_agent.MockAgent,
                         connect: UndiciTypes.connector.buildConnector_.connector,
@@ -192960,105 +193036,9 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
                         ?allowH2: bool,
                         ?maxConcurrentStreams: float
                     )
+                    : Options
                     =
-                    Options()
-
-                /// <summary>
-                /// The agent to associate this MockClient with.
-                /// </summary>
-                member val agent: UndiciTypes.mock_agent.MockAgent = nativeOnly with get, set
-
-                /// <summary>
-                /// TODO
-                /// </summary>
-                member val interceptors: UndiciTypes.client.Client_.OptionsInterceptors option =
-                    nativeOnly with get, set
-
-                /// <summary>
-                /// The maximum length of request headers in bytes. Default: Node.js' <c>--max-http-header-size</c> or <c>16384</c> (16KiB).
-                /// </summary>
-                member val maxHeaderSize: float option = nativeOnly with get, set
-                /// <summary>
-                /// The amount of time, in milliseconds, the parser will wait to receive the complete HTTP headers (Node 14 and above only). Default: <c>300e3</c> milliseconds (300s).
-                /// </summary>
-                member val headersTimeout: float option = nativeOnly with get, set
-                member val socketTimeout: obj option = nativeOnly with get, set
-                member val requestTimeout: obj option = nativeOnly with get, set
-                /// <summary>
-                /// TODO
-                /// </summary>
-                member val connectTimeout: float option = nativeOnly with get, set
-                /// <summary>
-                /// The timeout after which a request will time out, in milliseconds. Monitors time between receiving body data. Use <c>0</c> to disable it entirely. Default: <c>300e3</c> milliseconds (300s).
-                /// </summary>
-                member val bodyTimeout: float option = nativeOnly with get, set
-                member val idleTimeout: obj option = nativeOnly with get, set
-                member val keepAlive: obj option = nativeOnly with get, set
-                /// <summary>
-                /// the timeout, in milliseconds, after which a socket without active requests will time out. Monitors time between activity on a connected socket. This value may be overridden by *keep-alive* hints from the server. Default: <c>4e3</c> milliseconds (4s).
-                /// </summary>
-                member val keepAliveTimeout: float option = nativeOnly with get, set
-                member val maxKeepAliveTimeout: obj option = nativeOnly with get, set
-                /// <summary>
-                /// the maximum allowed <c>idleTimeout</c>, in milliseconds, when overridden by *keep-alive* hints from the server. Default: <c>600e3</c> milliseconds (10min).
-                /// </summary>
-                member val keepAliveMaxTimeout: float option = nativeOnly with get, set
-                /// <summary>
-                /// A number of milliseconds subtracted from server *keep-alive* hints when overriding <c>idleTimeout</c> to account for timing inaccuracies caused by e.g. transport latency. Default: <c>1e3</c> milliseconds (1s).
-                /// </summary>
-                member val keepAliveTimeoutThreshold: float option = nativeOnly with get, set
-                /// <summary>
-                /// TODO
-                /// </summary>
-                member val socketPath: string option = nativeOnly with get, set
-                /// <summary>
-                /// The amount of concurrent requests to be sent over the single TCP/TLS connection according to [RFC7230](https://tools.ietf.org/html/rfc7230#section-6.3.2). Default: <c>1</c>.
-                /// </summary>
-                member val pipelining: float option = nativeOnly with get, set
-                member val tls: obj option = nativeOnly with get, set
-                /// <summary>
-                /// If <c>true</c>, an error is thrown when the request content-length header doesn't match the length of the request body. Default: <c>true</c>.
-                /// </summary>
-                member val strictContentLength: bool option = nativeOnly with get, set
-                /// <summary>
-                /// TODO
-                /// </summary>
-                member val maxCachedSessions: float option = nativeOnly with get, set
-                /// <summary>
-                /// TODO
-                /// </summary>
-                member val maxRedirections: float option = nativeOnly with get, set
-
-                /// <summary>
-                /// TODO
-                /// </summary>
-                member val connect: U2<
-                    UndiciTypes.connector.buildConnector_.BuildOptions,
-                    UndiciTypes.connector.buildConnector_.connector
-                                     > option = nativeOnly with get, set
-
-                /// <summary>
-                /// TODO
-                /// </summary>
-                member val maxRequestsPerClient: float option = nativeOnly with get, set
-                /// <summary>
-                /// TODO
-                /// </summary>
-                member val localAddress: string option = nativeOnly with get, set
-                /// <summary>
-                /// Max response body size in bytes, -1 is disabled
-                /// </summary>
-                member val maxResponseSize: float option = nativeOnly with get, set
-                /// <summary>
-                /// Enables a family autodetection algorithm that loosely implements section 5 of RFC 8305.
-                /// </summary>
-                member val autoSelectFamily: bool option = nativeOnly with get, set
-                /// <summary>
-                /// The amount of time in milliseconds to wait for a connection attempt to finish before trying the next address when using the <c>autoSelectFamily</c> option.
-                /// </summary>
-                member val autoSelectFamilyAttemptTimeout: float option = nativeOnly with get, set
-                member val allowH2: bool option = nativeOnly with get, set
-                member val maxConcurrentStreams: float option = nativeOnly with get, set
+                    nativeOnly
 
         type Options = MockClient_.Options
 
@@ -193292,17 +193272,40 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
                 abstract member headers: UndiciTypes.header.IncomingHttpHeaders option with get, set
                 abstract member trailers: MockResponseOptions.trailers option with get, set
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type MockResponseCallbackOptions private () =
+            [<Interface>]
+            type MockResponseCallbackOptions =
+                abstract member path: string with get, set
+                abstract member ``method``: string with get, set
+
+                abstract member headers:
+                    U2<UndiciTypes.fetch.Headers, MockResponseCallbackOptions.headers.U2.Case2> option with get, set
+
+                abstract member origin: string option with get, set
+
+                abstract member body:
+                    U2<
+                        UndiciTypes.fetch.BodyInit,
+                        U5<
+                            string,
+                            JS.Uint8Array,
+                            Node.stream.Stream_.Readable,
+                            Node.Buffer,
+                            UndiciTypes.formdata.FormData
+                         > option
+                     > option with get, set
+
+                abstract member maxRedirections: float option with get, set
 
                 [<ParamObject; Emit("$0")>]
-                new(path: string, ``method``: string, ?origin: string, ?maxRedirections: float)
+                static member Create
+                    (path: string, ``method``: string, ?origin: string, ?maxRedirections: float)
+                    : MockResponseCallbackOptions
                     =
-                    MockResponseCallbackOptions()
+                    nativeOnly
 
                 [<ParamObject; Emit("$0")>]
-                new
+                static member Create
                     (
                         path: string,
                         ``method``: string,
@@ -193310,11 +193313,12 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
                         ?origin: string,
                         ?maxRedirections: float
                     )
+                    : MockResponseCallbackOptions
                     =
-                    MockResponseCallbackOptions()
+                    nativeOnly
 
                 [<ParamObject; Emit("$0")>]
-                new
+                static member Create
                     (
                         path: string,
                         ``method``: string,
@@ -193329,11 +193333,12 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
                         ?origin: string,
                         ?maxRedirections: float
                     )
+                    : MockResponseCallbackOptions
                     =
-                    MockResponseCallbackOptions()
+                    nativeOnly
 
                 [<ParamObject; Emit("$0")>]
-                new
+                static member Create
                     (
                         path: string,
                         ``method``: string,
@@ -193341,11 +193346,12 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
                         ?origin: string,
                         ?maxRedirections: float
                     )
+                    : MockResponseCallbackOptions
                     =
-                    MockResponseCallbackOptions()
+                    nativeOnly
 
                 [<ParamObject; Emit("$0")>]
-                new
+                static member Create
                     (
                         path: string,
                         ``method``: string,
@@ -193354,11 +193360,12 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
                         ?origin: string,
                         ?maxRedirections: float
                     )
+                    : MockResponseCallbackOptions
                     =
-                    MockResponseCallbackOptions()
+                    nativeOnly
 
                 [<ParamObject; Emit("$0")>]
-                new
+                static member Create
                     (
                         path: string,
                         ``method``: string,
@@ -193374,11 +193381,12 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
                         ?origin: string,
                         ?maxRedirections: float
                     )
+                    : MockResponseCallbackOptions
                     =
-                    MockResponseCallbackOptions()
+                    nativeOnly
 
                 [<ParamObject; Emit("$0")>]
-                new
+                static member Create
                     (
                         path: string,
                         ``method``: string,
@@ -193386,11 +193394,12 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
                         ?origin: string,
                         ?maxRedirections: float
                     )
+                    : MockResponseCallbackOptions
                     =
-                    MockResponseCallbackOptions()
+                    nativeOnly
 
                 [<ParamObject; Emit("$0")>]
-                new
+                static member Create
                     (
                         path: string,
                         ``method``: string,
@@ -193399,11 +193408,12 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
                         ?origin: string,
                         ?maxRedirections: float
                     )
+                    : MockResponseCallbackOptions
                     =
-                    MockResponseCallbackOptions()
+                    nativeOnly
 
                 [<ParamObject; Emit("$0")>]
-                new
+                static member Create
                     (
                         path: string,
                         ``method``: string,
@@ -193419,31 +193429,9 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
                         ?origin: string,
                         ?maxRedirections: float
                     )
+                    : MockResponseCallbackOptions
                     =
-                    MockResponseCallbackOptions()
-
-                member val path: string = nativeOnly with get, set
-                member val ``method``: string = nativeOnly with get, set
-
-                member val headers: U2<
-                    UndiciTypes.fetch.Headers,
-                    MockResponseCallbackOptions.headers.U2.Case2
-                                     > option = nativeOnly with get, set
-
-                member val origin: string option = nativeOnly with get, set
-
-                member val body: U2<
-                    UndiciTypes.fetch.BodyInit,
-                    U5<
-                        string,
-                        JS.Uint8Array,
-                        Node.stream.Stream_.Readable,
-                        Node.Buffer,
-                        UndiciTypes.formdata.FormData
-                     > option
-                                  > option = nativeOnly with get, set
-
-                member val maxRedirections: float option = nativeOnly with get, set
+                    nativeOnly
 
             type MockResponseDataHandler<'TData> =
                 delegate of
@@ -193510,60 +193498,61 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
 
             module MockReplyOptionsCallback =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type ReturnType<'TData> private () =
+                [<Interface>]
+                type ReturnType<'TData> =
+                    abstract member statusCode: float with get, set
+                    abstract member data: U3<'TData, Node.Buffer, string> option with get, set
+
+                    abstract member responseOptions:
+                        UndiciTypes.mock_interceptor.MockInterceptor_.MockResponseOptions option with get, set
 
                     [<ParamObject; Emit("$0")>]
-                    new
+                    static member Create
                         (
                             statusCode: float,
                             ?responseOptions:
                                 UndiciTypes.mock_interceptor.MockInterceptor_.MockResponseOptions
                         )
+                        : ReturnType<'TData>
                         =
-                        ReturnType()
+                        nativeOnly
 
                     [<ParamObject; Emit("$0")>]
-                    new
+                    static member Create
                         (
                             statusCode: float,
                             data: 'TData,
                             ?responseOptions:
                                 UndiciTypes.mock_interceptor.MockInterceptor_.MockResponseOptions
                         )
+                        : ReturnType<'TData>
                         =
-                        ReturnType()
+                        nativeOnly
 
                     [<ParamObject; Emit("$0")>]
-                    new
+                    static member Create
                         (
                             statusCode: float,
                             data: Node.Buffer,
                             ?responseOptions:
                                 UndiciTypes.mock_interceptor.MockInterceptor_.MockResponseOptions
                         )
+                        : ReturnType<'TData>
                         =
-                        ReturnType()
+                        nativeOnly
 
                     [<ParamObject; Emit("$0")>]
-                    new
+                    static member Create
                         (
                             statusCode: float,
                             data: string,
                             ?responseOptions:
                                 UndiciTypes.mock_interceptor.MockInterceptor_.MockResponseOptions
                         )
+                        : ReturnType<'TData>
                         =
-                        ReturnType()
-
-                    member val statusCode: float = nativeOnly with get, set
-
-                    member val data: U3<'TData, Node.Buffer, string> option =
-                        nativeOnly with get, set
-
-                    member val responseOptions: UndiciTypes.mock_interceptor.MockInterceptor_.MockResponseOptions option =
-                        nativeOnly with get, set
+                        nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -193954,11 +193943,13 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
 
             module dump =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type opts [<ParamObject; Emit("$0")>] (limit: float) =
+                [<Interface>]
+                type opts =
+                    abstract member limit: float with get, set
 
-                    member val limit: float = nativeOnly with get, set
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(limit: float) : opts = nativeOnly
 
     module retry_agent =
 
@@ -193996,81 +193987,83 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
                     callback: UndiciTypes.retry_handler.RetryHandler_.OnRetryCallback ->
                         float option
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type RetryOptions
-                [<ParamObject; Emit("$0")>]
-                (
-                    ?retry: UndiciTypes.retry_handler.RetryHandler_.RetryCallback,
-                    ?maxRetries: float,
-                    ?maxTimeout: float,
-                    ?minTimeout: float,
-                    ?timeoutFactor: float,
-                    ?retryAfter: bool,
-                    ?methods: ResizeArray<UndiciTypes.dispatcher.Dispatcher_.HttpMethod>,
-                    ?errorCodes: ResizeArray<string>,
-                    ?statusCodes: ResizeArray<float>
-                )
-                =
-
+            [<Interface>]
+            type RetryOptions =
                 /// <summary>
                 /// Callback to be invoked on every retry iteration.
                 /// It receives the error, current state of the retry object and the options object
                 /// passed when instantiating the retry handler.
                 /// </summary>
-                member val retry: UndiciTypes.retry_handler.RetryHandler_.RetryCallback option =
-                    nativeOnly with get, set
-
+                abstract member retry: UndiciTypes.retry_handler.RetryHandler_.RetryCallback option with get, set
                 /// <summary>
                 /// Maximum number of retries to allow.
                 /// </summary>
-                member val maxRetries: float option = nativeOnly with get, set
+                abstract member maxRetries: float option with get, set
                 /// <summary>
                 /// Max number of milliseconds allow between retries
                 /// </summary>
-                member val maxTimeout: float option = nativeOnly with get, set
+                abstract member maxTimeout: float option with get, set
                 /// <summary>
                 /// Initial number of milliseconds to wait before retrying for the first time.
                 /// </summary>
-                member val minTimeout: float option = nativeOnly with get, set
+                abstract member minTimeout: float option with get, set
                 /// <summary>
                 /// Factior to multiply the timeout factor between retries.
                 /// </summary>
-                member val timeoutFactor: float option = nativeOnly with get, set
+                abstract member timeoutFactor: float option with get, set
                 /// <summary>
                 /// It enables to automatically infer timeout between retries based on the <c>Retry-After</c> header.
                 /// </summary>
-                member val retryAfter: bool option = nativeOnly with get, set
+                abstract member retryAfter: bool option with get, set
 
                 /// <summary>
                 /// HTTP methods to retry.
                 /// </summary>
-                member val methods: ResizeArray<UndiciTypes.dispatcher.Dispatcher_.HttpMethod> option =
-                    nativeOnly with get, set
+                abstract member methods:
+                    ResizeArray<UndiciTypes.dispatcher.Dispatcher_.HttpMethod> option with get, set
 
                 /// <summary>
                 /// Error codes to be retried. e.g. <c>ECONNRESET</c>, <c>ENOTFOUND</c>, <c>ETIMEDOUT</c>, <c>ECONNREFUSED</c>, etc.
                 /// </summary>
-                member val errorCodes: ResizeArray<string> option = nativeOnly with get, set
+                abstract member errorCodes: ResizeArray<string> option with get, set
                 /// <summary>
                 /// HTTP status codes to be retried.
                 /// </summary>
-                member val statusCodes: ResizeArray<float> option = nativeOnly with get, set
+                abstract member statusCodes: ResizeArray<float> option with get, set
 
-            [<Global>]
-            [<AllowNullLiteral>]
-            type RetryHandlers
                 [<ParamObject; Emit("$0")>]
-                (
-                    dispatch: RetryHandlers.dispatch,
-                    handler: UndiciTypes.dispatcher.Dispatcher_.DispatchHandlers
-                )
-                =
+                static member Create
+                    (
+                        ?retry: UndiciTypes.retry_handler.RetryHandler_.RetryCallback,
+                        ?maxRetries: float,
+                        ?maxTimeout: float,
+                        ?minTimeout: float,
+                        ?timeoutFactor: float,
+                        ?retryAfter: bool,
+                        ?methods: ResizeArray<UndiciTypes.dispatcher.Dispatcher_.HttpMethod>,
+                        ?errorCodes: ResizeArray<string>,
+                        ?statusCodes: ResizeArray<float>
+                    )
+                    : RetryOptions
+                    =
+                    nativeOnly
 
-                member val dispatch: RetryHandlers.dispatch = nativeOnly with get, set
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type RetryHandlers =
+                abstract member dispatch: RetryHandlers.dispatch with get, set
+                abstract member handler: UndiciTypes.dispatcher.Dispatcher_.DispatchHandlers with get, set
 
-                member val handler: UndiciTypes.dispatcher.Dispatcher_.DispatchHandlers =
-                    nativeOnly with get, set
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        dispatch: RetryHandlers.dispatch,
+                        handler: UndiciTypes.dispatcher.Dispatcher_.DispatchHandlers
+                    )
+                    : RetryHandlers
+                    =
+                    nativeOnly
 
             module RetryContext =
 
@@ -194145,20 +194138,21 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
 
             module RetryCallback =
 
-                [<Global>]
                 [<AllowNullLiteral>]
-                type context
+                [<Interface>]
+                type context =
+                    abstract member state: UndiciTypes.retry_handler.RetryHandler_.RetryState with get, set
+                    abstract member opts: RetryCallback.context.opts with get, set
+
                     [<ParamObject; Emit("$0")>]
-                    (
-                        state: UndiciTypes.retry_handler.RetryHandler_.RetryState,
-                        opts: RetryCallback.context.opts
-                    )
-                    =
-
-                    member val state: UndiciTypes.retry_handler.RetryHandler_.RetryState =
-                        nativeOnly with get, set
-
-                    member val opts: RetryCallback.context.opts = nativeOnly with get, set
+                    static member Create
+                        (
+                            state: UndiciTypes.retry_handler.RetryHandler_.RetryState,
+                            opts: RetryCallback.context.opts
+                        )
+                        : context
+                        =
+                        nativeOnly
 
                 module context =
 
@@ -194591,26 +194585,27 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
                 options: UndiciTypes.patch.EventListenerOptions ->
                     unit
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type CloseEventInit
-            [<ParamObject; Emit("$0")>]
-            (
-                ?bubbles: bool,
-                ?cancelable: bool,
-                ?composed: bool,
-                ?code: float,
-                ?reason: string,
-                ?wasClean: bool
-            )
-            =
+        [<Interface>]
+        type CloseEventInit =
+            inherit UndiciTypes.patch.EventInit
+            abstract member code: float option with get, set
+            abstract member reason: string option with get, set
+            abstract member wasClean: bool option with get, set
 
-            member val bubbles: bool option = nativeOnly with get, set
-            member val cancelable: bool option = nativeOnly with get, set
-            member val composed: bool option = nativeOnly with get, set
-            member val code: float option = nativeOnly with get, set
-            member val reason: string option = nativeOnly with get, set
-            member val wasClean: bool option = nativeOnly with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?bubbles: bool,
+                    ?cancelable: bool,
+                    ?composed: bool,
+                    ?code: float,
+                    ?reason: string,
+                    ?wasClean: bool
+                )
+                : CloseEventInit
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -194651,30 +194646,31 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
                 ?ports: ResizeArray<Node.worker_threads.MessagePort> ->
                     unit
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type ErrorEventInit
-            [<ParamObject; Emit("$0")>]
-            (
-                ?bubbles: bool,
-                ?cancelable: bool,
-                ?composed: bool,
-                ?message: string,
-                ?filename: string,
-                ?lineno: float,
-                ?colno: float,
-                ?error: obj
-            )
-            =
+        [<Interface>]
+        type ErrorEventInit =
+            inherit UndiciTypes.patch.EventInit
+            abstract member message: string option with get, set
+            abstract member filename: string option with get, set
+            abstract member lineno: float option with get, set
+            abstract member colno: float option with get, set
+            abstract member error: obj option with get, set
 
-            member val bubbles: bool option = nativeOnly with get, set
-            member val cancelable: bool option = nativeOnly with get, set
-            member val composed: bool option = nativeOnly with get, set
-            member val message: string option = nativeOnly with get, set
-            member val filename: string option = nativeOnly with get, set
-            member val lineno: float option = nativeOnly with get, set
-            member val colno: float option = nativeOnly with get, set
-            member val error: obj option = nativeOnly with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?bubbles: bool,
+                    ?cancelable: bool,
+                    ?composed: bool,
+                    ?message: string,
+                    ?filename: string,
+                    ?lineno: float,
+                    ?colno: float,
+                    ?error: obj
+                )
+                : ErrorEventInit
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -194686,45 +194682,44 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
             abstract member colno: float with get
             abstract member error: obj with get
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type WebSocketInit private () =
+        [<Interface>]
+        type WebSocketInit =
+            abstract member protocols: U2<string, ResizeArray<string>> option with get, set
+            abstract member dispatcher: UndiciTypes.dispatcher.Dispatcher option with get, set
+            abstract member headers: UndiciTypes.fetch.HeadersInit option with get, set
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     ?dispatcher: UndiciTypes.dispatcher.Dispatcher,
                     ?headers: UndiciTypes.fetch.HeadersInit
                 )
+                : WebSocketInit
                 =
-                WebSocketInit()
+                nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     protocols: string,
                     ?dispatcher: UndiciTypes.dispatcher.Dispatcher,
                     ?headers: UndiciTypes.fetch.HeadersInit
                 )
+                : WebSocketInit
                 =
-                WebSocketInit()
+                nativeOnly
 
             [<ParamObject; Emit("$0")>]
-            new
+            static member Create
                 (
                     protocols: ResizeArray<string>,
                     ?dispatcher: UndiciTypes.dispatcher.Dispatcher,
                     ?headers: UndiciTypes.fetch.HeadersInit
                 )
+                : WebSocketInit
                 =
-                WebSocketInit()
-
-            member val protocols: U2<string, ResizeArray<string>> option = nativeOnly with get, set
-
-            member val dispatcher: UndiciTypes.dispatcher.Dispatcher option =
-                nativeOnly with get, set
-
-            member val headers: UndiciTypes.fetch.HeadersInit option = nativeOnly with get, set
+                nativeOnly
 
         type MessageEventInit = MessageEventInit<obj>
 

@@ -39,15 +39,12 @@ module Exports =
 
     module CategoryScale =
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type Type
+        [<Interface>]
+        type Type =
+            abstract member prototype: CategoryScale with get, set
             [<ParamObject; Emit("$0")>]
-            (
-                prototype: CategoryScale
-            ) =
-
-            member val prototype : CategoryScale = nativeOnly with get, set
+            static member Create (prototype: CategoryScale) : Type = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

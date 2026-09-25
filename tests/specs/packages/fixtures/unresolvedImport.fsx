@@ -16,15 +16,12 @@ module UnresolvedImport =
 
     module scale =
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type Scale
+        [<Interface>]
+        type Scale =
+            abstract member factor: float with get, set
             [<ParamObject; Emit("$0")>]
-            (
-                factor: float
-            ) =
-
-            member val factor : float = nativeOnly with get, set
+            static member Create (factor: float) : Scale = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

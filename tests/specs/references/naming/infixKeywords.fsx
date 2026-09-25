@@ -15,15 +15,12 @@ type Quotes =
 
 module PluginModuleFactory =
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type ``mod``
+    [<Interface>]
+    type ``mod`` =
+        abstract member typescript: string with get, set
         [<ParamObject; Emit("$0")>]
-        (
-            typescript: string
-        ) =
-
-        member val typescript : string = nativeOnly with get, set
+        static member Create (typescript: string) : ``mod`` = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

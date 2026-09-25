@@ -14,15 +14,12 @@ module Exports =
 
     module settings =
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type Type
+        [<Interface>]
+        type Type =
+            abstract member enable: bool with get
             [<ParamObject; Emit("$0")>]
-            (
-                enable: bool
-            ) =
-
-            member val enable : bool = nativeOnly with get
+            static member Create (enable: bool) : Type = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

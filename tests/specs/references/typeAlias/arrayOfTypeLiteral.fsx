@@ -15,27 +15,21 @@ type Docs =
 
 module Documentation =
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type ResizeArray
+    [<Interface>]
+    type ResizeArray =
+        abstract member kind: string with get
         [<ParamObject; Emit("$0")>]
-        (
-            kind: string
-        ) =
-
-        member val kind : string = nativeOnly with get
+        static member Create (kind: string) : ResizeArray = nativeOnly
 
 module Docs =
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type ReadonlyArray
+    [<Interface>]
+    type ReadonlyArray =
+        abstract member kind: string with get
         [<ParamObject; Emit("$0")>]
-        (
-            kind: string
-        ) =
-
-        member val kind : string = nativeOnly with get
+        static member Create (kind: string) : ReadonlyArray = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

@@ -15,17 +15,13 @@ type Exports =
 type PresentationOptions =
     abstract member title: string with get, set
 
-[<Global>]
 [<AllowNullLiteral>]
-type GetSessionOptions
+[<Interface>]
+type GetSessionOptions =
+    abstract member createIfNone: U2<bool, PresentationOptions> option with get, set
+    abstract member forceNewSession: U2<bool, PresentationOptions> option with get, set
     [<ParamObject; Emit("$0")>]
-    (
-        ?createIfNone: U2<bool, PresentationOptions>,
-        ?forceNewSession: U2<bool, PresentationOptions>
-    ) =
-
-    member val createIfNone : U2<bool, PresentationOptions> option = nativeOnly with get, set
-    member val forceNewSession : U2<bool, PresentationOptions> option = nativeOnly with get, set
+    static member Create (?createIfNone: U2<bool, PresentationOptions>, ?forceNewSession: U2<bool, PresentationOptions>) : GetSessionOptions = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

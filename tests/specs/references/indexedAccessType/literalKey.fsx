@@ -26,47 +26,35 @@ type Documentation =
 
 module CodeActionProviderMetadata =
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type documentation
+    [<Interface>]
+    type documentation =
+        abstract member kind: string with get
+        abstract member command: string with get
         [<ParamObject; Emit("$0")>]
-        (
-            kind: string,
-            command: string
-        ) =
-
-        member val kind : string = nativeOnly with get
-        member val command : string = nativeOnly with get
+        static member Create (kind: string, command: string) : documentation = nativeOnly
 
 module Documentation =
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type ReadonlyArray
+    [<Interface>]
+    type ReadonlyArray =
+        abstract member kind: string with get
+        abstract member command: string with get
         [<ParamObject; Emit("$0")>]
-        (
-            kind: string,
-            command: string
-        ) =
-
-        member val kind : string = nativeOnly with get
-        member val command : string = nativeOnly with get
+        static member Create (kind: string, command: string) : ReadonlyArray = nativeOnly
 
 module Exports =
 
     module asDocumentation =
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type value
+        [<Interface>]
+        type value =
+            abstract member kind: string with get
+            abstract member command: string with get
             [<ParamObject; Emit("$0")>]
-            (
-                kind: string,
-                command: string
-            ) =
-
-            member val kind : string = nativeOnly with get
-            member val command : string = nativeOnly with get
+            static member Create (kind: string, command: string) : value = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

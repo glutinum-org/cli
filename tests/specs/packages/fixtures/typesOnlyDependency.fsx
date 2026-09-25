@@ -19,15 +19,12 @@ module TypesOnlyDep =
     type Dispatcher =
         abstract member close: unit -> unit
 
-    [<Global>]
     [<AllowNullLiteral>]
-    type DispatcherOptions
+    [<Interface>]
+    type DispatcherOptions =
+        abstract member keepAlive: bool option with get, set
         [<ParamObject; Emit("$0")>]
-        (
-            ?keepAlive: bool
-        ) =
-
-        member val keepAlive : bool option = nativeOnly with get, set
+        static member Create (?keepAlive: bool) : DispatcherOptions = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

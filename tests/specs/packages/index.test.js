@@ -23,6 +23,7 @@ const fixtures = [
     "subpathEntries",
     "unresolvedImport",
     "namespaceImport",
+    "externalParamObject",
 ]
 
 const footer = `

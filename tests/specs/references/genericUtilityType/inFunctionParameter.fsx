@@ -23,15 +23,12 @@ module Exports =
 
     module f =
 
-        [<Global>]
         [<AllowNullLiteral>]
-        type x
+        [<Interface>]
+        type x =
+            abstract member id: string with get, set
             [<ParamObject; Emit("$0")>]
-            (
-                id: string
-            ) =
-
-            member val id : string = nativeOnly with get, set
+            static member Create (id: string) : x = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

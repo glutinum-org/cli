@@ -16,39 +16,29 @@ module Geometry =
 
         module point =
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type at
+            [<Interface>]
+            type at =
+                abstract member x: float with get, set
+                abstract member y: float with get, set
                 [<ParamObject; Emit("$0")>]
-                (
-                    x: float,
-                    y: float
-                ) =
-
-                member val x : float = nativeOnly with get, set
-                member val y : float = nativeOnly with get, set
+                static member Create (x: float, y: float) : at = nativeOnly
 
         module line =
 
-            [<Global>]
             [<AllowNullLiteral>]
-            type from
+            [<Interface>]
+            type from =
+                abstract member x: float with get, set
                 [<ParamObject; Emit("$0")>]
-                (
-                    x: float
-                ) =
+                static member Create (x: float) : from = nativeOnly
 
-                member val x : float = nativeOnly with get, set
-
-            [<Global>]
             [<AllowNullLiteral>]
-            type ``to``
+            [<Interface>]
+            type ``to`` =
+                abstract member x: float with get, set
                 [<ParamObject; Emit("$0")>]
-                (
-                    x: float
-                ) =
-
-                member val x : float = nativeOnly with get, set
+                static member Create (x: float) : ``to`` = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"
