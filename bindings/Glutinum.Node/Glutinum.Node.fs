@@ -167378,15 +167378,6 @@ Duplex.fromWeb($0, $1)"""
             type LcovReporter =
                 inherit Node.stream.Stream_.Transform
 
-            module ReporterConstructorWrapper =
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type T =
-                    [<EmitConstructor>]
-                    abstract member Create:
-                        [<ParamArray>] args: obj[] -> Node.stream.Stream_.Transform
-
             module Exports =
 
                 module LcovReporter =

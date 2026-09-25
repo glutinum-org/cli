@@ -5576,11 +5576,22 @@ module private TypeParameter =
                 SealedTypeOpt = sealedType
             }
 
-    let transform (context: TransformContext) (typeParameter: GlueTypeParameter) : TransformResult =
+    /// `withDefault` transforms the default, which exposes the types it names. A signature
+    /// never prints a default, F# has none, and exposing them there names the type parameters
+    /// of the enclosing declaration, which the exposed type can't declare.
+    let transformWith
+        (withDefault: bool)
+        (context: TransformContext)
+        (typeParameter: GlueTypeParameter)
+        : TransformResult
+        =
         // The scope avoids naming an anonymous default after the declaration
         let default_ =
-            typeParameter.Default
-            |> Option.map (transformType (context.PushScope typeParameter.Name))
+            if withDefault then
+                typeParameter.Default
+                |> Option.map (transformType (context.PushScope typeParameter.Name))
+            else
+                None
 
         match typeParameter.Constraint with
         | None -> TransformResult.Create(typeParameter.Name, default_ = default_)
@@ -5606,7 +5617,9 @@ module private TypeParameter =
         | Some(GlueType.TypeLiteral _)
         | Some(GlueType.IntersectionType _)
         | Some(GlueType.UtilityType _)
-        | Some(GlueType.MappedType _) ->
+        | Some(GlueType.MappedType _)
+        | Some(GlueType.FunctionType _)
+        | Some(GlueType.ConstructorType _) ->
             TransformResult.Create(typeParameter.Name, default_ = default_)
 
         | Some constraintType ->
@@ -5641,6 +5654,9 @@ module private TypeParameter =
 
             // Anything else (a mapped type, a tuple, ...) is sealed or anonymous
             | _ -> TransformResult.Create(typeParameter.Name, default_ = default_)
+
+    let transform (context: TransformContext) (typeParameter: GlueTypeParameter) : TransformResult =
+        transformWith true context typeParameter
 
     let rec mapFSharpType (seadledTypes: SealedTypeInfo list) (typ: FSharpType) =
         match typ with
@@ -5793,7 +5809,7 @@ let private transformTypeParameters
     : TransformTypeParametersResult
     =
     let transformedTypeParameters =
-        typeParameters |> List.map (TypeParameter.transform context)
+        typeParameters |> List.map (TypeParameter.transformWith false context)
 
     let sealedTypes = transformedTypeParameters |> List.choose _.SealedTypeOpt
 
