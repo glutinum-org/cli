@@ -2305,7 +2305,7 @@ module TypeScript =
         abstract member Create: ?value: obj -> bool
 
         [<Emit("$0($1...)")>]
-        abstract member Invoke: ?value: 'T -> bool
+        abstract member Invoke<'T> : ?value: 'T -> bool
 
         abstract member prototype: bool with get
 

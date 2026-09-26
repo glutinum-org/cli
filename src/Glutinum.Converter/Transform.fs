@@ -2896,16 +2896,24 @@ module private TransformMembers =
             | GlueMember.CallSignature callSignatureInfo ->
                 let name, context = sanitizeNameAndPushScope "Invoke" context
 
+                let typeParameters =
+                    transformTypeParameters context callSignatureInfo.TypeParameters
+
                 {
                     Attributes = [ FSharpAttribute.EmitSelfInvoke ]
                     Name = name
                     OriginalName = "Invoke"
                     Parameters =
                         callSignatureInfo.Parameters
-                        |> List.map (transformParameter context)
+                        |> List.map (
+                            transformParameter context
+                            >> TypeParameter.mapFsharpParameter typeParameters.SealedTypes
+                        )
                         |> requiredBeforeParamArray
-                    Type = transformType context callSignatureInfo.Type
-                    TypeParameters = []
+                    Type =
+                        transformType context callSignatureInfo.Type
+                        |> TypeParameter.mapFSharpType typeParameters.SealedTypes
+                    TypeParameters = typeParameters.TypeParameters
                     IsOptional = false
                     IsStatic = false
                     Accessor = None
