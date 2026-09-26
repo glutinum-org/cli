@@ -6989,7 +6989,13 @@ let private transformTypeAliasDeclaration
                 | _ -> transformType context unionType |> makeTypeAlias
 
         | GlueType.KeyOf glueType ->
-            TypeAliasDeclaration.transformKeyOf context glueTypeAliasDeclaration.Name glueType
+            match
+                TypeAliasDeclaration.transformKeyOf context glueTypeAliasDeclaration.Name glueType
+            with
+            // `keyof StoreMutators<unknown, unknown>` of an empty registry has no key, the
+            // alias is still referenced by the re-exports
+            | FSharpType.Discard -> makeTypeAlias FSharpType.Object
+            | typ -> typ
 
         | GlueType.IndexedAccessType glueType ->
             let typ =
