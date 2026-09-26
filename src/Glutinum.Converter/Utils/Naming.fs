@@ -107,6 +107,10 @@ let sanitizeNameWithResult (name: string) : SanitizeNameResult = sanitizeWith id
 let sanitizeTypeNameWithResult (name: string) : SanitizeNameResult =
     sanitizeWith (replaceDollar >> replaceForwardSlash >> replaceTypeNameInvalidChars) name
 
+/// A type parameter is printed after `'`, it cannot be escaped with double backticks
+let sanitizeTypeParameterName (name: string) : string =
+    name |> replaceDollar |> replaceForwardSlash
+
 let sanitizeName (name: string) =
     let result = sanitizeNameWithResult name
     result.Name

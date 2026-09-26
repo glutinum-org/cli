@@ -6040,7 +6040,9 @@ module private TypeParameter =
         let default_ =
             if withDefault then
                 typeParameter.Default
-                |> Option.map (transformType (context.PushScope typeParameter.Name))
+                |> Option.map (
+                    transformType (context.PushScope(Naming.sanitizeTypeName typeParameter.Name))
+                )
             else
                 None
 
@@ -6048,7 +6050,7 @@ module private TypeParameter =
         | None -> TransformResult.Create(typeParameter.Name, default_ = default_)
 
         | Some(GlueType.KeyOf _ as constraintType) ->
-            let context = context.PushScope typeParameter.Name
+            let context = context.PushScope(Naming.sanitizeTypeName typeParameter.Name)
 
             match transformType context constraintType with
             | FSharpType.TypeReference _ as fsharpType ->
@@ -6075,7 +6077,11 @@ module private TypeParameter =
 
         | Some constraintType ->
             // Manual optimization to remove constraints that are not supported by F#
-            match transformType (context.PushScope typeParameter.Name) constraintType with
+            match
+                transformType
+                    (context.PushScope(Naming.sanitizeTypeName typeParameter.Name))
+                    constraintType
+            with
             | FSharpType.Function _
             | FSharpType.TypeReference { Name = "Action" } ->
                 TransformResult.Create(typeParameter.Name, default_ = default_)

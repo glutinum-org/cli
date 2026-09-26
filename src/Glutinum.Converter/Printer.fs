@@ -212,7 +212,7 @@ let rec printTypeParametersDeclaration
             match typeParameter with
             | FSharpTypeParameter.FSharpType _ -> innterPrinter.WriteInline $"'T{index}"
             | FSharpTypeParameter.FSharpTypeParameter typeParameter ->
-                innterPrinter.WriteInline $"'{typeParameter.Name}"
+                innterPrinter.WriteInline $"'{Naming.sanitizeTypeParameterName typeParameter.Name}"
         )
 
         // Print the constraints only if we are in the initial declaration.
@@ -252,6 +252,13 @@ let rec printTypeParametersDeclaration
 and printTypeNameWithTypeParameters (name: string) (typeParameters: FSharpTypeParameter list) =
     let printer = new Printer()
 
+    // A type parameter reaches here as a name starting with `'`
+    let name =
+        if name.StartsWith "'" then
+            "'" + Naming.sanitizeTypeParameterName (name.Substring 1)
+        else
+            name
+
     if not typeParameters.IsEmpty then
         printer.WriteInline("<")
 
@@ -263,7 +270,7 @@ and printTypeNameWithTypeParameters (name: string) (typeParameters: FSharpTypePa
             match typeParameter with
             | FSharpTypeParameter.FSharpType innerType -> printer.WriteInline(printType innerType)
             | FSharpTypeParameter.FSharpTypeParameter typeParameter ->
-                printer.WriteInline $"'{typeParameter.Name}"
+                printer.WriteInline $"'{Naming.sanitizeTypeParameterName typeParameter.Name}"
         )
 
         printer.WriteInline(">")
@@ -358,7 +365,7 @@ and printType (fsharpType: FSharpType) =
         else
             name
 
-    | FSharpType.TypeParameter name -> $"'{name}"
+    | FSharpType.TypeParameter name -> $"'{Naming.sanitizeTypeParameterName name}"
     | FSharpType.Option optionType -> printType optionType + " option"
     | FSharpType.ResizeArray arrayType -> $"ResizeArray<{printType arrayType}>"
     | FSharpType.JSApi apiInfo ->
