@@ -711,13 +711,21 @@ module private UtilityType =
         =
         match readonlyInfo with
         | GlueReadonly.Members members ->
+            let typeParameterNames =
+                members |> List.collect memberTypeParameterNames |> List.distinct
+
             let interfaceTyp =
                 {
                     XmlDoc = []
                     Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
                     Name = context.CurrentScopeName
                     OriginalName = context.CurrentScopeName
-                    TypeParameters = []
+                    TypeParameters =
+                        typeParameterNames
+                        |> List.map (fun name ->
+                            FSharpTypeParameterInfo.Create(name)
+                            |> FSharpTypeParameter.FSharpTypeParameter
+                        )
                     Members =
                         TransformMembers.toFSharpMember context members
                         |> TransformMembers.forceReadonly
@@ -732,7 +740,9 @@ module private UtilityType =
 
                 ({
                     Name = context.FullName
-                    TypeParameters = []
+                    TypeParameters =
+                        typeParameterNames
+                        |> List.map (FSharpType.TypeParameter >> FSharpTypeParameter.FSharpType)
                 }
                 : FSharpMapped)
                 |> FSharpType.Mapped
