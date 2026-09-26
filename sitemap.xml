@@ -199,22 +199,16 @@
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/assert/exports/assert/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/assert/exports/assert/type-1/</loc>
-  </url>
-  <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/assert/exports/assert/type/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/assert/exports/assert/type/create/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/assert/exports/assert/type/create/options-1/</loc>
-  </url>
-  <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/assert/exports/assert/type/create/options/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/assert/exports/assert/type/create/options/diff-1/</loc>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/assert/exports/assert/type/create/options/diff/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/async-hooks/</loc>
@@ -7597,91 +7591,91 @@
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/bytelengthqueuingstrategy/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/bytelengthqueuingstrategy/type-1/</loc>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/bytelengthqueuingstrategy/type/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/countqueuingstrategy/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/countqueuingstrategy/type-1/</loc>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/countqueuingstrategy/type/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/readablebytestreamcontroller/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/readablebytestreamcontroller/type-1/</loc>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/readablebytestreamcontroller/type/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/readablestream/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/readablestream/type-1/</loc>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/readablestream/type/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/readablestreambyobreader/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/readablestreambyobreader/type-1/</loc>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/readablestreambyobreader/type/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/readablestreambyobrequest/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/readablestreambyobrequest/type-1/</loc>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/readablestreambyobrequest/type/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/readablestreamdefaultcontroller/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/readablestreamdefaultcontroller/type-1/</loc>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/readablestreamdefaultcontroller/type/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/readablestreamdefaultreader/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/readablestreamdefaultreader/type-1/</loc>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/readablestreamdefaultreader/type/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/textdecoderstream/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/textdecoderstream/type-1/</loc>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/textdecoderstream/type/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/textencoderstream/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/textencoderstream/type-1/</loc>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/textencoderstream/type/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/transformstream/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/transformstream/type-1/</loc>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/transformstream/type/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/transformstreamdefaultcontroller/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/transformstreamdefaultcontroller/type-1/</loc>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/transformstreamdefaultcontroller/type/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/writablestream/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/writablestream/type-1/</loc>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/writablestream/type/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/writablestreamdefaultcontroller/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/writablestreamdefaultcontroller/type-1/</loc>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/writablestreamdefaultcontroller/type/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/writablestreamdefaultwriter/</loc>
   </url>
   <url>
-    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/writablestreamdefaultwriter/type-1/</loc>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/exports/writablestreamdefaultwriter/type/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream-web/stream-slash-web/queuingstrategy/</loc>
@@ -10243,6 +10237,9 @@
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/undicitypes/dispatcher-module/dispatcher-module/responsedata/</loc>
   </url>
   <url>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/undicitypes/dispatcher-module/dispatcher-module/responsedata/body/</loc>
+  </url>
+  <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/undicitypes/dispatcher-module/dispatcher-module/responsedata/trailers/</loc>
   </url>
   <url>
@@ -10727,6 +10724,9 @@
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/undicitypes/filereader-module/filereader/error/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/undicitypes/filereader-module/filereader/proto/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/undicitypes/filereader-module/progressevent/</loc>
