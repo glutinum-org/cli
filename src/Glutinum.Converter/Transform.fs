@@ -7355,27 +7355,31 @@ let private transformTypeAliasDeclaration
 
 module private ReExport =
 
+    /// A constraint the transform writes the same way wherever it appears
+    let rec private isExpressible (glueType: GlueType) =
+        match glueType with
+        | GlueType.TypeReference _
+        | GlueType.Primitive _
+        | GlueType.Unknown -> true
+        // The transform keeps the wrapper and writes the inner type
+        | GlueType.ReadOnly innerType
+        | GlueType.Array innerType
+        | GlueType.OptionalType innerType -> isExpressible innerType
+        | GlueType.Union(GlueTypeUnion cases) -> cases |> List.forall isExpressible
+        | GlueType.TupleType elements -> elements |> List.forall isExpressible
+        | _ -> false
+
     let canForwardConstraints (typeParameters: GlueTypeParameter list) =
         typeParameters
         |> List.forall (fun typeParameter ->
             match typeParameter.Constraint with
             | None
-            | Some(GlueType.TypeReference _)
-            | Some(GlueType.Primitive _)
             // Dropped by the transform
             | Some(GlueType.TypeLiteral _)
             | Some(GlueType.IntersectionType _)
             | Some(GlueType.UtilityType _)
             | Some(GlueType.MappedType _) -> true
-            // Sealed to the same type by the transform
-            | Some(GlueType.Union(GlueTypeUnion cases)) ->
-                cases
-                |> List.forall (
-                    function
-                    | GlueType.Primitive _ -> true
-                    | _ -> false
-                )
-            | Some _ -> false
+            | Some constraintType -> isExpressible constraintType
         )
 
 let private transformReExport

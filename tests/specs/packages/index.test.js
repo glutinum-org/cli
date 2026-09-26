@@ -26,6 +26,7 @@ const fixtures = [
     "externalParamObject",
     "crossFileConditional",
     "unboundTypeParameter",
+    "reExportedConstraint",
 ]
 
 const footer = `

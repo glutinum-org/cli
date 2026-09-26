@@ -160407,6 +160407,10 @@ Duplex.fromWeb($0, $1)"""
 
         type PipelineDestination<'S, 'P> = Stream_.PipelineDestination<'S, 'P>
 
+        type PipelineCallback<'S> = Stream_.PipelineCallback<'S>
+
+        type PipelinePromise<'S> = Stream_.PipelinePromise<'S>
+
         type PipelineOptions = Stream_.PipelineOptions
 
         type Pipe = Stream_.Pipe
