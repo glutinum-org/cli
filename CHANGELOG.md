@@ -1,5 +1,5 @@
 ---
-last_commit_released: 9699a781e7f42d59a8e5ca71f3026a3911ae3d87
+last_commit_released: 6e1a85ac32de3f60132d7c0200cf63a67110b141
 name: Glutinum.Converter.CLI
 exclude:
   - src/Glutinum.Types/
@@ -17,6 +17,43 @@ updaters:
 All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## 1.0.0 - 2026-09-26
+
+### 🏗️ Breaking changes
+
+* An object type is an interface with a `Create` static member ([7e36e60](https://github.com/glutinum-org/cli/commit/7e36e609984c8ff806a258bc94cb8fca3e6a39e3))
+
+### 🚀 Features
+
+* Warn when a single file re-exports from another file ([76d13e1](https://github.com/glutinum-org/cli/commit/76d13e15358cd4397b2a64c9733e0a506504a79d))
+
+### 🐞 Bug Fixes
+
+* A types-only package generates no import ([cb6356b](https://github.com/glutinum-org/cli/commit/cb6356bad5d9ef17e35a3e61b2ddc9ea679bf223))
+* Only a subpath entry is named after its folder ([9c58b28](https://github.com/glutinum-org/cli/commit/9c58b28a896c574188e68ecd31d92cbed193fdf5))
+* A type imported from a package that is not installed is obj ([eb18036](https://github.com/glutinum-org/cli/commit/eb180364cde4a9c54fc0b56008e4dd173684e5e5))
+* `typeof` a namespace is the `Exports` of its module ([017cf78](https://github.com/glutinum-org/cli/commit/017cf786dbbde9356f581232b7a34e84e12ad50a))
+* An anonymous type reached twice is one definition ([9310a98](https://github.com/glutinum-org/cli/commit/9310a98f75f1db9c870d71955859400ae9a238c5))
+* An overload subsumed by a longer one is erased ([e9e348e](https://github.com/glutinum-org/cli/commit/e9e348e897ae0779fee2b27c2fd571bc1bd18554))
+* A markdown fence in an Obsolete message is escaped ([ecefd60](https://github.com/glutinum-org/cli/commit/ecefd60588f95329426a6b64047796ad9226eff6))
+* A Record alias keeps its constrained type parameter ([9ffc8c3](https://github.com/glutinum-org/cli/commit/9ffc8c3239222306136838a9825bdbe72b6dbb5b))
+* A keyof map used by a call signature generates its Key type ([a88ae1a](https://github.com/glutinum-org/cli/commit/a88ae1a1a4c79ef2ddc3db7ab004ee4b2446ebf3))
+* A type parameter default follows the chain to its constraint ([11b0aff](https://github.com/glutinum-org/cli/commit/11b0aff53f6bb63ae8fb52ecb7b209b769e5b973))
+* A dropped type parameter constraint or default exposes no type ([2276503](https://github.com/glutinum-org/cli/commit/22765030704d8f68142daea55ace2ff528f19f56))
+* An anonymous type declares the type parameters its members use ([eabdb5f](https://github.com/glutinum-org/cli/commit/eabdb5f2fe2620136e425518a8c0d0d043eddf5f))
+* A `Create` member names each property once ([d717565](https://github.com/glutinum-org/cli/commit/d717565bf3aabe4f3f3e4aae6232823a6985d4dd))
+* A conditional alias naming itself no longer crashes ([498c8fa](https://github.com/glutinum-org/cli/commit/498c8fa3f039c7c664aa28d36e2f714b13221730))
+* A `Readonly` type declares the type parameters its members use ([dad5ae4](https://github.com/glutinum-org/cli/commit/dad5ae4811a17cc7a533df1b320d519ee9aae71f))
+* An inherited signature declares its own type parameters ([e42b929](https://github.com/glutinum-org/cli/commit/e42b929d3ecb905edd4a878e3b4601fb1f9fbe16))
+* A generic call signature declares its type parameters ([adde70c](https://github.com/glutinum-org/cli/commit/adde70c769e62f2a8669eff10debac24f8c4002f))
+* An imported type is identified by its declaration ([d8ed49b](https://github.com/glutinum-org/cli/commit/d8ed49ba9f02fe58552110c7ed4fbf11fdffe379))
+* A conditional collapses when its branches share a type ([d4aeb06](https://github.com/glutinum-org/cli/commit/d4aeb06d81c62f13e43a93656e9b036adc7de09a))
+* An intersection F# cannot merge is inherited instead of erased ([659d420](https://github.com/glutinum-org/cli/commit/659d420bc9a7bae26be5fef89a92762056c6f8d2))
+* An overload two others subsume is the one that resolves ([68ef1b5](https://github.com/glutinum-org/cli/commit/68ef1b576e0a97a0d8f0ffce1367510c120ec8e8))
+* The companion module of a static member no longer shadows it ([6e1a85a](https://github.com/glutinum-org/cli/commit/6e1a85ac32de3f60132d7c0200cf63a67110b141))
+
+<strong><small>[View changes on Github](https://github.com/glutinum-org/cli/compare/9699a781e7f42d59a8e5ca71f3026a3911ae3d87..6e1a85ac32de3f60132d7c0200cf63a67110b141)</small></strong>
 
 ## 0.14.1 - 2026-09-20
 
