@@ -793,11 +793,27 @@ module private UtilityType =
 /// The type each own type parameter of a function type stands for outside a generic position.
 /// `<P, P2 = P>`: the default of `P2` is another own parameter, which has none itself.
 let private ownTypeParameterDefaults (functionTypeInfo: GlueFunctionType) =
-    let declared =
+    let listed = functionTypeInfo.TypeParameters |> List.map _.Name |> Set.ofList
+
+    let own =
         functionTypeInfo.TypeParameters
         |> List.filter (fun typeParameter ->
             List.contains typeParameter.Name functionTypeInfo.OwnTypeParameterNames
         )
+
+    // An inherited signature names its own type parameters without listing them
+    let inherited =
+        functionTypeInfo.OwnTypeParameterNames
+        |> List.filter (fun name -> not (listed.Contains name))
+        |> List.map (fun name ->
+            {
+                Name = name
+                Constraint = None
+                Default = None
+            }
+        )
+
+    let declared = own @ inherited
 
     let byName =
         declared
@@ -1075,7 +1091,19 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
         // More than 1 parameter, we generate a delegate
         | _ ->
             let typParameters =
+                // An inherited signature names its own type parameters without listing them
+                let declared = functionTypeInfo.TypeParameters |> List.map _.Name |> Set.ofList
+
                 functionTypeInfo.TypeParameters
+                @ (functionTypeInfo.OwnTypeParameterNames
+                   |> List.filter (fun name -> not (declared.Contains name))
+                   |> List.map (fun name ->
+                       {
+                           Name = name
+                           Constraint = None
+                           Default = None
+                       }
+                   ))
                 // TypeParameters are coming from the parent scope
                 // so we need to filter them to only keep the ones that are used
                 // See file://./../../tests/specs/references/functionType/interface/generics/moreGenericsOnParentThanNeeded.d.ts
