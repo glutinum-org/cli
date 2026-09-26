@@ -1,5 +1,5 @@
 ---
-last_commit_released: 865f54ebdd8defd9b7f8e3f26e42bf563043372d
+last_commit_released: 6e1a85ac32de3f60132d7c0200cf63a67110b141
 name: Glutinum.Web
 ---
 
@@ -12,6 +12,21 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 This changelog is generated using [EasyBuild.ShipIt](https://github.com/easybuild-org/EasyBuild.ShipIt).
 
 ⚠ Only edit the front matter metadata at the top of this file. All other changes will be overwritten when a new release is created.
+
+## 1.0.0 - 2026-09-26
+
+### 🏗️ Breaking changes
+
+* An object type is an interface with a `Create` static member ([7e36e60](https://github.com/glutinum-org/cli/commit/7e36e609984c8ff806a258bc94cb8fca3e6a39e3))
+
+### 🐞 Bug Fixes
+
+* An anonymous type reached twice is one definition ([9310a98](https://github.com/glutinum-org/cli/commit/9310a98f75f1db9c870d71955859400ae9a238c5))
+* An overload subsumed by a longer one is erased ([e9e348e](https://github.com/glutinum-org/cli/commit/e9e348e897ae0779fee2b27c2fd571bc1bd18554))
+* An anonymous type declares the type parameters its members use ([eabdb5f](https://github.com/glutinum-org/cli/commit/eabdb5f2fe2620136e425518a8c0d0d043eddf5f))
+* The companion module of a static member no longer shadows it ([6e1a85a](https://github.com/glutinum-org/cli/commit/6e1a85ac32de3f60132d7c0200cf63a67110b141))
+
+<strong><small>[View changes on Github](https://github.com/glutinum-org/cli/compare/865f54ebdd8defd9b7f8e3f26e42bf563043372d..6e1a85ac32de3f60132d7c0200cf63a67110b141)</small></strong>
 
 ## 0.1.0 - 2026-09-19
 
