@@ -850,6 +850,15 @@ let private ownTypeParameterDefaults (functionTypeInfo: GlueFunctionType) =
         GlueSubstitution.substitute (Map.remove name resolved) glueType
     )
 
+/// An F# interface can only inherit another interface
+let private inheritableBases (references: GlueType list) =
+    references
+    |> List.filter (
+        function
+        | GlueType.TypeReference reference -> Conditionals.isInterfaceDeclaration reference.FullName
+        | _ -> false
+    )
+
 let rec private transformType (context: TransformContext) (glueType: GlueType) : FSharpType =
     match glueType with
     | GlueType.Unknown -> FSharpType.Object
@@ -1356,6 +1365,46 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
         }
         : FSharpFunctionType)
         |> FSharpType.Function
+
+    | GlueType.IntersectionOfReferences references ->
+        // An interface can only inherit another interface, a reference to anything else
+        // would not compile
+        let bases = inheritableBases references
+
+        if bases.IsEmpty then
+            FSharpType.Object
+        else
+            let typeParameterNames =
+                references |> List.collect typeParameterNames |> List.distinct
+
+            let name =
+                context.TypeLiteralsMemory.GetTypeName(context.FullName, context.CurrentScopeName)
+
+            {
+                XmlDoc = []
+                Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
+                Name = name
+                OriginalName = context.CurrentScopeName
+                TypeParameters =
+                    typeParameterNames
+                    |> List.map (fun name ->
+                        FSharpTypeParameterInfo.Create(name)
+                        |> FSharpTypeParameter.FSharpTypeParameter
+                    )
+                Members = []
+                Inheritance = bases |> List.map (transformType context)
+            }
+            |> FSharpType.Interface
+            |> context.ExposeType
+
+            ({
+                Name = context.TypeLiteralsMemory.ReferenceName(context.FullName, name)
+                TypeParameters =
+                    typeParameterNames
+                    |> List.map (FSharpType.TypeParameter >> FSharpTypeParameter.FSharpType)
+            }
+            : FSharpMapped)
+            |> FSharpType.Mapped
 
     | GlueType.IntersectionType members ->
         if members.IsEmpty then
@@ -4527,6 +4576,18 @@ module Conditionals =
 
     let isConditionalAlias (fullName: string) = aliases.ContainsKey fullName
 
+    /// Whether the declaration behind a reference is printed as an F# interface
+    let isInterfaceDeclaration (fullName: string) =
+        if interfaces.ContainsKey fullName then
+            true
+        elif allAliases.ContainsKey fullName then
+            match allAliases.[fullName].Type with
+            | GlueType.IntersectionType members -> not members.IsEmpty
+            | GlueType.TypeLiteral typeLiteral -> not typeLiteral.Members.IsEmpty
+            | _ -> false
+        else
+            false
+
     /// The type parameters of the function type `type Fn = <T>(value: T) => T` aliases
     let genericDelegateTypeParameters (fullName: string) : string list =
         match allAliases.TryGetValue fullName with
@@ -7084,6 +7145,21 @@ let private transformTypeAliasDeclaration
                 Inheritance = []
             }
             |> FSharpType.Interface
+
+        | GlueType.IntersectionOfReferences references ->
+            match inheritableBases references with
+            | [] -> makeTypeAlias FSharpType.Object
+            | bases ->
+                {
+                    XmlDoc = []
+                    Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
+                    Name = typeAliasName
+                    OriginalName = glueTypeAliasDeclaration.Name
+                    TypeParameters = declarationTypeParameters.Value.TypeParameters
+                    Members = []
+                    Inheritance = bases |> List.map (transformType context)
+                }
+                |> FSharpType.Interface
 
         | GlueType.TypeLiteral typeLiteralInfo ->
             let typParameters = declarationTypeParameters.Value

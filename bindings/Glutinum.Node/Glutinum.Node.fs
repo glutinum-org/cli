@@ -190994,7 +190994,7 @@ module UndiciTypes =
             type ResponseData =
                 abstract member statusCode: float with get, set
                 abstract member headers: UndiciTypes.header.IncomingHttpHeaders with get, set
-                abstract member body: obj with get, set
+                abstract member body: ResponseData.body with get, set
                 abstract member trailers: ResponseData.trailers with get, set
                 abstract member opaque: obj with get, set
                 abstract member context: obj with get, set
@@ -191193,6 +191193,11 @@ module UndiciTypes =
                             abstract member Item: key: string -> U2<string, ResizeArray<string>> with get, set
 
             module ResponseData =
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type body =
+                    inherit UndiciTypes.dispatcher.Dispatcher_.BodyMixin
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -192420,7 +192425,7 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
         [<AllowNullLiteral>]
         [<Interface>]
         type FileReader =
-            abstract member __proto__: obj with get, set
+            abstract member __proto__: FileReader.__proto__ with get, set
             abstract member readAsArrayBuffer: blob: Node.buffer.buffer_.Blob -> unit
             abstract member readAsBinaryString: blob: Node.buffer.buffer_.Blob -> unit
             abstract member readAsText: blob: Node.buffer.buffer_.Blob * ?encoding: string -> unit
@@ -192470,6 +192475,11 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
             abstract member total: float with get
 
         module FileReader =
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type __proto__ =
+                inherit Node.EventTarget
 
             [<AllowNullLiteral>]
             [<Interface>]

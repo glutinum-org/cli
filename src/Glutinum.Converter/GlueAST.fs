@@ -390,6 +390,8 @@ type GlueType =
     | TupleType of GlueType list
     | NamedTupleType of NamedTupleType
     | IntersectionType of GlueMember list
+    /// An intersection F# can only express by inheriting each of its constituents
+    | IntersectionOfReferences of GlueType list
     | TypeLiteral of GlueTypeLiteral
     | OptionalType of GlueType
     | Unknown
@@ -445,6 +447,7 @@ type GlueType =
         | NamedTupleType _
         | TypeLiteral _
         | IntersectionType _
+        | IntersectionOfReferences _
         | IndexedAccessType _
         | FunctionType _
         | TupleType _
@@ -494,6 +497,8 @@ type GlueType =
         | ReadOnly info -> info.TypeParameters
         | IntersectionType members ->
             members |> List.collect (fun memberInfo -> memberInfo.TypeParameters)
+        | IntersectionOfReferences references ->
+            references |> List.collect (fun reference -> reference.TypeParameters)
         | UtilityType info -> info.TypeParameters
         | Unknown
         | ExportDefault _
@@ -631,6 +636,8 @@ module GlueSubstitution =
                 }
         | GlueType.IntersectionType members ->
             GlueType.IntersectionType(members |> List.map (substituteMember substitutions))
+        | GlueType.IntersectionOfReferences references ->
+            GlueType.IntersectionOfReferences(references |> List.map substitute)
         | GlueType.TypeLiteral typeLiteral ->
             GlueType.TypeLiteral
                 { typeLiteral with

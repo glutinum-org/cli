@@ -1466,7 +1466,26 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                 )
 
         if hasUnsupportedProperties then
-            GlueType.Primitive GluePrimitive.Any
+            // F# has no intersection, an interface can still inherit each constituent
+            let references =
+                intersectionTypeNode.types
+                |> Seq.toList
+                |> List.map (fun constituent ->
+                    if constituent.kind = Ts.SyntaxKind.TypeReference then
+                        reader.ReadTypeNode constituent
+                    else
+                        GlueType.Discard
+                )
+
+            let isReference =
+                function
+                | GlueType.TypeReference _ -> true
+                | _ -> false
+
+            if not references.IsEmpty && references |> List.forall isReference then
+                GlueType.IntersectionOfReferences references
+            else
+                GlueType.Primitive GluePrimitive.Any
         else
             (properties
              |> List.choose (
