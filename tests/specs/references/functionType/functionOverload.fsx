@@ -8,13 +8,13 @@ open System
 [<Erase>]
 type Exports =
     [<Import("withProgress", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member withProgress<'R> (task: Exports.withProgress.task) : unit = nativeOnly
+    static member withProgress<'R> (task: Exports.withProgress__.task) : unit = nativeOnly
     [<Import("withProgress", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member withProgress<'R> (task: Exports.withProgress.task_1<'R>) : unit = nativeOnly
+    static member withProgress<'R> (task: Exports.withProgress__.task_1<'R>) : unit = nativeOnly
 
 module Exports =
 
-    module withProgress =
+    module withProgress__ =
 
         type task =
             delegate of progress: obj * data: obj -> bool

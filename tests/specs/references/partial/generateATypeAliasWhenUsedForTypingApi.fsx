@@ -8,7 +8,7 @@ open System
 [<Erase>]
 type Exports =
     [<Import("UpdateTodo", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member UpdateTodo (todo: Exports.UpdateTodo.todo) : obj = nativeOnly
+    static member UpdateTodo (todo: Exports.UpdateTodo__.todo) : obj = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
@@ -18,7 +18,7 @@ type Todo =
 
 module Exports =
 
-    module UpdateTodo =
+    module UpdateTodo__ =
 
         [<AllowNullLiteral>]
         [<Interface>]

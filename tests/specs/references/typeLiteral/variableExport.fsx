@@ -8,14 +8,14 @@ open System
 [<Erase>]
 type Exports =
     [<ImportDefault("REPLACE_ME_WITH_MODULE_NAME")>]
-    static member inline supportsColor: Exports.supportsColor.Type = nativeOnly
+    static member inline supportsColor: Exports.supportsColor__.Type = nativeOnly
 
 type ColorInfo =
     string
 
 module Exports =
 
-    module supportsColor =
+    module supportsColor__ =
 
         [<AllowNullLiteral>]
         [<Interface>]

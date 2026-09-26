@@ -8,9 +8,9 @@ open System
 [<Erase>]
 type Exports =
     [<Import("getSession", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member getSession (options: Exports.getSession.options) : string = nativeOnly
+    static member getSession (options: Exports.getSession__.options) : string = nativeOnly
     [<Import("getSession", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member getSession (options: Exports.getSession.options_1) : string = nativeOnly
+    static member getSession (options: Exports.getSession__.options_1) : string = nativeOnly
     [<Import("getSession", "REPLACE_ME_WITH_MODULE_NAME")>]
     static member getSession (?options: Options) : string option = nativeOnly
 
@@ -23,7 +23,7 @@ type Options =
 
 module Exports =
 
-    module getSession =
+    module getSession__ =
 
         [<AllowNullLiteral>]
         [<Interface>]

@@ -8,11 +8,11 @@ open System
 [<Erase>]
 type Exports =
     [<Import("injectStore", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member inline injectStore: Exports.injectStore.Type = nativeOnly
+    static member inline injectStore: Exports.injectStore__.Type = nativeOnly
 
 module Exports =
 
-    module injectStore =
+    module injectStore__ =
 
         [<AllowNullLiteral>]
         [<Interface>]

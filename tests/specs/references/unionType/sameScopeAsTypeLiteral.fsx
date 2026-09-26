@@ -8,19 +8,19 @@ open System
 [<Erase>]
 type Exports =
     [<Import("readdir", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member readdir (path: string, options: Exports.readdir.options) : ResizeArray<string> = nativeOnly
+    static member readdir (path: string, options: Exports.readdir__.options) : ResizeArray<string> = nativeOnly
     [<Import("readdir", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member readdir (path: string, options: Exports.readdir.options_1) : ResizeArray<string> = nativeOnly
+    static member readdir (path: string, options: Exports.readdir__.options_1) : ResizeArray<string> = nativeOnly
 
 module Exports =
 
-    module readdir =
+    module readdir__ =
 
         [<RequireQualifiedAccess>]
         [<Erase(CaseRules.None)>]
         type options =
             | buffer
-            | Case1 of Exports.readdir.options.Cases.Case1
+            | Case1 of Exports.readdir__.options.Cases.Case1
 
         module options =
 

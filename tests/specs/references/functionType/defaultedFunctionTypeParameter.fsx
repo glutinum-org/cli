@@ -8,7 +8,7 @@ open System
 [<Erase>]
 type Exports =
     [<Import("validator", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member inline validator: Exports.validator.Type<Exports.validator.Type_1> = nativeOnly
+    static member inline validator: Exports.validator__.Type<Exports.validator__.Type_1> = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
@@ -20,7 +20,7 @@ type Context<'E> =
 
 module Exports =
 
-    module validator =
+    module validator__ =
 
         type Type<'VF> =
             delegate of target: string * validationFunc: 'VF -> unit

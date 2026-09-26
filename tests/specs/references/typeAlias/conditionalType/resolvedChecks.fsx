@@ -8,7 +8,7 @@ open System
 [<Erase>]
 type Exports =
     [<Import("parse", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member parse<'T> (?config: 'T) : Exports.parse = nativeOnly
+    static member parse<'T> (?config: 'T) : Exports.parse__ = nativeOnly
     [<Import("strict", "REPLACE_ME_WITH_MODULE_NAME")>]
     static member inline strict: string = nativeOnly
     [<Import("loose", "REPLACE_ME_WITH_MODULE_NAME")>]
@@ -71,10 +71,10 @@ module Exports =
 
     [<AllowNullLiteral>]
     [<Interface>]
-    type parse =
+    type parse__ =
         abstract member tokens: ResizeArray<Token> with get, set
         [<ParamObject; Emit("$0")>]
-        static member Create (tokens: ResizeArray<Token>) : parse = nativeOnly
+        static member Create (tokens: ResizeArray<Token>) : parse__ = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

@@ -8,7 +8,7 @@ open System
 [<Erase>]
 type Exports =
     [<Import("Ctor", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member inline Ctor: Exports.Ctor.Type = nativeOnly
+    static member inline Ctor: Exports.Ctor__.Type = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
@@ -24,7 +24,7 @@ type Instance =
 
 module Exports =
 
-    module Ctor =
+    module Ctor__ =
 
         [<AllowNullLiteral>]
         [<Interface>]

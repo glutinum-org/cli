@@ -8,7 +8,7 @@ open System
 [<Erase>]
 type Exports =
     [<Import("make", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member make () : Exports.make = nativeOnly
+    static member make () : Exports.make__ = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
@@ -26,7 +26,7 @@ module Exports =
 
     [<AllowNullLiteral>]
     [<Interface>]
-    type make =
+    type make__ =
         inherit Instance
         inherit Wrapper<Instance>
 

@@ -8,11 +8,11 @@ open System
 [<Erase>]
 type Exports =
     [<Import("show", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member show (?options: Exports.show.options) : unit = nativeOnly
+    static member show (?options: Exports.show__.options) : unit = nativeOnly
 
 module Exports =
 
-    module show =
+    module show__ =
 
         [<AllowNullLiteral>]
         [<Interface>]

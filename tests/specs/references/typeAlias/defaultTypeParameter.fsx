@@ -8,7 +8,7 @@ open System
 [<Erase>]
 type Exports =
     [<Import("CategoryScale", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member inline CategoryScale: Exports.CategoryScale.Type = nativeOnly
+    static member inline CategoryScale: Exports.CategoryScale__.Type = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
@@ -37,7 +37,7 @@ type Pair<'A> =
 
 module Exports =
 
-    module CategoryScale =
+    module CategoryScale__ =
 
         [<AllowNullLiteral>]
         [<Interface>]

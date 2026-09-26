@@ -8,7 +8,7 @@ open System
 [<Erase>]
 type Exports =
     [<Import("createWebviewPanel", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member createWebviewPanel (?options: Exports.createWebviewPanel.options) : unit = nativeOnly
+    static member createWebviewPanel (?options: Exports.createWebviewPanel__.options) : unit = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
@@ -22,7 +22,7 @@ type WebviewPanelOptions =
 
 module Exports =
 
-    module createWebviewPanel =
+    module createWebviewPanel__ =
 
         [<AllowNullLiteral>]
         [<Interface>]

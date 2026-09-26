@@ -15,7 +15,7 @@ module Web =
     [<Erase>]
     type Exports =
         [<Global("NodeFilter")>]
-        static member inline NodeFilter: Exports.NodeFilter.Type = nativeOnly
+        static member inline NodeFilter: Exports.NodeFilter__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>AbortController</c>** interface represents a controller object that allows you to abort one or more Web requests as and when desired.
@@ -23,7 +23,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/AbortController)
         /// </summary>
         [<Global("AbortController")>]
-        static member inline AbortController: Exports.AbortController.Type = nativeOnly
+        static member inline AbortController: Exports.AbortController__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>AbortSignal</c>** interface represents a signal object that allows you to communicate with an asynchronous operation (such as a fetch request) and abort it if required via an AbortController object.
@@ -31,7 +31,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/AbortSignal)
         /// </summary>
         [<Global("AbortSignal")>]
-        static member inline AbortSignal: Exports.AbortSignal.Type = nativeOnly
+        static member inline AbortSignal: Exports.AbortSignal__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>AbstractRange</c>** abstract interface is the base class upon which all DOM range types are defined. A range is an object that indicates the start and end points of a section of content within the document.
@@ -39,7 +39,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/AbstractRange)
         /// </summary>
         [<Global("AbstractRange")>]
-        static member inline AbstractRange: Exports.AbstractRange.Type = nativeOnly
+        static member inline AbstractRange: Exports.AbstractRange__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>AnalyserNode</c>** interface represents a node able to provide real-time frequency and time-domain analysis information. It is an AudioNode that passes the audio stream unchanged from the input to the output, but allows you to take the generated data, process it, and create audio visualizations.
@@ -47,7 +47,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/AnalyserNode)
         /// </summary>
         [<Global("AnalyserNode")>]
-        static member inline AnalyserNode: Exports.AnalyserNode.Type = nativeOnly
+        static member inline AnalyserNode: Exports.AnalyserNode__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>Animation</c>** interface of the Web Animations API represents a single animation player and provides playback controls and a timeline for an animation node or source.
@@ -55,7 +55,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Animation)
         /// </summary>
         [<Global("Animation")>]
-        static member inline Animation: Exports.Animation.Type = nativeOnly
+        static member inline Animation: Exports.Animation__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>AnimationEffect</c>** interface of the Web Animations API is an interface representing animation effects.
@@ -63,7 +63,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/AnimationEffect)
         /// </summary>
         [<Global("AnimationEffect")>]
-        static member inline AnimationEffect: Exports.AnimationEffect.Type = nativeOnly
+        static member inline AnimationEffect: Exports.AnimationEffect__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>AnimationEvent</c>** interface represents events providing information related to animations.
@@ -71,7 +71,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/AnimationEvent)
         /// </summary>
         [<Global("AnimationEvent")>]
-        static member inline AnimationEvent: Exports.AnimationEvent.Type = nativeOnly
+        static member inline AnimationEvent: Exports.AnimationEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>AnimationPlaybackEvent</c>** interface of the Web Animations API represents animation events.
@@ -79,7 +79,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/AnimationPlaybackEvent)
         /// </summary>
         [<Global("AnimationPlaybackEvent")>]
-        static member inline AnimationPlaybackEvent: Exports.AnimationPlaybackEvent.Type =
+        static member inline AnimationPlaybackEvent: Exports.AnimationPlaybackEvent__.Type =
             nativeOnly
 
         /// <summary>
@@ -88,7 +88,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/AnimationTimeline)
         /// </summary>
         [<Global("AnimationTimeline")>]
-        static member inline AnimationTimeline: Exports.AnimationTimeline.Type = nativeOnly
+        static member inline AnimationTimeline: Exports.AnimationTimeline__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>Attr</c>** interface represents one of an element's attributes as an object. In most situations, you will directly retrieve the attribute value as a string (e.g., Element.getAttribute()), but some cases may require interacting with Attr instances (e.g., Element.getAttributeNode()).
@@ -96,7 +96,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Attr)
         /// </summary>
         [<Global("Attr")>]
-        static member inline Attr: Exports.Attr.Type = nativeOnly
+        static member inline Attr: Exports.Attr__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>AudioBuffer</c>** interface represents a short audio asset residing in memory, created from an audio file using the AudioContext.decodeAudioData() method, or from raw data using AudioContext.createBuffer(). Once put into an AudioBuffer, the audio can then be played by being passed into an AudioBufferSourceNode.
@@ -104,7 +104,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioBuffer)
         /// </summary>
         [<Global("AudioBuffer")>]
-        static member inline AudioBuffer: Exports.AudioBuffer.Type = nativeOnly
+        static member inline AudioBuffer: Exports.AudioBuffer__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>AudioBufferSourceNode</c>** interface is an AudioScheduledSourceNode which represents an audio source consisting of in-memory audio data, stored in an AudioBuffer.
@@ -112,7 +112,8 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioBufferSourceNode)
         /// </summary>
         [<Global("AudioBufferSourceNode")>]
-        static member inline AudioBufferSourceNode: Exports.AudioBufferSourceNode.Type = nativeOnly
+        static member inline AudioBufferSourceNode: Exports.AudioBufferSourceNode__.Type =
+            nativeOnly
 
         /// <summary>
         /// The **<c>AudioContext</c>** interface represents an audio-processing graph built from audio modules linked together, each represented by an AudioNode.
@@ -120,7 +121,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioContext)
         /// </summary>
         [<Global("AudioContext")>]
-        static member inline AudioContext: Exports.AudioContext.Type = nativeOnly
+        static member inline AudioContext: Exports.AudioContext__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>AudioData</c>** interface of the WebCodecs API represents an audio sample.
@@ -128,7 +129,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioData)
         /// </summary>
         [<Global("AudioData")>]
-        static member inline AudioData: Exports.AudioData.Type = nativeOnly
+        static member inline AudioData: Exports.AudioData__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>AudioDecoder</c>** interface of the WebCodecs API decodes chunks of audio.
@@ -137,7 +138,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioDecoder)
         /// </summary>
         [<Global("AudioDecoder")>]
-        static member inline AudioDecoder: Exports.AudioDecoder.Type = nativeOnly
+        static member inline AudioDecoder: Exports.AudioDecoder__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>AudioDestinationNode</c>** interface represents the end destination of an audio graph in a given context — usually the speakers of your device. It can also be the node that will "record" the audio data when used with an OfflineAudioContext.
@@ -145,7 +146,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioDestinationNode)
         /// </summary>
         [<Global("AudioDestinationNode")>]
-        static member inline AudioDestinationNode: Exports.AudioDestinationNode.Type = nativeOnly
+        static member inline AudioDestinationNode: Exports.AudioDestinationNode__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>AudioEncoder</c>** interface of the WebCodecs API encodes AudioData objects.
@@ -154,7 +155,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioEncoder)
         /// </summary>
         [<Global("AudioEncoder")>]
-        static member inline AudioEncoder: Exports.AudioEncoder.Type = nativeOnly
+        static member inline AudioEncoder: Exports.AudioEncoder__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>AudioListener</c>** interface represents the position and orientation of the unique person listening to the audio scene, and is used in audio spatialization. All PannerNodes spatialize in relation to the AudioListener stored in the BaseAudioContext.listener attribute.
@@ -162,7 +163,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioListener)
         /// </summary>
         [<Global("AudioListener")>]
-        static member inline AudioListener: Exports.AudioListener.Type = nativeOnly
+        static member inline AudioListener: Exports.AudioListener__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>AudioNode</c>** interface is a generic interface for representing an audio processing module.
@@ -170,7 +171,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioNode)
         /// </summary>
         [<Global("AudioNode")>]
-        static member inline AudioNode: Exports.AudioNode.Type = nativeOnly
+        static member inline AudioNode: Exports.AudioNode__.Type = nativeOnly
 
         /// <summary>
         /// The Web Audio API's **<c>AudioParam</c>** interface represents an audio-related parameter, usually a parameter of an AudioNode (such as GainNode.gain).
@@ -178,7 +179,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioParam)
         /// </summary>
         [<Global("AudioParam")>]
-        static member inline AudioParam: Exports.AudioParam.Type = nativeOnly
+        static member inline AudioParam: Exports.AudioParam__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>AudioParamMap</c>** interface of the Web Audio API represents an iterable and read-only set of multiple audio parameters.
@@ -186,14 +187,14 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioParamMap)
         /// </summary>
         [<Global("AudioParamMap")>]
-        static member inline AudioParamMap: Exports.AudioParamMap.Type = nativeOnly
+        static member inline AudioParamMap: Exports.AudioParamMap__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>AudioProcessingEvent</c>** interface of the Web Audio API represents events that occur when a ScriptProcessorNode input buffer is ready to be processed.
         /// </summary>
         [<Global("AudioProcessingEvent")>]
         [<Obsolete>]
-        static member inline AudioProcessingEvent: Exports.AudioProcessingEvent.Type = nativeOnly
+        static member inline AudioProcessingEvent: Exports.AudioProcessingEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>AudioScheduledSourceNode</c>** interface—part of the Web Audio API—is a parent interface for several types of audio source node interfaces which share the ability to be started and stopped, optionally at specified times. Specifically, this interface defines the start() and stop() methods, as well as the ended event.
@@ -201,7 +202,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioScheduledSourceNode)
         /// </summary>
         [<Global("AudioScheduledSourceNode")>]
-        static member inline AudioScheduledSourceNode: Exports.AudioScheduledSourceNode.Type =
+        static member inline AudioScheduledSourceNode: Exports.AudioScheduledSourceNode__.Type =
             nativeOnly
 
         /// <summary>
@@ -211,7 +212,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioWorklet)
         /// </summary>
         [<Global("AudioWorklet")>]
-        static member inline AudioWorklet: Exports.AudioWorklet.Type = nativeOnly
+        static member inline AudioWorklet: Exports.AudioWorklet__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>AudioWorkletNode</c>** interface of the Web Audio API represents a base class for a user-defined AudioNode, which can be connected to an audio routing graph along with other nodes. It has an associated AudioWorkletProcessor, which does the actual audio processing in a Web Audio rendering thread.
@@ -220,7 +221,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioWorkletNode)
         /// </summary>
         [<Global("AudioWorkletNode")>]
-        static member inline AudioWorkletNode: Exports.AudioWorkletNode.Type = nativeOnly
+        static member inline AudioWorkletNode: Exports.AudioWorkletNode__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>AuthenticatorAssertionResponse</c>** interface of the Web Authentication API contains a digital signature from the private key of a particular WebAuthn credential. The relying party's server can verify this signature to authenticate a user, for example when they sign in.
@@ -230,7 +231,7 @@ module Web =
         /// </summary>
         [<Global("AuthenticatorAssertionResponse")>]
         static member inline AuthenticatorAssertionResponse
-            : Exports.AuthenticatorAssertionResponse.Type =
+            : Exports.AuthenticatorAssertionResponse__.Type =
             nativeOnly
 
         /// <summary>
@@ -241,7 +242,7 @@ module Web =
         /// </summary>
         [<Global("AuthenticatorAttestationResponse")>]
         static member inline AuthenticatorAttestationResponse
-            : Exports.AuthenticatorAttestationResponse.Type =
+            : Exports.AuthenticatorAttestationResponse__.Type =
             nativeOnly
 
         /// <summary>
@@ -251,7 +252,8 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/AuthenticatorResponse)
         /// </summary>
         [<Global("AuthenticatorResponse")>]
-        static member inline AuthenticatorResponse: Exports.AuthenticatorResponse.Type = nativeOnly
+        static member inline AuthenticatorResponse: Exports.AuthenticatorResponse__.Type =
+            nativeOnly
 
         /// <summary>
         /// The **<c>BarProp</c>** interface of the Document Object Model represents the web browser user interface elements that are exposed to scripts in web pages. Each of the following interface elements are represented by a BarProp object.
@@ -259,7 +261,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/BarProp)
         /// </summary>
         [<Global("BarProp")>]
-        static member inline BarProp: Exports.BarProp.Type = nativeOnly
+        static member inline BarProp: Exports.BarProp__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>BaseAudioContext</c>** interface of the Web Audio API acts as a base definition for online and offline audio-processing graphs, as represented by AudioContext and OfflineAudioContext respectively. You wouldn't use BaseAudioContext directly — you'd use its features via one of these two inheriting interfaces.
@@ -267,7 +269,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/BaseAudioContext)
         /// </summary>
         [<Global("BaseAudioContext")>]
-        static member inline BaseAudioContext: Exports.BaseAudioContext.Type = nativeOnly
+        static member inline BaseAudioContext: Exports.BaseAudioContext__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>BeforeUnloadEvent</c>** interface represents the event object for the beforeunload event, which is fired when the current window, contained document, and associated resources are about to be unloaded.
@@ -275,7 +277,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/BeforeUnloadEvent)
         /// </summary>
         [<Global("BeforeUnloadEvent")>]
-        static member inline BeforeUnloadEvent: Exports.BeforeUnloadEvent.Type = nativeOnly
+        static member inline BeforeUnloadEvent: Exports.BeforeUnloadEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>BiquadFilterNode</c>** interface represents a simple low-order filter, and is created using the BaseAudioContext/createBiquadFilter method. It is an AudioNode that can represent different kinds of filters, tone control devices, and graphic equalizers. A BiquadFilterNode always has exactly one input and one output.
@@ -283,7 +285,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/BiquadFilterNode)
         /// </summary>
         [<Global("BiquadFilterNode")>]
-        static member inline BiquadFilterNode: Exports.BiquadFilterNode.Type = nativeOnly
+        static member inline BiquadFilterNode: Exports.BiquadFilterNode__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>Blob</c>** interface represents a blob, which is a file-like object of immutable, raw data; they can be read as text or binary data, or converted into a ReadableStream so its methods can be used for processing the data.
@@ -291,7 +293,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Blob)
         /// </summary>
         [<Global("Blob")>]
-        static member inline Blob: Exports.Blob.Type = nativeOnly
+        static member inline Blob: Exports.Blob__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>BlobEvent</c>** interface of the MediaStream Recording API represents events associated with a Blob. These blobs are typically, but not necessarily, associated with media content.
@@ -299,7 +301,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/BlobEvent)
         /// </summary>
         [<Global("BlobEvent")>]
-        static member inline BlobEvent: Exports.BlobEvent.Type = nativeOnly
+        static member inline BlobEvent: Exports.BlobEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>BroadcastChannel</c>** interface represents a named channel that any browsing context of a given origin can subscribe to. It allows communication between different documents (in different windows, tabs, frames or iframes) of the same origin. Messages are broadcasted via a message event fired at all BroadcastChannel objects listening to the channel, except the object that sent the message.
@@ -307,7 +309,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/BroadcastChannel)
         /// </summary>
         [<Global("BroadcastChannel")>]
-        static member inline BroadcastChannel: Exports.BroadcastChannel.Type = nativeOnly
+        static member inline BroadcastChannel: Exports.BroadcastChannel__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>ByteLengthQueuingStrategy</c>** interface of the Streams API provides a built-in byte length queuing strategy that can be used when constructing streams.
@@ -315,7 +317,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ByteLengthQueuingStrategy)
         /// </summary>
         [<Global("ByteLengthQueuingStrategy")>]
-        static member inline ByteLengthQueuingStrategy: Exports.ByteLengthQueuingStrategy.Type =
+        static member inline ByteLengthQueuingStrategy: Exports.ByteLengthQueuingStrategy__.Type =
             nativeOnly
 
         /// <summary>
@@ -324,7 +326,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CDATASection)
         /// </summary>
         [<Global("CDATASection")>]
-        static member inline CDATASection: Exports.CDATASection.Type = nativeOnly
+        static member inline CDATASection: Exports.CDATASection__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSAnimation</c>** interface of the Web Animations API represents an Animation object.
@@ -332,7 +334,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSAnimation)
         /// </summary>
         [<Global("CSSAnimation")>]
-        static member inline CSSAnimation: Exports.CSSAnimation.Type = nativeOnly
+        static member inline CSSAnimation: Exports.CSSAnimation__.Type = nativeOnly
 
         /// <summary>
         /// An object implementing the **<c>CSSConditionRule</c>** interface represents a single condition CSS at-rule, which consists of a condition and a statement block.
@@ -340,45 +342,45 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSConditionRule)
         /// </summary>
         [<Global("CSSConditionRule")>]
-        static member inline CSSConditionRule: Exports.CSSConditionRule.Type = nativeOnly
+        static member inline CSSConditionRule: Exports.CSSConditionRule__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSContainerRule</c>** interface represents a single CSS
         /// </summary>
         [<Global("CSSContainerRule")>]
-        static member inline CSSContainerRule: Exports.CSSContainerRule.Type = nativeOnly
+        static member inline CSSContainerRule: Exports.CSSContainerRule__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSCounterStyleRule</c>** interface represents an
         /// </summary>
         [<Global("CSSCounterStyleRule")>]
-        static member inline CSSCounterStyleRule: Exports.CSSCounterStyleRule.Type = nativeOnly
+        static member inline CSSCounterStyleRule: Exports.CSSCounterStyleRule__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSFontFaceDescriptors</c>** interface represents a CSS declaration block for an
         /// </summary>
         [<Global("CSSFontFaceDescriptors")>]
-        static member inline CSSFontFaceDescriptors: Exports.CSSFontFaceDescriptors.Type =
+        static member inline CSSFontFaceDescriptors: Exports.CSSFontFaceDescriptors__.Type =
             nativeOnly
 
         /// <summary>
         /// The **<c>CSSFontFaceRule</c>** interface represents an
         /// </summary>
         [<Global("CSSFontFaceRule")>]
-        static member inline CSSFontFaceRule: Exports.CSSFontFaceRule.Type = nativeOnly
+        static member inline CSSFontFaceRule: Exports.CSSFontFaceRule__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSFontFeatureValuesRule</c>** interface represents an
         /// </summary>
         [<Global("CSSFontFeatureValuesRule")>]
-        static member inline CSSFontFeatureValuesRule: Exports.CSSFontFeatureValuesRule.Type =
+        static member inline CSSFontFeatureValuesRule: Exports.CSSFontFeatureValuesRule__.Type =
             nativeOnly
 
         /// <summary>
         /// The **<c>CSSFontPaletteValuesRule</c>** interface represents an
         /// </summary>
         [<Global("CSSFontPaletteValuesRule")>]
-        static member inline CSSFontPaletteValuesRule: Exports.CSSFontPaletteValuesRule.Type =
+        static member inline CSSFontPaletteValuesRule: Exports.CSSFontPaletteValuesRule__.Type =
             nativeOnly
 
         /// <summary>
@@ -387,7 +389,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSGroupingRule)
         /// </summary>
         [<Global("CSSGroupingRule")>]
-        static member inline CSSGroupingRule: Exports.CSSGroupingRule.Type = nativeOnly
+        static member inline CSSGroupingRule: Exports.CSSGroupingRule__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSImageValue</c>** interface of the CSS Typed Object Model API represents values for properties that take an image, for example background-image, list-style-image, or border-image-source.
@@ -395,25 +397,25 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSImageValue)
         /// </summary>
         [<Global("CSSImageValue")>]
-        static member inline CSSImageValue: Exports.CSSImageValue.Type = nativeOnly
+        static member inline CSSImageValue: Exports.CSSImageValue__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSImportRule</c>** interface represents an
         /// </summary>
         [<Global("CSSImportRule")>]
-        static member inline CSSImportRule: Exports.CSSImportRule.Type = nativeOnly
+        static member inline CSSImportRule: Exports.CSSImportRule__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSKeyframeRule</c>** interface describes an object representing a set of styles for a given keyframe. It corresponds to the contents of a single keyframe of a
         /// </summary>
         [<Global("CSSKeyframeRule")>]
-        static member inline CSSKeyframeRule: Exports.CSSKeyframeRule.Type = nativeOnly
+        static member inline CSSKeyframeRule: Exports.CSSKeyframeRule__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSKeyframesRule</c>** interface describes an object representing a complete set of keyframes for a CSS animation. It corresponds to the contents of a whole
         /// </summary>
         [<Global("CSSKeyframesRule")>]
-        static member inline CSSKeyframesRule: Exports.CSSKeyframesRule.Type = nativeOnly
+        static member inline CSSKeyframesRule: Exports.CSSKeyframesRule__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSKeywordValue</c>** interface of the CSS Typed Object Model API creates an object to represent CSS keywords and other identifiers.
@@ -421,19 +423,20 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSKeywordValue)
         /// </summary>
         [<Global("CSSKeywordValue")>]
-        static member inline CSSKeywordValue: Exports.CSSKeywordValue.Type = nativeOnly
+        static member inline CSSKeywordValue: Exports.CSSKeywordValue__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSLayerBlockRule</c>** represents a
         /// </summary>
         [<Global("CSSLayerBlockRule")>]
-        static member inline CSSLayerBlockRule: Exports.CSSLayerBlockRule.Type = nativeOnly
+        static member inline CSSLayerBlockRule: Exports.CSSLayerBlockRule__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSLayerStatementRule</c>** represents a
         /// </summary>
         [<Global("CSSLayerStatementRule")>]
-        static member inline CSSLayerStatementRule: Exports.CSSLayerStatementRule.Type = nativeOnly
+        static member inline CSSLayerStatementRule: Exports.CSSLayerStatementRule__.Type =
+            nativeOnly
 
         /// <summary>
         /// The **<c>CSSMathClamp</c>** interface of the CSS Typed Object Model API represents the CSS clamp() function. It inherits properties and methods from its parent CSSNumericValue.
@@ -441,7 +444,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSMathClamp)
         /// </summary>
         [<Global("CSSMathClamp")>]
-        static member inline CSSMathClamp: Exports.CSSMathClamp.Type = nativeOnly
+        static member inline CSSMathClamp: Exports.CSSMathClamp__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSMathInvert</c>** interface of the CSS Typed Object Model API represents a CSS calc() used as calc(1 / <value>). It inherits properties and methods from its parent CSSNumericValue.
@@ -449,7 +452,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSMathInvert)
         /// </summary>
         [<Global("CSSMathInvert")>]
-        static member inline CSSMathInvert: Exports.CSSMathInvert.Type = nativeOnly
+        static member inline CSSMathInvert: Exports.CSSMathInvert__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSMathMax</c>** interface of the CSS Typed Object Model API represents the CSS max() function. It inherits properties and methods from its parent CSSNumericValue.
@@ -457,7 +460,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSMathMax)
         /// </summary>
         [<Global("CSSMathMax")>]
-        static member inline CSSMathMax: Exports.CSSMathMax.Type = nativeOnly
+        static member inline CSSMathMax: Exports.CSSMathMax__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSMathMin</c>** interface of the CSS Typed Object Model API represents the CSS min() function. It inherits properties and methods from its parent CSSNumericValue.
@@ -465,7 +468,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSMathMin)
         /// </summary>
         [<Global("CSSMathMin")>]
-        static member inline CSSMathMin: Exports.CSSMathMin.Type = nativeOnly
+        static member inline CSSMathMin: Exports.CSSMathMin__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSMathNegate</c>** interface of the CSS Typed Object Model API negates the value passed into it. It inherits properties and methods from its parent CSSNumericValue.
@@ -473,7 +476,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSMathNegate)
         /// </summary>
         [<Global("CSSMathNegate")>]
-        static member inline CSSMathNegate: Exports.CSSMathNegate.Type = nativeOnly
+        static member inline CSSMathNegate: Exports.CSSMathNegate__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSMathProduct</c>** interface of the CSS Typed Object Model API represents the result obtained by calling add(), sub(), or toSum() on CSSNumericValue. It inherits properties and methods from its parent CSSNumericValue.
@@ -481,7 +484,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSMathProduct)
         /// </summary>
         [<Global("CSSMathProduct")>]
-        static member inline CSSMathProduct: Exports.CSSMathProduct.Type = nativeOnly
+        static member inline CSSMathProduct: Exports.CSSMathProduct__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSMathSum</c>** interface of the CSS Typed Object Model API represents the result obtained by calling add(), sub(), or toSum() on CSSNumericValue.
@@ -489,7 +492,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSMathSum)
         /// </summary>
         [<Global("CSSMathSum")>]
-        static member inline CSSMathSum: Exports.CSSMathSum.Type = nativeOnly
+        static member inline CSSMathSum: Exports.CSSMathSum__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSMathValue</c>** interface of the CSS Typed Object Model API a base class for classes representing complex numeric values.
@@ -497,7 +500,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSMathValue)
         /// </summary>
         [<Global("CSSMathValue")>]
-        static member inline CSSMathValue: Exports.CSSMathValue.Type = nativeOnly
+        static member inline CSSMathValue: Exports.CSSMathValue__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSMatrixComponent</c>** interface of the CSS Typed Object Model API represents the matrix() and matrix3d() values of the individual transform property in CSS. It inherits properties and methods from its parent CSSTransformValue.
@@ -505,19 +508,19 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSMatrixComponent)
         /// </summary>
         [<Global("CSSMatrixComponent")>]
-        static member inline CSSMatrixComponent: Exports.CSSMatrixComponent.Type = nativeOnly
+        static member inline CSSMatrixComponent: Exports.CSSMatrixComponent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSMediaRule</c>** interface represents a single CSS
         /// </summary>
         [<Global("CSSMediaRule")>]
-        static member inline CSSMediaRule: Exports.CSSMediaRule.Type = nativeOnly
+        static member inline CSSMediaRule: Exports.CSSMediaRule__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSNamespaceRule</c>** interface describes an object representing a single CSS
         /// </summary>
         [<Global("CSSNamespaceRule")>]
-        static member inline CSSNamespaceRule: Exports.CSSNamespaceRule.Type = nativeOnly
+        static member inline CSSNamespaceRule: Exports.CSSNamespaceRule__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSNestedDeclarations</c>** interface of the CSS Rule API is used to group nested CSSRules.
@@ -525,7 +528,8 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSNestedDeclarations)
         /// </summary>
         [<Global("CSSNestedDeclarations")>]
-        static member inline CSSNestedDeclarations: Exports.CSSNestedDeclarations.Type = nativeOnly
+        static member inline CSSNestedDeclarations: Exports.CSSNestedDeclarations__.Type =
+            nativeOnly
 
         /// <summary>
         /// The **<c>CSSNumericArray</c>** interface of the CSS Typed Object Model API contains a list of CSSNumericValue objects.
@@ -533,7 +537,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSNumericArray)
         /// </summary>
         [<Global("CSSNumericArray")>]
-        static member inline CSSNumericArray: Exports.CSSNumericArray.Type = nativeOnly
+        static member inline CSSNumericArray: Exports.CSSNumericArray__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSNumericValue</c>** interface of the CSS Typed Object Model API represents operations that all numeric values can perform.
@@ -541,19 +545,19 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSNumericValue)
         /// </summary>
         [<Global("CSSNumericValue")>]
-        static member inline CSSNumericValue: Exports.CSSNumericValue.Type = nativeOnly
+        static member inline CSSNumericValue: Exports.CSSNumericValue__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSPageDescriptors</c>** interface represents a CSS declaration block for an
         /// </summary>
         [<Global("CSSPageDescriptors")>]
-        static member inline CSSPageDescriptors: Exports.CSSPageDescriptors.Type = nativeOnly
+        static member inline CSSPageDescriptors: Exports.CSSPageDescriptors__.Type = nativeOnly
 
         /// <summary>
         /// **<c>CSSPageRule</c>** represents a single CSS
         /// </summary>
         [<Global("CSSPageRule")>]
-        static member inline CSSPageRule: Exports.CSSPageRule.Type = nativeOnly
+        static member inline CSSPageRule: Exports.CSSPageRule__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSPerspective</c>** interface of the CSS Typed Object Model API represents the perspective() value of the individual transform property in CSS. It inherits properties and methods from its parent CSSTransformValue.
@@ -561,26 +565,26 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSPerspective)
         /// </summary>
         [<Global("CSSPerspective")>]
-        static member inline CSSPerspective: Exports.CSSPerspective.Type = nativeOnly
+        static member inline CSSPerspective: Exports.CSSPerspective__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSPositionTryDescriptors</c>** interface defines properties that represent the list of CSS descriptors that can be set in the body of a
         /// </summary>
         [<Global("CSSPositionTryDescriptors")>]
-        static member inline CSSPositionTryDescriptors: Exports.CSSPositionTryDescriptors.Type =
+        static member inline CSSPositionTryDescriptors: Exports.CSSPositionTryDescriptors__.Type =
             nativeOnly
 
         /// <summary>
         /// The **<c>CSSPositionTryRule</c>** interface describes an object representing a
         /// </summary>
         [<Global("CSSPositionTryRule")>]
-        static member inline CSSPositionTryRule: Exports.CSSPositionTryRule.Type = nativeOnly
+        static member inline CSSPositionTryRule: Exports.CSSPositionTryRule__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSPropertyRule</c>** interface of the CSS Properties and Values API represents a single CSS
         /// </summary>
         [<Global("CSSPropertyRule")>]
-        static member inline CSSPropertyRule: Exports.CSSPropertyRule.Type = nativeOnly
+        static member inline CSSPropertyRule: Exports.CSSPropertyRule__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSRotate</c>** interface of the CSS Typed Object Model API represents the rotate value of the individual transform property in CSS. It inherits properties and methods from its parent CSSTransformValue.
@@ -588,7 +592,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSRotate)
         /// </summary>
         [<Global("CSSRotate")>]
-        static member inline CSSRotate: Exports.CSSRotate.Type = nativeOnly
+        static member inline CSSRotate: Exports.CSSRotate__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSRule</c>** interface represents a single CSS rule. There are several types of rules which inherit properties from CSSRule.
@@ -596,7 +600,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSRule)
         /// </summary>
         [<Global("CSSRule")>]
-        static member inline CSSRule: Exports.CSSRule.Type = nativeOnly
+        static member inline CSSRule: Exports.CSSRule__.Type = nativeOnly
 
         /// <summary>
         /// A **<c>CSSRuleList</c>** represents an ordered collection of read-only CSSRule objects.
@@ -604,7 +608,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSRuleList)
         /// </summary>
         [<Global("CSSRuleList")>]
-        static member inline CSSRuleList: Exports.CSSRuleList.Type = nativeOnly
+        static member inline CSSRuleList: Exports.CSSRuleList__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSScale</c>** interface of the CSS Typed Object Model API represents the scale() and scale3d() values of the individual transform property in CSS. It inherits properties and methods from its parent CSSTransformValue.
@@ -612,13 +616,13 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSScale)
         /// </summary>
         [<Global("CSSScale")>]
-        static member inline CSSScale: Exports.CSSScale.Type = nativeOnly
+        static member inline CSSScale: Exports.CSSScale__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSScopeRule</c>** interface of the CSS Object Model represents a CSS
         /// </summary>
         [<Global("CSSScopeRule")>]
-        static member inline CSSScopeRule: Exports.CSSScopeRule.Type = nativeOnly
+        static member inline CSSScopeRule: Exports.CSSScopeRule__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSSkew</c>** interface of the CSS Typed Object Model API is part of the CSSTransformValue interface. It represents the skew() value of the individual transform property in CSS.
@@ -626,7 +630,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSSkew)
         /// </summary>
         [<Global("CSSSkew")>]
-        static member inline CSSSkew: Exports.CSSSkew.Type = nativeOnly
+        static member inline CSSSkew: Exports.CSSSkew__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSSkewX</c>** interface of the CSS Typed Object Model API represents the skewX() value of the individual transform property in CSS. It inherits properties and methods from its parent CSSTransformValue.
@@ -634,7 +638,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSSkewX)
         /// </summary>
         [<Global("CSSSkewX")>]
-        static member inline CSSSkewX: Exports.CSSSkewX.Type = nativeOnly
+        static member inline CSSSkewX: Exports.CSSSkewX__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSSkewY</c>** interface of the CSS Typed Object Model API represents the skewY() value of the individual transform property in CSS. It inherits properties and methods from its parent CSSTransformValue.
@@ -642,16 +646,16 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSSkewY)
         /// </summary>
         [<Global("CSSSkewY")>]
-        static member inline CSSSkewY: Exports.CSSSkewY.Type = nativeOnly
+        static member inline CSSSkewY: Exports.CSSSkewY__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSStartingStyleRule</c>** interface of the CSS Object Model represents a CSS
         /// </summary>
         [<Global("CSSStartingStyleRule")>]
-        static member inline CSSStartingStyleRule: Exports.CSSStartingStyleRule.Type = nativeOnly
+        static member inline CSSStartingStyleRule: Exports.CSSStartingStyleRule__.Type = nativeOnly
 
         [<Global("CSSStyleDeclaration")>]
-        static member inline CSSStyleDeclaration: Exports.CSSStyleDeclaration.Type = nativeOnly
+        static member inline CSSStyleDeclaration: Exports.CSSStyleDeclaration__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSStyleProperties</c>** interface of the CSS Object Model (CSSOM) represents inline or computed styles available on an element, or the styles associated with a CSS style rule.
@@ -659,7 +663,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSStyleProperties)
         /// </summary>
         [<Global("CSSStyleProperties")>]
-        static member inline CSSStyleProperties: Exports.CSSStyleProperties.Type = nativeOnly
+        static member inline CSSStyleProperties: Exports.CSSStyleProperties__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSStyleRule</c>** interface represents a single CSS style rule.
@@ -667,7 +671,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSStyleRule)
         /// </summary>
         [<Global("CSSStyleRule")>]
-        static member inline CSSStyleRule: Exports.CSSStyleRule.Type = nativeOnly
+        static member inline CSSStyleRule: Exports.CSSStyleRule__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSStyleSheet</c>** interface represents a single CSS stylesheet, and lets you inspect and modify the list of rules contained in the stylesheet. It inherits properties and methods from its parent, StyleSheet.
@@ -675,7 +679,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSStyleSheet)
         /// </summary>
         [<Global("CSSStyleSheet")>]
-        static member inline CSSStyleSheet: Exports.CSSStyleSheet.Type = nativeOnly
+        static member inline CSSStyleSheet: Exports.CSSStyleSheet__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSStyleValue</c>** interface of the CSS Typed Object Model API is the base class of all CSS values accessible through the Typed OM API. An instance of this class may be used anywhere a string is expected.
@@ -683,13 +687,13 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSStyleValue)
         /// </summary>
         [<Global("CSSStyleValue")>]
-        static member inline CSSStyleValue: Exports.CSSStyleValue.Type = nativeOnly
+        static member inline CSSStyleValue: Exports.CSSStyleValue__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSSupportsRule</c>** interface represents a single CSS
         /// </summary>
         [<Global("CSSSupportsRule")>]
-        static member inline CSSSupportsRule: Exports.CSSSupportsRule.Type = nativeOnly
+        static member inline CSSSupportsRule: Exports.CSSSupportsRule__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSTransformComponent</c>** interface of the CSS Typed Object Model API is part of the CSSTransformValue interface.
@@ -697,7 +701,8 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSTransformComponent)
         /// </summary>
         [<Global("CSSTransformComponent")>]
-        static member inline CSSTransformComponent: Exports.CSSTransformComponent.Type = nativeOnly
+        static member inline CSSTransformComponent: Exports.CSSTransformComponent__.Type =
+            nativeOnly
 
         /// <summary>
         /// The **<c>CSSTransformValue</c>** interface of the CSS Typed Object Model API represents transform-list values as used by the CSS transform property.
@@ -705,7 +710,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSTransformValue)
         /// </summary>
         [<Global("CSSTransformValue")>]
-        static member inline CSSTransformValue: Exports.CSSTransformValue.Type = nativeOnly
+        static member inline CSSTransformValue: Exports.CSSTransformValue__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSTransition</c>** interface of the Web Animations API represents an Animation object used for a CSS Transition.
@@ -713,7 +718,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSTransition)
         /// </summary>
         [<Global("CSSTransition")>]
-        static member inline CSSTransition: Exports.CSSTransition.Type = nativeOnly
+        static member inline CSSTransition: Exports.CSSTransition__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSTranslate</c>** interface of the CSS Typed Object Model API represents the translate() value of the individual transform property in CSS. It inherits properties and methods from its parent CSSTransformValue.
@@ -721,7 +726,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSTranslate)
         /// </summary>
         [<Global("CSSTranslate")>]
-        static member inline CSSTranslate: Exports.CSSTranslate.Type = nativeOnly
+        static member inline CSSTranslate: Exports.CSSTranslate__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSUnitValue</c>** interface of the CSS Typed Object Model API represents values that contain a single unit type.
@@ -729,7 +734,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSUnitValue)
         /// </summary>
         [<Global("CSSUnitValue")>]
-        static member inline CSSUnitValue: Exports.CSSUnitValue.Type = nativeOnly
+        static member inline CSSUnitValue: Exports.CSSUnitValue__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSUnparsedValue</c>** interface of the CSS Typed Object Model API represents property values that reference custom properties. It consists of a list of string fragments and variable references.
@@ -737,7 +742,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSUnparsedValue)
         /// </summary>
         [<Global("CSSUnparsedValue")>]
-        static member inline CSSUnparsedValue: Exports.CSSUnparsedValue.Type = nativeOnly
+        static member inline CSSUnparsedValue: Exports.CSSUnparsedValue__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CSSVariableReferenceValue</c>** interface of the CSS Typed Object Model API allows you to create a custom name for a built-in CSS value. This object functionality is sometimes called a "CSS variable" and serves the same purpose as the var() function. The custom name must begin with two dashes.
@@ -745,14 +750,15 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSVariableReferenceValue)
         /// </summary>
         [<Global("CSSVariableReferenceValue")>]
-        static member inline CSSVariableReferenceValue: Exports.CSSVariableReferenceValue.Type =
+        static member inline CSSVariableReferenceValue: Exports.CSSVariableReferenceValue__.Type =
             nativeOnly
 
         /// <summary>
         /// The **<c>CSSViewTransitionRule</c>** interface represents a CSS
         /// </summary>
         [<Global("CSSViewTransitionRule")>]
-        static member inline CSSViewTransitionRule: Exports.CSSViewTransitionRule.Type = nativeOnly
+        static member inline CSSViewTransitionRule: Exports.CSSViewTransitionRule__.Type =
+            nativeOnly
 
         /// <summary>
         /// The **<c>Cache</c>** interface provides a persistent storage mechanism for Request / Response object pairs that are cached in long lived memory. How long a Cache object lives is browser dependent, but a single origin's scripts can typically rely on the presence of a previously populated Cache object. Note that the Cache interface is exposed to windowed scopes as well as workers. You don't have to use it in conjunction with service workers, even though it is defined in the service worker spec.
@@ -761,7 +767,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Cache)
         /// </summary>
         [<Global("Cache")>]
-        static member inline Cache: Exports.Cache.Type = nativeOnly
+        static member inline Cache: Exports.Cache__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CacheStorage</c>** interface represents the storage for Cache objects.
@@ -770,7 +776,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CacheStorage)
         /// </summary>
         [<Global("CacheStorage")>]
-        static member inline CacheStorage: Exports.CacheStorage.Type = nativeOnly
+        static member inline CacheStorage: Exports.CacheStorage__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CanvasCaptureMediaStreamTrack</c>** interface of the Media Capture and Streams API represents the video track contained in a MediaStream being generated from a <canvas> following a call to HTMLCanvasElement.captureStream().
@@ -779,7 +785,7 @@ module Web =
         /// </summary>
         [<Global("CanvasCaptureMediaStreamTrack")>]
         static member inline CanvasCaptureMediaStreamTrack
-            : Exports.CanvasCaptureMediaStreamTrack.Type =
+            : Exports.CanvasCaptureMediaStreamTrack__.Type =
             nativeOnly
 
         /// <summary>
@@ -788,7 +794,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CanvasGradient)
         /// </summary>
         [<Global("CanvasGradient")>]
-        static member inline CanvasGradient: Exports.CanvasGradient.Type = nativeOnly
+        static member inline CanvasGradient: Exports.CanvasGradient__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CanvasPattern</c>** interface represents an opaque object describing a pattern, based on an image, a canvas, or a video, created by the CanvasRenderingContext2D.createPattern() method.
@@ -796,7 +802,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CanvasPattern)
         /// </summary>
         [<Global("CanvasPattern")>]
-        static member inline CanvasPattern: Exports.CanvasPattern.Type = nativeOnly
+        static member inline CanvasPattern: Exports.CanvasPattern__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CanvasRenderingContext2D</c>** interface, part of the Canvas API, provides the 2D rendering context for the drawing surface of a <canvas> element. It is used for drawing shapes, text, images, and other objects.
@@ -804,7 +810,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D)
         /// </summary>
         [<Global("CanvasRenderingContext2D")>]
-        static member inline CanvasRenderingContext2D: Exports.CanvasRenderingContext2D.Type =
+        static member inline CanvasRenderingContext2D: Exports.CanvasRenderingContext2D__.Type =
             nativeOnly
 
         /// <summary>
@@ -813,7 +819,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CaretPosition)
         /// </summary>
         [<Global("CaretPosition")>]
-        static member inline CaretPosition: Exports.CaretPosition.Type = nativeOnly
+        static member inline CaretPosition: Exports.CaretPosition__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>ChannelMergerNode</c>** interface, often used in conjunction with its opposite, ChannelSplitterNode, reunites different mono inputs into a single output. Each input is used to fill a channel of the output. This is useful for accessing each channel separately, e.g., for performing channel mixing where gain must be separately controlled on each channel.
@@ -821,7 +827,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ChannelMergerNode)
         /// </summary>
         [<Global("ChannelMergerNode")>]
-        static member inline ChannelMergerNode: Exports.ChannelMergerNode.Type = nativeOnly
+        static member inline ChannelMergerNode: Exports.ChannelMergerNode__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>ChannelSplitterNode</c>** interface, often used in conjunction with its opposite, ChannelMergerNode, separates the different channels of an audio source into a set of mono outputs. This is useful for accessing each channel separately, e.g., for performing channel mixing where gain must be separately controlled on each channel.
@@ -829,7 +835,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ChannelSplitterNode)
         /// </summary>
         [<Global("ChannelSplitterNode")>]
-        static member inline ChannelSplitterNode: Exports.ChannelSplitterNode.Type = nativeOnly
+        static member inline ChannelSplitterNode: Exports.ChannelSplitterNode__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CharacterData</c>** abstract interface represents a Node object that contains characters. This is an abstract interface, meaning there aren't any objects of type CharacterData: it is implemented by other interfaces like Text, Comment, CDATASection, or ProcessingInstruction, which aren't abstract.
@@ -837,7 +843,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CharacterData)
         /// </summary>
         [<Global("CharacterData")>]
-        static member inline CharacterData: Exports.CharacterData.Type = nativeOnly
+        static member inline CharacterData: Exports.CharacterData__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>Clipboard</c>** interface of the Clipboard API provides read and write access to the contents of the system clipboard. This allows a web application to implement cut, copy, and paste features.
@@ -846,7 +852,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Clipboard)
         /// </summary>
         [<Global("Clipboard")>]
-        static member inline Clipboard: Exports.Clipboard.Type = nativeOnly
+        static member inline Clipboard: Exports.Clipboard__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>ClipboardEvent</c>** interface of the Clipboard API represents events providing information related to modification of the clipboard, that is cut, copy, and paste events.
@@ -854,7 +860,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ClipboardEvent)
         /// </summary>
         [<Global("ClipboardEvent")>]
-        static member inline ClipboardEvent: Exports.ClipboardEvent.Type = nativeOnly
+        static member inline ClipboardEvent: Exports.ClipboardEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>ClipboardItem</c>** interface of the Clipboard API represents a single item format, used when reading or writing clipboard data using Clipboard.read() and Clipboard.write() respectively.
@@ -863,7 +869,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ClipboardItem)
         /// </summary>
         [<Global("ClipboardItem")>]
-        static member inline ClipboardItem: Exports.ClipboardItem.Type = nativeOnly
+        static member inline ClipboardItem: Exports.ClipboardItem__.Type = nativeOnly
 
         /// <summary>
         /// A **<c>CloseEvent</c>** is sent to clients using WebSockets when the connection is closed. This is delivered to the listener indicated by the WebSocket object's onclose attribute.
@@ -871,7 +877,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CloseEvent)
         /// </summary>
         [<Global("CloseEvent")>]
-        static member inline CloseEvent: Exports.CloseEvent.Type = nativeOnly
+        static member inline CloseEvent: Exports.CloseEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CloseWatcher</c>** interface allows a custom UI component with open and close semantics to respond to device-specific close actions in the same way as a built-in component.
@@ -879,7 +885,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CloseWatcher)
         /// </summary>
         [<Global("CloseWatcher")>]
-        static member inline CloseWatcher: Exports.CloseWatcher.Type = nativeOnly
+        static member inline CloseWatcher: Exports.CloseWatcher__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CommandEvent</c>** interface represents an event notifying the user when a button element with valid commandForElement and command attributes is about to invoke an interactive element.
@@ -887,7 +893,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CommandEvent)
         /// </summary>
         [<Global("CommandEvent")>]
-        static member inline CommandEvent: Exports.CommandEvent.Type = nativeOnly
+        static member inline CommandEvent: Exports.CommandEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>Comment</c>** interface represents textual notations within markup; although it is generally not visually shown, such comments are available to be read in the source view.
@@ -895,7 +901,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Comment)
         /// </summary>
         [<Global("Comment")>]
-        static member inline Comment: Exports.Comment.Type = nativeOnly
+        static member inline Comment: Exports.Comment__.Type = nativeOnly
 
         /// <summary>
         /// The DOM **<c>CompositionEvent</c>** represents events that occur due to the user indirectly entering text.
@@ -903,7 +909,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CompositionEvent)
         /// </summary>
         [<Global("CompositionEvent")>]
-        static member inline CompositionEvent: Exports.CompositionEvent.Type = nativeOnly
+        static member inline CompositionEvent: Exports.CompositionEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CompressionStream</c>** interface of the Compression Streams API compresses a stream of data. It implements the same shape as a TransformStream, allowing it to be used in ReadableStream.pipeThrough() and similar methods.
@@ -911,7 +917,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CompressionStream)
         /// </summary>
         [<Global("CompressionStream")>]
-        static member inline CompressionStream: Exports.CompressionStream.Type = nativeOnly
+        static member inline CompressionStream: Exports.CompressionStream__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>ConstantSourceNode</c>** interface—part of the Web Audio API—represents an audio source (based upon AudioScheduledSourceNode) whose output is single unchanging value. This makes it useful for cases in which you need a constant value coming in from an audio source. In addition, it can be used like a constructible AudioParam by automating the value of its offset or by connecting another node to it; see Controlling multiple parameters with ConstantSourceNode.
@@ -919,7 +925,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ConstantSourceNode)
         /// </summary>
         [<Global("ConstantSourceNode")>]
-        static member inline ConstantSourceNode: Exports.ConstantSourceNode.Type = nativeOnly
+        static member inline ConstantSourceNode: Exports.ConstantSourceNode__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>ContentVisibilityAutoStateChangeEvent</c>** interface is the event object for the contentvisibilityautostatechange event, which fires on any element with content-visibility: auto set on it when it starts or stops being relevant to the user and skipping its contents.
@@ -928,7 +934,7 @@ module Web =
         /// </summary>
         [<Global("ContentVisibilityAutoStateChangeEvent")>]
         static member inline ContentVisibilityAutoStateChangeEvent
-            : Exports.ContentVisibilityAutoStateChangeEvent.Type =
+            : Exports.ContentVisibilityAutoStateChangeEvent__.Type =
             nativeOnly
 
         /// <summary>
@@ -937,7 +943,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ConvolverNode)
         /// </summary>
         [<Global("ConvolverNode")>]
-        static member inline ConvolverNode: Exports.ConvolverNode.Type = nativeOnly
+        static member inline ConvolverNode: Exports.ConvolverNode__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CookieChangeEvent</c>** interface of the Cookie Store API is the event type of the change event fired at a CookieStore when any cookies are created or deleted.
@@ -946,7 +952,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CookieChangeEvent)
         /// </summary>
         [<Global("CookieChangeEvent")>]
-        static member inline CookieChangeEvent: Exports.CookieChangeEvent.Type = nativeOnly
+        static member inline CookieChangeEvent: Exports.CookieChangeEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CookieStore</c>** interface of the Cookie Store API provides methods for getting and setting cookies asynchronously from either a page or a service worker.
@@ -955,7 +961,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CookieStore)
         /// </summary>
         [<Global("CookieStore")>]
-        static member inline CookieStore: Exports.CookieStore.Type = nativeOnly
+        static member inline CookieStore: Exports.CookieStore__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CookieStoreManager</c>** interface of the Cookie Store API allows service workers to subscribe to cookie change events. Call subscribe() on a particular service worker registration to receive change events.
@@ -964,7 +970,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CookieStoreManager)
         /// </summary>
         [<Global("CookieStoreManager")>]
-        static member inline CookieStoreManager: Exports.CookieStoreManager.Type = nativeOnly
+        static member inline CookieStoreManager: Exports.CookieStoreManager__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CountQueuingStrategy</c>** interface of the Streams API provides a built-in chunk counting queuing strategy that can be used when constructing streams.
@@ -972,7 +978,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CountQueuingStrategy)
         /// </summary>
         [<Global("CountQueuingStrategy")>]
-        static member inline CountQueuingStrategy: Exports.CountQueuingStrategy.Type = nativeOnly
+        static member inline CountQueuingStrategy: Exports.CountQueuingStrategy__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>Credential</c>** interface of the Credential Management API provides information about an entity (usually a user) normally as a prerequisite to a trust decision.
@@ -981,7 +987,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Credential)
         /// </summary>
         [<Global("Credential")>]
-        static member inline Credential: Exports.Credential.Type = nativeOnly
+        static member inline Credential: Exports.Credential__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CredentialsContainer</c>** interface of the Credential Management API exposes methods to request credentials and notify the user agent when events such as successful sign in or sign out happen. This interface is accessible from Navigator.credentials.
@@ -990,7 +996,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CredentialsContainer)
         /// </summary>
         [<Global("CredentialsContainer")>]
-        static member inline CredentialsContainer: Exports.CredentialsContainer.Type = nativeOnly
+        static member inline CredentialsContainer: Exports.CredentialsContainer__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>Crypto</c>** interface represents basic cryptography features available in the current context. It allows access to a cryptographically strong random number generator and to cryptographic primitives.
@@ -998,7 +1004,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Crypto)
         /// </summary>
         [<Global("Crypto")>]
-        static member inline Crypto: Exports.Crypto.Type = nativeOnly
+        static member inline Crypto: Exports.Crypto__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CryptoKey</c>** interface of the Web Crypto API represents a cryptographic key obtained from one of the SubtleCrypto methods generateKey(), deriveKey(), importKey(), or unwrapKey().
@@ -1007,7 +1013,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CryptoKey)
         /// </summary>
         [<Global("CryptoKey")>]
-        static member inline CryptoKey: Exports.CryptoKey.Type = nativeOnly
+        static member inline CryptoKey: Exports.CryptoKey__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>CustomElementRegistry</c>** interface provides methods for registering custom elements and querying registered elements. To get an instance of it, use the window.customElements property. To create a scoped registry, use the CustomElementRegistry() constructor.
@@ -1015,7 +1021,8 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CustomElementRegistry)
         /// </summary>
         [<Global("CustomElementRegistry")>]
-        static member inline CustomElementRegistry: Exports.CustomElementRegistry.Type = nativeOnly
+        static member inline CustomElementRegistry: Exports.CustomElementRegistry__.Type =
+            nativeOnly
 
         /// <summary>
         /// The **<c>CustomEvent</c>** interface can be used to attach custom data to an event generated by an application.
@@ -1023,7 +1030,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CustomEvent)
         /// </summary>
         [<Global("CustomEvent")>]
-        static member inline CustomEvent: Exports.CustomEvent.Type<obj> = nativeOnly
+        static member inline CustomEvent: Exports.CustomEvent__.Type<obj> = nativeOnly
 
         /// <summary>
         /// The **<c>CustomStateSet</c>** interface of the Document Object Model stores a list of states for an autonomous custom element, and allows states to be added and removed from the set.
@@ -1031,7 +1038,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CustomStateSet)
         /// </summary>
         [<Global("CustomStateSet")>]
-        static member inline CustomStateSet: Exports.CustomStateSet.Type = nativeOnly
+        static member inline CustomStateSet: Exports.CustomStateSet__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>DOMException</c>** interface represents an abnormal event (called an exception) that occurs as a result of calling a method or accessing a property of a web API. This is how error conditions are described in web APIs.
@@ -1039,7 +1046,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMException)
         /// </summary>
         [<Global("DOMException")>]
-        static member inline DOMException: Exports.DOMException.Type = nativeOnly
+        static member inline DOMException: Exports.DOMException__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>DOMImplementation</c>** interface represents an object providing methods which are not dependent on any particular document. Such an object is returned by the Document.implementation property.
@@ -1047,7 +1054,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMImplementation)
         /// </summary>
         [<Global("DOMImplementation")>]
-        static member inline DOMImplementation: Exports.DOMImplementation.Type = nativeOnly
+        static member inline DOMImplementation: Exports.DOMImplementation__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>DOMMatrix</c>** interface represents 4×4 matrices, suitable for 2D and 3D operations including rotation and translation. It is a mutable version of the DOMMatrixReadOnly interface. The interface is available inside web workers.
@@ -1055,13 +1062,13 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrix)
         /// </summary>
         [<Global("DOMMatrix")>]
-        static member inline DOMMatrix: Exports.DOMMatrix.Type = nativeOnly
+        static member inline DOMMatrix: Exports.DOMMatrix__.Type = nativeOnly
 
         [<Global("SVGMatrix")>]
-        static member inline SVGMatrix: Exports.DOMMatrix.Type = nativeOnly
+        static member inline SVGMatrix: Exports.DOMMatrix__.Type = nativeOnly
 
         [<Global("WebKitCSSMatrix")>]
-        static member inline WebKitCSSMatrix: Exports.DOMMatrix.Type = nativeOnly
+        static member inline WebKitCSSMatrix: Exports.DOMMatrix__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>DOMMatrixReadOnly</c>** interface represents a read-only 4×4 matrix, suitable for 2D and 3D operations. The DOMMatrix interface — which is based upon DOMMatrixReadOnly—adds mutability, allowing you to alter the matrix after creating it.
@@ -1069,7 +1076,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly)
         /// </summary>
         [<Global("DOMMatrixReadOnly")>]
-        static member inline DOMMatrixReadOnly: Exports.DOMMatrixReadOnly.Type = nativeOnly
+        static member inline DOMMatrixReadOnly: Exports.DOMMatrixReadOnly__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>DOMParser</c>** interface provides the ability to parse XML or HTML source code from a string into a DOM Document.
@@ -1077,7 +1084,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMParser)
         /// </summary>
         [<Global("DOMParser")>]
-        static member inline DOMParser: Exports.DOMParser.Type = nativeOnly
+        static member inline DOMParser: Exports.DOMParser__.Type = nativeOnly
 
         /// <summary>
         /// A **<c>DOMPoint</c>** object represents a 2D or 3D point in a coordinate system; it includes values for the coordinates in up to three dimensions, as well as an optional perspective value. DOMPoint is based on DOMPointReadOnly but allows its properties' values to be changed.
@@ -1085,10 +1092,10 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMPoint)
         /// </summary>
         [<Global("DOMPoint")>]
-        static member inline DOMPoint: Exports.DOMPoint.Type = nativeOnly
+        static member inline DOMPoint: Exports.DOMPoint__.Type = nativeOnly
 
         [<Global("SVGPoint")>]
-        static member inline SVGPoint: Exports.DOMPoint.Type = nativeOnly
+        static member inline SVGPoint: Exports.DOMPoint__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>DOMPointReadOnly</c>** interface specifies the coordinate and perspective fields used by DOMPoint to define a 2D or 3D point in a coordinate system.
@@ -1096,7 +1103,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMPointReadOnly)
         /// </summary>
         [<Global("DOMPointReadOnly")>]
-        static member inline DOMPointReadOnly: Exports.DOMPointReadOnly.Type = nativeOnly
+        static member inline DOMPointReadOnly: Exports.DOMPointReadOnly__.Type = nativeOnly
 
         /// <summary>
         /// A **<c>DOMQuad</c>** is a collection of four DOMPoints defining the corners of an arbitrary quadrilateral. Returning DOMQuads lets getBoxQuads() return accurate information even when arbitrary 2D or 3D transforms are present. It has a handy bounds attribute returning a DOMRectReadOnly for those cases where you just want an axis-aligned bounding rectangle.
@@ -1104,7 +1111,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMQuad)
         /// </summary>
         [<Global("DOMQuad")>]
-        static member inline DOMQuad: Exports.DOMQuad.Type = nativeOnly
+        static member inline DOMQuad: Exports.DOMQuad__.Type = nativeOnly
 
         /// <summary>
         /// A **<c>DOMRect</c>** describes the size and position of a rectangle.
@@ -1112,10 +1119,10 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMRect)
         /// </summary>
         [<Global("DOMRect")>]
-        static member inline DOMRect: Exports.DOMRect.Type = nativeOnly
+        static member inline DOMRect: Exports.DOMRect__.Type = nativeOnly
 
         [<Global("SVGRect")>]
-        static member inline SVGRect: Exports.DOMRect.Type = nativeOnly
+        static member inline SVGRect: Exports.DOMRect__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>DOMRectList</c>** interface represents a collection of DOMRect objects, typically used to hold the rectangles associated with a particular element, like bounding boxes returned by methods such as getClientRects(). It provides access to each rectangle in the list via its index, along with a length property that indicates the total number of rectangles in the list.
@@ -1123,7 +1130,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMRectList)
         /// </summary>
         [<Global("DOMRectList")>]
-        static member inline DOMRectList: Exports.DOMRectList.Type = nativeOnly
+        static member inline DOMRectList: Exports.DOMRectList__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>DOMRectReadOnly</c>** interface specifies the standard properties (also used by DOMRect) to define a rectangle whose properties are immutable.
@@ -1131,7 +1138,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMRectReadOnly)
         /// </summary>
         [<Global("DOMRectReadOnly")>]
-        static member inline DOMRectReadOnly: Exports.DOMRectReadOnly.Type = nativeOnly
+        static member inline DOMRectReadOnly: Exports.DOMRectReadOnly__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>DOMStringList</c>** interface is a legacy type returned by some APIs and represents a non-modifiable list of strings (DOMString).
@@ -1139,7 +1146,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMStringList)
         /// </summary>
         [<Global("DOMStringList")>]
-        static member inline DOMStringList: Exports.DOMStringList.Type = nativeOnly
+        static member inline DOMStringList: Exports.DOMStringList__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>DOMStringMap</c>** interface is used for the HTMLElement.dataset attribute, to represent data for custom attributes added to elements.
@@ -1147,7 +1154,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMStringMap)
         /// </summary>
         [<Global("DOMStringMap")>]
-        static member inline DOMStringMap: Exports.DOMStringMap.Type = nativeOnly
+        static member inline DOMStringMap: Exports.DOMStringMap__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>DOMTokenList</c>** interface represents a set of space-separated tokens. Such a set is returned by Element.classList or HTMLLinkElement.relList, and many others.
@@ -1155,7 +1162,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMTokenList)
         /// </summary>
         [<Global("DOMTokenList")>]
-        static member inline DOMTokenList: Exports.DOMTokenList.Type = nativeOnly
+        static member inline DOMTokenList: Exports.DOMTokenList__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>DataTransfer</c>** object is used to hold any data transferred between contexts, such as a drag and drop operation, or clipboard read/write. It may hold one or more data items, each of one or more data types.
@@ -1163,7 +1170,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/DataTransfer)
         /// </summary>
         [<Global("DataTransfer")>]
-        static member inline DataTransfer: Exports.DataTransfer.Type = nativeOnly
+        static member inline DataTransfer: Exports.DataTransfer__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>DataTransferItem</c>** object represents one drag data item. During a drag operation, each DragEvent has a dataTransfer property which contains a list of drag data items. Each item in the list is a DataTransferItem object.
@@ -1171,7 +1178,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/DataTransferItem)
         /// </summary>
         [<Global("DataTransferItem")>]
-        static member inline DataTransferItem: Exports.DataTransferItem.Type = nativeOnly
+        static member inline DataTransferItem: Exports.DataTransferItem__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>DataTransferItemList</c>** object is a list of DataTransferItem objects representing items being dragged. During a drag operation, each DragEvent has a dataTransfer property and that property is a DataTransferItemList.
@@ -1179,7 +1186,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/DataTransferItemList)
         /// </summary>
         [<Global("DataTransferItemList")>]
-        static member inline DataTransferItemList: Exports.DataTransferItemList.Type = nativeOnly
+        static member inline DataTransferItemList: Exports.DataTransferItemList__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>DecompressionStream</c>** interface of the Compression Streams API decompresses a stream of data. It implements the same shape as a TransformStream, allowing it to be used in ReadableStream.pipeThrough() and similar methods.
@@ -1187,7 +1194,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/DecompressionStream)
         /// </summary>
         [<Global("DecompressionStream")>]
-        static member inline DecompressionStream: Exports.DecompressionStream.Type = nativeOnly
+        static member inline DecompressionStream: Exports.DecompressionStream__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>DelayNode</c>** interface represents a delay-line; an AudioNode audio-processing module that causes a delay between the arrival of an input data and its propagation to the output.
@@ -1195,7 +1202,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/DelayNode)
         /// </summary>
         [<Global("DelayNode")>]
-        static member inline DelayNode: Exports.DelayNode.Type = nativeOnly
+        static member inline DelayNode: Exports.DelayNode__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>DeviceMotionEvent</c>** interface of the Device Orientation Events provides web developers with information about the speed of changes for the device's position and orientation.
@@ -1204,7 +1211,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/DeviceMotionEvent)
         /// </summary>
         [<Global("DeviceMotionEvent")>]
-        static member inline DeviceMotionEvent: Exports.DeviceMotionEvent.Type = nativeOnly
+        static member inline DeviceMotionEvent: Exports.DeviceMotionEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>DeviceOrientationEvent</c>** interface of the Device Orientation Events provides web developers with information from the physical orientation of the device running the web page.
@@ -1213,14 +1220,14 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/DeviceOrientationEvent)
         /// </summary>
         [<Global("DeviceOrientationEvent")>]
-        static member inline DeviceOrientationEvent: Exports.DeviceOrientationEvent.Type =
+        static member inline DeviceOrientationEvent: Exports.DeviceOrientationEvent__.Type =
             nativeOnly
 
         /// <summary>
         /// Available only in secure contexts.
         /// </summary>
         [<Global("DigitalCredential")>]
-        static member inline DigitalCredential: Exports.DigitalCredential.Type = nativeOnly
+        static member inline DigitalCredential: Exports.DigitalCredential__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>Document</c>** interface represents any web page loaded in the browser and serves as an entry point into the web page's content, which is the DOM tree.
@@ -1228,7 +1235,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document)
         /// </summary>
         [<Global("Document")>]
-        static member inline Document: Exports.Document.Type = nativeOnly
+        static member inline Document: Exports.Document__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>DocumentFragment</c>** interface represents a minimal document object that has no parent.
@@ -1236,7 +1243,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/DocumentFragment)
         /// </summary>
         [<Global("DocumentFragment")>]
-        static member inline DocumentFragment: Exports.DocumentFragment.Type = nativeOnly
+        static member inline DocumentFragment: Exports.DocumentFragment__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>DocumentPictureInPicture</c>** interface of the Document Picture-in-Picture API is the entry point for creating and handling document picture-in-picture windows.
@@ -1245,7 +1252,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/DocumentPictureInPicture)
         /// </summary>
         [<Global("DocumentPictureInPicture")>]
-        static member inline DocumentPictureInPicture: Exports.DocumentPictureInPicture.Type =
+        static member inline DocumentPictureInPicture: Exports.DocumentPictureInPicture__.Type =
             nativeOnly
 
         /// <summary>
@@ -1256,7 +1263,7 @@ module Web =
         /// </summary>
         [<Global("DocumentPictureInPictureEvent")>]
         static member inline DocumentPictureInPictureEvent
-            : Exports.DocumentPictureInPictureEvent.Type =
+            : Exports.DocumentPictureInPictureEvent__.Type =
             nativeOnly
 
         /// <summary>
@@ -1265,7 +1272,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/DocumentTimeline)
         /// </summary>
         [<Global("DocumentTimeline")>]
-        static member inline DocumentTimeline: Exports.DocumentTimeline.Type = nativeOnly
+        static member inline DocumentTimeline: Exports.DocumentTimeline__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>DocumentType</c>** interface represents a Node containing a doctype.
@@ -1273,7 +1280,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/DocumentType)
         /// </summary>
         [<Global("DocumentType")>]
-        static member inline DocumentType: Exports.DocumentType.Type = nativeOnly
+        static member inline DocumentType: Exports.DocumentType__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>DragEvent</c>** interface is a DOM event that represents a drag and drop interaction. The user initiates a drag by placing a pointer device (such as a mouse) on the touch surface and then dragging the pointer to a new location (such as another DOM element). Applications are free to interpret a drag and drop interaction in an application-specific way.
@@ -1281,7 +1288,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/DragEvent)
         /// </summary>
         [<Global("DragEvent")>]
-        static member inline DragEvent: Exports.DragEvent.Type = nativeOnly
+        static member inline DragEvent: Exports.DragEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>DynamicsCompressorNode</c>** interface provides a compression effect, which lowers the volume of the loudest parts of the signal in order to help prevent clipping and distortion that can occur when multiple sounds are played and multiplexed together at once. This is often used in musical production and game audio. DynamicsCompressorNode is an AudioNode that has exactly one input and one output.
@@ -1289,7 +1296,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/DynamicsCompressorNode)
         /// </summary>
         [<Global("DynamicsCompressorNode")>]
-        static member inline DynamicsCompressorNode: Exports.DynamicsCompressorNode.Type =
+        static member inline DynamicsCompressorNode: Exports.DynamicsCompressorNode__.Type =
             nativeOnly
 
         /// <summary>
@@ -1298,7 +1305,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element)
         /// </summary>
         [<Global("Element")>]
-        static member inline Element: Exports.Element.Type = nativeOnly
+        static member inline Element: Exports.Element__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>ElementInternals</c>** interface of the Document Object Model gives web developers a way to allow custom elements to fully participate in HTML forms. It provides utilities for working with these elements in the same way you would work with any standard HTML form element, and also exposes the Accessibility Object Model to the element.
@@ -1306,7 +1313,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ElementInternals)
         /// </summary>
         [<Global("ElementInternals")>]
-        static member inline ElementInternals: Exports.ElementInternals.Type = nativeOnly
+        static member inline ElementInternals: Exports.ElementInternals__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>EncodedAudioChunk</c>** interface of the WebCodecs API represents a chunk of encoded audio data.
@@ -1314,7 +1321,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/EncodedAudioChunk)
         /// </summary>
         [<Global("EncodedAudioChunk")>]
-        static member inline EncodedAudioChunk: Exports.EncodedAudioChunk.Type = nativeOnly
+        static member inline EncodedAudioChunk: Exports.EncodedAudioChunk__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>EncodedVideoChunk</c>** interface of the WebCodecs API represents a chunk of encoded video data.
@@ -1322,7 +1329,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/EncodedVideoChunk)
         /// </summary>
         [<Global("EncodedVideoChunk")>]
-        static member inline EncodedVideoChunk: Exports.EncodedVideoChunk.Type = nativeOnly
+        static member inline EncodedVideoChunk: Exports.EncodedVideoChunk__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>ErrorEvent</c>** interface represents events providing information related to errors in scripts or in files.
@@ -1330,7 +1337,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ErrorEvent)
         /// </summary>
         [<Global("ErrorEvent")>]
-        static member inline ErrorEvent: Exports.ErrorEvent.Type = nativeOnly
+        static member inline ErrorEvent: Exports.ErrorEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>Event</c>** interface represents an event which takes place on an EventTarget.
@@ -1338,7 +1345,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Event)
         /// </summary>
         [<Global("Event")>]
-        static member inline Event: Exports.Event.Type = nativeOnly
+        static member inline Event: Exports.Event__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>EventCounts</c>** interface of the Performance API provides the number of events that have been dispatched for each event type.
@@ -1346,7 +1353,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/EventCounts)
         /// </summary>
         [<Global("EventCounts")>]
-        static member inline EventCounts: Exports.EventCounts.Type = nativeOnly
+        static member inline EventCounts: Exports.EventCounts__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>EventSource</c>** interface is web content's interface to server-sent events.
@@ -1354,7 +1361,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/EventSource)
         /// </summary>
         [<Global("EventSource")>]
-        static member inline EventSource: Exports.EventSource.Type = nativeOnly
+        static member inline EventSource: Exports.EventSource__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>EventTarget</c>** interface is implemented by objects that can receive events and may have listeners for them. In other words, any target of events implements the three methods associated with this interface.
@@ -1362,11 +1369,11 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/EventTarget)
         /// </summary>
         [<Global("EventTarget")>]
-        static member inline EventTarget: Exports.EventTarget.Type = nativeOnly
+        static member inline EventTarget: Exports.EventTarget__.Type = nativeOnly
 
         [<Global("External")>]
         [<Obsolete>]
-        static member inline External: Exports.External.Type = nativeOnly
+        static member inline External: Exports.External__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>File</c>** interface provides information about files and allows JavaScript in a web page to access their content.
@@ -1374,7 +1381,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/File)
         /// </summary>
         [<Global("File")>]
-        static member inline File: Exports.File.Type = nativeOnly
+        static member inline File: Exports.File__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>FileList</c>** interface represents an object of this type returned by the files property of the HTML <input> element; this lets you access the list of files selected with the <input type="file"> element. It's also used for a list of files dropped into web content when using the drag and drop API; see the DataTransfer object for details on this usage.
@@ -1382,7 +1389,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileList)
         /// </summary>
         [<Global("FileList")>]
-        static member inline FileList: Exports.FileList.Type = nativeOnly
+        static member inline FileList: Exports.FileList__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>FileReader</c>** interface lets web applications asynchronously read the contents of files (or raw data buffers) stored on the user's computer, using File or Blob objects to specify the file or data to read.
@@ -1390,7 +1397,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileReader)
         /// </summary>
         [<Global("FileReader")>]
-        static member inline FileReader: Exports.FileReader.Type = nativeOnly
+        static member inline FileReader: Exports.FileReader__.Type = nativeOnly
 
         /// <summary>
         /// The File and Directory Entries API interface **<c>FileSystem</c>** is used to represent a file system. These objects can be obtained from the filesystem property on any file system entry. Some browsers offer additional APIs to create and manage file systems, such as Chrome's requestFileSystem() method.
@@ -1398,7 +1405,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystem)
         /// </summary>
         [<Global("FileSystem")>]
-        static member inline FileSystem: Exports.FileSystem.Type = nativeOnly
+        static member inline FileSystem: Exports.FileSystem__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>FileSystemDirectoryEntry</c>** interface of the File and Directory Entries API represents a directory in a file system. It provides methods which make it possible to access and manipulate the files in a directory, as well as to access the entries within the directory.
@@ -1406,7 +1413,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemDirectoryEntry)
         /// </summary>
         [<Global("FileSystemDirectoryEntry")>]
-        static member inline FileSystemDirectoryEntry: Exports.FileSystemDirectoryEntry.Type =
+        static member inline FileSystemDirectoryEntry: Exports.FileSystemDirectoryEntry__.Type =
             nativeOnly
 
         /// <summary>
@@ -1416,7 +1423,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemDirectoryHandle)
         /// </summary>
         [<Global("FileSystemDirectoryHandle")>]
-        static member inline FileSystemDirectoryHandle: Exports.FileSystemDirectoryHandle.Type =
+        static member inline FileSystemDirectoryHandle: Exports.FileSystemDirectoryHandle__.Type =
             nativeOnly
 
         /// <summary>
@@ -1425,7 +1432,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemDirectoryReader)
         /// </summary>
         [<Global("FileSystemDirectoryReader")>]
-        static member inline FileSystemDirectoryReader: Exports.FileSystemDirectoryReader.Type =
+        static member inline FileSystemDirectoryReader: Exports.FileSystemDirectoryReader__.Type =
             nativeOnly
 
         /// <summary>
@@ -1434,7 +1441,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemEntry)
         /// </summary>
         [<Global("FileSystemEntry")>]
-        static member inline FileSystemEntry: Exports.FileSystemEntry.Type = nativeOnly
+        static member inline FileSystemEntry: Exports.FileSystemEntry__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>FileSystemFileEntry</c>** interface of the File and Directory Entries API represents a file in a file system. It offers properties describing the file's attributes, as well as the file() method, which creates a File object that can be used to read the file.
@@ -1442,7 +1449,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemFileEntry)
         /// </summary>
         [<Global("FileSystemFileEntry")>]
-        static member inline FileSystemFileEntry: Exports.FileSystemFileEntry.Type = nativeOnly
+        static member inline FileSystemFileEntry: Exports.FileSystemFileEntry__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>FileSystemFileHandle</c>** interface of the File System API represents a handle to a file system entry. The interface is accessed through the window.showOpenFilePicker() method.
@@ -1451,7 +1458,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemFileHandle)
         /// </summary>
         [<Global("FileSystemFileHandle")>]
-        static member inline FileSystemFileHandle: Exports.FileSystemFileHandle.Type = nativeOnly
+        static member inline FileSystemFileHandle: Exports.FileSystemFileHandle__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>FileSystemHandle</c>** interface of the File System API is an object which represents a file or directory entry. Multiple handles can represent the same entry. For the most part you do not work with FileSystemHandle directly but rather its child interfaces FileSystemFileHandle and FileSystemDirectoryHandle.
@@ -1460,7 +1467,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemHandle)
         /// </summary>
         [<Global("FileSystemHandle")>]
-        static member inline FileSystemHandle: Exports.FileSystemHandle.Type = nativeOnly
+        static member inline FileSystemHandle: Exports.FileSystemHandle__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>FileSystemWritableFileStream</c>** interface of the File System API is a WritableStream object with additional convenience methods, which operates on a single file on disk. The interface is accessed through the FileSystemFileHandle.createWritable() method.
@@ -1469,7 +1476,8 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemWritableFileStream)
         /// </summary>
         [<Global("FileSystemWritableFileStream")>]
-        static member inline FileSystemWritableFileStream: Exports.FileSystemWritableFileStream.Type =
+        static member inline FileSystemWritableFileStream
+            : Exports.FileSystemWritableFileStream__.Type =
             nativeOnly
 
         /// <summary>
@@ -1478,7 +1486,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/FocusEvent)
         /// </summary>
         [<Global("FocusEvent")>]
-        static member inline FocusEvent: Exports.FocusEvent.Type = nativeOnly
+        static member inline FocusEvent: Exports.FocusEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>FontFace</c>** interface of the CSS Font Loading API represents a single usable font face.
@@ -1486,7 +1494,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/FontFace)
         /// </summary>
         [<Global("FontFace")>]
-        static member inline FontFace: Exports.FontFace.Type = nativeOnly
+        static member inline FontFace: Exports.FontFace__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>FontFaceSet</c>** interface of the CSS Font Loading API manages the loading of font-faces and querying of their download status.
@@ -1494,7 +1502,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/FontFaceSet)
         /// </summary>
         [<Global("FontFaceSet")>]
-        static member inline FontFaceSet: Exports.FontFaceSet.Type = nativeOnly
+        static member inline FontFaceSet: Exports.FontFaceSet__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>FontFaceSetLoadEvent</c>** interface of the CSS Font Loading API represents events fired at a FontFaceSet after it starts loading font faces.
@@ -1502,7 +1510,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/FontFaceSetLoadEvent)
         /// </summary>
         [<Global("FontFaceSetLoadEvent")>]
-        static member inline FontFaceSetLoadEvent: Exports.FontFaceSetLoadEvent.Type = nativeOnly
+        static member inline FontFaceSetLoadEvent: Exports.FontFaceSetLoadEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>FormData</c>** interface provides a way to construct a set of key/value pairs representing form fields and their values, which can be sent using the fetch(), XMLHttpRequest.send() or navigator.sendBeacon() methods. It uses the same format a form would use if the encoding type were set to "multipart/form-data".
@@ -1510,7 +1518,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/FormData)
         /// </summary>
         [<Global("FormData")>]
-        static member inline FormData: Exports.FormData.Type = nativeOnly
+        static member inline FormData: Exports.FormData__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>FormDataEvent</c>** interface represents a formdata event — such an event is fired on an HTMLFormElement object after the entry list representing the form's data is constructed. This happens when the form is submitted, but can also be triggered by the invocation of a FormData() constructor.
@@ -1518,7 +1526,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/FormDataEvent)
         /// </summary>
         [<Global("FormDataEvent")>]
-        static member inline FormDataEvent: Exports.FormDataEvent.Type = nativeOnly
+        static member inline FormDataEvent: Exports.FormDataEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>FragmentDirective</c>** interface is an object exposed to allow code to check whether or not a browser supports text fragments.
@@ -1526,7 +1534,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/FragmentDirective)
         /// </summary>
         [<Global("FragmentDirective")>]
-        static member inline FragmentDirective: Exports.FragmentDirective.Type = nativeOnly
+        static member inline FragmentDirective: Exports.FragmentDirective__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>GPU</c>** interface of the WebGPU API is the starting point for using WebGPU. It can be used to return a GPUAdapter from which you can request devices, configure features and limits, and more.
@@ -1535,7 +1543,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPU)
         /// </summary>
         [<Global("GPU")>]
-        static member inline GPU: Exports.GPU.Type = nativeOnly
+        static member inline GPU: Exports.GPU__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>GPUAdapter</c>** interface of the WebGPU API represents a GPU adapter. From this you can request a GPUDevice, adapter info, features, and limits.
@@ -1544,7 +1552,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUAdapter)
         /// </summary>
         [<Global("GPUAdapter")>]
-        static member inline GPUAdapter: Exports.GPUAdapter.Type = nativeOnly
+        static member inline GPUAdapter: Exports.GPUAdapter__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>GPUAdapterInfo</c>** interface of the WebGPU API contains identifying information about a GPUAdapter.
@@ -1553,7 +1561,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUAdapterInfo)
         /// </summary>
         [<Global("GPUAdapterInfo")>]
-        static member inline GPUAdapterInfo: Exports.GPUAdapterInfo.Type = nativeOnly
+        static member inline GPUAdapterInfo: Exports.GPUAdapterInfo__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>GPUBindGroup</c>** interface of the WebGPU API is based on a GPUBindGroupLayout and defines a set of resources to be bound together in a group and how those resources are used in shader stages.
@@ -1562,7 +1570,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUBindGroup)
         /// </summary>
         [<Global("GPUBindGroup")>]
-        static member inline GPUBindGroup: Exports.GPUBindGroup.Type = nativeOnly
+        static member inline GPUBindGroup: Exports.GPUBindGroup__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>GPUBindGroupLayout</c>** interface of the WebGPU API defines the structure and purpose of related GPU resources such as buffers that will be used in a pipeline, and is used as a template when creating GPUBindGroups.
@@ -1571,7 +1579,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUBindGroupLayout)
         /// </summary>
         [<Global("GPUBindGroupLayout")>]
-        static member inline GPUBindGroupLayout: Exports.GPUBindGroupLayout.Type = nativeOnly
+        static member inline GPUBindGroupLayout: Exports.GPUBindGroupLayout__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>GPUBuffer</c>** interface of the WebGPU API represents a block of memory that can be used to store raw data to use in GPU operations.
@@ -1580,7 +1588,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUBuffer)
         /// </summary>
         [<Global("GPUBuffer")>]
-        static member inline GPUBuffer: Exports.GPUBuffer.Type = nativeOnly
+        static member inline GPUBuffer: Exports.GPUBuffer__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>GPUCanvasContext</c>** interface of the WebGPU API represents the WebGPU rendering context of a <canvas> element, returned via an HTMLCanvasElement.getContext() call with a contextType of "webgpu".
@@ -1589,7 +1597,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUCanvasContext)
         /// </summary>
         [<Global("GPUCanvasContext")>]
-        static member inline GPUCanvasContext: Exports.GPUCanvasContext.Type = nativeOnly
+        static member inline GPUCanvasContext: Exports.GPUCanvasContext__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>GPUCommandBuffer</c>** interface of the WebGPU API represents a pre-recorded list of GPU commands that can be submitted to a GPUQueue for execution.
@@ -1598,7 +1606,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUCommandBuffer)
         /// </summary>
         [<Global("GPUCommandBuffer")>]
-        static member inline GPUCommandBuffer: Exports.GPUCommandBuffer.Type = nativeOnly
+        static member inline GPUCommandBuffer: Exports.GPUCommandBuffer__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>GPUCommandEncoder</c>** interface of the WebGPU API represents an encoder that collects a sequence of GPU commands to be issued to the GPU.
@@ -1607,7 +1615,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUCommandEncoder)
         /// </summary>
         [<Global("GPUCommandEncoder")>]
-        static member inline GPUCommandEncoder: Exports.GPUCommandEncoder.Type = nativeOnly
+        static member inline GPUCommandEncoder: Exports.GPUCommandEncoder__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>GPUCompilationInfo</c>** interface of the WebGPU API represents an array of GPUCompilationMessage objects generated by the GPU shader module compiler to help diagnose problems with shader code.
@@ -1616,7 +1624,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUCompilationInfo)
         /// </summary>
         [<Global("GPUCompilationInfo")>]
-        static member inline GPUCompilationInfo: Exports.GPUCompilationInfo.Type = nativeOnly
+        static member inline GPUCompilationInfo: Exports.GPUCompilationInfo__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>GPUCompilationMessage</c>** interface of the WebGPU API represents a single informational, warning, or error message generated by the GPU shader module compiler.
@@ -1625,7 +1633,8 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUCompilationMessage)
         /// </summary>
         [<Global("GPUCompilationMessage")>]
-        static member inline GPUCompilationMessage: Exports.GPUCompilationMessage.Type = nativeOnly
+        static member inline GPUCompilationMessage: Exports.GPUCompilationMessage__.Type =
+            nativeOnly
 
         /// <summary>
         /// The **<c>GPUComputePassEncoder</c>** interface of the WebGPU API encodes commands related to controlling the compute shader stage, as issued by a GPUComputePipeline. It forms part of the overall encoding activity of a GPUCommandEncoder.
@@ -1634,7 +1643,8 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUComputePassEncoder)
         /// </summary>
         [<Global("GPUComputePassEncoder")>]
-        static member inline GPUComputePassEncoder: Exports.GPUComputePassEncoder.Type = nativeOnly
+        static member inline GPUComputePassEncoder: Exports.GPUComputePassEncoder__.Type =
+            nativeOnly
 
         /// <summary>
         /// The **<c>GPUComputePipeline</c>** interface of the WebGPU API represents a pipeline that controls the compute shader stage and can be used in a GPUComputePassEncoder.
@@ -1643,7 +1653,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUComputePipeline)
         /// </summary>
         [<Global("GPUComputePipeline")>]
-        static member inline GPUComputePipeline: Exports.GPUComputePipeline.Type = nativeOnly
+        static member inline GPUComputePipeline: Exports.GPUComputePipeline__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>GPUDevice</c>** interface of the WebGPU API represents a logical GPU device. This is the main interface through which the majority of WebGPU functionality is accessed.
@@ -1652,7 +1662,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUDevice)
         /// </summary>
         [<Global("GPUDevice")>]
-        static member inline GPUDevice: Exports.GPUDevice.Type = nativeOnly
+        static member inline GPUDevice: Exports.GPUDevice__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>GPUDeviceLostInfo</c>** interface of the WebGPU API represents the object returned when the GPUDevice.lost Promise resolves. This provides information as to why a device has been lost.
@@ -1661,7 +1671,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUDeviceLostInfo)
         /// </summary>
         [<Global("GPUDeviceLostInfo")>]
-        static member inline GPUDeviceLostInfo: Exports.GPUDeviceLostInfo.Type = nativeOnly
+        static member inline GPUDeviceLostInfo: Exports.GPUDeviceLostInfo__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>GPUError</c>** interface of the WebGPU API is the base interface for errors surfaced by GPUDevice.popErrorScope and the uncapturederror event.
@@ -1670,7 +1680,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUError)
         /// </summary>
         [<Global("GPUError")>]
-        static member inline GPUError: Exports.GPUError.Type = nativeOnly
+        static member inline GPUError: Exports.GPUError__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>GPUExternalTexture</c>** interface of the WebGPU API represents a wrapper object containing an HTMLVideoElement snapshot that can be used as a texture in GPU rendering operations.
@@ -1679,7 +1689,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUExternalTexture)
         /// </summary>
         [<Global("GPUExternalTexture")>]
-        static member inline GPUExternalTexture: Exports.GPUExternalTexture.Type = nativeOnly
+        static member inline GPUExternalTexture: Exports.GPUExternalTexture__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>GPUInternalError</c>** interface of the WebGPU API describes an application error indicating that an operation failed for a system or implementation-specific reason, even when all validation requirements were satisfied.
@@ -1688,7 +1698,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUInternalError)
         /// </summary>
         [<Global("GPUInternalError")>]
-        static member inline GPUInternalError: Exports.GPUInternalError.Type = nativeOnly
+        static member inline GPUInternalError: Exports.GPUInternalError__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>GPUOutOfMemoryError</c>** interface of the WebGPU API describes an out-of-memory (oom) error indicating that there was not enough free memory to complete the requested operation.
@@ -1697,7 +1707,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUOutOfMemoryError)
         /// </summary>
         [<Global("GPUOutOfMemoryError")>]
-        static member inline GPUOutOfMemoryError: Exports.GPUOutOfMemoryError.Type = nativeOnly
+        static member inline GPUOutOfMemoryError: Exports.GPUOutOfMemoryError__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>GPUPipelineError</c>** interface of the WebGPU API describes a pipeline failure. This is the value received when a Promise returned by a GPUDevice.createComputePipelineAsync() or GPUDevice.createRenderPipelineAsync() call rejects.
@@ -1706,7 +1716,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUPipelineError)
         /// </summary>
         [<Global("GPUPipelineError")>]
-        static member inline GPUPipelineError: Exports.GPUPipelineError.Type = nativeOnly
+        static member inline GPUPipelineError: Exports.GPUPipelineError__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>GPUPipelineLayout</c>** interface of the WebGPU API defines the GPUBindGroupLayouts used by a pipeline. GPUBindGroups used with the pipeline during command encoding must have compatible GPUBindGroupLayouts.
@@ -1715,7 +1725,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUPipelineLayout)
         /// </summary>
         [<Global("GPUPipelineLayout")>]
-        static member inline GPUPipelineLayout: Exports.GPUPipelineLayout.Type = nativeOnly
+        static member inline GPUPipelineLayout: Exports.GPUPipelineLayout__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>GPUQuerySet</c>** interface of the WebGPU API is used to record the results of queries on passes, such as occlusion or timestamp queries.
@@ -1724,7 +1734,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUQuerySet)
         /// </summary>
         [<Global("GPUQuerySet")>]
-        static member inline GPUQuerySet: Exports.GPUQuerySet.Type = nativeOnly
+        static member inline GPUQuerySet: Exports.GPUQuerySet__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>GPUQueue</c>** interface of the WebGPU API controls execution of encoded commands on the GPU.
@@ -1733,7 +1743,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUQueue)
         /// </summary>
         [<Global("GPUQueue")>]
-        static member inline GPUQueue: Exports.GPUQueue.Type = nativeOnly
+        static member inline GPUQueue: Exports.GPUQueue__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>GPURenderBundle</c>** interface of the WebGPU API represents a container for pre-recorded bundles of commands.
@@ -1742,7 +1752,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPURenderBundle)
         /// </summary>
         [<Global("GPURenderBundle")>]
-        static member inline GPURenderBundle: Exports.GPURenderBundle.Type = nativeOnly
+        static member inline GPURenderBundle: Exports.GPURenderBundle__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>GPURenderBundleEncoder</c>** interface of the WebGPU API is used to pre-record bundles of commands.
@@ -1751,7 +1761,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPURenderBundleEncoder)
         /// </summary>
         [<Global("GPURenderBundleEncoder")>]
-        static member inline GPURenderBundleEncoder: Exports.GPURenderBundleEncoder.Type =
+        static member inline GPURenderBundleEncoder: Exports.GPURenderBundleEncoder__.Type =
             nativeOnly
 
         /// <summary>
@@ -1761,7 +1771,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPURenderPassEncoder)
         /// </summary>
         [<Global("GPURenderPassEncoder")>]
-        static member inline GPURenderPassEncoder: Exports.GPURenderPassEncoder.Type = nativeOnly
+        static member inline GPURenderPassEncoder: Exports.GPURenderPassEncoder__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>GPURenderPipeline</c>** interface of the WebGPU API represents a pipeline that controls the vertex and fragment shader stages and can be used in a GPURenderPassEncoder or GPURenderBundleEncoder.
@@ -1770,7 +1780,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPURenderPipeline)
         /// </summary>
         [<Global("GPURenderPipeline")>]
-        static member inline GPURenderPipeline: Exports.GPURenderPipeline.Type = nativeOnly
+        static member inline GPURenderPipeline: Exports.GPURenderPipeline__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>GPUSampler</c>** interface of the WebGPU API represents an object that can control how shaders transform and filter texture resource data.
@@ -1779,7 +1789,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUSampler)
         /// </summary>
         [<Global("GPUSampler")>]
-        static member inline GPUSampler: Exports.GPUSampler.Type = nativeOnly
+        static member inline GPUSampler: Exports.GPUSampler__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>GPUShaderModule</c>** interface of the WebGPU API represents an internal shader module object, a container for WGSL shader code that can be submitted to the GPU for execution by a pipeline.
@@ -1788,7 +1798,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUShaderModule)
         /// </summary>
         [<Global("GPUShaderModule")>]
-        static member inline GPUShaderModule: Exports.GPUShaderModule.Type = nativeOnly
+        static member inline GPUShaderModule: Exports.GPUShaderModule__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>GPUSupportedFeatures</c>** interface of the WebGPU API is a Set-like object that describes additional functionality supported by a GPUAdapter.
@@ -1797,7 +1807,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUSupportedFeatures)
         /// </summary>
         [<Global("GPUSupportedFeatures")>]
-        static member inline GPUSupportedFeatures: Exports.GPUSupportedFeatures.Type = nativeOnly
+        static member inline GPUSupportedFeatures: Exports.GPUSupportedFeatures__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>GPUSupportedLimits</c>** interface of the WebGPU API describes the limits supported by a GPUAdapter.
@@ -1806,7 +1816,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUSupportedLimits)
         /// </summary>
         [<Global("GPUSupportedLimits")>]
-        static member inline GPUSupportedLimits: Exports.GPUSupportedLimits.Type = nativeOnly
+        static member inline GPUSupportedLimits: Exports.GPUSupportedLimits__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>GPUTexture</c>** interface of the WebGPU API represents a container used to store 1D, 2D, or 3D arrays of data, such as images, to use in GPU rendering operations.
@@ -1815,7 +1825,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUTexture)
         /// </summary>
         [<Global("GPUTexture")>]
-        static member inline GPUTexture: Exports.GPUTexture.Type = nativeOnly
+        static member inline GPUTexture: Exports.GPUTexture__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>GPUTextureView</c>** interface of the WebGPU API represents a view into a subset of the texture resources defined by a particular GPUTexture.
@@ -1824,7 +1834,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUTextureView)
         /// </summary>
         [<Global("GPUTextureView")>]
-        static member inline GPUTextureView: Exports.GPUTextureView.Type = nativeOnly
+        static member inline GPUTextureView: Exports.GPUTextureView__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>GPUUncapturedErrorEvent</c>** interface of the WebGPU API is the event object type for the GPUDevice uncapturederror event, used for telemetry and to report unexpected errors.
@@ -1833,7 +1843,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUUncapturedErrorEvent)
         /// </summary>
         [<Global("GPUUncapturedErrorEvent")>]
-        static member inline GPUUncapturedErrorEvent: Exports.GPUUncapturedErrorEvent.Type =
+        static member inline GPUUncapturedErrorEvent: Exports.GPUUncapturedErrorEvent__.Type =
             nativeOnly
 
         /// <summary>
@@ -1843,7 +1853,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUValidationError)
         /// </summary>
         [<Global("GPUValidationError")>]
-        static member inline GPUValidationError: Exports.GPUValidationError.Type = nativeOnly
+        static member inline GPUValidationError: Exports.GPUValidationError__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>GainNode</c>** interface represents a change in volume. It is an AudioNode audio-processing module that causes a given gain to be applied to the input data before its propagation to the output. A GainNode always has exactly one input and one output, both with the same number of channels.
@@ -1851,7 +1861,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GainNode)
         /// </summary>
         [<Global("GainNode")>]
-        static member inline GainNode: Exports.GainNode.Type = nativeOnly
+        static member inline GainNode: Exports.GainNode__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>Gamepad</c>** interface of the Gamepad API defines an individual gamepad or other controller, allowing access to information such as button presses, axis positions, and id.
@@ -1859,7 +1869,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Gamepad)
         /// </summary>
         [<Global("Gamepad")>]
-        static member inline Gamepad: Exports.Gamepad.Type = nativeOnly
+        static member inline Gamepad: Exports.Gamepad__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>GamepadButton</c>** interface defines an individual button of a gamepad or other controller, allowing access to the current state of different types of buttons available on the control device.
@@ -1867,7 +1877,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GamepadButton)
         /// </summary>
         [<Global("GamepadButton")>]
-        static member inline GamepadButton: Exports.GamepadButton.Type = nativeOnly
+        static member inline GamepadButton: Exports.GamepadButton__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>GamepadEvent</c>** interface of the Gamepad API contains references to gamepads connected to the system, which is what the gamepad events gamepadconnected and gamepaddisconnected are fired in response to.
@@ -1875,7 +1885,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GamepadEvent)
         /// </summary>
         [<Global("GamepadEvent")>]
-        static member inline GamepadEvent: Exports.GamepadEvent.Type = nativeOnly
+        static member inline GamepadEvent: Exports.GamepadEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>GamepadHapticActuator</c>** interface of the Gamepad API represents hardware in the controller designed to provide haptic feedback to the user (if available), most commonly vibration hardware.
@@ -1883,7 +1893,8 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GamepadHapticActuator)
         /// </summary>
         [<Global("GamepadHapticActuator")>]
-        static member inline GamepadHapticActuator: Exports.GamepadHapticActuator.Type = nativeOnly
+        static member inline GamepadHapticActuator: Exports.GamepadHapticActuator__.Type =
+            nativeOnly
 
         /// <summary>
         /// The **<c>Geolocation</c>** interface represents an object able to obtain the position of the device programmatically. It gives Web content access to the location of the device. This allows a website or app to offer customized results based on the user's location.
@@ -1891,7 +1902,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Geolocation)
         /// </summary>
         [<Global("Geolocation")>]
-        static member inline Geolocation: Exports.Geolocation.Type = nativeOnly
+        static member inline Geolocation: Exports.Geolocation__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>GeolocationCoordinates</c>** interface represents the position and altitude of the device on Earth, as well as the accuracy with which these properties are calculated. The geographic position information is provided in terms of World Geodetic System coordinates (WGS84).
@@ -1900,7 +1911,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GeolocationCoordinates)
         /// </summary>
         [<Global("GeolocationCoordinates")>]
-        static member inline GeolocationCoordinates: Exports.GeolocationCoordinates.Type =
+        static member inline GeolocationCoordinates: Exports.GeolocationCoordinates__.Type =
             nativeOnly
 
         /// <summary>
@@ -1910,7 +1921,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GeolocationPosition)
         /// </summary>
         [<Global("GeolocationPosition")>]
-        static member inline GeolocationPosition: Exports.GeolocationPosition.Type = nativeOnly
+        static member inline GeolocationPosition: Exports.GeolocationPosition__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>GeolocationPositionError</c>** interface represents the reason of an error occurring when using the geolocating device.
@@ -1918,7 +1929,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/GeolocationPositionError)
         /// </summary>
         [<Global("GeolocationPositionError")>]
-        static member inline GeolocationPositionError: Exports.GeolocationPositionError.Type =
+        static member inline GeolocationPositionError: Exports.GeolocationPositionError__.Type =
             nativeOnly
 
         /// <summary>
@@ -1927,7 +1938,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLAllCollection)
         /// </summary>
         [<Global("HTMLAllCollection")>]
-        static member inline HTMLAllCollection: Exports.HTMLAllCollection.Type = nativeOnly
+        static member inline HTMLAllCollection: Exports.HTMLAllCollection__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLAnchorElement</c>** interface represents hyperlink elements and provides special properties and methods (beyond those of the regular HTMLElement object interface that they inherit from) for manipulating the layout and presentation of such elements. This interface corresponds to <a> element; not to be confused with <link>, which is represented by HTMLLinkElement.
@@ -1935,7 +1946,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLAnchorElement)
         /// </summary>
         [<Global("HTMLAnchorElement")>]
-        static member inline HTMLAnchorElement: Exports.HTMLAnchorElement.Type = nativeOnly
+        static member inline HTMLAnchorElement: Exports.HTMLAnchorElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLAreaElement</c>** interface provides special properties and methods (beyond those of the regular object HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of <area> elements.
@@ -1943,7 +1954,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLAreaElement)
         /// </summary>
         [<Global("HTMLAreaElement")>]
-        static member inline HTMLAreaElement: Exports.HTMLAreaElement.Type = nativeOnly
+        static member inline HTMLAreaElement: Exports.HTMLAreaElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLAudioElement</c>** interface provides access to the properties of <audio> elements, as well as methods to manipulate them.
@@ -1951,7 +1962,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLAudioElement)
         /// </summary>
         [<Global("HTMLAudioElement")>]
-        static member inline HTMLAudioElement: Exports.HTMLAudioElement.Type = nativeOnly
+        static member inline HTMLAudioElement: Exports.HTMLAudioElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLBRElement</c>** interface represents an HTML line break element (<br>). It inherits from HTMLElement.
@@ -1959,7 +1970,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLBRElement)
         /// </summary>
         [<Global("HTMLBRElement")>]
-        static member inline HTMLBRElement: Exports.HTMLBRElement.Type = nativeOnly
+        static member inline HTMLBRElement: Exports.HTMLBRElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLBaseElement</c>** interface contains the base URI for a document. This object inherits all of the properties and methods as described in the HTMLElement interface.
@@ -1967,7 +1978,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLBaseElement)
         /// </summary>
         [<Global("HTMLBaseElement")>]
-        static member inline HTMLBaseElement: Exports.HTMLBaseElement.Type = nativeOnly
+        static member inline HTMLBaseElement: Exports.HTMLBaseElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLBodyElement</c>** interface provides special properties (beyond those inherited from the regular HTMLElement interface) for manipulating <body> elements.
@@ -1975,7 +1986,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLBodyElement)
         /// </summary>
         [<Global("HTMLBodyElement")>]
-        static member inline HTMLBodyElement: Exports.HTMLBodyElement.Type = nativeOnly
+        static member inline HTMLBodyElement: Exports.HTMLBodyElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLButtonElement</c>** interface provides properties and methods (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating <button> elements.
@@ -1983,7 +1994,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLButtonElement)
         /// </summary>
         [<Global("HTMLButtonElement")>]
-        static member inline HTMLButtonElement: Exports.HTMLButtonElement.Type = nativeOnly
+        static member inline HTMLButtonElement: Exports.HTMLButtonElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLCanvasElement</c>** interface provides properties and methods for manipulating the layout and presentation of <canvas> elements. The HTMLCanvasElement interface also inherits the properties and methods of the HTMLElement interface.
@@ -1991,10 +2002,10 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLCanvasElement)
         /// </summary>
         [<Global("HTMLCanvasElement")>]
-        static member inline HTMLCanvasElement: Exports.HTMLCanvasElement.Type = nativeOnly
+        static member inline HTMLCanvasElement: Exports.HTMLCanvasElement__.Type = nativeOnly
 
         [<Global("HTMLCollection")>]
-        static member inline HTMLCollection: Exports.HTMLCollection.Type = nativeOnly
+        static member inline HTMLCollection: Exports.HTMLCollection__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLDListElement</c>** interface provides special properties (beyond those of the regular HTMLElement interface it also has available to it by inheritance) for manipulating definition list (<dl>) elements.
@@ -2002,7 +2013,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLDListElement)
         /// </summary>
         [<Global("HTMLDListElement")>]
-        static member inline HTMLDListElement: Exports.HTMLDListElement.Type = nativeOnly
+        static member inline HTMLDListElement: Exports.HTMLDListElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLDataElement</c>** interface provides special properties (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating <data> elements.
@@ -2010,7 +2021,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLDataElement)
         /// </summary>
         [<Global("HTMLDataElement")>]
-        static member inline HTMLDataElement: Exports.HTMLDataElement.Type = nativeOnly
+        static member inline HTMLDataElement: Exports.HTMLDataElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLDataListElement</c>** interface provides special properties (beyond the HTMLElement object interface it also has available to it by inheritance) to manipulate <datalist> elements and their content.
@@ -2018,7 +2029,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLDataListElement)
         /// </summary>
         [<Global("HTMLDataListElement")>]
-        static member inline HTMLDataListElement: Exports.HTMLDataListElement.Type = nativeOnly
+        static member inline HTMLDataListElement: Exports.HTMLDataListElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLDetailsElement</c>** interface provides special properties (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating <details> elements.
@@ -2026,7 +2037,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLDetailsElement)
         /// </summary>
         [<Global("HTMLDetailsElement")>]
-        static member inline HTMLDetailsElement: Exports.HTMLDetailsElement.Type = nativeOnly
+        static member inline HTMLDetailsElement: Exports.HTMLDetailsElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLDialogElement</c>** interface provides methods to manipulate <dialog> elements. It inherits properties and methods from the HTMLElement interface.
@@ -2034,11 +2045,11 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLDialogElement)
         /// </summary>
         [<Global("HTMLDialogElement")>]
-        static member inline HTMLDialogElement: Exports.HTMLDialogElement.Type = nativeOnly
+        static member inline HTMLDialogElement: Exports.HTMLDialogElement__.Type = nativeOnly
 
         [<Global("HTMLDirectoryElement")>]
         [<Obsolete>]
-        static member inline HTMLDirectoryElement: Exports.HTMLDirectoryElement.Type = nativeOnly
+        static member inline HTMLDirectoryElement: Exports.HTMLDirectoryElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLDivElement</c>** interface provides special properties (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating <div> elements.
@@ -2046,13 +2057,13 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLDivElement)
         /// </summary>
         [<Global("HTMLDivElement")>]
-        static member inline HTMLDivElement: Exports.HTMLDivElement.Type = nativeOnly
+        static member inline HTMLDivElement: Exports.HTMLDivElement__.Type = nativeOnly
 
         /// <summary>
         /// For historical reasons, Window objects have a **<c>window.HTMLDocument</c>** property whose value is the Document interface. So you can think of HTMLDocument as an alias for Document, and you can find documentation for HTMLDocument members under the documentation for the Document interface.
         /// </summary>
         [<Global("HTMLDocument")>]
-        static member inline HTMLDocument: Exports.HTMLDocument.Type = nativeOnly
+        static member inline HTMLDocument: Exports.HTMLDocument__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLElement</c>** interface represents any HTML element. Some elements directly implement this interface, while others implement it via an interface that inherits it.
@@ -2060,7 +2071,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLElement)
         /// </summary>
         [<Global("HTMLElement")>]
-        static member inline HTMLElement: Exports.HTMLElement.Type = nativeOnly
+        static member inline HTMLElement: Exports.HTMLElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLEmbedElement</c>** interface provides special properties (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating <embed> elements.
@@ -2068,7 +2079,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLEmbedElement)
         /// </summary>
         [<Global("HTMLEmbedElement")>]
-        static member inline HTMLEmbedElement: Exports.HTMLEmbedElement.Type = nativeOnly
+        static member inline HTMLEmbedElement: Exports.HTMLEmbedElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLFieldSetElement</c>** interface provides special properties and methods (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of <fieldset> elements.
@@ -2076,14 +2087,14 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLFieldSetElement)
         /// </summary>
         [<Global("HTMLFieldSetElement")>]
-        static member inline HTMLFieldSetElement: Exports.HTMLFieldSetElement.Type = nativeOnly
+        static member inline HTMLFieldSetElement: Exports.HTMLFieldSetElement__.Type = nativeOnly
 
         /// <summary>
         /// Implements the document object model (DOM) representation of the font element. The HTML Font Element <font> defines the font size, font face and color of text.
         /// </summary>
         [<Global("HTMLFontElement")>]
         [<Obsolete>]
-        static member inline HTMLFontElement: Exports.HTMLFontElement.Type = nativeOnly
+        static member inline HTMLFontElement: Exports.HTMLFontElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLFormControlsCollection</c>** interface represents a collection of HTML form control elements, returned by the HTMLFormElement interface's elements property.
@@ -2091,7 +2102,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLFormControlsCollection)
         /// </summary>
         [<Global("HTMLFormControlsCollection")>]
-        static member inline HTMLFormControlsCollection: Exports.HTMLFormControlsCollection.Type =
+        static member inline HTMLFormControlsCollection: Exports.HTMLFormControlsCollection__.Type =
             nativeOnly
 
         /// <summary>
@@ -2100,18 +2111,18 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLFormElement)
         /// </summary>
         [<Global("HTMLFormElement")>]
-        static member inline HTMLFormElement: Exports.HTMLFormElement.Type = nativeOnly
+        static member inline HTMLFormElement: Exports.HTMLFormElement__.Type = nativeOnly
 
         [<Global("HTMLFrameElement")>]
         [<Obsolete>]
-        static member inline HTMLFrameElement: Exports.HTMLFrameElement.Type = nativeOnly
+        static member inline HTMLFrameElement: Exports.HTMLFrameElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLFrameSetElement</c>** interface provides special properties (beyond those of the regular HTMLElement interface they also inherit) for manipulating <frameset> elements.
         /// </summary>
         [<Global("HTMLFrameSetElement")>]
         [<Obsolete>]
-        static member inline HTMLFrameSetElement: Exports.HTMLFrameSetElement.Type = nativeOnly
+        static member inline HTMLFrameSetElement: Exports.HTMLFrameSetElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLHRElement</c>** interface provides special properties (beyond those of the HTMLElement interface it also has available to it by inheritance) for manipulating <hr> elements.
@@ -2119,7 +2130,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLHRElement)
         /// </summary>
         [<Global("HTMLHRElement")>]
-        static member inline HTMLHRElement: Exports.HTMLHRElement.Type = nativeOnly
+        static member inline HTMLHRElement: Exports.HTMLHRElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLHeadElement</c>** interface contains the descriptive information, or metadata, for a document. This object inherits all of the properties and methods described in the HTMLElement interface.
@@ -2127,7 +2138,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLHeadElement)
         /// </summary>
         [<Global("HTMLHeadElement")>]
-        static member inline HTMLHeadElement: Exports.HTMLHeadElement.Type = nativeOnly
+        static member inline HTMLHeadElement: Exports.HTMLHeadElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLHeadingElement</c>** interface represents the different heading elements, <h1> through <h6>. It inherits methods and properties from the HTMLElement interface.
@@ -2135,7 +2146,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLHeadingElement)
         /// </summary>
         [<Global("HTMLHeadingElement")>]
-        static member inline HTMLHeadingElement: Exports.HTMLHeadingElement.Type = nativeOnly
+        static member inline HTMLHeadingElement: Exports.HTMLHeadingElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLHtmlElement</c>** interface serves as the root node for a given HTML document. This object inherits the properties and methods described in the HTMLElement interface.
@@ -2143,7 +2154,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLHtmlElement)
         /// </summary>
         [<Global("HTMLHtmlElement")>]
-        static member inline HTMLHtmlElement: Exports.HTMLHtmlElement.Type = nativeOnly
+        static member inline HTMLHtmlElement: Exports.HTMLHtmlElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLIFrameElement</c>** interface provides special properties and methods (beyond those of the HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of inline frame elements.
@@ -2151,7 +2162,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLIFrameElement)
         /// </summary>
         [<Global("HTMLIFrameElement")>]
-        static member inline HTMLIFrameElement: Exports.HTMLIFrameElement.Type = nativeOnly
+        static member inline HTMLIFrameElement: Exports.HTMLIFrameElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLImageElement</c>** interface represents an HTML <img> element, providing the properties and methods used to manipulate image elements.
@@ -2159,7 +2170,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLImageElement)
         /// </summary>
         [<Global("HTMLImageElement")>]
-        static member inline HTMLImageElement: Exports.HTMLImageElement.Type = nativeOnly
+        static member inline HTMLImageElement: Exports.HTMLImageElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLInputElement</c>** interface provides special properties and methods for manipulating the options, layout, and presentation of <input> elements.
@@ -2167,7 +2178,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLInputElement)
         /// </summary>
         [<Global("HTMLInputElement")>]
-        static member inline HTMLInputElement: Exports.HTMLInputElement.Type = nativeOnly
+        static member inline HTMLInputElement: Exports.HTMLInputElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLLIElement</c>** interface exposes specific properties and methods (beyond those defined by regular HTMLElement interface it also has available to it by inheritance) for manipulating list elements.
@@ -2175,7 +2186,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLLIElement)
         /// </summary>
         [<Global("HTMLLIElement")>]
-        static member inline HTMLLIElement: Exports.HTMLLIElement.Type = nativeOnly
+        static member inline HTMLLIElement: Exports.HTMLLIElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLLabelElement</c>** interface gives access to properties specific to <label> elements. It inherits methods and properties from the base HTMLElement interface.
@@ -2183,7 +2194,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLLabelElement)
         /// </summary>
         [<Global("HTMLLabelElement")>]
-        static member inline HTMLLabelElement: Exports.HTMLLabelElement.Type = nativeOnly
+        static member inline HTMLLabelElement: Exports.HTMLLabelElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLLegendElement</c>** is an interface allowing to access properties of the <legend> elements. It inherits properties and methods from the HTMLElement interface.
@@ -2191,7 +2202,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLLegendElement)
         /// </summary>
         [<Global("HTMLLegendElement")>]
-        static member inline HTMLLegendElement: Exports.HTMLLegendElement.Type = nativeOnly
+        static member inline HTMLLegendElement: Exports.HTMLLegendElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLLinkElement</c>** interface represents reference information for external resources and the relationship of those resources to a document and vice versa (corresponds to <link> element; not to be confused with <a>, which is represented by HTMLAnchorElement). This object inherits all of the properties and methods of the HTMLElement interface.
@@ -2199,7 +2210,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLLinkElement)
         /// </summary>
         [<Global("HTMLLinkElement")>]
-        static member inline HTMLLinkElement: Exports.HTMLLinkElement.Type = nativeOnly
+        static member inline HTMLLinkElement: Exports.HTMLLinkElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLMapElement</c>** interface provides special properties and methods (beyond those of the regular object HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of map elements.
@@ -2207,14 +2218,14 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLMapElement)
         /// </summary>
         [<Global("HTMLMapElement")>]
-        static member inline HTMLMapElement: Exports.HTMLMapElement.Type = nativeOnly
+        static member inline HTMLMapElement: Exports.HTMLMapElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLMarqueeElement</c>** interface provides methods to manipulate <marquee> elements.
         /// </summary>
         [<Global("HTMLMarqueeElement")>]
         [<Obsolete>]
-        static member inline HTMLMarqueeElement: Exports.HTMLMarqueeElement.Type = nativeOnly
+        static member inline HTMLMarqueeElement: Exports.HTMLMarqueeElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLMediaElement</c>** interface adds to HTMLElement the properties and methods needed to support basic media-related capabilities that are common to audio and video.
@@ -2222,7 +2233,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement)
         /// </summary>
         [<Global("HTMLMediaElement")>]
-        static member inline HTMLMediaElement: Exports.HTMLMediaElement.Type = nativeOnly
+        static member inline HTMLMediaElement: Exports.HTMLMediaElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLMenuElement</c>** interface provides additional properties (beyond those inherited from the HTMLElement interface) for manipulating a <menu> element. <menu> is a semantic alternative to the <ul> element.
@@ -2230,7 +2241,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLMenuElement)
         /// </summary>
         [<Global("HTMLMenuElement")>]
-        static member inline HTMLMenuElement: Exports.HTMLMenuElement.Type = nativeOnly
+        static member inline HTMLMenuElement: Exports.HTMLMenuElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLMetaElement</c>** interface contains descriptive metadata about a document provided in HTML as <meta> elements. This interface inherits all of the properties and methods described in the HTMLElement interface.
@@ -2238,7 +2249,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLMetaElement)
         /// </summary>
         [<Global("HTMLMetaElement")>]
-        static member inline HTMLMetaElement: Exports.HTMLMetaElement.Type = nativeOnly
+        static member inline HTMLMetaElement: Exports.HTMLMetaElement__.Type = nativeOnly
 
         /// <summary>
         /// The HTML <meter> elements expose the **<c>HTMLMeterElement</c>** interface, which provides special properties and methods (beyond the HTMLElement object interface they also have available to them by inheritance) for manipulating the layout and presentation of <meter> elements.
@@ -2246,7 +2257,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLMeterElement)
         /// </summary>
         [<Global("HTMLMeterElement")>]
-        static member inline HTMLMeterElement: Exports.HTMLMeterElement.Type = nativeOnly
+        static member inline HTMLMeterElement: Exports.HTMLMeterElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLModElement</c>** interface provides special properties (beyond the regular methods and properties available through the HTMLElement interface they also have available to them by inheritance) for manipulating modification elements, that is <del> and <ins>.
@@ -2254,7 +2265,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLModElement)
         /// </summary>
         [<Global("HTMLModElement")>]
-        static member inline HTMLModElement: Exports.HTMLModElement.Type = nativeOnly
+        static member inline HTMLModElement: Exports.HTMLModElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLOListElement</c>** interface provides special properties (beyond those defined on the regular HTMLElement interface it also has available to it by inheritance) for manipulating ordered list elements.
@@ -2262,7 +2273,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLOListElement)
         /// </summary>
         [<Global("HTMLOListElement")>]
-        static member inline HTMLOListElement: Exports.HTMLOListElement.Type = nativeOnly
+        static member inline HTMLOListElement: Exports.HTMLOListElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLObjectElement</c>** interface provides special properties and methods (beyond those on the HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of <object> element, representing external resources.
@@ -2270,7 +2281,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLObjectElement)
         /// </summary>
         [<Global("HTMLObjectElement")>]
-        static member inline HTMLObjectElement: Exports.HTMLObjectElement.Type = nativeOnly
+        static member inline HTMLObjectElement: Exports.HTMLObjectElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLOptGroupElement</c>** interface provides special properties and methods (beyond the regular HTMLElement object interface they also have available to them by inheritance) for manipulating the layout and presentation of <optgroup> elements.
@@ -2278,7 +2289,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLOptGroupElement)
         /// </summary>
         [<Global("HTMLOptGroupElement")>]
-        static member inline HTMLOptGroupElement: Exports.HTMLOptGroupElement.Type = nativeOnly
+        static member inline HTMLOptGroupElement: Exports.HTMLOptGroupElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLOptionElement</c>** interface represents <option> elements and inherits all properties and methods of the HTMLElement interface.
@@ -2286,7 +2297,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLOptionElement)
         /// </summary>
         [<Global("HTMLOptionElement")>]
-        static member inline HTMLOptionElement: Exports.HTMLOptionElement.Type = nativeOnly
+        static member inline HTMLOptionElement: Exports.HTMLOptionElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLOptionsCollection</c>** interface represents a collection of <option> HTML elements (in document order) and offers methods and properties for selecting from the list as well as optionally altering its items. This object is returned only by the options property of select.
@@ -2294,7 +2305,8 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLOptionsCollection)
         /// </summary>
         [<Global("HTMLOptionsCollection")>]
-        static member inline HTMLOptionsCollection: Exports.HTMLOptionsCollection.Type = nativeOnly
+        static member inline HTMLOptionsCollection: Exports.HTMLOptionsCollection__.Type =
+            nativeOnly
 
         /// <summary>
         /// The **<c>HTMLOutputElement</c>** interface provides properties and methods (beyond those inherited from HTMLElement) for manipulating the layout and presentation of <output> elements.
@@ -2302,7 +2314,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLOutputElement)
         /// </summary>
         [<Global("HTMLOutputElement")>]
-        static member inline HTMLOutputElement: Exports.HTMLOutputElement.Type = nativeOnly
+        static member inline HTMLOutputElement: Exports.HTMLOutputElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLParagraphElement</c>** interface provides special properties (beyond those of the regular HTMLElement object interface it inherits) for manipulating <p> elements.
@@ -2310,14 +2322,14 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLParagraphElement)
         /// </summary>
         [<Global("HTMLParagraphElement")>]
-        static member inline HTMLParagraphElement: Exports.HTMLParagraphElement.Type = nativeOnly
+        static member inline HTMLParagraphElement: Exports.HTMLParagraphElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLParamElement</c>** interface provides special properties (beyond those of the regular HTMLElement object interface it inherits) for manipulating <param> elements, representing a pair of a key and a value that acts as a parameter for an <object> element.
         /// </summary>
         [<Global("HTMLParamElement")>]
         [<Obsolete>]
-        static member inline HTMLParamElement: Exports.HTMLParamElement.Type = nativeOnly
+        static member inline HTMLParamElement: Exports.HTMLParamElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLPictureElement</c>** interface represents a <picture> HTML element. It doesn't implement specific properties or methods.
@@ -2325,7 +2337,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLPictureElement)
         /// </summary>
         [<Global("HTMLPictureElement")>]
-        static member inline HTMLPictureElement: Exports.HTMLPictureElement.Type = nativeOnly
+        static member inline HTMLPictureElement: Exports.HTMLPictureElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLPreElement</c>** interface exposes specific properties and methods (beyond those of the HTMLElement interface it also has available to it by inheritance) for manipulating a block of preformatted text (<pre>).
@@ -2333,7 +2345,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLPreElement)
         /// </summary>
         [<Global("HTMLPreElement")>]
-        static member inline HTMLPreElement: Exports.HTMLPreElement.Type = nativeOnly
+        static member inline HTMLPreElement: Exports.HTMLPreElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLProgressElement</c>** interface provides special properties and methods (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of <progress> elements.
@@ -2341,7 +2353,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLProgressElement)
         /// </summary>
         [<Global("HTMLProgressElement")>]
-        static member inline HTMLProgressElement: Exports.HTMLProgressElement.Type = nativeOnly
+        static member inline HTMLProgressElement: Exports.HTMLProgressElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLQuoteElement</c>** interface provides special properties and methods (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating quoting elements, like <blockquote> and <q>, but not the <cite> element.
@@ -2349,7 +2361,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLQuoteElement)
         /// </summary>
         [<Global("HTMLQuoteElement")>]
-        static member inline HTMLQuoteElement: Exports.HTMLQuoteElement.Type = nativeOnly
+        static member inline HTMLQuoteElement: Exports.HTMLQuoteElement__.Type = nativeOnly
 
         /// <summary>
         /// HTML <script> elements expose the **<c>HTMLScriptElement</c>** interface, which provides special properties and methods for manipulating the behavior and execution of <script> elements (beyond the inherited HTMLElement interface).
@@ -2357,7 +2369,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLScriptElement)
         /// </summary>
         [<Global("HTMLScriptElement")>]
-        static member inline HTMLScriptElement: Exports.HTMLScriptElement.Type = nativeOnly
+        static member inline HTMLScriptElement: Exports.HTMLScriptElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLSelectElement</c>** interface represents a <select> HTML Element. These elements also share all of the properties and methods of other HTML elements via the HTMLElement interface.
@@ -2365,7 +2377,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLSelectElement)
         /// </summary>
         [<Global("HTMLSelectElement")>]
-        static member inline HTMLSelectElement: Exports.HTMLSelectElement.Type = nativeOnly
+        static member inline HTMLSelectElement: Exports.HTMLSelectElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLSlotElement</c>** interface of the Shadow DOM API enables access to the name and assigned nodes of an HTML <slot> element.
@@ -2373,7 +2385,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLSlotElement)
         /// </summary>
         [<Global("HTMLSlotElement")>]
-        static member inline HTMLSlotElement: Exports.HTMLSlotElement.Type = nativeOnly
+        static member inline HTMLSlotElement: Exports.HTMLSlotElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLSourceElement</c>** interface provides special properties (beyond the regular HTMLElement object interface it also has available to it by inheritance) for manipulating <source> elements.
@@ -2381,7 +2393,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLSourceElement)
         /// </summary>
         [<Global("HTMLSourceElement")>]
-        static member inline HTMLSourceElement: Exports.HTMLSourceElement.Type = nativeOnly
+        static member inline HTMLSourceElement: Exports.HTMLSourceElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLSpanElement</c>** interface represents a <span> element and derives from the HTMLElement interface, but without implementing any additional properties or methods.
@@ -2389,7 +2401,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLSpanElement)
         /// </summary>
         [<Global("HTMLSpanElement")>]
-        static member inline HTMLSpanElement: Exports.HTMLSpanElement.Type = nativeOnly
+        static member inline HTMLSpanElement: Exports.HTMLSpanElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLStyleElement</c>** interface represents a <style> element. It inherits properties and methods from its parent, HTMLElement.
@@ -2397,7 +2409,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLStyleElement)
         /// </summary>
         [<Global("HTMLStyleElement")>]
-        static member inline HTMLStyleElement: Exports.HTMLStyleElement.Type = nativeOnly
+        static member inline HTMLStyleElement: Exports.HTMLStyleElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLTableCaptionElement</c>** interface provides special properties (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating table <caption> elements.
@@ -2405,7 +2417,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTableCaptionElement)
         /// </summary>
         [<Global("HTMLTableCaptionElement")>]
-        static member inline HTMLTableCaptionElement: Exports.HTMLTableCaptionElement.Type =
+        static member inline HTMLTableCaptionElement: Exports.HTMLTableCaptionElement__.Type =
             nativeOnly
 
         /// <summary>
@@ -2414,7 +2426,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTableCellElement)
         /// </summary>
         [<Global("HTMLTableCellElement")>]
-        static member inline HTMLTableCellElement: Exports.HTMLTableCellElement.Type = nativeOnly
+        static member inline HTMLTableCellElement: Exports.HTMLTableCellElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLTableColElement</c>** interface provides properties for manipulating single or grouped table column elements.
@@ -2422,7 +2434,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTableColElement)
         /// </summary>
         [<Global("HTMLTableColElement")>]
-        static member inline HTMLTableColElement: Exports.HTMLTableColElement.Type = nativeOnly
+        static member inline HTMLTableColElement: Exports.HTMLTableColElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLTableElement</c>** interface provides special properties and methods (beyond the regular HTMLElement object interface it also has available to it by inheritance) for manipulating the layout and presentation of tables in an HTML document.
@@ -2430,7 +2442,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTableElement)
         /// </summary>
         [<Global("HTMLTableElement")>]
-        static member inline HTMLTableElement: Exports.HTMLTableElement.Type = nativeOnly
+        static member inline HTMLTableElement: Exports.HTMLTableElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLTableRowElement</c>** interface provides special properties and methods (beyond the HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of rows in an HTML table.
@@ -2438,7 +2450,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTableRowElement)
         /// </summary>
         [<Global("HTMLTableRowElement")>]
-        static member inline HTMLTableRowElement: Exports.HTMLTableRowElement.Type = nativeOnly
+        static member inline HTMLTableRowElement: Exports.HTMLTableRowElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLTableSectionElement</c>** interface provides special properties and methods (beyond the HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of sections, that is headers, footers and bodies (<thead>, <tfoot>, and <tbody>, respectively) in an HTML table.
@@ -2446,7 +2458,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTableSectionElement)
         /// </summary>
         [<Global("HTMLTableSectionElement")>]
-        static member inline HTMLTableSectionElement: Exports.HTMLTableSectionElement.Type =
+        static member inline HTMLTableSectionElement: Exports.HTMLTableSectionElement__.Type =
             nativeOnly
 
         /// <summary>
@@ -2455,7 +2467,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTemplateElement)
         /// </summary>
         [<Global("HTMLTemplateElement")>]
-        static member inline HTMLTemplateElement: Exports.HTMLTemplateElement.Type = nativeOnly
+        static member inline HTMLTemplateElement: Exports.HTMLTemplateElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLTextAreaElement</c>** interface provides properties and methods for manipulating the layout and presentation of <textarea> elements.
@@ -2463,7 +2475,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTextAreaElement)
         /// </summary>
         [<Global("HTMLTextAreaElement")>]
-        static member inline HTMLTextAreaElement: Exports.HTMLTextAreaElement.Type = nativeOnly
+        static member inline HTMLTextAreaElement: Exports.HTMLTextAreaElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLTimeElement</c>** interface provides special properties (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating <time> elements.
@@ -2471,7 +2483,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTimeElement)
         /// </summary>
         [<Global("HTMLTimeElement")>]
-        static member inline HTMLTimeElement: Exports.HTMLTimeElement.Type = nativeOnly
+        static member inline HTMLTimeElement: Exports.HTMLTimeElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLTitleElement</c>** interface is implemented by a document's <title>. This element inherits all of the properties and methods of the HTMLElement interface.
@@ -2479,7 +2491,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTitleElement)
         /// </summary>
         [<Global("HTMLTitleElement")>]
-        static member inline HTMLTitleElement: Exports.HTMLTitleElement.Type = nativeOnly
+        static member inline HTMLTitleElement: Exports.HTMLTitleElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLTrackElement</c>** interface represents an HTML <track> element within the DOM. This element can be used as a child of either <audio> or <video> to specify a text track containing information such as closed captions or subtitles.
@@ -2487,7 +2499,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTrackElement)
         /// </summary>
         [<Global("HTMLTrackElement")>]
-        static member inline HTMLTrackElement: Exports.HTMLTrackElement.Type = nativeOnly
+        static member inline HTMLTrackElement: Exports.HTMLTrackElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLUListElement</c>** interface provides special properties (beyond those defined on the regular HTMLElement interface it also has available to it by inheritance) for manipulating unordered list (<ul>) elements.
@@ -2495,7 +2507,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLUListElement)
         /// </summary>
         [<Global("HTMLUListElement")>]
-        static member inline HTMLUListElement: Exports.HTMLUListElement.Type = nativeOnly
+        static member inline HTMLUListElement: Exports.HTMLUListElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HTMLUnknownElement</c>** interface represents an invalid HTML element and derives from the HTMLElement interface, but without implementing any additional properties or methods.
@@ -2503,7 +2515,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLUnknownElement)
         /// </summary>
         [<Global("HTMLUnknownElement")>]
-        static member inline HTMLUnknownElement: Exports.HTMLUnknownElement.Type = nativeOnly
+        static member inline HTMLUnknownElement: Exports.HTMLUnknownElement__.Type = nativeOnly
 
         /// <summary>
         /// Implemented by the <video> element, the **<c>HTMLVideoElement</c>** interface provides special properties and methods for manipulating video objects. It also inherits properties and methods of HTMLMediaElement and HTMLElement.
@@ -2511,7 +2523,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLVideoElement)
         /// </summary>
         [<Global("HTMLVideoElement")>]
-        static member inline HTMLVideoElement: Exports.HTMLVideoElement.Type = nativeOnly
+        static member inline HTMLVideoElement: Exports.HTMLVideoElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HashChangeEvent</c>** interface represents events that fire when the fragment identifier of the URL has changed.
@@ -2519,7 +2531,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HashChangeEvent)
         /// </summary>
         [<Global("HashChangeEvent")>]
-        static member inline HashChangeEvent: Exports.HashChangeEvent.Type = nativeOnly
+        static member inline HashChangeEvent: Exports.HashChangeEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>Headers</c>** interface of the Fetch API allows you to perform various actions on HTTP request and response headers. These actions include retrieving, setting, adding to, and removing headers from the list of the request's headers.
@@ -2527,7 +2539,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Headers)
         /// </summary>
         [<Global("Headers")>]
-        static member inline Headers: Exports.Headers.Type = nativeOnly
+        static member inline Headers: Exports.Headers__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>Highlight</c>** interface of the CSS Custom Highlight API is used to represent a collection of AbstractRange instances to be styled using the API.
@@ -2535,7 +2547,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Highlight)
         /// </summary>
         [<Global("Highlight")>]
-        static member inline Highlight: Exports.Highlight.Type = nativeOnly
+        static member inline Highlight: Exports.Highlight__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>HighlightRegistry</c>** interface of the CSS Custom Highlight API is used to register Highlight objects to be styled using the API. It is accessed via CSS.highlights.
@@ -2543,7 +2555,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HighlightRegistry)
         /// </summary>
         [<Global("HighlightRegistry")>]
-        static member inline HighlightRegistry: Exports.HighlightRegistry.Type = nativeOnly
+        static member inline HighlightRegistry: Exports.HighlightRegistry__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>History</c>** interface of the History API allows manipulation of the browser session history, that is the pages visited in the tab or frame that the current page is loaded in.
@@ -2551,7 +2563,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/History)
         /// </summary>
         [<Global("History")>]
-        static member inline History: Exports.History.Type = nativeOnly
+        static member inline History: Exports.History__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>IDBCursor</c>** interface of the IndexedDB API represents a cursor for traversing or iterating over multiple records in a database.
@@ -2559,7 +2571,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBCursor)
         /// </summary>
         [<Global("IDBCursor")>]
-        static member inline IDBCursor: Exports.IDBCursor.Type = nativeOnly
+        static member inline IDBCursor: Exports.IDBCursor__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>IDBCursorWithValue</c>** interface of the IndexedDB API represents a cursor for traversing or iterating over multiple records in a database. It is the same as the IDBCursor, except that it includes the value property.
@@ -2567,7 +2579,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBCursorWithValue)
         /// </summary>
         [<Global("IDBCursorWithValue")>]
-        static member inline IDBCursorWithValue: Exports.IDBCursorWithValue.Type = nativeOnly
+        static member inline IDBCursorWithValue: Exports.IDBCursorWithValue__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>IDBDatabase</c>** interface of the IndexedDB API provides a connection to a database; you can use an IDBDatabase object to open a transaction on your database then create, manipulate, and delete objects (data) in that database. The interface provides the only way to get and manage versions of the database.
@@ -2575,7 +2587,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBDatabase)
         /// </summary>
         [<Global("IDBDatabase")>]
-        static member inline IDBDatabase: Exports.IDBDatabase.Type = nativeOnly
+        static member inline IDBDatabase: Exports.IDBDatabase__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>IDBFactory</c>** interface of the IndexedDB API lets applications asynchronously access the indexed databases. The object that implements the interface is window.indexedDB. You open — that is, create and access — and delete a database with this object, and not directly with IDBFactory.
@@ -2583,7 +2595,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBFactory)
         /// </summary>
         [<Global("IDBFactory")>]
-        static member inline IDBFactory: Exports.IDBFactory.Type = nativeOnly
+        static member inline IDBFactory: Exports.IDBFactory__.Type = nativeOnly
 
         /// <summary>
         /// **<c>IDBIndex</c>** interface of the IndexedDB API provides asynchronous access to an index in a database. An index is a kind of object store for looking up records in another object store, called the referenced object store. You use this interface to retrieve data.
@@ -2591,7 +2603,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBIndex)
         /// </summary>
         [<Global("IDBIndex")>]
-        static member inline IDBIndex: Exports.IDBIndex.Type = nativeOnly
+        static member inline IDBIndex: Exports.IDBIndex__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>IDBKeyRange</c>** interface of the IndexedDB API represents a continuous interval over some data type that is used for keys. Records can be retrieved from IDBObjectStore and IDBIndex objects using keys or a range of keys. You can limit the range using lower and upper bounds. For example, you can iterate over all values of a key in the value range A–Z.
@@ -2599,7 +2611,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBKeyRange)
         /// </summary>
         [<Global("IDBKeyRange")>]
-        static member inline IDBKeyRange: Exports.IDBKeyRange.Type = nativeOnly
+        static member inline IDBKeyRange: Exports.IDBKeyRange__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>IDBObjectStore</c>** interface of the IndexedDB API represents an object store in a database. Records within an object store are sorted according to their keys. This sorting enables fast insertion, look-up, and ordered retrieval.
@@ -2607,7 +2619,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBObjectStore)
         /// </summary>
         [<Global("IDBObjectStore")>]
-        static member inline IDBObjectStore: Exports.IDBObjectStore.Type = nativeOnly
+        static member inline IDBObjectStore: Exports.IDBObjectStore__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>IDBOpenDBRequest</c>** interface of the IndexedDB API provides access to the results of requests to open or delete databases (performed using IDBFactory.open and IDBFactory.deleteDatabase), using specific event handler attributes.
@@ -2615,7 +2627,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBOpenDBRequest)
         /// </summary>
         [<Global("IDBOpenDBRequest")>]
-        static member inline IDBOpenDBRequest: Exports.IDBOpenDBRequest.Type = nativeOnly
+        static member inline IDBOpenDBRequest: Exports.IDBOpenDBRequest__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>IDBRequest</c>** interface of the IndexedDB API provides access to results of asynchronous requests to databases and database objects using event handler attributes. Each reading and writing operation on a database is done using a request.
@@ -2623,7 +2635,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBRequest)
         /// </summary>
         [<Global("IDBRequest")>]
-        static member inline IDBRequest: Exports.IDBRequest.Type = nativeOnly
+        static member inline IDBRequest: Exports.IDBRequest__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>IDBTransaction</c>** interface of the IndexedDB API provides a static, asynchronous transaction on a database using event handler attributes. All reading and writing of data is done within transactions. You use IDBDatabase to start transactions, IDBTransaction to set the mode of the transaction (e.g., is it readonly or readwrite), and you access an IDBObjectStore to make a request. You can also use an IDBTransaction object to abort transactions.
@@ -2631,7 +2643,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBTransaction)
         /// </summary>
         [<Global("IDBTransaction")>]
-        static member inline IDBTransaction: Exports.IDBTransaction.Type = nativeOnly
+        static member inline IDBTransaction: Exports.IDBTransaction__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>IDBVersionChangeEvent</c>** interface of the IndexedDB API indicates that the version of the database has changed, as the result of an onupgradeneeded event handler function.
@@ -2639,7 +2651,8 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IDBVersionChangeEvent)
         /// </summary>
         [<Global("IDBVersionChangeEvent")>]
-        static member inline IDBVersionChangeEvent: Exports.IDBVersionChangeEvent.Type = nativeOnly
+        static member inline IDBVersionChangeEvent: Exports.IDBVersionChangeEvent__.Type =
+            nativeOnly
 
         /// <summary>
         /// The **<c>IIRFilterNode</c>** interface of the Web Audio API is an AudioNode processor which implements a general infinite impulse response (IIR) filter; this type of filter can be used to implement tone control devices and graphic equalizers as well. It lets the parameters of the filter response be specified, so that it can be tuned as needed.
@@ -2647,7 +2660,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IIRFilterNode)
         /// </summary>
         [<Global("IIRFilterNode")>]
-        static member inline IIRFilterNode: Exports.IIRFilterNode.Type = nativeOnly
+        static member inline IIRFilterNode: Exports.IIRFilterNode__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>IdleDeadline</c>** interface is used as the data type of the input parameter to idle callbacks established by calling Window.requestIdleCallback(). It offers a method, timeRemaining(), which lets you determine how much longer the user agent estimates it will remain idle and a property, didTimeout, which lets you determine if your callback is executing because its timeout duration expired.
@@ -2655,7 +2668,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IdleDeadline)
         /// </summary>
         [<Global("IdleDeadline")>]
-        static member inline IdleDeadline: Exports.IdleDeadline.Type = nativeOnly
+        static member inline IdleDeadline: Exports.IdleDeadline__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>ImageBitmap</c>** interface represents a bitmap image which can be drawn to a <canvas> without undue latency. It can be created from a variety of source objects using the Window.createImageBitmap() or WorkerGlobalScope.createImageBitmap() factory method. ImageBitmap provides an asynchronous and resource efficient pathway to prepare textures for rendering in WebGL.
@@ -2663,7 +2676,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ImageBitmap)
         /// </summary>
         [<Global("ImageBitmap")>]
-        static member inline ImageBitmap: Exports.ImageBitmap.Type = nativeOnly
+        static member inline ImageBitmap: Exports.ImageBitmap__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>ImageBitmapRenderingContext</c>** interface is a canvas rendering context that provides the functionality to replace the canvas's contents with the given ImageBitmap. Its context id (the first argument to HTMLCanvasElement.getContext() or OffscreenCanvas.getContext()) is "bitmaprenderer".
@@ -2671,7 +2684,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ImageBitmapRenderingContext)
         /// </summary>
         [<Global("ImageBitmapRenderingContext")>]
-        static member inline ImageBitmapRenderingContext: Exports.ImageBitmapRenderingContext.Type =
+        static member inline ImageBitmapRenderingContext: Exports.ImageBitmapRenderingContext__.Type =
             nativeOnly
 
         /// <summary>
@@ -2681,7 +2694,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ImageCapture)
         /// </summary>
         [<Global("ImageCapture")>]
-        static member inline ImageCapture: Exports.ImageCapture.Type = nativeOnly
+        static member inline ImageCapture: Exports.ImageCapture__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>ImageData</c>** interface represents the underlying pixel data of an area of a <canvas> element.
@@ -2689,7 +2702,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ImageData)
         /// </summary>
         [<Global("ImageData")>]
-        static member inline ImageData: Exports.ImageData.Type = nativeOnly
+        static member inline ImageData: Exports.ImageData__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>ImageDecoder</c>** interface of the WebCodecs API provides a way to unpack and decode encoded image data.
@@ -2698,7 +2711,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ImageDecoder)
         /// </summary>
         [<Global("ImageDecoder")>]
-        static member inline ImageDecoder: Exports.ImageDecoder.Type = nativeOnly
+        static member inline ImageDecoder: Exports.ImageDecoder__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>ImageTrack</c>** interface of the WebCodecs API represents an individual image track.
@@ -2707,7 +2720,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ImageTrack)
         /// </summary>
         [<Global("ImageTrack")>]
-        static member inline ImageTrack: Exports.ImageTrack.Type = nativeOnly
+        static member inline ImageTrack: Exports.ImageTrack__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>ImageTrackList</c>** interface of the WebCodecs API represents a list of image tracks.
@@ -2716,7 +2729,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ImageTrackList)
         /// </summary>
         [<Global("ImageTrackList")>]
-        static member inline ImageTrackList: Exports.ImageTrackList.Type = nativeOnly
+        static member inline ImageTrackList: Exports.ImageTrackList__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>InputDeviceInfo</c>** interface of the Media Capture and Streams API gives access to the capabilities of the input device that it represents.
@@ -2725,7 +2738,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/InputDeviceInfo)
         /// </summary>
         [<Global("InputDeviceInfo")>]
-        static member inline InputDeviceInfo: Exports.InputDeviceInfo.Type = nativeOnly
+        static member inline InputDeviceInfo: Exports.InputDeviceInfo__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>InputEvent</c>** interface represents an event notifying the user of editable content changes.
@@ -2733,7 +2746,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/InputEvent)
         /// </summary>
         [<Global("InputEvent")>]
-        static member inline InputEvent: Exports.InputEvent.Type = nativeOnly
+        static member inline InputEvent: Exports.InputEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>IntersectionObserver</c>** interface of the Intersection Observer API provides a way to asynchronously observe changes in the intersection of a target element with an ancestor element or with a top-level document's viewport. The ancestor element or viewport is referred to as the root.
@@ -2741,7 +2754,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IntersectionObserver)
         /// </summary>
         [<Global("IntersectionObserver")>]
-        static member inline IntersectionObserver: Exports.IntersectionObserver.Type = nativeOnly
+        static member inline IntersectionObserver: Exports.IntersectionObserver__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>IntersectionObserverEntry</c>** interface of the Intersection Observer API describes the intersection between the target element and its root container at a specific moment of transition.
@@ -2749,7 +2762,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/IntersectionObserverEntry)
         /// </summary>
         [<Global("IntersectionObserverEntry")>]
-        static member inline IntersectionObserverEntry: Exports.IntersectionObserverEntry.Type =
+        static member inline IntersectionObserverEntry: Exports.IntersectionObserverEntry__.Type =
             nativeOnly
 
         /// <summary>
@@ -2758,7 +2771,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/KeyboardEvent)
         /// </summary>
         [<Global("KeyboardEvent")>]
-        static member inline KeyboardEvent: Exports.KeyboardEvent.Type = nativeOnly
+        static member inline KeyboardEvent: Exports.KeyboardEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>KeyframeEffect</c>** interface of the Web Animations API lets us create sets of animatable properties and values, called keyframes. These can then be played using the Animation() constructor.
@@ -2766,7 +2779,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/KeyframeEffect)
         /// </summary>
         [<Global("KeyframeEffect")>]
-        static member inline KeyframeEffect: Exports.KeyframeEffect.Type = nativeOnly
+        static member inline KeyframeEffect: Exports.KeyframeEffect__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>LargestContentfulPaint</c>** interface provides timing information about the largest image or text paint before user input on a web page.
@@ -2774,7 +2787,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/LargestContentfulPaint)
         /// </summary>
         [<Global("LargestContentfulPaint")>]
-        static member inline LargestContentfulPaint: Exports.LargestContentfulPaint.Type =
+        static member inline LargestContentfulPaint: Exports.LargestContentfulPaint__.Type =
             nativeOnly
 
         /// <summary>
@@ -2783,7 +2796,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Location)
         /// </summary>
         [<Global("Location")>]
-        static member inline Location: Exports.Location.Type = nativeOnly
+        static member inline Location: Exports.Location__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>Lock</c>** interface of the Web Locks API provides the name and mode of a lock. This may be a newly requested lock that is received in the callback to LockManager.request(), or a record of an active or queued lock returned by LockManager.query().
@@ -2792,7 +2805,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Lock)
         /// </summary>
         [<Global("Lock")>]
-        static member inline Lock: Exports.Lock.Type = nativeOnly
+        static member inline Lock: Exports.Lock__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>LockManager</c>** interface of the Web Locks API provides methods for requesting a new Lock object and querying for an existing Lock object. To get an instance of LockManager, call navigator.locks.
@@ -2801,7 +2814,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/LockManager)
         /// </summary>
         [<Global("LockManager")>]
-        static member inline LockManager: Exports.LockManager.Type = nativeOnly
+        static member inline LockManager: Exports.LockManager__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>MIDIAccess</c>** interface of the Web MIDI API provides methods for listing MIDI input and output devices, and obtaining access to those devices.
@@ -2810,7 +2823,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/MIDIAccess)
         /// </summary>
         [<Global("MIDIAccess")>]
-        static member inline MIDIAccess: Exports.MIDIAccess.Type = nativeOnly
+        static member inline MIDIAccess: Exports.MIDIAccess__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>MIDIConnectionEvent</c>** interface of the Web MIDI API is the event passed to the statechange event of the MIDIAccess interface and the statechange event of the MIDIPort interface. This occurs any time a new port becomes available, or when a previously available port becomes unavailable. For example, this event is fired whenever a MIDI device is either plugged in to or unplugged from a computer.
@@ -2819,7 +2832,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/MIDIConnectionEvent)
         /// </summary>
         [<Global("MIDIConnectionEvent")>]
-        static member inline MIDIConnectionEvent: Exports.MIDIConnectionEvent.Type = nativeOnly
+        static member inline MIDIConnectionEvent: Exports.MIDIConnectionEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>MIDIInput</c>** interface of the Web MIDI API receives messages from a MIDI input port.
@@ -2828,7 +2841,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/MIDIInput)
         /// </summary>
         [<Global("MIDIInput")>]
-        static member inline MIDIInput: Exports.MIDIInput.Type = nativeOnly
+        static member inline MIDIInput: Exports.MIDIInput__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>MIDIInputMap</c>** read-only interface of the Web MIDI API provides the set of MIDI input ports that are currently available.
@@ -2837,7 +2850,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/MIDIInputMap)
         /// </summary>
         [<Global("MIDIInputMap")>]
-        static member inline MIDIInputMap: Exports.MIDIInputMap.Type = nativeOnly
+        static member inline MIDIInputMap: Exports.MIDIInputMap__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>MIDIMessageEvent</c>** interface of the Web MIDI API represents the event passed to the midimessage event of the MIDIInput interface. A midimessage event is fired every time a MIDI message is sent from a device represented by a MIDIInput, for example when a MIDI keyboard key is pressed, a knob is tweaked, or a slider is moved.
@@ -2846,7 +2859,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/MIDIMessageEvent)
         /// </summary>
         [<Global("MIDIMessageEvent")>]
-        static member inline MIDIMessageEvent: Exports.MIDIMessageEvent.Type = nativeOnly
+        static member inline MIDIMessageEvent: Exports.MIDIMessageEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>MIDIOutput</c>** interface of the Web MIDI API provides methods to add messages to the queue of an output device, and to clear the queue of messages.
@@ -2855,7 +2868,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/MIDIOutput)
         /// </summary>
         [<Global("MIDIOutput")>]
-        static member inline MIDIOutput: Exports.MIDIOutput.Type = nativeOnly
+        static member inline MIDIOutput: Exports.MIDIOutput__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>MIDIOutputMap</c>** read-only interface of the Web MIDI API provides the set of MIDI output ports that are currently available.
@@ -2864,7 +2877,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/MIDIOutputMap)
         /// </summary>
         [<Global("MIDIOutputMap")>]
-        static member inline MIDIOutputMap: Exports.MIDIOutputMap.Type = nativeOnly
+        static member inline MIDIOutputMap: Exports.MIDIOutputMap__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>MIDIPort</c>** interface of the Web MIDI API represents a MIDI input or output port.
@@ -2873,7 +2886,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/MIDIPort)
         /// </summary>
         [<Global("MIDIPort")>]
-        static member inline MIDIPort: Exports.MIDIPort.Type = nativeOnly
+        static member inline MIDIPort: Exports.MIDIPort__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>MathMLElement</c>** interface represents any MathML element.
@@ -2881,7 +2894,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/MathMLElement)
         /// </summary>
         [<Global("MathMLElement")>]
-        static member inline MathMLElement: Exports.MathMLElement.Type = nativeOnly
+        static member inline MathMLElement: Exports.MathMLElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>MediaCapabilities</c>** interface of the Media Capabilities API provides information about the decoding abilities of the device, system and browser. The API can be used to query the browser about the decoding abilities of the device based on codecs, profile, resolution, and bitrates. The information can be used to serve optimal media streams to the user and determine if playback should be smooth and power efficient.
@@ -2889,7 +2902,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaCapabilities)
         /// </summary>
         [<Global("MediaCapabilities")>]
-        static member inline MediaCapabilities: Exports.MediaCapabilities.Type = nativeOnly
+        static member inline MediaCapabilities: Exports.MediaCapabilities__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>MediaDeviceInfo</c>** interface of the Media Capture and Streams API contains information that describes a single media input or output device.
@@ -2898,7 +2911,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaDeviceInfo)
         /// </summary>
         [<Global("MediaDeviceInfo")>]
-        static member inline MediaDeviceInfo: Exports.MediaDeviceInfo.Type = nativeOnly
+        static member inline MediaDeviceInfo: Exports.MediaDeviceInfo__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>MediaDevices</c>** interface of the Media Capture and Streams API provides access to connected media input devices like cameras and microphones, as well as screen sharing. In essence, it lets you obtain access to any hardware source of media data.
@@ -2907,7 +2920,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaDevices)
         /// </summary>
         [<Global("MediaDevices")>]
-        static member inline MediaDevices: Exports.MediaDevices.Type = nativeOnly
+        static member inline MediaDevices: Exports.MediaDevices__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>MediaElementAudioSourceNode</c>** interface represents an audio source consisting of an HTML <audio> or <video> element. It is an AudioNode that acts as an audio source.
@@ -2915,7 +2928,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaElementAudioSourceNode)
         /// </summary>
         [<Global("MediaElementAudioSourceNode")>]
-        static member inline MediaElementAudioSourceNode: Exports.MediaElementAudioSourceNode.Type =
+        static member inline MediaElementAudioSourceNode: Exports.MediaElementAudioSourceNode__.Type =
             nativeOnly
 
         /// <summary>
@@ -2924,7 +2937,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaEncryptedEvent)
         /// </summary>
         [<Global("MediaEncryptedEvent")>]
-        static member inline MediaEncryptedEvent: Exports.MediaEncryptedEvent.Type = nativeOnly
+        static member inline MediaEncryptedEvent: Exports.MediaEncryptedEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>MediaError</c>** interface represents an error which occurred while handling media in an HTML media element based on HTMLMediaElement, such as <audio> or <video>.
@@ -2932,7 +2945,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaError)
         /// </summary>
         [<Global("MediaError")>]
-        static member inline MediaError: Exports.MediaError.Type = nativeOnly
+        static member inline MediaError: Exports.MediaError__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>MediaKeyMessageEvent</c>** interface of the Encrypted Media Extensions API contains the content and related data when the content decryption module generates a message for the session.
@@ -2941,7 +2954,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaKeyMessageEvent)
         /// </summary>
         [<Global("MediaKeyMessageEvent")>]
-        static member inline MediaKeyMessageEvent: Exports.MediaKeyMessageEvent.Type = nativeOnly
+        static member inline MediaKeyMessageEvent: Exports.MediaKeyMessageEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>MediaKeySession</c>** interface of the Encrypted Media Extensions API represents a context for message exchange with a content decryption module (CDM).
@@ -2950,7 +2963,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaKeySession)
         /// </summary>
         [<Global("MediaKeySession")>]
-        static member inline MediaKeySession: Exports.MediaKeySession.Type = nativeOnly
+        static member inline MediaKeySession: Exports.MediaKeySession__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>MediaKeyStatusMap</c>** interface of the Encrypted Media Extensions API is a read-only map of media key statuses by key IDs.
@@ -2959,7 +2972,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaKeyStatusMap)
         /// </summary>
         [<Global("MediaKeyStatusMap")>]
-        static member inline MediaKeyStatusMap: Exports.MediaKeyStatusMap.Type = nativeOnly
+        static member inline MediaKeyStatusMap: Exports.MediaKeyStatusMap__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>MediaKeySystemAccess</c>** interface of the Encrypted Media Extensions API provides access to a Key System for decryption and/or a content protection provider. You can request an instance of this object using the Navigator.requestMediaKeySystemAccess() method.
@@ -2968,7 +2981,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaKeySystemAccess)
         /// </summary>
         [<Global("MediaKeySystemAccess")>]
-        static member inline MediaKeySystemAccess: Exports.MediaKeySystemAccess.Type = nativeOnly
+        static member inline MediaKeySystemAccess: Exports.MediaKeySystemAccess__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>MediaKeys</c>** interface of Encrypted Media Extensions API represents a set of keys that an associated HTMLMediaElement can use for decryption of media data during playback.
@@ -2977,7 +2990,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaKeys)
         /// </summary>
         [<Global("MediaKeys")>]
-        static member inline MediaKeys: Exports.MediaKeys.Type = nativeOnly
+        static member inline MediaKeys: Exports.MediaKeys__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>MediaList</c>** interface represents the media queries of a stylesheet, e.g., those set using a <link> element's media attribute.
@@ -2985,7 +2998,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaList)
         /// </summary>
         [<Global("MediaList")>]
-        static member inline MediaList: Exports.MediaList.Type = nativeOnly
+        static member inline MediaList: Exports.MediaList__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>MediaMetadata</c>** interface of the Media Session API allows a web page to provide rich media metadata for display in a platform UI.
@@ -2993,7 +3006,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaMetadata)
         /// </summary>
         [<Global("MediaMetadata")>]
-        static member inline MediaMetadata: Exports.MediaMetadata.Type = nativeOnly
+        static member inline MediaMetadata: Exports.MediaMetadata__.Type = nativeOnly
 
         /// <summary>
         /// A **<c>MediaQueryList</c>** object stores information on a media query applied to a document, with support for both immediate and event-driven matching against the state of the document.
@@ -3001,7 +3014,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaQueryList)
         /// </summary>
         [<Global("MediaQueryList")>]
-        static member inline MediaQueryList: Exports.MediaQueryList.Type = nativeOnly
+        static member inline MediaQueryList: Exports.MediaQueryList__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>MediaQueryListEvent</c>** object stores information on the changes that have happened to a MediaQueryList object — instances are available as the event object on a function referenced by a change event.
@@ -3009,7 +3022,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaQueryListEvent)
         /// </summary>
         [<Global("MediaQueryListEvent")>]
-        static member inline MediaQueryListEvent: Exports.MediaQueryListEvent.Type = nativeOnly
+        static member inline MediaQueryListEvent: Exports.MediaQueryListEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>MediaRecorder</c>** interface of the MediaStream Recording API provides functionality to easily record media. It is created using the MediaRecorder() constructor.
@@ -3017,7 +3030,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaRecorder)
         /// </summary>
         [<Global("MediaRecorder")>]
-        static member inline MediaRecorder: Exports.MediaRecorder.Type = nativeOnly
+        static member inline MediaRecorder: Exports.MediaRecorder__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>MediaSession</c>** interface of the Media Session API allows a web page to provide custom behaviors for standard media playback interactions, and to report metadata that can be sent by the user agent to the device or operating system for presentation in standardized user interface elements.
@@ -3025,7 +3038,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaSession)
         /// </summary>
         [<Global("MediaSession")>]
-        static member inline MediaSession: Exports.MediaSession.Type = nativeOnly
+        static member inline MediaSession: Exports.MediaSession__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>MediaSource</c>** interface of the Media Source Extensions API represents a source of media data for an HTMLMediaElement object. A MediaSource object can be attached to a HTMLMediaElement to be played in the user agent.
@@ -3033,7 +3046,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaSource)
         /// </summary>
         [<Global("MediaSource")>]
-        static member inline MediaSource: Exports.MediaSource.Type = nativeOnly
+        static member inline MediaSource: Exports.MediaSource__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>MediaSourceHandle</c>** interface of the Media Source Extensions API is a proxy for a MediaSource that can be transferred from a dedicated worker back to the main thread and attached to a media element via its HTMLMediaElement.srcObject property. MediaSource objects are not transferable because they are event targets, hence the need for MediaSourceHandles.
@@ -3041,7 +3054,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaSourceHandle)
         /// </summary>
         [<Global("MediaSourceHandle")>]
-        static member inline MediaSourceHandle: Exports.MediaSourceHandle.Type = nativeOnly
+        static member inline MediaSourceHandle: Exports.MediaSourceHandle__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>MediaStream</c>** interface of the Media Capture and Streams API represents a stream of media content. A stream consists of several tracks, such as video or audio tracks. Each track is specified as an instance of MediaStreamTrack.
@@ -3049,7 +3062,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaStream)
         /// </summary>
         [<Global("MediaStream")>]
-        static member inline MediaStream: Exports.MediaStream.Type = nativeOnly
+        static member inline MediaStream: Exports.MediaStream__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>MediaStreamAudioDestinationNode</c>** interface represents an audio destination consisting of a WebRTC MediaStream with a single AudioMediaStreamTrack, which can be used in a similar way to a MediaStream obtained from navigator.mediaDevices.getUserMedia().
@@ -3058,7 +3071,7 @@ module Web =
         /// </summary>
         [<Global("MediaStreamAudioDestinationNode")>]
         static member inline MediaStreamAudioDestinationNode
-            : Exports.MediaStreamAudioDestinationNode.Type =
+            : Exports.MediaStreamAudioDestinationNode__.Type =
             nativeOnly
 
         /// <summary>
@@ -3067,7 +3080,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaStreamAudioSourceNode)
         /// </summary>
         [<Global("MediaStreamAudioSourceNode")>]
-        static member inline MediaStreamAudioSourceNode: Exports.MediaStreamAudioSourceNode.Type =
+        static member inline MediaStreamAudioSourceNode: Exports.MediaStreamAudioSourceNode__.Type =
             nativeOnly
 
         /// <summary>
@@ -3076,7 +3089,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaStreamTrack)
         /// </summary>
         [<Global("MediaStreamTrack")>]
-        static member inline MediaStreamTrack: Exports.MediaStreamTrack.Type = nativeOnly
+        static member inline MediaStreamTrack: Exports.MediaStreamTrack__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>MediaStreamTrackEvent</c>** interface of the Media Capture and Streams API represents events which indicate that a MediaStream has had tracks added to or removed from the stream through calls to Media Capture and Streams API methods. These events are sent to the stream when these changes occur.
@@ -3084,7 +3097,8 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaStreamTrackEvent)
         /// </summary>
         [<Global("MediaStreamTrackEvent")>]
-        static member inline MediaStreamTrackEvent: Exports.MediaStreamTrackEvent.Type = nativeOnly
+        static member inline MediaStreamTrackEvent: Exports.MediaStreamTrackEvent__.Type =
+            nativeOnly
 
         /// <summary>
         /// The **<c>MessageChannel</c>** interface of the Channel Messaging API allows us to create a new message channel and send data through it via its two MessagePort properties.
@@ -3092,7 +3106,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/MessageChannel)
         /// </summary>
         [<Global("MessageChannel")>]
-        static member inline MessageChannel: Exports.MessageChannel.Type = nativeOnly
+        static member inline MessageChannel: Exports.MessageChannel__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>MessageEvent</c>** interface represents a message received by a target object.
@@ -3100,7 +3114,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/MessageEvent)
         /// </summary>
         [<Global("MessageEvent")>]
-        static member inline MessageEvent: Exports.MessageEvent.Type<obj> = nativeOnly
+        static member inline MessageEvent: Exports.MessageEvent__.Type<obj> = nativeOnly
 
         /// <summary>
         /// The **<c>MessagePort</c>** interface of the Channel Messaging API represents one of the two ports of a MessageChannel, allowing messages to be sent from one port and listening out for them arriving at the other.
@@ -3108,21 +3122,21 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/MessagePort)
         /// </summary>
         [<Global("MessagePort")>]
-        static member inline MessagePort: Exports.MessagePort.Type = nativeOnly
+        static member inline MessagePort: Exports.MessagePort__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>MimeType</c>** interface provides contains information about a MIME type associated with a particular plugin. Navigator.mimeTypes returns an array of this object.
         /// </summary>
         [<Global("MimeType")>]
         [<Obsolete>]
-        static member inline MimeType: Exports.MimeType.Type = nativeOnly
+        static member inline MimeType: Exports.MimeType__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>MimeTypeArray</c>** interface returns an array of MimeType instances, each of which contains information about a supported browser plugins. This object is returned by the deprecated Navigator.mimeTypes property.
         /// </summary>
         [<Global("MimeTypeArray")>]
         [<Obsolete>]
-        static member inline MimeTypeArray: Exports.MimeTypeArray.Type = nativeOnly
+        static member inline MimeTypeArray: Exports.MimeTypeArray__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>MouseEvent</c>** interface represents events that occur due to the user interacting with a pointing device (such as a mouse). Common events using this interface include click, dblclick, mouseup, mousedown.
@@ -3130,7 +3144,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/MouseEvent)
         /// </summary>
         [<Global("MouseEvent")>]
-        static member inline MouseEvent: Exports.MouseEvent.Type = nativeOnly
+        static member inline MouseEvent: Exports.MouseEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>MutationObserver</c>** interface provides the ability to watch for changes being made to the DOM tree. It is designed as a replacement for the older Mutation Events feature, which was part of the DOM3 Events specification.
@@ -3138,7 +3152,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/MutationObserver)
         /// </summary>
         [<Global("MutationObserver")>]
-        static member inline MutationObserver: Exports.MutationObserver.Type = nativeOnly
+        static member inline MutationObserver: Exports.MutationObserver__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>MutationRecord</c>** is a read-only interface that represents an individual DOM mutation observed by a MutationObserver. It is the object inside the array passed to the callback of a MutationObserver.
@@ -3146,7 +3160,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/MutationRecord)
         /// </summary>
         [<Global("MutationRecord")>]
-        static member inline MutationRecord: Exports.MutationRecord.Type = nativeOnly
+        static member inline MutationRecord: Exports.MutationRecord__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>NamedNodeMap</c>** interface represents a collection of Attr objects. Objects inside a NamedNodeMap are not in any particular order, unlike NodeList, although they may be accessed by an index as in an array.
@@ -3154,7 +3168,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/NamedNodeMap)
         /// </summary>
         [<Global("NamedNodeMap")>]
-        static member inline NamedNodeMap: Exports.NamedNodeMap.Type = nativeOnly
+        static member inline NamedNodeMap: Exports.NamedNodeMap__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>NavigateEvent</c>** interface of the Navigation API is the event object for the navigate event, which fires when any type of navigation is initiated (this includes usage of History API features like History.go()). NavigateEvent provides access to information about that navigation, and allows developers to intercept and control the navigation handling.
@@ -3162,7 +3176,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/NavigateEvent)
         /// </summary>
         [<Global("NavigateEvent")>]
-        static member inline NavigateEvent: Exports.NavigateEvent.Type = nativeOnly
+        static member inline NavigateEvent: Exports.NavigateEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>Navigation</c>** interface of the Navigation API allows control over all navigation actions for the current window in one central place, including initiating navigations programmatically, examining navigation history entries, and managing navigations as they happen.
@@ -3170,7 +3184,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Navigation)
         /// </summary>
         [<Global("Navigation")>]
-        static member inline Navigation: Exports.Navigation.Type = nativeOnly
+        static member inline Navigation: Exports.Navigation__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>NavigationActivation</c>** interface of the Navigation API represents a recent cross-document navigation. It contains the navigation type and outgoing and inbound document history entries.
@@ -3178,7 +3192,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/NavigationActivation)
         /// </summary>
         [<Global("NavigationActivation")>]
-        static member inline NavigationActivation: Exports.NavigationActivation.Type = nativeOnly
+        static member inline NavigationActivation: Exports.NavigationActivation__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>NavigationCurrentEntryChangeEvent</c>** interface of the Navigation API is the event object for the currententrychange event, which fires when the Navigation.currentEntry has changed.
@@ -3187,7 +3201,7 @@ module Web =
         /// </summary>
         [<Global("NavigationCurrentEntryChangeEvent")>]
         static member inline NavigationCurrentEntryChangeEvent
-            : Exports.NavigationCurrentEntryChangeEvent.Type =
+            : Exports.NavigationCurrentEntryChangeEvent__.Type =
             nativeOnly
 
         /// <summary>
@@ -3196,7 +3210,8 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/NavigationDestination)
         /// </summary>
         [<Global("NavigationDestination")>]
-        static member inline NavigationDestination: Exports.NavigationDestination.Type = nativeOnly
+        static member inline NavigationDestination: Exports.NavigationDestination__.Type =
+            nativeOnly
 
         /// <summary>
         /// The **<c>NavigationHistoryEntry</c>** interface of the Navigation API represents a single navigation history entry.
@@ -3204,7 +3219,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/NavigationHistoryEntry)
         /// </summary>
         [<Global("NavigationHistoryEntry")>]
-        static member inline NavigationHistoryEntry: Exports.NavigationHistoryEntry.Type =
+        static member inline NavigationHistoryEntry: Exports.NavigationHistoryEntry__.Type =
             nativeOnly
 
         /// <summary>
@@ -3214,7 +3229,7 @@ module Web =
         /// </summary>
         [<Global("NavigationPrecommitController")>]
         static member inline NavigationPrecommitController
-            : Exports.NavigationPrecommitController.Type =
+            : Exports.NavigationPrecommitController__.Type =
             nativeOnly
 
         /// <summary>
@@ -3224,7 +3239,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/NavigationPreloadManager)
         /// </summary>
         [<Global("NavigationPreloadManager")>]
-        static member inline NavigationPreloadManager: Exports.NavigationPreloadManager.Type =
+        static member inline NavigationPreloadManager: Exports.NavigationPreloadManager__.Type =
             nativeOnly
 
         /// <summary>
@@ -3233,7 +3248,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/NavigationTransition)
         /// </summary>
         [<Global("NavigationTransition")>]
-        static member inline NavigationTransition: Exports.NavigationTransition.Type = nativeOnly
+        static member inline NavigationTransition: Exports.NavigationTransition__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>Navigator</c>** interface represents the state and the identity of the user agent. It allows scripts to query it and to register themselves to carry on some activities.
@@ -3241,7 +3256,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Navigator)
         /// </summary>
         [<Global("Navigator")>]
-        static member inline Navigator: Exports.Navigator.Type = nativeOnly
+        static member inline Navigator: Exports.Navigator__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>NavigatorLogin</c>** interface of the Federated Credential Management (FedCM) API defines login functionality for federated identity providers (IdPs). Specifically, it enables a federated identity provider (IdP) to set its login status when a user signs into or out of the IdP.
@@ -3250,7 +3265,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/NavigatorLogin)
         /// </summary>
         [<Global("NavigatorLogin")>]
-        static member inline NavigatorLogin: Exports.NavigatorLogin.Type = nativeOnly
+        static member inline NavigatorLogin: Exports.NavigatorLogin__.Type = nativeOnly
 
         /// <summary>
         /// The DOM **<c>Node</c>** interface is an abstract base class upon which many other DOM API objects are based, thus letting those object types be used similarly and often interchangeably. As an abstract class, there is no such thing as a plain Node object. All objects that implement Node functionality are based on one of its subclasses. Most notable are Document, Element, and DocumentFragment.
@@ -3258,7 +3273,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Node)
         /// </summary>
         [<Global("Node")>]
-        static member inline Node: Exports.Node.Type = nativeOnly
+        static member inline Node: Exports.Node__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>NodeIterator</c>** interface represents an iterator to traverse nodes of a DOM subtree in document order.
@@ -3266,7 +3281,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/NodeIterator)
         /// </summary>
         [<Global("NodeIterator")>]
-        static member inline NodeIterator: Exports.NodeIterator.Type = nativeOnly
+        static member inline NodeIterator: Exports.NodeIterator__.Type = nativeOnly
 
         /// <summary>
         /// **<c>NodeList</c>** objects are collections of nodes, usually returned by properties such as Node.childNodes and methods such as document.querySelectorAll().
@@ -3274,7 +3289,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/NodeList)
         /// </summary>
         [<Global("NodeList")>]
-        static member inline NodeList: Exports.NodeList.Type = nativeOnly
+        static member inline NodeList: Exports.NodeList__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>Notification</c>** interface of the Notifications API is used to configure and display desktop notifications to the user.
@@ -3282,7 +3297,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Notification)
         /// </summary>
         [<Global("Notification")>]
-        static member inline Notification: Exports.Notification.Type = nativeOnly
+        static member inline Notification: Exports.Notification__.Type = nativeOnly
 
         /// <summary>
         /// The Web Audio API **<c>OfflineAudioCompletionEvent</c>** interface represents events that occur when the processing of an OfflineAudioContext is terminated. The complete event uses this interface.
@@ -3290,7 +3305,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/OfflineAudioCompletionEvent)
         /// </summary>
         [<Global("OfflineAudioCompletionEvent")>]
-        static member inline OfflineAudioCompletionEvent: Exports.OfflineAudioCompletionEvent.Type =
+        static member inline OfflineAudioCompletionEvent: Exports.OfflineAudioCompletionEvent__.Type =
             nativeOnly
 
         /// <summary>
@@ -3299,7 +3314,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/OfflineAudioContext)
         /// </summary>
         [<Global("OfflineAudioContext")>]
-        static member inline OfflineAudioContext: Exports.OfflineAudioContext.Type = nativeOnly
+        static member inline OfflineAudioContext: Exports.OfflineAudioContext__.Type = nativeOnly
 
         /// <summary>
         /// When using the <canvas> element or the Canvas API, rendering, animation, and user interaction usually happen on the main execution thread of a web application. The computation relating to canvas animations and rendering can have a significant impact on application performance.
@@ -3307,7 +3322,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/OffscreenCanvas)
         /// </summary>
         [<Global("OffscreenCanvas")>]
-        static member inline OffscreenCanvas: Exports.OffscreenCanvas.Type = nativeOnly
+        static member inline OffscreenCanvas: Exports.OffscreenCanvas__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>OffscreenCanvasRenderingContext2D</c>** interface is a CanvasRenderingContext2D rendering context for drawing to the bitmap of an OffscreenCanvas object. It is similar to the CanvasRenderingContext2D object, with the following differences:
@@ -3316,11 +3331,11 @@ module Web =
         /// </summary>
         [<Global("OffscreenCanvasRenderingContext2D")>]
         static member inline OffscreenCanvasRenderingContext2D
-            : Exports.OffscreenCanvasRenderingContext2D.Type =
+            : Exports.OffscreenCanvasRenderingContext2D__.Type =
             nativeOnly
 
         [<Global("Origin")>]
-        static member inline Origin: Exports.Origin.Type = nativeOnly
+        static member inline Origin: Exports.Origin__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>OscillatorNode</c>** interface represents a periodic waveform, such as a sine wave. It is an AudioScheduledSourceNode audio-processing module that causes a specified frequency of a given wave to be created—in effect, a constant tone.
@@ -3328,7 +3343,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/OscillatorNode)
         /// </summary>
         [<Global("OscillatorNode")>]
-        static member inline OscillatorNode: Exports.OscillatorNode.Type = nativeOnly
+        static member inline OscillatorNode: Exports.OscillatorNode__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>OverconstrainedError</c>** interface of the Media Capture and Streams API indicates that the set of desired capabilities for the current MediaStreamTrack cannot currently be met. When this event is thrown on a MediaStreamTrack, it is muted until either the current constraints can be established or until satisfiable constraints are applied.
@@ -3336,7 +3351,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/OverconstrainedError)
         /// </summary>
         [<Global("OverconstrainedError")>]
-        static member inline OverconstrainedError: Exports.OverconstrainedError.Type = nativeOnly
+        static member inline OverconstrainedError: Exports.OverconstrainedError__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>PageRevealEvent</c>** event object is made available inside handler functions for the pagereveal event.
@@ -3344,7 +3359,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/PageRevealEvent)
         /// </summary>
         [<Global("PageRevealEvent")>]
-        static member inline PageRevealEvent: Exports.PageRevealEvent.Type = nativeOnly
+        static member inline PageRevealEvent: Exports.PageRevealEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>PageSwapEvent</c>** event object is made available inside handler functions for the pageswap event.
@@ -3352,7 +3367,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/PageSwapEvent)
         /// </summary>
         [<Global("PageSwapEvent")>]
-        static member inline PageSwapEvent: Exports.PageSwapEvent.Type = nativeOnly
+        static member inline PageSwapEvent: Exports.PageSwapEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>PageTransitionEvent</c>** event object is available inside handler functions for the pageshow and pagehide events, fired when a document is being loaded or unloaded.
@@ -3360,7 +3375,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/PageTransitionEvent)
         /// </summary>
         [<Global("PageTransitionEvent")>]
-        static member inline PageTransitionEvent: Exports.PageTransitionEvent.Type = nativeOnly
+        static member inline PageTransitionEvent: Exports.PageTransitionEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>PannerNode</c>** interface defines an audio-processing object that represents the location, direction, and behavior of an audio source signal in a simulated physical space. This AudioNode uses right-hand Cartesian coordinates to describe the source's position as a vector and its orientation as a 3D directional cone.
@@ -3368,7 +3383,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/PannerNode)
         /// </summary>
         [<Global("PannerNode")>]
-        static member inline PannerNode: Exports.PannerNode.Type = nativeOnly
+        static member inline PannerNode: Exports.PannerNode__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>Path2D</c>** interface of the Canvas 2D API is used to declare a path that can then be used on a CanvasRenderingContext2D object. The path methods of the CanvasRenderingContext2D interface are also present on this interface, which gives you the convenience of being able to retain and replay your path whenever desired.
@@ -3376,7 +3391,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Path2D)
         /// </summary>
         [<Global("Path2D")>]
-        static member inline Path2D: Exports.Path2D.Type = nativeOnly
+        static member inline Path2D: Exports.Path2D__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>ContactAddress</c>** interface of the Contact Picker API represents a physical address. Instances of this interface are retrieved from the address property of the objects returned by ContactsManager.getProperties().
@@ -3384,7 +3399,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ContactAddress)
         /// </summary>
         [<Global("PaymentAddress")>]
-        static member inline PaymentAddress: Exports.PaymentAddress.Type = nativeOnly
+        static member inline PaymentAddress: Exports.PaymentAddress__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>PaymentMethodChangeEvent</c>** interface of the Payment Request API describes the paymentmethodchange event which is fired by some payment handlers when the user switches payment instruments (e.g., a user selects a "store" card to make a purchase while using Apple Pay).
@@ -3393,7 +3408,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/PaymentMethodChangeEvent)
         /// </summary>
         [<Global("PaymentMethodChangeEvent")>]
-        static member inline PaymentMethodChangeEvent: Exports.PaymentMethodChangeEvent.Type =
+        static member inline PaymentMethodChangeEvent: Exports.PaymentMethodChangeEvent__.Type =
             nativeOnly
 
         /// <summary>
@@ -3403,7 +3418,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/PaymentRequest)
         /// </summary>
         [<Global("PaymentRequest")>]
-        static member inline PaymentRequest: Exports.PaymentRequest.Type = nativeOnly
+        static member inline PaymentRequest: Exports.PaymentRequest__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>PaymentRequestUpdateEvent</c>** interface is used for events sent to a PaymentRequest instance when changes are made to shipping-related information for a pending PaymentRequest. Those events are:
@@ -3412,7 +3427,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/PaymentRequestUpdateEvent)
         /// </summary>
         [<Global("PaymentRequestUpdateEvent")>]
-        static member inline PaymentRequestUpdateEvent: Exports.PaymentRequestUpdateEvent.Type =
+        static member inline PaymentRequestUpdateEvent: Exports.PaymentRequestUpdateEvent__.Type =
             nativeOnly
 
         /// <summary>
@@ -3422,7 +3437,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/PaymentResponse)
         /// </summary>
         [<Global("PaymentResponse")>]
-        static member inline PaymentResponse: Exports.PaymentResponse.Type = nativeOnly
+        static member inline PaymentResponse: Exports.PaymentResponse__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>Performance</c>** interface provides access to performance-related information for the current page.
@@ -3430,7 +3445,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Performance)
         /// </summary>
         [<Global("Performance")>]
-        static member inline Performance: Exports.Performance.Type = nativeOnly
+        static member inline Performance: Exports.Performance__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>PerformanceEntry</c>** object encapsulates a single performance metric that is part of the browser's performance timeline.
@@ -3438,7 +3453,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/PerformanceEntry)
         /// </summary>
         [<Global("PerformanceEntry")>]
-        static member inline PerformanceEntry: Exports.PerformanceEntry.Type = nativeOnly
+        static member inline PerformanceEntry: Exports.PerformanceEntry__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>PerformanceEventTiming</c>** interface of the Event Timing API provides insights into the latency of certain event types triggered by user interaction.
@@ -3446,7 +3461,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/PerformanceEventTiming)
         /// </summary>
         [<Global("PerformanceEventTiming")>]
-        static member inline PerformanceEventTiming: Exports.PerformanceEventTiming.Type =
+        static member inline PerformanceEventTiming: Exports.PerformanceEventTiming__.Type =
             nativeOnly
 
         /// <summary>
@@ -3455,7 +3470,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/PerformanceMark)
         /// </summary>
         [<Global("PerformanceMark")>]
-        static member inline PerformanceMark: Exports.PerformanceMark.Type = nativeOnly
+        static member inline PerformanceMark: Exports.PerformanceMark__.Type = nativeOnly
 
         /// <summary>
         /// **<c>PerformanceMeasure</c>** is an abstract interface for PerformanceEntry objects with an entryType of "measure". Entries of this type are created by calling performance.measure() to add a named DOMHighResTimeStamp (the measure) between two marks to the browser's performance timeline.
@@ -3463,14 +3478,15 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/PerformanceMeasure)
         /// </summary>
         [<Global("PerformanceMeasure")>]
-        static member inline PerformanceMeasure: Exports.PerformanceMeasure.Type = nativeOnly
+        static member inline PerformanceMeasure: Exports.PerformanceMeasure__.Type = nativeOnly
 
         /// <summary>
         /// The legacy **<c>PerformanceNavigation</c>** interface represents information about how the navigation to the current document was done.
         /// </summary>
         [<Global("PerformanceNavigation")>]
         [<Obsolete>]
-        static member inline PerformanceNavigation: Exports.PerformanceNavigation.Type = nativeOnly
+        static member inline PerformanceNavigation: Exports.PerformanceNavigation__.Type =
+            nativeOnly
 
         /// <summary>
         /// The **<c>PerformanceNavigationTiming</c>** interface provides methods and properties to store and retrieve metrics regarding the browser's document navigation events. For example, this interface can be used to determine how much time it takes to load or unload a document.
@@ -3478,7 +3494,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/PerformanceNavigationTiming)
         /// </summary>
         [<Global("PerformanceNavigationTiming")>]
-        static member inline PerformanceNavigationTiming: Exports.PerformanceNavigationTiming.Type =
+        static member inline PerformanceNavigationTiming: Exports.PerformanceNavigationTiming__.Type =
             nativeOnly
 
         /// <summary>
@@ -3487,7 +3503,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/PerformanceObserver)
         /// </summary>
         [<Global("PerformanceObserver")>]
-        static member inline PerformanceObserver: Exports.PerformanceObserver.Type = nativeOnly
+        static member inline PerformanceObserver: Exports.PerformanceObserver__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>PerformanceObserverEntryList</c>** interface is a list of performance events that were explicitly observed via the observe() method.
@@ -3495,7 +3511,8 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/PerformanceObserverEntryList)
         /// </summary>
         [<Global("PerformanceObserverEntryList")>]
-        static member inline PerformanceObserverEntryList: Exports.PerformanceObserverEntryList.Type =
+        static member inline PerformanceObserverEntryList
+            : Exports.PerformanceObserverEntryList__.Type =
             nativeOnly
 
         /// <summary>
@@ -3504,7 +3521,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/PerformancePaintTiming)
         /// </summary>
         [<Global("PerformancePaintTiming")>]
-        static member inline PerformancePaintTiming: Exports.PerformancePaintTiming.Type =
+        static member inline PerformancePaintTiming: Exports.PerformancePaintTiming__.Type =
             nativeOnly
 
         /// <summary>
@@ -3513,7 +3530,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/PerformanceResourceTiming)
         /// </summary>
         [<Global("PerformanceResourceTiming")>]
-        static member inline PerformanceResourceTiming: Exports.PerformanceResourceTiming.Type =
+        static member inline PerformanceResourceTiming: Exports.PerformanceResourceTiming__.Type =
             nativeOnly
 
         /// <summary>
@@ -3522,7 +3539,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/PerformanceServerTiming)
         /// </summary>
         [<Global("PerformanceServerTiming")>]
-        static member inline PerformanceServerTiming: Exports.PerformanceServerTiming.Type =
+        static member inline PerformanceServerTiming: Exports.PerformanceServerTiming__.Type =
             nativeOnly
 
         /// <summary>
@@ -3530,7 +3547,7 @@ module Web =
         /// </summary>
         [<Global("PerformanceTiming")>]
         [<Obsolete>]
-        static member inline PerformanceTiming: Exports.PerformanceTiming.Type = nativeOnly
+        static member inline PerformanceTiming: Exports.PerformanceTiming__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>PeriodicWave</c>** interface defines a periodic waveform that can be used to shape the output of an OscillatorNode.
@@ -3538,7 +3555,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/PeriodicWave)
         /// </summary>
         [<Global("PeriodicWave")>]
-        static member inline PeriodicWave: Exports.PeriodicWave.Type = nativeOnly
+        static member inline PeriodicWave: Exports.PeriodicWave__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>PermissionStatus</c>** interface of the Permissions API provides the state of an object and an event handler for monitoring changes to said state.
@@ -3546,7 +3563,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/PermissionStatus)
         /// </summary>
         [<Global("PermissionStatus")>]
-        static member inline PermissionStatus: Exports.PermissionStatus.Type = nativeOnly
+        static member inline PermissionStatus: Exports.PermissionStatus__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>Permissions</c>** interface of the Permissions API provides the core Permission API functionality, such as methods for querying and revoking permissions
@@ -3554,7 +3571,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Permissions)
         /// </summary>
         [<Global("Permissions")>]
-        static member inline Permissions: Exports.Permissions.Type = nativeOnly
+        static member inline Permissions: Exports.Permissions__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>PictureInPictureEvent</c>** interface represents picture-in-picture-related events, including enterpictureinpicture, leavepictureinpicture and resize.
@@ -3562,7 +3579,8 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/PictureInPictureEvent)
         /// </summary>
         [<Global("PictureInPictureEvent")>]
-        static member inline PictureInPictureEvent: Exports.PictureInPictureEvent.Type = nativeOnly
+        static member inline PictureInPictureEvent: Exports.PictureInPictureEvent__.Type =
+            nativeOnly
 
         /// <summary>
         /// The **<c>PictureInPictureWindow</c>** interface represents an object able to programmatically obtain the width and height and resize event of the floating video window.
@@ -3570,7 +3588,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/PictureInPictureWindow)
         /// </summary>
         [<Global("PictureInPictureWindow")>]
-        static member inline PictureInPictureWindow: Exports.PictureInPictureWindow.Type =
+        static member inline PictureInPictureWindow: Exports.PictureInPictureWindow__.Type =
             nativeOnly
 
         /// <summary>
@@ -3578,14 +3596,14 @@ module Web =
         /// </summary>
         [<Global("Plugin")>]
         [<Obsolete>]
-        static member inline Plugin: Exports.Plugin.Type = nativeOnly
+        static member inline Plugin: Exports.Plugin__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>PluginArray</c>** interface is used to store a list of Plugin objects; it's returned by the navigator.plugins property. The PluginArray is not a JavaScript array, but has the length property and supports accessing individual items using bracket notation (plugins[2]), as well as via item(index) and namedItem("name") methods.
         /// </summary>
         [<Global("PluginArray")>]
         [<Obsolete>]
-        static member inline PluginArray: Exports.PluginArray.Type = nativeOnly
+        static member inline PluginArray: Exports.PluginArray__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>PointerEvent</c>** interface represents the state of a DOM event produced by a pointer such as the geometry of the contact point, the device type that generated the event, the amount of pressure that was applied on the contact surface, etc.
@@ -3593,7 +3611,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/PointerEvent)
         /// </summary>
         [<Global("PointerEvent")>]
-        static member inline PointerEvent: Exports.PointerEvent.Type = nativeOnly
+        static member inline PointerEvent: Exports.PointerEvent__.Type = nativeOnly
 
         /// <summary>
         /// **<c>PopStateEvent</c>** is an interface for the popstate event.
@@ -3601,7 +3619,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/PopStateEvent)
         /// </summary>
         [<Global("PopStateEvent")>]
-        static member inline PopStateEvent: Exports.PopStateEvent.Type = nativeOnly
+        static member inline PopStateEvent: Exports.PopStateEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>ProcessingInstruction</c>** interface represents a processing instruction; that is, a Node which embeds an instruction targeting a specific application but that can be ignored by any other applications which don't recognize the instruction.
@@ -3609,7 +3627,8 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ProcessingInstruction)
         /// </summary>
         [<Global("ProcessingInstruction")>]
-        static member inline ProcessingInstruction: Exports.ProcessingInstruction.Type = nativeOnly
+        static member inline ProcessingInstruction: Exports.ProcessingInstruction__.Type =
+            nativeOnly
 
         /// <summary>
         /// The **<c>ProgressEvent</c>** interface represents events that measure the progress of an underlying process, like an HTTP request (e.g., an XMLHttpRequest, or the loading of the underlying resource of an <img>, <audio>, <video>, <style> or <link>).
@@ -3617,7 +3636,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ProgressEvent)
         /// </summary>
         [<Global("ProgressEvent")>]
-        static member inline ProgressEvent: Exports.ProgressEvent.Type = nativeOnly
+        static member inline ProgressEvent: Exports.ProgressEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>PromiseRejectionEvent</c>** interface represents events which are sent to the global script context when JavaScript Promises are rejected. These events are particularly useful for telemetry and debugging purposes.
@@ -3625,7 +3644,8 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/PromiseRejectionEvent)
         /// </summary>
         [<Global("PromiseRejectionEvent")>]
-        static member inline PromiseRejectionEvent: Exports.PromiseRejectionEvent.Type = nativeOnly
+        static member inline PromiseRejectionEvent: Exports.PromiseRejectionEvent__.Type =
+            nativeOnly
 
         /// <summary>
         /// The **<c>PublicKeyCredential</c>** interface provides information about a public key / private key pair, which is a credential for logging in to a service using an un-phishable and data-breach resistant asymmetric key pair instead of a password. It inherits from Credential, and is part of the Web Authentication API extension to the Credential Management API.
@@ -3634,7 +3654,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/PublicKeyCredential)
         /// </summary>
         [<Global("PublicKeyCredential")>]
-        static member inline PublicKeyCredential: Exports.PublicKeyCredential.Type = nativeOnly
+        static member inline PublicKeyCredential: Exports.PublicKeyCredential__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>PushManager</c>** interface of the Push API provides a way to receive notifications from third-party servers as well as request URLs for push notifications.
@@ -3643,7 +3663,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/PushManager)
         /// </summary>
         [<Global("PushManager")>]
-        static member inline PushManager: Exports.PushManager.Type = nativeOnly
+        static member inline PushManager: Exports.PushManager__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>PushSubscription</c>** interface of the Push API provides a subscription's URL endpoint along with the public key and secrets that should be used for encrypting push messages to this subscription. This information must be passed to the application server, using any desired application-specific method.
@@ -3652,7 +3672,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/PushSubscription)
         /// </summary>
         [<Global("PushSubscription")>]
-        static member inline PushSubscription: Exports.PushSubscription.Type = nativeOnly
+        static member inline PushSubscription: Exports.PushSubscription__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>PushSubscriptionOptions</c>** interface of the Push API represents the options associated with a push subscription.
@@ -3661,7 +3681,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/PushSubscriptionOptions)
         /// </summary>
         [<Global("PushSubscriptionOptions")>]
-        static member inline PushSubscriptionOptions: Exports.PushSubscriptionOptions.Type =
+        static member inline PushSubscriptionOptions: Exports.PushSubscriptionOptions__.Type =
             nativeOnly
 
         /// <summary>
@@ -3670,7 +3690,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCCertificate)
         /// </summary>
         [<Global("RTCCertificate")>]
-        static member inline RTCCertificate: Exports.RTCCertificate.Type = nativeOnly
+        static member inline RTCCertificate: Exports.RTCCertificate__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>RTCDTMFSender</c>** interface provides a mechanism for transmitting DTMF codes on a WebRTC RTCPeerConnection. You gain access to the connection's RTCDTMFSender through the RTCRtpSender.dtmf property on the audio track you wish to send DTMF with.
@@ -3678,7 +3698,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCDTMFSender)
         /// </summary>
         [<Global("RTCDTMFSender")>]
-        static member inline RTCDTMFSender: Exports.RTCDTMFSender.Type = nativeOnly
+        static member inline RTCDTMFSender: Exports.RTCDTMFSender__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>RTCDTMFToneChangeEvent</c>** interface represents events sent to indicate that DTMF tones have started or finished playing. This interface is used by the tonechange event.
@@ -3686,7 +3706,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCDTMFToneChangeEvent)
         /// </summary>
         [<Global("RTCDTMFToneChangeEvent")>]
-        static member inline RTCDTMFToneChangeEvent: Exports.RTCDTMFToneChangeEvent.Type =
+        static member inline RTCDTMFToneChangeEvent: Exports.RTCDTMFToneChangeEvent__.Type =
             nativeOnly
 
         /// <summary>
@@ -3695,7 +3715,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCDataChannel)
         /// </summary>
         [<Global("RTCDataChannel")>]
-        static member inline RTCDataChannel: Exports.RTCDataChannel.Type = nativeOnly
+        static member inline RTCDataChannel: Exports.RTCDataChannel__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>RTCDataChannelEvent</c>** interface represents an event related to a specific RTCDataChannel.
@@ -3703,7 +3723,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCDataChannelEvent)
         /// </summary>
         [<Global("RTCDataChannelEvent")>]
-        static member inline RTCDataChannelEvent: Exports.RTCDataChannelEvent.Type = nativeOnly
+        static member inline RTCDataChannelEvent: Exports.RTCDataChannelEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>RTCDtlsTransport</c>** interface provides access to information about the Datagram Transport Layer Security (DTLS) transport over which a RTCPeerConnection's RTP and RTCP packets are sent and received by its RTCRtpSender and RTCRtpReceiver objects.
@@ -3711,7 +3731,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCDtlsTransport)
         /// </summary>
         [<Global("RTCDtlsTransport")>]
-        static member inline RTCDtlsTransport: Exports.RTCDtlsTransport.Type = nativeOnly
+        static member inline RTCDtlsTransport: Exports.RTCDtlsTransport__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>RTCEncodedAudioFrame</c>** of the WebRTC API represents an encoded audio frame in the WebRTC receiver or sender pipeline, which may be modified using a WebRTC Encoded Transform.
@@ -3719,7 +3739,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCEncodedAudioFrame)
         /// </summary>
         [<Global("RTCEncodedAudioFrame")>]
-        static member inline RTCEncodedAudioFrame: Exports.RTCEncodedAudioFrame.Type = nativeOnly
+        static member inline RTCEncodedAudioFrame: Exports.RTCEncodedAudioFrame__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>RTCEncodedVideoFrame</c>** of the WebRTC API represents an encoded video frame in the WebRTC receiver or sender pipeline, which may be modified using a WebRTC Encoded Transform.
@@ -3727,7 +3747,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCEncodedVideoFrame)
         /// </summary>
         [<Global("RTCEncodedVideoFrame")>]
-        static member inline RTCEncodedVideoFrame: Exports.RTCEncodedVideoFrame.Type = nativeOnly
+        static member inline RTCEncodedVideoFrame: Exports.RTCEncodedVideoFrame__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>RTCError</c>** interface describes an error which has occurred while handling WebRTC operations. It's based upon the standard DOMException interface that describes general DOM errors.
@@ -3735,7 +3755,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCError)
         /// </summary>
         [<Global("RTCError")>]
-        static member inline RTCError: Exports.RTCError.Type = nativeOnly
+        static member inline RTCError: Exports.RTCError__.Type = nativeOnly
 
         /// <summary>
         /// The WebRTC API's **<c>RTCErrorEvent</c>** interface represents an error sent to a WebRTC object. It's based on the standard Event interface, but adds RTC-specific information describing the error, as shown below.
@@ -3743,7 +3763,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCErrorEvent)
         /// </summary>
         [<Global("RTCErrorEvent")>]
-        static member inline RTCErrorEvent: Exports.RTCErrorEvent.Type = nativeOnly
+        static member inline RTCErrorEvent: Exports.RTCErrorEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>RTCIceCandidate</c>** interface—part of the WebRTC API—represents a candidate Interactive Connectivity Establishment (ICE) configuration which may be used to establish an RTCPeerConnection.
@@ -3751,7 +3771,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCIceCandidate)
         /// </summary>
         [<Global("RTCIceCandidate")>]
-        static member inline RTCIceCandidate: Exports.RTCIceCandidate.Type = nativeOnly
+        static member inline RTCIceCandidate: Exports.RTCIceCandidate__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>RTCIceTransport</c>** interface provides access to information about the ICE transport layer over which the data is being sent and received. This is particularly useful if you need to access state information about the connection.
@@ -3759,7 +3779,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCIceTransport)
         /// </summary>
         [<Global("RTCIceTransport")>]
-        static member inline RTCIceTransport: Exports.RTCIceTransport.Type = nativeOnly
+        static member inline RTCIceTransport: Exports.RTCIceTransport__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>RTCPeerConnection</c>** interface represents a WebRTC connection between the local computer and a remote peer. It provides methods to connect to a remote peer, maintain and monitor the connection, and close the connection once it's no longer needed.
@@ -3767,7 +3787,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnection)
         /// </summary>
         [<Global("RTCPeerConnection")>]
-        static member inline RTCPeerConnection: Exports.RTCPeerConnection.Type = nativeOnly
+        static member inline RTCPeerConnection: Exports.RTCPeerConnection__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>RTCPeerConnectionIceErrorEvent</c>** interface—based upon the Event interface—provides details pertaining to an ICE error announced by sending an icecandidateerror event to the RTCPeerConnection object.
@@ -3776,7 +3796,7 @@ module Web =
         /// </summary>
         [<Global("RTCPeerConnectionIceErrorEvent")>]
         static member inline RTCPeerConnectionIceErrorEvent
-            : Exports.RTCPeerConnectionIceErrorEvent.Type =
+            : Exports.RTCPeerConnectionIceErrorEvent__.Type =
             nativeOnly
 
         /// <summary>
@@ -3785,7 +3805,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnectionIceEvent)
         /// </summary>
         [<Global("RTCPeerConnectionIceEvent")>]
-        static member inline RTCPeerConnectionIceEvent: Exports.RTCPeerConnectionIceEvent.Type =
+        static member inline RTCPeerConnectionIceEvent: Exports.RTCPeerConnectionIceEvent__.Type =
             nativeOnly
 
         /// <summary>
@@ -3794,7 +3814,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCRtpReceiver)
         /// </summary>
         [<Global("RTCRtpReceiver")>]
-        static member inline RTCRtpReceiver: Exports.RTCRtpReceiver.Type = nativeOnly
+        static member inline RTCRtpReceiver: Exports.RTCRtpReceiver__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>RTCRtpScriptTransform</c>** interface of the WebRTC API is used to insert a WebRTC Encoded Transform (a TransformStream running in a worker thread) into the WebRTC sender and receiver pipelines.
@@ -3802,7 +3822,8 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCRtpScriptTransform)
         /// </summary>
         [<Global("RTCRtpScriptTransform")>]
-        static member inline RTCRtpScriptTransform: Exports.RTCRtpScriptTransform.Type = nativeOnly
+        static member inline RTCRtpScriptTransform: Exports.RTCRtpScriptTransform__.Type =
+            nativeOnly
 
         /// <summary>
         /// The **<c>RTCRtpSender</c>** interface provides the ability to control and obtain details about how a particular MediaStreamTrack is encoded and sent to a remote peer.
@@ -3810,7 +3831,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCRtpSender)
         /// </summary>
         [<Global("RTCRtpSender")>]
-        static member inline RTCRtpSender: Exports.RTCRtpSender.Type = nativeOnly
+        static member inline RTCRtpSender: Exports.RTCRtpSender__.Type = nativeOnly
 
         /// <summary>
         /// The WebRTC interface **<c>RTCRtpTransceiver</c>** describes a permanent pairing of an RTCRtpSender and an RTCRtpReceiver, along with some shared state.
@@ -3818,7 +3839,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCRtpTransceiver)
         /// </summary>
         [<Global("RTCRtpTransceiver")>]
-        static member inline RTCRtpTransceiver: Exports.RTCRtpTransceiver.Type = nativeOnly
+        static member inline RTCRtpTransceiver: Exports.RTCRtpTransceiver__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>RTCSctpTransport</c>** interface provides information which describes a Stream Control Transmission Protocol (SCTP) transport. This provides information about limitations of the transport, but also provides a way to access the underlying Datagram Transport Layer Security (DTLS) transport over which SCTP packets for all of an RTCPeerConnection's data channels are sent and received.
@@ -3826,7 +3847,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCSctpTransport)
         /// </summary>
         [<Global("RTCSctpTransport")>]
-        static member inline RTCSctpTransport: Exports.RTCSctpTransport.Type = nativeOnly
+        static member inline RTCSctpTransport: Exports.RTCSctpTransport__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>RTCSessionDescription</c>** interface describes one end of a connection—or potential connection—and how it's configured. Each RTCSessionDescription consists of a description type indicating which part of the offer/answer negotiation process it describes and of the SDP descriptor of the session.
@@ -3834,7 +3855,8 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCSessionDescription)
         /// </summary>
         [<Global("RTCSessionDescription")>]
-        static member inline RTCSessionDescription: Exports.RTCSessionDescription.Type = nativeOnly
+        static member inline RTCSessionDescription: Exports.RTCSessionDescription__.Type =
+            nativeOnly
 
         /// <summary>
         /// The **<c>RTCStatsReport</c>** interface of the WebRTC API provides a statistics report for a RTCPeerConnection, RTCRtpSender, or RTCRtpReceiver.
@@ -3842,7 +3864,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCStatsReport)
         /// </summary>
         [<Global("RTCStatsReport")>]
-        static member inline RTCStatsReport: Exports.RTCStatsReport.Type = nativeOnly
+        static member inline RTCStatsReport: Exports.RTCStatsReport__.Type = nativeOnly
 
         /// <summary>
         /// The WebRTC API interface **<c>RTCTrackEvent</c>** represents the track event, which is sent when a new MediaStreamTrack is added to an RTCRtpReceiver which is part of the RTCPeerConnection.
@@ -3850,7 +3872,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCTrackEvent)
         /// </summary>
         [<Global("RTCTrackEvent")>]
-        static member inline RTCTrackEvent: Exports.RTCTrackEvent.Type = nativeOnly
+        static member inline RTCTrackEvent: Exports.RTCTrackEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>RadioNodeList</c>** interface represents a collection of elements in a <form> returned by a call to HTMLFormControlsCollection.namedItem().
@@ -3858,7 +3880,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/RadioNodeList)
         /// </summary>
         [<Global("RadioNodeList")>]
-        static member inline RadioNodeList: Exports.RadioNodeList.Type = nativeOnly
+        static member inline RadioNodeList: Exports.RadioNodeList__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>Range</c>** interface represents a fragment of a document that can contain nodes and parts of text nodes.
@@ -3866,7 +3888,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Range)
         /// </summary>
         [<Global("Range")>]
-        static member inline Range: Exports.Range.Type = nativeOnly
+        static member inline Range: Exports.Range__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>ReadableByteStreamController</c>** interface of the Streams API represents a controller for a readable byte stream. It allows control of the state and internal queue of a ReadableStream with an underlying byte source, and enables efficient zero-copy transfer of data from the underlying source to a consumer when the stream's internal queue is empty.
@@ -3874,7 +3896,8 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableByteStreamController)
         /// </summary>
         [<Global("ReadableByteStreamController")>]
-        static member inline ReadableByteStreamController: Exports.ReadableByteStreamController.Type =
+        static member inline ReadableByteStreamController
+            : Exports.ReadableByteStreamController__.Type =
             nativeOnly
 
         /// <summary>
@@ -3883,7 +3906,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStream)
         /// </summary>
         [<Global("ReadableStream")>]
-        static member inline ReadableStream: Exports.ReadableStream.Type<obj> = nativeOnly
+        static member inline ReadableStream: Exports.ReadableStream__.Type<obj> = nativeOnly
 
         /// <summary>
         /// The **<c>ReadableStreamBYOBReader</c>** interface of the Streams API defines a reader for a ReadableStream that supports zero-copy reading from an underlying byte source. It is used for efficient copying from underlying sources where the data is delivered as an "anonymous" sequence of bytes, such as files.
@@ -3891,7 +3914,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStreamBYOBReader)
         /// </summary>
         [<Global("ReadableStreamBYOBReader")>]
-        static member inline ReadableStreamBYOBReader: Exports.ReadableStreamBYOBReader.Type =
+        static member inline ReadableStreamBYOBReader: Exports.ReadableStreamBYOBReader__.Type =
             nativeOnly
 
         /// <summary>
@@ -3900,7 +3923,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStreamBYOBRequest)
         /// </summary>
         [<Global("ReadableStreamBYOBRequest")>]
-        static member inline ReadableStreamBYOBRequest: Exports.ReadableStreamBYOBRequest.Type =
+        static member inline ReadableStreamBYOBRequest: Exports.ReadableStreamBYOBRequest__.Type =
             nativeOnly
 
         /// <summary>
@@ -3910,7 +3933,7 @@ module Web =
         /// </summary>
         [<Global("ReadableStreamDefaultController")>]
         static member inline ReadableStreamDefaultController
-            : Exports.ReadableStreamDefaultController.Type =
+            : Exports.ReadableStreamDefaultController__.Type =
             nativeOnly
 
         /// <summary>
@@ -3920,7 +3943,7 @@ module Web =
         /// </summary>
         [<Global("ReadableStreamDefaultReader")>]
         static member inline ReadableStreamDefaultReader
-            : Exports.ReadableStreamDefaultReader.Type<obj> =
+            : Exports.ReadableStreamDefaultReader__.Type<obj> =
             nativeOnly
 
         /// <summary>
@@ -3929,7 +3952,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/RemotePlayback)
         /// </summary>
         [<Global("RemotePlayback")>]
-        static member inline RemotePlayback: Exports.RemotePlayback.Type = nativeOnly
+        static member inline RemotePlayback: Exports.RemotePlayback__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>ReportingObserver</c>** interface of the Reporting API allows you to collect and access reports.
@@ -3937,7 +3960,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReportingObserver)
         /// </summary>
         [<Global("ReportingObserver")>]
-        static member inline ReportingObserver: Exports.ReportingObserver.Type = nativeOnly
+        static member inline ReportingObserver: Exports.ReportingObserver__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>Request</c>** interface of the Fetch API represents a resource request.
@@ -3945,7 +3968,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Request)
         /// </summary>
         [<Global("Request")>]
-        static member inline Request: Exports.Request.Type = nativeOnly
+        static member inline Request: Exports.Request__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>ResizeObserver</c>** interface reports changes to the dimensions of an Element's content or border box, or the bounding box of an SVGElement.
@@ -3953,7 +3976,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ResizeObserver)
         /// </summary>
         [<Global("ResizeObserver")>]
-        static member inline ResizeObserver: Exports.ResizeObserver.Type = nativeOnly
+        static member inline ResizeObserver: Exports.ResizeObserver__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>ResizeObserverEntry</c>** interface represents the object passed to the ResizeObserver() constructor's callback function, which allows you to access the new dimensions of the Element or SVGElement being observed.
@@ -3961,7 +3984,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ResizeObserverEntry)
         /// </summary>
         [<Global("ResizeObserverEntry")>]
-        static member inline ResizeObserverEntry: Exports.ResizeObserverEntry.Type = nativeOnly
+        static member inline ResizeObserverEntry: Exports.ResizeObserverEntry__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>ResizeObserverSize</c>** interface of the Resize Observer API is used by the ResizeObserverEntry interface to access the box sizing properties of the element being observed.
@@ -3969,7 +3992,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ResizeObserverSize)
         /// </summary>
         [<Global("ResizeObserverSize")>]
-        static member inline ResizeObserverSize: Exports.ResizeObserverSize.Type = nativeOnly
+        static member inline ResizeObserverSize: Exports.ResizeObserverSize__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>Response</c>** interface of the Fetch API represents the response to a request.
@@ -3977,7 +4000,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Response)
         /// </summary>
         [<Global("Response")>]
-        static member inline Response: Exports.Response.Type = nativeOnly
+        static member inline Response: Exports.Response__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGAElement</c>** interface provides access to the properties of an <a> element, as well as methods to manipulate them.
@@ -3985,7 +4008,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGAElement)
         /// </summary>
         [<Global("SVGAElement")>]
-        static member inline SVGAElement: Exports.SVGAElement.Type = nativeOnly
+        static member inline SVGAElement: Exports.SVGAElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGAngle</c>** interface is used to represent a value that can be an <angle> or <number> value.
@@ -3993,7 +4016,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGAngle)
         /// </summary>
         [<Global("SVGAngle")>]
-        static member inline SVGAngle: Exports.SVGAngle.Type = nativeOnly
+        static member inline SVGAngle: Exports.SVGAngle__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGAnimateElement</c>** interface corresponds to the <animate> element.
@@ -4001,7 +4024,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGAnimateElement)
         /// </summary>
         [<Global("SVGAnimateElement")>]
-        static member inline SVGAnimateElement: Exports.SVGAnimateElement.Type = nativeOnly
+        static member inline SVGAnimateElement: Exports.SVGAnimateElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGAnimateMotionElement</c>** interface corresponds to the <animateMotion> element.
@@ -4009,7 +4032,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGAnimateMotionElement)
         /// </summary>
         [<Global("SVGAnimateMotionElement")>]
-        static member inline SVGAnimateMotionElement: Exports.SVGAnimateMotionElement.Type =
+        static member inline SVGAnimateMotionElement: Exports.SVGAnimateMotionElement__.Type =
             nativeOnly
 
         /// <summary>
@@ -4018,7 +4041,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGAnimateTransformElement)
         /// </summary>
         [<Global("SVGAnimateTransformElement")>]
-        static member inline SVGAnimateTransformElement: Exports.SVGAnimateTransformElement.Type =
+        static member inline SVGAnimateTransformElement: Exports.SVGAnimateTransformElement__.Type =
             nativeOnly
 
         /// <summary>
@@ -4027,7 +4050,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGAnimatedAngle)
         /// </summary>
         [<Global("SVGAnimatedAngle")>]
-        static member inline SVGAnimatedAngle: Exports.SVGAnimatedAngle.Type = nativeOnly
+        static member inline SVGAnimatedAngle: Exports.SVGAnimatedAngle__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGAnimatedBoolean</c>** interface is used for attributes of type boolean which can be animated.
@@ -4035,7 +4058,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGAnimatedBoolean)
         /// </summary>
         [<Global("SVGAnimatedBoolean")>]
-        static member inline SVGAnimatedBoolean: Exports.SVGAnimatedBoolean.Type = nativeOnly
+        static member inline SVGAnimatedBoolean: Exports.SVGAnimatedBoolean__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGAnimatedEnumeration</c>** interface describes attribute values which are constants from a particular enumeration and which can be animated.
@@ -4043,7 +4066,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGAnimatedEnumeration)
         /// </summary>
         [<Global("SVGAnimatedEnumeration")>]
-        static member inline SVGAnimatedEnumeration: Exports.SVGAnimatedEnumeration.Type =
+        static member inline SVGAnimatedEnumeration: Exports.SVGAnimatedEnumeration__.Type =
             nativeOnly
 
         /// <summary>
@@ -4052,7 +4075,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGAnimatedInteger)
         /// </summary>
         [<Global("SVGAnimatedInteger")>]
-        static member inline SVGAnimatedInteger: Exports.SVGAnimatedInteger.Type = nativeOnly
+        static member inline SVGAnimatedInteger: Exports.SVGAnimatedInteger__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGAnimatedLength</c>** interface represents attributes of type <length> which can be animated.
@@ -4060,7 +4083,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGAnimatedLength)
         /// </summary>
         [<Global("SVGAnimatedLength")>]
-        static member inline SVGAnimatedLength: Exports.SVGAnimatedLength.Type = nativeOnly
+        static member inline SVGAnimatedLength: Exports.SVGAnimatedLength__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGAnimatedLengthList</c>** interface is used for attributes of type SVGLengthList which can be animated.
@@ -4068,7 +4091,8 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGAnimatedLengthList)
         /// </summary>
         [<Global("SVGAnimatedLengthList")>]
-        static member inline SVGAnimatedLengthList: Exports.SVGAnimatedLengthList.Type = nativeOnly
+        static member inline SVGAnimatedLengthList: Exports.SVGAnimatedLengthList__.Type =
+            nativeOnly
 
         /// <summary>
         /// The **<c>SVGAnimatedNumber</c>** interface represents attributes of type <number> which can be animated.
@@ -4076,7 +4100,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGAnimatedNumber)
         /// </summary>
         [<Global("SVGAnimatedNumber")>]
-        static member inline SVGAnimatedNumber: Exports.SVGAnimatedNumber.Type = nativeOnly
+        static member inline SVGAnimatedNumber: Exports.SVGAnimatedNumber__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGAnimatedNumberList</c>** interface represents a list of attributes of type <number> which can be animated.
@@ -4084,7 +4108,8 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGAnimatedNumberList)
         /// </summary>
         [<Global("SVGAnimatedNumberList")>]
-        static member inline SVGAnimatedNumberList: Exports.SVGAnimatedNumberList.Type = nativeOnly
+        static member inline SVGAnimatedNumberList: Exports.SVGAnimatedNumberList__.Type =
+            nativeOnly
 
         /// <summary>
         /// The **<c>SVGAnimatedPreserveAspectRatio</c>** interface represents attributes of type SVGPreserveAspectRatio which can be animated.
@@ -4093,7 +4118,7 @@ module Web =
         /// </summary>
         [<Global("SVGAnimatedPreserveAspectRatio")>]
         static member inline SVGAnimatedPreserveAspectRatio
-            : Exports.SVGAnimatedPreserveAspectRatio.Type =
+            : Exports.SVGAnimatedPreserveAspectRatio__.Type =
             nativeOnly
 
         /// <summary>
@@ -4102,7 +4127,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGAnimatedRect)
         /// </summary>
         [<Global("SVGAnimatedRect")>]
-        static member inline SVGAnimatedRect: Exports.SVGAnimatedRect.Type = nativeOnly
+        static member inline SVGAnimatedRect: Exports.SVGAnimatedRect__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGAnimatedString</c>** interface represents string attributes which can be animated from each SVG declaration. You need to create SVG attribute before doing anything else, everything should be declared inside this.
@@ -4110,7 +4135,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGAnimatedString)
         /// </summary>
         [<Global("SVGAnimatedString")>]
-        static member inline SVGAnimatedString: Exports.SVGAnimatedString.Type = nativeOnly
+        static member inline SVGAnimatedString: Exports.SVGAnimatedString__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGAnimatedTransformList</c>** interface represents attributes which take a list of numbers and which can be animated.
@@ -4118,7 +4143,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGAnimatedTransformList)
         /// </summary>
         [<Global("SVGAnimatedTransformList")>]
-        static member inline SVGAnimatedTransformList: Exports.SVGAnimatedTransformList.Type =
+        static member inline SVGAnimatedTransformList: Exports.SVGAnimatedTransformList__.Type =
             nativeOnly
 
         /// <summary>
@@ -4127,7 +4152,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGAnimationElement)
         /// </summary>
         [<Global("SVGAnimationElement")>]
-        static member inline SVGAnimationElement: Exports.SVGAnimationElement.Type = nativeOnly
+        static member inline SVGAnimationElement: Exports.SVGAnimationElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGCircleElement</c>** interface is an interface for the <circle> element.
@@ -4135,7 +4160,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGCircleElement)
         /// </summary>
         [<Global("SVGCircleElement")>]
-        static member inline SVGCircleElement: Exports.SVGCircleElement.Type = nativeOnly
+        static member inline SVGCircleElement: Exports.SVGCircleElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGClipPathElement</c>** interface provides access to the properties of <clipPath> elements, as well as methods to manipulate them.
@@ -4143,7 +4168,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGClipPathElement)
         /// </summary>
         [<Global("SVGClipPathElement")>]
-        static member inline SVGClipPathElement: Exports.SVGClipPathElement.Type = nativeOnly
+        static member inline SVGClipPathElement: Exports.SVGClipPathElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGComponentTransferFunctionElement</c>** interface represents a base interface used by the component transfer function interfaces.
@@ -4152,7 +4177,7 @@ module Web =
         /// </summary>
         [<Global("SVGComponentTransferFunctionElement")>]
         static member inline SVGComponentTransferFunctionElement
-            : Exports.SVGComponentTransferFunctionElement.Type =
+            : Exports.SVGComponentTransferFunctionElement__.Type =
             nativeOnly
 
         /// <summary>
@@ -4161,7 +4186,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGDefsElement)
         /// </summary>
         [<Global("SVGDefsElement")>]
-        static member inline SVGDefsElement: Exports.SVGDefsElement.Type = nativeOnly
+        static member inline SVGDefsElement: Exports.SVGDefsElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGDescElement</c>** interface corresponds to the <desc> element.
@@ -4169,7 +4194,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGDescElement)
         /// </summary>
         [<Global("SVGDescElement")>]
-        static member inline SVGDescElement: Exports.SVGDescElement.Type = nativeOnly
+        static member inline SVGDescElement: Exports.SVGDescElement__.Type = nativeOnly
 
         /// <summary>
         /// All of the SVG DOM interfaces that correspond directly to elements in the SVG language derive from the **<c>SVGElement</c>** interface.
@@ -4177,7 +4202,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGElement)
         /// </summary>
         [<Global("SVGElement")>]
-        static member inline SVGElement: Exports.SVGElement.Type = nativeOnly
+        static member inline SVGElement: Exports.SVGElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGEllipseElement</c>** interface provides access to the properties of <ellipse> elements.
@@ -4185,7 +4210,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGEllipseElement)
         /// </summary>
         [<Global("SVGEllipseElement")>]
-        static member inline SVGEllipseElement: Exports.SVGEllipseElement.Type = nativeOnly
+        static member inline SVGEllipseElement: Exports.SVGEllipseElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGFEBlendElement</c>** interface corresponds to the <feBlend> element.
@@ -4193,7 +4218,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGFEBlendElement)
         /// </summary>
         [<Global("SVGFEBlendElement")>]
-        static member inline SVGFEBlendElement: Exports.SVGFEBlendElement.Type = nativeOnly
+        static member inline SVGFEBlendElement: Exports.SVGFEBlendElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGFEColorMatrixElement</c>** interface corresponds to the <feColorMatrix> element.
@@ -4201,7 +4226,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGFEColorMatrixElement)
         /// </summary>
         [<Global("SVGFEColorMatrixElement")>]
-        static member inline SVGFEColorMatrixElement: Exports.SVGFEColorMatrixElement.Type =
+        static member inline SVGFEColorMatrixElement: Exports.SVGFEColorMatrixElement__.Type =
             nativeOnly
 
         /// <summary>
@@ -4211,7 +4236,7 @@ module Web =
         /// </summary>
         [<Global("SVGFEComponentTransferElement")>]
         static member inline SVGFEComponentTransferElement
-            : Exports.SVGFEComponentTransferElement.Type =
+            : Exports.SVGFEComponentTransferElement__.Type =
             nativeOnly
 
         /// <summary>
@@ -4220,7 +4245,8 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGFECompositeElement)
         /// </summary>
         [<Global("SVGFECompositeElement")>]
-        static member inline SVGFECompositeElement: Exports.SVGFECompositeElement.Type = nativeOnly
+        static member inline SVGFECompositeElement: Exports.SVGFECompositeElement__.Type =
+            nativeOnly
 
         /// <summary>
         /// The **<c>SVGFEConvolveMatrixElement</c>** interface corresponds to the <feConvolveMatrix> element.
@@ -4228,7 +4254,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGFEConvolveMatrixElement)
         /// </summary>
         [<Global("SVGFEConvolveMatrixElement")>]
-        static member inline SVGFEConvolveMatrixElement: Exports.SVGFEConvolveMatrixElement.Type =
+        static member inline SVGFEConvolveMatrixElement: Exports.SVGFEConvolveMatrixElement__.Type =
             nativeOnly
 
         /// <summary>
@@ -4237,7 +4263,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGFEDiffuseLightingElement)
         /// </summary>
         [<Global("SVGFEDiffuseLightingElement")>]
-        static member inline SVGFEDiffuseLightingElement: Exports.SVGFEDiffuseLightingElement.Type =
+        static member inline SVGFEDiffuseLightingElement: Exports.SVGFEDiffuseLightingElement__.Type =
             nativeOnly
 
         /// <summary>
@@ -4246,7 +4272,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGFEDisplacementMapElement)
         /// </summary>
         [<Global("SVGFEDisplacementMapElement")>]
-        static member inline SVGFEDisplacementMapElement: Exports.SVGFEDisplacementMapElement.Type =
+        static member inline SVGFEDisplacementMapElement: Exports.SVGFEDisplacementMapElement__.Type =
             nativeOnly
 
         /// <summary>
@@ -4255,7 +4281,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGFEDistantLightElement)
         /// </summary>
         [<Global("SVGFEDistantLightElement")>]
-        static member inline SVGFEDistantLightElement: Exports.SVGFEDistantLightElement.Type =
+        static member inline SVGFEDistantLightElement: Exports.SVGFEDistantLightElement__.Type =
             nativeOnly
 
         /// <summary>
@@ -4264,7 +4290,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGFEDropShadowElement)
         /// </summary>
         [<Global("SVGFEDropShadowElement")>]
-        static member inline SVGFEDropShadowElement: Exports.SVGFEDropShadowElement.Type =
+        static member inline SVGFEDropShadowElement: Exports.SVGFEDropShadowElement__.Type =
             nativeOnly
 
         /// <summary>
@@ -4273,7 +4299,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGFEFloodElement)
         /// </summary>
         [<Global("SVGFEFloodElement")>]
-        static member inline SVGFEFloodElement: Exports.SVGFEFloodElement.Type = nativeOnly
+        static member inline SVGFEFloodElement: Exports.SVGFEFloodElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGFEFuncAElement</c>** interface corresponds to the <feFuncA> element.
@@ -4281,7 +4307,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGFEFuncAElement)
         /// </summary>
         [<Global("SVGFEFuncAElement")>]
-        static member inline SVGFEFuncAElement: Exports.SVGFEFuncAElement.Type = nativeOnly
+        static member inline SVGFEFuncAElement: Exports.SVGFEFuncAElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGFEFuncBElement</c>** interface corresponds to the <feFuncB> element.
@@ -4289,7 +4315,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGFEFuncBElement)
         /// </summary>
         [<Global("SVGFEFuncBElement")>]
-        static member inline SVGFEFuncBElement: Exports.SVGFEFuncBElement.Type = nativeOnly
+        static member inline SVGFEFuncBElement: Exports.SVGFEFuncBElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGFEFuncGElement</c>** interface corresponds to the <feFuncG> element.
@@ -4297,7 +4323,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGFEFuncGElement)
         /// </summary>
         [<Global("SVGFEFuncGElement")>]
-        static member inline SVGFEFuncGElement: Exports.SVGFEFuncGElement.Type = nativeOnly
+        static member inline SVGFEFuncGElement: Exports.SVGFEFuncGElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGFEFuncRElement</c>** interface corresponds to the <feFuncR> element.
@@ -4305,7 +4331,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGFEFuncRElement)
         /// </summary>
         [<Global("SVGFEFuncRElement")>]
-        static member inline SVGFEFuncRElement: Exports.SVGFEFuncRElement.Type = nativeOnly
+        static member inline SVGFEFuncRElement: Exports.SVGFEFuncRElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGFEGaussianBlurElement</c>** interface corresponds to the <feGaussianBlur> element.
@@ -4313,7 +4339,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGFEGaussianBlurElement)
         /// </summary>
         [<Global("SVGFEGaussianBlurElement")>]
-        static member inline SVGFEGaussianBlurElement: Exports.SVGFEGaussianBlurElement.Type =
+        static member inline SVGFEGaussianBlurElement: Exports.SVGFEGaussianBlurElement__.Type =
             nativeOnly
 
         /// <summary>
@@ -4322,7 +4348,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGFEImageElement)
         /// </summary>
         [<Global("SVGFEImageElement")>]
-        static member inline SVGFEImageElement: Exports.SVGFEImageElement.Type = nativeOnly
+        static member inline SVGFEImageElement: Exports.SVGFEImageElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGFEMergeElement</c>** interface corresponds to the <feMerge> element.
@@ -4330,7 +4356,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGFEMergeElement)
         /// </summary>
         [<Global("SVGFEMergeElement")>]
-        static member inline SVGFEMergeElement: Exports.SVGFEMergeElement.Type = nativeOnly
+        static member inline SVGFEMergeElement: Exports.SVGFEMergeElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGFEMergeNodeElement</c>** interface corresponds to the <feMergeNode> element.
@@ -4338,7 +4364,8 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGFEMergeNodeElement)
         /// </summary>
         [<Global("SVGFEMergeNodeElement")>]
-        static member inline SVGFEMergeNodeElement: Exports.SVGFEMergeNodeElement.Type = nativeOnly
+        static member inline SVGFEMergeNodeElement: Exports.SVGFEMergeNodeElement__.Type =
+            nativeOnly
 
         /// <summary>
         /// The **<c>SVGFEMorphologyElement</c>** interface corresponds to the <feMorphology> element.
@@ -4346,7 +4373,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGFEMorphologyElement)
         /// </summary>
         [<Global("SVGFEMorphologyElement")>]
-        static member inline SVGFEMorphologyElement: Exports.SVGFEMorphologyElement.Type =
+        static member inline SVGFEMorphologyElement: Exports.SVGFEMorphologyElement__.Type =
             nativeOnly
 
         /// <summary>
@@ -4355,7 +4382,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGFEOffsetElement)
         /// </summary>
         [<Global("SVGFEOffsetElement")>]
-        static member inline SVGFEOffsetElement: Exports.SVGFEOffsetElement.Type = nativeOnly
+        static member inline SVGFEOffsetElement: Exports.SVGFEOffsetElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGFEPointLightElement</c>** interface corresponds to the <fePointLight> element.
@@ -4363,7 +4390,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGFEPointLightElement)
         /// </summary>
         [<Global("SVGFEPointLightElement")>]
-        static member inline SVGFEPointLightElement: Exports.SVGFEPointLightElement.Type =
+        static member inline SVGFEPointLightElement: Exports.SVGFEPointLightElement__.Type =
             nativeOnly
 
         /// <summary>
@@ -4372,7 +4399,8 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGFESpecularLightingElement)
         /// </summary>
         [<Global("SVGFESpecularLightingElement")>]
-        static member inline SVGFESpecularLightingElement: Exports.SVGFESpecularLightingElement.Type =
+        static member inline SVGFESpecularLightingElement
+            : Exports.SVGFESpecularLightingElement__.Type =
             nativeOnly
 
         /// <summary>
@@ -4381,7 +4409,8 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGFESpotLightElement)
         /// </summary>
         [<Global("SVGFESpotLightElement")>]
-        static member inline SVGFESpotLightElement: Exports.SVGFESpotLightElement.Type = nativeOnly
+        static member inline SVGFESpotLightElement: Exports.SVGFESpotLightElement__.Type =
+            nativeOnly
 
         /// <summary>
         /// The **<c>SVGFETileElement</c>** interface corresponds to the <feTile> element.
@@ -4389,7 +4418,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGFETileElement)
         /// </summary>
         [<Global("SVGFETileElement")>]
-        static member inline SVGFETileElement: Exports.SVGFETileElement.Type = nativeOnly
+        static member inline SVGFETileElement: Exports.SVGFETileElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGFETurbulenceElement</c>** interface corresponds to the <feTurbulence> element.
@@ -4397,7 +4426,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGFETurbulenceElement)
         /// </summary>
         [<Global("SVGFETurbulenceElement")>]
-        static member inline SVGFETurbulenceElement: Exports.SVGFETurbulenceElement.Type =
+        static member inline SVGFETurbulenceElement: Exports.SVGFETurbulenceElement__.Type =
             nativeOnly
 
         /// <summary>
@@ -4406,7 +4435,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGFilterElement)
         /// </summary>
         [<Global("SVGFilterElement")>]
-        static member inline SVGFilterElement: Exports.SVGFilterElement.Type = nativeOnly
+        static member inline SVGFilterElement: Exports.SVGFilterElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGForeignObjectElement</c>** interface provides access to the properties of <foreignObject> elements, as well as methods to manipulate them.
@@ -4414,7 +4443,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGForeignObjectElement)
         /// </summary>
         [<Global("SVGForeignObjectElement")>]
-        static member inline SVGForeignObjectElement: Exports.SVGForeignObjectElement.Type =
+        static member inline SVGForeignObjectElement: Exports.SVGForeignObjectElement__.Type =
             nativeOnly
 
         /// <summary>
@@ -4423,7 +4452,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGGElement)
         /// </summary>
         [<Global("SVGGElement")>]
-        static member inline SVGGElement: Exports.SVGGElement.Type = nativeOnly
+        static member inline SVGGElement: Exports.SVGGElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGGeometryElement</c>** interface represents SVG elements whose rendering is defined by geometry with an equivalent path, and which can be filled and stroked. This includes paths and the basic shapes.
@@ -4431,7 +4460,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGGeometryElement)
         /// </summary>
         [<Global("SVGGeometryElement")>]
-        static member inline SVGGeometryElement: Exports.SVGGeometryElement.Type = nativeOnly
+        static member inline SVGGeometryElement: Exports.SVGGeometryElement__.Type = nativeOnly
 
         /// <summary>
         /// The SVGGradient interface is a base interface used by SVGLinearGradientElement and SVGRadialGradientElement.
@@ -4439,7 +4468,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGGradientElement)
         /// </summary>
         [<Global("SVGGradientElement")>]
-        static member inline SVGGradientElement: Exports.SVGGradientElement.Type = nativeOnly
+        static member inline SVGGradientElement: Exports.SVGGradientElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGGraphicsElement</c>** interface represents SVG elements whose primary purpose is to directly render graphics into a group.
@@ -4447,7 +4476,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGGraphicsElement)
         /// </summary>
         [<Global("SVGGraphicsElement")>]
-        static member inline SVGGraphicsElement: Exports.SVGGraphicsElement.Type = nativeOnly
+        static member inline SVGGraphicsElement: Exports.SVGGraphicsElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGImageElement</c>** interface corresponds to the <image> element.
@@ -4455,7 +4484,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGImageElement)
         /// </summary>
         [<Global("SVGImageElement")>]
-        static member inline SVGImageElement: Exports.SVGImageElement.Type = nativeOnly
+        static member inline SVGImageElement: Exports.SVGImageElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGLength</c>** interface correspond to the <length> basic data type.
@@ -4463,7 +4492,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGLength)
         /// </summary>
         [<Global("SVGLength")>]
-        static member inline SVGLength: Exports.SVGLength.Type = nativeOnly
+        static member inline SVGLength: Exports.SVGLength__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGLengthList</c>** interface defines a list of SVGLength objects. It is used for the baseVal and animVal properties of SVGAnimatedLengthList.
@@ -4471,7 +4500,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGLengthList)
         /// </summary>
         [<Global("SVGLengthList")>]
-        static member inline SVGLengthList: Exports.SVGLengthList.Type = nativeOnly
+        static member inline SVGLengthList: Exports.SVGLengthList__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGLineElement</c>** interface provides access to the properties of <line> elements, as well as methods to manipulate them.
@@ -4479,7 +4508,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGLineElement)
         /// </summary>
         [<Global("SVGLineElement")>]
-        static member inline SVGLineElement: Exports.SVGLineElement.Type = nativeOnly
+        static member inline SVGLineElement: Exports.SVGLineElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGLinearGradientElement</c>** interface corresponds to the <linearGradient> element.
@@ -4487,7 +4516,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGLinearGradientElement)
         /// </summary>
         [<Global("SVGLinearGradientElement")>]
-        static member inline SVGLinearGradientElement: Exports.SVGLinearGradientElement.Type =
+        static member inline SVGLinearGradientElement: Exports.SVGLinearGradientElement__.Type =
             nativeOnly
 
         /// <summary>
@@ -4496,7 +4525,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGMPathElement)
         /// </summary>
         [<Global("SVGMPathElement")>]
-        static member inline SVGMPathElement: Exports.SVGMPathElement.Type = nativeOnly
+        static member inline SVGMPathElement: Exports.SVGMPathElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGMarkerElement</c>** interface provides access to the properties of <marker> elements, as well as methods to manipulate them. The <marker> element defines the graphics used for drawing marks on a shape.
@@ -4504,7 +4533,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGMarkerElement)
         /// </summary>
         [<Global("SVGMarkerElement")>]
-        static member inline SVGMarkerElement: Exports.SVGMarkerElement.Type = nativeOnly
+        static member inline SVGMarkerElement: Exports.SVGMarkerElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGMaskElement</c>** interface provides access to the properties of <mask> elements, as well as methods to manipulate them.
@@ -4512,7 +4541,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGMaskElement)
         /// </summary>
         [<Global("SVGMaskElement")>]
-        static member inline SVGMaskElement: Exports.SVGMaskElement.Type = nativeOnly
+        static member inline SVGMaskElement: Exports.SVGMaskElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGMetadataElement</c>** interface corresponds to the <metadata> element.
@@ -4520,7 +4549,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGMetadataElement)
         /// </summary>
         [<Global("SVGMetadataElement")>]
-        static member inline SVGMetadataElement: Exports.SVGMetadataElement.Type = nativeOnly
+        static member inline SVGMetadataElement: Exports.SVGMetadataElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGNumber</c>** interface corresponds to the <number> basic data type.
@@ -4528,7 +4557,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGNumber)
         /// </summary>
         [<Global("SVGNumber")>]
-        static member inline SVGNumber: Exports.SVGNumber.Type = nativeOnly
+        static member inline SVGNumber: Exports.SVGNumber__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGNumberList</c>** interface defines a list of numbers.
@@ -4536,7 +4565,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGNumberList)
         /// </summary>
         [<Global("SVGNumberList")>]
-        static member inline SVGNumberList: Exports.SVGNumberList.Type = nativeOnly
+        static member inline SVGNumberList: Exports.SVGNumberList__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGPathElement</c>** interface corresponds to the <path> element.
@@ -4544,7 +4573,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGPathElement)
         /// </summary>
         [<Global("SVGPathElement")>]
-        static member inline SVGPathElement: Exports.SVGPathElement.Type = nativeOnly
+        static member inline SVGPathElement: Exports.SVGPathElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGPatternElement</c>** interface corresponds to the <pattern> element.
@@ -4552,7 +4581,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGPatternElement)
         /// </summary>
         [<Global("SVGPatternElement")>]
-        static member inline SVGPatternElement: Exports.SVGPatternElement.Type = nativeOnly
+        static member inline SVGPatternElement: Exports.SVGPatternElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGPointList</c>** interface represents a list of DOMPoint objects.
@@ -4560,7 +4589,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGPointList)
         /// </summary>
         [<Global("SVGPointList")>]
-        static member inline SVGPointList: Exports.SVGPointList.Type = nativeOnly
+        static member inline SVGPointList: Exports.SVGPointList__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGPolygonElement</c>** interface provides access to the properties of <polygon> elements, as well as methods to manipulate them.
@@ -4568,7 +4597,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGPolygonElement)
         /// </summary>
         [<Global("SVGPolygonElement")>]
-        static member inline SVGPolygonElement: Exports.SVGPolygonElement.Type = nativeOnly
+        static member inline SVGPolygonElement: Exports.SVGPolygonElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGPolylineElement</c>** interface provides access to the properties of <polyline> elements, as well as methods to manipulate them.
@@ -4576,7 +4605,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGPolylineElement)
         /// </summary>
         [<Global("SVGPolylineElement")>]
-        static member inline SVGPolylineElement: Exports.SVGPolylineElement.Type = nativeOnly
+        static member inline SVGPolylineElement: Exports.SVGPolylineElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGPreserveAspectRatio</c>** interface corresponds to the preserveAspectRatio attribute.
@@ -4584,7 +4613,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGPreserveAspectRatio)
         /// </summary>
         [<Global("SVGPreserveAspectRatio")>]
-        static member inline SVGPreserveAspectRatio: Exports.SVGPreserveAspectRatio.Type =
+        static member inline SVGPreserveAspectRatio: Exports.SVGPreserveAspectRatio__.Type =
             nativeOnly
 
         /// <summary>
@@ -4593,7 +4622,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGRadialGradientElement)
         /// </summary>
         [<Global("SVGRadialGradientElement")>]
-        static member inline SVGRadialGradientElement: Exports.SVGRadialGradientElement.Type =
+        static member inline SVGRadialGradientElement: Exports.SVGRadialGradientElement__.Type =
             nativeOnly
 
         /// <summary>
@@ -4602,7 +4631,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGRectElement)
         /// </summary>
         [<Global("SVGRectElement")>]
-        static member inline SVGRectElement: Exports.SVGRectElement.Type = nativeOnly
+        static member inline SVGRectElement: Exports.SVGRectElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGSVGElement</c>** interface provides access to the properties of <svg> elements, as well as methods to manipulate them. This interface contains also various miscellaneous commonly-used utility methods, such as matrix operations and the ability to control the time of redraw on visual rendering devices.
@@ -4610,7 +4639,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGSVGElement)
         /// </summary>
         [<Global("SVGSVGElement")>]
-        static member inline SVGSVGElement: Exports.SVGSVGElement.Type = nativeOnly
+        static member inline SVGSVGElement: Exports.SVGSVGElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGScriptElement</c>** interface corresponds to the SVG <script> element.
@@ -4618,7 +4647,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGScriptElement)
         /// </summary>
         [<Global("SVGScriptElement")>]
-        static member inline SVGScriptElement: Exports.SVGScriptElement.Type = nativeOnly
+        static member inline SVGScriptElement: Exports.SVGScriptElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGSetElement</c>** interface corresponds to the <set> element.
@@ -4626,7 +4655,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGSetElement)
         /// </summary>
         [<Global("SVGSetElement")>]
-        static member inline SVGSetElement: Exports.SVGSetElement.Type = nativeOnly
+        static member inline SVGSetElement: Exports.SVGSetElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGStopElement</c>** interface corresponds to the <stop> element.
@@ -4634,7 +4663,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGStopElement)
         /// </summary>
         [<Global("SVGStopElement")>]
-        static member inline SVGStopElement: Exports.SVGStopElement.Type = nativeOnly
+        static member inline SVGStopElement: Exports.SVGStopElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGStringList</c>** interface defines a list of strings.
@@ -4642,7 +4671,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGStringList)
         /// </summary>
         [<Global("SVGStringList")>]
-        static member inline SVGStringList: Exports.SVGStringList.Type = nativeOnly
+        static member inline SVGStringList: Exports.SVGStringList__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGStyleElement</c>** interface corresponds to the SVG <style> element.
@@ -4650,7 +4679,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGStyleElement)
         /// </summary>
         [<Global("SVGStyleElement")>]
-        static member inline SVGStyleElement: Exports.SVGStyleElement.Type = nativeOnly
+        static member inline SVGStyleElement: Exports.SVGStyleElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGSwitchElement</c>** interface corresponds to the <switch> element.
@@ -4658,7 +4687,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGSwitchElement)
         /// </summary>
         [<Global("SVGSwitchElement")>]
-        static member inline SVGSwitchElement: Exports.SVGSwitchElement.Type = nativeOnly
+        static member inline SVGSwitchElement: Exports.SVGSwitchElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGSymbolElement</c>** interface corresponds to the <symbol> element.
@@ -4666,7 +4695,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGSymbolElement)
         /// </summary>
         [<Global("SVGSymbolElement")>]
-        static member inline SVGSymbolElement: Exports.SVGSymbolElement.Type = nativeOnly
+        static member inline SVGSymbolElement: Exports.SVGSymbolElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGTSpanElement</c>** interface represents a <tspan> element.
@@ -4674,7 +4703,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGTSpanElement)
         /// </summary>
         [<Global("SVGTSpanElement")>]
-        static member inline SVGTSpanElement: Exports.SVGTSpanElement.Type = nativeOnly
+        static member inline SVGTSpanElement: Exports.SVGTSpanElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGTextContentElement</c>** interface is implemented by elements that support rendering child text content. It is inherited by various text-related interfaces, such as SVGTextElement, SVGTSpanElement, and SVGTextPathElement.
@@ -4682,7 +4711,8 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGTextContentElement)
         /// </summary>
         [<Global("SVGTextContentElement")>]
-        static member inline SVGTextContentElement: Exports.SVGTextContentElement.Type = nativeOnly
+        static member inline SVGTextContentElement: Exports.SVGTextContentElement__.Type =
+            nativeOnly
 
         /// <summary>
         /// The **<c>SVGTextElement</c>** interface corresponds to the <text> elements.
@@ -4690,7 +4720,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGTextElement)
         /// </summary>
         [<Global("SVGTextElement")>]
-        static member inline SVGTextElement: Exports.SVGTextElement.Type = nativeOnly
+        static member inline SVGTextElement: Exports.SVGTextElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGTextPathElement</c>** interface corresponds to the <textPath> element.
@@ -4698,7 +4728,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGTextPathElement)
         /// </summary>
         [<Global("SVGTextPathElement")>]
-        static member inline SVGTextPathElement: Exports.SVGTextPathElement.Type = nativeOnly
+        static member inline SVGTextPathElement: Exports.SVGTextPathElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGTextPositioningElement</c>** interface is implemented by elements that support attributes that position individual text glyphs. It is inherited by SVGTextElement and SVGTSpanElement.
@@ -4706,7 +4736,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGTextPositioningElement)
         /// </summary>
         [<Global("SVGTextPositioningElement")>]
-        static member inline SVGTextPositioningElement: Exports.SVGTextPositioningElement.Type =
+        static member inline SVGTextPositioningElement: Exports.SVGTextPositioningElement__.Type =
             nativeOnly
 
         /// <summary>
@@ -4715,7 +4745,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGTitleElement)
         /// </summary>
         [<Global("SVGTitleElement")>]
-        static member inline SVGTitleElement: Exports.SVGTitleElement.Type = nativeOnly
+        static member inline SVGTitleElement: Exports.SVGTitleElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGTransform</c>** interface reflects one of the component transformations within an SVGTransformList; thus, an SVGTransform object corresponds to a single component (e.g., scale(…) or matrix(…)) within a transform attribute.
@@ -4723,7 +4753,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGTransform)
         /// </summary>
         [<Global("SVGTransform")>]
-        static member inline SVGTransform: Exports.SVGTransform.Type = nativeOnly
+        static member inline SVGTransform: Exports.SVGTransform__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGTransformList</c>** interface defines a list of SVGTransform objects.
@@ -4731,7 +4761,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGTransformList)
         /// </summary>
         [<Global("SVGTransformList")>]
-        static member inline SVGTransformList: Exports.SVGTransformList.Type = nativeOnly
+        static member inline SVGTransformList: Exports.SVGTransformList__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGUnitTypes</c>** interface defines a commonly used set of constants used for reflecting gradientUnits, patternContentUnits and other similar attributes.
@@ -4739,7 +4769,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGUnitTypes)
         /// </summary>
         [<Global("SVGUnitTypes")>]
-        static member inline SVGUnitTypes: Exports.SVGUnitTypes.Type = nativeOnly
+        static member inline SVGUnitTypes: Exports.SVGUnitTypes__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGUseElement</c>** interface corresponds to the <use> element.
@@ -4747,7 +4777,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGUseElement)
         /// </summary>
         [<Global("SVGUseElement")>]
-        static member inline SVGUseElement: Exports.SVGUseElement.Type = nativeOnly
+        static member inline SVGUseElement: Exports.SVGUseElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SVGViewElement</c>** interface provides access to the properties of <view> elements, as well as methods to manipulate them.
@@ -4755,7 +4785,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGViewElement)
         /// </summary>
         [<Global("SVGViewElement")>]
-        static member inline SVGViewElement: Exports.SVGViewElement.Type = nativeOnly
+        static member inline SVGViewElement: Exports.SVGViewElement__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>Sanitizer</c>** interface of the HTML Sanitizer API defines a configuration object that specifies what elements, attributes and comments are allowed or should be removed when inserting strings of HTML into an Element or ShadowRoot, or when parsing an HTML string into a Document.
@@ -4763,7 +4793,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Sanitizer)
         /// </summary>
         [<Global("Sanitizer")>]
-        static member inline Sanitizer: Exports.Sanitizer.Type = nativeOnly
+        static member inline Sanitizer: Exports.Sanitizer__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>Scheduler</c>** interface of the Prioritized Task Scheduling API provides methods for scheduling prioritized tasks.
@@ -4771,7 +4801,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Scheduler)
         /// </summary>
         [<Global("Scheduler")>]
-        static member inline Scheduler: Exports.Scheduler.Type = nativeOnly
+        static member inline Scheduler: Exports.Scheduler__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>Screen</c>** interface represents a screen, usually the one on which the current window is being rendered, and is obtained using window.screen.
@@ -4779,7 +4809,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Screen)
         /// </summary>
         [<Global("Screen")>]
-        static member inline Screen: Exports.Screen.Type = nativeOnly
+        static member inline Screen: Exports.Screen__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>ScreenOrientation</c>** interface of the Screen Orientation API provides information about the current orientation of the document.
@@ -4787,14 +4817,14 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ScreenOrientation)
         /// </summary>
         [<Global("ScreenOrientation")>]
-        static member inline ScreenOrientation: Exports.ScreenOrientation.Type = nativeOnly
+        static member inline ScreenOrientation: Exports.ScreenOrientation__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>ScriptProcessorNode</c>** interface allows the generation, processing, or analyzing of audio using JavaScript.
         /// </summary>
         [<Global("ScriptProcessorNode")>]
         [<Obsolete>]
-        static member inline ScriptProcessorNode: Exports.ScriptProcessorNode.Type = nativeOnly
+        static member inline ScriptProcessorNode: Exports.ScriptProcessorNode__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>ScrollTimeline</c>** interface of the Web Animations API represents a scroll progress timeline (see CSS scroll-driven animations for more details).
@@ -4802,7 +4832,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ScrollTimeline)
         /// </summary>
         [<Global("ScrollTimeline")>]
-        static member inline ScrollTimeline: Exports.ScrollTimeline.Type = nativeOnly
+        static member inline ScrollTimeline: Exports.ScrollTimeline__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SecurityPolicyViolationEvent</c>** interface inherits from Event, and represents the event object of a securitypolicyviolation event sent on an Element, Document, or worker when its Content Security Policy (CSP) is violated.
@@ -4810,7 +4840,8 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SecurityPolicyViolationEvent)
         /// </summary>
         [<Global("SecurityPolicyViolationEvent")>]
-        static member inline SecurityPolicyViolationEvent: Exports.SecurityPolicyViolationEvent.Type =
+        static member inline SecurityPolicyViolationEvent
+            : Exports.SecurityPolicyViolationEvent__.Type =
             nativeOnly
 
         /// <summary>
@@ -4819,7 +4850,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Selection)
         /// </summary>
         [<Global("Selection")>]
-        static member inline Selection: Exports.Selection.Type = nativeOnly
+        static member inline Selection: Exports.Selection__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>Serial</c>** interface of the Web Serial API provides attributes and methods for finding and connecting to serial ports from a web page.
@@ -4828,7 +4859,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Serial)
         /// </summary>
         [<Global("Serial")>]
-        static member inline Serial: Exports.Serial.Type = nativeOnly
+        static member inline Serial: Exports.Serial__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SerialPort</c>** interface of the Web Serial API provides access to a serial port on the host device.
@@ -4837,7 +4868,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SerialPort)
         /// </summary>
         [<Global("SerialPort")>]
-        static member inline SerialPort: Exports.SerialPort.Type = nativeOnly
+        static member inline SerialPort: Exports.SerialPort__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>ServiceWorker</c>** interface of the Service Worker API provides a reference to a service worker. Multiple browsing contexts (e.g., pages, workers, etc.) can be associated with the same service worker, each through a unique ServiceWorker object.
@@ -4846,7 +4877,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ServiceWorker)
         /// </summary>
         [<Global("ServiceWorker")>]
-        static member inline ServiceWorker: Exports.ServiceWorker.Type = nativeOnly
+        static member inline ServiceWorker: Exports.ServiceWorker__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>ServiceWorkerContainer</c>** interface of the Service Worker API provides an object representing the service worker as an overall unit in the network ecosystem, including facilities to register, unregister and update service workers, and access the state of service workers and their registrations.
@@ -4855,7 +4886,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ServiceWorkerContainer)
         /// </summary>
         [<Global("ServiceWorkerContainer")>]
-        static member inline ServiceWorkerContainer: Exports.ServiceWorkerContainer.Type =
+        static member inline ServiceWorkerContainer: Exports.ServiceWorkerContainer__.Type =
             nativeOnly
 
         /// <summary>
@@ -4865,7 +4896,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ServiceWorkerRegistration)
         /// </summary>
         [<Global("ServiceWorkerRegistration")>]
-        static member inline ServiceWorkerRegistration: Exports.ServiceWorkerRegistration.Type =
+        static member inline ServiceWorkerRegistration: Exports.ServiceWorkerRegistration__.Type =
             nativeOnly
 
         /// <summary>
@@ -4874,7 +4905,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ShadowRoot)
         /// </summary>
         [<Global("ShadowRoot")>]
-        static member inline ShadowRoot: Exports.ShadowRoot.Type = nativeOnly
+        static member inline ShadowRoot: Exports.ShadowRoot__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SharedWorker</c>** interface represents a specific kind of worker that can be accessed from several browsing contexts, such as multiple windows or iframes. Shared workers implement a different interface than dedicated workers, have a different global scope (SharedWorkerGlobalScope), and their constructor is not exposed in DedicatedWorkerGlobalScope, so they cannot be instantiated from dedicated workers.
@@ -4882,7 +4913,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SharedWorker)
         /// </summary>
         [<Global("SharedWorker")>]
-        static member inline SharedWorker: Exports.SharedWorker.Type = nativeOnly
+        static member inline SharedWorker: Exports.SharedWorker__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SourceBuffer</c>** interface represents a chunk of media to be passed into an HTMLMediaElement and played, via a MediaSource object. This can be made up of one or several media segments.
@@ -4890,7 +4921,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SourceBuffer)
         /// </summary>
         [<Global("SourceBuffer")>]
-        static member inline SourceBuffer: Exports.SourceBuffer.Type = nativeOnly
+        static member inline SourceBuffer: Exports.SourceBuffer__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SourceBufferList</c>** interface represents a simple container list for multiple SourceBuffer objects.
@@ -4898,7 +4929,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SourceBufferList)
         /// </summary>
         [<Global("SourceBufferList")>]
-        static member inline SourceBufferList: Exports.SourceBufferList.Type = nativeOnly
+        static member inline SourceBufferList: Exports.SourceBufferList__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SpeechRecognitionAlternative</c>** interface of the Web Speech API represents a single word that has been recognized by the speech recognition service.
@@ -4907,7 +4938,8 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SpeechRecognitionAlternative)
         /// </summary>
         [<Global("SpeechRecognitionAlternative")>]
-        static member inline SpeechRecognitionAlternative: Exports.SpeechRecognitionAlternative.Type =
+        static member inline SpeechRecognitionAlternative
+            : Exports.SpeechRecognitionAlternative__.Type =
             nativeOnly
 
         /// <summary>
@@ -4917,7 +4949,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SpeechRecognitionErrorEvent)
         /// </summary>
         [<Global("SpeechRecognitionErrorEvent")>]
-        static member inline SpeechRecognitionErrorEvent: Exports.SpeechRecognitionErrorEvent.Type =
+        static member inline SpeechRecognitionErrorEvent: Exports.SpeechRecognitionErrorEvent__.Type =
             nativeOnly
 
         /// <summary>
@@ -4927,7 +4959,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SpeechRecognitionEvent)
         /// </summary>
         [<Global("SpeechRecognitionEvent")>]
-        static member inline SpeechRecognitionEvent: Exports.SpeechRecognitionEvent.Type =
+        static member inline SpeechRecognitionEvent: Exports.SpeechRecognitionEvent__.Type =
             nativeOnly
 
         /// <summary>
@@ -4937,7 +4969,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SpeechRecognitionResult)
         /// </summary>
         [<Global("SpeechRecognitionResult")>]
-        static member inline SpeechRecognitionResult: Exports.SpeechRecognitionResult.Type =
+        static member inline SpeechRecognitionResult: Exports.SpeechRecognitionResult__.Type =
             nativeOnly
 
         /// <summary>
@@ -4947,7 +4979,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SpeechRecognitionResultList)
         /// </summary>
         [<Global("SpeechRecognitionResultList")>]
-        static member inline SpeechRecognitionResultList: Exports.SpeechRecognitionResultList.Type =
+        static member inline SpeechRecognitionResultList: Exports.SpeechRecognitionResultList__.Type =
             nativeOnly
 
         /// <summary>
@@ -4956,7 +4988,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SpeechSynthesis)
         /// </summary>
         [<Global("SpeechSynthesis")>]
-        static member inline SpeechSynthesis: Exports.SpeechSynthesis.Type = nativeOnly
+        static member inline SpeechSynthesis: Exports.SpeechSynthesis__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SpeechSynthesisErrorEvent</c>** interface of the Web Speech API contains information about any errors that occur while processing SpeechSynthesisUtterance objects in the speech service.
@@ -4964,7 +4996,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SpeechSynthesisErrorEvent)
         /// </summary>
         [<Global("SpeechSynthesisErrorEvent")>]
-        static member inline SpeechSynthesisErrorEvent: Exports.SpeechSynthesisErrorEvent.Type =
+        static member inline SpeechSynthesisErrorEvent: Exports.SpeechSynthesisErrorEvent__.Type =
             nativeOnly
 
         /// <summary>
@@ -4973,7 +5005,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SpeechSynthesisEvent)
         /// </summary>
         [<Global("SpeechSynthesisEvent")>]
-        static member inline SpeechSynthesisEvent: Exports.SpeechSynthesisEvent.Type = nativeOnly
+        static member inline SpeechSynthesisEvent: Exports.SpeechSynthesisEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SpeechSynthesisUtterance</c>** interface of the Web Speech API represents a speech request. It contains the content the speech service should read and information about how to read it (e.g., language, pitch and volume.)
@@ -4981,7 +5013,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SpeechSynthesisUtterance)
         /// </summary>
         [<Global("SpeechSynthesisUtterance")>]
-        static member inline SpeechSynthesisUtterance: Exports.SpeechSynthesisUtterance.Type =
+        static member inline SpeechSynthesisUtterance: Exports.SpeechSynthesisUtterance__.Type =
             nativeOnly
 
         /// <summary>
@@ -4990,7 +5022,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SpeechSynthesisVoice)
         /// </summary>
         [<Global("SpeechSynthesisVoice")>]
-        static member inline SpeechSynthesisVoice: Exports.SpeechSynthesisVoice.Type = nativeOnly
+        static member inline SpeechSynthesisVoice: Exports.SpeechSynthesisVoice__.Type = nativeOnly
 
         /// <summary>
         /// The DOM **<c>StaticRange</c>** interface extends AbstractRange to provide a method to specify a range of content in the DOM whose contents don't update to reflect changes which occur within the DOM tree.
@@ -4998,7 +5030,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/StaticRange)
         /// </summary>
         [<Global("StaticRange")>]
-        static member inline StaticRange: Exports.StaticRange.Type = nativeOnly
+        static member inline StaticRange: Exports.StaticRange__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>StereoPannerNode</c>** interface of the Web Audio API represents a simple stereo panner node that can be used to pan an audio stream left or right. It is an AudioNode audio-processing module that positions an incoming audio stream in a stereo image using a low-cost equal-power panning algorithm.
@@ -5006,7 +5038,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/StereoPannerNode)
         /// </summary>
         [<Global("StereoPannerNode")>]
-        static member inline StereoPannerNode: Exports.StereoPannerNode.Type = nativeOnly
+        static member inline StereoPannerNode: Exports.StereoPannerNode__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>Storage</c>** interface of the Web Storage API provides access to a particular domain's session or local storage. It allows, for example, the addition, modification, or deletion of stored data items.
@@ -5014,7 +5046,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Storage)
         /// </summary>
         [<Global("Storage")>]
-        static member inline Storage: Exports.Storage.Type = nativeOnly
+        static member inline Storage: Exports.Storage__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>StorageEvent</c>** interface is implemented by the storage event, which is sent to a window when a storage area the window has access to is changed within the context of another document.
@@ -5022,7 +5054,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/StorageEvent)
         /// </summary>
         [<Global("StorageEvent")>]
-        static member inline StorageEvent: Exports.StorageEvent.Type = nativeOnly
+        static member inline StorageEvent: Exports.StorageEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>StorageManager</c>** interface of the Storage API provides an interface for managing persistence permissions and estimating available storage. You can get a reference to this interface using either navigator.storage or WorkerNavigator.storage.
@@ -5031,7 +5063,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/StorageManager)
         /// </summary>
         [<Global("StorageManager")>]
-        static member inline StorageManager: Exports.StorageManager.Type = nativeOnly
+        static member inline StorageManager: Exports.StorageManager__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>StylePropertyMap</c>** interface of the CSS Typed Object Model API provides a representation of a CSS declaration block that is an alternative to CSSStyleDeclaration.
@@ -5039,7 +5071,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/StylePropertyMap)
         /// </summary>
         [<Global("StylePropertyMap")>]
-        static member inline StylePropertyMap: Exports.StylePropertyMap.Type = nativeOnly
+        static member inline StylePropertyMap: Exports.StylePropertyMap__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>StylePropertyMapReadOnly</c>** interface of the CSS Typed Object Model API provides a read-only representation of a CSS declaration block that is an alternative to CSSStyleDeclaration. Retrieve an instance of this interface using Element.computedStyleMap().
@@ -5047,7 +5079,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/StylePropertyMapReadOnly)
         /// </summary>
         [<Global("StylePropertyMapReadOnly")>]
-        static member inline StylePropertyMapReadOnly: Exports.StylePropertyMapReadOnly.Type =
+        static member inline StylePropertyMapReadOnly: Exports.StylePropertyMapReadOnly__.Type =
             nativeOnly
 
         /// <summary>
@@ -5056,7 +5088,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/StyleSheet)
         /// </summary>
         [<Global("StyleSheet")>]
-        static member inline StyleSheet: Exports.StyleSheet.Type = nativeOnly
+        static member inline StyleSheet: Exports.StyleSheet__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>StyleSheetList</c>** interface represents a list of CSSStyleSheet objects. An instance of this object can be returned by Document.styleSheets.
@@ -5064,7 +5096,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/StyleSheetList)
         /// </summary>
         [<Global("StyleSheetList")>]
-        static member inline StyleSheetList: Exports.StyleSheetList.Type = nativeOnly
+        static member inline StyleSheetList: Exports.StyleSheetList__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SubmitEvent</c>** interface defines the object used to represent an HTML form's submit event. This event is fired at the <form> when the form's submit action is invoked.
@@ -5072,7 +5104,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubmitEvent)
         /// </summary>
         [<Global("SubmitEvent")>]
-        static member inline SubmitEvent: Exports.SubmitEvent.Type = nativeOnly
+        static member inline SubmitEvent: Exports.SubmitEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>SubtleCrypto</c>** interface of the Web Crypto API provides a number of low-level cryptographic functions.
@@ -5081,7 +5113,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto)
         /// </summary>
         [<Global("SubtleCrypto")>]
-        static member inline SubtleCrypto: Exports.SubtleCrypto.Type = nativeOnly
+        static member inline SubtleCrypto: Exports.SubtleCrypto__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>TaskController</c>** interface of the Prioritized Task Scheduling API represents a controller object that can be used to both abort and change the priority of one or more prioritized tasks. If there is no need to change task priorities, then AbortController can be used instead.
@@ -5089,7 +5121,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/TaskController)
         /// </summary>
         [<Global("TaskController")>]
-        static member inline TaskController: Exports.TaskController.Type = nativeOnly
+        static member inline TaskController: Exports.TaskController__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>TaskPriorityChangeEvent</c>** is the interface for the prioritychange event.
@@ -5097,7 +5129,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/TaskPriorityChangeEvent)
         /// </summary>
         [<Global("TaskPriorityChangeEvent")>]
-        static member inline TaskPriorityChangeEvent: Exports.TaskPriorityChangeEvent.Type =
+        static member inline TaskPriorityChangeEvent: Exports.TaskPriorityChangeEvent__.Type =
             nativeOnly
 
         /// <summary>
@@ -5106,7 +5138,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/TaskSignal)
         /// </summary>
         [<Global("TaskSignal")>]
-        static member inline TaskSignal: Exports.TaskSignal.Type = nativeOnly
+        static member inline TaskSignal: Exports.TaskSignal__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>Text</c>** interface represents a text node in a DOM tree.
@@ -5114,7 +5146,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Text)
         /// </summary>
         [<Global("Text")>]
-        static member inline Text: Exports.Text.Type = nativeOnly
+        static member inline Text: Exports.Text__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>TextDecoder</c>** interface represents a decoder for a specific text encoding, such as UTF-8, ISO-8859-2, or GBK. A decoder takes an array of bytes as input and returns a JavaScript string.
@@ -5122,7 +5154,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/TextDecoder)
         /// </summary>
         [<Global("TextDecoder")>]
-        static member inline TextDecoder: Exports.TextDecoder.Type = nativeOnly
+        static member inline TextDecoder: Exports.TextDecoder__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>TextDecoderStream</c>** interface of the Encoding API converts a stream of text in a binary encoding, such as UTF-8 etc., to a stream of strings. It is the streaming equivalent of TextDecoder. It implements the same shape as a TransformStream, allowing it to be used in ReadableStream.pipeThrough() and similar methods.
@@ -5130,7 +5162,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/TextDecoderStream)
         /// </summary>
         [<Global("TextDecoderStream")>]
-        static member inline TextDecoderStream: Exports.TextDecoderStream.Type = nativeOnly
+        static member inline TextDecoderStream: Exports.TextDecoderStream__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>TextEncoder</c>** interface enables you to encode a JavaScript string using UTF-8.
@@ -5138,7 +5170,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/TextEncoder)
         /// </summary>
         [<Global("TextEncoder")>]
-        static member inline TextEncoder: Exports.TextEncoder.Type = nativeOnly
+        static member inline TextEncoder: Exports.TextEncoder__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>TextEncoderStream</c>** interface of the Encoding API converts a stream of strings into bytes in the UTF-8 encoding. It is the streaming equivalent of TextEncoder. It implements the same shape as a TransformStream, allowing it to be used in ReadableStream.pipeThrough() and similar methods.
@@ -5146,14 +5178,14 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/TextEncoderStream)
         /// </summary>
         [<Global("TextEncoderStream")>]
-        static member inline TextEncoderStream: Exports.TextEncoderStream.Type = nativeOnly
+        static member inline TextEncoderStream: Exports.TextEncoderStream__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>TextEvent</c>** interface is a legacy UI event interface for reporting changes to text UI elements.
         /// </summary>
         [<Global("TextEvent")>]
         [<Obsolete>]
-        static member inline TextEvent: Exports.TextEvent.Type = nativeOnly
+        static member inline TextEvent: Exports.TextEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>TextMetrics</c>** interface represents the dimensions of a piece of text in the canvas; a TextMetrics instance can be retrieved using the CanvasRenderingContext2D.measureText() method.
@@ -5161,7 +5193,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/TextMetrics)
         /// </summary>
         [<Global("TextMetrics")>]
-        static member inline TextMetrics: Exports.TextMetrics.Type = nativeOnly
+        static member inline TextMetrics: Exports.TextMetrics__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>TextTrack</c>** interface of the WebVTT API represents a text track associated with a media element.
@@ -5169,7 +5201,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/TextTrack)
         /// </summary>
         [<Global("TextTrack")>]
-        static member inline TextTrack: Exports.TextTrack.Type = nativeOnly
+        static member inline TextTrack: Exports.TextTrack__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>TextTrackCue</c>** interface of the WebVTT API is the abstract base class for the various derived cue types, such as VTTCue and DataCue; you will work with these derived types rather than the base class.
@@ -5177,7 +5209,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/TextTrackCue)
         /// </summary>
         [<Global("TextTrackCue")>]
-        static member inline TextTrackCue: Exports.TextTrackCue.Type = nativeOnly
+        static member inline TextTrackCue: Exports.TextTrackCue__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>TextTrackCueList</c>** interface of the WebVTT API is an array-like object that represents a dynamically updating list of TextTrackCue objects.
@@ -5185,7 +5217,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/TextTrackCueList)
         /// </summary>
         [<Global("TextTrackCueList")>]
-        static member inline TextTrackCueList: Exports.TextTrackCueList.Type = nativeOnly
+        static member inline TextTrackCueList: Exports.TextTrackCueList__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>TextTrackList</c>** interface is used to represent a list of the text tracks defined for the associated video or audio element, with each track represented by a separate TextTrack object in the list.
@@ -5193,7 +5225,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/TextTrackList)
         /// </summary>
         [<Global("TextTrackList")>]
-        static member inline TextTrackList: Exports.TextTrackList.Type = nativeOnly
+        static member inline TextTrackList: Exports.TextTrackList__.Type = nativeOnly
 
         /// <summary>
         /// When loading a media resource for use by an <audio> or <video> element, the **<c>TimeRanges</c>** interface is used for representing the time ranges of the media resource that have been buffered, the time ranges that have been played, and the time ranges that are seekable.
@@ -5201,7 +5233,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/TimeRanges)
         /// </summary>
         [<Global("TimeRanges")>]
-        static member inline TimeRanges: Exports.TimeRanges.Type = nativeOnly
+        static member inline TimeRanges: Exports.TimeRanges__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>ToggleEvent</c>** interface represents an event that fires when a popover element is toggled between being shown and hidden.
@@ -5209,7 +5241,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ToggleEvent)
         /// </summary>
         [<Global("ToggleEvent")>]
-        static member inline ToggleEvent: Exports.ToggleEvent.Type = nativeOnly
+        static member inline ToggleEvent: Exports.ToggleEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>Touch</c>** interface represents a single contact point on a touch-sensitive device. The contact point is commonly a finger or stylus and the device may be a touchscreen or trackpad.
@@ -5217,7 +5249,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Touch)
         /// </summary>
         [<Global("Touch")>]
-        static member inline Touch: Exports.Touch.Type = nativeOnly
+        static member inline Touch: Exports.Touch__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>TouchEvent</c>** interface represents an UIEvent which is sent when the state of contacts with a touch-sensitive surface changes. This surface can be a touch screen or trackpad, for example. The event can describe one or more points of contact with the screen and includes support for detecting movement, addition and removal of contact points, and so forth.
@@ -5225,7 +5257,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/TouchEvent)
         /// </summary>
         [<Global("TouchEvent")>]
-        static member inline TouchEvent: Exports.TouchEvent.Type = nativeOnly
+        static member inline TouchEvent: Exports.TouchEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>TouchList</c>** interface represents a list of contact points on a touch surface. For example, if the user has three fingers on the touch surface (such as a screen or trackpad), the corresponding TouchList object would have one Touch object for each finger, for a total of three entries.
@@ -5233,7 +5265,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/TouchList)
         /// </summary>
         [<Global("TouchList")>]
-        static member inline TouchList: Exports.TouchList.Type = nativeOnly
+        static member inline TouchList: Exports.TouchList__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>TrackEvent</c>** interface of the HTML DOM API is used for events which represent changes to a set of available tracks on an HTML media element; these events are addtrack and removetrack.
@@ -5241,7 +5273,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/TrackEvent)
         /// </summary>
         [<Global("TrackEvent")>]
-        static member inline TrackEvent: Exports.TrackEvent.Type = nativeOnly
+        static member inline TrackEvent: Exports.TrackEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>TransformStream</c>** interface of the Streams API represents a concrete implementation of the pipe chain transform stream concept.
@@ -5249,7 +5281,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/TransformStream)
         /// </summary>
         [<Global("TransformStream")>]
-        static member inline TransformStream: Exports.TransformStream.Type<obj, obj> = nativeOnly
+        static member inline TransformStream: Exports.TransformStream__.Type<obj, obj> = nativeOnly
 
         /// <summary>
         /// The **<c>TransformStreamDefaultController</c>** interface of the Streams API provides methods to manipulate the associated ReadableStream and WritableStream.
@@ -5258,7 +5290,7 @@ module Web =
         /// </summary>
         [<Global("TransformStreamDefaultController")>]
         static member inline TransformStreamDefaultController
-            : Exports.TransformStreamDefaultController.Type =
+            : Exports.TransformStreamDefaultController__.Type =
             nativeOnly
 
         /// <summary>
@@ -5267,7 +5299,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/TransitionEvent)
         /// </summary>
         [<Global("TransitionEvent")>]
-        static member inline TransitionEvent: Exports.TransitionEvent.Type = nativeOnly
+        static member inline TransitionEvent: Exports.TransitionEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>TreeWalker</c>** object represents the nodes of a document subtree and a position within them.
@@ -5275,7 +5307,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/TreeWalker)
         /// </summary>
         [<Global("TreeWalker")>]
-        static member inline TreeWalker: Exports.TreeWalker.Type = nativeOnly
+        static member inline TreeWalker: Exports.TreeWalker__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>UIEvent</c>** interface represents simple user interface events. It is part of the UI Events API, which includes various event types and interfaces related to user interactions.
@@ -5283,7 +5315,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/UIEvent)
         /// </summary>
         [<Global("UIEvent")>]
-        static member inline UIEvent: Exports.UIEvent.Type = nativeOnly
+        static member inline UIEvent: Exports.UIEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>URL</c>** interface is used to parse, construct, normalize, and encode URLs. It works by providing properties which allow you to easily read and modify the components of a URL.
@@ -5291,10 +5323,10 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/URL)
         /// </summary>
         [<Global("URL")>]
-        static member inline URL: Exports.URL.Type = nativeOnly
+        static member inline URL: Exports.URL__.Type = nativeOnly
 
         [<Global("webkitURL")>]
-        static member inline webkitURL: Exports.URL.Type = nativeOnly
+        static member inline webkitURL: Exports.URL__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>URLPattern</c>** interface of the URL Pattern API matches URLs or parts of URLs against a pattern. The pattern can contain capturing groups that extract parts of the matched URL.
@@ -5302,7 +5334,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/URLPattern)
         /// </summary>
         [<Global("URLPattern")>]
-        static member inline URLPattern: Exports.URLPattern.Type = nativeOnly
+        static member inline URLPattern: Exports.URLPattern__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>URLSearchParams</c>** interface defines utility methods to work with the query string of a URL.
@@ -5310,7 +5342,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/URLSearchParams)
         /// </summary>
         [<Global("URLSearchParams")>]
-        static member inline URLSearchParams: Exports.URLSearchParams.Type = nativeOnly
+        static member inline URLSearchParams: Exports.URLSearchParams__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>UserActivation</c>** interface provides information about whether a user is currently interacting with the page, or has completed an interaction since page load.
@@ -5318,7 +5350,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/UserActivation)
         /// </summary>
         [<Global("UserActivation")>]
-        static member inline UserActivation: Exports.UserActivation.Type = nativeOnly
+        static member inline UserActivation: Exports.UserActivation__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>VTTCue</c>** interface of the WebVTT API represents a cue that can be added to the text track associated with a particular video (or other media).
@@ -5326,7 +5358,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/VTTCue)
         /// </summary>
         [<Global("VTTCue")>]
-        static member inline VTTCue: Exports.VTTCue.Type = nativeOnly
+        static member inline VTTCue: Exports.VTTCue__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>VTTRegion</c>** interface of the WebVTT API describes a portion of the video to render a VTTCue onto.
@@ -5334,7 +5366,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/VTTRegion)
         /// </summary>
         [<Global("VTTRegion")>]
-        static member inline VTTRegion: Exports.VTTRegion.Type = nativeOnly
+        static member inline VTTRegion: Exports.VTTRegion__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>ValidityState</c>** interface represents the validity states that an element can be in, with respect to constraint validation. Together, they help explain why an element's value fails to validate, if it's not valid.
@@ -5342,7 +5374,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ValidityState)
         /// </summary>
         [<Global("ValidityState")>]
-        static member inline ValidityState: Exports.ValidityState.Type = nativeOnly
+        static member inline ValidityState: Exports.ValidityState__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>VideoColorSpace</c>** interface of the WebCodecs API represents the color space of a video.
@@ -5350,7 +5382,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/VideoColorSpace)
         /// </summary>
         [<Global("VideoColorSpace")>]
-        static member inline VideoColorSpace: Exports.VideoColorSpace.Type = nativeOnly
+        static member inline VideoColorSpace: Exports.VideoColorSpace__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>VideoDecoder</c>** interface of the WebCodecs API decodes chunks of video.
@@ -5359,7 +5391,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/VideoDecoder)
         /// </summary>
         [<Global("VideoDecoder")>]
-        static member inline VideoDecoder: Exports.VideoDecoder.Type = nativeOnly
+        static member inline VideoDecoder: Exports.VideoDecoder__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>VideoEncoder</c>** interface of the WebCodecs API encodes VideoFrame objects into EncodedVideoChunks.
@@ -5368,7 +5400,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/VideoEncoder)
         /// </summary>
         [<Global("VideoEncoder")>]
-        static member inline VideoEncoder: Exports.VideoEncoder.Type = nativeOnly
+        static member inline VideoEncoder: Exports.VideoEncoder__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>VideoFrame</c>** interface of the Web Codecs API represents a frame of a video.
@@ -5376,7 +5408,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/VideoFrame)
         /// </summary>
         [<Global("VideoFrame")>]
-        static member inline VideoFrame: Exports.VideoFrame.Type = nativeOnly
+        static member inline VideoFrame: Exports.VideoFrame__.Type = nativeOnly
 
         /// <summary>
         /// A **<c>VideoPlaybackQuality</c>** object is returned by the HTMLVideoElement.getVideoPlaybackQuality() method and contains metrics that can be used to determine the playback quality of a video.
@@ -5384,7 +5416,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/VideoPlaybackQuality)
         /// </summary>
         [<Global("VideoPlaybackQuality")>]
-        static member inline VideoPlaybackQuality: Exports.VideoPlaybackQuality.Type = nativeOnly
+        static member inline VideoPlaybackQuality: Exports.VideoPlaybackQuality__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>ViewTimeline</c>** interface of the Web Animations API represents a view progress timeline (see CSS scroll-driven animations for more details).
@@ -5392,7 +5424,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ViewTimeline)
         /// </summary>
         [<Global("ViewTimeline")>]
-        static member inline ViewTimeline: Exports.ViewTimeline.Type = nativeOnly
+        static member inline ViewTimeline: Exports.ViewTimeline__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>ViewTransition</c>** interface of the View Transition API represents an active view transition, and provides functionality to react to the transition reaching different states (e.g., ready to run the animation, or animation finished) or skip the transition altogether.
@@ -5400,7 +5432,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ViewTransition)
         /// </summary>
         [<Global("ViewTransition")>]
-        static member inline ViewTransition: Exports.ViewTransition.Type = nativeOnly
+        static member inline ViewTransition: Exports.ViewTransition__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>ViewTransitionTypeSet</c>** interface of the View Transition API is a set-like object representing the types of an active view transition. This enables the types to be queried or modified on-the-fly during a transition.
@@ -5408,7 +5440,8 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ViewTransitionTypeSet)
         /// </summary>
         [<Global("ViewTransitionTypeSet")>]
-        static member inline ViewTransitionTypeSet: Exports.ViewTransitionTypeSet.Type = nativeOnly
+        static member inline ViewTransitionTypeSet: Exports.ViewTransitionTypeSet__.Type =
+            nativeOnly
 
         /// <summary>
         /// The **<c>VisualViewport</c>** interface of the CSSOM view API represents the visual viewport for a given window. For a page containing iframes, each iframe, as well as the containing page, will have a unique window object. Each window on a page will have a unique VisualViewport representing the properties associated with that window.
@@ -5416,7 +5449,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/VisualViewport)
         /// </summary>
         [<Global("VisualViewport")>]
-        static member inline VisualViewport: Exports.VisualViewport.Type = nativeOnly
+        static member inline VisualViewport: Exports.VisualViewport__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>WGSLLanguageFeatures</c>** interface of the WebGPU API is a setlike object that reports the WGSL language extensions supported by the WebGPU implementation.
@@ -5425,7 +5458,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WGSLLanguageFeatures)
         /// </summary>
         [<Global("WGSLLanguageFeatures")>]
-        static member inline WGSLLanguageFeatures: Exports.WGSLLanguageFeatures.Type = nativeOnly
+        static member inline WGSLLanguageFeatures: Exports.WGSLLanguageFeatures__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>WakeLock</c>** interface of the Screen Wake Lock API can be used to request a lock that prevents device screens from dimming or locking when an application needs to keep running.
@@ -5434,7 +5467,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WakeLock)
         /// </summary>
         [<Global("WakeLock")>]
-        static member inline WakeLock: Exports.WakeLock.Type = nativeOnly
+        static member inline WakeLock: Exports.WakeLock__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>WakeLockSentinel</c>** interface of the Screen Wake Lock API can be used to monitor the status of the platform screen wake lock, and manually release the lock when needed.
@@ -5443,7 +5476,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WakeLockSentinel)
         /// </summary>
         [<Global("WakeLockSentinel")>]
-        static member inline WakeLockSentinel: Exports.WakeLockSentinel.Type = nativeOnly
+        static member inline WakeLockSentinel: Exports.WakeLockSentinel__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>WaveShaperNode</c>** interface represents a non-linear distorter.
@@ -5451,7 +5484,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WaveShaperNode)
         /// </summary>
         [<Global("WaveShaperNode")>]
-        static member inline WaveShaperNode: Exports.WaveShaperNode.Type = nativeOnly
+        static member inline WaveShaperNode: Exports.WaveShaperNode__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>WebGL2RenderingContext</c>** interface provides the OpenGL ES 3.0 rendering context for the drawing surface of an HTML <canvas> element.
@@ -5459,7 +5492,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext)
         /// </summary>
         [<Global("WebGL2RenderingContext")>]
-        static member inline WebGL2RenderingContext: Exports.WebGL2RenderingContext.Type =
+        static member inline WebGL2RenderingContext: Exports.WebGL2RenderingContext__.Type =
             nativeOnly
 
         /// <summary>
@@ -5468,7 +5501,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLActiveInfo)
         /// </summary>
         [<Global("WebGLActiveInfo")>]
-        static member inline WebGLActiveInfo: Exports.WebGLActiveInfo.Type = nativeOnly
+        static member inline WebGLActiveInfo: Exports.WebGLActiveInfo__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>WebGLBuffer</c>** interface is part of the WebGL API and represents an opaque buffer object storing data such as vertices or colors.
@@ -5476,7 +5509,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLBuffer)
         /// </summary>
         [<Global("WebGLBuffer")>]
-        static member inline WebGLBuffer: Exports.WebGLBuffer.Type = nativeOnly
+        static member inline WebGLBuffer: Exports.WebGLBuffer__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>WebGLContextEvent</c>** interface is part of the WebGL API and is an interface for an event that is generated in response to a status change to the WebGL rendering context.
@@ -5484,7 +5517,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLContextEvent)
         /// </summary>
         [<Global("WebGLContextEvent")>]
-        static member inline WebGLContextEvent: Exports.WebGLContextEvent.Type = nativeOnly
+        static member inline WebGLContextEvent: Exports.WebGLContextEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>WebGLFramebuffer</c>** interface is part of the WebGL API and represents a collection of buffers that serve as a rendering destination.
@@ -5492,7 +5525,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLFramebuffer)
         /// </summary>
         [<Global("WebGLFramebuffer")>]
-        static member inline WebGLFramebuffer: Exports.WebGLFramebuffer.Type = nativeOnly
+        static member inline WebGLFramebuffer: Exports.WebGLFramebuffer__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>WebGLProgram</c>** is part of the WebGL API and is a combination of two compiled WebGLShaders consisting of a vertex shader and a fragment shader (both written in GLSL).
@@ -5500,7 +5533,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLProgram)
         /// </summary>
         [<Global("WebGLProgram")>]
-        static member inline WebGLProgram: Exports.WebGLProgram.Type = nativeOnly
+        static member inline WebGLProgram: Exports.WebGLProgram__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>WebGLQuery</c>** interface is part of the WebGL 2 API and provides ways to asynchronously query for information. By default, occlusion queries and primitive queries are available.
@@ -5508,7 +5541,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLQuery)
         /// </summary>
         [<Global("WebGLQuery")>]
-        static member inline WebGLQuery: Exports.WebGLQuery.Type = nativeOnly
+        static member inline WebGLQuery: Exports.WebGLQuery__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>WebGLRenderbuffer</c>** interface is part of the WebGL API and represents a buffer that can contain an image, or that can be a source or target of a rendering operation.
@@ -5516,7 +5549,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderbuffer)
         /// </summary>
         [<Global("WebGLRenderbuffer")>]
-        static member inline WebGLRenderbuffer: Exports.WebGLRenderbuffer.Type = nativeOnly
+        static member inline WebGLRenderbuffer: Exports.WebGLRenderbuffer__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>WebGLRenderingContext</c>** interface provides an interface to the OpenGL ES 2.0 graphics rendering context for the drawing surface of an HTML <canvas> element.
@@ -5524,7 +5557,8 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext)
         /// </summary>
         [<Global("WebGLRenderingContext")>]
-        static member inline WebGLRenderingContext: Exports.WebGLRenderingContext.Type = nativeOnly
+        static member inline WebGLRenderingContext: Exports.WebGLRenderingContext__.Type =
+            nativeOnly
 
         /// <summary>
         /// The **<c>WebGLSampler</c>** interface is part of the WebGL 2 API and stores sampling parameters for WebGLTexture access inside of a shader.
@@ -5532,7 +5566,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLSampler)
         /// </summary>
         [<Global("WebGLSampler")>]
-        static member inline WebGLSampler: Exports.WebGLSampler.Type = nativeOnly
+        static member inline WebGLSampler: Exports.WebGLSampler__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>WebGLShader</c>** is part of the WebGL API and can either be a vertex or a fragment shader. A WebGLProgram requires both types of shaders.
@@ -5540,7 +5574,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLShader)
         /// </summary>
         [<Global("WebGLShader")>]
-        static member inline WebGLShader: Exports.WebGLShader.Type = nativeOnly
+        static member inline WebGLShader: Exports.WebGLShader__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>WebGLShaderPrecisionFormat</c>** interface is part of the WebGL API and represents the information returned by calling the WebGLRenderingContext.getShaderPrecisionFormat() method.
@@ -5548,7 +5582,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLShaderPrecisionFormat)
         /// </summary>
         [<Global("WebGLShaderPrecisionFormat")>]
-        static member inline WebGLShaderPrecisionFormat: Exports.WebGLShaderPrecisionFormat.Type =
+        static member inline WebGLShaderPrecisionFormat: Exports.WebGLShaderPrecisionFormat__.Type =
             nativeOnly
 
         /// <summary>
@@ -5557,7 +5591,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLSync)
         /// </summary>
         [<Global("WebGLSync")>]
-        static member inline WebGLSync: Exports.WebGLSync.Type = nativeOnly
+        static member inline WebGLSync: Exports.WebGLSync__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>WebGLTexture</c>** interface is part of the WebGL API and represents an opaque texture object providing storage and state for texturing operations.
@@ -5565,7 +5599,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLTexture)
         /// </summary>
         [<Global("WebGLTexture")>]
-        static member inline WebGLTexture: Exports.WebGLTexture.Type = nativeOnly
+        static member inline WebGLTexture: Exports.WebGLTexture__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>WebGLTransformFeedback</c>** interface is part of the WebGL 2 API and enables transform feedback, which is the process of capturing primitives generated by vertex processing. It allows to preserve the post-transform rendering state of an object and resubmit this data multiple times.
@@ -5573,7 +5607,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLTransformFeedback)
         /// </summary>
         [<Global("WebGLTransformFeedback")>]
-        static member inline WebGLTransformFeedback: Exports.WebGLTransformFeedback.Type =
+        static member inline WebGLTransformFeedback: Exports.WebGLTransformFeedback__.Type =
             nativeOnly
 
         /// <summary>
@@ -5582,7 +5616,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLUniformLocation)
         /// </summary>
         [<Global("WebGLUniformLocation")>]
-        static member inline WebGLUniformLocation: Exports.WebGLUniformLocation.Type = nativeOnly
+        static member inline WebGLUniformLocation: Exports.WebGLUniformLocation__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>WebGLVertexArrayObject</c>** interface is part of the WebGL 2 API, represents vertex array objects (VAOs) pointing to vertex array data, and provides names for different sets of vertex data.
@@ -5590,7 +5624,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLVertexArrayObject)
         /// </summary>
         [<Global("WebGLVertexArrayObject")>]
-        static member inline WebGLVertexArrayObject: Exports.WebGLVertexArrayObject.Type =
+        static member inline WebGLVertexArrayObject: Exports.WebGLVertexArrayObject__.Type =
             nativeOnly
 
         /// <summary>
@@ -5599,7 +5633,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebSocket)
         /// </summary>
         [<Global("WebSocket")>]
-        static member inline WebSocket: Exports.WebSocket.Type = nativeOnly
+        static member inline WebSocket: Exports.WebSocket__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>WebTransport</c>** interface of the WebTransport API provides functionality to enable a user agent to connect to an HTTP/3 server, initiate reliable and unreliable transport in either or both directions, and close the connection once it is no longer needed.
@@ -5608,7 +5642,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebTransport)
         /// </summary>
         [<Global("WebTransport")>]
-        static member inline WebTransport: Exports.WebTransport.Type = nativeOnly
+        static member inline WebTransport: Exports.WebTransport__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>WebTransportBidirectionalStream</c>** interface of the WebTransport API represents a bidirectional stream created by a server or a client that can be used for reliable transport. Provides access to a WebTransportReceiveStream for reading incoming data, and a WebTransportSendStream for writing outgoing data.
@@ -5618,7 +5652,7 @@ module Web =
         /// </summary>
         [<Global("WebTransportBidirectionalStream")>]
         static member inline WebTransportBidirectionalStream
-            : Exports.WebTransportBidirectionalStream.Type =
+            : Exports.WebTransportBidirectionalStream__.Type =
             nativeOnly
 
         /// <summary>
@@ -5629,7 +5663,7 @@ module Web =
         /// </summary>
         [<Global("WebTransportDatagramDuplexStream")>]
         static member inline WebTransportDatagramDuplexStream
-            : Exports.WebTransportDatagramDuplexStream.Type =
+            : Exports.WebTransportDatagramDuplexStream__.Type =
             nativeOnly
 
         /// <summary>
@@ -5639,7 +5673,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebTransportError)
         /// </summary>
         [<Global("WebTransportError")>]
-        static member inline WebTransportError: Exports.WebTransportError.Type = nativeOnly
+        static member inline WebTransportError: Exports.WebTransportError__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>WebTransportReceiveStream</c>** interface of the WebTransport API is a ReadableStream that can be used to read from an incoming unidirectional or bidirectional WebTransport stream.
@@ -5648,7 +5682,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebTransportReceiveStream)
         /// </summary>
         [<Global("WebTransportReceiveStream")>]
-        static member inline WebTransportReceiveStream: Exports.WebTransportReceiveStream.Type =
+        static member inline WebTransportReceiveStream: Exports.WebTransportReceiveStream__.Type =
             nativeOnly
 
         /// <summary>
@@ -5658,7 +5692,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebTransportSendStream)
         /// </summary>
         [<Global("WebTransportSendStream")>]
-        static member inline WebTransportSendStream: Exports.WebTransportSendStream.Type =
+        static member inline WebTransportSendStream: Exports.WebTransportSendStream__.Type =
             nativeOnly
 
         /// <summary>
@@ -5667,7 +5701,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WheelEvent)
         /// </summary>
         [<Global("WheelEvent")>]
-        static member inline WheelEvent: Exports.WheelEvent.Type = nativeOnly
+        static member inline WheelEvent: Exports.WheelEvent__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>Window</c>** interface represents a window containing a DOM document; the document property points to the DOM document loaded in that window.
@@ -5675,7 +5709,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window)
         /// </summary>
         [<Global("Window")>]
-        static member inline Window: Exports.Window.Type = nativeOnly
+        static member inline Window: Exports.Window__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>Worker</c>** interface of the Web Workers API represents a background task that can be created via script, which can send messages back to its creator.
@@ -5683,7 +5717,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Worker)
         /// </summary>
         [<Global("Worker")>]
-        static member inline Worker: Exports.Worker.Type = nativeOnly
+        static member inline Worker: Exports.Worker__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>Worklet</c>** interface is a lightweight version of Web Workers and gives developers access to low-level parts of the rendering pipeline.
@@ -5692,7 +5726,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Worklet)
         /// </summary>
         [<Global("Worklet")>]
-        static member inline Worklet: Exports.Worklet.Type = nativeOnly
+        static member inline Worklet: Exports.Worklet__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>WritableStream</c>** interface of the Streams API provides a standard abstraction for writing streaming data to a destination, known as a sink. This object comes with built-in backpressure and queuing.
@@ -5700,7 +5734,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/WritableStream)
         /// </summary>
         [<Global("WritableStream")>]
-        static member inline WritableStream: Exports.WritableStream.Type<obj> = nativeOnly
+        static member inline WritableStream: Exports.WritableStream__.Type<obj> = nativeOnly
 
         /// <summary>
         /// The **<c>WritableStreamDefaultController</c>** interface of the Streams API represents a controller allowing control of a WritableStream's state. When constructing a WritableStream, the underlying sink is given a corresponding WritableStreamDefaultController instance to manipulate.
@@ -5709,7 +5743,7 @@ module Web =
         /// </summary>
         [<Global("WritableStreamDefaultController")>]
         static member inline WritableStreamDefaultController
-            : Exports.WritableStreamDefaultController.Type =
+            : Exports.WritableStreamDefaultController__.Type =
             nativeOnly
 
         /// <summary>
@@ -5719,7 +5753,7 @@ module Web =
         /// </summary>
         [<Global("WritableStreamDefaultWriter")>]
         static member inline WritableStreamDefaultWriter
-            : Exports.WritableStreamDefaultWriter.Type<obj> =
+            : Exports.WritableStreamDefaultWriter__.Type<obj> =
             nativeOnly
 
         /// <summary>
@@ -5728,7 +5762,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/XMLDocument)
         /// </summary>
         [<Global("XMLDocument")>]
-        static member inline XMLDocument: Exports.XMLDocument.Type = nativeOnly
+        static member inline XMLDocument: Exports.XMLDocument__.Type = nativeOnly
 
         /// <summary>
         /// **<c>XMLHttpRequest</c>** (XHR) objects are used to interact with servers. You can retrieve data from a URL without having to do a full page refresh. This enables a Web page to update just part of a page without disrupting what the user is doing.
@@ -5736,7 +5770,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/XMLHttpRequest)
         /// </summary>
         [<Global("XMLHttpRequest")>]
-        static member inline XMLHttpRequest: Exports.XMLHttpRequest.Type = nativeOnly
+        static member inline XMLHttpRequest: Exports.XMLHttpRequest__.Type = nativeOnly
 
         /// <summary>
         /// **<c>XMLHttpRequestEventTarget</c>** is the interface that describes the event handlers shared on XMLHttpRequest and XMLHttpRequestUpload.
@@ -5744,7 +5778,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/XMLHttpRequestEventTarget)
         /// </summary>
         [<Global("XMLHttpRequestEventTarget")>]
-        static member inline XMLHttpRequestEventTarget: Exports.XMLHttpRequestEventTarget.Type =
+        static member inline XMLHttpRequestEventTarget: Exports.XMLHttpRequestEventTarget__.Type =
             nativeOnly
 
         /// <summary>
@@ -5753,7 +5787,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/XMLHttpRequestUpload)
         /// </summary>
         [<Global("XMLHttpRequestUpload")>]
-        static member inline XMLHttpRequestUpload: Exports.XMLHttpRequestUpload.Type = nativeOnly
+        static member inline XMLHttpRequestUpload: Exports.XMLHttpRequestUpload__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>XMLSerializer</c>** interface provides the serializeToString() method to construct an XML string representing a DOM tree.
@@ -5761,7 +5795,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/XMLSerializer)
         /// </summary>
         [<Global("XMLSerializer")>]
-        static member inline XMLSerializer: Exports.XMLSerializer.Type = nativeOnly
+        static member inline XMLSerializer: Exports.XMLSerializer__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>XPathEvaluator</c>** interface allows to compile and evaluate XPath expressions.
@@ -5769,7 +5803,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/XPathEvaluator)
         /// </summary>
         [<Global("XPathEvaluator")>]
-        static member inline XPathEvaluator: Exports.XPathEvaluator.Type = nativeOnly
+        static member inline XPathEvaluator: Exports.XPathEvaluator__.Type = nativeOnly
 
         /// <summary>
         /// This interface is a compiled XPath expression that can be evaluated on a document or specific node to return information from its DOM tree.
@@ -5777,7 +5811,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/XPathExpression)
         /// </summary>
         [<Global("XPathExpression")>]
-        static member inline XPathExpression: Exports.XPathExpression.Type = nativeOnly
+        static member inline XPathExpression: Exports.XPathExpression__.Type = nativeOnly
 
         /// <summary>
         /// The **<c>XPathResult</c>** interface represents the results generated by evaluating an XPath expression within the context of a given node.
@@ -5785,7 +5819,7 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/XPathResult)
         /// </summary>
         [<Global("XPathResult")>]
-        static member inline XPathResult: Exports.XPathResult.Type = nativeOnly
+        static member inline XPathResult: Exports.XPathResult__.Type = nativeOnly
 
         /// <summary>
         /// An **<c>XSLTProcessor</c>** applies an XSLT stylesheet transformation to an XML document to produce a new XML document as output. It has methods to load the XSLT stylesheet, to manipulate <xsl:param> parameter values, and to apply the transformation to documents.
@@ -5793,19 +5827,19 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/XSLTProcessor)
         /// </summary>
         [<Global("XSLTProcessor")>]
-        static member inline XSLTProcessor: Exports.XSLTProcessor.Type = nativeOnly
+        static member inline XSLTProcessor: Exports.XSLTProcessor__.Type = nativeOnly
 
         [<Global("console")>]
         static member inline console: Web.Console = nativeOnly
 
         [<Global("Audio")>]
-        static member inline Audio: Exports.Audio.Type = nativeOnly
+        static member inline Audio: Exports.Audio__.Type = nativeOnly
 
         [<Global("Image")>]
-        static member inline Image: Exports.Image.Type = nativeOnly
+        static member inline Image: Exports.Image__.Type = nativeOnly
 
         [<Global("Option")>]
-        static member inline Option: Exports.Option.Type = nativeOnly
+        static member inline Option: Exports.Option__.Type = nativeOnly
 
         [<Global("clientInformation")>]
         [<Obsolete("""This is a legacy alias of `navigator`.
@@ -108396,7 +108430,7 @@ module Web =
 
     module Exports =
 
-        module NodeFilter =
+        module NodeFilter__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108442,7 +108476,7 @@ module Web =
                     =
                     nativeOnly
 
-        module AbortController =
+        module AbortController__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108452,7 +108486,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.AbortController
 
-        module AbortSignal =
+        module AbortSignal__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108481,7 +108515,7 @@ module Web =
                 /// </summary>
                 abstract member timeout: milliseconds: float -> Web.AbortSignal
 
-        module AbstractRange =
+        module AbstractRange__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108491,7 +108525,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.AbstractRange
 
-        module AnalyserNode =
+        module AnalyserNode__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108503,7 +108537,7 @@ module Web =
                     context: Web.BaseAudioContext * ?options: Web.AnalyserOptions ->
                         Web.AnalyserNode
 
-        module Animation =
+        module Animation__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108514,7 +108548,7 @@ module Web =
                 abstract member Create:
                     ?effect: Web.AnimationEffect * ?timeline: Web.AnimationTimeline -> Web.Animation
 
-        module AnimationEffect =
+        module AnimationEffect__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108524,7 +108558,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.AnimationEffect
 
-        module AnimationEvent =
+        module AnimationEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108536,7 +108570,7 @@ module Web =
                     ``type``: string * ?animationEventInitDict: Web.AnimationEventInit ->
                         Web.AnimationEvent
 
-        module AnimationPlaybackEvent =
+        module AnimationPlaybackEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108548,7 +108582,7 @@ module Web =
                     ``type``: string * ?eventInitDict: Web.AnimationPlaybackEventInit ->
                         Web.AnimationPlaybackEvent
 
-        module AnimationTimeline =
+        module AnimationTimeline__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108558,7 +108592,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.AnimationTimeline
 
-        module Attr =
+        module Attr__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108568,7 +108602,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.Attr
 
-        module AudioBuffer =
+        module AudioBuffer__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108578,7 +108612,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: options: Web.AudioBufferOptions -> Web.AudioBuffer
 
-        module AudioBufferSourceNode =
+        module AudioBufferSourceNode__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108590,7 +108624,7 @@ module Web =
                     context: Web.BaseAudioContext * ?options: Web.AudioBufferSourceOptions ->
                         Web.AudioBufferSourceNode
 
-        module AudioContext =
+        module AudioContext__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108600,7 +108634,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: ?contextOptions: Web.AudioContextOptions -> Web.AudioContext
 
-        module AudioData =
+        module AudioData__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108610,7 +108644,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: init: Web.AudioDataInit -> Web.AudioData
 
-        module AudioDecoder =
+        module AudioDecoder__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108628,7 +108662,7 @@ module Web =
                 abstract member isConfigSupported:
                     config: Web.AudioDecoderConfig -> JS.Promise<Web.AudioDecoderSupport>
 
-        module AudioDestinationNode =
+        module AudioDestinationNode__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108638,7 +108672,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.AudioDestinationNode
 
-        module AudioEncoder =
+        module AudioEncoder__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108656,7 +108690,7 @@ module Web =
                 abstract member isConfigSupported:
                     config: Web.AudioEncoderConfig -> JS.Promise<Web.AudioEncoderSupport>
 
-        module AudioListener =
+        module AudioListener__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108666,7 +108700,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.AudioListener
 
-        module AudioNode =
+        module AudioNode__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108676,7 +108710,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.AudioNode
 
-        module AudioParam =
+        module AudioParam__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108686,7 +108720,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.AudioParam
 
-        module AudioParamMap =
+        module AudioParamMap__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108696,7 +108730,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.AudioParamMap
 
-        module AudioProcessingEvent =
+        module AudioProcessingEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108708,7 +108742,7 @@ module Web =
                     ``type``: string * eventInitDict: Web.AudioProcessingEventInit ->
                         Web.AudioProcessingEvent
 
-        module AudioScheduledSourceNode =
+        module AudioScheduledSourceNode__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108718,7 +108752,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.AudioScheduledSourceNode
 
-        module AudioWorklet =
+        module AudioWorklet__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108728,7 +108762,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.AudioWorklet
 
-        module AudioWorkletNode =
+        module AudioWorkletNode__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108742,7 +108776,7 @@ module Web =
                     ?options: Web.AudioWorkletNodeOptions ->
                         Web.AudioWorkletNode
 
-        module AuthenticatorAssertionResponse =
+        module AuthenticatorAssertionResponse__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108752,7 +108786,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.AuthenticatorAssertionResponse
 
-        module AuthenticatorAttestationResponse =
+        module AuthenticatorAttestationResponse__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108762,7 +108796,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.AuthenticatorAttestationResponse
 
-        module AuthenticatorResponse =
+        module AuthenticatorResponse__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108772,7 +108806,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.AuthenticatorResponse
 
-        module BarProp =
+        module BarProp__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108782,7 +108816,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.BarProp
 
-        module BaseAudioContext =
+        module BaseAudioContext__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108792,7 +108826,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.BaseAudioContext
 
-        module BeforeUnloadEvent =
+        module BeforeUnloadEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108802,7 +108836,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.BeforeUnloadEvent
 
-        module BiquadFilterNode =
+        module BiquadFilterNode__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108814,7 +108848,7 @@ module Web =
                     context: Web.BaseAudioContext * ?options: Web.BiquadFilterOptions ->
                         Web.BiquadFilterNode
 
-        module Blob =
+        module Blob__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108826,7 +108860,7 @@ module Web =
                     ?blobParts: ResizeArray<Web.BlobPart> * ?options: Web.BlobPropertyBag ->
                         Web.Blob
 
-        module BlobEvent =
+        module BlobEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108837,7 +108871,7 @@ module Web =
                 abstract member Create:
                     ``type``: string * eventInitDict: Web.BlobEventInit -> Web.BlobEvent
 
-        module BroadcastChannel =
+        module BroadcastChannel__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108847,7 +108881,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: name: string -> Web.BroadcastChannel
 
-        module ByteLengthQueuingStrategy =
+        module ByteLengthQueuingStrategy__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108858,7 +108892,7 @@ module Web =
                 abstract member Create:
                     init: Web.QueuingStrategyInit -> Web.ByteLengthQueuingStrategy
 
-        module CDATASection =
+        module CDATASection__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108868,7 +108902,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CDATASection
 
-        module CSSAnimation =
+        module CSSAnimation__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108878,7 +108912,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CSSAnimation
 
-        module CSSConditionRule =
+        module CSSConditionRule__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108888,7 +108922,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CSSConditionRule
 
-        module CSSContainerRule =
+        module CSSContainerRule__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108898,7 +108932,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CSSContainerRule
 
-        module CSSCounterStyleRule =
+        module CSSCounterStyleRule__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108908,7 +108942,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CSSCounterStyleRule
 
-        module CSSFontFaceDescriptors =
+        module CSSFontFaceDescriptors__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108918,7 +108952,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CSSFontFaceDescriptors
 
-        module CSSFontFaceRule =
+        module CSSFontFaceRule__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108928,7 +108962,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CSSFontFaceRule
 
-        module CSSFontFeatureValuesRule =
+        module CSSFontFeatureValuesRule__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108938,7 +108972,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CSSFontFeatureValuesRule
 
-        module CSSFontPaletteValuesRule =
+        module CSSFontPaletteValuesRule__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108948,7 +108982,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CSSFontPaletteValuesRule
 
-        module CSSGroupingRule =
+        module CSSGroupingRule__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108958,7 +108992,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CSSGroupingRule
 
-        module CSSImageValue =
+        module CSSImageValue__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108968,7 +109002,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CSSImageValue
 
-        module CSSImportRule =
+        module CSSImportRule__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108978,7 +109012,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CSSImportRule
 
-        module CSSKeyframeRule =
+        module CSSKeyframeRule__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108988,7 +109022,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CSSKeyframeRule
 
-        module CSSKeyframesRule =
+        module CSSKeyframesRule__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -108998,7 +109032,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CSSKeyframesRule
 
-        module CSSKeywordValue =
+        module CSSKeywordValue__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109008,7 +109042,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: value: string -> Web.CSSKeywordValue
 
-        module CSSLayerBlockRule =
+        module CSSLayerBlockRule__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109018,7 +109052,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CSSLayerBlockRule
 
-        module CSSLayerStatementRule =
+        module CSSLayerStatementRule__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109028,7 +109062,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CSSLayerStatementRule
 
-        module CSSMathClamp =
+        module CSSMathClamp__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109073,7 +109107,7 @@ module Web =
                     upper: Web.CSSNumericValue ->
                         Web.CSSMathClamp
 
-        module CSSMathInvert =
+        module CSSMathInvert__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109086,7 +109120,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: arg: Web.CSSNumericValue -> Web.CSSMathInvert
 
-        module CSSMathMax =
+        module CSSMathMax__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109096,7 +109130,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: [<ParamArray>] args: Web.CSSNumberish[] -> Web.CSSMathMax
 
-        module CSSMathMin =
+        module CSSMathMin__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109106,7 +109140,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: [<ParamArray>] args: Web.CSSNumberish[] -> Web.CSSMathMin
 
-        module CSSMathNegate =
+        module CSSMathNegate__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109119,7 +109153,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: arg: Web.CSSNumericValue -> Web.CSSMathNegate
 
-        module CSSMathProduct =
+        module CSSMathProduct__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109130,7 +109164,7 @@ module Web =
                 abstract member Create:
                     [<ParamArray>] args: Web.CSSNumberish[] -> Web.CSSMathProduct
 
-        module CSSMathSum =
+        module CSSMathSum__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109140,7 +109174,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: [<ParamArray>] args: Web.CSSNumberish[] -> Web.CSSMathSum
 
-        module CSSMathValue =
+        module CSSMathValue__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109150,7 +109184,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CSSMathValue
 
-        module CSSMatrixComponent =
+        module CSSMatrixComponent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109162,7 +109196,7 @@ module Web =
                     matrix: Web.DOMMatrixReadOnly * ?options: Web.CSSMatrixComponentOptions ->
                         Web.CSSMatrixComponent
 
-        module CSSMediaRule =
+        module CSSMediaRule__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109172,7 +109206,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CSSMediaRule
 
-        module CSSNamespaceRule =
+        module CSSNamespaceRule__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109182,7 +109216,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CSSNamespaceRule
 
-        module CSSNestedDeclarations =
+        module CSSNestedDeclarations__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109192,7 +109226,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CSSNestedDeclarations
 
-        module CSSNumericArray =
+        module CSSNumericArray__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109202,7 +109236,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CSSNumericArray
 
-        module CSSNumericValue =
+        module CSSNumericValue__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109219,7 +109253,7 @@ module Web =
                 /// </summary>
                 abstract member parse: cssText: string -> Web.CSSNumericValue
 
-        module CSSPageDescriptors =
+        module CSSPageDescriptors__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109229,7 +109263,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CSSPageDescriptors
 
-        module CSSPageRule =
+        module CSSPageRule__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109239,7 +109273,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CSSPageRule
 
-        module CSSPerspective =
+        module CSSPerspective__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109255,7 +109289,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: length: Web.CSSKeywordValue -> Web.CSSPerspective
 
-        module CSSPositionTryDescriptors =
+        module CSSPositionTryDescriptors__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109265,7 +109299,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CSSPositionTryDescriptors
 
-        module CSSPositionTryRule =
+        module CSSPositionTryRule__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109275,7 +109309,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CSSPositionTryRule
 
-        module CSSPropertyRule =
+        module CSSPropertyRule__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109285,7 +109319,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CSSPropertyRule
 
-        module CSSRotate =
+        module CSSRotate__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109346,7 +109380,7 @@ module Web =
                     angle: Web.CSSNumericValue ->
                         Web.CSSRotate
 
-        module CSSRule =
+        module CSSRule__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109370,7 +109404,7 @@ module Web =
                 abstract member COUNTER_STYLE_RULE: int with get
                 abstract member FONT_FEATURE_VALUES_RULE: int with get
 
-        module CSSRuleList =
+        module CSSRuleList__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109380,7 +109414,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CSSRuleList
 
-        module CSSScale =
+        module CSSScale__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109429,7 +109463,7 @@ module Web =
                     x: Web.CSSNumericValue * y: Web.CSSNumericValue * z: Web.CSSNumericValue ->
                         Web.CSSScale
 
-        module CSSScopeRule =
+        module CSSScopeRule__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109439,7 +109473,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CSSScopeRule
 
-        module CSSSkew =
+        module CSSSkew__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109450,7 +109484,7 @@ module Web =
                 abstract member Create:
                     ax: Web.CSSNumericValue * ay: Web.CSSNumericValue -> Web.CSSSkew
 
-        module CSSSkewX =
+        module CSSSkewX__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109460,7 +109494,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: ax: Web.CSSNumericValue -> Web.CSSSkewX
 
-        module CSSSkewY =
+        module CSSSkewY__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109470,7 +109504,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: ay: Web.CSSNumericValue -> Web.CSSSkewY
 
-        module CSSStartingStyleRule =
+        module CSSStartingStyleRule__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109480,7 +109514,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CSSStartingStyleRule
 
-        module CSSStyleDeclaration =
+        module CSSStyleDeclaration__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109490,7 +109524,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CSSStyleDeclaration
 
-        module CSSStyleProperties =
+        module CSSStyleProperties__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109500,7 +109534,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CSSStyleProperties
 
-        module CSSStyleRule =
+        module CSSStyleRule__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109510,7 +109544,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CSSStyleRule
 
-        module CSSStyleSheet =
+        module CSSStyleSheet__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109520,7 +109554,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: ?options: Web.CSSStyleSheetInit -> Web.CSSStyleSheet
 
-        module CSSStyleValue =
+        module CSSStyleValue__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109545,7 +109579,7 @@ module Web =
                 abstract member parseAll:
                     property: string * cssText: string -> ResizeArray<Web.CSSStyleValue>
 
-        module CSSSupportsRule =
+        module CSSSupportsRule__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109555,7 +109589,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CSSSupportsRule
 
-        module CSSTransformComponent =
+        module CSSTransformComponent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109565,7 +109599,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CSSTransformComponent
 
-        module CSSTransformValue =
+        module CSSTransformValue__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109576,7 +109610,7 @@ module Web =
                 abstract member Create:
                     transforms: ResizeArray<Web.CSSTransformComponent> -> Web.CSSTransformValue
 
-        module CSSTransition =
+        module CSSTransition__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109586,7 +109620,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CSSTransition
 
-        module CSSTranslate =
+        module CSSTranslate__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109598,7 +109632,7 @@ module Web =
                     x: Web.CSSNumericValue * y: Web.CSSNumericValue * ?z: Web.CSSNumericValue ->
                         Web.CSSTranslate
 
-        module CSSUnitValue =
+        module CSSUnitValue__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109608,7 +109642,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: value: float * unit: string -> Web.CSSUnitValue
 
-        module CSSUnparsedValue =
+        module CSSUnparsedValue__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109619,7 +109653,7 @@ module Web =
                 abstract member Create:
                     members: ResizeArray<Web.CSSUnparsedSegment> -> Web.CSSUnparsedValue
 
-        module CSSVariableReferenceValue =
+        module CSSVariableReferenceValue__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109631,7 +109665,7 @@ module Web =
                     variable: string * ?fallback: Web.CSSUnparsedValue ->
                         Web.CSSVariableReferenceValue
 
-        module CSSViewTransitionRule =
+        module CSSViewTransitionRule__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109641,7 +109675,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CSSViewTransitionRule
 
-        module Cache =
+        module Cache__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109651,7 +109685,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.Cache
 
-        module CacheStorage =
+        module CacheStorage__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109661,7 +109695,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CacheStorage
 
-        module CanvasCaptureMediaStreamTrack =
+        module CanvasCaptureMediaStreamTrack__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109671,7 +109705,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CanvasCaptureMediaStreamTrack
 
-        module CanvasGradient =
+        module CanvasGradient__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109681,7 +109715,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CanvasGradient
 
-        module CanvasPattern =
+        module CanvasPattern__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109691,7 +109725,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CanvasPattern
 
-        module CanvasRenderingContext2D =
+        module CanvasRenderingContext2D__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109701,7 +109735,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CanvasRenderingContext2D
 
-        module CaretPosition =
+        module CaretPosition__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109711,7 +109745,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CaretPosition
 
-        module ChannelMergerNode =
+        module ChannelMergerNode__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109723,7 +109757,7 @@ module Web =
                     context: Web.BaseAudioContext * ?options: Web.ChannelMergerOptions ->
                         Web.ChannelMergerNode
 
-        module ChannelSplitterNode =
+        module ChannelSplitterNode__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109735,7 +109769,7 @@ module Web =
                     context: Web.BaseAudioContext * ?options: Web.ChannelSplitterOptions ->
                         Web.ChannelSplitterNode
 
-        module CharacterData =
+        module CharacterData__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109745,7 +109779,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CharacterData
 
-        module Clipboard =
+        module Clipboard__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109755,7 +109789,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.Clipboard
 
-        module ClipboardEvent =
+        module ClipboardEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109766,7 +109800,7 @@ module Web =
                 abstract member Create:
                     ``type``: string * ?eventInitDict: Web.ClipboardEventInit -> Web.ClipboardEvent
 
-        module ClipboardItem =
+        module ClipboardItem__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109775,7 +109809,7 @@ module Web =
 
                 [<EmitConstructor>]
                 abstract member Create:
-                    items: Exports.ClipboardItem.Type.Create.items *
+                    items: Exports.ClipboardItem__.Type.Create.items *
                     ?options: Web.ClipboardItemOptions ->
                         Web.ClipboardItem
 
@@ -109796,7 +109830,7 @@ module Web =
                         [<EmitIndexer>]
                         abstract member Item: key: string -> U3<string, Web.Blob, obj> with get, set
 
-        module CloseEvent =
+        module CloseEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109807,7 +109841,7 @@ module Web =
                 abstract member Create:
                     ``type``: string * ?eventInitDict: Web.CloseEventInit -> Web.CloseEvent
 
-        module CloseWatcher =
+        module CloseWatcher__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109817,7 +109851,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: ?options: Web.CloseWatcherOptions -> Web.CloseWatcher
 
-        module CommandEvent =
+        module CommandEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109828,7 +109862,7 @@ module Web =
                 abstract member Create:
                     ``type``: string * ?eventInitDict: Web.CommandEventInit -> Web.CommandEvent
 
-        module Comment =
+        module Comment__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109838,7 +109872,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: ?data: string -> Web.Comment
 
-        module CompositionEvent =
+        module CompositionEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109850,7 +109884,7 @@ module Web =
                     ``type``: string * ?eventInitDict: Web.CompositionEventInit ->
                         Web.CompositionEvent
 
-        module CompressionStream =
+        module CompressionStream__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109860,7 +109894,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: format: Web.CompressionFormat -> Web.CompressionStream
 
-        module ConstantSourceNode =
+        module ConstantSourceNode__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109872,7 +109906,7 @@ module Web =
                     context: Web.BaseAudioContext * ?options: Web.ConstantSourceOptions ->
                         Web.ConstantSourceNode
 
-        module ContentVisibilityAutoStateChangeEvent =
+        module ContentVisibilityAutoStateChangeEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109884,7 +109918,7 @@ module Web =
                     ``type``: string * ?eventInitDict: Web.ContentVisibilityAutoStateChangeEventInit ->
                         Web.ContentVisibilityAutoStateChangeEvent
 
-        module ConvolverNode =
+        module ConvolverNode__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109896,7 +109930,7 @@ module Web =
                     context: Web.BaseAudioContext * ?options: Web.ConvolverOptions ->
                         Web.ConvolverNode
 
-        module CookieChangeEvent =
+        module CookieChangeEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109908,7 +109942,7 @@ module Web =
                     ``type``: string * ?eventInitDict: Web.CookieChangeEventInit ->
                         Web.CookieChangeEvent
 
-        module CookieStore =
+        module CookieStore__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109918,7 +109952,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CookieStore
 
-        module CookieStoreManager =
+        module CookieStoreManager__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109928,7 +109962,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CookieStoreManager
 
-        module CountQueuingStrategy =
+        module CountQueuingStrategy__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109938,7 +109972,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: init: Web.QueuingStrategyInit -> Web.CountQueuingStrategy
 
-        module Credential =
+        module Credential__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109955,7 +109989,7 @@ module Web =
                 /// </summary>
                 abstract member isConditionalMediationAvailable: unit -> JS.Promise<bool>
 
-        module CredentialsContainer =
+        module CredentialsContainer__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109965,7 +109999,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CredentialsContainer
 
-        module Crypto =
+        module Crypto__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109975,7 +110009,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.Crypto
 
-        module CryptoKey =
+        module CryptoKey__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109985,7 +110019,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CryptoKey
 
-        module CustomElementRegistry =
+        module CustomElementRegistry__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -109995,7 +110029,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CustomElementRegistry
 
-        module CustomEvent =
+        module CustomEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110007,7 +110041,7 @@ module Web =
                     ``type``: string * ?eventInitDict: Web.CustomEventInit<'T> ->
                         Web.CustomEvent<'T>
 
-        module CustomStateSet =
+        module CustomStateSet__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110017,7 +110051,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.CustomStateSet
 
-        module DOMException =
+        module DOMException__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110053,7 +110087,7 @@ module Web =
                 abstract member INVALID_NODE_TYPE_ERR: int with get
                 abstract member DATA_CLONE_ERR: int with get
 
-        module DOMImplementation =
+        module DOMImplementation__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110063,7 +110097,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.DOMImplementation
 
-        module DOMMatrix =
+        module DOMMatrix__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110098,7 +110132,7 @@ module Web =
                 /// </summary>
                 abstract member fromMatrix: ?other: Web.DOMMatrixInit -> Web.DOMMatrix
 
-        module DOMMatrixReadOnly =
+        module DOMMatrixReadOnly__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110133,7 +110167,7 @@ module Web =
                 /// </summary>
                 abstract member fromMatrix: ?other: Web.DOMMatrixInit -> Web.DOMMatrixReadOnly
 
-        module DOMParser =
+        module DOMParser__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110143,7 +110177,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.DOMParser
 
-        module DOMPoint =
+        module DOMPoint__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110161,7 +110195,7 @@ module Web =
                 /// </summary>
                 abstract member fromPoint: ?other: Web.DOMPointInit -> Web.DOMPoint
 
-        module DOMPointReadOnly =
+        module DOMPointReadOnly__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110179,7 +110213,7 @@ module Web =
                 /// </summary>
                 abstract member fromPoint: ?other: Web.DOMPointInit -> Web.DOMPointReadOnly
 
-        module DOMQuad =
+        module DOMQuad__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110207,7 +110241,7 @@ module Web =
                 /// </summary>
                 abstract member fromRect: ?other: Web.DOMRectInit -> Web.DOMQuad
 
-        module DOMRect =
+        module DOMRect__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110225,7 +110259,7 @@ module Web =
                 /// </summary>
                 abstract member fromRect: ?other: Web.DOMRectInit -> Web.DOMRect
 
-        module DOMRectList =
+        module DOMRectList__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110235,7 +110269,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.DOMRectList
 
-        module DOMRectReadOnly =
+        module DOMRectReadOnly__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110253,7 +110287,7 @@ module Web =
                 /// </summary>
                 abstract member fromRect: ?other: Web.DOMRectInit -> Web.DOMRectReadOnly
 
-        module DOMStringList =
+        module DOMStringList__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110263,7 +110297,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.DOMStringList
 
-        module DOMStringMap =
+        module DOMStringMap__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110273,7 +110307,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.DOMStringMap
 
-        module DOMTokenList =
+        module DOMTokenList__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110283,7 +110317,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.DOMTokenList
 
-        module DataTransfer =
+        module DataTransfer__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110293,7 +110327,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.DataTransfer
 
-        module DataTransferItem =
+        module DataTransferItem__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110303,7 +110337,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.DataTransferItem
 
-        module DataTransferItemList =
+        module DataTransferItemList__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110313,7 +110347,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.DataTransferItemList
 
-        module DecompressionStream =
+        module DecompressionStream__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110323,7 +110357,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: format: Web.CompressionFormat -> Web.DecompressionStream
 
-        module DelayNode =
+        module DelayNode__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110334,7 +110368,7 @@ module Web =
                 abstract member Create:
                     context: Web.BaseAudioContext * ?options: Web.DelayOptions -> Web.DelayNode
 
-        module DeviceMotionEvent =
+        module DeviceMotionEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110346,7 +110380,7 @@ module Web =
                     ``type``: string * ?eventInitDict: Web.DeviceMotionEventInit ->
                         Web.DeviceMotionEvent
 
-        module DeviceOrientationEvent =
+        module DeviceOrientationEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110358,7 +110392,7 @@ module Web =
                     ``type``: string * ?eventInitDict: Web.DeviceOrientationEventInit ->
                         Web.DeviceOrientationEvent
 
-        module DigitalCredential =
+        module DigitalCredential__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110370,7 +110404,7 @@ module Web =
 
                 abstract member userAgentAllowsProtocol: protocol: string -> bool
 
-        module Document =
+        module Document__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110388,7 +110422,7 @@ module Web =
                 abstract member parseHTMLUnsafe:
                     html: string * ?options: Web.ParseHTMLUnsafeOptions -> Web.Document
 
-        module DocumentFragment =
+        module DocumentFragment__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110398,7 +110432,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.DocumentFragment
 
-        module DocumentPictureInPicture =
+        module DocumentPictureInPicture__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110408,7 +110442,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.DocumentPictureInPicture
 
-        module DocumentPictureInPictureEvent =
+        module DocumentPictureInPictureEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110420,7 +110454,7 @@ module Web =
                     ``type``: string * eventInitDict: Web.DocumentPictureInPictureEventInit ->
                         Web.DocumentPictureInPictureEvent
 
-        module DocumentTimeline =
+        module DocumentTimeline__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110431,7 +110465,7 @@ module Web =
                 abstract member Create:
                     ?options: Web.DocumentTimelineOptions -> Web.DocumentTimeline
 
-        module DocumentType =
+        module DocumentType__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110441,7 +110475,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.DocumentType
 
-        module DragEvent =
+        module DragEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110452,7 +110486,7 @@ module Web =
                 abstract member Create:
                     ``type``: string * ?eventInitDict: Web.DragEventInit -> Web.DragEvent
 
-        module DynamicsCompressorNode =
+        module DynamicsCompressorNode__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110464,7 +110498,7 @@ module Web =
                     context: Web.BaseAudioContext * ?options: Web.DynamicsCompressorOptions ->
                         Web.DynamicsCompressorNode
 
-        module Element =
+        module Element__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110474,7 +110508,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.Element
 
-        module ElementInternals =
+        module ElementInternals__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110484,7 +110518,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.ElementInternals
 
-        module EncodedAudioChunk =
+        module EncodedAudioChunk__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110494,7 +110528,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: init: Web.EncodedAudioChunkInit -> Web.EncodedAudioChunk
 
-        module EncodedVideoChunk =
+        module EncodedVideoChunk__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110504,7 +110538,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: init: Web.EncodedVideoChunkInit -> Web.EncodedVideoChunk
 
-        module ErrorEvent =
+        module ErrorEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110515,7 +110549,7 @@ module Web =
                 abstract member Create:
                     ``type``: string * ?eventInitDict: Web.ErrorEventInit -> Web.ErrorEvent
 
-        module Event =
+        module Event__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110531,7 +110565,7 @@ module Web =
                 abstract member AT_TARGET: int with get
                 abstract member BUBBLING_PHASE: int with get
 
-        module EventCounts =
+        module EventCounts__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110541,7 +110575,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.EventCounts
 
-        module EventSource =
+        module EventSource__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110560,7 +110594,7 @@ module Web =
                 abstract member OPEN: int with get
                 abstract member CLOSED: int with get
 
-        module EventTarget =
+        module EventTarget__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110570,7 +110604,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.EventTarget
 
-        module External =
+        module External__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110580,7 +110614,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.External
 
-        module File =
+        module File__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110594,7 +110628,7 @@ module Web =
                     ?options: Web.FilePropertyBag ->
                         Web.File
 
-        module FileList =
+        module FileList__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110604,7 +110638,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.FileList
 
-        module FileReader =
+        module FileReader__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110618,7 +110652,7 @@ module Web =
                 abstract member LOADING: int with get
                 abstract member DONE: int with get
 
-        module FileSystem =
+        module FileSystem__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110628,7 +110662,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.FileSystem
 
-        module FileSystemDirectoryEntry =
+        module FileSystemDirectoryEntry__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110638,7 +110672,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.FileSystemDirectoryEntry
 
-        module FileSystemDirectoryHandle =
+        module FileSystemDirectoryHandle__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110648,7 +110682,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.FileSystemDirectoryHandle
 
-        module FileSystemDirectoryReader =
+        module FileSystemDirectoryReader__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110658,7 +110692,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.FileSystemDirectoryReader
 
-        module FileSystemEntry =
+        module FileSystemEntry__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110668,7 +110702,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.FileSystemEntry
 
-        module FileSystemFileEntry =
+        module FileSystemFileEntry__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110678,7 +110712,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.FileSystemFileEntry
 
-        module FileSystemFileHandle =
+        module FileSystemFileHandle__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110688,7 +110722,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.FileSystemFileHandle
 
-        module FileSystemHandle =
+        module FileSystemHandle__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110698,7 +110732,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.FileSystemHandle
 
-        module FileSystemWritableFileStream =
+        module FileSystemWritableFileStream__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110708,7 +110742,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.FileSystemWritableFileStream
 
-        module FocusEvent =
+        module FocusEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110719,7 +110753,7 @@ module Web =
                 abstract member Create:
                     ``type``: string * ?eventInitDict: Web.FocusEventInit -> Web.FocusEvent
 
-        module FontFace =
+        module FontFace__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110738,7 +110772,7 @@ module Web =
                     ?descriptors: Web.FontFaceDescriptors ->
                         Web.FontFace
 
-        module FontFaceSet =
+        module FontFaceSet__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110748,7 +110782,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.FontFaceSet
 
-        module FontFaceSetLoadEvent =
+        module FontFaceSetLoadEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110760,7 +110794,7 @@ module Web =
                     ``type``: string * ?eventInitDict: Web.FontFaceSetLoadEventInit ->
                         Web.FontFaceSetLoadEvent
 
-        module FormData =
+        module FormData__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110771,7 +110805,7 @@ module Web =
                 abstract member Create:
                     ?form: Web.HTMLFormElement * ?submitter: Web.HTMLElement -> Web.FormData
 
-        module FormDataEvent =
+        module FormDataEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110782,7 +110816,7 @@ module Web =
                 abstract member Create:
                     ``type``: string * eventInitDict: Web.FormDataEventInit -> Web.FormDataEvent
 
-        module FragmentDirective =
+        module FragmentDirective__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110792,7 +110826,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.FragmentDirective
 
-        module GPU =
+        module GPU__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110802,7 +110836,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.GPU
 
-        module GPUAdapter =
+        module GPUAdapter__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110812,7 +110846,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.GPUAdapter
 
-        module GPUAdapterInfo =
+        module GPUAdapterInfo__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110822,7 +110856,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.GPUAdapterInfo
 
-        module GPUBindGroup =
+        module GPUBindGroup__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110832,7 +110866,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.GPUBindGroup
 
-        module GPUBindGroupLayout =
+        module GPUBindGroupLayout__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110842,7 +110876,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.GPUBindGroupLayout
 
-        module GPUBuffer =
+        module GPUBuffer__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110852,7 +110886,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.GPUBuffer
 
-        module GPUCanvasContext =
+        module GPUCanvasContext__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110862,7 +110896,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.GPUCanvasContext
 
-        module GPUCommandBuffer =
+        module GPUCommandBuffer__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110872,7 +110906,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.GPUCommandBuffer
 
-        module GPUCommandEncoder =
+        module GPUCommandEncoder__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110882,7 +110916,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.GPUCommandEncoder
 
-        module GPUCompilationInfo =
+        module GPUCompilationInfo__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110892,7 +110926,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.GPUCompilationInfo
 
-        module GPUCompilationMessage =
+        module GPUCompilationMessage__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110902,7 +110936,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.GPUCompilationMessage
 
-        module GPUComputePassEncoder =
+        module GPUComputePassEncoder__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110912,7 +110946,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.GPUComputePassEncoder
 
-        module GPUComputePipeline =
+        module GPUComputePipeline__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110922,7 +110956,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.GPUComputePipeline
 
-        module GPUDevice =
+        module GPUDevice__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110932,7 +110966,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.GPUDevice
 
-        module GPUDeviceLostInfo =
+        module GPUDeviceLostInfo__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110942,7 +110976,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.GPUDeviceLostInfo
 
-        module GPUError =
+        module GPUError__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110952,7 +110986,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.GPUError
 
-        module GPUExternalTexture =
+        module GPUExternalTexture__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110962,7 +110996,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.GPUExternalTexture
 
-        module GPUInternalError =
+        module GPUInternalError__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110972,7 +111006,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: message: string -> Web.GPUInternalError
 
-        module GPUOutOfMemoryError =
+        module GPUOutOfMemoryError__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110982,7 +111016,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: message: string -> Web.GPUOutOfMemoryError
 
-        module GPUPipelineError =
+        module GPUPipelineError__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -110993,7 +111027,7 @@ module Web =
                 abstract member Create:
                     message: string * options: Web.GPUPipelineErrorInit -> Web.GPUPipelineError
 
-        module GPUPipelineLayout =
+        module GPUPipelineLayout__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111003,7 +111037,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.GPUPipelineLayout
 
-        module GPUQuerySet =
+        module GPUQuerySet__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111013,7 +111047,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.GPUQuerySet
 
-        module GPUQueue =
+        module GPUQueue__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111023,7 +111057,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.GPUQueue
 
-        module GPURenderBundle =
+        module GPURenderBundle__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111033,7 +111067,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.GPURenderBundle
 
-        module GPURenderBundleEncoder =
+        module GPURenderBundleEncoder__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111043,7 +111077,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.GPURenderBundleEncoder
 
-        module GPURenderPassEncoder =
+        module GPURenderPassEncoder__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111053,7 +111087,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.GPURenderPassEncoder
 
-        module GPURenderPipeline =
+        module GPURenderPipeline__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111063,7 +111097,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.GPURenderPipeline
 
-        module GPUSampler =
+        module GPUSampler__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111073,7 +111107,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.GPUSampler
 
-        module GPUShaderModule =
+        module GPUShaderModule__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111083,7 +111117,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.GPUShaderModule
 
-        module GPUSupportedFeatures =
+        module GPUSupportedFeatures__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111093,7 +111127,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.GPUSupportedFeatures
 
-        module GPUSupportedLimits =
+        module GPUSupportedLimits__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111103,7 +111137,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.GPUSupportedLimits
 
-        module GPUTexture =
+        module GPUTexture__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111113,7 +111147,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.GPUTexture
 
-        module GPUTextureView =
+        module GPUTextureView__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111123,7 +111157,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.GPUTextureView
 
-        module GPUUncapturedErrorEvent =
+        module GPUUncapturedErrorEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111136,7 +111170,7 @@ module Web =
                     gpuUncapturedErrorEventInitDict: Web.GPUUncapturedErrorEventInit ->
                         Web.GPUUncapturedErrorEvent
 
-        module GPUValidationError =
+        module GPUValidationError__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111146,7 +111180,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: message: string -> Web.GPUValidationError
 
-        module GainNode =
+        module GainNode__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111157,7 +111191,7 @@ module Web =
                 abstract member Create:
                     context: Web.BaseAudioContext * ?options: Web.GainOptions -> Web.GainNode
 
-        module Gamepad =
+        module Gamepad__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111167,7 +111201,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.Gamepad
 
-        module GamepadButton =
+        module GamepadButton__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111177,7 +111211,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.GamepadButton
 
-        module GamepadEvent =
+        module GamepadEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111188,7 +111222,7 @@ module Web =
                 abstract member Create:
                     ``type``: string * ?eventInitDict: Web.GamepadEventInit -> Web.GamepadEvent
 
-        module GamepadHapticActuator =
+        module GamepadHapticActuator__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111198,7 +111232,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.GamepadHapticActuator
 
-        module Geolocation =
+        module Geolocation__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111208,7 +111242,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.Geolocation
 
-        module GeolocationCoordinates =
+        module GeolocationCoordinates__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111218,7 +111252,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.GeolocationCoordinates
 
-        module GeolocationPosition =
+        module GeolocationPosition__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111228,7 +111262,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.GeolocationPosition
 
-        module GeolocationPositionError =
+        module GeolocationPositionError__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111242,7 +111276,7 @@ module Web =
                 abstract member POSITION_UNAVAILABLE: int with get
                 abstract member TIMEOUT: int with get
 
-        module HTMLAllCollection =
+        module HTMLAllCollection__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111252,7 +111286,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLAllCollection
 
-        module HTMLAnchorElement =
+        module HTMLAnchorElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111262,7 +111296,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLAnchorElement
 
-        module HTMLAreaElement =
+        module HTMLAreaElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111272,7 +111306,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLAreaElement
 
-        module HTMLAudioElement =
+        module HTMLAudioElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111282,7 +111316,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLAudioElement
 
-        module HTMLBRElement =
+        module HTMLBRElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111292,7 +111326,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLBRElement
 
-        module HTMLBaseElement =
+        module HTMLBaseElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111302,7 +111336,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLBaseElement
 
-        module HTMLBodyElement =
+        module HTMLBodyElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111312,7 +111346,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLBodyElement
 
-        module HTMLButtonElement =
+        module HTMLButtonElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111322,7 +111356,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLButtonElement
 
-        module HTMLCanvasElement =
+        module HTMLCanvasElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111332,7 +111366,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLCanvasElement
 
-        module HTMLCollection =
+        module HTMLCollection__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111342,7 +111376,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLCollection
 
-        module HTMLDListElement =
+        module HTMLDListElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111352,7 +111386,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLDListElement
 
-        module HTMLDataElement =
+        module HTMLDataElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111362,7 +111396,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLDataElement
 
-        module HTMLDataListElement =
+        module HTMLDataListElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111372,7 +111406,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLDataListElement
 
-        module HTMLDetailsElement =
+        module HTMLDetailsElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111382,7 +111416,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLDetailsElement
 
-        module HTMLDialogElement =
+        module HTMLDialogElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111392,7 +111426,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLDialogElement
 
-        module HTMLDirectoryElement =
+        module HTMLDirectoryElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111402,7 +111436,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLDirectoryElement
 
-        module HTMLDivElement =
+        module HTMLDivElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111412,7 +111446,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLDivElement
 
-        module HTMLDocument =
+        module HTMLDocument__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111422,7 +111456,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLDocument
 
-        module HTMLElement =
+        module HTMLElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111432,7 +111466,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLElement
 
-        module HTMLEmbedElement =
+        module HTMLEmbedElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111442,7 +111476,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLEmbedElement
 
-        module HTMLFieldSetElement =
+        module HTMLFieldSetElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111452,7 +111486,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLFieldSetElement
 
-        module HTMLFontElement =
+        module HTMLFontElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111462,7 +111496,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLFontElement
 
-        module HTMLFormControlsCollection =
+        module HTMLFormControlsCollection__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111472,7 +111506,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLFormControlsCollection
 
-        module HTMLFormElement =
+        module HTMLFormElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111482,7 +111516,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLFormElement
 
-        module HTMLFrameElement =
+        module HTMLFrameElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111492,7 +111526,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLFrameElement
 
-        module HTMLFrameSetElement =
+        module HTMLFrameSetElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111502,7 +111536,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLFrameSetElement
 
-        module HTMLHRElement =
+        module HTMLHRElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111512,7 +111546,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLHRElement
 
-        module HTMLHeadElement =
+        module HTMLHeadElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111522,7 +111556,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLHeadElement
 
-        module HTMLHeadingElement =
+        module HTMLHeadingElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111532,7 +111566,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLHeadingElement
 
-        module HTMLHtmlElement =
+        module HTMLHtmlElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111542,7 +111576,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLHtmlElement
 
-        module HTMLIFrameElement =
+        module HTMLIFrameElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111552,7 +111586,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLIFrameElement
 
-        module HTMLImageElement =
+        module HTMLImageElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111562,7 +111596,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLImageElement
 
-        module HTMLInputElement =
+        module HTMLInputElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111572,7 +111606,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLInputElement
 
-        module HTMLLIElement =
+        module HTMLLIElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111582,7 +111616,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLLIElement
 
-        module HTMLLabelElement =
+        module HTMLLabelElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111592,7 +111626,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLLabelElement
 
-        module HTMLLegendElement =
+        module HTMLLegendElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111602,7 +111636,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLLegendElement
 
-        module HTMLLinkElement =
+        module HTMLLinkElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111612,7 +111646,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLLinkElement
 
-        module HTMLMapElement =
+        module HTMLMapElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111622,7 +111656,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLMapElement
 
-        module HTMLMarqueeElement =
+        module HTMLMarqueeElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111632,7 +111666,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLMarqueeElement
 
-        module HTMLMediaElement =
+        module HTMLMediaElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111652,7 +111686,7 @@ module Web =
                 abstract member HAVE_FUTURE_DATA: int with get
                 abstract member HAVE_ENOUGH_DATA: int with get
 
-        module HTMLMenuElement =
+        module HTMLMenuElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111662,7 +111696,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLMenuElement
 
-        module HTMLMetaElement =
+        module HTMLMetaElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111672,7 +111706,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLMetaElement
 
-        module HTMLMeterElement =
+        module HTMLMeterElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111682,7 +111716,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLMeterElement
 
-        module HTMLModElement =
+        module HTMLModElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111692,7 +111726,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLModElement
 
-        module HTMLOListElement =
+        module HTMLOListElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111702,7 +111736,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLOListElement
 
-        module HTMLObjectElement =
+        module HTMLObjectElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111712,7 +111746,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLObjectElement
 
-        module HTMLOptGroupElement =
+        module HTMLOptGroupElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111722,7 +111756,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLOptGroupElement
 
-        module HTMLOptionElement =
+        module HTMLOptionElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111732,7 +111766,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLOptionElement
 
-        module HTMLOptionsCollection =
+        module HTMLOptionsCollection__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111742,7 +111776,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLOptionsCollection
 
-        module HTMLOutputElement =
+        module HTMLOutputElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111752,7 +111786,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLOutputElement
 
-        module HTMLParagraphElement =
+        module HTMLParagraphElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111762,7 +111796,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLParagraphElement
 
-        module HTMLParamElement =
+        module HTMLParamElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111772,7 +111806,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLParamElement
 
-        module HTMLPictureElement =
+        module HTMLPictureElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111782,7 +111816,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLPictureElement
 
-        module HTMLPreElement =
+        module HTMLPreElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111792,7 +111826,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLPreElement
 
-        module HTMLProgressElement =
+        module HTMLProgressElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111802,7 +111836,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLProgressElement
 
-        module HTMLQuoteElement =
+        module HTMLQuoteElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111812,7 +111846,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLQuoteElement
 
-        module HTMLScriptElement =
+        module HTMLScriptElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111829,7 +111863,7 @@ module Web =
                 /// </summary>
                 abstract member supports: ``type``: string -> bool
 
-        module HTMLSelectElement =
+        module HTMLSelectElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111839,7 +111873,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLSelectElement
 
-        module HTMLSlotElement =
+        module HTMLSlotElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111849,7 +111883,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLSlotElement
 
-        module HTMLSourceElement =
+        module HTMLSourceElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111859,7 +111893,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLSourceElement
 
-        module HTMLSpanElement =
+        module HTMLSpanElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111869,7 +111903,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLSpanElement
 
-        module HTMLStyleElement =
+        module HTMLStyleElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111879,7 +111913,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLStyleElement
 
-        module HTMLTableCaptionElement =
+        module HTMLTableCaptionElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111889,7 +111923,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLTableCaptionElement
 
-        module HTMLTableCellElement =
+        module HTMLTableCellElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111899,7 +111933,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLTableCellElement
 
-        module HTMLTableColElement =
+        module HTMLTableColElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111909,7 +111943,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLTableColElement
 
-        module HTMLTableElement =
+        module HTMLTableElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111919,7 +111953,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLTableElement
 
-        module HTMLTableRowElement =
+        module HTMLTableRowElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111929,7 +111963,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLTableRowElement
 
-        module HTMLTableSectionElement =
+        module HTMLTableSectionElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111939,7 +111973,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLTableSectionElement
 
-        module HTMLTemplateElement =
+        module HTMLTemplateElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111949,7 +111983,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLTemplateElement
 
-        module HTMLTextAreaElement =
+        module HTMLTextAreaElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111959,7 +111993,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLTextAreaElement
 
-        module HTMLTimeElement =
+        module HTMLTimeElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111969,7 +112003,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLTimeElement
 
-        module HTMLTitleElement =
+        module HTMLTitleElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111979,7 +112013,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLTitleElement
 
-        module HTMLTrackElement =
+        module HTMLTrackElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -111994,7 +112028,7 @@ module Web =
                 abstract member LOADED: int with get
                 abstract member ERROR: int with get
 
-        module HTMLUListElement =
+        module HTMLUListElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112004,7 +112038,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLUListElement
 
-        module HTMLUnknownElement =
+        module HTMLUnknownElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112014,7 +112048,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLUnknownElement
 
-        module HTMLVideoElement =
+        module HTMLVideoElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112024,7 +112058,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HTMLVideoElement
 
-        module HashChangeEvent =
+        module HashChangeEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112036,7 +112070,7 @@ module Web =
                     ``type``: string * ?eventInitDict: Web.HashChangeEventInit ->
                         Web.HashChangeEvent
 
-        module Headers =
+        module Headers__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112050,7 +112084,7 @@ module Web =
                 abstract member Create: init: ResizeArray<string * string> -> Web.Headers
 
                 [<EmitConstructor>]
-                abstract member Create: init: Exports.Headers.Type.Create.init -> Web.Headers
+                abstract member Create: init: Exports.Headers__.Type.Create.init -> Web.Headers
 
                 [<EmitConstructor>]
                 abstract member Create: init: Web.Headers -> Web.Headers
@@ -112065,7 +112099,7 @@ module Web =
                         [<EmitIndexer>]
                         abstract member Item: key: string -> string with get, set
 
-        module Highlight =
+        module Highlight__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112076,7 +112110,7 @@ module Web =
                 abstract member Create:
                     [<ParamArray>] initialRanges: Web.AbstractRange[] -> Web.Highlight
 
-        module HighlightRegistry =
+        module HighlightRegistry__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112086,7 +112120,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.HighlightRegistry
 
-        module History =
+        module History__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112096,7 +112130,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.History
 
-        module IDBCursor =
+        module IDBCursor__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112106,7 +112140,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.IDBCursor
 
-        module IDBCursorWithValue =
+        module IDBCursorWithValue__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112116,7 +112150,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.IDBCursorWithValue
 
-        module IDBDatabase =
+        module IDBDatabase__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112126,7 +112160,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.IDBDatabase
 
-        module IDBFactory =
+        module IDBFactory__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112136,7 +112170,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.IDBFactory
 
-        module IDBIndex =
+        module IDBIndex__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112146,7 +112180,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.IDBIndex
 
-        module IDBKeyRange =
+        module IDBKeyRange__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112183,7 +112217,7 @@ module Web =
                 /// </summary>
                 abstract member upperBound: upper: obj * ?``open``: bool -> Web.IDBKeyRange
 
-        module IDBObjectStore =
+        module IDBObjectStore__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112193,7 +112227,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.IDBObjectStore
 
-        module IDBOpenDBRequest =
+        module IDBOpenDBRequest__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112203,7 +112237,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.IDBOpenDBRequest
 
-        module IDBRequest =
+        module IDBRequest__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112213,7 +112247,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.IDBRequest
 
-        module IDBTransaction =
+        module IDBTransaction__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112223,7 +112257,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.IDBTransaction
 
-        module IDBVersionChangeEvent =
+        module IDBVersionChangeEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112235,7 +112269,7 @@ module Web =
                     ``type``: string * ?eventInitDict: Web.IDBVersionChangeEventInit ->
                         Web.IDBVersionChangeEvent
 
-        module IIRFilterNode =
+        module IIRFilterNode__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112247,7 +112281,7 @@ module Web =
                     context: Web.BaseAudioContext * options: Web.IIRFilterOptions ->
                         Web.IIRFilterNode
 
-        module IdleDeadline =
+        module IdleDeadline__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112257,7 +112291,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.IdleDeadline
 
-        module ImageBitmap =
+        module ImageBitmap__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112267,7 +112301,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.ImageBitmap
 
-        module ImageBitmapRenderingContext =
+        module ImageBitmapRenderingContext__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112277,7 +112311,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.ImageBitmapRenderingContext
 
-        module ImageCapture =
+        module ImageCapture__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112287,7 +112321,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: videoTrack: Web.MediaStreamTrack -> Web.ImageCapture
 
-        module ImageData =
+        module ImageData__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112306,7 +112340,7 @@ module Web =
                     ?settings: Web.ImageDataSettings ->
                         Web.ImageData
 
-        module ImageDecoder =
+        module ImageDecoder__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112323,7 +112357,7 @@ module Web =
                 /// </summary>
                 abstract member isTypeSupported: ``type``: string -> JS.Promise<bool>
 
-        module ImageTrack =
+        module ImageTrack__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112333,7 +112367,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.ImageTrack
 
-        module ImageTrackList =
+        module ImageTrackList__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112343,7 +112377,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.ImageTrackList
 
-        module InputDeviceInfo =
+        module InputDeviceInfo__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112353,7 +112387,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.InputDeviceInfo
 
-        module InputEvent =
+        module InputEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112364,7 +112398,7 @@ module Web =
                 abstract member Create:
                     ``type``: string * ?eventInitDict: Web.InputEventInit -> Web.InputEvent
 
-        module IntersectionObserver =
+        module IntersectionObserver__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112377,7 +112411,7 @@ module Web =
                     ?options: Web.IntersectionObserverInit ->
                         Web.IntersectionObserver
 
-        module IntersectionObserverEntry =
+        module IntersectionObserverEntry__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112387,7 +112421,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.IntersectionObserverEntry
 
-        module KeyboardEvent =
+        module KeyboardEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112403,7 +112437,7 @@ module Web =
                 abstract member DOM_KEY_LOCATION_RIGHT: int with get
                 abstract member DOM_KEY_LOCATION_NUMPAD: int with get
 
-        module KeyframeEffect =
+        module KeyframeEffect__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112451,7 +112485,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: source: Web.KeyframeEffect -> Web.KeyframeEffect
 
-        module LargestContentfulPaint =
+        module LargestContentfulPaint__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112461,7 +112495,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.LargestContentfulPaint
 
-        module Location =
+        module Location__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112471,7 +112505,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.Location
 
-        module Lock =
+        module Lock__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112481,7 +112515,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.Lock
 
-        module LockManager =
+        module LockManager__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112491,7 +112525,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.LockManager
 
-        module MIDIAccess =
+        module MIDIAccess__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112501,7 +112535,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.MIDIAccess
 
-        module MIDIConnectionEvent =
+        module MIDIConnectionEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112513,7 +112547,7 @@ module Web =
                     ``type``: string * ?eventInitDict: Web.MIDIConnectionEventInit ->
                         Web.MIDIConnectionEvent
 
-        module MIDIInput =
+        module MIDIInput__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112523,7 +112557,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.MIDIInput
 
-        module MIDIInputMap =
+        module MIDIInputMap__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112533,7 +112567,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.MIDIInputMap
 
-        module MIDIMessageEvent =
+        module MIDIMessageEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112545,7 +112579,7 @@ module Web =
                     ``type``: string * ?eventInitDict: Web.MIDIMessageEventInit ->
                         Web.MIDIMessageEvent
 
-        module MIDIOutput =
+        module MIDIOutput__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112555,7 +112589,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.MIDIOutput
 
-        module MIDIOutputMap =
+        module MIDIOutputMap__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112565,7 +112599,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.MIDIOutputMap
 
-        module MIDIPort =
+        module MIDIPort__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112575,7 +112609,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.MIDIPort
 
-        module MathMLElement =
+        module MathMLElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112585,7 +112619,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.MathMLElement
 
-        module MediaCapabilities =
+        module MediaCapabilities__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112595,7 +112629,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.MediaCapabilities
 
-        module MediaDeviceInfo =
+        module MediaDeviceInfo__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112605,7 +112639,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.MediaDeviceInfo
 
-        module MediaDevices =
+        module MediaDevices__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112615,7 +112649,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.MediaDevices
 
-        module MediaElementAudioSourceNode =
+        module MediaElementAudioSourceNode__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112627,7 +112661,7 @@ module Web =
                     context: Web.AudioContext * options: Web.MediaElementAudioSourceOptions ->
                         Web.MediaElementAudioSourceNode
 
-        module MediaEncryptedEvent =
+        module MediaEncryptedEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112639,7 +112673,7 @@ module Web =
                     ``type``: string * ?eventInitDict: Web.MediaEncryptedEventInit ->
                         Web.MediaEncryptedEvent
 
-        module MediaError =
+        module MediaError__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112654,7 +112688,7 @@ module Web =
                 abstract member MEDIA_ERR_DECODE: int with get
                 abstract member MEDIA_ERR_SRC_NOT_SUPPORTED: int with get
 
-        module MediaKeyMessageEvent =
+        module MediaKeyMessageEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112666,7 +112700,7 @@ module Web =
                     ``type``: string * eventInitDict: Web.MediaKeyMessageEventInit ->
                         Web.MediaKeyMessageEvent
 
-        module MediaKeySession =
+        module MediaKeySession__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112676,7 +112710,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.MediaKeySession
 
-        module MediaKeyStatusMap =
+        module MediaKeyStatusMap__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112686,7 +112720,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.MediaKeyStatusMap
 
-        module MediaKeySystemAccess =
+        module MediaKeySystemAccess__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112696,7 +112730,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.MediaKeySystemAccess
 
-        module MediaKeys =
+        module MediaKeys__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112706,7 +112740,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.MediaKeys
 
-        module MediaList =
+        module MediaList__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112716,7 +112750,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.MediaList
 
-        module MediaMetadata =
+        module MediaMetadata__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112726,7 +112760,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: ?init: Web.MediaMetadataInit -> Web.MediaMetadata
 
-        module MediaQueryList =
+        module MediaQueryList__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112736,7 +112770,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.MediaQueryList
 
-        module MediaQueryListEvent =
+        module MediaQueryListEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112748,7 +112782,7 @@ module Web =
                     ``type``: string * ?eventInitDict: Web.MediaQueryListEventInit ->
                         Web.MediaQueryListEvent
 
-        module MediaRecorder =
+        module MediaRecorder__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112767,7 +112801,7 @@ module Web =
                 /// </summary>
                 abstract member isTypeSupported: ``type``: string -> bool
 
-        module MediaSession =
+        module MediaSession__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112777,7 +112811,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.MediaSession
 
-        module MediaSource =
+        module MediaSource__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112800,7 +112834,7 @@ module Web =
                 /// </summary>
                 abstract member isTypeSupported: ``type``: string -> bool
 
-        module MediaSourceHandle =
+        module MediaSourceHandle__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112810,7 +112844,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.MediaSourceHandle
 
-        module MediaStream =
+        module MediaStream__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112826,7 +112860,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: tracks: ResizeArray<Web.MediaStreamTrack> -> Web.MediaStream
 
-        module MediaStreamAudioDestinationNode =
+        module MediaStreamAudioDestinationNode__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112838,7 +112872,7 @@ module Web =
                     context: Web.AudioContext * ?options: Web.AudioNodeOptions ->
                         Web.MediaStreamAudioDestinationNode
 
-        module MediaStreamAudioSourceNode =
+        module MediaStreamAudioSourceNode__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112850,7 +112884,7 @@ module Web =
                     context: Web.AudioContext * options: Web.MediaStreamAudioSourceOptions ->
                         Web.MediaStreamAudioSourceNode
 
-        module MediaStreamTrack =
+        module MediaStreamTrack__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112860,7 +112894,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.MediaStreamTrack
 
-        module MediaStreamTrackEvent =
+        module MediaStreamTrackEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112872,7 +112906,7 @@ module Web =
                     ``type``: string * eventInitDict: Web.MediaStreamTrackEventInit ->
                         Web.MediaStreamTrackEvent
 
-        module MessageChannel =
+        module MessageChannel__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112882,7 +112916,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.MessageChannel
 
-        module MessageEvent =
+        module MessageEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112894,7 +112928,7 @@ module Web =
                     ``type``: string * ?eventInitDict: Web.MessageEventInit<'T> ->
                         Web.MessageEvent<'T>
 
-        module MessagePort =
+        module MessagePort__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112904,7 +112938,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.MessagePort
 
-        module MimeType =
+        module MimeType__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112914,7 +112948,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.MimeType
 
-        module MimeTypeArray =
+        module MimeTypeArray__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112924,7 +112958,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.MimeTypeArray
 
-        module MouseEvent =
+        module MouseEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112935,7 +112969,7 @@ module Web =
                 abstract member Create:
                     ``type``: string * ?eventInitDict: Web.MouseEventInit -> Web.MouseEvent
 
-        module MutationObserver =
+        module MutationObserver__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112945,7 +112979,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: callback: Web.MutationCallback -> Web.MutationObserver
 
-        module MutationRecord =
+        module MutationRecord__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112955,7 +112989,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.MutationRecord
 
-        module NamedNodeMap =
+        module NamedNodeMap__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112965,7 +112999,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.NamedNodeMap
 
-        module NavigateEvent =
+        module NavigateEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112976,7 +113010,7 @@ module Web =
                 abstract member Create:
                     ``type``: string * eventInitDict: Web.NavigateEventInit -> Web.NavigateEvent
 
-        module Navigation =
+        module Navigation__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112986,7 +113020,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.Navigation
 
-        module NavigationActivation =
+        module NavigationActivation__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -112996,7 +113030,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.NavigationActivation
 
-        module NavigationCurrentEntryChangeEvent =
+        module NavigationCurrentEntryChangeEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113008,7 +113042,7 @@ module Web =
                     ``type``: string * eventInitDict: Web.NavigationCurrentEntryChangeEventInit ->
                         Web.NavigationCurrentEntryChangeEvent
 
-        module NavigationDestination =
+        module NavigationDestination__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113018,7 +113052,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.NavigationDestination
 
-        module NavigationHistoryEntry =
+        module NavigationHistoryEntry__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113028,7 +113062,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.NavigationHistoryEntry
 
-        module NavigationPrecommitController =
+        module NavigationPrecommitController__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113038,7 +113072,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.NavigationPrecommitController
 
-        module NavigationPreloadManager =
+        module NavigationPreloadManager__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113048,7 +113082,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.NavigationPreloadManager
 
-        module NavigationTransition =
+        module NavigationTransition__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113058,7 +113092,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.NavigationTransition
 
-        module Navigator =
+        module Navigator__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113068,7 +113102,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.Navigator
 
-        module NavigatorLogin =
+        module NavigatorLogin__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113078,7 +113112,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.NavigatorLogin
 
-        module Node =
+        module Node__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113146,7 +113180,7 @@ module Web =
                 abstract member DOCUMENT_POSITION_CONTAINED_BY: int with get
                 abstract member DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC: int with get
 
-        module NodeIterator =
+        module NodeIterator__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113156,7 +113190,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.NodeIterator
 
-        module NodeList =
+        module NodeList__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113166,7 +113200,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.NodeList
 
-        module Notification =
+        module Notification__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113199,7 +113233,7 @@ module Web =
                     ?deprecatedCallback: Web.NotificationPermissionCallback ->
                         JS.Promise<Web.NotificationPermission>
 
-        module OfflineAudioCompletionEvent =
+        module OfflineAudioCompletionEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113211,7 +113245,7 @@ module Web =
                     ``type``: string * eventInitDict: Web.OfflineAudioCompletionEventInit ->
                         Web.OfflineAudioCompletionEvent
 
-        module OfflineAudioContext =
+        module OfflineAudioContext__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113227,7 +113261,7 @@ module Web =
                     numberOfChannels: float * length: float * sampleRate: float ->
                         Web.OfflineAudioContext
 
-        module OffscreenCanvas =
+        module OffscreenCanvas__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113237,7 +113271,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: width: float * height: float -> Web.OffscreenCanvas
 
-        module OffscreenCanvasRenderingContext2D =
+        module OffscreenCanvasRenderingContext2D__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113247,7 +113281,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.OffscreenCanvasRenderingContext2D
 
-        module Origin =
+        module Origin__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113259,7 +113293,7 @@ module Web =
 
                 abstract member from: value: obj -> Web.Origin
 
-        module OscillatorNode =
+        module OscillatorNode__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113271,7 +113305,7 @@ module Web =
                     context: Web.BaseAudioContext * ?options: Web.OscillatorOptions ->
                         Web.OscillatorNode
 
-        module OverconstrainedError =
+        module OverconstrainedError__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113282,7 +113316,7 @@ module Web =
                 abstract member Create:
                     ``constraint``: string * ?message: string -> Web.OverconstrainedError
 
-        module PageRevealEvent =
+        module PageRevealEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113294,7 +113328,7 @@ module Web =
                     ``type``: string * ?eventInitDict: Web.PageRevealEventInit ->
                         Web.PageRevealEvent
 
-        module PageSwapEvent =
+        module PageSwapEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113305,7 +113339,7 @@ module Web =
                 abstract member Create:
                     ``type``: string * ?eventInitDict: Web.PageSwapEventInit -> Web.PageSwapEvent
 
-        module PageTransitionEvent =
+        module PageTransitionEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113317,7 +113351,7 @@ module Web =
                     ``type``: string * ?eventInitDict: Web.PageTransitionEventInit ->
                         Web.PageTransitionEvent
 
-        module PannerNode =
+        module PannerNode__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113328,7 +113362,7 @@ module Web =
                 abstract member Create:
                     context: Web.BaseAudioContext * ?options: Web.PannerOptions -> Web.PannerNode
 
-        module Path2D =
+        module Path2D__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113344,7 +113378,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: path: string -> Web.Path2D
 
-        module PaymentAddress =
+        module PaymentAddress__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113354,7 +113388,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.PaymentAddress
 
-        module PaymentMethodChangeEvent =
+        module PaymentMethodChangeEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113366,7 +113400,7 @@ module Web =
                     ``type``: string * ?eventInitDict: Web.PaymentMethodChangeEventInit ->
                         Web.PaymentMethodChangeEvent
 
-        module PaymentRequest =
+        module PaymentRequest__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113380,7 +113414,7 @@ module Web =
                     ?options: Web.PaymentOptions ->
                         Web.PaymentRequest
 
-        module PaymentRequestUpdateEvent =
+        module PaymentRequestUpdateEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113392,7 +113426,7 @@ module Web =
                     ``type``: string * ?eventInitDict: Web.PaymentRequestUpdateEventInit ->
                         Web.PaymentRequestUpdateEvent
 
-        module PaymentResponse =
+        module PaymentResponse__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113402,7 +113436,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.PaymentResponse
 
-        module Performance =
+        module Performance__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113412,7 +113446,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.Performance
 
-        module PerformanceEntry =
+        module PerformanceEntry__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113422,7 +113456,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.PerformanceEntry
 
-        module PerformanceEventTiming =
+        module PerformanceEventTiming__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113432,7 +113466,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.PerformanceEventTiming
 
-        module PerformanceMark =
+        module PerformanceMark__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113444,7 +113478,7 @@ module Web =
                     markName: string * ?markOptions: Web.PerformanceMarkOptions ->
                         Web.PerformanceMark
 
-        module PerformanceMeasure =
+        module PerformanceMeasure__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113454,7 +113488,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.PerformanceMeasure
 
-        module PerformanceNavigation =
+        module PerformanceNavigation__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113469,7 +113503,7 @@ module Web =
                 abstract member TYPE_BACK_FORWARD: int with get
                 abstract member TYPE_RESERVED: int with get
 
-        module PerformanceNavigationTiming =
+        module PerformanceNavigationTiming__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113479,7 +113513,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.PerformanceNavigationTiming
 
-        module PerformanceObserver =
+        module PerformanceObserver__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113497,7 +113531,7 @@ module Web =
                 /// </summary>
                 abstract member supportedEntryTypes: ReadonlyArray<string> with get
 
-        module PerformanceObserverEntryList =
+        module PerformanceObserverEntryList__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113507,7 +113541,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.PerformanceObserverEntryList
 
-        module PerformancePaintTiming =
+        module PerformancePaintTiming__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113517,7 +113551,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.PerformancePaintTiming
 
-        module PerformanceResourceTiming =
+        module PerformanceResourceTiming__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113527,7 +113561,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.PerformanceResourceTiming
 
-        module PerformanceServerTiming =
+        module PerformanceServerTiming__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113537,7 +113571,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.PerformanceServerTiming
 
-        module PerformanceTiming =
+        module PerformanceTiming__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113547,7 +113581,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.PerformanceTiming
 
-        module PeriodicWave =
+        module PeriodicWave__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113559,7 +113593,7 @@ module Web =
                     context: Web.BaseAudioContext * ?options: Web.PeriodicWaveOptions ->
                         Web.PeriodicWave
 
-        module PermissionStatus =
+        module PermissionStatus__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113569,7 +113603,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.PermissionStatus
 
-        module Permissions =
+        module Permissions__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113579,7 +113613,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.Permissions
 
-        module PictureInPictureEvent =
+        module PictureInPictureEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113591,7 +113625,7 @@ module Web =
                     ``type``: string * eventInitDict: Web.PictureInPictureEventInit ->
                         Web.PictureInPictureEvent
 
-        module PictureInPictureWindow =
+        module PictureInPictureWindow__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113601,7 +113635,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.PictureInPictureWindow
 
-        module Plugin =
+        module Plugin__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113611,7 +113645,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.Plugin
 
-        module PluginArray =
+        module PluginArray__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113621,7 +113655,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.PluginArray
 
-        module PointerEvent =
+        module PointerEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113632,7 +113666,7 @@ module Web =
                 abstract member Create:
                     ``type``: string * ?eventInitDict: Web.PointerEventInit -> Web.PointerEvent
 
-        module PopStateEvent =
+        module PopStateEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113643,7 +113677,7 @@ module Web =
                 abstract member Create:
                     ``type``: string * ?eventInitDict: Web.PopStateEventInit -> Web.PopStateEvent
 
-        module ProcessingInstruction =
+        module ProcessingInstruction__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113653,7 +113687,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.ProcessingInstruction
 
-        module ProgressEvent =
+        module ProgressEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113664,7 +113698,7 @@ module Web =
                 abstract member Create:
                     ``type``: string * ?eventInitDict: Web.ProgressEventInit -> Web.ProgressEvent
 
-        module PromiseRejectionEvent =
+        module PromiseRejectionEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113676,7 +113710,7 @@ module Web =
                     ``type``: string * eventInitDict: Web.PromiseRejectionEventInit ->
                         Web.PromiseRejectionEvent
 
-        module PublicKeyCredential =
+        module PublicKeyCredential__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113751,7 +113785,7 @@ module Web =
                 abstract member signalUnknownCredential:
                     options: Web.UnknownCredentialOptions -> JS.Promise<unit>
 
-        module PushManager =
+        module PushManager__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113768,7 +113802,7 @@ module Web =
                 /// </summary>
                 abstract member supportedContentEncodings: ReadonlyArray<string> with get
 
-        module PushSubscription =
+        module PushSubscription__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113778,7 +113812,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.PushSubscription
 
-        module PushSubscriptionOptions =
+        module PushSubscriptionOptions__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113788,7 +113822,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.PushSubscriptionOptions
 
-        module RTCCertificate =
+        module RTCCertificate__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113798,7 +113832,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.RTCCertificate
 
-        module RTCDTMFSender =
+        module RTCDTMFSender__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113808,7 +113842,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.RTCDTMFSender
 
-        module RTCDTMFToneChangeEvent =
+        module RTCDTMFToneChangeEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113820,7 +113854,7 @@ module Web =
                     ``type``: string * ?eventInitDict: Web.RTCDTMFToneChangeEventInit ->
                         Web.RTCDTMFToneChangeEvent
 
-        module RTCDataChannel =
+        module RTCDataChannel__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113830,7 +113864,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.RTCDataChannel
 
-        module RTCDataChannelEvent =
+        module RTCDataChannelEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113842,7 +113876,7 @@ module Web =
                     ``type``: string * eventInitDict: Web.RTCDataChannelEventInit ->
                         Web.RTCDataChannelEvent
 
-        module RTCDtlsTransport =
+        module RTCDtlsTransport__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113852,7 +113886,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.RTCDtlsTransport
 
-        module RTCEncodedAudioFrame =
+        module RTCEncodedAudioFrame__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113862,7 +113896,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.RTCEncodedAudioFrame
 
-        module RTCEncodedVideoFrame =
+        module RTCEncodedVideoFrame__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113872,7 +113906,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.RTCEncodedVideoFrame
 
-        module RTCError =
+        module RTCError__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113882,7 +113916,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: init: Web.RTCErrorInit * ?message: string -> Web.RTCError
 
-        module RTCErrorEvent =
+        module RTCErrorEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113893,7 +113927,7 @@ module Web =
                 abstract member Create:
                     ``type``: string * eventInitDict: Web.RTCErrorEventInit -> Web.RTCErrorEvent
 
-        module RTCIceCandidate =
+        module RTCIceCandidate__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113904,7 +113938,7 @@ module Web =
                 abstract member Create:
                     ?candidateInitDict: Web.RTCLocalIceCandidateInit -> Web.RTCIceCandidate
 
-        module RTCIceTransport =
+        module RTCIceTransport__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113914,7 +113948,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.RTCIceTransport
 
-        module RTCPeerConnection =
+        module RTCPeerConnection__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113941,7 +113975,7 @@ module Web =
                 abstract member generateCertificate:
                     keygenAlgorithm: string -> JS.Promise<Web.RTCCertificate>
 
-        module RTCPeerConnectionIceErrorEvent =
+        module RTCPeerConnectionIceErrorEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113953,7 +113987,7 @@ module Web =
                     ``type``: string * eventInitDict: Web.RTCPeerConnectionIceErrorEventInit ->
                         Web.RTCPeerConnectionIceErrorEvent
 
-        module RTCPeerConnectionIceEvent =
+        module RTCPeerConnectionIceEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113965,7 +113999,7 @@ module Web =
                     ``type``: string * ?eventInitDict: Web.RTCPeerConnectionIceEventInit ->
                         Web.RTCPeerConnectionIceEvent
 
-        module RTCRtpReceiver =
+        module RTCRtpReceiver__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113982,7 +114016,7 @@ module Web =
                 /// </summary>
                 abstract member getCapabilities: kind: string -> Web.RTCRtpCapabilities option
 
-        module RTCRtpScriptTransform =
+        module RTCRtpScriptTransform__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -113996,7 +114030,7 @@ module Web =
                     ?transfer: ResizeArray<obj> ->
                         Web.RTCRtpScriptTransform
 
-        module RTCRtpSender =
+        module RTCRtpSender__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114013,7 +114047,7 @@ module Web =
                 /// </summary>
                 abstract member getCapabilities: kind: string -> Web.RTCRtpCapabilities option
 
-        module RTCRtpTransceiver =
+        module RTCRtpTransceiver__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114023,7 +114057,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.RTCRtpTransceiver
 
-        module RTCSctpTransport =
+        module RTCSctpTransport__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114033,7 +114067,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.RTCSctpTransport
 
-        module RTCSessionDescription =
+        module RTCSessionDescription__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114044,7 +114078,7 @@ module Web =
                 abstract member Create:
                     descriptionInitDict: Web.RTCSessionDescriptionInit -> Web.RTCSessionDescription
 
-        module RTCStatsReport =
+        module RTCStatsReport__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114054,7 +114088,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.RTCStatsReport
 
-        module RTCTrackEvent =
+        module RTCTrackEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114065,7 +114099,7 @@ module Web =
                 abstract member Create:
                     ``type``: string * eventInitDict: Web.RTCTrackEventInit -> Web.RTCTrackEvent
 
-        module RadioNodeList =
+        module RadioNodeList__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114075,7 +114109,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.RadioNodeList
 
-        module Range =
+        module Range__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114090,7 +114124,7 @@ module Web =
                 abstract member END_TO_END: int with get
                 abstract member END_TO_START: int with get
 
-        module ReadableByteStreamController =
+        module ReadableByteStreamController__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114100,7 +114134,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.ReadableByteStreamController
 
-        module ReadableStream =
+        module ReadableStream__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114110,7 +114144,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create:
                     underlyingSource: Web.UnderlyingByteSource *
-                    ?strategy: Exports.ReadableStream.Type.Create.strategy ->
+                    ?strategy: Exports.ReadableStream__.Type.Create.strategy ->
                         Web.ReadableStream<JS.Uint8Array>
 
                 [<EmitConstructor>]
@@ -114136,7 +114170,7 @@ module Web =
                         [<ParamObject; Emit("$0")>]
                         static member Create(?highWaterMark: float) : strategy = nativeOnly
 
-        module ReadableStreamBYOBReader =
+        module ReadableStreamBYOBReader__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114147,7 +114181,7 @@ module Web =
                 abstract member Create:
                     stream: Web.ReadableStream<JS.Uint8Array> -> Web.ReadableStreamBYOBReader
 
-        module ReadableStreamBYOBRequest =
+        module ReadableStreamBYOBRequest__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114157,7 +114191,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.ReadableStreamBYOBRequest
 
-        module ReadableStreamDefaultController =
+        module ReadableStreamDefaultController__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114167,7 +114201,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.ReadableStreamDefaultController
 
-        module ReadableStreamDefaultReader =
+        module ReadableStreamDefaultReader__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114178,7 +114212,7 @@ module Web =
                 abstract member Create:
                     stream: Web.ReadableStream<'R> -> Web.ReadableStreamDefaultReader<'R>
 
-        module RemotePlayback =
+        module RemotePlayback__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114188,7 +114222,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.RemotePlayback
 
-        module ReportingObserver =
+        module ReportingObserver__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114200,7 +114234,7 @@ module Web =
                     callback: Web.ReportingObserverCallback * ?options: Web.ReportingObserverOptions ->
                         Web.ReportingObserver
 
-        module Request =
+        module Request__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114216,7 +114250,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: input: Web.URL * ?init: Web.RequestInit -> Web.Request
 
-        module ResizeObserver =
+        module ResizeObserver__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114226,7 +114260,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: callback: Web.ResizeObserverCallback -> Web.ResizeObserver
 
-        module ResizeObserverEntry =
+        module ResizeObserverEntry__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114236,7 +114270,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.ResizeObserverEntry
 
-        module ResizeObserverSize =
+        module ResizeObserverSize__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114246,7 +114280,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.ResizeObserverSize
 
-        module Response =
+        module Response__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114302,7 +114336,7 @@ module Web =
                 /// </summary>
                 abstract member redirect: url: Web.URL * ?status: float -> Web.Response
 
-        module SVGAElement =
+        module SVGAElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114312,7 +114346,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGAElement
 
-        module SVGAngle =
+        module SVGAngle__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114328,7 +114362,7 @@ module Web =
                 abstract member SVG_ANGLETYPE_RAD: int with get
                 abstract member SVG_ANGLETYPE_GRAD: int with get
 
-        module SVGAnimateElement =
+        module SVGAnimateElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114338,7 +114372,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGAnimateElement
 
-        module SVGAnimateMotionElement =
+        module SVGAnimateMotionElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114348,7 +114382,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGAnimateMotionElement
 
-        module SVGAnimateTransformElement =
+        module SVGAnimateTransformElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114358,7 +114392,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGAnimateTransformElement
 
-        module SVGAnimatedAngle =
+        module SVGAnimatedAngle__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114368,7 +114402,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGAnimatedAngle
 
-        module SVGAnimatedBoolean =
+        module SVGAnimatedBoolean__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114378,7 +114412,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGAnimatedBoolean
 
-        module SVGAnimatedEnumeration =
+        module SVGAnimatedEnumeration__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114388,7 +114422,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGAnimatedEnumeration
 
-        module SVGAnimatedInteger =
+        module SVGAnimatedInteger__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114398,7 +114432,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGAnimatedInteger
 
-        module SVGAnimatedLength =
+        module SVGAnimatedLength__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114408,7 +114442,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGAnimatedLength
 
-        module SVGAnimatedLengthList =
+        module SVGAnimatedLengthList__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114418,7 +114452,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGAnimatedLengthList
 
-        module SVGAnimatedNumber =
+        module SVGAnimatedNumber__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114428,7 +114462,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGAnimatedNumber
 
-        module SVGAnimatedNumberList =
+        module SVGAnimatedNumberList__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114438,7 +114472,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGAnimatedNumberList
 
-        module SVGAnimatedPreserveAspectRatio =
+        module SVGAnimatedPreserveAspectRatio__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114448,7 +114482,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGAnimatedPreserveAspectRatio
 
-        module SVGAnimatedRect =
+        module SVGAnimatedRect__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114458,7 +114492,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGAnimatedRect
 
-        module SVGAnimatedString =
+        module SVGAnimatedString__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114468,7 +114502,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGAnimatedString
 
-        module SVGAnimatedTransformList =
+        module SVGAnimatedTransformList__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114478,7 +114512,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGAnimatedTransformList
 
-        module SVGAnimationElement =
+        module SVGAnimationElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114488,7 +114522,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGAnimationElement
 
-        module SVGCircleElement =
+        module SVGCircleElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114498,7 +114532,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGCircleElement
 
-        module SVGClipPathElement =
+        module SVGClipPathElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114508,7 +114542,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGClipPathElement
 
-        module SVGComponentTransferFunctionElement =
+        module SVGComponentTransferFunctionElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114525,7 +114559,7 @@ module Web =
                 abstract member SVG_FECOMPONENTTRANSFER_TYPE_LINEAR: int with get
                 abstract member SVG_FECOMPONENTTRANSFER_TYPE_GAMMA: int with get
 
-        module SVGDefsElement =
+        module SVGDefsElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114535,7 +114569,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGDefsElement
 
-        module SVGDescElement =
+        module SVGDescElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114545,7 +114579,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGDescElement
 
-        module SVGElement =
+        module SVGElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114555,7 +114589,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGElement
 
-        module SVGEllipseElement =
+        module SVGEllipseElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114565,7 +114599,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGEllipseElement
 
-        module SVGFEBlendElement =
+        module SVGFEBlendElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114593,7 +114627,7 @@ module Web =
                 abstract member SVG_FEBLEND_MODE_COLOR: int with get
                 abstract member SVG_FEBLEND_MODE_LUMINOSITY: int with get
 
-        module SVGFEColorMatrixElement =
+        module SVGFEColorMatrixElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114609,7 +114643,7 @@ module Web =
                 abstract member SVG_FECOLORMATRIX_TYPE_HUEROTATE: int with get
                 abstract member SVG_FECOLORMATRIX_TYPE_LUMINANCETOALPHA: int with get
 
-        module SVGFEComponentTransferElement =
+        module SVGFEComponentTransferElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114619,7 +114653,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGFEComponentTransferElement
 
-        module SVGFECompositeElement =
+        module SVGFECompositeElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114637,7 +114671,7 @@ module Web =
                 abstract member SVG_FECOMPOSITE_OPERATOR_XOR: int with get
                 abstract member SVG_FECOMPOSITE_OPERATOR_ARITHMETIC: int with get
 
-        module SVGFEConvolveMatrixElement =
+        module SVGFEConvolveMatrixElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114652,7 +114686,7 @@ module Web =
                 abstract member SVG_EDGEMODE_WRAP: int with get
                 abstract member SVG_EDGEMODE_NONE: int with get
 
-        module SVGFEDiffuseLightingElement =
+        module SVGFEDiffuseLightingElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114662,7 +114696,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGFEDiffuseLightingElement
 
-        module SVGFEDisplacementMapElement =
+        module SVGFEDisplacementMapElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114678,7 +114712,7 @@ module Web =
                 abstract member SVG_CHANNEL_B: int with get
                 abstract member SVG_CHANNEL_A: int with get
 
-        module SVGFEDistantLightElement =
+        module SVGFEDistantLightElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114688,7 +114722,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGFEDistantLightElement
 
-        module SVGFEDropShadowElement =
+        module SVGFEDropShadowElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114698,7 +114732,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGFEDropShadowElement
 
-        module SVGFEFloodElement =
+        module SVGFEFloodElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114708,7 +114742,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGFEFloodElement
 
-        module SVGFEFuncAElement =
+        module SVGFEFuncAElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114718,7 +114752,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGFEFuncAElement
 
-        module SVGFEFuncBElement =
+        module SVGFEFuncBElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114728,7 +114762,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGFEFuncBElement
 
-        module SVGFEFuncGElement =
+        module SVGFEFuncGElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114738,7 +114772,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGFEFuncGElement
 
-        module SVGFEFuncRElement =
+        module SVGFEFuncRElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114748,7 +114782,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGFEFuncRElement
 
-        module SVGFEGaussianBlurElement =
+        module SVGFEGaussianBlurElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114758,7 +114792,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGFEGaussianBlurElement
 
-        module SVGFEImageElement =
+        module SVGFEImageElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114768,7 +114802,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGFEImageElement
 
-        module SVGFEMergeElement =
+        module SVGFEMergeElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114778,7 +114812,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGFEMergeElement
 
-        module SVGFEMergeNodeElement =
+        module SVGFEMergeNodeElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114788,7 +114822,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGFEMergeNodeElement
 
-        module SVGFEMorphologyElement =
+        module SVGFEMorphologyElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114802,7 +114836,7 @@ module Web =
                 abstract member SVG_MORPHOLOGY_OPERATOR_ERODE: int with get
                 abstract member SVG_MORPHOLOGY_OPERATOR_DILATE: int with get
 
-        module SVGFEOffsetElement =
+        module SVGFEOffsetElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114812,7 +114846,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGFEOffsetElement
 
-        module SVGFEPointLightElement =
+        module SVGFEPointLightElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114822,7 +114856,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGFEPointLightElement
 
-        module SVGFESpecularLightingElement =
+        module SVGFESpecularLightingElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114832,7 +114866,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGFESpecularLightingElement
 
-        module SVGFESpotLightElement =
+        module SVGFESpotLightElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114842,7 +114876,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGFESpotLightElement
 
-        module SVGFETileElement =
+        module SVGFETileElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114852,7 +114886,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGFETileElement
 
-        module SVGFETurbulenceElement =
+        module SVGFETurbulenceElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114869,7 +114903,7 @@ module Web =
                 abstract member SVG_STITCHTYPE_STITCH: int with get
                 abstract member SVG_STITCHTYPE_NOSTITCH: int with get
 
-        module SVGFilterElement =
+        module SVGFilterElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114879,7 +114913,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGFilterElement
 
-        module SVGForeignObjectElement =
+        module SVGForeignObjectElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114889,7 +114923,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGForeignObjectElement
 
-        module SVGGElement =
+        module SVGGElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114899,7 +114933,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGGElement
 
-        module SVGGeometryElement =
+        module SVGGeometryElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114909,7 +114943,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGGeometryElement
 
-        module SVGGradientElement =
+        module SVGGradientElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114924,7 +114958,7 @@ module Web =
                 abstract member SVG_SPREADMETHOD_REFLECT: int with get
                 abstract member SVG_SPREADMETHOD_REPEAT: int with get
 
-        module SVGGraphicsElement =
+        module SVGGraphicsElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114934,7 +114968,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGGraphicsElement
 
-        module SVGImageElement =
+        module SVGImageElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114944,7 +114978,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGImageElement
 
-        module SVGLength =
+        module SVGLength__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114966,7 +115000,7 @@ module Web =
                 abstract member SVG_LENGTHTYPE_PT: int with get
                 abstract member SVG_LENGTHTYPE_PC: int with get
 
-        module SVGLengthList =
+        module SVGLengthList__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114976,7 +115010,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGLengthList
 
-        module SVGLineElement =
+        module SVGLineElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114986,7 +115020,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGLineElement
 
-        module SVGLinearGradientElement =
+        module SVGLinearGradientElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -114996,7 +115030,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGLinearGradientElement
 
-        module SVGMPathElement =
+        module SVGMPathElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115006,7 +115040,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGMPathElement
 
-        module SVGMarkerElement =
+        module SVGMarkerElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115024,7 +115058,7 @@ module Web =
                 abstract member SVG_MARKER_ORIENT_ANGLE: int with get
                 abstract member SVG_MARKER_ORIENT_AUTO_START_REVERSE: int with get
 
-        module SVGMaskElement =
+        module SVGMaskElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115034,7 +115068,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGMaskElement
 
-        module SVGMetadataElement =
+        module SVGMetadataElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115044,7 +115078,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGMetadataElement
 
-        module SVGNumber =
+        module SVGNumber__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115054,7 +115088,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGNumber
 
-        module SVGNumberList =
+        module SVGNumberList__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115064,7 +115098,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGNumberList
 
-        module SVGPathElement =
+        module SVGPathElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115074,7 +115108,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGPathElement
 
-        module SVGPatternElement =
+        module SVGPatternElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115084,7 +115118,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGPatternElement
 
-        module SVGPointList =
+        module SVGPointList__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115094,7 +115128,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGPointList
 
-        module SVGPolygonElement =
+        module SVGPolygonElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115104,7 +115138,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGPolygonElement
 
-        module SVGPolylineElement =
+        module SVGPolylineElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115114,7 +115148,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGPolylineElement
 
-        module SVGPreserveAspectRatio =
+        module SVGPreserveAspectRatio__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115139,7 +115173,7 @@ module Web =
                 abstract member SVG_MEETORSLICE_MEET: int with get
                 abstract member SVG_MEETORSLICE_SLICE: int with get
 
-        module SVGRadialGradientElement =
+        module SVGRadialGradientElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115149,7 +115183,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGRadialGradientElement
 
-        module SVGRectElement =
+        module SVGRectElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115159,7 +115193,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGRectElement
 
-        module SVGSVGElement =
+        module SVGSVGElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115169,7 +115203,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGSVGElement
 
-        module SVGScriptElement =
+        module SVGScriptElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115179,7 +115213,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGScriptElement
 
-        module SVGSetElement =
+        module SVGSetElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115189,7 +115223,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGSetElement
 
-        module SVGStopElement =
+        module SVGStopElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115199,7 +115233,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGStopElement
 
-        module SVGStringList =
+        module SVGStringList__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115209,7 +115243,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGStringList
 
-        module SVGStyleElement =
+        module SVGStyleElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115219,7 +115253,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGStyleElement
 
-        module SVGSwitchElement =
+        module SVGSwitchElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115229,7 +115263,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGSwitchElement
 
-        module SVGSymbolElement =
+        module SVGSymbolElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115239,7 +115273,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGSymbolElement
 
-        module SVGTSpanElement =
+        module SVGTSpanElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115249,7 +115283,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGTSpanElement
 
-        module SVGTextContentElement =
+        module SVGTextContentElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115263,7 +115297,7 @@ module Web =
                 abstract member LENGTHADJUST_SPACING: int with get
                 abstract member LENGTHADJUST_SPACINGANDGLYPHS: int with get
 
-        module SVGTextElement =
+        module SVGTextElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115273,7 +115307,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGTextElement
 
-        module SVGTextPathElement =
+        module SVGTextPathElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115290,7 +115324,7 @@ module Web =
                 abstract member TEXTPATH_SPACINGTYPE_AUTO: int with get
                 abstract member TEXTPATH_SPACINGTYPE_EXACT: int with get
 
-        module SVGTextPositioningElement =
+        module SVGTextPositioningElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115300,7 +115334,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGTextPositioningElement
 
-        module SVGTitleElement =
+        module SVGTitleElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115310,7 +115344,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGTitleElement
 
-        module SVGTransform =
+        module SVGTransform__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115328,7 +115362,7 @@ module Web =
                 abstract member SVG_TRANSFORM_SKEWX: int with get
                 abstract member SVG_TRANSFORM_SKEWY: int with get
 
-        module SVGTransformList =
+        module SVGTransformList__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115338,7 +115372,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGTransformList
 
-        module SVGUnitTypes =
+        module SVGUnitTypes__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115352,7 +115386,7 @@ module Web =
                 abstract member SVG_UNIT_TYPE_USERSPACEONUSE: int with get
                 abstract member SVG_UNIT_TYPE_OBJECTBOUNDINGBOX: int with get
 
-        module SVGUseElement =
+        module SVGUseElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115362,7 +115396,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGUseElement
 
-        module SVGViewElement =
+        module SVGViewElement__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115372,7 +115406,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SVGViewElement
 
-        module Sanitizer =
+        module Sanitizer__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115388,7 +115422,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: configuration: Web.SanitizerPresets -> Web.Sanitizer
 
-        module Scheduler =
+        module Scheduler__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115398,7 +115432,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.Scheduler
 
-        module Screen =
+        module Screen__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115408,7 +115442,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.Screen
 
-        module ScreenOrientation =
+        module ScreenOrientation__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115418,7 +115452,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.ScreenOrientation
 
-        module ScriptProcessorNode =
+        module ScriptProcessorNode__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115428,7 +115462,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.ScriptProcessorNode
 
-        module ScrollTimeline =
+        module ScrollTimeline__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115438,7 +115472,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: ?options: Web.ScrollTimelineOptions -> Web.ScrollTimeline
 
-        module SecurityPolicyViolationEvent =
+        module SecurityPolicyViolationEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115450,7 +115484,7 @@ module Web =
                     ``type``: string * ?eventInitDict: Web.SecurityPolicyViolationEventInit ->
                         Web.SecurityPolicyViolationEvent
 
-        module Selection =
+        module Selection__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115460,7 +115494,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.Selection
 
-        module Serial =
+        module Serial__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115470,7 +115504,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.Serial
 
-        module SerialPort =
+        module SerialPort__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115480,7 +115514,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SerialPort
 
-        module ServiceWorker =
+        module ServiceWorker__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115490,7 +115524,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.ServiceWorker
 
-        module ServiceWorkerContainer =
+        module ServiceWorkerContainer__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115500,7 +115534,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.ServiceWorkerContainer
 
-        module ServiceWorkerRegistration =
+        module ServiceWorkerRegistration__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115510,7 +115544,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.ServiceWorkerRegistration
 
-        module ShadowRoot =
+        module ShadowRoot__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115520,7 +115554,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.ShadowRoot
 
-        module SharedWorker =
+        module SharedWorker__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115547,7 +115581,7 @@ module Web =
                 abstract member Create:
                     scriptURL: Web.URL * options: Web.WorkerOptions -> Web.SharedWorker
 
-        module SourceBuffer =
+        module SourceBuffer__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115557,7 +115591,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SourceBuffer
 
-        module SourceBufferList =
+        module SourceBufferList__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115567,7 +115601,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SourceBufferList
 
-        module SpeechRecognitionAlternative =
+        module SpeechRecognitionAlternative__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115577,7 +115611,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SpeechRecognitionAlternative
 
-        module SpeechRecognitionErrorEvent =
+        module SpeechRecognitionErrorEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115589,7 +115623,7 @@ module Web =
                     ``type``: string * eventInitDict: Web.SpeechRecognitionErrorEventInit ->
                         Web.SpeechRecognitionErrorEvent
 
-        module SpeechRecognitionEvent =
+        module SpeechRecognitionEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115601,7 +115635,7 @@ module Web =
                     ``type``: string * eventInitDict: Web.SpeechRecognitionEventInit ->
                         Web.SpeechRecognitionEvent
 
-        module SpeechRecognitionResult =
+        module SpeechRecognitionResult__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115611,7 +115645,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SpeechRecognitionResult
 
-        module SpeechRecognitionResultList =
+        module SpeechRecognitionResultList__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115621,7 +115655,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SpeechRecognitionResultList
 
-        module SpeechSynthesis =
+        module SpeechSynthesis__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115631,7 +115665,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SpeechSynthesis
 
-        module SpeechSynthesisErrorEvent =
+        module SpeechSynthesisErrorEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115643,7 +115677,7 @@ module Web =
                     ``type``: string * eventInitDict: Web.SpeechSynthesisErrorEventInit ->
                         Web.SpeechSynthesisErrorEvent
 
-        module SpeechSynthesisEvent =
+        module SpeechSynthesisEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115655,7 +115689,7 @@ module Web =
                     ``type``: string * eventInitDict: Web.SpeechSynthesisEventInit ->
                         Web.SpeechSynthesisEvent
 
-        module SpeechSynthesisUtterance =
+        module SpeechSynthesisUtterance__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115665,7 +115699,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: ?text: string -> Web.SpeechSynthesisUtterance
 
-        module SpeechSynthesisVoice =
+        module SpeechSynthesisVoice__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115675,7 +115709,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SpeechSynthesisVoice
 
-        module StaticRange =
+        module StaticRange__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115685,7 +115719,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: init: Web.StaticRangeInit -> Web.StaticRange
 
-        module StereoPannerNode =
+        module StereoPannerNode__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115697,7 +115731,7 @@ module Web =
                     context: Web.BaseAudioContext * ?options: Web.StereoPannerOptions ->
                         Web.StereoPannerNode
 
-        module Storage =
+        module Storage__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115707,7 +115741,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.Storage
 
-        module StorageEvent =
+        module StorageEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115718,7 +115752,7 @@ module Web =
                 abstract member Create:
                     ``type``: string * ?eventInitDict: Web.StorageEventInit -> Web.StorageEvent
 
-        module StorageManager =
+        module StorageManager__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115728,7 +115762,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.StorageManager
 
-        module StylePropertyMap =
+        module StylePropertyMap__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115738,7 +115772,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.StylePropertyMap
 
-        module StylePropertyMapReadOnly =
+        module StylePropertyMapReadOnly__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115748,7 +115782,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.StylePropertyMapReadOnly
 
-        module StyleSheet =
+        module StyleSheet__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115758,7 +115792,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.StyleSheet
 
-        module StyleSheetList =
+        module StyleSheetList__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115768,7 +115802,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.StyleSheetList
 
-        module SubmitEvent =
+        module SubmitEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115779,7 +115813,7 @@ module Web =
                 abstract member Create:
                     ``type``: string * ?eventInitDict: Web.SubmitEventInit -> Web.SubmitEvent
 
-        module SubtleCrypto =
+        module SubtleCrypto__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115789,7 +115823,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.SubtleCrypto
 
-        module TaskController =
+        module TaskController__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115799,7 +115833,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: ?init: Web.TaskControllerInit -> Web.TaskController
 
-        module TaskPriorityChangeEvent =
+        module TaskPriorityChangeEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115811,7 +115845,7 @@ module Web =
                     ``type``: string * priorityChangeEventInitDict: Web.TaskPriorityChangeEventInit ->
                         Web.TaskPriorityChangeEvent
 
-        module TaskSignal =
+        module TaskSignal__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115830,7 +115864,7 @@ module Web =
                     signals: ResizeArray<Web.AbortSignal> * ?init: Web.TaskSignalAnyInit ->
                         Web.TaskSignal
 
-        module Text =
+        module Text__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115840,7 +115874,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: ?data: string -> Web.Text
 
-        module TextDecoder =
+        module TextDecoder__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115851,7 +115885,7 @@ module Web =
                 abstract member Create:
                     ?label: string * ?options: Web.TextDecoderOptions -> Web.TextDecoder
 
-        module TextDecoderStream =
+        module TextDecoderStream__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115862,7 +115896,7 @@ module Web =
                 abstract member Create:
                     ?label: string * ?options: Web.TextDecoderOptions -> Web.TextDecoderStream
 
-        module TextEncoder =
+        module TextEncoder__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115872,7 +115906,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.TextEncoder
 
-        module TextEncoderStream =
+        module TextEncoderStream__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115882,7 +115916,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.TextEncoderStream
 
-        module TextEvent =
+        module TextEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115892,7 +115926,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.TextEvent
 
-        module TextMetrics =
+        module TextMetrics__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115902,7 +115936,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.TextMetrics
 
-        module TextTrack =
+        module TextTrack__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115912,7 +115946,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.TextTrack
 
-        module TextTrackCue =
+        module TextTrackCue__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115922,7 +115956,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.TextTrackCue
 
-        module TextTrackCueList =
+        module TextTrackCueList__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115932,7 +115966,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.TextTrackCueList
 
-        module TextTrackList =
+        module TextTrackList__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115942,7 +115976,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.TextTrackList
 
-        module TimeRanges =
+        module TimeRanges__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115952,7 +115986,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.TimeRanges
 
-        module ToggleEvent =
+        module ToggleEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115963,7 +115997,7 @@ module Web =
                 abstract member Create:
                     ``type``: string * ?eventInitDict: Web.ToggleEventInit -> Web.ToggleEvent
 
-        module Touch =
+        module Touch__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115973,7 +116007,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: touchInitDict: Web.TouchInit -> Web.Touch
 
-        module TouchEvent =
+        module TouchEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115984,7 +116018,7 @@ module Web =
                 abstract member Create:
                     ``type``: string * ?eventInitDict: Web.TouchEventInit -> Web.TouchEvent
 
-        module TouchList =
+        module TouchList__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -115994,7 +116028,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.TouchList
 
-        module TrackEvent =
+        module TrackEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -116005,7 +116039,7 @@ module Web =
                 abstract member Create:
                     ``type``: string * ?eventInitDict: Web.TrackEventInit -> Web.TrackEvent
 
-        module TransformStream =
+        module TransformStream__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -116019,7 +116053,7 @@ module Web =
                     ?readableStrategy: Web.QueuingStrategy<'O> ->
                         Web.TransformStream<'I, 'O>
 
-        module TransformStreamDefaultController =
+        module TransformStreamDefaultController__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -116029,7 +116063,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.TransformStreamDefaultController
 
-        module TransitionEvent =
+        module TransitionEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -116041,7 +116075,7 @@ module Web =
                     ``type``: string * ?transitionEventInitDict: Web.TransitionEventInit ->
                         Web.TransitionEvent
 
-        module TreeWalker =
+        module TreeWalker__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -116051,7 +116085,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.TreeWalker
 
-        module UIEvent =
+        module UIEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -116062,7 +116096,7 @@ module Web =
                 abstract member Create:
                     ``type``: string * ?eventInitDict: Web.UIEventInit -> Web.UIEvent
 
-        module URL =
+        module URL__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -116178,7 +116212,7 @@ module Web =
                 /// </summary>
                 abstract member revokeObjectURL: url: string -> unit
 
-        module URLPattern =
+        module URLPattern__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -116216,7 +116250,7 @@ module Web =
                 abstract member Create:
                     input: Web.URLPatternInit * ?options: Web.URLPatternOptions -> Web.URLPattern
 
-        module URLSearchParams =
+        module URLSearchParams__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -116232,7 +116266,7 @@ module Web =
 
                 [<EmitConstructor>]
                 abstract member Create:
-                    init: Exports.URLSearchParams.Type.Create.init -> Web.URLSearchParams
+                    init: Exports.URLSearchParams__.Type.Create.init -> Web.URLSearchParams
 
                 [<EmitConstructor>]
                 abstract member Create: init: string -> Web.URLSearchParams
@@ -116250,7 +116284,7 @@ module Web =
                         [<EmitIndexer>]
                         abstract member Item: key: string -> string with get, set
 
-        module UserActivation =
+        module UserActivation__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -116260,7 +116294,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.UserActivation
 
-        module VTTCue =
+        module VTTCue__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -116271,7 +116305,7 @@ module Web =
                 abstract member Create:
                     startTime: float * endTime: float * text: string -> Web.VTTCue
 
-        module VTTRegion =
+        module VTTRegion__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -116281,7 +116315,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.VTTRegion
 
-        module ValidityState =
+        module ValidityState__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -116291,7 +116325,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.ValidityState
 
-        module VideoColorSpace =
+        module VideoColorSpace__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -116301,7 +116335,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: ?init: Web.VideoColorSpaceInit -> Web.VideoColorSpace
 
-        module VideoDecoder =
+        module VideoDecoder__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -116319,7 +116353,7 @@ module Web =
                 abstract member isConfigSupported:
                     config: Web.VideoDecoderConfig -> JS.Promise<Web.VideoDecoderSupport>
 
-        module VideoEncoder =
+        module VideoEncoder__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -116337,7 +116371,7 @@ module Web =
                 abstract member isConfigSupported:
                     config: Web.VideoEncoderConfig -> JS.Promise<Web.VideoEncoderSupport>
 
-        module VideoFrame =
+        module VideoFrame__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -116377,7 +116411,7 @@ module Web =
                     data: Web.AllowSharedBufferSource * init: Web.VideoFrameBufferInit ->
                         Web.VideoFrame
 
-        module VideoPlaybackQuality =
+        module VideoPlaybackQuality__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -116387,7 +116421,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.VideoPlaybackQuality
 
-        module ViewTimeline =
+        module ViewTimeline__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -116397,7 +116431,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: ?options: Web.ViewTimelineOptions -> Web.ViewTimeline
 
-        module ViewTransition =
+        module ViewTransition__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -116407,7 +116441,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.ViewTransition
 
-        module ViewTransitionTypeSet =
+        module ViewTransitionTypeSet__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -116417,7 +116451,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.ViewTransitionTypeSet
 
-        module VisualViewport =
+        module VisualViewport__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -116427,7 +116461,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.VisualViewport
 
-        module WGSLLanguageFeatures =
+        module WGSLLanguageFeatures__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -116437,7 +116471,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.WGSLLanguageFeatures
 
-        module WakeLock =
+        module WakeLock__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -116447,7 +116481,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.WakeLock
 
-        module WakeLockSentinel =
+        module WakeLockSentinel__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -116457,7 +116491,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.WakeLockSentinel
 
-        module WaveShaperNode =
+        module WaveShaperNode__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -116469,7 +116503,7 @@ module Web =
                     context: Web.BaseAudioContext * ?options: Web.WaveShaperOptions ->
                         Web.WaveShaperNode
 
-        module WebGL2RenderingContext =
+        module WebGL2RenderingContext__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -117039,7 +117073,7 @@ module Web =
                 abstract member UNPACK_COLORSPACE_CONVERSION_WEBGL: int with get
                 abstract member BROWSER_DEFAULT_WEBGL: int with get
 
-        module WebGLActiveInfo =
+        module WebGLActiveInfo__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -117049,7 +117083,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.WebGLActiveInfo
 
-        module WebGLBuffer =
+        module WebGLBuffer__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -117059,7 +117093,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.WebGLBuffer
 
-        module WebGLContextEvent =
+        module WebGLContextEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -117071,7 +117105,7 @@ module Web =
                     ``type``: string * ?eventInit: Web.WebGLContextEventInit ->
                         Web.WebGLContextEvent
 
-        module WebGLFramebuffer =
+        module WebGLFramebuffer__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -117081,7 +117115,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.WebGLFramebuffer
 
-        module WebGLProgram =
+        module WebGLProgram__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -117091,7 +117125,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.WebGLProgram
 
-        module WebGLQuery =
+        module WebGLQuery__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -117101,7 +117135,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.WebGLQuery
 
-        module WebGLRenderbuffer =
+        module WebGLRenderbuffer__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -117111,7 +117145,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.WebGLRenderbuffer
 
-        module WebGLRenderingContext =
+        module WebGLRenderingContext__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -117419,7 +117453,7 @@ module Web =
                 abstract member UNPACK_COLORSPACE_CONVERSION_WEBGL: int with get
                 abstract member BROWSER_DEFAULT_WEBGL: int with get
 
-        module WebGLSampler =
+        module WebGLSampler__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -117429,7 +117463,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.WebGLSampler
 
-        module WebGLShader =
+        module WebGLShader__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -117439,7 +117473,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.WebGLShader
 
-        module WebGLShaderPrecisionFormat =
+        module WebGLShaderPrecisionFormat__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -117449,7 +117483,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.WebGLShaderPrecisionFormat
 
-        module WebGLSync =
+        module WebGLSync__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -117459,7 +117493,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.WebGLSync
 
-        module WebGLTexture =
+        module WebGLTexture__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -117469,7 +117503,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.WebGLTexture
 
-        module WebGLTransformFeedback =
+        module WebGLTransformFeedback__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -117479,7 +117513,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.WebGLTransformFeedback
 
-        module WebGLUniformLocation =
+        module WebGLUniformLocation__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -117489,7 +117523,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.WebGLUniformLocation
 
-        module WebGLVertexArrayObject =
+        module WebGLVertexArrayObject__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -117499,7 +117533,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.WebGLVertexArrayObject
 
-        module WebSocket =
+        module WebSocket__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -117531,7 +117565,7 @@ module Web =
                 abstract member CLOSING: int with get
                 abstract member CLOSED: int with get
 
-        module WebTransport =
+        module WebTransport__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -117546,7 +117580,7 @@ module Web =
                 abstract member Create:
                     url: Web.URL * ?options: Web.WebTransportOptions -> Web.WebTransport
 
-        module WebTransportBidirectionalStream =
+        module WebTransportBidirectionalStream__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -117556,7 +117590,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.WebTransportBidirectionalStream
 
-        module WebTransportDatagramDuplexStream =
+        module WebTransportDatagramDuplexStream__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -117566,7 +117600,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.WebTransportDatagramDuplexStream
 
-        module WebTransportError =
+        module WebTransportError__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -117578,7 +117612,7 @@ module Web =
                     ?message: string * ?options: Web.WebTransportErrorOptions ->
                         Web.WebTransportError
 
-        module WebTransportReceiveStream =
+        module WebTransportReceiveStream__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -117588,7 +117622,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.WebTransportReceiveStream
 
-        module WebTransportSendStream =
+        module WebTransportSendStream__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -117598,7 +117632,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.WebTransportSendStream
 
-        module WheelEvent =
+        module WheelEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -117613,7 +117647,7 @@ module Web =
                 abstract member DOM_DELTA_LINE: int with get
                 abstract member DOM_DELTA_PAGE: int with get
 
-        module Window =
+        module Window__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -117623,7 +117657,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.Window
 
-        module Worker =
+        module Worker__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -117638,7 +117672,7 @@ module Web =
                 abstract member Create:
                     scriptURL: Web.URL * ?options: Web.WorkerOptions -> Web.Worker
 
-        module Worklet =
+        module Worklet__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -117648,7 +117682,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.Worklet
 
-        module WritableStream =
+        module WritableStream__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -117660,7 +117694,7 @@ module Web =
                     ?underlyingSink: Web.UnderlyingSink<'W> * ?strategy: Web.QueuingStrategy<'W> ->
                         Web.WritableStream<'W>
 
-        module WritableStreamDefaultController =
+        module WritableStreamDefaultController__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -117670,7 +117704,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.WritableStreamDefaultController
 
-        module WritableStreamDefaultWriter =
+        module WritableStreamDefaultWriter__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -117681,7 +117715,7 @@ module Web =
                 abstract member Create:
                     stream: Web.WritableStream<'W> -> Web.WritableStreamDefaultWriter<'W>
 
-        module XMLDocument =
+        module XMLDocument__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -117691,7 +117725,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.XMLDocument
 
-        module XMLHttpRequest =
+        module XMLHttpRequest__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -117707,7 +117741,7 @@ module Web =
                 abstract member LOADING: int with get
                 abstract member DONE: int with get
 
-        module XMLHttpRequestEventTarget =
+        module XMLHttpRequestEventTarget__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -117717,7 +117751,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.XMLHttpRequestEventTarget
 
-        module XMLHttpRequestUpload =
+        module XMLHttpRequestUpload__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -117727,7 +117761,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.XMLHttpRequestUpload
 
-        module XMLSerializer =
+        module XMLSerializer__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -117737,7 +117771,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.XMLSerializer
 
-        module XPathEvaluator =
+        module XPathEvaluator__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -117747,7 +117781,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.XPathEvaluator
 
-        module XPathExpression =
+        module XPathExpression__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -117757,7 +117791,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.XPathExpression
 
-        module XPathResult =
+        module XPathResult__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -117778,7 +117812,7 @@ module Web =
                 abstract member ANY_UNORDERED_NODE_TYPE: int with get
                 abstract member FIRST_ORDERED_NODE_TYPE: int with get
 
-        module XSLTProcessor =
+        module XSLTProcessor__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -117788,7 +117822,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: unit -> Web.XSLTProcessor
 
-        module Audio =
+        module Audio__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -117796,7 +117830,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: ?src: string -> Web.HTMLAudioElement
 
-        module Image =
+        module Image__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -117804,7 +117838,7 @@ module Web =
                 [<EmitConstructor>]
                 abstract member Create: ?width: float * ?height: float -> Web.HTMLImageElement
 
-        module Option =
+        module Option__ =
 
             [<AllowNullLiteral>]
             [<Interface>]

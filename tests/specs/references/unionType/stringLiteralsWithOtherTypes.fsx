@@ -8,7 +8,7 @@ open System
 [<Erase>]
 type Exports =
     [<Import("scale", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member scale (value: Exports.scale.value) : unit = nativeOnly
+    static member scale (value: Exports.scale__.value) : unit = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
@@ -74,7 +74,7 @@ module Props =
 
 module Exports =
 
-    module scale =
+    module scale__ =
 
         [<RequireQualifiedAccess>]
         [<Erase(CaseRules.None)>]

@@ -8,7 +8,7 @@ open System
 [<Erase>]
 type Exports =
     [<Import("styles", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member inline styles: Exports.styles.Type = nativeOnly
+    static member inline styles: Exports.styles__.Type = nativeOnly
 
 [<RequireQualifiedAccess>]
 [<StringEnum(CaseRules.None)>]
@@ -24,7 +24,7 @@ type SignalConstants =
 
 module Exports =
 
-    module styles =
+    module styles__ =
 
         [<AllowNullLiteral>]
         [<Interface>]

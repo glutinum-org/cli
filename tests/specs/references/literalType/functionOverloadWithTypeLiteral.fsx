@@ -8,13 +8,13 @@ open System
 [<Erase>]
 type Exports =
     [<Import("openTextDocument", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member openTextDocument (?options: Exports.openTextDocument.options) : obj = nativeOnly
+    static member openTextDocument (?options: Exports.openTextDocument__.options) : obj = nativeOnly
     [<Import("openTextDocument", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member openTextDocument (prefix: string, ?options: Exports.openTextDocument.options_1) : obj = nativeOnly
+    static member openTextDocument (prefix: string, ?options: Exports.openTextDocument__.options_1) : obj = nativeOnly
 
 module Exports =
 
-    module openTextDocument =
+    module openTextDocument__ =
 
         [<AllowNullLiteral>]
         [<Interface>]

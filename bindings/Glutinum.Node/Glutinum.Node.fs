@@ -62,14 +62,14 @@ module Node =
         /// https://nodejs.org/api/buffer.html#class-blob
         /// </summary>
         [<Global("Blob")>]
-        static member inline Blob: Exports.Blob.Type = nativeOnly
+        static member inline Blob: Exports.Blob__.Type = nativeOnly
 
         /// <summary>
         /// <c>File</c> class is a global reference for <c>import { File } from 'node:buffer'</c>
         /// https://nodejs.org/api/buffer.html#class-file
         /// </summary>
         [<Global("File")>]
-        static member inline File: Exports.File.Type = nativeOnly
+        static member inline File: Exports.File__.Type = nativeOnly
 
         /// <summary>
         /// The <c>console</c> module provides a simple debugging console that is similar to the
@@ -183,38 +183,39 @@ module Node =
         /// <c>PerformanceEntry</c> is a global reference for <c>import { PerformanceEntry } from 'node:perf_hooks'</c>
         /// </summary>
         [<Global("PerformanceEntry")>]
-        static member inline PerformanceEntry: Exports.PerformanceEntry.Type = nativeOnly
+        static member inline PerformanceEntry: Exports.PerformanceEntry__.Type = nativeOnly
 
         /// <summary>
         /// <c>PerformanceMark</c> is a global reference for <c>import { PerformanceMark } from 'node:perf_hooks'</c>
         /// </summary>
         [<Global("PerformanceMark")>]
-        static member inline PerformanceMark: Exports.PerformanceMark.Type = nativeOnly
+        static member inline PerformanceMark: Exports.PerformanceMark__.Type = nativeOnly
 
         /// <summary>
         /// <c>PerformanceMeasure</c> is a global reference for <c>import { PerformanceMeasure } from 'node:perf_hooks'</c>
         /// </summary>
         [<Global("PerformanceMeasure")>]
-        static member inline PerformanceMeasure: Exports.PerformanceMeasure.Type = nativeOnly
+        static member inline PerformanceMeasure: Exports.PerformanceMeasure__.Type = nativeOnly
 
         /// <summary>
         /// <c>PerformanceObserver</c> is a global reference for <c>import { PerformanceObserver } from 'node:perf_hooks'</c>
         /// </summary>
         [<Global("PerformanceObserver")>]
-        static member inline PerformanceObserver: Exports.PerformanceObserver.Type = nativeOnly
+        static member inline PerformanceObserver: Exports.PerformanceObserver__.Type = nativeOnly
 
         /// <summary>
         /// <c>PerformanceObserverEntryList</c> is a global reference for <c>import { PerformanceObserverEntryList } from 'node:perf_hooks'</c>
         /// </summary>
         [<Global("PerformanceObserverEntryList")>]
-        static member inline PerformanceObserverEntryList: Exports.PerformanceObserverEntryList.Type =
+        static member inline PerformanceObserverEntryList
+            : Exports.PerformanceObserverEntryList__.Type =
             nativeOnly
 
         /// <summary>
         /// <c>PerformanceResourceTiming</c> is a global reference for <c>import { PerformanceResourceTiming } from 'node:perf_hooks'</c>
         /// </summary>
         [<Global("PerformanceResourceTiming")>]
-        static member inline PerformanceResourceTiming: Exports.PerformanceResourceTiming.Type =
+        static member inline PerformanceResourceTiming: Exports.PerformanceResourceTiming__.Type =
             nativeOnly
 
         /// <summary>
@@ -228,7 +229,7 @@ module Node =
         /// https://nodejs.org/api/globals.html#class-bytelengthqueuingstrategy
         /// </summary>
         [<Global("ByteLengthQueuingStrategy")>]
-        static member inline ByteLengthQueuingStrategy: Exports.ByteLengthQueuingStrategy.Type =
+        static member inline ByteLengthQueuingStrategy: Exports.ByteLengthQueuingStrategy__.Type =
             nativeOnly
 
         /// <summary>
@@ -236,14 +237,15 @@ module Node =
         /// https://nodejs.org/api/globals.html#class-countqueuingstrategy
         /// </summary>
         [<Global("CountQueuingStrategy")>]
-        static member inline CountQueuingStrategy: Exports.CountQueuingStrategy.Type = nativeOnly
+        static member inline CountQueuingStrategy: Exports.CountQueuingStrategy__.Type = nativeOnly
 
         /// <summary>
         /// <c>ReadableByteStreamController</c> class is a global reference for <c>import { ReadableByteStreamController } from 'node:stream/web'</c>.
         /// https://nodejs.org/api/globals.html#class-readablebytestreamcontroller
         /// </summary>
         [<Global("ReadableByteStreamController")>]
-        static member inline ReadableByteStreamController: Exports.ReadableByteStreamController.Type =
+        static member inline ReadableByteStreamController
+            : Exports.ReadableByteStreamController__.Type =
             nativeOnly
 
         /// <summary>
@@ -251,14 +253,14 @@ module Node =
         /// https://nodejs.org/api/globals.html#class-readablestream
         /// </summary>
         [<Global("ReadableStream")>]
-        static member inline ReadableStream: Exports.ReadableStream.Type<obj> = nativeOnly
+        static member inline ReadableStream: Exports.ReadableStream__.Type<obj> = nativeOnly
 
         /// <summary>
         /// <c>ReadableStreamBYOBReader</c> class is a global reference for <c>import { ReadableStreamBYOBReader } from 'node:stream/web'</c>.
         /// https://nodejs.org/api/globals.html#class-readablestreambyobreader
         /// </summary>
         [<Global("ReadableStreamBYOBReader")>]
-        static member inline ReadableStreamBYOBReader: Exports.ReadableStreamBYOBReader.Type =
+        static member inline ReadableStreamBYOBReader: Exports.ReadableStreamBYOBReader__.Type =
             nativeOnly
 
         /// <summary>
@@ -266,7 +268,7 @@ module Node =
         /// https://nodejs.org/api/globals.html#class-readablestreambyobrequest
         /// </summary>
         [<Global("ReadableStreamBYOBRequest")>]
-        static member inline ReadableStreamBYOBRequest: Exports.ReadableStreamBYOBRequest.Type =
+        static member inline ReadableStreamBYOBRequest: Exports.ReadableStreamBYOBRequest__.Type =
             nativeOnly
 
         /// <summary>
@@ -275,7 +277,7 @@ module Node =
         /// </summary>
         [<Global("ReadableStreamDefaultController")>]
         static member inline ReadableStreamDefaultController
-            : Exports.ReadableStreamDefaultController.Type =
+            : Exports.ReadableStreamDefaultController__.Type =
             nativeOnly
 
         /// <summary>
@@ -284,7 +286,7 @@ module Node =
         /// </summary>
         [<Global("ReadableStreamDefaultReader")>]
         static member inline ReadableStreamDefaultReader
-            : Exports.ReadableStreamDefaultReader.Type<obj> =
+            : Exports.ReadableStreamDefaultReader__.Type<obj> =
             nativeOnly
 
         /// <summary>
@@ -292,21 +294,21 @@ module Node =
         /// https://nodejs.org/api/globals.html#class-textdecoderstream
         /// </summary>
         [<Global("TextDecoderStream")>]
-        static member inline TextDecoderStream: Exports.TextDecoderStream.Type = nativeOnly
+        static member inline TextDecoderStream: Exports.TextDecoderStream__.Type = nativeOnly
 
         /// <summary>
         /// <c>TextEncoderStream</c> class is a global reference for <c>import { TextEncoderStream } from 'node:stream/web'</c>.
         /// https://nodejs.org/api/globals.html#class-textencoderstream
         /// </summary>
         [<Global("TextEncoderStream")>]
-        static member inline TextEncoderStream: Exports.TextEncoderStream.Type = nativeOnly
+        static member inline TextEncoderStream: Exports.TextEncoderStream__.Type = nativeOnly
 
         /// <summary>
         /// <c>TransformStream</c> class is a global reference for <c>import { TransformStream } from 'node:stream/web'</c>.
         /// https://nodejs.org/api/globals.html#class-transformstream
         /// </summary>
         [<Global("TransformStream")>]
-        static member inline TransformStream: Exports.TransformStream.Type<obj, obj> = nativeOnly
+        static member inline TransformStream: Exports.TransformStream__.Type<obj, obj> = nativeOnly
 
         /// <summary>
         /// <c>TransformStreamDefaultController</c> class is a global reference for <c>import { TransformStreamDefaultController } from 'node:stream/web'</c>.
@@ -314,7 +316,7 @@ module Node =
         /// </summary>
         [<Global("TransformStreamDefaultController")>]
         static member inline TransformStreamDefaultController
-            : Exports.TransformStreamDefaultController.Type =
+            : Exports.TransformStreamDefaultController__.Type =
             nativeOnly
 
         /// <summary>
@@ -322,7 +324,7 @@ module Node =
         /// https://nodejs.org/api/globals.html#class-writablestream
         /// </summary>
         [<Global("WritableStream")>]
-        static member inline WritableStream: Exports.WritableStream.Type<obj> = nativeOnly
+        static member inline WritableStream: Exports.WritableStream__.Type<obj> = nativeOnly
 
         /// <summary>
         /// <c>WritableStreamDefaultController</c> class is a global reference for <c>import { WritableStreamDefaultController } from 'node:stream/web'</c>.
@@ -330,7 +332,7 @@ module Node =
         /// </summary>
         [<Global("WritableStreamDefaultController")>]
         static member inline WritableStreamDefaultController
-            : Exports.WritableStreamDefaultController.Type =
+            : Exports.WritableStreamDefaultController__.Type =
             nativeOnly
 
         /// <summary>
@@ -339,7 +341,7 @@ module Node =
         /// </summary>
         [<Global("WritableStreamDefaultWriter")>]
         static member inline WritableStreamDefaultWriter
-            : Exports.WritableStreamDefaultWriter.Type<obj> =
+            : Exports.WritableStreamDefaultWriter__.Type<obj> =
             nativeOnly
 
         /// <summary>
@@ -542,46 +544,46 @@ module Node =
         /// https://nodejs.org/api/url.html#the-whatwg-url-api
         /// </summary>
         [<Global("URL")>]
-        static member inline URL: Exports.URL.Type = nativeOnly
+        static member inline URL: Exports.URL__.Type = nativeOnly
 
         /// <summary>
         /// <c>URLSearchParams</c> class is a global reference for <c>import { URLSearchParams } from 'node:url'</c>
         /// https://nodejs.org/api/url.html#class-urlsearchparams
         /// </summary>
         [<Global("URLSearchParams")>]
-        static member inline URLSearchParams: Exports.URLSearchParams.Type = nativeOnly
+        static member inline URLSearchParams: Exports.URLSearchParams__.Type = nativeOnly
 
         /// <summary>
         /// <c>TextDecoder</c> class is a global reference for <c>import { TextDecoder } from 'node:util'</c>
         /// https://nodejs.org/api/globals.html#textdecoder
         /// </summary>
         [<Global("TextDecoder")>]
-        static member inline TextDecoder: Exports.TextDecoder.Type = nativeOnly
+        static member inline TextDecoder: Exports.TextDecoder__.Type = nativeOnly
 
         /// <summary>
         /// <c>TextEncoder</c> class is a global reference for <c>import { TextEncoder } from 'node:util'</c>
         /// https://nodejs.org/api/globals.html#textencoder
         /// </summary>
         [<Global("TextEncoder")>]
-        static member inline TextEncoder: Exports.TextEncoder.Type = nativeOnly
+        static member inline TextEncoder: Exports.TextEncoder__.Type = nativeOnly
 
         [<Global("AbortController")>]
-        static member inline AbortController: Exports.AbortController.Type = nativeOnly
+        static member inline AbortController: Exports.AbortController__.Type = nativeOnly
 
         [<Global("AbortSignal")>]
-        static member inline AbortSignal: Exports.AbortSignal.Type = nativeOnly
+        static member inline AbortSignal: Exports.AbortSignal__.Type = nativeOnly
 
         [<Global("DOMException")>]
-        static member inline DOMException: Exports.DOMException.Type = nativeOnly
+        static member inline DOMException: Exports.DOMException__.Type = nativeOnly
 
         [<Global("CustomEvent")>]
-        static member inline CustomEvent: Exports.CustomEvent.Type<obj> = nativeOnly
+        static member inline CustomEvent: Exports.CustomEvent__.Type<obj> = nativeOnly
 
         [<Global("Event")>]
-        static member inline Event: Exports.Event.Type = nativeOnly
+        static member inline Event: Exports.Event__.Type = nativeOnly
 
         [<Global("EventTarget")>]
-        static member inline EventTarget: Exports.EventTarget.Type = nativeOnly
+        static member inline EventTarget: Exports.EventTarget__.Type = nativeOnly
 
         [<Global("fetch")>]
         static member fetch(input: string, ?init: Node.RequestInit) : JS.Promise<Node.Response> =
@@ -599,34 +601,34 @@ module Node =
             nativeOnly
 
         [<Global("EventSource")>]
-        static member inline EventSource: Exports.EventSource.Type = nativeOnly
+        static member inline EventSource: Exports.EventSource__.Type = nativeOnly
 
         [<Global("FormData")>]
-        static member inline FormData: Exports.FormData.Type = nativeOnly
+        static member inline FormData: Exports.FormData__.Type = nativeOnly
 
         [<Global("Headers")>]
-        static member inline Headers: Exports.Headers.Type = nativeOnly
+        static member inline Headers: Exports.Headers__.Type = nativeOnly
 
         [<Global("MessageEvent")>]
-        static member inline MessageEvent: Exports.MessageEvent.Type = nativeOnly
+        static member inline MessageEvent: Exports.MessageEvent__.Type = nativeOnly
 
         [<Global("Request")>]
-        static member inline Request: Exports.Request.Type = nativeOnly
+        static member inline Request: Exports.Request__.Type = nativeOnly
 
         [<Global("Response")>]
-        static member inline Response: Exports.Response.Type = nativeOnly
+        static member inline Response: Exports.Response__.Type = nativeOnly
 
         [<Global("WebSocket")>]
-        static member inline WebSocket: Exports.WebSocket.Type = nativeOnly
+        static member inline WebSocket: Exports.WebSocket__.Type = nativeOnly
 
         [<Global("Navigator")>]
-        static member inline Navigator: Exports.Navigator.Type = nativeOnly
+        static member inline Navigator: Exports.Navigator__.Type = nativeOnly
 
         [<Global("navigator")>]
         static member inline navigator: Node.Navigator = nativeOnly
 
         [<Global("Storage")>]
-        static member inline Storage: Exports.Storage.Type = nativeOnly
+        static member inline Storage: Exports.Storage__.Type = nativeOnly
 
         [<Global("localStorage")>]
         static member inline localStorage: Node.Storage = nativeOnly
@@ -635,14 +637,14 @@ module Node =
         static member inline sessionStorage: Node.Storage = nativeOnly
 
         [<Global("CompressionStream")>]
-        static member inline CompressionStream: Exports.CompressionStream.Type = nativeOnly
+        static member inline CompressionStream: Exports.CompressionStream__.Type = nativeOnly
 
         [<Global("DecompressionStream")>]
-        static member inline DecompressionStream: Exports.DecompressionStream.Type = nativeOnly
+        static member inline DecompressionStream: Exports.DecompressionStream__.Type = nativeOnly
 
         [<Global("structuredClone")>]
         static member structuredClone<'T>
-            (value: 'T, ?options: Exports.structuredClone.options)
+            (value: 'T, ?options: Exports.structuredClone__.options)
             : 'T
             =
             nativeOnly
@@ -652,21 +654,21 @@ module Node =
         /// https://nodejs.org/api/globals.html#broadcastchannel
         /// </summary>
         [<Global("BroadcastChannel")>]
-        static member inline BroadcastChannel: Exports.BroadcastChannel.Type = nativeOnly
+        static member inline BroadcastChannel: Exports.BroadcastChannel__.Type = nativeOnly
 
         /// <summary>
         /// <c>MessageChannel</c> class is a global reference for <c>import { MessageChannel } from 'worker_threads'</c>
         /// https://nodejs.org/api/globals.html#messagechannel
         /// </summary>
         [<Global("MessageChannel")>]
-        static member inline MessageChannel: Exports.MessageChannel.Type = nativeOnly
+        static member inline MessageChannel: Exports.MessageChannel__.Type = nativeOnly
 
         /// <summary>
         /// <c>MessagePort</c> class is a global reference for <c>import { MessagePort } from 'worker_threads'</c>
         /// https://nodejs.org/api/globals.html#messageport
         /// </summary>
         [<Global("MessagePort")>]
-        static member inline MessagePort: Exports.MessagePort.Type = nativeOnly
+        static member inline MessagePort: Exports.MessagePort__.Type = nativeOnly
 
     module NodeJS =
 
@@ -14280,7 +14282,7 @@ TypeScript versions earlier than 5.7.""")>]
 
     module Exports =
 
-        module Blob =
+        module Blob__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14293,7 +14295,7 @@ TypeScript versions earlier than 5.7.""")>]
                     ?options: Glutinum.Web.BlobPropertyBag ->
                         Node.Blob
 
-        module File =
+        module File__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14307,7 +14309,7 @@ TypeScript versions earlier than 5.7.""")>]
                     ?options: Glutinum.Web.FilePropertyBag ->
                         Node.File
 
-        module PerformanceEntry =
+        module PerformanceEntry__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14317,7 +14319,7 @@ TypeScript versions earlier than 5.7.""")>]
                 [<EmitConstructor>]
                 abstract member Create: unit -> Glutinum.Web.PerformanceEntry
 
-        module PerformanceMark =
+        module PerformanceMark__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14329,7 +14331,7 @@ TypeScript versions earlier than 5.7.""")>]
                     markName: string * ?markOptions: Glutinum.Web.PerformanceMarkOptions ->
                         Glutinum.Web.PerformanceMark
 
-        module PerformanceMeasure =
+        module PerformanceMeasure__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14339,7 +14341,7 @@ TypeScript versions earlier than 5.7.""")>]
                 [<EmitConstructor>]
                 abstract member Create: unit -> Glutinum.Web.PerformanceMeasure
 
-        module PerformanceObserver =
+        module PerformanceObserver__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14356,7 +14358,7 @@ TypeScript versions earlier than 5.7.""")>]
                 /// </summary>
                 abstract member supportedEntryTypes: ReadonlyArray<string> with get
 
-        module PerformanceObserverEntryList =
+        module PerformanceObserverEntryList__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14366,7 +14368,7 @@ TypeScript versions earlier than 5.7.""")>]
                 [<EmitConstructor>]
                 abstract member Create: unit -> Glutinum.Web.PerformanceObserverEntryList
 
-        module PerformanceResourceTiming =
+        module PerformanceResourceTiming__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14376,7 +14378,7 @@ TypeScript versions earlier than 5.7.""")>]
                 [<EmitConstructor>]
                 abstract member Create: unit -> Glutinum.Web.PerformanceResourceTiming
 
-        module ByteLengthQueuingStrategy =
+        module ByteLengthQueuingStrategy__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14387,7 +14389,7 @@ TypeScript versions earlier than 5.7.""")>]
                 abstract member Create:
                     init: Glutinum.Web.QueuingStrategyInit -> Node.ByteLengthQueuingStrategy
 
-        module CountQueuingStrategy =
+        module CountQueuingStrategy__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14398,7 +14400,7 @@ TypeScript versions earlier than 5.7.""")>]
                 abstract member Create:
                     init: Glutinum.Web.QueuingStrategyInit -> Node.CountQueuingStrategy
 
-        module ReadableByteStreamController =
+        module ReadableByteStreamController__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14408,7 +14410,7 @@ TypeScript versions earlier than 5.7.""")>]
                 [<EmitConstructor>]
                 abstract member Create: unit -> Node.ReadableByteStreamController
 
-        module ReadableStream =
+        module ReadableStream__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14418,7 +14420,7 @@ TypeScript versions earlier than 5.7.""")>]
                 [<EmitConstructor>]
                 abstract member Create:
                     underlyingSource: Glutinum.Web.UnderlyingByteSource *
-                    ?strategy: Exports.ReadableStream.Type.Create.strategy ->
+                    ?strategy: Exports.ReadableStream__.Type.Create.strategy ->
                         Node.ReadableStream<JS.Uint8Array>
 
                 [<EmitConstructor>]
@@ -14445,7 +14447,7 @@ TypeScript versions earlier than 5.7.""")>]
                         [<ParamObject; Emit("$0")>]
                         static member Create(?highWaterMark: float) : strategy = nativeOnly
 
-        module ReadableStreamBYOBReader =
+        module ReadableStreamBYOBReader__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14455,7 +14457,7 @@ TypeScript versions earlier than 5.7.""")>]
                 [<EmitConstructor>]
                 abstract member Create: stream: Node.ReadableStream -> Node.ReadableStreamBYOBReader
 
-        module ReadableStreamBYOBRequest =
+        module ReadableStreamBYOBRequest__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14465,7 +14467,7 @@ TypeScript versions earlier than 5.7.""")>]
                 [<EmitConstructor>]
                 abstract member Create: unit -> Node.ReadableStreamBYOBRequest
 
-        module ReadableStreamDefaultController =
+        module ReadableStreamDefaultController__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14475,7 +14477,7 @@ TypeScript versions earlier than 5.7.""")>]
                 [<EmitConstructor>]
                 abstract member Create: unit -> Node.ReadableStreamDefaultController
 
-        module ReadableStreamDefaultReader =
+        module ReadableStreamDefaultReader__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14486,7 +14488,7 @@ TypeScript versions earlier than 5.7.""")>]
                 abstract member Create:
                     stream: Node.ReadableStream<'R> -> Node.ReadableStreamDefaultReader<'R>
 
-        module TextDecoderStream =
+        module TextDecoderStream__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14498,7 +14500,7 @@ TypeScript versions earlier than 5.7.""")>]
                     ?label: string * ?options: Glutinum.Web.TextDecoderOptions ->
                         Node.TextDecoderStream
 
-        module TextEncoderStream =
+        module TextEncoderStream__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14508,7 +14510,7 @@ TypeScript versions earlier than 5.7.""")>]
                 [<EmitConstructor>]
                 abstract member Create: unit -> Node.TextEncoderStream
 
-        module TransformStream =
+        module TransformStream__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14522,7 +14524,7 @@ TypeScript versions earlier than 5.7.""")>]
                     ?readableStrategy: Node.QueuingStrategy<'O> ->
                         Node.TransformStream<'I, 'O>
 
-        module TransformStreamDefaultController =
+        module TransformStreamDefaultController__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14532,7 +14534,7 @@ TypeScript versions earlier than 5.7.""")>]
                 [<EmitConstructor>]
                 abstract member Create: unit -> Node.TransformStreamDefaultController
 
-        module WritableStream =
+        module WritableStream__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14545,7 +14547,7 @@ TypeScript versions earlier than 5.7.""")>]
                     ?strategy: Node.QueuingStrategy<'W> ->
                         Node.WritableStream<'W>
 
-        module WritableStreamDefaultController =
+        module WritableStreamDefaultController__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14555,7 +14557,7 @@ TypeScript versions earlier than 5.7.""")>]
                 [<EmitConstructor>]
                 abstract member Create: unit -> Node.WritableStreamDefaultController
 
-        module WritableStreamDefaultWriter =
+        module WritableStreamDefaultWriter__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14566,7 +14568,7 @@ TypeScript versions earlier than 5.7.""")>]
                 abstract member Create:
                     stream: Node.WritableStream<'W> -> Node.WritableStreamDefaultWriter<'W>
 
-        module URL =
+        module URL__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14612,7 +14614,7 @@ TypeScript versions earlier than 5.7.""")>]
                 /// </summary>
                 abstract member revokeObjectURL: url: string -> unit
 
-        module URLSearchParams =
+        module URLSearchParams__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14628,7 +14630,7 @@ TypeScript versions earlier than 5.7.""")>]
 
                 [<EmitConstructor>]
                 abstract member Create:
-                    init: Exports.URLSearchParams.Type.Create.init -> Node.URLSearchParams
+                    init: Exports.URLSearchParams__.Type.Create.init -> Node.URLSearchParams
 
                 [<EmitConstructor>]
                 abstract member Create: init: string -> Node.URLSearchParams
@@ -14646,7 +14648,7 @@ TypeScript versions earlier than 5.7.""")>]
                         [<EmitIndexer>]
                         abstract member Item: key: string -> string with get, set
 
-        module TextDecoder =
+        module TextDecoder__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14658,7 +14660,7 @@ TypeScript versions earlier than 5.7.""")>]
                     ?label: string * ?options: Glutinum.Web.TextDecoderOptions ->
                         Glutinum.Web.TextDecoder
 
-        module TextEncoder =
+        module TextEncoder__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14668,7 +14670,7 @@ TypeScript versions earlier than 5.7.""")>]
                 [<EmitConstructor>]
                 abstract member Create: unit -> Glutinum.Web.TextEncoder
 
-        module AbortController =
+        module AbortController__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14678,7 +14680,7 @@ TypeScript versions earlier than 5.7.""")>]
                 [<EmitConstructor>]
                 abstract member Create: unit -> Node.AbortController
 
-        module AbortSignal =
+        module AbortSignal__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14691,7 +14693,7 @@ TypeScript versions earlier than 5.7.""")>]
                 abstract member abort: ?reason: obj -> Node.AbortSignal
                 abstract member timeout: milliseconds: float -> Node.AbortSignal
 
-        module DOMException =
+        module DOMException__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14727,7 +14729,7 @@ TypeScript versions earlier than 5.7.""")>]
                 abstract member INVALID_NODE_TYPE_ERR: int with get
                 abstract member DATA_CLONE_ERR: int with get
 
-        module CustomEvent =
+        module CustomEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14739,7 +14741,7 @@ TypeScript versions earlier than 5.7.""")>]
                     ``type``: string * ?eventInitDict: Glutinum.Web.CustomEventInit<'T> ->
                         Node.CustomEvent<'T>
 
-        module Event =
+        module Event__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14755,7 +14757,7 @@ TypeScript versions earlier than 5.7.""")>]
                 abstract member AT_TARGET: int with get
                 abstract member BUBBLING_PHASE: int with get
 
-        module EventTarget =
+        module EventTarget__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14765,7 +14767,7 @@ TypeScript versions earlier than 5.7.""")>]
                 [<EmitConstructor>]
                 abstract member Create: unit -> Node.EventTarget
 
-        module EventSource =
+        module EventSource__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14784,7 +14786,7 @@ TypeScript versions earlier than 5.7.""")>]
                 abstract member OPEN: int with get
                 abstract member CLOSED: int with get
 
-        module FormData =
+        module FormData__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14796,7 +14798,7 @@ TypeScript versions earlier than 5.7.""")>]
                     ?form: Glutinum.Web.HTMLFormElement * ?submitter: Glutinum.Web.HTMLElement ->
                         Node.FormData
 
-        module Headers =
+        module Headers__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14810,7 +14812,7 @@ TypeScript versions earlier than 5.7.""")>]
                 abstract member Create: init: ResizeArray<ResizeArray<string>> -> Node.Headers
 
                 [<EmitConstructor>]
-                abstract member Create: init: Exports.Headers.Type.Create.init -> Node.Headers
+                abstract member Create: init: Exports.Headers__.Type.Create.init -> Node.Headers
 
                 [<EmitConstructor>]
                 abstract member Create: init: UndiciTypes.fetch.Headers -> Node.Headers
@@ -14825,7 +14827,7 @@ TypeScript versions earlier than 5.7.""")>]
                         [<EmitIndexer>]
                         abstract member Item: key: string -> U2<string, ReadonlyArray<string>> with get, set
 
-        module MessageEvent =
+        module MessageEvent__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14836,7 +14838,7 @@ TypeScript versions earlier than 5.7.""")>]
                 abstract member Create:
                     ``type``: string * ?eventInitDict: Node.MessageEventInit -> Node.MessageEvent
 
-        module Request =
+        module Request__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14857,7 +14859,7 @@ TypeScript versions earlier than 5.7.""")>]
                 [<EmitConstructor>]
                 abstract member Create: input: Node.URL * ?init: Node.RequestInit -> Node.Request
 
-        module Response =
+        module Response__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14910,7 +14912,7 @@ TypeScript versions earlier than 5.7.""")>]
                 /// </summary>
                 abstract member redirect: url: Node.URL * ?status: float -> Node.Response
 
-        module WebSocket =
+        module WebSocket__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14942,7 +14944,7 @@ TypeScript versions earlier than 5.7.""")>]
                 abstract member CLOSING: int with get
                 abstract member CLOSED: int with get
 
-        module Navigator =
+        module Navigator__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14952,7 +14954,7 @@ TypeScript versions earlier than 5.7.""")>]
                 [<EmitConstructor>]
                 abstract member Create: unit -> Node.Navigator
 
-        module Storage =
+        module Storage__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14962,7 +14964,7 @@ TypeScript versions earlier than 5.7.""")>]
                 [<EmitConstructor>]
                 abstract member Create: unit -> Node.Storage
 
-        module CompressionStream =
+        module CompressionStream__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14973,7 +14975,7 @@ TypeScript versions earlier than 5.7.""")>]
                 abstract member Create:
                     format: Glutinum.Web.CompressionFormat -> Node.CompressionStream
 
-        module DecompressionStream =
+        module DecompressionStream__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14984,7 +14986,7 @@ TypeScript versions earlier than 5.7.""")>]
                 abstract member Create:
                     format: Glutinum.Web.CompressionFormat -> Node.DecompressionStream
 
-        module structuredClone =
+        module structuredClone__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -14998,7 +15000,7 @@ TypeScript versions earlier than 5.7.""")>]
                     =
                     nativeOnly
 
-        module BroadcastChannel =
+        module BroadcastChannel__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -15008,7 +15010,7 @@ TypeScript versions earlier than 5.7.""")>]
                 [<EmitConstructor>]
                 abstract member Create: name: string -> Glutinum.Web.BroadcastChannel
 
-        module MessageChannel =
+        module MessageChannel__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -15018,7 +15020,7 @@ TypeScript versions earlier than 5.7.""")>]
                 [<EmitConstructor>]
                 abstract member Create: unit -> Glutinum.Web.MessageChannel
 
-        module MessagePort =
+        module MessagePort__ =
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -15176,7 +15178,7 @@ TypeScript versions earlier than 5.7.""")>]
             /// </summary>
             [<ImportDefault("assert")>]
             [<Emit("$0.Assert")>]
-            static member inline Assert: Exports.Assert.Type_1 = nativeOnly
+            static member inline Assert: Exports.Assert__.Type = nativeOnly
 
             /// <summary>
             /// Throws an <c>AssertionError</c> with the provided error message or a default
@@ -19153,14 +19155,14 @@ TypeScript versions earlier than 5.7.""")>]
 
         module Exports =
 
-            module Assert =
+            module Assert__ =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type Type_1 =
+                type Type =
                     [<EmitConstructor>]
                     abstract member Create:
-                        ?options: Exports.Assert.Type.Create.options_1 ->
+                        ?options: Exports.Assert__.Type.Create.options ->
                             Node.``assert``.assert_.AssertStrict
 
                     [<EmitConstructor>]
@@ -19174,18 +19176,18 @@ TypeScript versions earlier than 5.7.""")>]
 
                         [<AllowNullLiteral>]
                         [<Interface>]
-                        type options_1 =
+                        type options =
                             /// <summary>
                             /// If set to <c>'full'</c>, shows the full diff in assertion errors.
                             /// </summary>
-                            abstract member diff: Exports.Assert.Type.Create.options.diff_1 option with get, set
+                            abstract member diff: Exports.Assert__.Type.Create.options.diff option with get, set
                             abstract member strict: bool option with get, set
 
                         module options =
 
                             [<RequireQualifiedAccess>]
                             [<StringEnum(CaseRules.None)>]
-                            type diff_1 =
+                            type diff =
                                 | simple
                                 | full
 
@@ -19716,7 +19718,7 @@ AsyncLocalStorage.bind($0)"""
             /// <returns>
             /// A new function with the signature <c>(fn: (...args) : R, ...args) : R</c>.
             /// </returns>
-            static member inline snapshot() : AsyncLocalStorage.snapshot<obj, obj> =
+            static member inline snapshot() : AsyncLocalStorage.snapshot__<obj, obj> =
                 emitJsExpr
                     ()
                     $$"""
@@ -20055,7 +20057,7 @@ AsyncLocalStorage.snapshot()"""
 
         module AsyncLocalStorage =
 
-            type snapshot<'R, 'TArgs> =
+            type snapshot__<'R, 'TArgs> =
                 delegate of fn: System.Delegate * [<ParamArray>] args: 'TArgs[] -> 'R
 
     module buffer =
@@ -20932,7 +20934,7 @@ AsyncLocalStorage.snapshot()"""
             /// </param>
             [<Import("exec", "child_process")>]
             static member exec
-                (command: string, ?callback: Exports.exec.callback)
+                (command: string, ?callback: Exports.exec__.callback)
                 : Node.child_process.ChildProcess
                 =
                 nativeOnly
@@ -20942,7 +20944,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     command: string,
                     options: Node.child_process.ExecOptionsWithBufferEncoding,
-                    ?callback: Exports.exec.callback_1
+                    ?callback: Exports.exec__.callback_1
                 )
                 : Node.child_process.ChildProcess
                 =
@@ -20953,7 +20955,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     command: string,
                     options: Node.child_process.ExecOptionsWithStringEncoding,
-                    ?callback: Exports.exec.callback
+                    ?callback: Exports.exec__.callback
                 )
                 : Node.child_process.ChildProcess
                 =
@@ -20964,7 +20966,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     command: string,
                     options: Node.child_process.ExecOptions option,
-                    ?callback: Exports.exec.callback_2
+                    ?callback: Exports.exec__.callback_2
                 )
                 : Node.child_process.ChildProcess
                 =
@@ -21041,7 +21043,7 @@ AsyncLocalStorage.snapshot()"""
             /// </param>
             [<Import("execFile", "child_process")>]
             static member execFile
-                (file: string, ?callback: Exports.execFile.callback)
+                (file: string, ?callback: Exports.execFile__.callback)
                 : Node.child_process.ChildProcess
                 =
                 nativeOnly
@@ -21051,7 +21053,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     file: string,
                     args: ResizeArray<string> option,
-                    ?callback: Exports.execFile.callback
+                    ?callback: Exports.execFile__.callback
                 )
                 : Node.child_process.ChildProcess
                 =
@@ -21062,7 +21064,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     file: string,
                     options: Node.child_process.ExecFileOptionsWithBufferEncoding,
-                    ?callback: Exports.execFile.callback_1
+                    ?callback: Exports.execFile__.callback_1
                 )
                 : Node.child_process.ChildProcess
                 =
@@ -21074,7 +21076,7 @@ AsyncLocalStorage.snapshot()"""
                     file: string,
                     args: ResizeArray<string> option,
                     options: Node.child_process.ExecFileOptionsWithBufferEncoding,
-                    ?callback: Exports.execFile.callback_1
+                    ?callback: Exports.execFile__.callback_1
                 )
                 : Node.child_process.ChildProcess
                 =
@@ -21085,7 +21087,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     file: string,
                     options: Node.child_process.ExecFileOptionsWithStringEncoding,
-                    ?callback: Exports.execFile.callback
+                    ?callback: Exports.execFile__.callback
                 )
                 : Node.child_process.ChildProcess
                 =
@@ -21097,7 +21099,7 @@ AsyncLocalStorage.snapshot()"""
                     file: string,
                     args: ResizeArray<string> option,
                     options: Node.child_process.ExecFileOptionsWithStringEncoding,
-                    ?callback: Exports.execFile.callback
+                    ?callback: Exports.execFile__.callback
                 )
                 : Node.child_process.ChildProcess
                 =
@@ -21108,7 +21110,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     file: string,
                     options: Node.child_process.ExecFileOptions option,
-                    callback: Exports.execFile.callback_2 option
+                    callback: Exports.execFile__.callback_2 option
                 )
                 : Node.child_process.ChildProcess
                 =
@@ -21120,7 +21122,7 @@ AsyncLocalStorage.snapshot()"""
                     file: string,
                     args: ResizeArray<string> option,
                     options: Node.child_process.ExecFileOptions option,
-                    callback: Exports.execFile.callback_2 option
+                    callback: Exports.execFile__.callback_2 option
                 )
                 : Node.child_process.ChildProcess
                 =
@@ -28030,7 +28032,7 @@ AsyncLocalStorage.snapshot()"""
 
         module Exports =
 
-            module exec =
+            module exec__ =
 
                 type callback =
                     delegate of
@@ -28053,7 +28055,7 @@ AsyncLocalStorage.snapshot()"""
                         stderr: U2<string, Node.NonSharedBuffer> ->
                             unit
 
-            module execFile =
+            module execFile__ =
 
                 type callback =
                     delegate of
@@ -32555,7 +32557,7 @@ AsyncLocalStorage.snapshot()"""
 
         module Exports =
 
-            module cluster =
+            module cluster__ =
 
                 module Type =
 
@@ -32682,13 +32684,13 @@ AsyncLocalStorage.snapshot()"""
         [<Erase>]
         type Exports =
             [<ImportDefault("constants")>]
-            static member inline constants: Exports.constants = nativeOnly
+            static member inline constants: Exports.constants__ = nativeOnly
 
         module Exports =
 
             [<AllowNullLiteral>]
             [<Interface>]
-            type constants =
+            type constants__ =
                 abstract member RTLD_LAZY: float with get
                 abstract member RTLD_NOW: float with get
                 abstract member RTLD_GLOBAL: float with get
@@ -34525,9 +34527,9 @@ AsyncLocalStorage.snapshot()"""
             [<Import("generateKey", "crypto")>]
             static member generateKey
                 (
-                    ``type``: Exports.generateKey.``type``,
-                    options: Exports.generateKey.options,
-                    callback: Exports.generateKey.callback
+                    ``type``: Exports.generateKey__.``type``,
+                    options: Exports.generateKey__.options,
+                    callback: Exports.generateKey__.callback
                 )
                 : unit
                 =
@@ -34554,8 +34556,8 @@ AsyncLocalStorage.snapshot()"""
             [<Import("generateKeySync", "crypto")>]
             static member generateKeySync
                 (
-                    ``type``: Exports.generateKeySync.``type``,
-                    options: Exports.generateKeySync.options
+                    ``type``: Exports.generateKeySync__.``type``,
+                    options: Exports.generateKeySync__.options
                 )
                 : Node.crypto.KeyObject
                 =
@@ -35007,7 +35009,7 @@ AsyncLocalStorage.snapshot()"""
                     iterations: float,
                     keylen: float,
                     digest: string,
-                    callback: Exports.pbkdf2.callback
+                    callback: Exports.pbkdf2__.callback
                 )
                 : unit
                 =
@@ -35055,7 +35057,7 @@ AsyncLocalStorage.snapshot()"""
                     iterations: float,
                     keylen: float,
                     digest: string,
-                    callback: Exports.pbkdf2.callback
+                    callback: Exports.pbkdf2__.callback
                 )
                 : unit
                 =
@@ -35103,7 +35105,7 @@ AsyncLocalStorage.snapshot()"""
                     iterations: float,
                     keylen: float,
                     digest: string,
-                    callback: Exports.pbkdf2.callback
+                    callback: Exports.pbkdf2__.callback
                 )
                 : unit
                 =
@@ -35151,7 +35153,7 @@ AsyncLocalStorage.snapshot()"""
                     iterations: float,
                     keylen: float,
                     digest: string,
-                    callback: Exports.pbkdf2.callback
+                    callback: Exports.pbkdf2__.callback
                 )
                 : unit
                 =
@@ -35374,7 +35376,10 @@ AsyncLocalStorage.snapshot()"""
             static member randomBytes(size: float) : Node.NonSharedBuffer = nativeOnly
 
             [<Import("randomBytes", "crypto")>]
-            static member randomBytes(size: float, callback: Exports.randomBytes.callback) : unit =
+            static member randomBytes
+                (size: float, callback: Exports.randomBytes__.callback)
+                : unit
+                =
                 nativeOnly
 
             [<Import("pseudoRandomBytes", "crypto")>]
@@ -35382,7 +35387,7 @@ AsyncLocalStorage.snapshot()"""
 
             [<Import("pseudoRandomBytes", "crypto")>]
             static member pseudoRandomBytes
-                (size: float, callback: Exports.pseudoRandomBytes.callback)
+                (size: float, callback: Exports.pseudoRandomBytes__.callback)
                 : unit
                 =
                 nativeOnly
@@ -35445,12 +35450,12 @@ AsyncLocalStorage.snapshot()"""
             static member randomInt(min: float, max: float) : float = nativeOnly
 
             [<Import("randomInt", "crypto")>]
-            static member randomInt(max: float, callback: Exports.randomInt.callback) : unit =
+            static member randomInt(max: float, callback: Exports.randomInt__.callback) : unit =
                 nativeOnly
 
             [<Import("randomInt", "crypto")>]
             static member randomInt
-                (min: float, max: float, callback: Exports.randomInt.callback)
+                (min: float, max: float, callback: Exports.randomInt__.callback)
                 : unit
                 =
                 nativeOnly
@@ -35591,21 +35596,21 @@ AsyncLocalStorage.snapshot()"""
             /// </param>
             [<Import("randomFill", "crypto")>]
             static member randomFill<'T>
-                (buffer: 'T, callback: Exports.randomFill.callback<'T>)
+                (buffer: 'T, callback: Exports.randomFill__.callback<'T>)
                 : unit
                 =
                 nativeOnly
 
             [<Import("randomFill", "crypto")>]
             static member randomFill<'T>
-                (buffer: 'T, offset: float, callback: Exports.randomFill.callback<'T>)
+                (buffer: 'T, offset: float, callback: Exports.randomFill__.callback<'T>)
                 : unit
                 =
                 nativeOnly
 
             [<Import("randomFill", "crypto")>]
             static member randomFill<'T>
-                (buffer: 'T, offset: float, size: float, callback: Exports.randomFill.callback<'T>)
+                (buffer: 'T, offset: float, size: float, callback: Exports.randomFill__.callback<'T>)
                 : unit
                 =
                 nativeOnly
@@ -35645,7 +35650,7 @@ AsyncLocalStorage.snapshot()"""
             /// </summary>
             [<Import("scrypt", "crypto")>]
             static member scrypt
-                (password: string, salt: string, keylen: float, callback: Exports.scrypt.callback)
+                (password: string, salt: string, keylen: float, callback: Exports.scrypt__.callback)
                 : unit
                 =
                 nativeOnly
@@ -35689,7 +35694,7 @@ AsyncLocalStorage.snapshot()"""
                     password: string,
                     salt: Node.NodeJS.ArrayBufferView,
                     keylen: float,
-                    callback: Exports.scrypt.callback
+                    callback: Exports.scrypt__.callback
                 )
                 : unit
                 =
@@ -35734,7 +35739,7 @@ AsyncLocalStorage.snapshot()"""
                     password: Node.NodeJS.ArrayBufferView,
                     salt: string,
                     keylen: float,
-                    callback: Exports.scrypt.callback
+                    callback: Exports.scrypt__.callback
                 )
                 : unit
                 =
@@ -35779,7 +35784,7 @@ AsyncLocalStorage.snapshot()"""
                     password: Node.NodeJS.ArrayBufferView,
                     salt: Node.NodeJS.ArrayBufferView,
                     keylen: float,
-                    callback: Exports.scrypt.callback
+                    callback: Exports.scrypt__.callback
                 )
                 : unit
                 =
@@ -35792,7 +35797,7 @@ AsyncLocalStorage.snapshot()"""
                     salt: string,
                     keylen: float,
                     options: Node.crypto.ScryptOptions,
-                    callback: Exports.scrypt.callback
+                    callback: Exports.scrypt__.callback
                 )
                 : unit
                 =
@@ -35805,7 +35810,7 @@ AsyncLocalStorage.snapshot()"""
                     salt: Node.NodeJS.ArrayBufferView,
                     keylen: float,
                     options: Node.crypto.ScryptOptions,
-                    callback: Exports.scrypt.callback
+                    callback: Exports.scrypt__.callback
                 )
                 : unit
                 =
@@ -35818,7 +35823,7 @@ AsyncLocalStorage.snapshot()"""
                     salt: string,
                     keylen: float,
                     options: Node.crypto.ScryptOptions,
-                    callback: Exports.scrypt.callback
+                    callback: Exports.scrypt__.callback
                 )
                 : unit
                 =
@@ -35831,7 +35836,7 @@ AsyncLocalStorage.snapshot()"""
                     salt: Node.NodeJS.ArrayBufferView,
                     keylen: float,
                     options: Node.crypto.ScryptOptions,
-                    callback: Exports.scrypt.callback
+                    callback: Exports.scrypt__.callback
                 )
                 : unit
                 =
@@ -36582,7 +36587,7 @@ AsyncLocalStorage.snapshot()"""
             /// <c>1</c> if and only if a FIPS compliant crypto provider is currently in use, <c>0</c> otherwise. A future semver-major release may change the return type of this API to a {boolean}.
             /// </returns>
             [<Import("getFips", "crypto")>]
-            static member getFips() : Exports.getFips = nativeOnly
+            static member getFips() : Exports.getFips__ = nativeOnly
 
             /// <summary>
             /// Enables the FIPS compliant crypto provider in a FIPS-enabled Node.js build.
@@ -36848,7 +36853,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     ``type``: string,
                     options: Node.crypto.RSAKeyPairOptions<string, string>,
-                    callback: Exports.generateKeyPair.callback
+                    callback: Exports.generateKeyPair__.callback
                 )
                 : unit
                 =
@@ -36859,7 +36864,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     ``type``: string,
                     options: Node.crypto.RSAKeyPairOptions<string, string>,
-                    callback: Exports.generateKeyPair.callback_1
+                    callback: Exports.generateKeyPair__.callback_1
                 )
                 : unit
                 =
@@ -36870,7 +36875,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     ``type``: string,
                     options: Node.crypto.RSAKeyPairOptions<string, string>,
-                    callback: Exports.generateKeyPair.callback_2
+                    callback: Exports.generateKeyPair__.callback_2
                 )
                 : unit
                 =
@@ -36881,7 +36886,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     ``type``: string,
                     options: Node.crypto.RSAKeyPairOptions<string, string>,
-                    callback: Exports.generateKeyPair.callback_3
+                    callback: Exports.generateKeyPair__.callback_3
                 )
                 : unit
                 =
@@ -36892,7 +36897,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     ``type``: string,
                     options: Node.crypto.RSAKeyPairKeyObjectOptions,
-                    callback: Exports.generateKeyPair.callback_4
+                    callback: Exports.generateKeyPair__.callback_4
                 )
                 : unit
                 =
@@ -36903,7 +36908,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     ``type``: string,
                     options: Node.crypto.RSAPSSKeyPairOptions<string, string>,
-                    callback: Exports.generateKeyPair.callback
+                    callback: Exports.generateKeyPair__.callback
                 )
                 : unit
                 =
@@ -36914,7 +36919,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     ``type``: string,
                     options: Node.crypto.RSAPSSKeyPairOptions<string, string>,
-                    callback: Exports.generateKeyPair.callback_1
+                    callback: Exports.generateKeyPair__.callback_1
                 )
                 : unit
                 =
@@ -36925,7 +36930,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     ``type``: string,
                     options: Node.crypto.RSAPSSKeyPairOptions<string, string>,
-                    callback: Exports.generateKeyPair.callback_2
+                    callback: Exports.generateKeyPair__.callback_2
                 )
                 : unit
                 =
@@ -36936,7 +36941,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     ``type``: string,
                     options: Node.crypto.RSAPSSKeyPairOptions<string, string>,
-                    callback: Exports.generateKeyPair.callback_3
+                    callback: Exports.generateKeyPair__.callback_3
                 )
                 : unit
                 =
@@ -36947,7 +36952,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     ``type``: string,
                     options: Node.crypto.RSAPSSKeyPairKeyObjectOptions,
-                    callback: Exports.generateKeyPair.callback_4
+                    callback: Exports.generateKeyPair__.callback_4
                 )
                 : unit
                 =
@@ -36958,7 +36963,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     ``type``: string,
                     options: Node.crypto.DSAKeyPairOptions<string, string>,
-                    callback: Exports.generateKeyPair.callback
+                    callback: Exports.generateKeyPair__.callback
                 )
                 : unit
                 =
@@ -36969,7 +36974,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     ``type``: string,
                     options: Node.crypto.DSAKeyPairOptions<string, string>,
-                    callback: Exports.generateKeyPair.callback_1
+                    callback: Exports.generateKeyPair__.callback_1
                 )
                 : unit
                 =
@@ -36980,7 +36985,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     ``type``: string,
                     options: Node.crypto.DSAKeyPairOptions<string, string>,
-                    callback: Exports.generateKeyPair.callback_2
+                    callback: Exports.generateKeyPair__.callback_2
                 )
                 : unit
                 =
@@ -36991,7 +36996,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     ``type``: string,
                     options: Node.crypto.DSAKeyPairOptions<string, string>,
-                    callback: Exports.generateKeyPair.callback_3
+                    callback: Exports.generateKeyPair__.callback_3
                 )
                 : unit
                 =
@@ -37002,7 +37007,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     ``type``: string,
                     options: Node.crypto.DSAKeyPairKeyObjectOptions,
-                    callback: Exports.generateKeyPair.callback_4
+                    callback: Exports.generateKeyPair__.callback_4
                 )
                 : unit
                 =
@@ -37013,7 +37018,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     ``type``: string,
                     options: Node.crypto.ECKeyPairOptions<string, string>,
-                    callback: Exports.generateKeyPair.callback
+                    callback: Exports.generateKeyPair__.callback
                 )
                 : unit
                 =
@@ -37024,7 +37029,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     ``type``: string,
                     options: Node.crypto.ECKeyPairOptions<string, string>,
-                    callback: Exports.generateKeyPair.callback_1
+                    callback: Exports.generateKeyPair__.callback_1
                 )
                 : unit
                 =
@@ -37035,7 +37040,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     ``type``: string,
                     options: Node.crypto.ECKeyPairOptions<string, string>,
-                    callback: Exports.generateKeyPair.callback_2
+                    callback: Exports.generateKeyPair__.callback_2
                 )
                 : unit
                 =
@@ -37046,7 +37051,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     ``type``: string,
                     options: Node.crypto.ECKeyPairOptions<string, string>,
-                    callback: Exports.generateKeyPair.callback_3
+                    callback: Exports.generateKeyPair__.callback_3
                 )
                 : unit
                 =
@@ -37057,7 +37062,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     ``type``: string,
                     options: Node.crypto.ECKeyPairKeyObjectOptions,
-                    callback: Exports.generateKeyPair.callback_4
+                    callback: Exports.generateKeyPair__.callback_4
                 )
                 : unit
                 =
@@ -37068,7 +37073,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     ``type``: string,
                     options: Node.crypto.ED25519KeyPairOptions<string, string>,
-                    callback: Exports.generateKeyPair.callback
+                    callback: Exports.generateKeyPair__.callback
                 )
                 : unit
                 =
@@ -37079,7 +37084,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     ``type``: string,
                     options: Node.crypto.ED25519KeyPairOptions<string, string>,
-                    callback: Exports.generateKeyPair.callback_1
+                    callback: Exports.generateKeyPair__.callback_1
                 )
                 : unit
                 =
@@ -37090,7 +37095,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     ``type``: string,
                     options: Node.crypto.ED25519KeyPairOptions<string, string>,
-                    callback: Exports.generateKeyPair.callback_2
+                    callback: Exports.generateKeyPair__.callback_2
                 )
                 : unit
                 =
@@ -37101,7 +37106,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     ``type``: string,
                     options: Node.crypto.ED25519KeyPairOptions<string, string>,
-                    callback: Exports.generateKeyPair.callback_3
+                    callback: Exports.generateKeyPair__.callback_3
                 )
                 : unit
                 =
@@ -37112,7 +37117,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     ``type``: string,
                     options: Node.crypto.ED25519KeyPairKeyObjectOptions option,
-                    callback: Exports.generateKeyPair.callback_4
+                    callback: Exports.generateKeyPair__.callback_4
                 )
                 : unit
                 =
@@ -37123,7 +37128,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     ``type``: string,
                     options: Node.crypto.ED448KeyPairOptions<string, string>,
-                    callback: Exports.generateKeyPair.callback
+                    callback: Exports.generateKeyPair__.callback
                 )
                 : unit
                 =
@@ -37134,7 +37139,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     ``type``: string,
                     options: Node.crypto.ED448KeyPairOptions<string, string>,
-                    callback: Exports.generateKeyPair.callback_1
+                    callback: Exports.generateKeyPair__.callback_1
                 )
                 : unit
                 =
@@ -37145,7 +37150,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     ``type``: string,
                     options: Node.crypto.ED448KeyPairOptions<string, string>,
-                    callback: Exports.generateKeyPair.callback_2
+                    callback: Exports.generateKeyPair__.callback_2
                 )
                 : unit
                 =
@@ -37156,7 +37161,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     ``type``: string,
                     options: Node.crypto.ED448KeyPairOptions<string, string>,
-                    callback: Exports.generateKeyPair.callback_3
+                    callback: Exports.generateKeyPair__.callback_3
                 )
                 : unit
                 =
@@ -37167,7 +37172,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     ``type``: string,
                     options: Node.crypto.ED448KeyPairKeyObjectOptions option,
-                    callback: Exports.generateKeyPair.callback_4
+                    callback: Exports.generateKeyPair__.callback_4
                 )
                 : unit
                 =
@@ -37178,7 +37183,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     ``type``: string,
                     options: Node.crypto.X25519KeyPairOptions<string, string>,
-                    callback: Exports.generateKeyPair.callback
+                    callback: Exports.generateKeyPair__.callback
                 )
                 : unit
                 =
@@ -37189,7 +37194,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     ``type``: string,
                     options: Node.crypto.X25519KeyPairOptions<string, string>,
-                    callback: Exports.generateKeyPair.callback_1
+                    callback: Exports.generateKeyPair__.callback_1
                 )
                 : unit
                 =
@@ -37200,7 +37205,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     ``type``: string,
                     options: Node.crypto.X25519KeyPairOptions<string, string>,
-                    callback: Exports.generateKeyPair.callback_2
+                    callback: Exports.generateKeyPair__.callback_2
                 )
                 : unit
                 =
@@ -37211,7 +37216,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     ``type``: string,
                     options: Node.crypto.X25519KeyPairOptions<string, string>,
-                    callback: Exports.generateKeyPair.callback_3
+                    callback: Exports.generateKeyPair__.callback_3
                 )
                 : unit
                 =
@@ -37222,7 +37227,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     ``type``: string,
                     options: Node.crypto.X25519KeyPairKeyObjectOptions option,
-                    callback: Exports.generateKeyPair.callback_4
+                    callback: Exports.generateKeyPair__.callback_4
                 )
                 : unit
                 =
@@ -37233,7 +37238,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     ``type``: string,
                     options: Node.crypto.X448KeyPairOptions<string, string>,
-                    callback: Exports.generateKeyPair.callback
+                    callback: Exports.generateKeyPair__.callback
                 )
                 : unit
                 =
@@ -37244,7 +37249,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     ``type``: string,
                     options: Node.crypto.X448KeyPairOptions<string, string>,
-                    callback: Exports.generateKeyPair.callback_1
+                    callback: Exports.generateKeyPair__.callback_1
                 )
                 : unit
                 =
@@ -37255,7 +37260,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     ``type``: string,
                     options: Node.crypto.X448KeyPairOptions<string, string>,
-                    callback: Exports.generateKeyPair.callback_2
+                    callback: Exports.generateKeyPair__.callback_2
                 )
                 : unit
                 =
@@ -37266,7 +37271,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     ``type``: string,
                     options: Node.crypto.X448KeyPairOptions<string, string>,
-                    callback: Exports.generateKeyPair.callback_3
+                    callback: Exports.generateKeyPair__.callback_3
                 )
                 : unit
                 =
@@ -37277,7 +37282,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     ``type``: string,
                     options: Node.crypto.X448KeyPairKeyObjectOptions option,
-                    callback: Exports.generateKeyPair.callback_4
+                    callback: Exports.generateKeyPair__.callback_4
                 )
                 : unit
                 =
@@ -37413,7 +37418,7 @@ AsyncLocalStorage.snapshot()"""
                     algorithm: string option,
                     data: Node.NodeJS.ArrayBufferView,
                     key: string,
-                    callback: Exports.sign.callback
+                    callback: Exports.sign__.callback
                 )
                 : unit
                 =
@@ -37425,7 +37430,7 @@ AsyncLocalStorage.snapshot()"""
                     algorithm: string option,
                     data: Node.NodeJS.ArrayBufferView,
                     key: Node.Buffer,
-                    callback: Exports.sign.callback
+                    callback: Exports.sign__.callback
                 )
                 : unit
                 =
@@ -37437,7 +37442,7 @@ AsyncLocalStorage.snapshot()"""
                     algorithm: string option,
                     data: Node.NodeJS.ArrayBufferView,
                     key: Node.crypto.KeyObject,
-                    callback: Exports.sign.callback
+                    callback: Exports.sign__.callback
                 )
                 : unit
                 =
@@ -37449,7 +37454,7 @@ AsyncLocalStorage.snapshot()"""
                     algorithm: string option,
                     data: Node.NodeJS.ArrayBufferView,
                     key: Node.crypto.SignKeyObjectInput,
-                    callback: Exports.sign.callback
+                    callback: Exports.sign__.callback
                 )
                 : unit
                 =
@@ -37461,7 +37466,7 @@ AsyncLocalStorage.snapshot()"""
                     algorithm: string option,
                     data: Node.NodeJS.ArrayBufferView,
                     key: Node.crypto.SignPrivateKeyInput,
-                    callback: Exports.sign.callback
+                    callback: Exports.sign__.callback
                 )
                 : unit
                 =
@@ -37473,7 +37478,7 @@ AsyncLocalStorage.snapshot()"""
                     algorithm: string option,
                     data: Node.NodeJS.ArrayBufferView,
                     key: Node.crypto.SignJsonWebKeyInput,
-                    callback: Exports.sign.callback
+                    callback: Exports.sign__.callback
                 )
                 : unit
                 =
@@ -37648,7 +37653,7 @@ AsyncLocalStorage.snapshot()"""
                     data: Node.NodeJS.ArrayBufferView,
                     key: string,
                     signature: Node.NodeJS.ArrayBufferView,
-                    callback: Exports.verify.callback
+                    callback: Exports.verify__.callback
                 )
                 : unit
                 =
@@ -37661,7 +37666,7 @@ AsyncLocalStorage.snapshot()"""
                     data: Node.NodeJS.ArrayBufferView,
                     key: Node.Buffer,
                     signature: Node.NodeJS.ArrayBufferView,
-                    callback: Exports.verify.callback
+                    callback: Exports.verify__.callback
                 )
                 : unit
                 =
@@ -37674,7 +37679,7 @@ AsyncLocalStorage.snapshot()"""
                     data: Node.NodeJS.ArrayBufferView,
                     key: Node.crypto.KeyObject,
                     signature: Node.NodeJS.ArrayBufferView,
-                    callback: Exports.verify.callback
+                    callback: Exports.verify__.callback
                 )
                 : unit
                 =
@@ -37687,7 +37692,7 @@ AsyncLocalStorage.snapshot()"""
                     data: Node.NodeJS.ArrayBufferView,
                     key: Node.crypto.VerifyKeyObjectInput,
                     signature: Node.NodeJS.ArrayBufferView,
-                    callback: Exports.verify.callback
+                    callback: Exports.verify__.callback
                 )
                 : unit
                 =
@@ -37700,7 +37705,7 @@ AsyncLocalStorage.snapshot()"""
                     data: Node.NodeJS.ArrayBufferView,
                     key: Node.crypto.VerifyPublicKeyInput,
                     signature: Node.NodeJS.ArrayBufferView,
-                    callback: Exports.verify.callback
+                    callback: Exports.verify__.callback
                 )
                 : unit
                 =
@@ -37713,7 +37718,7 @@ AsyncLocalStorage.snapshot()"""
                     data: Node.NodeJS.ArrayBufferView,
                     key: Node.crypto.VerifyJsonWebKeyInput,
                     signature: Node.NodeJS.ArrayBufferView,
-                    callback: Exports.verify.callback
+                    callback: Exports.verify__.callback
                 )
                 : unit
                 =
@@ -37725,7 +37730,7 @@ AsyncLocalStorage.snapshot()"""
             /// </summary>
             [<Import("diffieHellman", "crypto")>]
             static member diffieHellman
-                (options: Exports.diffieHellman.options)
+                (options: Exports.diffieHellman__.options)
                 : Node.NonSharedBuffer
                 =
                 nativeOnly
@@ -37826,7 +37831,7 @@ AsyncLocalStorage.snapshot()"""
 
             [<Import("hash", "crypto")>]
             static member hash
-                (algorithm: string, data: string, ?outputEncoding: Exports.hash.outputEncoding)
+                (algorithm: string, data: string, ?outputEncoding: Exports.hash__.outputEncoding)
                 : U2<string, Node.NonSharedBuffer>
                 =
                 nativeOnly
@@ -37836,7 +37841,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     algorithm: string,
                     data: Node.NodeJS.ArrayBufferView,
-                    ?outputEncoding: Exports.hash.outputEncoding
+                    ?outputEncoding: Exports.hash__.outputEncoding
                 )
                 : U2<string, Node.NonSharedBuffer>
                 =
@@ -37924,7 +37929,7 @@ AsyncLocalStorage.snapshot()"""
                     salt: string,
                     info: string,
                     keylen: float,
-                    callback: Exports.hkdf.callback
+                    callback: Exports.hkdf__.callback
                 )
                 : unit
                 =
@@ -37974,7 +37979,7 @@ AsyncLocalStorage.snapshot()"""
                     salt: string,
                     info: Node.NodeJS.ArrayBufferView,
                     keylen: float,
-                    callback: Exports.hkdf.callback
+                    callback: Exports.hkdf__.callback
                 )
                 : unit
                 =
@@ -38024,7 +38029,7 @@ AsyncLocalStorage.snapshot()"""
                     salt: Node.NodeJS.ArrayBufferView,
                     info: string,
                     keylen: float,
-                    callback: Exports.hkdf.callback
+                    callback: Exports.hkdf__.callback
                 )
                 : unit
                 =
@@ -38074,7 +38079,7 @@ AsyncLocalStorage.snapshot()"""
                     salt: Node.NodeJS.ArrayBufferView,
                     info: Node.NodeJS.ArrayBufferView,
                     keylen: float,
-                    callback: Exports.hkdf.callback
+                    callback: Exports.hkdf__.callback
                 )
                 : unit
                 =
@@ -38124,7 +38129,7 @@ AsyncLocalStorage.snapshot()"""
                     salt: string,
                     info: string,
                     keylen: float,
-                    callback: Exports.hkdf.callback
+                    callback: Exports.hkdf__.callback
                 )
                 : unit
                 =
@@ -38174,7 +38179,7 @@ AsyncLocalStorage.snapshot()"""
                     salt: string,
                     info: Node.NodeJS.ArrayBufferView,
                     keylen: float,
-                    callback: Exports.hkdf.callback
+                    callback: Exports.hkdf__.callback
                 )
                 : unit
                 =
@@ -38224,7 +38229,7 @@ AsyncLocalStorage.snapshot()"""
                     salt: Node.NodeJS.ArrayBufferView,
                     info: string,
                     keylen: float,
-                    callback: Exports.hkdf.callback
+                    callback: Exports.hkdf__.callback
                 )
                 : unit
                 =
@@ -38274,7 +38279,7 @@ AsyncLocalStorage.snapshot()"""
                     salt: Node.NodeJS.ArrayBufferView,
                     info: Node.NodeJS.ArrayBufferView,
                     keylen: float,
-                    callback: Exports.hkdf.callback
+                    callback: Exports.hkdf__.callback
                 )
                 : unit
                 =
@@ -38324,7 +38329,7 @@ AsyncLocalStorage.snapshot()"""
                     salt: string,
                     info: string,
                     keylen: float,
-                    callback: Exports.hkdf.callback
+                    callback: Exports.hkdf__.callback
                 )
                 : unit
                 =
@@ -38374,7 +38379,7 @@ AsyncLocalStorage.snapshot()"""
                     salt: string,
                     info: Node.NodeJS.ArrayBufferView,
                     keylen: float,
-                    callback: Exports.hkdf.callback
+                    callback: Exports.hkdf__.callback
                 )
                 : unit
                 =
@@ -38424,7 +38429,7 @@ AsyncLocalStorage.snapshot()"""
                     salt: Node.NodeJS.ArrayBufferView,
                     info: string,
                     keylen: float,
-                    callback: Exports.hkdf.callback
+                    callback: Exports.hkdf__.callback
                 )
                 : unit
                 =
@@ -38474,7 +38479,7 @@ AsyncLocalStorage.snapshot()"""
                     salt: Node.NodeJS.ArrayBufferView,
                     info: Node.NodeJS.ArrayBufferView,
                     keylen: float,
-                    callback: Exports.hkdf.callback
+                    callback: Exports.hkdf__.callback
                 )
                 : unit
                 =
@@ -39091,7 +39096,7 @@ AsyncLocalStorage.snapshot()"""
             /// </param>
             [<Import("generatePrime", "crypto")>]
             static member generatePrime
-                (size: float, callback: Exports.generatePrime.callback)
+                (size: float, callback: Exports.generatePrime__.callback)
                 : unit
                 =
                 nativeOnly
@@ -39101,7 +39106,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     size: float,
                     options: Node.crypto.GeneratePrimeOptionsBigInt,
-                    callback: Exports.generatePrime.callback_1
+                    callback: Exports.generatePrime__.callback_1
                 )
                 : unit
                 =
@@ -39112,7 +39117,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     size: float,
                     options: Node.crypto.GeneratePrimeOptionsArrayBuffer,
-                    callback: Exports.generatePrime.callback
+                    callback: Exports.generatePrime__.callback
                 )
                 : unit
                 =
@@ -39123,7 +39128,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     size: float,
                     options: Node.crypto.GeneratePrimeOptions,
-                    callback: Exports.generatePrime.callback_2
+                    callback: Exports.generatePrime__.callback_2
                 )
                 : unit
                 =
@@ -39189,7 +39194,7 @@ AsyncLocalStorage.snapshot()"""
             /// </param>
             [<Import("checkPrime", "crypto")>]
             static member checkPrime
-                (value: Node.NodeJS.ArrayBufferView, callback: Exports.checkPrime.callback)
+                (value: Node.NodeJS.ArrayBufferView, callback: Exports.checkPrime__.callback)
                 : unit
                 =
                 nativeOnly
@@ -39201,7 +39206,7 @@ AsyncLocalStorage.snapshot()"""
             /// A possible prime encoded as a sequence of big endian octets of arbitrary length.
             /// </param>
             [<Import("checkPrime", "crypto")>]
-            static member checkPrime(value: obj, callback: Exports.checkPrime.callback) : unit =
+            static member checkPrime(value: obj, callback: Exports.checkPrime__.callback) : unit =
                 nativeOnly
 
             /// <summary>
@@ -39211,7 +39216,10 @@ AsyncLocalStorage.snapshot()"""
             /// A possible prime encoded as a sequence of big endian octets of arbitrary length.
             /// </param>
             [<Import("checkPrime", "crypto")>]
-            static member checkPrime(value: bigint, callback: Exports.checkPrime.callback) : unit =
+            static member checkPrime
+                (value: bigint, callback: Exports.checkPrime__.callback)
+                : unit
+                =
                 nativeOnly
 
             [<Import("checkPrime", "crypto")>]
@@ -39219,7 +39227,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     value: Node.NodeJS.ArrayBufferView,
                     options: Node.crypto.CheckPrimeOptions,
-                    callback: Exports.checkPrime.callback
+                    callback: Exports.checkPrime__.callback
                 )
                 : unit
                 =
@@ -39230,7 +39238,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     value: obj,
                     options: Node.crypto.CheckPrimeOptions,
-                    callback: Exports.checkPrime.callback
+                    callback: Exports.checkPrime__.callback
                 )
                 : unit
                 =
@@ -39241,7 +39249,7 @@ AsyncLocalStorage.snapshot()"""
                 (
                     value: bigint,
                     options: Node.crypto.CheckPrimeOptions,
-                    callback: Exports.checkPrime.callback
+                    callback: Exports.checkPrime__.callback
                 )
                 : unit
                 =
@@ -43002,8 +43010,8 @@ KeyObject.from($0)"""
                     key: string,
                     curve: string,
                     ?inputEncoding: Node.crypto.BinaryToTextEncoding,
-                    ?outputEncoding: ECDH.convertKey.outputEncoding,
-                    ?format: ECDH.convertKey.format
+                    ?outputEncoding: ECDH.convertKey__.outputEncoding,
+                    ?format: ECDH.convertKey__.format
                 )
                 : U2<Node.NonSharedBuffer, string>
                 =
@@ -43065,8 +43073,8 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                     key: Node.NodeJS.ArrayBufferView,
                     curve: string,
                     ?inputEncoding: Node.crypto.BinaryToTextEncoding,
-                    ?outputEncoding: ECDH.convertKey.outputEncoding,
-                    ?format: ECDH.convertKey.format
+                    ?outputEncoding: ECDH.convertKey__.outputEncoding,
+                    ?format: ECDH.convertKey__.format
                 )
                 : U2<Node.NonSharedBuffer, string>
                 =
@@ -46839,7 +46847,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
 
         module ECDH =
 
-            module convertKey =
+            module convertKey__ =
 
                 [<RequireQualifiedAccess>]
                 [<StringEnum(CaseRules.None)>]
@@ -47099,11 +47107,11 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
         module Exports =
 
             [<RequireQualifiedAccess>]
-            type getFips =
+            type getFips__ =
                 | ``1`` = 1
                 | ``0`` = 0
 
-            module generateKey =
+            module generateKey__ =
 
                 [<RequireQualifiedAccess>]
                 [<StringEnum(CaseRules.None)>]
@@ -47122,7 +47130,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 type callback =
                     delegate of err: Exception option * key: Node.crypto.KeyObject -> unit
 
-            module generateKeySync =
+            module generateKeySync__ =
 
                 [<RequireQualifiedAccess>]
                 [<StringEnum(CaseRules.None)>]
@@ -47138,35 +47146,35 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                     [<ParamObject; Emit("$0")>]
                     static member Create(length: float) : options = nativeOnly
 
-            module pbkdf2 =
+            module pbkdf2__ =
 
                 type callback =
                     delegate of err: Exception option * derivedKey: Node.NonSharedBuffer -> unit
 
-            module randomBytes =
+            module randomBytes__ =
 
                 type callback =
                     delegate of err: Exception option * buf: Node.NonSharedBuffer -> unit
 
-            module pseudoRandomBytes =
+            module pseudoRandomBytes__ =
 
                 type callback =
                     delegate of err: Exception option * buf: Node.NonSharedBuffer -> unit
 
-            module randomInt =
+            module randomInt__ =
 
                 type callback = delegate of err: Exception option * value: float -> unit
 
-            module randomFill =
+            module randomFill__ =
 
                 type callback<'T> = delegate of err: Exception option * buf: 'T -> unit
 
-            module scrypt =
+            module scrypt__ =
 
                 type callback =
                     delegate of err: Exception option * derivedKey: Node.NonSharedBuffer -> unit
 
-            module generateKeyPair =
+            module generateKeyPair__ =
 
                 type callback =
                     delegate of
@@ -47196,16 +47204,16 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                         privateKey: Node.crypto.KeyObject ->
                             unit
 
-            module sign =
+            module sign__ =
 
                 type callback =
                     delegate of error: Exception option * data: Node.NonSharedBuffer -> unit
 
-            module verify =
+            module verify__ =
 
                 type callback = delegate of error: Exception option * result: bool -> unit
 
-            module diffieHellman =
+            module diffieHellman__ =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -47220,7 +47228,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                         =
                         nativeOnly
 
-            module hash =
+            module hash__ =
 
                 [<RequireQualifiedAccess>]
                 [<StringEnum(CaseRules.None)>]
@@ -47231,11 +47239,11 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                     | binary
                     | buffer
 
-            module hkdf =
+            module hkdf__ =
 
                 type callback = delegate of err: Exception option * derivedKey: obj -> unit
 
-            module generatePrime =
+            module generatePrime__ =
 
                 type callback = delegate of err: Exception option * prime: obj -> unit
 
@@ -47243,7 +47251,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
 
                 type callback_2 = delegate of err: Exception option * prime: U2<obj, bigint> -> unit
 
-            module checkPrime =
+            module checkPrime__ =
 
                 type callback = delegate of err: Exception option * result: bool -> unit
 
@@ -47280,14 +47288,14 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// </param>
             [<Import("createSocket", "dgram")>]
             static member createSocket
-                (``type``: Node.dgram.SocketType, ?callback: Exports.createSocket.callback)
+                (``type``: Node.dgram.SocketType, ?callback: Exports.createSocket__.callback)
                 : Node.dgram.Socket
                 =
                 nativeOnly
 
             [<Import("createSocket", "dgram")>]
             static member createSocket
-                (options: Node.dgram.SocketOptions, ?callback: Exports.createSocket.callback)
+                (options: Node.dgram.SocketOptions, ?callback: Exports.createSocket__.callback)
                 : Node.dgram.Socket
                 =
                 nativeOnly
@@ -50573,7 +50581,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
 
         module Exports =
 
-            module createSocket =
+            module createSocket__ =
 
                 type callback =
                     delegate of msg: Node.NonSharedBuffer * rinfo: Node.dgram.RemoteInfo -> unit
@@ -52252,7 +52260,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// </summary>
             [<Import("lookup", "dns")>]
             static member lookup
-                (hostname: string, family: float, callback: Exports.lookup.callback)
+                (hostname: string, family: float, callback: Exports.lookup__.callback)
                 : unit
                 =
                 nativeOnly
@@ -52262,7 +52270,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 (
                     hostname: string,
                     options: Node.dns.LookupOneOptions,
-                    callback: Exports.lookup.callback
+                    callback: Exports.lookup__.callback
                 )
                 : unit
                 =
@@ -52273,7 +52281,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 (
                     hostname: string,
                     options: Node.dns.LookupAllOptions,
-                    callback: Exports.lookup.callback_1
+                    callback: Exports.lookup__.callback_1
                 )
                 : unit
                 =
@@ -52284,14 +52292,14 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 (
                     hostname: string,
                     options: Node.dns.LookupOptions,
-                    callback: Exports.lookup.callback_2
+                    callback: Exports.lookup__.callback_2
                 )
                 : unit
                 =
                 nativeOnly
 
             [<Import("lookup", "dns")>]
-            static member lookup(hostname: string, callback: Exports.lookup.callback) : unit =
+            static member lookup(hostname: string, callback: Exports.lookup__.callback) : unit =
                 nativeOnly
 
             /// <summary>
@@ -52317,7 +52325,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// </summary>
             [<Import("lookupService", "dns")>]
             static member lookupService
-                (address: string, port: float, callback: Exports.lookupService.callback)
+                (address: string, port: float, callback: Exports.lookupService__.callback)
                 : unit
                 =
                 nativeOnly
@@ -52339,15 +52347,15 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// Resource record type.
             /// </param>
             [<Import("resolve", "dns")>]
-            static member resolve(hostname: string, callback: Exports.resolve.callback) : unit =
+            static member resolve(hostname: string, callback: Exports.resolve__.callback) : unit =
                 nativeOnly
 
             [<Import("resolve", "dns")>]
             static member resolve
                 (
                     hostname: string,
-                    rrtype: Exports.resolve.rrtype,
-                    callback: Exports.resolve.callback
+                    rrtype: Exports.resolve__.rrtype,
+                    callback: Exports.resolve__.callback
                 )
                 : unit
                 =
@@ -52355,63 +52363,63 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
 
             [<Import("resolve", "dns")>]
             static member resolve
-                (hostname: string, rrtype: string, callback: Exports.resolve.callback_1)
+                (hostname: string, rrtype: string, callback: Exports.resolve__.callback_1)
                 : unit
                 =
                 nativeOnly
 
             [<Import("resolve", "dns")>]
             static member resolve
-                (hostname: string, rrtype: string, callback: Exports.resolve.callback_2)
+                (hostname: string, rrtype: string, callback: Exports.resolve__.callback_2)
                 : unit
                 =
                 nativeOnly
 
             [<Import("resolve", "dns")>]
             static member resolve
-                (hostname: string, rrtype: string, callback: Exports.resolve.callback_3)
+                (hostname: string, rrtype: string, callback: Exports.resolve__.callback_3)
                 : unit
                 =
                 nativeOnly
 
             [<Import("resolve", "dns")>]
             static member resolve
-                (hostname: string, rrtype: string, callback: Exports.resolve.callback_4)
+                (hostname: string, rrtype: string, callback: Exports.resolve__.callback_4)
                 : unit
                 =
                 nativeOnly
 
             [<Import("resolve", "dns")>]
             static member resolve
-                (hostname: string, rrtype: string, callback: Exports.resolve.callback_5)
+                (hostname: string, rrtype: string, callback: Exports.resolve__.callback_5)
                 : unit
                 =
                 nativeOnly
 
             [<Import("resolve", "dns")>]
             static member resolve
-                (hostname: string, rrtype: string, callback: Exports.resolve.callback_6)
+                (hostname: string, rrtype: string, callback: Exports.resolve__.callback_6)
                 : unit
                 =
                 nativeOnly
 
             [<Import("resolve", "dns")>]
             static member resolve
-                (hostname: string, rrtype: string, callback: Exports.resolve.callback_7)
+                (hostname: string, rrtype: string, callback: Exports.resolve__.callback_7)
                 : unit
                 =
                 nativeOnly
 
             [<Import("resolve", "dns")>]
             static member resolve
-                (hostname: string, rrtype: string, callback: Exports.resolve.callback_8)
+                (hostname: string, rrtype: string, callback: Exports.resolve__.callback_8)
                 : unit
                 =
                 nativeOnly
 
             [<Import("resolve", "dns")>]
             static member resolve
-                (hostname: string, rrtype: string, callback: Exports.resolve.callback_9)
+                (hostname: string, rrtype: string, callback: Exports.resolve__.callback_9)
                 : unit
                 =
                 nativeOnly
@@ -52424,7 +52432,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// Host name to resolve.
             /// </param>
             [<Import("resolve4", "dns")>]
-            static member resolve4(hostname: string, callback: Exports.resolve4.callback) : unit =
+            static member resolve4(hostname: string, callback: Exports.resolve4__.callback) : unit =
                 nativeOnly
 
             [<Import("resolve4", "dns")>]
@@ -52432,7 +52440,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 (
                     hostname: string,
                     options: Node.dns.ResolveWithTtlOptions,
-                    callback: Exports.resolve4.callback_1
+                    callback: Exports.resolve4__.callback_1
                 )
                 : unit
                 =
@@ -52443,7 +52451,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 (
                     hostname: string,
                     options: Node.dns.ResolveOptions,
-                    callback: Exports.resolve4.callback_2
+                    callback: Exports.resolve4__.callback_2
                 )
                 : unit
                 =
@@ -52457,7 +52465,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// Host name to resolve.
             /// </param>
             [<Import("resolve6", "dns")>]
-            static member resolve6(hostname: string, callback: Exports.resolve6.callback) : unit =
+            static member resolve6(hostname: string, callback: Exports.resolve6__.callback) : unit =
                 nativeOnly
 
             [<Import("resolve6", "dns")>]
@@ -52465,7 +52473,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 (
                     hostname: string,
                     options: Node.dns.ResolveWithTtlOptions,
-                    callback: Exports.resolve6.callback_1
+                    callback: Exports.resolve6__.callback_1
                 )
                 : unit
                 =
@@ -52476,7 +52484,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 (
                     hostname: string,
                     options: Node.dns.ResolveOptions,
-                    callback: Exports.resolve6.callback_2
+                    callback: Exports.resolve6__.callback_2
                 )
                 : unit
                 =
@@ -52488,7 +52496,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// </summary>
             [<Import("resolveCname", "dns")>]
             static member resolveCname
-                (hostname: string, callback: Exports.resolveCname.callback)
+                (hostname: string, callback: Exports.resolveCname__.callback)
                 : unit
                 =
                 nativeOnly
@@ -52500,7 +52508,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// </summary>
             [<Import("resolveCaa", "dns")>]
             static member resolveCaa
-                (hostname: string, callback: Exports.resolveCaa.callback)
+                (hostname: string, callback: Exports.resolveCaa__.callback)
                 : unit
                 =
                 nativeOnly
@@ -52510,7 +52518,10 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// contain an array of objects containing both a <c>priority</c> and <c>exchange</c> property (e.g. <c>[{priority: 10, exchange: 'mx.example.com'}, ...]</c>).
             /// </summary>
             [<Import("resolveMx", "dns")>]
-            static member resolveMx(hostname: string, callback: Exports.resolveMx.callback) : unit =
+            static member resolveMx
+                (hostname: string, callback: Exports.resolveMx__.callback)
+                : unit
+                =
                 nativeOnly
 
             /// <summary>
@@ -52537,7 +52548,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// </summary>
             [<Import("resolveNaptr", "dns")>]
             static member resolveNaptr
-                (hostname: string, callback: Exports.resolveNaptr.callback)
+                (hostname: string, callback: Exports.resolveNaptr__.callback)
                 : unit
                 =
                 nativeOnly
@@ -52547,7 +52558,10 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// contain an array of name server records available for <c>hostname</c> (e.g. <c>['ns1.example.com', 'ns2.example.com']</c>).
             /// </summary>
             [<Import("resolveNs", "dns")>]
-            static member resolveNs(hostname: string, callback: Exports.resolveNs.callback) : unit =
+            static member resolveNs
+                (hostname: string, callback: Exports.resolveNs__.callback)
+                : unit
+                =
                 nativeOnly
 
             /// <summary>
@@ -52556,7 +52570,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// </summary>
             [<Import("resolvePtr", "dns")>]
             static member resolvePtr
-                (hostname: string, callback: Exports.resolvePtr.callback)
+                (hostname: string, callback: Exports.resolvePtr__.callback)
                 : unit
                 =
                 nativeOnly
@@ -52588,7 +52602,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// </summary>
             [<Import("resolveSoa", "dns")>]
             static member resolveSoa
-                (hostname: string, callback: Exports.resolveSoa.callback)
+                (hostname: string, callback: Exports.resolveSoa__.callback)
                 : unit
                 =
                 nativeOnly
@@ -52613,7 +52627,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// </summary>
             [<Import("resolveSrv", "dns")>]
             static member resolveSrv
-                (hostname: string, callback: Exports.resolveSrv.callback)
+                (hostname: string, callback: Exports.resolveSrv__.callback)
                 : unit
                 =
                 nativeOnly
@@ -52639,7 +52653,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// </summary>
             [<Import("resolveTlsa", "dns")>]
             static member resolveTlsa
-                (hostname: string, callback: Exports.resolveTlsa.callback)
+                (hostname: string, callback: Exports.resolveTlsa__.callback)
                 : unit
                 =
                 nativeOnly
@@ -52652,7 +52666,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// </summary>
             [<Import("resolveTxt", "dns")>]
             static member resolveTxt
-                (hostname: string, callback: Exports.resolveTxt.callback)
+                (hostname: string, callback: Exports.resolveTxt__.callback)
                 : unit
                 =
                 nativeOnly
@@ -52689,7 +52703,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// </summary>
             [<Import("resolveAny", "dns")>]
             static member resolveAny
-                (hostname: string, callback: Exports.resolveAny.callback)
+                (hostname: string, callback: Exports.resolveAny__.callback)
                 : unit
                 =
                 nativeOnly
@@ -52702,7 +52716,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// one of the [DNS error codes](https://nodejs.org/docs/latest-v22.x/api/dns.html#error-codes).
             /// </summary>
             [<Import("reverse", "dns")>]
-            static member reverse(ip: string, callback: Exports.reverse.callback) : unit =
+            static member reverse(ip: string, callback: Exports.reverse__.callback) : unit =
                 nativeOnly
 
             /// <summary>
@@ -52714,7 +52728,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// * <c>verbatim</c>: for <c>order</c> defaulting to <c>verbatim</c>.
             /// </summary>
             [<Import("getDefaultResultOrder", "dns")>]
-            static member getDefaultResultOrder() : Exports.getDefaultResultOrder = nativeOnly
+            static member getDefaultResultOrder() : Exports.getDefaultResultOrder__ = nativeOnly
 
             /// <summary>
             /// Sets the IP address and port of servers to be used when performing DNS
@@ -52782,7 +52796,10 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// must be <c>'ipv4first'</c>, <c>'ipv6first'</c> or <c>'verbatim'</c>.
             /// </param>
             [<Import("setDefaultResultOrder", "dns")>]
-            static member setDefaultResultOrder(order: Exports.setDefaultResultOrder.order) : unit =
+            static member setDefaultResultOrder
+                (order: Exports.setDefaultResultOrder__.order)
+                : unit
+                =
                 nativeOnly
 
             [<Import("NODATA", "dns")>]
@@ -53893,12 +53910,12 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
 
             [<RequireQualifiedAccess>]
             [<StringEnum(CaseRules.None)>]
-            type getDefaultResultOrder =
+            type getDefaultResultOrder__ =
                 | ipv4first
                 | ipv6first
                 | verbatim
 
-            module lookup =
+            module lookup__ =
 
                 type callback =
                     delegate of
@@ -53918,14 +53935,14 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                         family: float ->
                             unit
 
-            module lookupService =
+            module lookupService__ =
 
                 type callback =
                     delegate of
                         err: Node.NodeJS.ErrnoException option * hostname: string * service: string ->
                             unit
 
-            module resolve =
+            module resolve__ =
 
                 type callback =
                     delegate of
@@ -54005,7 +54022,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                              > ->
                             unit
 
-            module resolve4 =
+            module resolve4__ =
 
                 type callback =
                     delegate of
@@ -54024,7 +54041,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                         addresses: U2<ResizeArray<string>, ResizeArray<Node.dns.RecordWithTtl>> ->
                             unit
 
-            module resolve6 =
+            module resolve6__ =
 
                 type callback =
                     delegate of
@@ -54043,14 +54060,14 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                         addresses: U2<ResizeArray<string>, ResizeArray<Node.dns.RecordWithTtl>> ->
                             unit
 
-            module resolveCname =
+            module resolveCname__ =
 
                 type callback =
                     delegate of
                         err: Node.NodeJS.ErrnoException option * addresses: ResizeArray<string> ->
                             unit
 
-            module resolveCaa =
+            module resolveCaa__ =
 
                 type callback =
                     delegate of
@@ -54058,7 +54075,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                         records: ResizeArray<Node.dns.CaaRecord> ->
                             unit
 
-            module resolveMx =
+            module resolveMx__ =
 
                 type callback =
                     delegate of
@@ -54066,7 +54083,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                         addresses: ResizeArray<Node.dns.MxRecord> ->
                             unit
 
-            module resolveNaptr =
+            module resolveNaptr__ =
 
                 type callback =
                     delegate of
@@ -54074,27 +54091,27 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                         addresses: ResizeArray<Node.dns.NaptrRecord> ->
                             unit
 
-            module resolveNs =
+            module resolveNs__ =
 
                 type callback =
                     delegate of
                         err: Node.NodeJS.ErrnoException option * addresses: ResizeArray<string> ->
                             unit
 
-            module resolvePtr =
+            module resolvePtr__ =
 
                 type callback =
                     delegate of
                         err: Node.NodeJS.ErrnoException option * addresses: ResizeArray<string> ->
                             unit
 
-            module resolveSoa =
+            module resolveSoa__ =
 
                 type callback =
                     delegate of
                         err: Node.NodeJS.ErrnoException option * address: Node.dns.SoaRecord -> unit
 
-            module resolveSrv =
+            module resolveSrv__ =
 
                 type callback =
                     delegate of
@@ -54102,7 +54119,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                         addresses: ResizeArray<Node.dns.SrvRecord> ->
                             unit
 
-            module resolveTlsa =
+            module resolveTlsa__ =
 
                 type callback =
                     delegate of
@@ -54110,7 +54127,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                         addresses: ResizeArray<Node.dns.TlsaRecord> ->
                             unit
 
-            module resolveTxt =
+            module resolveTxt__ =
 
                 type callback =
                     delegate of
@@ -54118,7 +54135,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                         addresses: ResizeArray<ResizeArray<string>> ->
                             unit
 
-            module resolveAny =
+            module resolveAny__ =
 
                 type callback =
                     delegate of
@@ -54126,14 +54143,14 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                         addresses: ResizeArray<Node.dns.AnyRecord> ->
                             unit
 
-            module reverse =
+            module reverse__ =
 
                 type callback =
                     delegate of
                         err: Node.NodeJS.ErrnoException option * hostnames: ResizeArray<string> ->
                             unit
 
-            module setDefaultResultOrder =
+            module setDefaultResultOrder__ =
 
                 [<RequireQualifiedAccess>]
                 [<StringEnum(CaseRules.None)>]
@@ -54258,7 +54275,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             [<Import("lookupService", "dns/promises")>]
             static member lookupService
                 (address: string, port: float)
-                : JS.Promise<Exports.lookupService>
+                : JS.Promise<Exports.lookupService__>
                 =
                 nativeOnly
 
@@ -54284,7 +54301,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
 
             [<Import("resolve", "dns/promises")>]
             static member resolve
-                (hostname: string, rrtype: Exports.resolve.rrtype_1)
+                (hostname: string, rrtype: Exports.resolve__.rrtype_1)
                 : JS.Promise<ResizeArray<string>>
                 =
                 nativeOnly
@@ -54561,7 +54578,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// * <c>verbatim</c>: for <c>verbatim</c> defaulting to <c>true</c>.
             /// </summary>
             [<Import("getDefaultResultOrder", "dns/promises")>]
-            static member getDefaultResultOrder() : Exports.getDefaultResultOrder_1 = nativeOnly
+            static member getDefaultResultOrder() : Exports.getDefaultResultOrder___1 = nativeOnly
 
             /// <summary>
             /// Sets the IP address and port of servers to be used when performing DNS
@@ -54610,7 +54627,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// </param>
             [<Import("setDefaultResultOrder", "dns/promises")>]
             static member setDefaultResultOrder
-                (order: Exports.setDefaultResultOrder.order_1)
+                (order: Exports.setDefaultResultOrder__.order_1)
                 : unit
                 =
                 nativeOnly
@@ -54781,20 +54798,21 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
 
             [<AllowNullLiteral>]
             [<Interface>]
-            type lookupService =
+            type lookupService__ =
                 abstract member hostname: string with get, set
                 abstract member service: string with get, set
 
                 [<ParamObject; Emit("$0")>]
-                static member Create(hostname: string, service: string) : lookupService = nativeOnly
+                static member Create(hostname: string, service: string) : lookupService__ =
+                    nativeOnly
 
             [<RequireQualifiedAccess>]
             [<StringEnum(CaseRules.None)>]
-            type getDefaultResultOrder_1 =
+            type getDefaultResultOrder___1 =
                 | ipv4first
                 | verbatim
 
-            module resolve =
+            module resolve__ =
 
                 [<RequireQualifiedAccess>]
                 [<StringEnum(CaseRules.None)>]
@@ -54805,7 +54823,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                     | NS
                     | PTR
 
-            module setDefaultResultOrder =
+            module setDefaultResultOrder__ =
 
                 [<RequireQualifiedAccess>]
                 [<StringEnum(CaseRules.None)>]
@@ -57797,7 +57815,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </code>
             /// </summary>
             [<Import("stat", "fs")>]
-            static member stat(path: string, callback: Exports.stat.callback) : unit = nativeOnly
+            static member stat(path: string, callback: Exports.stat__.callback) : unit = nativeOnly
 
             /// <summary>
             /// Asynchronous [<c>stat(2)</c>](http://man7.org/linux/man-pages/man2/stat.2.html). The callback gets two arguments <c>(err, stats)</c> where<c>stats</c> is an <c>fs.Stats</c> object.
@@ -57884,7 +57902,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </code>
             /// </summary>
             [<Import("stat", "fs")>]
-            static member stat(path: Node.Buffer, callback: Exports.stat.callback) : unit =
+            static member stat(path: Node.Buffer, callback: Exports.stat__.callback) : unit =
                 nativeOnly
 
             /// <summary>
@@ -57972,12 +57990,16 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </code>
             /// </summary>
             [<Import("stat", "fs")>]
-            static member stat(path: Node.url.URL, callback: Exports.stat.callback) : unit =
+            static member stat(path: Node.url.URL, callback: Exports.stat__.callback) : unit =
                 nativeOnly
 
             [<Import("stat", "fs")>]
             static member stat
-                (path: string, options: Exports.stat.options option, callback: Exports.stat.callback)
+                (
+                    path: string,
+                    options: Exports.stat__.options option,
+                    callback: Exports.stat__.callback
+                )
                 : unit
                 =
                 nativeOnly
@@ -57986,8 +58008,8 @@ EventEmitter.defaultMaxListeners = $0"""
             static member stat
                 (
                     path: Node.Buffer,
-                    options: Exports.stat.options option,
-                    callback: Exports.stat.callback
+                    options: Exports.stat__.options option,
+                    callback: Exports.stat__.callback
                 )
                 : unit
                 =
@@ -57997,8 +58019,8 @@ EventEmitter.defaultMaxListeners = $0"""
             static member stat
                 (
                     path: Node.url.URL,
-                    options: Exports.stat.options option,
-                    callback: Exports.stat.callback
+                    options: Exports.stat__.options option,
+                    callback: Exports.stat__.callback
                 )
                 : unit
                 =
@@ -58006,7 +58028,11 @@ EventEmitter.defaultMaxListeners = $0"""
 
             [<Import("stat", "fs")>]
             static member stat
-                (path: string, options: Exports.stat.options_1, callback: Exports.stat.callback_1)
+                (
+                    path: string,
+                    options: Exports.stat__.options_1,
+                    callback: Exports.stat__.callback_1
+                )
                 : unit
                 =
                 nativeOnly
@@ -58015,8 +58041,8 @@ EventEmitter.defaultMaxListeners = $0"""
             static member stat
                 (
                     path: Node.Buffer,
-                    options: Exports.stat.options_1,
-                    callback: Exports.stat.callback_1
+                    options: Exports.stat__.options_1,
+                    callback: Exports.stat__.callback_1
                 )
                 : unit
                 =
@@ -58026,8 +58052,8 @@ EventEmitter.defaultMaxListeners = $0"""
             static member stat
                 (
                     path: Node.url.URL,
-                    options: Exports.stat.options_1,
-                    callback: Exports.stat.callback_1
+                    options: Exports.stat__.options_1,
+                    callback: Exports.stat__.callback_1
                 )
                 : unit
                 =
@@ -58038,7 +58064,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: string,
                     options: Node.fs.StatOptions option,
-                    callback: Exports.stat.callback_2
+                    callback: Exports.stat__.callback_2
                 )
                 : unit
                 =
@@ -58049,7 +58075,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: Node.Buffer,
                     options: Node.fs.StatOptions option,
-                    callback: Exports.stat.callback_2
+                    callback: Exports.stat__.callback_2
                 )
                 : unit
                 =
@@ -58060,7 +58086,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: Node.url.URL,
                     options: Node.fs.StatOptions option,
-                    callback: Exports.stat.callback_2
+                    callback: Exports.stat__.callback_2
                 )
                 : unit
                 =
@@ -58081,25 +58107,33 @@ EventEmitter.defaultMaxListeners = $0"""
             /// See the POSIX [<c>fstat(2)</c>](http://man7.org/linux/man-pages/man2/fstat.2.html) documentation for more detail.
             /// </summary>
             [<Import("fstat", "fs")>]
-            static member fstat(fd: float, callback: Exports.fstat.callback) : unit = nativeOnly
+            static member fstat(fd: float, callback: Exports.fstat__.callback) : unit = nativeOnly
 
             [<Import("fstat", "fs")>]
             static member fstat
-                (fd: float, options: Exports.fstat.options option, callback: Exports.fstat.callback)
+                (
+                    fd: float,
+                    options: Exports.fstat__.options option,
+                    callback: Exports.fstat__.callback
+                )
                 : unit
                 =
                 nativeOnly
 
             [<Import("fstat", "fs")>]
             static member fstat
-                (fd: float, options: Exports.fstat.options_1, callback: Exports.fstat.callback_1)
+                (fd: float, options: Exports.fstat__.options_1, callback: Exports.fstat__.callback_1)
                 : unit
                 =
                 nativeOnly
 
             [<Import("fstat", "fs")>]
             static member fstat
-                (fd: float, options: Node.fs.StatOptions option, callback: Exports.fstat.callback_2)
+                (
+                    fd: float,
+                    options: Node.fs.StatOptions option,
+                    callback: Exports.fstat__.callback_2
+                )
                 : unit
                 =
                 nativeOnly
@@ -58111,14 +58145,14 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </summary>
             [<Import("fstatSync", "fs")>]
             static member fstatSync
-                (fd: float, ?options: Exports.fstatSync.options)
+                (fd: float, ?options: Exports.fstatSync__.options)
                 : Node.fs.Stats
                 =
                 nativeOnly
 
             [<Import("fstatSync", "fs")>]
             static member fstatSync
-                (fd: float, options: Exports.fstatSync.options_1)
+                (fd: float, options: Exports.fstatSync__.options_1)
                 : Node.fs.BigIntStats
                 =
                 nativeOnly
@@ -58138,17 +58172,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// See the POSIX [<c>lstat(2)</c>](http://man7.org/linux/man-pages/man2/lstat.2.html) documentation for more details.
             /// </summary>
             [<Import("lstat", "fs")>]
-            static member lstat(path: string, callback: Exports.lstat.callback) : unit = nativeOnly
-
-            /// <summary>
-            /// Retrieves the <c>fs.Stats</c> for the symbolic link referred to by the path.
-            /// The callback gets two arguments <c>(err, stats)</c> where <c>stats</c> is a <c>fs.Stats</c> object. <c>lstat()</c> is identical to <c>stat()</c>, except that if <c>path</c> is a symbolic
-            /// link, then the link itself is stat-ed, not the file that it refers to.
-            ///
-            /// See the POSIX [<c>lstat(2)</c>](http://man7.org/linux/man-pages/man2/lstat.2.html) documentation for more details.
-            /// </summary>
-            [<Import("lstat", "fs")>]
-            static member lstat(path: Node.Buffer, callback: Exports.lstat.callback) : unit =
+            static member lstat(path: string, callback: Exports.lstat__.callback) : unit =
                 nativeOnly
 
             /// <summary>
@@ -58159,15 +58183,26 @@ EventEmitter.defaultMaxListeners = $0"""
             /// See the POSIX [<c>lstat(2)</c>](http://man7.org/linux/man-pages/man2/lstat.2.html) documentation for more details.
             /// </summary>
             [<Import("lstat", "fs")>]
-            static member lstat(path: Node.url.URL, callback: Exports.lstat.callback) : unit =
+            static member lstat(path: Node.Buffer, callback: Exports.lstat__.callback) : unit =
+                nativeOnly
+
+            /// <summary>
+            /// Retrieves the <c>fs.Stats</c> for the symbolic link referred to by the path.
+            /// The callback gets two arguments <c>(err, stats)</c> where <c>stats</c> is a <c>fs.Stats</c> object. <c>lstat()</c> is identical to <c>stat()</c>, except that if <c>path</c> is a symbolic
+            /// link, then the link itself is stat-ed, not the file that it refers to.
+            ///
+            /// See the POSIX [<c>lstat(2)</c>](http://man7.org/linux/man-pages/man2/lstat.2.html) documentation for more details.
+            /// </summary>
+            [<Import("lstat", "fs")>]
+            static member lstat(path: Node.url.URL, callback: Exports.lstat__.callback) : unit =
                 nativeOnly
 
             [<Import("lstat", "fs")>]
             static member lstat
                 (
                     path: string,
-                    options: Exports.lstat.options option,
-                    callback: Exports.lstat.callback
+                    options: Exports.lstat__.options option,
+                    callback: Exports.lstat__.callback
                 )
                 : unit
                 =
@@ -58177,8 +58212,8 @@ EventEmitter.defaultMaxListeners = $0"""
             static member lstat
                 (
                     path: Node.Buffer,
-                    options: Exports.lstat.options option,
-                    callback: Exports.lstat.callback
+                    options: Exports.lstat__.options option,
+                    callback: Exports.lstat__.callback
                 )
                 : unit
                 =
@@ -58188,37 +58223,8 @@ EventEmitter.defaultMaxListeners = $0"""
             static member lstat
                 (
                     path: Node.url.URL,
-                    options: Exports.lstat.options option,
-                    callback: Exports.lstat.callback
-                )
-                : unit
-                =
-                nativeOnly
-
-            [<Import("lstat", "fs")>]
-            static member lstat
-                (path: string, options: Exports.lstat.options_1, callback: Exports.lstat.callback_1)
-                : unit
-                =
-                nativeOnly
-
-            [<Import("lstat", "fs")>]
-            static member lstat
-                (
-                    path: Node.Buffer,
-                    options: Exports.lstat.options_1,
-                    callback: Exports.lstat.callback_1
-                )
-                : unit
-                =
-                nativeOnly
-
-            [<Import("lstat", "fs")>]
-            static member lstat
-                (
-                    path: Node.url.URL,
-                    options: Exports.lstat.options_1,
-                    callback: Exports.lstat.callback_1
+                    options: Exports.lstat__.options option,
+                    callback: Exports.lstat__.callback
                 )
                 : unit
                 =
@@ -58228,8 +58234,41 @@ EventEmitter.defaultMaxListeners = $0"""
             static member lstat
                 (
                     path: string,
+                    options: Exports.lstat__.options_1,
+                    callback: Exports.lstat__.callback_1
+                )
+                : unit
+                =
+                nativeOnly
+
+            [<Import("lstat", "fs")>]
+            static member lstat
+                (
+                    path: Node.Buffer,
+                    options: Exports.lstat__.options_1,
+                    callback: Exports.lstat__.callback_1
+                )
+                : unit
+                =
+                nativeOnly
+
+            [<Import("lstat", "fs")>]
+            static member lstat
+                (
+                    path: Node.url.URL,
+                    options: Exports.lstat__.options_1,
+                    callback: Exports.lstat__.callback_1
+                )
+                : unit
+                =
+                nativeOnly
+
+            [<Import("lstat", "fs")>]
+            static member lstat
+                (
+                    path: string,
                     options: Node.fs.StatOptions option,
-                    callback: Exports.lstat.callback_2
+                    callback: Exports.lstat__.callback_2
                 )
                 : unit
                 =
@@ -58240,7 +58279,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: Node.Buffer,
                     options: Node.fs.StatOptions option,
-                    callback: Exports.lstat.callback_2
+                    callback: Exports.lstat__.callback_2
                 )
                 : unit
                 =
@@ -58251,7 +58290,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: Node.url.URL,
                     options: Node.fs.StatOptions option,
-                    callback: Exports.lstat.callback_2
+                    callback: Exports.lstat__.callback_2
                 )
                 : unit
                 =
@@ -58267,7 +58306,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// A path to an existing file or directory on the file system to be queried.
             /// </param>
             [<Import("statfs", "fs")>]
-            static member statfs(path: string, callback: Exports.statfs.callback) : unit =
+            static member statfs(path: string, callback: Exports.statfs__.callback) : unit =
                 nativeOnly
 
             /// <summary>
@@ -58280,7 +58319,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// A path to an existing file or directory on the file system to be queried.
             /// </param>
             [<Import("statfs", "fs")>]
-            static member statfs(path: Node.Buffer, callback: Exports.statfs.callback) : unit =
+            static member statfs(path: Node.Buffer, callback: Exports.statfs__.callback) : unit =
                 nativeOnly
 
             /// <summary>
@@ -58293,15 +58332,15 @@ EventEmitter.defaultMaxListeners = $0"""
             /// A path to an existing file or directory on the file system to be queried.
             /// </param>
             [<Import("statfs", "fs")>]
-            static member statfs(path: Node.url.URL, callback: Exports.statfs.callback) : unit =
+            static member statfs(path: Node.url.URL, callback: Exports.statfs__.callback) : unit =
                 nativeOnly
 
             [<Import("statfs", "fs")>]
             static member statfs
                 (
                     path: string,
-                    options: Exports.statfs.options option,
-                    callback: Exports.statfs.callback
+                    options: Exports.statfs__.options option,
+                    callback: Exports.statfs__.callback
                 )
                 : unit
                 =
@@ -58311,8 +58350,8 @@ EventEmitter.defaultMaxListeners = $0"""
             static member statfs
                 (
                     path: Node.Buffer,
-                    options: Exports.statfs.options option,
-                    callback: Exports.statfs.callback
+                    options: Exports.statfs__.options option,
+                    callback: Exports.statfs__.callback
                 )
                 : unit
                 =
@@ -58322,8 +58361,8 @@ EventEmitter.defaultMaxListeners = $0"""
             static member statfs
                 (
                     path: Node.url.URL,
-                    options: Exports.statfs.options option,
-                    callback: Exports.statfs.callback
+                    options: Exports.statfs__.options option,
+                    callback: Exports.statfs__.callback
                 )
                 : unit
                 =
@@ -58333,8 +58372,8 @@ EventEmitter.defaultMaxListeners = $0"""
             static member statfs
                 (
                     path: string,
-                    options: Exports.statfs.options_1,
-                    callback: Exports.statfs.callback_1
+                    options: Exports.statfs__.options_1,
+                    callback: Exports.statfs__.callback_1
                 )
                 : unit
                 =
@@ -58344,8 +58383,8 @@ EventEmitter.defaultMaxListeners = $0"""
             static member statfs
                 (
                     path: Node.Buffer,
-                    options: Exports.statfs.options_1,
-                    callback: Exports.statfs.callback_1
+                    options: Exports.statfs__.options_1,
+                    callback: Exports.statfs__.callback_1
                 )
                 : unit
                 =
@@ -58355,8 +58394,8 @@ EventEmitter.defaultMaxListeners = $0"""
             static member statfs
                 (
                     path: Node.url.URL,
-                    options: Exports.statfs.options_1,
-                    callback: Exports.statfs.callback_1
+                    options: Exports.statfs__.options_1,
+                    callback: Exports.statfs__.callback_1
                 )
                 : unit
                 =
@@ -58367,7 +58406,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: string,
                     options: Node.fs.StatFsOptions option,
-                    callback: Exports.statfs.callback_2
+                    callback: Exports.statfs__.callback_2
                 )
                 : unit
                 =
@@ -58378,7 +58417,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: Node.Buffer,
                     options: Node.fs.StatFsOptions option,
-                    callback: Exports.statfs.callback_2
+                    callback: Exports.statfs__.callback_2
                 )
                 : unit
                 =
@@ -58389,7 +58428,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: Node.url.URL,
                     options: Node.fs.StatFsOptions option,
-                    callback: Exports.statfs.callback_2
+                    callback: Exports.statfs__.callback_2
                 )
                 : unit
                 =
@@ -58406,7 +58445,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("statfsSync", "fs")>]
             static member statfsSync
-                (path: string, ?options: Exports.statfsSync.options)
+                (path: string, ?options: Exports.statfsSync__.options)
                 : Node.fs.StatsFs
                 =
                 nativeOnly
@@ -58422,7 +58461,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("statfsSync", "fs")>]
             static member statfsSync
-                (path: Node.Buffer, ?options: Exports.statfsSync.options)
+                (path: Node.Buffer, ?options: Exports.statfsSync__.options)
                 : Node.fs.StatsFs
                 =
                 nativeOnly
@@ -58438,28 +58477,28 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("statfsSync", "fs")>]
             static member statfsSync
-                (path: Node.url.URL, ?options: Exports.statfsSync.options)
+                (path: Node.url.URL, ?options: Exports.statfsSync__.options)
                 : Node.fs.StatsFs
                 =
                 nativeOnly
 
             [<Import("statfsSync", "fs")>]
             static member statfsSync
-                (path: string, options: Exports.statfsSync.options_1)
+                (path: string, options: Exports.statfsSync__.options_1)
                 : Node.fs.BigIntStatsFs
                 =
                 nativeOnly
 
             [<Import("statfsSync", "fs")>]
             static member statfsSync
-                (path: Node.Buffer, options: Exports.statfsSync.options_1)
+                (path: Node.Buffer, options: Exports.statfsSync__.options_1)
                 : Node.fs.BigIntStatsFs
                 =
                 nativeOnly
 
             [<Import("statfsSync", "fs")>]
             static member statfsSync
-                (path: Node.url.URL, options: Exports.statfsSync.options_1)
+                (path: Node.url.URL, options: Exports.statfsSync__.options_1)
                 : Node.fs.BigIntStatsFs
                 =
                 nativeOnly
@@ -59382,7 +59421,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: string,
                     options: Node.fs.ObjectEncodingOptions option,
-                    callback: Exports.readlink.callback
+                    callback: Exports.readlink__.callback
                 )
                 : unit
                 =
@@ -59404,7 +59443,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: string,
                     options: Node.BufferEncoding option,
-                    callback: Exports.readlink.callback
+                    callback: Exports.readlink__.callback
                 )
                 : unit
                 =
@@ -59426,7 +59465,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: Node.Buffer,
                     options: Node.fs.ObjectEncodingOptions option,
-                    callback: Exports.readlink.callback
+                    callback: Exports.readlink__.callback
                 )
                 : unit
                 =
@@ -59448,7 +59487,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: Node.Buffer,
                     options: Node.BufferEncoding option,
-                    callback: Exports.readlink.callback
+                    callback: Exports.readlink__.callback
                 )
                 : unit
                 =
@@ -59470,7 +59509,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: Node.url.URL,
                     options: Node.fs.ObjectEncodingOptions option,
-                    callback: Exports.readlink.callback
+                    callback: Exports.readlink__.callback
                 )
                 : unit
                 =
@@ -59492,7 +59531,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: Node.url.URL,
                     options: Node.BufferEncoding option,
-                    callback: Exports.readlink.callback
+                    callback: Exports.readlink__.callback
                 )
                 : unit
                 =
@@ -59512,7 +59551,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: string,
                     options: Node.fs.BufferEncodingOption,
-                    callback: Exports.readlink.callback_1
+                    callback: Exports.readlink__.callback_1
                 )
                 : unit
                 =
@@ -59532,7 +59571,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: Node.Buffer,
                     options: Node.fs.BufferEncodingOption,
-                    callback: Exports.readlink.callback_1
+                    callback: Exports.readlink__.callback_1
                 )
                 : unit
                 =
@@ -59552,7 +59591,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: Node.url.URL,
                     options: Node.fs.BufferEncodingOption,
-                    callback: Exports.readlink.callback_1
+                    callback: Exports.readlink__.callback_1
                 )
                 : unit
                 =
@@ -59572,7 +59611,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: string,
                     options: Node.fs.ObjectEncodingOptions option,
-                    callback: Exports.readlink.callback_2
+                    callback: Exports.readlink__.callback_2
                 )
                 : unit
                 =
@@ -59592,7 +59631,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: string,
                     options: Node.BufferEncoding option,
-                    callback: Exports.readlink.callback_2
+                    callback: Exports.readlink__.callback_2
                 )
                 : unit
                 =
@@ -59612,7 +59651,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: Node.Buffer,
                     options: Node.fs.ObjectEncodingOptions option,
-                    callback: Exports.readlink.callback_2
+                    callback: Exports.readlink__.callback_2
                 )
                 : unit
                 =
@@ -59632,7 +59671,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: Node.Buffer,
                     options: Node.BufferEncoding option,
-                    callback: Exports.readlink.callback_2
+                    callback: Exports.readlink__.callback_2
                 )
                 : unit
                 =
@@ -59652,7 +59691,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: Node.url.URL,
                     options: Node.fs.ObjectEncodingOptions option,
-                    callback: Exports.readlink.callback_2
+                    callback: Exports.readlink__.callback_2
                 )
                 : unit
                 =
@@ -59672,7 +59711,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: Node.url.URL,
                     options: Node.BufferEncoding option,
-                    callback: Exports.readlink.callback_2
+                    callback: Exports.readlink__.callback_2
                 )
                 : unit
                 =
@@ -59685,7 +59724,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
             /// </param>
             [<Import("readlink", "fs")>]
-            static member readlink(path: string, callback: Exports.readlink.callback) : unit =
+            static member readlink(path: string, callback: Exports.readlink__.callback) : unit =
                 nativeOnly
 
             /// <summary>
@@ -59695,7 +59734,10 @@ EventEmitter.defaultMaxListeners = $0"""
             /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
             /// </param>
             [<Import("readlink", "fs")>]
-            static member readlink(path: Node.Buffer, callback: Exports.readlink.callback) : unit =
+            static member readlink
+                (path: Node.Buffer, callback: Exports.readlink__.callback)
+                : unit
+                =
                 nativeOnly
 
             /// <summary>
@@ -59705,7 +59747,10 @@ EventEmitter.defaultMaxListeners = $0"""
             /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
             /// </param>
             [<Import("readlink", "fs")>]
-            static member readlink(path: Node.url.URL, callback: Exports.readlink.callback) : unit =
+            static member readlink
+                (path: Node.url.URL, callback: Exports.readlink__.callback)
+                : unit
+                =
                 nativeOnly
 
             /// <summary>
@@ -59918,7 +59963,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: string,
                     options: Node.fs.ObjectEncodingOptions option,
-                    callback: Exports.realpath.callback
+                    callback: Exports.realpath__.callback
                 )
                 : unit
                 =
@@ -59954,7 +59999,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: string,
                     options: Node.BufferEncoding option,
-                    callback: Exports.realpath.callback
+                    callback: Exports.realpath__.callback
                 )
                 : unit
                 =
@@ -59990,7 +60035,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: Node.Buffer,
                     options: Node.fs.ObjectEncodingOptions option,
-                    callback: Exports.realpath.callback
+                    callback: Exports.realpath__.callback
                 )
                 : unit
                 =
@@ -60026,7 +60071,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: Node.Buffer,
                     options: Node.BufferEncoding option,
-                    callback: Exports.realpath.callback
+                    callback: Exports.realpath__.callback
                 )
                 : unit
                 =
@@ -60062,7 +60107,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: Node.url.URL,
                     options: Node.fs.ObjectEncodingOptions option,
-                    callback: Exports.realpath.callback
+                    callback: Exports.realpath__.callback
                 )
                 : unit
                 =
@@ -60098,7 +60143,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: Node.url.URL,
                     options: Node.BufferEncoding option,
-                    callback: Exports.realpath.callback
+                    callback: Exports.realpath__.callback
                 )
                 : unit
                 =
@@ -60118,7 +60163,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: string,
                     options: Node.fs.BufferEncodingOption,
-                    callback: Exports.realpath.callback_1
+                    callback: Exports.realpath__.callback_1
                 )
                 : unit
                 =
@@ -60138,7 +60183,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: Node.Buffer,
                     options: Node.fs.BufferEncodingOption,
-                    callback: Exports.realpath.callback_1
+                    callback: Exports.realpath__.callback_1
                 )
                 : unit
                 =
@@ -60158,7 +60203,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: Node.url.URL,
                     options: Node.fs.BufferEncodingOption,
-                    callback: Exports.realpath.callback_1
+                    callback: Exports.realpath__.callback_1
                 )
                 : unit
                 =
@@ -60178,7 +60223,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: string,
                     options: Node.fs.ObjectEncodingOptions option,
-                    callback: Exports.realpath.callback_2
+                    callback: Exports.realpath__.callback_2
                 )
                 : unit
                 =
@@ -60198,7 +60243,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: string,
                     options: Node.BufferEncoding option,
-                    callback: Exports.realpath.callback_2
+                    callback: Exports.realpath__.callback_2
                 )
                 : unit
                 =
@@ -60218,7 +60263,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: Node.Buffer,
                     options: Node.fs.ObjectEncodingOptions option,
-                    callback: Exports.realpath.callback_2
+                    callback: Exports.realpath__.callback_2
                 )
                 : unit
                 =
@@ -60238,7 +60283,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: Node.Buffer,
                     options: Node.BufferEncoding option,
-                    callback: Exports.realpath.callback_2
+                    callback: Exports.realpath__.callback_2
                 )
                 : unit
                 =
@@ -60258,7 +60303,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: Node.url.URL,
                     options: Node.fs.ObjectEncodingOptions option,
-                    callback: Exports.realpath.callback_2
+                    callback: Exports.realpath__.callback_2
                 )
                 : unit
                 =
@@ -60278,7 +60323,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: Node.url.URL,
                     options: Node.BufferEncoding option,
-                    callback: Exports.realpath.callback_2
+                    callback: Exports.realpath__.callback_2
                 )
                 : unit
                 =
@@ -60291,7 +60336,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
             /// </param>
             [<Import("realpath", "fs")>]
-            static member realpath(path: string, callback: Exports.realpath.callback) : unit =
+            static member realpath(path: string, callback: Exports.realpath__.callback) : unit =
                 nativeOnly
 
             /// <summary>
@@ -60301,7 +60346,10 @@ EventEmitter.defaultMaxListeners = $0"""
             /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
             /// </param>
             [<Import("realpath", "fs")>]
-            static member realpath(path: Node.Buffer, callback: Exports.realpath.callback) : unit =
+            static member realpath
+                (path: Node.Buffer, callback: Exports.realpath__.callback)
+                : unit
+                =
                 nativeOnly
 
             /// <summary>
@@ -60311,7 +60359,10 @@ EventEmitter.defaultMaxListeners = $0"""
             /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
             /// </param>
             [<Import("realpath", "fs")>]
-            static member realpath(path: Node.url.URL, callback: Exports.realpath.callback) : unit =
+            static member realpath
+                (path: Node.url.URL, callback: Exports.realpath__.callback)
+                : unit
+                =
                 nativeOnly
 
             /// <summary>
@@ -60741,7 +60792,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </summary>
             [<Import("mkdir", "fs")>]
             static member mkdir
-                (path: string, options: Exports.mkdir.options, callback: Exports.mkdir.callback)
+                (path: string, options: Exports.mkdir__.options, callback: Exports.mkdir__.callback)
                 : unit
                 =
                 nativeOnly
@@ -60783,7 +60834,11 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </summary>
             [<Import("mkdir", "fs")>]
             static member mkdir
-                (path: Node.Buffer, options: Exports.mkdir.options, callback: Exports.mkdir.callback)
+                (
+                    path: Node.Buffer,
+                    options: Exports.mkdir__.options,
+                    callback: Exports.mkdir__.callback
+                )
                 : unit
                 =
                 nativeOnly
@@ -60827,8 +60882,8 @@ EventEmitter.defaultMaxListeners = $0"""
             static member mkdir
                 (
                     path: Node.url.URL,
-                    options: Exports.mkdir.options,
-                    callback: Exports.mkdir.callback
+                    options: Exports.mkdir__.options,
+                    callback: Exports.mkdir__.callback
                 )
                 : unit
                 =
@@ -60882,7 +60937,7 @@ EventEmitter.defaultMaxListeners = $0"""
             static member mkdir
                 (
                     path: string,
-                    options: Exports.mkdir.options_1 option,
+                    options: Exports.mkdir__.options_1 option,
                     callback: Node.fs.NoParamCallback
                 )
                 : unit
@@ -60937,7 +60992,7 @@ EventEmitter.defaultMaxListeners = $0"""
             static member mkdir
                 (
                     path: Node.Buffer,
-                    options: Exports.mkdir.options_1 option,
+                    options: Exports.mkdir__.options_1 option,
                     callback: Node.fs.NoParamCallback
                 )
                 : unit
@@ -60992,7 +61047,7 @@ EventEmitter.defaultMaxListeners = $0"""
             static member mkdir
                 (
                     path: Node.url.URL,
-                    options: Exports.mkdir.options_1 option,
+                    options: Exports.mkdir__.options_1 option,
                     callback: Node.fs.NoParamCallback
                 )
                 : unit
@@ -61011,7 +61066,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("mkdir", "fs")>]
             static member mkdir
-                (path: string, options: float option, callback: Exports.mkdir.callback)
+                (path: string, options: float option, callback: Exports.mkdir__.callback)
                 : unit
                 =
                 nativeOnly
@@ -61028,7 +61083,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("mkdir", "fs")>]
             static member mkdir
-                (path: string, options: string option, callback: Exports.mkdir.callback)
+                (path: string, options: string option, callback: Exports.mkdir__.callback)
                 : unit
                 =
                 nativeOnly
@@ -61048,7 +61103,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: string,
                     options: Node.fs.MakeDirectoryOptions option,
-                    callback: Exports.mkdir.callback
+                    callback: Exports.mkdir__.callback
                 )
                 : unit
                 =
@@ -61066,7 +61121,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("mkdir", "fs")>]
             static member mkdir
-                (path: Node.Buffer, options: float option, callback: Exports.mkdir.callback)
+                (path: Node.Buffer, options: float option, callback: Exports.mkdir__.callback)
                 : unit
                 =
                 nativeOnly
@@ -61083,7 +61138,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("mkdir", "fs")>]
             static member mkdir
-                (path: Node.Buffer, options: string option, callback: Exports.mkdir.callback)
+                (path: Node.Buffer, options: string option, callback: Exports.mkdir__.callback)
                 : unit
                 =
                 nativeOnly
@@ -61103,7 +61158,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: Node.Buffer,
                     options: Node.fs.MakeDirectoryOptions option,
-                    callback: Exports.mkdir.callback
+                    callback: Exports.mkdir__.callback
                 )
                 : unit
                 =
@@ -61121,7 +61176,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("mkdir", "fs")>]
             static member mkdir
-                (path: Node.url.URL, options: float option, callback: Exports.mkdir.callback)
+                (path: Node.url.URL, options: float option, callback: Exports.mkdir__.callback)
                 : unit
                 =
                 nativeOnly
@@ -61138,7 +61193,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("mkdir", "fs")>]
             static member mkdir
-                (path: Node.url.URL, options: string option, callback: Exports.mkdir.callback)
+                (path: Node.url.URL, options: string option, callback: Exports.mkdir__.callback)
                 : unit
                 =
                 nativeOnly
@@ -61158,7 +61213,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: Node.url.URL,
                     options: Node.fs.MakeDirectoryOptions option,
-                    callback: Exports.mkdir.callback
+                    callback: Exports.mkdir__.callback
                 )
                 : unit
                 =
@@ -61201,7 +61256,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </summary>
             [<Import("mkdirSync", "fs")>]
             static member mkdirSync
-                (path: string, options: Exports.mkdirSync.options)
+                (path: string, options: Exports.mkdirSync__.options)
                 : string option
                 =
                 nativeOnly
@@ -61214,7 +61269,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </summary>
             [<Import("mkdirSync", "fs")>]
             static member mkdirSync
-                (path: Node.Buffer, options: Exports.mkdirSync.options)
+                (path: Node.Buffer, options: Exports.mkdirSync__.options)
                 : string option
                 =
                 nativeOnly
@@ -61227,7 +61282,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </summary>
             [<Import("mkdirSync", "fs")>]
             static member mkdirSync
-                (path: Node.url.URL, options: Exports.mkdirSync.options)
+                (path: Node.url.URL, options: Exports.mkdirSync__.options)
                 : string option
                 =
                 nativeOnly
@@ -61282,7 +61337,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// should be created. If a string is passed, it is parsed as an octal integer. If not specified, defaults to <c>0o777</c>.
             /// </param>
             [<Import("mkdirSync", "fs")>]
-            static member mkdirSync(path: string, options: Exports.mkdirSync.options_1) : unit =
+            static member mkdirSync(path: string, options: Exports.mkdirSync__.options_1) : unit =
                 nativeOnly
 
             /// <summary>
@@ -61336,7 +61391,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("mkdirSync", "fs")>]
             static member mkdirSync
-                (path: Node.Buffer, options: Exports.mkdirSync.options_1)
+                (path: Node.Buffer, options: Exports.mkdirSync__.options_1)
                 : unit
                 =
                 nativeOnly
@@ -61392,7 +61447,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("mkdirSync", "fs")>]
             static member mkdirSync
-                (path: Node.url.URL, options: Exports.mkdirSync.options_1)
+                (path: Node.url.URL, options: Exports.mkdirSync__.options_1)
                 : unit
                 =
                 nativeOnly
@@ -61511,7 +61566,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     prefix: string,
                     options: Node.fs.ObjectEncodingOptions option,
-                    callback: Exports.mkdtemp.callback
+                    callback: Exports.mkdtemp__.callback
                 )
                 : unit
                 =
@@ -61580,7 +61635,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     prefix: string,
                     options: Node.BufferEncoding option,
-                    callback: Exports.mkdtemp.callback
+                    callback: Exports.mkdtemp__.callback
                 )
                 : unit
                 =
@@ -61598,7 +61653,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     prefix: string,
                     options: Node.fs.BufferEncodingOption,
-                    callback: Exports.mkdtemp.callback_1
+                    callback: Exports.mkdtemp__.callback_1
                 )
                 : unit
                 =
@@ -61616,7 +61671,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     prefix: string,
                     options: Node.fs.ObjectEncodingOptions option,
-                    callback: Exports.mkdtemp.callback_2
+                    callback: Exports.mkdtemp__.callback_2
                 )
                 : unit
                 =
@@ -61634,7 +61689,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     prefix: string,
                     options: Node.BufferEncoding option,
-                    callback: Exports.mkdtemp.callback_2
+                    callback: Exports.mkdtemp__.callback_2
                 )
                 : unit
                 =
@@ -61645,7 +61700,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// Generates six random characters to be appended behind a required prefix to create a unique temporary directory.
             /// </summary>
             [<Import("mkdtemp", "fs")>]
-            static member mkdtemp(prefix: string, callback: Exports.mkdtemp.callback) : unit =
+            static member mkdtemp(prefix: string, callback: Exports.mkdtemp__.callback) : unit =
                 nativeOnly
 
             /// <summary>
@@ -61719,8 +61774,8 @@ EventEmitter.defaultMaxListeners = $0"""
             static member readdir
                 (
                     path: string,
-                    options: Exports.readdir.options option,
-                    callback: Exports.readdir.callback
+                    options: Exports.readdir__.options option,
+                    callback: Exports.readdir__.callback
                 )
                 : unit
                 =
@@ -61743,7 +61798,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: string,
                     options: Node.BufferEncoding option,
-                    callback: Exports.readdir.callback
+                    callback: Exports.readdir__.callback
                 )
                 : unit
                 =
@@ -61765,8 +61820,8 @@ EventEmitter.defaultMaxListeners = $0"""
             static member readdir
                 (
                     path: Node.Buffer,
-                    options: Exports.readdir.options option,
-                    callback: Exports.readdir.callback
+                    options: Exports.readdir__.options option,
+                    callback: Exports.readdir__.callback
                 )
                 : unit
                 =
@@ -61789,7 +61844,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: Node.Buffer,
                     options: Node.BufferEncoding option,
-                    callback: Exports.readdir.callback
+                    callback: Exports.readdir__.callback
                 )
                 : unit
                 =
@@ -61811,8 +61866,8 @@ EventEmitter.defaultMaxListeners = $0"""
             static member readdir
                 (
                     path: Node.url.URL,
-                    options: Exports.readdir.options option,
-                    callback: Exports.readdir.callback
+                    options: Exports.readdir__.options option,
+                    callback: Exports.readdir__.callback
                 )
                 : unit
                 =
@@ -61835,7 +61890,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: Node.url.URL,
                     options: Node.BufferEncoding option,
-                    callback: Exports.readdir.callback
+                    callback: Exports.readdir__.callback
                 )
                 : unit
                 =
@@ -61854,8 +61909,8 @@ EventEmitter.defaultMaxListeners = $0"""
             static member readdir
                 (
                     path: string,
-                    options: Exports.readdir.options_1,
-                    callback: Exports.readdir.callback_1
+                    options: Exports.readdir__.options_1,
+                    callback: Exports.readdir__.callback_1
                 )
                 : unit
                 =
@@ -61874,8 +61929,8 @@ EventEmitter.defaultMaxListeners = $0"""
             static member readdir
                 (
                     path: Node.Buffer,
-                    options: Exports.readdir.options_1,
-                    callback: Exports.readdir.callback_1
+                    options: Exports.readdir__.options_1,
+                    callback: Exports.readdir__.callback_1
                 )
                 : unit
                 =
@@ -61894,8 +61949,8 @@ EventEmitter.defaultMaxListeners = $0"""
             static member readdir
                 (
                     path: Node.url.URL,
-                    options: Exports.readdir.options_1,
-                    callback: Exports.readdir.callback_1
+                    options: Exports.readdir__.options_1,
+                    callback: Exports.readdir__.callback_1
                 )
                 : unit
                 =
@@ -61914,8 +61969,8 @@ EventEmitter.defaultMaxListeners = $0"""
             static member readdir
                 (
                     path: string,
-                    options: Exports.readdir.options_2 option,
-                    callback: Exports.readdir.callback_2
+                    options: Exports.readdir__.options_2 option,
+                    callback: Exports.readdir__.callback_2
                 )
                 : unit
                 =
@@ -61935,7 +61990,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: string,
                     options: Node.BufferEncoding option,
-                    callback: Exports.readdir.callback_2
+                    callback: Exports.readdir__.callback_2
                 )
                 : unit
                 =
@@ -61954,8 +62009,8 @@ EventEmitter.defaultMaxListeners = $0"""
             static member readdir
                 (
                     path: Node.Buffer,
-                    options: Exports.readdir.options_2 option,
-                    callback: Exports.readdir.callback_2
+                    options: Exports.readdir__.options_2 option,
+                    callback: Exports.readdir__.callback_2
                 )
                 : unit
                 =
@@ -61975,7 +62030,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: Node.Buffer,
                     options: Node.BufferEncoding option,
-                    callback: Exports.readdir.callback_2
+                    callback: Exports.readdir__.callback_2
                 )
                 : unit
                 =
@@ -61994,8 +62049,8 @@ EventEmitter.defaultMaxListeners = $0"""
             static member readdir
                 (
                     path: Node.url.URL,
-                    options: Exports.readdir.options_2 option,
-                    callback: Exports.readdir.callback_2
+                    options: Exports.readdir__.options_2 option,
+                    callback: Exports.readdir__.callback_2
                 )
                 : unit
                 =
@@ -62015,7 +62070,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: Node.url.URL,
                     options: Node.BufferEncoding option,
-                    callback: Exports.readdir.callback_2
+                    callback: Exports.readdir__.callback_2
                 )
                 : unit
                 =
@@ -62028,7 +62083,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
             /// </param>
             [<Import("readdir", "fs")>]
-            static member readdir(path: string, callback: Exports.readdir.callback) : unit =
+            static member readdir(path: string, callback: Exports.readdir__.callback) : unit =
                 nativeOnly
 
             /// <summary>
@@ -62038,7 +62093,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
             /// </param>
             [<Import("readdir", "fs")>]
-            static member readdir(path: Node.Buffer, callback: Exports.readdir.callback) : unit =
+            static member readdir(path: Node.Buffer, callback: Exports.readdir__.callback) : unit =
                 nativeOnly
 
             /// <summary>
@@ -62048,7 +62103,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
             /// </param>
             [<Import("readdir", "fs")>]
-            static member readdir(path: Node.url.URL, callback: Exports.readdir.callback) : unit =
+            static member readdir(path: Node.url.URL, callback: Exports.readdir__.callback) : unit =
                 nativeOnly
 
             /// <summary>
@@ -62064,28 +62119,8 @@ EventEmitter.defaultMaxListeners = $0"""
             static member readdir
                 (
                     path: string,
-                    options: Exports.readdir.options_3,
-                    callback: Exports.readdir.callback_3
-                )
-                : unit
-                =
-                nativeOnly
-
-            /// <summary>
-            /// Asynchronous readdir(3) - read a directory.
-            /// </summary>
-            /// <param name="path">
-            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-            /// </param>
-            /// <param name="options">
-            /// If called with <c>withFileTypes: true</c> the result data will be an array of Dirent.
-            /// </param>
-            [<Import("readdir", "fs")>]
-            static member readdir
-                (
-                    path: Node.Buffer,
-                    options: Exports.readdir.options_3,
-                    callback: Exports.readdir.callback_3
+                    options: Exports.readdir__.options_3,
+                    callback: Exports.readdir__.callback_3
                 )
                 : unit
                 =
@@ -62103,9 +62138,29 @@ EventEmitter.defaultMaxListeners = $0"""
             [<Import("readdir", "fs")>]
             static member readdir
                 (
+                    path: Node.Buffer,
+                    options: Exports.readdir__.options_3,
+                    callback: Exports.readdir__.callback_3
+                )
+                : unit
+                =
+                nativeOnly
+
+            /// <summary>
+            /// Asynchronous readdir(3) - read a directory.
+            /// </summary>
+            /// <param name="path">
+            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
+            /// </param>
+            /// <param name="options">
+            /// If called with <c>withFileTypes: true</c> the result data will be an array of Dirent.
+            /// </param>
+            [<Import("readdir", "fs")>]
+            static member readdir
+                (
                     path: Node.url.URL,
-                    options: Exports.readdir.options_3,
-                    callback: Exports.readdir.callback_3
+                    options: Exports.readdir__.options_3,
+                    callback: Exports.readdir__.callback_3
                 )
                 : unit
                 =
@@ -62124,8 +62179,8 @@ EventEmitter.defaultMaxListeners = $0"""
             static member readdir
                 (
                     path: string,
-                    options: Exports.readdir.options_4,
-                    callback: Exports.readdir.callback_4
+                    options: Exports.readdir__.options_4,
+                    callback: Exports.readdir__.callback_4
                 )
                 : unit
                 =
@@ -62144,8 +62199,8 @@ EventEmitter.defaultMaxListeners = $0"""
             static member readdir
                 (
                     path: Node.Buffer,
-                    options: Exports.readdir.options_4,
-                    callback: Exports.readdir.callback_4
+                    options: Exports.readdir__.options_4,
+                    callback: Exports.readdir__.callback_4
                 )
                 : unit
                 =
@@ -62164,8 +62219,8 @@ EventEmitter.defaultMaxListeners = $0"""
             static member readdir
                 (
                     path: Node.url.URL,
-                    options: Exports.readdir.options_4,
-                    callback: Exports.readdir.callback_4
+                    options: Exports.readdir__.options_4,
+                    callback: Exports.readdir__.callback_4
                 )
                 : unit
                 =
@@ -62200,7 +62255,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </summary>
             [<Import("readdirSync", "fs")>]
             static member readdirSync
-                (path: string, options: Exports.readdirSync.options)
+                (path: string, options: Exports.readdirSync__.options)
                 : ResizeArray<string>
                 =
                 nativeOnly
@@ -62253,7 +62308,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </summary>
             [<Import("readdirSync", "fs")>]
             static member readdirSync
-                (path: Node.Buffer, options: Exports.readdirSync.options)
+                (path: Node.Buffer, options: Exports.readdirSync__.options)
                 : ResizeArray<string>
                 =
                 nativeOnly
@@ -62306,7 +62361,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </summary>
             [<Import("readdirSync", "fs")>]
             static member readdirSync
-                (path: Node.url.URL, options: Exports.readdirSync.options)
+                (path: Node.url.URL, options: Exports.readdirSync__.options)
                 : ResizeArray<string>
                 =
                 nativeOnly
@@ -62341,7 +62396,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("readdirSync", "fs")>]
             static member readdirSync
-                (path: string, options: Exports.readdirSync.options_1)
+                (path: string, options: Exports.readdirSync__.options_1)
                 : ResizeArray<Node.NonSharedBuffer>
                 =
                 nativeOnly
@@ -62357,7 +62412,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("readdirSync", "fs")>]
             static member readdirSync
-                (path: Node.Buffer, options: Exports.readdirSync.options_1)
+                (path: Node.Buffer, options: Exports.readdirSync__.options_1)
                 : ResizeArray<Node.NonSharedBuffer>
                 =
                 nativeOnly
@@ -62373,7 +62428,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("readdirSync", "fs")>]
             static member readdirSync
-                (path: Node.url.URL, options: Exports.readdirSync.options_1)
+                (path: Node.url.URL, options: Exports.readdirSync__.options_1)
                 : ResizeArray<Node.NonSharedBuffer>
                 =
                 nativeOnly
@@ -62389,7 +62444,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("readdirSync", "fs")>]
             static member readdirSync
-                (path: string, options: Exports.readdirSync.options_2)
+                (path: string, options: Exports.readdirSync__.options_2)
                 : U2<ResizeArray<string>, ResizeArray<Node.NonSharedBuffer>>
                 =
                 nativeOnly
@@ -62405,7 +62460,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("readdirSync", "fs")>]
             static member readdirSync
-                (path: Node.Buffer, options: Exports.readdirSync.options_2)
+                (path: Node.Buffer, options: Exports.readdirSync__.options_2)
                 : U2<ResizeArray<string>, ResizeArray<Node.NonSharedBuffer>>
                 =
                 nativeOnly
@@ -62421,7 +62476,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("readdirSync", "fs")>]
             static member readdirSync
-                (path: Node.url.URL, options: Exports.readdirSync.options_2)
+                (path: Node.url.URL, options: Exports.readdirSync__.options_2)
                 : U2<ResizeArray<string>, ResizeArray<Node.NonSharedBuffer>>
                 =
                 nativeOnly
@@ -62437,7 +62492,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("readdirSync", "fs")>]
             static member readdirSync
-                (path: string, options: Exports.readdirSync.options_3)
+                (path: string, options: Exports.readdirSync__.options_3)
                 : ResizeArray<Node.fs.Dirent>
                 =
                 nativeOnly
@@ -62453,7 +62508,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("readdirSync", "fs")>]
             static member readdirSync
-                (path: Node.Buffer, options: Exports.readdirSync.options_3)
+                (path: Node.Buffer, options: Exports.readdirSync__.options_3)
                 : ResizeArray<Node.fs.Dirent>
                 =
                 nativeOnly
@@ -62469,7 +62524,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("readdirSync", "fs")>]
             static member readdirSync
-                (path: Node.url.URL, options: Exports.readdirSync.options_3)
+                (path: Node.url.URL, options: Exports.readdirSync__.options_3)
                 : ResizeArray<Node.fs.Dirent>
                 =
                 nativeOnly
@@ -62485,7 +62540,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("readdirSync", "fs")>]
             static member readdirSync
-                (path: string, options: Exports.readdirSync.options_4)
+                (path: string, options: Exports.readdirSync__.options_4)
                 : ResizeArray<Node.fs.Dirent<Node.NonSharedBuffer>>
                 =
                 nativeOnly
@@ -62501,7 +62556,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("readdirSync", "fs")>]
             static member readdirSync
-                (path: Node.Buffer, options: Exports.readdirSync.options_4)
+                (path: Node.Buffer, options: Exports.readdirSync__.options_4)
                 : ResizeArray<Node.fs.Dirent<Node.NonSharedBuffer>>
                 =
                 nativeOnly
@@ -62517,7 +62572,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("readdirSync", "fs")>]
             static member readdirSync
-                (path: Node.url.URL, options: Exports.readdirSync.options_4)
+                (path: Node.url.URL, options: Exports.readdirSync__.options_4)
                 : ResizeArray<Node.fs.Dirent<Node.NonSharedBuffer>>
                 =
                 nativeOnly
@@ -62571,7 +62626,7 @@ EventEmitter.defaultMaxListeners = $0"""
                     path: string,
                     flags: float option,
                     mode: float option,
-                    callback: Exports.``open``.callback
+                    callback: Exports.open__.callback
                 )
                 : unit
                 =
@@ -62603,7 +62658,7 @@ EventEmitter.defaultMaxListeners = $0"""
                     path: string,
                     flags: float option,
                     mode: string option,
-                    callback: Exports.``open``.callback
+                    callback: Exports.open__.callback
                 )
                 : unit
                 =
@@ -62635,7 +62690,7 @@ EventEmitter.defaultMaxListeners = $0"""
                     path: string,
                     flags: string option,
                     mode: float option,
-                    callback: Exports.``open``.callback
+                    callback: Exports.open__.callback
                 )
                 : unit
                 =
@@ -62667,7 +62722,7 @@ EventEmitter.defaultMaxListeners = $0"""
                     path: string,
                     flags: string option,
                     mode: string option,
-                    callback: Exports.``open``.callback
+                    callback: Exports.open__.callback
                 )
                 : unit
                 =
@@ -62699,7 +62754,7 @@ EventEmitter.defaultMaxListeners = $0"""
                     path: Node.Buffer,
                     flags: float option,
                     mode: float option,
-                    callback: Exports.``open``.callback
+                    callback: Exports.open__.callback
                 )
                 : unit
                 =
@@ -62731,7 +62786,7 @@ EventEmitter.defaultMaxListeners = $0"""
                     path: Node.Buffer,
                     flags: float option,
                     mode: string option,
-                    callback: Exports.``open``.callback
+                    callback: Exports.open__.callback
                 )
                 : unit
                 =
@@ -62763,7 +62818,7 @@ EventEmitter.defaultMaxListeners = $0"""
                     path: Node.Buffer,
                     flags: string option,
                     mode: float option,
-                    callback: Exports.``open``.callback
+                    callback: Exports.open__.callback
                 )
                 : unit
                 =
@@ -62795,7 +62850,7 @@ EventEmitter.defaultMaxListeners = $0"""
                     path: Node.Buffer,
                     flags: string option,
                     mode: string option,
-                    callback: Exports.``open``.callback
+                    callback: Exports.open__.callback
                 )
                 : unit
                 =
@@ -62827,7 +62882,7 @@ EventEmitter.defaultMaxListeners = $0"""
                     path: Node.url.URL,
                     flags: float option,
                     mode: float option,
-                    callback: Exports.``open``.callback
+                    callback: Exports.open__.callback
                 )
                 : unit
                 =
@@ -62859,7 +62914,7 @@ EventEmitter.defaultMaxListeners = $0"""
                     path: Node.url.URL,
                     flags: float option,
                     mode: string option,
-                    callback: Exports.``open``.callback
+                    callback: Exports.open__.callback
                 )
                 : unit
                 =
@@ -62891,7 +62946,7 @@ EventEmitter.defaultMaxListeners = $0"""
                     path: Node.url.URL,
                     flags: string option,
                     mode: float option,
-                    callback: Exports.``open``.callback
+                    callback: Exports.open__.callback
                 )
                 : unit
                 =
@@ -62923,7 +62978,7 @@ EventEmitter.defaultMaxListeners = $0"""
                     path: Node.url.URL,
                     flags: string option,
                     mode: string option,
-                    callback: Exports.``open``.callback
+                    callback: Exports.open__.callback
                 )
                 : unit
                 =
@@ -62940,7 +62995,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("open", "fs")>]
             static member ``open``
-                (path: string, flags: float option, callback: Exports.``open``.callback)
+                (path: string, flags: float option, callback: Exports.open__.callback)
                 : unit
                 =
                 nativeOnly
@@ -62956,7 +63011,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("open", "fs")>]
             static member ``open``
-                (path: string, flags: string option, callback: Exports.``open``.callback)
+                (path: string, flags: string option, callback: Exports.open__.callback)
                 : unit
                 =
                 nativeOnly
@@ -62972,7 +63027,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("open", "fs")>]
             static member ``open``
-                (path: Node.Buffer, flags: float option, callback: Exports.``open``.callback)
+                (path: Node.Buffer, flags: float option, callback: Exports.open__.callback)
                 : unit
                 =
                 nativeOnly
@@ -62988,7 +63043,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("open", "fs")>]
             static member ``open``
-                (path: Node.Buffer, flags: string option, callback: Exports.``open``.callback)
+                (path: Node.Buffer, flags: string option, callback: Exports.open__.callback)
                 : unit
                 =
                 nativeOnly
@@ -63004,7 +63059,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("open", "fs")>]
             static member ``open``
-                (path: Node.url.URL, flags: float option, callback: Exports.``open``.callback)
+                (path: Node.url.URL, flags: float option, callback: Exports.open__.callback)
                 : unit
                 =
                 nativeOnly
@@ -63020,7 +63075,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("open", "fs")>]
             static member ``open``
-                (path: Node.url.URL, flags: string option, callback: Exports.``open``.callback)
+                (path: Node.url.URL, flags: string option, callback: Exports.open__.callback)
                 : unit
                 =
                 nativeOnly
@@ -63032,7 +63087,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
             /// </param>
             [<Import("open", "fs")>]
-            static member ``open``(path: string, callback: Exports.``open``.callback) : unit =
+            static member ``open``(path: string, callback: Exports.open__.callback) : unit =
                 nativeOnly
 
             /// <summary>
@@ -63042,7 +63097,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
             /// </param>
             [<Import("open", "fs")>]
-            static member ``open``(path: Node.Buffer, callback: Exports.``open``.callback) : unit =
+            static member ``open``(path: Node.Buffer, callback: Exports.open__.callback) : unit =
                 nativeOnly
 
             /// <summary>
@@ -63052,7 +63107,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
             /// </param>
             [<Import("open", "fs")>]
-            static member ``open``(path: Node.url.URL, callback: Exports.``open``.callback) : unit =
+            static member ``open``(path: Node.url.URL, callback: Exports.open__.callback) : unit =
                 nativeOnly
 
             /// <summary>
@@ -63649,7 +63704,7 @@ EventEmitter.defaultMaxListeners = $0"""
                     offset: float option,
                     length: float option,
                     position: float option,
-                    callback: Exports.write.callback<'TBuffer>
+                    callback: Exports.write__.callback<'TBuffer>
                 )
                 : unit
                 =
@@ -63674,7 +63729,7 @@ EventEmitter.defaultMaxListeners = $0"""
                     buffer: 'TBuffer,
                     offset: float option,
                     length: float option,
-                    callback: Exports.write.callback<'TBuffer>
+                    callback: Exports.write__.callback<'TBuffer>
                 )
                 : unit
                 =
@@ -63695,7 +63750,7 @@ EventEmitter.defaultMaxListeners = $0"""
                     fd: float,
                     buffer: 'TBuffer,
                     offset: float option,
-                    callback: Exports.write.callback<'TBuffer>
+                    callback: Exports.write__.callback<'TBuffer>
                 )
                 : unit
                 =
@@ -63709,7 +63764,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("write", "fs")>]
             static member write<'TBuffer>
-                (fd: float, buffer: 'TBuffer, callback: Exports.write.callback<'TBuffer>)
+                (fd: float, buffer: 'TBuffer, callback: Exports.write__.callback<'TBuffer>)
                 : unit
                 =
                 nativeOnly
@@ -63732,7 +63787,7 @@ EventEmitter.defaultMaxListeners = $0"""
                     fd: float,
                     buffer: 'TBuffer,
                     options: Node.fs.WriteOptions,
-                    callback: Exports.write.callback<'TBuffer>
+                    callback: Exports.write__.callback<'TBuffer>
                 )
                 : unit
                 =
@@ -63760,7 +63815,7 @@ EventEmitter.defaultMaxListeners = $0"""
                     string: string,
                     position: float option,
                     encoding: Node.BufferEncoding option,
-                    callback: Exports.write.callback_1
+                    callback: Exports.write__.callback_1
                 )
                 : unit
                 =
@@ -63784,7 +63839,7 @@ EventEmitter.defaultMaxListeners = $0"""
                     fd: float,
                     string: string,
                     position: float option,
-                    callback: Exports.write.callback_1
+                    callback: Exports.write__.callback_1
                 )
                 : unit
                 =
@@ -63801,7 +63856,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("write", "fs")>]
             static member write
-                (fd: float, string: string, callback: Exports.write.callback_1)
+                (fd: float, string: string, callback: Exports.write__.callback_1)
                 : unit
                 =
                 nativeOnly
@@ -63889,7 +63944,7 @@ EventEmitter.defaultMaxListeners = $0"""
                     offset: float,
                     length: float,
                     position: float option,
-                    callback: Exports.read.callback<'TBuffer>
+                    callback: Exports.read__.callback<'TBuffer>
                 )
                 : unit
                 =
@@ -63927,7 +63982,7 @@ EventEmitter.defaultMaxListeners = $0"""
                     offset: float,
                     length: float,
                     position: bigint option,
-                    callback: Exports.read.callback<'TBuffer>
+                    callback: Exports.read__.callback<'TBuffer>
                 )
                 : unit
                 =
@@ -63946,7 +64001,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     fd: float,
                     options: Node.fs.ReadOptionsWithBuffer<'TBuffer>,
-                    callback: Exports.read.callback<'TBuffer>
+                    callback: Exports.read__.callback<'TBuffer>
                 )
                 : unit
                 =
@@ -63965,7 +64020,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     fd: float,
                     options: Node.fs.ReadOptionsWithBuffer<Node.NonSharedBuffer>,
-                    callback: Exports.read.callback_1
+                    callback: Exports.read__.callback_1
                 )
                 : unit
                 =
@@ -63977,7 +64032,7 @@ EventEmitter.defaultMaxListeners = $0"""
                     fd: float,
                     buffer: 'TBuffer,
                     options: Node.fs.ReadOptions,
-                    callback: Exports.read.callback<'TBuffer>
+                    callback: Exports.read__.callback<'TBuffer>
                 )
                 : unit
                 =
@@ -63985,13 +64040,13 @@ EventEmitter.defaultMaxListeners = $0"""
 
             [<Import("read", "fs")>]
             static member read<'TBuffer>
-                (fd: float, buffer: 'TBuffer, callback: Exports.read.callback<'TBuffer>)
+                (fd: float, buffer: 'TBuffer, callback: Exports.read__.callback<'TBuffer>)
                 : unit
                 =
                 nativeOnly
 
             [<Import("read", "fs")>]
-            static member read(fd: float, callback: Exports.read.callback_1) : unit = nativeOnly
+            static member read(fd: float, callback: Exports.read__.callback_1) : unit = nativeOnly
 
             /// <summary>
             /// Returns the number of <c>bytesRead</c>.
@@ -64119,8 +64174,8 @@ EventEmitter.defaultMaxListeners = $0"""
             static member readFile
                 (
                     path: string,
-                    options: Exports.readFile.options option,
-                    callback: Exports.readFile.callback
+                    options: Exports.readFile__.options option,
+                    callback: Exports.readFile__.callback
                 )
                 : unit
                 =
@@ -64197,8 +64252,8 @@ EventEmitter.defaultMaxListeners = $0"""
             static member readFile
                 (
                     path: Node.Buffer,
-                    options: Exports.readFile.options option,
-                    callback: Exports.readFile.callback
+                    options: Exports.readFile__.options option,
+                    callback: Exports.readFile__.callback
                 )
                 : unit
                 =
@@ -64275,8 +64330,8 @@ EventEmitter.defaultMaxListeners = $0"""
             static member readFile
                 (
                     path: Node.url.URL,
-                    options: Exports.readFile.options option,
-                    callback: Exports.readFile.callback
+                    options: Exports.readFile__.options option,
+                    callback: Exports.readFile__.callback
                 )
                 : unit
                 =
@@ -64353,8 +64408,8 @@ EventEmitter.defaultMaxListeners = $0"""
             static member readFile
                 (
                     path: float,
-                    options: Exports.readFile.options option,
-                    callback: Exports.readFile.callback
+                    options: Exports.readFile__.options option,
+                    callback: Exports.readFile__.callback
                 )
                 : unit
                 =
@@ -64375,8 +64430,8 @@ EventEmitter.defaultMaxListeners = $0"""
             static member readFile
                 (
                     path: string,
-                    options: Exports.readFile.options_1,
-                    callback: Exports.readFile.callback_1
+                    options: Exports.readFile__.options_1,
+                    callback: Exports.readFile__.callback_1
                 )
                 : unit
                 =
@@ -64395,7 +64450,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("readFile", "fs")>]
             static member readFile
-                (path: string, options: Node.BufferEncoding, callback: Exports.readFile.callback_1)
+                (path: string, options: Node.BufferEncoding, callback: Exports.readFile__.callback_1)
                 : unit
                 =
                 nativeOnly
@@ -64415,8 +64470,8 @@ EventEmitter.defaultMaxListeners = $0"""
             static member readFile
                 (
                     path: Node.Buffer,
-                    options: Exports.readFile.options_1,
-                    callback: Exports.readFile.callback_1
+                    options: Exports.readFile__.options_1,
+                    callback: Exports.readFile__.callback_1
                 )
                 : unit
                 =
@@ -64438,7 +64493,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: Node.Buffer,
                     options: Node.BufferEncoding,
-                    callback: Exports.readFile.callback_1
+                    callback: Exports.readFile__.callback_1
                 )
                 : unit
                 =
@@ -64459,8 +64514,8 @@ EventEmitter.defaultMaxListeners = $0"""
             static member readFile
                 (
                     path: Node.url.URL,
-                    options: Exports.readFile.options_1,
-                    callback: Exports.readFile.callback_1
+                    options: Exports.readFile__.options_1,
+                    callback: Exports.readFile__.callback_1
                 )
                 : unit
                 =
@@ -64482,7 +64537,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: Node.url.URL,
                     options: Node.BufferEncoding,
-                    callback: Exports.readFile.callback_1
+                    callback: Exports.readFile__.callback_1
                 )
                 : unit
                 =
@@ -64503,8 +64558,8 @@ EventEmitter.defaultMaxListeners = $0"""
             static member readFile
                 (
                     path: float,
-                    options: Exports.readFile.options_1,
-                    callback: Exports.readFile.callback_1
+                    options: Exports.readFile__.options_1,
+                    callback: Exports.readFile__.callback_1
                 )
                 : unit
                 =
@@ -64523,7 +64578,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("readFile", "fs")>]
             static member readFile
-                (path: float, options: Node.BufferEncoding, callback: Exports.readFile.callback_1)
+                (path: float, options: Node.BufferEncoding, callback: Exports.readFile__.callback_1)
                 : unit
                 =
                 nativeOnly
@@ -64543,8 +64598,8 @@ EventEmitter.defaultMaxListeners = $0"""
             static member readFile
                 (
                     path: string,
-                    options: Exports.readFile.options_2 option,
-                    callback: Exports.readFile.callback_2
+                    options: Exports.readFile__.options_2 option,
+                    callback: Exports.readFile__.callback_2
                 )
                 : unit
                 =
@@ -64566,7 +64621,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: string,
                     options: Node.BufferEncoding option,
-                    callback: Exports.readFile.callback_2
+                    callback: Exports.readFile__.callback_2
                 )
                 : unit
                 =
@@ -64587,8 +64642,8 @@ EventEmitter.defaultMaxListeners = $0"""
             static member readFile
                 (
                     path: Node.Buffer,
-                    options: Exports.readFile.options_2 option,
-                    callback: Exports.readFile.callback_2
+                    options: Exports.readFile__.options_2 option,
+                    callback: Exports.readFile__.callback_2
                 )
                 : unit
                 =
@@ -64610,7 +64665,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: Node.Buffer,
                     options: Node.BufferEncoding option,
-                    callback: Exports.readFile.callback_2
+                    callback: Exports.readFile__.callback_2
                 )
                 : unit
                 =
@@ -64631,8 +64686,8 @@ EventEmitter.defaultMaxListeners = $0"""
             static member readFile
                 (
                     path: Node.url.URL,
-                    options: Exports.readFile.options_2 option,
-                    callback: Exports.readFile.callback_2
+                    options: Exports.readFile__.options_2 option,
+                    callback: Exports.readFile__.callback_2
                 )
                 : unit
                 =
@@ -64654,7 +64709,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: Node.url.URL,
                     options: Node.BufferEncoding option,
-                    callback: Exports.readFile.callback_2
+                    callback: Exports.readFile__.callback_2
                 )
                 : unit
                 =
@@ -64675,8 +64730,8 @@ EventEmitter.defaultMaxListeners = $0"""
             static member readFile
                 (
                     path: float,
-                    options: Exports.readFile.options_2 option,
-                    callback: Exports.readFile.callback_2
+                    options: Exports.readFile__.options_2 option,
+                    callback: Exports.readFile__.callback_2
                 )
                 : unit
                 =
@@ -64698,7 +64753,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: float,
                     options: Node.BufferEncoding option,
-                    callback: Exports.readFile.callback_2
+                    callback: Exports.readFile__.callback_2
                 )
                 : unit
                 =
@@ -64712,7 +64767,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
             /// </param>
             [<Import("readFile", "fs")>]
-            static member readFile(path: string, callback: Exports.readFile.callback) : unit =
+            static member readFile(path: string, callback: Exports.readFile__.callback) : unit =
                 nativeOnly
 
             /// <summary>
@@ -64723,7 +64778,10 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
             /// </param>
             [<Import("readFile", "fs")>]
-            static member readFile(path: Node.Buffer, callback: Exports.readFile.callback) : unit =
+            static member readFile
+                (path: Node.Buffer, callback: Exports.readFile__.callback)
+                : unit
+                =
                 nativeOnly
 
             /// <summary>
@@ -64734,7 +64792,10 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
             /// </param>
             [<Import("readFile", "fs")>]
-            static member readFile(path: Node.url.URL, callback: Exports.readFile.callback) : unit =
+            static member readFile
+                (path: Node.url.URL, callback: Exports.readFile__.callback)
+                : unit
+                =
                 nativeOnly
 
             /// <summary>
@@ -64745,7 +64806,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
             /// </param>
             [<Import("readFile", "fs")>]
-            static member readFile(path: float, callback: Exports.readFile.callback) : unit =
+            static member readFile(path: float, callback: Exports.readFile__.callback) : unit =
                 nativeOnly
 
             /// <summary>
@@ -64775,7 +64836,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("readFileSync", "fs")>]
             static member readFileSync
-                (path: string, ?options: Exports.readFileSync.options)
+                (path: string, ?options: Exports.readFileSync__.options)
                 : Node.NonSharedBuffer
                 =
                 nativeOnly
@@ -64807,7 +64868,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("readFileSync", "fs")>]
             static member readFileSync
-                (path: Node.Buffer, ?options: Exports.readFileSync.options)
+                (path: Node.Buffer, ?options: Exports.readFileSync__.options)
                 : Node.NonSharedBuffer
                 =
                 nativeOnly
@@ -64839,7 +64900,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("readFileSync", "fs")>]
             static member readFileSync
-                (path: Node.url.URL, ?options: Exports.readFileSync.options)
+                (path: Node.url.URL, ?options: Exports.readFileSync__.options)
                 : Node.NonSharedBuffer
                 =
                 nativeOnly
@@ -64871,7 +64932,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("readFileSync", "fs")>]
             static member readFileSync
-                (path: float, ?options: Exports.readFileSync.options)
+                (path: float, ?options: Exports.readFileSync__.options)
                 : Node.NonSharedBuffer
                 =
                 nativeOnly
@@ -64889,7 +64950,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("readFileSync", "fs")>]
             static member readFileSync
-                (path: string, options: Exports.readFileSync.options_1)
+                (path: string, options: Exports.readFileSync__.options_1)
                 : string
                 =
                 nativeOnly
@@ -64922,7 +64983,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("readFileSync", "fs")>]
             static member readFileSync
-                (path: Node.Buffer, options: Exports.readFileSync.options_1)
+                (path: Node.Buffer, options: Exports.readFileSync__.options_1)
                 : string
                 =
                 nativeOnly
@@ -64955,7 +65016,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("readFileSync", "fs")>]
             static member readFileSync
-                (path: Node.url.URL, options: Exports.readFileSync.options_1)
+                (path: Node.url.URL, options: Exports.readFileSync__.options_1)
                 : string
                 =
                 nativeOnly
@@ -64988,7 +65049,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("readFileSync", "fs")>]
             static member readFileSync
-                (path: float, options: Exports.readFileSync.options_1)
+                (path: float, options: Exports.readFileSync__.options_1)
                 : string
                 =
                 nativeOnly
@@ -65035,7 +65096,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("readFileSync", "fs")>]
             static member readFileSync
-                (path: string, options: Exports.readFileSync.options_2)
+                (path: string, options: Exports.readFileSync__.options_2)
                 : U2<string, Node.NonSharedBuffer>
                 =
                 nativeOnly
@@ -65068,7 +65129,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("readFileSync", "fs")>]
             static member readFileSync
-                (path: Node.Buffer, options: Exports.readFileSync.options_2)
+                (path: Node.Buffer, options: Exports.readFileSync__.options_2)
                 : U2<string, Node.NonSharedBuffer>
                 =
                 nativeOnly
@@ -65101,7 +65162,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("readFileSync", "fs")>]
             static member readFileSync
-                (path: Node.url.URL, options: Exports.readFileSync.options_2)
+                (path: Node.url.URL, options: Exports.readFileSync__.options_2)
                 : U2<string, Node.NonSharedBuffer>
                 =
                 nativeOnly
@@ -65133,7 +65194,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("readFileSync", "fs")>]
             static member readFileSync
-                (path: float, options: Exports.readFileSync.options_2)
+                (path: float, options: Exports.readFileSync__.options_2)
                 : U2<string, Node.NonSharedBuffer>
                 =
                 nativeOnly
@@ -65205,7 +65266,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     file: string,
                     data: string,
-                    options: Exports.writeFile.options option,
+                    options: Exports.writeFile__.options option,
                     callback: Node.fs.NoParamCallback
                 )
                 : unit
@@ -65353,7 +65414,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     file: string,
                     data: Node.NodeJS.ArrayBufferView,
-                    options: Exports.writeFile.options option,
+                    options: Exports.writeFile__.options option,
                     callback: Node.fs.NoParamCallback
                 )
                 : unit
@@ -65501,7 +65562,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     file: Node.Buffer,
                     data: string,
-                    options: Exports.writeFile.options option,
+                    options: Exports.writeFile__.options option,
                     callback: Node.fs.NoParamCallback
                 )
                 : unit
@@ -65649,7 +65710,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     file: Node.Buffer,
                     data: Node.NodeJS.ArrayBufferView,
-                    options: Exports.writeFile.options option,
+                    options: Exports.writeFile__.options option,
                     callback: Node.fs.NoParamCallback
                 )
                 : unit
@@ -65797,7 +65858,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     file: Node.url.URL,
                     data: string,
-                    options: Exports.writeFile.options option,
+                    options: Exports.writeFile__.options option,
                     callback: Node.fs.NoParamCallback
                 )
                 : unit
@@ -65945,7 +66006,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     file: Node.url.URL,
                     data: Node.NodeJS.ArrayBufferView,
-                    options: Exports.writeFile.options option,
+                    options: Exports.writeFile__.options option,
                     callback: Node.fs.NoParamCallback
                 )
                 : unit
@@ -66093,7 +66154,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     file: float,
                     data: string,
-                    options: Exports.writeFile.options option,
+                    options: Exports.writeFile__.options option,
                     callback: Node.fs.NoParamCallback
                 )
                 : unit
@@ -66241,7 +66302,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     file: float,
                     data: Node.NodeJS.ArrayBufferView,
-                    options: Exports.writeFile.options option,
+                    options: Exports.writeFile__.options option,
                     callback: Node.fs.NoParamCallback
                 )
                 : unit
@@ -66677,7 +66738,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: string,
                     data: string,
-                    options: Exports.appendFile.options option,
+                    options: Exports.appendFile__.options option,
                     callback: Node.fs.NoParamCallback
                 )
                 : unit
@@ -66809,7 +66870,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: string,
                     data: JS.Uint8Array,
-                    options: Exports.appendFile.options option,
+                    options: Exports.appendFile__.options option,
                     callback: Node.fs.NoParamCallback
                 )
                 : unit
@@ -66941,7 +67002,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: Node.Buffer,
                     data: string,
-                    options: Exports.appendFile.options option,
+                    options: Exports.appendFile__.options option,
                     callback: Node.fs.NoParamCallback
                 )
                 : unit
@@ -67073,7 +67134,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: Node.Buffer,
                     data: JS.Uint8Array,
-                    options: Exports.appendFile.options option,
+                    options: Exports.appendFile__.options option,
                     callback: Node.fs.NoParamCallback
                 )
                 : unit
@@ -67205,7 +67266,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: Node.url.URL,
                     data: string,
-                    options: Exports.appendFile.options option,
+                    options: Exports.appendFile__.options option,
                     callback: Node.fs.NoParamCallback
                 )
                 : unit
@@ -67337,7 +67398,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: Node.url.URL,
                     data: JS.Uint8Array,
-                    options: Exports.appendFile.options option,
+                    options: Exports.appendFile__.options option,
                     callback: Node.fs.NoParamCallback
                 )
                 : unit
@@ -67469,7 +67530,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: float,
                     data: string,
-                    options: Exports.appendFile.options option,
+                    options: Exports.appendFile__.options option,
                     callback: Node.fs.NoParamCallback
                 )
                 : unit
@@ -67601,7 +67662,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     path: float,
                     data: JS.Uint8Array,
-                    options: Exports.appendFile.options option,
+                    options: Exports.appendFile__.options option,
                     callback: Node.fs.NoParamCallback
                 )
                 : unit
@@ -68299,7 +68360,7 @@ EventEmitter.defaultMaxListeners = $0"""
             static member watchFile
                 (
                     filename: string,
-                    options: Exports.watchFile.options option,
+                    options: Exports.watchFile__.options option,
                     listener: Node.fs.StatsListener
                 )
                 : Node.fs.StatWatcher
@@ -68355,7 +68416,7 @@ EventEmitter.defaultMaxListeners = $0"""
             static member watchFile
                 (
                     filename: Node.Buffer,
-                    options: Exports.watchFile.options option,
+                    options: Exports.watchFile__.options option,
                     listener: Node.fs.StatsListener
                 )
                 : Node.fs.StatWatcher
@@ -68411,7 +68472,7 @@ EventEmitter.defaultMaxListeners = $0"""
             static member watchFile
                 (
                     filename: Node.url.URL,
-                    options: Exports.watchFile.options option,
+                    options: Exports.watchFile__.options option,
                     listener: Node.fs.StatsListener
                 )
                 : Node.fs.StatWatcher
@@ -68422,7 +68483,7 @@ EventEmitter.defaultMaxListeners = $0"""
             static member watchFile
                 (
                     filename: string,
-                    options: Exports.watchFile.options_1 option,
+                    options: Exports.watchFile__.options_1 option,
                     listener: Node.fs.BigIntStatsListener
                 )
                 : Node.fs.StatWatcher
@@ -68433,7 +68494,7 @@ EventEmitter.defaultMaxListeners = $0"""
             static member watchFile
                 (
                     filename: Node.Buffer,
-                    options: Exports.watchFile.options_1 option,
+                    options: Exports.watchFile__.options_1 option,
                     listener: Node.fs.BigIntStatsListener
                 )
                 : Node.fs.StatWatcher
@@ -68444,7 +68505,7 @@ EventEmitter.defaultMaxListeners = $0"""
             static member watchFile
                 (
                     filename: Node.url.URL,
-                    options: Exports.watchFile.options_1 option,
+                    options: Exports.watchFile__.options_1 option,
                     listener: Node.fs.BigIntStatsListener
                 )
                 : Node.fs.StatWatcher
@@ -68836,7 +68897,7 @@ EventEmitter.defaultMaxListeners = $0"""
             static member watch
                 (
                     filename: string,
-                    options: Exports.watch.options,
+                    options: Exports.watch__.options,
                     listener: Node.fs.WatchListener<Node.NonSharedBuffer>
                 )
                 : Node.fs.FSWatcher
@@ -68847,7 +68908,7 @@ EventEmitter.defaultMaxListeners = $0"""
             static member watch
                 (
                     filename: Node.Buffer,
-                    options: Exports.watch.options,
+                    options: Exports.watch__.options,
                     listener: Node.fs.WatchListener<Node.NonSharedBuffer>
                 )
                 : Node.fs.FSWatcher
@@ -68858,7 +68919,7 @@ EventEmitter.defaultMaxListeners = $0"""
             static member watch
                 (
                     filename: Node.url.URL,
-                    options: Exports.watch.options,
+                    options: Exports.watch__.options,
                     listener: Node.fs.WatchListener<Node.NonSharedBuffer>
                 )
                 : Node.fs.FSWatcher
@@ -68869,7 +68930,7 @@ EventEmitter.defaultMaxListeners = $0"""
             static member watch
                 (
                     filename: string,
-                    options: Exports.watch.options_1,
+                    options: Exports.watch__.options_1,
                     listener: Node.fs.WatchListener<U2<string, Node.NonSharedBuffer>>
                 )
                 : Node.fs.FSWatcher
@@ -68880,7 +68941,7 @@ EventEmitter.defaultMaxListeners = $0"""
             static member watch
                 (
                     filename: Node.Buffer,
-                    options: Exports.watch.options_1,
+                    options: Exports.watch__.options_1,
                     listener: Node.fs.WatchListener<U2<string, Node.NonSharedBuffer>>
                 )
                 : Node.fs.FSWatcher
@@ -68891,7 +68952,7 @@ EventEmitter.defaultMaxListeners = $0"""
             static member watch
                 (
                     filename: Node.url.URL,
-                    options: Exports.watch.options_1,
+                    options: Exports.watch__.options_1,
                     listener: Node.fs.WatchListener<U2<string, Node.NonSharedBuffer>>
                 )
                 : Node.fs.FSWatcher
@@ -71823,7 +71884,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("writev", "fs")>]
             static member writev<'TBuffers>
-                (fd: float, buffers: 'TBuffers, cb: Exports.writev.cb<'TBuffers>)
+                (fd: float, buffers: 'TBuffers, cb: Exports.writev__.cb<'TBuffers>)
                 : unit
                 =
                 nativeOnly
@@ -71834,7 +71895,7 @@ EventEmitter.defaultMaxListeners = $0"""
                     fd: float,
                     buffers: 'TBuffers,
                     position: float option,
-                    cb: Exports.writev.cb<'TBuffers>
+                    cb: Exports.writev__.cb<'TBuffers>
                 )
                 : unit
                 =
@@ -71875,7 +71936,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </param>
             [<Import("readv", "fs")>]
             static member readv<'TBuffers>
-                (fd: float, buffers: 'TBuffers, cb: Exports.readv.cb<'TBuffers>)
+                (fd: float, buffers: 'TBuffers, cb: Exports.readv__.cb<'TBuffers>)
                 : unit
                 =
                 nativeOnly
@@ -71886,7 +71947,7 @@ EventEmitter.defaultMaxListeners = $0"""
                     fd: float,
                     buffers: 'TBuffers,
                     position: float option,
-                    cb: Exports.readv.cb<'TBuffers>
+                    cb: Exports.readv__.cb<'TBuffers>
                 )
                 : unit
                 =
@@ -72037,7 +72098,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// directory and subsequent read operations.
             /// </summary>
             [<Import("opendir", "fs")>]
-            static member opendir(path: string, cb: Exports.opendir.cb) : unit = nativeOnly
+            static member opendir(path: string, cb: Exports.opendir__.cb) : unit = nativeOnly
 
             /// <summary>
             /// Asynchronously open a directory. See the POSIX [<c>opendir(3)</c>](http://man7.org/linux/man-pages/man3/opendir.3.html) documentation for
@@ -72050,7 +72111,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// directory and subsequent read operations.
             /// </summary>
             [<Import("opendir", "fs")>]
-            static member opendir(path: Node.Buffer, cb: Exports.opendir.cb) : unit = nativeOnly
+            static member opendir(path: Node.Buffer, cb: Exports.opendir__.cb) : unit = nativeOnly
 
             /// <summary>
             /// Asynchronously open a directory. See the POSIX [<c>opendir(3)</c>](http://man7.org/linux/man-pages/man3/opendir.3.html) documentation for
@@ -72063,25 +72124,25 @@ EventEmitter.defaultMaxListeners = $0"""
             /// directory and subsequent read operations.
             /// </summary>
             [<Import("opendir", "fs")>]
-            static member opendir(path: Node.url.URL, cb: Exports.opendir.cb) : unit = nativeOnly
+            static member opendir(path: Node.url.URL, cb: Exports.opendir__.cb) : unit = nativeOnly
 
             [<Import("opendir", "fs")>]
             static member opendir
-                (path: string, options: Node.fs.OpenDirOptions, cb: Exports.opendir.cb)
+                (path: string, options: Node.fs.OpenDirOptions, cb: Exports.opendir__.cb)
                 : unit
                 =
                 nativeOnly
 
             [<Import("opendir", "fs")>]
             static member opendir
-                (path: Node.Buffer, options: Node.fs.OpenDirOptions, cb: Exports.opendir.cb)
+                (path: Node.Buffer, options: Node.fs.OpenDirOptions, cb: Exports.opendir__.cb)
                 : unit
                 =
                 nativeOnly
 
             [<Import("opendir", "fs")>]
             static member opendir
-                (path: Node.url.URL, options: Node.fs.OpenDirOptions, cb: Exports.opendir.cb)
+                (path: Node.url.URL, options: Node.fs.OpenDirOptions, cb: Exports.opendir__.cb)
                 : unit
                 =
                 nativeOnly
@@ -72323,7 +72384,8 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </code>
             /// </summary>
             [<Import("glob", "fs")>]
-            static member glob(pattern: string, callback: Exports.glob.callback) : unit = nativeOnly
+            static member glob(pattern: string, callback: Exports.glob__.callback) : unit =
+                nativeOnly
 
             /// <summary>
             /// Retrieves the files matching the specified pattern.
@@ -72339,7 +72401,7 @@ EventEmitter.defaultMaxListeners = $0"""
             /// </summary>
             [<Import("glob", "fs")>]
             static member glob
-                (pattern: ResizeArray<string>, callback: Exports.glob.callback)
+                (pattern: ResizeArray<string>, callback: Exports.glob__.callback)
                 : unit
                 =
                 nativeOnly
@@ -72349,7 +72411,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     pattern: string,
                     options: Node.fs.GlobOptionsWithFileTypes,
-                    callback: Exports.glob.callback_1
+                    callback: Exports.glob__.callback_1
                 )
                 : unit
                 =
@@ -72360,7 +72422,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     pattern: ResizeArray<string>,
                     options: Node.fs.GlobOptionsWithFileTypes,
-                    callback: Exports.glob.callback_1
+                    callback: Exports.glob__.callback_1
                 )
                 : unit
                 =
@@ -72371,7 +72433,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     pattern: string,
                     options: Node.fs.GlobOptionsWithoutFileTypes,
-                    callback: Exports.glob.callback
+                    callback: Exports.glob__.callback
                 )
                 : unit
                 =
@@ -72382,7 +72444,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     pattern: ResizeArray<string>,
                     options: Node.fs.GlobOptionsWithoutFileTypes,
-                    callback: Exports.glob.callback
+                    callback: Exports.glob__.callback
                 )
                 : unit
                 =
@@ -72390,7 +72452,7 @@ EventEmitter.defaultMaxListeners = $0"""
 
             [<Import("glob", "fs")>]
             static member glob
-                (pattern: string, options: Node.fs.GlobOptions, callback: Exports.glob.callback_2)
+                (pattern: string, options: Node.fs.GlobOptions, callback: Exports.glob__.callback_2)
                 : unit
                 =
                 nativeOnly
@@ -72400,7 +72462,7 @@ EventEmitter.defaultMaxListeners = $0"""
                 (
                     pattern: ResizeArray<string>,
                     options: Node.fs.GlobOptions,
-                    callback: Exports.glob.callback_2
+                    callback: Exports.glob__.callback_2
                 )
                 : unit
                 =
@@ -80353,7 +80415,7 @@ recursive mode, operations are retried on failure.""")>]
 
         module Exports =
 
-            module stat =
+            module stat__ =
 
                 type callback =
                     delegate of
@@ -80379,7 +80441,7 @@ recursive mode, operations are retried on failure.""")>]
                         stats: U2<Node.fs.Stats, Node.fs.BigIntStats> ->
                             unit
 
-            module fstat =
+            module fstat__ =
 
                 type callback =
                     delegate of
@@ -80405,7 +80467,7 @@ recursive mode, operations are retried on failure.""")>]
                         stats: U2<Node.fs.Stats, Node.fs.BigIntStats> ->
                             unit
 
-            module fstatSync =
+            module fstatSync__ =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -80417,7 +80479,7 @@ recursive mode, operations are retried on failure.""")>]
                 type options_1 =
                     abstract member bigint: bool with get, set
 
-            module lstat =
+            module lstat__ =
 
                 type callback =
                     delegate of
@@ -80443,7 +80505,7 @@ recursive mode, operations are retried on failure.""")>]
                         stats: U2<Node.fs.Stats, Node.fs.BigIntStats> ->
                             unit
 
-            module statfs =
+            module statfs__ =
 
                 type callback =
                     delegate of
@@ -80470,7 +80532,7 @@ recursive mode, operations are retried on failure.""")>]
                         stats: U2<Node.fs.StatsFs, Node.fs.BigIntStatsFs> ->
                             unit
 
-            module statfsSync =
+            module statfsSync__ =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -80482,7 +80544,7 @@ recursive mode, operations are retried on failure.""")>]
                 type options_1 =
                     abstract member bigint: bool with get, set
 
-            module readlink =
+            module readlink__ =
 
                 type callback =
                     delegate of err: Node.NodeJS.ErrnoException option * linkString: string -> unit
@@ -80498,7 +80560,7 @@ recursive mode, operations are retried on failure.""")>]
                         linkString: U2<string, Node.NonSharedBuffer> ->
                             unit
 
-            module realpath =
+            module realpath__ =
 
                 type callback =
                     delegate of
@@ -80515,7 +80577,7 @@ recursive mode, operations are retried on failure.""")>]
                         resolvedPath: U2<string, Node.NonSharedBuffer> ->
                             unit
 
-            module mkdir =
+            module mkdir__ =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -80538,7 +80600,7 @@ recursive mode, operations are retried on failure.""")>]
                     /// </summary>
                     abstract member mode: Node.fs.Mode option with get, set
 
-            module mkdirSync =
+            module mkdirSync__ =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -80558,7 +80620,7 @@ recursive mode, operations are retried on failure.""")>]
                     /// </summary>
                     abstract member mode: Node.fs.Mode option with get, set
 
-            module mkdtemp =
+            module mkdtemp__ =
 
                 type callback =
                     delegate of err: Node.NodeJS.ErrnoException option * folder: string -> unit
@@ -80574,7 +80636,7 @@ recursive mode, operations are retried on failure.""")>]
                         folder: U2<string, Node.NonSharedBuffer> ->
                             unit
 
-            module readdir =
+            module readdir__ =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -80598,7 +80660,7 @@ recursive mode, operations are retried on failure.""")>]
                 [<Erase(CaseRules.None)>]
                 type options_1 =
                     | buffer
-                    | Case1 of Exports.readdir.options.Cases.Case1
+                    | Case1 of Exports.readdir__.options.Cases.Case1
 
                 type callback_1 =
                     delegate of
@@ -80669,7 +80731,7 @@ recursive mode, operations are retried on failure.""")>]
                         files: ResizeArray<Node.fs.Dirent<Node.NonSharedBuffer>> ->
                             unit
 
-            module readdirSync =
+            module readdirSync__ =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -80689,7 +80751,7 @@ recursive mode, operations are retried on failure.""")>]
                 [<Erase(CaseRules.None)>]
                 type options_1 =
                     | buffer
-                    | Case1 of Exports.readdirSync.options.Cases.Case1
+                    | Case1 of Exports.readdirSync__.options.Cases.Case1
 
                 module options =
 
@@ -80737,12 +80799,12 @@ recursive mode, operations are retried on failure.""")>]
                         =
                         nativeOnly
 
-            module ``open`` =
+            module open__ =
 
                 type callback =
                     delegate of err: Node.NodeJS.ErrnoException option * fd: float -> unit
 
-            module write =
+            module write__ =
 
                 type callback<'TBuffer> =
                     delegate of
@@ -80754,7 +80816,7 @@ recursive mode, operations are retried on failure.""")>]
                         err: Node.NodeJS.ErrnoException option * written: float * str: string ->
                             unit
 
-            module read =
+            module read__ =
 
                 type callback<'TBuffer> =
                     delegate of
@@ -80768,7 +80830,7 @@ recursive mode, operations are retried on failure.""")>]
                         buffer: Node.NonSharedBuffer ->
                             unit
 
-            module readFile =
+            module readFile__ =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -80813,7 +80875,7 @@ recursive mode, operations are retried on failure.""")>]
                         data: U2<string, Node.NonSharedBuffer> ->
                             unit
 
-            module readFileSync =
+            module readFileSync__ =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -80840,7 +80902,7 @@ recursive mode, operations are retried on failure.""")>]
                     abstract member encoding: Node.BufferEncoding option with get, set
                     abstract member flag: string option with get, set
 
-            module writeFile =
+            module writeFile__ =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -80854,7 +80916,7 @@ recursive mode, operations are retried on failure.""")>]
                     abstract member flag: string option with get, set
                     abstract member flush: bool option with get, set
 
-            module appendFile =
+            module appendFile__ =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -80868,7 +80930,7 @@ recursive mode, operations are retried on failure.""")>]
                     abstract member flag: string option with get, set
                     abstract member flush: bool option with get, set
 
-            module watchFile =
+            module watchFile__ =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -80884,7 +80946,7 @@ recursive mode, operations are retried on failure.""")>]
                     abstract member persistent: bool option with get, set
                     abstract member interval: float option with get, set
 
-            module watch =
+            module watch__ =
 
                 [<RequireQualifiedAccess>]
                 [<Erase(CaseRules.None)>]
@@ -80899,7 +80961,7 @@ recursive mode, operations are retried on failure.""")>]
                     | Case1 of Node.fs.WatchOptions
                     | Case2 of Node.BufferEncoding
 
-            module writev =
+            module writev__ =
 
                 type cb<'TBuffers> =
                     delegate of
@@ -80908,7 +80970,7 @@ recursive mode, operations are retried on failure.""")>]
                         buffers: 'TBuffers ->
                             unit
 
-            module readv =
+            module readv__ =
 
                 type cb<'TBuffers> =
                     delegate of
@@ -80917,12 +80979,12 @@ recursive mode, operations are retried on failure.""")>]
                         buffers: 'TBuffers ->
                             unit
 
-            module opendir =
+            module opendir__ =
 
                 type cb =
                     delegate of err: Node.NodeJS.ErrnoException option * dir: Node.fs.Dir -> unit
 
-            module glob =
+            module glob__ =
 
                 type callback =
                     delegate of
@@ -81931,7 +81993,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </returns>
             [<Import("mkdir", "fs/promises")>]
             static member mkdir
-                (path: string, options: Exports.mkdir.options_2)
+                (path: string, options: Exports.mkdir__.options_2)
                 : JS.Promise<string option>
                 =
                 nativeOnly
@@ -81962,7 +82024,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </returns>
             [<Import("mkdir", "fs/promises")>]
             static member mkdir
-                (path: Node.Buffer, options: Exports.mkdir.options_2)
+                (path: Node.Buffer, options: Exports.mkdir__.options_2)
                 : JS.Promise<string option>
                 =
                 nativeOnly
@@ -81993,7 +82055,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </returns>
             [<Import("mkdir", "fs/promises")>]
             static member mkdir
-                (path: Node.url.URL, options: Exports.mkdir.options_2)
+                (path: Node.url.URL, options: Exports.mkdir__.options_2)
                 : JS.Promise<string option>
                 =
                 nativeOnly
@@ -82048,7 +82110,10 @@ recursive mode, operations are retried on failure.""")>]
             /// should be created. If a string is passed, it is parsed as an octal integer. If not specified, defaults to <c>0o777</c>.
             /// </param>
             [<Import("mkdir", "fs/promises")>]
-            static member mkdir(path: string, options: Exports.mkdir.options_3) : JS.Promise<unit> =
+            static member mkdir
+                (path: string, options: Exports.mkdir__.options_3)
+                : JS.Promise<unit>
+                =
                 nativeOnly
 
             /// <summary>
@@ -82102,7 +82167,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </param>
             [<Import("mkdir", "fs/promises")>]
             static member mkdir
-                (path: Node.Buffer, options: Exports.mkdir.options_3)
+                (path: Node.Buffer, options: Exports.mkdir__.options_3)
                 : JS.Promise<unit>
                 =
                 nativeOnly
@@ -82158,7 +82223,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </param>
             [<Import("mkdir", "fs/promises")>]
             static member mkdir
-                (path: Node.url.URL, options: Exports.mkdir.options_3)
+                (path: Node.url.URL, options: Exports.mkdir__.options_3)
                 : JS.Promise<unit>
                 =
                 nativeOnly
@@ -82269,7 +82334,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </returns>
             [<Import("readdir", "fs/promises")>]
             static member readdir
-                (path: string, options: Exports.readdir.options_5)
+                (path: string, options: Exports.readdir__.options_5)
                 : JS.Promise<ResizeArray<string>>
                 =
                 nativeOnly
@@ -82361,7 +82426,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </returns>
             [<Import("readdir", "fs/promises")>]
             static member readdir
-                (path: Node.Buffer, options: Exports.readdir.options_5)
+                (path: Node.Buffer, options: Exports.readdir__.options_5)
                 : JS.Promise<ResizeArray<string>>
                 =
                 nativeOnly
@@ -82453,7 +82518,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </returns>
             [<Import("readdir", "fs/promises")>]
             static member readdir
-                (path: Node.url.URL, options: Exports.readdir.options_5)
+                (path: Node.url.URL, options: Exports.readdir__.options_5)
                 : JS.Promise<ResizeArray<string>>
                 =
                 nativeOnly
@@ -82501,7 +82566,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </param>
             [<Import("readdir", "fs/promises")>]
             static member readdir
-                (path: string, options: Exports.readdir.options_6)
+                (path: string, options: Exports.readdir__.options_6)
                 : JS.Promise<ResizeArray<Node.NonSharedBuffer>>
                 =
                 nativeOnly
@@ -82517,7 +82582,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </param>
             [<Import("readdir", "fs/promises")>]
             static member readdir
-                (path: Node.Buffer, options: Exports.readdir.options_6)
+                (path: Node.Buffer, options: Exports.readdir__.options_6)
                 : JS.Promise<ResizeArray<Node.NonSharedBuffer>>
                 =
                 nativeOnly
@@ -82533,7 +82598,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </param>
             [<Import("readdir", "fs/promises")>]
             static member readdir
-                (path: Node.url.URL, options: Exports.readdir.options_6)
+                (path: Node.url.URL, options: Exports.readdir__.options_6)
                 : JS.Promise<ResizeArray<Node.NonSharedBuffer>>
                 =
                 nativeOnly
@@ -82549,7 +82614,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </param>
             [<Import("readdir", "fs/promises")>]
             static member readdir
-                (path: string, options: Exports.readdir.options_7)
+                (path: string, options: Exports.readdir__.options_7)
                 : JS.Promise<ResizeArray<Node.fs.Dirent>>
                 =
                 nativeOnly
@@ -82565,7 +82630,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </param>
             [<Import("readdir", "fs/promises")>]
             static member readdir
-                (path: Node.Buffer, options: Exports.readdir.options_7)
+                (path: Node.Buffer, options: Exports.readdir__.options_7)
                 : JS.Promise<ResizeArray<Node.fs.Dirent>>
                 =
                 nativeOnly
@@ -82581,7 +82646,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </param>
             [<Import("readdir", "fs/promises")>]
             static member readdir
-                (path: Node.url.URL, options: Exports.readdir.options_7)
+                (path: Node.url.URL, options: Exports.readdir__.options_7)
                 : JS.Promise<ResizeArray<Node.fs.Dirent>>
                 =
                 nativeOnly
@@ -82597,7 +82662,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </param>
             [<Import("readdir", "fs/promises")>]
             static member readdir
-                (path: string, options: Exports.readdir.options_8)
+                (path: string, options: Exports.readdir__.options_8)
                 : JS.Promise<ResizeArray<Node.fs.Dirent<Node.NonSharedBuffer>>>
                 =
                 nativeOnly
@@ -82613,7 +82678,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </param>
             [<Import("readdir", "fs/promises")>]
             static member readdir
-                (path: Node.Buffer, options: Exports.readdir.options_8)
+                (path: Node.Buffer, options: Exports.readdir__.options_8)
                 : JS.Promise<ResizeArray<Node.fs.Dirent<Node.NonSharedBuffer>>>
                 =
                 nativeOnly
@@ -82629,7 +82694,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </param>
             [<Import("readdir", "fs/promises")>]
             static member readdir
-                (path: Node.url.URL, options: Exports.readdir.options_8)
+                (path: Node.url.URL, options: Exports.readdir__.options_8)
                 : JS.Promise<ResizeArray<Node.fs.Dirent<Node.NonSharedBuffer>>>
                 =
                 nativeOnly
@@ -83106,7 +83171,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </returns>
             [<Import("lstat", "fs/promises")>]
             static member lstat
-                (path: string, ?opts: Exports.lstat.opts)
+                (path: string, ?opts: Exports.lstat__.opts)
                 : JS.Promise<Node.fs.Stats>
                 =
                 nativeOnly
@@ -83121,7 +83186,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </returns>
             [<Import("lstat", "fs/promises")>]
             static member lstat
-                (path: Node.Buffer, ?opts: Exports.lstat.opts)
+                (path: Node.Buffer, ?opts: Exports.lstat__.opts)
                 : JS.Promise<Node.fs.Stats>
                 =
                 nativeOnly
@@ -83136,28 +83201,28 @@ recursive mode, operations are retried on failure.""")>]
             /// </returns>
             [<Import("lstat", "fs/promises")>]
             static member lstat
-                (path: Node.url.URL, ?opts: Exports.lstat.opts)
+                (path: Node.url.URL, ?opts: Exports.lstat__.opts)
                 : JS.Promise<Node.fs.Stats>
                 =
                 nativeOnly
 
             [<Import("lstat", "fs/promises")>]
             static member lstat
-                (path: string, opts: Exports.lstat.opts_1)
+                (path: string, opts: Exports.lstat__.opts_1)
                 : JS.Promise<Node.fs.BigIntStats>
                 =
                 nativeOnly
 
             [<Import("lstat", "fs/promises")>]
             static member lstat
-                (path: Node.Buffer, opts: Exports.lstat.opts_1)
+                (path: Node.Buffer, opts: Exports.lstat__.opts_1)
                 : JS.Promise<Node.fs.BigIntStats>
                 =
                 nativeOnly
 
             [<Import("lstat", "fs/promises")>]
             static member lstat
-                (path: Node.url.URL, opts: Exports.lstat.opts_1)
+                (path: Node.url.URL, opts: Exports.lstat__.opts_1)
                 : JS.Promise<Node.fs.BigIntStats>
                 =
                 nativeOnly
@@ -83187,15 +83252,8 @@ recursive mode, operations are retried on failure.""")>]
             /// Fulfills with the {fs.Stats} object for the given <c>path</c>.
             /// </returns>
             [<Import("stat", "fs/promises")>]
-            static member stat(path: string, ?opts: Exports.stat.opts) : JS.Promise<Node.fs.Stats> =
-                nativeOnly
-
-            /// <returns>
-            /// Fulfills with the {fs.Stats} object for the given <c>path</c>.
-            /// </returns>
-            [<Import("stat", "fs/promises")>]
             static member stat
-                (path: Node.Buffer, ?opts: Exports.stat.opts)
+                (path: string, ?opts: Exports.stat__.opts)
                 : JS.Promise<Node.fs.Stats>
                 =
                 nativeOnly
@@ -83205,28 +83263,38 @@ recursive mode, operations are retried on failure.""")>]
             /// </returns>
             [<Import("stat", "fs/promises")>]
             static member stat
-                (path: Node.url.URL, ?opts: Exports.stat.opts)
+                (path: Node.Buffer, ?opts: Exports.stat__.opts)
+                : JS.Promise<Node.fs.Stats>
+                =
+                nativeOnly
+
+            /// <returns>
+            /// Fulfills with the {fs.Stats} object for the given <c>path</c>.
+            /// </returns>
+            [<Import("stat", "fs/promises")>]
+            static member stat
+                (path: Node.url.URL, ?opts: Exports.stat__.opts)
                 : JS.Promise<Node.fs.Stats>
                 =
                 nativeOnly
 
             [<Import("stat", "fs/promises")>]
             static member stat
-                (path: string, opts: Exports.stat.opts_1)
+                (path: string, opts: Exports.stat__.opts_1)
                 : JS.Promise<Node.fs.BigIntStats>
                 =
                 nativeOnly
 
             [<Import("stat", "fs/promises")>]
             static member stat
-                (path: Node.Buffer, opts: Exports.stat.opts_1)
+                (path: Node.Buffer, opts: Exports.stat__.opts_1)
                 : JS.Promise<Node.fs.BigIntStats>
                 =
                 nativeOnly
 
             [<Import("stat", "fs/promises")>]
             static member stat
-                (path: Node.url.URL, opts: Exports.stat.opts_1)
+                (path: Node.url.URL, opts: Exports.stat__.opts_1)
                 : JS.Promise<Node.fs.BigIntStats>
                 =
                 nativeOnly
@@ -83257,7 +83325,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </returns>
             [<Import("statfs", "fs/promises")>]
             static member statfs
-                (path: string, ?opts: Exports.statfs.opts)
+                (path: string, ?opts: Exports.statfs__.opts)
                 : JS.Promise<Node.fs.StatsFs>
                 =
                 nativeOnly
@@ -83267,7 +83335,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </returns>
             [<Import("statfs", "fs/promises")>]
             static member statfs
-                (path: Node.Buffer, ?opts: Exports.statfs.opts)
+                (path: Node.Buffer, ?opts: Exports.statfs__.opts)
                 : JS.Promise<Node.fs.StatsFs>
                 =
                 nativeOnly
@@ -83277,28 +83345,28 @@ recursive mode, operations are retried on failure.""")>]
             /// </returns>
             [<Import("statfs", "fs/promises")>]
             static member statfs
-                (path: Node.url.URL, ?opts: Exports.statfs.opts)
+                (path: Node.url.URL, ?opts: Exports.statfs__.opts)
                 : JS.Promise<Node.fs.StatsFs>
                 =
                 nativeOnly
 
             [<Import("statfs", "fs/promises")>]
             static member statfs
-                (path: string, opts: Exports.statfs.opts_1)
+                (path: string, opts: Exports.statfs__.opts_1)
                 : JS.Promise<Node.fs.BigIntStatsFs>
                 =
                 nativeOnly
 
             [<Import("statfs", "fs/promises")>]
             static member statfs
-                (path: Node.Buffer, opts: Exports.statfs.opts_1)
+                (path: Node.Buffer, opts: Exports.statfs__.opts_1)
                 : JS.Promise<Node.fs.BigIntStatsFs>
                 =
                 nativeOnly
 
             [<Import("statfs", "fs/promises")>]
             static member statfs
-                (path: Node.url.URL, opts: Exports.statfs.opts_1)
+                (path: Node.url.URL, opts: Exports.statfs__.opts_1)
                 : JS.Promise<Node.fs.BigIntStatsFs>
                 =
                 nativeOnly
@@ -84373,7 +84441,7 @@ recursive mode, operations are retried on failure.""")>]
                 (
                     file: string,
                     data: string,
-                    ?options: U2<Exports.writeFile.options.U2.Case1, Node.BufferEncoding>
+                    ?options: U2<Exports.writeFile__.options.U2.Case1, Node.BufferEncoding>
                 )
                 : JS.Promise<unit>
                 =
@@ -84437,7 +84505,7 @@ recursive mode, operations are retried on failure.""")>]
                 (
                     file: string,
                     data: Node.NodeJS.ArrayBufferView,
-                    ?options: U2<Exports.writeFile.options.U2.Case1, Node.BufferEncoding>
+                    ?options: U2<Exports.writeFile__.options.U2.Case1, Node.BufferEncoding>
                 )
                 : JS.Promise<unit>
                 =
@@ -84501,7 +84569,7 @@ recursive mode, operations are retried on failure.""")>]
                 (
                     file: string,
                     data: Iterable<U2<string, Node.NodeJS.ArrayBufferView>>,
-                    ?options: U2<Exports.writeFile.options.U2.Case1, Node.BufferEncoding>
+                    ?options: U2<Exports.writeFile__.options.U2.Case1, Node.BufferEncoding>
                 )
                 : JS.Promise<unit>
                 =
@@ -84565,7 +84633,7 @@ recursive mode, operations are retried on failure.""")>]
                 (
                     file: string,
                     data: obj,
-                    ?options: U2<Exports.writeFile.options.U2.Case1, Node.BufferEncoding>
+                    ?options: U2<Exports.writeFile__.options.U2.Case1, Node.BufferEncoding>
                 )
                 : JS.Promise<unit>
                 =
@@ -84629,7 +84697,7 @@ recursive mode, operations are retried on failure.""")>]
                 (
                     file: Node.Buffer,
                     data: string,
-                    ?options: U2<Exports.writeFile.options.U2.Case1, Node.BufferEncoding>
+                    ?options: U2<Exports.writeFile__.options.U2.Case1, Node.BufferEncoding>
                 )
                 : JS.Promise<unit>
                 =
@@ -84693,7 +84761,7 @@ recursive mode, operations are retried on failure.""")>]
                 (
                     file: Node.Buffer,
                     data: Node.NodeJS.ArrayBufferView,
-                    ?options: U2<Exports.writeFile.options.U2.Case1, Node.BufferEncoding>
+                    ?options: U2<Exports.writeFile__.options.U2.Case1, Node.BufferEncoding>
                 )
                 : JS.Promise<unit>
                 =
@@ -84757,7 +84825,7 @@ recursive mode, operations are retried on failure.""")>]
                 (
                     file: Node.Buffer,
                     data: Iterable<U2<string, Node.NodeJS.ArrayBufferView>>,
-                    ?options: U2<Exports.writeFile.options.U2.Case1, Node.BufferEncoding>
+                    ?options: U2<Exports.writeFile__.options.U2.Case1, Node.BufferEncoding>
                 )
                 : JS.Promise<unit>
                 =
@@ -84821,7 +84889,7 @@ recursive mode, operations are retried on failure.""")>]
                 (
                     file: Node.Buffer,
                     data: obj,
-                    ?options: U2<Exports.writeFile.options.U2.Case1, Node.BufferEncoding>
+                    ?options: U2<Exports.writeFile__.options.U2.Case1, Node.BufferEncoding>
                 )
                 : JS.Promise<unit>
                 =
@@ -84885,7 +84953,7 @@ recursive mode, operations are retried on failure.""")>]
                 (
                     file: Node.url.URL,
                     data: string,
-                    ?options: U2<Exports.writeFile.options.U2.Case1, Node.BufferEncoding>
+                    ?options: U2<Exports.writeFile__.options.U2.Case1, Node.BufferEncoding>
                 )
                 : JS.Promise<unit>
                 =
@@ -84949,7 +85017,7 @@ recursive mode, operations are retried on failure.""")>]
                 (
                     file: Node.url.URL,
                     data: Node.NodeJS.ArrayBufferView,
-                    ?options: U2<Exports.writeFile.options.U2.Case1, Node.BufferEncoding>
+                    ?options: U2<Exports.writeFile__.options.U2.Case1, Node.BufferEncoding>
                 )
                 : JS.Promise<unit>
                 =
@@ -85013,7 +85081,7 @@ recursive mode, operations are retried on failure.""")>]
                 (
                     file: Node.url.URL,
                     data: Iterable<U2<string, Node.NodeJS.ArrayBufferView>>,
-                    ?options: U2<Exports.writeFile.options.U2.Case1, Node.BufferEncoding>
+                    ?options: U2<Exports.writeFile__.options.U2.Case1, Node.BufferEncoding>
                 )
                 : JS.Promise<unit>
                 =
@@ -85077,7 +85145,7 @@ recursive mode, operations are retried on failure.""")>]
                 (
                     file: Node.url.URL,
                     data: obj,
-                    ?options: U2<Exports.writeFile.options.U2.Case1, Node.BufferEncoding>
+                    ?options: U2<Exports.writeFile__.options.U2.Case1, Node.BufferEncoding>
                 )
                 : JS.Promise<unit>
                 =
@@ -85141,7 +85209,7 @@ recursive mode, operations are retried on failure.""")>]
                 (
                     file: Node.fs_promises.FileHandle,
                     data: string,
-                    ?options: U2<Exports.writeFile.options.U2.Case1, Node.BufferEncoding>
+                    ?options: U2<Exports.writeFile__.options.U2.Case1, Node.BufferEncoding>
                 )
                 : JS.Promise<unit>
                 =
@@ -85205,7 +85273,7 @@ recursive mode, operations are retried on failure.""")>]
                 (
                     file: Node.fs_promises.FileHandle,
                     data: Node.NodeJS.ArrayBufferView,
-                    ?options: U2<Exports.writeFile.options.U2.Case1, Node.BufferEncoding>
+                    ?options: U2<Exports.writeFile__.options.U2.Case1, Node.BufferEncoding>
                 )
                 : JS.Promise<unit>
                 =
@@ -85269,7 +85337,7 @@ recursive mode, operations are retried on failure.""")>]
                 (
                     file: Node.fs_promises.FileHandle,
                     data: Iterable<U2<string, Node.NodeJS.ArrayBufferView>>,
-                    ?options: U2<Exports.writeFile.options.U2.Case1, Node.BufferEncoding>
+                    ?options: U2<Exports.writeFile__.options.U2.Case1, Node.BufferEncoding>
                 )
                 : JS.Promise<unit>
                 =
@@ -85333,7 +85401,7 @@ recursive mode, operations are retried on failure.""")>]
                 (
                     file: Node.fs_promises.FileHandle,
                     data: obj,
-                    ?options: U2<Exports.writeFile.options.U2.Case1, Node.BufferEncoding>
+                    ?options: U2<Exports.writeFile__.options.U2.Case1, Node.BufferEncoding>
                 )
                 : JS.Promise<unit>
                 =
@@ -85361,7 +85429,7 @@ recursive mode, operations are retried on failure.""")>]
                 (
                     path: string,
                     data: string,
-                    ?options: U2<Exports.appendFile.options.U2.Case1, Node.BufferEncoding>
+                    ?options: U2<Exports.appendFile__.options.U2.Case1, Node.BufferEncoding>
                 )
                 : JS.Promise<unit>
                 =
@@ -85389,7 +85457,7 @@ recursive mode, operations are retried on failure.""")>]
                 (
                     path: string,
                     data: Node.NodeJS.ArrayBufferView,
-                    ?options: U2<Exports.appendFile.options.U2.Case1, Node.BufferEncoding>
+                    ?options: U2<Exports.appendFile__.options.U2.Case1, Node.BufferEncoding>
                 )
                 : JS.Promise<unit>
                 =
@@ -85417,7 +85485,7 @@ recursive mode, operations are retried on failure.""")>]
                 (
                     path: string,
                     data: Iterable<U2<string, Node.NodeJS.ArrayBufferView>>,
-                    ?options: U2<Exports.appendFile.options.U2.Case1, Node.BufferEncoding>
+                    ?options: U2<Exports.appendFile__.options.U2.Case1, Node.BufferEncoding>
                 )
                 : JS.Promise<unit>
                 =
@@ -85445,7 +85513,7 @@ recursive mode, operations are retried on failure.""")>]
                 (
                     path: string,
                     data: obj,
-                    ?options: U2<Exports.appendFile.options.U2.Case1, Node.BufferEncoding>
+                    ?options: U2<Exports.appendFile__.options.U2.Case1, Node.BufferEncoding>
                 )
                 : JS.Promise<unit>
                 =
@@ -85473,7 +85541,7 @@ recursive mode, operations are retried on failure.""")>]
                 (
                     path: Node.Buffer,
                     data: string,
-                    ?options: U2<Exports.appendFile.options.U2.Case1, Node.BufferEncoding>
+                    ?options: U2<Exports.appendFile__.options.U2.Case1, Node.BufferEncoding>
                 )
                 : JS.Promise<unit>
                 =
@@ -85501,7 +85569,7 @@ recursive mode, operations are retried on failure.""")>]
                 (
                     path: Node.Buffer,
                     data: Node.NodeJS.ArrayBufferView,
-                    ?options: U2<Exports.appendFile.options.U2.Case1, Node.BufferEncoding>
+                    ?options: U2<Exports.appendFile__.options.U2.Case1, Node.BufferEncoding>
                 )
                 : JS.Promise<unit>
                 =
@@ -85529,7 +85597,7 @@ recursive mode, operations are retried on failure.""")>]
                 (
                     path: Node.Buffer,
                     data: Iterable<U2<string, Node.NodeJS.ArrayBufferView>>,
-                    ?options: U2<Exports.appendFile.options.U2.Case1, Node.BufferEncoding>
+                    ?options: U2<Exports.appendFile__.options.U2.Case1, Node.BufferEncoding>
                 )
                 : JS.Promise<unit>
                 =
@@ -85557,7 +85625,7 @@ recursive mode, operations are retried on failure.""")>]
                 (
                     path: Node.Buffer,
                     data: obj,
-                    ?options: U2<Exports.appendFile.options.U2.Case1, Node.BufferEncoding>
+                    ?options: U2<Exports.appendFile__.options.U2.Case1, Node.BufferEncoding>
                 )
                 : JS.Promise<unit>
                 =
@@ -85585,7 +85653,7 @@ recursive mode, operations are retried on failure.""")>]
                 (
                     path: Node.url.URL,
                     data: string,
-                    ?options: U2<Exports.appendFile.options.U2.Case1, Node.BufferEncoding>
+                    ?options: U2<Exports.appendFile__.options.U2.Case1, Node.BufferEncoding>
                 )
                 : JS.Promise<unit>
                 =
@@ -85613,7 +85681,7 @@ recursive mode, operations are retried on failure.""")>]
                 (
                     path: Node.url.URL,
                     data: Node.NodeJS.ArrayBufferView,
-                    ?options: U2<Exports.appendFile.options.U2.Case1, Node.BufferEncoding>
+                    ?options: U2<Exports.appendFile__.options.U2.Case1, Node.BufferEncoding>
                 )
                 : JS.Promise<unit>
                 =
@@ -85641,7 +85709,7 @@ recursive mode, operations are retried on failure.""")>]
                 (
                     path: Node.url.URL,
                     data: Iterable<U2<string, Node.NodeJS.ArrayBufferView>>,
-                    ?options: U2<Exports.appendFile.options.U2.Case1, Node.BufferEncoding>
+                    ?options: U2<Exports.appendFile__.options.U2.Case1, Node.BufferEncoding>
                 )
                 : JS.Promise<unit>
                 =
@@ -85669,7 +85737,7 @@ recursive mode, operations are retried on failure.""")>]
                 (
                     path: Node.url.URL,
                     data: obj,
-                    ?options: U2<Exports.appendFile.options.U2.Case1, Node.BufferEncoding>
+                    ?options: U2<Exports.appendFile__.options.U2.Case1, Node.BufferEncoding>
                 )
                 : JS.Promise<unit>
                 =
@@ -85697,7 +85765,7 @@ recursive mode, operations are retried on failure.""")>]
                 (
                     path: Node.fs_promises.FileHandle,
                     data: string,
-                    ?options: U2<Exports.appendFile.options.U2.Case1, Node.BufferEncoding>
+                    ?options: U2<Exports.appendFile__.options.U2.Case1, Node.BufferEncoding>
                 )
                 : JS.Promise<unit>
                 =
@@ -85725,7 +85793,7 @@ recursive mode, operations are retried on failure.""")>]
                 (
                     path: Node.fs_promises.FileHandle,
                     data: Node.NodeJS.ArrayBufferView,
-                    ?options: U2<Exports.appendFile.options.U2.Case1, Node.BufferEncoding>
+                    ?options: U2<Exports.appendFile__.options.U2.Case1, Node.BufferEncoding>
                 )
                 : JS.Promise<unit>
                 =
@@ -85753,7 +85821,7 @@ recursive mode, operations are retried on failure.""")>]
                 (
                     path: Node.fs_promises.FileHandle,
                     data: Iterable<U2<string, Node.NodeJS.ArrayBufferView>>,
-                    ?options: U2<Exports.appendFile.options.U2.Case1, Node.BufferEncoding>
+                    ?options: U2<Exports.appendFile__.options.U2.Case1, Node.BufferEncoding>
                 )
                 : JS.Promise<unit>
                 =
@@ -85781,7 +85849,7 @@ recursive mode, operations are retried on failure.""")>]
                 (
                     path: Node.fs_promises.FileHandle,
                     data: obj,
-                    ?options: U2<Exports.appendFile.options.U2.Case1, Node.BufferEncoding>
+                    ?options: U2<Exports.appendFile__.options.U2.Case1, Node.BufferEncoding>
                 )
                 : JS.Promise<unit>
                 =
@@ -85848,7 +85916,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </returns>
             [<Import("readFile", "fs/promises")>]
             static member readFile
-                (path: string, ?options: Exports.readFile.options_3)
+                (path: string, ?options: Exports.readFile__.options_3)
                 : JS.Promise<Node.NonSharedBuffer>
                 =
                 nativeOnly
@@ -85914,7 +85982,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </returns>
             [<Import("readFile", "fs/promises")>]
             static member readFile
-                (path: Node.Buffer, ?options: Exports.readFile.options_3)
+                (path: Node.Buffer, ?options: Exports.readFile__.options_3)
                 : JS.Promise<Node.NonSharedBuffer>
                 =
                 nativeOnly
@@ -85980,7 +86048,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </returns>
             [<Import("readFile", "fs/promises")>]
             static member readFile
-                (path: Node.url.URL, ?options: Exports.readFile.options_3)
+                (path: Node.url.URL, ?options: Exports.readFile__.options_3)
                 : JS.Promise<Node.NonSharedBuffer>
                 =
                 nativeOnly
@@ -86046,7 +86114,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </returns>
             [<Import("readFile", "fs/promises")>]
             static member readFile
-                (path: Node.fs_promises.FileHandle, ?options: Exports.readFile.options_3)
+                (path: Node.fs_promises.FileHandle, ?options: Exports.readFile__.options_3)
                 : JS.Promise<Node.NonSharedBuffer>
                 =
                 nativeOnly
@@ -86064,7 +86132,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </param>
             [<Import("readFile", "fs/promises")>]
             static member readFile
-                (path: string, options: Exports.readFile.options_4)
+                (path: string, options: Exports.readFile__.options_4)
                 : JS.Promise<string>
                 =
                 nativeOnly
@@ -86100,7 +86168,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </param>
             [<Import("readFile", "fs/promises")>]
             static member readFile
-                (path: Node.Buffer, options: Exports.readFile.options_4)
+                (path: Node.Buffer, options: Exports.readFile__.options_4)
                 : JS.Promise<string>
                 =
                 nativeOnly
@@ -86136,7 +86204,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </param>
             [<Import("readFile", "fs/promises")>]
             static member readFile
-                (path: Node.url.URL, options: Exports.readFile.options_4)
+                (path: Node.url.URL, options: Exports.readFile__.options_4)
                 : JS.Promise<string>
                 =
                 nativeOnly
@@ -86172,7 +86240,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </param>
             [<Import("readFile", "fs/promises")>]
             static member readFile
-                (path: Node.fs_promises.FileHandle, options: Exports.readFile.options_4)
+                (path: Node.fs_promises.FileHandle, options: Exports.readFile__.options_4)
                 : JS.Promise<string>
                 =
                 nativeOnly
@@ -86223,7 +86291,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </param>
             [<Import("readFile", "fs/promises")>]
             static member readFile
-                (path: string, options: Exports.readFile.options_5)
+                (path: string, options: Exports.readFile__.options_5)
                 : JS.Promise<U2<string, Node.NonSharedBuffer>>
                 =
                 nativeOnly
@@ -86259,7 +86327,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </param>
             [<Import("readFile", "fs/promises")>]
             static member readFile
-                (path: Node.Buffer, options: Exports.readFile.options_5)
+                (path: Node.Buffer, options: Exports.readFile__.options_5)
                 : JS.Promise<U2<string, Node.NonSharedBuffer>>
                 =
                 nativeOnly
@@ -86295,7 +86363,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </param>
             [<Import("readFile", "fs/promises")>]
             static member readFile
-                (path: Node.url.URL, options: Exports.readFile.options_5)
+                (path: Node.url.URL, options: Exports.readFile__.options_5)
                 : JS.Promise<U2<string, Node.NonSharedBuffer>>
                 =
                 nativeOnly
@@ -86331,7 +86399,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </param>
             [<Import("readFile", "fs/promises")>]
             static member readFile
-                (path: Node.fs_promises.FileHandle, options: Exports.readFile.options_5)
+                (path: Node.fs_promises.FileHandle, options: Exports.readFile__.options_5)
                 : JS.Promise<U2<string, Node.NonSharedBuffer>>
                 =
                 nativeOnly
@@ -86788,28 +86856,28 @@ recursive mode, operations are retried on failure.""")>]
 
             [<Import("watch", "fs/promises")>]
             static member watch
-                (filename: string, options: Exports.watch.options_2)
+                (filename: string, options: Exports.watch__.options_2)
                 : Node.NodeJS.AsyncIterator<Node.fs_promises.FileChangeInfo<Node.NonSharedBuffer>>
                 =
                 nativeOnly
 
             [<Import("watch", "fs/promises")>]
             static member watch
-                (filename: Node.Buffer, options: Exports.watch.options_2)
+                (filename: Node.Buffer, options: Exports.watch__.options_2)
                 : Node.NodeJS.AsyncIterator<Node.fs_promises.FileChangeInfo<Node.NonSharedBuffer>>
                 =
                 nativeOnly
 
             [<Import("watch", "fs/promises")>]
             static member watch
-                (filename: Node.url.URL, options: Exports.watch.options_2)
+                (filename: Node.url.URL, options: Exports.watch__.options_2)
                 : Node.NodeJS.AsyncIterator<Node.fs_promises.FileChangeInfo<Node.NonSharedBuffer>>
                 =
                 nativeOnly
 
             [<Import("watch", "fs/promises")>]
             static member watch
-                (filename: string, options: Exports.watch.options_3)
+                (filename: string, options: Exports.watch__.options_3)
                 : Node.NodeJS.AsyncIterator<
                       Node.fs_promises.FileChangeInfo<U2<string, Node.NonSharedBuffer>>
                    >
@@ -86818,7 +86886,7 @@ recursive mode, operations are retried on failure.""")>]
 
             [<Import("watch", "fs/promises")>]
             static member watch
-                (filename: Node.Buffer, options: Exports.watch.options_3)
+                (filename: Node.Buffer, options: Exports.watch__.options_3)
                 : Node.NodeJS.AsyncIterator<
                       Node.fs_promises.FileChangeInfo<U2<string, Node.NonSharedBuffer>>
                    >
@@ -86827,7 +86895,7 @@ recursive mode, operations are retried on failure.""")>]
 
             [<Import("watch", "fs/promises")>]
             static member watch
-                (filename: Node.url.URL, options: Exports.watch.options_3)
+                (filename: Node.url.URL, options: Exports.watch__.options_3)
                 : Node.NodeJS.AsyncIterator<
                       Node.fs_promises.FileChangeInfo<U2<string, Node.NonSharedBuffer>>
                    >
@@ -88172,7 +88240,7 @@ recursive mode, operations are retried on failure.""")>]
 
         module Exports =
 
-            module mkdir =
+            module mkdir__ =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -88192,7 +88260,7 @@ recursive mode, operations are retried on failure.""")>]
                     /// </summary>
                     abstract member mode: Node.fs.Mode option with get, set
 
-            module readdir =
+            module readdir__ =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -88205,7 +88273,7 @@ recursive mode, operations are retried on failure.""")>]
                 [<Erase(CaseRules.None)>]
                 type options_6 =
                     | buffer
-                    | Case1 of Exports.readdir.options.Cases.Case1_1
+                    | Case1 of Exports.readdir__.options.Cases.Case1_1
 
                 module options =
 
@@ -88246,7 +88314,7 @@ recursive mode, operations are retried on failure.""")>]
                         =
                         nativeOnly
 
-            module lstat =
+            module lstat__ =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -88258,7 +88326,7 @@ recursive mode, operations are retried on failure.""")>]
                 type opts_1 =
                     abstract member bigint: bool with get, set
 
-            module stat =
+            module stat__ =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -88270,7 +88338,7 @@ recursive mode, operations are retried on failure.""")>]
                 type opts_1 =
                     abstract member bigint: bool with get, set
 
-            module statfs =
+            module statfs__ =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -88282,7 +88350,7 @@ recursive mode, operations are retried on failure.""")>]
                 type opts_1 =
                     abstract member bigint: bool with get, set
 
-            module writeFile =
+            module writeFile__ =
 
                 module options =
 
@@ -88304,7 +88372,7 @@ recursive mode, operations are retried on failure.""")>]
                             /// </summary>
                             abstract member signal: Node.AbortSignal option with get, set
 
-            module appendFile =
+            module appendFile__ =
 
                 module options =
 
@@ -88318,7 +88386,7 @@ recursive mode, operations are retried on failure.""")>]
                             abstract member flag: Node.fs.OpenMode option with get, set
                             abstract member flush: bool option with get, set
 
-            module readFile =
+            module readFile__ =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -88350,7 +88418,7 @@ recursive mode, operations are retried on failure.""")>]
                     abstract member signal: Node.AbortSignal option with get, set
                     abstract member flag: Node.fs.OpenMode option with get, set
 
-            module watch =
+            module watch__ =
 
                 [<RequireQualifiedAccess>]
                 [<Erase(CaseRules.None)>]
@@ -88374,7 +88442,7 @@ recursive mode, operations are retried on failure.""")>]
             static member inline METHODS: ResizeArray<string> = nativeOnly
 
             [<Import("STATUS_CODES", "http")>]
-            static member inline STATUS_CODES: Exports.STATUS_CODES.Type = nativeOnly
+            static member inline STATUS_CODES: Exports.STATUS_CODES__.Type = nativeOnly
 
             /// <summary>
             /// Returns a new instance of <see href="Server">Server</see>.
@@ -95757,7 +95825,7 @@ recursive mode, operations are retried on failure.""")>]
 
         module Exports =
 
-            module STATUS_CODES =
+            module STATUS_CODES__ =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -95847,7 +95915,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </param>
             [<Import("createServer", "http2")>]
             static member createServer
-                (?onRequestHandler: Exports.createServer.onRequestHandler)
+                (?onRequestHandler: Exports.createServer__.onRequestHandler)
                 : Node.http2.Http2Server
                 =
                 nativeOnly
@@ -95862,7 +95930,7 @@ recursive mode, operations are retried on failure.""")>]
                             'Http2Request,
                             'Http2Response
                          >,
-                    ?onRequestHandler: Exports.createServer.onRequestHandler_1
+                    ?onRequestHandler: Exports.createServer__.onRequestHandler_1
                 )
                 : Node.http2.Http2Server<
                       'Http1Request,
@@ -95883,7 +95951,7 @@ recursive mode, operations are retried on failure.""")>]
                             Node.http2.Http2ServerRequest,
                             Node.http2.Http2ServerResponse<obj>
                          >,
-                    ?onRequestHandler: Exports.createServer.onRequestHandler_1
+                    ?onRequestHandler: Exports.createServer__.onRequestHandler_1
                 )
                 : Node.http2.Http2Server<
                       Node.http.IncomingMessage,
@@ -95925,7 +95993,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </param>
             [<Import("createSecureServer", "http2")>]
             static member createSecureServer
-                (?onRequestHandler: Exports.createSecureServer.onRequestHandler)
+                (?onRequestHandler: Exports.createSecureServer__.onRequestHandler)
                 : Node.http2.Http2SecureServer
                 =
                 nativeOnly
@@ -95940,7 +96008,7 @@ recursive mode, operations are retried on failure.""")>]
                             'Http2Request,
                             'Http2Response
                          >,
-                    ?onRequestHandler: Exports.createSecureServer.onRequestHandler_1
+                    ?onRequestHandler: Exports.createSecureServer__.onRequestHandler_1
                 )
                 : Node.http2.Http2SecureServer<
                       'Http1Request,
@@ -95961,7 +96029,7 @@ recursive mode, operations are retried on failure.""")>]
                             Node.http2.Http2ServerRequest,
                             Node.http2.Http2ServerResponse<obj>
                          >,
-                    ?onRequestHandler: Exports.createSecureServer.onRequestHandler_1
+                    ?onRequestHandler: Exports.createSecureServer__.onRequestHandler_1
                 )
                 : Node.http2.Http2SecureServer<
                       Node.http.IncomingMessage,
@@ -95993,7 +96061,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </param>
             [<Import("connect", "http2")>]
             static member connect
-                (authority: string, listener: Exports.connect.listener)
+                (authority: string, listener: Exports.connect__.listener)
                 : Node.http2.ClientHttp2Session
                 =
                 nativeOnly
@@ -96019,7 +96087,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </param>
             [<Import("connect", "http2")>]
             static member connect
-                (authority: Node.url.URL, listener: Exports.connect.listener)
+                (authority: Node.url.URL, listener: Exports.connect__.listener)
                 : Node.http2.ClientHttp2Session
                 =
                 nativeOnly
@@ -96032,7 +96100,7 @@ recursive mode, operations are retried on failure.""")>]
                 (
                     authority: string,
                     options: Node.http2.ClientSessionOptions,
-                    ?listener: Exports.connect.listener
+                    ?listener: Exports.connect__.listener
                 )
                 : Node.http2.ClientHttp2Session
                 =
@@ -96043,7 +96111,7 @@ recursive mode, operations are retried on failure.""")>]
                 (
                     authority: string,
                     options: Node.http2.SecureClientSessionOptions,
-                    ?listener: Exports.connect.listener
+                    ?listener: Exports.connect__.listener
                 )
                 : Node.http2.ClientHttp2Session
                 =
@@ -96058,7 +96126,7 @@ recursive mode, operations are retried on failure.""")>]
                 (
                     authority: Node.url.URL,
                     options: Node.http2.ClientSessionOptions,
-                    ?listener: Exports.connect.listener
+                    ?listener: Exports.connect__.listener
                 )
                 : Node.http2.ClientHttp2Session
                 =
@@ -96069,7 +96137,7 @@ recursive mode, operations are retried on failure.""")>]
                 (
                     authority: Node.url.URL,
                     options: Node.http2.SecureClientSessionOptions,
-                    ?listener: Exports.connect.listener
+                    ?listener: Exports.connect__.listener
                 )
                 : Node.http2.ClientHttp2Session
                 =
@@ -119349,7 +119417,7 @@ recursive mode, operations are retried on failure.""")>]
 
         module Exports =
 
-            module createServer =
+            module createServer__ =
 
                 type onRequestHandler =
                     delegate of
@@ -119359,7 +119427,7 @@ recursive mode, operations are retried on failure.""")>]
 
                 type onRequestHandler_1 = delegate of request: obj * response: obj -> unit
 
-            module createSecureServer =
+            module createSecureServer__ =
 
                 type onRequestHandler =
                     delegate of
@@ -119369,7 +119437,7 @@ recursive mode, operations are retried on failure.""")>]
 
                 type onRequestHandler_1 = delegate of request: obj * response: obj -> unit
 
-            module connect =
+            module connect__ =
 
                 type listener =
                     delegate of
@@ -133886,7 +133954,7 @@ SocketAddress.parse($0)"""
             /// Possible values are <c>'BE'</c> for big endian and <c>'LE'</c> for little endian.
             /// </summary>
             [<Import("endianness", "os")>]
-            static member endianness() : Exports.endianness = nativeOnly
+            static member endianness() : Exports.endianness__ = nativeOnly
 
             /// <summary>
             /// Returns the scheduling priority for the process specified by <c>pid</c>. If <c>pid</c> is
@@ -134569,7 +134637,7 @@ SocketAddress.parse($0)"""
 
             [<RequireQualifiedAccess>]
             [<StringEnum(CaseRules.None)>]
-            type endianness =
+            type endianness__ =
                 | BE
                 | LE
 
@@ -134740,14 +134808,14 @@ SocketAddress.parse($0)"""
             /// </summary>
             [<ImportDefault("path")>]
             [<Emit("$0.sep")>]
-            static member inline sep: Exports.sep.Type = nativeOnly
+            static member inline sep: Exports.sep__.Type = nativeOnly
 
             /// <summary>
             /// The platform-specific file delimiter. ';' or ':'.
             /// </summary>
             [<ImportDefault("path")>]
             [<Emit("$0.delimiter")>]
-            static member inline delimiter: Exports.delimiter.Type = nativeOnly
+            static member inline delimiter: Exports.delimiter__.Type = nativeOnly
 
             /// <summary>
             /// Returns an object from a path string - the opposite of format().
@@ -135066,7 +135134,7 @@ SocketAddress.parse($0)"""
 
         module Exports =
 
-            module sep =
+            module sep__ =
 
                 [<RequireQualifiedAccess>]
                 [<StringEnum(CaseRules.None)>]
@@ -135074,7 +135142,7 @@ SocketAddress.parse($0)"""
                     | [<CompiledName("\\")>] _BACKSLASH_
                     | [<CompiledName("/")>] _SLASH_
 
-            module delimiter =
+            module delimiter__ =
 
                 [<RequireQualifiedAccess>]
                 [<StringEnum(CaseRules.None)>]
@@ -136841,7 +136909,7 @@ SocketAddress.parse($0)"""
 
             [<ImportDefault("process")>]
             [<Emit("$0.finalization")>]
-            static member inline finalization: Exports.finalization.Type = nativeOnly
+            static member inline finalization: Exports.finalization__.Type = nativeOnly
 
             /// <summary>
             /// The <c>process.getActiveResourcesInfo()</c> method returns an array of strings containing
@@ -138032,7 +138100,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// </summary>
             [<ImportDefault("process"); Emit("$0.addListener($1...)")>]
             static member addListener
-                (event: string, listener: Exports.addListener.listener)
+                (event: string, listener: Exports.addListener__.listener)
                 : Node.NodeJS.Process
                 =
                 nativeOnly
@@ -138921,7 +138989,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// </code>
             /// </summary>
             [<ImportDefault("process"); Emit("$0.on($1...)")>]
-            static member on(event: string, listener: Exports.on.listener) : Node.NodeJS.Process =
+            static member on(event: string, listener: Exports.on__.listener) : Node.NodeJS.Process =
                 nativeOnly
 
             /// <summary>
@@ -139350,7 +139418,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// </summary>
             [<ImportDefault("process"); Emit("$0.once($1...)")>]
             static member once
-                (event: string, listener: Exports.once.listener)
+                (event: string, listener: Exports.once__.listener)
                 : Node.NodeJS.Process
                 =
                 nativeOnly
@@ -139572,7 +139640,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// </summary>
             [<ImportDefault("process"); Emit("$0.prependListener($1...)")>]
             static member prependListener
-                (event: string, listener: Exports.prependListener.listener)
+                (event: string, listener: Exports.prependListener__.listener)
                 : Node.NodeJS.Process
                 =
                 nativeOnly
@@ -139806,7 +139874,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// </summary>
             [<ImportDefault("process"); Emit("$0.prependOnceListener($1...)")>]
             static member prependOnceListener
-                (event: string, listener: Exports.prependOnceListener.listener)
+                (event: string, listener: Exports.prependOnceListener__.listener)
                 : Node.NodeJS.Process
                 =
                 nativeOnly
@@ -140364,9 +140432,9 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
 
         module Exports =
 
-            type listeners = delegate of value: obj * source: float -> unit
+            type listeners__ = delegate of value: obj * source: float -> unit
 
-            module finalization =
+            module finalization__ =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -140388,7 +140456,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
                     /// The callback function to be called when the resource is finalized.
                     /// </param>
                     abstract member register<'T> :
-                        ref: 'T * callback: Exports.finalization.Type.register.callback -> unit
+                        ref: 'T * callback: Exports.finalization__.Type.register.callback -> unit
 
                     /// <summary>
                     /// This function behaves exactly like the <c>register</c>, except that the callback will be called when the process emits the <c>beforeExit</c> event if <c>ref</c> object was not garbage collected.
@@ -140402,7 +140470,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
                     /// The callback function to be called when the resource is finalized.
                     /// </param>
                     abstract member registerBeforeExit<'T> :
-                        ref: 'T * callback: Exports.finalization.Type.registerBeforeExit.callback ->
+                        ref: 'T * callback: Exports.finalization__.Type.registerBeforeExit.callback ->
                             unit
 
                     /// <summary>
@@ -140430,23 +140498,23 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
 
                         type callback = delegate of ref: obj * event: string -> unit
 
-            module addListener =
+            module addListener__ =
 
                 type listener = delegate of value: obj * source: float -> unit
 
-            module on =
+            module on__ =
 
                 type listener = delegate of value: obj * source: float -> unit
 
-            module once =
+            module once__ =
 
                 type listener = delegate of value: obj * source: float -> unit
 
-            module prependListener =
+            module prependListener__ =
 
                 type listener = delegate of value: obj * source: float -> unit
 
-            module prependOnceListener =
+            module prependOnceListener__ =
 
                 type listener = delegate of value: obj * source: float -> unit
 
@@ -140648,13 +140716,13 @@ the userland-provided Punycode.js module instead.""")>]
             /// The querystring.encode() function is an alias for querystring.stringify().
             /// </summary>
             [<Import("encode", "querystring")>]
-            static member inline encode: Exports.encode.Type = nativeOnly
+            static member inline encode: Exports.encode__.Type = nativeOnly
 
             /// <summary>
             /// The querystring.decode() function is an alias for querystring.parse().
             /// </summary>
             [<Import("decode", "querystring")>]
-            static member inline decode: Exports.decode.Type = nativeOnly
+            static member inline decode: Exports.decode__.Type = nativeOnly
 
             /// <summary>
             /// The <c>querystring.escape()</c> method performs URL percent-encoding on the given <c>str</c> in a manner that is optimized for the specific requirements of URL
@@ -140729,7 +140797,7 @@ the userland-provided Punycode.js module instead.""")>]
 
         module Exports =
 
-            module encode =
+            module encode__ =
 
                 type Type =
                     delegate of
@@ -140739,7 +140807,7 @@ the userland-provided Punycode.js module instead.""")>]
                         ?options: Node.querystring.StringifyOptions ->
                             string
 
-            module decode =
+            module decode__ =
 
                 type Type =
                     delegate of
@@ -143479,7 +143547,7 @@ the userland-provided Punycode.js module instead.""")>]
             /// and it can be overridden by custom print functions.
             /// </summary>
             [<Import("writer", "repl")>]
-            static member inline writer: Exports.writer.Type = nativeOnly
+            static member inline writer: Exports.writer__.Type = nativeOnly
 
             /// <summary>
             /// A flag passed in the REPL options. Evaluates expressions in sloppy mode.
@@ -145809,7 +145877,7 @@ the userland-provided Punycode.js module instead.""")>]
 
         module Exports =
 
-            module writer =
+            module writer__ =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -145847,7 +145915,7 @@ the userland-provided Punycode.js module instead.""")>]
             /// </summary>
             [<Import("getAssetAsBlob", "node:sea")>]
             static member getAssetAsBlob
-                (key: Node.sea.AssetKey, ?options: Exports.getAssetAsBlob.options)
+                (key: Node.sea.AssetKey, ?options: Exports.getAssetAsBlob__.options)
                 : Node.Blob
                 =
                 nativeOnly
@@ -145883,7 +145951,7 @@ the userland-provided Punycode.js module instead.""")>]
 
         module Exports =
 
-            module getAssetAsBlob =
+            module getAssetAsBlob__ =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -148110,7 +148178,7 @@ Readable.from($0, $1)"""
                 static member inline fromWeb
                     (
                         readableStream: Node.stream_web.stream_SLASH_web_.ReadableStream,
-                        ?options: Readable.fromWeb.options
+                        ?options: Readable.fromWeb__.options
                     )
                     : Node.stream.Stream_.Readable
                     =
@@ -148124,7 +148192,10 @@ Readable.fromWeb($0, $1)"""
                 /// A utility method for creating a web <c>ReadableStream</c> from a <c>Readable</c>.
                 /// </summary>
                 static member inline toWeb
-                    (streamReadable: Node.stream.Stream_.Readable, ?options: Readable.toWeb.options)
+                    (
+                        streamReadable: Node.stream.Stream_.Readable,
+                        ?options: Readable.toWeb__.options
+                    )
                     : Node.stream_web.stream_SLASH_web_.ReadableStream
                     =
                     emitJsExpr
@@ -151995,7 +152066,7 @@ Readable.isDisturbed($0)"""
                 static member inline fromWeb
                     (
                         writableStream: Node.stream_web.stream_SLASH_web_.WritableStream,
-                        ?options: Writable.fromWeb.options
+                        ?options: Writable.fromWeb__.options
                     )
                     : Node.stream.Stream_.Writable
                     =
@@ -155546,7 +155617,7 @@ Duplex.from($0)"""
                 /// </summary>
                 static member inline toWeb
                     (streamDuplex: Node.stream.Stream_.Duplex)
-                    : Duplex.toWeb
+                    : Duplex.toWeb__
                     =
                     emitJsExpr
                         (streamDuplex)
@@ -155558,7 +155629,7 @@ Duplex.toWeb($0)"""
                 /// A utility method for creating a <c>Duplex</c> from a web <c>ReadableStream</c> and <c>WritableStream</c>.
                 /// </summary>
                 static member inline fromWeb
-                    (duplexStream: Duplex.fromWeb.duplexStream, ?options: Duplex.fromWeb.options)
+                    (duplexStream: Duplex.fromWeb__.duplexStream, ?options: Duplex.fromWeb__.options)
                     : Node.stream.Stream_.Duplex
                     =
                     emitJsExpr
@@ -160024,7 +160095,7 @@ Duplex.fromWeb($0, $1)"""
 
             module Readable =
 
-                module fromWeb =
+                module fromWeb__ =
 
                     [<AllowNullLiteral>]
                     [<Interface>]
@@ -160049,7 +160120,7 @@ Duplex.fromWeb($0, $1)"""
                             =
                             nativeOnly
 
-                module toWeb =
+                module toWeb__ =
 
                     [<AllowNullLiteral>]
                     [<Interface>]
@@ -160412,7 +160483,7 @@ Duplex.fromWeb($0, $1)"""
 
             module Writable =
 
-                module fromWeb =
+                module fromWeb__ =
 
                     [<AllowNullLiteral>]
                     [<Interface>]
@@ -160453,7 +160524,7 @@ Duplex.fromWeb($0, $1)"""
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type toWeb =
+                type toWeb__ =
                     abstract member readable: Node.stream_web.stream_SLASH_web_.ReadableStream with get, set
                     abstract member writable: Node.stream_web.stream_SLASH_web_.WritableStream with get, set
 
@@ -160463,11 +160534,11 @@ Duplex.fromWeb($0, $1)"""
                             readable: Node.stream_web.stream_SLASH_web_.ReadableStream,
                             writable: Node.stream_web.stream_SLASH_web_.WritableStream
                         )
-                        : toWeb
+                        : toWeb__
                         =
                         nativeOnly
 
-                module fromWeb =
+                module fromWeb__ =
 
                     [<AllowNullLiteral>]
                     [<Interface>]
@@ -160891,38 +160962,38 @@ Duplex.fromWeb($0, $1)"""
                 /// This Streams API interface represents a readable stream of byte data.
                 /// </summary>
                 [<Emit("$0.ReadableStream")>]
-                abstract member ReadableStream: Exports.ReadableStream.Type_1<obj>
+                abstract member ReadableStream: Exports.ReadableStream.Type<obj>
 
                 [<Emit("$0.ReadableStreamDefaultReader")>]
                 abstract member ReadableStreamDefaultReader:
-                    Exports.ReadableStreamDefaultReader.Type_1<obj>
+                    Exports.ReadableStreamDefaultReader.Type<obj>
 
                 /// <summary>
                 /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStreamBYOBReader)
                 /// </summary>
                 [<Emit("$0.ReadableStreamBYOBReader")>]
-                abstract member ReadableStreamBYOBReader: Exports.ReadableStreamBYOBReader.Type_1
+                abstract member ReadableStreamBYOBReader: Exports.ReadableStreamBYOBReader.Type
 
                 /// <summary>
                 /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStreamBYOBRequest)
                 /// </summary>
                 [<Emit("$0.ReadableStreamBYOBRequest")>]
-                abstract member ReadableStreamBYOBRequest: Exports.ReadableStreamBYOBRequest.Type_1
+                abstract member ReadableStreamBYOBRequest: Exports.ReadableStreamBYOBRequest.Type
 
                 [<Emit("$0.ReadableByteStreamController")>]
                 abstract member ReadableByteStreamController:
-                    Exports.ReadableByteStreamController.Type_1
+                    Exports.ReadableByteStreamController.Type
 
                 [<Emit("$0.ReadableStreamDefaultController")>]
                 abstract member ReadableStreamDefaultController:
-                    Exports.ReadableStreamDefaultController.Type_1
+                    Exports.ReadableStreamDefaultController.Type
 
                 [<Emit("$0.TransformStream")>]
-                abstract member TransformStream: Exports.TransformStream.Type_1<obj, obj>
+                abstract member TransformStream: Exports.TransformStream.Type<obj, obj>
 
                 [<Emit("$0.TransformStreamDefaultController")>]
                 abstract member TransformStreamDefaultController:
-                    Exports.TransformStreamDefaultController.Type_1
+                    Exports.TransformStreamDefaultController.Type
 
                 /// <summary>
                 /// This Streams API interface provides a standard abstraction for writing
@@ -160930,7 +161001,7 @@ Duplex.fromWeb($0, $1)"""
                 /// built-in back pressure and queuing.
                 /// </summary>
                 [<Emit("$0.WritableStream")>]
-                abstract member WritableStream: Exports.WritableStream.Type_1<obj>
+                abstract member WritableStream: Exports.WritableStream.Type<obj>
 
                 /// <summary>
                 /// This Streams API interface is the object returned by
@@ -160940,7 +161011,7 @@ Duplex.fromWeb($0, $1)"""
                 /// </summary>
                 [<Emit("$0.WritableStreamDefaultWriter")>]
                 abstract member WritableStreamDefaultWriter:
-                    Exports.WritableStreamDefaultWriter.Type_1<obj>
+                    Exports.WritableStreamDefaultWriter.Type<obj>
 
                 /// <summary>
                 /// This Streams API interface represents a controller allowing control of a
@@ -160950,27 +161021,27 @@ Duplex.fromWeb($0, $1)"""
                 /// </summary>
                 [<Emit("$0.WritableStreamDefaultController")>]
                 abstract member WritableStreamDefaultController:
-                    Exports.WritableStreamDefaultController.Type_1
+                    Exports.WritableStreamDefaultController.Type
 
                 /// <summary>
                 /// This Streams API interface provides a built-in byte length queuing
                 /// strategy that can be used when constructing streams.
                 /// </summary>
                 [<Emit("$0.ByteLengthQueuingStrategy")>]
-                abstract member ByteLengthQueuingStrategy: Exports.ByteLengthQueuingStrategy.Type_1
+                abstract member ByteLengthQueuingStrategy: Exports.ByteLengthQueuingStrategy.Type
 
                 /// <summary>
                 /// This Streams API interface provides a built-in byte length queuing
                 /// strategy that can be used when constructing streams.
                 /// </summary>
                 [<Emit("$0.CountQueuingStrategy")>]
-                abstract member CountQueuingStrategy: Exports.CountQueuingStrategy.Type_1
+                abstract member CountQueuingStrategy: Exports.CountQueuingStrategy.Type
 
                 [<Emit("$0.TextEncoderStream")>]
-                abstract member TextEncoderStream: Exports.TextEncoderStream.Type_1
+                abstract member TextEncoderStream: Exports.TextEncoderStream.Type
 
                 [<Emit("$0.TextDecoderStream")>]
-                abstract member TextDecoderStream: Exports.TextDecoderStream.Type_1
+                abstract member TextDecoderStream: Exports.TextDecoderStream.Type
 
                 [<Emit("new $0.CompressionStream($1...)")>]
                 abstract member CompressionStream:
@@ -161606,7 +161677,7 @@ Duplex.fromWeb($0, $1)"""
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type Type_1<'R> =
+                    type Type<'R> =
                         abstract member prototype: Node.stream_web.stream_SLASH_web_.ReadableStream with get, set
 
                         abstract member from<'T> :
@@ -161634,7 +161705,7 @@ Duplex.fromWeb($0, $1)"""
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type Type_1<'R> =
+                    type Type<'R> =
                         abstract member prototype:
                             Node.stream_web.stream_SLASH_web_.ReadableStreamDefaultReader with get, set
 
@@ -161647,7 +161718,7 @@ Duplex.fromWeb($0, $1)"""
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type Type_1 =
+                    type Type =
                         abstract member prototype:
                             Node.stream_web.stream_SLASH_web_.ReadableStreamBYOBReader with get, set
 
@@ -161660,7 +161731,7 @@ Duplex.fromWeb($0, $1)"""
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type Type_1 =
+                    type Type =
                         abstract member prototype:
                             Node.stream_web.stream_SLASH_web_.ReadableStreamBYOBRequest with get, set
 
@@ -161672,7 +161743,7 @@ Duplex.fromWeb($0, $1)"""
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type Type_1 =
+                    type Type =
                         abstract member prototype:
                             Node.stream_web.stream_SLASH_web_.ReadableByteStreamController with get, set
 
@@ -161684,7 +161755,7 @@ Duplex.fromWeb($0, $1)"""
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type Type_1 =
+                    type Type =
                         abstract member prototype:
                             Node.stream_web.stream_SLASH_web_.ReadableStreamDefaultController with get, set
 
@@ -161697,7 +161768,7 @@ Duplex.fromWeb($0, $1)"""
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type Type_1<'I, 'O> =
+                    type Type<'I, 'O> =
                         abstract member prototype: Node.stream_web.stream_SLASH_web_.TransformStream with get, set
 
                         [<EmitConstructor>]
@@ -161711,7 +161782,7 @@ Duplex.fromWeb($0, $1)"""
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type Type_1 =
+                    type Type =
                         abstract member prototype:
                             Node.stream_web.stream_SLASH_web_.TransformStreamDefaultController with get, set
 
@@ -161724,7 +161795,7 @@ Duplex.fromWeb($0, $1)"""
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type Type_1<'W> =
+                    type Type<'W> =
                         abstract member prototype: Node.stream_web.stream_SLASH_web_.WritableStream with get, set
 
                         [<EmitConstructor>]
@@ -161737,7 +161808,7 @@ Duplex.fromWeb($0, $1)"""
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type Type_1<'W> =
+                    type Type<'W> =
                         abstract member prototype:
                             Node.stream_web.stream_SLASH_web_.WritableStreamDefaultWriter with get, set
 
@@ -161750,7 +161821,7 @@ Duplex.fromWeb($0, $1)"""
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type Type_1 =
+                    type Type =
                         abstract member prototype:
                             Node.stream_web.stream_SLASH_web_.WritableStreamDefaultController with get, set
 
@@ -161763,7 +161834,7 @@ Duplex.fromWeb($0, $1)"""
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type Type_1 =
+                    type Type =
                         abstract member prototype:
                             Node.stream_web.stream_SLASH_web_.ByteLengthQueuingStrategy with get, set
 
@@ -161776,7 +161847,7 @@ Duplex.fromWeb($0, $1)"""
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type Type_1 =
+                    type Type =
                         abstract member prototype:
                             Node.stream_web.stream_SLASH_web_.CountQueuingStrategy with get, set
 
@@ -161789,7 +161860,7 @@ Duplex.fromWeb($0, $1)"""
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type Type_1 =
+                    type Type =
                         abstract member prototype:
                             Node.stream_web.stream_SLASH_web_.TextEncoderStream with get, set
 
@@ -161801,7 +161872,7 @@ Duplex.fromWeb($0, $1)"""
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type Type_1 =
+                    type Type =
                         abstract member prototype:
                             Node.stream_web.stream_SLASH_web_.TextDecoderStream with get, set
 
@@ -168667,7 +168738,7 @@ Duplex.fromWeb($0, $1)"""
             /// </returns>
             [<Import("getCACertificates", "tls")>]
             static member getCACertificates
-                (?``type``: Exports.getCACertificates.``type``)
+                (?``type``: Exports.getCACertificates__.``type``)
                 : ResizeArray<string>
                 =
                 nativeOnly
@@ -172597,7 +172668,7 @@ Duplex.fromWeb($0, $1)"""
 
         module Exports =
 
-            module getCACertificates =
+            module getCACertificates__ =
 
                 [<RequireQualifiedAccess>]
                 [<StringEnum(CaseRules.None)>]
@@ -172727,11 +172798,11 @@ Duplex.fromWeb($0, $1)"""
         type Exports =
             [<Import("SlowBuffer", "buffer")>]
             [<Obsolete("Use `Buffer.allocUnsafeSlow()` instead.")>]
-            static member inline SlowBuffer: Exports.SlowBuffer.Type = nativeOnly
+            static member inline SlowBuffer: Exports.SlowBuffer__.Type = nativeOnly
 
         module Exports =
 
-            module SlowBuffer =
+            module SlowBuffer__ =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -176275,91 +176346,91 @@ URL.parse($0, $1)"""
             [<Import("callbackify", "util")>]
             static member callbackify<'TResult>
                 (fn: (unit -> JS.Promise<'TResult>))
-                : (Exports.callbackify.callback<'TResult> -> unit)
+                : (Exports.callbackify__.callback<'TResult> -> unit)
                 =
                 nativeOnly
 
             [<Import("callbackify", "util")>]
             static member callbackify<'T1>
                 (fn: ('T1 -> JS.Promise<unit>))
-                : Exports.callbackify<'T1>
+                : Exports.callbackify__<'T1>
                 =
                 nativeOnly
 
             [<Import("callbackify", "util")>]
             static member callbackify<'T1, 'TResult>
                 (fn: ('T1 -> JS.Promise<'TResult>))
-                : Exports.callbackify_1<'T1, 'TResult>
+                : Exports.callbackify___1<'T1, 'TResult>
                 =
                 nativeOnly
 
             [<Import("callbackify", "util")>]
             static member callbackify<'T1, 'T2>
-                (fn: Exports.callbackify.fn<'T1, 'T2>)
-                : Exports.callbackify_2<'T1, 'T2>
+                (fn: Exports.callbackify__.fn<'T1, 'T2>)
+                : Exports.callbackify___2<'T1, 'T2>
                 =
                 nativeOnly
 
             [<Import("callbackify", "util")>]
             static member callbackify<'T1, 'T2, 'TResult>
-                (fn: Exports.callbackify.fn_1<'T1, 'T2, 'TResult>)
-                : Exports.callbackify_3<'T1, 'T2, 'TResult>
+                (fn: Exports.callbackify__.fn_1<'T1, 'T2, 'TResult>)
+                : Exports.callbackify___3<'T1, 'T2, 'TResult>
                 =
                 nativeOnly
 
             [<Import("callbackify", "util")>]
             static member callbackify<'T1, 'T2, 'T3>
-                (fn: Exports.callbackify.fn_2<'T1, 'T2, 'T3>)
-                : Exports.callbackify_4<'T1, 'T2, 'T3>
+                (fn: Exports.callbackify__.fn_2<'T1, 'T2, 'T3>)
+                : Exports.callbackify___4<'T1, 'T2, 'T3>
                 =
                 nativeOnly
 
             [<Import("callbackify", "util")>]
             static member callbackify<'T1, 'T2, 'T3, 'TResult>
-                (fn: Exports.callbackify.fn_3<'T1, 'T2, 'T3, 'TResult>)
-                : Exports.callbackify_5<'T1, 'T2, 'T3, 'TResult>
+                (fn: Exports.callbackify__.fn_3<'T1, 'T2, 'T3, 'TResult>)
+                : Exports.callbackify___5<'T1, 'T2, 'T3, 'TResult>
                 =
                 nativeOnly
 
             [<Import("callbackify", "util")>]
             static member callbackify<'T1, 'T2, 'T3, 'T4>
-                (fn: Exports.callbackify.fn_4<'T1, 'T2, 'T3, 'T4>)
-                : Exports.callbackify_6<'T1, 'T2, 'T3, 'T4>
+                (fn: Exports.callbackify__.fn_4<'T1, 'T2, 'T3, 'T4>)
+                : Exports.callbackify___6<'T1, 'T2, 'T3, 'T4>
                 =
                 nativeOnly
 
             [<Import("callbackify", "util")>]
             static member callbackify<'T1, 'T2, 'T3, 'T4, 'TResult>
-                (fn: Exports.callbackify.fn_5<'T1, 'T2, 'T3, 'T4, 'TResult>)
-                : Exports.callbackify_7<'T1, 'T2, 'T3, 'T4, 'TResult>
+                (fn: Exports.callbackify__.fn_5<'T1, 'T2, 'T3, 'T4, 'TResult>)
+                : Exports.callbackify___7<'T1, 'T2, 'T3, 'T4, 'TResult>
                 =
                 nativeOnly
 
             [<Import("callbackify", "util")>]
             static member callbackify<'T1, 'T2, 'T3, 'T4, 'T5>
-                (fn: Exports.callbackify.fn_6<'T1, 'T2, 'T3, 'T4, 'T5>)
-                : Exports.callbackify_8<'T1, 'T2, 'T3, 'T4, 'T5>
+                (fn: Exports.callbackify__.fn_6<'T1, 'T2, 'T3, 'T4, 'T5>)
+                : Exports.callbackify___8<'T1, 'T2, 'T3, 'T4, 'T5>
                 =
                 nativeOnly
 
             [<Import("callbackify", "util")>]
             static member callbackify<'T1, 'T2, 'T3, 'T4, 'T5, 'TResult>
-                (fn: Exports.callbackify.fn_7<'T1, 'T2, 'T3, 'T4, 'T5, 'TResult>)
-                : Exports.callbackify_9<'T1, 'T2, 'T3, 'T4, 'T5, 'TResult>
+                (fn: Exports.callbackify__.fn_7<'T1, 'T2, 'T3, 'T4, 'T5, 'TResult>)
+                : Exports.callbackify___9<'T1, 'T2, 'T3, 'T4, 'T5, 'TResult>
                 =
                 nativeOnly
 
             [<Import("callbackify", "util")>]
             static member callbackify<'T1, 'T2, 'T3, 'T4, 'T5, 'T6>
-                (fn: Exports.callbackify.fn_8<'T1, 'T2, 'T3, 'T4, 'T5, 'T6>)
-                : Exports.callbackify_10<'T1, 'T2, 'T3, 'T4, 'T5, 'T6>
+                (fn: Exports.callbackify__.fn_8<'T1, 'T2, 'T3, 'T4, 'T5, 'T6>)
+                : Exports.callbackify___10<'T1, 'T2, 'T3, 'T4, 'T5, 'T6>
                 =
                 nativeOnly
 
             [<Import("callbackify", "util")>]
             static member callbackify<'T1, 'T2, 'T3, 'T4, 'T5, 'T6, 'TResult>
-                (fn: Exports.callbackify.fn_9<'T1, 'T2, 'T3, 'T4, 'T5, 'T6, 'TResult>)
-                : Exports.callbackify_11<'T1, 'T2, 'T3, 'T4, 'T5, 'T6, 'TResult>
+                (fn: Exports.callbackify__.fn_9<'T1, 'T2, 'T3, 'T4, 'T5, 'T6, 'TResult>)
+                : Exports.callbackify___11<'T1, 'T2, 'T3, 'T4, 'T5, 'T6, 'TResult>
                 =
                 nativeOnly
 
@@ -176519,7 +176590,7 @@ URL.parse($0, $1)"""
 
             [<Import("promisify", "util")>]
             static member promisify<'TResult>
-                (fn: (Exports.promisify.fn.callback<'TResult> -> unit))
+                (fn: (Exports.promisify__.fn.callback<'TResult> -> unit))
                 : (unit -> JS.Promise<'TResult>)
                 =
                 nativeOnly
@@ -176533,71 +176604,71 @@ URL.parse($0, $1)"""
 
             [<Import("promisify", "util")>]
             static member promisify<'T1, 'TResult>
-                (fn: Exports.promisify.fn<'T1, 'TResult>)
+                (fn: Exports.promisify__.fn<'T1, 'TResult>)
                 : ('T1 -> JS.Promise<'TResult>)
                 =
                 nativeOnly
 
             [<Import("promisify", "util")>]
             static member promisify<'T1>
-                (fn: Exports.promisify.fn_1<'T1>)
+                (fn: Exports.promisify__.fn_1<'T1>)
                 : ('T1 -> JS.Promise<unit>)
                 =
                 nativeOnly
 
             [<Import("promisify", "util")>]
             static member promisify<'T1, 'T2, 'TResult>
-                (fn: Exports.promisify.fn_2<'T1, 'T2, 'TResult>)
-                : Exports.promisify<'T1, 'T2, 'TResult>
+                (fn: Exports.promisify__.fn_2<'T1, 'T2, 'TResult>)
+                : Exports.promisify__<'T1, 'T2, 'TResult>
                 =
                 nativeOnly
 
             [<Import("promisify", "util")>]
             static member promisify<'T1, 'T2>
-                (fn: Exports.promisify.fn_3<'T1, 'T2>)
-                : Exports.promisify_1<'T1, 'T2>
+                (fn: Exports.promisify__.fn_3<'T1, 'T2>)
+                : Exports.promisify___1<'T1, 'T2>
                 =
                 nativeOnly
 
             [<Import("promisify", "util")>]
             static member promisify<'T1, 'T2, 'T3, 'TResult>
-                (fn: Exports.promisify.fn_4<'T1, 'T2, 'T3, 'TResult>)
-                : Exports.promisify_2<'T1, 'T2, 'T3, 'TResult>
+                (fn: Exports.promisify__.fn_4<'T1, 'T2, 'T3, 'TResult>)
+                : Exports.promisify___2<'T1, 'T2, 'T3, 'TResult>
                 =
                 nativeOnly
 
             [<Import("promisify", "util")>]
             static member promisify<'T1, 'T2, 'T3>
-                (fn: Exports.promisify.fn_5<'T1, 'T2, 'T3>)
-                : Exports.promisify_3<'T1, 'T2, 'T3>
+                (fn: Exports.promisify__.fn_5<'T1, 'T2, 'T3>)
+                : Exports.promisify___3<'T1, 'T2, 'T3>
                 =
                 nativeOnly
 
             [<Import("promisify", "util")>]
             static member promisify<'T1, 'T2, 'T3, 'T4, 'TResult>
-                (fn: Exports.promisify.fn_6<'T1, 'T2, 'T3, 'T4, 'TResult>)
-                : Exports.promisify_4<'T1, 'T2, 'T3, 'T4, 'TResult>
+                (fn: Exports.promisify__.fn_6<'T1, 'T2, 'T3, 'T4, 'TResult>)
+                : Exports.promisify___4<'T1, 'T2, 'T3, 'T4, 'TResult>
                 =
                 nativeOnly
 
             [<Import("promisify", "util")>]
             static member promisify<'T1, 'T2, 'T3, 'T4>
-                (fn: Exports.promisify.fn_7<'T1, 'T2, 'T3, 'T4>)
-                : Exports.promisify_5<'T1, 'T2, 'T3, 'T4>
+                (fn: Exports.promisify__.fn_7<'T1, 'T2, 'T3, 'T4>)
+                : Exports.promisify___5<'T1, 'T2, 'T3, 'T4>
                 =
                 nativeOnly
 
             [<Import("promisify", "util")>]
             static member promisify<'T1, 'T2, 'T3, 'T4, 'T5, 'TResult>
-                (fn: Exports.promisify.fn_8<'T1, 'T2, 'T3, 'T4, 'T5, 'TResult>)
-                : Exports.promisify_6<'T1, 'T2, 'T3, 'T4, 'T5, 'TResult>
+                (fn: Exports.promisify__.fn_8<'T1, 'T2, 'T3, 'T4, 'T5, 'TResult>)
+                : Exports.promisify___6<'T1, 'T2, 'T3, 'T4, 'T5, 'TResult>
                 =
                 nativeOnly
 
             [<Import("promisify", "util")>]
             static member promisify<'T1, 'T2, 'T3, 'T4, 'T5>
-                (fn: Exports.promisify.fn_9<'T1, 'T2, 'T3, 'T4, 'T5>)
-                : Exports.promisify_7<'T1, 'T2, 'T3, 'T4, 'T5>
+                (fn: Exports.promisify__.fn_9<'T1, 'T2, 'T3, 'T4, 'T5>)
+                : Exports.promisify___7<'T1, 'T2, 'T3, 'T4, 'T5>
                 =
                 nativeOnly
 
@@ -176853,7 +176924,7 @@ URL.parse($0, $1)"""
             [<Import("styleText", "util")>]
             static member styleText
                 (
-                    format: ResizeArray<Exports.styleText.format>,
+                    format: ResizeArray<Exports.styleText__.format>,
                     text: string,
                     ?options: Node.util.StyleTextOptions
                 )
@@ -176893,7 +176964,7 @@ URL.parse($0, $1)"""
             /// The parsed command line arguments:
             /// </returns>
             [<Import("parseArgs", "util")>]
-            static member parseArgs<'T>(?config: 'T) : Exports.parseArgs = nativeOnly
+            static member parseArgs<'T>(?config: 'T) : Exports.parseArgs__ = nativeOnly
 
             [<Import("TextDecoder", "util"); EmitConstructor>]
             static member TextDecoder
@@ -178639,22 +178710,22 @@ URL.parse($0, $1)"""
 
         module Exports =
 
-            type callbackify<'T1> =
+            type callbackify__<'T1> =
                 delegate of arg1: 'T1 * callback: (Node.NodeJS.ErrnoException -> unit) -> unit
 
-            type callbackify_1<'T1, 'TResult> =
-                delegate of arg1: 'T1 * callback: Exports.callbackify.callback<'TResult> -> unit
+            type callbackify___1<'T1, 'TResult> =
+                delegate of arg1: 'T1 * callback: Exports.callbackify__.callback<'TResult> -> unit
 
-            type callbackify_2<'T1, 'T2> =
+            type callbackify___2<'T1, 'T2> =
                 delegate of
                     arg1: 'T1 * arg2: 'T2 * callback: (Node.NodeJS.ErrnoException -> unit) -> unit
 
-            type callbackify_3<'T1, 'T2, 'TResult> =
+            type callbackify___3<'T1, 'T2, 'TResult> =
                 delegate of
-                    arg1: 'T1 * arg2: 'T2 * callback: Exports.callbackify.callback_1<'TResult> ->
+                    arg1: 'T1 * arg2: 'T2 * callback: Exports.callbackify__.callback_1<'TResult> ->
                         unit
 
-            type callbackify_4<'T1, 'T2, 'T3> =
+            type callbackify___4<'T1, 'T2, 'T3> =
                 delegate of
                     arg1: 'T1 *
                     arg2: 'T2 *
@@ -178662,15 +178733,15 @@ URL.parse($0, $1)"""
                     callback: (Node.NodeJS.ErrnoException -> unit) ->
                         unit
 
-            type callbackify_5<'T1, 'T2, 'T3, 'TResult> =
+            type callbackify___5<'T1, 'T2, 'T3, 'TResult> =
                 delegate of
                     arg1: 'T1 *
                     arg2: 'T2 *
                     arg3: 'T3 *
-                    callback: Exports.callbackify.callback_1<'TResult> ->
+                    callback: Exports.callbackify__.callback_1<'TResult> ->
                         unit
 
-            type callbackify_6<'T1, 'T2, 'T3, 'T4> =
+            type callbackify___6<'T1, 'T2, 'T3, 'T4> =
                 delegate of
                     arg1: 'T1 *
                     arg2: 'T2 *
@@ -178679,16 +178750,16 @@ URL.parse($0, $1)"""
                     callback: (Node.NodeJS.ErrnoException -> unit) ->
                         unit
 
-            type callbackify_7<'T1, 'T2, 'T3, 'T4, 'TResult> =
+            type callbackify___7<'T1, 'T2, 'T3, 'T4, 'TResult> =
                 delegate of
                     arg1: 'T1 *
                     arg2: 'T2 *
                     arg3: 'T3 *
                     arg4: 'T4 *
-                    callback: Exports.callbackify.callback_1<'TResult> ->
+                    callback: Exports.callbackify__.callback_1<'TResult> ->
                         unit
 
-            type callbackify_8<'T1, 'T2, 'T3, 'T4, 'T5> =
+            type callbackify___8<'T1, 'T2, 'T3, 'T4, 'T5> =
                 delegate of
                     arg1: 'T1 *
                     arg2: 'T2 *
@@ -178698,28 +178769,17 @@ URL.parse($0, $1)"""
                     callback: (Node.NodeJS.ErrnoException -> unit) ->
                         unit
 
-            type callbackify_9<'T1, 'T2, 'T3, 'T4, 'T5, 'TResult> =
+            type callbackify___9<'T1, 'T2, 'T3, 'T4, 'T5, 'TResult> =
                 delegate of
                     arg1: 'T1 *
                     arg2: 'T2 *
                     arg3: 'T3 *
                     arg4: 'T4 *
                     arg5: 'T5 *
-                    callback: Exports.callbackify.callback_1<'TResult> ->
+                    callback: Exports.callbackify__.callback_1<'TResult> ->
                         unit
 
-            type callbackify_10<'T1, 'T2, 'T3, 'T4, 'T5, 'T6> =
-                delegate of
-                    arg1: 'T1 *
-                    arg2: 'T2 *
-                    arg3: 'T3 *
-                    arg4: 'T4 *
-                    arg5: 'T5 *
-                    arg6: 'T6 *
-                    callback: (Node.NodeJS.ErrnoException -> unit) ->
-                        unit
-
-            type callbackify_11<'T1, 'T2, 'T3, 'T4, 'T5, 'T6, 'TResult> =
+            type callbackify___10<'T1, 'T2, 'T3, 'T4, 'T5, 'T6> =
                 delegate of
                     arg1: 'T1 *
                     arg2: 'T2 *
@@ -178727,54 +178787,65 @@ URL.parse($0, $1)"""
                     arg4: 'T4 *
                     arg5: 'T5 *
                     arg6: 'T6 *
-                    callback: Exports.callbackify.callback_1<'TResult> ->
+                    callback: (Node.NodeJS.ErrnoException -> unit) ->
                         unit
 
-            type promisify<'T1, 'T2, 'TResult> =
+            type callbackify___11<'T1, 'T2, 'T3, 'T4, 'T5, 'T6, 'TResult> =
+                delegate of
+                    arg1: 'T1 *
+                    arg2: 'T2 *
+                    arg3: 'T3 *
+                    arg4: 'T4 *
+                    arg5: 'T5 *
+                    arg6: 'T6 *
+                    callback: Exports.callbackify__.callback_1<'TResult> ->
+                        unit
+
+            type promisify__<'T1, 'T2, 'TResult> =
                 delegate of arg1: 'T1 * arg2: 'T2 -> JS.Promise<'TResult>
 
-            type promisify_1<'T1, 'T2> = delegate of arg1: 'T1 * arg2: 'T2 -> JS.Promise<unit>
+            type promisify___1<'T1, 'T2> = delegate of arg1: 'T1 * arg2: 'T2 -> JS.Promise<unit>
 
-            type promisify_2<'T1, 'T2, 'T3, 'TResult> =
+            type promisify___2<'T1, 'T2, 'T3, 'TResult> =
                 delegate of arg1: 'T1 * arg2: 'T2 * arg3: 'T3 -> JS.Promise<'TResult>
 
-            type promisify_3<'T1, 'T2, 'T3> =
+            type promisify___3<'T1, 'T2, 'T3> =
                 delegate of arg1: 'T1 * arg2: 'T2 * arg3: 'T3 -> JS.Promise<unit>
 
-            type promisify_4<'T1, 'T2, 'T3, 'T4, 'TResult> =
+            type promisify___4<'T1, 'T2, 'T3, 'T4, 'TResult> =
                 delegate of arg1: 'T1 * arg2: 'T2 * arg3: 'T3 * arg4: 'T4 -> JS.Promise<'TResult>
 
-            type promisify_5<'T1, 'T2, 'T3, 'T4> =
+            type promisify___5<'T1, 'T2, 'T3, 'T4> =
                 delegate of arg1: 'T1 * arg2: 'T2 * arg3: 'T3 * arg4: 'T4 -> JS.Promise<unit>
 
-            type promisify_6<'T1, 'T2, 'T3, 'T4, 'T5, 'TResult> =
+            type promisify___6<'T1, 'T2, 'T3, 'T4, 'T5, 'TResult> =
                 delegate of
                     arg1: 'T1 * arg2: 'T2 * arg3: 'T3 * arg4: 'T4 * arg5: 'T5 ->
                         JS.Promise<'TResult>
 
-            type promisify_7<'T1, 'T2, 'T3, 'T4, 'T5> =
+            type promisify___7<'T1, 'T2, 'T3, 'T4, 'T5> =
                 delegate of
                     arg1: 'T1 * arg2: 'T2 * arg3: 'T3 * arg4: 'T4 * arg5: 'T5 -> JS.Promise<unit>
 
             [<AllowNullLiteral>]
             [<Interface>]
-            type parseArgs =
-                abstract member values: Exports.parseArgs.values with get, set
+            type parseArgs__ =
+                abstract member values: Exports.parseArgs__.values with get, set
                 abstract member positionals: ResizeArray<string> with get, set
                 abstract member tokens: ResizeArray<Node.util.Token> option with get, set
 
                 [<ParamObject; Emit("$0")>]
                 static member Create
                     (
-                        values: Exports.parseArgs.values,
+                        values: Exports.parseArgs__.values,
                         positionals: ResizeArray<string>,
                         ?tokens: ResizeArray<Node.util.Token>
                     )
-                    : parseArgs
+                    : parseArgs__
                     =
                     nativeOnly
 
-            module callbackify =
+            module callbackify__ =
 
                 type callback<'TResult> =
                     delegate of err: Node.NodeJS.ErrnoException * result: 'TResult -> unit
@@ -178820,7 +178891,7 @@ URL.parse($0, $1)"""
                         arg1: 'T1 * arg2: 'T2 * arg3: 'T3 * arg4: 'T4 * arg5: 'T5 * arg6: 'T6 ->
                             JS.Promise<'TResult>
 
-            module promisify =
+            module promisify__ =
 
                 module fn =
 
@@ -178828,13 +178899,13 @@ URL.parse($0, $1)"""
 
                 type fn<'T1, 'TResult> =
                     delegate of
-                        arg1: 'T1 * callback: Exports.promisify.fn.callback<'TResult> -> unit
+                        arg1: 'T1 * callback: Exports.promisify__.fn.callback<'TResult> -> unit
 
                 type fn_1<'T1> = delegate of arg1: 'T1 * callback: (obj option -> unit) -> unit
 
                 type fn_2<'T1, 'T2, 'TResult> =
                     delegate of
-                        arg1: 'T1 * arg2: 'T2 * callback: Exports.promisify.fn.callback<'TResult> ->
+                        arg1: 'T1 * arg2: 'T2 * callback: Exports.promisify__.fn.callback<'TResult> ->
                             unit
 
                 type fn_3<'T1, 'T2> =
@@ -178845,7 +178916,7 @@ URL.parse($0, $1)"""
                         arg1: 'T1 *
                         arg2: 'T2 *
                         arg3: 'T3 *
-                        callback: Exports.promisify.fn.callback<'TResult> ->
+                        callback: Exports.promisify__.fn.callback<'TResult> ->
                             unit
 
                 type fn_5<'T1, 'T2, 'T3> =
@@ -178858,7 +178929,7 @@ URL.parse($0, $1)"""
                         arg2: 'T2 *
                         arg3: 'T3 *
                         arg4: 'T4 *
-                        callback: Exports.promisify.fn.callback<'TResult> ->
+                        callback: Exports.promisify__.fn.callback<'TResult> ->
                             unit
 
                 type fn_7<'T1, 'T2, 'T3, 'T4> =
@@ -178877,7 +178948,7 @@ URL.parse($0, $1)"""
                         arg3: 'T3 *
                         arg4: 'T4 *
                         arg5: 'T5 *
-                        callback: Exports.promisify.fn.callback<'TResult> ->
+                        callback: Exports.promisify__.fn.callback<'TResult> ->
                             unit
 
                 type fn_9<'T1, 'T2, 'T3, 'T4, 'T5> =
@@ -178890,7 +178961,7 @@ URL.parse($0, $1)"""
                         callback: (obj option -> unit) ->
                             unit
 
-            module styleText =
+            module styleText__ =
 
                 [<RequireQualifiedAccess>]
                 [<StringEnum(CaseRules.None)>]
@@ -178945,7 +179016,7 @@ URL.parse($0, $1)"""
                     | strikethrough
                     | underline
 
-            module parseArgs =
+            module parseArgs__ =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -179128,7 +179199,7 @@ URL.parse($0, $1)"""
             /// </param>
             [<Import("getCppHeapStatistics", "v8")>]
             static member getCppHeapStatistics
-                (?detailLevel: Exports.getCppHeapStatistics.detailLevel)
+                (?detailLevel: Exports.getCppHeapStatistics__.detailLevel)
                 : obj
                 =
                 nativeOnly
@@ -179251,14 +179322,14 @@ URL.parse($0, $1)"""
 
             [<Import("queryObjects", "v8")>]
             static member queryObjects
-                (ctor: Action, options: Exports.queryObjects.options)
+                (ctor: Action, options: Exports.queryObjects__.options)
                 : float
                 =
                 nativeOnly
 
             [<Import("queryObjects", "v8")>]
             static member queryObjects
-                (ctor: Action, options: Exports.queryObjects.options_1)
+                (ctor: Action, options: Exports.queryObjects__.options_1)
                 : ResizeArray<string>
                 =
                 nativeOnly
@@ -180056,7 +180127,7 @@ URL.parse($0, $1)"""
 
         module Exports =
 
-            module getCppHeapStatistics =
+            module getCppHeapStatistics__ =
 
                 [<RequireQualifiedAccess>]
                 [<StringEnum(CaseRules.None)>]
@@ -180064,7 +180135,7 @@ URL.parse($0, $1)"""
                     | brief
                     | detailed
 
-            module queryObjects =
+            module queryObjects__ =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -182659,7 +182730,7 @@ URL.parse($0, $1)"""
             [<Import("receiveMessageOnPort", "worker_threads")>]
             static member receiveMessageOnPort
                 (port: Node.worker_threads.MessagePort)
-                : Exports.receiveMessageOnPort option
+                : Exports.receiveMessageOnPort__ option
                 =
                 nativeOnly
 
@@ -186248,11 +186319,11 @@ URL.parse($0, $1)"""
 
             [<AllowNullLiteral>]
             [<Interface>]
-            type receiveMessageOnPort =
+            type receiveMessageOnPort__ =
                 abstract member message: obj with get, set
 
                 [<ParamObject; Emit("$0")>]
-                static member Create(message: obj) : receiveMessageOnPort = nativeOnly
+                static member Create(message: obj) : receiveMessageOnPort__ = nativeOnly
 
     module zlib =
 

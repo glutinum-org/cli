@@ -8,11 +8,11 @@ open System
 [<Erase>]
 type Exports =
     [<Import("settings", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member inline settings: Exports.settings.Type = nativeOnly
+    static member inline settings: Exports.settings__.Type = nativeOnly
 
 module Exports =
 
-    module settings =
+    module settings__ =
 
         [<AllowNullLiteral>]
         [<Interface>]

@@ -8,7 +8,7 @@ open System
 [<Erase>]
 type Exports =
     [<Import("f", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member f (x: Exports.f.x) : unit = nativeOnly
+    static member f (x: Exports.f__.x) : unit = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
@@ -21,7 +21,7 @@ type Picked<'T, 'K when 'K :> obj> =
 
 module Exports =
 
-    module f =
+    module f__ =
 
         [<AllowNullLiteral>]
         [<Interface>]

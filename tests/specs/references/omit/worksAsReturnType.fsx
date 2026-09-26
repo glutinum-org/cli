@@ -8,7 +8,7 @@ open System
 [<Erase>]
 type Exports =
     [<Import("foo", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member foo () : Exports.foo = nativeOnly
+    static member foo () : Exports.foo__ = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
@@ -20,7 +20,7 @@ module Exports =
 
     [<AllowNullLiteral>]
     [<Interface>]
-    type foo =
+    type foo__ =
         abstract member description: string with get, set
 
 (***)

@@ -8,21 +8,21 @@ open System
 [<Erase>]
 type Exports =
     [<Import("openTextDocument", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member openTextDocument (?options: Exports.openTextDocument.options) : obj = nativeOnly
+    static member openTextDocument (?options: Exports.openTextDocument__.options) : obj = nativeOnly
     [<Import("openTextDocument", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member openTextDocument (prefix: string, ?options: Exports.openTextDocument.options_1) : obj = nativeOnly
+    static member openTextDocument (prefix: string, ?options: Exports.openTextDocument__.options_1) : obj = nativeOnly
 
 module Exports =
 
-    module openTextDocument =
+    module openTextDocument__ =
 
         [<AllowNullLiteral>]
         [<Interface>]
         type options =
             abstract member encoding: string option with get
-            abstract member clamp: Exports.openTextDocument.options.clamp with get
+            abstract member clamp: Exports.openTextDocument__.options.clamp with get
             [<ParamObject; Emit("$0")>]
-            static member Create (clamp: Exports.openTextDocument.options.clamp, ?encoding: string) : options = nativeOnly
+            static member Create (clamp: Exports.openTextDocument__.options.clamp, ?encoding: string) : options = nativeOnly
 
         module options =
 
@@ -45,9 +45,9 @@ module Exports =
         [<Interface>]
         type options_1 =
             abstract member encoding: string option with get
-            abstract member clamp: Exports.openTextDocument.options.clamp_1 with get
+            abstract member clamp: Exports.openTextDocument__.options.clamp_1 with get
             [<ParamObject; Emit("$0")>]
-            static member Create (clamp: Exports.openTextDocument.options.clamp_1, ?encoding: string) : options_1 = nativeOnly
+            static member Create (clamp: Exports.openTextDocument__.options.clamp_1, ?encoding: string) : options_1 = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

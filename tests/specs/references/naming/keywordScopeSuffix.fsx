@@ -8,13 +8,13 @@ open System
 [<Erase>]
 type Exports =
     [<Import("foo", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member foo (``use``: Exports.foo.``use``) : unit = nativeOnly
+    static member foo (``use``: Exports.foo__.``use``) : unit = nativeOnly
     [<Import("foo", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member foo (``use``: Exports.foo.``use_1``) : unit = nativeOnly
+    static member foo (``use``: Exports.foo__.``use_1``) : unit = nativeOnly
 
 module Exports =
 
-    module foo =
+    module foo__ =
 
         [<AllowNullLiteral>]
         [<Interface>]

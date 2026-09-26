@@ -8,7 +8,7 @@ open System
 [<Erase>]
 type Exports =
     [<Import("minimatch", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member inline minimatch: Exports.minimatch.Type = nativeOnly
+    static member inline minimatch: Exports.minimatch__.Type = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
@@ -19,14 +19,14 @@ type Options =
 
 module Exports =
 
-    module minimatch =
+    module minimatch__ =
 
         [<AllowNullLiteral>]
         [<Interface>]
         type Type =
             [<Emit("$0($1...)")>]
             abstract member Invoke: p: string * pattern: string * ?options: Options -> bool
-            abstract member defaults: (Options -> Exports.minimatch.Type.defaults) with get, set
+            abstract member defaults: (Options -> Exports.minimatch__.Type.defaults) with get, set
 
         module Type =
 

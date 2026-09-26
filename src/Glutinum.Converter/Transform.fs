@@ -226,7 +226,8 @@ type TransformContext
         typeMemory: GlueType list,
         typeLiteralsMemory: TypeLiteralsMemory,
         importSource: ImportSource,
-        ?parent: TransformContext
+        ?parent: TransformContext,
+        ?originalScopeName: string
     )
     =
 
@@ -239,6 +240,9 @@ type TransformContext
         | Some parent -> (parent.FullName + "." + currentScopeName).TrimStart '.'
 
     member val CurrentScopeName = currentScopeName
+
+    /// The name the scope had before it was renamed to stay out of the way of a member
+    member val OriginalScopeName = defaultArg originalScopeName currentScopeName
 
     member val TypeMemory = typeMemory
 
@@ -285,7 +289,7 @@ type TransformContext
         | None -> this
         | Some parent -> parent.Root
 
-    member this.PushScope(scopeName: string) =
+    member this.PushScope(scopeName: string, ?originalScopeName: string) =
         let childContext =
             TransformContext(
                 reporter,
@@ -293,7 +297,8 @@ type TransformContext
                 typeMemory,
                 typeLiteralsMemory,
                 importSource,
-                parent = this
+                parent = this,
+                ?originalScopeName = (originalScopeName |> Option.map Naming.sanitizeName)
             )
 
         modules.Add childContext
@@ -462,6 +467,23 @@ let private unwrapOptionIfAlreadyOptional
 let private sanitizeNameAndPushScope (name: string) (context: TransformContext) =
     let context = context.PushScope(Naming.sanitizeTypeName name)
     (Naming.sanitizeName name, context)
+
+/// `Holder.foo` reached through an `open` is the companion module, not the static member:
+/// the module of a static member takes a suffix so the member stays reachable
+let private sanitizeMemberNameAndPushScope
+    (isStatic: bool)
+    (name: string)
+    (context: TransformContext)
+    =
+    if isStatic then
+        // The suffix goes on the raw name: `open` is escaped as ``open`` and the suffix
+        // would land inside the escape
+        let context =
+            context.PushScope(Naming.sanitizeTypeName (name + "__"), Naming.sanitizeTypeName name)
+
+        (Naming.sanitizeName name, context)
+    else
+        sanitizeNameAndPushScope name context
 
 // Same as `sanitizeNameAndPushScope` but for type-level names (interfaces,
 // classes, modules, type aliases) where `$` and `/` are invalid even when
@@ -719,7 +741,7 @@ module private UtilityType =
                     XmlDoc = []
                     Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
                     Name = context.CurrentScopeName
-                    OriginalName = context.CurrentScopeName
+                    OriginalName = context.OriginalScopeName
                     TypeParameters =
                         typeParameterNames
                         |> List.map (fun name ->
@@ -1384,7 +1406,7 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
                 XmlDoc = []
                 Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
                 Name = name
-                OriginalName = context.CurrentScopeName
+                OriginalName = context.OriginalScopeName
                 TypeParameters =
                     typeParameterNames
                     |> List.map (fun name ->
@@ -1421,7 +1443,7 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
                 XmlDoc = []
                 Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
                 Name = name
-                OriginalName = context.CurrentScopeName
+                OriginalName = context.OriginalScopeName
                 TypeParameters =
                     typeParameterNames
                     |> List.map (fun name ->
@@ -1543,7 +1565,7 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
                 XmlDoc = []
                 Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
                 Name = name
-                OriginalName = context.CurrentScopeName
+                OriginalName = context.OriginalScopeName
                 TypeParameters = freeTypeParameters
                 Members = TransformMembers.toFSharpMember context members
                 Inheritance = []
@@ -1594,7 +1616,7 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
                 XmlDoc = []
                 Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
                 Name = name
-                OriginalName = context.CurrentScopeName
+                OriginalName = context.OriginalScopeName
                 TypeParameters =
                     freeTypeParameterNames
                     |> List.map (fun name ->
@@ -1904,7 +1926,7 @@ let private transformExports
 
                 match head with
                 | GlueType.Variable info ->
-                    let name, context = sanitizeNameAndPushScope info.Name context
+                    let name, context = sanitizeMemberNameAndPushScope isTopLevel info.Name context
                     // A type named like the property would shadow it when accessing `Exports.<name>`
                     let context = context.PushScope "Type"
                     let xmlDocInfo = transformComment info.Documentation
@@ -1940,7 +1962,7 @@ let private transformExports
                     applyHelper newTypes (Set.singleton name)
 
                 | GlueType.FunctionDeclaration info ->
-                    let name, context = sanitizeNameAndPushScope info.Name context
+                    let name, context = sanitizeMemberNameAndPushScope isTopLevel info.Name context
 
                     let xmlDocInfo = transformComment info.Documentation
 
@@ -2251,7 +2273,10 @@ let private transformExports
                         applyHelper [] Set.empty
                     else
                         let name, context =
-                            sanitizeNameAndPushScope (name.Substring "export=".Length) context
+                            sanitizeMemberNameAndPushScope
+                                true
+                                (name.Substring "export=".Length)
+                                context
 
                         let newTypes =
                             {
@@ -2437,7 +2462,7 @@ let private transformExports
                     applyHelper newTypes (Set.singleton name)
 
                 | GlueType.ExportDefault glueType ->
-                    let name, context = sanitizeNameAndPushScope glueType.Name context
+                    let name, context = sanitizeMemberNameAndPushScope true glueType.Name context
 
                     // `declare function RAL(): RAL; export default RAL;` already generated a `RAL` member
                     let name =
@@ -2893,7 +2918,8 @@ module private TransformMembers =
                             specializedName, remainingParameters, [ FSharpAttribute.Text emitText ]
                         | None -> methodInfo.Name, methodInfo.Parameters, []
 
-                let name, context = sanitizeNameAndPushScope methodName context
+                let name, context =
+                    sanitizeMemberNameAndPushScope methodInfo.IsStatic methodName context
 
                 if methodInfo.IsStatic then
                     {
@@ -2974,7 +3000,8 @@ module private TransformMembers =
                 |> Some
 
             | GlueMember.Property propertyInfo ->
-                let name, context = sanitizeNameAndPushScope propertyInfo.Name context
+                let name, context =
+                    sanitizeMemberNameAndPushScope propertyInfo.IsStatic propertyInfo.Name context
 
                 let xmlDocInfo = transformComment propertyInfo.Documentation
 
@@ -3016,7 +3043,11 @@ module private TransformMembers =
                     |> Some
 
             | GlueMember.GetAccessor getAccessorInfo ->
-                let name, context = sanitizeNameAndPushScope getAccessorInfo.Name context
+                let name, context =
+                    sanitizeMemberNameAndPushScope
+                        getAccessorInfo.IsStatic
+                        getAccessorInfo.Name
+                        context
 
                 let xmlDocInfo = transformComment getAccessorInfo.Documentation
 
@@ -3038,7 +3069,11 @@ module private TransformMembers =
                 |> Some
 
             | GlueMember.SetAccessor setAccessorInfo ->
-                let name, context = sanitizeNameAndPushScope setAccessorInfo.Name context
+                let name, context =
+                    sanitizeMemberNameAndPushScope
+                        setAccessorInfo.IsStatic
+                        setAccessorInfo.Name
+                        context
 
                 let xmlDocInfo = transformComment setAccessorInfo.Documentation
 
@@ -3224,7 +3259,11 @@ module private TransformMembers =
                 : FSharpParameter
 
             | GlueMember.GetAccessor getAccessorInfo ->
-                let name, context = sanitizeNameAndPushScope getAccessorInfo.Name context
+                let name, context =
+                    sanitizeMemberNameAndPushScope
+                        getAccessorInfo.IsStatic
+                        getAccessorInfo.Name
+                        context
 
                 {
                     Attributes = []
@@ -3236,7 +3275,11 @@ module private TransformMembers =
                 : FSharpParameter
 
             | GlueMember.SetAccessor setAccessorInfo ->
-                let name, context = sanitizeNameAndPushScope setAccessorInfo.Name context
+                let name, context =
+                    sanitizeMemberNameAndPushScope
+                        setAccessorInfo.IsStatic
+                        setAccessorInfo.Name
+                        context
 
                 {
                     Attributes = []
