@@ -9602,6 +9602,216 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
         /// <c>Buffer.from(string)</c> may also use the internal <c>Buffer</c> pool like
         /// <c>Buffer.allocUnsafe()</c> does.
         /// </summary>
+        abstract member from: array: obj -> Node.Buffer
+        /// <summary>
+        /// Allocates a new <c>Buffer</c> using an <c>array</c> of bytes in the range <c>0</c> – <c>255</c>.
+        /// Array entries outside that range will be truncated to fit into it.
+        ///
+        /// <code lang="js">
+        /// import { Buffer } from 'node:buffer';
+        ///
+        /// // Creates a new Buffer containing the UTF-8 bytes of the string 'buffer'.
+        /// const buf = Buffer.from([0x62, 0x75, 0x66, 0x66, 0x65, 0x72]);
+        /// </code>
+        ///
+        /// If <c>array</c> is an <c>Array</c>-like object (that is, one with a <c>length</c> property of
+        /// type <c>number</c>), it is treated as if it is an array, unless it is a <c>Buffer</c> or
+        /// a <c>Uint8Array</c>. This means all other <c>TypedArray</c> variants get treated as an
+        /// <c>Array</c>. To create a <c>Buffer</c> from the bytes backing a <c>TypedArray</c>, use
+        /// <c>Buffer.copyBytesFrom()</c>.
+        ///
+        /// A <c>TypeError</c> will be thrown if <c>array</c> is not an <c>Array</c> or another type
+        /// appropriate for <c>Buffer.from()</c> variants.
+        ///
+        /// <c>Buffer.from(array)</c> and <c>Buffer.from(string)</c> may also use the internal
+        /// <c>Buffer</c> pool like <c>Buffer.allocUnsafe()</c> does.
+        /// This creates a view of the <c>ArrayBuffer</c> without copying the underlying
+        /// memory. For example, when passed a reference to the <c>.buffer</c> property of a
+        /// <c>TypedArray</c> instance, the newly created <c>Buffer</c> will share the same
+        /// allocated memory as the <c>TypedArray</c>'s underlying <c>ArrayBuffer</c>.
+        ///
+        /// <c></c><c>js
+        /// import { Buffer } from 'node:buffer';
+        ///
+        /// const arr = new Uint16Array(2);
+        ///
+        /// arr[0] = 5000;
+        /// arr[1] = 4000;
+        ///
+        /// // Shares memory with </c>arr<c>.
+        /// const buf = Buffer.from(arr.buffer);
+        ///
+        /// console.log(buf);
+        /// // Prints: <Buffer 88 13 a0 0f>
+        ///
+        /// // Changing the original Uint16Array changes the Buffer also.
+        /// arr[1] = 6000;
+        ///
+        /// console.log(buf);
+        /// // Prints: <Buffer 88 13 70 17>
+        /// </c><c></c>
+        ///
+        /// The optional <c>byteOffset</c> and <c>length</c> arguments specify a memory range within
+        /// the <c>arrayBuffer</c> that will be shared by the <c>Buffer</c>.
+        ///
+        /// <code lang="js">
+        /// import { Buffer } from 'node:buffer';
+        ///
+        /// const ab = new ArrayBuffer(10);
+        /// const buf = Buffer.from(ab, 0, 2);
+        ///
+        /// console.log(buf.length);
+        /// // Prints: 2
+        /// </code>
+        ///
+        /// A <c>TypeError</c> will be thrown if <c>arrayBuffer</c> is not an <c>ArrayBuffer</c> or a
+        /// <c>SharedArrayBuffer</c> or another type appropriate for <c>Buffer.from()</c>
+        /// variants.
+        ///
+        /// It is important to remember that a backing <c>ArrayBuffer</c> can cover a range
+        /// of memory that extends beyond the bounds of a <c>TypedArray</c> view. A new
+        /// <c>Buffer</c> created using the <c>buffer</c> property of a <c>TypedArray</c> may extend
+        /// beyond the range of the <c>TypedArray</c>:
+        ///
+        /// <code lang="js">
+        /// import { Buffer } from 'node:buffer';
+        ///
+        /// const arrA = Uint8Array.from([0x63, 0x64, 0x65, 0x66]); // 4 elements
+        /// const arrB = new Uint8Array(arrA.buffer, 1, 2); // 2 elements
+        /// console.log(arrA.buffer === arrB.buffer); // true
+        ///
+        /// const buf = Buffer.from(arrB.buffer);
+        /// console.log(buf);
+        /// // Prints: <Buffer 63 64 65 66>
+        /// </code>
+        /// Creates a new <c>Buffer</c> containing <c>string</c>. The <c>encoding</c> parameter identifies
+        /// the character encoding to be used when converting <c>string</c> into bytes.
+        ///
+        /// <code lang="js">
+        /// import { Buffer } from 'node:buffer';
+        ///
+        /// const buf1 = Buffer.from('this is a tést');
+        /// const buf2 = Buffer.from('7468697320697320612074c3a97374', 'hex');
+        ///
+        /// console.log(buf1.toString());
+        /// // Prints: this is a tést
+        /// console.log(buf2.toString());
+        /// // Prints: this is a tést
+        /// console.log(buf1.toString('latin1'));
+        /// // Prints: this is a tÃ©st
+        /// </code>
+        ///
+        /// A <c>TypeError</c> will be thrown if <c>string</c> is not a string or another type
+        /// appropriate for <c>Buffer.from()</c> variants.
+        ///
+        /// <c>Buffer.from(string)</c> may also use the internal <c>Buffer</c> pool like
+        /// <c>Buffer.allocUnsafe()</c> does.
+        /// </summary>
+        abstract member from: array: BufferConstructor.from.array -> Node.Buffer
+        /// <summary>
+        /// Allocates a new <c>Buffer</c> using an <c>array</c> of bytes in the range <c>0</c> – <c>255</c>.
+        /// Array entries outside that range will be truncated to fit into it.
+        ///
+        /// <code lang="js">
+        /// import { Buffer } from 'node:buffer';
+        ///
+        /// // Creates a new Buffer containing the UTF-8 bytes of the string 'buffer'.
+        /// const buf = Buffer.from([0x62, 0x75, 0x66, 0x66, 0x65, 0x72]);
+        /// </code>
+        ///
+        /// If <c>array</c> is an <c>Array</c>-like object (that is, one with a <c>length</c> property of
+        /// type <c>number</c>), it is treated as if it is an array, unless it is a <c>Buffer</c> or
+        /// a <c>Uint8Array</c>. This means all other <c>TypedArray</c> variants get treated as an
+        /// <c>Array</c>. To create a <c>Buffer</c> from the bytes backing a <c>TypedArray</c>, use
+        /// <c>Buffer.copyBytesFrom()</c>.
+        ///
+        /// A <c>TypeError</c> will be thrown if <c>array</c> is not an <c>Array</c> or another type
+        /// appropriate for <c>Buffer.from()</c> variants.
+        ///
+        /// <c>Buffer.from(array)</c> and <c>Buffer.from(string)</c> may also use the internal
+        /// <c>Buffer</c> pool like <c>Buffer.allocUnsafe()</c> does.
+        /// This creates a view of the <c>ArrayBuffer</c> without copying the underlying
+        /// memory. For example, when passed a reference to the <c>.buffer</c> property of a
+        /// <c>TypedArray</c> instance, the newly created <c>Buffer</c> will share the same
+        /// allocated memory as the <c>TypedArray</c>'s underlying <c>ArrayBuffer</c>.
+        ///
+        /// <c></c><c>js
+        /// import { Buffer } from 'node:buffer';
+        ///
+        /// const arr = new Uint16Array(2);
+        ///
+        /// arr[0] = 5000;
+        /// arr[1] = 4000;
+        ///
+        /// // Shares memory with </c>arr<c>.
+        /// const buf = Buffer.from(arr.buffer);
+        ///
+        /// console.log(buf);
+        /// // Prints: <Buffer 88 13 a0 0f>
+        ///
+        /// // Changing the original Uint16Array changes the Buffer also.
+        /// arr[1] = 6000;
+        ///
+        /// console.log(buf);
+        /// // Prints: <Buffer 88 13 70 17>
+        /// </c><c></c>
+        ///
+        /// The optional <c>byteOffset</c> and <c>length</c> arguments specify a memory range within
+        /// the <c>arrayBuffer</c> that will be shared by the <c>Buffer</c>.
+        ///
+        /// <code lang="js">
+        /// import { Buffer } from 'node:buffer';
+        ///
+        /// const ab = new ArrayBuffer(10);
+        /// const buf = Buffer.from(ab, 0, 2);
+        ///
+        /// console.log(buf.length);
+        /// // Prints: 2
+        /// </code>
+        ///
+        /// A <c>TypeError</c> will be thrown if <c>arrayBuffer</c> is not an <c>ArrayBuffer</c> or a
+        /// <c>SharedArrayBuffer</c> or another type appropriate for <c>Buffer.from()</c>
+        /// variants.
+        ///
+        /// It is important to remember that a backing <c>ArrayBuffer</c> can cover a range
+        /// of memory that extends beyond the bounds of a <c>TypedArray</c> view. A new
+        /// <c>Buffer</c> created using the <c>buffer</c> property of a <c>TypedArray</c> may extend
+        /// beyond the range of the <c>TypedArray</c>:
+        ///
+        /// <code lang="js">
+        /// import { Buffer } from 'node:buffer';
+        ///
+        /// const arrA = Uint8Array.from([0x63, 0x64, 0x65, 0x66]); // 4 elements
+        /// const arrB = new Uint8Array(arrA.buffer, 1, 2); // 2 elements
+        /// console.log(arrA.buffer === arrB.buffer); // true
+        ///
+        /// const buf = Buffer.from(arrB.buffer);
+        /// console.log(buf);
+        /// // Prints: <Buffer 63 64 65 66>
+        /// </code>
+        /// Creates a new <c>Buffer</c> containing <c>string</c>. The <c>encoding</c> parameter identifies
+        /// the character encoding to be used when converting <c>string</c> into bytes.
+        ///
+        /// <code lang="js">
+        /// import { Buffer } from 'node:buffer';
+        ///
+        /// const buf1 = Buffer.from('this is a tést');
+        /// const buf2 = Buffer.from('7468697320697320612074c3a97374', 'hex');
+        ///
+        /// console.log(buf1.toString());
+        /// // Prints: this is a tést
+        /// console.log(buf2.toString());
+        /// // Prints: this is a tést
+        /// console.log(buf1.toString('latin1'));
+        /// // Prints: this is a tÃ©st
+        /// </code>
+        ///
+        /// A <c>TypeError</c> will be thrown if <c>string</c> is not a string or another type
+        /// appropriate for <c>Buffer.from()</c> variants.
+        ///
+        /// <c>Buffer.from(string)</c> may also use the internal <c>Buffer</c> pool like
+        /// <c>Buffer.allocUnsafe()</c> does.
+        /// </summary>
         /// <param name="arrayBuffer">
         /// An <c>ArrayBuffer</c>, <c>SharedArrayBuffer</c>, for example the
         /// <c>.buffer</c> property of a <c>TypedArray</c>.

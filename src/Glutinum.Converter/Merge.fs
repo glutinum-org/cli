@@ -433,7 +433,10 @@ let private withoutSubsumedOverloads (members: FSharpMember list) : FSharpMember
 
     members
     |> List.filter (fun candidate ->
-        not (members |> List.exists (fun other -> subsumes other candidate))
+        match members |> List.filter (fun other -> subsumes other candidate) with
+        // Two overloads accepting the same call are ambiguous, the shorter one resolves it
+        | [ _ ] -> false
+        | _ -> true
     )
 
 let distinctBySignature (members: FSharpMember list) : FSharpMember list =
