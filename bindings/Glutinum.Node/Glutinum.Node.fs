@@ -159695,7 +159695,7 @@ Duplex.fromWeb($0, $1)"""
                     [<Emit("$0.__promisify__($1...)")>]
                     abstract member __promisify__<'A, 'B> :
                         source: 'A * destination: 'B * ?options: Node.stream.Stream_.PipelineOptions ->
-                            obj
+                            JS.Promise<obj>
 
                     [<Emit("$0.__promisify__($1...)")>]
                     abstract member __promisify__<'A, 'T1, 'B> :
@@ -159703,7 +159703,7 @@ Duplex.fromWeb($0, $1)"""
                         transform1: 'T1 *
                         destination: 'B *
                         ?options: Node.stream.Stream_.PipelineOptions ->
-                            obj
+                            JS.Promise<obj>
 
                     [<Emit("$0.__promisify__($1...)")>]
                     abstract member __promisify__<'A, 'T1, 'T2, 'B> :
@@ -159712,7 +159712,7 @@ Duplex.fromWeb($0, $1)"""
                         transform2: 'T2 *
                         destination: 'B *
                         ?options: Node.stream.Stream_.PipelineOptions ->
-                            obj
+                            JS.Promise<obj>
 
                     [<Emit("$0.__promisify__($1...)")>]
                     abstract member __promisify__<'A, 'T1, 'T2, 'T3, 'B> :
@@ -159722,7 +159722,7 @@ Duplex.fromWeb($0, $1)"""
                         transform3: 'T3 *
                         destination: 'B *
                         ?options: Node.stream.Stream_.PipelineOptions ->
-                            obj
+                            JS.Promise<obj>
 
                     [<Emit("$0.__promisify__($1...)")>]
                     abstract member __promisify__<'A, 'T1, 'T2, 'T3, 'T4, 'B> :
@@ -159733,7 +159733,7 @@ Duplex.fromWeb($0, $1)"""
                         transform4: 'T4 *
                         destination: 'B *
                         ?options: Node.stream.Stream_.PipelineOptions ->
-                            obj
+                            JS.Promise<obj>
 
                     [<Emit("$0.__promisify__($1...)")>]
                     abstract member __promisify__:
@@ -160535,7 +160535,7 @@ Duplex.fromWeb($0, $1)"""
             [<Import("pipeline", "stream/promises")>]
             static member pipeline<'A, 'B>
                 (source: 'A, destination: 'B, ?options: Node.stream.Stream_.PipelineOptions)
-                : obj
+                : JS.Promise<obj>
                 =
                 nativeOnly
 
@@ -160547,7 +160547,7 @@ Duplex.fromWeb($0, $1)"""
                     destination: 'B,
                     ?options: Node.stream.Stream_.PipelineOptions
                 )
-                : obj
+                : JS.Promise<obj>
                 =
                 nativeOnly
 
@@ -160560,7 +160560,7 @@ Duplex.fromWeb($0, $1)"""
                     destination: 'B,
                     ?options: Node.stream.Stream_.PipelineOptions
                 )
-                : obj
+                : JS.Promise<obj>
                 =
                 nativeOnly
 
@@ -160574,7 +160574,7 @@ Duplex.fromWeb($0, $1)"""
                     destination: 'B,
                     ?options: Node.stream.Stream_.PipelineOptions
                 )
-                : obj
+                : JS.Promise<obj>
                 =
                 nativeOnly
 
@@ -160589,7 +160589,7 @@ Duplex.fromWeb($0, $1)"""
                     destination: 'B,
                     ?options: Node.stream.Stream_.PipelineOptions
                 )
-                : obj
+                : JS.Promise<obj>
                 =
                 nativeOnly
 

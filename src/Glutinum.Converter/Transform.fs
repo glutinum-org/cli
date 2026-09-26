@@ -4731,17 +4731,56 @@ module Conditionals =
 
         let checked = GlueSubstitution.mentionedTypeParameters conditionalType.CheckType
 
+        let withoutCheckedTypeParameters (glueType: GlueType) =
+            if
+                GlueSubstitution.mentionedTypeParameters glueType
+                |> List.forall (fun name -> not (List.contains name checked))
+            then
+                Some glueType
+            else
+                None
+
         match
             [ trueType; conditionalType.FalseType ]
             |> List.map resolve
             |> List.filter ((<>) (GlueType.Primitive GluePrimitive.Never))
             |> List.distinct
         with
-        | [ single ] when
-            GlueSubstitution.mentionedTypeParameters single
-            |> List.forall (fun name -> not (List.contains name checked))
+        | [ single ] -> withoutCheckedTypeParameters single
+        // `S extends F<infer P> ? Promise<P> : Promise<void>`: the branches agree on the
+        // type, only its arguments differ
+        | GlueType.TypeReference head :: _ as branches when
+            branches
+            |> List.forall (
+                function
+                | GlueType.TypeReference other ->
+                    other.FullName = head.FullName
+                    && other.TypeArguments.Length = head.TypeArguments.Length
+                | _ -> false
+            )
             ->
-            Some single
+            let typeArguments =
+                head.TypeArguments
+                |> List.mapi (fun index argument ->
+                    let shared =
+                        branches
+                        |> List.forall (
+                            function
+                            | GlueType.TypeReference other -> other.TypeArguments[index] = argument
+                            | _ -> false
+                        )
+
+                    if shared then
+                        argument
+                    else
+                        GlueType.Primitive GluePrimitive.Any
+                )
+
+            GlueType.TypeReference
+                { head with
+                    TypeArguments = typeArguments
+                }
+            |> withoutCheckedTypeParameters
         | _ -> None
 
     let rec private mentionsConditional (glueType: GlueType) =
