@@ -522,6 +522,12 @@ let private printXmlDoc (printer: Printer) (elements: FSharpXmlDoc list) =
             printBlockTag printer "typeparam" [ "name", info.TypeName ] info.Content
     )
 
+/// `path: [K1, K2]` is one argument, `path: K1 * K2` would be read as two
+let private printParameterType (typ: FSharpType) =
+    match typ with
+    | FSharpType.Tuple _ -> $"({printType typ})"
+    | _ -> printType typ
+
 let printParameters (printer: Printer) (parameters: FSharpParameter list) =
     if parameters.Length = 0 then
         printer.WriteInline("unit")
@@ -536,7 +542,7 @@ let printParameters (printer: Printer) (parameters: FSharpParameter list) =
             if p.IsOptional then
                 printer.WriteInline("?")
 
-            printer.WriteInline($"{p.Name}: {printType p.Type}")
+            printer.WriteInline($"{p.Name}: {printParameterType p.Type}")
 
             if hasParamArrayAttribute p.Attributes then
                 printer.WriteInline(" []")
@@ -596,7 +602,7 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
                         if p.IsOptional then
                             printer.WriteInline("?")
 
-                        printer.WriteInline($"{p.Name}: {printType p.Type}")
+                        printer.WriteInline($"{p.Name}: {printParameterType p.Type}")
 
                         if hasParamArrayAttribute p.Attributes then
                             printer.WriteInline(" []")
@@ -709,7 +715,7 @@ import {{ %s{interfaceInfo.OriginalName} }} from \"{printer.ImportSpecifier}\";
                         else
                             ""
 
-                    printer.WriteInline($"{p.Name}: {printType p.Type}{option}")
+                    printer.WriteInline($"{p.Name}: {printParameterType p.Type}{option}")
                 )
 
                 if propertyInfo.Parameters.Length > 0 then
@@ -770,7 +776,7 @@ import {{ %s{interfaceInfo.OriginalName} }} from \"{printer.ImportSpecifier}\";
                     if p.IsOptional then
                         printer.WriteInline("?")
 
-                    printer.WriteInline($"{p.Name}: {printType p.Type}")
+                    printer.WriteInline($"{p.Name}: {printParameterType p.Type}")
 
                     if hasParamArrayAttribute p.Attributes then
                         printer.WriteInline(" []")
@@ -831,7 +837,7 @@ let private printPrimaryConstructor (printer: Printer) (constructor: FSharpConst
             else
                 printer.Write("") // Empty string to have the correct indentation
 
-            printer.WriteInline($"{p.Name}: {printType p.Type}")
+            printer.WriteInline($"{p.Name}: {printParameterType p.Type}")
 
             if hasParamArrayAttribute p.Attributes then
                 printer.WriteInline(" []")
@@ -868,7 +874,7 @@ let private printClass (printer: Printer) (classInfo: FSharpClass) =
                 if p.IsOptional then
                     printer.WriteInline("?")
 
-                printer.WriteInline($"{p.Name}: {printType p.Type}")
+                printer.WriteInline($"{p.Name}: {printParameterType p.Type}")
 
                 if hasParamArrayAttribute p.Attributes then
                     printer.WriteInline(" []")

@@ -3240,7 +3240,7 @@ module Node =
         [<Interface>]
         type HRTime =
             [<Emit("$0($1...)")>]
-            abstract member Invoke: ?time: float * float -> float * float
+            abstract member Invoke: ?time: (float * float) -> float * float
 
             /// <summary>
             /// The <c>bigint</c> version of the <see href="process.hrtime()">process.hrtime()</see> method returning the current high-resolution real time in nanoseconds as a <c>bigint</c>.
@@ -182160,7 +182160,7 @@ URL.parse($0, $1)"""
 
                 [<ParamObject; Emit("$0")>]
                 static member Create
-                    (jsMemoryEstimate: float, jsMemoryRange: float * float)
+                    (jsMemoryEstimate: float, jsMemoryRange: (float * float))
                     : total
                     =
                     nativeOnly

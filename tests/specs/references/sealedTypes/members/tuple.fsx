@@ -13,7 +13,7 @@ type Exports =
 [<AllowNullLiteral>]
 [<Interface>]
 type Log<'T, 'R1, 'R2> =
-    abstract member info: data: 'T * float -> U2<'R1, 'R2>
+    abstract member info: data: ('T * float) -> U2<'R1, 'R2>
 
 type Log<'R2> =
     Log<string, float, 'R2>
