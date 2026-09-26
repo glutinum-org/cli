@@ -1041,8 +1041,25 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
 
                     let isExternal = isExternalToPackages checker reader.PackageContext symbolOpt
 
+                    // `InferIssue<ReturnType<TReference>>`: the checker elides a type too deep
+                    // to write out as `...`, neither it nor the application taking it is usable
+                    let isElided =
+                        name = "..."
+                        || (
+                            match typeReferenceNode.typeArguments with
+                            | Some typeArguments ->
+                                typeArguments
+                                |> Seq.exists (fun typeArgument ->
+                                    typeArgument.kind = Ts.SyntaxKind.TypeReference
+                                    && typeArgument?typeName?escapedText = "..."
+                                )
+                            | None -> false
+                        )
+
                     if
-                        isUnresolved || (isExternal && not (knownExternalTypeNames.Contains name))
+                        isElided
+                        || isUnresolved
+                        || (isExternal && not (knownExternalTypeNames.Contains name))
                     then
                         GlueType.Primitive GluePrimitive.Any
                     else
