@@ -320,17 +320,6 @@ module TypeScript =
             target: 'T * source1: 'U * source2: 'V * source3: 'W -> obj
 
         /// <summary>
-        /// Copy the values of all of the enumerable own properties from one or more source objects to a
-        /// target object. Returns the target object.
-        /// </summary>
-        /// <param name="target">
-        /// The target object to copy to.
-        /// </param>
-        /// <param name="sources">
-        /// One or more source objects from which to copy properties
-        /// </param>
-        abstract member assign: target: obj * [<ParamArray>] sources: obj[] -> obj
-        /// <summary>
         /// Returns an array of all symbol properties found directly on object o.
         /// </summary>
         /// <param name="o">
@@ -422,15 +411,6 @@ module TypeScript =
         /// </param>
         abstract member fromEntries<'T> :
             entries: Iterable<TypeScript.PropertyKey * 'T> -> ObjectConstructor.fromEntries<'T>
-
-        /// <summary>
-        /// Returns an object created by key-value entries for properties and methods
-        /// </summary>
-        /// <param name="entries">
-        /// An iterable object that contains key-value entries for properties and methods.
-        /// </param>
-        abstract member fromEntries:
-            entries: Iterable<TypeScript.PropertyKey * obj> -> ObjectConstructor.fromEntries_1
 
         /// <summary>
         /// Returns an object created by key-value entries for properties and methods
@@ -1770,10 +1750,6 @@ module TypeScript =
             [<Emit("$0.set($1...)")>]
             abstract member set:
                 target: obj * propertyKey: float * value: obj * ?receiver: obj -> bool
-
-            [<Emit("$0.set($1...)")>]
-            abstract member set:
-                target: obj * propertyKey: obj * value: obj * ?receiver: obj -> bool
 
             /// <summary>
             /// Sets the prototype of a specified object o to object proto or null.

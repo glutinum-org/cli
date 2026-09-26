@@ -50892,39 +50892,6 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 =
                 nativeOnly
 
-            /// <summary>
-            /// Creates a <c>TracingChannel</c> wrapper for the given <c>TracingChannel Channels</c>. If a name is given, the corresponding tracing
-            /// channels will be created in the form of <c>tracing:${name}:${eventType}</c> where <c>eventType</c> corresponds to the types of <c>TracingChannel Channels</c>.
-            ///
-            /// <code lang="js">
-            /// import diagnostics_channel from 'node:diagnostics_channel';
-            ///
-            /// const channelsByName = diagnostics_channel.tracingChannel('my-channel');
-            ///
-            /// // or...
-            ///
-            /// const channelsByCollection = diagnostics_channel.tracingChannel({
-            ///   start: diagnostics_channel.channel('tracing:my-channel:start'),
-            ///   end: diagnostics_channel.channel('tracing:my-channel:end'),
-            ///   asyncStart: diagnostics_channel.channel('tracing:my-channel:asyncStart'),
-            ///   asyncEnd: diagnostics_channel.channel('tracing:my-channel:asyncEnd'),
-            ///   error: diagnostics_channel.channel('tracing:my-channel:error'),
-            /// });
-            /// </code>
-            /// </summary>
-            /// <param name="nameOrChannels">
-            /// Channel name or object containing all the <c>TracingChannel Channels</c>
-            /// </param>
-            /// <returns>
-            /// Collection of channels to trace with
-            /// </returns>
-            [<Import("tracingChannel", "diagnostics_channel")>]
-            static member tracingChannel
-                (nameOrChannels: Node.diagnostics_channel.TracingChannelCollection<obj, obj>)
-                : Node.diagnostics_channel.TracingChannel<obj, obj>
-                =
-                nativeOnly
-
             [<Import("Channel", "diagnostics_channel"); EmitConstructor>]
             static member Channel<'StoreType, 'ContextType>
                 (name: string)
@@ -51702,50 +51669,6 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 thisArg: 'ThisArg *
                 [<ParamArray>] args: 'Args[] ->
                     JS.Promise<'Result>
-
-            /// <summary>
-            /// Trace a promise-returning function call. This will always produce a <c>start event</c> and <c>end event</c> around the synchronous portion of the
-            /// function execution, and will produce an <c>asyncStart event</c> and <c>asyncEnd event</c> when a promise continuation is reached. It may also
-            /// produce an <c>error event</c> if the given function throws an error or the
-            /// returned promise rejects. This will run the given function using <c>channel.runStores(context, ...)</c> on the <c>start</c> channel which ensures all
-            /// events should have any bound stores set to match this trace context.
-            ///
-            /// To ensure only correct trace graphs are formed, events will only be published if subscribers are present prior to starting the trace. Subscriptions
-            /// which are added after the trace begins will not receive future events from that trace, only future traces will be seen.
-            ///
-            /// <code lang="js">
-            /// import diagnostics_channel from 'node:diagnostics_channel';
-            ///
-            /// const channels = diagnostics_channel.tracingChannel('my-channel');
-            ///
-            /// channels.tracePromise(async () => {
-            ///   // Do something
-            /// }, {
-            ///   some: 'thing',
-            /// });
-            /// </code>
-            /// </summary>
-            /// <param name="fn">
-            /// Promise-returning function to wrap a trace around
-            /// </param>
-            /// <param name="context">
-            /// Shared object to correlate trace events through
-            /// </param>
-            /// <param name="thisArg">
-            /// The receiver to be used for the function call
-            /// </param>
-            /// <param name="args">
-            /// Optional arguments to pass to the function
-            /// </param>
-            /// <returns>
-            /// Chained from promise returned by the given function
-            /// </returns>
-            abstract member tracePromise:
-                fn: System.Delegate *
-                context: 'ContextType *
-                thisArg: obj *
-                [<ParamArray>] args: obj[] ->
-                    JS.Promise<obj>
 
             /// <summary>
             /// Trace a callback-receiving function call. This will always produce a <c>start event</c> and <c>end event</c> around the synchronous portion of the
@@ -127255,102 +127178,6 @@ recursive mode, operations are retried on failure.""")>]
                     ?options: Node.``module``.Module_.RegisterOptions<'Data> ->
                         unit
 
-                /// <summary>
-                /// Register a module that exports hooks that customize Node.js module
-                /// resolution and loading behavior. See
-                /// [Customization hooks](https://nodejs.org/docs/latest-v22.x/api/module.html#customization-hooks).
-                ///
-                /// This feature requires <c>--allow-worker</c> if used with the
-                /// [Permission Model](https://nodejs.org/docs/latest-v22.x/api/permissions.html#permission-model).
-                /// </summary>
-                /// <param name="specifier">
-                /// Customization hooks to be registered; this should be
-                /// the same string that would be passed to <c>import()</c>, except that if it is
-                /// relative, it is resolved relative to <c>parentURL</c>.
-                /// </param>
-                /// <param name="parentURL">
-                /// f you want to resolve <c>specifier</c> relative to a base
-                /// URL, such as <c>import.meta.url</c>, you can pass that URL here.
-                /// </param>
-                [<Emit("$0.register($1...)")>]
-                abstract member register:
-                    specifier: string *
-                    parentURL: string *
-                    ?options: Node.``module``.Module_.RegisterOptions<obj> ->
-                        unit
-
-                /// <summary>
-                /// Register a module that exports hooks that customize Node.js module
-                /// resolution and loading behavior. See
-                /// [Customization hooks](https://nodejs.org/docs/latest-v22.x/api/module.html#customization-hooks).
-                ///
-                /// This feature requires <c>--allow-worker</c> if used with the
-                /// [Permission Model](https://nodejs.org/docs/latest-v22.x/api/permissions.html#permission-model).
-                /// </summary>
-                /// <param name="specifier">
-                /// Customization hooks to be registered; this should be
-                /// the same string that would be passed to <c>import()</c>, except that if it is
-                /// relative, it is resolved relative to <c>parentURL</c>.
-                /// </param>
-                /// <param name="parentURL">
-                /// f you want to resolve <c>specifier</c> relative to a base
-                /// URL, such as <c>import.meta.url</c>, you can pass that URL here.
-                /// </param>
-                [<Emit("$0.register($1...)")>]
-                abstract member register:
-                    specifier: string *
-                    parentURL: Node.url.URL *
-                    ?options: Node.``module``.Module_.RegisterOptions<obj> ->
-                        unit
-
-                /// <summary>
-                /// Register a module that exports hooks that customize Node.js module
-                /// resolution and loading behavior. See
-                /// [Customization hooks](https://nodejs.org/docs/latest-v22.x/api/module.html#customization-hooks).
-                ///
-                /// This feature requires <c>--allow-worker</c> if used with the
-                /// [Permission Model](https://nodejs.org/docs/latest-v22.x/api/permissions.html#permission-model).
-                /// </summary>
-                /// <param name="specifier">
-                /// Customization hooks to be registered; this should be
-                /// the same string that would be passed to <c>import()</c>, except that if it is
-                /// relative, it is resolved relative to <c>parentURL</c>.
-                /// </param>
-                /// <param name="parentURL">
-                /// f you want to resolve <c>specifier</c> relative to a base
-                /// URL, such as <c>import.meta.url</c>, you can pass that URL here.
-                /// </param>
-                [<Emit("$0.register($1...)")>]
-                abstract member register:
-                    specifier: Node.url.URL *
-                    parentURL: string *
-                    ?options: Node.``module``.Module_.RegisterOptions<obj> ->
-                        unit
-
-                /// <summary>
-                /// Register a module that exports hooks that customize Node.js module
-                /// resolution and loading behavior. See
-                /// [Customization hooks](https://nodejs.org/docs/latest-v22.x/api/module.html#customization-hooks).
-                ///
-                /// This feature requires <c>--allow-worker</c> if used with the
-                /// [Permission Model](https://nodejs.org/docs/latest-v22.x/api/permissions.html#permission-model).
-                /// </summary>
-                /// <param name="specifier">
-                /// Customization hooks to be registered; this should be
-                /// the same string that would be passed to <c>import()</c>, except that if it is
-                /// relative, it is resolved relative to <c>parentURL</c>.
-                /// </param>
-                /// <param name="parentURL">
-                /// f you want to resolve <c>specifier</c> relative to a base
-                /// URL, such as <c>import.meta.url</c>, you can pass that URL here.
-                /// </param>
-                [<Emit("$0.register($1...)")>]
-                abstract member register:
-                    specifier: Node.url.URL *
-                    parentURL: Node.url.URL *
-                    ?options: Node.``module``.Module_.RegisterOptions<obj> ->
-                        unit
-
                 [<Emit("$0.register($1...)")>]
                 abstract member register<'Data> :
                     specifier: string * ?options: Node.``module``.Module_.RegisterOptions<'Data> ->
@@ -127360,16 +127187,6 @@ recursive mode, operations are retried on failure.""")>]
                 abstract member register<'Data> :
                     specifier: Node.url.URL *
                     ?options: Node.``module``.Module_.RegisterOptions<'Data> ->
-                        unit
-
-                [<Emit("$0.register($1...)")>]
-                abstract member register:
-                    specifier: string * ?options: Node.``module``.Module_.RegisterOptions<obj> ->
-                        unit
-
-                [<Emit("$0.register($1...)")>]
-                abstract member register:
-                    specifier: Node.url.URL * ?options: Node.``module``.Module_.RegisterOptions<obj> ->
                         unit
 
                 /// <summary>
@@ -141344,50 +141161,6 @@ the userland-provided Punycode.js module instead.""")>]
             /// The <c>rl.write()</c> method will write the data to the <c>readline</c> <c>Interface</c>'s <c>input</c> _as if it were provided by the user_.
             /// </summary>
             abstract member write: data: Node.Buffer * ?key: Node.readline.Key -> unit
-            /// <summary>
-            /// The <c>rl.write()</c> method will write either <c>data</c> or a key sequence identified
-            /// by <c>key</c> to the <c>output</c>. The <c>key</c> argument is supported only if <c>output</c> is
-            /// a <c>TTY</c> text terminal. See <c>TTY keybindings</c> for a list of key
-            /// combinations.
-            ///
-            /// If <c>key</c> is specified, <c>data</c> is ignored.
-            ///
-            /// When called, <c>rl.write()</c> will resume the <c>input</c> stream if it has been
-            /// paused.
-            ///
-            /// If the <c>Interface</c> was created with <c>output</c> set to <c>null</c> or <c>undefined</c> the <c>data</c> and <c>key</c> are not written.
-            ///
-            /// <code lang="js">
-            /// rl.write('Delete this!');
-            /// // Simulate Ctrl+U to delete the line written previously
-            /// rl.write(null, { ctrl: true, name: 'u' });
-            /// </code>
-            ///
-            /// The <c>rl.write()</c> method will write the data to the <c>readline</c> <c>Interface</c>'s <c>input</c> _as if it were provided by the user_.
-            /// </summary>
-            abstract member write: data: string option * key: Node.readline.Key -> unit
-            /// <summary>
-            /// The <c>rl.write()</c> method will write either <c>data</c> or a key sequence identified
-            /// by <c>key</c> to the <c>output</c>. The <c>key</c> argument is supported only if <c>output</c> is
-            /// a <c>TTY</c> text terminal. See <c>TTY keybindings</c> for a list of key
-            /// combinations.
-            ///
-            /// If <c>key</c> is specified, <c>data</c> is ignored.
-            ///
-            /// When called, <c>rl.write()</c> will resume the <c>input</c> stream if it has been
-            /// paused.
-            ///
-            /// If the <c>Interface</c> was created with <c>output</c> set to <c>null</c> or <c>undefined</c> the <c>data</c> and <c>key</c> are not written.
-            ///
-            /// <code lang="js">
-            /// rl.write('Delete this!');
-            /// // Simulate Ctrl+U to delete the line written previously
-            /// rl.write(null, { ctrl: true, name: 'u' });
-            /// </code>
-            ///
-            /// The <c>rl.write()</c> method will write the data to the <c>readline</c> <c>Interface</c>'s <c>input</c> _as if it were provided by the user_.
-            /// </summary>
-            abstract member write: data: Node.Buffer option * key: Node.readline.Key -> unit
             /// <summary>
             /// Returns the real position of the cursor in relation to the input
             /// prompt + string. Long input (wrapping) strings, as well as multiple
@@ -173775,13 +173548,6 @@ Duplex.fromWeb($0, $1)"""
                 =
                 nativeOnly
 
-            [<Import("parse", "url")>]
-            static member parse
-                (urlString: string, parseQueryString: bool, ?slashesDenoteHost: bool)
-                : Node.url.UrlWithParsedQuery
-                =
-                nativeOnly
-
             /// <summary>
             /// The <c>url.format()</c> method returns a formatted URL string derived from <c>urlObject</c>.
             ///
@@ -193414,14 +193180,6 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
             /// <summary>
             /// Mock an undici request with the defined reply.
             /// </summary>
-            abstract member reply:
-                replyOptionsCallback:
-                    UndiciTypes.mock_interceptor.MockInterceptor_.MockReplyOptionsCallback<obj> ->
-                    UndiciTypes.mock_interceptor.MockScope<obj>
-
-            /// <summary>
-            /// Mock an undici request with the defined reply.
-            /// </summary>
             abstract member reply<'TData> :
                 statusCode: float -> UndiciTypes.mock_interceptor.MockScope<'TData>
 
@@ -193471,15 +193229,6 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
             /// </summary>
             abstract member reply:
                 statusCode: float *
-                data: obj *
-                ?responseOptions: UndiciTypes.mock_interceptor.MockInterceptor_.MockResponseOptions ->
-                    UndiciTypes.mock_interceptor.MockScope<obj>
-
-            /// <summary>
-            /// Mock an undici request with the defined reply.
-            /// </summary>
-            abstract member reply:
-                statusCode: float *
                 data: Node.Buffer *
                 ?responseOptions: UndiciTypes.mock_interceptor.MockInterceptor_.MockResponseOptions ->
                     UndiciTypes.mock_interceptor.MockScope<obj>
@@ -193490,15 +193239,6 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
             abstract member reply:
                 statusCode: float *
                 data: string *
-                ?responseOptions: UndiciTypes.mock_interceptor.MockInterceptor_.MockResponseOptions ->
-                    UndiciTypes.mock_interceptor.MockScope<obj>
-
-            /// <summary>
-            /// Mock an undici request with the defined reply.
-            /// </summary>
-            abstract member reply:
-                statusCode: float *
-                data: UndiciTypes.mock_interceptor.MockInterceptor_.MockResponseDataHandler<obj> *
                 ?responseOptions: UndiciTypes.mock_interceptor.MockInterceptor_.MockResponseOptions ->
                     UndiciTypes.mock_interceptor.MockScope<obj>
 

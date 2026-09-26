@@ -184,6 +184,11 @@ let rec private signatureTypeAt (depth: int) (typ: FSharpType) : FSharpType =
         && (tryGenericAliasTarget typeReference).IsSome
         ->
         (tryGenericAliasTarget typeReference).Value |> signatureType
+    // `T[]` is `FSharpType.ResizeArray`, `Array<T>` a reference to it
+    | FSharpType.TypeReference {
+                                   Name = "ResizeArray"
+                                   TypeArguments = [ typeArgument ]
+                               } -> FSharpType.ResizeArray(signatureType typeArgument)
     | FSharpType.TypeReference typeReference ->
         { typeReference with
             // Both are `TypedArray<byte>` in Fable.Core
@@ -201,6 +206,19 @@ let rec private signatureTypeAt (depth: int) (typ: FSharpType) : FSharpType =
     | FSharpType.ResizeArray typ -> FSharpType.ResizeArray(signatureType typ)
     | FSharpType.JSApi(FSharpJSApi.ReadonlyArray typ) ->
         FSharpType.JSApi(FSharpJSApi.ReadonlyArray(signatureType typ))
+    | FSharpType.Union unionInfo ->
+        { unionInfo with
+            Cases =
+                unionInfo.Cases
+                |> List.map (
+                    function
+                    | FSharpUnionCase.Typed typ -> FSharpUnionCase.Typed(signatureType typ)
+                    | FSharpUnionCase.Field(name, typ) ->
+                        FSharpUnionCase.Field(name, signatureType typ)
+                    | case -> case
+                )
+        }
+        |> FSharpType.Union
     | FSharpType.Tuple types -> FSharpType.Tuple(types |> List.map signatureType)
     | FSharpType.Function functionType ->
         { functionType with
@@ -222,10 +240,17 @@ let rec private signatureTypeAt (depth: int) (typ: FSharpType) : FSharpType =
 let signatureType (typ: FSharpType) : FSharpType = signatureTypeAt 0 typ
 
 // `path: 'R * 'S` and `path: 'Rb * 'S` are the same overload for F#
-let rec private canonicalTypeParameters (names: Dictionary<string, string>) (typ: FSharpType) =
-    let canonical = canonicalTypeParameters names
+let rec private canonicalTypeParameters
+    (erased: Set<string>)
+    (names: Dictionary<string, string>)
+    (typ: FSharpType)
+    =
+    let canonical = canonicalTypeParameters erased names
 
     match typ with
+    // F# erases a type parameter used by the parameters, `f<'T>(x: 'T)` and `f(x: obj)`
+    // are one member for it
+    | FSharpType.TypeParameter name when erased.Contains name -> FSharpType.Object
     | FSharpType.TypeParameter name ->
         match names.TryGetValue name with
         | true, canonicalName -> FSharpType.TypeParameter canonicalName
@@ -269,47 +294,81 @@ let rec private canonicalTypeParameters (names: Dictionary<string, string>) (typ
         |> FSharpType.Function
     | typ -> typ
 
-let parametersSignature (parameters: FSharpParameter list) =
+let parametersSignatureWith (erased: Set<string>) (parameters: FSharpParameter list) =
     let names = Dictionary<string, string>()
 
     parameters
     |> List.map (fun parameter ->
-        signatureType parameter.Type |> canonicalTypeParameters names, parameter.IsOptional
+        signatureType parameter.Type |> canonicalTypeParameters erased names, parameter.IsOptional
     )
+
+let parametersSignature (parameters: FSharpParameter list) =
+    parametersSignatureWith Set.empty parameters
 
 // `querySelector<'E>(string)` and `querySelector(string)` are two overloads, `get<'R>(path: 'R)`
 // and `get(path: 'R)` are the same one
-let private arityOfSignature
+let private distinguishableTypeParameters
     (typeParameters: FSharpTypeParameter list)
-    (signature: (FSharpType * bool) list)
+    (parameters: FSharpParameter list)
     =
-    let rec mentionsTypeParameter (typ: FSharpType) =
+    let rec namesOf (typ: FSharpType) =
         match typ with
-        | FSharpType.TypeParameter _ -> true
+        | FSharpType.TypeParameter name -> [ name ]
         | FSharpType.TypeReference typeReference ->
-            typeReference.TypeArguments |> List.exists mentionsTypeParameter
+            typeReference.TypeArguments |> List.collect namesOf
         | FSharpType.Option typ
         | FSharpType.ResizeArray typ
-        | FSharpType.JSApi(FSharpJSApi.ReadonlyArray typ) -> mentionsTypeParameter typ
+        | FSharpType.JSApi(FSharpJSApi.ReadonlyArray typ) -> namesOf typ
         | FSharpType.Union unionInfo ->
             unionInfo.Cases
-            |> List.exists (
+            |> List.collect (
                 function
                 | FSharpUnionCase.Typed typ
-                | FSharpUnionCase.Field(_, typ) -> mentionsTypeParameter typ
-                | _ -> false
+                | FSharpUnionCase.Field(_, typ) -> namesOf typ
+                | _ -> []
             )
-        | FSharpType.Tuple types -> types |> List.exists mentionsTypeParameter
+        | FSharpType.Tuple types -> types |> List.collect namesOf
         | FSharpType.Function functionType ->
-            mentionsTypeParameter functionType.ReturnType
-            || functionType.Parameters
-               |> List.exists (fun parameter -> mentionsTypeParameter parameter.Type)
-        | _ -> false
+            namesOf functionType.ReturnType
+            @ (functionType.Parameters
+               |> List.collect (fun parameter -> namesOf parameter.Type))
+        | _ -> []
 
-    if signature |> List.exists (fun (typ, _) -> mentionsTypeParameter typ) then
-        -1
-    else
-        typeParameters.Length
+    let mentioned =
+        parameters |> List.collect (fun parameter -> namesOf parameter.Type) |> set
+
+    typeParameters
+    |> List.filter (
+        function
+        | FSharpTypeParameter.FSharpTypeParameter info -> not (mentioned.Contains info.Name)
+        | FSharpTypeParameter.FSharpType _ -> true
+    )
+    |> List.length
+
+/// The names a member binds itself, F# erases them from the signature it compares
+let private ownTypeParameterNames (typeParameters: FSharpTypeParameter list) =
+    typeParameters
+    |> List.choose (
+        function
+        | FSharpTypeParameter.FSharpTypeParameter info -> Some info.Name
+        | FSharpTypeParameter.FSharpType _ -> None
+    )
+    |> set
+
+/// The key ignores optionality, `?value: 'T` and `value: 'T option` are one signature for F#
+let private withoutOption (typ: FSharpType) =
+    match typ with
+    | FSharpType.Option inner -> inner
+    | typ -> typ
+
+let private signatureKey
+    (typeParameters: FSharpTypeParameter list)
+    (parameters: FSharpParameter list)
+    =
+    let erased = ownTypeParameterNames typeParameters
+
+    distinguishableTypeParameters typeParameters parameters,
+    parametersSignatureWith erased parameters |> List.map (fst >> withoutOption)
 
 /// Overloads only differing by their parameter names are the same member for F#
 /// `jsPDF(?options)` and `jsPDF(?orientation, ?unit)`: F# can't pick one for `jsPDF ()`,
@@ -463,23 +522,13 @@ let distinctBySignature (members: FSharpMember list) : FSharpMember list =
     |> List.groupBy (
         function
         | FSharpMember.Method info ->
-            let signature = parametersSignature info.Parameters |> List.map fst
-
-            Choice1Of3(
-                info.Name,
-                arityOfSignature info.TypeParameters (parametersSignature info.Parameters),
-                signature
-            )
+            let arity, signature = signatureKey info.TypeParameters info.Parameters
+            Choice1Of3(info.Name, arity, signature)
         | FSharpMember.Property info ->
             Choice2Of3(info.Name, parametersSignature info.Parameters |> List.map fst)
         | FSharpMember.StaticMember info ->
-            let signature = parametersSignature info.Parameters |> List.map fst
-
-            Choice3Of3(
-                info.Name,
-                arityOfSignature info.TypeParameters (parametersSignature info.Parameters),
-                signature
-            )
+            let arity, signature = signatureKey info.TypeParameters info.Parameters
+            Choice3Of3(info.Name, arity, signature)
     )
     |> List.map (fun (_, group) ->
         let optionalCount (fsharpMember: FSharpMember) =

@@ -7598,13 +7598,6 @@ module Web =
             nativeOnly
 
         /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/structuredClone)
-        /// </summary>
-        [<Global("structuredClone")>]
-        static member structuredClone(value: obj, ?options: Web.StructuredSerializeOptions) : obj =
-            nativeOnly
-
-        /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/sessionStorage)
         /// </summary>
         [<Global("sessionStorage")>]
@@ -100923,12 +100916,6 @@ module Web =
         /// </summary>
         abstract member structuredClone<'T> :
             value: 'T * ?options: Web.StructuredSerializeOptions -> 'T
-
-        /// <summary>
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/structuredClone)
-        /// </summary>
-        abstract member structuredClone:
-            value: obj * ?options: Web.StructuredSerializeOptions -> obj
 
     [<AllowNullLiteral>]
     [<Interface>]
