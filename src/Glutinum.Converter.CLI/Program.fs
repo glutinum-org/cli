@@ -74,9 +74,7 @@ let private generate (options: Packages.GenerateOptions) (inputs: string list) =
     | [ input ] when input.EndsWith ".d.ts" -> generateBindingFile input
     | inputs -> generatePackagesFromDisk options inputs
 
-[<EntryPoint>]
-let main (argv: string array) =
-    let argv = argv |> Array.toList
+let private run (argv: string list) =
 
     // Naive CLI parser
     // Order of matching is important !!!
@@ -155,19 +153,31 @@ let main (argv: string array) =
             1
         else
             Log.info $"""Generating binding file for %s{String.concat ", " inputs}"""
-            let res = generate options inputs
 
-            match outFile with
-            | Some outFile ->
-                let outFileDir = path.dirname (outFile)
-                fs?mkdirSync $ (outFileDir, {| recursive = true |})
-                fs.writeFileSync (outFile, res)
+            try
+                let res = generate options inputs
 
-                let absoluteOutFile = path.join (``process``.cwd (), outFile)
+                match outFile with
+                | Some outFile ->
+                    let outFileDir = path.dirname (outFile)
+                    fs?mkdirSync $ (outFileDir, {| recursive = true |})
+                    fs.writeFileSync (outFile, res)
 
-                Log.info $"Bindings written to: %s{absoluteOutFile}"
-            | None -> ``process``.stdout.write res |> ignore
+                    let absoluteOutFile = path.join (``process``.cwd (), outFile)
 
-            Log.success "Success!"
+                    Log.info $"Bindings written to: %s{absoluteOutFile}"
+                | None -> ``process``.stdout.write res |> ignore
 
-            0
+                Log.success "Success!"
+
+                0
+            with ex ->
+                Log.error ex.Message
+                1
+
+[<EntryPoint>]
+let main (argv: string array) =
+    let exitCode = run (argv |> Array.toList)
+    // Fable discards the value returned by the entry point
+    ``process``?exitCode <- exitCode
+    exitCode

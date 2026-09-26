@@ -396,13 +396,26 @@ export function resolveInput(host, input) {
         const segments = input.split("/");
         const packageName = input.startsWith("@") ? segments.slice(0, 2).join("/") : segments[0];
 
+        const typesPackage = path.join("@types", packageName.replace(/^@/, "").replace("/", "__"));
+        let withoutDeclaration = null;
+
         // A package without declaration files (`ws`) is described by its `@types` package
-        for (const candidate of [packageName, path.join("@types", packageName.replace(/^@/, "").replace("/", "__"))]) {
+        for (const candidate of [packageName, typesPackage]) {
             const packageDir = realDir(host, path.join(nodeModules, candidate));
 
-            if (fs.fileExists(path.join(packageDir, "package.json")) && describePackage(host, packageDir) !== null) {
-                return { kind: "package", packageDir };
+            if (fs.fileExists(path.join(packageDir, "package.json"))) {
+                if (describePackage(host, packageDir) !== null) {
+                    return { kind: "package", packageDir };
+                }
+
+                withoutDeclaration ??= candidate;
             }
+        }
+
+        if (withoutDeclaration !== null) {
+            throw new Error(
+                `'${withoutDeclaration}' ships no type declaration, install '${typesPackage}' and generate that instead.`
+            );
         }
     }
 
