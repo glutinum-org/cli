@@ -902,7 +902,8 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
 
     | GlueType.ThisType thisTypeInfo ->
         ({
-            Name = thisTypeInfo.Name
+            // The declaration sanitizes its name, `$ZodRegistry` is `_DOLLAR_ZodRegistry`
+            Name = Naming.sanitizeTypeName thisTypeInfo.Name
             TypeParameters =
                 thisTypeInfo.TypeParameters
                 |> List.map (fun typeParameter ->
