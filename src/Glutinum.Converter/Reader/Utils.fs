@@ -134,6 +134,13 @@ let symbolAtLocation (checker: Ts.TypeChecker) (node: Ts.Node) : Ts.Symbol optio
     else
         checker.getSymbolAtLocation node
 
+// An imported type resolves to the local alias, its declaration is the aliased symbol
+let private followAlias (checker: Ts.TypeChecker) (symbol: Ts.Symbol) =
+    if int (symbol.flags &&& Ts.SymbolFlags.Alias) <> 0 then
+        checker.getAliasedSymbol symbol
+    else
+        symbol
+
 let tryGetFullName (checker: Ts.TypeChecker) (node: Ts.Node) =
     // Naive way to check if the node has a symbol
     // The others solutions is to redo a pattern matching on the node.type
@@ -141,9 +148,9 @@ let tryGetFullName (checker: Ts.TypeChecker) (node: Ts.Node) =
     if isNull node?symbol then
         match checker.getSymbolAtLocation node with
         | None -> None
-        | Some symbol -> checker.getFullyQualifiedName symbol |> Some
+        | Some symbol -> checker.getFullyQualifiedName (followAlias checker symbol) |> Some
     else
-        checker.getFullyQualifiedName node?symbol |> Some
+        checker.getFullyQualifiedName (followAlias checker node?symbol) |> Some
 
 let getFullNameOrEmpty (checker: Ts.TypeChecker) (node: Ts.Node) =
     tryGetFullName checker node |> Option.defaultValue ""

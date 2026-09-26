@@ -73524,6 +73524,10 @@ EventEmitter.defaultMaxListeners = $0"""
         type ObjectEncodingOptions =
             abstract member encoding: Node.BufferEncoding option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create(?encoding: Node.BufferEncoding) : ObjectEncodingOptions =
+                nativeOnly
+
         type EncodingOption = U2<Node.fs.ObjectEncodingOptions, Node.BufferEncoding> option
 
         type OpenMode = U2<float, string>
@@ -160531,7 +160535,7 @@ Duplex.fromWeb($0, $1)"""
             [<Import("pipeline", "stream/promises")>]
             static member pipeline<'A, 'B>
                 (source: 'A, destination: 'B, ?options: Node.stream.Stream_.PipelineOptions)
-                : Node.stream.Stream_.PipelinePromise<'B>
+                : obj
                 =
                 nativeOnly
 
@@ -160543,7 +160547,7 @@ Duplex.fromWeb($0, $1)"""
                     destination: 'B,
                     ?options: Node.stream.Stream_.PipelineOptions
                 )
-                : Node.stream.Stream_.PipelinePromise<'B>
+                : obj
                 =
                 nativeOnly
 
@@ -160556,7 +160560,7 @@ Duplex.fromWeb($0, $1)"""
                     destination: 'B,
                     ?options: Node.stream.Stream_.PipelineOptions
                 )
-                : Node.stream.Stream_.PipelinePromise<'B>
+                : obj
                 =
                 nativeOnly
 
@@ -160570,7 +160574,7 @@ Duplex.fromWeb($0, $1)"""
                     destination: 'B,
                     ?options: Node.stream.Stream_.PipelineOptions
                 )
-                : Node.stream.Stream_.PipelinePromise<'B>
+                : obj
                 =
                 nativeOnly
 
@@ -160585,7 +160589,7 @@ Duplex.fromWeb($0, $1)"""
                     destination: 'B,
                     ?options: Node.stream.Stream_.PipelineOptions
                 )
-                : Node.stream.Stream_.PipelinePromise<'B>
+                : obj
                 =
                 nativeOnly
 
@@ -167883,6 +167887,9 @@ Duplex.fromWeb($0, $1)"""
             /// should not require the Node.js event loop to remain active.
             /// </summary>
             abstract member ref: bool option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create(?signal: Node.AbortSignal, ?ref: bool) : TimerOptions = nativeOnly
 
     module timers_promises =
 
@@ -182769,7 +182776,10 @@ URL.parse($0, $1)"""
         [<AllowNullLiteral>]
         [<Interface>]
         type WorkerPerformance =
-            abstract member eventLoopUtilization: Node.perf_hooks.EventLoopUtilityFunction with get, set
+            abstract member eventLoopUtilization:
+                ?utilization1: Node.perf_hooks.EventLoopUtilization *
+                ?utilization2: Node.perf_hooks.EventLoopUtilization ->
+                    Node.perf_hooks.EventLoopUtilization
 
         type Transferable =
             U7<
@@ -193695,6 +193705,13 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
             abstract member once: bool option with get, set
             abstract member passive: bool option with get, set
             abstract member signal: Node.AbortSignal option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (?capture: bool, ?once: bool, ?passive: bool, ?signal: Node.AbortSignal)
+                : AddEventListenerOptions
+                =
+                nativeOnly
 
         type EventListenerOrEventListenerObject =
             U2<UndiciTypes.patch.EventListener, UndiciTypes.patch.EventListenerObject>

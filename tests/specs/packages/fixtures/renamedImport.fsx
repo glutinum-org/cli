@@ -18,6 +18,8 @@ module RenamedImport =
         [<Interface>]
         type Marker =
             abstract member position: DepLib.Position with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create (position: DepLib.Position) : Marker = nativeOnly
 
 module DepLib =
 
@@ -26,6 +28,8 @@ module DepLib =
     type Position =
         abstract member line: float with get, set
         abstract member character: float with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create (line: float, character: float) : Position = nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]

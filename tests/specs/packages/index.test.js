@@ -24,6 +24,7 @@ const fixtures = [
     "unresolvedImport",
     "namespaceImport",
     "externalParamObject",
+    "crossFileConditional",
 ]
 
 const footer = `
