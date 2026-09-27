@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>
@@ -48,6 +48,7 @@
     <Compile Include="Generate.fs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="../Glutinum.Types/Glutinum.Types.fsproj" />
     <PackageReference Include="Fable.Core" />
     <PackageReference Include="Fable.Node" />
     <PackageReference Include="Fable.Promise" />

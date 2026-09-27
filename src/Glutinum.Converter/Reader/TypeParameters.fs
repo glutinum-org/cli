@@ -7,7 +7,7 @@ open TypeScript
 
 let readTypeParameters
     (reader: ITypeScriptReader)
-    (typeParameters: ResizeArray<Ts.TypeParameterDeclaration> option)
+    (typeParameters: Ts.NodeArray<Ts.TypeParameterDeclaration> option)
     : GlueTypeParameter list
     =
     match typeParameters with

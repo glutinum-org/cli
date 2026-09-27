@@ -49,7 +49,7 @@ let readNode (reader: ITypeScriptReader) (node: Ts.Node) : GlueType =
     | Ts.SyntaxKind.ExportSpecifier ->
         let exportSpecifier = node :?> Ts.ExportSpecifier
 
-        reader.checker.getExportSpecifierLocalTargetSymbol (U2.Case1 exportSpecifier)
+        reader.checker.getExportSpecifierLocalTargetSymbol exportSpecifier
         |> Option.bind (resolveAlias reader.checker)
         |> Option.bind (fun target ->
             match target.declarations with
@@ -60,7 +60,7 @@ let readNode (reader: ITypeScriptReader) (node: Ts.Node) : GlueType =
                 match exportSpecifier.propertyName with
                 | Some _ ->
                     ({
-                        Name = exportSpecifier.name.text
+                        Name = moduleExportNameText exportSpecifier.name
                         Declaration = declaration
                         ModulePath = []
                     }

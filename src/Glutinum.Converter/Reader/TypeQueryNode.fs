@@ -237,7 +237,7 @@ let readTypeQueryNode (reader: ITypeScriptReader) (typeQueryNode: Ts.TypeQueryNo
                             if isNull node then
                                 acc
                             else
-                                let typeParameters: ResizeArray<Ts.TypeParameterDeclaration> option =
+                                let typeParameters: Ts.NodeArray<Ts.TypeParameterDeclaration> option =
                                     node?typeParameters
 
                                 let acc =

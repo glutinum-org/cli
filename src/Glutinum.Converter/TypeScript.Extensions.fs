@@ -1,7 +1,17 @@
 [<AutoOpen>]
 module TypeScriptExtensions
 
+open Fable.Core
+open Glutinum.Types.TypeScript
 open TypeScript
+
+/// The `ts` namespace, the TypeScript bundled by ts-morph so the types match its projects
+[<Import("ts", "@ts-morph/bootstrap")>]
+let ts: Ts.Exports = jsNative
+
+// The ts2fable binding mapped a TypeScript array to `ResizeArray`
+type ReadonlyArray<'T> with
+    member inline this.Count = int this.length
 
 type Ts.SyntaxKind with
 
@@ -315,15 +325,8 @@ type Ts.SyntaxKind with
         | Ts.SyntaxKind.ShorthandPropertyAssignment -> "ShorthandPropertyAssignment"
         | Ts.SyntaxKind.SpreadAssignment -> "SpreadAssignment"
         | Ts.SyntaxKind.EnumMember -> "EnumMember"
-        | Ts.SyntaxKind.UnparsedPrologue -> "UnparsedPrologue"
-        | Ts.SyntaxKind.UnparsedPrepend -> "UnparsedPrepend"
-        | Ts.SyntaxKind.UnparsedText -> "UnparsedText"
-        | Ts.SyntaxKind.UnparsedInternalText -> "UnparsedInternalText"
-        | Ts.SyntaxKind.UnparsedSyntheticReference -> "UnparsedSyntheticReference"
         | Ts.SyntaxKind.SourceFile -> "SourceFile"
         | Ts.SyntaxKind.Bundle -> "Bundle"
-        | Ts.SyntaxKind.UnparsedSource -> "UnparsedSource"
-        | Ts.SyntaxKind.InputFiles -> "InputFiles"
         | Ts.SyntaxKind.JSDocTypeExpression -> "JSDocTypeExpression"
         | Ts.SyntaxKind.JSDocNameReference -> "JSDocNameReference"
         | Ts.SyntaxKind.JSDocMemberName -> "JSDocMemberName"
@@ -337,6 +340,9 @@ type Ts.SyntaxKind with
         | Ts.SyntaxKind.JSDocNamepathType -> "JSDocNamepathType"
         | Ts.SyntaxKind.JSDoc -> "JSDoc"
         | Ts.SyntaxKind.JSDocText -> "JSDocText"
+        | Ts.SyntaxKind.DeferKeyword -> "DeferKeyword"
+        | Ts.SyntaxKind.JSDocImportTag -> "JSDocImportTag"
+        | Ts.SyntaxKind.NotEmittedTypeElement -> "NotEmittedTypeElement"
         | Ts.SyntaxKind.JSDocTypeLiteral -> "JSDocTypeLiteral"
         | Ts.SyntaxKind.JSDocSignature -> "JSDocSignature"
         | Ts.SyntaxKind.JSDocLink -> "JSDocLink"

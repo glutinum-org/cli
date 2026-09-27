@@ -44,7 +44,7 @@ module UnboundTypeParameter =
     [<AllowNullLiteral>]
     [<Interface>]
     type Client =
-        abstract member setDefaults<'TQueryFnData>: options: Client.setDefaults.options<'TQueryFnData, obj> -> unit
+        abstract member setDefaults<'TQueryFnData>: options: Client.setDefaults.options<'TQueryFnData> -> unit
 
     type QueryFunctionContext<'TQueryKey> =
         QueryFunctionContext<'TQueryKey, obj>
@@ -85,8 +85,8 @@ module UnboundTypeParameter =
 
             [<AllowNullLiteral>]
             [<Interface>]
-            type options<'TQueryFnData, 'TQueryKey> =
-                abstract member persister: (UnboundTypeParameter.QueryFunction<'TQueryFnData, 'TQueryKey, obj> -> 'TQueryFnData) option with get, set
+            type options<'TQueryFnData> =
+                abstract member persister: (UnboundTypeParameter.QueryFunction<'TQueryFnData, ReadonlyArray<obj>, obj> -> 'TQueryFnData) option with get, set
 
 (***)
 #r "nuget: Fable.Core"

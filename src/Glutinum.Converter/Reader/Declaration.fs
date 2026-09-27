@@ -184,7 +184,7 @@ let readDeclaration (reader: ITypeScriptReader) (declaration: Ts.Declaration) : 
         let exportSpecifier = declaration :?> Ts.ExportSpecifier
 
         let target =
-            reader.checker.getExportSpecifierLocalTargetSymbol (U2.Case1 exportSpecifier)
+            reader.checker.getExportSpecifierLocalTargetSymbol exportSpecifier
             |> Option.bind (resolveAlias reader.checker)
             |> Option.bind (fun target ->
                 match target.declarations with

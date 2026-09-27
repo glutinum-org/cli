@@ -3,6 +3,7 @@ module Build.Main
 open SimpleExec
 open Build.Commands.Cli
 open Build.Commands.Bindings
+open Build.Commands.TypeScriptBinding
 open Build.Commands.Web
 open Build.Commands.Docs
 open Build.Commands.Test.Specs
@@ -40,6 +41,13 @@ You can then invoke the local version of Glutinum by running `node cli.js <args>
                 """Generate the Glutinum.Web and Glutinum.Node bindings from the packages pinned in package.json
 
 `--check` fails when the committed files are out of date"""
+            )
+        |> ignore
+
+        config
+            .AddCommand<TypeScriptBindingCommand>("typescript-binding")
+            .WithDescription(
+                "Regenerate the binding of the TypeScript compiler API the converter runs on, from the TypeScript bundled with ts-morph"
             )
         |> ignore
 

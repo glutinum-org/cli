@@ -27,6 +27,7 @@ const fixtures = [
     "crossFileConditional",
     "unboundTypeParameter",
     "reExportedConstraint",
+    "iteratorObjectBase",
 ]
 
 const footer = `

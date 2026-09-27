@@ -3,14 +3,21 @@ module Glutinum.Converter.Reader.Documentation
 open Glutinum.Converter.GlueAST
 open Glutinum.Converter.Reader.Types
 open TypeScript
+open Fable.Core
+open Glutinum.Types.TypeScript
 open System
 open System.Text.RegularExpressions
 open Fable.Core.JsInterop
 
+let private textOfComment (comment: U2<string, Ts.NodeArray<Ts.JSDocComment>>) =
+    match comment with
+    | U2.Case1 text -> ts.getTextOfJSDocComment text
+    | _ -> ts.getTextOfJSDocComment (unbox<Ts.NodeArray<Ts.JSDocComment>> comment)
+
 let private readDocumentation
     (reader: ITypeScriptReader)
     (summary: ResizeArray<Ts.SymbolDisplayPart>)
-    (jsDocTags: ResizeArray<Ts.JSDocTag>)
+    (jsDocTags: ReadonlyArray<Ts.JSDocTag>)
     =
 
     // TypeScript reads `@returns {@link Foo} text` as `@returns {` followed by a `@link Foo} text` tag
@@ -22,12 +29,12 @@ let private readDocumentation
 
     let readTagComment (index: int) (tag: Ts.JSDocTag) =
         match tag.comment with
-        | Some comment -> ts.getTextOfJSDocComment comment |> Option.defaultValue "" |> Some
+        | Some comment -> textOfComment comment |> Option.defaultValue "" |> Some
         | None ->
             match Seq.tryItem (index + 1) jsDocTags with
             | Some nextTag when isInlineLinkReadAsTag nextTag ->
                 nextTag.comment
-                |> Option.bind (fun comment -> ts.getTextOfJSDocComment comment)
+                |> Option.bind (fun comment -> textOfComment comment)
                 |> Option.map (fun text -> $"{{@link %s{text}")
             | _ -> None
 
@@ -38,7 +45,7 @@ let private readDocumentation
             | Ts.SyntaxKind.JSDocTag, Some comment when
                 tag.tagName.getText () = "link" && not (isInlineLinkReadAsTag tag)
                 ->
-                ts.getTextOfJSDocComment comment
+                textOfComment comment
                 |> Option.map (fun text ->
                     let m = Regex.Match(text.Trim(), "^\[(?<label>[^\]]+)\]\((?<url>[^)\s]+)\)$")
 
@@ -75,7 +82,7 @@ let private readDocumentation
 
                 let content =
                     match parameterTag.comment with
-                    | Some comment -> ts.getTextOfJSDocComment comment
+                    | Some comment -> textOfComment comment
                     | None -> None
 
                 {
@@ -87,8 +94,7 @@ let private readDocumentation
 
             | Ts.SyntaxKind.JSDocDeprecatedTag ->
                 match tag.comment with
-                | Some comment ->
-                    ts.getTextOfJSDocComment comment |> GlueComment.Deprecated |> Some
+                | Some comment -> textOfComment comment |> GlueComment.Deprecated |> Some
                 // We want to keep the deprecated tag even if there is no comment
                 // as it is still useful information
                 | None -> GlueComment.Deprecated None |> Some
@@ -101,7 +107,7 @@ let private readDocumentation
                 | "remarks" ->
                     match tag.comment with
                     | Some comment ->
-                        ts.getTextOfJSDocComment comment
+                        textOfComment comment
                         |> Option.defaultValue ""
                         |> GlueComment.Remarks
                         |> Some
@@ -110,7 +116,7 @@ let private readDocumentation
                 | "defaultValue" ->
                     match tag.comment with
                     | Some comment ->
-                        ts.getTextOfJSDocComment comment
+                        textOfComment comment
                         |> Option.defaultValue ""
                         |> GlueComment.DefaultValue
                         |> Some
@@ -119,7 +125,7 @@ let private readDocumentation
                 | "example" ->
                     match tag.comment with
                     | Some comment ->
-                        ts.getTextOfJSDocComment comment
+                        textOfComment comment
                         |> Option.defaultValue ""
                         |> GlueComment.Example
                         |> Some
@@ -128,7 +134,7 @@ let private readDocumentation
                 | "typeParam" ->
                     match tag.comment with
                     | Some comment ->
-                        match ts.getTextOfJSDocComment comment with
+                        match textOfComment comment with
                         | Some text ->
                             let regex =
                                 Regex(
@@ -184,13 +190,20 @@ let readDocumentationForSignature (reader: ITypeScriptReader) (declaration: Ts.D
 
     | None -> []
 
+// TypeScript 6 reads the kind of the node given, the nodes made by the checker have no parent
+let private jsDocTagsOfParent (node: Ts.Node) : ReadonlyArray<Ts.JSDocTag> =
+    if isNull node.parent then
+        unbox (ResizeArray())
+    else
+        ts.getJSDocTags node.parent
+
 let readDocumentationForNode (reader: ITypeScriptReader) (node: Ts.Node) =
     match reader.checker.getSymbolAtLocation node with
     | Some symbol ->
         readDocumentation
             reader
             (symbol.getDocumentationComment (Some reader.checker))
-            (ts.getJSDocTags node.parent)
+            (jsDocTagsOfParent node)
 
     | None ->
         // I don't know why sometimes TypeScript doesn't return a symbol

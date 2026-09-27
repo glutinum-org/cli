@@ -13,6 +13,10 @@ let createProgramForCLI (_fileName: string) (_source: string) : Ts.Program =
 let private createNodeHost (_fs: obj, _path: obj, _cwd: string) : Packages.Host = jsNative
 
 let generateBindingFile (filePath: string) =
+    generateBindingFileWith "Glutinum" filePath
+
+/// Generate the binding of a single declaration file as the module <c>moduleName</c>
+let generateBindingFileWith (moduleName: string) (filePath: string) =
 
     if fs.existsSync (U2.Case1 filePath) |> not then
         failwith $"File does not exist: {filePath}"
@@ -46,7 +50,7 @@ let generateBindingFile (filePath: string) =
     for reporter in transformResult.Errors do
         Log.error reporter
 
-    Printer.printFile printer transformResult
+    Printer.printFileWith moduleName false [] printer transformResult
 
     printer.ToString()
 

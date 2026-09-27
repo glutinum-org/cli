@@ -58,15 +58,15 @@ module TypeScript =
         /// <summary>
         /// Returns an iterable of key, value pairs for every entry in the map.
         /// </summary>
-        abstract member entries: unit -> TypeScript.IterableIterator<'K * 'V>
+        abstract member entries: unit -> Iterable<'K * 'V>
         /// <summary>
         /// Returns an iterable of keys in the map
         /// </summary>
-        abstract member keys: unit -> TypeScript.IterableIterator<'K>
+        abstract member keys: unit -> Iterable<'K>
         /// <summary>
         /// Returns an iterable of values in the map
         /// </summary>
-        abstract member values: unit -> TypeScript.IterableIterator<'V>
+        abstract member values: unit -> Iterable<'V>
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -81,15 +81,46 @@ module TypeScript =
         /// <summary>
         /// Returns an iterable of [v,v] pairs for every value <c>v</c> in the set.
         /// </summary>
-        abstract member entries: unit -> TypeScript.IterableIterator<'T * 'T>
+        abstract member entries: unit -> Iterable<'T * 'T>
         /// <summary>
         /// Despite its name, returns an iterable of the values in the set.
         /// </summary>
-        abstract member keys: unit -> TypeScript.IterableIterator<'T>
+        abstract member keys: unit -> Iterable<'T>
         /// <summary>
         /// Returns an iterable of values in the set.
         /// </summary>
-        abstract member values: unit -> TypeScript.IterableIterator<'T>
+        abstract member values: unit -> Iterable<'T>
+        /// <returns>
+        /// a new Set containing all the elements in this Set and also all the elements in the argument.
+        /// </returns>
+        abstract member union<'U> : other: TypeScript.ReadonlySetLike<'U> -> JS.Set<U2<'T, 'U>>
+        /// <returns>
+        /// a new Set containing all the elements which are both in this Set and in the argument.
+        /// </returns>
+        abstract member intersection<'U> : other: TypeScript.ReadonlySetLike<'U> -> JS.Set<obj>
+        /// <returns>
+        /// a new Set containing all the elements in this Set which are not also in the argument.
+        /// </returns>
+        abstract member difference<'U> : other: TypeScript.ReadonlySetLike<'U> -> JS.Set<'T>
+
+        /// <returns>
+        /// a new Set containing all the elements which are in either this Set or in the argument, but not in both.
+        /// </returns>
+        abstract member symmetricDifference<'U> :
+            other: TypeScript.ReadonlySetLike<'U> -> JS.Set<U2<'T, 'U>>
+
+        /// <returns>
+        /// a boolean indicating whether all the elements in this Set are also in the argument.
+        /// </returns>
+        abstract member isSubsetOf: other: TypeScript.ReadonlySetLike<obj> -> bool
+        /// <returns>
+        /// a boolean indicating whether all the elements in the argument are also in this Set.
+        /// </returns>
+        abstract member isSupersetOf: other: TypeScript.ReadonlySetLike<obj> -> bool
+        /// <returns>
+        /// a boolean indicating whether this Set has no elements in common with the argument.
+        /// </returns>
+        abstract member isDisjointFrom: other: TypeScript.ReadonlySetLike<obj> -> bool
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -354,42 +385,42 @@ module TypeScript =
         /// </param>
         abstract member setPrototypeOf: o: obj * proto: obj option -> obj
         /// <summary>
-        /// Returns an array of values of the enumerable properties of an object
+        /// Returns an array of values of the enumerable own properties of an object
         /// </summary>
         /// <param name="o">
         /// Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
         /// </param>
         abstract member values<'T> : o: ObjectConstructor.values.o<'T> -> ResizeArray<'T>
         /// <summary>
-        /// Returns an array of values of the enumerable properties of an object
+        /// Returns an array of values of the enumerable own properties of an object
         /// </summary>
         /// <param name="o">
         /// Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
         /// </param>
         abstract member values<'T> : o: TypeScript.ArrayLike<'T> -> ResizeArray<'T>
         /// <summary>
-        /// Returns an array of values of the enumerable properties of an object
+        /// Returns an array of values of the enumerable own properties of an object
         /// </summary>
         /// <param name="o">
         /// Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
         /// </param>
         abstract member values: o: obj -> ResizeArray<obj>
         /// <summary>
-        /// Returns an array of key/values of the enumerable properties of an object
+        /// Returns an array of key/values of the enumerable own properties of an object
         /// </summary>
         /// <param name="o">
         /// Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
         /// </param>
         abstract member entries<'T> : o: ObjectConstructor.entries.o<'T> -> ResizeArray<string * 'T>
         /// <summary>
-        /// Returns an array of key/values of the enumerable properties of an object
+        /// Returns an array of key/values of the enumerable own properties of an object
         /// </summary>
         /// <param name="o">
         /// Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
         /// </param>
         abstract member entries<'T> : o: TypeScript.ArrayLike<'T> -> ResizeArray<string * 'T>
         /// <summary>
-        /// Returns an array of key/values of the enumerable properties of an object
+        /// Returns an array of key/values of the enumerable own properties of an object
         /// </summary>
         /// <param name="o">
         /// Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
@@ -451,6 +482,19 @@ module TypeScript =
         /// A property name.
         /// </param>
         abstract member hasOwn: o: obj * v: obj -> bool
+
+        /// <summary>
+        /// Groups members of an iterable according to the return value of the passed callback.
+        /// </summary>
+        /// <param name="items">
+        /// An iterable.
+        /// </param>
+        /// <param name="keySelector">
+        /// A callback which will be invoked for each item in items.
+        /// </param>
+        abstract member groupBy<'K, 'T> :
+            items: Iterable<'T> * keySelector: ObjectConstructor.groupBy.keySelector<'K, 'T> ->
+                ObjectConstructor.groupBy
 
         [<EmitConstructor>]
         abstract member Create: ?value: obj -> obj
@@ -683,17 +727,29 @@ module TypeScript =
             predicate: ReadonlyArray.findIndex.predicate<'T> * ?thisArg: obj -> float
 
         /// <summary>
+        /// Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.
+        /// </summary>
+        abstract member toLocaleString:
+            locales: string * ?options: ReadonlyArray.toLocaleString.options -> string
+
+        /// <summary>
+        /// Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.
+        /// </summary>
+        abstract member toLocaleString:
+            locales: ResizeArray<string> * ?options: ReadonlyArray.toLocaleString.options -> string
+
+        /// <summary>
         /// Returns an iterable of key, value pairs for every entry in the array
         /// </summary>
-        abstract member entries: unit -> TypeScript.IterableIterator<float * 'T>
+        abstract member entries: unit -> Iterable<float * 'T>
         /// <summary>
         /// Returns an iterable of keys in the array
         /// </summary>
-        abstract member keys: unit -> TypeScript.IterableIterator<float>
+        abstract member keys: unit -> Iterable<float>
         /// <summary>
         /// Returns an iterable of values in the array
         /// </summary>
-        abstract member values: unit -> TypeScript.IterableIterator<'T>
+        abstract member values: unit -> Iterable<'T>
         /// <summary>
         /// Determines whether an array includes a certain element, returning true or false as appropriate.
         /// </summary>
@@ -787,7 +843,7 @@ module TypeScript =
         /// <param name="compareFn">
         /// Function used to determine the order of the elements. It is expected to return
         /// a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
-        /// value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
+        /// value otherwise. If omitted, the elements are sorted in ascending, UTF-16 code unit order.
         /// <code lang="ts">
         /// [11, 2, 22, 1].toSorted((a, b) => a - b) // [1, 2, 11, 22]
         /// </code>
@@ -1101,12 +1157,11 @@ module TypeScript =
     [<AllowNullLiteral>]
     [<Interface>]
     type Generator<'T, 'TReturn, 'TNext> =
-        inherit TypeScript.Iterator<'T, 'TReturn, 'TNext>
         inherit Iterable<'T>
-        abstract member next: [<ParamArray>] args: obj[] -> TypeScript.IteratorResult<'T, 'TReturn>
+        abstract member next: [<ParamArray>] arg0: obj[] -> TypeScript.IteratorResult<'T, 'TReturn>
 
         abstract member next:
-            [<ParamArray>] args: 'TNext[] -> TypeScript.IteratorResult<'T, 'TReturn>
+            [<ParamArray>] arg0: 'TNext[] -> TypeScript.IteratorResult<'T, 'TReturn>
 
         abstract member ``return``: value: 'TReturn -> TypeScript.IteratorResult<'T, 'TReturn>
         abstract member throw: e: obj -> TypeScript.IteratorResult<'T, 'TReturn>
@@ -1231,18 +1286,21 @@ module TypeScript =
     [<AllowNullLiteral>]
     [<Interface>]
     type Iterator<'T, 'TReturn, 'TNext> =
-        abstract member next: [<ParamArray>] args: obj[] -> TypeScript.IteratorResult<'T, 'TReturn>
+        abstract member next: [<ParamArray>] arg0: obj[] -> TypeScript.IteratorResult<'T, 'TReturn>
 
         abstract member next:
-            [<ParamArray>] args: 'TNext[] -> TypeScript.IteratorResult<'T, 'TReturn>
+            [<ParamArray>] arg0: 'TNext[] -> TypeScript.IteratorResult<'T, 'TReturn>
 
         abstract member ``return``: ?value: 'TReturn -> TypeScript.IteratorResult<'T, 'TReturn>
         abstract member throw: ?e: obj -> TypeScript.IteratorResult<'T, 'TReturn>
 
+    /// <summary>
+    /// Describes a user-defined <see href="Iterator">Iterator</see> that is also iterable.
+    /// </summary>
     [<AllowNullLiteral>]
     [<Interface>]
-    type IterableIterator<'T> =
-        inherit TypeScript.Iterator<'T>
+    type IterableIterator<'T, 'TReturn, 'TNext> =
+        inherit TypeScript.Iterator<'T, 'TReturn, 'TNext>
         inherit Iterable<'T>
 
     [<AllowNullLiteral>]
@@ -1498,7 +1556,10 @@ module TypeScript =
             /// </param>
             [<Emit("$0.apply($1...)")>]
             abstract member apply<'T, 'A, 'R> :
-                target: System.Delegate * thisArgument: 'T * argumentsList: 'A -> 'R
+                target: System.Delegate *
+                thisArgument: 'T *
+                argumentsList: Exports.apply.argumentsList<'T> ->
+                    'R
 
             [<Emit("$0.apply($1...)")>]
             abstract member apply:
@@ -1520,7 +1581,7 @@ module TypeScript =
             [<Emit("$0.construct($1...)")>]
             abstract member construct<'A, 'R> :
                 target: Exports.construct.target<'R, 'A> *
-                argumentsList: 'A *
+                argumentsList: Exports.construct.argumentsList<obj> *
                 ?newTarget: Exports.construct.newTarget ->
                     'R
 
@@ -1770,6 +1831,858 @@ module TypeScript =
 
         module Exports =
 
+            module apply =
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type argumentsList<'T> =
+                    /// <summary>
+                    /// Returns the value of the first element in the array where predicate is true, and undefined
+                    /// otherwise.
+                    /// </summary>
+                    /// <param name="predicate">
+                    /// find calls predicate once for each element of the array, in ascending
+                    /// order, until it finds one where predicate returns true. If such an element is found, find
+                    /// immediately returns that element value. Otherwise, find returns undefined.
+                    /// </param>
+                    /// <param name="thisArg">
+                    /// If provided, it will be used as the this value for each invocation of
+                    /// predicate. If it is not provided, undefined is used instead.
+                    /// </param>
+                    abstract member find<'S> :
+                        predicate: Exports.apply.argumentsList.find.predicate<'T> * ?thisArg: obj ->
+                            'S option
+
+                    /// <summary>
+                    /// Returns the value of the first element in the array where predicate is true, and undefined
+                    /// otherwise.
+                    /// </summary>
+                    abstract member find:
+                        predicate: Exports.apply.argumentsList.find.predicate_1<'T> * ?thisArg: obj ->
+                            'T option
+
+                    /// <summary>
+                    /// Returns the index of the first element in the array where predicate is true, and -1
+                    /// otherwise.
+                    /// </summary>
+                    /// <param name="predicate">
+                    /// find calls predicate once for each element of the array, in ascending
+                    /// order, until it finds one where predicate returns true. If such an element is found,
+                    /// findIndex immediately returns that element index. Otherwise, findIndex returns -1.
+                    /// </param>
+                    /// <param name="thisArg">
+                    /// If provided, it will be used as the this value for each invocation of
+                    /// predicate. If it is not provided, undefined is used instead.
+                    /// </param>
+                    abstract member findIndex:
+                        predicate: Exports.apply.argumentsList.findIndex.predicate * ?thisArg: obj ->
+                            float
+
+                    /// <summary>
+                    /// Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.
+                    /// </summary>
+                    abstract member toLocaleString:
+                        locales: string *
+                        ?options: Exports.apply.argumentsList.toLocaleString.options ->
+                            string
+
+                    /// <summary>
+                    /// Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.
+                    /// </summary>
+                    abstract member toLocaleString:
+                        locales: ResizeArray<string> *
+                        ?options: Exports.apply.argumentsList.toLocaleString.options ->
+                            string
+
+                    /// <summary>
+                    /// Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.
+                    /// </summary>
+                    abstract member toLocaleString: unit -> string
+                    /// <summary>
+                    /// Returns an iterable of key, value pairs for every entry in the array
+                    /// </summary>
+                    abstract member entries: unit -> Iterable<float * obj>
+                    /// <summary>
+                    /// Returns an iterable of keys in the array
+                    /// </summary>
+                    abstract member keys: unit -> Iterable<float>
+                    /// <summary>
+                    /// Returns an iterable of values in the array
+                    /// </summary>
+                    abstract member values: unit -> Iterable<obj>
+                    /// <summary>
+                    /// Determines whether an array includes a certain element, returning true or false as appropriate.
+                    /// </summary>
+                    /// <param name="searchElement">
+                    /// The element to search for.
+                    /// </param>
+                    /// <param name="fromIndex">
+                    /// The position in this array at which to begin searching for searchElement.
+                    /// </param>
+                    abstract member includes: searchElement: obj * ?fromIndex: float -> bool
+
+                    /// <summary>
+                    /// Calls a defined callback function on each element of an array. Then, flattens the result into
+                    /// a new array.
+                    /// This is identical to a map followed by flat with depth 1.
+                    /// </summary>
+                    /// <param name="callback">
+                    /// A function that accepts up to three arguments. The flatMap method calls the
+                    /// callback function one time for each element in the array.
+                    /// </param>
+                    /// <param name="thisArg">
+                    /// An object to which the this keyword can refer in the callback function. If
+                    /// thisArg is omitted, undefined is used as the this value.
+                    /// </param>
+                    abstract member flatMap<'U, 'This> :
+                        callback: Exports.apply.argumentsList.flatMap.callback * ?thisArg: 'This ->
+                            ResizeArray<'U>
+
+                    /// <summary>
+                    /// Returns a new array with all sub-array elements concatenated into it recursively up to the
+                    /// specified depth.
+                    /// </summary>
+                    /// <param name="depth">
+                    /// The maximum recursion depth
+                    /// </param>
+                    abstract member flat<'D> : ?depth: 'D -> ResizeArray<obj>
+                    /// <summary>
+                    /// Returns the item located at the specified index.
+                    /// </summary>
+                    /// <param name="index">
+                    /// The zero-based index of the desired code unit. A negative index will count back from the last item.
+                    /// </param>
+                    abstract member at: index: float -> obj
+
+                    /// <summary>
+                    /// Returns the value of the last element in the array where predicate is true, and undefined
+                    /// otherwise.
+                    /// </summary>
+                    /// <param name="predicate">
+                    /// findLast calls predicate once for each element of the array, in descending
+                    /// order, until it finds one where predicate returns true. If such an element is found, findLast
+                    /// immediately returns that element value. Otherwise, findLast returns undefined.
+                    /// </param>
+                    /// <param name="thisArg">
+                    /// If provided, it will be used as the this value for each invocation of
+                    /// predicate. If it is not provided, undefined is used instead.
+                    /// </param>
+                    abstract member findLast<'S> :
+                        predicate: Exports.apply.argumentsList.findLast.predicate<'T> *
+                        ?thisArg: obj ->
+                            'S option
+
+                    /// <summary>
+                    /// Returns the value of the last element in the array where predicate is true, and undefined
+                    /// otherwise.
+                    /// </summary>
+                    abstract member findLast:
+                        predicate: Exports.apply.argumentsList.findLast.predicate_1<'T> *
+                        ?thisArg: obj ->
+                            'T option
+
+                    /// <summary>
+                    /// Returns the index of the last element in the array where predicate is true, and -1
+                    /// otherwise.
+                    /// </summary>
+                    /// <param name="predicate">
+                    /// findLastIndex calls predicate once for each element of the array, in descending
+                    /// order, until it finds one where predicate returns true. If such an element is found,
+                    /// findLastIndex immediately returns that element index. Otherwise, findLastIndex returns -1.
+                    /// </param>
+                    /// <param name="thisArg">
+                    /// If provided, it will be used as the this value for each invocation of
+                    /// predicate. If it is not provided, undefined is used instead.
+                    /// </param>
+                    abstract member findLastIndex:
+                        predicate: Exports.apply.argumentsList.findLastIndex.predicate *
+                        ?thisArg: obj ->
+                            float
+
+                    /// <summary>
+                    /// Copies the array and returns the copied array with all of its elements reversed.
+                    /// </summary>
+                    abstract member toReversed: unit -> ResizeArray<obj>
+
+                    /// <summary>
+                    /// Copies and sorts the array.
+                    /// </summary>
+                    /// <param name="compareFn">
+                    /// Function used to determine the order of the elements. It is expected to return
+                    /// a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
+                    /// value otherwise. If omitted, the elements are sorted in ascending, UTF-16 code unit order.
+                    /// <code lang="ts">
+                    /// [11, 2, 22, 1].toSorted((a, b) => a - b) // [1, 2, 11, 22]
+                    /// </code>
+                    /// </param>
+                    abstract member toSorted:
+                        ?compareFn: Exports.apply.argumentsList.toSorted.compareFn ->
+                            ResizeArray<obj>
+
+                    /// <summary>
+                    /// Copies an array and removes elements while, if necessary, inserting new elements in their place, returning the remaining elements.
+                    /// Copies an array and removes elements while returning the remaining elements.
+                    /// </summary>
+                    /// <param name="start">
+                    /// The zero-based location in the array from which to start removing elements.
+                    /// </param>
+                    /// <param name="deleteCount">
+                    /// The number of elements to remove.
+                    /// </param>
+                    /// <param name="items">
+                    /// Elements to insert into the copied array in place of the deleted elements.
+                    /// </param>
+                    /// <returns>
+                    /// A copy of the original array with the remaining elements.
+                    /// </returns>
+                    abstract member toSpliced:
+                        start: float * deleteCount: float * [<ParamArray>] items: 'T[] ->
+                            ResizeArray<'T>
+
+                    /// <summary>
+                    /// Copies an array and removes elements while, if necessary, inserting new elements in their place, returning the remaining elements.
+                    /// Copies an array and removes elements while returning the remaining elements.
+                    /// </summary>
+                    /// <param name="start">
+                    /// The zero-based location in the array from which to start removing elements.
+                    /// </param>
+                    /// <param name="deleteCount">
+                    /// The number of elements to remove.
+                    /// </param>
+                    /// <returns>
+                    /// A copy of the original array with the remaining elements.
+                    /// </returns>
+                    abstract member toSpliced: start: float * ?deleteCount: float -> ResizeArray<'T>
+                    /// <summary>
+                    /// Copies an array, then overwrites the value at the provided index with the
+                    /// given value. If the index is negative, then it replaces from the end
+                    /// of the array
+                    /// </summary>
+                    /// <param name="index">
+                    /// The index of the value to overwrite. If the index is
+                    /// negative, then it replaces from the end of the array.
+                    /// </param>
+                    /// <param name="value">
+                    /// The value to insert into the copied array.
+                    /// </param>
+                    /// <returns>
+                    /// A copy of the original array with the inserted value.
+                    /// </returns>
+                    abstract member ``with``: index: float * value: obj -> ResizeArray<obj>
+                    /// <summary>
+                    /// Gets the length of the array. This is a number one higher than the highest element defined in an array.
+                    /// </summary>
+                    abstract member length: float with get
+                    /// <summary>
+                    /// Returns a string representation of an array.
+                    /// </summary>
+                    abstract member toString: unit -> string
+
+                    /// <summary>
+                    /// Combines two or more arrays.
+                    /// </summary>
+                    /// <param name="items">
+                    /// Additional items to add to the end of array1.
+                    /// </param>
+                    abstract member concat:
+                        [<ParamArray>] items: TypeScript.ConcatArray<'T>[] -> ResizeArray<'T>
+
+                    /// <summary>
+                    /// Combines two or more arrays.
+                    /// </summary>
+                    /// <param name="items">
+                    /// Additional items to add to the end of array1.
+                    /// </param>
+                    abstract member concat:
+                        [<ParamArray>] items: U2<'T, TypeScript.ConcatArray<'T>>[] ->
+                            ResizeArray<'T>
+
+                    /// <summary>
+                    /// Adds all the elements of an array separated by the specified separator string.
+                    /// </summary>
+                    /// <param name="separator">
+                    /// A string used to separate one element of an array from the next in the resulting String. If omitted, the array elements are separated with a comma.
+                    /// </param>
+                    abstract member join: ?separator: string -> string
+                    /// <summary>
+                    /// Returns a section of an array.
+                    /// </summary>
+                    /// <param name="start">
+                    /// The beginning of the specified portion of the array.
+                    /// </param>
+                    /// <param name="end">
+                    /// The end of the specified portion of the array. This is exclusive of the element at the index 'end'.
+                    /// </param>
+                    abstract member slice: ?start: float * ?``end``: float -> ResizeArray<obj>
+                    /// <summary>
+                    /// Returns the index of the first occurrence of a value in an array.
+                    /// </summary>
+                    /// <param name="searchElement">
+                    /// The value to locate in the array.
+                    /// </param>
+                    /// <param name="fromIndex">
+                    /// The array index at which to begin the search. If fromIndex is omitted, the search starts at index 0.
+                    /// </param>
+                    abstract member indexOf: searchElement: obj * ?fromIndex: float -> float
+                    /// <summary>
+                    /// Returns the index of the last occurrence of a specified value in an array.
+                    /// </summary>
+                    /// <param name="searchElement">
+                    /// The value to locate in the array.
+                    /// </param>
+                    /// <param name="fromIndex">
+                    /// The array index at which to begin the search. If fromIndex is omitted, the search starts at the last index in the array.
+                    /// </param>
+                    abstract member lastIndexOf: searchElement: obj * ?fromIndex: float -> float
+
+                    /// <summary>
+                    /// Determines whether all the members of an array satisfy the specified test.
+                    /// </summary>
+                    /// <param name="predicate">
+                    /// A function that accepts up to three arguments. The every method calls
+                    /// the predicate function for each element in the array until the predicate returns a value
+                    /// which is coercible to the Boolean value false, or until the end of the array.
+                    /// </param>
+                    /// <param name="thisArg">
+                    /// An object to which the this keyword can refer in the predicate function.
+                    /// If thisArg is omitted, undefined is used as the this value.
+                    /// </param>
+                    abstract member every:
+                        predicate: Exports.apply.argumentsList.every.predicate<'T> * ?thisArg: obj ->
+                            bool
+
+                    /// <summary>
+                    /// Determines whether all the members of an array satisfy the specified test.
+                    /// </summary>
+                    /// <param name="predicate">
+                    /// A function that accepts up to three arguments. The every method calls
+                    /// the predicate function for each element in the array until the predicate returns a value
+                    /// which is coercible to the Boolean value false, or until the end of the array.
+                    /// </param>
+                    /// <param name="thisArg">
+                    /// An object to which the this keyword can refer in the predicate function.
+                    /// If thisArg is omitted, undefined is used as the this value.
+                    /// </param>
+                    abstract member every:
+                        predicate: Exports.apply.argumentsList.every.predicate_1<'T> * ?thisArg: obj ->
+                            bool
+
+                    /// <summary>
+                    /// Determines whether the specified callback function returns true for any element of an array.
+                    /// </summary>
+                    /// <param name="predicate">
+                    /// A function that accepts up to three arguments. The some method calls
+                    /// the predicate function for each element in the array until the predicate returns a value
+                    /// which is coercible to the Boolean value true, or until the end of the array.
+                    /// </param>
+                    /// <param name="thisArg">
+                    /// An object to which the this keyword can refer in the predicate function.
+                    /// If thisArg is omitted, undefined is used as the this value.
+                    /// </param>
+                    abstract member some:
+                        predicate: Exports.apply.argumentsList.some.predicate * ?thisArg: obj ->
+                            bool
+
+                    /// <summary>
+                    /// Performs the specified action for each element in an array.
+                    /// </summary>
+                    /// <param name="callbackfn">
+                    /// A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the array.
+                    /// </param>
+                    /// <param name="thisArg">
+                    /// An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+                    /// </param>
+                    abstract member forEach:
+                        callbackfn: Exports.apply.argumentsList.forEach.callbackfn * ?thisArg: obj ->
+                            unit
+
+                    /// <summary>
+                    /// Calls a defined callback function on each element of an array, and returns an array that contains the results.
+                    /// </summary>
+                    /// <param name="callbackfn">
+                    /// A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
+                    /// </param>
+                    /// <param name="thisArg">
+                    /// An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+                    /// </param>
+                    abstract member map<'U> :
+                        callbackfn: Exports.apply.argumentsList.map.callbackfn * ?thisArg: obj ->
+                            ResizeArray<'U>
+
+                    /// <summary>
+                    /// Returns the elements of an array that meet the condition specified in a callback function.
+                    /// </summary>
+                    /// <param name="predicate">
+                    /// A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.
+                    /// </param>
+                    /// <param name="thisArg">
+                    /// An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.
+                    /// </param>
+                    abstract member filter<'S> :
+                        predicate: Exports.apply.argumentsList.filter.predicate<'T> * ?thisArg: obj ->
+                            ResizeArray<'S>
+
+                    /// <summary>
+                    /// Returns the elements of an array that meet the condition specified in a callback function.
+                    /// </summary>
+                    /// <param name="predicate">
+                    /// A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.
+                    /// </param>
+                    /// <param name="thisArg">
+                    /// An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.
+                    /// </param>
+                    abstract member filter:
+                        predicate: Exports.apply.argumentsList.filter.predicate_1<'T> *
+                        ?thisArg: obj ->
+                            ResizeArray<'T>
+
+                    /// <summary>
+                    /// Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
+                    /// </summary>
+                    /// <param name="callbackfn">
+                    /// A function that accepts up to four arguments. The reduce method calls the callbackfn function one time for each element in the array.
+                    /// </param>
+                    /// <param name="initialValue">
+                    /// If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
+                    /// </param>
+                    abstract member reduce:
+                        callbackfn: Exports.apply.argumentsList.reduce.callbackfn<'T> -> 'T
+
+                    /// <summary>
+                    /// Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
+                    /// </summary>
+                    abstract member reduce:
+                        callbackfn: Exports.apply.argumentsList.reduce.callbackfn<'T> *
+                        initialValue: 'T ->
+                            'T
+
+                    /// <summary>
+                    /// Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
+                    /// </summary>
+                    /// <param name="callbackfn">
+                    /// A function that accepts up to four arguments. The reduce method calls the callbackfn function one time for each element in the array.
+                    /// </param>
+                    /// <param name="initialValue">
+                    /// If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
+                    /// </param>
+                    abstract member reduce<'U> :
+                        callbackfn: Exports.apply.argumentsList.reduce.callbackfn_1<'U, 'T> *
+                        initialValue: 'U ->
+                            'U
+
+                    /// <summary>
+                    /// Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
+                    /// </summary>
+                    /// <param name="callbackfn">
+                    /// A function that accepts up to four arguments. The reduceRight method calls the callbackfn function one time for each element in the array.
+                    /// </param>
+                    /// <param name="initialValue">
+                    /// If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
+                    /// </param>
+                    abstract member reduceRight:
+                        callbackfn: Exports.apply.argumentsList.reduceRight.callbackfn<'T> -> 'T
+
+                    /// <summary>
+                    /// Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
+                    /// </summary>
+                    abstract member reduceRight:
+                        callbackfn: Exports.apply.argumentsList.reduceRight.callbackfn<'T> *
+                        initialValue: 'T ->
+                            'T
+
+                    /// <summary>
+                    /// Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
+                    /// </summary>
+                    /// <param name="callbackfn">
+                    /// A function that accepts up to four arguments. The reduceRight method calls the callbackfn function one time for each element in the array.
+                    /// </param>
+                    /// <param name="initialValue">
+                    /// If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
+                    /// </param>
+                    abstract member reduceRight<'U> :
+                        callbackfn: Exports.apply.argumentsList.reduceRight.callbackfn_1<'U, 'T> *
+                        initialValue: 'U ->
+                            'U
+
+                module argumentsList =
+
+                    module find =
+
+                        type predicate<'T> =
+                            delegate of value: 'T * index: float * obj: ResizeArray<'T> -> bool
+
+                        type predicate_1<'T> =
+                            delegate of value: 'T * index: float * obj: ResizeArray<'T> -> unit
+
+                    module findIndex =
+
+                        type predicate =
+                            delegate of value: obj * index: float * obj: ResizeArray<obj> -> unit
+
+                    module toLocaleString =
+
+                        [<AllowNullLiteral>]
+                        [<Interface>]
+                        type options =
+                            abstract member numberingSystem: string option with get, set
+
+                            abstract member compactDisplay:
+                                Exports.apply.argumentsList.toLocaleString.options.compactDisplay option with get, set
+
+                            abstract member notation:
+                                Exports.apply.argumentsList.toLocaleString.options.notation option with get, set
+
+                            abstract member signDisplay: obj option with get, set
+                            abstract member unit: string option with get, set
+
+                            abstract member unitDisplay:
+                                Exports.apply.argumentsList.toLocaleString.options.unitDisplay option with get, set
+
+                            abstract member currencySign:
+                                Exports.apply.argumentsList.toLocaleString.options.currencySign option with get, set
+
+                            abstract member roundingPriority:
+                                Exports.apply.argumentsList.toLocaleString.options.roundingPriority option with get, set
+
+                            abstract member roundingIncrement: obj option with get, set
+
+                            abstract member roundingMode:
+                                Exports.apply.argumentsList.toLocaleString.options.roundingMode option with get, set
+
+                            abstract member trailingZeroDisplay:
+                                Exports.apply.argumentsList.toLocaleString.options.trailingZeroDisplay option with get, set
+
+                            abstract member localeMatcher:
+                                Exports.apply.argumentsList.toLocaleString.options.localeMatcher option with get, set
+
+                            abstract member style: obj option with get, set
+                            abstract member currency: string option with get, set
+                            abstract member currencyDisplay: obj option with get, set
+
+                            abstract member useGrouping:
+                                Exports.apply.argumentsList.toLocaleString.options.useGrouping option with get, set
+
+                            abstract member minimumIntegerDigits: float option with get, set
+                            abstract member minimumFractionDigits: float option with get, set
+                            abstract member maximumFractionDigits: float option with get, set
+                            abstract member minimumSignificantDigits: float option with get, set
+                            abstract member maximumSignificantDigits: float option with get, set
+                            abstract member calendar: string option with get, set
+
+                            abstract member dayPeriod:
+                                Exports.apply.argumentsList.toLocaleString.options.dayPeriod option with get, set
+
+                            abstract member dateStyle:
+                                Exports.apply.argumentsList.toLocaleString.options.dateStyle option with get, set
+
+                            abstract member timeStyle:
+                                Exports.apply.argumentsList.toLocaleString.options.timeStyle option with get, set
+
+                            abstract member hourCycle:
+                                Exports.apply.argumentsList.toLocaleString.options.hourCycle option with get, set
+
+                            abstract member formatMatcher:
+                                Exports.apply.argumentsList.toLocaleString.options.formatMatcher option with get, set
+
+                            abstract member fractionalSecondDigits:
+                                Exports.apply.argumentsList.toLocaleString.options.fractionalSecondDigits option with get, set
+
+                            abstract member weekday:
+                                Exports.apply.argumentsList.toLocaleString.options.weekday option with get, set
+
+                            abstract member era:
+                                Exports.apply.argumentsList.toLocaleString.options.era option with get, set
+
+                            abstract member year:
+                                Exports.apply.argumentsList.toLocaleString.options.year option with get, set
+
+                            abstract member month:
+                                Exports.apply.argumentsList.toLocaleString.options.month option with get, set
+
+                            abstract member day:
+                                Exports.apply.argumentsList.toLocaleString.options.day option with get, set
+
+                            abstract member hour:
+                                Exports.apply.argumentsList.toLocaleString.options.hour option with get, set
+
+                            abstract member minute:
+                                Exports.apply.argumentsList.toLocaleString.options.minute option with get, set
+
+                            abstract member second:
+                                Exports.apply.argumentsList.toLocaleString.options.second option with get, set
+
+                            abstract member timeZoneName:
+                                Exports.apply.argumentsList.toLocaleString.options.timeZoneName option with get, set
+
+                            abstract member hour12: bool option with get, set
+                            abstract member timeZone: string option with get, set
+
+                        module options =
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type compactDisplay =
+                                | short
+                                | long
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type notation =
+                                | standard
+                                | scientific
+                                | engineering
+                                | compact
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type unitDisplay =
+                                | short
+                                | long
+                                | narrow
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type currencySign =
+                                | standard
+                                | accounting
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type roundingPriority =
+                                | auto
+                                | morePrecision
+                                | lessPrecision
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type roundingMode =
+                                | ceil
+                                | floor
+                                | expand
+                                | trunc
+                                | halfCeil
+                                | halfFloor
+                                | halfExpand
+                                | halfTrunc
+                                | halfEven
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type trailingZeroDisplay =
+                                | auto
+                                | stripIfInteger
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type localeMatcher =
+                                | lookup
+                                | ``best fit``
+
+                            [<RequireQualifiedAccess>]
+                            [<Erase(CaseRules.None)>]
+                            type useGrouping =
+                                | ``true``
+                                | ``false``
+                                | Case1 of bool
+                                | Case2 of obj
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type dayPeriod =
+                                | short
+                                | long
+                                | narrow
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type dateStyle =
+                                | short
+                                | long
+                                | full
+                                | medium
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type timeStyle =
+                                | short
+                                | long
+                                | full
+                                | medium
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type hourCycle =
+                                | h11
+                                | h12
+                                | h23
+                                | h24
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type formatMatcher =
+                                | ``best fit``
+                                | basic
+
+                            [<RequireQualifiedAccess>]
+                            type fractionalSecondDigits =
+                                | ``1`` = 1
+                                | ``2`` = 2
+                                | ``3`` = 3
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type weekday =
+                                | long
+                                | short
+                                | narrow
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type era =
+                                | long
+                                | short
+                                | narrow
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type year =
+                                | numeric
+                                | ``2-digit``
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type month =
+                                | numeric
+                                | ``2-digit``
+                                | long
+                                | short
+                                | narrow
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type day =
+                                | numeric
+                                | ``2-digit``
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type hour =
+                                | numeric
+                                | ``2-digit``
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type minute =
+                                | numeric
+                                | ``2-digit``
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type second =
+                                | numeric
+                                | ``2-digit``
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type timeZoneName =
+                                | short
+                                | long
+                                | shortOffset
+                                | longOffset
+                                | shortGeneric
+                                | longGeneric
+
+                    module flatMap =
+
+                        type callback =
+                            delegate of
+                                value: obj * index: float * array: ResizeArray<obj> ->
+                                    U2<obj, ReadonlyArray<obj>>
+
+                    module findLast =
+
+                        type predicate<'T> =
+                            delegate of value: 'T * index: float * array: ResizeArray<'T> -> bool
+
+                        type predicate_1<'T> =
+                            delegate of value: 'T * index: float * array: ResizeArray<'T> -> unit
+
+                    module findLastIndex =
+
+                        type predicate =
+                            delegate of value: obj * index: float * array: ResizeArray<obj> -> unit
+
+                    module toSorted =
+
+                        type compareFn = delegate of a: obj * b: obj -> float
+
+                    module every =
+
+                        type predicate<'T> =
+                            delegate of value: 'T * index: float * array: ResizeArray<'T> -> bool
+
+                        type predicate_1<'T> =
+                            delegate of value: 'T * index: float * array: ResizeArray<'T> -> unit
+
+                    module some =
+
+                        type predicate =
+                            delegate of value: obj * index: float * array: ResizeArray<obj> -> unit
+
+                    module forEach =
+
+                        type callbackfn =
+                            delegate of value: obj * index: float * array: ResizeArray<obj> -> unit
+
+                    module map =
+
+                        type callbackfn =
+                            delegate of value: obj * index: float * array: ResizeArray<obj> -> obj
+
+                    module filter =
+
+                        type predicate<'T> =
+                            delegate of value: 'T * index: float * array: ResizeArray<'T> -> bool
+
+                        type predicate_1<'T> =
+                            delegate of value: 'T * index: float * array: ResizeArray<'T> -> unit
+
+                    module reduce =
+
+                        type callbackfn<'T> =
+                            delegate of
+                                previousValue: 'T *
+                                currentValue: 'T *
+                                currentIndex: float *
+                                array: ResizeArray<'T> ->
+                                    'T
+
+                        type callbackfn_1<'U, 'T> =
+                            delegate of
+                                previousValue: 'U *
+                                currentValue: 'T *
+                                currentIndex: float *
+                                array: ResizeArray<'T> ->
+                                    'U
+
+                    module reduceRight =
+
+                        type callbackfn<'T> =
+                            delegate of
+                                previousValue: 'T *
+                                currentValue: 'T *
+                                currentIndex: float *
+                                array: ResizeArray<'T> ->
+                                    'T
+
+                        type callbackfn_1<'U, 'T> =
+                            delegate of
+                                previousValue: 'U *
+                                currentValue: 'T *
+                                currentIndex: float *
+                                array: ResizeArray<'T> ->
+                                    'U
+
             module construct =
 
                 [<AllowNullLiteral>]
@@ -1780,9 +2693,866 @@ module TypeScript =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
+                type argumentsList<'T> =
+                    /// <summary>
+                    /// Returns the value of the first element in the array where predicate is true, and undefined
+                    /// otherwise.
+                    /// </summary>
+                    /// <param name="predicate">
+                    /// find calls predicate once for each element of the array, in ascending
+                    /// order, until it finds one where predicate returns true. If such an element is found, find
+                    /// immediately returns that element value. Otherwise, find returns undefined.
+                    /// </param>
+                    /// <param name="thisArg">
+                    /// If provided, it will be used as the this value for each invocation of
+                    /// predicate. If it is not provided, undefined is used instead.
+                    /// </param>
+                    abstract member find<'S> :
+                        predicate: Exports.construct.argumentsList.find.predicate<'T> *
+                        ?thisArg: obj ->
+                            'S option
+
+                    /// <summary>
+                    /// Returns the value of the first element in the array where predicate is true, and undefined
+                    /// otherwise.
+                    /// </summary>
+                    abstract member find:
+                        predicate: Exports.construct.argumentsList.find.predicate_1<'T> *
+                        ?thisArg: obj ->
+                            'T option
+
+                    /// <summary>
+                    /// Returns the index of the first element in the array where predicate is true, and -1
+                    /// otherwise.
+                    /// </summary>
+                    /// <param name="predicate">
+                    /// find calls predicate once for each element of the array, in ascending
+                    /// order, until it finds one where predicate returns true. If such an element is found,
+                    /// findIndex immediately returns that element index. Otherwise, findIndex returns -1.
+                    /// </param>
+                    /// <param name="thisArg">
+                    /// If provided, it will be used as the this value for each invocation of
+                    /// predicate. If it is not provided, undefined is used instead.
+                    /// </param>
+                    abstract member findIndex:
+                        predicate: Exports.construct.argumentsList.findIndex.predicate *
+                        ?thisArg: obj ->
+                            float
+
+                    /// <summary>
+                    /// Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.
+                    /// </summary>
+                    abstract member toLocaleString:
+                        locales: string *
+                        ?options: Exports.construct.argumentsList.toLocaleString.options ->
+                            string
+
+                    /// <summary>
+                    /// Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.
+                    /// </summary>
+                    abstract member toLocaleString:
+                        locales: ResizeArray<string> *
+                        ?options: Exports.construct.argumentsList.toLocaleString.options ->
+                            string
+
+                    /// <summary>
+                    /// Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.
+                    /// </summary>
+                    abstract member toLocaleString: unit -> string
+                    /// <summary>
+                    /// Returns an iterable of key, value pairs for every entry in the array
+                    /// </summary>
+                    abstract member entries: unit -> Iterable<float * obj>
+                    /// <summary>
+                    /// Returns an iterable of keys in the array
+                    /// </summary>
+                    abstract member keys: unit -> Iterable<float>
+                    /// <summary>
+                    /// Returns an iterable of values in the array
+                    /// </summary>
+                    abstract member values: unit -> Iterable<obj>
+                    /// <summary>
+                    /// Determines whether an array includes a certain element, returning true or false as appropriate.
+                    /// </summary>
+                    /// <param name="searchElement">
+                    /// The element to search for.
+                    /// </param>
+                    /// <param name="fromIndex">
+                    /// The position in this array at which to begin searching for searchElement.
+                    /// </param>
+                    abstract member includes: searchElement: obj * ?fromIndex: float -> bool
+
+                    /// <summary>
+                    /// Calls a defined callback function on each element of an array. Then, flattens the result into
+                    /// a new array.
+                    /// This is identical to a map followed by flat with depth 1.
+                    /// </summary>
+                    /// <param name="callback">
+                    /// A function that accepts up to three arguments. The flatMap method calls the
+                    /// callback function one time for each element in the array.
+                    /// </param>
+                    /// <param name="thisArg">
+                    /// An object to which the this keyword can refer in the callback function. If
+                    /// thisArg is omitted, undefined is used as the this value.
+                    /// </param>
+                    abstract member flatMap<'U, 'This> :
+                        callback: Exports.construct.argumentsList.flatMap.callback * ?thisArg: 'This ->
+                            ResizeArray<'U>
+
+                    /// <summary>
+                    /// Returns a new array with all sub-array elements concatenated into it recursively up to the
+                    /// specified depth.
+                    /// </summary>
+                    /// <param name="depth">
+                    /// The maximum recursion depth
+                    /// </param>
+                    abstract member flat<'D> : ?depth: 'D -> ResizeArray<obj>
+                    /// <summary>
+                    /// Returns the item located at the specified index.
+                    /// </summary>
+                    /// <param name="index">
+                    /// The zero-based index of the desired code unit. A negative index will count back from the last item.
+                    /// </param>
+                    abstract member at: index: float -> obj
+
+                    /// <summary>
+                    /// Returns the value of the last element in the array where predicate is true, and undefined
+                    /// otherwise.
+                    /// </summary>
+                    /// <param name="predicate">
+                    /// findLast calls predicate once for each element of the array, in descending
+                    /// order, until it finds one where predicate returns true. If such an element is found, findLast
+                    /// immediately returns that element value. Otherwise, findLast returns undefined.
+                    /// </param>
+                    /// <param name="thisArg">
+                    /// If provided, it will be used as the this value for each invocation of
+                    /// predicate. If it is not provided, undefined is used instead.
+                    /// </param>
+                    abstract member findLast<'S> :
+                        predicate: Exports.construct.argumentsList.findLast.predicate<'T> *
+                        ?thisArg: obj ->
+                            'S option
+
+                    /// <summary>
+                    /// Returns the value of the last element in the array where predicate is true, and undefined
+                    /// otherwise.
+                    /// </summary>
+                    abstract member findLast:
+                        predicate: Exports.construct.argumentsList.findLast.predicate_1<'T> *
+                        ?thisArg: obj ->
+                            'T option
+
+                    /// <summary>
+                    /// Returns the index of the last element in the array where predicate is true, and -1
+                    /// otherwise.
+                    /// </summary>
+                    /// <param name="predicate">
+                    /// findLastIndex calls predicate once for each element of the array, in descending
+                    /// order, until it finds one where predicate returns true. If such an element is found,
+                    /// findLastIndex immediately returns that element index. Otherwise, findLastIndex returns -1.
+                    /// </param>
+                    /// <param name="thisArg">
+                    /// If provided, it will be used as the this value for each invocation of
+                    /// predicate. If it is not provided, undefined is used instead.
+                    /// </param>
+                    abstract member findLastIndex:
+                        predicate: Exports.construct.argumentsList.findLastIndex.predicate *
+                        ?thisArg: obj ->
+                            float
+
+                    /// <summary>
+                    /// Copies the array and returns the copied array with all of its elements reversed.
+                    /// </summary>
+                    abstract member toReversed: unit -> ResizeArray<obj>
+
+                    /// <summary>
+                    /// Copies and sorts the array.
+                    /// </summary>
+                    /// <param name="compareFn">
+                    /// Function used to determine the order of the elements. It is expected to return
+                    /// a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
+                    /// value otherwise. If omitted, the elements are sorted in ascending, UTF-16 code unit order.
+                    /// <code lang="ts">
+                    /// [11, 2, 22, 1].toSorted((a, b) => a - b) // [1, 2, 11, 22]
+                    /// </code>
+                    /// </param>
+                    abstract member toSorted:
+                        ?compareFn: Exports.construct.argumentsList.toSorted.compareFn ->
+                            ResizeArray<obj>
+
+                    /// <summary>
+                    /// Copies an array and removes elements while, if necessary, inserting new elements in their place, returning the remaining elements.
+                    /// Copies an array and removes elements while returning the remaining elements.
+                    /// </summary>
+                    /// <param name="start">
+                    /// The zero-based location in the array from which to start removing elements.
+                    /// </param>
+                    /// <param name="deleteCount">
+                    /// The number of elements to remove.
+                    /// </param>
+                    /// <param name="items">
+                    /// Elements to insert into the copied array in place of the deleted elements.
+                    /// </param>
+                    /// <returns>
+                    /// A copy of the original array with the remaining elements.
+                    /// </returns>
+                    abstract member toSpliced:
+                        start: float * deleteCount: float * [<ParamArray>] items: 'T[] ->
+                            ResizeArray<'T>
+
+                    /// <summary>
+                    /// Copies an array and removes elements while, if necessary, inserting new elements in their place, returning the remaining elements.
+                    /// Copies an array and removes elements while returning the remaining elements.
+                    /// </summary>
+                    /// <param name="start">
+                    /// The zero-based location in the array from which to start removing elements.
+                    /// </param>
+                    /// <param name="deleteCount">
+                    /// The number of elements to remove.
+                    /// </param>
+                    /// <returns>
+                    /// A copy of the original array with the remaining elements.
+                    /// </returns>
+                    abstract member toSpliced: start: float * ?deleteCount: float -> ResizeArray<'T>
+                    /// <summary>
+                    /// Copies an array, then overwrites the value at the provided index with the
+                    /// given value. If the index is negative, then it replaces from the end
+                    /// of the array
+                    /// </summary>
+                    /// <param name="index">
+                    /// The index of the value to overwrite. If the index is
+                    /// negative, then it replaces from the end of the array.
+                    /// </param>
+                    /// <param name="value">
+                    /// The value to insert into the copied array.
+                    /// </param>
+                    /// <returns>
+                    /// A copy of the original array with the inserted value.
+                    /// </returns>
+                    abstract member ``with``: index: float * value: obj -> ResizeArray<obj>
+                    /// <summary>
+                    /// Gets the length of the array. This is a number one higher than the highest element defined in an array.
+                    /// </summary>
+                    abstract member length: float with get
+                    /// <summary>
+                    /// Returns a string representation of an array.
+                    /// </summary>
+                    abstract member toString: unit -> string
+
+                    /// <summary>
+                    /// Combines two or more arrays.
+                    /// </summary>
+                    /// <param name="items">
+                    /// Additional items to add to the end of array1.
+                    /// </param>
+                    abstract member concat:
+                        [<ParamArray>] items: TypeScript.ConcatArray<'T>[] -> ResizeArray<'T>
+
+                    /// <summary>
+                    /// Combines two or more arrays.
+                    /// </summary>
+                    /// <param name="items">
+                    /// Additional items to add to the end of array1.
+                    /// </param>
+                    abstract member concat:
+                        [<ParamArray>] items: U2<'T, TypeScript.ConcatArray<'T>>[] ->
+                            ResizeArray<'T>
+
+                    /// <summary>
+                    /// Adds all the elements of an array separated by the specified separator string.
+                    /// </summary>
+                    /// <param name="separator">
+                    /// A string used to separate one element of an array from the next in the resulting String. If omitted, the array elements are separated with a comma.
+                    /// </param>
+                    abstract member join: ?separator: string -> string
+                    /// <summary>
+                    /// Returns a section of an array.
+                    /// </summary>
+                    /// <param name="start">
+                    /// The beginning of the specified portion of the array.
+                    /// </param>
+                    /// <param name="end">
+                    /// The end of the specified portion of the array. This is exclusive of the element at the index 'end'.
+                    /// </param>
+                    abstract member slice: ?start: float * ?``end``: float -> ResizeArray<obj>
+                    /// <summary>
+                    /// Returns the index of the first occurrence of a value in an array.
+                    /// </summary>
+                    /// <param name="searchElement">
+                    /// The value to locate in the array.
+                    /// </param>
+                    /// <param name="fromIndex">
+                    /// The array index at which to begin the search. If fromIndex is omitted, the search starts at index 0.
+                    /// </param>
+                    abstract member indexOf: searchElement: obj * ?fromIndex: float -> float
+                    /// <summary>
+                    /// Returns the index of the last occurrence of a specified value in an array.
+                    /// </summary>
+                    /// <param name="searchElement">
+                    /// The value to locate in the array.
+                    /// </param>
+                    /// <param name="fromIndex">
+                    /// The array index at which to begin the search. If fromIndex is omitted, the search starts at the last index in the array.
+                    /// </param>
+                    abstract member lastIndexOf: searchElement: obj * ?fromIndex: float -> float
+
+                    /// <summary>
+                    /// Determines whether all the members of an array satisfy the specified test.
+                    /// </summary>
+                    /// <param name="predicate">
+                    /// A function that accepts up to three arguments. The every method calls
+                    /// the predicate function for each element in the array until the predicate returns a value
+                    /// which is coercible to the Boolean value false, or until the end of the array.
+                    /// </param>
+                    /// <param name="thisArg">
+                    /// An object to which the this keyword can refer in the predicate function.
+                    /// If thisArg is omitted, undefined is used as the this value.
+                    /// </param>
+                    abstract member every:
+                        predicate: Exports.construct.argumentsList.every.predicate<'T> *
+                        ?thisArg: obj ->
+                            bool
+
+                    /// <summary>
+                    /// Determines whether all the members of an array satisfy the specified test.
+                    /// </summary>
+                    /// <param name="predicate">
+                    /// A function that accepts up to three arguments. The every method calls
+                    /// the predicate function for each element in the array until the predicate returns a value
+                    /// which is coercible to the Boolean value false, or until the end of the array.
+                    /// </param>
+                    /// <param name="thisArg">
+                    /// An object to which the this keyword can refer in the predicate function.
+                    /// If thisArg is omitted, undefined is used as the this value.
+                    /// </param>
+                    abstract member every:
+                        predicate: Exports.construct.argumentsList.every.predicate_1<'T> *
+                        ?thisArg: obj ->
+                            bool
+
+                    /// <summary>
+                    /// Determines whether the specified callback function returns true for any element of an array.
+                    /// </summary>
+                    /// <param name="predicate">
+                    /// A function that accepts up to three arguments. The some method calls
+                    /// the predicate function for each element in the array until the predicate returns a value
+                    /// which is coercible to the Boolean value true, or until the end of the array.
+                    /// </param>
+                    /// <param name="thisArg">
+                    /// An object to which the this keyword can refer in the predicate function.
+                    /// If thisArg is omitted, undefined is used as the this value.
+                    /// </param>
+                    abstract member some:
+                        predicate: Exports.construct.argumentsList.some.predicate * ?thisArg: obj ->
+                            bool
+
+                    /// <summary>
+                    /// Performs the specified action for each element in an array.
+                    /// </summary>
+                    /// <param name="callbackfn">
+                    /// A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the array.
+                    /// </param>
+                    /// <param name="thisArg">
+                    /// An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+                    /// </param>
+                    abstract member forEach:
+                        callbackfn: Exports.construct.argumentsList.forEach.callbackfn *
+                        ?thisArg: obj ->
+                            unit
+
+                    /// <summary>
+                    /// Calls a defined callback function on each element of an array, and returns an array that contains the results.
+                    /// </summary>
+                    /// <param name="callbackfn">
+                    /// A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
+                    /// </param>
+                    /// <param name="thisArg">
+                    /// An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+                    /// </param>
+                    abstract member map<'U> :
+                        callbackfn: Exports.construct.argumentsList.map.callbackfn * ?thisArg: obj ->
+                            ResizeArray<'U>
+
+                    /// <summary>
+                    /// Returns the elements of an array that meet the condition specified in a callback function.
+                    /// </summary>
+                    /// <param name="predicate">
+                    /// A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.
+                    /// </param>
+                    /// <param name="thisArg">
+                    /// An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.
+                    /// </param>
+                    abstract member filter<'S> :
+                        predicate: Exports.construct.argumentsList.filter.predicate<'T> *
+                        ?thisArg: obj ->
+                            ResizeArray<'S>
+
+                    /// <summary>
+                    /// Returns the elements of an array that meet the condition specified in a callback function.
+                    /// </summary>
+                    /// <param name="predicate">
+                    /// A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.
+                    /// </param>
+                    /// <param name="thisArg">
+                    /// An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.
+                    /// </param>
+                    abstract member filter:
+                        predicate: Exports.construct.argumentsList.filter.predicate_1<'T> *
+                        ?thisArg: obj ->
+                            ResizeArray<'T>
+
+                    /// <summary>
+                    /// Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
+                    /// </summary>
+                    /// <param name="callbackfn">
+                    /// A function that accepts up to four arguments. The reduce method calls the callbackfn function one time for each element in the array.
+                    /// </param>
+                    /// <param name="initialValue">
+                    /// If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
+                    /// </param>
+                    abstract member reduce:
+                        callbackfn: Exports.construct.argumentsList.reduce.callbackfn<'T> -> 'T
+
+                    /// <summary>
+                    /// Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
+                    /// </summary>
+                    abstract member reduce:
+                        callbackfn: Exports.construct.argumentsList.reduce.callbackfn<'T> *
+                        initialValue: 'T ->
+                            'T
+
+                    /// <summary>
+                    /// Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
+                    /// </summary>
+                    /// <param name="callbackfn">
+                    /// A function that accepts up to four arguments. The reduce method calls the callbackfn function one time for each element in the array.
+                    /// </param>
+                    /// <param name="initialValue">
+                    /// If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
+                    /// </param>
+                    abstract member reduce<'U> :
+                        callbackfn: Exports.construct.argumentsList.reduce.callbackfn_1<'U, 'T> *
+                        initialValue: 'U ->
+                            'U
+
+                    /// <summary>
+                    /// Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
+                    /// </summary>
+                    /// <param name="callbackfn">
+                    /// A function that accepts up to four arguments. The reduceRight method calls the callbackfn function one time for each element in the array.
+                    /// </param>
+                    /// <param name="initialValue">
+                    /// If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
+                    /// </param>
+                    abstract member reduceRight:
+                        callbackfn: Exports.construct.argumentsList.reduceRight.callbackfn<'T> -> 'T
+
+                    /// <summary>
+                    /// Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
+                    /// </summary>
+                    abstract member reduceRight:
+                        callbackfn: Exports.construct.argumentsList.reduceRight.callbackfn<'T> *
+                        initialValue: 'T ->
+                            'T
+
+                    /// <summary>
+                    /// Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
+                    /// </summary>
+                    /// <param name="callbackfn">
+                    /// A function that accepts up to four arguments. The reduceRight method calls the callbackfn function one time for each element in the array.
+                    /// </param>
+                    /// <param name="initialValue">
+                    /// If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
+                    /// </param>
+                    abstract member reduceRight<'U> :
+                        callbackfn: Exports.construct.argumentsList.reduceRight.callbackfn_1<'U, 'T> *
+                        initialValue: 'U ->
+                            'U
+
+                [<AllowNullLiteral>]
+                [<Interface>]
                 type newTarget =
                     [<EmitConstructor>]
                     abstract member Create: [<ParamArray>] args: obj[] -> obj
+
+                module argumentsList =
+
+                    module find =
+
+                        type predicate<'T> =
+                            delegate of value: 'T * index: float * obj: ResizeArray<'T> -> bool
+
+                        type predicate_1<'T> =
+                            delegate of value: 'T * index: float * obj: ResizeArray<'T> -> unit
+
+                    module findIndex =
+
+                        type predicate =
+                            delegate of value: obj * index: float * obj: ResizeArray<obj> -> unit
+
+                    module toLocaleString =
+
+                        [<AllowNullLiteral>]
+                        [<Interface>]
+                        type options =
+                            abstract member numberingSystem: string option with get, set
+
+                            abstract member compactDisplay:
+                                Exports.construct.argumentsList.toLocaleString.options.compactDisplay option with get, set
+
+                            abstract member notation:
+                                Exports.construct.argumentsList.toLocaleString.options.notation option with get, set
+
+                            abstract member signDisplay: obj option with get, set
+                            abstract member unit: string option with get, set
+
+                            abstract member unitDisplay:
+                                Exports.construct.argumentsList.toLocaleString.options.unitDisplay option with get, set
+
+                            abstract member currencySign:
+                                Exports.construct.argumentsList.toLocaleString.options.currencySign option with get, set
+
+                            abstract member roundingPriority:
+                                Exports.construct.argumentsList.toLocaleString.options.roundingPriority option with get, set
+
+                            abstract member roundingIncrement: obj option with get, set
+
+                            abstract member roundingMode:
+                                Exports.construct.argumentsList.toLocaleString.options.roundingMode option with get, set
+
+                            abstract member trailingZeroDisplay:
+                                Exports.construct.argumentsList.toLocaleString.options.trailingZeroDisplay option with get, set
+
+                            abstract member localeMatcher:
+                                Exports.construct.argumentsList.toLocaleString.options.localeMatcher option with get, set
+
+                            abstract member style: obj option with get, set
+                            abstract member currency: string option with get, set
+                            abstract member currencyDisplay: obj option with get, set
+
+                            abstract member useGrouping:
+                                Exports.construct.argumentsList.toLocaleString.options.useGrouping option with get, set
+
+                            abstract member minimumIntegerDigits: float option with get, set
+                            abstract member minimumFractionDigits: float option with get, set
+                            abstract member maximumFractionDigits: float option with get, set
+                            abstract member minimumSignificantDigits: float option with get, set
+                            abstract member maximumSignificantDigits: float option with get, set
+                            abstract member calendar: string option with get, set
+
+                            abstract member dayPeriod:
+                                Exports.construct.argumentsList.toLocaleString.options.dayPeriod option with get, set
+
+                            abstract member dateStyle:
+                                Exports.construct.argumentsList.toLocaleString.options.dateStyle option with get, set
+
+                            abstract member timeStyle:
+                                Exports.construct.argumentsList.toLocaleString.options.timeStyle option with get, set
+
+                            abstract member hourCycle:
+                                Exports.construct.argumentsList.toLocaleString.options.hourCycle option with get, set
+
+                            abstract member formatMatcher:
+                                Exports.construct.argumentsList.toLocaleString.options.formatMatcher option with get, set
+
+                            abstract member fractionalSecondDigits:
+                                Exports.construct.argumentsList.toLocaleString.options.fractionalSecondDigits option with get, set
+
+                            abstract member weekday:
+                                Exports.construct.argumentsList.toLocaleString.options.weekday option with get, set
+
+                            abstract member era:
+                                Exports.construct.argumentsList.toLocaleString.options.era option with get, set
+
+                            abstract member year:
+                                Exports.construct.argumentsList.toLocaleString.options.year option with get, set
+
+                            abstract member month:
+                                Exports.construct.argumentsList.toLocaleString.options.month option with get, set
+
+                            abstract member day:
+                                Exports.construct.argumentsList.toLocaleString.options.day option with get, set
+
+                            abstract member hour:
+                                Exports.construct.argumentsList.toLocaleString.options.hour option with get, set
+
+                            abstract member minute:
+                                Exports.construct.argumentsList.toLocaleString.options.minute option with get, set
+
+                            abstract member second:
+                                Exports.construct.argumentsList.toLocaleString.options.second option with get, set
+
+                            abstract member timeZoneName:
+                                Exports.construct.argumentsList.toLocaleString.options.timeZoneName option with get, set
+
+                            abstract member hour12: bool option with get, set
+                            abstract member timeZone: string option with get, set
+
+                        module options =
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type compactDisplay =
+                                | short
+                                | long
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type notation =
+                                | standard
+                                | scientific
+                                | engineering
+                                | compact
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type unitDisplay =
+                                | short
+                                | long
+                                | narrow
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type currencySign =
+                                | standard
+                                | accounting
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type roundingPriority =
+                                | auto
+                                | morePrecision
+                                | lessPrecision
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type roundingMode =
+                                | ceil
+                                | floor
+                                | expand
+                                | trunc
+                                | halfCeil
+                                | halfFloor
+                                | halfExpand
+                                | halfTrunc
+                                | halfEven
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type trailingZeroDisplay =
+                                | auto
+                                | stripIfInteger
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type localeMatcher =
+                                | lookup
+                                | ``best fit``
+
+                            [<RequireQualifiedAccess>]
+                            [<Erase(CaseRules.None)>]
+                            type useGrouping =
+                                | ``true``
+                                | ``false``
+                                | Case1 of bool
+                                | Case2 of obj
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type dayPeriod =
+                                | short
+                                | long
+                                | narrow
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type dateStyle =
+                                | short
+                                | long
+                                | full
+                                | medium
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type timeStyle =
+                                | short
+                                | long
+                                | full
+                                | medium
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type hourCycle =
+                                | h11
+                                | h12
+                                | h23
+                                | h24
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type formatMatcher =
+                                | ``best fit``
+                                | basic
+
+                            [<RequireQualifiedAccess>]
+                            type fractionalSecondDigits =
+                                | ``1`` = 1
+                                | ``2`` = 2
+                                | ``3`` = 3
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type weekday =
+                                | long
+                                | short
+                                | narrow
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type era =
+                                | long
+                                | short
+                                | narrow
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type year =
+                                | numeric
+                                | ``2-digit``
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type month =
+                                | numeric
+                                | ``2-digit``
+                                | long
+                                | short
+                                | narrow
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type day =
+                                | numeric
+                                | ``2-digit``
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type hour =
+                                | numeric
+                                | ``2-digit``
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type minute =
+                                | numeric
+                                | ``2-digit``
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type second =
+                                | numeric
+                                | ``2-digit``
+
+                            [<RequireQualifiedAccess>]
+                            [<StringEnum(CaseRules.None)>]
+                            type timeZoneName =
+                                | short
+                                | long
+                                | shortOffset
+                                | longOffset
+                                | shortGeneric
+                                | longGeneric
+
+                    module flatMap =
+
+                        type callback =
+                            delegate of
+                                value: obj * index: float * array: ResizeArray<obj> ->
+                                    U2<obj, ReadonlyArray<obj>>
+
+                    module findLast =
+
+                        type predicate<'T> =
+                            delegate of value: 'T * index: float * array: ResizeArray<'T> -> bool
+
+                        type predicate_1<'T> =
+                            delegate of value: 'T * index: float * array: ResizeArray<'T> -> unit
+
+                    module findLastIndex =
+
+                        type predicate =
+                            delegate of value: obj * index: float * array: ResizeArray<obj> -> unit
+
+                    module toSorted =
+
+                        type compareFn = delegate of a: obj * b: obj -> float
+
+                    module every =
+
+                        type predicate<'T> =
+                            delegate of value: 'T * index: float * array: ResizeArray<'T> -> bool
+
+                        type predicate_1<'T> =
+                            delegate of value: 'T * index: float * array: ResizeArray<'T> -> unit
+
+                    module some =
+
+                        type predicate =
+                            delegate of value: obj * index: float * array: ResizeArray<obj> -> unit
+
+                    module forEach =
+
+                        type callbackfn =
+                            delegate of value: obj * index: float * array: ResizeArray<obj> -> unit
+
+                    module map =
+
+                        type callbackfn =
+                            delegate of value: obj * index: float * array: ResizeArray<obj> -> obj
+
+                    module filter =
+
+                        type predicate<'T> =
+                            delegate of value: 'T * index: float * array: ResizeArray<'T> -> bool
+
+                        type predicate_1<'T> =
+                            delegate of value: 'T * index: float * array: ResizeArray<'T> -> unit
+
+                    module reduce =
+
+                        type callbackfn<'T> =
+                            delegate of
+                                previousValue: 'T *
+                                currentValue: 'T *
+                                currentIndex: float *
+                                array: ResizeArray<'T> ->
+                                    'T
+
+                        type callbackfn_1<'U, 'T> =
+                            delegate of
+                                previousValue: 'U *
+                                currentValue: 'T *
+                                currentIndex: float *
+                                array: ResizeArray<'T> ->
+                                    'U
+
+                    module reduceRight =
+
+                        type callbackfn<'T> =
+                            delegate of
+                                previousValue: 'T *
+                                currentValue: 'T *
+                                currentIndex: float *
+                                array: ResizeArray<'T> ->
+                                    'T
+
+                        type callbackfn_1<'U, 'T> =
+                            delegate of
+                                previousValue: 'U *
+                                currentValue: 'T *
+                                currentIndex: float *
+                                array: ResizeArray<'T> ->
+                                    'U
 
             module defineProperty =
 
@@ -1983,7 +3753,7 @@ module TypeScript =
         /// </summary>
         abstract member getUTCMilliseconds: unit -> float
         /// <summary>
-        /// Gets the difference in minutes between the time on the local computer and Universal Coordinated Time (UTC).
+        /// Gets the difference in minutes between Universal Coordinated Time (UTC) and the time on the local computer.
         /// </summary>
         abstract member getTimezoneOffset: unit -> float
         /// <summary>
@@ -2223,6 +3993,7 @@ module TypeScript =
         /// An object that contains one or more properties that specify comparison options.
         /// </param>
         abstract member toLocaleTimeString: locales: ResizeArray<string> * ?options: obj -> string
+        abstract member toTemporalInstant: unit -> obj
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -2234,7 +4005,25 @@ module TypeScript =
         /// <summary>
         /// Returns a section of an SharedArrayBuffer.
         /// </summary>
-        abstract member slice: ``begin``: float * ?``end``: float -> TypeScript.SharedArrayBuffer
+        abstract member slice: ?``begin``: float * ?``end``: float -> TypeScript.SharedArrayBuffer
+        /// <summary>
+        /// Returns true if this SharedArrayBuffer can be grown.
+        ///
+        /// [MDN](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/SharedArrayBuffer/growable)
+        /// </summary>
+        abstract member growable: bool with get
+        /// <summary>
+        /// If this SharedArrayBuffer is growable, returns the maximum byte length given during construction; returns the byte length if not.
+        ///
+        /// [MDN](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/SharedArrayBuffer/maxByteLength)
+        /// </summary>
+        abstract member maxByteLength: float with get
+        /// <summary>
+        /// Grows the SharedArrayBuffer to the specified size (in bytes).
+        ///
+        /// [MDN](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/SharedArrayBuffer/grow)
+        /// </summary>
+        abstract member grow: ?newByteLength: float -> unit
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -2242,7 +4031,12 @@ module TypeScript =
         abstract member prototype: TypeScript.SharedArrayBuffer with get
 
         [<EmitConstructor>]
-        abstract member Create: byteLength: float -> TypeScript.SharedArrayBuffer
+        abstract member Create: ?byteLength: float -> TypeScript.SharedArrayBuffer
+
+        [<EmitConstructor>]
+        abstract member Create:
+            byteLength: float * ?options: SharedArrayBufferConstructor.Create.options ->
+                TypeScript.SharedArrayBuffer
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -2257,6 +4051,22 @@ module TypeScript =
 
         [<ParamObject; Emit("$0")>]
         static member Create(?cause: obj) : ErrorOptions = nativeOnly
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type ReadonlySetLike<'T> =
+        /// <summary>
+        /// Despite its name, returns an iterator of the values in the set-like.
+        /// </summary>
+        abstract member keys: unit -> TypeScript.Iterator<'T>
+        /// <returns>
+        /// a boolean indicating whether an element with the specified value exists in the set-like or not.
+        /// </returns>
+        abstract member has: value: 'T -> bool
+        /// <returns>
+        /// the number of (unique) elements in the set-like.
+        /// </returns>
+        abstract member size: float with get
 
     type PropertyKey = U3<string, float, obj>
 
@@ -2387,6 +4197,10 @@ module TypeScript =
 
     type Iterator<'T> = Iterator<'T, obj, obj>
 
+    type IterableIterator<'T, 'TReturn> = IterableIterator<'T, 'TReturn, obj>
+
+    type IterableIterator<'T> = IterableIterator<'T, obj, obj>
+
     type ProxyHandler = ProxyHandler<obj>
 
     module ReadonlyMap =
@@ -2423,6 +4237,14 @@ module TypeScript =
             [<EmitIndexer>]
             abstract member Item: k: string -> obj with get, set
 
+        [<AllowNullLiteral>]
+        [<Interface>]
+        type groupBy = interface end
+
+        [<AllowNullLiteral>]
+        [<Interface>]
+        type freeze = interface end
+
         module values =
 
             [<AllowNullLiteral>]
@@ -2438,6 +4260,10 @@ module TypeScript =
             type o<'T> =
                 [<EmitIndexer>]
                 abstract member Item: s: string -> 'T with get, set
+
+        module groupBy =
+
+            type keySelector<'K, 'T> = delegate of item: 'T * index: float -> 'K
 
         module defineProperty =
 
@@ -2463,6 +4289,249 @@ module TypeScript =
         module findIndex =
 
             type predicate<'T> = delegate of value: 'T * index: float * obj: ResizeArray<'T> -> unit
+
+        module toLocaleString =
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type options =
+                abstract member numberingSystem: string option with get, set
+
+                abstract member compactDisplay:
+                    ReadonlyArray.toLocaleString.options.compactDisplay option with get, set
+
+                abstract member notation: ReadonlyArray.toLocaleString.options.notation option with get, set
+                abstract member signDisplay: obj option with get, set
+                abstract member unit: string option with get, set
+                abstract member unitDisplay: ReadonlyArray.toLocaleString.options.unitDisplay option with get, set
+
+                abstract member currencySign:
+                    ReadonlyArray.toLocaleString.options.currencySign option with get, set
+
+                abstract member roundingPriority:
+                    ReadonlyArray.toLocaleString.options.roundingPriority option with get, set
+
+                abstract member roundingIncrement: obj option with get, set
+
+                abstract member roundingMode:
+                    ReadonlyArray.toLocaleString.options.roundingMode option with get, set
+
+                abstract member trailingZeroDisplay:
+                    ReadonlyArray.toLocaleString.options.trailingZeroDisplay option with get, set
+
+                abstract member localeMatcher:
+                    ReadonlyArray.toLocaleString.options.localeMatcher option with get, set
+
+                abstract member style: obj option with get, set
+                abstract member currency: string option with get, set
+                abstract member currencyDisplay: obj option with get, set
+                abstract member useGrouping: ReadonlyArray.toLocaleString.options.useGrouping option with get, set
+                abstract member minimumIntegerDigits: float option with get, set
+                abstract member minimumFractionDigits: float option with get, set
+                abstract member maximumFractionDigits: float option with get, set
+                abstract member minimumSignificantDigits: float option with get, set
+                abstract member maximumSignificantDigits: float option with get, set
+                abstract member calendar: string option with get, set
+                abstract member dayPeriod: ReadonlyArray.toLocaleString.options.dayPeriod option with get, set
+                abstract member dateStyle: ReadonlyArray.toLocaleString.options.dateStyle option with get, set
+                abstract member timeStyle: ReadonlyArray.toLocaleString.options.timeStyle option with get, set
+                abstract member hourCycle: ReadonlyArray.toLocaleString.options.hourCycle option with get, set
+
+                abstract member formatMatcher:
+                    ReadonlyArray.toLocaleString.options.formatMatcher option with get, set
+
+                abstract member fractionalSecondDigits:
+                    ReadonlyArray.toLocaleString.options.fractionalSecondDigits option with get, set
+
+                abstract member weekday: ReadonlyArray.toLocaleString.options.weekday option with get, set
+                abstract member era: ReadonlyArray.toLocaleString.options.era option with get, set
+                abstract member year: ReadonlyArray.toLocaleString.options.year option with get, set
+                abstract member month: ReadonlyArray.toLocaleString.options.month option with get, set
+                abstract member day: ReadonlyArray.toLocaleString.options.day option with get, set
+                abstract member hour: ReadonlyArray.toLocaleString.options.hour option with get, set
+                abstract member minute: ReadonlyArray.toLocaleString.options.minute option with get, set
+                abstract member second: ReadonlyArray.toLocaleString.options.second option with get, set
+
+                abstract member timeZoneName:
+                    ReadonlyArray.toLocaleString.options.timeZoneName option with get, set
+
+                abstract member hour12: bool option with get, set
+                abstract member timeZone: string option with get, set
+
+            module options =
+
+                [<RequireQualifiedAccess>]
+                [<StringEnum(CaseRules.None)>]
+                type compactDisplay =
+                    | short
+                    | long
+
+                [<RequireQualifiedAccess>]
+                [<StringEnum(CaseRules.None)>]
+                type notation =
+                    | standard
+                    | scientific
+                    | engineering
+                    | compact
+
+                [<RequireQualifiedAccess>]
+                [<StringEnum(CaseRules.None)>]
+                type unitDisplay =
+                    | short
+                    | long
+                    | narrow
+
+                [<RequireQualifiedAccess>]
+                [<StringEnum(CaseRules.None)>]
+                type currencySign =
+                    | standard
+                    | accounting
+
+                [<RequireQualifiedAccess>]
+                [<StringEnum(CaseRules.None)>]
+                type roundingPriority =
+                    | auto
+                    | morePrecision
+                    | lessPrecision
+
+                [<RequireQualifiedAccess>]
+                [<StringEnum(CaseRules.None)>]
+                type roundingMode =
+                    | ceil
+                    | floor
+                    | expand
+                    | trunc
+                    | halfCeil
+                    | halfFloor
+                    | halfExpand
+                    | halfTrunc
+                    | halfEven
+
+                [<RequireQualifiedAccess>]
+                [<StringEnum(CaseRules.None)>]
+                type trailingZeroDisplay =
+                    | auto
+                    | stripIfInteger
+
+                [<RequireQualifiedAccess>]
+                [<StringEnum(CaseRules.None)>]
+                type localeMatcher =
+                    | lookup
+                    | ``best fit``
+
+                [<RequireQualifiedAccess>]
+                [<Erase(CaseRules.None)>]
+                type useGrouping =
+                    | ``true``
+                    | ``false``
+                    | Case1 of bool
+                    | Case2 of obj
+
+                [<RequireQualifiedAccess>]
+                [<StringEnum(CaseRules.None)>]
+                type dayPeriod =
+                    | short
+                    | long
+                    | narrow
+
+                [<RequireQualifiedAccess>]
+                [<StringEnum(CaseRules.None)>]
+                type dateStyle =
+                    | short
+                    | long
+                    | full
+                    | medium
+
+                [<RequireQualifiedAccess>]
+                [<StringEnum(CaseRules.None)>]
+                type timeStyle =
+                    | short
+                    | long
+                    | full
+                    | medium
+
+                [<RequireQualifiedAccess>]
+                [<StringEnum(CaseRules.None)>]
+                type hourCycle =
+                    | h11
+                    | h12
+                    | h23
+                    | h24
+
+                [<RequireQualifiedAccess>]
+                [<StringEnum(CaseRules.None)>]
+                type formatMatcher =
+                    | ``best fit``
+                    | basic
+
+                [<RequireQualifiedAccess>]
+                type fractionalSecondDigits =
+                    | ``1`` = 1
+                    | ``2`` = 2
+                    | ``3`` = 3
+
+                [<RequireQualifiedAccess>]
+                [<StringEnum(CaseRules.None)>]
+                type weekday =
+                    | long
+                    | short
+                    | narrow
+
+                [<RequireQualifiedAccess>]
+                [<StringEnum(CaseRules.None)>]
+                type era =
+                    | long
+                    | short
+                    | narrow
+
+                [<RequireQualifiedAccess>]
+                [<StringEnum(CaseRules.None)>]
+                type year =
+                    | numeric
+                    | ``2-digit``
+
+                [<RequireQualifiedAccess>]
+                [<StringEnum(CaseRules.None)>]
+                type month =
+                    | numeric
+                    | ``2-digit``
+                    | long
+                    | short
+                    | narrow
+
+                [<RequireQualifiedAccess>]
+                [<StringEnum(CaseRules.None)>]
+                type day =
+                    | numeric
+                    | ``2-digit``
+
+                [<RequireQualifiedAccess>]
+                [<StringEnum(CaseRules.None)>]
+                type hour =
+                    | numeric
+                    | ``2-digit``
+
+                [<RequireQualifiedAccess>]
+                [<StringEnum(CaseRules.None)>]
+                type minute =
+                    | numeric
+                    | ``2-digit``
+
+                [<RequireQualifiedAccess>]
+                [<StringEnum(CaseRules.None)>]
+                type second =
+                    | numeric
+                    | ``2-digit``
+
+                [<RequireQualifiedAccess>]
+                [<StringEnum(CaseRules.None)>]
+                type timeZoneName =
+                    | short
+                    | long
+                    | shortOffset
+                    | longOffset
+                    | shortGeneric
+                    | longGeneric
 
         module flatMap =
 
@@ -2580,3 +4649,15 @@ module TypeScript =
 
             [<ParamObject; Emit("$0")>]
             static member Create(proxy: 'T, revoke: (unit -> unit)) : revocable<'T> = nativeOnly
+
+    module SharedArrayBufferConstructor =
+
+        module Create =
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type options =
+                abstract member maxByteLength: float option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create(?maxByteLength: float) : options = nativeOnly

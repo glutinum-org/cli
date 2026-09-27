@@ -211,7 +211,7 @@ let private truncateToDeclaredArity
             | Ts.SyntaxKind.InterfaceDeclaration
             | Ts.SyntaxKind.ClassDeclaration
             | Ts.SyntaxKind.TypeAliasDeclaration ->
-                let typeParameters: ResizeArray<Ts.TypeParameterDeclaration> option =
+                let typeParameters: Ts.NodeArray<Ts.TypeParameterDeclaration> option =
                     declaration?typeParameters
 
                 typeParameters |> Option.map _.Count |> Option.defaultValue 0 |> Some
@@ -575,7 +575,7 @@ module UtilityType =
             if isNull node then
                 []
             else
-                let typeParameters: ResizeArray<Ts.TypeParameterDeclaration> option =
+                let typeParameters: Ts.NodeArray<Ts.TypeParameterDeclaration> option =
                     node?typeParameters
 
                 (match typeParameters with
@@ -1181,7 +1181,7 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                 elif node.kind = Ts.SyntaxKind.TypeParameter then
                     []
                 else
-                    let ownTypeParameters: ResizeArray<Ts.TypeParameterDeclaration> option =
+                    let ownTypeParameters: Ts.NodeArray<Ts.TypeParameterDeclaration> option =
                         node?typeParameters
 
                     let acc =
@@ -1197,7 +1197,10 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                 |> List.distinctBy (fun typeParameter -> identifierText typeParameter.name)
             with
             | [] -> []
-            | typParameters -> reader.ReadTypeParameters(Some(ResizeArray typParameters))
+            | typParameters ->
+                reader.ReadTypeParameters(
+                    Some(ts.factory.createNodeArray (ResizeArray typParameters))
+                )
 
         {
             Documentation = reader.ReadDocumentationFromNode typeNode
@@ -1251,11 +1254,12 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
             GlueType.Primitive GluePrimitive.Any
         // `typeof import("./file").fn` is the type of the value
         | None, Some qualifier when importTypeNode.isTypeOf ->
-            ts.factory.createTypeQueryNode qualifier |> reader.ReadTypeNode
+            ts.factory.createTypeQueryNode (unbox<Ts.Identifier> qualifier)
+            |> reader.ReadTypeNode
         | None, Some qualifier ->
             ts.factory.createTypeReferenceNode (
-                U2.Case2 qualifier,
-                ?typeArguments = importTypeNode.typeArguments
+                unbox<Ts.Identifier> qualifier,
+                ?typeArguments = unbox<ResizeArray<Ts.TypeNode> option> importTypeNode.typeArguments
             )
             |> reader.ReadTypeNode
         // `typeof import("./file")`, the module object

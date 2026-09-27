@@ -93,6 +93,9 @@ let tryReadLiteral (checker: Ts.TypeChecker) (expression: Ts.Node) =
             tryReadNumericLiteral text
 
 /// Nodes synthesized by <c>typeToTypeNode</c> have no source text
+/// An `Identifier` and a `StringLiteral` both carry the name in `text`
+let moduleExportNameText (name: Ts.ModuleExportName) : string = (unbox<Ts.Identifier> name).text
+
 let identifierText (node: Ts.Node) : string =
     if isNull node?text then
         node.getText ()
@@ -157,29 +160,34 @@ let getFullNameOrEmpty (checker: Ts.TypeChecker) (node: Ts.Node) =
 
 type ModifierUtil =
 
-    static member GetAccessor(modifiers: ResizeArray<Ts.Modifier> option) =
+    static member GetAccessor(modifiers: Ts.NodeArray<Ts.Modifier> option) =
         match modifiers with
         | Some modifiers ->
             modifiers
-            |> Seq.exists (fun modifier -> modifier.kind = Ts.SyntaxKind.ReadonlyKeyword)
+            |> Seq.exists (fun modifier ->
+                (unbox<Ts.Node> modifier).kind = Ts.SyntaxKind.ReadonlyKeyword
+            )
             |> function
                 | true -> GlueAccessor.ReadOnly
                 | false -> GlueAccessor.ReadWrite
         | None -> GlueAccessor.ReadWrite
 
-    static member GetAccessor(modifiers: ResizeArray<Ts.ModifierLike> option) =
-        ModifierUtil.GetAccessor(unbox<ResizeArray<Ts.Modifier> option> modifiers)
+    static member GetAccessor(modifiers: Ts.NodeArray<Ts.ModifierLike> option) =
+        ModifierUtil.GetAccessor(unbox<Ts.NodeArray<Ts.Modifier> option> modifiers)
 
-    static member HasModifier(modifiers: ResizeArray<Ts.Modifier> option, modifier: Ts.SyntaxKind) =
+    static member HasModifier
+        (modifiers: Ts.NodeArray<Ts.Modifier> option, modifier: Ts.SyntaxKind)
+        =
         match modifiers with
         | Some modifiers ->
-            modifiers |> Seq.exists (fun currentModifier -> currentModifier.kind = modifier)
+            modifiers
+            |> Seq.exists (fun currentModifier -> (unbox<Ts.Node> currentModifier).kind = modifier)
         | None -> false
 
     static member HasModifier
-        (modifiers: option<ResizeArray<Ts.ModifierLike>>, modifier: Ts.SyntaxKind)
+        (modifiers: option<Ts.NodeArray<Ts.ModifierLike>>, modifier: Ts.SyntaxKind)
         =
-        ModifierUtil.HasModifier(unbox<ResizeArray<Ts.Modifier> option> modifiers, modifier)
+        ModifierUtil.HasModifier(unbox<Ts.NodeArray<Ts.Modifier> option> modifiers, modifier)
 
 /// `K extends keyof Map` where `Map` is a reference, the map gives the typed keys of `K`
 let tryReadKeyOfConstraint
@@ -250,7 +258,7 @@ let private tryReadReferenceConstraint
 /// The type parameters of a member: a `keyof` or a reference constraint is kept
 let readMemberTypeParameters
     (reader: ITypeScriptReader)
-    (typeParameters: ResizeArray<Ts.TypeParameterDeclaration> option)
+    (typeParameters: Ts.NodeArray<Ts.TypeParameterDeclaration> option)
     : GlueTypeParameter list
     =
     match typeParameters with
@@ -341,7 +349,7 @@ let resolvedBaseTypeArguments
 
 let readHeritageClauses
     (reader: ITypeScriptReader)
-    (heritageClauses: ResizeArray<Ts.HeritageClause> option)
+    (heritageClauses: Ts.NodeArray<Ts.HeritageClause> option)
     =
     match heritageClauses with
     | Some heritageClauses ->
@@ -377,7 +385,7 @@ let isFromEs5Lib (symbolOpt: Ts.Symbol option) =
                 | Ts.SyntaxKind.SourceFile ->
                     let sourceFile = declarations[0].parent :?> Ts.SourceFile
 
-                    sourceFile.fileName.EndsWith("lib/lib.es5.d.ts")
+                    sourceFile.fileName.EndsWith("/lib.es5.d.ts")
                 | _ -> false
 
 /// `PromiseConstructor` of `lib.es2015.promise.d.ts`: a type of the ECMAScript libraries
@@ -458,7 +466,7 @@ let defaultTypeArguments
         |> Option.bind (fun symbol -> symbol.declarations)
         |> Option.bind Seq.tryHead
         |> Option.bind (fun declaration ->
-            let typeParameters: ResizeArray<Ts.TypeParameterDeclaration> option =
+            let typeParameters: Ts.NodeArray<Ts.TypeParameterDeclaration> option =
                 declaration?typeParameters
 
             typeParameters
@@ -723,7 +731,7 @@ let isPromotedAmbientModule (declaration: Ts.ModuleDeclaration) =
 /// always are, `export default x` and `export = x` are read by their own statement.
 let isExportedDeclaration (statement: Ts.Node) (names: Collections.Set<string>) =
     let hasExportModifier =
-        let modifiers: ResizeArray<Ts.Node> option = statement?modifiers
+        let modifiers: Ts.NodeArray<Ts.Node> option = statement?modifiers
 
         match modifiers with
         | Some modifiers ->
@@ -804,7 +812,7 @@ let exportedAlias (statement: Ts.Node) (localName: string) : string option =
                     |> Seq.tryPick (fun specifier ->
                         match specifier.propertyName with
                         | Some propertyName when identifierText !!propertyName = localName ->
-                            Some specifier.name.text
+                            Some(moduleExportNameText specifier.name)
                         | _ -> None
                     )
                 | _ -> None

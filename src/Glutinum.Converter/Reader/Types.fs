@@ -212,7 +212,7 @@ type ITypeScriptReader =
 
     abstract ReadExportDeclaration: exportDeclaration: Ts.ExportDeclaration -> GlueType list
 
-    abstract ReadParameters: parameters: ResizeArray<Ts.ParameterDeclaration> -> GlueParameter list
+    abstract ReadParameters: parameters: Ts.NodeArray<Ts.ParameterDeclaration> -> GlueParameter list
 
     abstract ReadDeclaration: declaration: Ts.Declaration -> GlueMember
 
@@ -223,7 +223,8 @@ type ITypeScriptReader =
     abstract ReadIndexedAccessType: declaration: Ts.IndexedAccessType -> GlueType
 
     abstract ReadTypeParameters:
-        typeParametersOpt: ResizeArray<Ts.TypeParameterDeclaration> option -> GlueTypeParameter list
+        typeParametersOpt: Ts.NodeArray<Ts.TypeParameterDeclaration> option ->
+            GlueTypeParameter list
 
     abstract ReadDocumentationFromSignature: declaration: Ts.Declaration -> GlueComment list
 

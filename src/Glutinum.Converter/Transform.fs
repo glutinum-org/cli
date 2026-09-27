@@ -5189,6 +5189,11 @@ let private inheritsIterable (typeMemory: GlueType list) (heritageClauses: GlueT
         |> List.exists (fun heritageClause ->
             match heritageClause with
             | GlueType.TypeReference typeReference when
+                typeReference.IsStandardLibrary
+                && (typeReference.Name = "Iterable" || iteratorNames.Contains typeReference.Name)
+                ->
+                true
+            | GlueType.TypeReference typeReference when
                 not (visited.Contains typeReference.FullName)
                 ->
                 typeMemory
@@ -5703,8 +5708,23 @@ let private transformInterface (context: TransformContext) (info: GlueInterface)
                     |> List.filter isInheritableType
                     |> List.distinct
 
+                // An interface declared several times has the clauses of every declaration
+                let heritageClauses =
+                    context.TypeMemory
+                    |> List.collect (
+                        function
+                        | GlueType.Interface candidate when candidate.FullName = info.FullName ->
+                            candidate.HeritageClauses
+                        | _ -> []
+                    )
+                    |> fun merged ->
+                        if merged.IsEmpty then
+                            info.HeritageClauses
+                        else
+                            merged
+
                 // F# rejects two `IEnumerable<_>` instantiations, the one of the base type stays
-                if not (inheritsIterable context.TypeMemory info.HeritageClauses) then
+                if not (inheritsIterable context.TypeMemory heritageClauses) then
                     match TypeLiteral.tryFindIterableType context info.Members with
                     | Some iterableType -> iterableType
                     | None -> ()

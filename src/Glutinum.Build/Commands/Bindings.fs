@@ -42,6 +42,7 @@ let esLibraryTypes =
         "ReadonlyArray"
         "ReadonlyMap"
         "ReadonlySet"
+        "ReadonlySetLike"
         "PromiseLike"
         "TemplateStringsArray"
         "Iterator"
@@ -76,7 +77,15 @@ let private writeEsPackage () =
     let files =
         Directory.GetFiles(source, "lib.es*.d.ts")
         |> Array.map Path.GetFileName
-        |> Array.filter (fun name -> not (name.Contains ".full."))
+        // `Temporal` is a proposal, `Date.toTemporalInstant` would drag its namespace in
+        // `es2025.iterator` is a module declaring the `Iterator` class through `declare global`
+        |> Array.filter (fun name ->
+            not (
+                name.Contains ".full."
+                || name.Contains ".temporal."
+                || name.Contains ".es2025.iterator."
+            )
+        )
         |> Array.sort
 
     // The `reference lib` directives would load the originals next to the copies

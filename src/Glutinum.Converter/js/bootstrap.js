@@ -29,7 +29,7 @@ export function createProgramFromFiles(host, entryFiles, options = {}) {
     // ESNext, so that lib types such as `AsyncIterable` resolve instead of being left undefined.
     // `types: []` stops TypeScript from loading every package under `node_modules/@types`.
     // ESNext module + Bundler resolution: follows `exports` maps and node_modules
-    const compilerOptions = { target: 99, module: 99, moduleResolution: 100, types: [], strict: true }
+    const compilerOptions = { target: ts.ScriptTarget.ESNext, module: ts.ModuleKind.ESNext, moduleResolution: ts.ModuleResolutionKind.Bundler, types: [], strict: true }
 
     // A package replacing the DOM lib (`@types/web`) redeclares its globals
     if (options.withoutDomLib) {
@@ -105,8 +105,7 @@ export function reachableFiles(host, program, entryFiles, excludedRuntimeNames) 
         seen.add(fileName);
 
         for (const usage of sourceFile.imports ?? []) {
-            const mode = ts.getModeForUsageLocation(sourceFile, usage);
-            visit(program.getResolvedModule(sourceFile, usage.text, mode)?.resolvedModule?.resolvedFileName);
+            visit(program.getResolvedModuleFromModuleSpecifier(usage, sourceFile)?.resolvedModule?.resolvedFileName);
         }
 
         for (const reference of sourceFile.referencedFiles ?? []) {

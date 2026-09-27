@@ -19173,7 +19173,7 @@ module Web =
         /// <summary>
         /// The read-only **<c>style</c>** property of the CSSFontFaceRule interface returns a CSSFontFaceDescriptors object representing the descriptors available in the
         /// </summary>
-        abstract member style: Web.CSSFontFaceDescriptors with get
+        abstract member style: Web.CSSFontFaceDescriptors with get, set
 
     /// <summary>
     /// The **<c>CSSFontFeatureValuesRule</c>** interface represents an
@@ -19275,7 +19275,7 @@ module Web =
         /// <summary>
         /// The read-only **<c>media</c>** property of the CSSImportRule interface returns a MediaList object representing the media query list of the
         /// </summary>
-        abstract member media: Web.MediaList with get
+        abstract member media: Web.MediaList with get, set
         /// <summary>
         /// The read-only **<c>styleSheet</c>** property of the CSSImportRule interface returns the CSS Stylesheet specified by the
         /// </summary>
@@ -19301,7 +19301,7 @@ module Web =
         /// <summary>
         /// The read-only **<c>style</c>** property of the CSSKeyframeRule interface contains a CSSStyleDeclaration object representing the descriptors available in the
         /// </summary>
-        abstract member style: Web.CSSStyleDeclaration with get
+        abstract member style: Web.CSSStyleDeclaration with get, set
 
     /// <summary>
     /// The **<c>CSSKeyframesRule</c>** interface describes an object representing a complete set of keyframes for a CSS animation. It corresponds to the contents of a whole
@@ -19561,7 +19561,7 @@ module Web =
         /// <summary>
         /// The read-only **<c>media</c>** property of the CSSMediaRule interface contains a MediaList object representing the media query list of the
         /// </summary>
-        abstract member media: Web.MediaList with get
+        abstract member media: Web.MediaList with get, set
 
     /// <summary>
     /// The **<c>CSSNamespaceRule</c>** interface describes an object representing a single CSS
@@ -19597,7 +19597,7 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSNestedDeclarations/style)
         /// </summary>
-        abstract member style: Web.CSSStyleDeclaration with get
+        abstract member style: Web.CSSStyleDeclaration with get, set
 
     /// <summary>
     /// The **<c>CSSNumericArray</c>** interface of the CSS Typed Object Model API contains a list of CSSNumericValue objects.
@@ -19759,7 +19759,7 @@ module Web =
         /// <summary>
         /// The read-only **<c>style</c>** property of the CSSPageRule interface contains a CSSPageDescriptors object representing the descriptors available in the
         /// </summary>
-        abstract member style: Web.CSSPageDescriptors with get
+        abstract member style: Web.CSSPageDescriptors with get, set
 
     /// <summary>
     /// The **<c>CSSPerspective</c>** interface of the CSS Typed Object Model API represents the perspective() value of the individual transform property in CSS. It inherits properties and methods from its parent CSSTransformValue.
@@ -20079,7 +20079,7 @@ module Web =
         /// <summary>
         /// The read-only **<c>style</c>** property of the CSSPositionTryRule interface contains a CSSPositionTryDescriptors object representing the descriptors available in the
         /// </summary>
-        abstract member style: Web.CSSPositionTryDescriptors with get
+        abstract member style: Web.CSSPositionTryDescriptors with get, set
 
     /// <summary>
     /// The **<c>CSSPropertyRule</c>** interface of the CSS Properties and Values API represents a single CSS
@@ -23540,7 +23540,7 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSStyleRule/style)
         /// </summary>
-        abstract member style: Web.CSSStyleDeclaration with get
+        abstract member style: Web.CSSStyleDeclaration with get, set
         /// <summary>
         /// The **<c>styleMap</c>** read-only property of the CSSStyleRule interface returns a StylePropertyMap object which provides access to the rule's property-value pairs.
         ///
@@ -29995,7 +29995,7 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/classList)
         /// </summary>
-        abstract member classList: Web.DOMTokenList with get
+        abstract member classList: Web.DOMTokenList with get, set
         /// <summary>
         /// The **<c>className</c>** property of the Element interface gets and sets the value of the class attribute of the specified element.
         ///
@@ -30087,7 +30087,7 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/part)
         /// </summary>
-        abstract member part: Web.DOMTokenList with get
+        abstract member part: Web.DOMTokenList with get, set
         /// <summary>
         /// The **<c>Element.prefix</c>** read-only property returns the namespace prefix of the specified element, or null if no prefix is specified.
         ///
@@ -30708,7 +30708,7 @@ module Web =
         /// <summary>
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLElement/style)
         /// </summary>
-        abstract member style: Web.CSSStyleDeclaration with get
+        abstract member style: Web.CSSStyleDeclaration with get, set
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -31994,9 +31994,19 @@ module Web =
         abstract member resolve:
             possibleDescendant: Web.FileSystemHandle -> JS.Promise<ResizeArray<string> option>
 
-        abstract member entries: unit -> obj
-        abstract member keys: unit -> obj
-        abstract member values: unit -> obj
+        abstract member entries:
+            unit ->
+                Web.FileSystemDirectoryHandleAsyncIterator<
+                    string * U2<Web.FileSystemDirectoryHandle, Web.FileSystemFileHandle>
+                 >
+
+        abstract member keys: unit -> Web.FileSystemDirectoryHandleAsyncIterator<string>
+
+        abstract member values:
+            unit ->
+                Web.FileSystemDirectoryHandleAsyncIterator<
+                    U2<Web.FileSystemDirectoryHandle, Web.FileSystemFileHandle>
+                 >
 
     /// <summary>
     /// The **<c>FileSystemDirectoryReader</c>** interface of the File and Directory Entries API lets you access the FileSystemFileEntry-based objects (generally FileSystemFileEntry or FileSystemDirectoryEntry) representing each entry in a directory.
@@ -32611,15 +32621,15 @@ module Web =
         /// <summary>
         /// Returns an array of key, value pairs for every entry in the list.
         /// </summary>
-        abstract member entries: unit -> Iterable<string * Web.FormDataEntryValue>
+        abstract member entries: unit -> Web.FormDataIterator<string * Web.FormDataEntryValue>
         /// <summary>
         /// Returns a list of keys in the list.
         /// </summary>
-        abstract member keys: unit -> Iterable<string>
+        abstract member keys: unit -> Web.FormDataIterator<string>
         /// <summary>
         /// Returns a list of values in the list.
         /// </summary>
-        abstract member values: unit -> Iterable<Web.FormDataEntryValue>
+        abstract member values: unit -> Web.FormDataIterator<Web.FormDataEntryValue>
 
     /// <summary>
     /// The **<c>FormDataEvent</c>** interface represents a formdata event — such an event is fired on an HTMLFormElement object after the entry list representing the form's data is constructed. This happens when the form is submitted, but can also be triggered by the invocation of a FormData() constructor.
@@ -35644,7 +35654,7 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLAnchorElement/relList)
         /// </summary>
-        abstract member relList: Web.DOMTokenList with get
+        abstract member relList: Web.DOMTokenList with get, set
 
         [<Obsolete>]
         abstract member rev: string with get, set
@@ -35871,7 +35881,7 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLAreaElement/relList)
         /// </summary>
-        abstract member relList: Web.DOMTokenList with get
+        abstract member relList: Web.DOMTokenList with get, set
         /// <summary>
         /// The **<c>shape</c>** property of the HTMLAreaElement interface specifies the shape of an image map area. It reflects the <area> element's shape attribute.
         ///
@@ -40515,7 +40525,7 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLFormElement/relList)
         /// </summary>
-        abstract member relList: Web.DOMTokenList with get
+        abstract member relList: Web.DOMTokenList with get, set
         /// <summary>
         /// The **<c>target</c>** property of the HTMLFormElement interface represents the target of the form's action (i.e., the frame in which to render its output).
         ///
@@ -42268,7 +42278,7 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLIFrameElement/sandbox)
         /// </summary>
-        abstract member sandbox: Web.DOMTokenList with get
+        abstract member sandbox: Web.DOMTokenList with get, set
 
         [<Obsolete>]
         abstract member scrolling: string with get, set
@@ -43864,7 +43874,7 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLLinkElement/blocking)
         /// </summary>
-        abstract member blocking: Web.DOMTokenList with get
+        abstract member blocking: Web.DOMTokenList with get, set
 
         [<Obsolete>]
         abstract member charset: string with get, set
@@ -43940,7 +43950,7 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLLinkElement/relList)
         /// </summary>
-        abstract member relList: Web.DOMTokenList with get
+        abstract member relList: Web.DOMTokenList with get, set
 
         [<Obsolete>]
         abstract member rev: string with get, set
@@ -43950,7 +43960,7 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLLinkElement/sizes)
         /// </summary>
-        abstract member sizes: Web.DOMTokenList with get
+        abstract member sizes: Web.DOMTokenList with get, set
 
         [<Obsolete>]
         abstract member target: string with get, set
@@ -47029,7 +47039,7 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLOutputElement/htmlFor)
         /// </summary>
-        abstract member htmlFor: Web.DOMTokenList with get
+        abstract member htmlFor: Web.DOMTokenList with get, set
         /// <summary>
         /// The **<c>HTMLOutputElement.labels</c>** read-only property returns a NodeList of the <label> elements associated with the <output> element.
         ///
@@ -48310,7 +48320,7 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLScriptElement/blocking)
         /// </summary>
-        abstract member blocking: Web.DOMTokenList with get
+        abstract member blocking: Web.DOMTokenList with get, set
 
         [<Obsolete>]
         abstract member charset: string with get, set
@@ -49472,7 +49482,7 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLStyleElement/blocking)
         /// </summary>
-        abstract member blocking: Web.DOMTokenList with get
+        abstract member blocking: Web.DOMTokenList with get, set
         /// <summary>
         /// The **<c>HTMLStyleElement.disabled</c>** property can be used to get and set whether the stylesheet is disabled (true) or not (false).
         ///
@@ -53456,15 +53466,15 @@ module Web =
         /// <summary>
         /// Returns an iterator allowing to go through all key/value pairs contained in this object.
         /// </summary>
-        abstract member entries: unit -> Iterable<string * string>
+        abstract member entries: unit -> Web.HeadersIterator<string * string>
         /// <summary>
         /// Returns an iterator allowing to go through all keys of the key/value pairs contained in this object.
         /// </summary>
-        abstract member keys: unit -> Iterable<string>
+        abstract member keys: unit -> Web.HeadersIterator<string>
         /// <summary>
         /// Returns an iterator allowing to go through all values of the key/value pairs contained in this object.
         /// </summary>
-        abstract member values: unit -> Iterable<string>
+        abstract member values: unit -> Web.HeadersIterator<string>
 
     /// <summary>
     /// The **<c>Highlight</c>** interface of the CSS Custom Highlight API is used to represent a collection of AbstractRange instances to be styled using the API.
@@ -58680,9 +58690,11 @@ module Web =
         abstract member forEach:
             callbackfn: MediaKeyStatusMap.forEach.callbackfn * ?thisArg: obj -> unit
 
-        abstract member entries: unit -> Iterable<Web.BufferSource * Web.MediaKeyStatus>
-        abstract member keys: unit -> Iterable<Web.BufferSource>
-        abstract member values: unit -> Iterable<Web.MediaKeyStatus>
+        abstract member entries:
+            unit -> Web.MediaKeyStatusMapIterator<Web.BufferSource * Web.MediaKeyStatus>
+
+        abstract member keys: unit -> Web.MediaKeyStatusMapIterator<Web.BufferSource>
+        abstract member values: unit -> Web.MediaKeyStatusMapIterator<Web.MediaKeyStatus>
 
     /// <summary>
     /// The **<c>MediaKeySystemAccess</c>** interface of the Encrypted Media Extensions API provides access to a Key System for decryption and/or a content protection provider. You can request an instance of this object using the Navigator.requestMediaKeySystemAccess() method.
@@ -69218,7 +69230,9 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStream/tee)
         /// </summary>
         abstract member tee: unit -> Web.ReadableStream<'R> * Web.ReadableStream<'R>
-        abstract member values: ?options: Web.ReadableStreamIteratorOptions -> obj
+
+        abstract member values:
+            ?options: Web.ReadableStreamIteratorOptions -> Web.ReadableStreamAsyncIterator<'R>
 
     /// <summary>
     /// The **<c>ReadableStreamBYOBReader</c>** interface of the Streams API defines a reader for a ReadableStream that supports zero-copy reading from an underlying byte source. It is used for efficient copying from underlying sources where the data is delivered as an "anonymous" sequence of bytes, such as files.
@@ -69875,7 +69889,7 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGAElement/relList)
         /// </summary>
-        abstract member relList: Web.DOMTokenList with get
+        abstract member relList: Web.DOMTokenList with get, set
         /// <summary>
         /// The **<c>SVGAElement.target</c>** read-only property of SVGAElement returns an SVGAnimatedString object that specifies the portion of a target window, frame, pane into which a document is to be opened when a link is activated.
         ///
@@ -88598,9 +88612,13 @@ module Web =
         abstract member forEach:
             callbackfn: StylePropertyMapReadOnly.forEach.callbackfn * ?thisArg: obj -> unit
 
-        abstract member entries: unit -> Iterable<string * Iterable<Web.CSSStyleValue>>
-        abstract member keys: unit -> Iterable<string>
-        abstract member values: unit -> Iterable<Iterable<Web.CSSStyleValue>>
+        abstract member entries:
+            unit -> Web.StylePropertyMapReadOnlyIterator<string * Iterable<Web.CSSStyleValue>>
+
+        abstract member keys: unit -> Web.StylePropertyMapReadOnlyIterator<string>
+
+        abstract member values:
+            unit -> Web.StylePropertyMapReadOnlyIterator<Iterable<Web.CSSStyleValue>>
 
     /// <summary>
     /// An object implementing the **<c>StyleSheet</c>** interface represents a single style sheet. CSS style sheets will further implement the more specialized CSSStyleSheet interface.
@@ -88627,7 +88645,7 @@ module Web =
         ///
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/StyleSheet/media)
         /// </summary>
-        abstract member media: Web.MediaList with get
+        abstract member media: Web.MediaList with get, set
         /// <summary>
         /// The **<c>ownerNode</c>** property of the StyleSheet interface returns the node that associates this style sheet with the document.
         ///
@@ -91790,15 +91808,15 @@ module Web =
         /// <summary>
         /// Returns an array of key, value pairs for every entry in the search params.
         /// </summary>
-        abstract member entries: unit -> Iterable<string * string>
+        abstract member entries: unit -> Web.URLSearchParamsIterator<string * string>
         /// <summary>
         /// Returns a list of keys in the search params.
         /// </summary>
-        abstract member keys: unit -> Iterable<string>
+        abstract member keys: unit -> Web.URLSearchParamsIterator<string>
         /// <summary>
         /// Returns a list of values in the search params.
         /// </summary>
-        abstract member values: unit -> Iterable<string>
+        abstract member values: unit -> Web.URLSearchParamsIterator<string>
 
     /// <summary>
     /// The **<c>UserActivation</c>** interface provides information about whether a user is currently interacting with the page, or has completed an interaction since page load.
@@ -107859,6 +107877,39 @@ module Web =
         | document
         | json
         | text
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type FormDataIterator<'T> =
+        inherit Iterable<'T>
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type HeadersIterator<'T> =
+        inherit Iterable<'T>
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type MediaKeyStatusMapIterator<'T> =
+        inherit Iterable<'T>
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type StylePropertyMapReadOnlyIterator<'T> =
+        inherit Iterable<'T>
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type URLSearchParamsIterator<'T> =
+        inherit Iterable<'T>
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type FileSystemDirectoryHandleAsyncIterator<'T> = interface end
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type ReadableStreamAsyncIterator<'T> = interface end
 
     type CustomEventInit = CustomEventInit<obj>
 

@@ -94,7 +94,7 @@ type TypeScriptReader(checker: Ts.TypeChecker, ?packageContext: PackageContext) 
             readDeclaration this declaration
 
         member this.ReadParameters
-            (parameters: ResizeArray<Ts.ParameterDeclaration>)
+            (parameters: Ts.NodeArray<Ts.ParameterDeclaration>)
             : GlueParameter list
             =
             readParameters this parameters
@@ -109,7 +109,7 @@ type TypeScriptReader(checker: Ts.TypeChecker, ?packageContext: PackageContext) 
             readIndexedAccessType this declaration
 
         member this.ReadTypeParameters
-            (typeParametersOpt: ResizeArray<Ts.TypeParameterDeclaration> option)
+            (typeParametersOpt: Ts.NodeArray<Ts.TypeParameterDeclaration> option)
             : GlueTypeParameter list
             =
             readTypeParameters this typeParametersOpt

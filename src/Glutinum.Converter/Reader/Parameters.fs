@@ -7,7 +7,7 @@ open TypeScript
 
 let readParameters
     (reader: ITypeScriptReader)
-    (parameters: ResizeArray<Ts.ParameterDeclaration>)
+    (parameters: Ts.NodeArray<Ts.ParameterDeclaration>)
     : GlueParameter list
     =
     parameters

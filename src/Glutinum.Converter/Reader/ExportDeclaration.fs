@@ -124,7 +124,7 @@ let readExportDeclaration
                 |> List.collect (fun specifier ->
                     let exportedName: string = specifier.name?text
 
-                    match checker.getExportSpecifierLocalTargetSymbol (U2.Case1 specifier) with
+                    match checker.getExportSpecifierLocalTargetSymbol specifier with
                     | None -> []
                     | Some symbol ->
                         readReExport reader packageContext currentFile exportedName symbol

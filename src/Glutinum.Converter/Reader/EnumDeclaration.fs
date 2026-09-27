@@ -23,7 +23,7 @@ let private readEnumMembers
     // computed constant initializers (e.g. `1 << 2`, `Read | Write`, string
     // concatenation), which we could not evaluate ourselves.
     let caseValue =
-        match checker.getConstantValue (!^enumMember) with
+        match checker.getConstantValue enumMember with
         | Some(U2.Case1 str) -> GlueLiteral.String str
         | Some(U2.Case2 num) ->
             if Constructors.Number.isSafeInteger num then

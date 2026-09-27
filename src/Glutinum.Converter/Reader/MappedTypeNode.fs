@@ -50,7 +50,9 @@ let readMappedTypeNode (reader: ITypeScriptReader) (mappedTypeNode: Ts.MappedTyp
         let! typParam =
             // TODO: Make a single reader.ReadTypeParameter method
             let typeParameters =
-                reader.ReadTypeParameters(Some(ResizeArray([ mappedTypeNode.typeParameter ])))
+                reader.ReadTypeParameters(
+                    Some(ts.factory.createNodeArray (ResizeArray [ mappedTypeNode.typeParameter ]))
+                )
 
             match typeParameters with
             | [ tp ] -> Ok tp

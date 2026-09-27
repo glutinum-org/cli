@@ -71,7 +71,8 @@ let private getVersion () =
 let private generate (options: Packages.GenerateOptions) (inputs: string list) =
     match inputs with
     | [ "--all" ] -> generatePackagesFromDisk options []
-    | [ input ] when input.EndsWith ".d.ts" -> generateBindingFile input
+    | [ input ] when input.EndsWith ".d.ts" ->
+        generateBindingFileWith (options.ModuleName |> Option.defaultValue "Glutinum") input
     | inputs -> generatePackagesFromDisk options inputs
 
 let private run (argv: string list) =
