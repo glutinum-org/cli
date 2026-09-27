@@ -15,7 +15,7 @@
     <PackageVersion Include="Fable.Elmish.React" Version="5.6.0" />
     <PackageVersion Include="Fable.Elmish.UrlParser" Version="1.0.2" />
     <PackageVersion Include="Fable.Node" Version="1.6.0" />
-    <PackageVersion Include="Fable.Package.SDK" Version="1.4.0">
+    <PackageVersion Include="Fable.Package.SDK" Version="1.4.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageVersion>
