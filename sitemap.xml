@@ -7855,6 +7855,9 @@
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream/pipe/</loc>
   </url>
   <url>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream/pipelinecallback/</loc>
+  </url>
+  <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream/pipelinedestination/</loc>
   </url>
   <url>
@@ -7865,6 +7868,9 @@
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream/pipelineoptions/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream/pipelinepromise/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/stream/pipelinesource/</loc>
@@ -11327,6 +11333,9 @@
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/objectconstructor/fromentries/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/objectconstructor/getownpropertydescriptors/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/objectconstructor/values/</loc>
