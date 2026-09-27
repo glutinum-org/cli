@@ -25,10 +25,4 @@
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
     </ItemGroup>
-    <Target Name="ExcludeFableSourceFromPackage" AfterTargets="CreateFablePackageFiles">
-        <ItemGroup>
-            <_PackageFiles Remove="@(Compile)" />
-            <_PackageFiles Remove="$(MSBuildProjectFullPath)" />
-        </ItemGroup>
-    </Target>
 </Project>
