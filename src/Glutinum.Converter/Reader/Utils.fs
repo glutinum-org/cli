@@ -111,7 +111,9 @@ let entityNameText (node: Ts.Node) : string =
 
 /// Identity of an anonymous type, a node synthesized by `typeToTypeNode` has none
 let typeLiteralId (node: Ts.Node) : string option =
-    if node.pos < 0 then
+    // A node synthesized by `typeToTypeNode` has a negative position, or in TypeScript 6 a
+    // position without a source file
+    if node.pos < 0 || isNull (node.getSourceFile ()) then
         None
     else
         Some $"{String.normalizePath (node.getSourceFile().fileName)}:{node.pos}"

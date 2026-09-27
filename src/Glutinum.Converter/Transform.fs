@@ -4294,13 +4294,19 @@ module KeyOfMaps =
     /// Full names of the interfaces used as `keyof` constraint by a method
     let private maps = HashSet<string>()
 
+    /// Names of those interfaces, TypeScript 6 gives an augmented interface a full name that
+    /// differs from the one the constraint records
+    let private mapNames = HashSet<string>()
+
     /// `type Value<K extends keyof Map> = Map[K]` by its full name, gives the map
     let private indexedAliases = Dictionary<string, string>()
 
     let private collectFromTypeParameters (typeParameters: GlueTypeParameter list) =
         for typeParameter in typeParameters do
             match typeParameter.Constraint with
-            | Some(GlueType.KeyOf(GlueType.TypeReference map)) -> maps.Add map.FullName |> ignore
+            | Some(GlueType.KeyOf(GlueType.TypeReference map)) ->
+                maps.Add map.FullName |> ignore
+                mapNames.Add map.Name |> ignore
             | _ -> ()
 
     let private collectFromMembers (members: GlueMember list) =
@@ -4334,10 +4340,15 @@ module KeyOfMaps =
 
     let reset (typeMemory: GlueType list) =
         maps.Clear()
+        mapNames.Clear()
         indexedAliases.Clear()
         typeMemory |> List.iter collect
 
     let isMap (fullName: string) = maps.Contains fullName
+
+    /// The `keyof` constraint and the interface declaration can carry different full names
+    let isMapNamed (fullName: string) (name: string) =
+        maps.Contains fullName || mapNames.Contains name
 
     let private keyReference (map: GlueTypeReference) (typeArgument: GlueType) =
         ({
@@ -7949,7 +7960,7 @@ let private transformToFsharp
                 [
                     FSharpType.Interface fsharpInterface
 
-                    if KeyOfMaps.isMap interfaceInfo.FullName then
+                    if KeyOfMaps.isMapNamed interfaceInfo.FullName interfaceInfo.Name then
                         // `HTMLElementEventMap` inherits most of its keys
                         let members =
                             ParamObjectCandidate.tryResolveMembers context.TypeMemory interfaceInfo

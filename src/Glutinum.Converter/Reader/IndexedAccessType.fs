@@ -22,6 +22,13 @@ let readIndexedAccessType
 
     let node = unbox<Ts.Node> declaration
 
+    // TypeScript 6 throws inside `typeToTypeNode` on a symbol whose declaration has no source file
+    let tryTypeToTypeNode (typ: Ts.Type) (flags: Ts.NodeBuilderFlags) : Ts.TypeNode option =
+        try
+            reader.checker.typeToTypeNode (typ, Some node, Some flags)
+        with _ ->
+            None
+
     // `ConfigTypeMap[keyof ConfigTypeMap]` of a concrete map is the union of its members
     let tryResolved () =
         if node.pos < 0 then
@@ -36,7 +43,7 @@ let readIndexedAccessType
                     Ts.NodeBuilderFlags.NoTruncation
                     ||| Ts.NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope
 
-                match checker.typeToTypeNode (typ, Some node, Some flags) with
+                match tryTypeToTypeNode typ flags with
                 | Some typeNode when typeNode.kind = Ts.SyntaxKind.UnionType ->
                     Some(reader.ReadTypeNode typeNode)
                 | _ -> None
@@ -65,9 +72,7 @@ let readIndexedAccessType
 
         match checker.getPropertyOfType (objectType, key) with
         | Some property ->
-            match
-                checker.typeToTypeNode (checker.getTypeOfSymbol property, Some node, Some flags)
-            with
+            match tryTypeToTypeNode (checker.getTypeOfSymbol property) flags with
             | Some typeNode -> reader.ReadTypeNode typeNode
             | None -> GlueType.Primitive GluePrimitive.Any
         | None -> GlueType.Primitive GluePrimitive.Any
