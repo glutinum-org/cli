@@ -12,6 +12,7 @@ type Exports =
 
 [<AllowNullLiteral>]
 [<AbstractClass>]
+[<Import("CancellationError", "REPLACE_ME_WITH_MODULE_NAME")>]
 type CancellationError =
     inherit Exception
 

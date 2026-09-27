@@ -7813,6 +7813,8 @@ let private transformClassDeclaration
 
                     if hasErrorInheritance then
                         FSharpAttribute.AbstractClass
+                        // A type test compiles to `instanceof`, which needs the imported class
+                        yield! importAttribute classDeclaration.Name context.ImportSource
                     else
                         FSharpAttribute.Interface
 

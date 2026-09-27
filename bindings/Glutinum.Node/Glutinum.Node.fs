@@ -18616,6 +18616,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// </summary>
             [<AllowNullLiteral>]
             [<AbstractClass>]
+            [<Import("AssertionError", "assert")>]
             type AssertionError =
                 inherit Exception
                 /// <summary>

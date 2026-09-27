@@ -14,11 +14,13 @@ type Exports =
 
 [<AllowNullLiteral>]
 [<AbstractClass>]
+[<Import("CancellationError", "REPLACE_ME_WITH_MODULE_NAME")>]
 type CancellationError =
     inherit Exception
 
 [<AllowNullLiteral>]
 [<AbstractClass>]
+[<Import("LSPCancellationError", "REPLACE_ME_WITH_MODULE_NAME")>]
 type LSPCancellationError =
     inherit CancellationError
     abstract member data: string with get
