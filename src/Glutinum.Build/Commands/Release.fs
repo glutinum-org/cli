@@ -2,6 +2,7 @@ module Build.Commands.Release
 
 open System
 open System.IO
+open System.Text.RegularExpressions
 open SimpleExec
 open BlackFox.CommandLine
 open Spectre.Console.Cli
@@ -9,6 +10,20 @@ open Build.Utils.Pnpm
 open Build.Workspace
 open EasyBuild.Tools.DotNet
 open EasyBuild.Tools.Fable
+
+// npm tags a published version `latest` unless a dist-tag is given, even for a pre-release
+let private npmTag () =
+    let packageJson = File.ReadAllText(Path.Combine(root, "package.json"))
+
+    let version =
+        Regex.Match(packageJson, "\"version\"\\s*:\\s*\"(?<v>[^\"]+)\"").Groups.["v"].Value
+
+    let prerelease = Regex.Match(version, "-(?<id>[0-9A-Za-z]+)")
+
+    if prerelease.Success then
+        Some prerelease.Groups.["id"].Value
+    else
+        None
 
 // A package is pushed after the ones it references, so a restore never sees a missing dependency
 let private packages =
@@ -55,6 +70,6 @@ type ReleaseCommand() =
                 outDir = VirtualWorkspace.dist.``.``
             )
 
-            Pnpm.publish (noGitChecks = true, access = Publish.Access.Public)
+            Pnpm.publish (noGitChecks = true, access = Publish.Access.Public, ?tag = npmTag ())
 
             0
