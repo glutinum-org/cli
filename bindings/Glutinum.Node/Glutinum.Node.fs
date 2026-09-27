@@ -177535,6 +177535,20 @@ URL.parse($0, $1)"""
             /// </summary>
             abstract member tokens: bool option with get, set
 
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    ?args: ReadonlyArray<string>,
+                    ?options: Node.util.ParseArgsOptionsConfig,
+                    ?strict: bool,
+                    ?allowPositionals: bool,
+                    ?allowNegative: bool,
+                    ?tokens: bool
+                )
+                : ParseArgsConfig
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type IfDefaultsTrue<'T, 'IfTrue, 'IfFalse> = interface end

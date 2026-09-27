@@ -14,6 +14,8 @@ type Exports =
 [<Interface>]
 type Config =
     abstract member options: Config.options with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (options: Config.options) : Config = nativeOnly
 
 module Config =
 

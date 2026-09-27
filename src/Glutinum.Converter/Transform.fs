@@ -2601,6 +2601,17 @@ let private transformAccessor (accessor: GlueAccessor) : FSharpAccessor =
 
 module private TransformMembers =
 
+    // A reference constraint of a member is read for the ParamObject analysis, the transform
+    // never sealed a member on one
+    let private withoutReferenceConstraints (typeParameters: GlueTypeParameter list) =
+        typeParameters
+        |> List.map (fun typeParameter ->
+            match typeParameter.Constraint with
+            | Some(GlueType.KeyOf _)
+            | None -> typeParameter
+            | Some _ -> { typeParameter with Constraint = None }
+        )
+
     // A computed property name such as `[Symbol.toStringTag]` has no F# equivalent
     let private hasComputedName (glueMember: GlueMember) =
         match glueMember with
@@ -2966,7 +2977,10 @@ module private TransformMembers =
                     |> Some
                 else
                     // `<E extends SVGElement | HTMLElement>` is sealed, `'E` is the union in the signature
-                    let typeParameters = transformTypeParameters context methodInfo.TypeParameters
+                    let typeParameters =
+                        transformTypeParameters
+                            context
+                            (withoutReferenceConstraints methodInfo.TypeParameters)
 
                     {
                         Attributes = [ yield! xmlDocInfo.ObsoleteAttributes; yield! emitAttributes ]
@@ -2997,7 +3011,9 @@ module private TransformMembers =
                 let name, context = sanitizeNameAndPushScope "Invoke" context
 
                 let typeParameters =
-                    transformTypeParameters context callSignatureInfo.TypeParameters
+                    transformTypeParameters
+                        context
+                        (withoutReferenceConstraints callSignatureInfo.TypeParameters)
 
                 {
                     Attributes = [ FSharpAttribute.EmitSelfInvoke ]
@@ -3173,7 +3189,10 @@ module private TransformMembers =
 
                 let name, context = sanitizeNameAndPushScope methodName context
 
-                let typeParameters = transformTypeParameters context methodSignature.TypeParameters
+                let typeParameters =
+                    transformTypeParameters
+                        context
+                        (withoutReferenceConstraints methodSignature.TypeParameters)
 
                 {
                     Attributes = [ yield! xmlDocInfo.ObsoleteAttributes; yield! emitAttributes ]
@@ -3883,6 +3902,41 @@ module private ParamObjectCandidate =
 
         resolve Set.empty info
 
+    // `option<O extends Options>(key, options: O)`: `Options` is the argument through `O`
+    let private constrainedParameterFullNames (glueType: GlueType) =
+        let ofSignature (typeParameters: GlueTypeParameter list) (parameters: GlueParameter list) =
+            parameters
+            |> List.collect (fun parameter ->
+                match parameter.Type with
+                | GlueType.TypeParameter name ->
+                    typeParameters
+                    |> List.tryFind (fun typeParameter -> typeParameter.Name = name)
+                    |> Option.bind _.Constraint
+                    |> Option.map typeReferenceFullNames
+                    |> Option.defaultValue []
+                | _ -> []
+            )
+
+        let ofMember (glueMember: GlueMember) =
+            match glueMember with
+            | GlueMember.Method info -> ofSignature info.TypeParameters info.Parameters
+            | GlueMember.MethodSignature info -> ofSignature info.TypeParameters info.Parameters
+            | GlueMember.CallSignature info -> ofSignature info.TypeParameters info.Parameters
+            | _ -> []
+
+        let rec collect (glueType: GlueType) =
+            match glueType with
+            | GlueType.FunctionDeclaration info -> ofSignature info.TypeParameters info.Parameters
+            | GlueType.ClassDeclaration info -> info.Members |> List.collect ofMember
+            | GlueType.Interface info -> info.Members |> List.collect ofMember
+            | GlueType.TypeLiteral info -> info.Members |> List.collect ofMember
+            | GlueType.TypeAliasDeclaration info -> collect info.Type
+            | GlueType.Variable info -> collect info.Type
+            | GlueType.ExportDefault innerType -> collect innerType
+            | _ -> []
+
+        collect glueType
+
     let isCandidate (typeMemory: GlueType list) (info: GlueInterface) =
         let members = tryResolveMembers typeMemory info
 
@@ -3905,6 +3959,7 @@ module private ParamObjectCandidate =
                 |> List.exists (fun parameter ->
                     typeReferenceFullNames parameter.Type |> List.contains info.FullName
                 )
+                || constrainedParameterFullNames glueType |> List.contains info.FullName
             )
 
         let isUsedAsOutput =

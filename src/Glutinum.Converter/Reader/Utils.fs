@@ -236,7 +236,18 @@ let tryReadKeyOfConstraint
             None
     | _ -> None
 
-/// The type parameters of a member: only a `keyof` constraint is kept
+/// `O extends Options`: the transform drops a reference constraint, `Options` is still the
+/// type an argument typed `O` takes
+let private tryReadReferenceConstraint
+    (reader: ITypeScriptReader)
+    (typeParameter: Ts.TypeParameterDeclaration)
+    =
+    match typeParameter.``constraint`` with
+    | Some constraintNode when constraintNode.kind = Ts.SyntaxKind.TypeReference ->
+        Some(reader.ReadTypeNode constraintNode)
+    | _ -> None
+
+/// The type parameters of a member: a `keyof` or a reference constraint is kept
 let readMemberTypeParameters
     (reader: ITypeScriptReader)
     (typeParameters: ResizeArray<Ts.TypeParameterDeclaration> option)
@@ -250,7 +261,10 @@ let readMemberTypeParameters
         |> List.map (fun typeParameter ->
             {
                 Name = identifierText typeParameter.name
-                Constraint = tryReadKeyOfConstraint reader typeParameter
+                Constraint =
+                    match tryReadKeyOfConstraint reader typeParameter with
+                    | Some keyOf -> Some keyOf
+                    | None -> tryReadReferenceConstraint reader typeParameter
                 Default = typeParameter.``default`` |> Option.map reader.ReadTypeNode
             }
         )

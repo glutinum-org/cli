@@ -23,6 +23,14 @@ type Options<'DateType> =
 type Interval =
     abstract member start: U2<Date, float> with get, set
     abstract member ``end``: U2<Date, float> with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (start: Date, ``end``: Date) : Interval = nativeOnly
+    [<ParamObject; Emit("$0")>]
+    static member Create (start: Date, ``end``: float) : Interval = nativeOnly
+    [<ParamObject; Emit("$0")>]
+    static member Create (start: float, ``end``: Date) : Interval = nativeOnly
+    [<ParamObject; Emit("$0")>]
+    static member Create (start: float, ``end``: float) : Interval = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

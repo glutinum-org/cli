@@ -23,6 +23,8 @@ type IfDefaultsTrue<'T, 'IfTrue, 'IfFalse> =
 [<Interface>]
 type Config =
     abstract member strict: bool option with get, set
+    [<ParamObject; Emit("$0")>]
+    static member Create (?strict: bool) : Config = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
