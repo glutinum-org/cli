@@ -10,11 +10,8 @@ type Options =
     abstract member a: string with get, set
     abstract member b: float with get, set
 
-[<AllowNullLiteral>]
-[<Interface>]
 type Same =
-    abstract member a: string with get, set
-    abstract member b: float with get, set
+    Options
 
 [<AllowNullLiteral>]
 [<Interface>]

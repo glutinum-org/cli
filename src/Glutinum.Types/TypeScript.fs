@@ -395,13 +395,15 @@ module TypeScript =
         /// Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
         /// </param>
         abstract member entries: o: obj -> ResizeArray<string * obj>
+
         /// <summary>
         /// Returns an object containing all own property descriptors of an object
         /// </summary>
         /// <param name="o">
         /// Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
         /// </param>
-        abstract member getOwnPropertyDescriptors<'T> : o: 'T -> obj
+        abstract member getOwnPropertyDescriptors<'T> :
+            o: 'T -> ObjectConstructor.getOwnPropertyDescriptors
 
         /// <summary>
         /// Returns an object created by key-value entries for properties and methods
@@ -2402,6 +2404,12 @@ module TypeScript =
                 delegate of value: 'T * value2: 'T * set: TypeScript.ReadonlySet<'T> -> unit
 
     module ObjectConstructor =
+
+        [<AllowNullLiteral>]
+        [<Interface>]
+        type getOwnPropertyDescriptors =
+            [<EmitIndexer>]
+            abstract member Item: x: string -> TypeScript.PropertyDescriptor with get, set
 
         [<AllowNullLiteral>]
         [<Interface>]

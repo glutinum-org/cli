@@ -1514,6 +1514,18 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                  | ForceAny -> failwith "Sould not happen here"
              ))
             @ callSignatures
+            // `getProperties` leaves the index signatures out, the type literals declare them
+            @ (intersectionTypeNode.types
+               |> Seq.toList
+               |> List.collect (fun constituent ->
+                   if constituent.kind = Ts.SyntaxKind.TypeLiteral then
+                       (constituent :?> Ts.TypeLiteralNode).members
+                       |> Seq.toList
+                       |> List.filter (fun element -> element.kind = Ts.SyntaxKind.IndexSignature)
+                       |> List.map reader.ReadDeclaration
+                   else
+                       []
+               ))
             |> GlueType.IntersectionType
 
     | Ts.SyntaxKind.TypeLiteral ->
