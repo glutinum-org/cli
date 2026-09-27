@@ -217,6 +217,7 @@ type FSharpAttribute =
     | ParamObject
     | ParamArray
     | Interface
+    | AutoOpen
 
 type FSharpParameter =
     {
@@ -428,6 +429,23 @@ type FSharpDelegate =
         ReturnType: FSharpType
     }
 
+/// Calls the delegate typed property of the same name, F# 9 resolves the member and the property
+type FSharpDelegateExtension =
+    {
+        Name: string
+        Parameters: FSharpParameter list
+        ReturnType: FSharpType
+    }
+
+/// `type Foo with` in an `[<AutoOpen>]` module, visible wherever `Foo` is
+type FSharpTypeExtension =
+    {
+        ModuleName: string
+        TargetName: string
+        TypeParameters: FSharpTypeParameter list
+        Members: FSharpDelegateExtension list
+    }
+
 [<RequireQualifiedAccess>]
 type FSharpType =
     | Enum of FSharpEnum
@@ -473,5 +491,6 @@ type FSharpType =
     | Object
     | JSApi of FSharpJSApi
     | Delegate of FSharpDelegate
+    | TypeExtension of FSharpTypeExtension
 
 type FSharpOutFile = { Name: string; Opens: string list }

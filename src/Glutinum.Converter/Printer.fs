@@ -127,6 +127,7 @@ let private attributeToText (fsharpAttribute: FSharpAttribute) =
     | FSharpAttribute.EmitSelf -> "[<Emit(\"$0\")>]"
     | FSharpAttribute.ParamArray -> "[<ParamArray>]"
     | FSharpAttribute.Interface -> "[<Interface>]"
+    | FSharpAttribute.AutoOpen -> "[<AutoOpen>]"
     | FSharpAttribute.Obsolete message ->
         match message with
         | Some message ->
@@ -379,6 +380,7 @@ and printType (fsharpType: FSharpType) =
     | FSharpType.Delegate delegateInfo ->
         printTypeNameWithTypeParameters delegateInfo.Name delegateInfo.TypeParameters
     | FSharpType.Module _
+    | FSharpType.TypeExtension _
     | FSharpType.Unsupported _
     | FSharpType.Discard -> "obj"
 
@@ -1149,6 +1151,43 @@ let rec private print (printer: Printer) (fsharpTypes: FSharpType list) =
             printer.Unindent
 
         | FSharpType.Delegate delegateInfo -> printDelegate printer delegateInfo
+
+        | FSharpType.TypeExtension extensionInfo ->
+            printAttributes printer [ FSharpAttribute.AutoOpen ]
+            printer.Write($"module {extensionInfo.ModuleName} =")
+            printer.NewLine
+            printer.Indent
+            printer.NewLine
+
+            printer.Write(
+                $"type {printTypeNameWithTypeParameters extensionInfo.TargetName extensionInfo.TypeParameters} with"
+            )
+
+            printer.NewLine
+            printer.Indent
+
+            for extensionMember in extensionInfo.Members do
+                let parameters =
+                    extensionMember.Parameters
+                    |> List.map (fun parameter ->
+                        $"{parameter.Name}: {printParameterType parameter.Type}"
+                    )
+                    |> String.concat ", "
+
+                let arguments = extensionMember.Parameters |> List.map _.Name |> String.concat ", "
+
+                printer.Write(
+                    $"member inline this.{extensionMember.Name}({parameters}) : {printType extensionMember.ReturnType} ="
+                )
+
+                printer.NewLine
+                printer.Indent
+                printer.Write($"this.{extensionMember.Name}.Invoke({arguments})")
+                printer.NewLine
+                printer.Unindent
+
+            printer.Unindent
+            printer.Unindent
 
         | FSharpType.Mapped _
         | FSharpType.Primitive _
