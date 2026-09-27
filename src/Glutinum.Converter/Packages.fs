@@ -2,42 +2,10 @@ module Glutinum.Converter.Packages
 
 open Fable.Core
 open TypeScript
+open TsMorph
 open Glutinum.Converter
 
-type ResolvedInput =
-    abstract kind: string
-    abstract file: string
-    abstract packageDir: string
-
-type SubpathEntry =
-    abstract subpath: string
-    abstract file: string
-
-[<AllowNullLiteral>]
-type PackageDescription =
-    abstract name: string
-    abstract runtimeName: string
-    abstract hasRuntime: bool
-    abstract dir: string
-    abstract typesRoot: string
-    abstract entryFile: string
-    abstract subpathEntries: SubpathEntry[]
-
-/// The file system the packages are read from: the disk for the CLI, an in-memory one in the browser
-[<AllowNullLiteral>]
-type Host =
-    abstract cwd: string
-
-/// A host over a ts-morph in-memory file system
-[<AllowNullLiteral>]
-type InMemoryHost =
-    inherit Host
-    abstract fileSystem: obj
-
-[<AllowNullLiteral>]
-type InstalledPackage =
-    abstract name: string
-    abstract version: string
+open Glutinum.Converter.Hosting
 
 type GenerationResult =
     {
@@ -48,48 +16,44 @@ type GenerationResult =
         Errors: string list
     }
 
-[<Import("createInMemoryHost", "./js/host.js")>]
-let createInMemoryHost (_cwd: string) : InMemoryHost = jsNative
+let createInMemoryHost (cwd: string) : InMemoryHost = Hosting.createInMemoryHost cwd
 
 /// <summary>
 /// Download the declaration files of a package, and of the packages it depends on,
 /// from jsDelivr into <c>/node_modules</c> of the file system.
 /// </summary>
-[<Import("installPackage", "./js/npm.js")>]
 let installPackage
-    (_fileSystem: obj, _spec: string, _options: {| onProgress: string -> unit |})
+    (fileSystem: FileSystemHost, spec: string, options: {| onProgress: string -> unit |})
     : JS.Promise<InstalledPackage>
     =
-    jsNative
+    Hosting.Npm.installPackage fileSystem spec options
 
-[<Import("resolveInput", "./js/resolve.js")>]
-let private resolveInput (_host: Host, _input: string) : ResolvedInput = jsNative
+let private resolveInput (host: Host, input: string) : ResolvedInput =
+    Hosting.Resolve.resolveInput host input
 
-[<Import("describePackage", "./js/resolve.js")>]
-let private describePackage (_host: Host, _packageDir: string) : PackageDescription = jsNative
+let private describePackage (host: Host, packageDir: string) : PackageDescription =
+    Hosting.Resolve.describePackage host packageDir |> Option.toObj
 
-[<Import("findPackageDir", "./js/resolve.js")>]
-let private findPackageDir (_host: Host, _file: string) : string = jsNative
+let private findPackageDir (host: Host, file: string) : string =
+    Hosting.Resolve.findPackageDir host file |> Option.toObj
 
-[<Import("listInstalledPackages", "./js/resolve.js")>]
-let private listInstalledPackages (_host: Host) : string[] = jsNative
+let private listInstalledPackages (host: Host) : string[] =
+    Hosting.Resolve.listInstalledPackages host
 
-[<Import("createProgramFromFiles", "./js/bootstrap.js")>]
 let private createProgramFromFiles
-    (_host: Host, _entryFiles: string[], _options: {| withoutDomLib: bool; noLib: bool |})
+    (host: Host, entryFiles: string[], options: {| withoutDomLib: bool; noLib: bool |})
     : Ts.Program
     =
-    jsNative
+    Hosting.Bootstrap.createProgramFromFiles host entryFiles options.withoutDomLib options.noLib
+
+let private reachableFiles
+    (host: Host, program: Ts.Program, entryFiles: string[], excludedRuntimeNames: string[])
+    : string[]
+    =
+    Hosting.Bootstrap.reachableFiles host program entryFiles excludedRuntimeNames
 
 /// The packages standing in for the DOM lib of TypeScript
 let private domLibReplacements = set [ "@types/web"; "@typescript/lib-dom" ]
-
-[<Import("reachableFiles", "./js/bootstrap.js")>]
-let private reachableFiles
-    (_host: Host, _program: Ts.Program, _entryFiles: string[], _excludedRuntimeNames: string[])
-    : string[]
-    =
-    jsNative
 
 let private moduleNameForPackage (runtimeName: string) =
     runtimeName.Split([| '@'; '/'; '-'; '.'; '_' |], System.StringSplitOptions.RemoveEmptyEntries)

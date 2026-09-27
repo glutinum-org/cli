@@ -52,7 +52,7 @@ for (const fixture of fixtures) {
 
 // The browser has no disk: the same package read from an in-memory file system gives the same binding
 import { generatePackagesWith } from '../../../src/Glutinum.Converter/Generate.fs.js'
-import { createInMemoryHost } from '../../../src/Glutinum.Converter/js/host.js'
+import { createInMemoryHost } from '../../../src/Glutinum.Converter/Hosting.fs.js'
 import fs from 'node:fs'
 
 test("packages/multiFile in memory", async () => {

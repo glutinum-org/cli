@@ -6,11 +6,8 @@ open TypeScript
 open Fable.Core.JsInterop
 open Glutinum.Converter
 
-let createProgramForCLI (_fileName: string) (_source: string) : Ts.Program =
-    importDefault "./js/bootstrap.js"
-
-[<Import("createNodeHost", "./js/host.js")>]
-let private createNodeHost (_fs: obj, _path: obj, _cwd: string) : Packages.Host = jsNative
+let createProgramForCLI (fileName: string) (source: string) : Ts.Program =
+    Hosting.Bootstrap.createProgramForCLI fileName source
 
 let generateBindingFile (filePath: string) =
     generateBindingFileWith "Glutinum" filePath
@@ -58,12 +55,12 @@ let generateBindingFileWith (moduleName: string) (filePath: string) =
 /// Generate a single binding file for the packages, and the packages they depend on.
 /// An empty list generates every package installed in the nearest <c>node_modules</c>.
 /// </summary>
-let generatePackagesWith (host: Packages.Host) (inputs: string list) =
+let generatePackagesWith (host: Hosting.Host) (inputs: string list) =
     generatePackagesWithOptions Packages.defaultOptions host inputs
 
 let generatePackagesWithOptions
     (options: Packages.GenerateOptions)
-    (host: Packages.Host)
+    (host: Hosting.Host)
     (inputs: string list)
     =
     let result = Packages.generateWith options host inputs
@@ -81,4 +78,4 @@ let generatePackages (inputs: string list) =
     generatePackagesFromDisk Packages.defaultOptions inputs
 
 let generatePackagesFromDisk (options: Packages.GenerateOptions) (inputs: string list) =
-    generatePackagesWithOptions options (createNodeHost (fs, path, ``process``.cwd ())) inputs
+    generatePackagesWithOptions options (Hosting.createNodeHost (``process``.cwd ())) inputs

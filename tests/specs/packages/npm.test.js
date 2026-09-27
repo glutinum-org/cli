@@ -1,8 +1,7 @@
 import { expect, test } from 'vitest'
 import { InMemoryFileSystemHost } from '@ts-morph/bootstrap'
-import { installPackage, parsePackageSpec, typesPackageName } from '../../../src/Glutinum.Converter/js/npm.js'
+import { Npm_installPackage as installPackage, Npm_parsePackageSpec as parsePackageSpec, Npm_typesPackageName as typesPackageName, createFileSystemHost } from '../../../src/Glutinum.Converter/Hosting.fs.js'
 import { generatePackagesWith } from '../../../src/Glutinum.Converter/Generate.fs.js'
-import { createFileSystemHost } from '../../../src/Glutinum.Converter/js/host.js'
 import { ofArray } from '../../../src/Glutinum.Converter/fable_modules/fable-library-js.5.17.2/List.js'
 
 // A registry with `my-lib` depending on `dep-lib`, and `untyped` described by `@types/untyped`
