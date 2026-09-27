@@ -12,6 +12,7 @@
     <Compile Include="Log.fs" />
     <Compile Include="TypeScript.fs" />
     <Compile Include="TypeScript.Extensions.fs" />
+    <Compile Include="TsMorph.fs" />
     <Compile Include="GlueAST.fs" />
     <Compile Include="Reader/Report.fs" />
     <Compile Include="Reader/Types.fs" />
