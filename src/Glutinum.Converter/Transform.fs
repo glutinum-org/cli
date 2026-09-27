@@ -2395,21 +2395,26 @@ let private transformExports
                                 |> Option.defaultValue []
                             | GlueType.TypeLiteral info -> info.Members
                             | _ -> []
-                            |> List.choose (
+                            |> List.collect (
                                 function
                                 | GlueMember.CallSignature info ->
-                                    ({
-                                        Documentation = []
-                                        IsDeclared = true
-                                        Name = name
-                                        Type = withoutThis info.Type
-                                        Parameters = info.Parameters
-                                        TypeParameters = info.TypeParameters
-                                    }
-                                    : GlueFunctionDeclaration)
-                                    |> GlueType.FunctionDeclaration
-                                    |> Some
-                                | _ -> None
+                                    // `yargs(args?: string[] | string)`: one overload per case
+                                    UnionOverloads.expandParameters
+                                        context.TypeMemory
+                                        info.Parameters
+                                    |> List.map (fun parameters ->
+                                        ({
+                                            Documentation = []
+                                            IsDeclared = true
+                                            Name = name
+                                            Type = withoutThis info.Type
+                                            Parameters = parameters
+                                            TypeParameters = info.TypeParameters
+                                        }
+                                        : GlueFunctionDeclaration)
+                                        |> GlueType.FunctionDeclaration
+                                    )
+                                | _ -> []
                             )
 
                         for memberExport in memberExports do
