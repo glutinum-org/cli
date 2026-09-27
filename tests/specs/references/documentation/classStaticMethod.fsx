@@ -17,10 +17,9 @@ type Disposable3 =
     /// Dispose this object.
     /// </summary>
     [<Obsolete("Use the static dispose method instead.")>]
-    static member inline dispose () : obj =
-        emitJsExpr () $$"""
-import { Disposable3 } from "REPLACE_ME_WITH_MODULE_NAME";
-Disposable3.dispose()"""
+    [<Emit("""import { Disposable3 } from "REPLACE_ME_WITH_MODULE_NAME";
+Disposable3.dispose()""")>]
+    static member inline dispose () : obj = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

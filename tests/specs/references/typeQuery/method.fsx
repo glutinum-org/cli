@@ -15,10 +15,9 @@ type Exports =
 [<AllowNullLiteral>]
 [<Interface>]
 type Headers =
-    static member inline parseParameters (value: string): float =
-        emitJsExpr (value) $$"""
-import { Headers } from "REPLACE_ME_WITH_MODULE_NAME";
-Headers.parseParameters($0)"""
+    [<Emit("""import { Headers } from "REPLACE_ME_WITH_MODULE_NAME";
+Headers.parseParameters($0)""")>]
+    static member inline parseParameters (value: string): float = nativeOnly
     abstract member get: parser: (string -> float) -> float
 
 [<AllowNullLiteral>]

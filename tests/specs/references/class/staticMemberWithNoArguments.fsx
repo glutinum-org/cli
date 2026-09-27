@@ -13,10 +13,9 @@ type Exports =
 [<AllowNullLiteral>]
 [<Interface>]
 type Hello =
-    static member inline SayHello () : unit =
-        emitJsExpr () $$"""
-import { Hello } from "REPLACE_ME_WITH_MODULE_NAME";
-Hello.SayHello()"""
+    [<Emit("""import { Hello } from "REPLACE_ME_WITH_MODULE_NAME";
+Hello.SayHello()""")>]
+    static member inline SayHello () : unit = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

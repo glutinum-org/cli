@@ -13,15 +13,13 @@ type Exports =
 [<AllowNullLiteral>]
 [<Interface>]
 type SettingsContainer =
+    [<Emit("""import { SettingsContainer } from "REPLACE_ME_WITH_MODULE_NAME";
+SettingsContainer.#privateField{{=$0}}""")>]
     static member inline private ``#privateField``
         with get () : obj =
-            emitJsExpr () $$"""
-import { SettingsContainer } from "REPLACE_ME_WITH_MODULE_NAME";
-SettingsContainer.#privateField"""
+            nativeOnly
         and set (value: obj) =
-            emitJsExpr (value) $$"""
-import { SettingsContainer } from "REPLACE_ME_WITH_MODULE_NAME";
-SettingsContainer.#privateField = $0"""
+            nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

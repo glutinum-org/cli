@@ -19389,12 +19389,10 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// <param name="type">
             /// An optional name to associate with the underlying <c>AsyncResource</c>.
             /// </param>
+            [<Emit("""import { AsyncResource } from "async_hooks";
+AsyncResource.bind($0, $1, $2)""")>]
             static member inline bind(fn: 'Func, ?``type``: string, ?thisArg: 'ThisArg) : 'Func =
-                emitJsExpr
-                    (fn, ``type``, thisArg)
-                    $$"""
-import { AsyncResource } from "async_hooks";
-AsyncResource.bind($0, $1, $2)"""
+                nativeOnly
 
             /// <summary>
             /// Binds the given function to execute to this <c>AsyncResource</c>'s scope.
@@ -19500,12 +19498,9 @@ AsyncResource.bind($0, $1, $2)"""
             /// <returns>
             /// A new function that calls <c>fn</c> within the captured execution context.
             /// </returns>
-            static member inline bind(fn: 'Func) : 'Func =
-                emitJsExpr
-                    (fn)
-                    $$"""
-import { AsyncLocalStorage } from "async_hooks";
-AsyncLocalStorage.bind($0)"""
+            [<Emit("""import { AsyncLocalStorage } from "async_hooks";
+AsyncLocalStorage.bind($0)""")>]
+            static member inline bind(fn: 'Func) : 'Func = nativeOnly
 
             /// <summary>
             /// Captures the current execution context and returns a function that accepts a
@@ -19536,12 +19531,9 @@ AsyncLocalStorage.bind($0)"""
             /// <returns>
             /// A new function with the signature <c>(fn: (...args) : R, ...args) : R</c>.
             /// </returns>
-            static member inline snapshot() : AsyncLocalStorage.snapshot__<obj, obj> =
-                emitJsExpr
-                    ()
-                    $$"""
-import { AsyncLocalStorage } from "async_hooks";
-AsyncLocalStorage.snapshot()"""
+            [<Emit("""import { AsyncLocalStorage } from "async_hooks";
+AsyncLocalStorage.snapshot()""")>]
+            static member inline snapshot() : AsyncLocalStorage.snapshot__<obj, obj> = nativeOnly
 
             /// <summary>
             /// Disables the instance of <c>AsyncLocalStorage</c>. All subsequent calls
@@ -39305,12 +39297,9 @@ AsyncLocalStorage.snapshot()"""
             /// <returns>
             /// The challenge component of the <c>spkac</c> data structure, which includes a public key and a challenge.
             /// </returns>
-            static member inline exportChallenge(spkac: string) : Node.NonSharedBuffer =
-                emitJsExpr
-                    (spkac)
-                    $$"""
-import { Certificate } from "crypto";
-Certificate.exportChallenge($0)"""
+            [<Emit("""import { Certificate } from "crypto";
+Certificate.exportChallenge($0)""")>]
+            static member inline exportChallenge(spkac: string) : Node.NonSharedBuffer = nativeOnly
 
             /// <summary>
             /// <code lang="js">
@@ -39327,15 +39316,13 @@ Certificate.exportChallenge($0)"""
             /// <returns>
             /// The challenge component of the <c>spkac</c> data structure, which includes a public key and a challenge.
             /// </returns>
+            [<Emit("""import { Certificate } from "crypto";
+Certificate.exportChallenge($0)""")>]
             static member inline exportChallenge
                 (spkac: Node.NodeJS.ArrayBufferView)
                 : Node.NonSharedBuffer
                 =
-                emitJsExpr
-                    (spkac)
-                    $$"""
-import { Certificate } from "crypto";
-Certificate.exportChallenge($0)"""
+                nativeOnly
 
             /// <summary>
             /// <code lang="js">
@@ -39352,15 +39339,13 @@ Certificate.exportChallenge($0)"""
             /// <returns>
             /// The public key component of the <c>spkac</c> data structure, which includes a public key and a challenge.
             /// </returns>
+            [<Emit("""import { Certificate } from "crypto";
+Certificate.exportPublicKey($0, $1)""")>]
             static member inline exportPublicKey
                 (spkac: string, ?encoding: string)
                 : Node.NonSharedBuffer
                 =
-                emitJsExpr
-                    (spkac, encoding)
-                    $$"""
-import { Certificate } from "crypto";
-Certificate.exportPublicKey($0, $1)"""
+                nativeOnly
 
             /// <summary>
             /// <code lang="js">
@@ -39377,15 +39362,13 @@ Certificate.exportPublicKey($0, $1)"""
             /// <returns>
             /// The public key component of the <c>spkac</c> data structure, which includes a public key and a challenge.
             /// </returns>
+            [<Emit("""import { Certificate } from "crypto";
+Certificate.exportPublicKey($0, $1)""")>]
             static member inline exportPublicKey
                 (spkac: Node.NodeJS.ArrayBufferView, ?encoding: string)
                 : Node.NonSharedBuffer
                 =
-                emitJsExpr
-                    (spkac, encoding)
-                    $$"""
-import { Certificate } from "crypto";
-Certificate.exportPublicKey($0, $1)"""
+                nativeOnly
 
             /// <summary>
             /// <code lang="js">
@@ -39403,12 +39386,9 @@ Certificate.exportPublicKey($0, $1)"""
             /// <returns>
             /// <c>true</c> if the given <c>spkac</c> data structure is valid, <c>false</c> otherwise.
             /// </returns>
-            static member inline verifySpkac(spkac: Node.NodeJS.ArrayBufferView) : bool =
-                emitJsExpr
-                    (spkac)
-                    $$"""
-import { Certificate } from "crypto";
-Certificate.verifySpkac($0)"""
+            [<Emit("""import { Certificate } from "crypto";
+Certificate.verifySpkac($0)""")>]
+            static member inline verifySpkac(spkac: Node.NodeJS.ArrayBufferView) : bool = nativeOnly
 
             /// <param name="spkac">
             ///
@@ -40214,15 +40194,13 @@ Certificate.verifySpkac($0)"""
             /// // Prints: 32 (symmetric key size in bytes)
             /// </code>
             /// </summary>
+            [<Emit("""import { KeyObject } from "crypto";
+KeyObject.from($0)""")>]
             static member inline from
                 (key: Node.crypto.webcrypto_.CryptoKey)
                 : Node.crypto.KeyObject
                 =
-                emitJsExpr
-                    (key)
-                    $$"""
-import { KeyObject } from "crypto";
-KeyObject.from($0)"""
+                nativeOnly
 
             /// <summary>
             /// For asymmetric keys, this property represents the type of the key. Supported key
@@ -42848,6 +42826,8 @@ KeyObject.from($0)"""
             /// <param name="format">
             ///
             /// </param>
+            [<Emit("""import { ECDH } from "crypto";
+ECDH.convertKey($0, $1, $2, $3, $4)""")>]
             static member inline convertKey
                 (
                     key: string,
@@ -42858,11 +42838,7 @@ KeyObject.from($0)"""
                 )
                 : U2<Node.NonSharedBuffer, string>
                 =
-                emitJsExpr
-                    (key, curve, inputEncoding, outputEncoding, format)
-                    $$"""
-import { ECDH } from "crypto";
-ECDH.convertKey($0, $1, $2, $3, $4)"""
+                nativeOnly
 
             /// <summary>
             /// Converts the EC Diffie-Hellman public key specified by <c>key</c> and <c>curve</c> to the
@@ -42911,6 +42887,8 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// <param name="format">
             ///
             /// </param>
+            [<Emit("""import { ECDH } from "crypto";
+ECDH.convertKey($0, $1, $2, $3, $4)""")>]
             static member inline convertKey
                 (
                     key: Node.NodeJS.ArrayBufferView,
@@ -42921,11 +42899,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 )
                 : U2<Node.NonSharedBuffer, string>
                 =
-                emitJsExpr
-                    (key, curve, inputEncoding, outputEncoding, format)
-                    $$"""
-import { ECDH } from "crypto";
-ECDH.convertKey($0, $1, $2, $3, $4)"""
+                nativeOnly
 
             /// <summary>
             /// Generates private and public EC Diffie-Hellman key values, and returns
@@ -54964,6 +54938,8 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
             /// ee.emit('foo'); // Prints: Waiting for the event was canceled!
             /// </code>
             /// </summary>
+            [<Emit("""import { EventEmitter } from "events";
+EventEmitter.once($0, $1, $2)""")>]
             static member inline once
                 (
                     emitter: Node.NodeJS.EventEmitter,
@@ -54972,11 +54948,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)"""
                 )
                 : JS.Promise<ResizeArray<obj>>
                 =
-                emitJsExpr
-                    (emitter, eventName, options)
-                    $$"""
-import { EventEmitter } from "events";
-EventEmitter.once($0, $1, $2)"""
+                nativeOnly
 
             /// <summary>
             /// Creates a <c>Promise</c> that is fulfilled when the <c>EventEmitter</c> emits the given
@@ -55056,6 +55028,8 @@ EventEmitter.once($0, $1, $2)"""
             /// ee.emit('foo'); // Prints: Waiting for the event was canceled!
             /// </code>
             /// </summary>
+            [<Emit("""import { EventEmitter } from "events";
+EventEmitter.once($0, $1, $2)""")>]
             static member inline once
                 (
                     emitter: Node.NodeJS.EventEmitter,
@@ -55064,11 +55038,7 @@ EventEmitter.once($0, $1, $2)"""
                 )
                 : JS.Promise<ResizeArray<obj>>
                 =
-                emitJsExpr
-                    (emitter, eventName, options)
-                    $$"""
-import { EventEmitter } from "events";
-EventEmitter.once($0, $1, $2)"""
+                nativeOnly
 
             /// <summary>
             /// Creates a <c>Promise</c> that is fulfilled when the <c>EventEmitter</c> emits the given
@@ -55148,6 +55118,8 @@ EventEmitter.once($0, $1, $2)"""
             /// ee.emit('foo'); // Prints: Waiting for the event was canceled!
             /// </code>
             /// </summary>
+            [<Emit("""import { EventEmitter } from "events";
+EventEmitter.once($0, $1, $2)""")>]
             static member inline once
                 (
                     emitter: Node.EventTarget,
@@ -55156,11 +55128,7 @@ EventEmitter.once($0, $1, $2)"""
                 )
                 : JS.Promise<ResizeArray<obj>>
                 =
-                emitJsExpr
-                    (emitter, eventName, options)
-                    $$"""
-import { EventEmitter } from "events";
-EventEmitter.once($0, $1, $2)"""
+                nativeOnly
 
             /// <summary>
             /// <code lang="js">
@@ -55243,6 +55211,8 @@ EventEmitter.once($0, $1, $2)"""
             /// <returns>
             /// An <c>AsyncIterator</c> that iterates <c>eventName</c> events emitted by the <c>emitter</c>
             /// </returns>
+            [<Emit("""import { EventEmitter } from "events";
+EventEmitter.on($0, $1, $2)""")>]
             static member inline on
                 (
                     emitter: Node.NodeJS.EventEmitter,
@@ -55251,11 +55221,7 @@ EventEmitter.once($0, $1, $2)"""
                 )
                 : Node.NodeJS.AsyncIterator<ResizeArray<obj>>
                 =
-                emitJsExpr
-                    (emitter, eventName, options)
-                    $$"""
-import { EventEmitter } from "events";
-EventEmitter.on($0, $1, $2)"""
+                nativeOnly
 
             /// <summary>
             /// <code lang="js">
@@ -55338,6 +55304,8 @@ EventEmitter.on($0, $1, $2)"""
             /// <returns>
             /// An <c>AsyncIterator</c> that iterates <c>eventName</c> events emitted by the <c>emitter</c>
             /// </returns>
+            [<Emit("""import { EventEmitter } from "events";
+EventEmitter.on($0, $1, $2)""")>]
             static member inline on
                 (
                     emitter: Node.NodeJS.EventEmitter,
@@ -55346,11 +55314,7 @@ EventEmitter.on($0, $1, $2)"""
                 )
                 : Node.NodeJS.AsyncIterator<ResizeArray<obj>>
                 =
-                emitJsExpr
-                    (emitter, eventName, options)
-                    $$"""
-import { EventEmitter } from "events";
-EventEmitter.on($0, $1, $2)"""
+                nativeOnly
 
             /// <summary>
             /// <code lang="js">
@@ -55430,6 +55394,8 @@ EventEmitter.on($0, $1, $2)"""
             /// console.log('done'); // prints 'done'
             /// </code>
             /// </summary>
+            [<Emit("""import { EventEmitter } from "events";
+EventEmitter.on($0, $1, $2)""")>]
             static member inline on
                 (
                     emitter: Node.EventTarget,
@@ -55438,11 +55404,7 @@ EventEmitter.on($0, $1, $2)"""
                 )
                 : Node.NodeJS.AsyncIterator<ResizeArray<obj>>
                 =
-                emitJsExpr
-                    (emitter, eventName, options)
-                    $$"""
-import { EventEmitter } from "events";
-EventEmitter.on($0, $1, $2)"""
+                nativeOnly
 
             /// <summary>
             /// A class method that returns the number of listeners for the given <c>eventName</c> registered on the given <c>emitter</c>.
@@ -55464,15 +55426,13 @@ EventEmitter.on($0, $1, $2)"""
             /// The event name
             /// </param>
             [<Obsolete("Since v3.2.0 - Use `listenerCount` instead.")>]
+            [<Emit("""import { EventEmitter } from "events";
+EventEmitter.listenerCount($0, $1)""")>]
             static member inline listenerCount
                 (emitter: Node.NodeJS.EventEmitter, eventName: string)
                 : float
                 =
-                emitJsExpr
-                    (emitter, eventName)
-                    $$"""
-import { EventEmitter } from "events";
-EventEmitter.listenerCount($0, $1)"""
+                nativeOnly
 
             /// <summary>
             /// A class method that returns the number of listeners for the given <c>eventName</c> registered on the given <c>emitter</c>.
@@ -55494,15 +55454,13 @@ EventEmitter.listenerCount($0, $1)"""
             /// The event name
             /// </param>
             [<Obsolete("Since v3.2.0 - Use `listenerCount` instead.")>]
+            [<Emit("""import { EventEmitter } from "events";
+EventEmitter.listenerCount($0, $1)""")>]
             static member inline listenerCount
                 (emitter: Node.NodeJS.EventEmitter, eventName: obj)
                 : float
                 =
-                emitJsExpr
-                    (emitter, eventName)
-                    $$"""
-import { EventEmitter } from "events";
-EventEmitter.listenerCount($0, $1)"""
+                nativeOnly
 
             /// <summary>
             /// Returns a copy of the array of listeners for the event named <c>eventName</c>.
@@ -55530,15 +55488,13 @@ EventEmitter.listenerCount($0, $1)"""
             /// }
             /// </code>
             /// </summary>
+            [<Emit("""import { EventEmitter } from "events";
+EventEmitter.getEventListeners($0, $1)""")>]
             static member inline getEventListeners
                 (emitter: Node.EventTarget, name: string)
                 : ResizeArray<Action>
                 =
-                emitJsExpr
-                    (emitter, name)
-                    $$"""
-import { EventEmitter } from "events";
-EventEmitter.getEventListeners($0, $1)"""
+                nativeOnly
 
             /// <summary>
             /// Returns a copy of the array of listeners for the event named <c>eventName</c>.
@@ -55566,15 +55522,13 @@ EventEmitter.getEventListeners($0, $1)"""
             /// }
             /// </code>
             /// </summary>
+            [<Emit("""import { EventEmitter } from "events";
+EventEmitter.getEventListeners($0, $1)""")>]
             static member inline getEventListeners
                 (emitter: Node.EventTarget, name: obj)
                 : ResizeArray<Action>
                 =
-                emitJsExpr
-                    (emitter, name)
-                    $$"""
-import { EventEmitter } from "events";
-EventEmitter.getEventListeners($0, $1)"""
+                nativeOnly
 
             /// <summary>
             /// Returns a copy of the array of listeners for the event named <c>eventName</c>.
@@ -55602,15 +55556,13 @@ EventEmitter.getEventListeners($0, $1)"""
             /// }
             /// </code>
             /// </summary>
+            [<Emit("""import { EventEmitter } from "events";
+EventEmitter.getEventListeners($0, $1)""")>]
             static member inline getEventListeners
                 (emitter: Node.NodeJS.EventEmitter, name: string)
                 : ResizeArray<Action>
                 =
-                emitJsExpr
-                    (emitter, name)
-                    $$"""
-import { EventEmitter } from "events";
-EventEmitter.getEventListeners($0, $1)"""
+                nativeOnly
 
             /// <summary>
             /// Returns a copy of the array of listeners for the event named <c>eventName</c>.
@@ -55638,15 +55590,13 @@ EventEmitter.getEventListeners($0, $1)"""
             /// }
             /// </code>
             /// </summary>
+            [<Emit("""import { EventEmitter } from "events";
+EventEmitter.getEventListeners($0, $1)""")>]
             static member inline getEventListeners
                 (emitter: Node.NodeJS.EventEmitter, name: obj)
                 : ResizeArray<Action>
                 =
-                emitJsExpr
-                    (emitter, name)
-                    $$"""
-import { EventEmitter } from "events";
-EventEmitter.getEventListeners($0, $1)"""
+                nativeOnly
 
             /// <summary>
             /// Returns the currently set max amount of listeners.
@@ -55675,12 +55625,9 @@ EventEmitter.getEventListeners($0, $1)"""
             /// }
             /// </code>
             /// </summary>
-            static member inline getMaxListeners(emitter: Node.EventTarget) : float =
-                emitJsExpr
-                    (emitter)
-                    $$"""
-import { EventEmitter } from "events";
-EventEmitter.getMaxListeners($0)"""
+            [<Emit("""import { EventEmitter } from "events";
+EventEmitter.getMaxListeners($0)""")>]
+            static member inline getMaxListeners(emitter: Node.EventTarget) : float = nativeOnly
 
             /// <summary>
             /// Returns the currently set max amount of listeners.
@@ -55709,12 +55656,10 @@ EventEmitter.getMaxListeners($0)"""
             /// }
             /// </code>
             /// </summary>
+            [<Emit("""import { EventEmitter } from "events";
+EventEmitter.getMaxListeners($0)""")>]
             static member inline getMaxListeners(emitter: Node.NodeJS.EventEmitter) : float =
-                emitJsExpr
-                    (emitter)
-                    $$"""
-import { EventEmitter } from "events";
-EventEmitter.getMaxListeners($0)"""
+                nativeOnly
 
             /// <summary>
             /// <code lang="js">
@@ -55733,6 +55678,8 @@ EventEmitter.getMaxListeners($0)"""
             /// Zero or more {EventTarget} or {EventEmitter} instances. If none are specified, <c>n</c> is set as the default max for all newly created {EventTarget} and {EventEmitter}
             /// objects.
             /// </param>
+            [<Emit("""import { EventEmitter } from "events";
+EventEmitter.setMaxListeners($0, $1)""")>]
             static member inline setMaxListeners
                 (
                     n: float,
@@ -55740,11 +55687,7 @@ EventEmitter.getMaxListeners($0)"""
                 )
                 : unit
                 =
-                emitJsExpr
-                    (n, eventTargets)
-                    $$"""
-import { EventEmitter } from "events";
-EventEmitter.setMaxListeners($0, $1)"""
+                nativeOnly
 
             /// <summary>
             /// Listens once to the <c>abort</c> event on the provided <c>signal</c>.
@@ -55780,15 +55723,13 @@ EventEmitter.setMaxListeners($0, $1)"""
             /// <returns>
             /// Disposable that removes the <c>abort</c> listener.
             /// </returns>
+            [<Emit("""import { EventEmitter } from "events";
+EventEmitter.addAbortListener($0, $1)""")>]
             static member inline addAbortListener
                 (signal: Node.AbortSignal, resource: (Node.Event -> unit))
                 : obj
                 =
-                emitJsExpr
-                    (signal, resource)
-                    $$"""
-import { EventEmitter } from "events";
-EventEmitter.addAbortListener($0, $1)"""
+                nativeOnly
 
             /// <summary>
             /// This symbol shall be used to install a listener for only monitoring <c>'error'</c> events. Listeners installed using this symbol are called before the regular <c>'error'</c> listeners are called.
@@ -55796,43 +55737,29 @@ EventEmitter.addAbortListener($0, $1)"""
             /// Installing a listener using this symbol does not change the behavior once an <c>'error'</c> event is emitted. Therefore, the process will still crash if no
             /// regular <c>'error'</c> listener is installed.
             /// </summary>
-            static member errorMonitor: obj =
-                emitJsExpr
-                    ()
-                    $$"""
-import { EventEmitter } from "events";
-EventEmitter.errorMonitor"""
+            [<Emit("""import { EventEmitter } from "events";
+EventEmitter.errorMonitor{{=$0}}""")>]
+            static member errorMonitor: obj = nativeOnly
 
             /// <summary>
             /// Value: <c>Symbol.for('nodejs.rejection')</c>
             ///
             /// See how to write a custom <c>rejection handler</c>.
             /// </summary>
-            static member captureRejectionSymbol: obj =
-                emitJsExpr
-                    ()
-                    $$"""
-import { EventEmitter } from "events";
-EventEmitter.captureRejectionSymbol"""
+            [<Emit("""import { EventEmitter } from "events";
+EventEmitter.captureRejectionSymbol{{=$0}}""")>]
+            static member captureRejectionSymbol: obj = nativeOnly
 
             /// <summary>
             /// Value: [boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Boolean_type)
             ///
             /// Change the default <c>captureRejections</c> option on all new <c>EventEmitter</c> objects.
             /// </summary>
+            [<Emit("""import { EventEmitter } from "events";
+EventEmitter.captureRejections{{=$0}}""")>]
             static member inline captureRejections
-                with get (): bool =
-                    emitJsExpr
-                        ()
-                        $$"""
-import { EventEmitter } from "events";
-EventEmitter.captureRejections"""
-                and set (value: bool) =
-                    emitJsExpr
-                        (value)
-                        $$"""
-import { EventEmitter } from "events";
-EventEmitter.captureRejections = $0"""
+                with get (): bool = nativeOnly
+                and set (value: bool) = nativeOnly
 
             /// <summary>
             /// By default, a maximum of <c>10</c> listeners can be registered for any single
@@ -55871,19 +55798,11 @@ EventEmitter.captureRejections = $0"""
             /// listeners, respectively.
             /// Its <c>name</c> property is set to <c>'MaxListenersExceededWarning'</c>.
             /// </summary>
+            [<Emit("""import { EventEmitter } from "events";
+EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member inline defaultMaxListeners
-                with get (): float =
-                    emitJsExpr
-                        ()
-                        $$"""
-import { EventEmitter } from "events";
-EventEmitter.defaultMaxListeners"""
-                and set (value: float) =
-                    emitJsExpr
-                        (value)
-                        $$"""
-import { EventEmitter } from "events";
-EventEmitter.defaultMaxListeners = $0"""
+                with get (): float = nativeOnly
+                and set (value: float) = nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -133088,12 +133007,9 @@ recursive mode, operations are retried on failure.""")>]
             /// <param name="value">
             /// Any JS value
             /// </param>
-            static member inline isBlockList(value: obj) : bool =
-                emitJsExpr
-                    (value)
-                    $$"""
-import { BlockList } from "net";
-BlockList.isBlockList($0)"""
+            [<Emit("""import { BlockList } from "net";
+BlockList.isBlockList($0)""")>]
+            static member inline isBlockList(value: obj) : bool = nativeOnly
 
             /// <summary>
             /// <code lang="js">
@@ -133187,12 +133103,9 @@ BlockList.isBlockList($0)"""
             /// Returns a <c>SocketAddress</c> if parsing was successful.
             /// Otherwise returns <c>undefined</c>.
             /// </returns>
-            static member inline parse(input: string) : Node.net.SocketAddress option =
-                emitJsExpr
-                    (input)
-                    $$"""
-import { SocketAddress } from "net";
-SocketAddress.parse($0)"""
+            [<Emit("""import { SocketAddress } from "net";
+SocketAddress.parse($0)""")>]
+            static member inline parse(input: string) : Node.net.SocketAddress option = nativeOnly
 
         module LookupFunction =
 
@@ -147759,15 +147672,13 @@ the userland-provided Punycode.js module instead.""")>]
                 /// <param name="options">
                 /// Options provided to <c>new stream.Readable([options])</c>. By default, <c>Readable.from()</c> will set <c>options.objectMode</c> to <c>true</c>, unless this is explicitly opted out by setting <c>options.objectMode</c> to <c>false</c>.
                 /// </param>
+                [<Emit("""import { Readable } from "stream";
+Readable.from($0, $1)""")>]
                 static member inline from
                     (iterable: Iterable<obj>, ?options: Node.stream.Stream_.ReadableOptions)
                     : Node.stream.Stream_.Readable
                     =
-                    emitJsExpr
-                        (iterable, options)
-                        $$"""
-import { Readable } from "stream";
-Readable.from($0, $1)"""
+                    nativeOnly
 
                 /// <summary>
                 /// A utility method for creating Readable Streams out of iterators.
@@ -147778,19 +147689,19 @@ Readable.from($0, $1)"""
                 /// <param name="options">
                 /// Options provided to <c>new stream.Readable([options])</c>. By default, <c>Readable.from()</c> will set <c>options.objectMode</c> to <c>true</c>, unless this is explicitly opted out by setting <c>options.objectMode</c> to <c>false</c>.
                 /// </param>
+                [<Emit("""import { Readable } from "stream";
+Readable.from($0, $1)""")>]
                 static member inline from
                     (iterable: obj, ?options: Node.stream.Stream_.ReadableOptions)
                     : Node.stream.Stream_.Readable
                     =
-                    emitJsExpr
-                        (iterable, options)
-                        $$"""
-import { Readable } from "stream";
-Readable.from($0, $1)"""
+                    nativeOnly
 
                 /// <summary>
                 /// A utility method for creating a <c>Readable</c> from a web <c>ReadableStream</c>.
                 /// </summary>
+                [<Emit("""import { Readable } from "stream";
+Readable.fromWeb($0, $1)""")>]
                 static member inline fromWeb
                     (
                         readableStream: Node.stream_web.stream_SLASH_web_.ReadableStream,
@@ -147798,15 +147709,13 @@ Readable.from($0, $1)"""
                     )
                     : Node.stream.Stream_.Readable
                     =
-                    emitJsExpr
-                        (readableStream, options)
-                        $$"""
-import { Readable } from "stream";
-Readable.fromWeb($0, $1)"""
+                    nativeOnly
 
                 /// <summary>
                 /// A utility method for creating a web <c>ReadableStream</c> from a <c>Readable</c>.
                 /// </summary>
+                [<Emit("""import { Readable } from "stream";
+Readable.toWeb($0, $1)""")>]
                 static member inline toWeb
                     (
                         streamReadable: Node.stream.Stream_.Readable,
@@ -147814,31 +147723,23 @@ Readable.fromWeb($0, $1)"""
                     )
                     : Node.stream_web.stream_SLASH_web_.ReadableStream
                     =
-                    emitJsExpr
-                        (streamReadable, options)
-                        $$"""
-import { Readable } from "stream";
-Readable.toWeb($0, $1)"""
+                    nativeOnly
 
                 /// <summary>
                 /// Returns whether the stream has been read from or cancelled.
                 /// </summary>
+                [<Emit("""import { Readable } from "stream";
+Readable.isDisturbed($0)""")>]
                 static member inline isDisturbed(stream: Node.stream.Stream_.Readable) : bool =
-                    emitJsExpr
-                        (stream)
-                        $$"""
-import { Readable } from "stream";
-Readable.isDisturbed($0)"""
+                    nativeOnly
 
                 /// <summary>
                 /// Returns whether the stream has been read from or cancelled.
                 /// </summary>
+                [<Emit("""import { Readable } from "stream";
+Readable.isDisturbed($0)""")>]
                 static member inline isDisturbed(stream: Node.NodeJS.ReadableStream) : bool =
-                    emitJsExpr
-                        (stream)
-                        $$"""
-import { Readable } from "stream";
-Readable.isDisturbed($0)"""
+                    nativeOnly
 
                 /// <summary>
                 /// Returns whether the stream was destroyed or errored before emitting <c>'end'</c>.
@@ -151679,6 +151580,8 @@ Readable.isDisturbed($0)"""
                 /// <summary>
                 /// A utility method for creating a <c>Writable</c> from a web <c>WritableStream</c>.
                 /// </summary>
+                [<Emit("""import { Writable } from "stream";
+Writable.fromWeb($0, $1)""")>]
                 static member inline fromWeb
                     (
                         writableStream: Node.stream_web.stream_SLASH_web_.WritableStream,
@@ -151686,24 +151589,18 @@ Readable.isDisturbed($0)"""
                     )
                     : Node.stream.Stream_.Writable
                     =
-                    emitJsExpr
-                        (writableStream, options)
-                        $$"""
-import { Writable } from "stream";
-Writable.fromWeb($0, $1)"""
+                    nativeOnly
 
                 /// <summary>
                 /// A utility method for creating a web <c>WritableStream</c> from a <c>Writable</c>.
                 /// </summary>
+                [<Emit("""import { Writable } from "stream";
+Writable.toWeb($0)""")>]
                 static member inline toWeb
                     (streamWritable: Node.stream.Stream_.Writable)
                     : Node.stream_web.stream_SLASH_web_.WritableStream
                     =
-                    emitJsExpr
-                        (streamWritable)
-                        $$"""
-import { Writable } from "stream";
-Writable.toWeb($0)"""
+                    nativeOnly
 
                 /// <summary>
                 /// Is <c>true</c> if it is safe to call <c>writable.write()</c>, which means
@@ -155088,12 +154985,10 @@ Writable.toWeb($0)"""
                 ///   <c>Duplex</c> will write to the <c>writable</c> and read from the <c>readable</c>.
                 /// - <c>Promise</c> converts into readable <c>Duplex</c>. Value <c>null</c> is ignored.
                 /// </summary>
+                [<Emit("""import { Duplex } from "stream";
+Duplex.from($0)""")>]
                 static member inline from(src: Node.stream.Stream) : Node.stream.Stream_.Duplex =
-                    emitJsExpr
-                        (src)
-                        $$"""
-import { Duplex } from "stream";
-Duplex.from($0)"""
+                    nativeOnly
 
                 /// <summary>
                 /// A utility method for creating duplex streams.
@@ -155114,15 +155009,13 @@ Duplex.from($0)"""
                 ///   <c>Duplex</c> will write to the <c>writable</c> and read from the <c>readable</c>.
                 /// - <c>Promise</c> converts into readable <c>Duplex</c>. Value <c>null</c> is ignored.
                 /// </summary>
+                [<Emit("""import { Duplex } from "stream";
+Duplex.from($0)""")>]
                 static member inline from
                     (src: Node.buffer.buffer_.Blob)
                     : Node.stream.Stream_.Duplex
                     =
-                    emitJsExpr
-                        (src)
-                        $$"""
-import { Duplex } from "stream";
-Duplex.from($0)"""
+                    nativeOnly
 
                 /// <summary>
                 /// A utility method for creating duplex streams.
@@ -155143,12 +155036,9 @@ Duplex.from($0)"""
                 ///   <c>Duplex</c> will write to the <c>writable</c> and read from the <c>readable</c>.
                 /// - <c>Promise</c> converts into readable <c>Duplex</c>. Value <c>null</c> is ignored.
                 /// </summary>
-                static member inline from(src: obj) : Node.stream.Stream_.Duplex =
-                    emitJsExpr
-                        (src)
-                        $$"""
-import { Duplex } from "stream";
-Duplex.from($0)"""
+                [<Emit("""import { Duplex } from "stream";
+Duplex.from($0)""")>]
+                static member inline from(src: obj) : Node.stream.Stream_.Duplex = nativeOnly
 
                 /// <summary>
                 /// A utility method for creating duplex streams.
@@ -155169,12 +155059,9 @@ Duplex.from($0)"""
                 ///   <c>Duplex</c> will write to the <c>writable</c> and read from the <c>readable</c>.
                 /// - <c>Promise</c> converts into readable <c>Duplex</c>. Value <c>null</c> is ignored.
                 /// </summary>
-                static member inline from(src: string) : Node.stream.Stream_.Duplex =
-                    emitJsExpr
-                        (src)
-                        $$"""
-import { Duplex } from "stream";
-Duplex.from($0)"""
+                [<Emit("""import { Duplex } from "stream";
+Duplex.from($0)""")>]
+                static member inline from(src: string) : Node.stream.Stream_.Duplex = nativeOnly
 
                 /// <summary>
                 /// A utility method for creating duplex streams.
@@ -155195,12 +155082,10 @@ Duplex.from($0)"""
                 ///   <c>Duplex</c> will write to the <c>writable</c> and read from the <c>readable</c>.
                 /// - <c>Promise</c> converts into readable <c>Duplex</c>. Value <c>null</c> is ignored.
                 /// </summary>
+                [<Emit("""import { Duplex } from "stream";
+Duplex.from($0)""")>]
                 static member inline from(src: Iterable<obj>) : Node.stream.Stream_.Duplex =
-                    emitJsExpr
-                        (src)
-                        $$"""
-import { Duplex } from "stream";
-Duplex.from($0)"""
+                    nativeOnly
 
                 /// <summary>
                 /// A utility method for creating duplex streams.
@@ -155221,38 +155106,32 @@ Duplex.from($0)"""
                 ///   <c>Duplex</c> will write to the <c>writable</c> and read from the <c>readable</c>.
                 /// - <c>Promise</c> converts into readable <c>Duplex</c>. Value <c>null</c> is ignored.
                 /// </summary>
+                [<Emit("""import { Duplex } from "stream";
+Duplex.from($0)""")>]
                 static member inline from(src: JS.Promise<obj>) : Node.stream.Stream_.Duplex =
-                    emitJsExpr
-                        (src)
-                        $$"""
-import { Duplex } from "stream";
-Duplex.from($0)"""
+                    nativeOnly
 
                 /// <summary>
                 /// A utility method for creating a web <c>ReadableStream</c> and <c>WritableStream</c> from a <c>Duplex</c>.
                 /// </summary>
+                [<Emit("""import { Duplex } from "stream";
+Duplex.toWeb($0)""")>]
                 static member inline toWeb
                     (streamDuplex: Node.stream.Stream_.Duplex)
                     : Duplex.toWeb__
                     =
-                    emitJsExpr
-                        (streamDuplex)
-                        $$"""
-import { Duplex } from "stream";
-Duplex.toWeb($0)"""
+                    nativeOnly
 
                 /// <summary>
                 /// A utility method for creating a <c>Duplex</c> from a web <c>ReadableStream</c> and <c>WritableStream</c>.
                 /// </summary>
+                [<Emit("""import { Duplex } from "stream";
+Duplex.fromWeb($0, $1)""")>]
                 static member inline fromWeb
                     (duplexStream: Duplex.fromWeb__.duplexStream, ?options: Duplex.fromWeb__.options)
                     : Node.stream.Stream_.Duplex
                     =
-                    emitJsExpr
-                        (duplexStream, options)
-                        $$"""
-import { Duplex } from "stream";
-Duplex.fromWeb($0, $1)"""
+                    nativeOnly
 
                 /// <summary>
                 /// Event emitter
@@ -174024,12 +173903,10 @@ Duplex.fromWeb($0, $1)"""
             /// Threads, <c>Blob</c> objects registered within one Worker will not be available
             /// to other workers or the main thread.
             /// </summary>
+            [<Emit("""import { URL } from "url";
+URL.createObjectURL($0)""")>]
             static member inline createObjectURL(blob: Node.buffer.buffer_.Blob) : string =
-                emitJsExpr
-                    (blob)
-                    $$"""
-import { URL } from "url";
-URL.createObjectURL($0)"""
+                nativeOnly
 
             /// <summary>
             /// Removes the stored <c>Blob</c> identified by the given ID. Attempting to revoke a
@@ -174038,12 +173915,9 @@ URL.createObjectURL($0)"""
             /// <param name="id">
             /// A <c>'blob:nodedata:...</c> URL string returned by a prior call to <c>URL.createObjectURL()</c>.
             /// </param>
-            static member inline revokeObjectURL(id: string) : unit =
-                emitJsExpr
-                    (id)
-                    $$"""
-import { URL } from "url";
-URL.revokeObjectURL($0)"""
+            [<Emit("""import { URL } from "url";
+URL.revokeObjectURL($0)""")>]
+            static member inline revokeObjectURL(id: string) : unit = nativeOnly
 
             /// <summary>
             /// Checks if an <c>input</c> relative to the <c>base</c> can be parsed to a <c>URL</c>.
@@ -174061,12 +173935,9 @@ URL.revokeObjectURL($0)"""
             /// <param name="base">
             /// The base URL to resolve against if the <c>input</c> is not absolute. If <c>base</c> is not a string, it is <c>converted to a string</c> first.
             /// </param>
-            static member inline canParse(input: string, ?``base``: string) : bool =
-                emitJsExpr
-                    (input, ``base``)
-                    $$"""
-import { URL } from "url";
-URL.canParse($0, $1)"""
+            [<Emit("""import { URL } from "url";
+URL.canParse($0, $1)""")>]
+            static member inline canParse(input: string, ?``base``: string) : bool = nativeOnly
 
             /// <summary>
             /// Parses a string as a URL. If <c>base</c> is provided, it will be used as the base
@@ -174082,12 +173953,10 @@ URL.canParse($0, $1)"""
             /// The base URL to resolve against if the <c>input</c> is not
             /// absolute. If <c>base</c> is not a string, it is [converted to a string](https://tc39.es/ecma262/#sec-tostring) first.
             /// </param>
+            [<Emit("""import { URL } from "url";
+URL.parse($0, $1)""")>]
             static member inline parse(input: string, ?``base``: string) : Node.url.URL option =
-                emitJsExpr
-                    (input, ``base``)
-                    $$"""
-import { URL } from "url";
-URL.parse($0, $1)"""
+                nativeOnly
 
             /// <summary>
             /// Gets and sets the fragment portion of the URL.

@@ -13,11 +13,11 @@ type Exports =
 [<AllowNullLiteral>]
 [<Interface>]
 type Fuse =
+    [<Emit("""import { Fuse } from "REPLACE_ME_WITH_MODULE_NAME";
+Fuse.version{{=$0}}""")>]
     static member inline version
         with get () : string =
-            emitJsExpr () $$"""
-import { Fuse } from "REPLACE_ME_WITH_MODULE_NAME";
-Fuse.version"""
+            nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

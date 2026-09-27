@@ -641,6 +641,27 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
             printAttributes printer propertyInfo.Attributes
 
             if propertyInfo.IsStatic then
+                // A property backed by imported code is emitted with an `[<Emit>]` attribute
+                // (`{{=$0}}` reads for the getter, assigns for the setter) rather than an
+                // `emitJsExpr` body, so the binding stays a pure interop assembly
+                match propertyInfo.Body with
+                | FSharpMemberInfoBody.NativeOnly -> ()
+                | FSharpMemberInfoBody.JavaScriptStaticProperty ->
+                    let macro =
+                        "import { "
+                        + interfaceInfo.OriginalName
+                        + " } from \""
+                        + printer.ImportSpecifier
+                        + "\";\n"
+                        + interfaceInfo.OriginalName
+                        + "."
+                        + propertyInfo.OriginalName
+                        + "{{=$0}}"
+
+                    printer.Write($"[<Emit(\"\"\"{macro}\"\"\")>]")
+
+                    printer.NewLine
+
                 printer.Write($"static member inline ")
 
                 FSharpAccessibility.printInline printer propertyInfo.Accessibility
@@ -655,13 +676,7 @@ let private printInterface (printer: Printer) (interfaceInfo: FSharpInterface) =
                     printer.NewLine
                     printer.Indent
 
-                    match propertyInfo.Body with
-                    | FSharpMemberInfoBody.NativeOnly -> printer.Write("nativeOnly")
-                    | FSharpMemberInfoBody.JavaScriptStaticProperty ->
-                        printer.Write
-                            $"emitJsExpr () $$\"\"\"
-import {{ %s{interfaceInfo.OriginalName} }} from \"{printer.ImportSpecifier}\";
-%s{interfaceInfo.OriginalName}.%s{propertyInfo.OriginalName}\"\"\""
+                    printer.Write("nativeOnly")
 
                     printer.Unindent
                     printer.Unindent
@@ -679,13 +694,7 @@ import {{ %s{interfaceInfo.OriginalName} }} from \"{printer.ImportSpecifier}\";
                     printer.NewLine
                     printer.Indent
 
-                    match propertyInfo.Body with
-                    | FSharpMemberInfoBody.NativeOnly -> printer.Write("nativeOnly")
-                    | FSharpMemberInfoBody.JavaScriptStaticProperty ->
-                        printer.Write
-                            $"emitJsExpr (value) $$\"\"\"
-import {{ %s{interfaceInfo.OriginalName} }} from \"{printer.ImportSpecifier}\";
-%s{interfaceInfo.OriginalName}.%s{propertyInfo.OriginalName} = $0\"\"\""
+                    printer.Write("nativeOnly")
 
                     printer.Unindent
                     printer.Unindent
@@ -752,6 +761,19 @@ import {{ %s{interfaceInfo.OriginalName} }} from \"{printer.ImportSpecifier}\";
             printXmlDoc printer staticMemberInfo.XmlDoc
             printCompactAttributesAndNewLine printer staticMemberInfo.Attributes
 
+            let macroArguments =
+                staticMemberInfo.Parameters
+                |> List.mapi (fun index _ -> $"$%i{index}")
+                |> String.concat ", "
+
+            // Emitted as an `[<Emit>]` attribute rather than an `emitJsExpr` body so the binding
+            // stays a pure interop assembly Fable can consume from its DLL without the F# source
+            printer.Write
+                $"[<Emit(\"\"\"import {{ %s{interfaceInfo.OriginalName} }} from \"{printer.ImportSpecifier}\";
+%s{interfaceInfo.OriginalName}.%s{staticMemberInfo.OriginalName}(%s{macroArguments})\"\"\")>]"
+
+            printer.NewLine
+
             printer.Write($"static member inline {staticMemberInfo.Name} ")
 
             printTypeParametersDeclaration printer staticMemberInfo.TypeParameters
@@ -759,18 +781,8 @@ import {{ %s{interfaceInfo.OriginalName} }} from \"{printer.ImportSpecifier}\";
             if staticMemberInfo.Parameters.IsEmpty then
                 printer.WriteInline("() : ")
                 printer.WriteInline(printType staticMemberInfo.Type)
-                printer.WriteInline(" =")
-                printer.Indent
+                printer.WriteInline(" = nativeOnly")
                 printer.NewLine
-
-                printer.Write
-                    $"emitJsExpr () $$\"\"\"
-import {{ %s{interfaceInfo.OriginalName} }} from \"{printer.ImportSpecifier}\";
-%s{interfaceInfo.OriginalName}.%s{staticMemberInfo.OriginalName}()\"\"\""
-
-                printer.NewLine
-
-                printer.Unindent
 
             else
                 printer.WriteInline("(")
@@ -793,26 +805,8 @@ import {{ %s{interfaceInfo.OriginalName} }} from \"{printer.ImportSpecifier}\";
 
                 printer.WriteInline("): ")
                 printer.WriteInline(printType staticMemberInfo.Type)
-                printer.WriteInline(" =")
+                printer.WriteInline(" = nativeOnly")
                 printer.NewLine
-
-                printer.Indent
-
-                let forwardedArgments =
-                    staticMemberInfo.Parameters |> List.map (fun p -> p.Name) |> String.concat ", "
-
-                let macroArguments =
-                    staticMemberInfo.Parameters
-                    |> List.mapi (fun index _ -> $"$%i{index}")
-                    |> String.concat ", "
-
-                printer.Write
-                    $"emitJsExpr (%s{forwardedArgments}) $$\"\"\"
-import {{ %s{interfaceInfo.OriginalName} }} from \"{printer.ImportSpecifier}\";
-%s{interfaceInfo.OriginalName}.%s{staticMemberInfo.OriginalName}(%s{macroArguments})\"\"\""
-
-                printer.NewLine
-                printer.Unindent
     )
 
     if interfaceInfo.Members.IsEmpty && interfaceInfo.Inheritance.IsEmpty then

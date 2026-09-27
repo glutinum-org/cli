@@ -13,10 +13,9 @@ type Exports =
 [<AllowNullLiteral>]
 [<Interface>]
 type Class =
-    static member inline extend (props: obj): obj =
-        emitJsExpr (props) $$"""
-import { Class } from "REPLACE_ME_WITH_MODULE_NAME";
-Class.extend($0)"""
+    [<Emit("""import { Class } from "REPLACE_ME_WITH_MODULE_NAME";
+Class.extend($0)""")>]
+    static member inline extend (props: obj): obj = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

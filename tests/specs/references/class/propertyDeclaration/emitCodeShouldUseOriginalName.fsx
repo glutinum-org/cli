@@ -13,15 +13,13 @@ type Exports =
 [<AllowNullLiteral>]
 [<Interface>]
 type Fuse =
+    [<Emit("""import { Fuse } from "REPLACE_ME_WITH_MODULE_NAME";
+Fuse.member{{=$0}}""")>]
     static member inline ``member``
         with get () : string =
-            emitJsExpr () $$"""
-import { Fuse } from "REPLACE_ME_WITH_MODULE_NAME";
-Fuse.member"""
+            nativeOnly
         and set (value: string) =
-            emitJsExpr (value) $$"""
-import { Fuse } from "REPLACE_ME_WITH_MODULE_NAME";
-Fuse.member = $0"""
+            nativeOnly
 
 (***)
 #r "nuget: Fable.Core"
