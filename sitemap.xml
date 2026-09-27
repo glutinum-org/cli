@@ -271,6 +271,9 @@
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/buffer-buffer/exports/slowbuffer/type/</loc>
   </url>
   <url>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/buffer-buffer/implicitarraybuffer/</loc>
+  </url>
+  <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/buffer-module/</loc>
   </url>
   <url>
@@ -9481,6 +9484,9 @@
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/vm/exports/</loc>
   </url>
   <url>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/vm/exports/compilefunction/</loc>
+  </url>
+  <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/vm/measurememorymode/</loc>
   </url>
   <url>
@@ -11329,6 +11335,9 @@
     <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/objectconstructor/entries/o/</loc>
   </url>
   <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/objectconstructor/freeze/</loc>
+  </url>
+  <url>
     <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/objectconstructor/fromentries-1/</loc>
   </url>
   <url>
@@ -11336,6 +11345,12 @@
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/objectconstructor/getownpropertydescriptors/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/objectconstructor/groupby/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/objectconstructor/groupby/keyselector/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/objectconstructor/values/</loc>
@@ -11458,6 +11473,84 @@
     <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/readonlyarray/some/predicate/</loc>
   </url>
   <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/readonlyarray/tolocalestring/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/readonlyarray/tolocalestring/options/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/readonlyarray/tolocalestring/options/compactdisplay/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/readonlyarray/tolocalestring/options/currencysign/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/readonlyarray/tolocalestring/options/datestyle/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/readonlyarray/tolocalestring/options/day/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/readonlyarray/tolocalestring/options/dayperiod/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/readonlyarray/tolocalestring/options/era/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/readonlyarray/tolocalestring/options/formatmatcher/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/readonlyarray/tolocalestring/options/fractionalseconddigits/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/readonlyarray/tolocalestring/options/hour/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/readonlyarray/tolocalestring/options/hourcycle/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/readonlyarray/tolocalestring/options/localematcher/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/readonlyarray/tolocalestring/options/minute/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/readonlyarray/tolocalestring/options/month/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/readonlyarray/tolocalestring/options/notation/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/readonlyarray/tolocalestring/options/roundingmode/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/readonlyarray/tolocalestring/options/roundingpriority/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/readonlyarray/tolocalestring/options/second/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/readonlyarray/tolocalestring/options/timestyle/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/readonlyarray/tolocalestring/options/timezonename/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/readonlyarray/tolocalestring/options/trailingzerodisplay/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/readonlyarray/tolocalestring/options/unitdisplay/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/readonlyarray/tolocalestring/options/usegrouping/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/readonlyarray/tolocalestring/options/weekday/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/readonlyarray/tolocalestring/options/year/</loc>
+  </url>
+  <url>
     <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/readonlyarray/tosorted/</loc>
   </url>
   <url>
@@ -11482,13 +11575,373 @@
     <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/readonlyset/foreach/callbackfn/</loc>
   </url>
   <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/readonlysetlike/</loc>
+  </url>
+  <url>
     <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/</loc>
   </url>
   <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/every/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/every/predicate-1/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/every/predicate/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/filter/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/filter/predicate-1/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/filter/predicate/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/find/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/find/predicate-1/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/find/predicate/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/findindex/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/findindex/predicate/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/findlast/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/findlast/predicate-1/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/findlast/predicate/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/findlastindex/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/findlastindex/predicate/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/flatmap/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/flatmap/callback/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/foreach/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/foreach/callbackfn/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/map/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/map/callbackfn/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/reduce/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/reduce/callbackfn-1/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/reduce/callbackfn/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/reduceright/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/reduceright/callbackfn-1/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/reduceright/callbackfn/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/some/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/some/predicate/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/tolocalestring/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/tolocalestring/options/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/tolocalestring/options/compactdisplay/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/tolocalestring/options/currencysign/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/tolocalestring/options/datestyle/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/tolocalestring/options/day/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/tolocalestring/options/dayperiod/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/tolocalestring/options/era/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/tolocalestring/options/formatmatcher/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/tolocalestring/options/fractionalseconddigits/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/tolocalestring/options/hour/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/tolocalestring/options/hourcycle/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/tolocalestring/options/localematcher/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/tolocalestring/options/minute/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/tolocalestring/options/month/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/tolocalestring/options/notation/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/tolocalestring/options/roundingmode/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/tolocalestring/options/roundingpriority/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/tolocalestring/options/second/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/tolocalestring/options/timestyle/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/tolocalestring/options/timezonename/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/tolocalestring/options/trailingzerodisplay/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/tolocalestring/options/unitdisplay/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/tolocalestring/options/usegrouping/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/tolocalestring/options/weekday/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/tolocalestring/options/year/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/tosorted/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/apply/argumentslist/tosorted/comparefn/</loc>
+  </url>
+  <url>
     <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/every/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/every/predicate-1/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/every/predicate/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/filter/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/filter/predicate-1/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/filter/predicate/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/find/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/find/predicate-1/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/find/predicate/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/findindex/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/findindex/predicate/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/findlast/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/findlast/predicate-1/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/findlast/predicate/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/findlastindex/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/findlastindex/predicate/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/flatmap/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/flatmap/callback/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/foreach/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/foreach/callbackfn/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/map/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/map/callbackfn/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/reduce/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/reduce/callbackfn-1/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/reduce/callbackfn/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/reduceright/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/reduceright/callbackfn-1/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/reduceright/callbackfn/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/some/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/some/predicate/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/tolocalestring/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/tolocalestring/options/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/tolocalestring/options/compactdisplay/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/tolocalestring/options/currencysign/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/tolocalestring/options/datestyle/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/tolocalestring/options/day/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/tolocalestring/options/dayperiod/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/tolocalestring/options/era/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/tolocalestring/options/formatmatcher/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/tolocalestring/options/fractionalseconddigits/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/tolocalestring/options/hour/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/tolocalestring/options/hourcycle/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/tolocalestring/options/localematcher/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/tolocalestring/options/minute/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/tolocalestring/options/month/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/tolocalestring/options/notation/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/tolocalestring/options/roundingmode/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/tolocalestring/options/roundingpriority/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/tolocalestring/options/second/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/tolocalestring/options/timestyle/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/tolocalestring/options/timezonename/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/tolocalestring/options/trailingzerodisplay/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/tolocalestring/options/unitdisplay/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/tolocalestring/options/usegrouping/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/tolocalestring/options/weekday/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/tolocalestring/options/year/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/tosorted/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/argumentslist/tosorted/comparefn/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/reflect/exports/construct/newtarget/</loc>
@@ -11507,6 +11960,12 @@
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/sharedarraybufferconstructor/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/sharedarraybufferconstructor/create/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/sharedarraybufferconstructor/create/options/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-types/glutinum-types/typescript/stringconstructor/</loc>
@@ -17338,6 +17797,9 @@
     <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/filesystemdirectoryhandle/</loc>
   </url>
   <url>
+    <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/filesystemdirectoryhandleasynciterator/</loc>
+  </url>
+  <url>
     <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/filesystemdirectoryreader/</loc>
   </url>
   <url>
@@ -17459,6 +17921,9 @@
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/formdataeventinit/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/formdataiterator/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/fragmentdirective/</loc>
@@ -18155,6 +18620,9 @@
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/headersinit/u3/case2/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/headersiterator/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/highlight/</loc>
@@ -18974,6 +19442,9 @@
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/mediakeystatusmap/foreach/callbackfn/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/mediakeystatusmapiterator/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/mediakeysystemaccess/</loc>
@@ -20011,6 +20482,9 @@
     <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/readablestream/getreader/options/</loc>
   </url>
   <url>
+    <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/readablestreamasynciterator/</loc>
+  </url>
+  <url>
     <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/readablestreambyobreader/</loc>
   </url>
   <url>
@@ -20929,6 +21403,9 @@
     <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/stylepropertymapreadonly/foreach/callbackfn/</loc>
   </url>
   <url>
+    <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/stylepropertymapreadonlyiterator/</loc>
+  </url>
+  <url>
     <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/stylesheet/</loc>
   </url>
   <url>
@@ -21599,6 +22076,9 @@
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/urlsearchparams/foreach/callbackfn/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/urlsearchparamsiterator/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-web/glutinum/web/useractivation/</loc>
