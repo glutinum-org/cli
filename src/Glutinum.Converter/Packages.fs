@@ -7,6 +7,14 @@ open Glutinum.Converter
 
 open Glutinum.Converter.Hosting
 
+/// Re-exported so consumers keep referring to them as `Packages.<Type>`
+type Host = Hosting.Host
+type InMemoryHost = Hosting.InMemoryHost
+type ResolvedInput = Hosting.ResolvedInput
+type SubpathEntry = Hosting.SubpathEntry
+type PackageDescription = Hosting.PackageDescription
+type InstalledPackage = Hosting.InstalledPackage
+
 type GenerationResult =
     {
         GlueAST: GlueAST.GlueType list
