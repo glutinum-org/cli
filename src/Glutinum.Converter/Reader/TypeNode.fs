@@ -1515,8 +1515,25 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                 | GlueType.TypeReference _ -> true
                 | _ -> false
 
-            if not references.IsEmpty && references |> List.forall isReference then
-                GlueType.IntersectionOfReferences references
+            // `WriteStream & { fd: 1 }`: the inherited constituents keep their overloads and the
+            // members of the literal ones are declared by the interface itself
+            let literalMembers =
+                intersectionTypeNode.types
+                |> Seq.toList
+                |> List.collect (fun constituent ->
+                    if constituent.kind = Ts.SyntaxKind.TypeLiteral then
+                        match reader.ReadTypeNode constituent with
+                        | GlueType.TypeLiteral typeLiteral -> typeLiteral.Members
+                        | _ -> []
+                    else
+                        []
+                )
+
+            let inheritable =
+                references |> List.filter (fun reference -> not (reference = GlueType.Discard))
+
+            if not inheritable.IsEmpty && inheritable |> List.forall isReference then
+                GlueType.IntersectionOfReferences(inheritable, literalMembers)
             else
                 GlueType.Primitive GluePrimitive.Any
         else

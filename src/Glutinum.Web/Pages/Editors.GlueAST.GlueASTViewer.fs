@@ -500,6 +500,36 @@ type GlueASTViewer =
                 ]
                 context
 
+        | GlueType.IntersectionOfReferences(references, members) ->
+            ASTViewer.renderNode
+                "IntersectionOfReferences"
+                [
+                    references
+                    |> List.map GlueASTViewer.GlueType
+                    |> ASTViewer.renderNode "References"
+                    members |> List.map GlueASTViewer.GlueMember |> ASTViewer.renderNode "Members"
+                ]
+                context
+
+        | GlueType.ConditionalType conditionalType ->
+            ASTViewer.renderNode
+                "ConditionalType"
+                [
+                    ASTViewer.renderNode "CheckType" [
+                        GlueASTViewer.GlueType conditionalType.CheckType
+                    ]
+                    ASTViewer.renderNode "ExtendsType" [
+                        GlueASTViewer.GlueType conditionalType.ExtendsType
+                    ]
+                    ASTViewer.renderNode "TrueType" [
+                        GlueASTViewer.GlueType conditionalType.TrueType
+                    ]
+                    ASTViewer.renderNode "FalseType" [
+                        GlueASTViewer.GlueType conditionalType.FalseType
+                    ]
+                ]
+                context
+
         | GlueType.IntersectionType intersectionType ->
             ASTViewer.renderNode
                 "IntersectionType"

@@ -7785,14 +7785,14 @@ TypeScript versions earlier than 5.7.""")>]
             ///
             /// <c>process.stdout</c> differs from other Node.js streams in important ways. See <c>note on process I/O</c> for more information.
             /// </summary>
-            abstract member stdout: obj with get, set
+            abstract member stdout: Process.stdout with get, set
             /// <summary>
             /// The <c>process.stderr</c> property returns a stream connected to<c>stderr</c> (fd <c>2</c>). It is a <c>net.Socket</c> (which is a <c>Duplex</c> stream) unless fd <c>2</c> refers to a file, in which case it is
             /// a <c>Writable</c> stream.
             ///
             /// <c>process.stderr</c> differs from other Node.js streams in important ways. See <c>note on process I/O</c> for more information.
             /// </summary>
-            abstract member stderr: obj with get, set
+            abstract member stderr: Process.stderr with get, set
             /// <summary>
             /// The <c>process.stdin</c> property returns a stream connected to<c>stdin</c> (fd <c>0</c>). It is a <c>net.Socket</c> (which is a <c>Duplex</c> stream) unless fd <c>0</c> refers to a file, in which case it is
             /// a <c>Readable</c> stream.
@@ -7806,7 +7806,7 @@ TypeScript versions earlier than 5.7.""")>]
             /// In "old" streams mode the <c>stdin</c> stream is paused by default, so one
             /// must call <c>process.stdin.resume()</c> to read from it. Note also that calling <c>process.stdin.resume()</c> itself would switch stream to "old" mode.
             /// </summary>
-            abstract member stdin: obj with get, set
+            abstract member stdin: Process.stdin with get, set
             /// <summary>
             /// The <c>process.argv</c> property returns an array containing the command-line
             /// arguments passed when the Node.js process was launched. The first element will
@@ -12544,6 +12544,24 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
                     nativeOnly
 
         module Process =
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type stdout =
+                inherit Node.NodeJS.WriteStream
+                abstract member fd: int with get, set
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type stderr =
+                inherit Node.NodeJS.WriteStream
+                abstract member fd: int with get, set
+
+            [<AllowNullLiteral>]
+            [<Interface>]
+            type stdin =
+                inherit Node.NodeJS.ReadStream
+                abstract member fd: int with get, set
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -137700,7 +137718,7 @@ SocketAddress.parse($0)""")>]
             /// </summary>
             [<ImportDefault("process")>]
             [<Emit("$0.stdout")>]
-            static member inline stdout: obj = nativeOnly
+            static member inline stdout: Exports.stdout__.Type = nativeOnly
 
             /// <summary>
             /// The <c>process.stderr</c> property returns a stream connected to<c>stderr</c> (fd <c>2</c>). It is a <c>net.Socket</c> (which is a <c>Duplex</c> stream) unless fd <c>2</c> refers to a file, in which case it is
@@ -137710,7 +137728,7 @@ SocketAddress.parse($0)""")>]
             /// </summary>
             [<ImportDefault("process")>]
             [<Emit("$0.stderr")>]
-            static member inline stderr: obj = nativeOnly
+            static member inline stderr: Exports.stderr__.Type = nativeOnly
 
             /// <summary>
             /// The <c>process.stdin</c> property returns a stream connected to<c>stdin</c> (fd <c>0</c>). It is a <c>net.Socket</c> (which is a <c>Duplex</c> stream) unless fd <c>0</c> refers to a file, in which case it is
@@ -137727,7 +137745,7 @@ SocketAddress.parse($0)""")>]
             /// </summary>
             [<ImportDefault("process")>]
             [<Emit("$0.stdin")>]
-            static member inline stdin: obj = nativeOnly
+            static member inline stdin: Exports.stdin__.Type = nativeOnly
 
             /// <summary>
             /// The <c>process.argv</c> property returns an array containing the command-line
@@ -141898,6 +141916,30 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
         module Exports =
 
             type listeners__ = delegate of value: obj * source: float -> unit
+
+            module stdout__ =
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type Type =
+                    inherit Node.NodeJS.WriteStream
+                    abstract member fd: int with get, set
+
+            module stderr__ =
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type Type =
+                    inherit Node.NodeJS.WriteStream
+                    abstract member fd: int with get, set
+
+            module stdin__ =
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type Type =
+                    inherit Node.NodeJS.ReadStream
+                    abstract member fd: int with get, set
 
             module finalization__ =
 
@@ -192841,6 +192883,7 @@ module UndiciTypes =
                 [<AllowNullLiteral>]
                 [<Interface>]
                 type body =
+                    inherit UndiciTypes.readable.BodyReadable
                     inherit UndiciTypes.dispatcher.Dispatcher_.BodyMixin
 
                 [<AllowNullLiteral>]
@@ -194042,6 +194085,7 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
             [<Interface>]
             type __proto__ =
                 inherit Node.EventTarget
+                inherit UndiciTypes.filereader.FileReader
 
             [<AllowNullLiteral>]
             [<Interface>]

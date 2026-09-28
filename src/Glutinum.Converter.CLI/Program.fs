@@ -101,6 +101,7 @@ let private write (outFile: string option) (content: string) =
 
         Log.info $"Bindings written to: %s{Path.resolve outFile}"
     | None ->
+        // `process.stdout` is typed from Glutinum.Node 1.0.0-beta.3 on, the cast goes away then
         let stdout: NodeJS.WriteStream = !!nodeProcess.stdout
 
         stdout.write (content, BufferEncoding.utf8) |> ignore

@@ -1428,7 +1428,7 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
         : FSharpFunctionType)
         |> FSharpType.Function
 
-    | GlueType.IntersectionOfReferences references ->
+    | GlueType.IntersectionOfReferences(references, members) ->
         // An interface can only inherit another interface, a reference to anything else
         // would not compile
         let bases = inheritableBases references
@@ -1453,7 +1453,7 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
                         FSharpTypeParameterInfo.Create(name)
                         |> FSharpTypeParameter.FSharpTypeParameter
                     )
-                Members = []
+                Members = TransformMembers.toFSharpMember context members
                 Inheritance = bases |> List.map (transformType context)
             }
             |> FSharpType.Interface
@@ -4791,10 +4791,14 @@ module Conditionals =
     /// The aliases standing for a conditional type, `Listener1<K, T> = Listener<K, T, F>` included
     let private aliases = Dictionary<string, GlueTypeAliasDeclaration>()
 
+    /// A class is printed as an F# interface too, unless it derives from `Error`
+    let private classes = Dictionary<string, GlueClassDeclaration>()
+
     let rec private collect (glueType: GlueType) =
         match glueType with
         | GlueType.TypeAliasDeclaration info -> allAliases.[info.FullName] <- info
         | GlueType.Interface info -> interfaces.[info.FullName] <- info
+        | GlueType.ClassDeclaration info -> classes.[info.FullName] <- info
         | GlueType.ModuleDeclaration info -> info.Types |> List.iter collect
         | GlueType.FileModule info -> info.Types |> List.iter collect
         | _ -> ()
@@ -4825,6 +4829,7 @@ module Conditionals =
         typeMemory.AddRange memory
         allAliases.Clear()
         interfaces.Clear()
+        classes.Clear()
         aliases.Clear()
         memory |> List.iter collect
 
@@ -4834,10 +4839,27 @@ module Conditionals =
 
     let isConditionalAlias (fullName: string) = aliases.ContainsKey fullName
 
+    /// An F# interface can't inherit the abstract class a JavaScript error is printed as
+    let rec private isErrorClass (visited: Set<string>) (fullName: string) =
+        match classes.TryGetValue fullName with
+        | false, _ -> false
+        | true, info ->
+            info.HeritageClauses
+            |> List.exists (
+                function
+                | GlueType.TypeReference typeReference ->
+                    (typeReference.IsStandardLibrary && typeReference.Name = "Error")
+                    || (not (visited.Contains typeReference.FullName)
+                        && isErrorClass (visited.Add fullName) typeReference.FullName)
+                | _ -> false
+            )
+
     /// Whether the declaration behind a reference is printed as an F# interface
     let isInterfaceDeclaration (fullName: string) =
         if interfaces.ContainsKey fullName then
             true
+        elif classes.ContainsKey fullName then
+            not (isErrorClass Set.empty fullName)
         elif allAliases.ContainsKey fullName then
             match allAliases.[fullName].Type with
             | GlueType.IntersectionType members -> not members.IsEmpty
@@ -7437,7 +7459,7 @@ let private transformTypeAliasDeclaration
             }
             |> FSharpType.Interface
 
-        | GlueType.IntersectionOfReferences references ->
+        | GlueType.IntersectionOfReferences(references, members) ->
             match inheritableBases references with
             | [] -> makeTypeAlias FSharpType.Object
             | bases ->
@@ -7447,7 +7469,7 @@ let private transformTypeAliasDeclaration
                     Name = typeAliasName
                     OriginalName = glueTypeAliasDeclaration.Name
                     TypeParameters = declarationTypeParameters.Value.TypeParameters
-                    Members = []
+                    Members = TransformMembers.toFSharpMember context members
                     Inheritance = bases |> List.map (transformType context)
                 }
                 |> FSharpType.Interface
