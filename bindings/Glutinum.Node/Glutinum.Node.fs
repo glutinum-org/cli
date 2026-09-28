@@ -7062,6 +7062,18 @@ TypeScript versions earlier than 5.7.""")>]
                     abstract member ``type``: GCFunction.Invoke.options.``type`` option with get, set
                     abstract member filename: string option with get, set
 
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (
+                            execution: string,
+                            ?flavor: GCFunction.Invoke.options.flavor,
+                            ?``type``: GCFunction.Invoke.options.``type``,
+                            ?filename: string
+                        )
+                        : options
+                        =
+                        nativeOnly
+
                 module options =
 
                     [<RequireQualifiedAccess>]
@@ -13388,6 +13400,12 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
                 | auto
                 | Case1 of bool
 
+                [<Emit("$0")>]
+                static member op_Implicit(value: bool) : colorMode = nativeOnly
+
+                [<Emit("$0")>]
+                static member op_ErasedCast(value: bool) : colorMode = nativeOnly
+
     [<AllowNullLiteral>]
     [<Interface>]
     type ErrorConstructor =
@@ -18916,6 +18934,13 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
                                 abstract member diff: Exports.Assert.Type.Create.options.diff option with get, set
                                 abstract member strict: bool option with get, set
 
+                                [<ParamObject; Emit("$0")>]
+                                static member Create
+                                    (?diff: Exports.Assert.Type.Create.options.diff, ?strict: bool)
+                                    : options
+                                    =
+                                    nativeOnly
+
                             module options =
 
                                 [<RequireQualifiedAccess>]
@@ -19001,6 +19026,13 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
                             /// </summary>
                             abstract member diff: Exports.Assert__.Type.Create.options.diff option with get, set
                             abstract member strict: bool option with get, set
+
+                            [<ParamObject; Emit("$0")>]
+                            static member Create
+                                (?diff: Exports.Assert__.Type.Create.options.diff, ?strict: bool)
+                                : options
+                                =
+                                nativeOnly
 
                         module options =
 
@@ -26525,6 +26557,12 @@ AsyncLocalStorage.snapshot()""")>]
             | ignore
             | Case1 of Node.stream.Stream
 
+            [<Emit("$0")>]
+            static member op_Implicit(value: Node.stream.Stream) : StdioNull = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Node.stream.Stream) : StdioNull = nativeOnly
+
         [<RequireQualifiedAccess>]
         [<StringEnum(CaseRules.None)>]
         type StdioPipeNamed =
@@ -26934,12 +26972,12 @@ AsyncLocalStorage.snapshot()""")>]
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     command: string * options: Node.child_process.ExecOptionsWithStringEncoding ->
-                        Node.child_process.PromiseWithChild<Exports.__promisify___2>
+                        Node.child_process.PromiseWithChild<Exports.__promisify__>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     command: string * options: Node.child_process.ExecOptions option ->
-                        Node.child_process.PromiseWithChild<Exports.__promisify___3>
+                        Node.child_process.PromiseWithChild<Exports.__promisify___2>
 
             module Exports =
 
@@ -26969,41 +27007,31 @@ AsyncLocalStorage.snapshot()""")>]
                 [<AllowNullLiteral>]
                 [<Interface>]
                 type __promisify___2 =
-                    abstract member stdout: string with get, set
-                    abstract member stderr: string with get, set
+                    abstract member stdout: U2<string, Node.NonSharedBuffer> with get, set
+                    abstract member stderr: U2<string, Node.NonSharedBuffer> with get, set
 
                     [<ParamObject; Emit("$0")>]
                     static member Create(stdout: string, stderr: string) : __promisify___2 =
                         nativeOnly
 
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type __promisify___3 =
-                    abstract member stdout: U2<string, Node.NonSharedBuffer> with get, set
-                    abstract member stderr: U2<string, Node.NonSharedBuffer> with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create(stdout: string, stderr: string) : __promisify___3 =
-                        nativeOnly
-
                     [<ParamObject; Emit("$0")>]
                     static member Create
                         (stdout: string, stderr: Node.NonSharedBuffer)
-                        : __promisify___3
+                        : __promisify___2
                         =
                         nativeOnly
 
                     [<ParamObject; Emit("$0")>]
                     static member Create
                         (stdout: Node.NonSharedBuffer, stderr: string)
-                        : __promisify___3
+                        : __promisify___2
                         =
                         nativeOnly
 
                     [<ParamObject; Emit("$0")>]
                     static member Create
                         (stdout: Node.NonSharedBuffer, stderr: Node.NonSharedBuffer)
-                        : __promisify___3
+                        : __promisify___2
                         =
                         nativeOnly
 
@@ -27104,176 +27132,102 @@ AsyncLocalStorage.snapshot()""")>]
             type Exports =
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    file: string -> Node.child_process.PromiseWithChild<Exports.__promisify___4>
+                    file: string -> Node.child_process.PromiseWithChild<Exports.__promisify___3>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     file: string * args: ResizeArray<string> option ->
-                        Node.child_process.PromiseWithChild<Exports.__promisify___5>
+                        Node.child_process.PromiseWithChild<Exports.__promisify___3>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     file: string * options: Node.child_process.ExecFileOptionsWithBufferEncoding ->
-                        Node.child_process.PromiseWithChild<Exports.__promisify___6>
+                        Node.child_process.PromiseWithChild<Exports.__promisify___4>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     file: string *
                     args: ResizeArray<string> option *
                     options: Node.child_process.ExecFileOptionsWithBufferEncoding ->
-                        Node.child_process.PromiseWithChild<Exports.__promisify___7>
+                        Node.child_process.PromiseWithChild<Exports.__promisify___4>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     file: string * options: Node.child_process.ExecFileOptionsWithStringEncoding ->
-                        Node.child_process.PromiseWithChild<Exports.__promisify___8>
+                        Node.child_process.PromiseWithChild<Exports.__promisify___3>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     file: string *
                     args: ResizeArray<string> option *
                     options: Node.child_process.ExecFileOptionsWithStringEncoding ->
-                        Node.child_process.PromiseWithChild<Exports.__promisify___9>
+                        Node.child_process.PromiseWithChild<Exports.__promisify___3>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     file: string * options: Node.child_process.ExecFileOptions option ->
-                        Node.child_process.PromiseWithChild<Exports.__promisify___10>
+                        Node.child_process.PromiseWithChild<Exports.__promisify___5>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     file: string *
                     args: ResizeArray<string> option *
                     options: Node.child_process.ExecFileOptions option ->
-                        Node.child_process.PromiseWithChild<Exports.__promisify___11>
+                        Node.child_process.PromiseWithChild<Exports.__promisify___5>
 
             module Exports =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type __promisify___4 =
+                type __promisify___3 =
                     abstract member stdout: string with get, set
                     abstract member stderr: string with get, set
 
                     [<ParamObject; Emit("$0")>]
-                    static member Create(stdout: string, stderr: string) : __promisify___4 =
+                    static member Create(stdout: string, stderr: string) : __promisify___3 =
+                        nativeOnly
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type __promisify___4 =
+                    abstract member stdout: Node.NonSharedBuffer with get, set
+                    abstract member stderr: Node.NonSharedBuffer with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (stdout: Node.NonSharedBuffer, stderr: Node.NonSharedBuffer)
+                        : __promisify___4
+                        =
                         nativeOnly
 
                 [<AllowNullLiteral>]
                 [<Interface>]
                 type __promisify___5 =
-                    abstract member stdout: string with get, set
-                    abstract member stderr: string with get, set
+                    abstract member stdout: U2<string, Node.NonSharedBuffer> with get, set
+                    abstract member stderr: U2<string, Node.NonSharedBuffer> with get, set
 
                     [<ParamObject; Emit("$0")>]
                     static member Create(stdout: string, stderr: string) : __promisify___5 =
                         nativeOnly
 
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type __promisify___6 =
-                    abstract member stdout: Node.NonSharedBuffer with get, set
-                    abstract member stderr: Node.NonSharedBuffer with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create
-                        (stdout: Node.NonSharedBuffer, stderr: Node.NonSharedBuffer)
-                        : __promisify___6
-                        =
-                        nativeOnly
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type __promisify___7 =
-                    abstract member stdout: Node.NonSharedBuffer with get, set
-                    abstract member stderr: Node.NonSharedBuffer with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create
-                        (stdout: Node.NonSharedBuffer, stderr: Node.NonSharedBuffer)
-                        : __promisify___7
-                        =
-                        nativeOnly
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type __promisify___8 =
-                    abstract member stdout: string with get, set
-                    abstract member stderr: string with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create(stdout: string, stderr: string) : __promisify___8 =
-                        nativeOnly
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type __promisify___9 =
-                    abstract member stdout: string with get, set
-                    abstract member stderr: string with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create(stdout: string, stderr: string) : __promisify___9 =
-                        nativeOnly
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type __promisify___10 =
-                    abstract member stdout: U2<string, Node.NonSharedBuffer> with get, set
-                    abstract member stderr: U2<string, Node.NonSharedBuffer> with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create(stdout: string, stderr: string) : __promisify___10 =
-                        nativeOnly
-
                     [<ParamObject; Emit("$0")>]
                     static member Create
                         (stdout: string, stderr: Node.NonSharedBuffer)
-                        : __promisify___10
+                        : __promisify___5
                         =
                         nativeOnly
 
                     [<ParamObject; Emit("$0")>]
                     static member Create
                         (stdout: Node.NonSharedBuffer, stderr: string)
-                        : __promisify___10
+                        : __promisify___5
                         =
                         nativeOnly
 
                     [<ParamObject; Emit("$0")>]
                     static member Create
                         (stdout: Node.NonSharedBuffer, stderr: Node.NonSharedBuffer)
-                        : __promisify___10
-                        =
-                        nativeOnly
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type __promisify___11 =
-                    abstract member stdout: U2<string, Node.NonSharedBuffer> with get, set
-                    abstract member stderr: U2<string, Node.NonSharedBuffer> with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create(stdout: string, stderr: string) : __promisify___11 =
-                        nativeOnly
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create
-                        (stdout: string, stderr: Node.NonSharedBuffer)
-                        : __promisify___11
-                        =
-                        nativeOnly
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create
-                        (stdout: Node.NonSharedBuffer, stderr: string)
-                        : __promisify___11
-                        =
-                        nativeOnly
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create
-                        (stdout: Node.NonSharedBuffer, stderr: Node.NonSharedBuffer)
-                        : __promisify___11
+                        : __promisify___5
                         =
                         nativeOnly
 
@@ -27827,6 +27781,25 @@ AsyncLocalStorage.snapshot()""")>]
                     | Case1 of Node.child_process.IOType
                     | Case2 of Node.stream.Stream
                     | Case3 of float
+
+                    [<Emit("$0")>]
+                    static member op_Implicit(value: Node.child_process.IOType) : Case2 = nativeOnly
+
+                    [<Emit("$0")>]
+                    static member op_ErasedCast(value: Node.child_process.IOType) : Case2 =
+                        nativeOnly
+
+                    [<Emit("$0")>]
+                    static member op_Implicit(value: Node.stream.Stream) : Case2 = nativeOnly
+
+                    [<Emit("$0")>]
+                    static member op_ErasedCast(value: Node.stream.Stream) : Case2 = nativeOnly
+
+                    [<Emit("$0")>]
+                    static member op_Implicit(value: float) : Case2 = nativeOnly
+
+                    [<Emit("$0")>]
+                    static member op_ErasedCast(value: float) : Case2 = nativeOnly
 
         module SpawnSyncOptions =
 
@@ -33031,6 +33004,296 @@ AsyncLocalStorage.snapshot()""")>]
                 /// Specifies the active default cipher list used by the current Node.js process  (colon-separated values).
                 /// </summary>
                 abstract member defaultCipherList: string with get
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        RTLD_LAZY: float,
+                        RTLD_NOW: float,
+                        RTLD_GLOBAL: float,
+                        RTLD_LOCAL: float,
+                        RTLD_DEEPBIND: float,
+                        E2BIG: float,
+                        EACCES: float,
+                        EADDRINUSE: float,
+                        EADDRNOTAVAIL: float,
+                        EAFNOSUPPORT: float,
+                        EAGAIN: float,
+                        EALREADY: float,
+                        EBADF: float,
+                        EBADMSG: float,
+                        EBUSY: float,
+                        ECANCELED: float,
+                        ECHILD: float,
+                        ECONNABORTED: float,
+                        ECONNREFUSED: float,
+                        ECONNRESET: float,
+                        EDEADLK: float,
+                        EDESTADDRREQ: float,
+                        EDOM: float,
+                        EDQUOT: float,
+                        EEXIST: float,
+                        EFAULT: float,
+                        EFBIG: float,
+                        EHOSTUNREACH: float,
+                        EIDRM: float,
+                        EILSEQ: float,
+                        EINPROGRESS: float,
+                        EINTR: float,
+                        EINVAL: float,
+                        EIO: float,
+                        EISCONN: float,
+                        EISDIR: float,
+                        ELOOP: float,
+                        EMFILE: float,
+                        EMLINK: float,
+                        EMSGSIZE: float,
+                        EMULTIHOP: float,
+                        ENAMETOOLONG: float,
+                        ENETDOWN: float,
+                        ENETRESET: float,
+                        ENETUNREACH: float,
+                        ENFILE: float,
+                        ENOBUFS: float,
+                        ENODATA: float,
+                        ENODEV: float,
+                        ENOENT: float,
+                        ENOEXEC: float,
+                        ENOLCK: float,
+                        ENOLINK: float,
+                        ENOMEM: float,
+                        ENOMSG: float,
+                        ENOPROTOOPT: float,
+                        ENOSPC: float,
+                        ENOSR: float,
+                        ENOSTR: float,
+                        ENOSYS: float,
+                        ENOTCONN: float,
+                        ENOTDIR: float,
+                        ENOTEMPTY: float,
+                        ENOTSOCK: float,
+                        ENOTSUP: float,
+                        ENOTTY: float,
+                        ENXIO: float,
+                        EOPNOTSUPP: float,
+                        EOVERFLOW: float,
+                        EPERM: float,
+                        EPIPE: float,
+                        EPROTO: float,
+                        EPROTONOSUPPORT: float,
+                        EPROTOTYPE: float,
+                        ERANGE: float,
+                        EROFS: float,
+                        ESPIPE: float,
+                        ESRCH: float,
+                        ESTALE: float,
+                        ETIME: float,
+                        ETIMEDOUT: float,
+                        ETXTBSY: float,
+                        EWOULDBLOCK: float,
+                        EXDEV: float,
+                        WSAEINTR: float,
+                        WSAEBADF: float,
+                        WSAEACCES: float,
+                        WSAEFAULT: float,
+                        WSAEINVAL: float,
+                        WSAEMFILE: float,
+                        WSAEWOULDBLOCK: float,
+                        WSAEINPROGRESS: float,
+                        WSAEALREADY: float,
+                        WSAENOTSOCK: float,
+                        WSAEDESTADDRREQ: float,
+                        WSAEMSGSIZE: float,
+                        WSAEPROTOTYPE: float,
+                        WSAENOPROTOOPT: float,
+                        WSAEPROTONOSUPPORT: float,
+                        WSAESOCKTNOSUPPORT: float,
+                        WSAEOPNOTSUPP: float,
+                        WSAEPFNOSUPPORT: float,
+                        WSAEAFNOSUPPORT: float,
+                        WSAEADDRINUSE: float,
+                        WSAEADDRNOTAVAIL: float,
+                        WSAENETDOWN: float,
+                        WSAENETUNREACH: float,
+                        WSAENETRESET: float,
+                        WSAECONNABORTED: float,
+                        WSAECONNRESET: float,
+                        WSAENOBUFS: float,
+                        WSAEISCONN: float,
+                        WSAENOTCONN: float,
+                        WSAESHUTDOWN: float,
+                        WSAETOOMANYREFS: float,
+                        WSAETIMEDOUT: float,
+                        WSAECONNREFUSED: float,
+                        WSAELOOP: float,
+                        WSAENAMETOOLONG: float,
+                        WSAEHOSTDOWN: float,
+                        WSAEHOSTUNREACH: float,
+                        WSAENOTEMPTY: float,
+                        WSAEPROCLIM: float,
+                        WSAEUSERS: float,
+                        WSAEDQUOT: float,
+                        WSAESTALE: float,
+                        WSAEREMOTE: float,
+                        WSASYSNOTREADY: float,
+                        WSAVERNOTSUPPORTED: float,
+                        WSANOTINITIALISED: float,
+                        WSAEDISCON: float,
+                        WSAENOMORE: float,
+                        WSAECANCELLED: float,
+                        WSAEINVALIDPROCTABLE: float,
+                        WSAEINVALIDPROVIDER: float,
+                        WSAEPROVIDERFAILEDINIT: float,
+                        WSASYSCALLFAILURE: float,
+                        WSASERVICE_NOT_FOUND: float,
+                        WSATYPE_NOT_FOUND: float,
+                        WSA_E_NO_MORE: float,
+                        WSA_E_CANCELLED: float,
+                        WSAEREFUSED: float,
+                        PRIORITY_LOW: float,
+                        PRIORITY_BELOW_NORMAL: float,
+                        PRIORITY_NORMAL: float,
+                        PRIORITY_ABOVE_NORMAL: float,
+                        PRIORITY_HIGH: float,
+                        PRIORITY_HIGHEST: float,
+                        SIGABRT: float,
+                        SIGALRM: float,
+                        SIGBUS: float,
+                        SIGCHLD: float,
+                        SIGCONT: float,
+                        SIGFPE: float,
+                        SIGHUP: float,
+                        SIGILL: float,
+                        SIGINT: float,
+                        SIGIO: float,
+                        SIGIOT: float,
+                        SIGKILL: float,
+                        SIGPIPE: float,
+                        SIGPOLL: float,
+                        SIGPROF: float,
+                        SIGPWR: float,
+                        SIGQUIT: float,
+                        SIGSEGV: float,
+                        SIGSTKFLT: float,
+                        SIGSTOP: float,
+                        SIGSYS: float,
+                        SIGTERM: float,
+                        SIGTRAP: float,
+                        SIGTSTP: float,
+                        SIGTTIN: float,
+                        SIGTTOU: float,
+                        SIGUNUSED: float,
+                        SIGURG: float,
+                        SIGUSR1: float,
+                        SIGUSR2: float,
+                        SIGVTALRM: float,
+                        SIGWINCH: float,
+                        SIGXCPU: float,
+                        SIGXFSZ: float,
+                        SIGBREAK: float,
+                        SIGLOST: float,
+                        SIGINFO: float,
+                        F_OK: float,
+                        R_OK: float,
+                        W_OK: float,
+                        X_OK: float,
+                        COPYFILE_EXCL: float,
+                        COPYFILE_FICLONE: float,
+                        COPYFILE_FICLONE_FORCE: float,
+                        O_RDONLY: float,
+                        O_WRONLY: float,
+                        O_RDWR: float,
+                        O_CREAT: float,
+                        O_EXCL: float,
+                        O_NOCTTY: float,
+                        O_TRUNC: float,
+                        O_APPEND: float,
+                        O_DIRECTORY: float,
+                        O_NOATIME: float,
+                        O_NOFOLLOW: float,
+                        O_SYNC: float,
+                        O_DSYNC: float,
+                        O_SYMLINK: float,
+                        O_DIRECT: float,
+                        O_NONBLOCK: float,
+                        S_IFMT: float,
+                        S_IFREG: float,
+                        S_IFDIR: float,
+                        S_IFCHR: float,
+                        S_IFBLK: float,
+                        S_IFIFO: float,
+                        S_IFLNK: float,
+                        S_IFSOCK: float,
+                        S_IRWXU: float,
+                        S_IRUSR: float,
+                        S_IWUSR: float,
+                        S_IXUSR: float,
+                        S_IRWXG: float,
+                        S_IRGRP: float,
+                        S_IWGRP: float,
+                        S_IXGRP: float,
+                        S_IRWXO: float,
+                        S_IROTH: float,
+                        S_IWOTH: float,
+                        S_IXOTH: float,
+                        UV_FS_O_FILEMAP: float,
+                        OPENSSL_VERSION_NUMBER: float,
+                        SSL_OP_ALL: float,
+                        SSL_OP_ALLOW_NO_DHE_KEX: float,
+                        SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION: float,
+                        SSL_OP_CIPHER_SERVER_PREFERENCE: float,
+                        SSL_OP_CISCO_ANYCONNECT: float,
+                        SSL_OP_COOKIE_EXCHANGE: float,
+                        SSL_OP_CRYPTOPRO_TLSEXT_BUG: float,
+                        SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS: float,
+                        SSL_OP_LEGACY_SERVER_CONNECT: float,
+                        SSL_OP_NO_COMPRESSION: float,
+                        SSL_OP_NO_ENCRYPT_THEN_MAC: float,
+                        SSL_OP_NO_QUERY_MTU: float,
+                        SSL_OP_NO_RENEGOTIATION: float,
+                        SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION: float,
+                        SSL_OP_NO_SSLv2: float,
+                        SSL_OP_NO_SSLv3: float,
+                        SSL_OP_NO_TICKET: float,
+                        SSL_OP_NO_TLSv1: float,
+                        SSL_OP_NO_TLSv1_1: float,
+                        SSL_OP_NO_TLSv1_2: float,
+                        SSL_OP_NO_TLSv1_3: float,
+                        SSL_OP_PRIORITIZE_CHACHA: float,
+                        SSL_OP_TLS_ROLLBACK_BUG: float,
+                        ENGINE_METHOD_RSA: float,
+                        ENGINE_METHOD_DSA: float,
+                        ENGINE_METHOD_DH: float,
+                        ENGINE_METHOD_RAND: float,
+                        ENGINE_METHOD_EC: float,
+                        ENGINE_METHOD_CIPHERS: float,
+                        ENGINE_METHOD_DIGESTS: float,
+                        ENGINE_METHOD_PKEY_METHS: float,
+                        ENGINE_METHOD_PKEY_ASN1_METHS: float,
+                        ENGINE_METHOD_ALL: float,
+                        ENGINE_METHOD_NONE: float,
+                        DH_CHECK_P_NOT_SAFE_PRIME: float,
+                        DH_CHECK_P_NOT_PRIME: float,
+                        DH_UNABLE_TO_CHECK_GENERATOR: float,
+                        DH_NOT_SUITABLE_GENERATOR: float,
+                        RSA_PKCS1_PADDING: float,
+                        RSA_SSLV23_PADDING: float,
+                        RSA_NO_PADDING: float,
+                        RSA_PKCS1_OAEP_PADDING: float,
+                        RSA_X931_PADDING: float,
+                        RSA_PKCS1_PSS_PADDING: float,
+                        RSA_PSS_SALTLEN_DIGEST: float,
+                        RSA_PSS_SALTLEN_MAX_SIGN: float,
+                        RSA_PSS_SALTLEN_AUTO: float,
+                        POINT_CONVERSION_COMPRESSED: float,
+                        POINT_CONVERSION_UNCOMPRESSED: float,
+                        POINT_CONVERSION_HYBRID: float,
+                        defaultCoreCipherList: string,
+                        defaultCipherList: string
+                    )
+                    : constants__
+                    =
+                    nativeOnly
 
     module crypto =
 
@@ -43317,7 +43580,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     ``type``: string * options: Node.crypto.RSAKeyPairOptions<string, string> ->
-                        JS.Promise<Exports.__promisify___12>
+                        JS.Promise<Exports.__promisify___6>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
@@ -43327,7 +43590,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     ``type``: string * options: Node.crypto.RSAPSSKeyPairOptions<string, string> ->
-                        JS.Promise<Exports.__promisify___16>
+                        JS.Promise<Exports.__promisify___6>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
@@ -43337,7 +43600,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     ``type``: string * options: Node.crypto.DSAKeyPairOptions<string, string> ->
-                        JS.Promise<Exports.__promisify___20>
+                        JS.Promise<Exports.__promisify___6>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
@@ -43347,7 +43610,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     ``type``: string * options: Node.crypto.ECKeyPairOptions<string, string> ->
-                        JS.Promise<Exports.__promisify___24>
+                        JS.Promise<Exports.__promisify___6>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
@@ -43357,7 +43620,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     ``type``: string * options: Node.crypto.ED25519KeyPairOptions<string, string> ->
-                        JS.Promise<Exports.__promisify___28>
+                        JS.Promise<Exports.__promisify___6>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
@@ -43367,7 +43630,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     ``type``: string * options: Node.crypto.ED448KeyPairOptions<string, string> ->
-                        JS.Promise<Exports.__promisify___32>
+                        JS.Promise<Exports.__promisify___6>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
@@ -43377,7 +43640,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     ``type``: string * options: Node.crypto.X25519KeyPairOptions<string, string> ->
-                        JS.Promise<Exports.__promisify___36>
+                        JS.Promise<Exports.__promisify___6>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
@@ -43387,7 +43650,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     ``type``: string * options: Node.crypto.X448KeyPairOptions<string, string> ->
-                        JS.Promise<Exports.__promisify___40>
+                        JS.Promise<Exports.__promisify___6>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
@@ -43398,393 +43661,50 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type __promisify___12 =
+                type __promisify___6 =
                     abstract member publicKey: string with get, set
                     abstract member privateKey: string with get, set
 
                     [<ParamObject; Emit("$0")>]
-                    static member Create(publicKey: string, privateKey: string) : __promisify___12 =
+                    static member Create(publicKey: string, privateKey: string) : __promisify___6 =
                         nativeOnly
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type __promisify___13 =
-                    abstract member publicKey: string with get, set
-                    abstract member privateKey: Node.NonSharedBuffer with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create
-                        (publicKey: string, privateKey: Node.NonSharedBuffer)
-                        : __promisify___13
-                        =
-                        nativeOnly
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type __promisify___14 =
-                    abstract member publicKey: Node.NonSharedBuffer with get, set
-                    abstract member privateKey: string with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create
-                        (publicKey: Node.NonSharedBuffer, privateKey: string)
-                        : __promisify___14
-                        =
-                        nativeOnly
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type __promisify___15 =
-                    abstract member publicKey: Node.NonSharedBuffer with get, set
-                    abstract member privateKey: Node.NonSharedBuffer with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create
-                        (publicKey: Node.NonSharedBuffer, privateKey: Node.NonSharedBuffer)
-                        : __promisify___15
-                        =
-                        nativeOnly
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type __promisify___16 =
-                    abstract member publicKey: string with get, set
-                    abstract member privateKey: string with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create(publicKey: string, privateKey: string) : __promisify___16 =
-                        nativeOnly
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type __promisify___17 =
+                type __promisify___7 =
                     abstract member publicKey: string with get, set
                     abstract member privateKey: Node.NonSharedBuffer with get, set
 
                     [<ParamObject; Emit("$0")>]
                     static member Create
                         (publicKey: string, privateKey: Node.NonSharedBuffer)
-                        : __promisify___17
+                        : __promisify___7
                         =
                         nativeOnly
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type __promisify___18 =
+                type __promisify___8 =
                     abstract member publicKey: Node.NonSharedBuffer with get, set
                     abstract member privateKey: string with get, set
 
                     [<ParamObject; Emit("$0")>]
                     static member Create
                         (publicKey: Node.NonSharedBuffer, privateKey: string)
-                        : __promisify___18
+                        : __promisify___8
                         =
                         nativeOnly
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type __promisify___19 =
+                type __promisify___9 =
                     abstract member publicKey: Node.NonSharedBuffer with get, set
                     abstract member privateKey: Node.NonSharedBuffer with get, set
 
                     [<ParamObject; Emit("$0")>]
                     static member Create
                         (publicKey: Node.NonSharedBuffer, privateKey: Node.NonSharedBuffer)
-                        : __promisify___19
-                        =
-                        nativeOnly
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type __promisify___20 =
-                    abstract member publicKey: string with get, set
-                    abstract member privateKey: string with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create(publicKey: string, privateKey: string) : __promisify___20 =
-                        nativeOnly
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type __promisify___21 =
-                    abstract member publicKey: string with get, set
-                    abstract member privateKey: Node.NonSharedBuffer with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create
-                        (publicKey: string, privateKey: Node.NonSharedBuffer)
-                        : __promisify___21
-                        =
-                        nativeOnly
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type __promisify___22 =
-                    abstract member publicKey: Node.NonSharedBuffer with get, set
-                    abstract member privateKey: string with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create
-                        (publicKey: Node.NonSharedBuffer, privateKey: string)
-                        : __promisify___22
-                        =
-                        nativeOnly
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type __promisify___23 =
-                    abstract member publicKey: Node.NonSharedBuffer with get, set
-                    abstract member privateKey: Node.NonSharedBuffer with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create
-                        (publicKey: Node.NonSharedBuffer, privateKey: Node.NonSharedBuffer)
-                        : __promisify___23
-                        =
-                        nativeOnly
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type __promisify___24 =
-                    abstract member publicKey: string with get, set
-                    abstract member privateKey: string with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create(publicKey: string, privateKey: string) : __promisify___24 =
-                        nativeOnly
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type __promisify___25 =
-                    abstract member publicKey: string with get, set
-                    abstract member privateKey: Node.NonSharedBuffer with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create
-                        (publicKey: string, privateKey: Node.NonSharedBuffer)
-                        : __promisify___25
-                        =
-                        nativeOnly
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type __promisify___26 =
-                    abstract member publicKey: Node.NonSharedBuffer with get, set
-                    abstract member privateKey: string with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create
-                        (publicKey: Node.NonSharedBuffer, privateKey: string)
-                        : __promisify___26
-                        =
-                        nativeOnly
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type __promisify___27 =
-                    abstract member publicKey: Node.NonSharedBuffer with get, set
-                    abstract member privateKey: Node.NonSharedBuffer with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create
-                        (publicKey: Node.NonSharedBuffer, privateKey: Node.NonSharedBuffer)
-                        : __promisify___27
-                        =
-                        nativeOnly
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type __promisify___28 =
-                    abstract member publicKey: string with get, set
-                    abstract member privateKey: string with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create(publicKey: string, privateKey: string) : __promisify___28 =
-                        nativeOnly
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type __promisify___29 =
-                    abstract member publicKey: string with get, set
-                    abstract member privateKey: Node.NonSharedBuffer with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create
-                        (publicKey: string, privateKey: Node.NonSharedBuffer)
-                        : __promisify___29
-                        =
-                        nativeOnly
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type __promisify___30 =
-                    abstract member publicKey: Node.NonSharedBuffer with get, set
-                    abstract member privateKey: string with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create
-                        (publicKey: Node.NonSharedBuffer, privateKey: string)
-                        : __promisify___30
-                        =
-                        nativeOnly
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type __promisify___31 =
-                    abstract member publicKey: Node.NonSharedBuffer with get, set
-                    abstract member privateKey: Node.NonSharedBuffer with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create
-                        (publicKey: Node.NonSharedBuffer, privateKey: Node.NonSharedBuffer)
-                        : __promisify___31
-                        =
-                        nativeOnly
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type __promisify___32 =
-                    abstract member publicKey: string with get, set
-                    abstract member privateKey: string with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create(publicKey: string, privateKey: string) : __promisify___32 =
-                        nativeOnly
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type __promisify___33 =
-                    abstract member publicKey: string with get, set
-                    abstract member privateKey: Node.NonSharedBuffer with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create
-                        (publicKey: string, privateKey: Node.NonSharedBuffer)
-                        : __promisify___33
-                        =
-                        nativeOnly
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type __promisify___34 =
-                    abstract member publicKey: Node.NonSharedBuffer with get, set
-                    abstract member privateKey: string with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create
-                        (publicKey: Node.NonSharedBuffer, privateKey: string)
-                        : __promisify___34
-                        =
-                        nativeOnly
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type __promisify___35 =
-                    abstract member publicKey: Node.NonSharedBuffer with get, set
-                    abstract member privateKey: Node.NonSharedBuffer with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create
-                        (publicKey: Node.NonSharedBuffer, privateKey: Node.NonSharedBuffer)
-                        : __promisify___35
-                        =
-                        nativeOnly
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type __promisify___36 =
-                    abstract member publicKey: string with get, set
-                    abstract member privateKey: string with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create(publicKey: string, privateKey: string) : __promisify___36 =
-                        nativeOnly
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type __promisify___37 =
-                    abstract member publicKey: string with get, set
-                    abstract member privateKey: Node.NonSharedBuffer with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create
-                        (publicKey: string, privateKey: Node.NonSharedBuffer)
-                        : __promisify___37
-                        =
-                        nativeOnly
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type __promisify___38 =
-                    abstract member publicKey: Node.NonSharedBuffer with get, set
-                    abstract member privateKey: string with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create
-                        (publicKey: Node.NonSharedBuffer, privateKey: string)
-                        : __promisify___38
-                        =
-                        nativeOnly
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type __promisify___39 =
-                    abstract member publicKey: Node.NonSharedBuffer with get, set
-                    abstract member privateKey: Node.NonSharedBuffer with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create
-                        (publicKey: Node.NonSharedBuffer, privateKey: Node.NonSharedBuffer)
-                        : __promisify___39
-                        =
-                        nativeOnly
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type __promisify___40 =
-                    abstract member publicKey: string with get, set
-                    abstract member privateKey: string with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create(publicKey: string, privateKey: string) : __promisify___40 =
-                        nativeOnly
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type __promisify___41 =
-                    abstract member publicKey: string with get, set
-                    abstract member privateKey: Node.NonSharedBuffer with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create
-                        (publicKey: string, privateKey: Node.NonSharedBuffer)
-                        : __promisify___41
-                        =
-                        nativeOnly
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type __promisify___42 =
-                    abstract member publicKey: Node.NonSharedBuffer with get, set
-                    abstract member privateKey: string with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create
-                        (publicKey: Node.NonSharedBuffer, privateKey: string)
-                        : __promisify___42
-                        =
-                        nativeOnly
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type __promisify___43 =
-                    abstract member publicKey: Node.NonSharedBuffer with get, set
-                    abstract member privateKey: Node.NonSharedBuffer with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create
-                        (publicKey: Node.NonSharedBuffer, privateKey: Node.NonSharedBuffer)
-                        : __promisify___43
+                        : __promisify___9
                         =
                         nativeOnly
 
@@ -46713,6 +46633,18 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                 abstract member passphrase: string option with get, set
                 abstract member ``type``: RSAKeyPairOptions.privateKeyEncoding.``type`` with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        format: 'PrivF,
+                        ``type``: RSAKeyPairOptions.privateKeyEncoding.``type``,
+                        ?cipher: string,
+                        ?passphrase: string
+                    )
+                    : privateKeyEncoding<'PrivF>
+                    =
+                    nativeOnly
+
             module publicKeyEncoding =
 
                 [<RequireQualifiedAccess>]
@@ -46749,6 +46681,13 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                 abstract member passphrase: string option with get, set
                 abstract member ``type``: string with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (format: 'PrivF, ``type``: string, ?cipher: string, ?passphrase: string)
+                    : privateKeyEncoding<'PrivF>
+                    =
+                    nativeOnly
+
         module DSAKeyPairOptions =
 
             [<AllowNullLiteral>]
@@ -46768,6 +46707,13 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                 abstract member cipher: string option with get, set
                 abstract member passphrase: string option with get, set
                 abstract member ``type``: string with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (format: 'PrivF, ``type``: string, ?cipher: string, ?passphrase: string)
+                    : privateKeyEncoding<'PrivF>
+                    =
+                    nativeOnly
 
         module ECKeyPairOptions =
 
@@ -46791,6 +46737,18 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                 abstract member cipher: string option with get, set
                 abstract member passphrase: string option with get, set
                 abstract member ``type``: ECKeyPairOptions.privateKeyEncoding.``type`` with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        format: 'PrivF,
+                        ``type``: ECKeyPairOptions.privateKeyEncoding.``type``,
+                        ?cipher: string,
+                        ?passphrase: string
+                    )
+                    : privateKeyEncoding<'PrivF>
+                    =
+                    nativeOnly
 
             module publicKeyEncoding =
 
@@ -46828,6 +46786,13 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                 abstract member passphrase: string option with get, set
                 abstract member ``type``: string with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (format: 'PrivF, ``type``: string, ?cipher: string, ?passphrase: string)
+                    : privateKeyEncoding<'PrivF>
+                    =
+                    nativeOnly
+
         module ED448KeyPairOptions =
 
             [<AllowNullLiteral>]
@@ -46847,6 +46812,13 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                 abstract member cipher: string option with get, set
                 abstract member passphrase: string option with get, set
                 abstract member ``type``: string with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (format: 'PrivF, ``type``: string, ?cipher: string, ?passphrase: string)
+                    : privateKeyEncoding<'PrivF>
+                    =
+                    nativeOnly
 
         module X25519KeyPairOptions =
 
@@ -46868,6 +46840,13 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                 abstract member passphrase: string option with get, set
                 abstract member ``type``: string with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (format: 'PrivF, ``type``: string, ?cipher: string, ?passphrase: string)
+                    : privateKeyEncoding<'PrivF>
+                    =
+                    nativeOnly
+
         module X448KeyPairOptions =
 
             [<AllowNullLiteral>]
@@ -46887,6 +46866,13 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                 abstract member cipher: string option with get, set
                 abstract member passphrase: string option with get, set
                 abstract member ``type``: string with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (format: 'PrivF, ``type``: string, ?cipher: string, ?passphrase: string)
+                    : privateKeyEncoding<'PrivF>
+                    =
+                    nativeOnly
 
         module X509CheckOptions =
 
@@ -51907,6 +51893,9 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                     abstract member error: obj option with get, set
                     abstract member result: obj option with get, set
 
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(?error: obj, ?result: obj) : message = nativeOnly
+
             module asyncStart =
 
                 [<AllowNullLiteral>]
@@ -51914,6 +51903,9 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                 type message =
                     abstract member error: obj option with get, set
                     abstract member result: obj option with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(?error: obj, ?result: obj) : message = nativeOnly
 
             module asyncEnd =
 
@@ -51923,12 +51915,18 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                     abstract member error: obj option with get, set
                     abstract member result: obj option with get, set
 
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(?error: obj, ?result: obj) : message = nativeOnly
+
             module error =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
                 type message =
                     abstract member error: obj with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(error: obj) : message = nativeOnly
 
     module dns =
 
@@ -53015,18 +53013,18 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
             type Exports =
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    address: string * port: float -> JS.Promise<Exports.__promisify___44>
+                    address: string * port: float -> JS.Promise<Exports.__promisify___10>
 
             module Exports =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type __promisify___44 =
+                type __promisify___10 =
                     abstract member hostname: string with get, set
                     abstract member service: string with get, set
 
                     [<ParamObject; Emit("$0")>]
-                    static member Create(hostname: string, service: string) : __promisify___44 =
+                    static member Create(hostname: string, service: string) : __promisify___10 =
                         nativeOnly
 
         [<AllowNullLiteral>]
@@ -53451,6 +53449,12 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                 | IPv6
                 | Case1 of float
 
+                [<Emit("$0")>]
+                static member op_Implicit(value: float) : family = nativeOnly
+
+                [<Emit("$0")>]
+                static member op_ErasedCast(value: float) : family = nativeOnly
+
             [<RequireQualifiedAccess>]
             [<StringEnum(CaseRules.None)>]
             type order =
@@ -53467,6 +53471,12 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                 | IPv6
                 | Case1 of float
 
+                [<Emit("$0")>]
+                static member op_Implicit(value: float) : family = nativeOnly
+
+                [<Emit("$0")>]
+                static member op_ErasedCast(value: float) : family = nativeOnly
+
             [<RequireQualifiedAccess>]
             [<StringEnum(CaseRules.None)>]
             type order =
@@ -53482,6 +53492,12 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                 | IPv4
                 | IPv6
                 | Case1 of float
+
+                [<Emit("$0")>]
+                static member op_Implicit(value: float) : family = nativeOnly
+
+                [<Emit("$0")>]
+                static member op_ErasedCast(value: float) : family = nativeOnly
 
             [<RequireQualifiedAccess>]
             [<StringEnum(CaseRules.None)>]
@@ -73477,6 +73493,20 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             | buffer
             | Case1 of BufferEncodingOption.Cases.Case1
 
+            [<Emit("$0")>]
+            static member op_Implicit
+                (value: BufferEncodingOption.Cases.Case1)
+                : BufferEncodingOption
+                =
+                nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast
+                (value: BufferEncodingOption.Cases.Case1)
+                : BufferEncodingOption
+                =
+                nativeOnly
+
         [<AllowNullLiteral>]
         [<Interface>]
         type ObjectEncodingOptions =
@@ -75629,10 +75659,16 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                     type options =
                         abstract member bigint: bool option with get, set
 
+                        [<ParamObject; Emit("$0")>]
+                        static member Create(?bigint: bool) : options = nativeOnly
+
                     [<AllowNullLiteral>]
                     [<Interface>]
                     type options_1 =
                         abstract member bigint: bool with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create(bigint: bool) : options_1 = nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -75656,6 +75692,11 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             [<Emit("$0($1...)")>]
             abstract member Invoke:
                 path: Node.fs.PathLike * options: StatSyncFn.Invoke.options_3 -> Node.fs.BigIntStats
+
+            [<Emit("$0($1...)")>]
+            abstract member Invoke:
+                path: Node.fs.PathLike * options: StatSyncFn.Invoke.options_4 ->
+                    U2<Node.fs.Stats, Node.fs.BigIntStats>
 
             [<Emit("$0($1...)")>]
             abstract member Invoke:
@@ -75697,10 +75738,16 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                     type options_2 =
                         abstract member bigint: bool option with get, set
 
+                        [<ParamObject; Emit("$0")>]
+                        static member Create(?bigint: bool) : options_2 = nativeOnly
+
                     [<AllowNullLiteral>]
                     [<Interface>]
                     type options_3 =
                         abstract member bigint: bool with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create(bigint: bool) : options_3 = nativeOnly
 
         module lstat_ =
 
@@ -75779,10 +75826,16 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                     type options_4 =
                         abstract member bigint: bool option with get, set
 
+                        [<ParamObject; Emit("$0")>]
+                        static member Create(?bigint: bool) : options_4 = nativeOnly
+
                     [<AllowNullLiteral>]
                     [<Interface>]
                     type options_5 =
                         abstract member bigint: bool with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create(bigint: bool) : options_5 = nativeOnly
 
         module statfs_ =
 
@@ -75861,10 +75914,16 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                     type options_6 =
                         abstract member bigint: bool option with get, set
 
+                        [<ParamObject; Emit("$0")>]
+                        static member Create(?bigint: bool) : options_6 = nativeOnly
+
                     [<AllowNullLiteral>]
                     [<Interface>]
                     type options_7 =
                         abstract member bigint: bool with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create(bigint: bool) : options_7 = nativeOnly
 
         module link_ =
 
@@ -77207,6 +77266,10 @@ recursive mode, operations are retried on failure.""")>]
                         /// </summary>
                         abstract member mode: Node.fs.Mode option with get, set
 
+                        [<ParamObject; Emit("$0")>]
+                        static member Create(``recursive``: bool, ?mode: Node.fs.Mode) : options_8 =
+                            nativeOnly
+
                     [<AllowNullLiteral>]
                     [<Interface>]
                     type options_9 =
@@ -77215,6 +77278,13 @@ recursive mode, operations are retried on failure.""")>]
                         /// A file mode. If a string is passed, it is parsed as an octal integer. If not specified
                         /// </summary>
                         abstract member mode: Node.fs.Mode option with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create
+                            (?``recursive``: bool, ?mode: Node.fs.Mode)
+                            : options_9
+                            =
+                            nativeOnly
 
         module mkdtemp_ =
 
@@ -77585,6 +77655,20 @@ recursive mode, operations are retried on failure.""")>]
                         | buffer
                         | Case1 of Exports.__promisify__.options.Cases.Case1
 
+                        [<Emit("$0")>]
+                        static member op_Implicit
+                            (value: Exports.__promisify__.options.Cases.Case1)
+                            : options_11
+                            =
+                            nativeOnly
+
+                        [<Emit("$0")>]
+                        static member op_ErasedCast
+                            (value: Exports.__promisify__.options.Cases.Case1)
+                            : options_11
+                            =
+                            nativeOnly
+
                     module options =
 
                         module Cases =
@@ -77610,12 +77694,34 @@ recursive mode, operations are retried on failure.""")>]
                         abstract member withFileTypes: bool option with get, set
                         abstract member ``recursive``: bool option with get, set
 
+                        [<ParamObject; Emit("$0")>]
+                        static member Create
+                            (
+                                ?encoding: Node.BufferEncoding,
+                                ?withFileTypes: bool,
+                                ?``recursive``: bool
+                            )
+                            : options_12
+                            =
+                            nativeOnly
+
                     [<AllowNullLiteral>]
                     [<Interface>]
                     type options_13 =
                         abstract member encoding: Node.BufferEncoding option with get, set
                         abstract member withFileTypes: bool with get, set
                         abstract member ``recursive``: bool option with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create
+                            (
+                                withFileTypes: bool,
+                                ?encoding: Node.BufferEncoding,
+                                ?``recursive``: bool
+                            )
+                            : options_13
+                            =
+                            nativeOnly
 
                     [<AllowNullLiteral>]
                     [<Interface>]
@@ -78078,7 +78184,7 @@ recursive mode, operations are retried on failure.""")>]
                     ?offset: float *
                     ?length: float *
                     ?position: float ->
-                        JS.Promise<Exports.__promisify___45<'TBuffer>>
+                        JS.Promise<Exports.__promisify___11<'TBuffer>>
 
                 /// <summary>
                 /// Asynchronously writes <c>buffer</c> to the file referenced by the supplied file descriptor.
@@ -78095,7 +78201,7 @@ recursive mode, operations are retried on failure.""")>]
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__<'TBuffer> :
                     fd: float * ?buffer: 'TBuffer * ?options: Node.fs.WriteOptions ->
-                        JS.Promise<Exports.__promisify___46<'TBuffer>>
+                        JS.Promise<Exports.__promisify___11<'TBuffer>>
 
                 /// <summary>
                 /// Asynchronously writes <c>string</c> to the file referenced by the supplied file descriptor.
@@ -78115,44 +78221,31 @@ recursive mode, operations are retried on failure.""")>]
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     fd: float * string: string * ?position: float * ?encoding: Node.BufferEncoding ->
-                        JS.Promise<Exports.__promisify___47>
+                        JS.Promise<Exports.__promisify___12>
 
             module Exports =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type __promisify___45<'TBuffer> =
+                type __promisify___11<'TBuffer> =
                     abstract member bytesWritten: float with get, set
                     abstract member buffer: 'TBuffer with get, set
 
                     [<ParamObject; Emit("$0")>]
                     static member Create
                         (bytesWritten: float, buffer: 'TBuffer)
-                        : __promisify___45<'TBuffer>
+                        : __promisify___11<'TBuffer>
                         =
                         nativeOnly
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type __promisify___46<'TBuffer> =
-                    abstract member bytesWritten: float with get, set
-                    abstract member buffer: 'TBuffer with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create
-                        (bytesWritten: float, buffer: 'TBuffer)
-                        : __promisify___46<'TBuffer>
-                        =
-                        nativeOnly
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type __promisify___47 =
+                type __promisify___12 =
                     abstract member bytesWritten: float with get, set
                     abstract member buffer: string with get, set
 
                     [<ParamObject; Emit("$0")>]
-                    static member Create(bytesWritten: float, buffer: string) : __promisify___47 =
+                    static member Create(bytesWritten: float, buffer: string) : __promisify___12 =
                         nativeOnly
 
         type ReadPosition = U2<float, bigint>
@@ -78209,7 +78302,7 @@ recursive mode, operations are retried on failure.""")>]
                     offset: float *
                     length: float *
                     position: float option ->
-                        JS.Promise<Exports.__promisify___48<'TBuffer>>
+                        JS.Promise<Exports.__promisify___13<'TBuffer>>
 
                 /// <param name="fd">
                 /// A file descriptor.
@@ -78233,85 +78326,46 @@ recursive mode, operations are retried on failure.""")>]
                     offset: float *
                     length: float *
                     position: bigint option ->
-                        JS.Promise<Exports.__promisify___49<'TBuffer>>
+                        JS.Promise<Exports.__promisify___13<'TBuffer>>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__<'TBuffer> :
                     fd: float * options: Node.fs.ReadOptionsWithBuffer<'TBuffer> ->
-                        JS.Promise<Exports.__promisify___50<'TBuffer>>
+                        JS.Promise<Exports.__promisify___13<'TBuffer>>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     fd: float * options: Node.fs.ReadOptionsWithBuffer<Node.NonSharedBuffer> ->
-                        JS.Promise<Exports.__promisify___51>
+                        JS.Promise<Exports.__promisify___14>
 
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: fd: float -> JS.Promise<Exports.__promisify___52>
+                abstract member __promisify__: fd: float -> JS.Promise<Exports.__promisify___14>
 
             module Exports =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type __promisify___48<'TBuffer> =
+                type __promisify___13<'TBuffer> =
                     abstract member bytesRead: float with get, set
                     abstract member buffer: 'TBuffer with get, set
 
                     [<ParamObject; Emit("$0")>]
                     static member Create
                         (bytesRead: float, buffer: 'TBuffer)
-                        : __promisify___48<'TBuffer>
+                        : __promisify___13<'TBuffer>
                         =
                         nativeOnly
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type __promisify___49<'TBuffer> =
-                    abstract member bytesRead: float with get, set
-                    abstract member buffer: 'TBuffer with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create
-                        (bytesRead: float, buffer: 'TBuffer)
-                        : __promisify___49<'TBuffer>
-                        =
-                        nativeOnly
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type __promisify___50<'TBuffer> =
-                    abstract member bytesRead: float with get, set
-                    abstract member buffer: 'TBuffer with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create
-                        (bytesRead: float, buffer: 'TBuffer)
-                        : __promisify___50<'TBuffer>
-                        =
-                        nativeOnly
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type __promisify___51 =
+                type __promisify___14 =
                     abstract member bytesRead: float with get, set
                     abstract member buffer: Node.NonSharedBuffer with get, set
 
                     [<ParamObject; Emit("$0")>]
                     static member Create
                         (bytesRead: float, buffer: Node.NonSharedBuffer)
-                        : __promisify___51
-                        =
-                        nativeOnly
-
-                [<AllowNullLiteral>]
-                [<Interface>]
-                type __promisify___52 =
-                    abstract member bytesRead: float with get, set
-                    abstract member buffer: Node.NonSharedBuffer with get, set
-
-                    [<ParamObject; Emit("$0")>]
-                    static member Create
-                        (bytesRead: float, buffer: Node.NonSharedBuffer)
-                        : __promisify___52
+                        : __promisify___14
                         =
                         nativeOnly
 
@@ -78678,6 +78732,13 @@ recursive mode, operations are retried on failure.""")>]
                     type options_17 =
                         abstract member encoding: Node.BufferEncoding option with get, set
                         abstract member flag: string option with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create
+                            (?encoding: Node.BufferEncoding, ?flag: string)
+                            : options_17
+                            =
+                            nativeOnly
 
         type WriteFileOptions = U2<WriteFileOptions.U2.Case1, Node.BufferEncoding> option
 
@@ -80037,11 +80098,18 @@ recursive mode, operations are retried on failure.""")>]
                     abstract member throwIfNoEntry: bool with get, set
                     abstract member bigint: bool option with get, set
 
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(throwIfNoEntry: bool, ?bigint: bool) : options = nativeOnly
+
                 [<AllowNullLiteral>]
                 [<Interface>]
                 type options_1 =
                     abstract member throwIfNoEntry: bool with get, set
                     abstract member bigint: bool with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(throwIfNoEntry: bool, bigint: bool) : options_1 =
+                        nativeOnly
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -80049,11 +80117,29 @@ recursive mode, operations are retried on failure.""")>]
                     abstract member throwIfNoEntry: bool option with get, set
                     abstract member bigint: bool option with get, set
 
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(?throwIfNoEntry: bool, ?bigint: bool) : options_2 =
+                        nativeOnly
+
                 [<AllowNullLiteral>]
                 [<Interface>]
                 type options_3 =
                     abstract member throwIfNoEntry: bool option with get, set
                     abstract member bigint: bool with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(bigint: bool, ?throwIfNoEntry: bool) : options_3 =
+                        nativeOnly
+
+                [<AllowNullLiteral>]
+                [<Interface>]
+                type options_4 =
+                    abstract member throwIfNoEntry: bool option with get, set
+                    abstract member bigint: bool with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(bigint: bool, ?throwIfNoEntry: bool) : options_4 =
+                        nativeOnly
 
         module WriteFileOptions =
 
@@ -80070,6 +80156,19 @@ recursive mode, operations are retried on failure.""")>]
                     abstract member mode: Node.fs.Mode option with get, set
                     abstract member flag: string option with get, set
                     abstract member flush: bool option with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (
+                            ?encoding: Node.BufferEncoding,
+                            ?signal: Node.AbortSignal,
+                            ?mode: Node.fs.Mode,
+                            ?flag: string,
+                            ?flush: bool
+                        )
+                        : Case1
+                        =
+                        nativeOnly
 
         module WatchOptions =
 
@@ -80112,10 +80211,16 @@ recursive mode, operations are retried on failure.""")>]
                 type options =
                     abstract member bigint: bool option with get, set
 
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(?bigint: bool) : options = nativeOnly
+
                 [<AllowNullLiteral>]
                 [<Interface>]
                 type options_1 =
                     abstract member bigint: bool with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(bigint: bool) : options_1 = nativeOnly
 
                 type callback_1 =
                     delegate of
@@ -80138,10 +80243,16 @@ recursive mode, operations are retried on failure.""")>]
                 type options =
                     abstract member bigint: bool option with get, set
 
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(?bigint: bool) : options = nativeOnly
+
                 [<AllowNullLiteral>]
                 [<Interface>]
                 type options_1 =
                     abstract member bigint: bool with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(bigint: bool) : options_1 = nativeOnly
 
                 type callback_1 =
                     delegate of
@@ -80160,10 +80271,16 @@ recursive mode, operations are retried on failure.""")>]
                 type options =
                     abstract member bigint: bool option with get, set
 
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(?bigint: bool) : options = nativeOnly
+
                 [<AllowNullLiteral>]
                 [<Interface>]
                 type options_1 =
                     abstract member bigint: bool with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(bigint: bool) : options_1 = nativeOnly
 
             module lstat__ =
 
@@ -80176,10 +80293,16 @@ recursive mode, operations are retried on failure.""")>]
                 type options =
                     abstract member bigint: bool option with get, set
 
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(?bigint: bool) : options = nativeOnly
+
                 [<AllowNullLiteral>]
                 [<Interface>]
                 type options_1 =
                     abstract member bigint: bool with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(bigint: bool) : options_1 = nativeOnly
 
                 type callback_1 =
                     delegate of
@@ -80202,10 +80325,16 @@ recursive mode, operations are retried on failure.""")>]
                 type options =
                     abstract member bigint: bool option with get, set
 
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(?bigint: bool) : options = nativeOnly
+
                 [<AllowNullLiteral>]
                 [<Interface>]
                 type options_1 =
                     abstract member bigint: bool with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(bigint: bool) : options_1 = nativeOnly
 
                 type callback_1 =
                     delegate of
@@ -80225,10 +80354,16 @@ recursive mode, operations are retried on failure.""")>]
                 type options =
                     abstract member bigint: bool option with get, set
 
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(?bigint: bool) : options = nativeOnly
+
                 [<AllowNullLiteral>]
                 [<Interface>]
                 type options_1 =
                     abstract member bigint: bool with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(bigint: bool) : options_1 = nativeOnly
 
             module readlink__ =
 
@@ -80274,6 +80409,10 @@ recursive mode, operations are retried on failure.""")>]
                     /// </summary>
                     abstract member mode: Node.fs.Mode option with get, set
 
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(``recursive``: bool, ?mode: Node.fs.Mode) : options =
+                        nativeOnly
+
                 type callback =
                     delegate of err: Node.NodeJS.ErrnoException option * ?path: string -> unit
 
@@ -80286,6 +80425,10 @@ recursive mode, operations are retried on failure.""")>]
                     /// </summary>
                     abstract member mode: Node.fs.Mode option with get, set
 
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(?``recursive``: bool, ?mode: Node.fs.Mode) : options_1 =
+                        nativeOnly
+
             module mkdirSync__ =
 
                 [<AllowNullLiteral>]
@@ -80297,6 +80440,10 @@ recursive mode, operations are retried on failure.""")>]
                     /// </summary>
                     abstract member mode: Node.fs.Mode option with get, set
 
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(``recursive``: bool, ?mode: Node.fs.Mode) : options =
+                        nativeOnly
+
                 [<AllowNullLiteral>]
                 [<Interface>]
                 type options_1 =
@@ -80305,6 +80452,10 @@ recursive mode, operations are retried on failure.""")>]
                     /// A file mode. If a string is passed, it is parsed as an octal integer. If not specified
                     /// </summary>
                     abstract member mode: Node.fs.Mode option with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(?``recursive``: bool, ?mode: Node.fs.Mode) : options_1 =
+                        nativeOnly
 
             module mkdtemp__ =
 
@@ -80348,6 +80499,20 @@ recursive mode, operations are retried on failure.""")>]
                     | buffer
                     | Case1 of Exports.readdir__.options.Cases.Case1
 
+                    [<Emit("$0")>]
+                    static member op_Implicit
+                        (value: Exports.readdir__.options.Cases.Case1)
+                        : options_1
+                        =
+                        nativeOnly
+
+                    [<Emit("$0")>]
+                    static member op_ErasedCast
+                        (value: Exports.readdir__.options.Cases.Case1)
+                        : options_1
+                        =
+                        nativeOnly
+
                 type callback_1 =
                     delegate of
                         err: Node.NodeJS.ErrnoException option *
@@ -80379,6 +80544,13 @@ recursive mode, operations are retried on failure.""")>]
                     abstract member withFileTypes: bool option with get, set
                     abstract member ``recursive``: bool option with get, set
 
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (?encoding: Node.BufferEncoding, ?withFileTypes: bool, ?``recursive``: bool)
+                        : options_2
+                        =
+                        nativeOnly
+
                 type callback_2 =
                     delegate of
                         err: Node.NodeJS.ErrnoException option *
@@ -80391,6 +80563,13 @@ recursive mode, operations are retried on failure.""")>]
                     abstract member encoding: Node.BufferEncoding option with get, set
                     abstract member withFileTypes: bool with get, set
                     abstract member ``recursive``: bool option with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (withFileTypes: bool, ?encoding: Node.BufferEncoding, ?``recursive``: bool)
+                        : options_3
+                        =
+                        nativeOnly
 
                 type callback_3 =
                     delegate of
@@ -80439,6 +80618,20 @@ recursive mode, operations are retried on failure.""")>]
                     | buffer
                     | Case1 of Exports.readdirSync__.options.Cases.Case1
 
+                    [<Emit("$0")>]
+                    static member op_Implicit
+                        (value: Exports.readdirSync__.options.Cases.Case1)
+                        : options_1
+                        =
+                        nativeOnly
+
+                    [<Emit("$0")>]
+                    static member op_ErasedCast
+                        (value: Exports.readdirSync__.options.Cases.Case1)
+                        : options_1
+                        =
+                        nativeOnly
+
                 module options =
 
                     module Cases =
@@ -80464,12 +80657,26 @@ recursive mode, operations are retried on failure.""")>]
                     abstract member withFileTypes: bool option with get, set
                     abstract member ``recursive``: bool option with get, set
 
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (?encoding: Node.BufferEncoding, ?withFileTypes: bool, ?``recursive``: bool)
+                        : options_2
+                        =
+                        nativeOnly
+
                 [<AllowNullLiteral>]
                 [<Interface>]
                 type options_3 =
                     abstract member encoding: Node.BufferEncoding option with get, set
                     abstract member withFileTypes: bool with get, set
                     abstract member ``recursive``: bool option with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (withFileTypes: bool, ?encoding: Node.BufferEncoding, ?``recursive``: bool)
+                        : options_3
+                        =
+                        nativeOnly
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -80528,6 +80735,13 @@ recursive mode, operations are retried on failure.""")>]
                     /// </summary>
                     abstract member signal: Node.AbortSignal option with get, set
 
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (?encoding: obj, ?flag: string, ?signal: Node.AbortSignal)
+                        : options
+                        =
+                        nativeOnly
+
                 type callback =
                     delegate of
                         err: Node.NodeJS.ErrnoException option * data: Node.NonSharedBuffer -> unit
@@ -80542,6 +80756,13 @@ recursive mode, operations are retried on failure.""")>]
                     /// </summary>
                     abstract member signal: Node.AbortSignal option with get, set
 
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (encoding: Node.BufferEncoding, ?flag: string, ?signal: Node.AbortSignal)
+                        : options_1
+                        =
+                        nativeOnly
+
                 type callback_1 =
                     delegate of err: Node.NodeJS.ErrnoException option * data: string -> unit
 
@@ -80554,6 +80775,13 @@ recursive mode, operations are retried on failure.""")>]
                     /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
                     /// </summary>
                     abstract member signal: Node.AbortSignal option with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (?encoding: Node.BufferEncoding, ?flag: string, ?signal: Node.AbortSignal)
+                        : options_2
+                        =
+                        nativeOnly
 
                 type callback_2 =
                     delegate of
@@ -80588,6 +80816,13 @@ recursive mode, operations are retried on failure.""")>]
                     abstract member encoding: Node.BufferEncoding option with get, set
                     abstract member flag: string option with get, set
 
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (?encoding: Node.BufferEncoding, ?flag: string)
+                        : options_2
+                        =
+                        nativeOnly
+
             module writeFile__ =
 
                 [<AllowNullLiteral>]
@@ -80601,6 +80836,19 @@ recursive mode, operations are retried on failure.""")>]
                     abstract member mode: Node.fs.Mode option with get, set
                     abstract member flag: string option with get, set
                     abstract member flush: bool option with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (
+                            ?encoding: Node.BufferEncoding,
+                            ?signal: Node.AbortSignal,
+                            ?mode: Node.fs.Mode,
+                            ?flag: string,
+                            ?flush: bool
+                        )
+                        : options
+                        =
+                        nativeOnly
 
             module appendFile__ =
 
@@ -80616,6 +80864,19 @@ recursive mode, operations are retried on failure.""")>]
                     abstract member flag: string option with get, set
                     abstract member flush: bool option with get, set
 
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (
+                            ?encoding: Node.BufferEncoding,
+                            ?signal: Node.AbortSignal,
+                            ?mode: Node.fs.Mode,
+                            ?flag: string,
+                            ?flush: bool
+                        )
+                        : options
+                        =
+                        nativeOnly
+
             module watchFile__ =
 
                 [<AllowNullLiteral>]
@@ -80625,12 +80886,26 @@ recursive mode, operations are retried on failure.""")>]
                     abstract member persistent: bool option with get, set
                     abstract member interval: float option with get, set
 
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (?bigint: bool, ?persistent: bool, ?interval: float)
+                        : options
+                        =
+                        nativeOnly
+
                 [<AllowNullLiteral>]
                 [<Interface>]
                 type options_1 =
                     abstract member bigint: bool with get, set
                     abstract member persistent: bool option with get, set
                     abstract member interval: float option with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (bigint: bool, ?persistent: bool, ?interval: float)
+                        : options_1
+                        =
+                        nativeOnly
 
             module watch__ =
 
@@ -80640,12 +80915,39 @@ recursive mode, operations are retried on failure.""")>]
                     | buffer
                     | Case1 of Node.fs.WatchOptionsWithBufferEncoding
 
+                    [<Emit("$0")>]
+                    static member op_Implicit
+                        (value: Node.fs.WatchOptionsWithBufferEncoding)
+                        : options
+                        =
+                        nativeOnly
+
+                    [<Emit("$0")>]
+                    static member op_ErasedCast
+                        (value: Node.fs.WatchOptionsWithBufferEncoding)
+                        : options
+                        =
+                        nativeOnly
+
                 [<RequireQualifiedAccess>]
                 [<Erase(CaseRules.None)>]
                 type options_1 =
                     | buffer
                     | Case1 of Node.fs.WatchOptions
                     | Case2 of Node.BufferEncoding
+
+                    [<Emit("$0")>]
+                    static member op_Implicit(value: Node.fs.WatchOptions) : options_1 = nativeOnly
+
+                    [<Emit("$0")>]
+                    static member op_ErasedCast(value: Node.fs.WatchOptions) : options_1 =
+                        nativeOnly
+
+                    [<Emit("$0")>]
+                    static member op_Implicit(value: Node.BufferEncoding) : options_1 = nativeOnly
+
+                    [<Emit("$0")>]
+                    static member op_ErasedCast(value: Node.BufferEncoding) : options_1 = nativeOnly
 
             module writev__ =
 
@@ -87669,7 +87971,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </summary>
             abstract member write<'TBuffer> :
                 buffer: 'TBuffer * ?options: FileHandle.write.options ->
-                    JS.Promise<FileHandle.write_1<'TBuffer>>
+                    JS.Promise<FileHandle.write<'TBuffer>>
 
             /// <summary>
             /// Write <c>buffer</c> to the file.
@@ -87686,7 +87988,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </summary>
             abstract member write:
                 data: string * ?position: float * ?encoding: Node.BufferEncoding ->
-                    JS.Promise<FileHandle.write_2>
+                    JS.Promise<FileHandle.write_1>
 
             /// <summary>
             /// Write an array of [ArrayBufferView](https://developer.mozilla.org/en-US/docs/Web/API/ArrayBufferView) s to the file.
@@ -87804,22 +88106,12 @@ recursive mode, operations are retried on failure.""")>]
 
             [<AllowNullLiteral>]
             [<Interface>]
-            type write_1<'TBuffer> =
-                abstract member bytesWritten: float with get, set
-                abstract member buffer: 'TBuffer with get, set
-
-                [<ParamObject; Emit("$0")>]
-                static member Create(bytesWritten: float, buffer: 'TBuffer) : write_1<'TBuffer> =
-                    nativeOnly
-
-            [<AllowNullLiteral>]
-            [<Interface>]
-            type write_2 =
+            type write_1 =
                 abstract member bytesWritten: float with get, set
                 abstract member buffer: string with get, set
 
                 [<ParamObject; Emit("$0")>]
-                static member Create(bytesWritten: float, buffer: string) : write_2 = nativeOnly
+                static member Create(bytesWritten: float, buffer: string) : write_1 = nativeOnly
 
             module appendFile =
 
@@ -87832,6 +88124,13 @@ recursive mode, operations are retried on failure.""")>]
                     /// </summary>
                     abstract member signal: Node.AbortSignal option with get, set
 
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (?encoding: Node.BufferEncoding, ?signal: Node.AbortSignal)
+                        : options
+                        =
+                        nativeOnly
+
             module readFile =
 
                 [<AllowNullLiteral>]
@@ -87843,6 +88142,10 @@ recursive mode, operations are retried on failure.""")>]
                     /// </summary>
                     abstract member signal: Node.AbortSignal option with get, set
 
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(?encoding: obj, ?signal: Node.AbortSignal) : options =
+                        nativeOnly
+
                 [<AllowNullLiteral>]
                 [<Interface>]
                 type options_1 =
@@ -87851,6 +88154,13 @@ recursive mode, operations are retried on failure.""")>]
                     /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
                     /// </summary>
                     abstract member signal: Node.AbortSignal option with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (encoding: Node.BufferEncoding, ?signal: Node.AbortSignal)
+                        : options_1
+                        =
+                        nativeOnly
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -87861,6 +88171,13 @@ recursive mode, operations are retried on failure.""")>]
                     /// </summary>
                     abstract member signal: Node.AbortSignal option with get, set
 
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (?encoding: Node.BufferEncoding, ?signal: Node.AbortSignal)
+                        : options_2
+                        =
+                        nativeOnly
+
             module stat =
 
                 [<AllowNullLiteral>]
@@ -87868,10 +88185,16 @@ recursive mode, operations are retried on failure.""")>]
                 type opts =
                     abstract member bigint: bool option with get, set
 
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(?bigint: bool) : opts = nativeOnly
+
                 [<AllowNullLiteral>]
                 [<Interface>]
                 type opts_1 =
                     abstract member bigint: bool with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(bigint: bool) : opts_1 = nativeOnly
 
             module writeFile =
 
@@ -87883,6 +88206,13 @@ recursive mode, operations are retried on failure.""")>]
                     /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
                     /// </summary>
                     abstract member signal: Node.AbortSignal option with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (?encoding: Node.BufferEncoding, ?signal: Node.AbortSignal)
+                        : options
+                        =
+                        nativeOnly
 
             module write =
 
@@ -87937,6 +88267,10 @@ recursive mode, operations are retried on failure.""")>]
                     /// </summary>
                     abstract member mode: Node.fs.Mode option with get, set
 
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(``recursive``: bool, ?mode: Node.fs.Mode) : options_2 =
+                        nativeOnly
+
                 [<AllowNullLiteral>]
                 [<Interface>]
                 type options_3 =
@@ -87945,6 +88279,10 @@ recursive mode, operations are retried on failure.""")>]
                     /// A file mode. If a string is passed, it is parsed as an octal integer. If not specified
                     /// </summary>
                     abstract member mode: Node.fs.Mode option with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(?``recursive``: bool, ?mode: Node.fs.Mode) : options_3 =
+                        nativeOnly
 
             module readdir__ =
 
@@ -87955,11 +88293,32 @@ recursive mode, operations are retried on failure.""")>]
                     abstract member withFileTypes: bool option with get, set
                     abstract member ``recursive``: bool option with get, set
 
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (?encoding: Node.BufferEncoding, ?withFileTypes: bool, ?``recursive``: bool)
+                        : options_5
+                        =
+                        nativeOnly
+
                 [<RequireQualifiedAccess>]
                 [<Erase(CaseRules.None)>]
                 type options_6 =
                     | buffer
                     | Case1 of Exports.readdir__.options.Cases.Case1_1
+
+                    [<Emit("$0")>]
+                    static member op_Implicit
+                        (value: Exports.readdir__.options.Cases.Case1_1)
+                        : options_6
+                        =
+                        nativeOnly
+
+                    [<Emit("$0")>]
+                    static member op_ErasedCast
+                        (value: Exports.readdir__.options.Cases.Case1_1)
+                        : options_6
+                        =
+                        nativeOnly
 
                 module options =
 
@@ -87986,6 +88345,13 @@ recursive mode, operations are retried on failure.""")>]
                     abstract member withFileTypes: bool with get, set
                     abstract member ``recursive``: bool option with get, set
 
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (withFileTypes: bool, ?encoding: Node.BufferEncoding, ?``recursive``: bool)
+                        : options_7
+                        =
+                        nativeOnly
+
                 [<AllowNullLiteral>]
                 [<Interface>]
                 type options_8 =
@@ -88007,10 +88373,16 @@ recursive mode, operations are retried on failure.""")>]
                 type opts =
                     abstract member bigint: bool option with get, set
 
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(?bigint: bool) : opts = nativeOnly
+
                 [<AllowNullLiteral>]
                 [<Interface>]
                 type opts_1 =
                     abstract member bigint: bool with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(bigint: bool) : opts_1 = nativeOnly
 
             module stat__ =
 
@@ -88019,10 +88391,16 @@ recursive mode, operations are retried on failure.""")>]
                 type opts =
                     abstract member bigint: bool option with get, set
 
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(?bigint: bool) : opts = nativeOnly
+
                 [<AllowNullLiteral>]
                 [<Interface>]
                 type opts_1 =
                     abstract member bigint: bool with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(bigint: bool) : opts_1 = nativeOnly
 
             module statfs__ =
 
@@ -88031,10 +88409,16 @@ recursive mode, operations are retried on failure.""")>]
                 type opts =
                     abstract member bigint: bool option with get, set
 
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(?bigint: bool) : opts = nativeOnly
+
                 [<AllowNullLiteral>]
                 [<Interface>]
                 type opts_1 =
                     abstract member bigint: bool with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create(bigint: bool) : opts_1 = nativeOnly
 
             module writeFile__ =
 
@@ -88058,6 +88442,19 @@ recursive mode, operations are retried on failure.""")>]
                             /// </summary>
                             abstract member signal: Node.AbortSignal option with get, set
 
+                            [<ParamObject; Emit("$0")>]
+                            static member Create
+                                (
+                                    ?encoding: Node.BufferEncoding,
+                                    ?mode: Node.fs.Mode,
+                                    ?flag: Node.fs.OpenMode,
+                                    ?flush: bool,
+                                    ?signal: Node.AbortSignal
+                                )
+                                : Case1
+                                =
+                                nativeOnly
+
             module appendFile__ =
 
                 module options =
@@ -88072,6 +88469,18 @@ recursive mode, operations are retried on failure.""")>]
                             abstract member flag: Node.fs.OpenMode option with get, set
                             abstract member flush: bool option with get, set
 
+                            [<ParamObject; Emit("$0")>]
+                            static member Create
+                                (
+                                    ?encoding: Node.BufferEncoding,
+                                    ?mode: Node.fs.Mode,
+                                    ?flag: Node.fs.OpenMode,
+                                    ?flush: bool
+                                )
+                                : Case1
+                                =
+                                nativeOnly
+
             module readFile__ =
 
                 [<AllowNullLiteral>]
@@ -88084,6 +88493,13 @@ recursive mode, operations are retried on failure.""")>]
                     /// </summary>
                     abstract member signal: Node.AbortSignal option with get, set
 
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (?encoding: obj, ?flag: Node.fs.OpenMode, ?signal: Node.AbortSignal)
+                        : options_3
+                        =
+                        nativeOnly
+
                 [<AllowNullLiteral>]
                 [<Interface>]
                 type options_4 =
@@ -88093,6 +88509,17 @@ recursive mode, operations are retried on failure.""")>]
                     /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
                     /// </summary>
                     abstract member signal: Node.AbortSignal option with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (
+                            encoding: Node.BufferEncoding,
+                            ?flag: Node.fs.OpenMode,
+                            ?signal: Node.AbortSignal
+                        )
+                        : options_4
+                        =
+                        nativeOnly
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -88104,6 +88531,17 @@ recursive mode, operations are retried on failure.""")>]
                     abstract member signal: Node.AbortSignal option with get, set
                     abstract member flag: Node.fs.OpenMode option with get, set
 
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (
+                            ?encoding: Node.BufferEncoding,
+                            ?signal: Node.AbortSignal,
+                            ?flag: Node.fs.OpenMode
+                        )
+                        : options_5
+                        =
+                        nativeOnly
+
             module watch__ =
 
                 [<RequireQualifiedAccess>]
@@ -88112,12 +88550,40 @@ recursive mode, operations are retried on failure.""")>]
                     | buffer
                     | Case1 of Node.fs_promises.WatchOptionsWithBufferEncoding
 
+                    [<Emit("$0")>]
+                    static member op_Implicit
+                        (value: Node.fs_promises.WatchOptionsWithBufferEncoding)
+                        : options_2
+                        =
+                        nativeOnly
+
+                    [<Emit("$0")>]
+                    static member op_ErasedCast
+                        (value: Node.fs_promises.WatchOptionsWithBufferEncoding)
+                        : options_2
+                        =
+                        nativeOnly
+
                 [<RequireQualifiedAccess>]
                 [<Erase(CaseRules.None)>]
                 type options_3 =
                     | buffer
                     | Case1 of Node.fs_promises.WatchOptions
                     | Case2 of Node.BufferEncoding
+
+                    [<Emit("$0")>]
+                    static member op_Implicit(value: Node.fs_promises.WatchOptions) : options_3 =
+                        nativeOnly
+
+                    [<Emit("$0")>]
+                    static member op_ErasedCast(value: Node.fs_promises.WatchOptions) : options_3 =
+                        nativeOnly
+
+                    [<Emit("$0")>]
+                    static member op_Implicit(value: Node.BufferEncoding) : options_3 = nativeOnly
+
+                    [<Emit("$0")>]
+                    static member op_ErasedCast(value: Node.BufferEncoding) : options_3 = nativeOnly
 
     module http =
 
@@ -116892,6 +117358,88 @@ recursive mode, operations are retried on failure.""")>]
                         abstract member ``www-authenticate``: string option with get, set
                         abstract member ``:status``: float option with get, set
 
+                        [<ParamObject; Emit("$0")>]
+                        static member Create
+                            (
+                                ?``:path``: string,
+                                ?``:method``: string,
+                                ?``:authority``: string,
+                                ?``:scheme``: string,
+                                ?``:protocol``: string,
+                                ?accept: string,
+                                ?``accept-encoding``: string,
+                                ?``accept-language``: string,
+                                ?``accept-patch``: string,
+                                ?``accept-ranges``: string,
+                                ?``access-control-allow-credentials``: string,
+                                ?``access-control-allow-headers``: string,
+                                ?``access-control-allow-methods``: string,
+                                ?``access-control-allow-origin``: string,
+                                ?``access-control-expose-headers``: string,
+                                ?``access-control-max-age``: string,
+                                ?``access-control-request-headers``: string,
+                                ?``access-control-request-method``: string,
+                                ?age: string,
+                                ?allow: string,
+                                ?``alt-svc``: string,
+                                ?authorization: string,
+                                ?``cache-control``: string,
+                                ?connection: string,
+                                ?``content-disposition``: string,
+                                ?``content-encoding``: string,
+                                ?``content-language``: string,
+                                ?``content-length``: string,
+                                ?``content-location``: string,
+                                ?``content-range``: string,
+                                ?``content-type``: string,
+                                ?cookie: string,
+                                ?date: string,
+                                ?etag: string,
+                                ?expect: string,
+                                ?expires: string,
+                                ?forwarded: string,
+                                ?from: string,
+                                ?host: string,
+                                ?``if-match``: string,
+                                ?``if-modified-since``: string,
+                                ?``if-none-match``: string,
+                                ?``if-unmodified-since``: string,
+                                ?``last-modified``: string,
+                                ?location: string,
+                                ?origin: string,
+                                ?pragma: string,
+                                ?``proxy-authenticate``: string,
+                                ?``proxy-authorization``: string,
+                                ?``public-key-pins``: string,
+                                ?range: string,
+                                ?referer: string,
+                                ?``retry-after``: string,
+                                ?``sec-fetch-site``: string,
+                                ?``sec-fetch-mode``: string,
+                                ?``sec-fetch-user``: string,
+                                ?``sec-fetch-dest``: string,
+                                ?``sec-websocket-accept``: string,
+                                ?``sec-websocket-extensions``: string,
+                                ?``sec-websocket-key``: string,
+                                ?``sec-websocket-protocol``: string,
+                                ?``sec-websocket-version``: string,
+                                ?``set-cookie``: ResizeArray<string>,
+                                ?``strict-transport-security``: string,
+                                ?tk: string,
+                                ?trailer: string,
+                                ?``transfer-encoding``: string,
+                                ?upgrade: string,
+                                ?``user-agent``: string,
+                                ?vary: string,
+                                ?via: string,
+                                ?warning: string,
+                                ?``www-authenticate``: string,
+                                ?``:status``: float
+                            )
+                            : headers
+                            =
+                            nativeOnly
+
             module addListener_push =
 
                 type listener =
@@ -116986,6 +117534,88 @@ recursive mode, operations are retried on failure.""")>]
                         abstract member ``www-authenticate``: string option with get, set
                         abstract member ``:status``: float option with get, set
 
+                        [<ParamObject; Emit("$0")>]
+                        static member Create
+                            (
+                                ?``:path``: string,
+                                ?``:method``: string,
+                                ?``:authority``: string,
+                                ?``:scheme``: string,
+                                ?``:protocol``: string,
+                                ?accept: string,
+                                ?``accept-encoding``: string,
+                                ?``accept-language``: string,
+                                ?``accept-patch``: string,
+                                ?``accept-ranges``: string,
+                                ?``access-control-allow-credentials``: string,
+                                ?``access-control-allow-headers``: string,
+                                ?``access-control-allow-methods``: string,
+                                ?``access-control-allow-origin``: string,
+                                ?``access-control-expose-headers``: string,
+                                ?``access-control-max-age``: string,
+                                ?``access-control-request-headers``: string,
+                                ?``access-control-request-method``: string,
+                                ?age: string,
+                                ?allow: string,
+                                ?``alt-svc``: string,
+                                ?authorization: string,
+                                ?``cache-control``: string,
+                                ?connection: string,
+                                ?``content-disposition``: string,
+                                ?``content-encoding``: string,
+                                ?``content-language``: string,
+                                ?``content-length``: string,
+                                ?``content-location``: string,
+                                ?``content-range``: string,
+                                ?``content-type``: string,
+                                ?cookie: string,
+                                ?date: string,
+                                ?etag: string,
+                                ?expect: string,
+                                ?expires: string,
+                                ?forwarded: string,
+                                ?from: string,
+                                ?host: string,
+                                ?``if-match``: string,
+                                ?``if-modified-since``: string,
+                                ?``if-none-match``: string,
+                                ?``if-unmodified-since``: string,
+                                ?``last-modified``: string,
+                                ?location: string,
+                                ?origin: string,
+                                ?pragma: string,
+                                ?``proxy-authenticate``: string,
+                                ?``proxy-authorization``: string,
+                                ?``public-key-pins``: string,
+                                ?range: string,
+                                ?referer: string,
+                                ?``retry-after``: string,
+                                ?``sec-fetch-site``: string,
+                                ?``sec-fetch-mode``: string,
+                                ?``sec-fetch-user``: string,
+                                ?``sec-fetch-dest``: string,
+                                ?``sec-websocket-accept``: string,
+                                ?``sec-websocket-extensions``: string,
+                                ?``sec-websocket-key``: string,
+                                ?``sec-websocket-protocol``: string,
+                                ?``sec-websocket-version``: string,
+                                ?``set-cookie``: ResizeArray<string>,
+                                ?``strict-transport-security``: string,
+                                ?tk: string,
+                                ?trailer: string,
+                                ?``transfer-encoding``: string,
+                                ?upgrade: string,
+                                ?``user-agent``: string,
+                                ?vary: string,
+                                ?via: string,
+                                ?warning: string,
+                                ?``www-authenticate``: string,
+                                ?``:status``: float
+                            )
+                            : headers
+                            =
+                            nativeOnly
+
             module emit_headers =
 
                 [<AllowNullLiteral>]
@@ -117066,6 +117696,88 @@ recursive mode, operations are retried on failure.""")>]
                     abstract member ``www-authenticate``: string option with get, set
                     abstract member ``:status``: float option with get, set
 
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (
+                            ?``:path``: string,
+                            ?``:method``: string,
+                            ?``:authority``: string,
+                            ?``:scheme``: string,
+                            ?``:protocol``: string,
+                            ?accept: string,
+                            ?``accept-encoding``: string,
+                            ?``accept-language``: string,
+                            ?``accept-patch``: string,
+                            ?``accept-ranges``: string,
+                            ?``access-control-allow-credentials``: string,
+                            ?``access-control-allow-headers``: string,
+                            ?``access-control-allow-methods``: string,
+                            ?``access-control-allow-origin``: string,
+                            ?``access-control-expose-headers``: string,
+                            ?``access-control-max-age``: string,
+                            ?``access-control-request-headers``: string,
+                            ?``access-control-request-method``: string,
+                            ?age: string,
+                            ?allow: string,
+                            ?``alt-svc``: string,
+                            ?authorization: string,
+                            ?``cache-control``: string,
+                            ?connection: string,
+                            ?``content-disposition``: string,
+                            ?``content-encoding``: string,
+                            ?``content-language``: string,
+                            ?``content-length``: string,
+                            ?``content-location``: string,
+                            ?``content-range``: string,
+                            ?``content-type``: string,
+                            ?cookie: string,
+                            ?date: string,
+                            ?etag: string,
+                            ?expect: string,
+                            ?expires: string,
+                            ?forwarded: string,
+                            ?from: string,
+                            ?host: string,
+                            ?``if-match``: string,
+                            ?``if-modified-since``: string,
+                            ?``if-none-match``: string,
+                            ?``if-unmodified-since``: string,
+                            ?``last-modified``: string,
+                            ?location: string,
+                            ?origin: string,
+                            ?pragma: string,
+                            ?``proxy-authenticate``: string,
+                            ?``proxy-authorization``: string,
+                            ?``public-key-pins``: string,
+                            ?range: string,
+                            ?referer: string,
+                            ?``retry-after``: string,
+                            ?``sec-fetch-site``: string,
+                            ?``sec-fetch-mode``: string,
+                            ?``sec-fetch-user``: string,
+                            ?``sec-fetch-dest``: string,
+                            ?``sec-websocket-accept``: string,
+                            ?``sec-websocket-extensions``: string,
+                            ?``sec-websocket-key``: string,
+                            ?``sec-websocket-protocol``: string,
+                            ?``sec-websocket-version``: string,
+                            ?``set-cookie``: ResizeArray<string>,
+                            ?``strict-transport-security``: string,
+                            ?tk: string,
+                            ?trailer: string,
+                            ?``transfer-encoding``: string,
+                            ?upgrade: string,
+                            ?``user-agent``: string,
+                            ?vary: string,
+                            ?via: string,
+                            ?warning: string,
+                            ?``www-authenticate``: string,
+                            ?``:status``: float
+                        )
+                        : headers
+                        =
+                        nativeOnly
+
             module emit_response =
 
                 [<AllowNullLiteral>]
@@ -117145,6 +117857,88 @@ recursive mode, operations are retried on failure.""")>]
                     abstract member warning: string option with get, set
                     abstract member ``www-authenticate``: string option with get, set
                     abstract member ``:status``: float option with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (
+                            ?``:path``: string,
+                            ?``:method``: string,
+                            ?``:authority``: string,
+                            ?``:scheme``: string,
+                            ?``:protocol``: string,
+                            ?accept: string,
+                            ?``accept-encoding``: string,
+                            ?``accept-language``: string,
+                            ?``accept-patch``: string,
+                            ?``accept-ranges``: string,
+                            ?``access-control-allow-credentials``: string,
+                            ?``access-control-allow-headers``: string,
+                            ?``access-control-allow-methods``: string,
+                            ?``access-control-allow-origin``: string,
+                            ?``access-control-expose-headers``: string,
+                            ?``access-control-max-age``: string,
+                            ?``access-control-request-headers``: string,
+                            ?``access-control-request-method``: string,
+                            ?age: string,
+                            ?allow: string,
+                            ?``alt-svc``: string,
+                            ?authorization: string,
+                            ?``cache-control``: string,
+                            ?connection: string,
+                            ?``content-disposition``: string,
+                            ?``content-encoding``: string,
+                            ?``content-language``: string,
+                            ?``content-length``: string,
+                            ?``content-location``: string,
+                            ?``content-range``: string,
+                            ?``content-type``: string,
+                            ?cookie: string,
+                            ?date: string,
+                            ?etag: string,
+                            ?expect: string,
+                            ?expires: string,
+                            ?forwarded: string,
+                            ?from: string,
+                            ?host: string,
+                            ?``if-match``: string,
+                            ?``if-modified-since``: string,
+                            ?``if-none-match``: string,
+                            ?``if-unmodified-since``: string,
+                            ?``last-modified``: string,
+                            ?location: string,
+                            ?origin: string,
+                            ?pragma: string,
+                            ?``proxy-authenticate``: string,
+                            ?``proxy-authorization``: string,
+                            ?``public-key-pins``: string,
+                            ?range: string,
+                            ?referer: string,
+                            ?``retry-after``: string,
+                            ?``sec-fetch-site``: string,
+                            ?``sec-fetch-mode``: string,
+                            ?``sec-fetch-user``: string,
+                            ?``sec-fetch-dest``: string,
+                            ?``sec-websocket-accept``: string,
+                            ?``sec-websocket-extensions``: string,
+                            ?``sec-websocket-key``: string,
+                            ?``sec-websocket-protocol``: string,
+                            ?``sec-websocket-version``: string,
+                            ?``set-cookie``: ResizeArray<string>,
+                            ?``strict-transport-security``: string,
+                            ?tk: string,
+                            ?trailer: string,
+                            ?``transfer-encoding``: string,
+                            ?upgrade: string,
+                            ?``user-agent``: string,
+                            ?vary: string,
+                            ?via: string,
+                            ?warning: string,
+                            ?``www-authenticate``: string,
+                            ?``:status``: float
+                        )
+                        : headers
+                        =
+                        nativeOnly
 
             module on_headers =
 
@@ -117234,6 +118028,88 @@ recursive mode, operations are retried on failure.""")>]
                         abstract member warning: string option with get, set
                         abstract member ``www-authenticate``: string option with get, set
                         abstract member ``:status``: float option with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create
+                            (
+                                ?``:path``: string,
+                                ?``:method``: string,
+                                ?``:authority``: string,
+                                ?``:scheme``: string,
+                                ?``:protocol``: string,
+                                ?accept: string,
+                                ?``accept-encoding``: string,
+                                ?``accept-language``: string,
+                                ?``accept-patch``: string,
+                                ?``accept-ranges``: string,
+                                ?``access-control-allow-credentials``: string,
+                                ?``access-control-allow-headers``: string,
+                                ?``access-control-allow-methods``: string,
+                                ?``access-control-allow-origin``: string,
+                                ?``access-control-expose-headers``: string,
+                                ?``access-control-max-age``: string,
+                                ?``access-control-request-headers``: string,
+                                ?``access-control-request-method``: string,
+                                ?age: string,
+                                ?allow: string,
+                                ?``alt-svc``: string,
+                                ?authorization: string,
+                                ?``cache-control``: string,
+                                ?connection: string,
+                                ?``content-disposition``: string,
+                                ?``content-encoding``: string,
+                                ?``content-language``: string,
+                                ?``content-length``: string,
+                                ?``content-location``: string,
+                                ?``content-range``: string,
+                                ?``content-type``: string,
+                                ?cookie: string,
+                                ?date: string,
+                                ?etag: string,
+                                ?expect: string,
+                                ?expires: string,
+                                ?forwarded: string,
+                                ?from: string,
+                                ?host: string,
+                                ?``if-match``: string,
+                                ?``if-modified-since``: string,
+                                ?``if-none-match``: string,
+                                ?``if-unmodified-since``: string,
+                                ?``last-modified``: string,
+                                ?location: string,
+                                ?origin: string,
+                                ?pragma: string,
+                                ?``proxy-authenticate``: string,
+                                ?``proxy-authorization``: string,
+                                ?``public-key-pins``: string,
+                                ?range: string,
+                                ?referer: string,
+                                ?``retry-after``: string,
+                                ?``sec-fetch-site``: string,
+                                ?``sec-fetch-mode``: string,
+                                ?``sec-fetch-user``: string,
+                                ?``sec-fetch-dest``: string,
+                                ?``sec-websocket-accept``: string,
+                                ?``sec-websocket-extensions``: string,
+                                ?``sec-websocket-key``: string,
+                                ?``sec-websocket-protocol``: string,
+                                ?``sec-websocket-version``: string,
+                                ?``set-cookie``: ResizeArray<string>,
+                                ?``strict-transport-security``: string,
+                                ?tk: string,
+                                ?trailer: string,
+                                ?``transfer-encoding``: string,
+                                ?upgrade: string,
+                                ?``user-agent``: string,
+                                ?vary: string,
+                                ?via: string,
+                                ?warning: string,
+                                ?``www-authenticate``: string,
+                                ?``:status``: float
+                            )
+                            : headers
+                            =
+                            nativeOnly
 
             module on_push =
 
@@ -117329,6 +118205,88 @@ recursive mode, operations are retried on failure.""")>]
                         abstract member ``www-authenticate``: string option with get, set
                         abstract member ``:status``: float option with get, set
 
+                        [<ParamObject; Emit("$0")>]
+                        static member Create
+                            (
+                                ?``:path``: string,
+                                ?``:method``: string,
+                                ?``:authority``: string,
+                                ?``:scheme``: string,
+                                ?``:protocol``: string,
+                                ?accept: string,
+                                ?``accept-encoding``: string,
+                                ?``accept-language``: string,
+                                ?``accept-patch``: string,
+                                ?``accept-ranges``: string,
+                                ?``access-control-allow-credentials``: string,
+                                ?``access-control-allow-headers``: string,
+                                ?``access-control-allow-methods``: string,
+                                ?``access-control-allow-origin``: string,
+                                ?``access-control-expose-headers``: string,
+                                ?``access-control-max-age``: string,
+                                ?``access-control-request-headers``: string,
+                                ?``access-control-request-method``: string,
+                                ?age: string,
+                                ?allow: string,
+                                ?``alt-svc``: string,
+                                ?authorization: string,
+                                ?``cache-control``: string,
+                                ?connection: string,
+                                ?``content-disposition``: string,
+                                ?``content-encoding``: string,
+                                ?``content-language``: string,
+                                ?``content-length``: string,
+                                ?``content-location``: string,
+                                ?``content-range``: string,
+                                ?``content-type``: string,
+                                ?cookie: string,
+                                ?date: string,
+                                ?etag: string,
+                                ?expect: string,
+                                ?expires: string,
+                                ?forwarded: string,
+                                ?from: string,
+                                ?host: string,
+                                ?``if-match``: string,
+                                ?``if-modified-since``: string,
+                                ?``if-none-match``: string,
+                                ?``if-unmodified-since``: string,
+                                ?``last-modified``: string,
+                                ?location: string,
+                                ?origin: string,
+                                ?pragma: string,
+                                ?``proxy-authenticate``: string,
+                                ?``proxy-authorization``: string,
+                                ?``public-key-pins``: string,
+                                ?range: string,
+                                ?referer: string,
+                                ?``retry-after``: string,
+                                ?``sec-fetch-site``: string,
+                                ?``sec-fetch-mode``: string,
+                                ?``sec-fetch-user``: string,
+                                ?``sec-fetch-dest``: string,
+                                ?``sec-websocket-accept``: string,
+                                ?``sec-websocket-extensions``: string,
+                                ?``sec-websocket-key``: string,
+                                ?``sec-websocket-protocol``: string,
+                                ?``sec-websocket-version``: string,
+                                ?``set-cookie``: ResizeArray<string>,
+                                ?``strict-transport-security``: string,
+                                ?tk: string,
+                                ?trailer: string,
+                                ?``transfer-encoding``: string,
+                                ?upgrade: string,
+                                ?``user-agent``: string,
+                                ?vary: string,
+                                ?via: string,
+                                ?warning: string,
+                                ?``www-authenticate``: string,
+                                ?``:status``: float
+                            )
+                            : headers
+                            =
+                            nativeOnly
+
             module once_headers =
 
                 type listener =
@@ -117417,6 +118375,88 @@ recursive mode, operations are retried on failure.""")>]
                         abstract member warning: string option with get, set
                         abstract member ``www-authenticate``: string option with get, set
                         abstract member ``:status``: float option with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create
+                            (
+                                ?``:path``: string,
+                                ?``:method``: string,
+                                ?``:authority``: string,
+                                ?``:scheme``: string,
+                                ?``:protocol``: string,
+                                ?accept: string,
+                                ?``accept-encoding``: string,
+                                ?``accept-language``: string,
+                                ?``accept-patch``: string,
+                                ?``accept-ranges``: string,
+                                ?``access-control-allow-credentials``: string,
+                                ?``access-control-allow-headers``: string,
+                                ?``access-control-allow-methods``: string,
+                                ?``access-control-allow-origin``: string,
+                                ?``access-control-expose-headers``: string,
+                                ?``access-control-max-age``: string,
+                                ?``access-control-request-headers``: string,
+                                ?``access-control-request-method``: string,
+                                ?age: string,
+                                ?allow: string,
+                                ?``alt-svc``: string,
+                                ?authorization: string,
+                                ?``cache-control``: string,
+                                ?connection: string,
+                                ?``content-disposition``: string,
+                                ?``content-encoding``: string,
+                                ?``content-language``: string,
+                                ?``content-length``: string,
+                                ?``content-location``: string,
+                                ?``content-range``: string,
+                                ?``content-type``: string,
+                                ?cookie: string,
+                                ?date: string,
+                                ?etag: string,
+                                ?expect: string,
+                                ?expires: string,
+                                ?forwarded: string,
+                                ?from: string,
+                                ?host: string,
+                                ?``if-match``: string,
+                                ?``if-modified-since``: string,
+                                ?``if-none-match``: string,
+                                ?``if-unmodified-since``: string,
+                                ?``last-modified``: string,
+                                ?location: string,
+                                ?origin: string,
+                                ?pragma: string,
+                                ?``proxy-authenticate``: string,
+                                ?``proxy-authorization``: string,
+                                ?``public-key-pins``: string,
+                                ?range: string,
+                                ?referer: string,
+                                ?``retry-after``: string,
+                                ?``sec-fetch-site``: string,
+                                ?``sec-fetch-mode``: string,
+                                ?``sec-fetch-user``: string,
+                                ?``sec-fetch-dest``: string,
+                                ?``sec-websocket-accept``: string,
+                                ?``sec-websocket-extensions``: string,
+                                ?``sec-websocket-key``: string,
+                                ?``sec-websocket-protocol``: string,
+                                ?``sec-websocket-version``: string,
+                                ?``set-cookie``: ResizeArray<string>,
+                                ?``strict-transport-security``: string,
+                                ?tk: string,
+                                ?trailer: string,
+                                ?``transfer-encoding``: string,
+                                ?upgrade: string,
+                                ?``user-agent``: string,
+                                ?vary: string,
+                                ?via: string,
+                                ?warning: string,
+                                ?``www-authenticate``: string,
+                                ?``:status``: float
+                            )
+                            : headers
+                            =
+                            nativeOnly
 
             module once_push =
 
@@ -117512,6 +118552,88 @@ recursive mode, operations are retried on failure.""")>]
                         abstract member ``www-authenticate``: string option with get, set
                         abstract member ``:status``: float option with get, set
 
+                        [<ParamObject; Emit("$0")>]
+                        static member Create
+                            (
+                                ?``:path``: string,
+                                ?``:method``: string,
+                                ?``:authority``: string,
+                                ?``:scheme``: string,
+                                ?``:protocol``: string,
+                                ?accept: string,
+                                ?``accept-encoding``: string,
+                                ?``accept-language``: string,
+                                ?``accept-patch``: string,
+                                ?``accept-ranges``: string,
+                                ?``access-control-allow-credentials``: string,
+                                ?``access-control-allow-headers``: string,
+                                ?``access-control-allow-methods``: string,
+                                ?``access-control-allow-origin``: string,
+                                ?``access-control-expose-headers``: string,
+                                ?``access-control-max-age``: string,
+                                ?``access-control-request-headers``: string,
+                                ?``access-control-request-method``: string,
+                                ?age: string,
+                                ?allow: string,
+                                ?``alt-svc``: string,
+                                ?authorization: string,
+                                ?``cache-control``: string,
+                                ?connection: string,
+                                ?``content-disposition``: string,
+                                ?``content-encoding``: string,
+                                ?``content-language``: string,
+                                ?``content-length``: string,
+                                ?``content-location``: string,
+                                ?``content-range``: string,
+                                ?``content-type``: string,
+                                ?cookie: string,
+                                ?date: string,
+                                ?etag: string,
+                                ?expect: string,
+                                ?expires: string,
+                                ?forwarded: string,
+                                ?from: string,
+                                ?host: string,
+                                ?``if-match``: string,
+                                ?``if-modified-since``: string,
+                                ?``if-none-match``: string,
+                                ?``if-unmodified-since``: string,
+                                ?``last-modified``: string,
+                                ?location: string,
+                                ?origin: string,
+                                ?pragma: string,
+                                ?``proxy-authenticate``: string,
+                                ?``proxy-authorization``: string,
+                                ?``public-key-pins``: string,
+                                ?range: string,
+                                ?referer: string,
+                                ?``retry-after``: string,
+                                ?``sec-fetch-site``: string,
+                                ?``sec-fetch-mode``: string,
+                                ?``sec-fetch-user``: string,
+                                ?``sec-fetch-dest``: string,
+                                ?``sec-websocket-accept``: string,
+                                ?``sec-websocket-extensions``: string,
+                                ?``sec-websocket-key``: string,
+                                ?``sec-websocket-protocol``: string,
+                                ?``sec-websocket-version``: string,
+                                ?``set-cookie``: ResizeArray<string>,
+                                ?``strict-transport-security``: string,
+                                ?tk: string,
+                                ?trailer: string,
+                                ?``transfer-encoding``: string,
+                                ?upgrade: string,
+                                ?``user-agent``: string,
+                                ?vary: string,
+                                ?via: string,
+                                ?warning: string,
+                                ?``www-authenticate``: string,
+                                ?``:status``: float
+                            )
+                            : headers
+                            =
+                            nativeOnly
+
             module prependListener_headers =
 
                 type listener =
@@ -117600,6 +118722,88 @@ recursive mode, operations are retried on failure.""")>]
                         abstract member warning: string option with get, set
                         abstract member ``www-authenticate``: string option with get, set
                         abstract member ``:status``: float option with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create
+                            (
+                                ?``:path``: string,
+                                ?``:method``: string,
+                                ?``:authority``: string,
+                                ?``:scheme``: string,
+                                ?``:protocol``: string,
+                                ?accept: string,
+                                ?``accept-encoding``: string,
+                                ?``accept-language``: string,
+                                ?``accept-patch``: string,
+                                ?``accept-ranges``: string,
+                                ?``access-control-allow-credentials``: string,
+                                ?``access-control-allow-headers``: string,
+                                ?``access-control-allow-methods``: string,
+                                ?``access-control-allow-origin``: string,
+                                ?``access-control-expose-headers``: string,
+                                ?``access-control-max-age``: string,
+                                ?``access-control-request-headers``: string,
+                                ?``access-control-request-method``: string,
+                                ?age: string,
+                                ?allow: string,
+                                ?``alt-svc``: string,
+                                ?authorization: string,
+                                ?``cache-control``: string,
+                                ?connection: string,
+                                ?``content-disposition``: string,
+                                ?``content-encoding``: string,
+                                ?``content-language``: string,
+                                ?``content-length``: string,
+                                ?``content-location``: string,
+                                ?``content-range``: string,
+                                ?``content-type``: string,
+                                ?cookie: string,
+                                ?date: string,
+                                ?etag: string,
+                                ?expect: string,
+                                ?expires: string,
+                                ?forwarded: string,
+                                ?from: string,
+                                ?host: string,
+                                ?``if-match``: string,
+                                ?``if-modified-since``: string,
+                                ?``if-none-match``: string,
+                                ?``if-unmodified-since``: string,
+                                ?``last-modified``: string,
+                                ?location: string,
+                                ?origin: string,
+                                ?pragma: string,
+                                ?``proxy-authenticate``: string,
+                                ?``proxy-authorization``: string,
+                                ?``public-key-pins``: string,
+                                ?range: string,
+                                ?referer: string,
+                                ?``retry-after``: string,
+                                ?``sec-fetch-site``: string,
+                                ?``sec-fetch-mode``: string,
+                                ?``sec-fetch-user``: string,
+                                ?``sec-fetch-dest``: string,
+                                ?``sec-websocket-accept``: string,
+                                ?``sec-websocket-extensions``: string,
+                                ?``sec-websocket-key``: string,
+                                ?``sec-websocket-protocol``: string,
+                                ?``sec-websocket-version``: string,
+                                ?``set-cookie``: ResizeArray<string>,
+                                ?``strict-transport-security``: string,
+                                ?tk: string,
+                                ?trailer: string,
+                                ?``transfer-encoding``: string,
+                                ?upgrade: string,
+                                ?``user-agent``: string,
+                                ?vary: string,
+                                ?via: string,
+                                ?warning: string,
+                                ?``www-authenticate``: string,
+                                ?``:status``: float
+                            )
+                            : headers
+                            =
+                            nativeOnly
 
             module prependListener_push =
 
@@ -117695,6 +118899,88 @@ recursive mode, operations are retried on failure.""")>]
                         abstract member ``www-authenticate``: string option with get, set
                         abstract member ``:status``: float option with get, set
 
+                        [<ParamObject; Emit("$0")>]
+                        static member Create
+                            (
+                                ?``:path``: string,
+                                ?``:method``: string,
+                                ?``:authority``: string,
+                                ?``:scheme``: string,
+                                ?``:protocol``: string,
+                                ?accept: string,
+                                ?``accept-encoding``: string,
+                                ?``accept-language``: string,
+                                ?``accept-patch``: string,
+                                ?``accept-ranges``: string,
+                                ?``access-control-allow-credentials``: string,
+                                ?``access-control-allow-headers``: string,
+                                ?``access-control-allow-methods``: string,
+                                ?``access-control-allow-origin``: string,
+                                ?``access-control-expose-headers``: string,
+                                ?``access-control-max-age``: string,
+                                ?``access-control-request-headers``: string,
+                                ?``access-control-request-method``: string,
+                                ?age: string,
+                                ?allow: string,
+                                ?``alt-svc``: string,
+                                ?authorization: string,
+                                ?``cache-control``: string,
+                                ?connection: string,
+                                ?``content-disposition``: string,
+                                ?``content-encoding``: string,
+                                ?``content-language``: string,
+                                ?``content-length``: string,
+                                ?``content-location``: string,
+                                ?``content-range``: string,
+                                ?``content-type``: string,
+                                ?cookie: string,
+                                ?date: string,
+                                ?etag: string,
+                                ?expect: string,
+                                ?expires: string,
+                                ?forwarded: string,
+                                ?from: string,
+                                ?host: string,
+                                ?``if-match``: string,
+                                ?``if-modified-since``: string,
+                                ?``if-none-match``: string,
+                                ?``if-unmodified-since``: string,
+                                ?``last-modified``: string,
+                                ?location: string,
+                                ?origin: string,
+                                ?pragma: string,
+                                ?``proxy-authenticate``: string,
+                                ?``proxy-authorization``: string,
+                                ?``public-key-pins``: string,
+                                ?range: string,
+                                ?referer: string,
+                                ?``retry-after``: string,
+                                ?``sec-fetch-site``: string,
+                                ?``sec-fetch-mode``: string,
+                                ?``sec-fetch-user``: string,
+                                ?``sec-fetch-dest``: string,
+                                ?``sec-websocket-accept``: string,
+                                ?``sec-websocket-extensions``: string,
+                                ?``sec-websocket-key``: string,
+                                ?``sec-websocket-protocol``: string,
+                                ?``sec-websocket-version``: string,
+                                ?``set-cookie``: ResizeArray<string>,
+                                ?``strict-transport-security``: string,
+                                ?tk: string,
+                                ?trailer: string,
+                                ?``transfer-encoding``: string,
+                                ?upgrade: string,
+                                ?``user-agent``: string,
+                                ?vary: string,
+                                ?via: string,
+                                ?warning: string,
+                                ?``www-authenticate``: string,
+                                ?``:status``: float
+                            )
+                            : headers
+                            =
+                            nativeOnly
+
             module prependOnceListener_headers =
 
                 type listener =
@@ -117783,6 +119069,88 @@ recursive mode, operations are retried on failure.""")>]
                         abstract member warning: string option with get, set
                         abstract member ``www-authenticate``: string option with get, set
                         abstract member ``:status``: float option with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create
+                            (
+                                ?``:path``: string,
+                                ?``:method``: string,
+                                ?``:authority``: string,
+                                ?``:scheme``: string,
+                                ?``:protocol``: string,
+                                ?accept: string,
+                                ?``accept-encoding``: string,
+                                ?``accept-language``: string,
+                                ?``accept-patch``: string,
+                                ?``accept-ranges``: string,
+                                ?``access-control-allow-credentials``: string,
+                                ?``access-control-allow-headers``: string,
+                                ?``access-control-allow-methods``: string,
+                                ?``access-control-allow-origin``: string,
+                                ?``access-control-expose-headers``: string,
+                                ?``access-control-max-age``: string,
+                                ?``access-control-request-headers``: string,
+                                ?``access-control-request-method``: string,
+                                ?age: string,
+                                ?allow: string,
+                                ?``alt-svc``: string,
+                                ?authorization: string,
+                                ?``cache-control``: string,
+                                ?connection: string,
+                                ?``content-disposition``: string,
+                                ?``content-encoding``: string,
+                                ?``content-language``: string,
+                                ?``content-length``: string,
+                                ?``content-location``: string,
+                                ?``content-range``: string,
+                                ?``content-type``: string,
+                                ?cookie: string,
+                                ?date: string,
+                                ?etag: string,
+                                ?expect: string,
+                                ?expires: string,
+                                ?forwarded: string,
+                                ?from: string,
+                                ?host: string,
+                                ?``if-match``: string,
+                                ?``if-modified-since``: string,
+                                ?``if-none-match``: string,
+                                ?``if-unmodified-since``: string,
+                                ?``last-modified``: string,
+                                ?location: string,
+                                ?origin: string,
+                                ?pragma: string,
+                                ?``proxy-authenticate``: string,
+                                ?``proxy-authorization``: string,
+                                ?``public-key-pins``: string,
+                                ?range: string,
+                                ?referer: string,
+                                ?``retry-after``: string,
+                                ?``sec-fetch-site``: string,
+                                ?``sec-fetch-mode``: string,
+                                ?``sec-fetch-user``: string,
+                                ?``sec-fetch-dest``: string,
+                                ?``sec-websocket-accept``: string,
+                                ?``sec-websocket-extensions``: string,
+                                ?``sec-websocket-key``: string,
+                                ?``sec-websocket-protocol``: string,
+                                ?``sec-websocket-version``: string,
+                                ?``set-cookie``: ResizeArray<string>,
+                                ?``strict-transport-security``: string,
+                                ?tk: string,
+                                ?trailer: string,
+                                ?``transfer-encoding``: string,
+                                ?upgrade: string,
+                                ?``user-agent``: string,
+                                ?vary: string,
+                                ?via: string,
+                                ?warning: string,
+                                ?``www-authenticate``: string,
+                                ?``:status``: float
+                            )
+                            : headers
+                            =
+                            nativeOnly
 
             module prependOnceListener_push =
 
@@ -117877,6 +119245,88 @@ recursive mode, operations are retried on failure.""")>]
                         abstract member warning: string option with get, set
                         abstract member ``www-authenticate``: string option with get, set
                         abstract member ``:status``: float option with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create
+                            (
+                                ?``:path``: string,
+                                ?``:method``: string,
+                                ?``:authority``: string,
+                                ?``:scheme``: string,
+                                ?``:protocol``: string,
+                                ?accept: string,
+                                ?``accept-encoding``: string,
+                                ?``accept-language``: string,
+                                ?``accept-patch``: string,
+                                ?``accept-ranges``: string,
+                                ?``access-control-allow-credentials``: string,
+                                ?``access-control-allow-headers``: string,
+                                ?``access-control-allow-methods``: string,
+                                ?``access-control-allow-origin``: string,
+                                ?``access-control-expose-headers``: string,
+                                ?``access-control-max-age``: string,
+                                ?``access-control-request-headers``: string,
+                                ?``access-control-request-method``: string,
+                                ?age: string,
+                                ?allow: string,
+                                ?``alt-svc``: string,
+                                ?authorization: string,
+                                ?``cache-control``: string,
+                                ?connection: string,
+                                ?``content-disposition``: string,
+                                ?``content-encoding``: string,
+                                ?``content-language``: string,
+                                ?``content-length``: string,
+                                ?``content-location``: string,
+                                ?``content-range``: string,
+                                ?``content-type``: string,
+                                ?cookie: string,
+                                ?date: string,
+                                ?etag: string,
+                                ?expect: string,
+                                ?expires: string,
+                                ?forwarded: string,
+                                ?from: string,
+                                ?host: string,
+                                ?``if-match``: string,
+                                ?``if-modified-since``: string,
+                                ?``if-none-match``: string,
+                                ?``if-unmodified-since``: string,
+                                ?``last-modified``: string,
+                                ?location: string,
+                                ?origin: string,
+                                ?pragma: string,
+                                ?``proxy-authenticate``: string,
+                                ?``proxy-authorization``: string,
+                                ?``public-key-pins``: string,
+                                ?range: string,
+                                ?referer: string,
+                                ?``retry-after``: string,
+                                ?``sec-fetch-site``: string,
+                                ?``sec-fetch-mode``: string,
+                                ?``sec-fetch-user``: string,
+                                ?``sec-fetch-dest``: string,
+                                ?``sec-websocket-accept``: string,
+                                ?``sec-websocket-extensions``: string,
+                                ?``sec-websocket-key``: string,
+                                ?``sec-websocket-protocol``: string,
+                                ?``sec-websocket-version``: string,
+                                ?``set-cookie``: ResizeArray<string>,
+                                ?``strict-transport-security``: string,
+                                ?tk: string,
+                                ?trailer: string,
+                                ?``transfer-encoding``: string,
+                                ?upgrade: string,
+                                ?``user-agent``: string,
+                                ?vary: string,
+                                ?via: string,
+                                ?warning: string,
+                                ?``www-authenticate``: string,
+                                ?``:status``: float
+                            )
+                            : headers
+                            =
+                            nativeOnly
 
         module ServerHttp2Stream =
 
@@ -118072,6 +119522,88 @@ recursive mode, operations are retried on failure.""")>]
                         abstract member ``www-authenticate``: string option with get, set
                         abstract member ``:status``: float option with get, set
 
+                        [<ParamObject; Emit("$0")>]
+                        static member Create
+                            (
+                                ?``:path``: string,
+                                ?``:method``: string,
+                                ?``:authority``: string,
+                                ?``:scheme``: string,
+                                ?``:protocol``: string,
+                                ?accept: string,
+                                ?``accept-encoding``: string,
+                                ?``accept-language``: string,
+                                ?``accept-patch``: string,
+                                ?``accept-ranges``: string,
+                                ?``access-control-allow-credentials``: string,
+                                ?``access-control-allow-headers``: string,
+                                ?``access-control-allow-methods``: string,
+                                ?``access-control-allow-origin``: string,
+                                ?``access-control-expose-headers``: string,
+                                ?``access-control-max-age``: string,
+                                ?``access-control-request-headers``: string,
+                                ?``access-control-request-method``: string,
+                                ?age: string,
+                                ?allow: string,
+                                ?``alt-svc``: string,
+                                ?authorization: string,
+                                ?``cache-control``: string,
+                                ?connection: string,
+                                ?``content-disposition``: string,
+                                ?``content-encoding``: string,
+                                ?``content-language``: string,
+                                ?``content-length``: string,
+                                ?``content-location``: string,
+                                ?``content-range``: string,
+                                ?``content-type``: string,
+                                ?cookie: string,
+                                ?date: string,
+                                ?etag: string,
+                                ?expect: string,
+                                ?expires: string,
+                                ?forwarded: string,
+                                ?from: string,
+                                ?host: string,
+                                ?``if-match``: string,
+                                ?``if-modified-since``: string,
+                                ?``if-none-match``: string,
+                                ?``if-unmodified-since``: string,
+                                ?``last-modified``: string,
+                                ?location: string,
+                                ?origin: string,
+                                ?pragma: string,
+                                ?``proxy-authenticate``: string,
+                                ?``proxy-authorization``: string,
+                                ?``public-key-pins``: string,
+                                ?range: string,
+                                ?referer: string,
+                                ?``retry-after``: string,
+                                ?``sec-fetch-site``: string,
+                                ?``sec-fetch-mode``: string,
+                                ?``sec-fetch-user``: string,
+                                ?``sec-fetch-dest``: string,
+                                ?``sec-websocket-accept``: string,
+                                ?``sec-websocket-extensions``: string,
+                                ?``sec-websocket-key``: string,
+                                ?``sec-websocket-protocol``: string,
+                                ?``sec-websocket-version``: string,
+                                ?``set-cookie``: ResizeArray<string>,
+                                ?``strict-transport-security``: string,
+                                ?tk: string,
+                                ?trailer: string,
+                                ?``transfer-encoding``: string,
+                                ?upgrade: string,
+                                ?``user-agent``: string,
+                                ?vary: string,
+                                ?via: string,
+                                ?warning: string,
+                                ?``www-authenticate``: string,
+                                ?``:status``: float
+                            )
+                            : headers
+                            =
+                            nativeOnly
+
             module emit_stream =
 
                 [<AllowNullLiteral>]
@@ -118151,6 +119683,88 @@ recursive mode, operations are retried on failure.""")>]
                     abstract member warning: string option with get, set
                     abstract member ``www-authenticate``: string option with get, set
                     abstract member ``:status``: float option with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (
+                            ?``:path``: string,
+                            ?``:method``: string,
+                            ?``:authority``: string,
+                            ?``:scheme``: string,
+                            ?``:protocol``: string,
+                            ?accept: string,
+                            ?``accept-encoding``: string,
+                            ?``accept-language``: string,
+                            ?``accept-patch``: string,
+                            ?``accept-ranges``: string,
+                            ?``access-control-allow-credentials``: string,
+                            ?``access-control-allow-headers``: string,
+                            ?``access-control-allow-methods``: string,
+                            ?``access-control-allow-origin``: string,
+                            ?``access-control-expose-headers``: string,
+                            ?``access-control-max-age``: string,
+                            ?``access-control-request-headers``: string,
+                            ?``access-control-request-method``: string,
+                            ?age: string,
+                            ?allow: string,
+                            ?``alt-svc``: string,
+                            ?authorization: string,
+                            ?``cache-control``: string,
+                            ?connection: string,
+                            ?``content-disposition``: string,
+                            ?``content-encoding``: string,
+                            ?``content-language``: string,
+                            ?``content-length``: string,
+                            ?``content-location``: string,
+                            ?``content-range``: string,
+                            ?``content-type``: string,
+                            ?cookie: string,
+                            ?date: string,
+                            ?etag: string,
+                            ?expect: string,
+                            ?expires: string,
+                            ?forwarded: string,
+                            ?from: string,
+                            ?host: string,
+                            ?``if-match``: string,
+                            ?``if-modified-since``: string,
+                            ?``if-none-match``: string,
+                            ?``if-unmodified-since``: string,
+                            ?``last-modified``: string,
+                            ?location: string,
+                            ?origin: string,
+                            ?pragma: string,
+                            ?``proxy-authenticate``: string,
+                            ?``proxy-authorization``: string,
+                            ?``public-key-pins``: string,
+                            ?range: string,
+                            ?referer: string,
+                            ?``retry-after``: string,
+                            ?``sec-fetch-site``: string,
+                            ?``sec-fetch-mode``: string,
+                            ?``sec-fetch-user``: string,
+                            ?``sec-fetch-dest``: string,
+                            ?``sec-websocket-accept``: string,
+                            ?``sec-websocket-extensions``: string,
+                            ?``sec-websocket-key``: string,
+                            ?``sec-websocket-protocol``: string,
+                            ?``sec-websocket-version``: string,
+                            ?``set-cookie``: ResizeArray<string>,
+                            ?``strict-transport-security``: string,
+                            ?tk: string,
+                            ?trailer: string,
+                            ?``transfer-encoding``: string,
+                            ?upgrade: string,
+                            ?``user-agent``: string,
+                            ?vary: string,
+                            ?via: string,
+                            ?warning: string,
+                            ?``www-authenticate``: string,
+                            ?``:status``: float
+                        )
+                        : headers
+                        =
+                        nativeOnly
 
             module on_altsvc =
 
@@ -118254,6 +119868,88 @@ recursive mode, operations are retried on failure.""")>]
                         abstract member ``www-authenticate``: string option with get, set
                         abstract member ``:status``: float option with get, set
 
+                        [<ParamObject; Emit("$0")>]
+                        static member Create
+                            (
+                                ?``:path``: string,
+                                ?``:method``: string,
+                                ?``:authority``: string,
+                                ?``:scheme``: string,
+                                ?``:protocol``: string,
+                                ?accept: string,
+                                ?``accept-encoding``: string,
+                                ?``accept-language``: string,
+                                ?``accept-patch``: string,
+                                ?``accept-ranges``: string,
+                                ?``access-control-allow-credentials``: string,
+                                ?``access-control-allow-headers``: string,
+                                ?``access-control-allow-methods``: string,
+                                ?``access-control-allow-origin``: string,
+                                ?``access-control-expose-headers``: string,
+                                ?``access-control-max-age``: string,
+                                ?``access-control-request-headers``: string,
+                                ?``access-control-request-method``: string,
+                                ?age: string,
+                                ?allow: string,
+                                ?``alt-svc``: string,
+                                ?authorization: string,
+                                ?``cache-control``: string,
+                                ?connection: string,
+                                ?``content-disposition``: string,
+                                ?``content-encoding``: string,
+                                ?``content-language``: string,
+                                ?``content-length``: string,
+                                ?``content-location``: string,
+                                ?``content-range``: string,
+                                ?``content-type``: string,
+                                ?cookie: string,
+                                ?date: string,
+                                ?etag: string,
+                                ?expect: string,
+                                ?expires: string,
+                                ?forwarded: string,
+                                ?from: string,
+                                ?host: string,
+                                ?``if-match``: string,
+                                ?``if-modified-since``: string,
+                                ?``if-none-match``: string,
+                                ?``if-unmodified-since``: string,
+                                ?``last-modified``: string,
+                                ?location: string,
+                                ?origin: string,
+                                ?pragma: string,
+                                ?``proxy-authenticate``: string,
+                                ?``proxy-authorization``: string,
+                                ?``public-key-pins``: string,
+                                ?range: string,
+                                ?referer: string,
+                                ?``retry-after``: string,
+                                ?``sec-fetch-site``: string,
+                                ?``sec-fetch-mode``: string,
+                                ?``sec-fetch-user``: string,
+                                ?``sec-fetch-dest``: string,
+                                ?``sec-websocket-accept``: string,
+                                ?``sec-websocket-extensions``: string,
+                                ?``sec-websocket-key``: string,
+                                ?``sec-websocket-protocol``: string,
+                                ?``sec-websocket-version``: string,
+                                ?``set-cookie``: ResizeArray<string>,
+                                ?``strict-transport-security``: string,
+                                ?tk: string,
+                                ?trailer: string,
+                                ?``transfer-encoding``: string,
+                                ?upgrade: string,
+                                ?``user-agent``: string,
+                                ?vary: string,
+                                ?via: string,
+                                ?warning: string,
+                                ?``www-authenticate``: string,
+                                ?``:status``: float
+                            )
+                            : headers
+                            =
+                            nativeOnly
+
             module once_altsvc =
 
                 type listener = delegate of alt: string * origin: string * stream: float -> unit
@@ -118355,6 +120051,88 @@ recursive mode, operations are retried on failure.""")>]
                         abstract member warning: string option with get, set
                         abstract member ``www-authenticate``: string option with get, set
                         abstract member ``:status``: float option with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create
+                            (
+                                ?``:path``: string,
+                                ?``:method``: string,
+                                ?``:authority``: string,
+                                ?``:scheme``: string,
+                                ?``:protocol``: string,
+                                ?accept: string,
+                                ?``accept-encoding``: string,
+                                ?``accept-language``: string,
+                                ?``accept-patch``: string,
+                                ?``accept-ranges``: string,
+                                ?``access-control-allow-credentials``: string,
+                                ?``access-control-allow-headers``: string,
+                                ?``access-control-allow-methods``: string,
+                                ?``access-control-allow-origin``: string,
+                                ?``access-control-expose-headers``: string,
+                                ?``access-control-max-age``: string,
+                                ?``access-control-request-headers``: string,
+                                ?``access-control-request-method``: string,
+                                ?age: string,
+                                ?allow: string,
+                                ?``alt-svc``: string,
+                                ?authorization: string,
+                                ?``cache-control``: string,
+                                ?connection: string,
+                                ?``content-disposition``: string,
+                                ?``content-encoding``: string,
+                                ?``content-language``: string,
+                                ?``content-length``: string,
+                                ?``content-location``: string,
+                                ?``content-range``: string,
+                                ?``content-type``: string,
+                                ?cookie: string,
+                                ?date: string,
+                                ?etag: string,
+                                ?expect: string,
+                                ?expires: string,
+                                ?forwarded: string,
+                                ?from: string,
+                                ?host: string,
+                                ?``if-match``: string,
+                                ?``if-modified-since``: string,
+                                ?``if-none-match``: string,
+                                ?``if-unmodified-since``: string,
+                                ?``last-modified``: string,
+                                ?location: string,
+                                ?origin: string,
+                                ?pragma: string,
+                                ?``proxy-authenticate``: string,
+                                ?``proxy-authorization``: string,
+                                ?``public-key-pins``: string,
+                                ?range: string,
+                                ?referer: string,
+                                ?``retry-after``: string,
+                                ?``sec-fetch-site``: string,
+                                ?``sec-fetch-mode``: string,
+                                ?``sec-fetch-user``: string,
+                                ?``sec-fetch-dest``: string,
+                                ?``sec-websocket-accept``: string,
+                                ?``sec-websocket-extensions``: string,
+                                ?``sec-websocket-key``: string,
+                                ?``sec-websocket-protocol``: string,
+                                ?``sec-websocket-version``: string,
+                                ?``set-cookie``: ResizeArray<string>,
+                                ?``strict-transport-security``: string,
+                                ?tk: string,
+                                ?trailer: string,
+                                ?``transfer-encoding``: string,
+                                ?upgrade: string,
+                                ?``user-agent``: string,
+                                ?vary: string,
+                                ?via: string,
+                                ?warning: string,
+                                ?``www-authenticate``: string,
+                                ?``:status``: float
+                            )
+                            : headers
+                            =
+                            nativeOnly
 
             module prependListener_altsvc =
 
@@ -118458,6 +120236,88 @@ recursive mode, operations are retried on failure.""")>]
                         abstract member ``www-authenticate``: string option with get, set
                         abstract member ``:status``: float option with get, set
 
+                        [<ParamObject; Emit("$0")>]
+                        static member Create
+                            (
+                                ?``:path``: string,
+                                ?``:method``: string,
+                                ?``:authority``: string,
+                                ?``:scheme``: string,
+                                ?``:protocol``: string,
+                                ?accept: string,
+                                ?``accept-encoding``: string,
+                                ?``accept-language``: string,
+                                ?``accept-patch``: string,
+                                ?``accept-ranges``: string,
+                                ?``access-control-allow-credentials``: string,
+                                ?``access-control-allow-headers``: string,
+                                ?``access-control-allow-methods``: string,
+                                ?``access-control-allow-origin``: string,
+                                ?``access-control-expose-headers``: string,
+                                ?``access-control-max-age``: string,
+                                ?``access-control-request-headers``: string,
+                                ?``access-control-request-method``: string,
+                                ?age: string,
+                                ?allow: string,
+                                ?``alt-svc``: string,
+                                ?authorization: string,
+                                ?``cache-control``: string,
+                                ?connection: string,
+                                ?``content-disposition``: string,
+                                ?``content-encoding``: string,
+                                ?``content-language``: string,
+                                ?``content-length``: string,
+                                ?``content-location``: string,
+                                ?``content-range``: string,
+                                ?``content-type``: string,
+                                ?cookie: string,
+                                ?date: string,
+                                ?etag: string,
+                                ?expect: string,
+                                ?expires: string,
+                                ?forwarded: string,
+                                ?from: string,
+                                ?host: string,
+                                ?``if-match``: string,
+                                ?``if-modified-since``: string,
+                                ?``if-none-match``: string,
+                                ?``if-unmodified-since``: string,
+                                ?``last-modified``: string,
+                                ?location: string,
+                                ?origin: string,
+                                ?pragma: string,
+                                ?``proxy-authenticate``: string,
+                                ?``proxy-authorization``: string,
+                                ?``public-key-pins``: string,
+                                ?range: string,
+                                ?referer: string,
+                                ?``retry-after``: string,
+                                ?``sec-fetch-site``: string,
+                                ?``sec-fetch-mode``: string,
+                                ?``sec-fetch-user``: string,
+                                ?``sec-fetch-dest``: string,
+                                ?``sec-websocket-accept``: string,
+                                ?``sec-websocket-extensions``: string,
+                                ?``sec-websocket-key``: string,
+                                ?``sec-websocket-protocol``: string,
+                                ?``sec-websocket-version``: string,
+                                ?``set-cookie``: ResizeArray<string>,
+                                ?``strict-transport-security``: string,
+                                ?tk: string,
+                                ?trailer: string,
+                                ?``transfer-encoding``: string,
+                                ?upgrade: string,
+                                ?``user-agent``: string,
+                                ?vary: string,
+                                ?via: string,
+                                ?warning: string,
+                                ?``www-authenticate``: string,
+                                ?``:status``: float
+                            )
+                            : headers
+                            =
+                            nativeOnly
+
             module prependOnceListener_altsvc =
 
                 type listener = delegate of alt: string * origin: string * stream: float -> unit
@@ -118559,6 +120419,88 @@ recursive mode, operations are retried on failure.""")>]
                         abstract member warning: string option with get, set
                         abstract member ``www-authenticate``: string option with get, set
                         abstract member ``:status``: float option with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create
+                            (
+                                ?``:path``: string,
+                                ?``:method``: string,
+                                ?``:authority``: string,
+                                ?``:scheme``: string,
+                                ?``:protocol``: string,
+                                ?accept: string,
+                                ?``accept-encoding``: string,
+                                ?``accept-language``: string,
+                                ?``accept-patch``: string,
+                                ?``accept-ranges``: string,
+                                ?``access-control-allow-credentials``: string,
+                                ?``access-control-allow-headers``: string,
+                                ?``access-control-allow-methods``: string,
+                                ?``access-control-allow-origin``: string,
+                                ?``access-control-expose-headers``: string,
+                                ?``access-control-max-age``: string,
+                                ?``access-control-request-headers``: string,
+                                ?``access-control-request-method``: string,
+                                ?age: string,
+                                ?allow: string,
+                                ?``alt-svc``: string,
+                                ?authorization: string,
+                                ?``cache-control``: string,
+                                ?connection: string,
+                                ?``content-disposition``: string,
+                                ?``content-encoding``: string,
+                                ?``content-language``: string,
+                                ?``content-length``: string,
+                                ?``content-location``: string,
+                                ?``content-range``: string,
+                                ?``content-type``: string,
+                                ?cookie: string,
+                                ?date: string,
+                                ?etag: string,
+                                ?expect: string,
+                                ?expires: string,
+                                ?forwarded: string,
+                                ?from: string,
+                                ?host: string,
+                                ?``if-match``: string,
+                                ?``if-modified-since``: string,
+                                ?``if-none-match``: string,
+                                ?``if-unmodified-since``: string,
+                                ?``last-modified``: string,
+                                ?location: string,
+                                ?origin: string,
+                                ?pragma: string,
+                                ?``proxy-authenticate``: string,
+                                ?``proxy-authorization``: string,
+                                ?``public-key-pins``: string,
+                                ?range: string,
+                                ?referer: string,
+                                ?``retry-after``: string,
+                                ?``sec-fetch-site``: string,
+                                ?``sec-fetch-mode``: string,
+                                ?``sec-fetch-user``: string,
+                                ?``sec-fetch-dest``: string,
+                                ?``sec-websocket-accept``: string,
+                                ?``sec-websocket-extensions``: string,
+                                ?``sec-websocket-key``: string,
+                                ?``sec-websocket-protocol``: string,
+                                ?``sec-websocket-version``: string,
+                                ?``set-cookie``: ResizeArray<string>,
+                                ?``strict-transport-security``: string,
+                                ?tk: string,
+                                ?trailer: string,
+                                ?``transfer-encoding``: string,
+                                ?upgrade: string,
+                                ?``user-agent``: string,
+                                ?vary: string,
+                                ?via: string,
+                                ?warning: string,
+                                ?``www-authenticate``: string,
+                                ?``:status``: float
+                            )
+                            : headers
+                            =
+                            nativeOnly
 
         module ServerHttp2Session =
 
@@ -148311,7 +150253,7 @@ Readable.isDisturbed($0)""")>]
                 /// a promise for the final value of the reduction.
                 /// </returns>
                 abstract member reduce:
-                    fn: Readable.reduce.fn_1 * ?initial: obj * ?options: Readable.reduce.options_1 ->
+                    fn: Readable.reduce.fn_1 * ?initial: obj * ?options: Readable.reduce.options ->
                         JS.Promise<obj>
 
                 /// <summary>
@@ -148325,22 +150267,8 @@ Readable.isDisturbed($0)""")>]
                 /// or parallelism. To perform a reduce concurrently, you can extract the async function to <c>readable.map</c> method.
                 /// </summary>
                 abstract member reduce<'T> :
-                    fn: Readable.reduce.fn_2<'T> * initial: 'T * ?options: Readable.reduce.options_2 ->
+                    fn: Readable.reduce.fn_2<'T> * initial: 'T * ?options: Readable.reduce.options ->
                         JS.Promise<'T>
-
-                /// <summary>
-                /// This method calls *fn* on each chunk of the stream in order, passing it the result from the calculation
-                /// on the previous element. It returns a promise for the final value of the reduction.
-                ///
-                /// If no *initial* value is supplied the first chunk of the stream is used as the initial value.
-                /// If the stream is empty, the promise is rejected with a <c>TypeError</c> with the <c>ERR_INVALID_ARGS</c> code property.
-                ///
-                /// The reducer function iterates the stream element-by-element which means that there is no *concurrency* parameter
-                /// or parallelism. To perform a reduce concurrently, you can extract the async function to <c>readable.map</c> method.
-                /// </summary>
-                abstract member reduce:
-                    fn: Readable.reduce.fn_3 * initial: obj * ?options: Readable.reduce.options_3 ->
-                        JS.Promise<obj>
 
                 abstract member _destroy:
                     error: Exception option * callback: (Exception option -> unit) -> unit
@@ -159748,20 +161676,9 @@ Duplex.fromWeb($0, $1)""")>]
                             [<ParamObject; Emit("$0")>]
                             static member Create(?signal: Node.AbortSignal) : options = nativeOnly
 
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type options_1 =
-                            /// <summary>
-                            /// Allows destroying the stream if the signal is aborted.
-                            /// </summary>
-                            abstract member signal: Node.AbortSignal option with get, set
-
-                            [<ParamObject; Emit("$0")>]
-                            static member Create(?signal: Node.AbortSignal) : options_1 = nativeOnly
-
                     type fn_1 =
                         delegate of
-                            data: obj * ?options: Readable.find.fn.options_1 ->
+                            data: obj * ?options: Readable.find.fn.options ->
                                 U2<bool, JS.Promise<bool>>
 
                 module every =
@@ -159870,85 +161787,13 @@ Duplex.fromWeb($0, $1)""")>]
                             [<ParamObject; Emit("$0")>]
                             static member Create(?signal: Node.AbortSignal) : options = nativeOnly
 
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type options_1 =
-                            /// <summary>
-                            /// Allows destroying the stream if the signal is aborted.
-                            /// </summary>
-                            abstract member signal: Node.AbortSignal option with get, set
-
-                            [<ParamObject; Emit("$0")>]
-                            static member Create(?signal: Node.AbortSignal) : options_1 = nativeOnly
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type options_2 =
-                            /// <summary>
-                            /// Allows destroying the stream if the signal is aborted.
-                            /// </summary>
-                            abstract member signal: Node.AbortSignal option with get, set
-
-                            [<ParamObject; Emit("$0")>]
-                            static member Create(?signal: Node.AbortSignal) : options_2 = nativeOnly
-
-                        [<AllowNullLiteral>]
-                        [<Interface>]
-                        type options_3 =
-                            /// <summary>
-                            /// Allows destroying the stream if the signal is aborted.
-                            /// </summary>
-                            abstract member signal: Node.AbortSignal option with get, set
-
-                            [<ParamObject; Emit("$0")>]
-                            static member Create(?signal: Node.AbortSignal) : options_3 = nativeOnly
-
                     type fn_1 =
                         delegate of
-                            previous: obj * data: obj * ?options: Readable.reduce.fn.options_1 ->
-                                unit
-
-                    [<AllowNullLiteral>]
-                    [<Interface>]
-                    type options_1 =
-                        /// <summary>
-                        /// Allows destroying the stream if the signal is aborted.
-                        /// </summary>
-                        abstract member signal: Node.AbortSignal option with get, set
-
-                        [<ParamObject; Emit("$0")>]
-                        static member Create(?signal: Node.AbortSignal) : options_1 = nativeOnly
+                            previous: obj * data: obj * ?options: Readable.reduce.fn.options -> unit
 
                     type fn_2<'T> =
                         delegate of
-                            previous: 'T * data: obj * ?options: Readable.reduce.fn.options_2 -> 'T
-
-                    [<AllowNullLiteral>]
-                    [<Interface>]
-                    type options_2 =
-                        /// <summary>
-                        /// Allows destroying the stream if the signal is aborted.
-                        /// </summary>
-                        abstract member signal: Node.AbortSignal option with get, set
-
-                        [<ParamObject; Emit("$0")>]
-                        static member Create(?signal: Node.AbortSignal) : options_2 = nativeOnly
-
-                    type fn_3 =
-                        delegate of
-                            previous: obj * data: obj * ?options: Readable.reduce.fn.options_3 ->
-                                unit
-
-                    [<AllowNullLiteral>]
-                    [<Interface>]
-                    type options_3 =
-                        /// <summary>
-                        /// Allows destroying the stream if the signal is aborted.
-                        /// </summary>
-                        abstract member signal: Node.AbortSignal option with get, set
-
-                        [<ParamObject; Emit("$0")>]
-                        static member Create(?signal: Node.AbortSignal) : options_3 = nativeOnly
+                            previous: 'T * data: obj * ?options: Readable.reduce.fn.options -> 'T
 
             module WritableOptions =
 
@@ -167404,6 +169249,13 @@ Duplex.fromWeb($0, $1)""")>]
                 [<Interface>]
                 type property =
                     abstract member mock: Node.test.test_.MockPropertyContext<obj> with get, set
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (mock: Node.test.test_.MockPropertyContext<obj>)
+                        : property
+                        =
+                        nativeOnly
 
             module MockPropertyContext =
 
@@ -178076,6 +179928,12 @@ URL.parse($0, $1)""")>]
                 | set
                 | Case1 of bool
 
+                [<Emit("$0")>]
+                static member op_Implicit(value: bool) : getters = nativeOnly
+
+                [<Emit("$0")>]
+                static member op_ErasedCast(value: bool) : getters = nativeOnly
+
             module sorted =
 
                 module U2 =
@@ -181691,6 +183549,26 @@ URL.parse($0, $1)""")>]
                 /// Otherwise the value is <c>undefined</c>.
                 /// </summary>
                 abstract member cachedDataRejected: bool option with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        apply: obj,
+                        call: obj,
+                        bind: obj,
+                        toString: string,
+                        prototype: obj,
+                        length: float,
+                        arguments: obj,
+                        caller: Action,
+                        name: string,
+                        ?cachedData: Node.NonSharedBuffer,
+                        ?cachedDataProduced: bool,
+                        ?cachedDataRejected: bool
+                    )
+                    : compileFunction__
+                    =
+                    nativeOnly
 
     module wasi =
 
@@ -188182,6 +190060,20 @@ module UndiciTypes =
                     abstract member Client:
                         ReadonlyArray<UndiciTypes.dispatcher.Dispatcher_.DispatchInterceptor> with get, set
 
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (
+                            Client:
+                                ReadonlyArray<UndiciTypes.dispatcher.Dispatcher_.DispatchInterceptor>,
+                            ?Agent:
+                                ReadonlyArray<UndiciTypes.dispatcher.Dispatcher_.DispatchInterceptor>,
+                            ?Pool:
+                                ReadonlyArray<UndiciTypes.dispatcher.Dispatcher_.DispatchInterceptor>
+                        )
+                        : interceptors
+                        =
+                        nativeOnly
+
         type Options = Agent_.Options
 
         type DispatchOptions = Agent_.DispatchOptions
@@ -192324,6 +194216,40 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
                 abstract member loaded: float with get
                 abstract member total: float with get
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        bubbles: bool,
+                        cancelBubble: bool,
+                        cancelable: bool,
+                        composed: bool,
+                        defaultPrevented: bool,
+                        eventPhase: float,
+                        isTrusted: bool,
+                        returnValue: bool,
+                        timeStamp: Glutinum.Web.DOMHighResTimeStamp,
+                        ``type``: string,
+                        composedPath: ResizeArray<Node.EventTarget>,
+                        initEvent: unit,
+                        preventDefault: unit,
+                        stopImmediatePropagation: unit,
+                        stopPropagation: unit,
+                        NONE: int,
+                        CAPTURING_PHASE: int,
+                        AT_TARGET: int,
+                        BUBBLING_PHASE: int,
+                        __proto__: obj,
+                        lengthComputable: bool,
+                        loaded: float,
+                        total: float,
+                        ?currentTarget: Node.EventTarget,
+                        ?srcElement: Node.EventTarget,
+                        ?target: Node.EventTarget
+                    )
+                    : __proto__
+                    =
+                    nativeOnly
+
     module formdata =
 
         /// <summary>
@@ -193535,6 +195461,18 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
                     abstract member Client:
                         ReadonlyArray<UndiciTypes.dispatcher.Dispatcher_.DispatchInterceptor> with get, set
 
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (
+                            Client:
+                                ReadonlyArray<UndiciTypes.dispatcher.Dispatcher_.DispatchInterceptor>,
+                            ?Pool:
+                                ReadonlyArray<UndiciTypes.dispatcher.Dispatcher_.DispatchInterceptor>
+                        )
+                        : interceptors_1
+                        =
+                        nativeOnly
+
         type PoolStats = Pool_.PoolStats
 
         type Options = Pool_.Options
@@ -193850,6 +195788,41 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
                     abstract member retryOptions:
                         UndiciTypes.retry_handler.RetryHandler_.RetryOptions option with get, set
 
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (
+                            path: string,
+                            ``method``: UndiciTypes.dispatcher.Dispatcher_.HttpMethod,
+                            ?origin: U2<string, Node.url.URL>,
+                            ?body:
+                                U5<
+                                    string,
+                                    Node.Buffer,
+                                    JS.Uint8Array,
+                                    Node.stream.Stream_.Readable,
+                                    UndiciTypes.formdata.FormData
+                                 >,
+                            ?headers:
+                                U3<
+                                    UndiciTypes.header.IncomingHttpHeaders,
+                                    ResizeArray<string>,
+                                    Iterable<string * U2<string, ResizeArray<string>> option>
+                                 >,
+                            ?query: obj,
+                            ?idempotent: bool,
+                            ?blocking: bool,
+                            ?upgrade: U2<bool, string>,
+                            ?headersTimeout: float,
+                            ?bodyTimeout: float,
+                            ?reset: bool,
+                            ?throwOnError: bool,
+                            ?expectContinue: bool,
+                            ?retryOptions: UndiciTypes.retry_handler.RetryHandler_.RetryOptions
+                        )
+                        : opts
+                        =
+                        nativeOnly
+
             module RetryCallback =
 
                 [<AllowNullLiteral>]
@@ -193938,6 +195911,41 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
 
                         abstract member retryOptions:
                             UndiciTypes.retry_handler.RetryHandler_.RetryOptions option with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create
+                            (
+                                path: string,
+                                ``method``: UndiciTypes.dispatcher.Dispatcher_.HttpMethod,
+                                ?origin: U2<string, Node.url.URL>,
+                                ?body:
+                                    U5<
+                                        string,
+                                        Node.Buffer,
+                                        JS.Uint8Array,
+                                        Node.stream.Stream_.Readable,
+                                        UndiciTypes.formdata.FormData
+                                     >,
+                                ?headers:
+                                    U3<
+                                        UndiciTypes.header.IncomingHttpHeaders,
+                                        ResizeArray<string>,
+                                        Iterable<string * U2<string, ResizeArray<string>> option>
+                                     >,
+                                ?query: obj,
+                                ?idempotent: bool,
+                                ?blocking: bool,
+                                ?upgrade: U2<bool, string>,
+                                ?headersTimeout: float,
+                                ?bodyTimeout: float,
+                                ?reset: bool,
+                                ?throwOnError: bool,
+                                ?expectContinue: bool,
+                                ?retryOptions: UndiciTypes.retry_handler.RetryHandler_.RetryOptions
+                            )
+                            : opts
+                            =
+                            nativeOnly
 
             module RetryHandlers =
 

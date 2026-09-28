@@ -89645,28 +89645,6 @@ module Web =
         /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/generateKey)
         /// </summary>
         abstract member generateKey:
-            algorithm: SubtleCrypto.generateKey.algorithm_2 *
-            extractable: bool *
-            keyUsages: ResizeArray<SubtleCrypto.generateKey.keyUsages> ->
-                JS.Promise<Web.CryptoKeyPair>
-
-        /// <summary>
-        /// The **<c>generateKey()</c>** method of the SubtleCrypto interface is used to generate a new key (for symmetric algorithms) or key pair (for public-key algorithms).
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/generateKey)
-        /// </summary>
-        abstract member generateKey:
-            algorithm: SubtleCrypto.generateKey.algorithm_3 *
-            extractable: bool *
-            keyUsages: ResizeArray<SubtleCrypto.generateKey.keyUsages_1> ->
-                JS.Promise<Web.CryptoKeyPair>
-
-        /// <summary>
-        /// The **<c>generateKey()</c>** method of the SubtleCrypto interface is used to generate a new key (for symmetric algorithms) or key pair (for public-key algorithms).
-        ///
-        /// [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/generateKey)
-        /// </summary>
-        abstract member generateKey:
             algorithm: Web.Algorithm * extractable: bool * keyUsages: Iterable<Web.KeyUsage> ->
                 JS.Promise<U2<Web.CryptoKeyPair, Web.CryptoKey>>
 
@@ -105754,11 +105732,23 @@ module Web =
         | [<CompiledName("")>] _EMPTY_
         | Case1 of string
 
+        [<Emit("$0")>]
+        static member op_Implicit(value: string) : OptionalPostfixToken<'T> = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: string) : OptionalPostfixToken<'T> = nativeOnly
+
     [<RequireQualifiedAccess>]
     [<Erase(CaseRules.None)>]
     type OptionalPrefixToken<'T> =
         | [<CompiledName("")>] _EMPTY_
         | Case1 of string
+
+        [<Emit("$0")>]
+        static member op_Implicit(value: string) : OptionalPrefixToken<'T> = nativeOnly
+
+        [<Emit("$0")>]
+        static member op_ErasedCast(value: string) : OptionalPrefixToken<'T> = nativeOnly
 
     type PerformanceEntryList = ResizeArray<Web.PerformanceEntry>
 
@@ -108174,6 +108164,12 @@ module Web =
             | ``until-found``
             | Case1 of bool
 
+            [<Emit("$0")>]
+            static member op_Implicit(value: bool) : hidden = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: bool) : hidden = nativeOnly
+
     module HTMLIFrameElement =
 
         [<RequireQualifiedAccess>]
@@ -108351,6 +108347,20 @@ module Web =
                 | Ed25519
                 | Case1 of SubtleCrypto.generateKey.algorithm.Cases.Case1
 
+                [<Emit("$0")>]
+                static member op_Implicit
+                    (value: SubtleCrypto.generateKey.algorithm.Cases.Case1)
+                    : algorithm
+                    =
+                    nativeOnly
+
+                [<Emit("$0")>]
+                static member op_ErasedCast
+                    (value: SubtleCrypto.generateKey.algorithm.Cases.Case1)
+                    : algorithm
+                    =
+                    nativeOnly
+
             [<RequireQualifiedAccess>]
             [<StringEnum(CaseRules.None)>]
             type keyUsages =
@@ -108377,45 +108387,31 @@ module Web =
                         [<ParamObject; Emit("$0")>]
                         static member Create(name: string) : Case1_1 = nativeOnly
 
-                    [<AllowNullLiteral>]
-                    [<Interface>]
-                    type Case1_2 =
-                        abstract member name: string with get, set
-
-                        [<ParamObject; Emit("$0")>]
-                        static member Create(name: string) : Case1_2 = nativeOnly
-
-                    [<AllowNullLiteral>]
-                    [<Interface>]
-                    type Case1_3 =
-                        abstract member name: string with get, set
-
-                        [<ParamObject; Emit("$0")>]
-                        static member Create(name: string) : Case1_3 = nativeOnly
-
             [<RequireQualifiedAccess>]
             [<Erase(CaseRules.None)>]
             type algorithm_1 =
                 | X25519
                 | Case1 of SubtleCrypto.generateKey.algorithm.Cases.Case1_1
 
+                [<Emit("$0")>]
+                static member op_Implicit
+                    (value: SubtleCrypto.generateKey.algorithm.Cases.Case1_1)
+                    : algorithm_1
+                    =
+                    nativeOnly
+
+                [<Emit("$0")>]
+                static member op_ErasedCast
+                    (value: SubtleCrypto.generateKey.algorithm.Cases.Case1_1)
+                    : algorithm_1
+                    =
+                    nativeOnly
+
             [<RequireQualifiedAccess>]
             [<StringEnum(CaseRules.None)>]
             type keyUsages_1 =
                 | deriveBits
                 | deriveKey
-
-            [<RequireQualifiedAccess>]
-            [<Erase(CaseRules.None)>]
-            type algorithm_2 =
-                | Ed25519
-                | Case1 of SubtleCrypto.generateKey.algorithm.Cases.Case1_2
-
-            [<RequireQualifiedAccess>]
-            [<Erase(CaseRules.None)>]
-            type algorithm_3 =
-                | X25519
-                | Case1 of SubtleCrypto.generateKey.algorithm.Cases.Case1_3
 
         module importKey =
 

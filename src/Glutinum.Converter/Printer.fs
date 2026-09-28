@@ -1073,6 +1073,40 @@ let rec private print (printer: Printer) (fsharpTypes: FSharpType list) =
                 printer.NewLine
             )
 
+            let isErased =
+                unionInfo.Attributes
+                |> List.exists (
+                    function
+                    | FSharpAttribute.Erase
+                    | FSharpAttribute.EraseWithCaseRules _ -> true
+                    | _ -> false
+                )
+
+            if isErased then
+                let returnType =
+                    printTypeNameWithTypeParameters unionInfo.Name unionInfo.TypeParameters
+
+                unionInfo.Cases
+                |> List.choose (
+                    function
+                    | FSharpUnionCase.Field(_, typ) -> Some(printType typ)
+                    | _ -> None
+                )
+                // An overload per distinct type, two cases can share one
+                |> List.distinct
+                |> List.iter (fun caseType ->
+                    for name in [ "op_Implicit"; "op_ErasedCast" ] do
+                        printer.NewLine
+                        printer.Write("[<Emit(\"$0\")>]")
+                        printer.NewLine
+
+                        printer.Write(
+                            $"static member {name}(value: {caseType}) : {returnType} = nativeOnly"
+                        )
+
+                        printer.NewLine
+                )
+
             printer.Unindent
 
         | FSharpType.Enum enumInfo -> printEnum printer enumInfo

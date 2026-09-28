@@ -20,6 +20,18 @@ type Mixed =
     static member inline C: Mixed = Mixed.Number 2.5
     static member inline D: Mixed = Mixed.Number 4.0
 
+    [<Emit("$0")>]
+    static member op_Implicit(value: string) : Mixed = nativeOnly
+
+    [<Emit("$0")>]
+    static member op_ErasedCast(value: string) : Mixed = nativeOnly
+
+    [<Emit("$0")>]
+    static member op_Implicit(value: float) : Mixed = nativeOnly
+
+    [<Emit("$0")>]
+    static member op_ErasedCast(value: float) : Mixed = nativeOnly
+
 (***)
 #r "nuget: Fable.Core"
 #r "nuget: Glutinum.Types"

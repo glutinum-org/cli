@@ -2417,6 +2417,72 @@ module TypeScript =
                             abstract member hour12: bool option with get, set
                             abstract member timeZone: string option with get, set
 
+                            [<ParamObject; Emit("$0")>]
+                            static member Create
+                                (
+                                    ?numberingSystem: string,
+                                    ?compactDisplay:
+                                        Exports.apply.argumentsList.toLocaleString.options.compactDisplay,
+                                    ?notation:
+                                        Exports.apply.argumentsList.toLocaleString.options.notation,
+                                    ?signDisplay: obj,
+                                    ?unit: string,
+                                    ?unitDisplay:
+                                        Exports.apply.argumentsList.toLocaleString.options.unitDisplay,
+                                    ?currencySign:
+                                        Exports.apply.argumentsList.toLocaleString.options.currencySign,
+                                    ?roundingPriority:
+                                        Exports.apply.argumentsList.toLocaleString.options.roundingPriority,
+                                    ?roundingIncrement: obj,
+                                    ?roundingMode:
+                                        Exports.apply.argumentsList.toLocaleString.options.roundingMode,
+                                    ?trailingZeroDisplay:
+                                        Exports.apply.argumentsList.toLocaleString.options.trailingZeroDisplay,
+                                    ?localeMatcher:
+                                        Exports.apply.argumentsList.toLocaleString.options.localeMatcher,
+                                    ?style: obj,
+                                    ?currency: string,
+                                    ?currencyDisplay: obj,
+                                    ?useGrouping:
+                                        Exports.apply.argumentsList.toLocaleString.options.useGrouping,
+                                    ?minimumIntegerDigits: float,
+                                    ?minimumFractionDigits: float,
+                                    ?maximumFractionDigits: float,
+                                    ?minimumSignificantDigits: float,
+                                    ?maximumSignificantDigits: float,
+                                    ?calendar: string,
+                                    ?dayPeriod:
+                                        Exports.apply.argumentsList.toLocaleString.options.dayPeriod,
+                                    ?dateStyle:
+                                        Exports.apply.argumentsList.toLocaleString.options.dateStyle,
+                                    ?timeStyle:
+                                        Exports.apply.argumentsList.toLocaleString.options.timeStyle,
+                                    ?hourCycle:
+                                        Exports.apply.argumentsList.toLocaleString.options.hourCycle,
+                                    ?formatMatcher:
+                                        Exports.apply.argumentsList.toLocaleString.options.formatMatcher,
+                                    ?fractionalSecondDigits:
+                                        Exports.apply.argumentsList.toLocaleString.options.fractionalSecondDigits,
+                                    ?weekday:
+                                        Exports.apply.argumentsList.toLocaleString.options.weekday,
+                                    ?era: Exports.apply.argumentsList.toLocaleString.options.era,
+                                    ?year: Exports.apply.argumentsList.toLocaleString.options.year,
+                                    ?month: Exports.apply.argumentsList.toLocaleString.options.month,
+                                    ?day: Exports.apply.argumentsList.toLocaleString.options.day,
+                                    ?hour: Exports.apply.argumentsList.toLocaleString.options.hour,
+                                    ?minute:
+                                        Exports.apply.argumentsList.toLocaleString.options.minute,
+                                    ?second:
+                                        Exports.apply.argumentsList.toLocaleString.options.second,
+                                    ?timeZoneName:
+                                        Exports.apply.argumentsList.toLocaleString.options.timeZoneName,
+                                    ?hour12: bool,
+                                    ?timeZone: string
+                                )
+                                : options
+                                =
+                                nativeOnly
+
                         module options =
 
                             [<RequireQualifiedAccess>]
@@ -2485,6 +2551,18 @@ module TypeScript =
                                 | ``false``
                                 | Case1 of bool
                                 | Case2 of obj
+
+                                [<Emit("$0")>]
+                                static member op_Implicit(value: bool) : useGrouping = nativeOnly
+
+                                [<Emit("$0")>]
+                                static member op_ErasedCast(value: bool) : useGrouping = nativeOnly
+
+                                [<Emit("$0")>]
+                                static member op_Implicit(value: obj) : useGrouping = nativeOnly
+
+                                [<Emit("$0")>]
+                                static member op_ErasedCast(value: obj) : useGrouping = nativeOnly
 
                             [<RequireQualifiedAccess>]
                             [<StringEnum(CaseRules.None)>]
@@ -3288,6 +3366,75 @@ module TypeScript =
                             abstract member hour12: bool option with get, set
                             abstract member timeZone: string option with get, set
 
+                            [<ParamObject; Emit("$0")>]
+                            static member Create
+                                (
+                                    ?numberingSystem: string,
+                                    ?compactDisplay:
+                                        Exports.construct.argumentsList.toLocaleString.options.compactDisplay,
+                                    ?notation:
+                                        Exports.construct.argumentsList.toLocaleString.options.notation,
+                                    ?signDisplay: obj,
+                                    ?unit: string,
+                                    ?unitDisplay:
+                                        Exports.construct.argumentsList.toLocaleString.options.unitDisplay,
+                                    ?currencySign:
+                                        Exports.construct.argumentsList.toLocaleString.options.currencySign,
+                                    ?roundingPriority:
+                                        Exports.construct.argumentsList.toLocaleString.options.roundingPriority,
+                                    ?roundingIncrement: obj,
+                                    ?roundingMode:
+                                        Exports.construct.argumentsList.toLocaleString.options.roundingMode,
+                                    ?trailingZeroDisplay:
+                                        Exports.construct.argumentsList.toLocaleString.options.trailingZeroDisplay,
+                                    ?localeMatcher:
+                                        Exports.construct.argumentsList.toLocaleString.options.localeMatcher,
+                                    ?style: obj,
+                                    ?currency: string,
+                                    ?currencyDisplay: obj,
+                                    ?useGrouping:
+                                        Exports.construct.argumentsList.toLocaleString.options.useGrouping,
+                                    ?minimumIntegerDigits: float,
+                                    ?minimumFractionDigits: float,
+                                    ?maximumFractionDigits: float,
+                                    ?minimumSignificantDigits: float,
+                                    ?maximumSignificantDigits: float,
+                                    ?calendar: string,
+                                    ?dayPeriod:
+                                        Exports.construct.argumentsList.toLocaleString.options.dayPeriod,
+                                    ?dateStyle:
+                                        Exports.construct.argumentsList.toLocaleString.options.dateStyle,
+                                    ?timeStyle:
+                                        Exports.construct.argumentsList.toLocaleString.options.timeStyle,
+                                    ?hourCycle:
+                                        Exports.construct.argumentsList.toLocaleString.options.hourCycle,
+                                    ?formatMatcher:
+                                        Exports.construct.argumentsList.toLocaleString.options.formatMatcher,
+                                    ?fractionalSecondDigits:
+                                        Exports.construct.argumentsList.toLocaleString.options.fractionalSecondDigits,
+                                    ?weekday:
+                                        Exports.construct.argumentsList.toLocaleString.options.weekday,
+                                    ?era: Exports.construct.argumentsList.toLocaleString.options.era,
+                                    ?year:
+                                        Exports.construct.argumentsList.toLocaleString.options.year,
+                                    ?month:
+                                        Exports.construct.argumentsList.toLocaleString.options.month,
+                                    ?day: Exports.construct.argumentsList.toLocaleString.options.day,
+                                    ?hour:
+                                        Exports.construct.argumentsList.toLocaleString.options.hour,
+                                    ?minute:
+                                        Exports.construct.argumentsList.toLocaleString.options.minute,
+                                    ?second:
+                                        Exports.construct.argumentsList.toLocaleString.options.second,
+                                    ?timeZoneName:
+                                        Exports.construct.argumentsList.toLocaleString.options.timeZoneName,
+                                    ?hour12: bool,
+                                    ?timeZone: string
+                                )
+                                : options
+                                =
+                                nativeOnly
+
                         module options =
 
                             [<RequireQualifiedAccess>]
@@ -3356,6 +3503,18 @@ module TypeScript =
                                 | ``false``
                                 | Case1 of bool
                                 | Case2 of obj
+
+                                [<Emit("$0")>]
+                                static member op_Implicit(value: bool) : useGrouping = nativeOnly
+
+                                [<Emit("$0")>]
+                                static member op_ErasedCast(value: bool) : useGrouping = nativeOnly
+
+                                [<Emit("$0")>]
+                                static member op_Implicit(value: obj) : useGrouping = nativeOnly
+
+                                [<Emit("$0")>]
+                                static member op_ErasedCast(value: obj) : useGrouping = nativeOnly
 
                             [<RequireQualifiedAccess>]
                             [<StringEnum(CaseRules.None)>]
@@ -3565,6 +3724,20 @@ module TypeScript =
                     abstract member writable: bool option with get, set
                     abstract member get: unit -> obj
                     abstract member set: v: obj -> unit
+
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (
+                            get: obj,
+                            set: unit,
+                            ?configurable: bool,
+                            ?enumerable: bool,
+                            ?value: obj,
+                            ?writable: bool
+                        )
+                        : attributes
+                        =
+                        nativeOnly
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -4277,6 +4450,20 @@ module TypeScript =
                 abstract member get: unit -> obj
                 abstract member set: v: obj -> unit
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        get: obj,
+                        set: unit,
+                        ?configurable: bool,
+                        ?enumerable: bool,
+                        ?value: obj,
+                        ?writable: bool
+                    )
+                    : attributes
+                    =
+                    nativeOnly
+
     module ReadonlyArray =
 
         module find =
@@ -4358,6 +4545,55 @@ module TypeScript =
                 abstract member hour12: bool option with get, set
                 abstract member timeZone: string option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create
+                    (
+                        ?numberingSystem: string,
+                        ?compactDisplay: ReadonlyArray.toLocaleString.options.compactDisplay,
+                        ?notation: ReadonlyArray.toLocaleString.options.notation,
+                        ?signDisplay: obj,
+                        ?unit: string,
+                        ?unitDisplay: ReadonlyArray.toLocaleString.options.unitDisplay,
+                        ?currencySign: ReadonlyArray.toLocaleString.options.currencySign,
+                        ?roundingPriority: ReadonlyArray.toLocaleString.options.roundingPriority,
+                        ?roundingIncrement: obj,
+                        ?roundingMode: ReadonlyArray.toLocaleString.options.roundingMode,
+                        ?trailingZeroDisplay:
+                            ReadonlyArray.toLocaleString.options.trailingZeroDisplay,
+                        ?localeMatcher: ReadonlyArray.toLocaleString.options.localeMatcher,
+                        ?style: obj,
+                        ?currency: string,
+                        ?currencyDisplay: obj,
+                        ?useGrouping: ReadonlyArray.toLocaleString.options.useGrouping,
+                        ?minimumIntegerDigits: float,
+                        ?minimumFractionDigits: float,
+                        ?maximumFractionDigits: float,
+                        ?minimumSignificantDigits: float,
+                        ?maximumSignificantDigits: float,
+                        ?calendar: string,
+                        ?dayPeriod: ReadonlyArray.toLocaleString.options.dayPeriod,
+                        ?dateStyle: ReadonlyArray.toLocaleString.options.dateStyle,
+                        ?timeStyle: ReadonlyArray.toLocaleString.options.timeStyle,
+                        ?hourCycle: ReadonlyArray.toLocaleString.options.hourCycle,
+                        ?formatMatcher: ReadonlyArray.toLocaleString.options.formatMatcher,
+                        ?fractionalSecondDigits:
+                            ReadonlyArray.toLocaleString.options.fractionalSecondDigits,
+                        ?weekday: ReadonlyArray.toLocaleString.options.weekday,
+                        ?era: ReadonlyArray.toLocaleString.options.era,
+                        ?year: ReadonlyArray.toLocaleString.options.year,
+                        ?month: ReadonlyArray.toLocaleString.options.month,
+                        ?day: ReadonlyArray.toLocaleString.options.day,
+                        ?hour: ReadonlyArray.toLocaleString.options.hour,
+                        ?minute: ReadonlyArray.toLocaleString.options.minute,
+                        ?second: ReadonlyArray.toLocaleString.options.second,
+                        ?timeZoneName: ReadonlyArray.toLocaleString.options.timeZoneName,
+                        ?hour12: bool,
+                        ?timeZone: string
+                    )
+                    : options
+                    =
+                    nativeOnly
+
             module options =
 
                 [<RequireQualifiedAccess>]
@@ -4426,6 +4662,18 @@ module TypeScript =
                     | ``false``
                     | Case1 of bool
                     | Case2 of obj
+
+                    [<Emit("$0")>]
+                    static member op_Implicit(value: bool) : useGrouping = nativeOnly
+
+                    [<Emit("$0")>]
+                    static member op_ErasedCast(value: bool) : useGrouping = nativeOnly
+
+                    [<Emit("$0")>]
+                    static member op_Implicit(value: obj) : useGrouping = nativeOnly
+
+                    [<Emit("$0")>]
+                    static member op_ErasedCast(value: obj) : useGrouping = nativeOnly
 
                 [<RequireQualifiedAccess>]
                 [<StringEnum(CaseRules.None)>]

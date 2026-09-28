@@ -22,6 +22,12 @@ module Exports =
             | buffer
             | Case1 of Exports.readdir__.options.Cases.Case1
 
+            [<Emit("$0")>]
+            static member op_Implicit(value: Exports.readdir__.options.Cases.Case1) : options = nativeOnly
+
+            [<Emit("$0")>]
+            static member op_ErasedCast(value: Exports.readdir__.options.Cases.Case1) : options = nativeOnly
+
         module options =
 
             module Cases =
