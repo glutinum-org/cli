@@ -1,5 +1,5 @@
 ---
-last_commit_released: 21b5bdf926daf6e2939b61a241861beb1a0623a6
+last_commit_released: bc253d603fb4d98975432ad990924d4c3ddd58c6
 name: Glutinum.Node
 ---
 
@@ -12,6 +12,19 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 This changelog is generated using [EasyBuild.ShipIt](https://github.com/easybuild-org/EasyBuild.ShipIt).
 
 ⚠ Only edit the front matter metadata at the top of this file. All other changes will be overwritten when a new release is created.
+
+## 1.0.0-beta.2 - 2026-09-28
+
+### 🚀 Features
+
+* Convert a value into an erased union implicitly ([92cf675](https://github.com/glutinum-org/cli/commit/92cf6755bb1db1a5a395f767b0518fe6ada61852))
+
+### 🐞 Bug Fixes
+
+* Type test a JavaScript error against its imported class ([086325d](https://github.com/glutinum-org/cli/commit/086325d075b62a90dc75194f4400412129d7683a))
+* Type a method of a param object as a function ([214cf4a](https://github.com/glutinum-org/cli/commit/214cf4a8e7edb1486e14cf7d190d3acae5b5cec4))
+
+<strong><small>[View changes on Github](https://github.com/glutinum-org/cli/compare/21b5bdf926daf6e2939b61a241861beb1a0623a6..bc253d603fb4d98975432ad990924d4c3ddd58c6)</small></strong>
 
 ## 1.0.0-beta.1 - 2026-09-27
 
