@@ -132,6 +132,54 @@ let readPackages
 
     let readPackage (package: PackageInfo) =
         let globals = ResizeArray<GlueType>()
+        let unexported = ResizeArray<string>()
+
+        let rec withoutValues (types: GlueType list) =
+            types
+            |> List.choose (
+                function
+                | GlueType.ClassDeclaration info ->
+                    Some(GlueType.ClassDeclaration { info with IsExported = false })
+                | GlueType.FunctionDeclaration _
+                | GlueType.Variable _ -> None
+                | GlueType.ModuleDeclaration info ->
+                    Some(
+                        GlueType.ModuleDeclaration
+                            { info with
+                                Types = withoutValues info.Types
+                            }
+                    )
+                | glueType -> Some glueType
+            )
+
+        let withoutUnexported (fileName: string) (types: GlueType list) =
+            let isUnexported (name: string) =
+                if packageContext.IsImportable(fileName, name) then
+                    false
+                else
+                    unexported.Add name
+                    true
+
+            types
+            |> List.choose (
+                function
+                | GlueType.ClassDeclaration info when isUnexported info.Name ->
+                    Some(GlueType.ClassDeclaration { info with IsExported = false })
+                | GlueType.FunctionDeclaration info when isUnexported info.Name -> None
+                | GlueType.Variable info when isUnexported info.Name -> None
+                | GlueType.ModuleDeclaration info when
+                    not info.IsGlobal
+                    && not (info.Name.StartsWith "\"" || info.Name.StartsWith "'")
+                    && isUnexported info.Name
+                    ->
+                    Some(
+                        GlueType.ModuleDeclaration
+                            { info with
+                                Types = withoutValues info.Types
+                            }
+                    )
+                | glueType -> Some glueType
+            )
 
         let entryTypes, fileModules =
             filesOfPackage package
@@ -150,6 +198,7 @@ let readPackages
                     ({
                         Name = packageContext.FileModuleName(package, fileName)
                         ImportSpecifier = importSpecifier
+                        SymbolSpecifiers = packageContext.SymbolSpecifiers fileName
                         IsGlobal = false
                         HasRuntime = package.HasRuntime
                         Types = types
@@ -178,7 +227,7 @@ let readPackages
                     else
                         fileModule ambientModules
                 else
-                    fileModule types
+                    fileModule (withoutUnexported fileName types)
             )
             |> List.partition (
                 function
@@ -228,6 +277,10 @@ let readPackages
                     |> GlueType.ModuleDeclaration
                 ]
 
+        if unexported.Count > 0 then
+            reader.Warnings.Add
+                $"%s{package.RuntimeName}: %i{unexported.Count} declarations are not exported by any entry, they are generated as types only"
+
         entryTypes @ globalsModule @ fileModules, entryIsGlobal
 
     let glueAst =
@@ -239,6 +292,7 @@ let readPackages
                 ({
                     Name = package.ModuleName
                     ImportSpecifier = package.RuntimeName
+                    SymbolSpecifiers = Map.empty
                     IsGlobal = isGlobal
                     HasRuntime = package.HasRuntime
                     Types = types

@@ -28,7 +28,7 @@ module SubpathEntries =
         [<AbstractClass>]
         [<Erase>]
         type Exports =
-            [<Import("Scope", "subpath-entries/scope/index.js"); EmitConstructor>]
+            [<Import("Scope", "subpath-entries"); EmitConstructor>]
             static member Scope () : Scope = nativeOnly
 
         type Scope =
@@ -39,7 +39,7 @@ module SubpathEntries =
         [<AbstractClass>]
         [<Erase>]
         type Exports =
-            [<Import("Scope", "subpath-entries/scope/scope.js"); EmitConstructor>]
+            [<Import("Scope", "subpath-entries"); EmitConstructor>]
             static member Scope () : Scope = nativeOnly
 
         [<AllowNullLiteral>]

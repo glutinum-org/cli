@@ -6,6 +6,7 @@ open TsMorph
 open Glutinum.Converter
 
 open Glutinum.Converter.Hosting
+open Glutinum.Converter.Reader.Utils
 
 /// Re-exported so consumers keep referring to them as `Packages.<Type>`
 type Host = Hosting.Host
@@ -80,7 +81,98 @@ let private toPackageInfo (description: PackageDescription) : Reader.Types.Packa
             description.subpathEntries
             |> Array.toList
             |> List.map (fun entry -> String.normalizePath entry.file, entry.subpath)
+        ReExportedSymbols = Map.empty
+        ReExportedFiles = Map.empty
+        ReExportedNames = Map.empty
+        HasExportsMap = false
     }
+
+/// The names a public entry of the package exports, with the subpath to import each from
+let private reExportedNames
+    (program: Ts.Program)
+    (checker: Ts.TypeChecker)
+    (hasExportsMap: bool)
+    (package: Reader.Types.PackageInfo)
+    : Map<string, string>
+    =
+    if not hasExportsMap then
+        Map.empty
+    else
+
+        ((Map.empty, (package.EntryFile, "") :: package.SubpathEntries)
+         ||> List.fold (fun acc (entryFile, subpath) ->
+             match program.getSourceFile entryFile with
+             | None -> acc
+             | Some sourceFile ->
+                 match checker.getSymbolAtLocation (unbox<Ts.Node> sourceFile) with
+                 | None -> acc
+                 | Some moduleSymbol ->
+                     (acc, checker.getExportsOfModule moduleSymbol)
+                     ||> Seq.fold (fun acc exportedSymbol ->
+                         if acc |> Map.containsKey exportedSymbol.name then
+                             acc
+                         else
+                             acc.Add(exportedSymbol.name, subpath)
+                     )
+         ))
+
+/// The declarations a public entry of the package exports, keyed by the declaring file and the
+/// exported name, with the subpath to import each from
+let private reExportedSymbols
+    (program: Ts.Program)
+    (checker: Ts.TypeChecker)
+    (hasExportsMap: bool)
+    (package: Reader.Types.PackageInfo)
+    : Map<string * string, string>
+    =
+    if not hasExportsMap then
+        Map.empty
+    else
+
+        let entries = (package.EntryFile, "") :: package.SubpathEntries
+        let entryFiles = entries |> List.map fst |> set
+
+        (Map.empty, entries)
+        ||> List.fold (fun acc (entryFile, subpath) ->
+            match program.getSourceFile entryFile with
+            | None -> acc
+            | Some sourceFile ->
+                match checker.getSymbolAtLocation (unbox<Ts.Node> sourceFile) with
+                | None -> acc
+                | Some moduleSymbol ->
+                    (acc, checker.getExportsOfModule moduleSymbol)
+                    ||> Seq.fold (fun acc exportedSymbol ->
+                        // `export { x as y }` publishes the declaration under the name of the alias
+                        let exportName = exportedSymbol.name
+
+                        // `export { x } from "./x.js"` exports an alias, the declaration is behind it
+                        let exportedSymbol =
+                            match exportedSymbol.flags with
+                            | HasSymbolFlags Ts.SymbolFlags.Alias ->
+                                checker.getAliasedSymbol exportedSymbol
+                            | _ -> exportedSymbol
+
+                        match exportedSymbol.declarations with
+                        | None -> acc
+                        | Some declarations ->
+                            (acc, declarations)
+                            ||> Seq.fold (fun acc declaration ->
+                                let declaringFile =
+                                    (unbox<Ts.Node> declaration).getSourceFile().fileName
+
+                                let key = String.normalizePath declaringFile, exportName
+
+                                if
+                                    (fst key).StartsWith package.Dir
+                                    && not (entryFiles.Contains(fst key))
+                                    && not (acc.ContainsKey key)
+                                then
+                                    acc.Add(key, subpath)
+                                else
+                                    acc
+                            )
+                    )
+        )
 
 let private isTypeScriptLibFile (fileName: string) =
     (String.normalizePath fileName).Contains "/typescript/lib/lib."
@@ -307,9 +399,38 @@ let generateWith (options: GenerateOptions) (host: Host) (inputs: string list) :
 
     let included = set options.Include
 
+    let exportsMapPackages =
+        (targets @ dependencies)
+        |> List.filter (fun description -> description.hasExportsMap)
+        |> List.map (fun description -> String.normalizePath description.dir + "/")
+        |> set
+
+    let withReExportedFiles (package: Reader.Types.PackageInfo) =
+        let hasExportsMap = exportsMapPackages.Contains package.Dir
+        let symbols = reExportedSymbols program checker hasExportsMap package
+
+        { package with
+            HasExportsMap = hasExportsMap
+            ReExportedSymbols = symbols
+            ReExportedNames = reExportedNames program checker hasExportsMap package
+            ReExportedFiles =
+                symbols
+                |> Map.toList
+                |> List.fold
+                    (fun acc ((file, _), subpath) ->
+                        if Map.containsKey file acc then
+                            acc
+                        else
+                            Map.add file subpath acc
+                    )
+                    Map.empty
+        }
+
     let packageContext: Reader.Types.PackageContext =
         {
-            Packages = targetPackages @ (dependencies |> List.map toPackageInfo)
+            Packages =
+                targetPackages @ (dependencies |> List.map toPackageInfo)
+                |> List.map withReExportedFiles
             Externals = externals
             // Without the library, the declarations left out of the package stand for it
             IsLibraryName =

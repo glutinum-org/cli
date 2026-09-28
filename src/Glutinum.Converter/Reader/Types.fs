@@ -21,6 +21,15 @@ type PackageInfo =
         EntryFile: string
         /// Other declaration entry points, with the subpath to import them from
         SubpathEntries: (string * string) list
+        /// A declaration a public entry re-exports, keyed by the file declaring it and the name
+        /// it is exported under, with the subpath to import it from
+        ReExportedSymbols: Map<string * string, string>
+        /// A file a public entry re-exports a declaration of, with the subpath to import it from
+        ReExportedFiles: Map<string, string>
+        /// A name a public entry exports, with the subpath to import it from
+        ReExportedNames: Map<string, string>
+        /// The `exports` map makes every file it does not list unreachable
+        HasExportsMap: bool
     }
 
 /// A package published as its own binding: its types are referenced, never generated
@@ -163,16 +172,80 @@ type PackageContext =
                 match package.SubpathEntries |> List.tryFind (fun (file, _) -> file = fileName) with
                 | Some(_, subpath) -> package.RuntimeName + "/" + subpath
                 | None ->
-                    let relativePath = fileName.Substring(package.Dir.Length)
 
-                    let withoutExtension =
-                        System.Text.RegularExpressions.Regex.Replace(
-                            relativePath,
-                            "\\.d\\.[cm]?ts$",
-                            ""
-                        )
+                    match package.ReExportedFiles.TryFind fileName with
+                    | Some "" -> package.RuntimeName
+                    | Some subpath -> package.RuntimeName + "/" + subpath
+                    | None ->
+                        let relativePath = fileName.Substring(package.Dir.Length)
 
-                    package.RuntimeName + "/" + withoutExtension + ".js"
+                        let withoutExtension =
+                            System.Text.RegularExpressions.Regex.Replace(
+                                relativePath,
+                                "\\.d\\.[cm]?ts$",
+                                ""
+                            )
+
+                        package.RuntimeName + "/" + withoutExtension + ".js"
+
+    /// Whether a public entry of the package re-exports a declaration of the file
+    member this.IsReExported(fileName: string) =
+        match this.TryFindPackage fileName with
+        | None -> true
+        | Some package ->
+            let fileName = String.normalizePath fileName
+
+            fileName = package.EntryFile
+            || package.SubpathEntries |> List.exists (fun (file, _) -> file = fileName)
+            || package.ReExportedFiles.ContainsKey fileName
+
+    /// Whether a specifier can import the declaration at runtime: the `exports` map of a package
+    /// blocks the file declaring it unless a public entry exports the name
+    member this.IsImportable(fileName: string, name: string) =
+        match this.TryFindPackage fileName with
+        | None -> true
+        | Some package when not package.HasExportsMap -> true
+        | Some package ->
+            let fileName = String.normalizePath fileName
+
+            fileName = package.EntryFile
+            || package.SubpathEntries |> List.exists (fun (file, _) -> file = fileName)
+            || package.ReExportedSymbols.ContainsKey(fileName, name)
+            || package.ReExportedNames.ContainsKey name
+
+    /// The declarations of the file a public entry re-exports, with the specifier to import each
+    /// of them from
+    member this.SymbolSpecifiers(fileName: string) : Map<string, string> =
+        match this.TryFindPackage fileName with
+        | None -> Map.empty
+        | Some package ->
+            let fileName = String.normalizePath fileName
+
+            let specifierOf (subpath: string) =
+                if subpath = "" then
+                    package.RuntimeName
+                else
+                    package.RuntimeName + "/" + subpath
+
+            let byName =
+                if this.IsReExported fileName then
+                    Map.empty
+                else
+                    package.ReExportedNames |> Map.map (fun _ subpath -> specifierOf subpath)
+
+            let bySymbol =
+                package.ReExportedSymbols
+                |> Map.toList
+                |> List.choose (fun ((file, name), subpath) ->
+                    if file = fileName then
+                        Some(name, specifierOf subpath)
+                    else
+                        None
+                )
+                |> Map.ofList
+
+            (byName, bySymbol)
+            ||> Map.fold (fun acc name specifier -> Map.add name specifier acc)
 
 [<Mangle>]
 type ITypeScriptReader =

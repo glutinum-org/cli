@@ -172,28 +172,35 @@ type TypeLiteralsMemory() =
 /// Where the top-level declarations come from at runtime
 [<RequireQualifiedAccess>]
 type ImportSource =
-    /// Exports of a JavaScript module
-    | Module of specifier: string
+    /// Exports of a JavaScript module, with the specifier of the declarations a public entry
+    /// re-exports under another one
+    | Module of specifier: string * symbolSpecifiers: Map<string, string>
     /// Globals of a script
     | Global
     /// A types-only package: it has no JavaScript to bind a value to
     | NoRuntime
 
+let private specifierOf (name: string) (specifier: string) (symbolSpecifiers: Map<string, string>) =
+    symbolSpecifiers.TryFind name |> Option.defaultValue specifier
+
 let private importAttribute (name: string) (source: ImportSource) =
     match source with
-    | ImportSource.Module specifier -> [ FSharpAttribute.Import(name, specifier) ]
+    | ImportSource.Module(specifier, symbolSpecifiers) ->
+        [ FSharpAttribute.Import(name, specifierOf name specifier symbolSpecifiers) ]
     | ImportSource.Global -> [ FSharpAttribute.Global(Some name) ]
     | ImportSource.NoRuntime -> []
 
 let private importAllAttribute (name: string) (source: ImportSource) =
     match source with
-    | ImportSource.Module specifier -> [ FSharpAttribute.ImportAll specifier ]
+    | ImportSource.Module(specifier, symbolSpecifiers) ->
+        [ FSharpAttribute.ImportAll(specifierOf name specifier symbolSpecifiers) ]
     | ImportSource.Global -> [ FSharpAttribute.Global(Some name) ]
     | ImportSource.NoRuntime -> []
 
 let private importDefaultAttribute (name: string) (source: ImportSource) =
     match source with
-    | ImportSource.Module specifier -> [ FSharpAttribute.ImportDefault specifier ]
+    | ImportSource.Module(specifier, symbolSpecifiers) ->
+        [ FSharpAttribute.ImportDefault(specifierOf name specifier symbolSpecifiers) ]
     | ImportSource.Global -> [ FSharpAttribute.Global(Some name) ]
     | ImportSource.NoRuntime -> []
 
@@ -2087,7 +2094,7 @@ let private transformExports
                     // called `express` too
                     let runtimeName =
                         match context.ImportSource with
-                        | ImportSource.Module specifier when
+                        | ImportSource.Module(specifier, _) when
                             isTopLevel
                             && defaultExportedDeclarations.Contains info.Name
                             && specifier <> Naming.MODULE_PLACEHOLDER
@@ -8160,7 +8167,10 @@ let private transformToFsharp
                      elif not fileModule.HasRuntime then
                          ImportSource.NoRuntime
                      else
-                         ImportSource.Module fileModule.ImportSpecifier)
+                         ImportSource.Module(
+                             fileModule.ImportSpecifier,
+                             fileModule.SymbolSpecifiers
+                         ))
                     true
                     fileModule.Types
 
@@ -8378,10 +8388,17 @@ let private transform
 
     let rest = transformToFsharp rootTransformContext rest
 
+    let exportsType =
+        if List.isEmpty exports then
+            None
+        else
+            match transformExports rootTransformContext isTopLevel exports with
+            | FSharpType.Interface { Members = [] } -> None
+            | exportsType -> Some exportsType
+
     [
         // These are the exported functions, classes, etc. from the binding
-        if not (List.isEmpty exports) then
-            transformExports rootTransformContext isTopLevel exports
+        yield! Option.toList exportsType
 
         // "Standard" types which are a direct mapping to a TypeScript type
         yield! rest
@@ -8765,7 +8782,7 @@ let applyWith (importSpecifier: string) (typeMemory: GlueType list) (glueAst: Gl
                 typeMemory
                 reporter
                 typeLiteralsMemory
-                (ImportSource.Module importSpecifier)
+                (ImportSource.Module(importSpecifier, Map.empty))
                 true
                 glueAst
             |> Merge.apply

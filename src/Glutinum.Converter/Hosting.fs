@@ -88,6 +88,8 @@ type PackageDescription =
     abstract member typesRoot: string
     abstract member entryFile: string
     abstract member subpathEntries: SubpathEntry[]
+    /// The `exports` map makes every file it does not list unreachable
+    abstract member hasExportsMap: bool
 
 [<AllowNullLiteral>]
 type InstalledPackage =
@@ -594,6 +596,8 @@ module Resolve =
                                 packageDir
 
                         member _.entryFile = main.file
+
+                        member _.hasExportsMap = not (isNullish (prop pkg "exports"))
 
                         member _.subpathEntries =
                             entries
