@@ -28,10 +28,10 @@
     <PackageVersion Include="Scriptorium.Nib.Browser" Version="0.3.1" />
     <PackageVersion Include="Scriptorium.Quill" Version="0.7.1" />
     <PackageVersion Include="Glutinum.Feliz.Iconify" Version="3.0.0" />
-    <PackageVersion Include="Glutinum.Node" Version="1.0.0-beta.1" />
+    <PackageVersion Include="Glutinum.Node" Version="1.0.0-beta.2" />
     <PackageVersion Include="Glutinum.IconifyIcons.Lucide" Version="1.0.0" />
     <PackageVersion Include="Glutinum.IconifyIcons.SimpleIcons" Version="1.0.0" />
-    <PackageVersion Include="Glutinum.Types" Version="1.0.0-beta.1" />
+    <PackageVersion Include="Glutinum.Types" Version="1.0.0-beta.2" />
     <PackageVersion Include="Nacara.Core" Version="2.0.0-beta.6" />
     <PackageVersion Include="Nacara.Plugin.Markdown" Version="1.0.0-beta.2" />
     <PackageVersion Include="Nacara.Plugin.Highlight.TreeSitter" Version="1.0.0-beta.2" />

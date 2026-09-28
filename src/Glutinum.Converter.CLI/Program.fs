@@ -92,12 +92,9 @@ let private generate (options: Packages.GenerateOptions) (isAll: bool) (inputs: 
 let private write (outFile: string option) (content: string) =
     match outFile with
     | Some outFile ->
-        let mkdirOptions = createEmpty<Glutinum.Node.fs.Exports.mkdirSync__.options>
-        mkdirOptions.recursive <- true
-
         Glutinum.Node.fs.Exports.mkdirSync (
             Glutinum.Node.path.Exports.dirname outFile,
-            mkdirOptions
+            Glutinum.Node.fs.Exports.mkdirSync__.options.Create(``recursive`` = true)
         )
         |> ignore
 

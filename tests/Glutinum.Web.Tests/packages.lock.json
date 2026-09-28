@@ -85,7 +85,7 @@
       },
       "Glutinum.Types": {
         "type": "CentralTransitive",
-        "requested": "[1.0.0-beta.1, )",
+        "requested": "[1.0.0-beta.2, )",
         "resolved": "0.1.0",
         "contentHash": "2VvjbyCXsSk3a0d4Uy/mEeMcpZ8dCCmo++TyPpx4V/y+Z9JY7ZYNYhwbaJmemtP/6PBa0Cg3eu00/Zs0xq9CcA==",
         "dependencies": {

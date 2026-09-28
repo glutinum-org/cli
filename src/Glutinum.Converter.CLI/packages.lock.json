@@ -25,24 +25,24 @@
       },
       "Glutinum.Node": {
         "type": "Direct",
-        "requested": "[1.0.0-beta.1, )",
-        "resolved": "1.0.0-beta.1",
-        "contentHash": "+G1VaumyoJ6CvcR5G0CyVa7Bq2YYnuZOzv/nmMzL8FJG/WcbR+rWMzYCGxFregJ6Gfb+B6y/qDbFuCw4ZDzE8Q==",
+        "requested": "[1.0.0-beta.2, )",
+        "resolved": "1.0.0-beta.2",
+        "contentHash": "a8QjtrmlhHRGenTDsqyBVV1Kdpc/6smi8Z/emncuw+dSHoNVJ4lS8TaVuNzhArP26m0h7ngzbgn7EnlJxrp1sw==",
         "dependencies": {
           "FSharp.Core": "10.1.301",
           "Fable.Core": "5.2.0",
-          "Glutinum.Types": "1.0.0-beta.1",
-          "Glutinum.Web": "1.0.0-beta.1"
+          "Glutinum.Types": "1.0.0-beta.2",
+          "Glutinum.Web": "1.0.0-beta.2"
         }
       },
       "Glutinum.Web": {
         "type": "Transitive",
-        "resolved": "1.0.0-beta.1",
-        "contentHash": "xnxAfqcAyqZrGZ/xIH0irMjHDe80v2DOSUmdDpJDzAMIZZP6EJKwC+5mNxXesoZIHFDGT4hQ9VBEunRWs0KSUQ==",
+        "resolved": "1.0.0-beta.2",
+        "contentHash": "rs50MbR+kMmLOh+1LuYPbPw9tj9YkXXIMCPh+9H9pzXAaxRnjFKKlvptnoAfHjq7WKCk7pg9geEZ16Y82Mll3w==",
         "dependencies": {
           "FSharp.Core": "10.1.301",
           "Fable.Core": "5.2.0",
-          "Glutinum.Types": "1.0.0-beta.1"
+          "Glutinum.Types": "1.0.0-beta.2"
         }
       },
       "glutinum.converter": {
@@ -53,8 +53,8 @@
           "Fable.Core": "[5.2.0, )",
           "Fable.Promise": "[3.2.1, )",
           "Glutinum.Chalk": "[1.0.0, )",
-          "Glutinum.Node": "[1.0.0-beta.1, )",
-          "Glutinum.Types": "[1.0.0-beta.1, )"
+          "Glutinum.Node": "[1.0.0-beta.2, )",
+          "Glutinum.Types": "[1.0.0-beta.2, )"
         }
       },
       "Fable.Promise": {
@@ -88,9 +88,9 @@
       },
       "Glutinum.Types": {
         "type": "CentralTransitive",
-        "requested": "[1.0.0-beta.1, )",
-        "resolved": "1.0.0-beta.1",
-        "contentHash": "tDroSR5oeZnhY+U5SLoEj3dvcFv4prychKE/EBcf/5SGjPX+CQE3AIBcB1HutUsY1J++32Nu4MgXAdj8mpLcog==",
+        "requested": "[1.0.0-beta.2, )",
+        "resolved": "1.0.0-beta.2",
+        "contentHash": "zc6tSjMVNM+8nqIy6zbaE+baNAhYabHIjdpdRON0VJgSOGJjHGJIvKQV2an3a5Ju5RhHs8ZrgxtoZOjct5AXBA==",
         "dependencies": {
           "FSharp.Core": "10.1.301",
           "Fable.Core": "5.2.0"
