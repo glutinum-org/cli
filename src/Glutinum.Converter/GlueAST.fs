@@ -114,6 +114,7 @@ type GlueMethodSignature =
         TypeParameters: GlueTypeParameter list
         Parameters: GlueParameter list
         Type: GlueType
+        IsOptional: bool
     }
 
 type GlueConstructSignature =

@@ -2651,15 +2651,14 @@ let private transformAccessor (accessor: GlueAccessor) : FSharpAccessor =
     | GlueAccessor.WriteOnly -> FSharpAccessor.WriteOnly
     | GlueAccessor.ReadWrite -> FSharpAccessor.ReadWrite
 
-/// A method of a param object is set as a value, so it is typed as a function and not
-/// as the type it returns
-let private methodFunctionType
-    (context: TransformContext)
+/// A method set as a value is a function and not the type it returns, as a param object field
+/// or as an optional member
+let private methodGlueFunctionType
     (documentation: GlueComment list)
     (typeParameters: GlueTypeParameter list)
     (parameters: GlueParameter list)
     (returnType: GlueType)
-    : FSharpType
+    : GlueType
     =
     ({
         Documentation = documentation
@@ -2670,6 +2669,16 @@ let private methodFunctionType
     }
     : GlueFunctionType)
     |> GlueType.FunctionType
+
+let private methodFunctionType
+    (context: TransformContext)
+    (documentation: GlueComment list)
+    (typeParameters: GlueTypeParameter list)
+    (parameters: GlueParameter list)
+    (returnType: GlueType)
+    : FSharpType
+    =
+    methodGlueFunctionType documentation typeParameters parameters returnType
     |> transformType context
 
 module private TransformMembers =
@@ -3247,6 +3256,36 @@ module private TransformMembers =
                 |> FSharpMember.Property
                 |> Some
 
+            | GlueMember.MethodSignature methodSignature when methodSignature.IsOptional ->
+                // An F# interface has no optional method, the member holds the function instead
+                let name, context = sanitizeNameAndPushScope methodSignature.Name context
+                let xmlDocInfo = transformComment methodSignature.Documentation
+
+                {
+                    Attributes = [ yield! xmlDocInfo.ObsoleteAttributes ]
+                    Name = name
+                    OriginalName = methodSignature.Name
+                    Parameters = []
+                    Type =
+                        unwrapOptionIfAlreadyOptional
+                            context
+                            (methodGlueFunctionType
+                                methodSignature.Documentation
+                                methodSignature.TypeParameters
+                                methodSignature.Parameters
+                                methodSignature.Type)
+                            true
+                    TypeParameters = []
+                    IsOptional = true
+                    IsStatic = false
+                    Accessor = Some FSharpAccessor.ReadWrite
+                    Accessibility = FSharpAccessibility.Public
+                    XmlDoc = xmlDocInfo.XmlDoc
+                    Body = FSharpMemberInfoBody.JavaScriptStaticProperty
+                }
+                |> FSharpMember.Property
+                |> Some
+
             | GlueMember.MethodSignature methodSignature ->
                 let xmlDocInfo = transformComment methodSignature.Documentation
 
@@ -3431,7 +3470,7 @@ module private TransformMembers =
                 {
                     Attributes = []
                     Name = name
-                    IsOptional = false
+                    IsOptional = methodSignature.IsOptional
                     Type =
                         methodFunctionType
                             context
@@ -5573,6 +5612,7 @@ module private CallableProperties =
                             TypeParameters = callSignature.TypeParameters
                             Parameters = callSignature.Parameters
                             Type = callSignature.Type
+                            IsOptional = property.IsOptional
                         }
                         : GlueMethodSignature)
                         |> GlueMember.MethodSignature

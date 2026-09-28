@@ -1291,8 +1291,10 @@ module TypeScript =
         abstract member next:
             [<ParamArray>] arg0: 'TNext[] -> TypeScript.IteratorResult<'T, 'TReturn>
 
-        abstract member ``return``: ?value: 'TReturn -> TypeScript.IteratorResult<'T, 'TReturn>
-        abstract member throw: ?e: obj -> TypeScript.IteratorResult<'T, 'TReturn>
+        abstract member ``return``:
+            ('TReturn option -> TypeScript.IteratorResult<'T, 'TReturn>) option with get, set
+
+        abstract member throw: (obj option -> TypeScript.IteratorResult<'T, 'TReturn>) option with get, set
 
     /// <summary>
     /// Describes a user-defined <see href="Iterator">Iterator</see> that is also iterable.
@@ -1312,8 +1314,7 @@ module TypeScript =
         /// <param name="target">
         /// The original callable object which is being proxied.
         /// </param>
-        abstract member apply: target: 'T * thisArg: obj * argArray: ResizeArray<obj> -> obj
-
+        abstract member apply: ProxyHandler.apply option with get, set
         /// <summary>
         /// A trap for the <c>new</c> operator.
         /// </summary>
@@ -1323,9 +1324,7 @@ module TypeScript =
         /// <param name="newTarget">
         /// The constructor that was originally called.
         /// </param>
-        abstract member construct:
-            target: 'T * argArray: ResizeArray<obj> * newTarget: Action -> obj
-
+        abstract member construct: ProxyHandler.construct option with get, set
         /// <summary>
         /// A trap for <c>Object.defineProperty()</c>.
         /// </summary>
@@ -1335,21 +1334,7 @@ module TypeScript =
         /// <returns>
         /// A <c>Boolean</c> indicating whether or not the property has been defined.
         /// </returns>
-        abstract member defineProperty:
-            target: 'T * property: string * attributes: TypeScript.PropertyDescriptor -> bool
-
-        /// <summary>
-        /// A trap for <c>Object.defineProperty()</c>.
-        /// </summary>
-        /// <param name="target">
-        /// The original object which is being proxied.
-        /// </param>
-        /// <returns>
-        /// A <c>Boolean</c> indicating whether or not the property has been defined.
-        /// </returns>
-        abstract member defineProperty:
-            target: 'T * property: obj * attributes: TypeScript.PropertyDescriptor -> bool
-
+        abstract member defineProperty: ProxyHandler.defineProperty option with get, set
         /// <summary>
         /// A trap for the <c>delete</c> operator.
         /// </summary>
@@ -1362,20 +1347,7 @@ module TypeScript =
         /// <returns>
         /// A <c>Boolean</c> indicating whether or not the property was deleted.
         /// </returns>
-        abstract member deleteProperty: target: 'T * p: string -> bool
-        /// <summary>
-        /// A trap for the <c>delete</c> operator.
-        /// </summary>
-        /// <param name="target">
-        /// The original object which is being proxied.
-        /// </param>
-        /// <param name="p">
-        /// The name or <c>Symbol</c> of the property to delete.
-        /// </param>
-        /// <returns>
-        /// A <c>Boolean</c> indicating whether or not the property was deleted.
-        /// </returns>
-        abstract member deleteProperty: target: 'T * p: obj -> bool
+        abstract member deleteProperty: ProxyHandler.deleteProperty option with get, set
         /// <summary>
         /// A trap for getting a property value.
         /// </summary>
@@ -1388,21 +1360,7 @@ module TypeScript =
         /// <param name="receiver">
         /// The proxy or an object that inherits from the proxy.
         /// </param>
-        abstract member get: target: 'T * p: string * receiver: obj -> obj
-        /// <summary>
-        /// A trap for getting a property value.
-        /// </summary>
-        /// <param name="target">
-        /// The original object which is being proxied.
-        /// </param>
-        /// <param name="p">
-        /// The name or <c>Symbol</c> of the property to get.
-        /// </param>
-        /// <param name="receiver">
-        /// The proxy or an object that inherits from the proxy.
-        /// </param>
-        abstract member get: target: 'T * p: obj * receiver: obj -> obj
-
+        abstract member get: ProxyHandler.get option with get, set
         /// <summary>
         /// A trap for <c>Object.getOwnPropertyDescriptor()</c>.
         /// </summary>
@@ -1412,28 +1370,14 @@ module TypeScript =
         /// <param name="p">
         /// The name of the property whose description should be retrieved.
         /// </param>
-        abstract member getOwnPropertyDescriptor:
-            target: 'T * p: string -> TypeScript.PropertyDescriptor option
-
-        /// <summary>
-        /// A trap for <c>Object.getOwnPropertyDescriptor()</c>.
-        /// </summary>
-        /// <param name="target">
-        /// The original object which is being proxied.
-        /// </param>
-        /// <param name="p">
-        /// The name of the property whose description should be retrieved.
-        /// </param>
-        abstract member getOwnPropertyDescriptor:
-            target: 'T * p: obj -> TypeScript.PropertyDescriptor option
-
+        abstract member getOwnPropertyDescriptor: ProxyHandler.getOwnPropertyDescriptor option with get, set
         /// <summary>
         /// A trap for the <c>[[GetPrototypeOf]]</c> internal method.
         /// </summary>
         /// <param name="target">
         /// The original object which is being proxied.
         /// </param>
-        abstract member getPrototypeOf: target: 'T -> obj option
+        abstract member getPrototypeOf: ('T -> obj option) option with get, set
         /// <summary>
         /// A trap for the <c>in</c> operator.
         /// </summary>
@@ -1443,38 +1387,28 @@ module TypeScript =
         /// <param name="p">
         /// The name or <c>Symbol</c> of the property to check for existence.
         /// </param>
-        abstract member has: target: 'T * p: string -> bool
-        /// <summary>
-        /// A trap for the <c>in</c> operator.
-        /// </summary>
-        /// <param name="target">
-        /// The original object which is being proxied.
-        /// </param>
-        /// <param name="p">
-        /// The name or <c>Symbol</c> of the property to check for existence.
-        /// </param>
-        abstract member has: target: 'T * p: obj -> bool
+        abstract member has: ProxyHandler.has option with get, set
         /// <summary>
         /// A trap for <c>Object.isExtensible()</c>.
         /// </summary>
         /// <param name="target">
         /// The original object which is being proxied.
         /// </param>
-        abstract member isExtensible: target: 'T -> bool
+        abstract member isExtensible: ('T -> bool) option with get, set
         /// <summary>
         /// A trap for <c>Reflect.ownKeys()</c>.
         /// </summary>
         /// <param name="target">
         /// The original object which is being proxied.
         /// </param>
-        abstract member ownKeys: target: 'T -> TypeScript.ArrayLike<U2<string, obj>>
+        abstract member ownKeys: ('T -> TypeScript.ArrayLike<U2<string, obj>>) option with get, set
         /// <summary>
         /// A trap for <c>Object.preventExtensions()</c>.
         /// </summary>
         /// <param name="target">
         /// The original object which is being proxied.
         /// </param>
-        abstract member preventExtensions: target: 'T -> bool
+        abstract member preventExtensions: ('T -> bool) option with get, set
         /// <summary>
         /// A trap for setting a property value.
         /// </summary>
@@ -1490,23 +1424,7 @@ module TypeScript =
         /// <returns>
         /// A <c>Boolean</c> indicating whether or not the property was set.
         /// </returns>
-        abstract member set: target: 'T * p: string * newValue: obj * receiver: obj -> bool
-        /// <summary>
-        /// A trap for setting a property value.
-        /// </summary>
-        /// <param name="target">
-        /// The original object which is being proxied.
-        /// </param>
-        /// <param name="p">
-        /// The name or <c>Symbol</c> of the property to set.
-        /// </param>
-        /// <param name="receiver">
-        /// The object to which the assignment was originally directed.
-        /// </param>
-        /// <returns>
-        /// A <c>Boolean</c> indicating whether or not the property was set.
-        /// </returns>
-        abstract member set: target: 'T * p: obj * newValue: obj * receiver: obj -> bool
+        abstract member set: ProxyHandler.set option with get, set
         /// <summary>
         /// A trap for <c>Object.setPrototypeOf()</c>.
         /// </summary>
@@ -1516,7 +1434,7 @@ module TypeScript =
         /// <param name="newPrototype">
         /// The object's new prototype or <c>null</c>.
         /// </param>
-        abstract member setPrototypeOf: target: 'T * v: obj option -> bool
+        abstract member setPrototypeOf: ProxyHandler.setPrototypeOf option with get, set
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -3722,18 +3640,18 @@ module TypeScript =
                     abstract member enumerable: bool option with get, set
                     abstract member value: obj option with get, set
                     abstract member writable: bool option with get, set
-                    abstract member get: unit -> obj
-                    abstract member set: v: obj -> unit
+                    abstract member get: (unit -> unit) option with get, set
+                    abstract member set: (obj -> unit) option with get, set
 
                     [<ParamObject; Emit("$0")>]
                     static member Create
                         (
-                            get: (unit -> unit),
-                            set: (obj -> unit),
                             ?configurable: bool,
                             ?enumerable: bool,
                             ?value: obj,
-                            ?writable: bool
+                            ?writable: bool,
+                            ?get: (unit -> unit),
+                            ?set: (obj -> unit)
                         )
                         : attributes
                         =
@@ -4250,8 +4168,8 @@ module TypeScript =
         abstract member enumerable: bool option with get, set
         abstract member value: obj option with get, set
         abstract member writable: bool option with get, set
-        abstract member get: unit -> obj
-        abstract member set: v: obj -> unit
+        abstract member get: (unit -> unit) option with get, set
+        abstract member set: (obj -> unit) option with get, set
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -4447,18 +4365,18 @@ module TypeScript =
                 abstract member enumerable: bool option with get, set
                 abstract member value: obj option with get, set
                 abstract member writable: bool option with get, set
-                abstract member get: unit -> obj
-                abstract member set: v: obj -> unit
+                abstract member get: (unit -> unit) option with get, set
+                abstract member set: (obj -> unit) option with get, set
 
                 [<ParamObject; Emit("$0")>]
                 static member Create
                     (
-                        get: (unit -> unit),
-                        set: (obj -> unit),
                         ?configurable: bool,
                         ?enumerable: bool,
                         ?value: obj,
-                        ?writable: bool
+                        ?writable: bool,
+                        ?get: (unit -> unit),
+                        ?set: (obj -> unit)
                     )
                     : attributes
                     =
@@ -4886,6 +4804,45 @@ module TypeScript =
 
                 [<ParamObject; Emit("$0")>]
                 static member Create(raw: TypeScript.ArrayLike<string>) : template = nativeOnly
+
+    module ProxyHandler =
+
+        type apply = delegate of target: obj * thisArg: obj * argArray: ResizeArray<obj> -> unit
+
+        type construct =
+            delegate of target: obj * argArray: ResizeArray<obj> * newTarget: Action -> obj
+
+        type defineProperty =
+            delegate of
+                target: obj * property: string * attributes: TypeScript.PropertyDescriptor -> bool
+
+        type defineProperty_1 =
+            delegate of
+                target: obj * property: obj * attributes: TypeScript.PropertyDescriptor -> bool
+
+        type deleteProperty = delegate of target: obj * p: string -> bool
+
+        type deleteProperty_1 = delegate of target: obj * p: obj -> bool
+
+        type get = delegate of target: obj * p: string * receiver: obj -> unit
+
+        type get_1 = delegate of target: obj * p: obj * receiver: obj -> unit
+
+        type getOwnPropertyDescriptor =
+            delegate of target: obj * p: string -> TypeScript.PropertyDescriptor option
+
+        type getOwnPropertyDescriptor_1 =
+            delegate of target: obj * p: obj -> TypeScript.PropertyDescriptor option
+
+        type has = delegate of target: obj * p: string -> bool
+
+        type has_1 = delegate of target: obj * p: obj -> bool
+
+        type set = delegate of target: obj * p: string * newValue: obj * receiver: obj -> bool
+
+        type set_1 = delegate of target: obj * p: obj * newValue: obj * receiver: obj -> bool
+
+        type setPrototypeOf = delegate of target: obj * v: obj option -> bool
 
     module ProxyConstructor =
 

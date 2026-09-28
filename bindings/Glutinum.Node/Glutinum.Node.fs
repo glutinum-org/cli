@@ -9688,120 +9688,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// <param name="options">
             /// used to parameterize the sending of certain types of handles. <c>options</c> supports the following properties:
             /// </param>
-            abstract member send: message: obj -> bool
-
-            /// <summary>
-            /// If Node.js is spawned with an IPC channel, the <c>process.send()</c> method can be
-            /// used to send messages to the parent process. Messages will be received as a <c>'message'</c> event on the parent's <c>ChildProcess</c> object.
-            ///
-            /// If Node.js was not spawned with an IPC channel, <c>process.send</c> will be <c>undefined</c>.
-            ///
-            /// The message goes through serialization and parsing. The resulting message might
-            /// not be the same as what is originally sent.
-            /// </summary>
-            /// <param name="options">
-            /// used to parameterize the sending of certain types of handles. <c>options</c> supports the following properties:
-            /// </param>
-            abstract member send:
-                message: obj *
-                sendHandle: Node.net.Socket *
-                ?options: Node.child_process.MessageOptions *
-                ?callback: (Exception option -> unit) ->
-                    bool
-
-            /// <summary>
-            /// If Node.js is spawned with an IPC channel, the <c>process.send()</c> method can be
-            /// used to send messages to the parent process. Messages will be received as a <c>'message'</c> event on the parent's <c>ChildProcess</c> object.
-            ///
-            /// If Node.js was not spawned with an IPC channel, <c>process.send</c> will be <c>undefined</c>.
-            ///
-            /// The message goes through serialization and parsing. The resulting message might
-            /// not be the same as what is originally sent.
-            /// </summary>
-            /// <param name="options">
-            /// used to parameterize the sending of certain types of handles. <c>options</c> supports the following properties:
-            /// </param>
-            abstract member send:
-                message: obj *
-                sendHandle: Node.net.Server *
-                ?options: Node.child_process.MessageOptions *
-                ?callback: (Exception option -> unit) ->
-                    bool
-
-            /// <summary>
-            /// If Node.js is spawned with an IPC channel, the <c>process.send()</c> method can be
-            /// used to send messages to the parent process. Messages will be received as a <c>'message'</c> event on the parent's <c>ChildProcess</c> object.
-            ///
-            /// If Node.js was not spawned with an IPC channel, <c>process.send</c> will be <c>undefined</c>.
-            ///
-            /// The message goes through serialization and parsing. The resulting message might
-            /// not be the same as what is originally sent.
-            /// </summary>
-            /// <param name="options">
-            /// used to parameterize the sending of certain types of handles. <c>options</c> supports the following properties:
-            /// </param>
-            abstract member send:
-                message: obj *
-                sendHandle: Node.dgram.Socket *
-                ?options: Node.child_process.MessageOptions *
-                ?callback: (Exception option -> unit) ->
-                    bool
-
-            /// <summary>
-            /// If Node.js is spawned with an IPC channel, the <c>process.send()</c> method can be
-            /// used to send messages to the parent process. Messages will be received as a <c>'message'</c> event on the parent's <c>ChildProcess</c> object.
-            ///
-            /// If Node.js was not spawned with an IPC channel, <c>process.send</c> will be <c>undefined</c>.
-            ///
-            /// The message goes through serialization and parsing. The resulting message might
-            /// not be the same as what is originally sent.
-            /// </summary>
-            abstract member send:
-                message: obj *
-                sendHandle: Node.net.Socket option *
-                ?callback: (Exception option -> unit) ->
-                    bool
-
-            /// <summary>
-            /// If Node.js is spawned with an IPC channel, the <c>process.send()</c> method can be
-            /// used to send messages to the parent process. Messages will be received as a <c>'message'</c> event on the parent's <c>ChildProcess</c> object.
-            ///
-            /// If Node.js was not spawned with an IPC channel, <c>process.send</c> will be <c>undefined</c>.
-            ///
-            /// The message goes through serialization and parsing. The resulting message might
-            /// not be the same as what is originally sent.
-            /// </summary>
-            abstract member send:
-                message: obj *
-                sendHandle: Node.net.Server option *
-                ?callback: (Exception option -> unit) ->
-                    bool
-
-            /// <summary>
-            /// If Node.js is spawned with an IPC channel, the <c>process.send()</c> method can be
-            /// used to send messages to the parent process. Messages will be received as a <c>'message'</c> event on the parent's <c>ChildProcess</c> object.
-            ///
-            /// If Node.js was not spawned with an IPC channel, <c>process.send</c> will be <c>undefined</c>.
-            ///
-            /// The message goes through serialization and parsing. The resulting message might
-            /// not be the same as what is originally sent.
-            /// </summary>
-            abstract member send:
-                message: obj *
-                sendHandle: Node.dgram.Socket option *
-                ?callback: (Exception option -> unit) ->
-                    bool
-
-            /// <summary>
-            /// If Node.js is spawned with an IPC channel, the <c>process.send()</c> method can be
-            /// used to send messages to the parent process. Messages will be received as a <c>'message'</c> event on the parent's <c>ChildProcess</c> object.
-            ///
-            /// If Node.js was not spawned with an IPC channel, <c>process.send</c> will be <c>undefined</c>.
-            ///
-            /// The message goes through serialization and parsing. The resulting message might
-            /// not be the same as what is originally sent.
-            /// </summary>
-            abstract member send: message: obj * callback: (Exception option -> unit) -> bool
+            abstract member send: (obj -> bool) option with get, set
             /// <summary>
             /// If the Node.js process is spawned with an IPC channel (see the <c>Child Process</c> and <c>Cluster</c> documentation), the <c>process.disconnect()</c> method will close the
             /// IPC channel to the parent process, allowing the child process to exit gracefully
@@ -9954,7 +9841,6 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// An object that may be "unref'd".
             /// </param>
             abstract member unref: maybeRefable: obj -> unit
-
             /// <summary>
             /// Replaces the current process with a new process.
             ///
@@ -9980,8 +9866,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// No key or value can contain a null-byte (<c>\u0000</c>).
             /// **Default:** <c>process.env</c>.
             /// </param>
-            abstract member execve:
-                file: string * ?args: ResizeArray<string> * ?env: Node.NodeJS.ProcessEnv -> obj
+            abstract member execve: Process.execve option with get, set
 
             /// <summary>
             /// Alias for <c>emitter.on(eventName, listener)</c>.
@@ -12714,6 +12599,57 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
                     : finalization
                     =
                     nativeOnly
+
+            type send =
+                delegate of
+                    message: obj *
+                    sendHandle: Node.net.Socket *
+                    ?options: Node.child_process.MessageOptions *
+                    ?callback: (Exception option -> unit) ->
+                        bool
+
+            type send_1 =
+                delegate of
+                    message: obj *
+                    sendHandle: Node.net.Server *
+                    ?options: Node.child_process.MessageOptions *
+                    ?callback: (Exception option -> unit) ->
+                        bool
+
+            type send_2 =
+                delegate of
+                    message: obj *
+                    sendHandle: Node.dgram.Socket *
+                    ?options: Node.child_process.MessageOptions *
+                    ?callback: (Exception option -> unit) ->
+                        bool
+
+            type send_3 =
+                delegate of
+                    message: obj *
+                    sendHandle: Node.net.Socket option *
+                    ?callback: (Exception option -> unit) ->
+                        bool
+
+            type send_4 =
+                delegate of
+                    message: obj *
+                    sendHandle: Node.net.Server option *
+                    ?callback: (Exception option -> unit) ->
+                        bool
+
+            type send_5 =
+                delegate of
+                    message: obj *
+                    sendHandle: Node.dgram.Socket option *
+                    ?callback: (Exception option -> unit) ->
+                        bool
+
+            type send_6 = delegate of message: obj * callback: (Exception option -> unit) -> bool
+
+            type execve =
+                delegate of
+                    file: string * ?args: ResizeArray<string> * ?env: Node.NodeJS.ProcessEnv -> obj
 
             type listeners_workerMessage = delegate of value: obj * source: float -> unit
 
@@ -19321,9 +19257,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// <param name="resource">
             /// Reference to the resource representing the async operation, needs to be released during destroy
             /// </param>
-            abstract member init:
-                asyncId: float * ``type``: string * triggerAsyncId: float * resource: obj -> unit
-
+            abstract member init: HookCallbacks.init option with get, set
             /// <summary>
             /// When an asynchronous operation is initiated or completes a callback is called to notify the user.
             /// The before callback is called just before said callback is executed.
@@ -19331,7 +19265,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// <param name="asyncId">
             /// the unique identifier assigned to the resource about to execute the callback.
             /// </param>
-            abstract member before: asyncId: float -> unit
+            abstract member before: (float -> unit) option with get, set
             /// <summary>
             /// Called immediately after the callback specified in <c>before</c> is completed.
             ///
@@ -19340,7 +19274,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// <param name="asyncId">
             /// the unique identifier assigned to the resource which has executed the callback.
             /// </param>
-            abstract member after: asyncId: float -> unit
+            abstract member after: (float -> unit) option with get, set
             /// <summary>
             /// Called when a promise has resolve() called. This may not be in the same execution id
             /// as the promise itself.
@@ -19348,14 +19282,14 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// <param name="asyncId">
             /// the unique id for the promise that was resolve()d.
             /// </param>
-            abstract member promiseResolve: asyncId: float -> unit
+            abstract member promiseResolve: (float -> unit) option with get, set
             /// <summary>
             /// Called after the resource corresponding to asyncId is destroyed
             /// </summary>
             /// <param name="asyncId">
             /// a unique ID for the async resource
             /// </param>
-            abstract member destroy: asyncId: float -> unit
+            abstract member destroy: (float -> unit) option with get, set
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -19908,6 +19842,13 @@ AsyncLocalStorage.snapshot()""")>]
 
                 [<Emit("$0.VERIFYREQUEST")>]
                 abstract member VERIFYREQUEST: float
+
+        module HookCallbacks =
+
+            type init =
+                delegate of
+                    asyncId: float * ``type``: string * triggerAsyncId: float * resource: obj ->
+                        unit
 
         module AsyncLocalStorage =
 
@@ -190023,19 +189964,10 @@ module UndiciTypes =
             [<Interface>]
             type Options =
                 inherit UndiciTypes.pool.Pool_.Options
-
                 /// <summary>
                 /// Default: <c>(origin, opts) => new Pool(origin, opts)</c>.
                 /// </summary>
-                abstract member factory:
-                    origin: string * opts: obj -> UndiciTypes.dispatcher.Dispatcher
-
-                /// <summary>
-                /// Default: <c>(origin, opts) => new Pool(origin, opts)</c>.
-                /// </summary>
-                abstract member factory:
-                    origin: Node.url.URL * opts: obj -> UndiciTypes.dispatcher.Dispatcher
-
+                abstract member factory: Options.factory option with get, set
                 /// <summary>
                 /// Integer. Default: <c>0</c>
                 /// </summary>
@@ -190090,6 +190022,13 @@ module UndiciTypes =
                     nativeOnly
 
             module Options =
+
+                type factory =
+                    delegate of origin: string * opts: obj -> UndiciTypes.dispatcher.Dispatcher
+
+                type factory_1 =
+                    delegate of
+                        origin: Node.url.URL * opts: obj -> UndiciTypes.dispatcher.Dispatcher
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -192792,57 +192731,35 @@ module UndiciTypes =
                 /// <summary>
                 /// Invoked before request is dispatched on socket. May be invoked multiple times when a request is retried when the request at the head of the pipeline fails.
                 /// </summary>
-                abstract member onConnect: abort: (Exception option -> unit) -> unit
+                abstract member onConnect: ((Exception option -> unit) -> unit) option with get, set
                 /// <summary>
                 /// Invoked when an error has occurred.
                 /// </summary>
-                abstract member onError: err: Exception -> unit
-
+                abstract member onError: (Exception -> unit) option with get, set
                 /// <summary>
                 /// Invoked when request is upgraded either due to a <c>Upgrade</c> header or <c>CONNECT</c> method.
                 /// </summary>
-                abstract member onUpgrade:
-                    statusCode: float *
-                    headers: ResizeArray<Node.Buffer> option *
-                    socket: Node.stream.Stream_.Duplex ->
-                        unit
-
-                /// <summary>
-                /// Invoked when request is upgraded either due to a <c>Upgrade</c> header or <c>CONNECT</c> method.
-                /// </summary>
-                abstract member onUpgrade:
-                    statusCode: float *
-                    headers: ResizeArray<string> option *
-                    socket: Node.stream.Stream_.Duplex ->
-                        unit
-
+                abstract member onUpgrade: DispatchHandlers.onUpgrade option with get, set
                 /// <summary>
                 /// Invoked when response is received, before headers have been read. *
                 /// </summary>
-                abstract member onResponseStarted: unit -> unit
-
+                abstract member onResponseStarted: (unit -> unit) option with get, set
                 /// <summary>
                 /// Invoked when statusCode and headers have been received. May be invoked multiple times due to 1xx informational headers.
                 /// </summary>
-                abstract member onHeaders:
-                    statusCode: float *
-                    headers: ResizeArray<Node.Buffer> *
-                    resume: (unit -> unit) *
-                    statusText: string ->
-                        bool
-
+                abstract member onHeaders: DispatchHandlers.onHeaders option with get, set
                 /// <summary>
                 /// Invoked when response payload data is received.
                 /// </summary>
-                abstract member onData: chunk: Node.Buffer -> bool
+                abstract member onData: (Node.Buffer -> bool) option with get, set
                 /// <summary>
                 /// Invoked when response payload and trailers have been received and the request has completed.
                 /// </summary>
-                abstract member onComplete: trailers: ResizeArray<string> option -> unit
+                abstract member onComplete: (ResizeArray<string> option -> unit) option with get, set
                 /// <summary>
                 /// Invoked when a body chunk is sent to the server. May be invoked multiple times for chunked requests
                 /// </summary>
-                abstract member onBodySent: chunkSize: float * totalBytesSent: float -> unit
+                abstract member onBodySent: DispatchHandlers.onBodySent option with get, set
 
             type PipelineHandler =
                 delegate of
@@ -192939,6 +192856,32 @@ module UndiciTypes =
                 type trailers =
                     [<EmitIndexer>]
                     abstract member Item: key: string -> string with get, set
+
+            module DispatchHandlers =
+
+                type onUpgrade =
+                    delegate of
+                        statusCode: float *
+                        headers: ResizeArray<Node.Buffer> option *
+                        socket: Node.stream.Stream_.Duplex ->
+                            unit
+
+                type onUpgrade_1 =
+                    delegate of
+                        statusCode: float *
+                        headers: ResizeArray<string> option *
+                        socket: Node.stream.Stream_.Duplex ->
+                            unit
+
+                type onHeaders =
+                    delegate of
+                        statusCode: float *
+                        headers: ResizeArray<Node.Buffer> *
+                        resume: (unit -> unit) *
+                        statusText: string ->
+                            bool
+
+                type onBodySent = delegate of chunkSize: float * totalBytesSent: float -> unit
 
             module DispatchInterceptor =
 
@@ -195482,13 +195425,10 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
             [<Interface>]
             type Options =
                 inherit UndiciTypes.client.Client_.Options
-
                 /// <summary>
                 /// Default: <c>(origin, opts) => new Client(origin, opts)</c>.
                 /// </summary>
-                abstract member factory:
-                    origin: Node.url.URL * opts: obj -> UndiciTypes.dispatcher.Dispatcher
-
+                abstract member factory: Options.factory_2 option with get, set
                 /// <summary>
                 /// The max number of clients to create. <c>null</c> if no limit. Default <c>null</c>.
                 /// </summary>
@@ -195499,6 +195439,10 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
                 abstract member interceptors: Options.interceptors_1 option with get, set
 
             module Options =
+
+                type factory_2 =
+                    delegate of
+                        origin: Node.url.URL * opts: obj -> UndiciTypes.dispatcher.Dispatcher
 
                 [<AllowNullLiteral>]
                 [<Interface>]
@@ -195572,9 +195516,12 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
                     UndiciTypes.connector.buildConnector_.BuildOptions option with get, set
 
                 abstract member proxyTls: UndiciTypes.connector.buildConnector_.BuildOptions option with get, set
+                abstract member clientFactory: Options.clientFactory option with get, set
 
-                abstract member clientFactory:
-                    origin: Node.URL * opts: obj -> UndiciTypes.dispatcher.Dispatcher
+            module Options =
+
+                type clientFactory =
+                    delegate of origin: Node.URL * opts: obj -> UndiciTypes.dispatcher.Dispatcher
 
         type Options = ProxyAgent_.Options
 

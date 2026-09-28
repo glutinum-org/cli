@@ -97,6 +97,7 @@ let readDeclaration (reader: ITypeScriptReader) (declaration: Ts.Declaration) : 
             TypeParameters = readMemberTypeParameters reader methodSignature.typeParameters
             Parameters = reader.ReadParameters methodSignature.parameters
             Type = reader.ReadTypeNode methodSignature.``type``
+            IsOptional = methodSignature.questionToken.IsSome
         }
         : GlueMethodSignature)
         |> GlueMember.MethodSignature
