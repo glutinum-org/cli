@@ -194247,6 +194247,9 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
             type DumpInterceptorOpts =
                 abstract member maxSize: float option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create(?maxSize: float) : DumpInterceptorOpts = nativeOnly
+
             type RetryInterceptorOpts = UndiciTypes.retry_handler.RetryHandler_.RetryOptions
 
             [<AllowNullLiteral>]
@@ -194254,10 +194257,16 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
             type RedirectInterceptorOpts =
                 abstract member maxRedirections: float option with get, set
 
+                [<ParamObject; Emit("$0")>]
+                static member Create(?maxRedirections: float) : RedirectInterceptorOpts = nativeOnly
+
             [<AllowNullLiteral>]
             [<Interface>]
             type ResponseErrorInterceptorOpts =
                 abstract member throwOnError: bool with get, set
+
+                [<ParamObject; Emit("$0")>]
+                static member Create(throwOnError: bool) : ResponseErrorInterceptorOpts = nativeOnly
 
         type DumpInterceptorOpts = Interceptors_.DumpInterceptorOpts
 

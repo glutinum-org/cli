@@ -7484,13 +7484,38 @@ let private transformTypeAliasDeclaration
         | GlueType.TypeLiteral typeLiteralInfo ->
             let typParameters = declarationTypeParameters.Value
 
+            let candidate =
+                ({
+                    Documentation = glueTypeAliasDeclaration.Documentation
+                    FullName = glueTypeAliasDeclaration.FullName
+                    Name = glueTypeAliasDeclaration.Name
+                    Members = typeLiteralInfo.Members
+                    TypeParameters = glueTypeAliasDeclaration.TypeParameters
+                    HeritageClauses = []
+                }
+                : GlueInterface)
+
+            let creates =
+                if ParamObjectCandidate.isCandidate context.TypeMemory candidate then
+                    let returnType =
+                        ({
+                            Name = typeAliasName
+                            TypeParameters = typParameters.TypeParameters
+                        }
+                        : FSharpMapped)
+                        |> FSharpType.Mapped
+
+                    paramObjectCreateMembers context returnType typeLiteralInfo.Members
+                else
+                    []
+
             {
                 XmlDoc = []
                 Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
                 Name = typeAliasName
                 OriginalName = glueTypeAliasDeclaration.Name
                 TypeParameters = typParameters.TypeParameters
-                Members = TransformMembers.toFSharpMember context typeLiteralInfo.Members
+                Members = TransformMembers.toFSharpMember context typeLiteralInfo.Members @ creates
                 Inheritance =
                     [
                         match TypeLiteral.tryFindIterableType context typeLiteralInfo.Members with
