@@ -75685,9 +75685,6 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
         [<Interface>]
         type StatSyncFn =
             [<Emit("$0($1...)")>]
-            abstract member Invoke: path: Node.fs.PathLike * ?options: obj -> Node.fs.Stats
-
-            [<Emit("$0($1...)")>]
             abstract member Invoke:
                 path: Node.fs.PathLike * ?options: StatSyncFn.Invoke.options -> Node.fs.Stats option
 
@@ -150256,8 +150253,7 @@ Readable.isDisturbed($0)""")>]
                 /// a promise for the final value of the reduction.
                 /// </returns>
                 abstract member reduce<'T> :
-                    fn: Readable.reduce.fn<'T> * ?initial: obj * ?options: Readable.reduce.options ->
-                        JS.Promise<'T>
+                    fn: Readable.reduce.fn<'T> * ?options: Readable.reduce.options -> JS.Promise<'T>
 
                 /// <summary>
                 /// This method calls *fn* on each chunk of the stream in order, passing it the result from the calculation
@@ -150279,8 +150275,7 @@ Readable.isDisturbed($0)""")>]
                 /// a promise for the final value of the reduction.
                 /// </returns>
                 abstract member reduce:
-                    fn: Readable.reduce.fn_1 * ?initial: obj * ?options: Readable.reduce.options ->
-                        JS.Promise<obj>
+                    fn: Readable.reduce.fn_1 * ?options: Readable.reduce.options -> JS.Promise<obj>
 
                 /// <summary>
                 /// This method calls *fn* on each chunk of the stream in order, passing it the result from the calculation
@@ -150295,6 +150290,20 @@ Readable.isDisturbed($0)""")>]
                 abstract member reduce<'T> :
                     fn: Readable.reduce.fn_2<'T> * initial: 'T * ?options: Readable.reduce.options ->
                         JS.Promise<'T>
+
+                /// <summary>
+                /// This method calls *fn* on each chunk of the stream in order, passing it the result from the calculation
+                /// on the previous element. It returns a promise for the final value of the reduction.
+                ///
+                /// If no *initial* value is supplied the first chunk of the stream is used as the initial value.
+                /// If the stream is empty, the promise is rejected with a <c>TypeError</c> with the <c>ERR_INVALID_ARGS</c> code property.
+                ///
+                /// The reducer function iterates the stream element-by-element which means that there is no *concurrency* parameter
+                /// or parallelism. To perform a reduce concurrently, you can extract the async function to <c>readable.map</c> method.
+                /// </summary>
+                abstract member reduce:
+                    fn: Readable.reduce.fn_1 * initial: obj * ?options: Readable.reduce.options ->
+                        JS.Promise<obj>
 
                 abstract member _destroy:
                     error: Exception option * callback: (Exception option -> unit) -> unit

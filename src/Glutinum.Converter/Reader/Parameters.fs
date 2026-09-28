@@ -17,6 +17,13 @@ let readParameters
         let nameNode = unbox<Ts.Node> parameter.name
         not (nameNode.kind = Ts.SyntaxKind.Identifier && identifierText nameNode = "this")
     )
+    // `options?: undefined` can only ever be omitted, so it is not a parameter of the binding
+    |> List.filter (fun parameter ->
+        match parameter.``type`` with
+        | Some typeNode ->
+            not (parameter.questionToken.IsSome && typeNode.kind = Ts.SyntaxKind.UndefinedKeyword)
+        | None -> true
+    )
     |> List.mapi (fun index parameter ->
         let nameNode = unbox<Ts.Node> parameter.name
 
