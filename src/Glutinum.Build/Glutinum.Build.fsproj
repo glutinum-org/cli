@@ -17,6 +17,7 @@
     <Compile Include="Commands/Bindings.fs" />
     <Compile Include="Commands/TypeScriptBinding.fs" />
     <Compile Include="Commands/TsMorphBinding.fs" />
+    <Compile Include="Commands/CommanderBinding.fs" />
     <Compile Include="Commands/Test/Specs.fs" />
     <Compile Include="Commands/Test/Bindings.fs" />
     <Compile Include="Commands/Test/All.fs" />

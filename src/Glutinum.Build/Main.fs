@@ -5,6 +5,7 @@ open Build.Commands.Cli
 open Build.Commands.Bindings
 open Build.Commands.TypeScriptBinding
 open Build.Commands.TsMorphBinding
+open Build.Commands.CommanderBinding
 open Build.Commands.Web
 open Build.Commands.Docs
 open Build.Commands.Test.Specs
@@ -56,6 +57,13 @@ You can then invoke the local version of Glutinum by running `node cli.js <args>
             .AddCommand<TsMorphBindingCommand>("tsmorph-binding")
             .WithDescription(
                 "Regenerate the binding of the @ts-morph/bootstrap API the converter drives ts-morph through"
+            )
+        |> ignore
+
+        config
+            .AddCommand<CommanderBindingCommand>("commander-binding")
+            .WithDescription(
+                "Regenerate the binding of commander the CLI parses its arguments with"
             )
         |> ignore
 

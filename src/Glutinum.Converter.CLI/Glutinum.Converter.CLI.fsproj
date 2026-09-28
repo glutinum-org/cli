@@ -5,6 +5,7 @@
     <ChangelogFile>$(MSBuildThisFileDirectory)/../../CHANGELOG.md</ChangelogFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Commander.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>
@@ -16,5 +17,6 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Fable.Core" />
+    <PackageReference Include="Glutinum.Node" />
   </ItemGroup>
 </Project>

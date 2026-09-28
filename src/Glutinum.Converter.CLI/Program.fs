@@ -1,23 +1,47 @@
 module Glutinum.Converter.Program
 
+open Glutinum
 open Glutinum.Converter
 open Glutinum.Converter.Generate
-open Node
-open Node.Api
+open Fable.Core
 open Fable.Core.JsInterop
+open Glutinum.Commander.ParseOptions
 
-// TODO: Create a real CLI parser
-let printHelp () =
-    let helpText =
-        """
-Generate Fable bindings from TypeScript definitions - https://github.com/glutinum-org/cl
+[<Emit("import.meta.url")>]
+let private importMetaUrl () : string = nativeOnly
 
-USAGE
+[<Interface>]
+type private PackageJson =
+    abstract member version: string with get
 
-    glutinum <input>... [--out-file <output>]
-    glutinum --all [--out-file <output>]
-    glue <input>... [--out-file <output>]
+[<Interface>]
+type private CliOptions =
+    abstract member outFile: string option with get
+    abstract member moduleName: string option with get
+    abstract member all: bool option with get
+    abstract member externals: bool with get
+    abstract member lib: bool with get
+    abstract member external: ResizeArray<string> with get
+    abstract member ``include``: ResizeArray<string> with get
 
+let private getVersion () =
+    let moduleDir =
+        Glutinum.Node.path.Exports.dirname (
+            Glutinum.Node.url.Exports.fileURLToPath (importMetaUrl ())
+        )
+
+    let content =
+        Glutinum.Node.fs.Exports.readFileSync (
+            Glutinum.Node.path.Exports.join (moduleDir, "..", "package.json"),
+            Glutinum.Node.BufferEncoding.utf8
+        )
+
+    let packageJson: PackageJson = !! JS.JSON.parse content
+
+    packageJson.version
+
+let private helpText =
+    """
     <input> can be:
       - an installed package name           (e.g. chalk, @types/vscode)
       - a path to a package directory       (e.g. ./node_modules/chalk)
@@ -25,160 +49,150 @@ USAGE
 
     Several packages are generated in the same file, each one with every
     package it depends on. A .d.ts file is generated alone.
-    --all generates every package installed in the nearest node_modules.
 
     The types of @types/node and @types/web (the DOM) are referenced from the
     Glutinum.Node and Glutinum.Web bindings, unless asked for or --no-externals.
 
-OPTIONS
-
-    --out-file <output>     Destination file to write in
-                            If not specified, the result will be printed to stdout
-    --no-externals          Generate @types/node and @types/web with the packages
-                            using them instead of referencing their bindings
-    --external <package>    Reference <package> from its own binding instead of
-                            generating it, `Glutinum.<Module>` is derived from its
-                            name unless given as <package>=<Module>
-                            Can be repeated
-    --module-name <name>    Full name of the generated module, `Glutinum.Types.TypeScript`,
-                            instead of `Glutinum.<Module>` derived from the package name
-    --include <names>       Comma-separated declarations to keep, the others are dropped
-                            Can be repeated
-    --no-lib                Create the program without the TypeScript library, for a
-                            package made of its files
-    -h, --help              Print this help message
-
-EXAMPLES
-
+Examples:
     glutinum chalk --out-file ./Glutinum.Chalk.fs
     glutinum vscode vscode-languageclient --out-file ./Glutinum.Vscode.fs
     glutinum leaflet --external @types/geojson --out-file ./Glutinum.Leaflet.fs
     glutinum --all --out-file ./Glutinum.fs
     glutinum ./node_modules/my-lib/index.d.ts
-        """
+"""
 
-    Log.log $"%s{helpText}"
+let private toGenerateOptions (options: CliOptions) : Packages.GenerateOptions =
+    let externals =
+        options.external
+        |> Seq.map (fun value ->
+            match value.Split('=') with
+            | [| name; moduleName |] -> name, Some moduleName
+            | _ -> value, None
+        )
+        |> Seq.toList
 
-let private getVersion () =
-    emitJsStatement
-        ()
-        """
-    const pkg = JSON.parse(fs.readFileSync(new URL('./../package.json', import.meta.url)));
+    let includes =
+        options.``include`` |> Seq.collect (fun value -> value.Split(',')) |> Seq.toList
 
-    return pkg.version;
-    """
+    { Packages.defaultOptions with
+        ExternalPackages = options.externals
+        Externals = externals
+        ModuleName = options.moduleName
+        Include = includes
+        NoLib = not options.lib
+    }
 
-let private generate (options: Packages.GenerateOptions) (inputs: string list) =
-    match inputs with
-    | [ "--all" ] -> generatePackagesFromDisk options []
-    | [ input ] when input.EndsWith ".d.ts" ->
+let private generate (options: Packages.GenerateOptions) (isAll: bool) (inputs: string list) =
+    match isAll, inputs with
+    | true, _ -> generatePackagesFromDisk options []
+    | false, [ input ] when input.EndsWith ".d.ts" ->
         generateBindingFileWith (options.ModuleName |> Option.defaultValue "Glutinum") input
-    | inputs -> generatePackagesFromDisk options inputs
+    | false, inputs -> generatePackagesFromDisk options inputs
 
-let private run (argv: string list) =
+let private write (outFile: string option) (content: string) =
+    match outFile with
+    | Some outFile ->
+        let mkdirOptions = createEmpty<Glutinum.Node.fs.Exports.mkdirSync__.options>
+        mkdirOptions.recursive <- true
 
-    // Naive CLI parser
-    // Order of matching is important !!!
-    match argv with
-    | []
-    | "-h" :: _
-    | "--help" :: _
-    | "help" :: _ ->
-        printHelp ()
-        0
+        Glutinum.Node.fs.Exports.mkdirSync (
+            Glutinum.Node.path.Exports.dirname outFile,
+            mkdirOptions
+        )
+        |> ignore
 
-    | "--version" :: [] ->
-        let version = getVersion ()
+        Glutinum.Node.fs.Exports.writeFileSync (outFile, content)
 
-        Log.log $"%s{version}"
-        0
+        Log.info $"Bindings written to: %s{Glutinum.Node.path.Exports.resolve outFile}"
+    | None ->
+        let stdout: Glutinum.Node.NodeJS.WriteStream =
+            !!Glutinum.Node.Exports.``process``.stdout
 
-    | _ ->
-        let inputs, outFile =
-            match List.rev argv with
-            | outFile :: "--out-file" :: inputs -> List.rev inputs, Some outFile
-            | _ -> argv, None
+        stdout.write (content, Glutinum.Node.BufferEncoding.utf8) |> ignore
 
-        let rec takeOptions
-            (args: string list)
-            (options: Packages.GenerateOptions)
-            (rest: string list)
-            =
-            match args with
-            | "--external" :: value :: tail ->
-                let external =
-                    match value.Split('=') with
-                    | [| name; moduleName |] -> name, Some moduleName
-                    | _ -> value, None
+let private run (argv: string array) =
+    let program = Commander.Exports.program
 
-                takeOptions
-                    tail
-                    { options with
-                        Externals = options.Externals @ [ external ]
-                    }
-                    rest
-            | "--module-name" :: value :: tail ->
-                takeOptions tail { options with ModuleName = Some value } rest
-            | "--no-lib" :: tail -> takeOptions tail { options with NoLib = true } rest
-            | "--include" :: value :: tail ->
-                takeOptions
-                    tail
-                    { options with
-                        Include = options.Include @ (value.Split(',') |> Array.toList)
-                    }
-                    rest
-            | arg :: tail -> takeOptions tail options (arg :: rest)
-            | [] -> options, List.rev rest
+    program
+        .name("glutinum")
+        .description(
+            "Generate Fable bindings from TypeScript definitions - https://github.com/glutinum-org/cli"
+        )
+        .version(getVersion ())
+    |> ignore
 
-        let options, inputs = takeOptions inputs Packages.defaultOptions []
+    program
+        .argument("[inputs...]", "packages, a package directory, or a .d.ts file to generate")
+        .option("--out-file <path>", "destination file to write in, stdout otherwise")
+        .option("--all", "generate every package installed in the nearest node_modules")
+        .option(
+            "--module-name <name>",
+            "full name of the generated module, instead of `Glutinum.<Module>`"
+        )
+        .option("--no-externals", "generate @types/node and @types/web instead of referencing them")
+        .option("--no-lib", "create the program without the TypeScript library")
+    |> ignore
 
-        let options =
-            { options with
-                ExternalPackages = not (List.contains "--no-externals" inputs)
-            }
+    program
+        .option(
+            "--external <package>",
+            "reference <package> from its own binding, as <package> or <package>=<Module>",
+            (fun value (previous: ResizeArray<string>) ->
+                previous.Add value
+                previous
+            ),
+            ResizeArray()
+        )
+        .option(
+            "--include <names>",
+            "comma separated declarations to keep, the others are dropped",
+            (fun value (previous: ResizeArray<string>) ->
+                previous.Add value
+                previous
+            ),
+            ResizeArray()
+        )
+        .addHelpText(Commander.AddHelpTextPosition.after, helpText)
+        .showHelpAfterError()
+    |> ignore
 
-        let inputs = inputs |> List.filter (fun input -> input <> "--no-externals")
+    let parseOptions = Commander.ParseOptions.Create from.user
 
-        let hasUnknownOption =
-            inputs |> List.exists (fun input -> input.StartsWith "-" && input <> "--all")
+    program.parse (ResizeArray argv, parseOptions) |> ignore
 
-        let mixesFileAndPackages =
-            inputs.Length > 1 && inputs |> List.exists (fun input -> input.EndsWith ".d.ts")
+    let options = program.opts<CliOptions>()
+    let inputs = program.args |> Seq.toList
+    let isAll = options.all |> Option.defaultValue false
 
-        if inputs.IsEmpty || hasUnknownOption then
-            Log.error "Invalid arguments"
-            printHelp ()
-            1
-        elif mixesFileAndPackages then
-            Log.error "A .d.ts file is generated alone, it can't be combined with other inputs"
-            1
+    let mixesFileAndPackages =
+        inputs.Length > 1 && inputs |> List.exists (fun input -> input.EndsWith ".d.ts")
+
+    if inputs.IsEmpty && not isAll then
+        Log.error "Give at least one input, or --all"
+        program.outputHelp (Commander.HelpContext.Create(error = true))
+        1
+    elif mixesFileAndPackages then
+        Log.error "A .d.ts file is generated alone, it can't be combined with other inputs"
+        1
+    else
+        if isAll then
+            Log.info "Generating binding file for every installed package"
         else
             Log.info $"""Generating binding file for %s{String.concat ", " inputs}"""
 
-            try
-                let res = generate options inputs
+        try
+            generate (toGenerateOptions options) isAll inputs |> write options.outFile
 
-                match outFile with
-                | Some outFile ->
-                    let outFileDir = path.dirname (outFile)
-                    fs?mkdirSync $ (outFileDir, {| recursive = true |})
-                    fs.writeFileSync (outFile, res)
+            Log.success "Success!"
 
-                    let absoluteOutFile = path.join (``process``.cwd (), outFile)
-
-                    Log.info $"Bindings written to: %s{absoluteOutFile}"
-                | None -> ``process``.stdout.write res |> ignore
-
-                Log.success "Success!"
-
-                0
-            with ex ->
-                Log.error ex.Message
-                1
+            0
+        with ex ->
+            Log.error ex.Message
+            1
 
 [<EntryPoint>]
 let main (argv: string array) =
-    let exitCode = run (argv |> Array.toList)
+    let exitCode = run argv
     // Fable discards the value returned by the entry point
-    ``process``?exitCode <- exitCode
+    Glutinum.Node.Exports.``process``.exitCode <- Some !^(float exitCode)
     exitCode
