@@ -132,6 +132,7 @@ type GlueASTViewer =
             ASTViewer.renderNode "MethodSignature" [
                 GlueASTViewer.Name methodSignature.Name
                 GlueASTViewer.Documentation methodSignature.Documentation
+                GlueASTViewer.IsOptional methodSignature.IsOptional
                 GlueASTViewer.Parameters methodSignature.Parameters
                 GlueASTViewer.Type methodSignature.Type
             ]
@@ -331,6 +332,7 @@ type GlueASTViewer =
                 [
                     GlueASTViewer.Name classDeclaration.Name
                     GlueASTViewer.Documentation classDeclaration.Documentation
+                    ASTViewer.renderKeyValue "IsExported" (string classDeclaration.IsExported)
                     GlueASTViewer.Constructors classDeclaration.Constructors
                     GlueASTViewer.TypeParameters classDeclaration.TypeParameters
                     classDeclaration.Members
@@ -363,6 +365,9 @@ type GlueASTViewer =
                 [
                     GlueASTViewer.Documentation functionType.Documentation
                     GlueASTViewer.TypeParameters functionType.TypeParameters
+                    ASTViewer.renderKeyValue
+                        "OwnTypeParameterNames"
+                        (String.concat ", " functionType.OwnTypeParameterNames)
                     GlueASTViewer.Parameters functionType.Parameters
                     GlueASTViewer.Type functionType.Type
                 ]
@@ -391,6 +396,7 @@ type GlueASTViewer =
                     ASTViewer.renderKeyValue "IsTopLevel" (string moduleDeclaration.IsTopLevel)
                     ASTViewer.renderKeyValue "IsNamespace" (string moduleDeclaration.IsNamespace)
                     ASTViewer.renderKeyValue "IsRecursive" (string moduleDeclaration.IsRecursive)
+                    ASTViewer.renderKeyValue "IsGlobal" (string moduleDeclaration.IsGlobal)
                     moduleDeclaration.Types
                     |> List.map GlueASTViewer.GlueType
                     |> ASTViewer.renderNode "Types"
@@ -504,6 +510,7 @@ type GlueASTViewer =
             ASTViewer.renderNode
                 "TypeLiteral"
                 [
+                    ASTViewer.renderKeyValue "Id" (Option.defaultValue "" typeLiteral.Id)
                     typeLiteral.Members
                     |> List.map GlueASTViewer.GlueMember
                     |> ASTViewer.renderNode "Members"

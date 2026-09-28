@@ -226,6 +226,9 @@ type FSharpASTViewer =
         )
         |> ASTViewer.renderNode "XmlDoc"
 
+    static member private Body(body: FSharpMemberInfoBody) =
+        ASTViewer.renderKeyValue "Body" (string body)
+
     static member private Member(memberInfo: FSharpMember) =
         match memberInfo with
         | FSharpMember.Method methodInfo ->
@@ -241,6 +244,7 @@ type FSharpASTViewer =
                 FSharpASTViewer.Parameters methodInfo.Parameters
                 FSharpASTViewer.TypeParameters methodInfo.TypeParameters
                 FSharpASTViewer.Type methodInfo.Type
+                FSharpASTViewer.Body methodInfo.Body
 
             ]
 
@@ -256,6 +260,7 @@ type FSharpASTViewer =
                 FSharpASTViewer.TypeParameters propertyInfo.TypeParameters
                 FSharpASTViewer.Parameters propertyInfo.Parameters
                 FSharpASTViewer.Type propertyInfo.Type
+                FSharpASTViewer.Body propertyInfo.Body
             ]
 
         | FSharpMember.StaticMember staticMemberInfo ->
@@ -535,6 +540,11 @@ type FSharpASTViewer =
                 [
                     FSharpASTViewer.Name unionInfo.Name
                     FSharpASTViewer.UnionCases unionInfo.Cases
+                    unionInfo.Constants
+                    |> List.map (fun constant ->
+                        ASTViewer.renderKeyValue constant.Name $"{constant.Case} {constant.Value}"
+                    )
+                    |> ASTViewer.renderNode "Constants"
                 ]
                 context
 
@@ -542,6 +552,25 @@ type FSharpASTViewer =
             ASTViewer.renderNode
                 "Unsupported"
                 [ ASTViewer.renderKeyValue "SyntaxKind" (string syntaxKind) ]
+                context
+
+        | FSharpType.TypeExtension extensionInfo ->
+            ASTViewer.renderNode
+                "TypeExtension"
+                [
+                    ASTViewer.renderKeyValue "ModuleName" extensionInfo.ModuleName
+                    ASTViewer.renderKeyValue "TargetName" extensionInfo.TargetName
+                    FSharpASTViewer.TypeParameters extensionInfo.TypeParameters
+                    extensionInfo.Members
+                    |> List.map (fun extensionMember ->
+                        ASTViewer.renderNode "Member" [
+                            FSharpASTViewer.Name extensionMember.Name
+                            FSharpASTViewer.Parameters extensionMember.Parameters
+                            FSharpASTViewer.Type extensionMember.ReturnType
+                        ]
+                    )
+                    |> ASTViewer.renderNode "Members"
+                ]
                 context
 
         | FSharpType.JSApi jsApi ->
