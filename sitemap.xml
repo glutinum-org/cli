@@ -9349,6 +9349,15 @@
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/vm/exports/compilefunction/</loc>
   </url>
   <url>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/vm/exports/compilefunction/apply/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/vm/exports/compilefunction/bind/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/vm/exports/compilefunction/call/</loc>
+  </url>
+  <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/vm/measurememorymode/</loc>
   </url>
   <url>
@@ -10607,6 +10616,9 @@
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/undicitypes/filereader-module/progressevent/proto/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/undicitypes/filereader-module/progressevent/proto/initevent/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/undicitypes/filereader-module/progresseventinit/</loc>
