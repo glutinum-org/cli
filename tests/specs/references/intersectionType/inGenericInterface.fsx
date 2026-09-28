@@ -31,6 +31,8 @@ module RSAKeyPairOptions =
         abstract member format: 'PrivF with get, set
         abstract member cipher: string option with get, set
         abstract member ``type``: RSAKeyPairOptions.privateKeyEncoding.``type`` with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create (format: 'PrivF, ``type``: RSAKeyPairOptions.privateKeyEncoding.``type``, ?cipher: string) : privateKeyEncoding<'PrivF> = nativeOnly
 
     module privateKeyEncoding =
 

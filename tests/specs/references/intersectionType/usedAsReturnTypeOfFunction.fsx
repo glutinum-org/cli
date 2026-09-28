@@ -29,6 +29,8 @@ module Exports =
         type options =
             abstract member enableFindWidget: bool option with get
             abstract member enableScripts: bool option with get
+            [<ParamObject; Emit("$0")>]
+            static member Create (?enableFindWidget: bool, ?enableScripts: bool) : options = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

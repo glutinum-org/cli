@@ -29,6 +29,8 @@ module ProgressEvent =
         abstract member bubbles: bool with get
         abstract member __proto__: obj with get, set
         abstract member loaded: float with get
+        [<ParamObject; Emit("$0")>]
+        static member Create (bubbles: bool, __proto__: obj, loaded: float) : __proto__ = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

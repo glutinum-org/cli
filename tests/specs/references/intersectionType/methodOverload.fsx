@@ -25,12 +25,16 @@ module BrowserPage =
         type options =
             abstract member base64: bool option with get, set
             abstract member save: bool with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create (save: bool, ?base64: bool) : options = nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
         type options_1 =
             abstract member save: bool option with get, set
             abstract member base64: bool with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create (base64: bool, ?save: bool) : options_1 = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

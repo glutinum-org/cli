@@ -30,12 +30,16 @@ module Exports =
         type options =
             abstract member silent: bool option with get, set
             abstract member createIfNone: bool with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create (createIfNone: bool, ?silent: bool) : options = nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
         type options_1 =
             abstract member silent: bool option with get, set
             abstract member forceNewSession: bool with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create (forceNewSession: bool, ?silent: bool) : options_1 = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

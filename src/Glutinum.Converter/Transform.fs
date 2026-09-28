@@ -45,10 +45,30 @@ let private withCountSuffix (name: string) (count: int) =
     else
         name + "_" + string count
 
+/// A `Create` returns the type it builds, so its name is not part of the shape
+let private withoutSelfReference (members: FSharpMember list) : FSharpMember list =
+    members
+    |> List.map (
+        function
+        | FSharpMember.Method method when
+            method.Attributes |> List.contains FSharpAttribute.ParamObject
+            ->
+            FSharpMember.Method
+                { method with
+                    Type = FSharpType.Discard
+                }
+        | member_ -> member_
+    )
+
 /// The anonymous type as it is compared to the ones already exposed under the same name
 let private withoutName (typ: FSharpType) : FSharpType =
     match typ with
-    | FSharpType.Interface info -> FSharpType.Interface { info with Name = "" }
+    | FSharpType.Interface info ->
+        FSharpType.Interface
+            { info with
+                Name = ""
+                Members = withoutSelfReference info.Members
+            }
     | FSharpType.Class info -> FSharpType.Class { info with Name = "" }
     | FSharpType.Delegate info -> FSharpType.Delegate { info with Name = "" }
     | FSharpType.Union info -> FSharpType.Union { info with Name = "" }
@@ -1459,6 +1479,38 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
             let name =
                 context.TypeLiteralsMemory.GetTypeName(context.FullName, context.CurrentScopeName)
 
+            let isParamObjectCandidate =
+                members
+                |> List.forall (
+                    function
+                    | GlueMember.IndexSignature _
+                    | GlueMember.CallSignature _
+                    | GlueMember.ConstructSignature _ -> false
+                    | GlueMember.MethodSignature _
+                    | GlueMember.Property _
+                    | GlueMember.GetAccessor _
+                    | GlueMember.SetAccessor _
+                    | GlueMember.Method _ -> true
+                )
+
+            let creates =
+                if isParamObjectCandidate then
+                    let returnType =
+                        ({
+                            Name = name
+                            TypeParameters =
+                                typeParameterNames
+                                |> List.map (
+                                    FSharpType.TypeParameter >> FSharpTypeParameter.FSharpType
+                                )
+                        }
+                        : FSharpMapped)
+                        |> FSharpType.Mapped
+
+                    paramObjectCreateMembers context returnType members
+                else
+                    []
+
             {
                 XmlDoc = []
                 Attributes = [ FSharpAttribute.AllowNullLiteral; FSharpAttribute.Interface ]
@@ -1470,7 +1522,7 @@ let rec private transformType (context: TransformContext) (glueType: GlueType) :
                         FSharpTypeParameterInfo.Create(name)
                         |> FSharpTypeParameter.FSharpTypeParameter
                     )
-                Members = TransformMembers.toFSharpMember context members
+                Members = TransformMembers.toFSharpMember context members @ creates
                 Inheritance = []
             }
             |> FSharpType.Interface
