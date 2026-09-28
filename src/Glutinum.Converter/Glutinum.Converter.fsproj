@@ -50,11 +50,11 @@
     <Compile Include="Generate.fs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="../Glutinum.Types/Glutinum.Types.fsproj" />
     <PackageReference Include="Fable.Core" />
-    <PackageReference Include="Fable.Node" />
     <PackageReference Include="Fable.Promise" />
     <PackageReference Include="FSToolkit.ErrorHandling" />
     <PackageReference Include="Glutinum.Chalk" />
+    <PackageReference Include="Glutinum.Node" />
+    <PackageReference Include="Glutinum.Types" />
   </ItemGroup>
 </Project>

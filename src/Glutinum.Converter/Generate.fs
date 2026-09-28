@@ -1,7 +1,6 @@
 module rec Glutinum.Converter.Generate
 
 open Fable.Core
-open Node
 open TypeScript
 open Fable.Core.JsInterop
 open Glutinum.Converter
@@ -15,12 +14,13 @@ let generateBindingFile (filePath: string) =
 /// Generate the binding of a single declaration file as the module <c>moduleName</c>
 let generateBindingFileWith (moduleName: string) (filePath: string) =
 
-    if fs.existsSync (U2.Case1 filePath) |> not then
+    if Glutinum.Node.fs.Exports.existsSync filePath |> not then
         failwith $"File does not exist: {filePath}"
 
-    let fileContent = fs.readFileSync filePath
+    let fileContent =
+        Glutinum.Node.fs.Exports.readFileSync (filePath, Glutinum.Node.BufferEncoding.utf8)
 
-    let program = createProgramForCLI filePath (fileContent.ToString())
+    let program = createProgramForCLI filePath fileContent
 
     let checker = program.getTypeChecker ()
 
@@ -78,4 +78,7 @@ let generatePackages (inputs: string list) =
     generatePackagesFromDisk Packages.defaultOptions inputs
 
 let generatePackagesFromDisk (options: Packages.GenerateOptions) (inputs: string list) =
-    generatePackagesWithOptions options (Hosting.createNodeHost (``process``.cwd ())) inputs
+    generatePackagesWithOptions
+        options
+        (Hosting.createNodeHost (Glutinum.Node.Exports.``process``.cwd ()))
+        inputs

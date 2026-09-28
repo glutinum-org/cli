@@ -64,15 +64,6 @@
           "Scriptorium.Parchment": "0.6.1"
         }
       },
-      "Glutinum.Types": {
-        "type": "Transitive",
-        "resolved": "0.1.0",
-        "contentHash": "2VvjbyCXsSk3a0d4Uy/mEeMcpZ8dCCmo++TyPpx4V/y+Z9JY7ZYNYhwbaJmemtP/6PBa0Cg3eu00/Zs0xq9CcA==",
-        "dependencies": {
-          "FSharp.Core": "5.0.2",
-          "Fable.Core": "4.3.0"
-        }
-      },
       "Scriptorium.Ink": {
         "type": "Transitive",
         "resolved": "0.5.0",
@@ -90,6 +81,16 @@
           "FSharp.Core": "10.0.101",
           "Fable.Core": "5.2.0",
           "Scriptorium.Ink": "0.5.0"
+        }
+      },
+      "Glutinum.Types": {
+        "type": "CentralTransitive",
+        "requested": "[1.0.0-beta.1, )",
+        "resolved": "0.1.0",
+        "contentHash": "2VvjbyCXsSk3a0d4Uy/mEeMcpZ8dCCmo++TyPpx4V/y+Z9JY7ZYNYhwbaJmemtP/6PBa0Cg3eu00/Zs0xq9CcA==",
+        "dependencies": {
+          "FSharp.Core": "5.0.2",
+          "Fable.Core": "4.3.0"
         }
       }
     }
