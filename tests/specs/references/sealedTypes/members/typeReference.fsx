@@ -20,6 +20,7 @@ type Thenable<'T> =
 type Log3<'T, 'R1, 'R2> =
     abstract member info: data: Thenable<'T> -> U2<'R1, 'R2>
     abstract member info: data: float -> U2<'R1, 'R2>
+    abstract member info: data: U2<Thenable<'T>, float> -> U2<'R1, 'R2>
 
 type Log3<'R2> =
     Log3<string, float, 'R2>

@@ -134,6 +134,9 @@ module TypeScript =
         [<EmitConstructor>]
         abstract member Create: value: TypeScript.Date -> TypeScript.Date
 
+        [<EmitConstructor>]
+        abstract member Create: value: U3<float, string, TypeScript.Date> -> TypeScript.Date
+
         /// <summary>
         /// Returns the number of milliseconds between midnight, January 1, 1970 Universal Coordinated Time (UTC) (or GMT) and the specified date.
         /// </summary>
@@ -170,6 +173,9 @@ module TypeScript =
 
         [<EmitConstructor>]
         abstract member Create: unit -> TypeScript.Date
+
+        [<EmitConstructor>]
+        abstract member Create: value: U2<float, string> -> TypeScript.Date
 
         [<EmitConstructor>]
         abstract member Create:
@@ -398,6 +404,17 @@ module TypeScript =
         /// Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
         /// </param>
         abstract member values<'T> : o: TypeScript.ArrayLike<'T> -> ResizeArray<'T>
+
+        /// <summary>
+        /// Returns an array of values of the enumerable own properties of an object
+        /// </summary>
+        /// <param name="o">
+        /// Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
+        /// </param>
+        abstract member values<'T> :
+            o: U2<ObjectConstructor.values.o.U2.Case1<'T>, TypeScript.ArrayLike<'T>> ->
+                ResizeArray<'T>
+
         /// <summary>
         /// Returns an array of values of the enumerable own properties of an object
         /// </summary>
@@ -419,6 +436,17 @@ module TypeScript =
         /// Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
         /// </param>
         abstract member entries<'T> : o: TypeScript.ArrayLike<'T> -> ResizeArray<string * 'T>
+
+        /// <summary>
+        /// Returns an array of key/values of the enumerable own properties of an object
+        /// </summary>
+        /// <param name="o">
+        /// Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
+        /// </param>
+        abstract member entries<'T> :
+            o: U2<ObjectConstructor.entries.o.U2.Case1<'T>, TypeScript.ArrayLike<'T>> ->
+                ResizeArray<string * 'T>
+
         /// <summary>
         /// Returns an array of key/values of the enumerable own properties of an object
         /// </summary>
@@ -482,6 +510,16 @@ module TypeScript =
         /// A property name.
         /// </param>
         abstract member hasOwn: o: obj * v: obj -> bool
+        /// <summary>
+        /// Determines whether an object has a property with the specified name.
+        /// </summary>
+        /// <param name="o">
+        /// An object.
+        /// </param>
+        /// <param name="v">
+        /// A property name.
+        /// </param>
+        abstract member hasOwn: o: obj * v: TypeScript.PropertyKey -> bool
 
         /// <summary>
         /// Groups members of an iterable according to the return value of the passed callback.
@@ -557,6 +595,19 @@ module TypeScript =
             o: obj * p: obj -> TypeScript.PropertyDescriptor option
 
         /// <summary>
+        /// Gets the own property descriptor of the specified object.
+        /// An own property descriptor is one that is defined directly on the object and is not inherited from the object's prototype.
+        /// </summary>
+        /// <param name="o">
+        /// Object that contains the property.
+        /// </param>
+        /// <param name="p">
+        /// Name of the property.
+        /// </param>
+        abstract member getOwnPropertyDescriptor:
+            o: obj * p: TypeScript.PropertyKey -> TypeScript.PropertyDescriptor option
+
+        /// <summary>
         /// Returns the names of the own properties of an object. The own properties of an object are those that are defined directly
         /// on that object, and are not inherited from the object's prototype. The properties of an object include both fields (objects) and functions.
         /// </summary>
@@ -628,6 +679,24 @@ module TypeScript =
         /// </param>
         abstract member defineProperty<'T> :
             o: 'T * p: obj * attributes: ObjectConstructor.defineProperty.attributes -> 'T
+
+        /// <summary>
+        /// Adds a property to an object, or modifies attributes of an existing property.
+        /// </summary>
+        /// <param name="o">
+        /// Object on which to add or modify the property. This can be a native JavaScript object (that is, a user-defined object or a built in object) or a DOM object.
+        /// </param>
+        /// <param name="p">
+        /// The property name.
+        /// </param>
+        /// <param name="attributes">
+        /// Descriptor for the property. It can be for a data property or an accessor property.
+        /// </param>
+        abstract member defineProperty<'T> :
+            o: 'T *
+            p: TypeScript.PropertyKey *
+            attributes: ObjectConstructor.defineProperty.attributes ->
+                'T
 
         /// <summary>
         /// Adds one or more properties to an object, and/or modifies attributes of existing properties.
@@ -737,6 +806,14 @@ module TypeScript =
         /// </summary>
         abstract member toLocaleString:
             locales: ResizeArray<string> * ?options: ReadonlyArray.toLocaleString.options -> string
+
+        /// <summary>
+        /// Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.
+        /// </summary>
+        abstract member toLocaleString:
+            locales: U2<string, ResizeArray<string>> *
+            ?options: ReadonlyArray.toLocaleString.options ->
+                string
 
         /// <summary>
         /// Returns an iterable of key, value pairs for every entry in the array
@@ -1163,6 +1240,10 @@ module TypeScript =
         abstract member next:
             [<ParamArray>] arg0: 'TNext[] -> TypeScript.IteratorResult<'T, 'TReturn>
 
+        abstract member next:
+            [<ParamArray>] arg0: U2<obj, ResizeArray<'TNext>>[] ->
+                TypeScript.IteratorResult<'T, 'TReturn>
+
         abstract member ``return``: value: 'TReturn -> TypeScript.IteratorResult<'T, 'TReturn>
         abstract member throw: e: obj -> TypeScript.IteratorResult<'T, 'TReturn>
 
@@ -1290,6 +1371,10 @@ module TypeScript =
 
         abstract member next:
             [<ParamArray>] arg0: 'TNext[] -> TypeScript.IteratorResult<'T, 'TReturn>
+
+        abstract member next:
+            [<ParamArray>] arg0: U2<obj, ResizeArray<'TNext>>[] ->
+                TypeScript.IteratorResult<'T, 'TReturn>
 
         abstract member ``return``:
             ('TReturn option -> TypeScript.IteratorResult<'T, 'TReturn>) option with get, set
@@ -1563,6 +1648,26 @@ module TypeScript =
                     bool
 
             /// <summary>
+            /// Adds a property to an object, or modifies attributes of an existing property.
+            /// </summary>
+            /// <param name="target">
+            /// Object on which to add or modify the property. This can be a native JavaScript object
+            /// (that is, a user-defined object or a built in object) or a DOM object.
+            /// </param>
+            /// <param name="propertyKey">
+            /// The property name.
+            /// </param>
+            /// <param name="attributes">
+            /// Descriptor for the property. It can be for a data property or an accessor property.
+            /// </param>
+            [<Emit("$0.defineProperty($1...)")>]
+            abstract member defineProperty:
+                target: obj *
+                propertyKey: TypeScript.PropertyKey *
+                attributes: Exports.defineProperty.attributes ->
+                    bool
+
+            /// <summary>
             /// Removes a property from an object, equivalent to <c>delete target[propertyKey]</c>,
             /// except it won't throw if <c>target[propertyKey]</c> is non-configurable.
             /// </summary>
@@ -1600,6 +1705,20 @@ module TypeScript =
             /// </param>
             [<Emit("$0.deleteProperty($1...)")>]
             abstract member deleteProperty: target: obj * propertyKey: obj -> bool
+
+            /// <summary>
+            /// Removes a property from an object, equivalent to <c>delete target[propertyKey]</c>,
+            /// except it won't throw if <c>target[propertyKey]</c> is non-configurable.
+            /// </summary>
+            /// <param name="target">
+            /// Object from which to remove the own property.
+            /// </param>
+            /// <param name="propertyKey">
+            /// The property name.
+            /// </param>
+            [<Emit("$0.deleteProperty($1...)")>]
+            abstract member deleteProperty:
+                target: obj * propertyKey: TypeScript.PropertyKey -> bool
 
             /// <summary>
             /// Gets the property of target, equivalent to <c>target[propertyKey]</c> when <c>receiver === target</c>.
@@ -1677,6 +1796,18 @@ module TypeScript =
             abstract member has: target: obj * propertyKey: obj -> bool
 
             /// <summary>
+            /// Equivalent to <c>propertyKey in target</c>.
+            /// </summary>
+            /// <param name="target">
+            /// Object that contains the property on itself or in its prototype chain.
+            /// </param>
+            /// <param name="propertyKey">
+            /// Name of the property.
+            /// </param>
+            [<Emit("$0.has($1...)")>]
+            abstract member has: target: obj * propertyKey: TypeScript.PropertyKey -> bool
+
+            /// <summary>
             /// Returns a value that indicates whether new properties can be added to an object.
             /// </summary>
             /// <param name="target">
@@ -1731,6 +1862,11 @@ module TypeScript =
             [<Emit("$0.set($1...)")>]
             abstract member set:
                 target: obj * propertyKey: float * value: obj * ?receiver: obj -> bool
+
+            [<Emit("$0.set($1...)")>]
+            abstract member set:
+                target: obj * propertyKey: TypeScript.PropertyKey * value: obj * ?receiver: obj ->
+                    bool
 
             /// <summary>
             /// Sets the prototype of a specified object o to object proto or null.
@@ -1809,6 +1945,14 @@ module TypeScript =
                     /// </summary>
                     abstract member toLocaleString:
                         locales: ResizeArray<string> *
+                        ?options: Exports.apply.argumentsList.toLocaleString.options ->
+                            string
+
+                    /// <summary>
+                    /// Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.
+                    /// </summary>
+                    abstract member toLocaleString:
+                        locales: U2<string, ResizeArray<string>> *
                         ?options: Exports.apply.argumentsList.toLocaleString.options ->
                             string
 
@@ -2748,6 +2892,14 @@ module TypeScript =
                     /// </summary>
                     abstract member toLocaleString:
                         locales: ResizeArray<string> *
+                        ?options: Exports.construct.argumentsList.toLocaleString.options ->
+                            string
+
+                    /// <summary>
+                    /// Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.
+                    /// </summary>
+                    abstract member toLocaleString:
+                        locales: U2<string, ResizeArray<string>> *
                         ?options: Exports.construct.argumentsList.toLocaleString.options ->
                             string
 
@@ -4344,6 +4496,16 @@ module TypeScript =
                 [<EmitIndexer>]
                 abstract member Item: s: string -> 'T with get, set
 
+            module o =
+
+                module U2 =
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type Case1<'T> =
+                        [<EmitIndexer>]
+                        abstract member Item: s: string -> 'T with get, set
+
         module entries =
 
             [<AllowNullLiteral>]
@@ -4351,6 +4513,16 @@ module TypeScript =
             type o<'T> =
                 [<EmitIndexer>]
                 abstract member Item: s: string -> 'T with get, set
+
+            module o =
+
+                module U2 =
+
+                    [<AllowNullLiteral>]
+                    [<Interface>]
+                    type Case1<'T> =
+                        [<EmitIndexer>]
+                        abstract member Item: s: string -> 'T with get, set
 
         module groupBy =
 
@@ -4820,13 +4992,22 @@ module TypeScript =
             delegate of
                 target: obj * property: obj * attributes: TypeScript.PropertyDescriptor -> bool
 
+        type defineProperty_2 =
+            delegate of
+                target: obj * property: U2<string, obj> * attributes: TypeScript.PropertyDescriptor ->
+                    bool
+
         type deleteProperty = delegate of target: obj * p: string -> bool
 
         type deleteProperty_1 = delegate of target: obj * p: obj -> bool
 
+        type deleteProperty_2 = delegate of target: obj * p: U2<string, obj> -> bool
+
         type get = delegate of target: obj * p: string * receiver: obj -> unit
 
         type get_1 = delegate of target: obj * p: obj * receiver: obj -> unit
+
+        type get_2 = delegate of target: obj * p: U2<string, obj> * receiver: obj -> unit
 
         type getOwnPropertyDescriptor =
             delegate of target: obj * p: string -> TypeScript.PropertyDescriptor option
@@ -4834,13 +5015,21 @@ module TypeScript =
         type getOwnPropertyDescriptor_1 =
             delegate of target: obj * p: obj -> TypeScript.PropertyDescriptor option
 
+        type getOwnPropertyDescriptor_2 =
+            delegate of target: obj * p: U2<string, obj> -> TypeScript.PropertyDescriptor option
+
         type has = delegate of target: obj * p: string -> bool
 
         type has_1 = delegate of target: obj * p: obj -> bool
 
+        type has_2 = delegate of target: obj * p: U2<string, obj> -> bool
+
         type set = delegate of target: obj * p: string * newValue: obj * receiver: obj -> bool
 
         type set_1 = delegate of target: obj * p: obj * newValue: obj * receiver: obj -> bool
+
+        type set_2 =
+            delegate of target: obj * p: U2<string, obj> * newValue: obj * receiver: obj -> bool
 
         type setPrototypeOf = delegate of target: obj * v: obj option -> bool
 

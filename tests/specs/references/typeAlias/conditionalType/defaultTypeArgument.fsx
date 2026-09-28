@@ -39,8 +39,13 @@ type EventEmitter<'T> =
     abstract member on<'A, 'B>: eventName: obj * listener: ('A -> 'B -> unit) -> EventEmitter<'T>
     abstract member on<'A, 'B, 'C>: eventName: obj * listener: ('A -> 'B -> 'C -> unit) -> EventEmitter<'T>
     abstract member on: eventName: obj * listener: System.Delegate -> EventEmitter<'T>
+    abstract member on<'A>: eventName: U2<string, obj> * listener: ('A -> unit) -> EventEmitter<'T>
+    abstract member on<'A, 'B>: eventName: U2<string, obj> * listener: ('A -> 'B -> unit) -> EventEmitter<'T>
+    abstract member on<'A, 'B, 'C>: eventName: U2<string, obj> * listener: ('A -> 'B -> 'C -> unit) -> EventEmitter<'T>
+    abstract member on: eventName: U2<string, obj> * listener: System.Delegate -> EventEmitter<'T>
     abstract member emit: eventName: string * [<ParamArray>] args: obj [] -> bool
     abstract member emit: eventName: obj * [<ParamArray>] args: obj [] -> bool
+    abstract member emit: eventName: U2<string, obj> * [<ParamArray>] args: obj [] -> bool
 
 type EventEmitter =
     EventEmitter<DefaultEventMap>

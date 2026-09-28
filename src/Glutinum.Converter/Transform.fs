@@ -4371,15 +4371,28 @@ module UnionOverloads =
                     acc @ [ [ Some parameter ] ], count
             )
 
+        // An overload omitting an optional parameter and the one keeping its union are
+        // indistinguishable at a call site passing nothing (FS0041)
+        let expandsAnOptional =
+            List.zip choices parameters
+            |> List.exists (fun (choice, parameter) -> parameter.IsOptional && choice.Length > 1)
+
         if count <= 1 then
             [ parameters ]
         else
-            cartesian choices
-            // The parameters after an omitted one can't be passed
-            |> List.map (fun combination ->
-                combination |> List.takeWhile Option.isSome |> List.choose id
-            )
-            |> List.distinct
+            let expanded =
+                cartesian choices
+                // The parameters after an omitted one can't be passed
+                |> List.map (fun combination ->
+                    combination |> List.takeWhile Option.isSome |> List.choose id
+                )
+                |> List.distinct
+
+            if expandsAnOptional then
+                expanded
+            else
+                // A caller holding a value at the union type has no expanded overload to pass it to
+                expanded @ [ parameters ] |> List.distinct
 
     let expandMembers (typeMemory: GlueType list) (members: GlueMember list) : GlueMember list =
         members

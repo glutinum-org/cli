@@ -11,10 +11,14 @@ type Exports =
     static member write (chunk: string, ?encoding: string) : unit = nativeOnly
     [<Import("write", "REPLACE_ME_WITH_MODULE_NAME")>]
     static member write (chunk: JS.Uint8Array, ?encoding: string) : unit = nativeOnly
+    [<Import("write", "REPLACE_ME_WITH_MODULE_NAME")>]
+    static member write (chunk: U2<string, JS.Uint8Array>, ?encoding: string) : unit = nativeOnly
     [<Import("Reader", "REPLACE_ME_WITH_MODULE_NAME"); EmitConstructor>]
     static member Reader (source: string) : Reader = nativeOnly
     [<Import("Reader", "REPLACE_ME_WITH_MODULE_NAME"); EmitConstructor>]
     static member Reader (source: JS.Uint8Array) : Reader = nativeOnly
+    [<Import("Reader", "REPLACE_ME_WITH_MODULE_NAME"); EmitConstructor>]
+    static member Reader (source: U2<string, JS.Uint8Array>) : Reader = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]
@@ -59,6 +63,7 @@ type EventTarget =
     abstract member tooMany: a: bool * b: string * c: U3<string, float, bool> -> unit
     abstract member tooMany: a: bool * b: float * c: U3<string, float, bool> -> unit
     abstract member tooMany: a: bool * b: bool * c: U3<string, float, bool> -> unit
+    abstract member tooMany: a: U3<string, float, bool> * b: U3<string, float, bool> * c: U3<string, float, bool> -> unit
 
 [<AllowNullLiteral>]
 [<Interface>]

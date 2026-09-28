@@ -13,6 +13,8 @@ type Exports =
     static member get (key: float) : unit = nativeOnly
     [<Import("get", "REPLACE_ME_WITH_MODULE_NAME")>]
     static member get (key: obj) : unit = nativeOnly
+    [<Import("get", "REPLACE_ME_WITH_MODULE_NAME")>]
+    static member get (key: U3<string, float, obj>) : unit = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

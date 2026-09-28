@@ -15,6 +15,7 @@ type Exports =
 type MyClass =
     abstract member contains: otherBoundsOrLatLng: MyClass -> bool
     abstract member contains: otherBoundsOrLatLng: string -> bool
+    abstract member contains: otherBoundsOrLatLng: U2<MyUnion, string> -> bool
 
 type MyUnion =
     U2<MyClass, string>

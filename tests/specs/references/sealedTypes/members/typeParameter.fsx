@@ -15,6 +15,7 @@ type Exports =
 type Log2<'T, 'R1, 'R2> =
     abstract member info: data: 'T -> U2<'R1, 'R2>
     abstract member info: data: float -> U2<'R1, 'R2>
+    abstract member info: data: U2<'T, float> -> U2<'R1, 'R2>
 
 type Log2<'R2> =
     Log2<string, float, 'R2>
