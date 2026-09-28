@@ -6966,7 +6966,7 @@ TypeScript versions earlier than 5.7.""")>]
             abstract member write: buffer: string * ?cb: (Exception option -> unit) -> bool
 
             abstract member write:
-                str: string * ?encoding: Node.BufferEncoding * ?cb: (Exception option -> unit) ->
+                str: string * encoding: Node.BufferEncoding * ?cb: (Exception option -> unit) ->
                     bool
 
             abstract member ``end``: ?cb: (unit -> unit) -> WritableStream
@@ -6974,7 +6974,7 @@ TypeScript versions earlier than 5.7.""")>]
             abstract member ``end``: data: JS.Uint8Array * ?cb: (unit -> unit) -> WritableStream
 
             abstract member ``end``:
-                str: string * ?encoding: Node.BufferEncoding * ?cb: (unit -> unit) -> WritableStream
+                str: string * encoding: Node.BufferEncoding * ?cb: (unit -> unit) -> WritableStream
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -7712,7 +7712,7 @@ TypeScript versions earlier than 5.7.""")>]
             /// If the value of filename is set to <c>'stdout'</c> or <c>'stderr'</c>, the report is written
             /// to the stdout or stderr of the process respectively.
             /// </summary>
-            abstract member writeReport: ?err: Exception -> string
+            abstract member writeReport: err: Exception -> string
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -8172,7 +8172,7 @@ TypeScript versions earlier than 5.7.""")>]
             /// * If the <c>--no-deprecation</c> command-line flag is used, the deprecation warning is suppressed.
             /// * If the <c>--trace-deprecation</c> command-line flag is used, the deprecation warning is printed to <c>stderr</c> along with the full stack trace.
             /// </summary>
-            abstract member emitWarning: warning: string * ?``type``: string * ?ctor: Action -> unit
+            abstract member emitWarning: warning: string * ``type``: string * ?ctor: Action -> unit
 
             /// <summary>
             /// The <c>process.emitWarning()</c> method can be used to emit custom or application
@@ -8241,7 +8241,7 @@ TypeScript versions earlier than 5.7.""")>]
             /// * If the <c>--trace-deprecation</c> command-line flag is used, the deprecation warning is printed to <c>stderr</c> along with the full stack trace.
             /// </summary>
             abstract member emitWarning:
-                warning: Exception * ?``type``: string * ?ctor: Action -> unit
+                warning: Exception * ``type``: string * ?ctor: Action -> unit
 
             /// <summary>
             /// The <c>process.emitWarning()</c> method can be used to emit custom or application
@@ -8310,7 +8310,7 @@ TypeScript versions earlier than 5.7.""")>]
             /// * If the <c>--trace-deprecation</c> command-line flag is used, the deprecation warning is printed to <c>stderr</c> along with the full stack trace.
             /// </summary>
             abstract member emitWarning:
-                warning: string * ?``type``: string * ?code: string * ?ctor: Action -> unit
+                warning: string * ``type``: string * code: string * ?ctor: Action -> unit
 
             /// <summary>
             /// The <c>process.emitWarning()</c> method can be used to emit custom or application
@@ -8379,7 +8379,7 @@ TypeScript versions earlier than 5.7.""")>]
             /// * If the <c>--trace-deprecation</c> command-line flag is used, the deprecation warning is printed to <c>stderr</c> along with the full stack trace.
             /// </summary>
             abstract member emitWarning:
-                warning: Exception * ?``type``: string * ?code: string * ?ctor: Action -> unit
+                warning: Exception * ``type``: string * code: string * ?ctor: Action -> unit
 
             /// <summary>
             /// The <c>process.emitWarning()</c> method can be used to emit custom or application
@@ -8448,7 +8448,7 @@ TypeScript versions earlier than 5.7.""")>]
             /// * If the <c>--trace-deprecation</c> command-line flag is used, the deprecation warning is printed to <c>stderr</c> along with the full stack trace.
             /// </summary>
             abstract member emitWarning:
-                warning: string * ?options: Node.NodeJS.EmitWarningOptions -> unit
+                warning: string * options: Node.NodeJS.EmitWarningOptions -> unit
 
             /// <summary>
             /// The <c>process.emitWarning()</c> method can be used to emit custom or application
@@ -8517,7 +8517,7 @@ TypeScript versions earlier than 5.7.""")>]
             /// * If the <c>--trace-deprecation</c> command-line flag is used, the deprecation warning is printed to <c>stderr</c> along with the full stack trace.
             /// </summary>
             abstract member emitWarning:
-                warning: Exception * ?options: Node.NodeJS.EmitWarningOptions -> unit
+                warning: Exception * options: Node.NodeJS.EmitWarningOptions -> unit
 
             /// <summary>
             /// The <c>process.env</c> property returns an object containing the user environment.
@@ -20519,7 +20519,7 @@ AsyncLocalStorage.snapshot()""")>]
             static member spawn
                 (
                     command: string,
-                    ?args: ResizeArray<string>,
+                    args: ResizeArray<string>,
                     ?options: Node.child_process.SpawnOptionsWithoutStdio
                 )
                 : Node.child_process.ChildProcessWithoutNullStreams
@@ -21088,7 +21088,7 @@ AsyncLocalStorage.snapshot()""")>]
             static member fork
                 (
                     modulePath: string,
-                    ?args: ResizeArray<string>,
+                    args: ResizeArray<string>,
                     ?options: Node.child_process.ForkOptions
                 )
                 : Node.child_process.ChildProcess
@@ -21099,7 +21099,7 @@ AsyncLocalStorage.snapshot()""")>]
             static member fork
                 (
                     modulePath: Node.url.URL,
-                    ?args: ResizeArray<string>,
+                    args: ResizeArray<string>,
                     ?options: Node.child_process.ForkOptions
                 )
                 : Node.child_process.ChildProcess
@@ -21147,7 +21147,7 @@ AsyncLocalStorage.snapshot()""")>]
 
             [<Import("spawnSync", "child_process")>]
             static member spawnSync
-                (command: string, ?options: Node.child_process.SpawnSyncOptions)
+                (command: string, options: Node.child_process.SpawnSyncOptions)
                 : Node.child_process.SpawnSyncReturns<U2<string, Node.NonSharedBuffer>>
                 =
                 nativeOnly
@@ -21185,8 +21185,8 @@ AsyncLocalStorage.snapshot()""")>]
             static member spawnSync
                 (
                     command: string,
-                    ?args: ResizeArray<string>,
-                    ?options: Node.child_process.SpawnSyncOptions
+                    args: ResizeArray<string>,
+                    options: Node.child_process.SpawnSyncOptions
                 )
                 : Node.child_process.SpawnSyncReturns<U2<string, Node.NonSharedBuffer>>
                 =
@@ -21230,7 +21230,7 @@ AsyncLocalStorage.snapshot()""")>]
 
             [<Import("execSync", "child_process")>]
             static member execSync
-                (command: string, ?options: Node.child_process.ExecSyncOptions)
+                (command: string, options: Node.child_process.ExecSyncOptions)
                 : U2<string, Node.NonSharedBuffer>
                 =
                 nativeOnly
@@ -21279,7 +21279,7 @@ AsyncLocalStorage.snapshot()""")>]
 
             [<Import("execFileSync", "child_process")>]
             static member execFileSync
-                (file: string, ?options: Node.child_process.ExecFileSyncOptions)
+                (file: string, options: Node.child_process.ExecFileSyncOptions)
                 : U2<string, Node.NonSharedBuffer>
                 =
                 nativeOnly
@@ -21317,8 +21317,8 @@ AsyncLocalStorage.snapshot()""")>]
             static member execFileSync
                 (
                     file: string,
-                    ?args: ResizeArray<string>,
-                    ?options: Node.child_process.ExecFileSyncOptions
+                    args: ResizeArray<string>,
+                    options: Node.child_process.ExecFileSyncOptions
                 )
                 : U2<string, Node.NonSharedBuffer>
                 =
@@ -22755,7 +22755,7 @@ AsyncLocalStorage.snapshot()""")>]
             /// </summary>
             abstract member send:
                 message: string *
-                ?sendHandle: Node.child_process.SendHandle *
+                sendHandle: Node.child_process.SendHandle *
                 ?callback: (Exception option -> unit) ->
                     bool
 
@@ -22911,7 +22911,7 @@ AsyncLocalStorage.snapshot()""")>]
             /// </summary>
             abstract member send:
                 message: obj *
-                ?sendHandle: Node.child_process.SendHandle *
+                sendHandle: Node.child_process.SendHandle *
                 ?callback: (Exception option -> unit) ->
                     bool
 
@@ -23067,7 +23067,7 @@ AsyncLocalStorage.snapshot()""")>]
             /// </summary>
             abstract member send:
                 message: float *
-                ?sendHandle: Node.child_process.SendHandle *
+                sendHandle: Node.child_process.SendHandle *
                 ?callback: (Exception option -> unit) ->
                     bool
 
@@ -23223,7 +23223,7 @@ AsyncLocalStorage.snapshot()""")>]
             /// </summary>
             abstract member send:
                 message: bool *
-                ?sendHandle: Node.child_process.SendHandle *
+                sendHandle: Node.child_process.SendHandle *
                 ?callback: (Exception option -> unit) ->
                     bool
 
@@ -23379,7 +23379,7 @@ AsyncLocalStorage.snapshot()""")>]
             /// </summary>
             abstract member send:
                 message: bigint *
-                ?sendHandle: Node.child_process.SendHandle *
+                sendHandle: Node.child_process.SendHandle *
                 ?callback: (Exception option -> unit) ->
                     bool
 
@@ -23535,8 +23535,8 @@ AsyncLocalStorage.snapshot()""")>]
             /// </summary>
             abstract member send:
                 message: string *
-                ?sendHandle: Node.child_process.SendHandle *
-                ?options: Node.child_process.MessageOptions *
+                sendHandle: Node.child_process.SendHandle *
+                options: Node.child_process.MessageOptions *
                 ?callback: (Exception option -> unit) ->
                     bool
 
@@ -23692,8 +23692,8 @@ AsyncLocalStorage.snapshot()""")>]
             /// </summary>
             abstract member send:
                 message: obj *
-                ?sendHandle: Node.child_process.SendHandle *
-                ?options: Node.child_process.MessageOptions *
+                sendHandle: Node.child_process.SendHandle *
+                options: Node.child_process.MessageOptions *
                 ?callback: (Exception option -> unit) ->
                     bool
 
@@ -23849,8 +23849,8 @@ AsyncLocalStorage.snapshot()""")>]
             /// </summary>
             abstract member send:
                 message: float *
-                ?sendHandle: Node.child_process.SendHandle *
-                ?options: Node.child_process.MessageOptions *
+                sendHandle: Node.child_process.SendHandle *
+                options: Node.child_process.MessageOptions *
                 ?callback: (Exception option -> unit) ->
                     bool
 
@@ -24006,8 +24006,8 @@ AsyncLocalStorage.snapshot()""")>]
             /// </summary>
             abstract member send:
                 message: bool *
-                ?sendHandle: Node.child_process.SendHandle *
-                ?options: Node.child_process.MessageOptions *
+                sendHandle: Node.child_process.SendHandle *
+                options: Node.child_process.MessageOptions *
                 ?callback: (Exception option -> unit) ->
                     bool
 
@@ -24163,8 +24163,8 @@ AsyncLocalStorage.snapshot()""")>]
             /// </summary>
             abstract member send:
                 message: bigint *
-                ?sendHandle: Node.child_process.SendHandle *
-                ?options: Node.child_process.MessageOptions *
+                sendHandle: Node.child_process.SendHandle *
+                options: Node.child_process.MessageOptions *
                 ?callback: (Exception option -> unit) ->
                     bool
 
@@ -28532,7 +28532,7 @@ AsyncLocalStorage.snapshot()""")>]
             abstract member send:
                 message: string *
                 sendHandle: Node.net.Socket option *
-                ?options: Node.child_process.MessageOptions *
+                options: Node.child_process.MessageOptions *
                 ?callback: (Exception option -> unit) ->
                     bool
 
@@ -28560,7 +28560,7 @@ AsyncLocalStorage.snapshot()""")>]
             abstract member send:
                 message: string *
                 sendHandle: Node.net.Server option *
-                ?options: Node.child_process.MessageOptions *
+                options: Node.child_process.MessageOptions *
                 ?callback: (Exception option -> unit) ->
                     bool
 
@@ -28588,7 +28588,7 @@ AsyncLocalStorage.snapshot()""")>]
             abstract member send:
                 message: string *
                 sendHandle: Node.dgram.Socket option *
-                ?options: Node.child_process.MessageOptions *
+                options: Node.child_process.MessageOptions *
                 ?callback: (Exception option -> unit) ->
                     bool
 
@@ -28616,7 +28616,7 @@ AsyncLocalStorage.snapshot()""")>]
             abstract member send:
                 message: obj *
                 sendHandle: Node.net.Socket option *
-                ?options: Node.child_process.MessageOptions *
+                options: Node.child_process.MessageOptions *
                 ?callback: (Exception option -> unit) ->
                     bool
 
@@ -28644,7 +28644,7 @@ AsyncLocalStorage.snapshot()""")>]
             abstract member send:
                 message: obj *
                 sendHandle: Node.net.Server option *
-                ?options: Node.child_process.MessageOptions *
+                options: Node.child_process.MessageOptions *
                 ?callback: (Exception option -> unit) ->
                     bool
 
@@ -28672,7 +28672,7 @@ AsyncLocalStorage.snapshot()""")>]
             abstract member send:
                 message: obj *
                 sendHandle: Node.dgram.Socket option *
-                ?options: Node.child_process.MessageOptions *
+                options: Node.child_process.MessageOptions *
                 ?callback: (Exception option -> unit) ->
                     bool
 
@@ -28700,7 +28700,7 @@ AsyncLocalStorage.snapshot()""")>]
             abstract member send:
                 message: float *
                 sendHandle: Node.net.Socket option *
-                ?options: Node.child_process.MessageOptions *
+                options: Node.child_process.MessageOptions *
                 ?callback: (Exception option -> unit) ->
                     bool
 
@@ -28728,7 +28728,7 @@ AsyncLocalStorage.snapshot()""")>]
             abstract member send:
                 message: float *
                 sendHandle: Node.net.Server option *
-                ?options: Node.child_process.MessageOptions *
+                options: Node.child_process.MessageOptions *
                 ?callback: (Exception option -> unit) ->
                     bool
 
@@ -28756,7 +28756,7 @@ AsyncLocalStorage.snapshot()""")>]
             abstract member send:
                 message: float *
                 sendHandle: Node.dgram.Socket option *
-                ?options: Node.child_process.MessageOptions *
+                options: Node.child_process.MessageOptions *
                 ?callback: (Exception option -> unit) ->
                     bool
 
@@ -28784,7 +28784,7 @@ AsyncLocalStorage.snapshot()""")>]
             abstract member send:
                 message: bool *
                 sendHandle: Node.net.Socket option *
-                ?options: Node.child_process.MessageOptions *
+                options: Node.child_process.MessageOptions *
                 ?callback: (Exception option -> unit) ->
                     bool
 
@@ -28812,7 +28812,7 @@ AsyncLocalStorage.snapshot()""")>]
             abstract member send:
                 message: bool *
                 sendHandle: Node.net.Server option *
-                ?options: Node.child_process.MessageOptions *
+                options: Node.child_process.MessageOptions *
                 ?callback: (Exception option -> unit) ->
                     bool
 
@@ -28840,7 +28840,7 @@ AsyncLocalStorage.snapshot()""")>]
             abstract member send:
                 message: bool *
                 sendHandle: Node.dgram.Socket option *
-                ?options: Node.child_process.MessageOptions *
+                options: Node.child_process.MessageOptions *
                 ?callback: (Exception option -> unit) ->
                     bool
 
@@ -28868,7 +28868,7 @@ AsyncLocalStorage.snapshot()""")>]
             abstract member send:
                 message: bigint *
                 sendHandle: Node.net.Socket option *
-                ?options: Node.child_process.MessageOptions *
+                options: Node.child_process.MessageOptions *
                 ?callback: (Exception option -> unit) ->
                     bool
 
@@ -28896,7 +28896,7 @@ AsyncLocalStorage.snapshot()""")>]
             abstract member send:
                 message: bigint *
                 sendHandle: Node.net.Server option *
-                ?options: Node.child_process.MessageOptions *
+                options: Node.child_process.MessageOptions *
                 ?callback: (Exception option -> unit) ->
                     bool
 
@@ -28924,7 +28924,7 @@ AsyncLocalStorage.snapshot()""")>]
             abstract member send:
                 message: bigint *
                 sendHandle: Node.dgram.Socket option *
-                ?options: Node.child_process.MessageOptions *
+                options: Node.child_process.MessageOptions *
                 ?callback: (Exception option -> unit) ->
                     bool
 
@@ -36844,7 +36844,7 @@ AsyncLocalStorage.snapshot()""")>]
 
             [<Import("generateKeyPairSync", "crypto")>]
             static member generateKeyPairSync
-                (``type``: string, ?options: Node.crypto.ED448KeyPairKeyObjectOptions)
+                (``type``: string, options: Node.crypto.ED448KeyPairKeyObjectOptions)
                 : Node.crypto.KeyPairKeyObjectResult
                 =
                 nativeOnly
@@ -36858,7 +36858,7 @@ AsyncLocalStorage.snapshot()""")>]
 
             [<Import("generateKeyPairSync", "crypto")>]
             static member generateKeyPairSync
-                (``type``: string, ?options: Node.crypto.X25519KeyPairKeyObjectOptions)
+                (``type``: string, options: Node.crypto.X25519KeyPairKeyObjectOptions)
                 : Node.crypto.KeyPairKeyObjectResult
                 =
                 nativeOnly
@@ -36872,7 +36872,7 @@ AsyncLocalStorage.snapshot()""")>]
 
             [<Import("generateKeyPairSync", "crypto")>]
             static member generateKeyPairSync
-                (``type``: string, ?options: Node.crypto.X448KeyPairKeyObjectOptions)
+                (``type``: string, options: Node.crypto.X448KeyPairKeyObjectOptions)
                 : Node.crypto.KeyPairKeyObjectResult
                 =
                 nativeOnly
@@ -37900,7 +37900,7 @@ AsyncLocalStorage.snapshot()""")>]
 
             [<Import("hash", "crypto")>]
             static member hash
-                (algorithm: string, data: string, ?outputEncoding: Exports.hash__.outputEncoding)
+                (algorithm: string, data: string, outputEncoding: Exports.hash__.outputEncoding)
                 : U2<string, Node.NonSharedBuffer>
                 =
                 nativeOnly
@@ -37910,7 +37910,7 @@ AsyncLocalStorage.snapshot()""")>]
                 (
                     algorithm: string,
                     data: Node.NodeJS.ArrayBufferView,
-                    ?outputEncoding: Exports.hash__.outputEncoding
+                    outputEncoding: Exports.hash__.outputEncoding
                 )
                 : U2<string, Node.NonSharedBuffer>
                 =
@@ -40540,7 +40540,7 @@ KeyObject.from($0)""")>]
             /// PKCS#1 and SEC1 encryption.
             /// </summary>
             abstract member export:
-                ?options: Node.crypto.JwkKeyExportOptions -> Node.crypto.JsonWebKey
+                options: Node.crypto.JwkKeyExportOptions -> Node.crypto.JsonWebKey
 
             /// <summary>
             /// Returns <c>true</c> or <c>false</c> depending on whether the keys have exactly the same
@@ -43604,7 +43604,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    ``type``: string * ?options: Node.crypto.ED448KeyPairKeyObjectOptions ->
+                    ``type``: string * options: Node.crypto.ED448KeyPairKeyObjectOptions ->
                         JS.Promise<Node.crypto.KeyPairKeyObjectResult>
 
                 [<Emit("$0.__promisify__($1...)")>]
@@ -43614,7 +43614,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    ``type``: string * ?options: Node.crypto.X25519KeyPairKeyObjectOptions ->
+                    ``type``: string * options: Node.crypto.X25519KeyPairKeyObjectOptions ->
                         JS.Promise<Node.crypto.KeyPairKeyObjectResult>
 
                 [<Emit("$0.__promisify__($1...)")>]
@@ -43624,7 +43624,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    ``type``: string * ?options: Node.crypto.X448KeyPairKeyObjectOptions ->
+                    ``type``: string * options: Node.crypto.X448KeyPairKeyObjectOptions ->
                         JS.Promise<Node.crypto.KeyPairKeyObjectResult>
 
             module Exports =
@@ -47329,7 +47329,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
             /// // Prints: server listening 0.0.0.0:41234
             /// </c><c></c>
             /// </summary>
-            abstract member bind: ?port: float * ?callback: (unit -> unit) -> Socket
+            abstract member bind: port: float * ?callback: (unit -> unit) -> Socket
             /// <summary>
             /// For UDP sockets, causes the <c>dgram.Socket</c> to listen for datagram
             /// messages on a named <c>port</c> and optional <c>address</c>. If <c>port</c> is not
@@ -47372,7 +47372,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
             /// // Prints: server listening 0.0.0.0:41234
             /// </c><c></c>
             /// </summary>
-            abstract member bind: ?callback: (unit -> unit) -> Socket
+            abstract member bind: callback: (unit -> unit) -> Socket
 
             /// <summary>
             /// For UDP sockets, causes the <c>dgram.Socket</c> to listen for datagram
@@ -47934,7 +47934,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
             /// </code>
             /// </summary>
             abstract member send:
-                msg: string * ?port: float * ?callback: Socket.send.callback -> unit
+                msg: string * port: float * ?callback: Socket.send.callback -> unit
 
             /// <summary>
             /// Broadcasts a datagram on the socket.
@@ -48023,7 +48023,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
             /// </code>
             /// </summary>
             abstract member send:
-                msg: Node.NodeJS.ArrayBufferView * ?port: float * ?callback: Socket.send.callback ->
+                msg: Node.NodeJS.ArrayBufferView * port: float * ?callback: Socket.send.callback ->
                     unit
 
             /// <summary>
@@ -48113,7 +48113,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
             /// </code>
             /// </summary>
             abstract member send:
-                msg: ResizeArray<obj> * ?port: float * ?callback: Socket.send.callback -> unit
+                msg: ResizeArray<obj> * port: float * ?callback: Socket.send.callback -> unit
 
             /// <summary>
             /// Broadcasts a datagram on the socket.
@@ -48201,7 +48201,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
             /// });
             /// </code>
             /// </summary>
-            abstract member send: msg: string * ?callback: Socket.send.callback -> unit
+            abstract member send: msg: string * callback: Socket.send.callback -> unit
 
             /// <summary>
             /// Broadcasts a datagram on the socket.
@@ -48290,7 +48290,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
             /// </code>
             /// </summary>
             abstract member send:
-                msg: Node.NodeJS.ArrayBufferView * ?callback: Socket.send.callback -> unit
+                msg: Node.NodeJS.ArrayBufferView * callback: Socket.send.callback -> unit
 
             /// <summary>
             /// Broadcasts a datagram on the socket.
@@ -48378,7 +48378,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
             /// });
             /// </code>
             /// </summary>
-            abstract member send: msg: ResizeArray<obj> * ?callback: Socket.send.callback -> unit
+            abstract member send: msg: ResizeArray<obj> * callback: Socket.send.callback -> unit
 
             /// <summary>
             /// Broadcasts a datagram on the socket.
@@ -48660,7 +48660,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                 msg: string *
                 offset: float *
                 length: float *
-                ?port: float *
+                port: float *
                 ?callback: Socket.send.callback ->
                     unit
 
@@ -48754,7 +48754,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                 msg: Node.NodeJS.ArrayBufferView *
                 offset: float *
                 length: float *
-                ?port: float *
+                port: float *
                 ?callback: Socket.send.callback ->
                     unit
 
@@ -48845,8 +48845,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
             /// </code>
             /// </summary>
             abstract member send:
-                msg: string * offset: float * length: float * ?callback: Socket.send.callback ->
-                    unit
+                msg: string * offset: float * length: float * callback: Socket.send.callback -> unit
 
             /// <summary>
             /// Broadcasts a datagram on the socket.
@@ -48938,7 +48937,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                 msg: Node.NodeJS.ArrayBufferView *
                 offset: float *
                 length: float *
-                ?callback: Socket.send.callback ->
+                callback: Socket.send.callback ->
                     unit
 
             /// <summary>
@@ -53189,7 +53188,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    hostname: string * ?options: Node.dns.ResolveOptions ->
+                    hostname: string * options: Node.dns.ResolveOptions ->
                         JS.Promise<U2<ResizeArray<string>, ResizeArray<Node.dns.RecordWithTtl>>>
 
         module resolve6_ =
@@ -53207,7 +53206,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    hostname: string * ?options: Node.dns.ResolveOptions ->
+                    hostname: string * options: Node.dns.ResolveOptions ->
                         JS.Promise<U2<ResizeArray<string>, ResizeArray<Node.dns.RecordWithTtl>>>
 
         module resolveCname_ =
@@ -57831,7 +57830,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
 
             [<Import("fstatSync", "fs")>]
             static member fstatSync
-                (fd: float, ?options: Node.fs.StatOptions)
+                (fd: float, options: Node.fs.StatOptions)
                 : U2<Node.fs.Stats, Node.fs.BigIntStats>
                 =
                 nativeOnly
@@ -58177,21 +58176,21 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
 
             [<Import("statfsSync", "fs")>]
             static member statfsSync
-                (path: string, ?options: Node.fs.StatFsOptions)
+                (path: string, options: Node.fs.StatFsOptions)
                 : U2<Node.fs.StatsFs, Node.fs.BigIntStatsFs>
                 =
                 nativeOnly
 
             [<Import("statfsSync", "fs")>]
             static member statfsSync
-                (path: Node.Buffer, ?options: Node.fs.StatFsOptions)
+                (path: Node.Buffer, options: Node.fs.StatFsOptions)
                 : U2<Node.fs.StatsFs, Node.fs.BigIntStatsFs>
                 =
                 nativeOnly
 
             [<Import("statfsSync", "fs")>]
             static member statfsSync
-                (path: Node.url.URL, ?options: Node.fs.StatFsOptions)
+                (path: Node.url.URL, options: Node.fs.StatFsOptions)
                 : U2<Node.fs.StatsFs, Node.fs.BigIntStatsFs>
                 =
                 nativeOnly
@@ -64753,39 +64752,10 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             /// If a flag is not provided, it defaults to <c>'r'</c>.
             /// </param>
             [<Import("readFileSync", "fs")>]
-            static member readFileSync(path: string) : U2<string, Node.NonSharedBuffer> = nativeOnly
-
-            /// <summary>
-            /// Synchronously reads the entire contents of a file.
-            /// </summary>
-            /// <param name="path">
-            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-            /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
-            /// </param>
-            /// <param name="options">
-            /// Either the encoding for the result, or an object that contains the encoding and an optional flag.
-            /// If a flag is not provided, it defaults to <c>'r'</c>.
-            /// </param>
-            [<Import("readFileSync", "fs")>]
             static member readFileSync
                 (path: string, options: Exports.readFileSync__.options_2)
                 : U2<string, Node.NonSharedBuffer>
                 =
-                nativeOnly
-
-            /// <summary>
-            /// Synchronously reads the entire contents of a file.
-            /// </summary>
-            /// <param name="path">
-            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-            /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
-            /// </param>
-            /// <param name="options">
-            /// Either the encoding for the result, or an object that contains the encoding and an optional flag.
-            /// If a flag is not provided, it defaults to <c>'r'</c>.
-            /// </param>
-            [<Import("readFileSync", "fs")>]
-            static member readFileSync(path: Node.Buffer) : U2<string, Node.NonSharedBuffer> =
                 nativeOnly
 
             /// <summary>
@@ -64818,40 +64788,11 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             /// If a flag is not provided, it defaults to <c>'r'</c>.
             /// </param>
             [<Import("readFileSync", "fs")>]
-            static member readFileSync(path: Node.url.URL) : U2<string, Node.NonSharedBuffer> =
-                nativeOnly
-
-            /// <summary>
-            /// Synchronously reads the entire contents of a file.
-            /// </summary>
-            /// <param name="path">
-            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-            /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
-            /// </param>
-            /// <param name="options">
-            /// Either the encoding for the result, or an object that contains the encoding and an optional flag.
-            /// If a flag is not provided, it defaults to <c>'r'</c>.
-            /// </param>
-            [<Import("readFileSync", "fs")>]
             static member readFileSync
                 (path: Node.url.URL, options: Exports.readFileSync__.options_2)
                 : U2<string, Node.NonSharedBuffer>
                 =
                 nativeOnly
-
-            /// <summary>
-            /// Synchronously reads the entire contents of a file.
-            /// </summary>
-            /// <param name="path">
-            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-            /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
-            /// </param>
-            /// <param name="options">
-            /// Either the encoding for the result, or an object that contains the encoding and an optional flag.
-            /// If a flag is not provided, it defaults to <c>'r'</c>.
-            /// </param>
-            [<Import("readFileSync", "fs")>]
-            static member readFileSync(path: float) : U2<string, Node.NonSharedBuffer> = nativeOnly
 
             /// <summary>
             /// Synchronously reads the entire contents of a file.
@@ -68282,21 +68223,21 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
 
             [<Import("unwatchFile", "fs")>]
             static member unwatchFile
-                (filename: string, ?listener: Node.fs.BigIntStatsListener)
+                (filename: string, listener: Node.fs.BigIntStatsListener)
                 : unit
                 =
                 nativeOnly
 
             [<Import("unwatchFile", "fs")>]
             static member unwatchFile
-                (filename: Node.Buffer, ?listener: Node.fs.BigIntStatsListener)
+                (filename: Node.Buffer, listener: Node.fs.BigIntStatsListener)
                 : unit
                 =
                 nativeOnly
 
             [<Import("unwatchFile", "fs")>]
             static member unwatchFile
-                (filename: Node.url.URL, ?listener: Node.fs.BigIntStatsListener)
+                (filename: Node.url.URL, listener: Node.fs.BigIntStatsListener)
                 : unit
                 =
                 nativeOnly
@@ -75607,17 +75548,17 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: string * ?options: Node.fs.StatOptions ->
+                    path: string * options: Node.fs.StatOptions ->
                         JS.Promise<U2<Node.fs.Stats, Node.fs.BigIntStats>>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.Buffer * ?options: Node.fs.StatOptions ->
+                    path: Node.Buffer * options: Node.fs.StatOptions ->
                         JS.Promise<U2<Node.fs.Stats, Node.fs.BigIntStats>>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.url.URL * ?options: Node.fs.StatOptions ->
+                    path: Node.url.URL * options: Node.fs.StatOptions ->
                         JS.Promise<U2<Node.fs.Stats, Node.fs.BigIntStats>>
 
             module Exports =
@@ -75654,7 +75595,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
 
             [<Emit("$0($1...)")>]
             abstract member Invoke:
-                path: Node.fs.PathLike * ?options: StatSyncFn.Invoke.options_2 -> Node.fs.Stats
+                path: Node.fs.PathLike * options: StatSyncFn.Invoke.options_2 -> Node.fs.Stats
 
             [<Emit("$0($1...)")>]
             abstract member Invoke:
@@ -75667,7 +75608,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
 
             [<Emit("$0($1...)")>]
             abstract member Invoke:
-                path: Node.fs.PathLike * ?options: Node.fs.StatSyncOptions ->
+                path: Node.fs.PathLike * options: Node.fs.StatSyncOptions ->
                     U2<Node.fs.Stats, Node.fs.BigIntStats> option
 
         module fstat_ =
@@ -75693,7 +75634,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    fd: float * ?options: Node.fs.StatOptions ->
+                    fd: float * options: Node.fs.StatOptions ->
                         JS.Promise<U2<Node.fs.Stats, Node.fs.BigIntStats>>
 
             module Exports =
@@ -75771,17 +75712,17 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: string * ?options: Node.fs.StatOptions ->
+                    path: string * options: Node.fs.StatOptions ->
                         JS.Promise<U2<Node.fs.Stats, Node.fs.BigIntStats>>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.Buffer * ?options: Node.fs.StatOptions ->
+                    path: Node.Buffer * options: Node.fs.StatOptions ->
                         JS.Promise<U2<Node.fs.Stats, Node.fs.BigIntStats>>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.url.URL * ?options: Node.fs.StatOptions ->
+                    path: Node.url.URL * options: Node.fs.StatOptions ->
                         JS.Promise<U2<Node.fs.Stats, Node.fs.BigIntStats>>
 
             module Exports =
@@ -75859,17 +75800,17 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: string * ?options: Node.fs.StatFsOptions ->
+                    path: string * options: Node.fs.StatFsOptions ->
                         JS.Promise<U2<Node.fs.StatsFs, Node.fs.BigIntStatsFs>>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.Buffer * ?options: Node.fs.StatFsOptions ->
+                    path: Node.Buffer * options: Node.fs.StatFsOptions ->
                         JS.Promise<U2<Node.fs.StatsFs, Node.fs.BigIntStatsFs>>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.url.URL * ?options: Node.fs.StatFsOptions ->
+                    path: Node.url.URL * options: Node.fs.StatFsOptions ->
                         JS.Promise<U2<Node.fs.StatsFs, Node.fs.BigIntStatsFs>>
 
             module Exports =
@@ -78167,7 +78108,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__<'TBuffer> :
-                    fd: float * ?buffer: 'TBuffer * ?options: Node.fs.WriteOptions ->
+                    fd: float * buffer: 'TBuffer * ?options: Node.fs.WriteOptions ->
                         JS.Promise<Exports.__promisify___11<'TBuffer>>
 
                 /// <summary>
@@ -78549,40 +78490,8 @@ recursive mode, operations are retried on failure.""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: string -> JS.Promise<U2<string, Node.NonSharedBuffer>>
-
-                /// <summary>
-                /// Asynchronously reads the entire contents of a file.
-                /// </summary>
-                /// <param name="path">
-                /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-                /// URL support is _experimental_.
-                /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
-                /// </param>
-                /// <param name="options">
-                /// Either the encoding for the result, or an object that contains the encoding and an optional flag.
-                /// If a flag is not provided, it defaults to <c>'r'</c>.
-                /// </param>
-                [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__:
                     path: string * options: Exports.__promisify__.options_17 ->
                         JS.Promise<U2<string, Node.NonSharedBuffer>>
-
-                /// <summary>
-                /// Asynchronously reads the entire contents of a file.
-                /// </summary>
-                /// <param name="path">
-                /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-                /// URL support is _experimental_.
-                /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
-                /// </param>
-                /// <param name="options">
-                /// Either the encoding for the result, or an object that contains the encoding and an optional flag.
-                /// If a flag is not provided, it defaults to <c>'r'</c>.
-                /// </param>
-                [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__:
-                    path: Node.Buffer -> JS.Promise<U2<string, Node.NonSharedBuffer>>
 
                 /// <summary>
                 /// Asynchronously reads the entire contents of a file.
@@ -78615,40 +78524,8 @@ recursive mode, operations are retried on failure.""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.url.URL -> JS.Promise<U2<string, Node.NonSharedBuffer>>
-
-                /// <summary>
-                /// Asynchronously reads the entire contents of a file.
-                /// </summary>
-                /// <param name="path">
-                /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-                /// URL support is _experimental_.
-                /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
-                /// </param>
-                /// <param name="options">
-                /// Either the encoding for the result, or an object that contains the encoding and an optional flag.
-                /// If a flag is not provided, it defaults to <c>'r'</c>.
-                /// </param>
-                [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__:
                     path: Node.url.URL * options: Exports.__promisify__.options_17 ->
                         JS.Promise<U2<string, Node.NonSharedBuffer>>
-
-                /// <summary>
-                /// Asynchronously reads the entire contents of a file.
-                /// </summary>
-                /// <param name="path">
-                /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-                /// URL support is _experimental_.
-                /// If a file descriptor is provided, the underlying file will _not_ be closed automatically.
-                /// </param>
-                /// <param name="options">
-                /// Either the encoding for the result, or an object that contains the encoding and an optional flag.
-                /// If a flag is not provided, it defaults to <c>'r'</c>.
-                /// </param>
-                [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__:
-                    path: float -> JS.Promise<U2<string, Node.NonSharedBuffer>>
 
                 /// <summary>
                 /// Asynchronously reads the entire contents of a file.
@@ -83184,21 +83061,21 @@ recursive mode, operations are retried on failure.""")>]
 
             [<Import("lstat", "fs/promises")>]
             static member lstat
-                (path: string, ?opts: Node.fs.StatOptions)
+                (path: string, opts: Node.fs.StatOptions)
                 : JS.Promise<U2<Node.fs.Stats, Node.fs.BigIntStats>>
                 =
                 nativeOnly
 
             [<Import("lstat", "fs/promises")>]
             static member lstat
-                (path: Node.Buffer, ?opts: Node.fs.StatOptions)
+                (path: Node.Buffer, opts: Node.fs.StatOptions)
                 : JS.Promise<U2<Node.fs.Stats, Node.fs.BigIntStats>>
                 =
                 nativeOnly
 
             [<Import("lstat", "fs/promises")>]
             static member lstat
-                (path: Node.url.URL, ?opts: Node.fs.StatOptions)
+                (path: Node.url.URL, opts: Node.fs.StatOptions)
                 : JS.Promise<U2<Node.fs.Stats, Node.fs.BigIntStats>>
                 =
                 nativeOnly
@@ -83256,21 +83133,21 @@ recursive mode, operations are retried on failure.""")>]
 
             [<Import("stat", "fs/promises")>]
             static member stat
-                (path: string, ?opts: Node.fs.StatOptions)
+                (path: string, opts: Node.fs.StatOptions)
                 : JS.Promise<U2<Node.fs.Stats, Node.fs.BigIntStats>>
                 =
                 nativeOnly
 
             [<Import("stat", "fs/promises")>]
             static member stat
-                (path: Node.Buffer, ?opts: Node.fs.StatOptions)
+                (path: Node.Buffer, opts: Node.fs.StatOptions)
                 : JS.Promise<U2<Node.fs.Stats, Node.fs.BigIntStats>>
                 =
                 nativeOnly
 
             [<Import("stat", "fs/promises")>]
             static member stat
-                (path: Node.url.URL, ?opts: Node.fs.StatOptions)
+                (path: Node.url.URL, opts: Node.fs.StatOptions)
                 : JS.Promise<U2<Node.fs.Stats, Node.fs.BigIntStats>>
                 =
                 nativeOnly
@@ -83328,21 +83205,21 @@ recursive mode, operations are retried on failure.""")>]
 
             [<Import("statfs", "fs/promises")>]
             static member statfs
-                (path: string, ?opts: Node.fs.StatFsOptions)
+                (path: string, opts: Node.fs.StatFsOptions)
                 : JS.Promise<U2<Node.fs.StatsFs, Node.fs.BigIntStatsFs>>
                 =
                 nativeOnly
 
             [<Import("statfs", "fs/promises")>]
             static member statfs
-                (path: Node.Buffer, ?opts: Node.fs.StatFsOptions)
+                (path: Node.Buffer, opts: Node.fs.StatFsOptions)
                 : JS.Promise<U2<Node.fs.StatsFs, Node.fs.BigIntStatsFs>>
                 =
                 nativeOnly
 
             [<Import("statfs", "fs/promises")>]
             static member statfs
-                (path: Node.url.URL, ?opts: Node.fs.StatFsOptions)
+                (path: Node.url.URL, opts: Node.fs.StatFsOptions)
                 : JS.Promise<U2<Node.fs.StatsFs, Node.fs.BigIntStatsFs>>
                 =
                 nativeOnly
@@ -86230,41 +86107,8 @@ recursive mode, operations are retried on failure.""")>]
             /// If a flag is not provided, it defaults to <c>'r'</c>.
             /// </param>
             [<Import("readFile", "fs/promises")>]
-            static member readFile(path: string) : JS.Promise<U2<string, Node.NonSharedBuffer>> =
-                nativeOnly
-
-            /// <summary>
-            /// Asynchronously reads the entire contents of a file.
-            /// </summary>
-            /// <param name="path">
-            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-            /// If a <c>FileHandle</c> is provided, the underlying file will _not_ be closed automatically.
-            /// </param>
-            /// <param name="options">
-            /// An object that may contain an optional flag.
-            /// If a flag is not provided, it defaults to <c>'r'</c>.
-            /// </param>
-            [<Import("readFile", "fs/promises")>]
             static member readFile
                 (path: string, options: Exports.readFile__.options_5)
-                : JS.Promise<U2<string, Node.NonSharedBuffer>>
-                =
-                nativeOnly
-
-            /// <summary>
-            /// Asynchronously reads the entire contents of a file.
-            /// </summary>
-            /// <param name="path">
-            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-            /// If a <c>FileHandle</c> is provided, the underlying file will _not_ be closed automatically.
-            /// </param>
-            /// <param name="options">
-            /// An object that may contain an optional flag.
-            /// If a flag is not provided, it defaults to <c>'r'</c>.
-            /// </param>
-            [<Import("readFile", "fs/promises")>]
-            static member readFile
-                (path: Node.Buffer)
                 : JS.Promise<U2<string, Node.NonSharedBuffer>>
                 =
                 nativeOnly
@@ -86300,43 +86144,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </param>
             [<Import("readFile", "fs/promises")>]
             static member readFile
-                (path: Node.url.URL)
-                : JS.Promise<U2<string, Node.NonSharedBuffer>>
-                =
-                nativeOnly
-
-            /// <summary>
-            /// Asynchronously reads the entire contents of a file.
-            /// </summary>
-            /// <param name="path">
-            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-            /// If a <c>FileHandle</c> is provided, the underlying file will _not_ be closed automatically.
-            /// </param>
-            /// <param name="options">
-            /// An object that may contain an optional flag.
-            /// If a flag is not provided, it defaults to <c>'r'</c>.
-            /// </param>
-            [<Import("readFile", "fs/promises")>]
-            static member readFile
                 (path: Node.url.URL, options: Exports.readFile__.options_5)
-                : JS.Promise<U2<string, Node.NonSharedBuffer>>
-                =
-                nativeOnly
-
-            /// <summary>
-            /// Asynchronously reads the entire contents of a file.
-            /// </summary>
-            /// <param name="path">
-            /// A path to a file. If a URL is provided, it must use the <c>file:</c> protocol.
-            /// If a <c>FileHandle</c> is provided, the underlying file will _not_ be closed automatically.
-            /// </param>
-            /// <param name="options">
-            /// An object that may contain an optional flag.
-            /// If a flag is not provided, it defaults to <c>'r'</c>.
-            /// </param>
-            [<Import("readFile", "fs/promises")>]
-            static member readFile
-                (path: Node.fs_promises.FileHandle)
                 : JS.Promise<U2<string, Node.NonSharedBuffer>>
                 =
                 nativeOnly
@@ -87418,7 +87226,7 @@ recursive mode, operations are retried on failure.""")>]
             /// number of bytes read is zero.
             /// </summary>
             abstract member read<'T> :
-                buffer: 'T * ?options: Node.fs.ReadOptions ->
+                buffer: 'T * options: Node.fs.ReadOptions ->
                     JS.Promise<Node.fs_promises.FileReadResult<'T>>
 
             /// <summary>
@@ -87585,7 +87393,7 @@ recursive mode, operations are retried on failure.""")>]
             abstract member stat: opts: FileHandle.stat.opts_1 -> JS.Promise<Node.fs.BigIntStats>
 
             abstract member stat:
-                ?opts: Node.fs.StatOptions -> JS.Promise<U2<Node.fs.Stats, Node.fs.BigIntStats>>
+                opts: Node.fs.StatOptions -> JS.Promise<U2<Node.fs.Stats, Node.fs.BigIntStats>>
 
             /// <summary>
             /// Truncates the file.
@@ -87937,7 +87745,7 @@ recursive mode, operations are retried on failure.""")>]
             /// the end of the file.
             /// </summary>
             abstract member write<'TBuffer> :
-                buffer: 'TBuffer * ?options: FileHandle.write.options ->
+                buffer: 'TBuffer * options: FileHandle.write.options ->
                     JS.Promise<FileHandle.write<'TBuffer>>
 
             /// <summary>
@@ -101349,7 +101157,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </summary>
             abstract member pushStream:
                 headers: Node.http.OutgoingHttpHeaders *
-                ?options: Node.http2.StreamPriorityOptions *
+                options: Node.http2.StreamPriorityOptions *
                 ?callback: ServerHttp2Stream.pushStream.callback ->
                     unit
 
@@ -128160,7 +127968,7 @@ recursive mode, operations are retried on failure.""")>]
             static member register<'Data>
                 (
                     specifier: U2<string, Node.url.URL>,
-                    ?options: Node.``module``.Module_.RegisterOptions<'Data>
+                    options: Node.``module``.Module_.RegisterOptions<'Data>
                 )
                 : unit
                 =
@@ -129788,7 +129596,7 @@ recursive mode, operations are retried on failure.""")>]
 
             [<Import("createServer", "net")>]
             static member createServer
-                (?options: Node.net.ServerOpts, ?connectionListener: (Node.net.Socket -> unit))
+                (options: Node.net.ServerOpts, ?connectionListener: (Node.net.Socket -> unit))
                 : Node.net.Server
                 =
                 nativeOnly
@@ -129991,7 +129799,7 @@ recursive mode, operations are retried on failure.""")>]
 
             [<Import("Server", "net"); EmitConstructor>]
             static member Server
-                (?options: Node.net.ServerOpts, ?connectionListener: (Node.net.Socket -> unit))
+                (options: Node.net.ServerOpts, ?connectionListener: (Node.net.Socket -> unit))
                 : Server
                 =
                 nativeOnly
@@ -130150,9 +129958,7 @@ recursive mode, operations are retried on failure.""")>]
             /// Only used when data is <c>string</c>.
             /// </param>
             abstract member write:
-                str: JS.Uint8Array *
-                ?encoding: Node.BufferEncoding *
-                ?cb: (Exception option -> unit) ->
+                str: JS.Uint8Array * encoding: Node.BufferEncoding * ?cb: (Exception option -> unit) ->
                     bool
 
             /// <summary>
@@ -130173,7 +129979,7 @@ recursive mode, operations are retried on failure.""")>]
             /// Only used when data is <c>string</c>.
             /// </param>
             abstract member write:
-                str: string * ?encoding: Node.BufferEncoding * ?cb: (Exception option -> unit) ->
+                str: string * encoding: Node.BufferEncoding * ?cb: (Exception option -> unit) ->
                     bool
 
             /// <summary>
@@ -130555,7 +130361,7 @@ recursive mode, operations are retried on failure.""")>]
             /// The socket itself.
             /// </returns>
             abstract member ``end``:
-                str: JS.Uint8Array * ?encoding: Node.BufferEncoding * ?callback: (unit -> unit) ->
+                str: JS.Uint8Array * encoding: Node.BufferEncoding * ?callback: (unit -> unit) ->
                     Socket
 
             /// <summary>
@@ -130575,7 +130381,7 @@ recursive mode, operations are retried on failure.""")>]
             /// The socket itself.
             /// </returns>
             abstract member ``end``:
-                str: string * ?encoding: Node.BufferEncoding * ?callback: (unit -> unit) -> Socket
+                str: string * encoding: Node.BufferEncoding * ?callback: (unit -> unit) -> Socket
 
             /// <summary>
             /// events.EventEmitter
@@ -133208,7 +133014,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </code>
             /// </summary>
             abstract member listen:
-                ?port: float * ?hostname: string * ?listeningListener: (unit -> unit) -> Server
+                port: float * ?hostname: string * ?listeningListener: (unit -> unit) -> Server
 
             /// <summary>
             /// Start a server listening for connections. A <c>net.Server</c> can be a TCP or
@@ -133252,7 +133058,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </code>
             /// </summary>
             abstract member listen:
-                ?port: float * ?backlog: float * ?listeningListener: (unit -> unit) -> Server
+                port: float * backlog: float * ?listeningListener: (unit -> unit) -> Server
 
             /// <summary>
             /// Start a server listening for connections. A <c>net.Server</c> can be a TCP or
@@ -133295,7 +133101,7 @@ recursive mode, operations are retried on failure.""")>]
             /// });
             /// </code>
             /// </summary>
-            abstract member listen: ?port: float * ?listeningListener: (unit -> unit) -> Server
+            abstract member listen: port: float * listeningListener: (unit -> unit) -> Server
 
             /// <summary>
             /// Start a server listening for connections. A <c>net.Server</c> can be a TCP or
@@ -133382,7 +133188,7 @@ recursive mode, operations are retried on failure.""")>]
             /// });
             /// </code>
             /// </summary>
-            abstract member listen: path: string * ?listeningListener: (unit -> unit) -> Server
+            abstract member listen: path: string * listeningListener: (unit -> unit) -> Server
 
             /// <summary>
             /// Start a server listening for connections. A <c>net.Server</c> can be a TCP or
@@ -133513,7 +133319,7 @@ recursive mode, operations are retried on failure.""")>]
             /// });
             /// </code>
             /// </summary>
-            abstract member listen: handle: obj * ?listeningListener: (unit -> unit) -> Server
+            abstract member listen: handle: obj * listeningListener: (unit -> unit) -> Server
             /// <summary>
             /// Stops the server from accepting new connections and keeps existing
             /// connections. This function is asynchronous, the server is finally closed
@@ -138071,7 +137877,7 @@ SocketAddress.parse($0)""")>]
             /// </summary>
             [<ImportDefault("process"); Emit("$0.emitWarning($1...)")>]
             static member emitWarning
-                (warning: U2<string, Exception>, ?``type``: string, ?ctor: Action)
+                (warning: U2<string, Exception>, ``type``: string, ?ctor: Action)
                 : unit
                 =
                 nativeOnly
@@ -138144,7 +137950,7 @@ SocketAddress.parse($0)""")>]
             /// </summary>
             [<ImportDefault("process"); Emit("$0.emitWarning($1...)")>]
             static member emitWarning
-                (warning: U2<string, Exception>, ?``type``: string, ?code: string, ?ctor: Action)
+                (warning: U2<string, Exception>, ``type``: string, code: string, ?ctor: Action)
                 : unit
                 =
                 nativeOnly
@@ -138217,7 +138023,7 @@ SocketAddress.parse($0)""")>]
             /// </summary>
             [<ImportDefault("process"); Emit("$0.emitWarning($1...)")>]
             static member emitWarning
-                (warning: U2<string, Exception>, ?options: Node.NodeJS.EmitWarningOptions)
+                (warning: U2<string, Exception>, options: Node.NodeJS.EmitWarningOptions)
                 : unit
                 =
                 nativeOnly
@@ -163417,20 +163223,20 @@ Duplex.fromWeb($0, $1)""")>]
 
             [<ImportDefault("node:test")>]
             static member test
-                (?name: string, ?options: Node.test.test_.TestOptions, ?fn: Node.test.test_.TestFn)
+                (name: string, ?options: Node.test.test_.TestOptions, ?fn: Node.test.test_.TestFn)
                 : JS.Promise<unit>
                 =
                 nativeOnly
 
             [<ImportDefault("node:test")>]
             static member test
-                (?options: Node.test.test_.TestOptions, ?fn: Node.test.test_.TestFn)
+                (options: Node.test.test_.TestOptions, ?fn: Node.test.test_.TestFn)
                 : JS.Promise<unit>
                 =
                 nativeOnly
 
             [<ImportDefault("node:test")>]
-            static member test(?fn: Node.test.test_.TestFn) : JS.Promise<unit> = nativeOnly
+            static member test(fn: Node.test.test_.TestFn) : JS.Promise<unit> = nativeOnly
 
             /// <summary>
             /// The <c>test()</c> function is the value imported from the <c>test</c> module. Each
@@ -163534,18 +163340,18 @@ Duplex.fromWeb($0, $1)""")>]
             static member suite() : JS.Promise<unit> = nativeOnly
 
             [<ImportDefault("node:test"); Emit("$0.suite($1...)")>]
-            static member suite(?name: string, ?fn: Node.test.test_.SuiteFn) : JS.Promise<unit> =
+            static member suite(name: string, ?fn: Node.test.test_.SuiteFn) : JS.Promise<unit> =
                 nativeOnly
 
             [<ImportDefault("node:test"); Emit("$0.suite($1...)")>]
             static member suite
-                (?options: Node.test.test_.TestOptions, ?fn: Node.test.test_.SuiteFn)
+                (options: Node.test.test_.TestOptions, ?fn: Node.test.test_.SuiteFn)
                 : JS.Promise<unit>
                 =
                 nativeOnly
 
             [<ImportDefault("node:test"); Emit("$0.suite($1...)")>]
-            static member suite(?fn: Node.test.test_.SuiteFn) : JS.Promise<unit> = nativeOnly
+            static member suite(fn: Node.test.test_.SuiteFn) : JS.Promise<unit> = nativeOnly
 
             /// <summary>
             /// Shorthand for skipping a test. This is the same as calling <see href="test">test</see> with <c>options.skip</c> set to <c>true</c>.
@@ -163564,18 +163370,18 @@ Duplex.fromWeb($0, $1)""")>]
             static member skip() : JS.Promise<unit> = nativeOnly
 
             [<ImportDefault("node:test"); Emit("$0.skip($1...)")>]
-            static member skip(?name: string, ?fn: Node.test.test_.TestFn) : JS.Promise<unit> =
+            static member skip(name: string, ?fn: Node.test.test_.TestFn) : JS.Promise<unit> =
                 nativeOnly
 
             [<ImportDefault("node:test"); Emit("$0.skip($1...)")>]
             static member skip
-                (?options: Node.test.test_.TestOptions, ?fn: Node.test.test_.TestFn)
+                (options: Node.test.test_.TestOptions, ?fn: Node.test.test_.TestFn)
                 : JS.Promise<unit>
                 =
                 nativeOnly
 
             [<ImportDefault("node:test"); Emit("$0.skip($1...)")>]
-            static member skip(?fn: Node.test.test_.TestFn) : JS.Promise<unit> = nativeOnly
+            static member skip(fn: Node.test.test_.TestFn) : JS.Promise<unit> = nativeOnly
 
             /// <summary>
             /// Shorthand for marking a test as <c>TODO</c>. This is the same as calling <see href="test">test</see> with <c>options.todo</c> set to <c>true</c>.
@@ -163594,18 +163400,18 @@ Duplex.fromWeb($0, $1)""")>]
             static member todo() : JS.Promise<unit> = nativeOnly
 
             [<ImportDefault("node:test"); Emit("$0.todo($1...)")>]
-            static member todo(?name: string, ?fn: Node.test.test_.TestFn) : JS.Promise<unit> =
+            static member todo(name: string, ?fn: Node.test.test_.TestFn) : JS.Promise<unit> =
                 nativeOnly
 
             [<ImportDefault("node:test"); Emit("$0.todo($1...)")>]
             static member todo
-                (?options: Node.test.test_.TestOptions, ?fn: Node.test.test_.TestFn)
+                (options: Node.test.test_.TestOptions, ?fn: Node.test.test_.TestFn)
                 : JS.Promise<unit>
                 =
                 nativeOnly
 
             [<ImportDefault("node:test"); Emit("$0.todo($1...)")>]
-            static member todo(?fn: Node.test.test_.TestFn) : JS.Promise<unit> = nativeOnly
+            static member todo(fn: Node.test.test_.TestFn) : JS.Promise<unit> = nativeOnly
 
             /// <summary>
             /// Shorthand for marking a test as <c>only</c>. This is the same as calling <see href="test">test</see> with <c>options.only</c> set to <c>true</c>.
@@ -163624,18 +163430,18 @@ Duplex.fromWeb($0, $1)""")>]
             static member only() : JS.Promise<unit> = nativeOnly
 
             [<ImportDefault("node:test"); Emit("$0.only($1...)")>]
-            static member only(?name: string, ?fn: Node.test.test_.TestFn) : JS.Promise<unit> =
+            static member only(name: string, ?fn: Node.test.test_.TestFn) : JS.Promise<unit> =
                 nativeOnly
 
             [<ImportDefault("node:test"); Emit("$0.only($1...)")>]
             static member only
-                (?options: Node.test.test_.TestOptions, ?fn: Node.test.test_.TestFn)
+                (options: Node.test.test_.TestOptions, ?fn: Node.test.test_.TestFn)
                 : JS.Promise<unit>
                 =
                 nativeOnly
 
             [<ImportDefault("node:test"); Emit("$0.only($1...)")>]
-            static member only(?fn: Node.test.test_.TestFn) : JS.Promise<unit> = nativeOnly
+            static member only(fn: Node.test.test_.TestFn) : JS.Promise<unit> = nativeOnly
 
             /// <summary>
             /// This function creates a hook that runs before executing a suite.
@@ -163834,15 +163640,15 @@ Duplex.fromWeb($0, $1)""")>]
 
                 [<Emit("$0.suite($1...)")>]
                 abstract member suite:
-                    ?name: string * ?fn: Node.test.test_.SuiteFn -> JS.Promise<unit>
+                    name: string * ?fn: Node.test.test_.SuiteFn -> JS.Promise<unit>
 
                 [<Emit("$0.suite($1...)")>]
                 abstract member suite:
-                    ?options: Node.test.test_.TestOptions * ?fn: Node.test.test_.SuiteFn ->
+                    options: Node.test.test_.TestOptions * ?fn: Node.test.test_.SuiteFn ->
                         JS.Promise<unit>
 
                 [<Emit("$0.suite($1...)")>]
-                abstract member suite: ?fn: Node.test.test_.SuiteFn -> JS.Promise<unit>
+                abstract member suite: fn: Node.test.test_.SuiteFn -> JS.Promise<unit>
 
                 /// <summary>
                 /// Shorthand for skipping a test. This is the same as calling <see href="test">test</see> with <c>options.skip</c> set to <c>true</c>.
@@ -163861,16 +163667,15 @@ Duplex.fromWeb($0, $1)""")>]
                 abstract member skip: unit -> JS.Promise<unit>
 
                 [<Emit("$0.skip($1...)")>]
-                abstract member skip:
-                    ?name: string * ?fn: Node.test.test_.TestFn -> JS.Promise<unit>
+                abstract member skip: name: string * ?fn: Node.test.test_.TestFn -> JS.Promise<unit>
 
                 [<Emit("$0.skip($1...)")>]
                 abstract member skip:
-                    ?options: Node.test.test_.TestOptions * ?fn: Node.test.test_.TestFn ->
+                    options: Node.test.test_.TestOptions * ?fn: Node.test.test_.TestFn ->
                         JS.Promise<unit>
 
                 [<Emit("$0.skip($1...)")>]
-                abstract member skip: ?fn: Node.test.test_.TestFn -> JS.Promise<unit>
+                abstract member skip: fn: Node.test.test_.TestFn -> JS.Promise<unit>
 
                 /// <summary>
                 /// Shorthand for marking a test as <c>TODO</c>. This is the same as calling <see href="test">test</see> with <c>options.todo</c> set to <c>true</c>.
@@ -163889,16 +163694,15 @@ Duplex.fromWeb($0, $1)""")>]
                 abstract member todo: unit -> JS.Promise<unit>
 
                 [<Emit("$0.todo($1...)")>]
-                abstract member todo:
-                    ?name: string * ?fn: Node.test.test_.TestFn -> JS.Promise<unit>
+                abstract member todo: name: string * ?fn: Node.test.test_.TestFn -> JS.Promise<unit>
 
                 [<Emit("$0.todo($1...)")>]
                 abstract member todo:
-                    ?options: Node.test.test_.TestOptions * ?fn: Node.test.test_.TestFn ->
+                    options: Node.test.test_.TestOptions * ?fn: Node.test.test_.TestFn ->
                         JS.Promise<unit>
 
                 [<Emit("$0.todo($1...)")>]
-                abstract member todo: ?fn: Node.test.test_.TestFn -> JS.Promise<unit>
+                abstract member todo: fn: Node.test.test_.TestFn -> JS.Promise<unit>
 
                 /// <summary>
                 /// Shorthand for marking a test as <c>only</c>. This is the same as calling <see href="test">test</see> with <c>options.only</c> set to <c>true</c>.
@@ -163917,16 +163721,15 @@ Duplex.fromWeb($0, $1)""")>]
                 abstract member only: unit -> JS.Promise<unit>
 
                 [<Emit("$0.only($1...)")>]
-                abstract member only:
-                    ?name: string * ?fn: Node.test.test_.TestFn -> JS.Promise<unit>
+                abstract member only: name: string * ?fn: Node.test.test_.TestFn -> JS.Promise<unit>
 
                 [<Emit("$0.only($1...)")>]
                 abstract member only:
-                    ?options: Node.test.test_.TestOptions * ?fn: Node.test.test_.TestFn ->
+                    options: Node.test.test_.TestOptions * ?fn: Node.test.test_.TestFn ->
                         JS.Promise<unit>
 
                 [<Emit("$0.only($1...)")>]
-                abstract member only: ?fn: Node.test.test_.TestFn -> JS.Promise<unit>
+                abstract member only: fn: Node.test.test_.TestFn -> JS.Promise<unit>
 
                 /// <summary>
                 /// This function creates a hook that runs before executing a suite.
@@ -164068,15 +163871,15 @@ Duplex.fromWeb($0, $1)""")>]
 
                     [<Emit("$0.skip($1...)")>]
                     abstract member skip:
-                        ?name: string * ?fn: Node.test.test_.SuiteFn -> JS.Promise<unit>
+                        name: string * ?fn: Node.test.test_.SuiteFn -> JS.Promise<unit>
 
                     [<Emit("$0.skip($1...)")>]
                     abstract member skip:
-                        ?options: Node.test.test_.TestOptions * ?fn: Node.test.test_.SuiteFn ->
+                        options: Node.test.test_.TestOptions * ?fn: Node.test.test_.SuiteFn ->
                             JS.Promise<unit>
 
                     [<Emit("$0.skip($1...)")>]
-                    abstract member skip: ?fn: Node.test.test_.SuiteFn -> JS.Promise<unit>
+                    abstract member skip: fn: Node.test.test_.SuiteFn -> JS.Promise<unit>
 
                     /// <summary>
                     /// Shorthand for marking a suite as <c>TODO</c>. This is the same as calling <see href="suite">suite</see> with <c>options.todo</c> set to <c>true</c>.
@@ -164096,15 +163899,15 @@ Duplex.fromWeb($0, $1)""")>]
 
                     [<Emit("$0.todo($1...)")>]
                     abstract member todo:
-                        ?name: string * ?fn: Node.test.test_.SuiteFn -> JS.Promise<unit>
+                        name: string * ?fn: Node.test.test_.SuiteFn -> JS.Promise<unit>
 
                     [<Emit("$0.todo($1...)")>]
                     abstract member todo:
-                        ?options: Node.test.test_.TestOptions * ?fn: Node.test.test_.SuiteFn ->
+                        options: Node.test.test_.TestOptions * ?fn: Node.test.test_.SuiteFn ->
                             JS.Promise<unit>
 
                     [<Emit("$0.todo($1...)")>]
-                    abstract member todo: ?fn: Node.test.test_.SuiteFn -> JS.Promise<unit>
+                    abstract member todo: fn: Node.test.test_.SuiteFn -> JS.Promise<unit>
 
                     /// <summary>
                     /// Shorthand for marking a suite as <c>only</c>. This is the same as calling <see href="suite">suite</see> with <c>options.only</c> set to <c>true</c>.
@@ -164124,15 +163927,15 @@ Duplex.fromWeb($0, $1)""")>]
 
                     [<Emit("$0.only($1...)")>]
                     abstract member only:
-                        ?name: string * ?fn: Node.test.test_.SuiteFn -> JS.Promise<unit>
+                        name: string * ?fn: Node.test.test_.SuiteFn -> JS.Promise<unit>
 
                     [<Emit("$0.only($1...)")>]
                     abstract member only:
-                        ?options: Node.test.test_.TestOptions * ?fn: Node.test.test_.SuiteFn ->
+                        options: Node.test.test_.TestOptions * ?fn: Node.test.test_.SuiteFn ->
                             JS.Promise<unit>
 
                     [<Emit("$0.only($1...)")>]
-                    abstract member only: ?fn: Node.test.test_.SuiteFn -> JS.Promise<unit>
+                    abstract member only: fn: Node.test.test_.SuiteFn -> JS.Promise<unit>
 
             /// <summary>
             /// The type of a function passed to <see href="test">test</see>. The first argument to this function is a <see href="TestContext">TestContext</see> object.
@@ -168456,7 +168259,7 @@ Duplex.fromWeb($0, $1)""")>]
                 /// </code>
                 /// </summary>
                 abstract member fn:
-                    ?original: System.Delegate *
+                    original: System.Delegate *
                     ?implementation: System.Delegate *
                     ?options: Node.test.test_.MockFunctionOptions ->
                         Node.test.test_.Mock<System.Delegate>
@@ -170000,7 +169803,7 @@ Duplex.fromWeb($0, $1)""")>]
             static member connect
                 (
                     port: float,
-                    ?options: Node.tls.ConnectionOptions,
+                    options: Node.tls.ConnectionOptions,
                     ?secureConnectListener: (unit -> unit)
                 )
                 : Node.tls.TLSSocket
@@ -175056,7 +174859,7 @@ Duplex.fromWeb($0, $1)""")>]
             /// // Returns false (the environment setting pretends to support 2 ** 8 colors).
             /// </c><c></c>
             /// </summary>
-            abstract member hasColors: ?env: obj -> bool
+            abstract member hasColors: env: obj -> bool
             /// <summary>
             /// Returns <c>true</c> if the <c>writeStream</c> supports at least as many colors as provided
             /// in <c>count</c>. Minimum support is 2 (black and white).
@@ -177089,7 +176892,7 @@ URL.parse($0, $1)""")>]
                 nativeOnly
 
             [<Import("inspect", "util")>]
-            static member inspect(``object``: obj, ?options: Node.util.InspectOptions) : string =
+            static member inspect(``object``: obj, options: Node.util.InspectOptions) : string =
                 nativeOnly
 
             /// <summary>
@@ -188998,7 +188801,7 @@ URL.parse($0, $1)""")>]
             abstract member close: ?callback: (unit -> unit) -> unit
             abstract member flush: ?kind: float * ?callback: (unit -> unit) -> unit
             abstract member flush: unit -> unit
-            abstract member flush: ?callback: (unit -> unit) -> unit
+            abstract member flush: callback: (unit -> unit) -> unit
 
         [<AllowNullLiteral>]
         [<Interface>]

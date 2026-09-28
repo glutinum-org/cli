@@ -10,9 +10,9 @@ type Exports =
     [<Import("parse", "REPLACE_ME_WITH_MODULE_NAME")>]
     static member parse (text: string) : Parsed = nativeOnly
     [<Import("parse", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member parse (text: string, ?format: string, ?strict: bool) : Parsed = nativeOnly
+    static member parse (text: string, format: string, ?strict: bool) : Parsed = nativeOnly
     [<Import("parse", "REPLACE_ME_WITH_MODULE_NAME")>]
-    static member parse (text: string, ?format: string, ?locale: string, ?strict: bool) : Parsed = nativeOnly
+    static member parse (text: string, format: string, locale: string, ?strict: bool) : Parsed = nativeOnly
 
 [<AllowNullLiteral>]
 [<Interface>]

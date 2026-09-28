@@ -1515,8 +1515,6 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                 | GlueType.TypeReference _ -> true
                 | _ -> false
 
-            // `WriteStream & { fd: 1 }`: the inherited constituents keep their overloads and the
-            // members of the literal ones are declared by the interface itself
             let literalMembers =
                 intersectionTypeNode.types
                 |> Seq.toList

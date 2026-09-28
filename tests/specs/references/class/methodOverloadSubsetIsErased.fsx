@@ -17,7 +17,7 @@ type Logger =
     abstract member warn: value: string * ?code: float -> unit
     abstract member warn: value: string * code: float * fatal: bool -> unit
     abstract member read: path: string -> string
-    abstract member read: path: string * ?encoding: string -> float
+    abstract member read: path: string * encoding: string -> float
 
 (***)
 #r "nuget: Fable.Core"

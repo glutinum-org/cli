@@ -8772,6 +8772,7 @@ let applyWith (importSpecifier: string) (typeMemory: GlueType list) (glueAst: Gl
             |> Abbreviations.apply
             |> FreeTypeParameters.apply
             |> DelegateExtensions.apply
+            |> Merge.disambiguateOverloads
         Warnings = reporter.Warnings
         Errors = reporter.Errors
         IncludeRegExpAlias = reporter.HasRegEpx

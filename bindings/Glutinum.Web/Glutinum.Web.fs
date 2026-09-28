@@ -32825,7 +32825,7 @@ module Web =
         abstract member setBindGroup:
             index: Web.GPUIndex32 *
             bindGroup: Web.GPUBindGroup option *
-            ?dynamicOffsets: Iterable<Web.GPUBufferDynamicOffset> ->
+            dynamicOffsets: Iterable<Web.GPUBufferDynamicOffset> ->
                 unit
 
     /// <summary>
@@ -60324,7 +60324,7 @@ module Web =
         [<Obsolete>]
         abstract member initMessageEvent:
             ``type``: string *
-            ?bubbles: bool *
+            bubbles: bool *
             ?cancelable: bool *
             ?data: obj *
             ?origin: string *

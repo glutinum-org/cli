@@ -677,6 +677,100 @@ let rec private distinctMembers (types: FSharpType list) =
         | _ -> typ
     )
 
+/// TypeScript resolves a call to the first declaration it matches
+let rec disambiguateOverloads (types: FSharpType list) : FSharpType list =
+    let requiredKey (fsharpMember: FSharpMember) =
+        let key
+            (name: string)
+            (isStatic: bool)
+            (typeParameters: FSharpTypeParameter list)
+            (parameters: FSharpParameter list)
+            =
+            if parameters.IsEmpty then
+                None
+            else
+                Some(
+                    name,
+                    isStatic,
+                    typeParameters,
+                    parameters
+                    |> List.filter (fun parameter -> not parameter.IsOptional)
+                    |> parametersSignature
+                )
+
+        match fsharpMember with
+        | FSharpMember.Method info ->
+            key info.Name info.IsStatic info.TypeParameters info.Parameters
+        | FSharpMember.StaticMember info -> key info.Name true info.TypeParameters info.Parameters
+        | FSharpMember.Property _ -> None
+
+    let promoteLeadingOptional (fsharpMember: FSharpMember) =
+        let promote (parameters: FSharpParameter list) =
+            match parameters |> List.tryFindIndex _.IsOptional with
+            | None -> None
+            | Some index ->
+                parameters
+                |> List.mapi (fun currentIndex parameter ->
+                    if currentIndex = index then
+                        { parameter with IsOptional = false }
+                    else
+                        parameter
+                )
+                |> Some
+
+        match fsharpMember with
+        | FSharpMember.Method info ->
+            promote info.Parameters
+            |> Option.map (fun parameters ->
+                FSharpMember.Method { info with Parameters = parameters }
+            )
+        | FSharpMember.StaticMember info ->
+            promote info.Parameters
+            |> Option.map (fun parameters ->
+                FSharpMember.StaticMember { info with Parameters = parameters }
+            )
+        | FSharpMember.Property _ -> Some fsharpMember
+
+    let disambiguate (members: FSharpMember list) =
+        let taken =
+            HashSet<string * bool * FSharpTypeParameter list * (FSharpType * bool) list>()
+
+        members
+        |> List.choose (fun fsharpMember ->
+            match requiredKey fsharpMember with
+            | None -> Some fsharpMember
+            | Some key ->
+                let rec free (candidate: FSharpMember) (key: _) =
+                    if not (taken.Contains key) then
+                        taken.Add key |> ignore
+                        Some candidate
+                    else
+                        match promoteLeadingOptional candidate with
+                        | None -> None
+                        | Some promoted ->
+                            match requiredKey promoted with
+                            | None -> None
+                            | Some promotedKey -> free promoted promotedKey
+
+                free fsharpMember key
+        )
+
+    types
+    |> List.map (
+        function
+        | FSharpType.Interface interfaceInfo ->
+            FSharpType.Interface
+                { interfaceInfo with
+                    Members = disambiguate interfaceInfo.Members
+                }
+        | FSharpType.Module moduleInfo ->
+            FSharpType.Module
+                { moduleInfo with
+                    Types = disambiguateOverloads moduleInfo.Types
+                }
+        | typ -> typ
+    )
+
 let apply (types: FSharpType list) =
     aliasTargets.Clear()
     genericAliasTargets.Clear()
