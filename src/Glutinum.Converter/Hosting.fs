@@ -10,6 +10,8 @@ open TsMorph
 let private declarationFile = Regex(@"\.d\.[cm]?ts$")
 let private javaScriptFile = Regex(@"\.[cm]?js$")
 
+// The web app bundles this file, so `fs` and `path` are imported as namespaces: a named import
+// from them is not exported by the browser shim and breaks the bundle
 [<AutoOpen>]
 module private NodeExterns =
 
@@ -60,7 +62,7 @@ type Host =
     abstract member cwd: string
     abstract member path: Path
     abstract member fs: Fs
-    abstract member createProject: compilerOptions: obj -> Project
+    abstract member createProject: compilerOptions: Ts.CompilerOptions -> Project
 
 /// A host over a ts-morph in-memory file system
 [<AllowNullLiteral>]
@@ -182,11 +184,11 @@ let createFileSystemHost (fileSystem: FileSystemHost) (cwd: string) : InMemoryHo
 
         member _.createProject compilerOptions =
             Exports.createProjectSync (
-                !!{|
-                    fileSystem = fileSystem
-                    compilerOptions = compilerOptions
+                ProjectOptions.Create(
+                    fileSystem = fileSystem,
+                    compilerOptions = compilerOptions,
                     skipAddingFilesFromTsConfig = true
-                |}
+                )
             )
     }
 
@@ -226,10 +228,10 @@ let createNodeHost (cwd: string) : Host =
 
         member _.createProject compilerOptions =
             Exports.createProjectSync (
-                !!{|
-                    compilerOptions = compilerOptions
+                ProjectOptions.Create(
+                    compilerOptions = compilerOptions,
                     skipAddingFilesFromTsConfig = true
-                |}
+                )
             )
     }
 
@@ -925,12 +927,10 @@ module Bootstrap =
 
     let createProgramForCLI (_fileName: string) (source: string) : Ts.Program =
         // `strict`, so that `T | undefined` is kept by the checker
-        let project =
-            Exports.createProjectSync (
-                !!{|
-                    compilerOptions = {| strict = true |}
-                |}
-            )
+        let compilerOptions = createEmpty<Ts.CompilerOptions>
+        compilerOptions.strict <- Some true
+
+        let project = Exports.createProjectSync (ProjectOptions.Create(compilerOptions))
 
         project.createSourceFile (_fileName, source) |> ignore
         project.createProgram ()
@@ -945,24 +945,24 @@ module Bootstrap =
         =
         // ESNext, so lib types such as `AsyncIterable` resolve; `types: []` stops TypeScript from
         // loading every `node_modules/@types`; Bundler resolution follows `exports` maps
-        let compilerOptions =
-            createObj
-                [
-                    "target" ==> Ts.ScriptTarget.ESNext
-                    "module" ==> Ts.ModuleKind.ESNext
-                    "moduleResolution" ==> Ts.ModuleResolutionKind.Bundler
-                    "types" ==> ([||]: string[])
-                    "strict" ==> true
-                ]
+        let compilerOptions = createEmpty<Ts.CompilerOptions>
+        compilerOptions.target <- Some Ts.ScriptTarget.ESNext
+        compilerOptions.``module`` <- Some Ts.ModuleKind.ESNext
+        compilerOptions.moduleResolution <- Some Ts.ModuleResolutionKind.Bundler
+        compilerOptions.types <- Some(ResizeArray())
+        compilerOptions.strict <- Some true
 
         // A package replacing the DOM lib (`@types/web`) redeclares its globals
         if withoutDomLib then
-            compilerOptions?lib <-
-                [| "lib.esnext.d.ts"; "lib.decorators.d.ts"; "lib.decorators.legacy.d.ts" |]
+            compilerOptions.lib <-
+                Some(
+                    ResizeArray
+                        [ "lib.esnext.d.ts"; "lib.decorators.d.ts"; "lib.decorators.legacy.d.ts" ]
+                )
 
         // A package made of the ES library files declares the library itself
         if noLib then
-            compilerOptions?noLib <- true
+            compilerOptions.noLib <- Some true
 
         let project = host.createProject compilerOptions
 
