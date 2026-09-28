@@ -1435,20 +1435,32 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
                 | None -> Some(WithoutDeclaration property)
             )
 
+        // `{ new (...args: any[]): any } & typeof Class` describes the class itself, reading its
+        // members would end up in an infinite loop
+        let intersectsATypeQuery =
+            intersectionTypeNode.types
+            |> Seq.exists (fun constituent -> constituent.kind = Ts.SyntaxKind.TypeQuery)
+
+        // An interface inheriting every constituent keeps their overloads, flattening the members
+        // into one type does not, so it is only worth it when a constituent can't be inherited
+        let everyConstituentIsAReference =
+            intersectionTypeNode.types
+            |> Seq.forall (fun constituent -> constituent.kind = Ts.SyntaxKind.TypeReference)
+
         // We can't create a contract for some of the properties
         // they would eiher end-up in a infinite loop or they are don't
         // have a equivalent in F#
         let hasUnsupportedProperties =
-            properties
-            |> List.exists (fun property ->
-                match property with
-                | ForceAny -> true // Force to generate obj
-                | WithoutDeclaration _ -> false
-                | Single(_, declaration) -> // Give a try to generate a real contract
-                    match declaration.kind with
-                    | Ts.SyntaxKind.MethodDeclaration -> true
-                    | _ -> false
-            )
+            intersectsATypeQuery
+            || properties
+               |> List.exists (fun property ->
+                   match property with
+                   | ForceAny -> true // Force to generate obj
+                   | WithoutDeclaration _ -> false
+                   | Single(_, declaration) ->
+                       everyConstituentIsAReference
+                       && declaration.kind = Ts.SyntaxKind.MethodDeclaration
+               )
 
         // `IRouterHandler<T> & ((...handlers: Handler[]) => T)`: the intersection is callable
         let callSignatures =
