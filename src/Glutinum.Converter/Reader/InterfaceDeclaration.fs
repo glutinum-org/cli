@@ -79,3 +79,37 @@ let readInterfaceDeclaration
             )
             |> List.distinct
     }
+
+/// <summary>
+/// <c>interface Blob extends _Blob {}</c> of <c>@types/node</c> redeclares a type of the DOM lib,
+/// with no member of its own: the declaration of the external binding is the one carrying the API
+/// </summary>
+let tryReadExternalRedeclaration
+    (reader: ITypeScriptReader)
+    (declaration: Ts.InterfaceDeclaration)
+    (glueInterface: GlueInterface)
+    : GlueType option
+    =
+    if not glueInterface.Members.IsEmpty then
+        None
+    else
+        match reader.PackageContext, reader.checker.getSymbolAtLocation declaration.name with
+        | Some packageContext, Some symbol ->
+            symbol.declarations
+            |> Option.map Seq.toList
+            |> Option.defaultValue []
+            |> List.tryPick (fun other ->
+                packageContext.TryFindExternalModulePath(
+                    (unbox<Ts.Node> other).getSourceFile().fileName
+                )
+            )
+            |> Option.map (fun modulePath ->
+                ({
+                    Name = glueInterface.Name
+                    Declaration = GlueType.Interface glueInterface
+                    ModulePath = modulePath
+                }
+                : GlueReExport)
+                |> GlueType.ReExport
+            )
+        | _ -> None

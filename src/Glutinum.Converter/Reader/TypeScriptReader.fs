@@ -63,7 +63,11 @@ type TypeScriptReader(checker: Ts.TypeChecker, ?packageContext: PackageContext) 
             (interfaceDeclaration: Ts.InterfaceDeclaration)
             : GlueType
             =
-            readInterfaceDeclaration this interfaceDeclaration |> GlueType.Interface
+            let glueInterface = readInterfaceDeclaration this interfaceDeclaration
+
+            match tryReadExternalRedeclaration this interfaceDeclaration glueInterface with
+            | Some glueType -> glueType
+            | None -> GlueType.Interface glueInterface
 
         member this.ReadModuleDeclaration(moduleDeclaration: Ts.ModuleDeclaration) : GlueType =
             readModuleDeclaration this moduleDeclaration |> GlueType.ModuleDeclaration

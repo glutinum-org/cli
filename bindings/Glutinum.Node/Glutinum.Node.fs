@@ -15218,6 +15218,13 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// a reference to <c>immediate</c>
             /// </returns>
             abstract member unref: unit -> Immediate
+
+            /// <summary>
+            /// Cancels the immediate. This is similar to calling <c>clearImmediate()</c>.
+            /// </summary>
+            [<Emit("$0[Symbol.dispose]($1...)")>]
+            abstract member dispose: unit -> unit
+
             abstract member _onImmediate: [<ParamArray>] args: obj[] -> unit
 
         [<Obsolete("Use `NodeJS.Timeout` instead.")>]
@@ -15289,6 +15296,13 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             /// a reference to <c>timeout</c>
             /// </returns>
             abstract member unref: unit -> Timeout
+
+            /// <summary>
+            /// Cancels the timeout.
+            /// </summary>
+            [<Emit("$0[Symbol.dispose]($1...)")>]
+            abstract member dispose: unit -> unit
+
             abstract member _onTimeout: [<ParamArray>] args: obj[] -> unit
 
     [<RequireQualifiedAccess>]
@@ -15307,21 +15321,9 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
         | binary
         | hex
 
-    /// <summary>
-    /// <c>Blob</c> class is a global reference for <c>import { Blob } from 'node:buffer'</c>
-    /// https://nodejs.org/api/buffer.html#class-blob
-    /// </summary>
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type Blob = interface end
+    type Blob = Glutinum.Web.Blob
 
-    /// <summary>
-    /// <c>File</c> class is a global reference for <c>import { File } from 'node:buffer'</c>
-    /// https://nodejs.org/api/buffer.html#class-file
-    /// </summary>
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type File = interface end
+    type File = Glutinum.Web.File
 
     type _Blob = obj
 
@@ -15335,11 +15337,15 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
 
     [<AllowNullLiteral>]
     [<Interface>]
-    type Disposable = interface end
+    type Disposable =
+        [<Emit("$0[Symbol.dispose]($1...)")>]
+        abstract member dispose: unit -> unit
 
     [<AllowNullLiteral>]
     [<Interface>]
-    type AsyncDisposable = interface end
+    type AsyncDisposable =
+        [<Emit("$0[Symbol.asyncDispose]($1...)")>]
+        abstract member asyncDispose: unit -> obj
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -16082,133 +16088,61 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
     type RequireResolve =
         inherit Node.NodeJS.RequireResolve
 
-    /// <summary>
-    /// <c>ByteLengthQueuingStrategy</c> class is a global reference for <c>import { ByteLengthQueuingStrategy } from 'node:stream/web'</c>.
-    /// https://nodejs.org/api/globals.html#class-bytelengthqueuingstrategy
-    /// </summary>
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type ByteLengthQueuingStrategy = interface end
+    type ByteLengthQueuingStrategy = Glutinum.Web.ByteLengthQueuingStrategy
 
-    /// <summary>
-    /// <c>CountQueuingStrategy</c> class is a global reference for <c>import { CountQueuingStrategy } from 'node:stream/web'</c>.
-    /// https://nodejs.org/api/globals.html#class-countqueuingstrategy
-    /// </summary>
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type CountQueuingStrategy = interface end
+    type CountQueuingStrategy = Glutinum.Web.CountQueuingStrategy
 
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type QueuingStrategy<'T> = interface end
+    type QueuingStrategy<'T> = Glutinum.Web.QueuingStrategy<'T>
 
-    /// <summary>
-    /// <c>ReadableByteStreamController</c> class is a global reference for <c>import { ReadableByteStreamController } from 'node:stream/web'</c>.
-    /// https://nodejs.org/api/globals.html#class-readablebytestreamcontroller
-    /// </summary>
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type ReadableByteStreamController = interface end
+    type QueuingStrategy = QueuingStrategy<obj>
 
-    /// <summary>
-    /// <c>ReadableStream</c> class is a global reference for <c>import { ReadableStream } from 'node:stream/web'</c>.
-    /// https://nodejs.org/api/globals.html#class-readablestream
-    /// </summary>
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type ReadableStream<'R> = interface end
+    type ReadableByteStreamController = Glutinum.Web.ReadableByteStreamController
 
-    /// <summary>
-    /// <c>ReadableStreamBYOBReader</c> class is a global reference for <c>import { ReadableStreamBYOBReader } from 'node:stream/web'</c>.
-    /// https://nodejs.org/api/globals.html#class-readablestreambyobreader
-    /// </summary>
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type ReadableStreamBYOBReader = interface end
+    type ReadableStream<'R> = Glutinum.Web.ReadableStream<'R>
 
-    /// <summary>
-    /// <c>ReadableStreamBYOBRequest</c> class is a global reference for <c>import { ReadableStreamBYOBRequest } from 'node:stream/web'</c>.
-    /// https://nodejs.org/api/globals.html#class-readablestreambyobrequest
-    /// </summary>
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type ReadableStreamBYOBRequest = interface end
+    type ReadableStream = ReadableStream<obj>
 
-    /// <summary>
-    /// <c>ReadableStreamDefaultController</c> class is a global reference for <c>import { ReadableStreamDefaultController } from 'node:stream/web'</c>.
-    /// https://nodejs.org/api/globals.html#class-readablestreamdefaultcontroller
-    /// </summary>
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type ReadableStreamDefaultController<'R> = interface end
+    type ReadableStreamBYOBReader = Glutinum.Web.ReadableStreamBYOBReader
 
-    /// <summary>
-    /// <c>ReadableStreamDefaultReader</c> class is a global reference for <c>import { ReadableStreamDefaultReader } from 'node:stream/web'</c>.
-    /// https://nodejs.org/api/globals.html#class-readablestreamdefaultreader
-    /// </summary>
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type ReadableStreamDefaultReader<'R> = interface end
+    type ReadableStreamBYOBRequest = Glutinum.Web.ReadableStreamBYOBRequest
 
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type ReadableWritablePair<'R, 'W> = interface end
+    type ReadableStreamDefaultController<'R> = Glutinum.Web.ReadableStreamDefaultController<'R>
 
-    /// <summary>
-    /// <c>TextDecoderStream</c> class is a global reference for <c>import { TextDecoderStream } from 'node:stream/web'</c>.
-    /// https://nodejs.org/api/globals.html#class-textdecoderstream
-    /// </summary>
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type TextDecoderStream = interface end
+    type ReadableStreamDefaultController = ReadableStreamDefaultController<obj>
 
-    /// <summary>
-    /// <c>TextEncoderStream</c> class is a global reference for <c>import { TextEncoderStream } from 'node:stream/web'</c>.
-    /// https://nodejs.org/api/globals.html#class-textencoderstream
-    /// </summary>
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type TextEncoderStream = interface end
+    type ReadableStreamDefaultReader<'R> = Glutinum.Web.ReadableStreamDefaultReader<'R>
 
-    /// <summary>
-    /// <c>TransformStream</c> class is a global reference for <c>import { TransformStream } from 'node:stream/web'</c>.
-    /// https://nodejs.org/api/globals.html#class-transformstream
-    /// </summary>
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type TransformStream<'I, 'O> = interface end
+    type ReadableStreamDefaultReader = ReadableStreamDefaultReader<obj>
 
-    /// <summary>
-    /// <c>TransformStreamDefaultController</c> class is a global reference for <c>import { TransformStreamDefaultController } from 'node:stream/web'</c>.
-    /// https://nodejs.org/api/globals.html#class-transformstreamdefaultcontroller
-    /// </summary>
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type TransformStreamDefaultController<'O> = interface end
+    type ReadableWritablePair<'R, 'W> = Glutinum.Web.ReadableWritablePair<'R, 'W>
 
-    /// <summary>
-    /// <c>WritableStream</c> class is a global reference for <c>import { WritableStream } from 'node:stream/web'</c>.
-    /// https://nodejs.org/api/globals.html#class-writablestream
-    /// </summary>
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type WritableStream<'W> = interface end
+    type ReadableWritablePair<'R> = ReadableWritablePair<'R, obj>
 
-    /// <summary>
-    /// <c>WritableStreamDefaultController</c> class is a global reference for <c>import { WritableStreamDefaultController } from 'node:stream/web'</c>.
-    /// https://nodejs.org/api/globals.html#class-writablestreamdefaultcontroller
-    /// </summary>
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type WritableStreamDefaultController = interface end
+    type ReadableWritablePair = ReadableWritablePair<obj, obj>
 
-    /// <summary>
-    /// <c>WritableStreamDefaultWriter</c> class is a global reference for <c>import { WritableStreamDefaultWriter } from 'node:stream/web'</c>.
-    /// https://nodejs.org/api/globals.html#class-writablestreamdefaultwriter
-    /// </summary>
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type WritableStreamDefaultWriter<'W> = interface end
+    type TextDecoderStream = Glutinum.Web.TextDecoderStream
+
+    type TextEncoderStream = Glutinum.Web.TextEncoderStream
+
+    type TransformStream<'I, 'O> = Glutinum.Web.TransformStream<'I, 'O>
+
+    type TransformStream<'I> = TransformStream<'I, obj>
+
+    type TransformStream = TransformStream<obj, obj>
+
+    type TransformStreamDefaultController<'O> = Glutinum.Web.TransformStreamDefaultController<'O>
+
+    type TransformStreamDefaultController = TransformStreamDefaultController<obj>
+
+    type WritableStream<'W> = Glutinum.Web.WritableStream<'W>
+
+    type WritableStream = WritableStream<obj>
+
+    type WritableStreamDefaultController = Glutinum.Web.WritableStreamDefaultController
+
+    type WritableStreamDefaultWriter<'W> = Glutinum.Web.WritableStreamDefaultWriter<'W>
+
+    type WritableStreamDefaultWriter = WritableStreamDefaultWriter<obj>
 
     type _ByteLengthQueuingStrategy = obj
 
@@ -16262,23 +16196,9 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
     [<Interface>]
     type _WritableStreamDefaultWriter<'W> = interface end
 
-    /// <summary>
-    /// <c>URLSearchParams</c> class is a global reference for <c>import { URLSearchParams } from 'node:url'</c>
-    /// https://nodejs.org/api/url.html#class-urlsearchparams
-    /// </summary>
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type URLSearchParams =
-        inherit Node.url.URLSearchParams
+    type URLSearchParams = Glutinum.Web.URLSearchParams
 
-    /// <summary>
-    /// <c>URL</c> class is a global reference for <c>import { URL } from 'url'</c>
-    /// https://nodejs.org/api/url.html#the-whatwg-url-api
-    /// </summary>
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type URL =
-        inherit Node.url.URL
+    type URL = Glutinum.Web.URL
 
     [<AllowNullLiteral>]
     [<Interface>]
@@ -16286,97 +16206,55 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
         abstract member URL: Node.url.URL with get, set
         abstract member URLSearchParams: Node.url.URLSearchParams with get, set
 
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type AbortController = interface end
+    type AbortController = Glutinum.Web.AbortController
 
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type AbortSignal = interface end
+    type AbortSignal = Glutinum.Web.AbortSignal
 
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type DOMException = interface end
+    type DOMException = Glutinum.Web.DOMException
 
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type CustomEvent<'T> = interface end
+    type CustomEvent<'T> = Glutinum.Web.CustomEvent<'T>
 
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type Event = interface end
+    type CustomEvent = CustomEvent<obj>
 
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type EventListenerOptions = interface end
+    type Event = Glutinum.Web.Event
 
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type EventTarget = interface end
+    type EventListenerOptions = Glutinum.Web.EventListenerOptions
 
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type EventSource = interface end
+    type EventTarget = Glutinum.Web.EventTarget
 
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type EventSourceInit = interface end
+    type EventSource = Glutinum.Web.EventSource
 
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type FormData = interface end
+    type EventSourceInit = Glutinum.Web.EventSourceInit
 
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type Headers = interface end
+    type FormData = Glutinum.Web.FormData
 
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type MessageEvent = interface end
+    type Headers = Glutinum.Web.Headers
 
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type MessageEventInit = interface end
+    type MessageEvent = Glutinum.Web.MessageEvent
 
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type Request = interface end
+    type MessageEventInit = Glutinum.Web.MessageEventInit
 
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type RequestInit = interface end
+    type Request = Glutinum.Web.Request
 
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type Response = interface end
+    type RequestInit = Glutinum.Web.RequestInit
 
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type ResponseInit = interface end
+    type Response = Glutinum.Web.Response
 
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type WebSocket = interface end
+    type ResponseInit = Glutinum.Web.ResponseInit
+
+    type WebSocket = Glutinum.Web.WebSocket
 
     [<AllowNullLiteral>]
     [<Interface>]
     type WebSocketInit = interface end
 
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type Navigator = interface end
+    type Navigator = Glutinum.Web.Navigator
 
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type Storage = interface end
+    type Storage = Glutinum.Web.Storage
 
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type CompressionStream = interface end
+    type CompressionStream = Glutinum.Web.CompressionStream
 
-    [<AllowNullLiteral>]
-    [<Interface>]
-    type DecompressionStream = interface end
+    type DecompressionStream = Glutinum.Web.DecompressionStream
 
     type Buffer = Buffer<obj>
 
@@ -16387,28 +16265,6 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
     type AsyncIteratorObject<'T, 'TReturn> = AsyncIteratorObject<'T, 'TReturn, obj>
 
     type AsyncIteratorObject<'T> = AsyncIteratorObject<'T, obj, obj>
-
-    type QueuingStrategy = QueuingStrategy<obj>
-
-    type ReadableStream = ReadableStream<obj>
-
-    type ReadableStreamDefaultController = ReadableStreamDefaultController<obj>
-
-    type ReadableStreamDefaultReader = ReadableStreamDefaultReader<obj>
-
-    type ReadableWritablePair<'R> = ReadableWritablePair<'R, obj>
-
-    type ReadableWritablePair = ReadableWritablePair<obj, obj>
-
-    type TransformStream<'I> = TransformStream<'I, obj>
-
-    type TransformStream = TransformStream<obj, obj>
-
-    type TransformStreamDefaultController = TransformStreamDefaultController<obj>
-
-    type WritableStream = WritableStream<obj>
-
-    type WritableStreamDefaultWriter = WritableStreamDefaultWriter<obj>
 
     type _QueuingStrategy = _QueuingStrategy<obj>
 
@@ -16431,8 +16287,6 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
     type _WritableStream = _WritableStream<obj>
 
     type _WritableStreamDefaultWriter = _WritableStreamDefaultWriter<obj>
-
-    type CustomEvent = CustomEvent<obj>
 
     module BufferConstructor =
 
@@ -24398,6 +24252,13 @@ AsyncLocalStorage.snapshot()""")>]
             /// </c><c></c>
             /// </summary>
             abstract member kill: signal: float -> bool
+
+            /// <summary>
+            /// Calls <see href="ChildProcess.kill">ChildProcess.kill</see> with <c>'SIGTERM'</c>.
+            /// </summary>
+            [<Emit("$0[Symbol.dispose]($1...)")>]
+            abstract member dispose: unit -> unit
+
             /// <summary>
             /// When an IPC channel has been established between the parent and child (
             /// i.e. when using <see href="fork">fork</see>), the <c>subprocess.send()</c> method can
@@ -56064,6 +55925,12 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
             abstract member prependOnceListener_message:
                 listener: Socket.prependOnceListener_message.listener -> Socket
 
+            /// <summary>
+            /// Calls <c>socket.close()</c> and returns a promise that fulfills when the socket has closed.
+            /// </summary>
+            [<Emit("$0[Symbol.asyncDispose]($1...)")>]
+            abstract member asyncDispose: unit -> JS.Promise<unit>
+
         module RemoteInfo =
 
             [<RequireQualifiedAccess>]
@@ -82683,6 +82550,20 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             /// </summary>
             abstract member readSync: unit -> Node.fs.Dirent option
 
+            /// <summary>
+            /// Calls <c>dir.close()</c> if the directory handle is open, and returns a promise that
+            /// fulfills when disposal is complete.
+            /// </summary>
+            [<Emit("$0[Symbol.asyncDispose]($1...)")>]
+            abstract member asyncDispose: unit -> JS.Promise<unit>
+
+            /// <summary>
+            /// Calls <c>dir.closeSync()</c> if the directory handle is open, and returns
+            /// <c>undefined</c>.
+            /// </summary>
+            [<Emit("$0[Symbol.dispose]($1...)")>]
+            abstract member dispose: unit -> unit
+
         /// <summary>
         /// Class: fs.StatWatcher
         /// </summary>
@@ -98177,6 +98058,13 @@ recursive mode, operations are retried on failure.""")>]
             /// Fulfills with <c>undefined</c> upon success.
             /// </returns>
             abstract member close: unit -> JS.Promise<unit>
+
+            /// <summary>
+            /// Calls <c>filehandle.close()</c> and returns a promise that fulfills when the
+            /// filehandle is closed.
+            /// </summary>
+            [<Emit("$0[Symbol.asyncDispose]($1...)")>]
+            abstract member asyncDispose: unit -> JS.Promise<unit>
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -150986,6 +150874,12 @@ recursive mode, operations are retried on failure.""")>]
             abstract member prependOnceListener_drop:
                 listener: (Node.net.DropArgument option -> unit) -> Server
 
+            /// <summary>
+            /// Calls <see href="Server.close()">Server.close()</see> and returns a promise that fulfills when the server has closed.
+            /// </summary>
+            [<Emit("$0[Symbol.asyncDispose]($1...)")>]
+            abstract member asyncDispose: unit -> JS.Promise<unit>
+
         [<RequireQualifiedAccess>]
         [<StringEnum(CaseRules.None)>]
         type IPVersion =
@@ -159058,6 +158952,13 @@ the userland-provided Punycode.js module instead.""")>]
             /// from being emitted by the <c>Interface</c> instance.
             /// </summary>
             abstract member close: unit -> unit
+
+            /// <summary>
+            /// Alias for <c>rl.close()</c>.
+            /// </summary>
+            [<Emit("$0[Symbol.dispose]($1...)")>]
+            abstract member dispose: unit -> unit
+
             /// <summary>
             /// The <c>rl.write()</c> method will write either <c>data</c> or a key sequence identified
             /// by <c>key</c> to the <c>output</c>. The <c>key</c> argument is supported only if <c>output</c> is
@@ -164539,6 +164440,13 @@ the userland-provided Punycode.js module instead.""")>]
             /// </returns>
             abstract member applyChangeset:
                 changeset: JS.Uint8Array * ?options: Node.sqlite.ApplyChangesetOptions -> bool
+
+            /// <summary>
+            /// Closes the database connection. If the database connection is already closed
+            /// then this is a no-op.
+            /// </summary>
+            [<Emit("$0[Symbol.dispose]($1...)")>]
+            abstract member dispose: unit -> unit
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -170933,6 +170841,12 @@ Readable.isDisturbed($0)""")>]
                 /// </summary>
                 abstract member removeListener:
                     event: U2<string, obj> * listener: System.Delegate -> Readable
+
+                /// <summary>
+                /// Calls <c>readable.destroy()</c> with an <c>AbortError</c> and returns a promise that fulfills when the stream is finished.
+                /// </summary>
+                [<Emit("$0[Symbol.asyncDispose]($1...)")>]
+                abstract member asyncDispose: unit -> JS.Promise<unit>
 
             [<AllowNullLiteral>]
             [<Interface>]
@@ -188457,6 +188371,12 @@ Duplex.fromWeb($0, $1)""")>]
                 /// </summary>
                 abstract member runAll: unit -> unit
 
+                /// <summary>
+                /// Calls <see href="MockTimers.reset()">MockTimers.reset()</see>.
+                /// </summary>
+                [<Emit("$0[Symbol.dispose]($1...)")>]
+                abstract member dispose: unit -> unit
+
             module ``assert`` =
 
                 [<AbstractClass>]
@@ -204702,6 +204622,9 @@ URL.parse($0, $1)""")>]
         type CPUProfileHandle =
             abstract member stop: unit -> JS.Promise<string>
 
+            [<Emit("$0[Symbol.asyncDispose]($1...)")>]
+            abstract member asyncDispose: unit -> JS.Promise<unit>
+
         /// <summary>
         /// The <c>Worker</c> class represents an independent JavaScript execution thread.
         /// Most Node.js APIs are available inside of it.
@@ -204884,6 +204807,19 @@ URL.parse($0, $1)""")>]
             /// </summary>
             abstract member startCpuProfile:
                 name: string -> JS.Promise<Node.worker_threads.CPUProfileHandle>
+
+            /// <summary>
+            /// Calls <c>worker.terminate()</c> when the dispose scope is exited.
+            ///
+            /// <code lang="js">
+            /// async function example() {
+            ///   await using worker = new Worker('for (;;) {}', { eval: true });
+            ///   // Worker is automatically terminate when the scope is exited.
+            /// }
+            /// </code>
+            /// </summary>
+            [<Emit("$0[Symbol.asyncDispose]($1...)")>]
+            abstract member asyncDispose: unit -> JS.Promise<unit>
 
             /// <summary>
             /// Alias for <c>emitter.on(eventName, listener)</c>.

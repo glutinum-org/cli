@@ -2702,13 +2702,22 @@ module private TransformMembers =
         )
 
     // A computed property name such as `[Symbol.toStringTag]` has no F# equivalent
+    /// The disposal protocol, the other computed names are iteration handled by the
+    /// `Iterable<T>` inheritance and formatting hooks a binding has no use for
+    let private disposalMemberName (name: string) =
+        match name with
+        | "[Symbol.dispose]" -> Some "dispose"
+        | "[Symbol.asyncDispose]" -> Some "asyncDispose"
+        | _ -> None
+
     let private hasComputedName (glueMember: GlueMember) =
         match glueMember with
         | GlueMember.Property { Name = name }
         | GlueMember.Method { Name = name }
         | GlueMember.MethodSignature { Name = name }
         | GlueMember.GetAccessor { Name = name }
-        | GlueMember.SetAccessor { Name = name } -> name.StartsWith "["
+        | GlueMember.SetAccessor { Name = name } ->
+            name.StartsWith "[" && (disposalMemberName name).IsNone
         | GlueMember.CallSignature _
         | GlueMember.ConstructSignature _
         | GlueMember.IndexSignature _ -> false
@@ -3364,6 +3373,23 @@ module private TransformMembers =
         |> AnyFunctionOverloads.expandMembers
         |> Merge.distinctBySignature
         |> withoutUnmentionedTypeParameters
+        |> List.map (
+            function
+            | FSharpMember.Method info as fsharpMember ->
+                match disposalMemberName info.OriginalName with
+                | Some name ->
+                    FSharpMember.Method
+                        { info with
+                            Name = name
+                            Attributes =
+                                info.Attributes
+                                @ [
+                                    FSharpAttribute.Text $"Emit(\"$0%s{info.OriginalName}($1...)\")"
+                                ]
+                        }
+                | None -> fsharpMember
+            | fsharpMember -> fsharpMember
+        )
 
     let forceReadonly (members: FSharpMember list) =
         members
