@@ -1,5 +1,5 @@
 ---
-last_commit_released: 21b5bdf926daf6e2939b61a241861beb1a0623a6
+last_commit_released: bc253d603fb4d98975432ad990924d4c3ddd58c6
 name: Glutinum.Converter.CLI
 exclude:
   - src/Glutinum.Types/
@@ -17,6 +17,21 @@ updaters:
 All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## 1.0.0-beta.2 - 2026-09-28
+
+### 🚀 Features
+
+* Parse the CLI arguments with commander ([1ca4229](https://github.com/glutinum-org/cli/commit/1ca42290e05449b6df95fdac3f3f4b81a696b500))
+* Create a param object for an intersection type ([8cf8ce7](https://github.com/glutinum-org/cli/commit/8cf8ce792abf38db53808f520d6932b9e3836fe8))
+* Convert a value into an erased union implicitly ([92cf675](https://github.com/glutinum-org/cli/commit/92cf6755bb1db1a5a395f767b0518fe6ada61852))
+
+### 🐞 Bug Fixes
+
+* Type test a JavaScript error against its imported class ([086325d](https://github.com/glutinum-org/cli/commit/086325d075b62a90dc75194f4400412129d7683a))
+* Type a method of a param object as a function ([214cf4a](https://github.com/glutinum-org/cli/commit/214cf4a8e7edb1486e14cf7d190d3acae5b5cec4))
+
+<strong><small>[View changes on Github](https://github.com/glutinum-org/cli/compare/21b5bdf926daf6e2939b61a241861beb1a0623a6..bc253d603fb4d98975432ad990924d4c3ddd58c6)</small></strong>
 
 ## 1.0.0-beta.1 - 2026-09-27
 

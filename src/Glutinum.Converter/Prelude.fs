@@ -1,4 +1,4 @@
 module Glutinum.Converter.Prelude
 
 [<Literal>]
-let VERSION = "1.0.0-beta.1"
+let VERSION = "1.0.0-beta.2"
