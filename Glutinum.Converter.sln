@@ -11,7 +11,7 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Glutinum.Converter.CLI", "s
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Glutinum.Build", "src\Glutinum.Build\Glutinum.Build.fsproj", "{1566C4D2-0960-4F46-B6BB-F85426C277A4}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Glutinum.Web", "src\Glutinum.Web\Glutinum.Web.fsproj", "{A3123CF8-74D0-46FD-9558-BB22557DCD60}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Glutinum.Web.App", "src\Glutinum.Web\Glutinum.Web.App.fsproj", "{A3123CF8-74D0-46FD-9558-BB22557DCD60}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Glutinum.Types", "src\Glutinum.Types\Glutinum.Types.fsproj", "{960AAB9A-90EE-454D-AD90-30DB9C6232BC}"
 EndProject
