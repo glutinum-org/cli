@@ -1,11 +1,19 @@
 module Glutinum.Converter.Program
 
 open Glutinum
+open Glutinum.Node
 open Glutinum.Converter
 open Glutinum.Converter.Generate
 open Fable.Core
 open Fable.Core.JsInterop
 open Glutinum.Commander.ParseOptions
+
+type private Fs = fs.Exports
+type private Path = path.Exports
+type private Url = url.Exports
+type private MkdirOptions = fs.Exports.mkdirSync__.options
+
+let private nodeProcess = Glutinum.Node.Exports.``process``
 
 [<Emit("import.meta.url")>]
 let private importMetaUrl () : string = nativeOnly
@@ -25,16 +33,10 @@ type private CliOptions =
     abstract member ``include``: ResizeArray<string> with get
 
 let private getVersion () =
-    let moduleDir =
-        Glutinum.Node.path.Exports.dirname (
-            Glutinum.Node.url.Exports.fileURLToPath (importMetaUrl ())
-        )
+    let moduleDir = Path.dirname (Url.fileURLToPath (importMetaUrl ()))
 
     let content =
-        Glutinum.Node.fs.Exports.readFileSync (
-            Glutinum.Node.path.Exports.join (moduleDir, "..", "package.json"),
-            Glutinum.Node.BufferEncoding.utf8
-        )
+        Fs.readFileSync (Path.join (moduleDir, "..", "package.json"), BufferEncoding.utf8)
 
     let packageJson: PackageJson = !! JS.JSON.parse content
 
@@ -92,20 +94,16 @@ let private generate (options: Packages.GenerateOptions) (isAll: bool) (inputs: 
 let private write (outFile: string option) (content: string) =
     match outFile with
     | Some outFile ->
-        Glutinum.Node.fs.Exports.mkdirSync (
-            Glutinum.Node.path.Exports.dirname outFile,
-            Glutinum.Node.fs.Exports.mkdirSync__.options.Create(``recursive`` = true)
-        )
+        Fs.mkdirSync (Path.dirname outFile, MkdirOptions.Create(``recursive`` = true))
         |> ignore
 
-        Glutinum.Node.fs.Exports.writeFileSync (outFile, content)
+        Fs.writeFileSync (outFile, content)
 
-        Log.info $"Bindings written to: %s{Glutinum.Node.path.Exports.resolve outFile}"
+        Log.info $"Bindings written to: %s{Path.resolve outFile}"
     | None ->
-        let stdout: Glutinum.Node.NodeJS.WriteStream =
-            !!Glutinum.Node.Exports.``process``.stdout
+        let stdout: NodeJS.WriteStream = !!nodeProcess.stdout
 
-        stdout.write (content, Glutinum.Node.BufferEncoding.utf8) |> ignore
+        stdout.write (content, BufferEncoding.utf8) |> ignore
 
 let private run (argv: string array) =
     let program = Commander.Exports.program
@@ -191,5 +189,5 @@ let private run (argv: string array) =
 let main (argv: string array) =
     let exitCode = run argv
     // Fable discards the value returned by the entry point
-    Glutinum.Node.Exports.``process``.exitCode <- Some !^(float exitCode)
+    nodeProcess.exitCode <- Some !^(float exitCode)
     exitCode
