@@ -6739,6 +6739,15 @@
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/nodejs/process/send/</loc>
   </url>
   <url>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/nodejs/process/stderr/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/nodejs/process/stdin/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/nodejs/process/stdout/</loc>
+  </url>
+  <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/nodejs/processconfig/</loc>
   </url>
   <url>
@@ -7139,6 +7148,24 @@
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/process/exports/prependoncelistener/listener/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/process/exports/stderr/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/process/exports/stderr/type/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/process/exports/stdin/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/process/exports/stdin/type/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/process/exports/stdout/</loc>
+  </url>
+  <url>
+    <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/process/exports/stdout/type/</loc>
   </url>
   <url>
     <loc>https://glutinum.net/reference/glutinum-node/glutinum/node/punycode/</loc>
