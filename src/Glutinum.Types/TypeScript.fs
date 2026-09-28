@@ -3728,8 +3728,8 @@ module TypeScript =
                     [<ParamObject; Emit("$0")>]
                     static member Create
                         (
-                            get: obj,
-                            set: unit,
+                            get: (unit -> unit),
+                            set: (obj -> unit),
                             ?configurable: bool,
                             ?enumerable: bool,
                             ?value: obj,
@@ -4453,8 +4453,8 @@ module TypeScript =
                 [<ParamObject; Emit("$0")>]
                 static member Create
                     (
-                        get: obj,
-                        set: unit,
+                        get: (unit -> unit),
+                        set: (obj -> unit),
                         ?configurable: bool,
                         ?enumerable: bool,
                         ?value: obj,

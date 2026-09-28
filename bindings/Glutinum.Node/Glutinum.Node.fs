@@ -12706,7 +12706,11 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
 
                 [<ParamObject; Emit("$0")>]
                 static member Create
-                    (register: unit, registerBeforeExit: unit, unregister: unit)
+                    (
+                        register: Process.finalization.register<obj>,
+                        registerBeforeExit: Process.finalization.registerBeforeExit<obj>,
+                        unregister: (obj -> unit)
+                    )
                     : finalization
                     =
                     nativeOnly
@@ -12714,6 +12718,13 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
             type listeners_workerMessage = delegate of value: obj * source: float -> unit
 
             module finalization =
+
+                type register<'T> =
+                    delegate of ref: 'T * callback: Process.finalization.register.callback -> unit
+
+                type registerBeforeExit<'T> =
+                    delegate of
+                        ref: 'T * callback: Process.finalization.registerBeforeExit.callback -> unit
 
                 module register =
 
@@ -14015,7 +14026,7 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
                 abstract member valueOf: unit -> obj
 
                 [<ParamObject; Emit("$0")>]
-                static member Create(valueOf: obj) : array = nativeOnly
+                static member Create(valueOf: (unit -> unit)) : array = nativeOnly
 
     module Buffer =
 
@@ -20252,7 +20263,7 @@ AsyncLocalStorage.snapshot()""")>]
                         abstract member valueOf: unit -> 'T
 
                         [<ParamObject; Emit("$0")>]
-                        static member Create(valueOf: 'T) : Case2<'T> = nativeOnly
+                        static member Create(valueOf: (unit -> 'T)) : Case2<'T> = nativeOnly
 
             module Exports =
 
@@ -141999,12 +142010,27 @@ security vulnerability. There is no safe, cross-platform alternative API.""")>]
 
                     [<ParamObject; Emit("$0")>]
                     static member Create
-                        (register: unit, registerBeforeExit: unit, unregister: unit)
+                        (
+                            register: Exports.finalization__.Type.register<obj>,
+                            registerBeforeExit: Exports.finalization__.Type.registerBeforeExit<obj>,
+                            unregister: (obj -> unit)
+                        )
                         : Type
                         =
                         nativeOnly
 
                 module Type =
+
+                    type register<'T> =
+                        delegate of
+                            ref: 'T * callback: Exports.finalization__.Type.register.callback ->
+                                unit
+
+                    type registerBeforeExit<'T> =
+                        delegate of
+                            ref: 'T *
+                            callback: Exports.finalization__.Type.registerBeforeExit.callback ->
+                                unit
 
                     module register =
 
@@ -183553,10 +183579,10 @@ URL.parse($0, $1)""")>]
                 [<ParamObject; Emit("$0")>]
                 static member Create
                     (
-                        apply: obj,
-                        call: obj,
-                        bind: obj,
-                        toString: string,
+                        apply: Exports.compileFunction__.apply,
+                        call: Exports.compileFunction__.call,
+                        bind: Exports.compileFunction__.bind,
+                        toString: (unit -> string),
                         prototype: obj,
                         length: float,
                         arguments: obj,
@@ -183569,6 +183595,14 @@ URL.parse($0, $1)""")>]
                     : compileFunction__
                     =
                     nativeOnly
+
+            module compileFunction__ =
+
+                type apply = delegate of thisArg: obj * ?argArray: obj -> unit
+
+                type call = delegate of thisArg: obj * [<ParamArray>] argArray: obj[] -> unit
+
+                type bind = delegate of thisArg: obj * [<ParamArray>] argArray: obj[] -> unit
 
     module wasi =
 
@@ -194229,11 +194263,11 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
                         returnValue: bool,
                         timeStamp: Glutinum.Web.DOMHighResTimeStamp,
                         ``type``: string,
-                        composedPath: ResizeArray<Node.EventTarget>,
-                        initEvent: unit,
-                        preventDefault: unit,
-                        stopImmediatePropagation: unit,
-                        stopPropagation: unit,
+                        composedPath: (unit -> ResizeArray<Node.EventTarget>),
+                        initEvent: ProgressEvent.__proto__.initEvent,
+                        preventDefault: (unit -> unit),
+                        stopImmediatePropagation: (unit -> unit),
+                        stopPropagation: (unit -> unit),
                         NONE: int,
                         CAPTURING_PHASE: int,
                         AT_TARGET: int,
@@ -194249,6 +194283,11 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
                     : __proto__
                     =
                     nativeOnly
+
+            module __proto__ =
+
+                type initEvent =
+                    delegate of ``type``: string * ?bubbles: bool * ?cancelable: bool -> unit
 
     module formdata =
 

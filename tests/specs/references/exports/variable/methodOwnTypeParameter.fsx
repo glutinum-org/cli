@@ -30,7 +30,7 @@ module ns_ =
                 abstract member run<'T>: value: 'T -> unit
                 abstract member label: string with get, set
                 [<ParamObject; Emit("$0")>]
-                static member Create (run: unit, label: string) : Type = nativeOnly
+                static member Create (run: (obj -> unit), label: string) : Type = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

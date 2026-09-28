@@ -2651,6 +2651,27 @@ let private transformAccessor (accessor: GlueAccessor) : FSharpAccessor =
     | GlueAccessor.WriteOnly -> FSharpAccessor.WriteOnly
     | GlueAccessor.ReadWrite -> FSharpAccessor.ReadWrite
 
+/// A method of a param object is set as a value, so it is typed as a function and not
+/// as the type it returns
+let private methodFunctionType
+    (context: TransformContext)
+    (documentation: GlueComment list)
+    (typeParameters: GlueTypeParameter list)
+    (parameters: GlueParameter list)
+    (returnType: GlueType)
+    : FSharpType
+    =
+    ({
+        Documentation = documentation
+        Type = returnType
+        TypeParameters = typeParameters
+        OwnTypeParameterNames = typeParameters |> List.map _.Name
+        Parameters = parameters
+    }
+    : GlueFunctionType)
+    |> GlueType.FunctionType
+    |> transformType context
+
 module private TransformMembers =
 
     // A reference constraint of a member is read for the ParamObject analysis, the transform
@@ -3337,7 +3358,13 @@ module private TransformMembers =
                     Attributes = []
                     Name = name
                     IsOptional = methodInfo.IsOptional
-                    Type = transformType context methodInfo.Type
+                    Type =
+                        methodFunctionType
+                            context
+                            methodInfo.Documentation
+                            methodInfo.TypeParameters
+                            methodInfo.Parameters
+                            methodInfo.Type
                     OriginalGlueMember = Some glueMember
                 }
                 : FSharpParameter
@@ -3405,7 +3432,13 @@ module private TransformMembers =
                     Attributes = []
                     Name = name
                     IsOptional = false
-                    Type = transformType context methodSignature.Type
+                    Type =
+                        methodFunctionType
+                            context
+                            methodSignature.Documentation
+                            methodSignature.TypeParameters
+                            methodSignature.Parameters
+                            methodSignature.Type
                     OriginalGlueMember = Some glueMember
                 }
                 : FSharpParameter

@@ -108025,7 +108025,7 @@ module Web =
                 abstract member acceptNode: node: Web.Node -> float
 
                 [<ParamObject; Emit("$0")>]
-                static member Create(acceptNode: float) : Case2 = nativeOnly
+                static member Create(acceptNode: (Web.Node -> float)) : Case2 = nativeOnly
 
     module XPathNSResolver =
 
@@ -108037,7 +108037,8 @@ module Web =
                 abstract member lookupNamespaceURI: prefix: string option -> string option
 
                 [<ParamObject; Emit("$0")>]
-                static member Create(?lookupNamespaceURI: string) : Case2 = nativeOnly
+                static member Create(lookupNamespaceURI: (string option -> string option)) : Case2 =
+                    nativeOnly
 
     module AudioParamMap =
 

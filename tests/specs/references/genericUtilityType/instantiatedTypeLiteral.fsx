@@ -27,7 +27,7 @@ module Pair =
         abstract member server: 'C with get, set
         abstract member swap: unit -> Pair<'C, 'S>
         [<ParamObject; Emit("$0")>]
-        static member Create (client: 'S, server: 'C, swap: Pair<'C, 'S>) : swap<'S, 'C> = nativeOnly
+        static member Create (client: 'S, server: 'C, swap: (unit -> Pair<'C, 'S>)) : swap<'S, 'C> = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"
