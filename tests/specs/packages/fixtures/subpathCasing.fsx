@@ -15,6 +15,11 @@ module SubpathCasing =
         [<Import("version", "subpath-casing")>]
         static member inline version: string = nativeOnly
 
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type Options =
+        abstract member verbose: bool with get, set
+
     module Fs =
 
         [<AbstractClass>]

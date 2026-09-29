@@ -227,8 +227,8 @@ let private declaredNames (program: Ts.Program) (checker: Ts.TypeChecker) (fileN
             )
             |> Set.ofSeq
 
-/// A declaration the root entry exports is read into the package module, unless its name is
-/// taken by the entry or by a file read before it
+/// A declaration the root entry exports, or one of a file no entry publishes, is read into the
+/// package module, unless its name is taken by the entry or by a file read before it
 let private hoistableDeclarations
     (program: Ts.Program)
     (checker: Ts.TypeChecker)
@@ -237,16 +237,30 @@ let private hoistableDeclarations
     =
     let entryNames = declaredNames program checker package.EntryFile
 
-    let candidates =
+    let isEntry (file: string) =
+        file = package.EntryFile
+        || package.SubpathEntries |> List.exists (fun (entry, _) -> entry = file)
+
+    let exported =
         reExportedFiles
         |> Map.toList
-        |> List.filter (fun (file, subpath) ->
-            subpath = ""
-            && file <> package.EntryFile
-            && not (package.SubpathEntries |> List.exists (fun (entry, _) -> entry = file))
-        )
+        |> List.filter (fun (file, subpath) -> subpath = "" && not (isEntry file))
         |> List.map fst
         |> List.sort
+
+    let unpublished =
+        program.getSourceFiles ()
+        |> Seq.map (fun sourceFile -> String.normalizePath sourceFile.fileName)
+        |> Seq.filter (fun file ->
+            file.StartsWith package.Dir
+            && not (file.Substring(package.Dir.Length).Contains "node_modules/")
+            && not (isEntry file)
+            && not (reExportedFiles.ContainsKey file)
+        )
+        |> Seq.sort
+        |> Seq.toList
+
+    let candidates = exported @ unpublished
 
     ((entryNames, Set.empty), candidates)
     ||> List.fold (fun (taken, hoistable) file ->

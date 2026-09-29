@@ -10,7 +10,7 @@ module ExportsMap =
     [<Erase>]
     type Exports =
         [<Import("start", "exports-map")>]
-        static member start (options: ExportsMap.``internal``.hidden.Options) : ExportsMap.``internal``.hidden.Session = nativeOnly
+        static member start (options: ExportsMap.Options) : ExportsMap.Session = nativeOnly
         [<Import("running", "exports-map")>]
         static member inline running: bool = nativeOnly
         [<Import("alpha", "exports-map")>]
@@ -18,22 +18,22 @@ module ExportsMap =
         [<Import("beta", "exports-map/utils")>]
         static member beta () : unit = nativeOnly
 
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type Options =
+        abstract member verbose: bool with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create (verbose: bool) : Options = nativeOnly
+
+    [<AllowNullLiteral>]
+    [<Interface>]
+    type Session =
+        abstract member id: string with get
+        abstract member close: unit -> unit
+
     module ``internal`` =
 
         module hidden =
-
-            [<AllowNullLiteral>]
-            [<Interface>]
-            type Options =
-                abstract member verbose: bool with get, set
-                [<ParamObject; Emit("$0")>]
-                static member Create (verbose: bool) : Options = nativeOnly
-
-            [<AllowNullLiteral>]
-            [<Interface>]
-            type Session =
-                abstract member id: string with get
-                abstract member close: unit -> unit
 
             type mode =
                 float
