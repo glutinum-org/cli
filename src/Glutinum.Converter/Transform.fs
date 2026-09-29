@@ -8128,37 +8128,58 @@ let private aggregatedExports (types: FSharpType list) : FSharpType list =
             | _ -> false
         )
 
-    let abbreviations =
+    // `fs.promises` is a module nested in `fs`, the abbreviations follow the same nesting so
+    // `open Node.Exports` gives `fs.promises.access ()`
+    let rec abbreviationsOf (path: string) (types: FSharpType list) : FSharpType list =
         types
-        |> List.choose (
+        |> List.collect (
             function
             | FSharpType.Module fileModule ->
-                fileModule.Types
-                |> List.tryPick (
-                    function
-                    | FSharpType.Interface { Name = "Exports"; Members = members } when
-                        not members.IsEmpty && members |> List.forall isStatic
-                        ->
+                let own =
+                    fileModule.Types
+                    |> List.tryPick (
+                        function
+                        | FSharpType.Interface { Name = "Exports"; Members = members } when
+                            not members.IsEmpty && members |> List.forall isStatic
+                            ->
+                            ({
+                                Attributes = []
+                                XmlDoc = []
+                                Name = fileModule.Name
+                                Type =
+                                    ({
+                                        Name = $"{path}{fileModule.Name}.Exports"
+                                        TypeParameters = []
+                                    }
+                                    : FSharpMapped)
+                                    |> FSharpType.Mapped
+                                TypeParameters = []
+                            }
+                            : FSharpTypeAlias)
+                            |> FSharpType.TypeAlias
+                            |> Some
+                        | _ -> None
+                    )
+
+                let nested = abbreviationsOf $"{path}{fileModule.Name}." fileModule.Types
+
+                [
+                    yield! Option.toList own
+
+                    if not nested.IsEmpty then
                         ({
-                            Attributes = []
-                            XmlDoc = []
                             Name = fileModule.Name
-                            Type =
-                                ({
-                                    Name = $"{fileModule.Name}.Exports"
-                                    TypeParameters = []
-                                }
-                                : FSharpMapped)
-                                |> FSharpType.Mapped
-                            TypeParameters = []
+                            IsRecursive = false
+                            ImportSpecifier = None
+                            Types = nested
                         }
-                        : FSharpTypeAlias)
-                        |> FSharpType.TypeAlias
-                        |> Some
-                    | _ -> None
-                )
-            | _ -> None
+                        : FSharpModule)
+                        |> FSharpType.Module
+                ]
+            | _ -> []
         )
+
+    let abbreviations = abbreviationsOf "" types
 
     if abbreviations.IsEmpty || hasEntryExports then
         []

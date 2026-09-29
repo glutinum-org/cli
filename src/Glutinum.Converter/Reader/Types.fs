@@ -173,13 +173,15 @@ type PackageContext =
                         List.rev (withoutExtension :: rest)
                 | [] -> []
 
+            // `fs/promises.d.ts` is the nested module `fs.promises`, spelled as the package
+            // spells it
             segments
             |> List.map (fun segment ->
                 segment.Split([| '-'; '.'; ' ' |], System.StringSplitOptions.RemoveEmptyEntries)
                 |> String.concat "_"
+                |> Naming.sanitizeTypeName
             )
-            |> String.concat "_"
-            |> Naming.sanitizeTypeName
+            |> String.concat "."
 
     /// F# modules qualifying a type declared in `fileName`, empty for the target entry file
     member this.ModulePath(fileName: string) : string list = this.ModulePath(fileName, true)
