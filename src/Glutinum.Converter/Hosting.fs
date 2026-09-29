@@ -531,10 +531,11 @@ module Resolve =
                 | n when not (isNullish n) -> n
                 | _ -> prop pkg "typings"
 
+            // With an `exports` map, TypeScript resolves the package to its `.` entry, not to `types`
+            candidates.AddRange(collectExportsTypes (prop pkg "exports"))
+
             if jsTypeof typesField = "string" then
                 candidates.Add(".", unbox typesField)
-
-            candidates.AddRange(collectExportsTypes (prop pkg "exports"))
 
             let mainField = prop pkg "main"
 

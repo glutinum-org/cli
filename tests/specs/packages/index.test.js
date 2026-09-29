@@ -22,6 +22,7 @@ const fixtures = [
     "typesOnlyDependency",
     "subpathEntries",
     "exportsMap",
+    "exportsMapEntry",
     "subpathCasing",
     "unresolvedImport",
     "namespaceImport",

@@ -1,0 +1,9 @@
+{
+    "name": "exports-map-entry",
+    "version": "1.0.0",
+    "main": "index.js",
+    "types": "types/types.d.ts",
+    "exports": {
+        ".": { "types": "./index.d.ts" }
+    }
+}
