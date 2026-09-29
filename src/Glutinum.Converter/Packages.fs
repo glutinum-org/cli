@@ -1,6 +1,7 @@
 module Glutinum.Converter.Packages
 
 open Fable.Core
+open Fable.Core.JsInterop
 open TypeScript
 open TsMorph
 open Glutinum.Converter
@@ -85,6 +86,7 @@ let private toPackageInfo (description: PackageDescription) : Reader.Types.Packa
         ReExportedFiles = Map.empty
         ReExportedNames = Map.empty
         HasExportsMap = false
+        HoistableDeclarations = Set.empty
     }
 
 /// The names a public entry of the package exports, with the subpath to import each from
@@ -173,6 +175,86 @@ let private reExportedSymbols
                             )
                     )
         )
+
+/// The names a file declares itself, the ones it re-exports belong to another file
+let private declaredNames (program: Ts.Program) (checker: Ts.TypeChecker) (fileName: string) =
+    match program.getSourceFile fileName with
+    | None -> Set.empty
+    | Some sourceFile ->
+        match checker.getSymbolAtLocation (unbox<Ts.Node> sourceFile) with
+        | None -> Set.empty
+        | Some moduleSymbol ->
+            let normalized = String.normalizePath fileName
+
+            checker.getExportsOfModule moduleSymbol
+            // A namespace stays in the module of its file, the reader keeps it there
+            |> Seq.filter (fun exportedSymbol ->
+                match exportedSymbol.flags with
+                | HasSymbolFlags Ts.SymbolFlags.ValueModule
+                | HasSymbolFlags Ts.SymbolFlags.NamespaceModule -> false
+                | _ -> true
+            )
+            |> Seq.filter (fun exportedSymbol ->
+                match exportedSymbol.declarations with
+                | Some declarations ->
+                    declarations
+                    |> Seq.exists (fun declaration ->
+                        // `export { alpha } from "./shared.js"` is a specifier, not a declaration
+                        declaration.kind <> Ts.SyntaxKind.ExportSpecifier
+                        && declaration.kind <> Ts.SyntaxKind.ExportAssignment
+                        && String.normalizePath (
+                            (unbox<Ts.Node> declaration).getSourceFile().fileName
+                        )
+                            =
+                            normalized
+                    )
+                | None -> false
+            )
+            // `export default class Element` is exported as `default`, the class carries the name
+            |> Seq.map (fun exportedSymbol ->
+                if exportedSymbol.name = "default" then
+                    exportedSymbol.declarations
+                    |> Option.bind (
+                        Seq.tryPick (fun declaration ->
+                            match declaration?name with
+                            | null -> None
+                            | name -> Some(name?getText (): string)
+                        )
+                    )
+                    |> Option.defaultValue exportedSymbol.name
+                else
+                    exportedSymbol.name
+            )
+            |> Set.ofSeq
+
+/// A declaration the root entry exports is read into the package module, unless its name is
+/// taken by the entry or by a file read before it
+let private hoistableDeclarations
+    (program: Ts.Program)
+    (checker: Ts.TypeChecker)
+    (package: Reader.Types.PackageInfo)
+    (reExportedFiles: Map<string, string>)
+    =
+    let entryNames = declaredNames program checker package.EntryFile
+
+    let candidates =
+        reExportedFiles
+        |> Map.toList
+        |> List.filter (fun (file, subpath) ->
+            subpath = ""
+            && file <> package.EntryFile
+            && not (package.SubpathEntries |> List.exists (fun (entry, _) -> entry = file))
+        )
+        |> List.map fst
+        |> List.sort
+
+    ((entryNames, Set.empty), candidates)
+    ||> List.fold (fun (taken, hoistable) file ->
+        let free = Set.difference (declaredNames program checker file) taken
+
+        Set.union taken free, Set.union hoistable (free |> Set.map (fun name -> file, name))
+    )
+    |> snd
 
 let private isTypeScriptLibFile (fileName: string) =
     (String.normalizePath fileName).Contains "/typescript/lib/lib."
@@ -409,8 +491,25 @@ let generateWith (options: GenerateOptions) (host: Host) (inputs: string list) :
         let hasExportsMap = exportsMapPackages.Contains package.Dir
         let symbols = reExportedSymbols program checker hasExportsMap package
 
+        let reExportedFiles =
+            symbols
+            |> Map.toList
+            |> List.fold
+                (fun acc ((file, _), subpath) ->
+                    if Map.containsKey file acc then
+                        acc
+                    else
+                        Map.add file subpath acc
+                )
+                Map.empty
+
         { package with
             HasExportsMap = hasExportsMap
+            HoistableDeclarations =
+                if hasExportsMap then
+                    hoistableDeclarations program checker package reExportedFiles
+                else
+                    Set.empty
             ReExportedSymbols = symbols
             ReExportedNames = reExportedNames program checker hasExportsMap package
             ReExportedFiles =

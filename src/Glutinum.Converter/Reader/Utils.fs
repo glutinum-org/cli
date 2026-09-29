@@ -900,11 +900,28 @@ let private namespaceChain (packageContext: PackageContext option) (declaration:
 
     collect declaration.parent []
 
+/// The name of the declaration at the top of the file: a member of an enum, a namespace or a
+/// class is placed where its owner is
+let private topLevelDeclarationName (declaration: Ts.Node) : string option =
+    let rec top (node: Ts.Node) =
+        match node.parent with
+        | null -> node
+        | parent when parent.kind = Ts.SyntaxKind.SourceFile -> node
+        | parent -> top parent
+
+    match (top declaration)?name with
+    | null -> None
+    | name -> Some(name?getText (): string)
+
 /// The F# modules qualifying a declaration from another file: its file modules and its namespaces
 let modulePathForDeclaration (packageContext: PackageContext) (declaration: Ts.Node) : string list =
     let fileName = declaration.getSourceFile().fileName |> String.normalizePath
 
-    packageContext.ModulePath(fileName, not (isPackageGlobal (Some packageContext) declaration))
+    packageContext.ModulePath(
+        fileName,
+        not (isPackageGlobal (Some packageContext) declaration),
+        topLevelDeclarationName declaration
+    )
     @ namespaceChain (Some packageContext) declaration
 
 /// <summary>
@@ -931,7 +948,11 @@ let modulePathForSymbol
                     | Some declaration -> not (isPackageGlobal (Some packageContext) declaration)
                     | None -> true
 
-                packageContext.ModulePath(fileName, includeFile)
+                packageContext.ModulePath(
+                    fileName,
+                    includeFile,
+                    declaration |> Option.bind topLevelDeclarationName
+                )
             | _ -> []
 
         // A path to another file is absolute, so it includes the namespaces

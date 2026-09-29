@@ -15,24 +15,18 @@ module ExportsMap =
         static member inline running: bool = nativeOnly
         [<Import("alpha", "exports-map")>]
         static member alpha () : unit = nativeOnly
+        [<Import("beta", "exports-map/utils")>]
+        static member beta () : unit = nativeOnly
 
-    module internal_engine =
-
-        [<AbstractClass>]
-        [<Erase>]
-        type Exports =
-            [<Import("start", "exports-map")>]
-            static member start (options: ExportsMap.internal_hidden.Options) : ExportsMap.internal_hidden.Session = nativeOnly
-            [<Import("running", "exports-map")>]
-            static member inline running: bool = nativeOnly
-
-    module internal_format =
+    module Utils =
 
         [<AbstractClass>]
         [<Erase>]
         type Exports =
             [<Import("pad", "exports-map/utils")>]
             static member pad (value: string) : string = nativeOnly
+            [<Import("beta", "exports-map/utils")>]
+            static member beta () : unit = nativeOnly
 
     module internal_hidden =
 
@@ -51,26 +45,6 @@ module ExportsMap =
 
         type mode =
             float
-
-    module internal_shared =
-
-        [<AbstractClass>]
-        [<Erase>]
-        type Exports =
-            [<Import("alpha", "exports-map")>]
-            static member alpha () : unit = nativeOnly
-            [<Import("beta", "exports-map/utils")>]
-            static member beta () : unit = nativeOnly
-
-    module utils =
-
-        [<AbstractClass>]
-        [<Erase>]
-        type Exports =
-            [<Import("pad", "exports-map/utils")>]
-            static member pad (value: string) : string = nativeOnly
-            [<Import("beta", "exports-map/utils")>]
-            static member beta () : unit = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

@@ -12,10 +12,12 @@ module SubpathEntries =
         [<Import("Scope", "subpath-entries"); EmitConstructor>]
         static member Scope () : Scope = nativeOnly
 
+    [<AllowNullLiteral>]
+    [<Interface>]
     type Scope =
-        SubpathEntries.scope_scope.Scope
+        abstract member revert: unit -> unit
 
-    module auto =
+    module Auto =
 
         [<AbstractClass>]
         [<Erase>]
@@ -32,20 +34,7 @@ module SubpathEntries =
             static member Scope () : Scope = nativeOnly
 
         type Scope =
-            SubpathEntries.scope_scope.Scope
-
-    module scope_scope =
-
-        [<AbstractClass>]
-        [<Erase>]
-        type Exports =
-            [<Import("Scope", "subpath-entries"); EmitConstructor>]
-            static member Scope () : Scope = nativeOnly
-
-        [<AllowNullLiteral>]
-        [<Interface>]
-        type Scope =
-            abstract member revert: unit -> unit
+            SubpathEntries.Scope
 
 (***)
 #r "nuget: Fable.Core"

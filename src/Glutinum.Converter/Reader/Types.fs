@@ -30,6 +30,9 @@ type PackageInfo =
         ReExportedNames: Map<string, string>
         /// The `exports` map makes every file it does not list unreachable
         HasExportsMap: bool
+        /// A declaration the root entry exports under a name nothing else declares, keyed by the
+        /// file declaring it: it is read into the package module
+        HoistableDeclarations: Set<string * string>
     }
 
 /// A package published as its own binding: its types are referenced, never generated
@@ -98,60 +101,109 @@ type PackageContext =
         (this.TryFindPackage fileName).IsNone
         && (this.TryFindExternalModulePath fileName).IsNone
 
+    /// Whether the root entry exports the declaration: it belongs to the package module, the
+    /// file declaring it is an implementation detail
+    member this.IsHoisted(package: PackageInfo, fileName: string, name: string) =
+        package.HoistableDeclarations.Contains(String.normalizePath fileName, name)
+
+    /// The subpath a public entry exports the declarations of the file from, when there is one
+    member this.SubpathOf(package: PackageInfo, fileName: string) =
+        let fileName = String.normalizePath fileName
+
+        package.SubpathEntries
+        |> List.tryPick (fun (file, subpath) ->
+            if file = fileName then
+                Some subpath
+            else
+                None
+        )
+        |> Option.orElseWith (fun () -> package.ReExportedFiles.TryFind fileName)
+
     member this.FileModuleName(package: PackageInfo, fileName: string) =
         let fileName = String.normalizePath fileName
 
-        let relativePath =
-            if fileName.StartsWith package.TypesRoot then
-                fileName.Substring(package.TypesRoot.Length)
-            else
-                fileName.Substring(package.Dir.Length)
+        // `animejs/svg` is `Animejs.Svg`, the file declaring it is an implementation detail
+        let fromSubpath =
+            match this.SubpathOf(package, fileName) with
+            | Some subpath when subpath <> "" ->
+                subpath.Split('/')
+                |> Array.map (fun segment ->
+                    segment.Split(
+                        [| '-'; '.'; ' ' |],
+                        System.StringSplitOptions.RemoveEmptyEntries
+                    )
+                    |> String.concat "_"
+                    |> Naming.sanitizeTypeName
+                    |> fun name -> string (System.Char.ToUpper name.[0]) + name.Substring 1
+                )
+                |> String.concat "."
+                |> Some
+            | _ -> None
 
-        let segments =
-            relativePath.Split('/')
-            |> Array.toList
-            |> List.filter (fun segment -> segment <> "")
+        match fromSubpath with
+        | Some name -> name
+        | None ->
 
-        let segments =
-            match List.rev segments with
-            | last :: rest ->
-                let withoutExtension =
-                    System.Text.RegularExpressions.Regex.Replace(last, "\\.d\\.[cm]?ts$", "")
-
-                let isSubpathEntry =
-                    package.SubpathEntries |> List.exists (fun (file, _) -> file = fileName)
-
-                if withoutExtension = "index" && not rest.IsEmpty then
-                    List.rev rest
-                // `chart.js/auto` is `auto/auto.d.ts`
-                elif List.tryHead rest = Some withoutExtension && isSubpathEntry then
-                    List.rev rest
+            let relativePath =
+                if fileName.StartsWith package.TypesRoot then
+                    fileName.Substring(package.TypesRoot.Length)
                 else
-                    List.rev (withoutExtension :: rest)
-            | [] -> []
+                    fileName.Substring(package.Dir.Length)
 
-        segments
-        |> List.map (fun segment ->
-            segment.Split([| '-'; '.'; ' ' |], System.StringSplitOptions.RemoveEmptyEntries)
+            let segments =
+                relativePath.Split('/')
+                |> Array.toList
+                |> List.filter (fun segment -> segment <> "")
+
+            let segments =
+                match List.rev segments with
+                | last :: rest ->
+                    let withoutExtension =
+                        System.Text.RegularExpressions.Regex.Replace(last, "\\.d\\.[cm]?ts$", "")
+
+                    let isSubpathEntry =
+                        package.SubpathEntries |> List.exists (fun (file, _) -> file = fileName)
+
+                    if withoutExtension = "index" && not rest.IsEmpty then
+                        List.rev rest
+                    // `chart.js/auto` is `auto/auto.d.ts`
+                    elif List.tryHead rest = Some withoutExtension && isSubpathEntry then
+                        List.rev rest
+                    else
+                        List.rev (withoutExtension :: rest)
+                | [] -> []
+
+            segments
+            |> List.map (fun segment ->
+                segment.Split([| '-'; '.'; ' ' |], System.StringSplitOptions.RemoveEmptyEntries)
+                |> String.concat "_"
+            )
             |> String.concat "_"
-        )
-        |> String.concat "_"
-        |> Naming.sanitizeTypeName
+            |> Naming.sanitizeTypeName
 
     /// F# modules qualifying a type declared in `fileName`, empty for the target entry file
     member this.ModulePath(fileName: string) : string list = this.ModulePath(fileName, true)
 
     /// `includeFile = false` gives the package module only, where its globals are
     member this.ModulePath(fileName: string, includeFile: bool) : string list =
+        this.ModulePath(fileName, includeFile, None)
+
+    /// `name` is the declaration at the top of the file the reference lands in
+    member this.ModulePath(fileName: string, includeFile: bool, name: string option) : string list =
         match this.TryFindPackage fileName with
         | None -> this.TryFindExternalModulePath(fileName, includeFile) |> Option.defaultValue []
         | Some package ->
             let fileName = String.normalizePath fileName
 
+            let isHoisted =
+                match name with
+                | Some name -> this.IsHoisted(package, fileName, name)
+                | None -> false
+
             [
                 package.ModuleName
 
-                if includeFile && fileName <> package.EntryFile then
+                if includeFile && fileName <> package.EntryFile && not isHoisted then
                     this.FileModuleName(package, fileName)
             ]
 

@@ -48,6 +48,16 @@ let private dropShadowedReExports (types: GlueType list) =
         )
         |> set
 
+    // A re-export whose declaration did not resolve has no key, the name is the only match
+    let localNames =
+        types
+        |> List.choose (fun glueType ->
+            match glueType with
+            | GlueType.ReExport _ -> None
+            | _ -> declarationKey glueType |> Option.map snd
+        )
+        |> set
+
     (types, (Map.empty, []))
     ||> List.foldBack (fun glueType (seen, acc) ->
         match glueType with
@@ -65,10 +75,69 @@ let private dropShadowedReExports (types: GlueType list) =
                         seen, glueType :: acc
                     | Some _ -> seen, acc
                     | None -> Map.add key reExport.ModulePath seen, glueType :: acc
-            | None -> seen, glueType :: acc
+            | None ->
+                if localNames.Contains reExport.Name then
+                    seen, acc
+                else
+                    seen, glueType :: acc
         | _ -> seen, glueType :: acc
     )
     |> snd
+
+/// `animejs/easings/spring` and `animejs/easings/steps` share the `Easings` module: a name of
+/// several segments is nested, and F# declares each module once
+let rec private nestByName (fileModules: GlueFileModule list) : GlueType list =
+    fileModules
+    |> List.groupBy (fun fileModule -> fileModule.Name.Split('.').[0])
+    |> List.map (fun (head, group) ->
+        // Several files can share a subpath, the module holds the declarations of all of them
+        let ownModules = group |> List.filter (fun fileModule -> fileModule.Name = head)
+
+        let ownModule =
+            match ownModules with
+            | [] -> None
+            | first :: rest ->
+                Some
+                    { first with
+                        // One of them can re-export what another declares
+                        Types =
+                            first.Types @ (rest |> List.collect _.Types) |> dropShadowedReExports
+                        SymbolSpecifiers =
+                            (first.SymbolSpecifiers, rest)
+                            ||> List.fold (fun acc other ->
+                                (acc, other.SymbolSpecifiers)
+                                ||> Map.fold (fun acc name specifier -> acc.Add(name, specifier))
+                            )
+                    }
+
+        let nested =
+            group
+            |> List.filter (fun fileModule -> fileModule.Name <> head)
+            |> List.map (fun fileModule ->
+                { fileModule with
+                    Name = fileModule.Name.Substring(head.Length + 1)
+                }
+            )
+            |> nestByName
+
+        match ownModule, nested with
+        | Some fileModule, [] -> GlueType.FileModule fileModule
+        | Some fileModule, nested ->
+            GlueType.FileModule
+                { fileModule with
+                    Types = fileModule.Types @ nested
+                }
+        | None, nested ->
+            GlueType.FileModule
+                {
+                    Name = head
+                    ImportSpecifier = ""
+                    SymbolSpecifiers = Map.empty
+                    IsGlobal = false
+                    HasRuntime = false
+                    Types = nested
+                }
+    )
 
 /// The declarations of the `global { }` blocks, taken out of their modules
 let rec private extractGlobals (types: GlueType list) : GlueType list * GlueType list =
@@ -129,10 +198,22 @@ let readPackages
             | None -> false
         )
         |> List.sortBy (fun sourceFile -> String.normalizePath sourceFile.fileName)
+        // The entry is read first, a file is only read into the package module when the names
+        // it declares are still free
+        |> List.sortBy (fun sourceFile ->
+            if String.normalizePath sourceFile.fileName = package.EntryFile then
+                0
+            else
+                1
+        )
 
     let readPackage (package: PackageInfo) =
         let globals = ResizeArray<GlueType>()
         let unexported = ResizeArray<string>()
+        // A file the root entry exports is read into the package module, its declarations keep
+        // the specifier of the subpath exporting each of them
+        let hoistedSpecifiers = ResizeArray<string * string>()
+        let hoistedTypes = ResizeArray<GlueType>()
 
         let rec withoutValues (types: GlueType list) =
             types
@@ -227,7 +308,35 @@ let readPackages
                     else
                         fileModule ambientModules
                 else
-                    fileModule (withoutUnexported fileName types)
+                    let types = withoutUnexported fileName types
+
+                    // A declaration the root entry exports goes to the package module, the file
+                    // keeps a module for the ones whose name is taken elsewhere
+                    let hoisted, kept =
+                        types
+                        |> List.partition (fun glueType ->
+                            // `export default class Element` is hoisted under the name of the class
+                            let declaration =
+                                match glueType with
+                                | GlueType.ExportDefault inner -> inner
+                                | _ -> glueType
+
+                            match declarationKey declaration with
+                            | Some(_, name) -> packageContext.IsHoisted(package, fileName, name)
+                            | None -> false
+                        )
+
+                    if not hoisted.IsEmpty then
+                        hoistedSpecifiers.AddRange(
+                            packageContext.SymbolSpecifiers fileName |> Map.toSeq
+                        )
+
+                        hoistedTypes.AddRange hoisted
+
+                    if kept.IsEmpty then
+                        None
+                    else
+                        fileModule kept
             )
             |> List.partition (
                 function
@@ -250,14 +359,18 @@ let readPackages
                 | Choice1Of2(types, _) -> types
                 | Choice2Of2 _ -> []
             )
+            |> fun types -> types @ List.ofSeq hoistedTypes
+            // The entry re-exports what a file it is read with declares
+            |> dropShadowedReExports
 
         let fileModules =
             fileModules
             |> List.choose (
                 function
-                | Choice2Of2 fileModule -> Some fileModule
-                | Choice1Of2 _ -> None
+                | Choice2Of2(GlueType.FileModule fileModule) -> Some fileModule
+                | _ -> None
             )
+            |> nestByName
 
         let globalsModule =
             if globals.Count = 0 then
@@ -281,18 +394,18 @@ let readPackages
             reader.Warnings.Add
                 $"%s{package.RuntimeName}: %i{unexported.Count} declarations are not exported by any entry, they are generated as types only"
 
-        entryTypes @ globalsModule @ fileModules, entryIsGlobal
+        entryTypes @ globalsModule @ fileModules, entryIsGlobal, Map.ofSeq hoistedSpecifiers
 
     let glueAst =
         packageContext.Packages
         |> List.collect (fun package ->
-            let types, isGlobal = readPackage package
+            let types, isGlobal, hoistedSpecifiers = readPackage package
 
             [
                 ({
                     Name = package.ModuleName
                     ImportSpecifier = package.RuntimeName
-                    SymbolSpecifiers = Map.empty
+                    SymbolSpecifiers = hoistedSpecifiers
                     IsGlobal = isGlobal
                     HasRuntime = package.HasRuntime
                     Types = types
