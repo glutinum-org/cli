@@ -122,7 +122,8 @@ type PackageContext =
     member this.FileModuleName(package: PackageInfo, fileName: string) =
         let fileName = String.normalizePath fileName
 
-        // `animejs/svg` is `Animejs.Svg`, the file declaring it is an implementation detail
+        // `animejs/svg` is `Animejs.svg`, spelled as the import specifier is, the file declaring
+        // it is an implementation detail
         let fromSubpath =
             match this.SubpathOf(package, fileName) with
             | Some subpath when subpath <> "" ->
@@ -134,7 +135,6 @@ type PackageContext =
                     )
                     |> String.concat "_"
                     |> Naming.sanitizeTypeName
-                    |> fun name -> string (System.Char.ToUpper name.[0]) + name.Substring 1
                 )
                 |> String.concat "."
                 |> Some

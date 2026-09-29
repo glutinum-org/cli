@@ -38,7 +38,7 @@ module ExportsMap =
             type mode =
                 float
 
-    module Utils =
+    module utils =
 
         [<AbstractClass>]
         [<Erase>]

@@ -1,0 +1,11 @@
+{
+    "name": "subpath-casing",
+    "version": "1.0.0",
+    "main": "index.js",
+    "types": "index.d.ts",
+    "exports": {
+        ".": { "types": "./index.d.ts" },
+        "./Fs": { "types": "./Fs/index.d.ts" },
+        "./addDays": { "types": "./addDays.d.ts" }
+    }
+}

@@ -17,7 +17,7 @@ module SubpathEntries =
     type Scope =
         abstract member revert: unit -> unit
 
-    module Auto =
+    module auto =
 
         [<AbstractClass>]
         [<Erase>]
