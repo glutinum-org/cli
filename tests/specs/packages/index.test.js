@@ -23,6 +23,7 @@ const fixtures = [
     "subpathEntries",
     "exportsMap",
     "exportsMapEntry",
+    "factory",
     "subpathCasing",
     "unresolvedImport",
     "namespaceImport",

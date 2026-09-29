@@ -222,7 +222,9 @@ let readPackages
                 | GlueType.ClassDeclaration info ->
                     Some(GlueType.ClassDeclaration { info with IsExported = false })
                 | GlueType.FunctionDeclaration _
-                | GlueType.Variable _ -> None
+                | GlueType.Variable _
+                | GlueType.ExportDefault(GlueType.FunctionDeclaration _)
+                | GlueType.ExportDefault(GlueType.Variable _) -> None
                 | GlueType.ModuleDeclaration info ->
                     Some(
                         GlueType.ModuleDeclaration
@@ -248,6 +250,8 @@ let readPackages
                     Some(GlueType.ClassDeclaration { info with IsExported = false })
                 | GlueType.FunctionDeclaration info when isUnexported info.Name -> None
                 | GlueType.Variable info when isUnexported info.Name -> None
+                | GlueType.ExportDefault(GlueType.FunctionDeclaration _)
+                | GlueType.ExportDefault(GlueType.Variable _) when isUnexported "default" -> None
                 | GlueType.ModuleDeclaration info when
                     not info.IsGlobal
                     && not (info.Name.StartsWith "\"" || info.Name.StartsWith "'")

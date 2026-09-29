@@ -85,6 +85,7 @@ let private toPackageInfo (description: PackageDescription) : Reader.Types.Packa
         ReExportedSymbols = Map.empty
         ReExportedFiles = Map.empty
         ReExportedNames = Map.empty
+        DefaultExportNames = Map.empty
         HasExportsMap = false
         HoistableDeclarations = Set.empty
     }
@@ -118,23 +119,39 @@ let private reExportedNames
                      )
          ))
 
+let private resolveAlias (checker: Ts.TypeChecker) (symbol: Ts.Symbol) =
+    match symbol.flags with
+    | HasSymbolFlags Ts.SymbolFlags.Alias -> checker.getAliasedSymbol symbol
+    | _ -> symbol
+
+/// The declaration `export default` of the file points to
+let private defaultExportOf (program: Ts.Program) (checker: Ts.TypeChecker) (fileName: string) =
+    program.getSourceFile fileName
+    |> Option.bind (fun sourceFile -> checker.getSymbolAtLocation (unbox<Ts.Node> sourceFile))
+    |> Option.bind (fun moduleSymbol ->
+        checker.getExportsOfModule moduleSymbol
+        |> Seq.tryFind (fun exported -> exported.name = "default")
+    )
+    |> Option.map (resolveAlias checker)
+
 /// The declarations a public entry of the package exports, keyed by the declaring file and the
-/// exported name, with the subpath to import each from
+/// exported name, with the subpath to import each from, and the name each entry exports the
+/// default export of a file under
 let private reExportedSymbols
     (program: Ts.Program)
     (checker: Ts.TypeChecker)
     (hasExportsMap: bool)
     (package: Reader.Types.PackageInfo)
-    : Map<string * string, string>
+    : Map<string * string, string> * Map<string, string>
     =
     if not hasExportsMap then
-        Map.empty
+        Map.empty, Map.empty
     else
 
         let entries = (package.EntryFile, "") :: package.SubpathEntries
         let entryFiles = entries |> List.map fst |> set
 
-        (Map.empty, entries)
+        ((Map.empty, Map.empty), entries)
         ||> List.fold (fun acc (entryFile, subpath) ->
             match program.getSourceFile entryFile with
             | None -> acc
@@ -148,36 +165,53 @@ let private reExportedSymbols
                         let exportName = exportedSymbol.name
 
                         // `export { x } from "./x.js"` exports an alias, the declaration is behind it
-                        let exportedSymbol =
-                            match exportedSymbol.flags with
-                            | HasSymbolFlags Ts.SymbolFlags.Alias ->
-                                checker.getAliasedSymbol exportedSymbol
-                            | _ -> exportedSymbol
+                        let exportedSymbol = resolveAlias checker exportedSymbol
 
                         match exportedSymbol.declarations with
                         | None -> acc
                         | Some declarations ->
                             (acc, declarations)
-                            ||> Seq.fold (fun acc declaration ->
+                            ||> Seq.fold (fun (symbols, defaults) declaration ->
                                 let declaringFile =
                                     (unbox<Ts.Node> declaration).getSourceFile().fileName
+                                    |> String.normalizePath
 
-                                let key = String.normalizePath declaringFile, exportName
+                                let key = declaringFile, exportName
 
                                 if
-                                    (fst key).StartsWith package.Dir
-                                    && not (entryFiles.Contains(fst key))
-                                    && not (acc.ContainsKey key)
+                                    declaringFile.StartsWith package.Dir
+                                    && not (entryFiles.Contains declaringFile)
+                                    && not (symbols.ContainsKey key)
                                 then
-                                    acc.Add(key, subpath)
+                                    let isDefault =
+                                        not (defaults.ContainsKey declaringFile)
+                                        && (
+                                            match
+                                                defaultExportOf program checker declaringFile
+                                            with
+                                            | Some target ->
+                                                obj.ReferenceEquals(target, exportedSymbol)
+                                            | None -> false
+                                        )
+
+                                    symbols.Add(key, subpath),
+                                    (if isDefault then
+                                         defaults.Add(declaringFile, exportName)
+                                     else
+                                         defaults)
                                 else
-                                    acc
+                                    symbols, defaults
                             )
                     )
         )
 
 /// The names a file declares itself, the ones it re-exports belong to another file
-let private declaredNames (program: Ts.Program) (checker: Ts.TypeChecker) (fileName: string) =
+let private declaredNames
+    (program: Ts.Program)
+    (checker: Ts.TypeChecker)
+    (defaultExportNames: Map<string, string>)
+    (fileName: string)
+    =
     match program.getSourceFile fileName with
     | None -> Set.empty
     | Some sourceFile ->
@@ -194,12 +228,13 @@ let private declaredNames (program: Ts.Program) (checker: Ts.TypeChecker) (fileN
                 | HasSymbolFlags Ts.SymbolFlags.NamespaceModule -> false
                 | _ -> true
             )
+            // `export { alpha } from "./shared.js"` and `export default _default` are aliases,
+            // the declaration behind each tells the file
             |> Seq.filter (fun exportedSymbol ->
-                match exportedSymbol.declarations with
+                match (resolveAlias checker exportedSymbol).declarations with
                 | Some declarations ->
                     declarations
                     |> Seq.exists (fun declaration ->
-                        // `export { alpha } from "./shared.js"` is a specifier, not a declaration
                         declaration.kind <> Ts.SyntaxKind.ExportSpecifier
                         && declaration.kind <> Ts.SyntaxKind.ExportAssignment
                         && String.normalizePath (
@@ -213,15 +248,18 @@ let private declaredNames (program: Ts.Program) (checker: Ts.TypeChecker) (fileN
             // `export default class Element` is exported as `default`, the class carries the name
             |> Seq.map (fun exportedSymbol ->
                 if exportedSymbol.name = "default" then
-                    exportedSymbol.declarations
-                    |> Option.bind (
-                        Seq.tryPick (fun declaration ->
-                            match declaration?name with
-                            | null -> None
-                            | name -> Some(name?getText (): string)
+                    match defaultExportNames.TryFind normalized with
+                    | Some name -> name
+                    | None ->
+                        exportedSymbol.declarations
+                        |> Option.bind (
+                            Seq.tryPick (fun declaration ->
+                                match declaration?name with
+                                | null -> None
+                                | name -> Some(name?getText (): string)
+                            )
                         )
-                    )
-                    |> Option.defaultValue exportedSymbol.name
+                        |> Option.defaultValue exportedSymbol.name
                 else
                     exportedSymbol.name
             )
@@ -234,8 +272,10 @@ let private hoistableDeclarations
     (checker: Ts.TypeChecker)
     (package: Reader.Types.PackageInfo)
     (reExportedFiles: Map<string, string>)
+    (defaultExportNames: Map<string, string>)
     =
-    let entryNames = declaredNames program checker package.EntryFile
+    let declaredNames = declaredNames program checker defaultExportNames
+    let entryNames = declaredNames package.EntryFile
 
     let isEntry (file: string) =
         file = package.EntryFile
@@ -264,7 +304,7 @@ let private hoistableDeclarations
 
     ((entryNames, Set.empty), candidates)
     ||> List.fold (fun (taken, hoistable) file ->
-        let free = Set.difference (declaredNames program checker file) taken
+        let free = Set.difference (declaredNames file) taken
 
         Set.union taken free, Set.union hoistable (free |> Set.map (fun name -> file, name))
     )
@@ -503,7 +543,9 @@ let generateWith (options: GenerateOptions) (host: Host) (inputs: string list) :
 
     let withReExportedFiles (package: Reader.Types.PackageInfo) =
         let hasExportsMap = exportsMapPackages.Contains package.Dir
-        let symbols = reExportedSymbols program checker hasExportsMap package
+
+        let symbols, defaultExportNames =
+            reExportedSymbols program checker hasExportsMap package
 
         let reExportedFiles =
             symbols
@@ -521,11 +563,12 @@ let generateWith (options: GenerateOptions) (host: Host) (inputs: string list) :
             HasExportsMap = hasExportsMap
             HoistableDeclarations =
                 if hasExportsMap then
-                    hoistableDeclarations program checker package reExportedFiles
+                    hoistableDeclarations program checker package reExportedFiles defaultExportNames
                 else
                     Set.empty
             ReExportedSymbols = symbols
             ReExportedNames = reExportedNames program checker hasExportsMap package
+            DefaultExportNames = defaultExportNames
             ReExportedFiles =
                 symbols
                 |> Map.toList

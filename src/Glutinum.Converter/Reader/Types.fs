@@ -28,6 +28,8 @@ type PackageInfo =
         ReExportedFiles: Map<string, string>
         /// A name a public entry exports, with the subpath to import it from
         ReExportedNames: Map<string, string>
+        /// The name a public entry exports the default export of a file under, keyed by the file
+        DefaultExportNames: Map<string, string>
         /// The `exports` map makes every file it does not list unreachable
         HasExportsMap: bool
         /// A declaration the root entry exports under a name nothing else declares, keyed by the
@@ -264,8 +266,18 @@ type PackageContext =
 
             fileName = package.EntryFile
             || package.SubpathEntries |> List.exists (fun (file, _) -> file = fileName)
-            || package.ReExportedSymbols.ContainsKey(fileName, name)
-            || package.ReExportedNames.ContainsKey name
+            || (if name = "default" then
+                    package.DefaultExportNames.ContainsKey fileName
+                else
+                    package.ReExportedSymbols.ContainsKey(fileName, name)
+                    || package.ReExportedNames.ContainsKey name)
+
+    /// The name a public entry exports the default export of the file under
+    member this.DefaultExportName(fileName: string) : string option =
+        this.TryFindPackage fileName
+        |> Option.bind (fun package ->
+            package.DefaultExportNames.TryFind(String.normalizePath fileName)
+        )
 
     /// The declarations of the file a public entry re-exports, with the specifier to import each
     /// of them from
