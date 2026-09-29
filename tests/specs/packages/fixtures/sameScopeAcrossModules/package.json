@@ -1,0 +1,10 @@
+{
+    "name": "same-scope-across-modules",
+    "version": "1.0.0",
+    "main": "index.js",
+    "types": "index.d.ts",
+    "exports": {
+        ".": { "types": "./index.d.ts" },
+        "./utils": { "types": "./utils/index.d.ts" }
+    }
+}

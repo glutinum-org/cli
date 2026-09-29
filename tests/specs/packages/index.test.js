@@ -24,6 +24,7 @@ const fixtures = [
     "exportsMap",
     "exportsMapEntry",
     "factory",
+    "sameScopeAcrossModules",
     "subpathCasing",
     "unresolvedImport",
     "namespaceImport",

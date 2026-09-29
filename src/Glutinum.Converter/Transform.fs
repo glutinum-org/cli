@@ -86,8 +86,8 @@ let private typeName (typ: FSharpType) : string option =
     | FSharpType.TypeAlias info -> Some info.Name
     | _ -> None
 
-/// The names of the anonymous types of a scope (`Exports.exec.callback`): a type identical to
-/// an already exposed one takes its name instead of the next count suffix
+/// The names of the anonymous types of a scope (`Exports.exec.callback`) of an F# module: a
+/// type identical to an already exposed one takes its name instead of the next count suffix
 type TypeLiteralsMemory() =
     // The same scope name is used by the members of several modules, a type is only
     // the duplicate of one exposed to the same module of the same transform
@@ -97,14 +97,25 @@ type TypeLiteralsMemory() =
     let assigned = Dictionary<string, string * int>()
     let pending = Dictionary<string, string>()
     let byDeclaration = Dictionary<string, obj * string>()
+    let modulePath = ResizeArray<string>()
+
+    // A name is qualified inside its F# module, modules merged later share the count
+    let moduleKey () = String.concat "." modulePath
+
+    member _.EnterModule(name: string) = modulePath.Add name
+
+    member _.LeaveModule() =
+        modulePath.RemoveAt(modulePath.Count - 1)
 
     member _.GetTypeName(fullName: string, currentScopeName: string) =
+        let key = $"{moduleKey ()}|{fullName}"
+
         let types =
-            match exposed.TryGetValue fullName with
+            match exposed.TryGetValue key with
             | true, types -> types
             | false, _ ->
                 let types = ResizeArray()
-                exposed.[fullName] <- types
+                exposed.[key] <- types
                 types
 
         let index = types.Count
@@ -116,8 +127,8 @@ type TypeLiteralsMemory() =
             else
                 withCountSuffix currentScopeName index
 
-        assigned.[$"{fullName}/{name}"] <- (fullName, index)
-        pending.[name] <- fullName
+        assigned.[$"{key}/{name}"] <- (fullName, index)
+        pending.[$"{moduleKey ()}|{name}"] <- key
         name
 
     /// `true` when an identical type is already exposed to the module, the references use its name
@@ -125,11 +136,13 @@ type TypeLiteralsMemory() =
         match typeName typ with
         | None -> false
         | Some name ->
-            match pending.TryGetValue name with
+            let pendingKey = $"{moduleKey ()}|{name}"
+
+            match pending.TryGetValue pendingKey with
             | false, _ -> false
-            | true, fullName ->
-                pending.Remove name |> ignore
-                let types = exposed.[fullName]
+            | true, key ->
+                pending.Remove pendingKey |> ignore
+                let types = exposed.[key]
                 let signature = withoutName typ
                 let last = types.Count - 1
 
@@ -147,7 +160,8 @@ type TypeLiteralsMemory() =
                 match existing with
                 | Some index when index < last ->
                     types.RemoveAt last
-                    assigned.[$"{fullName}/{name}"] <- (fullName, index)
+                    let fullName, _ = assigned.[$"{key}/{name}"]
+                    assigned.[$"{key}/{name}"] <- (fullName, index)
                     true
                 | _ ->
                     types.[last] <- Some(signature, root, modulePath)
@@ -164,7 +178,7 @@ type TypeLiteralsMemory() =
 
     /// The qualified name to reference the type named `name` by `GetTypeName` in `fullName`
     member _.ReferenceName(fullName: string, name: string) =
-        match assigned.TryGetValue $"{fullName}/{name}" with
+        match assigned.TryGetValue $"{moduleKey ()}|{fullName}/{name}" with
         | true, (fullName, 0) -> fullName
         | true, (fullName, index) -> withCountSuffix fullName index
         | false, _ -> fullName
@@ -7834,21 +7848,29 @@ let private transformModuleDeclaration
             else
                 ""
 
+        let name =
+            Naming.sanitizeTypeName (
+                Naming.removeSurroundingQuotes moduleDeclaration.Name + moduleSuffix
+            )
+
+        typeLiteralsMemory.EnterModule name
+
+        let types =
+            transform
+                typeMemory
+                reporter
+                typeLiteralsMemory
+                importSource
+                false
+                moduleDeclaration.Types
+
+        typeLiteralsMemory.LeaveModule()
+
         ({
-            Name =
-                Naming.sanitizeTypeName (
-                    Naming.removeSurroundingQuotes moduleDeclaration.Name + moduleSuffix
-                )
+            Name = name
             IsRecursive = moduleDeclaration.IsRecursive
             ImportSpecifier = None
-            Types =
-                transform
-                    typeMemory
-                    reporter
-                    typeLiteralsMemory
-                    importSource
-                    false
-                    moduleDeclaration.Types
+            Types = types
         }
         : FSharpModule)
         |> FSharpType.Module
@@ -8282,6 +8304,9 @@ let private transformToFsharp
                 moduleInfo
 
         | GlueType.FileModule fileModule ->
+            let name = Naming.sanitizeTypeName fileModule.Name
+            context.TypeLiteralsMemory.EnterModule name
+
             let types =
                 transform
                     context.TypeMemory
@@ -8299,8 +8324,10 @@ let private transformToFsharp
                     true
                     fileModule.Types
 
+            context.TypeLiteralsMemory.LeaveModule()
+
             ({
-                Name = Naming.sanitizeTypeName fileModule.Name
+                Name = name
                 IsRecursive = false
                 ImportSpecifier = Some fileModule.ImportSpecifier
                 Types = types @ aggregatedExports types

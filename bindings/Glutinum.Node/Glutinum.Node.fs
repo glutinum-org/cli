@@ -34994,102 +34994,102 @@ AsyncLocalStorage.snapshot()""")>]
             type Exports =
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    file: string -> Node.child_process.PromiseWithChild<Exports.__promisify___3>
+                    file: string -> Node.child_process.PromiseWithChild<Exports.__promisify__>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     file: string * args: ResizeArray<string> option ->
-                        Node.child_process.PromiseWithChild<Exports.__promisify___3>
+                        Node.child_process.PromiseWithChild<Exports.__promisify__>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     file: string * options: Node.child_process.ExecFileOptionsWithBufferEncoding ->
-                        Node.child_process.PromiseWithChild<Exports.__promisify___4>
+                        Node.child_process.PromiseWithChild<Exports.__promisify___1>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     file: string *
                     args: ResizeArray<string> option *
                     options: Node.child_process.ExecFileOptionsWithBufferEncoding ->
-                        Node.child_process.PromiseWithChild<Exports.__promisify___4>
+                        Node.child_process.PromiseWithChild<Exports.__promisify___1>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     file: string * options: Node.child_process.ExecFileOptionsWithStringEncoding ->
-                        Node.child_process.PromiseWithChild<Exports.__promisify___3>
+                        Node.child_process.PromiseWithChild<Exports.__promisify__>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     file: string *
                     args: ResizeArray<string> option *
                     options: Node.child_process.ExecFileOptionsWithStringEncoding ->
-                        Node.child_process.PromiseWithChild<Exports.__promisify___3>
+                        Node.child_process.PromiseWithChild<Exports.__promisify__>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     file: string * options: Node.child_process.ExecFileOptions option ->
-                        Node.child_process.PromiseWithChild<Exports.__promisify___5>
+                        Node.child_process.PromiseWithChild<Exports.__promisify___2>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     file: string *
                     args: ResizeArray<string> option *
                     options: Node.child_process.ExecFileOptions option ->
-                        Node.child_process.PromiseWithChild<Exports.__promisify___5>
+                        Node.child_process.PromiseWithChild<Exports.__promisify___2>
 
             module Exports =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type __promisify___3 =
+                type __promisify__ =
                     abstract member stdout: string with get, set
                     abstract member stderr: string with get, set
 
                     [<ParamObject; Emit("$0")>]
-                    static member Create(stdout: string, stderr: string) : __promisify___3 =
+                    static member Create(stdout: string, stderr: string) : __promisify__ =
                         nativeOnly
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type __promisify___4 =
+                type __promisify___1 =
                     abstract member stdout: Node.NonSharedBuffer with get, set
                     abstract member stderr: Node.NonSharedBuffer with get, set
 
                     [<ParamObject; Emit("$0")>]
                     static member Create
                         (stdout: Node.NonSharedBuffer, stderr: Node.NonSharedBuffer)
-                        : __promisify___4
+                        : __promisify___1
                         =
                         nativeOnly
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type __promisify___5 =
+                type __promisify___2 =
                     abstract member stdout: U2<string, Node.NonSharedBuffer> with get, set
                     abstract member stderr: U2<string, Node.NonSharedBuffer> with get, set
 
                     [<ParamObject; Emit("$0")>]
-                    static member Create(stdout: string, stderr: string) : __promisify___5 =
+                    static member Create(stdout: string, stderr: string) : __promisify___2 =
                         nativeOnly
 
                     [<ParamObject; Emit("$0")>]
                     static member Create
                         (stdout: string, stderr: Node.NonSharedBuffer)
-                        : __promisify___5
+                        : __promisify___2
                         =
                         nativeOnly
 
                     [<ParamObject; Emit("$0")>]
                     static member Create
                         (stdout: Node.NonSharedBuffer, stderr: string)
-                        : __promisify___5
+                        : __promisify___2
                         =
                         nativeOnly
 
                     [<ParamObject; Emit("$0")>]
                     static member Create
                         (stdout: Node.NonSharedBuffer, stderr: Node.NonSharedBuffer)
-                        : __promisify___5
+                        : __promisify___2
                         =
                         nativeOnly
 
@@ -53351,7 +53351,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     ``type``: string * options: Node.crypto.RSAKeyPairOptions<string, string> ->
-                        JS.Promise<Exports.__promisify___6>
+                        JS.Promise<Exports.__promisify__>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
@@ -53361,7 +53361,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     ``type``: string * options: Node.crypto.RSAPSSKeyPairOptions<string, string> ->
-                        JS.Promise<Exports.__promisify___6>
+                        JS.Promise<Exports.__promisify__>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
@@ -53371,7 +53371,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     ``type``: string * options: Node.crypto.DSAKeyPairOptions<string, string> ->
-                        JS.Promise<Exports.__promisify___6>
+                        JS.Promise<Exports.__promisify__>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
@@ -53381,7 +53381,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     ``type``: string * options: Node.crypto.ECKeyPairOptions<string, string> ->
-                        JS.Promise<Exports.__promisify___6>
+                        JS.Promise<Exports.__promisify__>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
@@ -53391,7 +53391,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     ``type``: string * options: Node.crypto.ED25519KeyPairOptions<string, string> ->
-                        JS.Promise<Exports.__promisify___6>
+                        JS.Promise<Exports.__promisify__>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
@@ -53401,7 +53401,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     ``type``: string * options: Node.crypto.ED448KeyPairOptions<string, string> ->
-                        JS.Promise<Exports.__promisify___6>
+                        JS.Promise<Exports.__promisify__>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
@@ -53411,7 +53411,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     ``type``: string * options: Node.crypto.X25519KeyPairOptions<string, string> ->
-                        JS.Promise<Exports.__promisify___6>
+                        JS.Promise<Exports.__promisify__>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
@@ -53421,7 +53421,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     ``type``: string * options: Node.crypto.X448KeyPairOptions<string, string> ->
-                        JS.Promise<Exports.__promisify___6>
+                        JS.Promise<Exports.__promisify__>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
@@ -53432,50 +53432,50 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type __promisify___6 =
+                type __promisify__ =
                     abstract member publicKey: string with get, set
                     abstract member privateKey: string with get, set
 
                     [<ParamObject; Emit("$0")>]
-                    static member Create(publicKey: string, privateKey: string) : __promisify___6 =
+                    static member Create(publicKey: string, privateKey: string) : __promisify__ =
                         nativeOnly
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type __promisify___7 =
+                type __promisify___1 =
                     abstract member publicKey: string with get, set
                     abstract member privateKey: Node.NonSharedBuffer with get, set
 
                     [<ParamObject; Emit("$0")>]
                     static member Create
                         (publicKey: string, privateKey: Node.NonSharedBuffer)
-                        : __promisify___7
+                        : __promisify___1
                         =
                         nativeOnly
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type __promisify___8 =
+                type __promisify___2 =
                     abstract member publicKey: Node.NonSharedBuffer with get, set
                     abstract member privateKey: string with get, set
 
                     [<ParamObject; Emit("$0")>]
                     static member Create
                         (publicKey: Node.NonSharedBuffer, privateKey: string)
-                        : __promisify___8
+                        : __promisify___2
                         =
                         nativeOnly
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type __promisify___9 =
+                type __promisify___3 =
                     abstract member publicKey: Node.NonSharedBuffer with get, set
                     abstract member privateKey: Node.NonSharedBuffer with get, set
 
                     [<ParamObject; Emit("$0")>]
                     static member Create
                         (publicKey: Node.NonSharedBuffer, privateKey: Node.NonSharedBuffer)
-                        : __promisify___9
+                        : __promisify___3
                         =
                         nativeOnly
 
@@ -63258,7 +63258,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
             static member resolve
                 (
                     hostname: string,
-                    rrtype: Exports.resolve__.rrtype_1,
+                    rrtype: Exports.resolve__.rrtype,
                     callback: Exports.resolve__.callback
                 )
                 : unit
@@ -63632,7 +63632,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
             /// * <c>verbatim</c>: for <c>order</c> defaulting to <c>verbatim</c>.
             /// </summary>
             [<Import("getDefaultResultOrder", "dns")>]
-            static member getDefaultResultOrder() : Exports.getDefaultResultOrder___1 = nativeOnly
+            static member getDefaultResultOrder() : Exports.getDefaultResultOrder__ = nativeOnly
 
             /// <summary>
             /// Sets the IP address and port of servers to be used when performing DNS
@@ -63701,7 +63701,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
             /// </param>
             [<Import("setDefaultResultOrder", "dns")>]
             static member setDefaultResultOrder
-                (order: Exports.setDefaultResultOrder__.order_1)
+                (order: Exports.setDefaultResultOrder__.order)
                 : unit
                 =
                 nativeOnly
@@ -64191,18 +64191,18 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
             type Exports =
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    address: string * port: float -> JS.Promise<Exports.__promisify___10>
+                    address: string * port: float -> JS.Promise<Exports.__promisify__>
 
             module Exports =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type __promisify___10 =
+                type __promisify__ =
                     abstract member hostname: string with get, set
                     abstract member service: string with get, set
 
                     [<ParamObject; Emit("$0")>]
-                    static member Create(hostname: string, service: string) : __promisify___10 =
+                    static member Create(hostname: string, service: string) : __promisify__ =
                         nativeOnly
 
         [<AllowNullLiteral>]
@@ -65536,7 +65536,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
 
             [<RequireQualifiedAccess>]
             [<StringEnum(CaseRules.None)>]
-            type getDefaultResultOrder___1 =
+            type getDefaultResultOrder__ =
                 | ipv4first
                 | ipv6first
                 | verbatim
@@ -65577,7 +65577,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
 
                 [<RequireQualifiedAccess>]
                 [<StringEnum(CaseRules.None)>]
-                type rrtype_1 =
+                type rrtype =
                     | A
                     | AAAA
                     | CNAME
@@ -65780,7 +65780,7 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
 
                 [<RequireQualifiedAccess>]
                 [<StringEnum(CaseRules.None)>]
-                type order_1 =
+                type order =
                     | ipv4first
                     | ipv6first
                     | verbatim
@@ -72890,11 +72890,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             /// </summary>
             [<Import("mkdir", "fs")>]
             static member mkdir
-                (
-                    path: string,
-                    options: Exports.mkdir__.options_2,
-                    callback: Exports.mkdir__.callback
-                )
+                (path: string, options: Exports.mkdir__.options, callback: Exports.mkdir__.callback)
                 : unit
                 =
                 nativeOnly
@@ -72938,7 +72934,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member mkdir
                 (
                     path: Node.Buffer,
-                    options: Exports.mkdir__.options_2,
+                    options: Exports.mkdir__.options,
                     callback: Exports.mkdir__.callback
                 )
                 : unit
@@ -72984,7 +72980,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member mkdir
                 (
                     path: Node.url.URL,
-                    options: Exports.mkdir__.options_2,
+                    options: Exports.mkdir__.options,
                     callback: Exports.mkdir__.callback
                 )
                 : unit
@@ -73030,7 +73026,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member mkdir
                 (
                     path: Node.fs.PathLike,
-                    options: Exports.mkdir__.options_2,
+                    options: Exports.mkdir__.options,
                     callback: Exports.mkdir__.callback
                 )
                 : unit
@@ -73085,7 +73081,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member mkdir
                 (
                     path: string,
-                    options: Exports.mkdir__.options_3 option,
+                    options: Exports.mkdir__.options_1 option,
                     callback: Node.fs.NoParamCallback
                 )
                 : unit
@@ -73140,7 +73136,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member mkdir
                 (
                     path: Node.Buffer,
-                    options: Exports.mkdir__.options_3 option,
+                    options: Exports.mkdir__.options_1 option,
                     callback: Node.fs.NoParamCallback
                 )
                 : unit
@@ -73195,7 +73191,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member mkdir
                 (
                     path: Node.url.URL,
-                    options: Exports.mkdir__.options_3 option,
+                    options: Exports.mkdir__.options_1 option,
                     callback: Node.fs.NoParamCallback
                 )
                 : unit
@@ -74074,7 +74070,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member readdir
                 (
                     path: string,
-                    options: Exports.readdir__.options_4 option,
+                    options: Exports.readdir__.options option,
                     callback: Exports.readdir__.callback
                 )
                 : unit
@@ -74120,7 +74116,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member readdir
                 (
                     path: Node.Buffer,
-                    options: Exports.readdir__.options_4 option,
+                    options: Exports.readdir__.options option,
                     callback: Exports.readdir__.callback
                 )
                 : unit
@@ -74166,7 +74162,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member readdir
                 (
                     path: Node.url.URL,
-                    options: Exports.readdir__.options_4 option,
+                    options: Exports.readdir__.options option,
                     callback: Exports.readdir__.callback
                 )
                 : unit
@@ -74212,7 +74208,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member readdir
                 (
                     path: Node.fs.PathLike,
-                    options: U2<Exports.readdir__.options_4, Node.BufferEncoding> option,
+                    options: U2<Exports.readdir__.options, Node.BufferEncoding> option,
                     callback: Exports.readdir__.callback
                 )
                 : unit
@@ -74232,7 +74228,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member readdir
                 (
                     path: string,
-                    options: Exports.readdir__.options_5,
+                    options: Exports.readdir__.options_1,
                     callback: Exports.readdir__.callback_1
                 )
                 : unit
@@ -74252,7 +74248,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member readdir
                 (
                     path: Node.Buffer,
-                    options: Exports.readdir__.options_5,
+                    options: Exports.readdir__.options_1,
                     callback: Exports.readdir__.callback_1
                 )
                 : unit
@@ -74272,7 +74268,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member readdir
                 (
                     path: Node.url.URL,
-                    options: Exports.readdir__.options_5,
+                    options: Exports.readdir__.options_1,
                     callback: Exports.readdir__.callback_1
                 )
                 : unit
@@ -74292,7 +74288,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member readdir
                 (
                     path: Node.fs.PathLike,
-                    options: Exports.readdir__.options_5,
+                    options: Exports.readdir__.options_1,
                     callback: Exports.readdir__.callback_1
                 )
                 : unit
@@ -74312,7 +74308,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member readdir
                 (
                     path: string,
-                    options: Exports.readdir__.options_6 option,
+                    options: Exports.readdir__.options_2 option,
                     callback: Exports.readdir__.callback_2
                 )
                 : unit
@@ -74352,7 +74348,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member readdir
                 (
                     path: Node.Buffer,
-                    options: Exports.readdir__.options_6 option,
+                    options: Exports.readdir__.options_2 option,
                     callback: Exports.readdir__.callback_2
                 )
                 : unit
@@ -74392,7 +74388,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member readdir
                 (
                     path: Node.url.URL,
-                    options: Exports.readdir__.options_6 option,
+                    options: Exports.readdir__.options_2 option,
                     callback: Exports.readdir__.callback_2
                 )
                 : unit
@@ -74495,7 +74491,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member readdir
                 (
                     path: string,
-                    options: Exports.readdir__.options_7,
+                    options: Exports.readdir__.options_3,
                     callback: Exports.readdir__.callback_3
                 )
                 : unit
@@ -74515,7 +74511,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member readdir
                 (
                     path: Node.Buffer,
-                    options: Exports.readdir__.options_7,
+                    options: Exports.readdir__.options_3,
                     callback: Exports.readdir__.callback_3
                 )
                 : unit
@@ -74535,7 +74531,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member readdir
                 (
                     path: Node.url.URL,
-                    options: Exports.readdir__.options_7,
+                    options: Exports.readdir__.options_3,
                     callback: Exports.readdir__.callback_3
                 )
                 : unit
@@ -74555,7 +74551,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member readdir
                 (
                     path: Node.fs.PathLike,
-                    options: Exports.readdir__.options_7,
+                    options: Exports.readdir__.options_3,
                     callback: Exports.readdir__.callback_3
                 )
                 : unit
@@ -74575,7 +74571,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member readdir
                 (
                     path: string,
-                    options: Exports.readdir__.options_8,
+                    options: Exports.readdir__.options_4,
                     callback: Exports.readdir__.callback_4
                 )
                 : unit
@@ -74595,7 +74591,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member readdir
                 (
                     path: Node.Buffer,
-                    options: Exports.readdir__.options_8,
+                    options: Exports.readdir__.options_4,
                     callback: Exports.readdir__.callback_4
                 )
                 : unit
@@ -74615,7 +74611,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member readdir
                 (
                     path: Node.url.URL,
-                    options: Exports.readdir__.options_8,
+                    options: Exports.readdir__.options_4,
                     callback: Exports.readdir__.callback_4
                 )
                 : unit
@@ -74635,7 +74631,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member readdir
                 (
                     path: Node.fs.PathLike,
-                    options: Exports.readdir__.options_8,
+                    options: Exports.readdir__.options_4,
                     callback: Exports.readdir__.callback_4
                 )
                 : unit
@@ -76841,7 +76837,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member readFile
                 (
                     path: string,
-                    options: Exports.readFile__.options_3 option,
+                    options: Exports.readFile__.options option,
                     callback: Exports.readFile__.callback
                 )
                 : unit
@@ -76919,7 +76915,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member readFile
                 (
                     path: Node.Buffer,
-                    options: Exports.readFile__.options_3 option,
+                    options: Exports.readFile__.options option,
                     callback: Exports.readFile__.callback
                 )
                 : unit
@@ -76997,7 +76993,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member readFile
                 (
                     path: Node.url.URL,
-                    options: Exports.readFile__.options_3 option,
+                    options: Exports.readFile__.options option,
                     callback: Exports.readFile__.callback
                 )
                 : unit
@@ -77075,7 +77071,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member readFile
                 (
                     path: float,
-                    options: Exports.readFile__.options_3 option,
+                    options: Exports.readFile__.options option,
                     callback: Exports.readFile__.callback
                 )
                 : unit
@@ -77153,7 +77149,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member readFile
                 (
                     path: Node.fs.PathOrFileDescriptor,
-                    options: Exports.readFile__.options_3 option,
+                    options: Exports.readFile__.options option,
                     callback: Exports.readFile__.callback
                 )
                 : unit
@@ -77175,7 +77171,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member readFile
                 (
                     path: string,
-                    options: Exports.readFile__.options_4,
+                    options: Exports.readFile__.options_1,
                     callback: Exports.readFile__.callback_1
                 )
                 : unit
@@ -77215,7 +77211,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member readFile
                 (
                     path: Node.Buffer,
-                    options: Exports.readFile__.options_4,
+                    options: Exports.readFile__.options_1,
                     callback: Exports.readFile__.callback_1
                 )
                 : unit
@@ -77259,7 +77255,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member readFile
                 (
                     path: Node.url.URL,
-                    options: Exports.readFile__.options_4,
+                    options: Exports.readFile__.options_1,
                     callback: Exports.readFile__.callback_1
                 )
                 : unit
@@ -77303,7 +77299,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member readFile
                 (
                     path: float,
-                    options: Exports.readFile__.options_4,
+                    options: Exports.readFile__.options_1,
                     callback: Exports.readFile__.callback_1
                 )
                 : unit
@@ -77343,7 +77339,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member readFile
                 (
                     path: Node.fs.PathOrFileDescriptor,
-                    options: U2<Exports.readFile__.options.U2.Case1_1, Node.BufferEncoding>,
+                    options: U2<Exports.readFile__.options.U2.Case1, Node.BufferEncoding>,
                     callback: Exports.readFile__.callback_1
                 )
                 : unit
@@ -77365,7 +77361,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member readFile
                 (
                     path: string,
-                    options: Exports.readFile__.options_5 option,
+                    options: Exports.readFile__.options_2 option,
                     callback: Exports.readFile__.callback_2
                 )
                 : unit
@@ -77409,7 +77405,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member readFile
                 (
                     path: Node.Buffer,
-                    options: Exports.readFile__.options_5 option,
+                    options: Exports.readFile__.options_2 option,
                     callback: Exports.readFile__.callback_2
                 )
                 : unit
@@ -77453,7 +77449,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member readFile
                 (
                     path: Node.url.URL,
-                    options: Exports.readFile__.options_5 option,
+                    options: Exports.readFile__.options_2 option,
                     callback: Exports.readFile__.callback_2
                 )
                 : unit
@@ -77497,7 +77493,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member readFile
                 (
                     path: float,
-                    options: Exports.readFile__.options_5 option,
+                    options: Exports.readFile__.options_2 option,
                     callback: Exports.readFile__.callback_2
                 )
                 : unit
@@ -77541,7 +77537,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member readFile
                 (
                     path: Node.fs.PathOrFileDescriptor,
-                    options: U2<Exports.readFile__.options.U2.Case1_2, Node.BufferEncoding> option,
+                    options: U2<Exports.readFile__.options.U2.Case1_1, Node.BufferEncoding> option,
                     callback: Exports.readFile__.callback_2
                 )
                 : unit
@@ -82065,7 +82061,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member watch
                 (
                     filename: string,
-                    options: Exports.watch__.options_2,
+                    options: Exports.watch__.options,
                     listener: Node.fs.WatchListener<Node.NonSharedBuffer>
                 )
                 : Node.fs.FSWatcher
@@ -82076,7 +82072,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member watch
                 (
                     filename: Node.Buffer,
-                    options: Exports.watch__.options_2,
+                    options: Exports.watch__.options,
                     listener: Node.fs.WatchListener<Node.NonSharedBuffer>
                 )
                 : Node.fs.FSWatcher
@@ -82087,7 +82083,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member watch
                 (
                     filename: Node.url.URL,
-                    options: Exports.watch__.options_2,
+                    options: Exports.watch__.options,
                     listener: Node.fs.WatchListener<Node.NonSharedBuffer>
                 )
                 : Node.fs.FSWatcher
@@ -82098,7 +82094,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member watch
                 (
                     filename: Node.fs.PathLike,
-                    options: Exports.watch__.options_2,
+                    options: Exports.watch__.options,
                     listener: Node.fs.WatchListener<Node.NonSharedBuffer>
                 )
                 : Node.fs.FSWatcher
@@ -82109,7 +82105,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member watch
                 (
                     filename: string,
-                    options: Exports.watch__.options_3,
+                    options: Exports.watch__.options_1,
                     listener: Node.fs.WatchListener<U2<string, Node.NonSharedBuffer>>
                 )
                 : Node.fs.FSWatcher
@@ -82120,7 +82116,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member watch
                 (
                     filename: Node.Buffer,
-                    options: Exports.watch__.options_3,
+                    options: Exports.watch__.options_1,
                     listener: Node.fs.WatchListener<U2<string, Node.NonSharedBuffer>>
                 )
                 : Node.fs.FSWatcher
@@ -82131,7 +82127,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member watch
                 (
                     filename: Node.url.URL,
-                    options: Exports.watch__.options_3,
+                    options: Exports.watch__.options_1,
                     listener: Node.fs.WatchListener<U2<string, Node.NonSharedBuffer>>
                 )
                 : Node.fs.FSWatcher
@@ -82142,7 +82138,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
             static member watch
                 (
                     filename: Node.fs.PathLike,
-                    options: Exports.watch__.options_3,
+                    options: Exports.watch__.options_1,
                     listener: Node.fs.WatchListener<U2<string, Node.NonSharedBuffer>>
                 )
                 : Node.fs.FSWatcher
@@ -90023,12 +90019,11 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    fd: float * ?options: Exports.__promisify__.options_2 ->
-                        JS.Promise<Node.fs.Stats>
+                    fd: float * ?options: Exports.__promisify__.options -> JS.Promise<Node.fs.Stats>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    fd: float * options: Exports.__promisify__.options_3 ->
+                    fd: float * options: Exports.__promisify__.options_1 ->
                         JS.Promise<Node.fs.BigIntStats>
 
                 [<Emit("$0.__promisify__($1...)")>]
@@ -90042,19 +90037,19 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type options_2 =
+                    type options =
                         abstract member bigint: bool option with get, set
 
                         [<ParamObject; Emit("$0")>]
-                        static member Create(?bigint: bool) : options_2 = nativeOnly
+                        static member Create(?bigint: bool) : options = nativeOnly
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type options_3 =
+                    type options_1 =
                         abstract member bigint: bool with get, set
 
                         [<ParamObject; Emit("$0")>]
-                        static member Create(bigint: bool) : options_3 = nativeOnly
+                        static member Create(bigint: bool) : options_1 = nativeOnly
 
         module lstat_ =
 
@@ -90069,7 +90064,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: string * ?options: Exports.__promisify__.options_4 ->
+                    path: string * ?options: Exports.__promisify__.options ->
                         JS.Promise<Node.fs.Stats>
 
                 /// <summary>
@@ -90080,7 +90075,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.Buffer * ?options: Exports.__promisify__.options_4 ->
+                    path: Node.Buffer * ?options: Exports.__promisify__.options ->
                         JS.Promise<Node.fs.Stats>
 
                 /// <summary>
@@ -90091,7 +90086,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.url.URL * ?options: Exports.__promisify__.options_4 ->
+                    path: Node.url.URL * ?options: Exports.__promisify__.options ->
                         JS.Promise<Node.fs.Stats>
 
                 /// <summary>
@@ -90102,27 +90097,27 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.fs.PathLike * ?options: Exports.__promisify__.options_4 ->
+                    path: Node.fs.PathLike * ?options: Exports.__promisify__.options ->
                         JS.Promise<Node.fs.Stats>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: string * options: Exports.__promisify__.options_5 ->
+                    path: string * options: Exports.__promisify__.options_1 ->
                         JS.Promise<Node.fs.BigIntStats>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.Buffer * options: Exports.__promisify__.options_5 ->
+                    path: Node.Buffer * options: Exports.__promisify__.options_1 ->
                         JS.Promise<Node.fs.BigIntStats>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.url.URL * options: Exports.__promisify__.options_5 ->
+                    path: Node.url.URL * options: Exports.__promisify__.options_1 ->
                         JS.Promise<Node.fs.BigIntStats>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.fs.PathLike * options: Exports.__promisify__.options_5 ->
+                    path: Node.fs.PathLike * options: Exports.__promisify__.options_1 ->
                         JS.Promise<Node.fs.BigIntStats>
 
                 [<Emit("$0.__promisify__($1...)")>]
@@ -90151,19 +90146,19 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type options_4 =
+                    type options =
                         abstract member bigint: bool option with get, set
 
                         [<ParamObject; Emit("$0")>]
-                        static member Create(?bigint: bool) : options_4 = nativeOnly
+                        static member Create(?bigint: bool) : options = nativeOnly
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type options_5 =
+                    type options_1 =
                         abstract member bigint: bool with get, set
 
                         [<ParamObject; Emit("$0")>]
-                        static member Create(bigint: bool) : options_5 = nativeOnly
+                        static member Create(bigint: bool) : options_1 = nativeOnly
 
         module statfs_ =
 
@@ -90178,7 +90173,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: string * ?options: Exports.__promisify__.options_6 ->
+                    path: string * ?options: Exports.__promisify__.options ->
                         JS.Promise<Node.fs.StatsFs>
 
                 /// <summary>
@@ -90189,7 +90184,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.Buffer * ?options: Exports.__promisify__.options_6 ->
+                    path: Node.Buffer * ?options: Exports.__promisify__.options ->
                         JS.Promise<Node.fs.StatsFs>
 
                 /// <summary>
@@ -90200,7 +90195,7 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.url.URL * ?options: Exports.__promisify__.options_6 ->
+                    path: Node.url.URL * ?options: Exports.__promisify__.options ->
                         JS.Promise<Node.fs.StatsFs>
 
                 /// <summary>
@@ -90211,27 +90206,27 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.fs.PathLike * ?options: Exports.__promisify__.options_6 ->
+                    path: Node.fs.PathLike * ?options: Exports.__promisify__.options ->
                         JS.Promise<Node.fs.StatsFs>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: string * options: Exports.__promisify__.options_7 ->
+                    path: string * options: Exports.__promisify__.options_1 ->
                         JS.Promise<Node.fs.BigIntStatsFs>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.Buffer * options: Exports.__promisify__.options_7 ->
+                    path: Node.Buffer * options: Exports.__promisify__.options_1 ->
                         JS.Promise<Node.fs.BigIntStatsFs>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.url.URL * options: Exports.__promisify__.options_7 ->
+                    path: Node.url.URL * options: Exports.__promisify__.options_1 ->
                         JS.Promise<Node.fs.BigIntStatsFs>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.fs.PathLike * options: Exports.__promisify__.options_7 ->
+                    path: Node.fs.PathLike * options: Exports.__promisify__.options_1 ->
                         JS.Promise<Node.fs.BigIntStatsFs>
 
                 [<Emit("$0.__promisify__($1...)")>]
@@ -90260,19 +90255,19 @@ EventEmitter.defaultMaxListeners{{=$0}}""")>]
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type options_6 =
+                    type options =
                         abstract member bigint: bool option with get, set
 
                         [<ParamObject; Emit("$0")>]
-                        static member Create(?bigint: bool) : options_6 = nativeOnly
+                        static member Create(?bigint: bool) : options = nativeOnly
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type options_7 =
+                    type options_1 =
                         abstract member bigint: bool with get, set
 
                         [<ParamObject; Emit("$0")>]
-                        static member Create(bigint: bool) : options_7 = nativeOnly
+                        static member Create(bigint: bool) : options_1 = nativeOnly
 
         module link_ =
 
@@ -91491,7 +91486,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: string * options: Exports.__promisify__.options_8 ->
+                    path: string * options: Exports.__promisify__.options ->
                         JS.Promise<string option>
 
                 /// <summary>
@@ -91506,7 +91501,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.Buffer * options: Exports.__promisify__.options_8 ->
+                    path: Node.Buffer * options: Exports.__promisify__.options ->
                         JS.Promise<string option>
 
                 /// <summary>
@@ -91521,7 +91516,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.url.URL * options: Exports.__promisify__.options_8 ->
+                    path: Node.url.URL * options: Exports.__promisify__.options ->
                         JS.Promise<string option>
 
                 /// <summary>
@@ -91536,7 +91531,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.fs.PathLike * options: Exports.__promisify__.options_8 ->
+                    path: Node.fs.PathLike * options: Exports.__promisify__.options ->
                         JS.Promise<string option>
 
                 /// <summary>
@@ -91590,7 +91585,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: string * options: Exports.__promisify__.options_9 -> JS.Promise<unit>
+                    path: string * options: Exports.__promisify__.options_1 -> JS.Promise<unit>
 
                 /// <summary>
                 /// Asynchronous mkdir(2) - create a directory.
@@ -91645,7 +91640,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.Buffer * options: Exports.__promisify__.options_9 -> JS.Promise<unit>
+                    path: Node.Buffer * options: Exports.__promisify__.options_1 -> JS.Promise<unit>
 
                 /// <summary>
                 /// Asynchronous mkdir(2) - create a directory.
@@ -91700,7 +91695,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.url.URL * options: Exports.__promisify__.options_9 ->
+                    path: Node.url.URL * options: Exports.__promisify__.options_1 ->
                         JS.Promise<unit>
 
                 /// <summary>
@@ -91754,7 +91749,7 @@ recursive mode, operations are retried on failure.""")>]
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type options_8 =
+                    type options =
                         abstract member ``recursive``: bool with get, set
                         /// <summary>
                         /// A file mode. If a string is passed, it is parsed as an octal integer. If not specified
@@ -91762,12 +91757,12 @@ recursive mode, operations are retried on failure.""")>]
                         abstract member mode: Node.fs.Mode option with get, set
 
                         [<ParamObject; Emit("$0")>]
-                        static member Create(``recursive``: bool, ?mode: Node.fs.Mode) : options_8 =
+                        static member Create(``recursive``: bool, ?mode: Node.fs.Mode) : options =
                             nativeOnly
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type options_9 =
+                    type options_1 =
                         abstract member ``recursive``: bool option with get, set
                         /// <summary>
                         /// A file mode. If a string is passed, it is parsed as an octal integer. If not specified
@@ -91777,7 +91772,7 @@ recursive mode, operations are retried on failure.""")>]
                         [<ParamObject; Emit("$0")>]
                         static member Create
                             (?``recursive``: bool, ?mode: Node.fs.Mode)
-                            : options_9
+                            : options_1
                             =
                             nativeOnly
 
@@ -91858,7 +91853,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: string * options: Exports.__promisify__.options_10 ->
+                    path: string * options: Exports.__promisify__.options ->
                         JS.Promise<ResizeArray<string>>
 
                 /// <summary>
@@ -91897,7 +91892,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.Buffer * options: Exports.__promisify__.options_10 ->
+                    path: Node.Buffer * options: Exports.__promisify__.options ->
                         JS.Promise<ResizeArray<string>>
 
                 /// <summary>
@@ -91937,7 +91932,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.url.URL * options: Exports.__promisify__.options_10 ->
+                    path: Node.url.URL * options: Exports.__promisify__.options ->
                         JS.Promise<ResizeArray<string>>
 
                 /// <summary>
@@ -91965,7 +91960,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: string * options: Exports.__promisify__.options_11 ->
+                    path: string * options: Exports.__promisify__.options_1 ->
                         JS.Promise<ResizeArray<Node.NonSharedBuffer>>
 
                 /// <summary>
@@ -91979,7 +91974,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.Buffer * options: Exports.__promisify__.options_11 ->
+                    path: Node.Buffer * options: Exports.__promisify__.options_1 ->
                         JS.Promise<ResizeArray<Node.NonSharedBuffer>>
 
                 /// <summary>
@@ -91993,7 +91988,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.url.URL * options: Exports.__promisify__.options_11 ->
+                    path: Node.url.URL * options: Exports.__promisify__.options_1 ->
                         JS.Promise<ResizeArray<Node.NonSharedBuffer>>
 
                 /// <summary>
@@ -92007,7 +92002,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.fs.PathLike * options: Exports.__promisify__.options_11 ->
+                    path: Node.fs.PathLike * options: Exports.__promisify__.options_1 ->
                         JS.Promise<ResizeArray<Node.NonSharedBuffer>>
 
                 /// <summary>
@@ -92021,7 +92016,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: string * options: Exports.__promisify__.options_12 ->
+                    path: string * options: Exports.__promisify__.options_2 ->
                         JS.Promise<U2<ResizeArray<string>, ResizeArray<Node.NonSharedBuffer>>>
 
                 /// <summary>
@@ -92035,7 +92030,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.Buffer * options: Exports.__promisify__.options_12 ->
+                    path: Node.Buffer * options: Exports.__promisify__.options_2 ->
                         JS.Promise<U2<ResizeArray<string>, ResizeArray<Node.NonSharedBuffer>>>
 
                 /// <summary>
@@ -92049,7 +92044,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.url.URL * options: Exports.__promisify__.options_12 ->
+                    path: Node.url.URL * options: Exports.__promisify__.options_2 ->
                         JS.Promise<U2<ResizeArray<string>, ResizeArray<Node.NonSharedBuffer>>>
 
                 /// <summary>
@@ -92063,7 +92058,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: string * options: Exports.__promisify__.options_13 ->
+                    path: string * options: Exports.__promisify__.options_3 ->
                         JS.Promise<ResizeArray<Node.fs.Dirent>>
 
                 /// <summary>
@@ -92077,7 +92072,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.Buffer * options: Exports.__promisify__.options_13 ->
+                    path: Node.Buffer * options: Exports.__promisify__.options_3 ->
                         JS.Promise<ResizeArray<Node.fs.Dirent>>
 
                 /// <summary>
@@ -92091,7 +92086,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.url.URL * options: Exports.__promisify__.options_13 ->
+                    path: Node.url.URL * options: Exports.__promisify__.options_3 ->
                         JS.Promise<ResizeArray<Node.fs.Dirent>>
 
                 /// <summary>
@@ -92105,7 +92100,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.fs.PathLike * options: Exports.__promisify__.options_13 ->
+                    path: Node.fs.PathLike * options: Exports.__promisify__.options_3 ->
                         JS.Promise<ResizeArray<Node.fs.Dirent>>
 
                 /// <summary>
@@ -92119,7 +92114,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: string * options: Exports.__promisify__.options_14 ->
+                    path: string * options: Exports.__promisify__.options_4 ->
                         JS.Promise<ResizeArray<Node.fs.Dirent<Node.NonSharedBuffer>>>
 
                 /// <summary>
@@ -92133,7 +92128,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.Buffer * options: Exports.__promisify__.options_14 ->
+                    path: Node.Buffer * options: Exports.__promisify__.options_4 ->
                         JS.Promise<ResizeArray<Node.fs.Dirent<Node.NonSharedBuffer>>>
 
                 /// <summary>
@@ -92147,7 +92142,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.url.URL * options: Exports.__promisify__.options_14 ->
+                    path: Node.url.URL * options: Exports.__promisify__.options_4 ->
                         JS.Promise<ResizeArray<Node.fs.Dirent<Node.NonSharedBuffer>>>
 
                 /// <summary>
@@ -92161,7 +92156,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.fs.PathLike * options: Exports.__promisify__.options_14 ->
+                    path: Node.fs.PathLike * options: Exports.__promisify__.options_4 ->
                         JS.Promise<ResizeArray<Node.fs.Dirent<Node.NonSharedBuffer>>>
 
             module Exports =
@@ -92170,7 +92165,7 @@ recursive mode, operations are retried on failure.""")>]
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type options_10 =
+                    type options =
                         abstract member encoding: Node.BufferEncoding option with get, set
                         abstract member withFileTypes: bool option with get, set
                         abstract member ``recursive``: bool option with get, set
@@ -92182,27 +92177,27 @@ recursive mode, operations are retried on failure.""")>]
                                 ?withFileTypes: bool,
                                 ?``recursive``: bool
                             )
-                            : options_10
+                            : options
                             =
                             nativeOnly
 
                     [<RequireQualifiedAccess>]
                     [<Erase(CaseRules.None)>]
-                    type options_11 =
+                    type options_1 =
                         | buffer
                         | Case1 of Exports.__promisify__.options.Cases.Case1
 
                         [<Emit("$0")>]
                         static member op_Implicit
                             (value: Exports.__promisify__.options.Cases.Case1)
-                            : options_11
+                            : options_1
                             =
                             nativeOnly
 
                         [<Emit("$0")>]
                         static member op_ErasedCast
                             (value: Exports.__promisify__.options.Cases.Case1)
-                            : options_11
+                            : options_1
                             =
                             nativeOnly
 
@@ -92226,7 +92221,7 @@ recursive mode, operations are retried on failure.""")>]
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type options_12 =
+                    type options_2 =
                         abstract member encoding: Node.BufferEncoding option with get, set
                         abstract member withFileTypes: bool option with get, set
                         abstract member ``recursive``: bool option with get, set
@@ -92238,13 +92233,13 @@ recursive mode, operations are retried on failure.""")>]
                                 ?withFileTypes: bool,
                                 ?``recursive``: bool
                             )
-                            : options_12
+                            : options_2
                             =
                             nativeOnly
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type options_13 =
+                    type options_3 =
                         abstract member encoding: Node.BufferEncoding option with get, set
                         abstract member withFileTypes: bool with get, set
                         abstract member ``recursive``: bool option with get, set
@@ -92256,13 +92251,13 @@ recursive mode, operations are retried on failure.""")>]
                                 ?encoding: Node.BufferEncoding,
                                 ?``recursive``: bool
                             )
-                            : options_13
+                            : options_3
                             =
                             nativeOnly
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type options_14 =
+                    type options_4 =
                         abstract member encoding: string with get, set
                         abstract member withFileTypes: bool with get, set
                         abstract member ``recursive``: bool option with get, set
@@ -92270,7 +92265,7 @@ recursive mode, operations are retried on failure.""")>]
                         [<ParamObject; Emit("$0")>]
                         static member Create
                             (encoding: string, withFileTypes: bool, ?``recursive``: bool)
-                            : options_14
+                            : options_4
                             =
                             nativeOnly
 
@@ -92769,7 +92764,7 @@ recursive mode, operations are retried on failure.""")>]
                     ?offset: float *
                     ?length: float *
                     ?position: float ->
-                        JS.Promise<Exports.__promisify___11<'TBuffer>>
+                        JS.Promise<Exports.__promisify__<'TBuffer>>
 
                 /// <summary>
                 /// Asynchronously writes <c>buffer</c> to the file referenced by the supplied file descriptor.
@@ -92786,7 +92781,7 @@ recursive mode, operations are retried on failure.""")>]
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__<'TBuffer> :
                     fd: float * buffer: 'TBuffer * ?options: Node.fs.WriteOptions ->
-                        JS.Promise<Exports.__promisify___11<'TBuffer>>
+                        JS.Promise<Exports.__promisify__<'TBuffer>>
 
                 /// <summary>
                 /// Asynchronously writes <c>string</c> to the file referenced by the supplied file descriptor.
@@ -92806,31 +92801,31 @@ recursive mode, operations are retried on failure.""")>]
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     fd: float * string: string * ?position: float * ?encoding: Node.BufferEncoding ->
-                        JS.Promise<Exports.__promisify___12>
+                        JS.Promise<Exports.__promisify___1>
 
             module Exports =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type __promisify___11<'TBuffer> =
+                type __promisify__<'TBuffer> =
                     abstract member bytesWritten: float with get, set
                     abstract member buffer: 'TBuffer with get, set
 
                     [<ParamObject; Emit("$0")>]
                     static member Create
                         (bytesWritten: float, buffer: 'TBuffer)
-                        : __promisify___11<'TBuffer>
+                        : __promisify__<'TBuffer>
                         =
                         nativeOnly
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type __promisify___12 =
+                type __promisify___1 =
                     abstract member bytesWritten: float with get, set
                     abstract member buffer: string with get, set
 
                     [<ParamObject; Emit("$0")>]
-                    static member Create(bytesWritten: float, buffer: string) : __promisify___12 =
+                    static member Create(bytesWritten: float, buffer: string) : __promisify___1 =
                         nativeOnly
 
         type ReadPosition = U2<float, bigint>
@@ -92901,7 +92896,7 @@ recursive mode, operations are retried on failure.""")>]
                     offset: float *
                     length: float *
                     position: float option ->
-                        JS.Promise<Exports.__promisify___13<'TBuffer>>
+                        JS.Promise<Exports.__promisify__<'TBuffer>>
 
                 /// <param name="fd">
                 /// A file descriptor.
@@ -92925,7 +92920,7 @@ recursive mode, operations are retried on failure.""")>]
                     offset: float *
                     length: float *
                     position: bigint option ->
-                        JS.Promise<Exports.__promisify___13<'TBuffer>>
+                        JS.Promise<Exports.__promisify__<'TBuffer>>
 
                 /// <param name="fd">
                 /// A file descriptor.
@@ -92949,46 +92944,46 @@ recursive mode, operations are retried on failure.""")>]
                     offset: float *
                     length: float *
                     position: Node.fs.ReadPosition option ->
-                        JS.Promise<Exports.__promisify___13<'TBuffer>>
+                        JS.Promise<Exports.__promisify__<'TBuffer>>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__<'TBuffer> :
                     fd: float * options: Node.fs.ReadOptionsWithBuffer<'TBuffer> ->
-                        JS.Promise<Exports.__promisify___13<'TBuffer>>
+                        JS.Promise<Exports.__promisify__<'TBuffer>>
 
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     fd: float * options: Node.fs.ReadOptionsWithBuffer<Node.NonSharedBuffer> ->
-                        JS.Promise<Exports.__promisify___14>
+                        JS.Promise<Exports.__promisify___1>
 
                 [<Emit("$0.__promisify__($1...)")>]
-                abstract member __promisify__: fd: float -> JS.Promise<Exports.__promisify___14>
+                abstract member __promisify__: fd: float -> JS.Promise<Exports.__promisify___1>
 
             module Exports =
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type __promisify___13<'TBuffer> =
+                type __promisify__<'TBuffer> =
                     abstract member bytesRead: float with get, set
                     abstract member buffer: 'TBuffer with get, set
 
                     [<ParamObject; Emit("$0")>]
                     static member Create
                         (bytesRead: float, buffer: 'TBuffer)
-                        : __promisify___13<'TBuffer>
+                        : __promisify__<'TBuffer>
                         =
                         nativeOnly
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type __promisify___14 =
+                type __promisify___1 =
                     abstract member bytesRead: float with get, set
                     abstract member buffer: Node.NonSharedBuffer with get, set
 
                     [<ParamObject; Emit("$0")>]
                     static member Create
                         (bytesRead: float, buffer: Node.NonSharedBuffer)
-                        : __promisify___14
+                        : __promisify___1
                         =
                         nativeOnly
 
@@ -93010,7 +93005,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: string * ?options: Exports.__promisify__.options_15 ->
+                    path: string * ?options: Exports.__promisify__.options ->
                         JS.Promise<Node.NonSharedBuffer>
 
                 /// <summary>
@@ -93026,7 +93021,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.Buffer * ?options: Exports.__promisify__.options_15 ->
+                    path: Node.Buffer * ?options: Exports.__promisify__.options ->
                         JS.Promise<Node.NonSharedBuffer>
 
                 /// <summary>
@@ -93042,7 +93037,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.url.URL * ?options: Exports.__promisify__.options_15 ->
+                    path: Node.url.URL * ?options: Exports.__promisify__.options ->
                         JS.Promise<Node.NonSharedBuffer>
 
                 /// <summary>
@@ -93058,7 +93053,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: float * ?options: Exports.__promisify__.options_15 ->
+                    path: float * ?options: Exports.__promisify__.options ->
                         JS.Promise<Node.NonSharedBuffer>
 
                 /// <summary>
@@ -93074,7 +93069,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.fs.PathOrFileDescriptor * ?options: Exports.__promisify__.options_15 ->
+                    path: Node.fs.PathOrFileDescriptor * ?options: Exports.__promisify__.options ->
                         JS.Promise<Node.NonSharedBuffer>
 
                 /// <summary>
@@ -93091,7 +93086,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: string * options: Exports.__promisify__.options_16 -> JS.Promise<string>
+                    path: string * options: Exports.__promisify__.options_1 -> JS.Promise<string>
 
                 /// <summary>
                 /// Asynchronously reads the entire contents of a file.
@@ -93123,7 +93118,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.Buffer * options: Exports.__promisify__.options_16 ->
+                    path: Node.Buffer * options: Exports.__promisify__.options_1 ->
                         JS.Promise<string>
 
                 /// <summary>
@@ -93156,7 +93151,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.url.URL * options: Exports.__promisify__.options_16 ->
+                    path: Node.url.URL * options: Exports.__promisify__.options_1 ->
                         JS.Promise<string>
 
                 /// <summary>
@@ -93189,7 +93184,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: float * options: Exports.__promisify__.options_16 -> JS.Promise<string>
+                    path: float * options: Exports.__promisify__.options_1 -> JS.Promise<string>
 
                 /// <summary>
                 /// Asynchronously reads the entire contents of a file.
@@ -93222,7 +93217,7 @@ recursive mode, operations are retried on failure.""")>]
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
                     path: Node.fs.PathOrFileDescriptor *
-                    options: U2<Exports.__promisify__.options_16, Node.BufferEncoding> ->
+                    options: U2<Exports.__promisify__.options_1, Node.BufferEncoding> ->
                         JS.Promise<string>
 
                 /// <summary>
@@ -93239,7 +93234,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: string * options: Exports.__promisify__.options_17 ->
+                    path: string * options: Exports.__promisify__.options_2 ->
                         JS.Promise<U2<string, Node.NonSharedBuffer>>
 
                 /// <summary>
@@ -93256,7 +93251,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.Buffer * options: Exports.__promisify__.options_17 ->
+                    path: Node.Buffer * options: Exports.__promisify__.options_2 ->
                         JS.Promise<U2<string, Node.NonSharedBuffer>>
 
                 /// <summary>
@@ -93273,7 +93268,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: Node.url.URL * options: Exports.__promisify__.options_17 ->
+                    path: Node.url.URL * options: Exports.__promisify__.options_2 ->
                         JS.Promise<U2<string, Node.NonSharedBuffer>>
 
                 /// <summary>
@@ -93290,7 +93285,7 @@ recursive mode, operations are retried on failure.""")>]
                 /// </param>
                 [<Emit("$0.__promisify__($1...)")>]
                 abstract member __promisify__:
-                    path: float * options: Exports.__promisify__.options_17 ->
+                    path: float * options: Exports.__promisify__.options_2 ->
                         JS.Promise<U2<string, Node.NonSharedBuffer>>
 
             module Exports =
@@ -93299,37 +93294,36 @@ recursive mode, operations are retried on failure.""")>]
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type options_15 =
+                    type options =
                         abstract member encoding: obj option with get, set
                         abstract member flag: string option with get, set
 
                         [<ParamObject; Emit("$0")>]
-                        static member Create(?encoding: obj, ?flag: string) : options_15 =
-                            nativeOnly
+                        static member Create(?encoding: obj, ?flag: string) : options = nativeOnly
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type options_16 =
+                    type options_1 =
                         abstract member encoding: Node.BufferEncoding with get, set
                         abstract member flag: string option with get, set
 
                         [<ParamObject; Emit("$0")>]
                         static member Create
                             (encoding: Node.BufferEncoding, ?flag: string)
-                            : options_16
+                            : options_1
                             =
                             nativeOnly
 
                     [<AllowNullLiteral>]
                     [<Interface>]
-                    type options_17 =
+                    type options_2 =
                         abstract member encoding: Node.BufferEncoding option with get, set
                         abstract member flag: string option with get, set
 
                         [<ParamObject; Emit("$0")>]
                         static member Create
                             (?encoding: Node.BufferEncoding, ?flag: string)
-                            : options_17
+                            : options_2
                             =
                             nativeOnly
 
@@ -102782,7 +102776,7 @@ recursive mode, operations are retried on failure.""")>]
                 static member Create
                     (
                         ?signal: Node.AbortSignal,
-                        ?encoding: WatchOptions.encoding_1,
+                        ?encoding: WatchOptions.encoding,
                         ?persistent: bool,
                         ?``recursive``: bool,
                         ?maxQueue: float,
@@ -103004,7 +102998,7 @@ recursive mode, operations are retried on failure.""")>]
 
                 [<RequireQualifiedAccess>]
                 [<StringEnum(CaseRules.None)>]
-                type encoding_1 =
+                type encoding =
                     | ascii
                     | utf8
                     | ``utf-8``
@@ -103783,7 +103777,7 @@ recursive mode, operations are retried on failure.""")>]
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type options_2 =
+                type options =
                     abstract member ``recursive``: bool with get, set
                     /// <summary>
                     /// A file mode. If a string is passed, it is parsed as an octal integer. If not specified
@@ -103791,7 +103785,7 @@ recursive mode, operations are retried on failure.""")>]
                     abstract member mode: Node.fs.Mode option with get, set
 
                     [<ParamObject; Emit("$0")>]
-                    static member Create(``recursive``: bool, ?mode: Node.fs.Mode) : options_2 =
+                    static member Create(``recursive``: bool, ?mode: Node.fs.Mode) : options =
                         nativeOnly
 
                 type callback =
@@ -103799,7 +103793,7 @@ recursive mode, operations are retried on failure.""")>]
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type options_3 =
+                type options_1 =
                     abstract member ``recursive``: bool option with get, set
                     /// <summary>
                     /// A file mode. If a string is passed, it is parsed as an octal integer. If not specified
@@ -103807,7 +103801,7 @@ recursive mode, operations are retried on failure.""")>]
                     abstract member mode: Node.fs.Mode option with get, set
 
                     [<ParamObject; Emit("$0")>]
-                    static member Create(?``recursive``: bool, ?mode: Node.fs.Mode) : options_3 =
+                    static member Create(?``recursive``: bool, ?mode: Node.fs.Mode) : options_1 =
                         nativeOnly
 
                 module options =
@@ -103878,7 +103872,7 @@ recursive mode, operations are retried on failure.""")>]
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type options_4 =
+                type options =
                     abstract member encoding: Node.BufferEncoding option with get, set
                     abstract member withFileTypes: bool option with get, set
                     abstract member ``recursive``: bool option with get, set
@@ -103886,7 +103880,7 @@ recursive mode, operations are retried on failure.""")>]
                     [<ParamObject; Emit("$0")>]
                     static member Create
                         (?encoding: Node.BufferEncoding, ?withFileTypes: bool, ?``recursive``: bool)
-                        : options_4
+                        : options
                         =
                         nativeOnly
 
@@ -103896,21 +103890,21 @@ recursive mode, operations are retried on failure.""")>]
 
                 [<RequireQualifiedAccess>]
                 [<Erase(CaseRules.None)>]
-                type options_5 =
+                type options_1 =
                     | buffer
-                    | Case1 of Exports.readdir__.options.Cases.Case1_1
+                    | Case1 of Exports.readdir__.options.Cases.Case1
 
                     [<Emit("$0")>]
                     static member op_Implicit
-                        (value: Exports.readdir__.options.Cases.Case1_1)
-                        : options_5
+                        (value: Exports.readdir__.options.Cases.Case1)
+                        : options_1
                         =
                         nativeOnly
 
                     [<Emit("$0")>]
                     static member op_ErasedCast
-                        (value: Exports.readdir__.options.Cases.Case1_1)
-                        : options_5
+                        (value: Exports.readdir__.options.Cases.Case1)
+                        : options_1
                         =
                         nativeOnly
 
@@ -103926,7 +103920,7 @@ recursive mode, operations are retried on failure.""")>]
 
                         [<AllowNullLiteral>]
                         [<Interface>]
-                        type Case1_1 =
+                        type Case1 =
                             abstract member encoding: string with get, set
                             abstract member withFileTypes: bool option with get, set
                             abstract member ``recursive``: bool option with get, set
@@ -103934,7 +103928,7 @@ recursive mode, operations are retried on failure.""")>]
                             [<ParamObject; Emit("$0")>]
                             static member Create
                                 (encoding: string, ?withFileTypes: bool, ?``recursive``: bool)
-                                : Case1_1
+                                : Case1
                                 =
                                 nativeOnly
 
@@ -103960,7 +103954,7 @@ recursive mode, operations are retried on failure.""")>]
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type options_6 =
+                type options_2 =
                     abstract member encoding: Node.BufferEncoding option with get, set
                     abstract member withFileTypes: bool option with get, set
                     abstract member ``recursive``: bool option with get, set
@@ -103968,7 +103962,7 @@ recursive mode, operations are retried on failure.""")>]
                     [<ParamObject; Emit("$0")>]
                     static member Create
                         (?encoding: Node.BufferEncoding, ?withFileTypes: bool, ?``recursive``: bool)
-                        : options_6
+                        : options_2
                         =
                         nativeOnly
 
@@ -103980,7 +103974,7 @@ recursive mode, operations are retried on failure.""")>]
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type options_7 =
+                type options_3 =
                     abstract member encoding: Node.BufferEncoding option with get, set
                     abstract member withFileTypes: bool with get, set
                     abstract member ``recursive``: bool option with get, set
@@ -103988,7 +103982,7 @@ recursive mode, operations are retried on failure.""")>]
                     [<ParamObject; Emit("$0")>]
                     static member Create
                         (withFileTypes: bool, ?encoding: Node.BufferEncoding, ?``recursive``: bool)
-                        : options_7
+                        : options_3
                         =
                         nativeOnly
 
@@ -103999,7 +103993,7 @@ recursive mode, operations are retried on failure.""")>]
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type options_8 =
+                type options_4 =
                     abstract member encoding: string with get, set
                     abstract member withFileTypes: bool with get, set
                     abstract member ``recursive``: bool option with get, set
@@ -104007,7 +104001,7 @@ recursive mode, operations are retried on failure.""")>]
                     [<ParamObject; Emit("$0")>]
                     static member Create
                         (encoding: string, withFileTypes: bool, ?``recursive``: bool)
-                        : options_8
+                        : options_4
                         =
                         nativeOnly
 
@@ -104148,7 +104142,7 @@ recursive mode, operations are retried on failure.""")>]
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type options_3 =
+                type options =
                     abstract member encoding: obj option with get, set
                     abstract member flag: string option with get, set
                     /// <summary>
@@ -104159,7 +104153,7 @@ recursive mode, operations are retried on failure.""")>]
                     [<ParamObject; Emit("$0")>]
                     static member Create
                         (?encoding: obj, ?flag: string, ?signal: Node.AbortSignal)
-                        : options_3
+                        : options
                         =
                         nativeOnly
 
@@ -104169,7 +104163,7 @@ recursive mode, operations are retried on failure.""")>]
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type options_4 =
+                type options_1 =
                     abstract member encoding: Node.BufferEncoding with get, set
                     abstract member flag: string option with get, set
                     /// <summary>
@@ -104180,7 +104174,7 @@ recursive mode, operations are retried on failure.""")>]
                     [<ParamObject; Emit("$0")>]
                     static member Create
                         (encoding: Node.BufferEncoding, ?flag: string, ?signal: Node.AbortSignal)
-                        : options_4
+                        : options_1
                         =
                         nativeOnly
 
@@ -104193,7 +104187,7 @@ recursive mode, operations are retried on failure.""")>]
 
                         [<AllowNullLiteral>]
                         [<Interface>]
-                        type Case1_1 =
+                        type Case1 =
                             abstract member encoding: Node.BufferEncoding with get, set
                             abstract member flag: string option with get, set
                             /// <summary>
@@ -104208,13 +104202,13 @@ recursive mode, operations are retried on failure.""")>]
                                     ?flag: string,
                                     ?signal: Node.AbortSignal
                                 )
-                                : Case1_1
+                                : Case1
                                 =
                                 nativeOnly
 
                         [<AllowNullLiteral>]
                         [<Interface>]
-                        type Case1_2 =
+                        type Case1_1 =
                             abstract member encoding: Node.BufferEncoding option with get, set
                             abstract member flag: string option with get, set
                             /// <summary>
@@ -104229,13 +104223,13 @@ recursive mode, operations are retried on failure.""")>]
                                     ?flag: string,
                                     ?signal: Node.AbortSignal
                                 )
-                                : Case1_2
+                                : Case1_1
                                 =
                                 nativeOnly
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type options_5 =
+                type options_2 =
                     abstract member encoding: Node.BufferEncoding option with get, set
                     abstract member flag: string option with get, set
                     /// <summary>
@@ -104246,7 +104240,7 @@ recursive mode, operations are retried on failure.""")>]
                     [<ParamObject; Emit("$0")>]
                     static member Create
                         (?encoding: Node.BufferEncoding, ?flag: string, ?signal: Node.AbortSignal)
-                        : options_5
+                        : options_2
                         =
                         nativeOnly
 
@@ -104378,43 +104372,43 @@ recursive mode, operations are retried on failure.""")>]
 
                 [<RequireQualifiedAccess>]
                 [<Erase(CaseRules.None)>]
-                type options_2 =
+                type options =
                     | buffer
                     | Case1 of Node.fs.WatchOptionsWithBufferEncoding
 
                     [<Emit("$0")>]
                     static member op_Implicit
                         (value: Node.fs.WatchOptionsWithBufferEncoding)
-                        : options_2
+                        : options
                         =
                         nativeOnly
 
                     [<Emit("$0")>]
                     static member op_ErasedCast
                         (value: Node.fs.WatchOptionsWithBufferEncoding)
-                        : options_2
+                        : options
                         =
                         nativeOnly
 
                 [<RequireQualifiedAccess>]
                 [<Erase(CaseRules.None)>]
-                type options_3 =
+                type options_1 =
                     | buffer
                     | Case1 of Node.fs.WatchOptions
                     | Case2 of Node.BufferEncoding
 
                     [<Emit("$0")>]
-                    static member op_Implicit(value: Node.fs.WatchOptions) : options_3 = nativeOnly
+                    static member op_Implicit(value: Node.fs.WatchOptions) : options_1 = nativeOnly
 
                     [<Emit("$0")>]
-                    static member op_ErasedCast(value: Node.fs.WatchOptions) : options_3 =
+                    static member op_ErasedCast(value: Node.fs.WatchOptions) : options_1 =
                         nativeOnly
 
                     [<Emit("$0")>]
-                    static member op_Implicit(value: Node.BufferEncoding) : options_3 = nativeOnly
+                    static member op_Implicit(value: Node.BufferEncoding) : options_1 = nativeOnly
 
                     [<Emit("$0")>]
-                    static member op_ErasedCast(value: Node.BufferEncoding) : options_3 = nativeOnly
+                    static member op_ErasedCast(value: Node.BufferEncoding) : options_1 = nativeOnly
 
             module writev__ =
 
@@ -143930,7 +143924,7 @@ recursive mode, operations are retried on failure.""")>]
                     ?_defaultAgent: Node.http.Agent,
                     ?agent: U2<Node.http.Agent, bool>,
                     ?auth: string,
-                    ?createConnection: RequestOptions.createConnection_1,
+                    ?createConnection: RequestOptions.createConnection,
                     ?defaultPort: U2<float, string>,
                     ?family: float,
                     ?headers: U2<Node.http.OutgoingHttpHeaders, ReadonlyArray<string>>,
@@ -144025,7 +144019,7 @@ recursive mode, operations are retried on failure.""")>]
             /// <c>callback</c> has a signature of <c>(err, stream)</c>.
             /// </summary>
             abstract member createConnection:
-                options: Node.https.RequestOptions * ?callback: Agent.createConnection.callback_1 ->
+                options: Node.https.RequestOptions * ?callback: Agent.createConnection.callback ->
                     Node.stream.Stream_.Duplex option
 
             /// <summary>
@@ -144270,7 +144264,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </summary>
             [<Emit("$0.addListener('clientError',$1...)")>]
             abstract member addListener_clientError:
-                listener: Server.addListener_clientError.listener_1 -> Server<'Request, 'Response>
+                listener: Server.addListener_clientError.listener -> Server<'Request, 'Response>
 
             /// <summary>
             /// events.EventEmitter
@@ -144283,7 +144277,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </summary>
             [<Emit("$0.addListener('connect',$1...)")>]
             abstract member addListener_connect:
-                listener: Server.addListener_connect.listener_1 -> Server<'Request, 'Response>
+                listener: Server.addListener_connect.listener -> Server<'Request, 'Response>
 
             /// <summary>
             /// events.EventEmitter
@@ -144310,7 +144304,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </summary>
             [<Emit("$0.addListener('upgrade',$1...)")>]
             abstract member addListener_upgrade:
-                listener: Server.addListener_upgrade.listener_1 -> Server<'Request, 'Response>
+                listener: Server.addListener_upgrade.listener -> Server<'Request, 'Response>
 
             /// <summary>
             /// Synchronously calls each of the listeners registered for the event named <c>eventName</c>, in the order they were registered, passing the supplied arguments
@@ -145577,7 +145571,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </summary>
             [<Emit("$0.on('clientError',$1...)")>]
             abstract member on_clientError:
-                listener: Server.on_clientError.listener_1 -> Server<'Request, 'Response>
+                listener: Server.on_clientError.listener -> Server<'Request, 'Response>
 
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
@@ -145609,7 +145603,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </summary>
             [<Emit("$0.on('connect',$1...)")>]
             abstract member on_connect:
-                listener: Server.on_connect.listener_1 -> Server<'Request, 'Response>
+                listener: Server.on_connect.listener -> Server<'Request, 'Response>
 
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
@@ -145674,7 +145668,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </summary>
             [<Emit("$0.on('upgrade',$1...)")>]
             abstract member on_upgrade:
-                listener: Server.on_upgrade.listener_1 -> Server<'Request, 'Response>
+                listener: Server.on_upgrade.listener -> Server<'Request, 'Response>
 
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
@@ -146179,7 +146173,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </summary>
             [<Emit("$0.once('clientError',$1...)")>]
             abstract member once_clientError:
-                listener: Server.once_clientError.listener_1 -> Server<'Request, 'Response>
+                listener: Server.once_clientError.listener -> Server<'Request, 'Response>
 
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
@@ -146209,7 +146203,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </summary>
             [<Emit("$0.once('connect',$1...)")>]
             abstract member once_connect:
-                listener: Server.once_connect.listener_1 -> Server<'Request, 'Response>
+                listener: Server.once_connect.listener -> Server<'Request, 'Response>
 
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
@@ -146270,7 +146264,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </summary>
             [<Emit("$0.once('upgrade',$1...)")>]
             abstract member once_upgrade:
-                listener: Server.once_upgrade.listener_1 -> Server<'Request, 'Response>
+                listener: Server.once_upgrade.listener -> Server<'Request, 'Response>
 
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
@@ -146576,8 +146570,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </summary>
             [<Emit("$0.prependListener('clientError',$1...)")>]
             abstract member prependListener_clientError:
-                listener: Server.prependListener_clientError.listener_1 ->
-                    Server<'Request, 'Response>
+                listener: Server.prependListener_clientError.listener -> Server<'Request, 'Response>
 
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
@@ -146595,7 +146588,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </summary>
             [<Emit("$0.prependListener('connect',$1...)")>]
             abstract member prependListener_connect:
-                listener: Server.prependListener_connect.listener_1 -> Server<'Request, 'Response>
+                listener: Server.prependListener_connect.listener -> Server<'Request, 'Response>
 
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
@@ -146632,7 +146625,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </summary>
             [<Emit("$0.prependListener('upgrade',$1...)")>]
             abstract member prependListener_upgrade:
-                listener: Server.prependListener_upgrade.listener_1 -> Server<'Request, 'Response>
+                listener: Server.prependListener_upgrade.listener -> Server<'Request, 'Response>
 
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
@@ -146906,7 +146899,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </summary>
             [<Emit("$0.prependOnceListener('clientError',$1...)")>]
             abstract member prependOnceListener_clientError:
-                listener: Server.prependOnceListener_clientError.listener_1 ->
+                listener: Server.prependOnceListener_clientError.listener ->
                     Server<'Request, 'Response>
 
             /// <summary>
@@ -146923,8 +146916,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </summary>
             [<Emit("$0.prependOnceListener('connect',$1...)")>]
             abstract member prependOnceListener_connect:
-                listener: Server.prependOnceListener_connect.listener_1 ->
-                    Server<'Request, 'Response>
+                listener: Server.prependOnceListener_connect.listener -> Server<'Request, 'Response>
 
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
@@ -146957,8 +146949,7 @@ recursive mode, operations are retried on failure.""")>]
             /// </summary>
             [<Emit("$0.prependOnceListener('upgrade',$1...)")>]
             abstract member prependOnceListener_upgrade:
-                listener: Server.prependOnceListener_upgrade.listener_1 ->
-                    Server<'Request, 'Response>
+                listener: Server.prependOnceListener_upgrade.listener -> Server<'Request, 'Response>
 
         type Server<'Request> = Server<'Request, Node.http.ServerResponse<obj>>
 
@@ -147000,22 +146991,22 @@ recursive mode, operations are retried on failure.""")>]
                 delegate of
                     hostname: string * cert: Node.tls.DetailedPeerCertificate -> Exception option
 
-            type createConnection_1 =
+            type createConnection =
                 delegate of
                     options: Node.http.ClientRequestArgs *
-                    oncreate: RequestOptions.createConnection.oncreate_1 ->
+                    oncreate: RequestOptions.createConnection.oncreate ->
                         Node.stream.Stream_.Duplex option
 
             module createConnection =
 
-                type oncreate_1 =
+                type oncreate =
                     delegate of err: Exception option * socket: Node.stream.Stream_.Duplex -> unit
 
         module Agent =
 
             module createConnection =
 
-                type callback_1 =
+                type callback =
                     delegate of err: Exception option * stream: Node.stream.Stream_.Duplex -> unit
 
         module Server =
@@ -147067,19 +147058,19 @@ recursive mode, operations are retried on failure.""")>]
 
             module addListener_clientError =
 
-                type listener_1 =
+                type listener =
                     delegate of err: Exception * socket: Node.stream.Stream_.Duplex -> unit
 
             module addListener_connect =
 
-                type listener_1 =
+                type listener =
                     delegate of
                         req: obj * socket: Node.stream.Stream_.Duplex * head: Node.NonSharedBuffer ->
                             unit
 
             module addListener_upgrade =
 
-                type listener_1 =
+                type listener =
                     delegate of
                         req: obj * socket: Node.stream.Stream_.Duplex * head: Node.NonSharedBuffer ->
                             unit
@@ -147140,19 +147131,19 @@ recursive mode, operations are retried on failure.""")>]
 
             module on_clientError =
 
-                type listener_1 =
+                type listener =
                     delegate of err: Exception * socket: Node.stream.Stream_.Duplex -> unit
 
             module on_connect =
 
-                type listener_1 =
+                type listener =
                     delegate of
                         req: obj * socket: Node.stream.Stream_.Duplex * head: Node.NonSharedBuffer ->
                             unit
 
             module on_upgrade =
 
-                type listener_1 =
+                type listener =
                     delegate of
                         req: obj * socket: Node.stream.Stream_.Duplex * head: Node.NonSharedBuffer ->
                             unit
@@ -147204,19 +147195,19 @@ recursive mode, operations are retried on failure.""")>]
 
             module once_clientError =
 
-                type listener_1 =
+                type listener =
                     delegate of err: Exception * socket: Node.stream.Stream_.Duplex -> unit
 
             module once_connect =
 
-                type listener_1 =
+                type listener =
                     delegate of
                         req: obj * socket: Node.stream.Stream_.Duplex * head: Node.NonSharedBuffer ->
                             unit
 
             module once_upgrade =
 
-                type listener_1 =
+                type listener =
                     delegate of
                         req: obj * socket: Node.stream.Stream_.Duplex * head: Node.NonSharedBuffer ->
                             unit
@@ -147268,19 +147259,19 @@ recursive mode, operations are retried on failure.""")>]
 
             module prependListener_clientError =
 
-                type listener_1 =
+                type listener =
                     delegate of err: Exception * socket: Node.stream.Stream_.Duplex -> unit
 
             module prependListener_connect =
 
-                type listener_1 =
+                type listener =
                     delegate of
                         req: obj * socket: Node.stream.Stream_.Duplex * head: Node.NonSharedBuffer ->
                             unit
 
             module prependListener_upgrade =
 
-                type listener_1 =
+                type listener =
                     delegate of
                         req: obj * socket: Node.stream.Stream_.Duplex * head: Node.NonSharedBuffer ->
                             unit
@@ -147332,19 +147323,19 @@ recursive mode, operations are retried on failure.""")>]
 
             module prependOnceListener_clientError =
 
-                type listener_1 =
+                type listener =
                     delegate of err: Exception * socket: Node.stream.Stream_.Duplex -> unit
 
             module prependOnceListener_connect =
 
-                type listener_1 =
+                type listener =
                     delegate of
                         req: obj * socket: Node.stream.Stream_.Duplex * head: Node.NonSharedBuffer ->
                             unit
 
             module prependOnceListener_upgrade =
 
-                type listener_1 =
+                type listener =
                     delegate of
                         req: obj * socket: Node.stream.Stream_.Duplex * head: Node.NonSharedBuffer ->
                             unit
@@ -200893,7 +200884,7 @@ Duplex.fromWeb($0, $1)""")>]
             /// </summary>
             [<Emit("$0.addListener('tlsClientError',$1...)")>]
             abstract member addListener_tlsClientError:
-                listener: Server.addListener_tlsClientError.listener_1 -> Server
+                listener: Server.addListener_tlsClientError.listener -> Server
 
             /// <summary>
             /// events.EventEmitter
@@ -200906,7 +200897,7 @@ Duplex.fromWeb($0, $1)""")>]
             /// </summary>
             [<Emit("$0.addListener('newSession',$1...)")>]
             abstract member addListener_newSession:
-                listener: Server.addListener_newSession.listener_1 -> Server
+                listener: Server.addListener_newSession.listener -> Server
 
             /// <summary>
             /// events.EventEmitter
@@ -200919,7 +200910,7 @@ Duplex.fromWeb($0, $1)""")>]
             /// </summary>
             [<Emit("$0.addListener('OCSPRequest',$1...)")>]
             abstract member addListener_OCSPRequest:
-                listener: Server.addListener_OCSPRequest.listener_1 -> Server
+                listener: Server.addListener_OCSPRequest.listener -> Server
 
             /// <summary>
             /// events.EventEmitter
@@ -200932,7 +200923,7 @@ Duplex.fromWeb($0, $1)""")>]
             /// </summary>
             [<Emit("$0.addListener('resumeSession',$1...)")>]
             abstract member addListener_resumeSession:
-                listener: Server.addListener_resumeSession.listener_1 -> Server
+                listener: Server.addListener_resumeSession.listener -> Server
 
             /// <summary>
             /// events.EventEmitter
@@ -200958,7 +200949,7 @@ Duplex.fromWeb($0, $1)""")>]
             /// </summary>
             [<Emit("$0.addListener('keylog',$1...)")>]
             abstract member addListener_keylog:
-                listener: Server.addListener_keylog.listener_1 -> Server
+                listener: Server.addListener_keylog.listener -> Server
 
             /// <summary>
             /// Synchronously calls each of the listeners registered for the event named <c>eventName</c>, in the order they were registered, passing the supplied arguments
@@ -201213,7 +201204,7 @@ Duplex.fromWeb($0, $1)""")>]
             abstract member emit_OCSPRequest:
                 certificate: Node.NonSharedBuffer *
                 issuer: Node.NonSharedBuffer *
-                callback: Server.emit_OCSPRequest.callback_1 ->
+                callback: Server.emit_OCSPRequest.callback ->
                     bool
 
             /// <summary>
@@ -201257,7 +201248,7 @@ Duplex.fromWeb($0, $1)""")>]
             /// </summary>
             [<Emit("$0.emit('resumeSession',$1...)")>]
             abstract member emit_resumeSession:
-                sessionId: Node.NonSharedBuffer * callback: Server.emit_resumeSession.callback_1 ->
+                sessionId: Node.NonSharedBuffer * callback: Server.emit_resumeSession.callback ->
                     bool
 
             /// <summary>
@@ -201494,8 +201485,7 @@ Duplex.fromWeb($0, $1)""")>]
             /// </code>
             /// </summary>
             [<Emit("$0.on('tlsClientError',$1...)")>]
-            abstract member on_tlsClientError:
-                listener: Server.on_tlsClientError.listener_1 -> Server
+            abstract member on_tlsClientError: listener: Server.on_tlsClientError.listener -> Server
 
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
@@ -201526,7 +201516,7 @@ Duplex.fromWeb($0, $1)""")>]
             /// </code>
             /// </summary>
             [<Emit("$0.on('newSession',$1...)")>]
-            abstract member on_newSession: listener: Server.on_newSession.listener_1 -> Server
+            abstract member on_newSession: listener: Server.on_newSession.listener -> Server
 
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
@@ -201557,7 +201547,7 @@ Duplex.fromWeb($0, $1)""")>]
             /// </code>
             /// </summary>
             [<Emit("$0.on('OCSPRequest',$1...)")>]
-            abstract member on_OCSPRequest: listener: Server.on_OCSPRequest.listener_1 -> Server
+            abstract member on_OCSPRequest: listener: Server.on_OCSPRequest.listener -> Server
 
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
@@ -201588,7 +201578,7 @@ Duplex.fromWeb($0, $1)""")>]
             /// </code>
             /// </summary>
             [<Emit("$0.on('resumeSession',$1...)")>]
-            abstract member on_resumeSession: listener: Server.on_resumeSession.listener_1 -> Server
+            abstract member on_resumeSession: listener: Server.on_resumeSession.listener -> Server
 
             /// <summary>
             /// Adds the <c>listener</c> function to the end of the listeners array for the event
@@ -201650,7 +201640,7 @@ Duplex.fromWeb($0, $1)""")>]
             /// </code>
             /// </summary>
             [<Emit("$0.on('keylog',$1...)")>]
-            abstract member on_keylog: listener: Server.on_keylog.listener_1 -> Server
+            abstract member on_keylog: listener: Server.on_keylog.listener -> Server
 
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
@@ -201792,7 +201782,7 @@ Duplex.fromWeb($0, $1)""")>]
             /// </summary>
             [<Emit("$0.once('tlsClientError',$1...)")>]
             abstract member once_tlsClientError:
-                listener: Server.once_tlsClientError.listener_1 -> Server
+                listener: Server.once_tlsClientError.listener -> Server
 
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
@@ -201821,7 +201811,7 @@ Duplex.fromWeb($0, $1)""")>]
             /// </code>
             /// </summary>
             [<Emit("$0.once('newSession',$1...)")>]
-            abstract member once_newSession: listener: Server.once_newSession.listener_1 -> Server
+            abstract member once_newSession: listener: Server.once_newSession.listener -> Server
 
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
@@ -201850,7 +201840,7 @@ Duplex.fromWeb($0, $1)""")>]
             /// </code>
             /// </summary>
             [<Emit("$0.once('OCSPRequest',$1...)")>]
-            abstract member once_OCSPRequest: listener: Server.once_OCSPRequest.listener_1 -> Server
+            abstract member once_OCSPRequest: listener: Server.once_OCSPRequest.listener -> Server
 
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
@@ -201880,7 +201870,7 @@ Duplex.fromWeb($0, $1)""")>]
             /// </summary>
             [<Emit("$0.once('resumeSession',$1...)")>]
             abstract member once_resumeSession:
-                listener: Server.once_resumeSession.listener_1 -> Server
+                listener: Server.once_resumeSession.listener -> Server
 
             /// <summary>
             /// Adds a **one-time** <c>listener</c> function for the event named <c>eventName</c>. The
@@ -201938,7 +201928,7 @@ Duplex.fromWeb($0, $1)""")>]
             /// </code>
             /// </summary>
             [<Emit("$0.once('keylog',$1...)")>]
-            abstract member once_keylog: listener: Server.once_keylog.listener_1 -> Server
+            abstract member once_keylog: listener: Server.once_keylog.listener -> Server
 
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
@@ -202022,7 +202012,7 @@ Duplex.fromWeb($0, $1)""")>]
             /// </summary>
             [<Emit("$0.prependListener('tlsClientError',$1...)")>]
             abstract member prependListener_tlsClientError:
-                listener: Server.prependListener_tlsClientError.listener_1 -> Server
+                listener: Server.prependListener_tlsClientError.listener -> Server
 
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
@@ -202040,7 +202030,7 @@ Duplex.fromWeb($0, $1)""")>]
             /// </summary>
             [<Emit("$0.prependListener('newSession',$1...)")>]
             abstract member prependListener_newSession:
-                listener: Server.prependListener_newSession.listener_1 -> Server
+                listener: Server.prependListener_newSession.listener -> Server
 
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
@@ -202058,7 +202048,7 @@ Duplex.fromWeb($0, $1)""")>]
             /// </summary>
             [<Emit("$0.prependListener('OCSPRequest',$1...)")>]
             abstract member prependListener_OCSPRequest:
-                listener: Server.prependListener_OCSPRequest.listener_1 -> Server
+                listener: Server.prependListener_OCSPRequest.listener -> Server
 
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
@@ -202076,7 +202066,7 @@ Duplex.fromWeb($0, $1)""")>]
             /// </summary>
             [<Emit("$0.prependListener('resumeSession',$1...)")>]
             abstract member prependListener_resumeSession:
-                listener: Server.prependListener_resumeSession.listener_1 -> Server
+                listener: Server.prependListener_resumeSession.listener -> Server
 
             /// <summary>
             /// Adds the <c>listener</c> function to the _beginning_ of the listeners array for the
@@ -202112,7 +202102,7 @@ Duplex.fromWeb($0, $1)""")>]
             /// </summary>
             [<Emit("$0.prependListener('keylog',$1...)")>]
             abstract member prependListener_keylog:
-                listener: Server.prependListener_keylog.listener_1 -> Server
+                listener: Server.prependListener_keylog.listener -> Server
 
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
@@ -202187,7 +202177,7 @@ Duplex.fromWeb($0, $1)""")>]
             /// </summary>
             [<Emit("$0.prependOnceListener('tlsClientError',$1...)")>]
             abstract member prependOnceListener_tlsClientError:
-                listener: Server.prependOnceListener_tlsClientError.listener_1 -> Server
+                listener: Server.prependOnceListener_tlsClientError.listener -> Server
 
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
@@ -202203,7 +202193,7 @@ Duplex.fromWeb($0, $1)""")>]
             /// </summary>
             [<Emit("$0.prependOnceListener('newSession',$1...)")>]
             abstract member prependOnceListener_newSession:
-                listener: Server.prependOnceListener_newSession.listener_1 -> Server
+                listener: Server.prependOnceListener_newSession.listener -> Server
 
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
@@ -202219,7 +202209,7 @@ Duplex.fromWeb($0, $1)""")>]
             /// </summary>
             [<Emit("$0.prependOnceListener('OCSPRequest',$1...)")>]
             abstract member prependOnceListener_OCSPRequest:
-                listener: Server.prependOnceListener_OCSPRequest.listener_1 -> Server
+                listener: Server.prependOnceListener_OCSPRequest.listener -> Server
 
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
@@ -202235,7 +202225,7 @@ Duplex.fromWeb($0, $1)""")>]
             /// </summary>
             [<Emit("$0.prependOnceListener('resumeSession',$1...)")>]
             abstract member prependOnceListener_resumeSession:
-                listener: Server.prependOnceListener_resumeSession.listener_1 -> Server
+                listener: Server.prependOnceListener_resumeSession.listener -> Server
 
             /// <summary>
             /// Adds a **one-time**<c>listener</c> function for the event named <c>eventName</c> to the _beginning_ of the listeners array. The next time <c>eventName</c> is triggered, this
@@ -202267,7 +202257,7 @@ Duplex.fromWeb($0, $1)""")>]
             /// </summary>
             [<Emit("$0.prependOnceListener('keylog',$1...)")>]
             abstract member prependOnceListener_keylog:
-                listener: Server.prependOnceListener_keylog.listener_1 -> Server
+                listener: Server.prependOnceListener_keylog.listener -> Server
 
         [<Obsolete("since v0.11.3 Use `tls.TLSSocket` instead.")>]
         [<AllowNullLiteral>]
@@ -202600,11 +202590,11 @@ Duplex.fromWeb($0, $1)""")>]
 
             module addListener_tlsClientError =
 
-                type listener_1 = delegate of err: Exception * tlsSocket: Node.tls.TLSSocket -> unit
+                type listener = delegate of err: Exception * tlsSocket: Node.tls.TLSSocket -> unit
 
             module addListener_newSession =
 
-                type listener_1 =
+                type listener =
                     delegate of
                         sessionId: Node.NonSharedBuffer *
                         sessionData: Node.NonSharedBuffer *
@@ -202613,53 +202603,52 @@ Duplex.fromWeb($0, $1)""")>]
 
             module addListener_OCSPRequest =
 
-                type listener_1 =
+                type listener =
                     delegate of
                         certificate: Node.NonSharedBuffer *
                         issuer: Node.NonSharedBuffer *
-                        callback: Server.addListener_OCSPRequest.listener.callback_1 ->
+                        callback: Server.addListener_OCSPRequest.listener.callback ->
                             unit
 
                 module listener =
 
-                    type callback_1 =
+                    type callback =
                         delegate of err: Exception option * resp: Node.Buffer option -> unit
 
             module addListener_resumeSession =
 
-                type listener_1 =
+                type listener =
                     delegate of
                         sessionId: Node.NonSharedBuffer *
-                        callback: Server.addListener_resumeSession.listener.callback_1 ->
+                        callback: Server.addListener_resumeSession.listener.callback ->
                             unit
 
                 module listener =
 
-                    type callback_1 =
+                    type callback =
                         delegate of err: Exception option * sessionData: Node.Buffer option -> unit
 
             module addListener_keylog =
 
-                type listener_1 =
+                type listener =
                     delegate of line: Node.NonSharedBuffer * tlsSocket: Node.tls.TLSSocket -> unit
 
             module emit_OCSPRequest =
 
-                type callback_1 =
-                    delegate of err: Exception option * resp: Node.Buffer option -> unit
+                type callback = delegate of err: Exception option * resp: Node.Buffer option -> unit
 
             module emit_resumeSession =
 
-                type callback_1 =
+                type callback =
                     delegate of err: Exception option * sessionData: Node.Buffer option -> unit
 
             module on_tlsClientError =
 
-                type listener_1 = delegate of err: Exception * tlsSocket: Node.tls.TLSSocket -> unit
+                type listener = delegate of err: Exception * tlsSocket: Node.tls.TLSSocket -> unit
 
             module on_newSession =
 
-                type listener_1 =
+                type listener =
                     delegate of
                         sessionId: Node.NonSharedBuffer *
                         sessionData: Node.NonSharedBuffer *
@@ -202668,43 +202657,43 @@ Duplex.fromWeb($0, $1)""")>]
 
             module on_OCSPRequest =
 
-                type listener_1 =
+                type listener =
                     delegate of
                         certificate: Node.NonSharedBuffer *
                         issuer: Node.NonSharedBuffer *
-                        callback: Server.on_OCSPRequest.listener.callback_1 ->
+                        callback: Server.on_OCSPRequest.listener.callback ->
                             unit
 
                 module listener =
 
-                    type callback_1 =
+                    type callback =
                         delegate of err: Exception option * resp: Node.Buffer option -> unit
 
             module on_resumeSession =
 
-                type listener_1 =
+                type listener =
                     delegate of
                         sessionId: Node.NonSharedBuffer *
-                        callback: Server.on_resumeSession.listener.callback_1 ->
+                        callback: Server.on_resumeSession.listener.callback ->
                             unit
 
                 module listener =
 
-                    type callback_1 =
+                    type callback =
                         delegate of err: Exception option * sessionData: Node.Buffer option -> unit
 
             module on_keylog =
 
-                type listener_1 =
+                type listener =
                     delegate of line: Node.NonSharedBuffer * tlsSocket: Node.tls.TLSSocket -> unit
 
             module once_tlsClientError =
 
-                type listener_1 = delegate of err: Exception * tlsSocket: Node.tls.TLSSocket -> unit
+                type listener = delegate of err: Exception * tlsSocket: Node.tls.TLSSocket -> unit
 
             module once_newSession =
 
-                type listener_1 =
+                type listener =
                     delegate of
                         sessionId: Node.NonSharedBuffer *
                         sessionData: Node.NonSharedBuffer *
@@ -202713,43 +202702,43 @@ Duplex.fromWeb($0, $1)""")>]
 
             module once_OCSPRequest =
 
-                type listener_1 =
+                type listener =
                     delegate of
                         certificate: Node.NonSharedBuffer *
                         issuer: Node.NonSharedBuffer *
-                        callback: Server.once_OCSPRequest.listener.callback_1 ->
+                        callback: Server.once_OCSPRequest.listener.callback ->
                             unit
 
                 module listener =
 
-                    type callback_1 =
+                    type callback =
                         delegate of err: Exception option * resp: Node.Buffer option -> unit
 
             module once_resumeSession =
 
-                type listener_1 =
+                type listener =
                     delegate of
                         sessionId: Node.NonSharedBuffer *
-                        callback: Server.once_resumeSession.listener.callback_1 ->
+                        callback: Server.once_resumeSession.listener.callback ->
                             unit
 
                 module listener =
 
-                    type callback_1 =
+                    type callback =
                         delegate of err: Exception option * sessionData: Node.Buffer option -> unit
 
             module once_keylog =
 
-                type listener_1 =
+                type listener =
                     delegate of line: Node.NonSharedBuffer * tlsSocket: Node.tls.TLSSocket -> unit
 
             module prependListener_tlsClientError =
 
-                type listener_1 = delegate of err: Exception * tlsSocket: Node.tls.TLSSocket -> unit
+                type listener = delegate of err: Exception * tlsSocket: Node.tls.TLSSocket -> unit
 
             module prependListener_newSession =
 
-                type listener_1 =
+                type listener =
                     delegate of
                         sessionId: Node.NonSharedBuffer *
                         sessionData: Node.NonSharedBuffer *
@@ -202758,43 +202747,43 @@ Duplex.fromWeb($0, $1)""")>]
 
             module prependListener_OCSPRequest =
 
-                type listener_1 =
+                type listener =
                     delegate of
                         certificate: Node.NonSharedBuffer *
                         issuer: Node.NonSharedBuffer *
-                        callback: Server.prependListener_OCSPRequest.listener.callback_1 ->
+                        callback: Server.prependListener_OCSPRequest.listener.callback ->
                             unit
 
                 module listener =
 
-                    type callback_1 =
+                    type callback =
                         delegate of err: Exception option * resp: Node.Buffer option -> unit
 
             module prependListener_resumeSession =
 
-                type listener_1 =
+                type listener =
                     delegate of
                         sessionId: Node.NonSharedBuffer *
-                        callback: Server.prependListener_resumeSession.listener.callback_1 ->
+                        callback: Server.prependListener_resumeSession.listener.callback ->
                             unit
 
                 module listener =
 
-                    type callback_1 =
+                    type callback =
                         delegate of err: Exception option * sessionData: Node.Buffer option -> unit
 
             module prependListener_keylog =
 
-                type listener_1 =
+                type listener =
                     delegate of line: Node.NonSharedBuffer * tlsSocket: Node.tls.TLSSocket -> unit
 
             module prependOnceListener_tlsClientError =
 
-                type listener_1 = delegate of err: Exception * tlsSocket: Node.tls.TLSSocket -> unit
+                type listener = delegate of err: Exception * tlsSocket: Node.tls.TLSSocket -> unit
 
             module prependOnceListener_newSession =
 
-                type listener_1 =
+                type listener =
                     delegate of
                         sessionId: Node.NonSharedBuffer *
                         sessionData: Node.NonSharedBuffer *
@@ -202803,34 +202792,34 @@ Duplex.fromWeb($0, $1)""")>]
 
             module prependOnceListener_OCSPRequest =
 
-                type listener_1 =
+                type listener =
                     delegate of
                         certificate: Node.NonSharedBuffer *
                         issuer: Node.NonSharedBuffer *
-                        callback: Server.prependOnceListener_OCSPRequest.listener.callback_1 ->
+                        callback: Server.prependOnceListener_OCSPRequest.listener.callback ->
                             unit
 
                 module listener =
 
-                    type callback_1 =
+                    type callback =
                         delegate of err: Exception option * resp: Node.Buffer option -> unit
 
             module prependOnceListener_resumeSession =
 
-                type listener_1 =
+                type listener =
                     delegate of
                         sessionId: Node.NonSharedBuffer *
-                        callback: Server.prependOnceListener_resumeSession.listener.callback_1 ->
+                        callback: Server.prependOnceListener_resumeSession.listener.callback ->
                             unit
 
                 module listener =
 
-                    type callback_1 =
+                    type callback =
                         delegate of err: Exception option * sessionData: Node.Buffer option -> unit
 
             module prependOnceListener_keylog =
 
-                type listener_1 =
+                type listener =
                     delegate of line: Node.NonSharedBuffer * tlsSocket: Node.tls.TLSSocket -> unit
 
         module Exports =
@@ -227093,7 +227082,7 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
                 /// <summary>
                 /// Default: <c>(origin, opts) => new Client(origin, opts)</c>.
                 /// </summary>
-                abstract member factory: Options.factory_3 option with get, set
+                abstract member factory: Options.factory option with get, set
                 /// <summary>
                 /// The max number of clients to create. <c>null</c> if no limit. Default <c>null</c>.
                 /// </summary>
@@ -227101,17 +227090,17 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
                 /// <summary>
                 /// TODO
                 /// </summary>
-                abstract member interceptors: Options.interceptors_1 option with get, set
+                abstract member interceptors: Options.interceptors option with get, set
 
             module Options =
 
-                type factory_3 =
+                type factory =
                     delegate of
                         origin: Node.url.URL * opts: obj -> UndiciTypes.dispatcher.Dispatcher
 
                 [<AllowNullLiteral>]
                 [<Interface>]
-                type interceptors_1 =
+                type interceptors =
                     abstract member Pool:
                         ReadonlyArray<UndiciTypes.dispatcher.Dispatcher_.DispatchInterceptor> option with get, set
 
@@ -227126,7 +227115,7 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
                             ?Pool:
                                 ReadonlyArray<UndiciTypes.dispatcher.Dispatcher_.DispatchInterceptor>
                         )
-                        : interceptors_1
+                        : interceptors
                         =
                         nativeOnly
 
