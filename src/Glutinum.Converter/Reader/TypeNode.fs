@@ -1154,8 +1154,13 @@ let readTypeNode (reader: ITypeScriptReader) (typeNode: Ts.TypeNode) : GlueType 
             | "Record" -> UtilityType.readRecord reader typeReferenceNode
             | "ReturnType" -> UtilityType.readReturnType reader typeReferenceNode
             | "ThisParameterType" -> UtilityType.readThisParameterType reader typeReferenceNode
-            | "Omit" -> UtilityType.readOmit reader typeReferenceNode
-            | "Pick" -> UtilityType.readPick reader typeReferenceNode
+            // The checker resolves the mapped type, the reader stands in for a synthesized node
+            | "Omit" ->
+                UtilityType.tryExpandAnonymousObjectApplication reader typeReferenceNode
+                |> Option.defaultWith (fun () -> UtilityType.readOmit reader typeReferenceNode)
+            | "Pick" ->
+                UtilityType.tryExpandAnonymousObjectApplication reader typeReferenceNode
+                |> Option.defaultWith (fun () -> UtilityType.readPick reader typeReferenceNode)
             | "Readonly" -> UtilityType.readReadonly reader typeReferenceNode
             | _ -> readTypeReference true
         else

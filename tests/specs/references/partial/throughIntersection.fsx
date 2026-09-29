@@ -35,6 +35,8 @@ module Base =
     [<Interface>]
     type rest<'T> =
         abstract member value: 'T with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create (value: 'T) : rest<'T> = nativeOnly
 
 module Config =
 

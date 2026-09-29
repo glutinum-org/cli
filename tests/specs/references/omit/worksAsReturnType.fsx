@@ -22,6 +22,8 @@ module Exports =
     [<Interface>]
     type foo__ =
         abstract member description: string with get, set
+        [<ParamObject; Emit("$0")>]
+        static member Create (description: string) : foo__ = nativeOnly
 
 (***)
 #r "nuget: Fable.Core"

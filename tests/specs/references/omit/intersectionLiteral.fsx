@@ -37,6 +37,8 @@ module Publisher =
         type message =
             abstract member ``type``: string with get, set
             abstract member data: float with get, set
+            [<ParamObject; Emit("$0")>]
+            static member Create (``type``: string, data: float) : message = nativeOnly
 
 module Sender =
 

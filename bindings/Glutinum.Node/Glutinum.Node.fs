@@ -57376,6 +57376,13 @@ ECDH.convertKey($0, $1, $2, $3, $4)""")>]
                 type options =
                     abstract member subject: X509Certificate.checkEmail.options.subject option with get, set
 
+                    [<ParamObject; Emit("$0")>]
+                    static member Create
+                        (?subject: X509Certificate.checkEmail.options.subject)
+                        : options
+                        =
+                        nativeOnly
+
                 module options =
 
                     [<RequireQualifiedAccess>]
@@ -187074,13 +187081,25 @@ Duplex.fromWeb($0, $1)""")>]
                     [<AllowNullLiteral>]
                     [<Interface>]
                     type options =
-                        abstract member encoding: Node.BufferEncoding option with get, set
-                        abstract member highWaterMark: float option with get, set
-                        abstract member objectMode: bool option with get, set
                         /// <summary>
                         /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
                         /// </summary>
                         abstract member signal: Node.AbortSignal option with get, set
+                        abstract member encoding: Node.BufferEncoding option with get, set
+                        abstract member highWaterMark: float option with get, set
+                        abstract member objectMode: bool option with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create
+                            (
+                                ?signal: Node.AbortSignal,
+                                ?encoding: Node.BufferEncoding,
+                                ?highWaterMark: float,
+                                ?objectMode: bool
+                            )
+                            : options
+                            =
+                            nativeOnly
 
                 module toWeb__ =
 
@@ -187121,6 +187140,9 @@ Duplex.fromWeb($0, $1)""")>]
                             /// </summary>
                             abstract member signal: Node.AbortSignal option with get, set
 
+                            [<ParamObject; Emit("$0")>]
+                            static member Create(?signal: Node.AbortSignal) : options = nativeOnly
+
                 module filter =
 
                     type fn =
@@ -187137,6 +187159,9 @@ Duplex.fromWeb($0, $1)""")>]
                             /// Allows destroying the stream if the signal is aborted.
                             /// </summary>
                             abstract member signal: Node.AbortSignal option with get, set
+
+                            [<ParamObject; Emit("$0")>]
+                            static member Create(?signal: Node.AbortSignal) : options = nativeOnly
 
                 module forEach =
 
@@ -187155,6 +187180,9 @@ Duplex.fromWeb($0, $1)""")>]
                             /// </summary>
                             abstract member signal: Node.AbortSignal option with get, set
 
+                            [<ParamObject; Emit("$0")>]
+                            static member Create(?signal: Node.AbortSignal) : options = nativeOnly
+
                 module toArray =
 
                     [<AllowNullLiteral>]
@@ -187164,6 +187192,9 @@ Duplex.fromWeb($0, $1)""")>]
                         /// Allows destroying the stream if the signal is aborted.
                         /// </summary>
                         abstract member signal: Node.AbortSignal option with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create(?signal: Node.AbortSignal) : options = nativeOnly
 
                 module some =
 
@@ -187182,6 +187213,9 @@ Duplex.fromWeb($0, $1)""")>]
                             /// </summary>
                             abstract member signal: Node.AbortSignal option with get, set
 
+                            [<ParamObject; Emit("$0")>]
+                            static member Create(?signal: Node.AbortSignal) : options = nativeOnly
+
                 module find =
 
                     type fn = delegate of data: obj * ?options: Readable.find.fn.options -> bool
@@ -187195,6 +187229,9 @@ Duplex.fromWeb($0, $1)""")>]
                             /// Allows destroying the stream if the signal is aborted.
                             /// </summary>
                             abstract member signal: Node.AbortSignal option with get, set
+
+                            [<ParamObject; Emit("$0")>]
+                            static member Create(?signal: Node.AbortSignal) : options = nativeOnly
 
                     type fn_1 =
                         delegate of
@@ -187218,6 +187255,9 @@ Duplex.fromWeb($0, $1)""")>]
                             /// </summary>
                             abstract member signal: Node.AbortSignal option with get, set
 
+                            [<ParamObject; Emit("$0")>]
+                            static member Create(?signal: Node.AbortSignal) : options = nativeOnly
+
                 module flatMap =
 
                     type fn = delegate of data: obj * ?options: Readable.flatMap.fn.options -> unit
@@ -187232,6 +187272,9 @@ Duplex.fromWeb($0, $1)""")>]
                             /// </summary>
                             abstract member signal: Node.AbortSignal option with get, set
 
+                            [<ParamObject; Emit("$0")>]
+                            static member Create(?signal: Node.AbortSignal) : options = nativeOnly
+
                 module drop =
 
                     [<AllowNullLiteral>]
@@ -187241,6 +187284,9 @@ Duplex.fromWeb($0, $1)""")>]
                         /// Allows destroying the stream if the signal is aborted.
                         /// </summary>
                         abstract member signal: Node.AbortSignal option with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create(?signal: Node.AbortSignal) : options = nativeOnly
 
                 module take =
 
@@ -187252,6 +187298,9 @@ Duplex.fromWeb($0, $1)""")>]
                         /// </summary>
                         abstract member signal: Node.AbortSignal option with get, set
 
+                        [<ParamObject; Emit("$0")>]
+                        static member Create(?signal: Node.AbortSignal) : options = nativeOnly
+
                 module asIndexedPairs =
 
                     [<AllowNullLiteral>]
@@ -187261,6 +187310,9 @@ Duplex.fromWeb($0, $1)""")>]
                         /// Allows destroying the stream if the signal is aborted.
                         /// </summary>
                         abstract member signal: Node.AbortSignal option with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create(?signal: Node.AbortSignal) : options = nativeOnly
 
                 module reduce =
 
@@ -187276,6 +187328,9 @@ Duplex.fromWeb($0, $1)""")>]
                         /// </summary>
                         abstract member signal: Node.AbortSignal option with get, set
 
+                        [<ParamObject; Emit("$0")>]
+                        static member Create(?signal: Node.AbortSignal) : options = nativeOnly
+
                     module fn =
 
                         [<AllowNullLiteral>]
@@ -187285,6 +187340,9 @@ Duplex.fromWeb($0, $1)""")>]
                             /// Allows destroying the stream if the signal is aborted.
                             /// </summary>
                             abstract member signal: Node.AbortSignal option with get, set
+
+                            [<ParamObject; Emit("$0")>]
+                            static member Create(?signal: Node.AbortSignal) : options = nativeOnly
 
                     type fn_1 =
                         delegate of
@@ -187332,13 +187390,25 @@ Duplex.fromWeb($0, $1)""")>]
                     [<AllowNullLiteral>]
                     [<Interface>]
                     type options =
-                        abstract member decodeStrings: bool option with get, set
-                        abstract member highWaterMark: float option with get, set
-                        abstract member objectMode: bool option with get, set
                         /// <summary>
                         /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
                         /// </summary>
                         abstract member signal: Node.AbortSignal option with get, set
+                        abstract member highWaterMark: float option with get, set
+                        abstract member objectMode: bool option with get, set
+                        abstract member decodeStrings: bool option with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create
+                            (
+                                ?signal: Node.AbortSignal,
+                                ?highWaterMark: float,
+                                ?objectMode: bool,
+                                ?decodeStrings: bool
+                            )
+                            : options
+                            =
+                            nativeOnly
 
                 module _writev =
 
@@ -187410,15 +187480,29 @@ Duplex.fromWeb($0, $1)""")>]
                     [<AllowNullLiteral>]
                     [<Interface>]
                     type options =
-                        abstract member allowHalfOpen: bool option with get, set
-                        abstract member encoding: Node.BufferEncoding option with get, set
-                        abstract member highWaterMark: float option with get, set
-                        abstract member objectMode: bool option with get, set
                         /// <summary>
                         /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
                         /// </summary>
                         abstract member signal: Node.AbortSignal option with get, set
+                        abstract member encoding: Node.BufferEncoding option with get, set
+                        abstract member highWaterMark: float option with get, set
+                        abstract member objectMode: bool option with get, set
                         abstract member decodeStrings: bool option with get, set
+                        abstract member allowHalfOpen: bool option with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create
+                            (
+                                ?signal: Node.AbortSignal,
+                                ?encoding: Node.BufferEncoding,
+                                ?highWaterMark: float,
+                                ?objectMode: bool,
+                                ?decodeStrings: bool,
+                                ?allowHalfOpen: bool
+                            )
+                            : options
+                            =
+                            nativeOnly
 
             module TransformOptions =
 
@@ -197692,33 +197776,62 @@ Duplex.fromWeb($0, $1)""")>]
                     [<AllowNullLiteral>]
                     [<Interface>]
                     type opts =
+                        /// <summary>
+                        /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
+                        /// </summary>
+                        abstract member signal: Node.AbortSignal option with get, set
+                        abstract member encoding: Node.BufferEncoding option with get, set
+                        abstract member highWaterMark: float option with get, set
+                        abstract member objectMode: bool option with get, set
+                        abstract member decodeStrings: bool option with get, set
+                        abstract member allowHalfOpen: bool option with get, set
                         abstract member transform: Exports.LcovReporter.opts.transform option with get, set
 
                         abstract member flush:
                             (Node.stream.Stream_.TransformCallback -> unit) option with get, set
 
-                        abstract member allowHalfOpen: bool option with get, set
                         abstract member readableObjectMode: bool option with get, set
                         abstract member readableHighWaterMark: float option with get, set
                         abstract member writableHighWaterMark: float option with get, set
                         abstract member writableCorked: float option with get, set
-                        abstract member encoding: Node.BufferEncoding option with get, set
                         abstract member read: (float -> unit) option with get, set
                         abstract member emitClose: bool option with get, set
-                        abstract member highWaterMark: float option with get, set
-                        abstract member objectMode: bool option with get, set
                         abstract member construct: ((Exception option -> unit) -> unit) option with get, set
                         abstract member destroy: Exports.LcovReporter.opts.destroy option with get, set
                         abstract member autoDestroy: bool option with get, set
-                        /// <summary>
-                        /// When provided the corresponding <c>AbortController</c> can be used to cancel an asynchronous action.
-                        /// </summary>
-                        abstract member signal: Node.AbortSignal option with get, set
-                        abstract member decodeStrings: bool option with get, set
                         abstract member defaultEncoding: Node.BufferEncoding option with get, set
                         abstract member write: Exports.LcovReporter.opts.write option with get, set
                         abstract member writev: Exports.LcovReporter.opts.writev option with get, set
                         abstract member final: ((Exception option -> unit) -> unit) option with get, set
+
+                        [<ParamObject; Emit("$0")>]
+                        static member Create
+                            (
+                                ?signal: Node.AbortSignal,
+                                ?encoding: Node.BufferEncoding,
+                                ?highWaterMark: float,
+                                ?objectMode: bool,
+                                ?decodeStrings: bool,
+                                ?allowHalfOpen: bool,
+                                ?transform: Exports.LcovReporter.opts.transform,
+                                ?flush: (Node.stream.Stream_.TransformCallback -> unit),
+                                ?readableObjectMode: bool,
+                                ?readableHighWaterMark: float,
+                                ?writableHighWaterMark: float,
+                                ?writableCorked: float,
+                                ?read: (float -> unit),
+                                ?emitClose: bool,
+                                ?construct: ((Exception option -> unit) -> unit),
+                                ?destroy: Exports.LcovReporter.opts.destroy,
+                                ?autoDestroy: bool,
+                                ?defaultEncoding: Node.BufferEncoding,
+                                ?write: Exports.LcovReporter.opts.write,
+                                ?writev: Exports.LcovReporter.opts.writev,
+                                ?final: ((Exception option -> unit) -> unit)
+                            )
+                            : opts
+                            =
+                            nativeOnly
 
                     module opts =
 
@@ -220733,20 +220846,13 @@ module UndiciTypes =
         [<AllowNullLiteral>]
         [<Interface>]
         type BalancedPoolConnectOptions =
-            abstract member path: string with get, set
-
-            /// <summary>
-            /// Default: <c>null</c>
-            /// </summary>
-            abstract member headers:
-                U2<UndiciTypes.header.IncomingHttpHeaders, ResizeArray<string>> option with get, set
-
             /// <summary>
             /// Default: <c>null</c>
             /// </summary>
             abstract member signal:
                 U2<UndiciTypes.dispatcher.AbortSignal, Node.events.EventEmitter> option with get, set
 
+            abstract member path: string with get, set
             /// <summary>
             /// This argument parameter is passed through to <c>ConnectData</c>
             /// </summary>
@@ -220763,6 +220869,141 @@ module UndiciTypes =
             /// Default: <c>null</c>
             /// </summary>
             abstract member responseHeader: string option with get, set
+
+            /// <summary>
+            /// Default: <c>null</c>
+            /// </summary>
+            abstract member headers:
+                U2<UndiciTypes.header.IncomingHttpHeaders, ResizeArray<string>> option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    path: string,
+                    ?opaque: obj,
+                    ?maxRedirections: float,
+                    ?redirectionLimitReached: bool,
+                    ?responseHeader: string
+                )
+                : BalancedPoolConnectOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    path: string,
+                    headers: UndiciTypes.header.IncomingHttpHeaders,
+                    ?opaque: obj,
+                    ?maxRedirections: float,
+                    ?redirectionLimitReached: bool,
+                    ?responseHeader: string
+                )
+                : BalancedPoolConnectOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    path: string,
+                    headers: ResizeArray<string>,
+                    ?opaque: obj,
+                    ?maxRedirections: float,
+                    ?redirectionLimitReached: bool,
+                    ?responseHeader: string
+                )
+                : BalancedPoolConnectOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    path: string,
+                    signal: UndiciTypes.dispatcher.AbortSignal,
+                    ?opaque: obj,
+                    ?maxRedirections: float,
+                    ?redirectionLimitReached: bool,
+                    ?responseHeader: string
+                )
+                : BalancedPoolConnectOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    path: string,
+                    signal: UndiciTypes.dispatcher.AbortSignal,
+                    headers: UndiciTypes.header.IncomingHttpHeaders,
+                    ?opaque: obj,
+                    ?maxRedirections: float,
+                    ?redirectionLimitReached: bool,
+                    ?responseHeader: string
+                )
+                : BalancedPoolConnectOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    path: string,
+                    signal: UndiciTypes.dispatcher.AbortSignal,
+                    headers: ResizeArray<string>,
+                    ?opaque: obj,
+                    ?maxRedirections: float,
+                    ?redirectionLimitReached: bool,
+                    ?responseHeader: string
+                )
+                : BalancedPoolConnectOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    path: string,
+                    signal: Node.events.EventEmitter,
+                    ?opaque: obj,
+                    ?maxRedirections: float,
+                    ?redirectionLimitReached: bool,
+                    ?responseHeader: string
+                )
+                : BalancedPoolConnectOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    path: string,
+                    signal: Node.events.EventEmitter,
+                    headers: UndiciTypes.header.IncomingHttpHeaders,
+                    ?opaque: obj,
+                    ?maxRedirections: float,
+                    ?redirectionLimitReached: bool,
+                    ?responseHeader: string
+                )
+                : BalancedPoolConnectOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    path: string,
+                    signal: Node.events.EventEmitter,
+                    headers: ResizeArray<string>,
+                    ?opaque: obj,
+                    ?maxRedirections: float,
+                    ?redirectionLimitReached: bool,
+                    ?responseHeader: string
+                )
+                : BalancedPoolConnectOptions
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
@@ -220965,20 +221206,13 @@ module UndiciTypes =
         [<AllowNullLiteral>]
         [<Interface>]
         type ClientConnectOptions =
-            abstract member path: string with get, set
-
-            /// <summary>
-            /// Default: <c>null</c>
-            /// </summary>
-            abstract member headers:
-                U2<UndiciTypes.header.IncomingHttpHeaders, ResizeArray<string>> option with get, set
-
             /// <summary>
             /// Default: <c>null</c>
             /// </summary>
             abstract member signal:
                 U2<UndiciTypes.dispatcher.AbortSignal, Node.events.EventEmitter> option with get, set
 
+            abstract member path: string with get, set
             /// <summary>
             /// This argument parameter is passed through to <c>ConnectData</c>
             /// </summary>
@@ -220995,6 +221229,141 @@ module UndiciTypes =
             /// Default: <c>null</c>
             /// </summary>
             abstract member responseHeader: string option with get, set
+
+            /// <summary>
+            /// Default: <c>null</c>
+            /// </summary>
+            abstract member headers:
+                U2<UndiciTypes.header.IncomingHttpHeaders, ResizeArray<string>> option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    path: string,
+                    ?opaque: obj,
+                    ?maxRedirections: float,
+                    ?redirectionLimitReached: bool,
+                    ?responseHeader: string
+                )
+                : ClientConnectOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    path: string,
+                    headers: UndiciTypes.header.IncomingHttpHeaders,
+                    ?opaque: obj,
+                    ?maxRedirections: float,
+                    ?redirectionLimitReached: bool,
+                    ?responseHeader: string
+                )
+                : ClientConnectOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    path: string,
+                    headers: ResizeArray<string>,
+                    ?opaque: obj,
+                    ?maxRedirections: float,
+                    ?redirectionLimitReached: bool,
+                    ?responseHeader: string
+                )
+                : ClientConnectOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    path: string,
+                    signal: UndiciTypes.dispatcher.AbortSignal,
+                    ?opaque: obj,
+                    ?maxRedirections: float,
+                    ?redirectionLimitReached: bool,
+                    ?responseHeader: string
+                )
+                : ClientConnectOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    path: string,
+                    signal: UndiciTypes.dispatcher.AbortSignal,
+                    headers: UndiciTypes.header.IncomingHttpHeaders,
+                    ?opaque: obj,
+                    ?maxRedirections: float,
+                    ?redirectionLimitReached: bool,
+                    ?responseHeader: string
+                )
+                : ClientConnectOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    path: string,
+                    signal: UndiciTypes.dispatcher.AbortSignal,
+                    headers: ResizeArray<string>,
+                    ?opaque: obj,
+                    ?maxRedirections: float,
+                    ?redirectionLimitReached: bool,
+                    ?responseHeader: string
+                )
+                : ClientConnectOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    path: string,
+                    signal: Node.events.EventEmitter,
+                    ?opaque: obj,
+                    ?maxRedirections: float,
+                    ?redirectionLimitReached: bool,
+                    ?responseHeader: string
+                )
+                : ClientConnectOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    path: string,
+                    signal: Node.events.EventEmitter,
+                    headers: UndiciTypes.header.IncomingHttpHeaders,
+                    ?opaque: obj,
+                    ?maxRedirections: float,
+                    ?redirectionLimitReached: bool,
+                    ?responseHeader: string
+                )
+                : ClientConnectOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    path: string,
+                    signal: Node.events.EventEmitter,
+                    headers: ResizeArray<string>,
+                    ?opaque: obj,
+                    ?maxRedirections: float,
+                    ?redirectionLimitReached: bool,
+                    ?responseHeader: string
+                )
+                : ClientConnectOptions
+                =
+                nativeOnly
 
         /// <summary>
         /// A basic HTTP/1.1 client, mapped on top a single TCP/TLS connection. Pipelining is disabled by default.
@@ -226440,20 +226809,13 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
         [<AllowNullLiteral>]
         [<Interface>]
         type PoolConnectOptions =
-            abstract member path: string with get, set
-
-            /// <summary>
-            /// Default: <c>null</c>
-            /// </summary>
-            abstract member headers:
-                U2<UndiciTypes.header.IncomingHttpHeaders, ResizeArray<string>> option with get, set
-
             /// <summary>
             /// Default: <c>null</c>
             /// </summary>
             abstract member signal:
                 U2<UndiciTypes.dispatcher.AbortSignal, Node.events.EventEmitter> option with get, set
 
+            abstract member path: string with get, set
             /// <summary>
             /// This argument parameter is passed through to <c>ConnectData</c>
             /// </summary>
@@ -226470,6 +226832,141 @@ It is recommended to use a library such as [@fastify/busboy](https://www.npmjs.c
             /// Default: <c>null</c>
             /// </summary>
             abstract member responseHeader: string option with get, set
+
+            /// <summary>
+            /// Default: <c>null</c>
+            /// </summary>
+            abstract member headers:
+                U2<UndiciTypes.header.IncomingHttpHeaders, ResizeArray<string>> option with get, set
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    path: string,
+                    ?opaque: obj,
+                    ?maxRedirections: float,
+                    ?redirectionLimitReached: bool,
+                    ?responseHeader: string
+                )
+                : PoolConnectOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    path: string,
+                    headers: UndiciTypes.header.IncomingHttpHeaders,
+                    ?opaque: obj,
+                    ?maxRedirections: float,
+                    ?redirectionLimitReached: bool,
+                    ?responseHeader: string
+                )
+                : PoolConnectOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    path: string,
+                    headers: ResizeArray<string>,
+                    ?opaque: obj,
+                    ?maxRedirections: float,
+                    ?redirectionLimitReached: bool,
+                    ?responseHeader: string
+                )
+                : PoolConnectOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    path: string,
+                    signal: UndiciTypes.dispatcher.AbortSignal,
+                    ?opaque: obj,
+                    ?maxRedirections: float,
+                    ?redirectionLimitReached: bool,
+                    ?responseHeader: string
+                )
+                : PoolConnectOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    path: string,
+                    signal: UndiciTypes.dispatcher.AbortSignal,
+                    headers: UndiciTypes.header.IncomingHttpHeaders,
+                    ?opaque: obj,
+                    ?maxRedirections: float,
+                    ?redirectionLimitReached: bool,
+                    ?responseHeader: string
+                )
+                : PoolConnectOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    path: string,
+                    signal: UndiciTypes.dispatcher.AbortSignal,
+                    headers: ResizeArray<string>,
+                    ?opaque: obj,
+                    ?maxRedirections: float,
+                    ?redirectionLimitReached: bool,
+                    ?responseHeader: string
+                )
+                : PoolConnectOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    path: string,
+                    signal: Node.events.EventEmitter,
+                    ?opaque: obj,
+                    ?maxRedirections: float,
+                    ?redirectionLimitReached: bool,
+                    ?responseHeader: string
+                )
+                : PoolConnectOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    path: string,
+                    signal: Node.events.EventEmitter,
+                    headers: UndiciTypes.header.IncomingHttpHeaders,
+                    ?opaque: obj,
+                    ?maxRedirections: float,
+                    ?redirectionLimitReached: bool,
+                    ?responseHeader: string
+                )
+                : PoolConnectOptions
+                =
+                nativeOnly
+
+            [<ParamObject; Emit("$0")>]
+            static member Create
+                (
+                    path: string,
+                    signal: Node.events.EventEmitter,
+                    headers: ResizeArray<string>,
+                    ?opaque: obj,
+                    ?maxRedirections: float,
+                    ?redirectionLimitReached: bool,
+                    ?responseHeader: string
+                )
+                : PoolConnectOptions
+                =
+                nativeOnly
 
         [<AllowNullLiteral>]
         [<Interface>]
