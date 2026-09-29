@@ -45,14 +45,14 @@ let readExportAssignment (reader: ITypeScriptReader) (exportNode: Ts.ExportAssig
                 let identiferNode: Ts.Identifier = !!exportNode.expression
                 // The declared type of the variable keeps the module path of a reference
                 let declaredTypeNode =
-                    if isExportEqualsOfVariable then
-                        reader.checker.getSymbolAtLocation exportNode.expression
-                        |> Option.bind _.valueDeclaration
-                        |> Option.bind (fun declaration ->
-                            (declaration :?> Ts.VariableDeclaration).``type``
-                        )
-                    else
-                        None
+                    reader.checker.getSymbolAtLocation exportNode.expression
+                    |> Option.bind _.valueDeclaration
+                    |> Option.filter (fun declaration ->
+                        declaration.kind = Ts.SyntaxKind.VariableDeclaration
+                    )
+                    |> Option.bind (fun declaration ->
+                        (declaration :?> Ts.VariableDeclaration).``type``
+                    )
 
                 // Determine the type of the default export
                 let typ =

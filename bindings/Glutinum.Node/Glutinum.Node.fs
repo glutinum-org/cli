@@ -35860,7 +35860,7 @@ AsyncLocalStorage.snapshot()""")>]
             static member inline cluster: Node.cluster.Cluster = nativeOnly
 
             [<ImportDefault("cluster")>]
-            static member inline cluster_: Cluster = nativeOnly
+            static member inline cluster_: Node.cluster.Cluster = nativeOnly
 
             [<Import("Worker", "cluster"); EmitConstructor>]
             static member Worker() : Worker = nativeOnly
@@ -40635,129 +40635,6 @@ AsyncLocalStorage.snapshot()""")>]
                         message: obj *
                         handle: U2<Node.net.Socket, Node.net.Server> ->
                             unit
-
-        module Exports =
-
-            module cluster__ =
-
-                module Type =
-
-                    module Cluster =
-
-                        module addListener_exit =
-
-                            type listener =
-                                delegate of
-                                    worker: Node.cluster.Worker * code: float * signal: string ->
-                                        unit
-
-                        module addListener_listening =
-
-                            type listener =
-                                delegate of
-                                    worker: Node.cluster.Worker * address: Node.cluster.Address ->
-                                        unit
-
-                        module addListener_message =
-
-                            type listener =
-                                delegate of
-                                    worker: Node.cluster.Worker *
-                                    message: obj *
-                                    handle: U2<Node.net.Socket, Node.net.Server> ->
-                                        unit
-
-                        module on_exit =
-
-                            type listener =
-                                delegate of
-                                    worker: Node.cluster.Worker * code: float * signal: string ->
-                                        unit
-
-                        module on_listening =
-
-                            type listener =
-                                delegate of
-                                    worker: Node.cluster.Worker * address: Node.cluster.Address ->
-                                        unit
-
-                        module on_message =
-
-                            type listener =
-                                delegate of
-                                    worker: Node.cluster.Worker *
-                                    message: obj *
-                                    handle: U2<Node.net.Socket, Node.net.Server> ->
-                                        unit
-
-                        module once_exit =
-
-                            type listener =
-                                delegate of
-                                    worker: Node.cluster.Worker * code: float * signal: string ->
-                                        unit
-
-                        module once_listening =
-
-                            type listener =
-                                delegate of
-                                    worker: Node.cluster.Worker * address: Node.cluster.Address ->
-                                        unit
-
-                        module once_message =
-
-                            type listener =
-                                delegate of
-                                    worker: Node.cluster.Worker *
-                                    message: obj *
-                                    handle: U2<Node.net.Socket, Node.net.Server> ->
-                                        unit
-
-                        module prependListener_exit =
-
-                            type listener =
-                                delegate of
-                                    worker: Node.cluster.Worker * code: float * signal: string ->
-                                        unit
-
-                        module prependListener_listening =
-
-                            type listener =
-                                delegate of
-                                    worker: Node.cluster.Worker * address: Node.cluster.Address ->
-                                        unit
-
-                        module prependListener_message =
-
-                            type listener =
-                                delegate of
-                                    worker: Node.cluster.Worker *
-                                    message: obj *
-                                    handle: U2<Node.net.Socket, Node.net.Server> ->
-                                        unit
-
-                        module prependOnceListener_exit =
-
-                            type listener =
-                                delegate of
-                                    worker: Node.cluster.Worker * code: float * signal: string ->
-                                        unit
-
-                        module prependOnceListener_listening =
-
-                            type listener =
-                                delegate of
-                                    worker: Node.cluster.Worker * address: Node.cluster.Address ->
-                                        unit
-
-                        module prependOnceListener_message =
-
-                            type listener =
-                                delegate of
-                                    worker: Node.cluster.Worker *
-                                    message: obj *
-                                    handle: U2<Node.net.Socket, Node.net.Server> ->
-                                        unit
 
     module constants =
 
